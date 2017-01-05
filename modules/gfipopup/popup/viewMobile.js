@@ -7,7 +7,7 @@ define([
 ], function (Backbone, Template, GFIPopup, EventBus) {
     "use strict";
     var GFIPopupView = Backbone.View.extend({
-        model: new GFIPopup(),
+        model: GFIPopup,
         className: "modal fade",
         template: _.template(Template),
         events: {
@@ -43,7 +43,7 @@ define([
         },
 
         /**
-         * "Blättert" eine Seite weiter, falls mehrere GFI's vorhanden sind.
+         * "BlÃ¤ttert" eine Seite weiter, falls mehrere GFI's vorhanden sind.
          */
         renderNext: function () {
             if ($(".pager-right").hasClass("disabled") === false) {
@@ -53,7 +53,7 @@ define([
         },
 
         /**
-         * "Blättert eine Seite zurück".
+         * "BlÃ¤ttert eine Seite zurÃ¼ck".
          */
         renderPrevious: function () {
             if ($(".pager-left").hasClass("disabled") === false) {

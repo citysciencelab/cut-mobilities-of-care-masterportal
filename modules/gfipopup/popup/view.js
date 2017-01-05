@@ -9,7 +9,7 @@ define(function (require) {
         GFIPopupView;
 
     GFIPopupView = Backbone.View.extend({
-        model: new GFIPopup(),
+        model: GFIPopup,
         template: _.template(GFIPopupTemplate),
         backupGFI: {},
         events: {
@@ -29,7 +29,7 @@ define(function (require) {
             }, this);
 
             $("#popovermin").remove();
-            this.listenTo(this.model, "render", this.render);
+            this.listenTo(this.model, "change:coordinate", this.render);
             EventBus.on("gfipopup:rerender", this.rerender, this);
             EventBus.on("closeGFIParams", this.destroy, this); // trigger in map.js
             EventBus.on("showGFIParams", this.minMaximizePop, this);
