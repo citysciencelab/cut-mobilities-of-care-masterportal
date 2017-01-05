@@ -42,7 +42,6 @@ define(function (require) {
          * Blendet das Popover ein oder aus
          */
         toggle: function () {
-            console.log(this.model.get("currentTheme"));
             if (this.model.getIsVisible() === true) {
                 $(this.model.getOverlayElement()).popover("show");
             }

@@ -23,12 +23,12 @@ define(function (require) {
             coordinate: undefined,
             // Verwaltet die Themes
             themeList: new ThemeList(),
+            // Index für das aktuelle Theme
+            themeIndex: 0,
             // Anzahl der Themes
             numberOfThemes: 0,
             // Popover Überschriften
-            titles: undefined,
-            // Index für das aktuelle Theme
-            themeIndex: 0
+            titles: undefined
         },
         initialize: function () {
             var channel = Radio.channel("GFI");
@@ -54,8 +54,8 @@ define(function (require) {
                 "change:isMobile": function () {
                     this.initView();
                     if (this.getIsVisible() === true) {
-                        this.getCurrentView().render();console.log(this.get("themeIndex"));
-                        this.getThemeList().appendTheme(this.get("themeIndex"));
+                        this.getCurrentView().render();
+                        this.getThemeList().appendTheme(this.getThemeIndex());
                         this.getCurrentView().toggle();
                     }
                 },
@@ -126,7 +126,6 @@ define(function (require) {
 
             // Beim ersten Initialisieren ist CurrentView noch undefined
             if (_.isUndefined(this.getCurrentView()) === false) {
-                console.log("removeView");
                 this.getCurrentView().removeView();
             }
 
@@ -186,7 +185,7 @@ define(function (require) {
                 }
             }, this);
             this.setTitles(_.pluck(gfiParams, "name"));
-            this.set("themeIndex", 0);
+            this.setThemeIndex(0);
             this.getThemeList().reset(gfiParams);
             gfiParams = [];
         },
@@ -246,6 +245,10 @@ define(function (require) {
             this.getOverlay().setElement(value);
         },
 
+        setThemeIndex: function (value) {
+            this.set("themeIndex", value);
+        },
+
         setTitles: function (value) {
             this.set("titles", value);
         },
@@ -283,6 +286,10 @@ define(function (require) {
             return this.getOverlay().getElement();
         },
 
+        getThemeIndex: function () {
+            return this.get("themeIndex");
+        },
+
         getThemeList: function () {
             return this.get("themeList");
         },
@@ -291,7 +298,7 @@ define(function (require) {
         * @description Liefert die GFI-Infos ans Print-Modul.
         */
         getGFIForPrint: function () {
-            var theme = this.getThemeList().at(this.get("themeIndex"));
+            var theme = this.getThemeList().at(this.getThemeIndex());
 
             return [theme.getGfiContent()[0], theme.get("name"), this.getCoordinate()];
         },

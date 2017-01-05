@@ -24,7 +24,6 @@ define(function (require) {
         appendTheme: function (model, value) {
             if (value === true) {
                 Radio.request("GFI", "getCurrentView").$el.find(".gfi-content").html(this.el);
-                // Radio.request("GFI", "getCurrentView").$el.find(".gfi-title").text(this.model.get("name"));
                 this.appendChildren();
                 this.appendRoutableButton();
             }
@@ -48,6 +47,7 @@ define(function (require) {
         appendRoutableButton: function () {
             if (this.model.get("routable") !== undefined) {
                 var rb = this.model.get("routable");
+
                 this.$el.after(rb.$el);
             }
         }

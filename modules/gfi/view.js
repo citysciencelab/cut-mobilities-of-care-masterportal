@@ -18,6 +18,7 @@ define(function (require) {
                 "change:coordinate": this.setMarker
             });
 
+            // Die attached View braucht für ol.Overlay noch ein Dom-Element
             if (this.model.getDesktopViewType() === "attached" && this.model.getIsMobile() === false) {
                 this.renderDomElementToBody();
                 this.model.setOverlayElement(document.getElementById("gfipopup"));
