@@ -31,6 +31,7 @@ define(function (require) {
             });
 
             this.addViews(models);
+            Radio.trigger("Title", "setSize");
         },
         addViews: function (models) {
             _.each(models, function (model) {
