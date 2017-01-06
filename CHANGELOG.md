@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.2.1
+
+FIXES:
+
+  - 00917df Portal-Titel wurde in "kleinen" Themenportalen initial nicht angezeigt
+
 # Changelog LGV Master-Portal 1.2.0
 
 NEU:
