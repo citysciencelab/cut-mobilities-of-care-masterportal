@@ -9,7 +9,7 @@
 </div>
 <div class="content">
     <h4 class="subtitle"><%= layername %></h4>
-    <% if (typeof metaID !== "undefined") { %>
+    <% if (metaID !== null) { %>
         <p class="abstract"><%= abstractText %></p>
         <br>
         <p class="metalink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
