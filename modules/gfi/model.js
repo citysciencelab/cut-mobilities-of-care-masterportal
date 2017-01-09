@@ -26,9 +26,7 @@ define(function (require) {
             // Index für das aktuelle Theme
             themeIndex: 0,
             // Anzahl der Themes
-            numberOfThemes: 0,
-            // Popover Überschriften
-            titles: undefined
+            numberOfThemes: 0
         },
         initialize: function () {
             var channel = Radio.channel("GFI");
@@ -64,7 +62,6 @@ define(function (require) {
                     this.getOverlay().setPosition(value);
                 },
                 "change:themeIndex": function (model, value) {
-                    $(".gfi-title").text(this.get("titles")[value]);
                     this.getThemeList().appendTheme(value);
                 },
                 "change:desktopViewType": function () {
@@ -184,7 +181,6 @@ define(function (require) {
                     }
                 }
             }, this);
-            this.setTitles(_.pluck(gfiParams, "name"));
             this.setThemeIndex(0);
             this.getThemeList().reset(gfiParams);
             gfiParams = [];
@@ -247,10 +243,6 @@ define(function (require) {
 
         setThemeIndex: function (value) {
             this.set("themeIndex", value);
-        },
-
-        setTitles: function (value) {
-            this.set("titles", value);
         },
 
         // Getter
