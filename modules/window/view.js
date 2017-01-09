@@ -79,7 +79,7 @@ define([
             this.$el.hide("slow");
             this.model.setVisible(false);
             this.model.sendParamsToWinCotent();
-            EventBus.trigger("onlyActivateGFI");
+            Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
         }
     });
 
