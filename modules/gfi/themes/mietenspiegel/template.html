@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<div class="panel panel-default no-margin">
+    <div class="panel-body no-margin container-fluid">
+        <div class="row" style="padding-bottom: 4px;">
+            <div class="col-xs-6">
+                <p class="text-left"><b>Strasse:</b></p>
+            </div>
+            <div class="col-xs-6">
+                <p class="text-right"><%= msStrasse %></p>
+            </div>
+        </div>
+        <div class="row" style="padding-bottom: 4px;">
+            <div class="col-xs-6">
+                <p class="text-left"><b>Stadtteil:</b></p>
+            </div>
+            <div class="col-xs-6">
+                <p class="text-right"><%= msStadtteil %></p>
+            </div>
+        </div>
+        <% _.each (msMerkmale, function (value, key) { %>
+            <% if (key === 'Wohnlage') { %>
+                <div class="row" style="padding-bottom: 4px;">
+                    <div class="col-xs-6">
+                        <p class="text-left"><b>Kategorie:</b></p>
+                    </div>
+                    <div class="col-xs-6">
+                        <p class="text-right mswohnlage"><%= msWohnlage %></p>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="row" style="padding-bottom: 4px;">
+                    <div class="col-xs-6">
+                        <p class="text-left"><b><%= key %>:</b></p>
+                    </div>
+                </div>
+                <div class="row" style="padding-bottom: 4px;">
+                    <div class="col-xs-10 col-xs-offset-2">
+                        <select disabled class="form-control input-sm msmerkmal" id="<%=key%>">
+                            <option value="-1">bitte wählen</option>
+                        </select>
+                    </div>
+                </div>
+            <% } %>
+        <% });%>
+    </div>
+    <div id="msergdiv" style="display:none;">
+        <div class="panel-heading">
+            <h4 class="panel-title"><%= msTitel %></h4>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-6">
+                    <p class="text-left"><b>Mittelwert:</b></p>
+                </div>
+                <div class="col-xs-6">
+                    <p class="text-left msmittelwert">-</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <p class="text-left"><b>Spanne Min.:</b></p>
+                </div>
+                <div class="col-xs-6">
+                    <p class="text-left msspannemin">-</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <p class="text-left"><b>Spanne Max.:</b></p>
+                </div>
+                <div class="col-xs-6">
+                    <p class="text-left msspannemax">-</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <p class="text-left"><b>Datensätze:</b></p>
+                </div>
+                <div class="col-xs-6">
+                    <p class="text-left msdatensaetze">-</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button class="btn btn-info btn-sm" id="msreset" type="submit">
+                <span class="" aria-hidden="true">Neue Berechnung </span>
+                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+    <div id="msmetadaten">
+        <div class="panel-footer">
+            <p class="text-left"><b>Herausgeber: </b><%= msHerausgeber %></p>
+            <p class="text-left"><b>Erhebungsstand: </b><%= msErhebungsstand %></p>
+            <p class="text-left"><b>Hinweis: </b><%= msHinweis %></p>
+        </div>
+    </div>
+</div>

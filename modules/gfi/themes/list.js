@@ -11,6 +11,8 @@ define(function (require) {
         SolaratlasTheme = require("modules/gfi/themes/solaratlas/model"),
         TrinkwasserThemeView = require("modules/gfi/themes/trinkwasser/view"),
         TrinkwasserTheme = require("modules/gfi/themes/trinkwasser/model"),
+        MietenspiegelThemeView = require("modules/gfi/themes/mietenspiegel/view"),
+        MietenspiegelTheme = require("modules/gfi/themes/mietenspiegel/model"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -26,6 +28,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "trinkwasser") {
                 return new TrinkwasserTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "mietenspiegel") {
+                return new MietenspiegelTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -71,6 +76,10 @@ define(function (require) {
                 }
                 case "trinkwasser": {
                     new TrinkwasserThemeView({model: model});
+                    break;
+                }
+                case "mietenspiegel": {
+                    new MietenspiegelThemeView({model: model});
                     break;
                 }
                 default: {
