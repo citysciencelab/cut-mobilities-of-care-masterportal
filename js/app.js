@@ -119,12 +119,10 @@ define("app",
                     break;
                 }
                 case "gfi": {
-                    require(["modules/gfi/model"], function (GfiModel) {
+                    require(["modules/tools/gfi/model"], function (GfiModel) {
                         new GfiModel();
                     });
-                    // require(["modules/gfi/popupLoader"], function (PopupLoader) {
-                    //     new PopupLoader();
-                    // });
+                    break;
                 }
                 case "coord": {
                     require(["modules/coordpopup/view"], function (CoordPopupView) {

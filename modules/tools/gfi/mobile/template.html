@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="glyphicon glyphicon-remove"></span>
+            <h4 class="modal-title gfi-title"></h4>
+        </div>
+        <div class="modal-body gfi-content">
+        </div>
+        <% if(numberOfThemes > 1) { %>
+        <div class="modal-footer gfi-footer">
+            <div class="pager-left <% if(themeIndex === 0) {print (' disabled') }%>">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </div>
+            <div class="pager-right <% if(themeIndex === numberOfThemes - 1) {print (' disabled') }%>">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </div>
+        </div>
+        <% } %>
+    </div>
+</div>
