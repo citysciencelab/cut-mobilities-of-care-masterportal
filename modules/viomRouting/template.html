@@ -6,7 +6,7 @@
     <li>
       <span id="options" title="Optionen eingeben" class="glyphicon glyphicon-tags" aria-hidden="true"></span>
     </li>
-    <li id="calcLi" class="disabled">
+    <li id="calcLi" class="<% if (fromCoord === '' || toCoord === '') {print ('disabled');} %>">
       <span id="calc" title="Route berechnen" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
     </li>
   </ul>

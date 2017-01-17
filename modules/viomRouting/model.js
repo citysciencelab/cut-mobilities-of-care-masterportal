@@ -59,6 +59,10 @@ define([
                 this.removeOverlay();
                 Radio.trigger("Map", "removeLayer", this.get("routelayer"));
                 this.set("routelayer", "");
+                this.set("description", "");
+                this.set("endDescription", "");
+                this.set("sumLength", "");
+                this.set("sumTime", "");
             }
         },
         suggestByBKG: function (value, target) {
