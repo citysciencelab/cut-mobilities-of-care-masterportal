@@ -130,7 +130,7 @@ liest package.json.
 
 # App Abhängigkeiten ziehen via Bower
 
-Wichtig für Öffentliche Nutzer: die Datei bower-public.json in bower.json umbenennen.
+Wichtig für Öffentliche Nutzer: die Datei bower-public.json in bower.json umbenennen und in der Datei .bowerrc die Proxy-Einstellungen anpassen.
 
 ```
 # bower install
