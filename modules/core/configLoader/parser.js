@@ -60,6 +60,9 @@ define([
                             return model.get("type") === "layer" && model.get("parentId") !== "Baselayer";
                         });
 
+                    _.each(modelListToRemove, function (model) {
+                        model.setIsSelected(false);
+                    });
                     modelList.remove(modelListToRemove);
                     this.setItemList([]);
                     this.addTreeMenuItems();
