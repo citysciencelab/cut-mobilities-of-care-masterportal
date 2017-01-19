@@ -1,7 +1,7 @@
 define([
     "backbone",
-    "eventbus"
-], function (Backbone, EventBus) {
+    "backbone.radio"
+], function (Backbone, Radio) {
     "use strict";
     var RoutableModel = Backbone.Model.extend({
         /**
@@ -18,7 +18,7 @@ define([
             this.set("coordinate", coord);
         },
         setRoutingDestination: function () {
-            EventBus.trigger("setRoutingDestination", this.get("coordinate"));
+            Radio.trigger("ViomRouting", "setRoutingDestination", this.get("coordinate"));
         },
         destroy: function () {
             this.unbind();
