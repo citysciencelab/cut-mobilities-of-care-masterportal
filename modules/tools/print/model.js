@@ -272,17 +272,16 @@ define([
          *
          */
         setSpecification: function (gfiPosition) {
-            var animationLayer = Radio.request("Map", "getLayers");
-
-            animationLayer.forEach(function (layer) {
-                if (layer.get("name") === "animationLayer") {
-                    animationLayer = layer;
-                }
-            });
+            var layers = Radio.request("Map", "getLayers").getArray(),
+                animationLayer = _.filter(layers, function (lay) {
+                    return lay.get("name") === "animationLayer";
+                });
 
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
             this.setLayer(Radio.request("Draw", "getLayer"));
-            this.setLayer(animationLayer);
+            if (animationLayer.length > 0) {
+                this.setLayer(animationLayer[0]);
+            }
 
             var specification = {
                 // layout: $("#layoutField option:selected").html(),
