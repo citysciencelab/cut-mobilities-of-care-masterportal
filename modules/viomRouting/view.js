@@ -3,55 +3,82 @@ define([
     "backbone.radio",
     "text!modules/viomRouting/template.html",
     "modules/viomRouting/model",
-    "eventbus",
     "modules/controls/orientation/model"
-], function (Backbone, Radio, RoutingWin, RoutingModel, EventBus) {
+], function (Backbone, Radio, RoutingWin, RoutingModel) {
 
     var RoutingView = Backbone.View.extend({
         model: RoutingModel,
-        id: "RoutingWin",
-        className: "win-body",
+        id: "routingWin",
+        className: "win-body routingWin",
         template: _.template(RoutingWin),
         initialize: function () {
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
-
-            this.listenTo(this.model, "change:fromCoord", this.coord_change);
-            this.listenTo(this.model, "change:toCoord", this.coord_change);
-            this.listenTo(this.model, "change:description", this.toggleSwitcher);
+            this.listenTo(this.model, "change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
+            this.listenTo(this.model, "change:fromCoord", this.setCenter);
+            this.listenTo(this.model, "change:fromCoord", this.toggleRoutingButton);
+            this.listenTo(this.model, "change:toCoord", this.setCenter);
+            this.listenTo(this.model, "change:toCoord", this.toggleRoutingButton);
+            this.listenTo(this.model, "change:description", this.addDescription);
             this.listenTo(this.model, "change:fromList", this.fromListChanged);
             this.listenTo(this.model, "change:toList", this.toListChanged);
             this.listenTo(this.model, "change:startAdresse", this.changeStartAdresse);
             this.listenTo(this.model, "change:zielAdresse", this.changeZielAdresse);
-            EventBus.on("setGeolocation", this.setGeolocation, this);
-            EventBus.on("setRoutingDestination", this.setRoutingDestination, this);
-            EventBus.on("deleteRoute", this.deleteRoute, this);
+
+            var channel = Radio.channel("ViomRouting");
+
+            channel.on({
+                "setRoutingDestination": this.setRoutingDestination
+            }, this);
+
             Radio.trigger("Autostart", "initializedTool", "routing");
         },
         events: {
-            "click .toggleRoutingOptions": "toggleRoutingOptions",
-            "click #RouteBerechnenButton": "routeBerechnen",
+            "click #calc": "routeBerechnen",
             "change .changedWochentag": "changedRoutingTime",
             "change .changedUhrzeit": "changedRoutingTime",
             "click .startAdressePosition": "startAdressePosition", // eigene Positionsbestimmung auf aktueller Standpunkt
-            "click .startAdresseChanged": "adresse_click",
-            "click .zielAdresseChanged": "adresse_click",
-
-            "keyup .startAdresseChanged": "adresseChanged_keyup",
-            "keyup .zielAdresseChanged": "adresseChanged_keyup",
-
-            "click .startAdresseSelected": "startAdresseSelected",
-            "click .zielAdresseSelected": "zielAdresseSelected",
-
-            "click .toggleLayout": "toggleLayout",
-            "click .deleteroute": "deleteRoute"
+            "keyup .adresse": "adresseKeyup",
+            "click .addressLi": "addressSelected",
+            "click .pagination": "paginationSwitcher"
+        },
+        startAdressePosition: function () {
+            Radio.trigger("geolocation", "sendPosition");
+        },
+        paginationSwitcher: function (evt) {
+            if ($(evt.target).parent().hasClass("disabled") === false) {
+                $(evt.currentTarget).find(".active").removeClass("active");
+                $(evt.target).parent().addClass("active");
+                switch (evt.target.id)
+                    {
+                        case "options": {
+                            $(".calc").hide();
+                            $(".address").hide();
+                            $(".options").show();
+                            break;
+                        }
+                        case "calc": {
+                            if (evt.target)
+                            $(".options").hide();
+                            $(".calc").show();
+                            $(".address").hide();
+                            break;
+                        }
+                        default: {
+                            $(".options").hide();
+                            $(".calc").hide();
+                            $(".address").show();
+                        }
+                    }
+            }
         },
         changeStartAdresse: function () {
             $("#startAdresse").val(this.model.get("startAdresse"));
+            $("#startAdresse").attr("title", this.model.get("startAdresse"));
             $("#startAdresse").focus();
         },
         changeZielAdresse: function () {
             $("#zielAdresse").val(this.model.get("zielAdresse"));
-            $("#zieltAdresse").focus();
+            $("#zielAdresse").attr("title", this.model.get("zielAdresse"));
+            $("#zielAdresse").focus();
         },
         fromListChanged: function () {
             var fromList = this.model.get("fromList");
@@ -59,7 +86,7 @@ define([
             if (fromList.length > 0) {
                 $("#input-group-start ul").empty();
                 _.each(fromList, function (value) {
-                    $("#input-group-start ul").append("<li " + value + "</li>");
+                    $("#input-group-start ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
                 });
                 $("#input-group-start ul").show();
                 $("#startAdresse").focus();
@@ -75,7 +102,7 @@ define([
             if (toList.length > 0) {
                 $("#input-group-ziel ul").empty();
                 _.each(toList, function (value) {
-                    $("#input-group-ziel ul").append("<li " + value + "</li>");
+                    $("#input-group-ziel ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
                 });
                 $("#input-group-ziel ul").show();
                 $("#zielAdresse").focus();
@@ -86,78 +113,34 @@ define([
             }
         },
         setRoutingDestination: function (coordinate) {
-            EventBus.trigger("closeGFIParams", this);
-            EventBus.trigger("toggleWin", ["routing", "Routenplaner", "glyphicon-road"]);
+            Radio.trigger("GFIPopup", "closeGFIParams");
+            Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "routing"}));
             this.model.set("toStrassenname", coordinate.toString());
             this.model.set("toCoord", coordinate);
-            $("#zielAdresse").val(coordinate.toString());
+            this.model.set("zielAdresse", "gewähltes Ziel");
         },
-        deleteRoute: function () {
-            this.model.deleteRouteFromMap();
-            this.model.set("description", "");
-            this.model.set("endDescription", "");
-        },
-        toggleSwitcher: function () {
+        addDescription: function () {
             var description = this.model.get("description"),
                 endDescription = this.model.get("endDescription");
 
-            $("#input-group-description ul").empty();
+            $("#description").empty();
+            $("#endeDescription").text("");
+            $("#summary").text("Sie erreichen Ihr Ziel nach " + this.model.get("sumLength") + " km (" + this.model.get("sumTime") + " Min.):");
             if (description && description !== "" && endDescription && endDescription !== "") {
                 _.each(description, function (item, index) {
-                    $("#input-group-description ul").append("<li id='teil" + index.toString() + "' class='list-group-item'><span class=''>" + item.Description + "</span></li>");
+                    var tracDesc = "<strong>" + item.Description.split(". ")[0] + ".</strong>",
+                        tracLength = "<em>" + item.Description.split(". ")[1] + "</em>";
+
+                    $("#description").append("<li id='teil" + index.toString() + "' class='list-group-item'><span class=''>" + tracDesc + "<br>" + tracLength + "</span></li>");
                 });
                 $("#endeDescription").text(endDescription);
-                $("#RoutingWin > .panel-switcher").show("slow");
             }
-            else {
-                $("#endeDescription").text("");
-                $("#RoutingWin > .panel-switcher").hide("slow");
-                $("#input-group-description").hide("slow");
-                $("#RoutingWin > .panel-route").show("slow");
-            }
-        },
-        toggleLayout: function () {
-            if ($("#RoutingWin > .panel-description").is(":visible") === true) {
-                $("#toggleLayoutSpan").text("Beschreibung ");
-                $("#RoutingWin > .panel-route").show("slow");
-                $("#RoutingWin > .panel-description").hide("slow");
-            }
-            else {
-                $("#toggleLayoutSpan").text("Start / Ziel ");
-                $("#RoutingWin > .panel-route").hide("slow");
-                $("#RoutingWin > .panel-options").hide("slow");
-                $("#RoutingWin > .panel-description").show("slow");
-            }
-        },
-        toggleDescription: function () {
-            $("#RoutingWin > .panel-description").toggle("slow");
         },
         routeBerechnen: function () {
             this.model.deleteRouteFromMap();
-            if ($("#RoutingWin > .panel-options").is(":visible") === true) {
-                this.toggleRoutingOptions();
-            }
-            if ($("#RoutingWin > .panel-description").is(":visible") === true) {
-                this.toggleDescription();
-            }
             this.model.requestRoute();
         },
-        adresse_click: function (evt) {
-            var value = evt.target.value,
-                target = evt.target.id;
-
-            if (target === "startAdresse") {
-                if (value === "aktueller Standpunkt") {
-                    this.model.set("startAdresse", "");
-                    this.model.set("fromCoord", "");
-                    EventBus.trigger("clearGeolocationMarker", this);
-                }
-            }
-            this.model.set("toList", "");
-            this.model.set("fromList", "");
-            evt.target.select();
-        },
-        coord_change: function (newValue) {
+        setCenter: function (newValue) {
             // steuere Center der View
             if (newValue.changed.fromCoord) {
                 var newCoord = newValue.changed.fromCoord;
@@ -166,46 +149,83 @@ define([
                 var newCoord = newValue.changed.toCoord;
             }
             if (newCoord && newCoord.length === 2) {
-                EventBus.trigger("setCenter", newCoord, 10);
+                Radio.trigger("MapView", "setCenter", newCoord, 10);
             }
-            // steuere Route berechnen Button
+        },
+        toggleRoutingButton: function () {
             if (this.model.get("fromCoord") !== "" && this.model.get("toCoord") !== "") {
-                document.getElementById("RouteBerechnenButton").disabled = false;
+                $("#calcLi").removeClass("disabled");
             }
             else {
-                document.getElementById("RouteBerechnenButton").disabled = true;
+                $("#calcLi").addClass("disabled");
             }
         },
-        zielAdresseSelected: function (evt) {
-            var value = evt.currentTarget.id;
+        addressSelected: function (evt) {
+            var value = evt.currentTarget.id,
+                ref = $(evt.currentTarget).parent()[0].id;
 
-            this.model.geosearchByBKG(value, "ziel");
+            this.model.geosearchByBKG(value, ref);
         },
-        startAdresseSelected: function (evt) {
-            var value = evt.currentTarget.id;
+        toggleDown: function (target) {
+            var ul = $("#" + target)[0],
+                liList = $(ul).find("li"),
+                selectedLi = _.filter(liList, function (li) {
+                    return $(li).hasClass("active");
+                });
 
-            this.model.geosearchByBKG(value, "start");
-        },
-        adresseChanged_keyup: function (evt) {
-            var value = evt.target.value,
-                target = "";
-
-            if (evt.target.id === "startAdresse") {
-                target = "start";
+            if (selectedLi.length === 0) { // nimm 1. li
+                $(liList).first().addClass("active");
             }
             else {
-                target = "ziel";
+                $(selectedLi).removeClass("active");
+                $(selectedLi).next().addClass("active");
             }
-            if (evt.keyCode === 40) { //Down
+        },
+        toggleUp: function (target) {
+            var ul = $("#" + target)[0],
+                liList = $(ul).find("li"),
+                selectedLi = _.filter(liList, function (li) {
+                    return $(li).hasClass("active");
+                });
+
+            if (selectedLi.length === 0) { // nimm 1. li
+                $(liList).last().addClass("active");
             }
-            else if (evt.keyCode === 38) { //Up
+            else {
+                $(selectedLi).removeClass("active");
+                $(selectedLi).prev().addClass("active");
             }
-            else if (evt.keyCode === 27 || evt.keyCode === 13) { // Esc oder Enter
+        },
+        selectEnter: function (target) {
+            var selectedLi = $("#" + target).find(".active");
+
+            if (selectedLi.length === 1) {
+                this.model.geosearchByBKG(selectedLi[0].id, target);
+            }
+            else if (selectedLi.length === 0) {
                 this.model.set("fromList", "");
                 this.model.set("toList", "");
             }
+        },
+        adresseKeyup: function (evt) {
+            var value = evt.target.value,
+                target = evt.target.id === "startAdresse" ? "start" : "ziel";
+
+            if (evt.keyCode === 40) { // down
+                this.toggleDown(target);
+            }
+            else if (evt.keyCode === 38) { // up
+                this.toggleUp(target);
+            }
+            else if (evt.keyCode === 27) { // Esc
+                this.model.set("fromList", "");
+                this.model.set("toList", "");
+            }
+            else if (evt.keyCode === 13) { // Enter
+                this.selectEnter(target);
+            }
             else {
-                if (evt.target.id === "startAdresse") {
+                if (target === "start") {
                     this.model.set("fromCoord", "");
                     this.model.set("startAdresse", value);
                 }
@@ -238,58 +258,15 @@ define([
                 this.delegateEvents();
                 if ($("#geolocate").length > 0) {
                     $("#startAdressePositionSpan").show();
-                    if (this.model.get("fromCoord") === "") {
-                        Radio.trigger("geolocation", "sendPosition");
-                    }
                 }
                 else {
                     $("#startAdressePositionSpan").hide();
                 }
-                // steuere Route berechnen Button
-                if (this.model.get("fromCoord") !== "" && this.model.get("toCoord") !== "") {
-                    document.getElementById("RouteBerechnenButton").disabled = false;
-                }
-                else {
-                    document.getElementById("RouteBerechnenButton").disabled = true;
-                }
-                if (this.model.get("description") !== "") {
-                    this.toggleSwitcher();
-                }
             }
-            else {
+            else if (this.model.get("isCurrentWin") === false) {
+                this.model.deleteRouteFromMap();
                 this.undelegateEvents();
             }
-        },
-        toggleRoutingOptions: function () {
-            if ($("#RoutingWin > .panel-options").is(":visible") === false) {
-                var date = new Date(),
-                    oldTime = this.model.get("routingtime");
-
-                if (oldTime && oldTime !== "") {
-                    $("#timeButton").val(oldTime);
-                }
-                else {
-                    var localtime = date.toLocaleTimeString().split(":"),
-                        hour = localtime[0].length === 1 ? "0" + localtime[0] : localtime[0],
-                        minute = localtime[1].length === 1 ? "0" + localtime[1] : localtime[1];
-
-                    $("#timeButton").val(hour + ":" + minute);
-                }
-                var oldDate = this.model.get("routingdate");
-
-                if (oldDate && oldDate !== "") {
-                    $("#dayOfWeekButton").val(oldDate);
-                }
-                else {
-                    var year = date.toISOString().substr(0, 4),
-                        month = date.toISOString().substr(5, 2),
-                        day = date.toISOString().substr(8, 2);
-
-                    $("#dayOfWeekButton").val(year + "-" + month + "-" + day);
-                }
-            }
-            $("#RoutingWin > .panel-options").toggle("slow");
-            $("#RoutingWin > .panel-body > .btn-group > .toggleRoutingOptions > .glyphicon").toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
         }
     });
     return RoutingView;
