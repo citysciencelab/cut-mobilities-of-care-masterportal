@@ -3,7 +3,10 @@
     overflow: auto;
     max-height: 1280px;
 }
-.address {
+.inputGroupR {
+    width: 100%;
+}
+.innerRDiv {
     position: absolute;
     width: 225px;
 }
