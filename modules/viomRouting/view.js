@@ -121,11 +121,12 @@ define([
         },
         addDescription: function () {
             var description = this.model.get("description"),
-                endDescription = this.model.get("endDescription");
+                endDescription = this.model.get("endDescription"),
+                summary = this.model.get("sumLength") + " km (" + this.model.get("sumTime");
 
             $("#description").empty();
             $("#endeDescription").text("");
-            $("#summary").text("Sie erreichen Ihr Ziel nach " + this.model.get("sumLength") + " km (" + this.model.get("sumTime") + " Min.):");
+            $("#summary").text("Sie erreichen Ihr Ziel nach " + summary + " Min.):");
             if (description && description !== "" && endDescription && endDescription !== "") {
                 _.each(description, function (item, index) {
                     var tracDesc = "<strong>" + item.Description.split(". ")[0] + ".</strong>",
