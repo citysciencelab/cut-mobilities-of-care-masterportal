@@ -54,6 +54,16 @@ define([
 
             this.listenTo(this, {
                 "change:category": function () {
+                    var modelList = Radio.request("ModelList", "getCollection"),
+                        modelListToRemove = modelList.filter(function (model) {
+                            // Alle Fachdaten Layer
+                            return model.get("type") === "layer" && model.get("parentId") !== "Baselayer";
+                        });
+
+                    _.each(modelListToRemove, function (model) {
+                        model.setIsSelected(false);
+                    });
+                    modelList.remove(modelListToRemove);
                     this.setItemList([]);
                     this.addTreeMenuItems();
                     this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));

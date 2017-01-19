@@ -125,6 +125,11 @@
         max-width: calc(100vw - 35px);
     }
 }
+
+.attributions-view img {
+    max-height: 2em;
+}
+
 /***** OrientationControl *****/
 .orientationButtons {
     margin-top: 30px;
