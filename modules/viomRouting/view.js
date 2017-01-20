@@ -13,9 +13,7 @@ define([
         template: _.template(RoutingWin),
         initialize: function () {
             this.listenTo(this.model, "change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
-            this.listenTo(this.model, "change:fromCoord", this.setCenter);
             this.listenTo(this.model, "change:fromCoord", this.toggleRoutingButton);
-            this.listenTo(this.model, "change:toCoord", this.setCenter);
             this.listenTo(this.model, "change:toCoord", this.toggleRoutingButton);
             this.listenTo(this.model, "change:description", this.addDescription);
             this.listenTo(this.model, "change:fromList", this.fromListChanged);
@@ -56,7 +54,6 @@ define([
                             break;
                         }
                         case "calc": {
-                            if (evt.target)
                             $(".options").hide();
                             $(".calc").show();
                             $(".address").hide();
@@ -120,37 +117,12 @@ define([
             this.model.set("zielAdresse", "gewähltes Ziel");
         },
         addDescription: function () {
-            var description = this.model.get("description"),
-                endDescription = this.model.get("endDescription"),
-                summary = this.model.get("sumLength") + " km (" + this.model.get("sumTime");
-
-            $("#description").empty();
-            $("#endeDescription").text("");
-            $("#summary").text("Sie erreichen Ihr Ziel nach " + summary + " Min.):");
-            if (description && description !== "" && endDescription && endDescription !== "") {
-                _.each(description, function (item, index) {
-                    var tracDesc = "<strong>" + item.Description.split(". ")[0] + ".</strong>",
-                        tracLength = "<em>" + item.Description.split(". ")[1] + "</em>";
-
-                    $("#description").append("<li id='teil" + index.toString() + "' class='list-group-item'><span class=''>" + tracDesc + "<br>" + tracLength + "</span></li>");
-                });
-                $("#endeDescription").text(endDescription);
-            }
+            this.renderWin(); // Template schreibt Ergebnisse in Div
         },
         routeBerechnen: function () {
-            this.model.deleteRouteFromMap();
-            this.model.requestRoute();
-        },
-        setCenter: function (newValue) {
-            // steuere Center der View
-            if (newValue.changed.fromCoord) {
-                var newCoord = newValue.changed.fromCoord;
-            }
-            else if (newValue.changed.toCoord) {
-                var newCoord = newValue.changed.toCoord;
-            }
-            if (newCoord && newCoord.length === 2) {
-                Radio.trigger("MapView", "setCenter", newCoord, 10);
+            if ($("#calc").parent().hasClass("disabled") === false) {
+                this.model.deleteRouteFromMap();
+                this.model.requestRoute();
             }
         },
         toggleRoutingButton: function () {
@@ -252,22 +224,19 @@ define([
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
-
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.renderWin();
                 this.delegateEvents();
-                if ($("#geolocate").length > 0) {
-                    $("#startAdressePositionSpan").show();
-                }
-                else {
-                    $("#startAdressePositionSpan").hide();
-                }
             }
             else if (this.model.get("isCurrentWin") === false) {
                 this.model.deleteRouteFromMap();
                 this.undelegateEvents();
             }
+        },
+        renderWin: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html("");
+            $(".win-heading").after(this.$el.html(this.template(attr)));
         }
     });
     return RoutingView;

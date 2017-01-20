@@ -1,18 +1,18 @@
 <nav aria-label="...">
   <ul class="pagination pagination-lg">
-    <li class="active">
+    <li class="<% if (routelayer === '') {print ('active');} %>">
       <span id="address" title="Start- und Ziel eingeben" class="glyphicon glyphicon-road" aria-hidden="true"></span>
     </li>
     <li>
       <span id="options" title="Optionen eingeben" class="glyphicon glyphicon-tags" aria-hidden="true"></span>
     </li>
-    <li id="calcLi" class="<% if (fromCoord === '' || toCoord === '') {print ('disabled');} %>">
+    <li id="calcLi" class="<% if (fromCoord === '' || toCoord === '') {print ('disabled');} else if (routelayer !== '') {print ('active');} %>">
       <span id="calc" title="Route berechnen" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
     </li>
   </ul>
 </nav>
 
-<div class="address innerRDiv">
+<div class="address innerRDiv" style="<% if (routelayer !== '') {print ('display: none');} %>">
     <h4>Startadresse:</h4>
     <div class="input-group inputGroupR" id="input-group-start">
         <input type="text" class="form-control adresse" id="startAdresse" placeholder="Von:" aria-describedby="basic-addon1"  value="<%=startAdresse%>" autocomplete="off">
@@ -20,7 +20,11 @@
              <ul id="start" class="suggestlist dropdown-menu-search dropdown-menu-right" aria-labelledby="startAdresse">
             </ul>
         </div>
-        <span id="startAdressePositionSpan" class="input-group-addon glyphicon glyphicon-map-marker routinglocator startAdressePosition" aria-hidden="true"></span>
+        <%
+           if ($("#geolocate").length > 0) {
+                print ("<span id='startAdressePositionSpan' class='input-group-addon glyphicon glyphicon-map-marker routinglocator startAdressePosition' aria-hidden='true'></span>");
+           }
+        %>
     </div>
     <h4>Zieladresse:</h4>
     <div class="input-group inputGroupR" id="input-group-ziel">
@@ -45,9 +49,17 @@
     </div>
 </div>
 
-<div class="calc" style="display: none;">
-    <h4 id="summary"></h4>
+<div class="calc" style="<% if (routelayer === '') {print ('display: none');} %>">
+    <h4 id="summary"><% if (routelayer !== '') {print ('Sie erreichen Ihr Ziel nach ' + sumLength + ' km (' + sumTime + ' Min.):');} %></h4>
     <ul id="description" class="list-group">
+        <%
+            _.each(description, function (item, index) {
+                var tracDesc = "<strong>" + item.Description.split(". ")[0] + ".</strong>",
+                    tracLength = "<em>" + item.Description.split(". ")[1] + "</em>";
+
+                print("<li id='teil" + index.toString() + "' class='list-group-item'><span class=''>" + tracDesc + "<br>" + tracLength + "</span></li>");
+            });
+        %>
     </ul>
-    <h4 id="endeDescription"></h4>
+    <h4 id="endeDescription"><% if (routelayer !== '') {print (endDescription)} %></h4>
 </div>
