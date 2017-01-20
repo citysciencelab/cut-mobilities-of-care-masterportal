@@ -40,6 +40,8 @@
         "define",
         "require",
         "_",
-        "JSON"
+        "JSON",
+        "Radio",
+        "Backbone"
     ]
 }

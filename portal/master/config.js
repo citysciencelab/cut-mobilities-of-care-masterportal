@@ -47,7 +47,7 @@ define(function () {
         * @type String
         * @desc bei "attached" wird das GFI-Fenster am Klickpunkt angezeigt, bei jedem anderen String wird es als eigenes Fenster erzeugt. Wird das attribut nicht gesetzt wird der default "detached" verwendet
         */
-        gfiWindow: "detached",
+        gfiWindow: "attached",
 
         /**
         * @memberof config
@@ -156,7 +156,7 @@ define(function () {
         * @example customModules: ["../url", "../url"]
         * @default []
         */
-        customModules: ["../portal/master/verkehrsfunctions"],
+        customModules: [],
         /**
         * @memberof config
         * @type {Object}
@@ -279,7 +279,7 @@ define(function () {
         print: {
             printID: "99999",
             title: "Master",
-            gfi: false
+            gfi: true
         },
         /**
         * @memberof config
