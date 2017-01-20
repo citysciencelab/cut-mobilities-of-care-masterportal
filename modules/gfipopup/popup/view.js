@@ -135,6 +135,8 @@ define(function (require) {
                     handle: ".gfi-header"
                 });
                 $(".gfi-win").show();
+                $(".gfi-win").css("left", window.innerWidth - $(".gfi-content").width() - 50);
+                $(".gfi-content").css("width", $(".gfi-content").width());
             }
             else {
                 this.model.showPopup();
