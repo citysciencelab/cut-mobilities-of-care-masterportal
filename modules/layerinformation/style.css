@@ -56,6 +56,11 @@
 
 .layerinformation-win > .content > .subtitle {
     color: rgb(182, 0, 0);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
 }
 
 .layerinformation-win > .content > .metalink {

@@ -8,14 +8,15 @@
     </p>
 </div>
 <div class="content">
-    <h4 class="subtitle"><%= layername %></h4>
+    <h4 class="subtitle" title="<%= title %>"><%= title %></h4>
     <% if (metaID !== null) { %>
         <p class="abstract"><%= abstractText %></p>
         <br>
         <p class="metalink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
         <p>Stand der Daten: <%= date %></p>
     <% } %>
-    <% if (legendURL[0] !== undefined && typeof metaID !== "undefined") { %> <hr> <% } %>
+    <% if (_.isObject(legendURL[0]) === true && typeof metaID !== "undefined") { %>
+        <hr>
         <h4 class="subtitle">Legende</h4>
         <p>
            <%
@@ -86,4 +87,5 @@
                }}}
                %>
         </p>
+    <% } %>
 </div>
