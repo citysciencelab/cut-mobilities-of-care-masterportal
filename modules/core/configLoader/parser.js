@@ -422,25 +422,28 @@ define([
         mergeObjectsByIds: function (ids, layerlist) {
             var objectsByIds = [],
                 newObject;
-                // Objekte die gruppiert werden
-                _.each(ids, function (id) {
-                    objectsByIds.push(_.findWhere(layerlist, {id: id}));
-                });
+            // Objekte die gruppiert werden
+            _.each(ids, function (id) {
+                var lay = _.findWhere(layerlist, {id: id});
 
-                // Das erste Objekt wird kopiert
-                newObject = _.clone(objectsByIds[0]);
-                // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
-                newObject.layers = _.pluck(objectsByIds, "layers").toString();
-                // Das Attribut maxScale wird gruppiert
-                // Am kopierten Objekt wird der höchste Wert gesetzt
-                newObject.maxScale = _.max(_.pluck(objectsByIds, "maxScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                // Das Attribut minScale wird gruppiert
-                // Am kopierten Objekt wird der niedrigste Wert gesetzt
-                newObject.minScale = _.min(_.pluck(objectsByIds, "minScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
+                if (lay) {
+                    objectsByIds.push(lay);
+                }
+            });
+            // Das erste Objekt wird kopiert
+            newObject = _.clone(objectsByIds[0]);
+            // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
+            newObject.layers = _.pluck(objectsByIds, "layers").toString();
+            // Das Attribut maxScale wird gruppiert
+            // Am kopierten Objekt wird der höchste Wert gesetzt
+            newObject.maxScale = _.max(_.pluck(objectsByIds, "maxScale"), function (scale) {
+                return parseInt(scale, 10);
+            });
+            // Das Attribut minScale wird gruppiert
+            // Am kopierten Objekt wird der niedrigste Wert gesetzt
+            newObject.minScale = _.min(_.pluck(objectsByIds, "minScale"), function (scale) {
+                return parseInt(scale, 10);
+            });
 
             return newObject;
         },

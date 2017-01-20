@@ -228,7 +228,7 @@ define([
          * @return {Backbone.Model[]} - Liste der Models
          */
         getLayerAttributesWhere: function (attributes) {
-            return this.findWhere(attributes).toJSON();
+            return this.findWhere(attributes) ? this.findWhere(attributes).toJSON() : null;
         },
 
          /**
