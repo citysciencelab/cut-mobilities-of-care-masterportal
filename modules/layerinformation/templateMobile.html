@@ -10,43 +10,40 @@
             </p>
         </div>
         <div class="modal-body">
-            <h4 class="subtitle"><%= name %></h4>
+            <h4 class="subtitle"><%= title %></h4>
             <% if (typeof metaID !== "undefined") { %>
                 <p class="abstract"><%= abstractText %></p>
                 <br>
                 <p class="metalink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
                 <p>Stand der Daten: <%= date %></p>
             <% } %>
-            <% if (legendURL !== "ignore" && legendURL !== "" && typeof metaID !== "undefined") { %> <hr> <% } %>
-            <% if (legendURL !== "ignore" && legendURL !== "") { %>
+            <% if (_.isObject(legendURL[0]) === true && typeof metaID !== "undefined") { %>
+                <hr>
                 <h4 class="subtitle">Legende</h4>
                 <p>
-                    <% if (typeof legendURL === "string") {
-                        if (legendURL.search(".pdf") !== -1) { %>
-                            <a href=<%= legendURL %> target="_blank">weitere Informationen</a>
-                        <% }
-                        else { %>
+                <% if (typeof legendURL === "string") { %>
+                    <% if (legendURL.search(".pdf") !== -1) { %>
+                        <a href=<%= legendURL %> target="_blank">weitere Informationen</a>
+                    <% } else { %>
+                        <p>
+                            <img src=<%= legendURL %> >
+                        </p>
+                    <% } %>
+                <% } else { %>
+                    <% if (legendURL.length > 1) { %>
+                        <% _.each(legendURL, function (legend) { %>
                             <p>
-                                <img src=<%= legendURL %>>
+                                <img src=<%= legend %>>
                             </p>
-                        <% }
-                    }
-                    else { %>
-                        <% if (legendURL.length > 1) {
-                            _.each(legendURL, function (legend) { %>
-                                <p>
-                                    <img src=<%= legend %>>
-                                </p>
-                        <%    });
-                        }
-                        else { %>
-                            <p>
-                                <img src=<%= legendURL[0] %>>
-                            </p>
-                        <% }
-                    } %>
-                </p>
+                        <% }); %>
+                    <% } else { %>
+                        <p>
+                            <img src=<%= legendURL[0] %>>
+                        </p>
+                    <% } %>
+                <% } %>
             <% } %>
+            </p>
         </div>
     </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
