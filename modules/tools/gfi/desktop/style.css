@@ -63,3 +63,32 @@
 .gfi-detached > .gfi-header > .title {
     cursor: move;
 }
+
+.gfi-footer {
+    padding: 0;
+    color: rgb(119, 119, 119);
+    text-align: center;
+    font-size: 22px;
+}
+
+.gfi-footer > div {
+    background: #f3f3f3;
+    padding: 6px;
+    cursor: pointer;
+    width: 50%;
+}
+
+.gfi-footer > .disabled {
+    cursor: not-allowed;
+    background-color: rgb(255, 255, 255);
+    opacity: 0.2;
+}
+
+.gfi-footer > .pager-left {
+    float: left;
+    border-right: 1px solid #ddd;
+}
+
+.gfi-footer > .pager-right {
+    float: right;
+}
