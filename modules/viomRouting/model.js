@@ -31,6 +31,7 @@ define([
         },
         setStartpoint: function (geoloc) {
             this.set("fromCoord", geoloc);
+            this.setCenter(geoloc);
             this.set("startAdresse", "aktueller Standpunkt");
         },
         setStatus: function (args) { // Fenstermanagement
@@ -138,6 +139,7 @@ define([
                             this.set("toList", "");
                             this.set("zielAdresse", data.features[0].properties.text);
                         }
+                        this.setCenter(data.features[0].geometry.coordinates);
                     }
                 },
                 error: function (error) {
@@ -145,6 +147,11 @@ define([
                 },
                 timeout: 3000
             });
+        },
+        setCenter: function (newCoord) {
+            if (newCoord && newCoord.length === 2) {
+                Radio.trigger("MapView", "setCenter", newCoord, 10);
+            }
         },
         requestRoute: function () {
             // zählt das Anfordern einer Routenberechnung
