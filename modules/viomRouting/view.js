@@ -138,8 +138,10 @@ define([
             }
         },
         routeBerechnen: function () {
-            this.model.deleteRouteFromMap();
-            this.model.requestRoute();
+            if ($("#calc").parent().hasClass("disabled") === false) {
+                this.model.deleteRouteFromMap();
+                this.model.requestRoute();
+            }
         },
         setCenter: function (newValue) {
             // steuere Center der View
