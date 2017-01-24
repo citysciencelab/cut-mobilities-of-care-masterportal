@@ -20,6 +20,7 @@ define([
                 "isOpera": this.isOpera,
                 "isWindows": this.isWindows,
                 "isChrome": this.isChrome,
+                "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny
             }, this);
 
