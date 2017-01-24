@@ -204,14 +204,14 @@ define(function () {
         * @desc Pfad zur services*.json mit den verfügbaren WMS-Layern bzw. WFS-FeatureTypes.
         * @example layerConf: "../components/lgv-config/services-fhhnet.json"
         */
-        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
+        layerConf: "../components/lgv-config/services-internet.json",
         /**
         * @memberof config
         * @type {String}
         * @desc Pfad zur json mit Druck- und WPS-Dienst.
         * @example restConf: "../components/lgv-config/rest-services-fhhnet.json"
         */
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
+        restConf: "../components/lgv-config/rest-services-internet.json",
         /**
         * @memberof config
         * @type {String}
