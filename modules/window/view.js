@@ -70,10 +70,7 @@ define([
             if (toolModel) {
                 toolModel.setIsActive(false);
             }
-            if (this.model.get("winType") === "routing") {
-                EventBus.trigger("deleteRoute", this);
-            }
-            else if (this.model.get("winType") === "download") {
+            if (this.model.get("winType") === "download") {
                 Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).setIsActive(false);
             }
             this.$el.hide("slow");

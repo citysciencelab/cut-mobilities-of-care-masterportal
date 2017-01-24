@@ -155,7 +155,7 @@
       "zoom": true,
       "orientation": "once",
       "poi": true,
-      "attributions": false
+      "attributions": true
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -222,7 +222,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": false,
+          "visibility": true,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",

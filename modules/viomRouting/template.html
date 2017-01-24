@@ -1,62 +1,66 @@
-<div class="panel-route">
-    <div class="input-group" id="input-group-start" style="width: 100%;">
-        <span class="input-group-addon start-square"></span>
-        <input type="text" class="form-control startAdresseChanged" id="startAdresse" placeholder="Von:" aria-describedby="basic-addon1"  value="<%=startAdresse%>">
-        <ul class="dropdown-menu-search dropdown-menu-right" aria-labelledby="startAdresse" style="max-height: 220px; overflow-y: auto; overflow-x: hidden;">
-        </ul>
-        <span id="startAdressePositionSpan" class="input-group-addon glyphicon glyphicon-map-marker routinglocator startAdressePosition" aria-hidden="true"></span>
+<nav aria-label="...">
+  <ul class="pagination pagination-lg">
+    <li class="<% if (routelayer === '') {print ('active');} %>">
+      <span id="address" title="Start- und Ziel eingeben" class="glyphicon glyphicon-road" aria-hidden="true"></span>
+    </li>
+    <li>
+      <span id="options" title="Optionen eingeben" class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+    </li>
+    <li id="calcLi" class="<% if (fromCoord === '' || toCoord === '') {print ('disabled');} else if (routelayer !== '') {print ('active');} %>">
+      <span id="calc" title="Route berechnen" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+    </li>
+  </ul>
+</nav>
+
+<div class="address innerRDiv" style="<% if (routelayer !== '') {print ('display: none');} %>">
+    <h4>Startadresse:</h4>
+    <div class="input-group inputGroupR" id="input-group-start">
+        <input type="text" class="form-control adresse" id="startAdresse" placeholder="Von:" aria-describedby="basic-addon1"  value="<%=startAdresse%>" autocomplete="off">
+        <div style="position:relative;">
+             <ul id="start" class="suggestlist dropdown-menu-search dropdown-menu-right" aria-labelledby="startAdresse">
+            </ul>
+        </div>
+        <%
+           if ($("#geolocate").length > 0) {
+                print ("<span id='startAdressePositionSpan' class='input-group-addon glyphicon glyphicon-map-marker routinglocator startAdressePosition' aria-hidden='true'></span>");
+           }
+        %>
     </div>
-    <br>
-    <div class="input-group" id="input-group-ziel" style="width: 100%;">
-        <span class="input-group-addon ziel-square"></span>
-        <input type="text" class="form-control zielAdresseChanged" id="zielAdresse" placeholder="Nach:" aria-describedby="basic-addon1" value="<%=zielAdresse%>">
-        <ul class="dropdown-menu-search dropdown-menu-right" role="menu" aria-labelledby="zielAdresse" style="max-height: 220px; overflow-y: auto; overflow-x: hidden;">
-        </ul>
-    </div>
-    <br>
-    <div style="width: 100%;" class="btn-group" role="group" aria-label="...">
-        <button style="width: 50%;" type="button" class="btn btn-default toggleRoutingOptions">
-            <span class="" aria-hidden="true">Optionen</span>
-            <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-        </button>
-        <button id="RouteBerechnenButton" style="width: 50%;" type="button" disabled class="btn btn-primary">
-            <span class="" aria-hidden="true">Route berechnen</span>
-            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-        </button>
+    <h4>Zieladresse:</h4>
+    <div class="input-group inputGroupR" id="input-group-ziel">
+        <input type="text" class="form-control adresse" id="zielAdresse" placeholder="Nach:" aria-describedby="basic-addon1" value="<%=zielAdresse%>" autocomplete="off">
+        <div style="position:relative;">
+            <ul id="ziel" class="suggestlist dropdown-menu-search dropdown-menu-right" role="menu" aria-labelledby="zielAdresse">
+            </ul>
+        </div>
     </div>
 </div>
 
-<div class="panel-options" style="display: none;">
-    <h3 class="panel-title">Startzeitpunkt vorgeben:</h3>
-    <br>
-    <div class="input-group">
-        <span class="input-group-addon glyphicon glyphicon-calendar" id="basic-addon1" style="vertical-align: middle !important;"></span>
-        <input type="date" id="dayOfWeekButton" class="form-control fixedwidth changedWochentag" aria-describedby="basic-addon2" min="2015-01-25">
+<div class="options innerRDiv" style="display: none;">
+    <h4>Startzeitpunkt vorgeben:</h4>
+    <div class="input-group inputGroupR">
+        <span class="input-group-addon">Datum</span>
+        <input type="date" id="dayOfWeekButton" class="form-control changedWochentag" aria-describedby="basic-addon2" min="2017-01-01" value="<% var date = new Date(); print (date.toISOString().split('T')[0]) %>">
     </div>
     <br>
-    <div class="input-group">
-        <span class="input-group-addon glyphicon glyphicon-time" id="basic-addon2" style="vertical-align: middle !important;"></span>
-        <input type="time" id="timeButton" class="form-control fixedwidth changedUhrzeit" aria-describedby="basic-addon2" min="00:00" max="23:59">
-    </div>
-</div>
-
-<div class="panel-switcher" style="display: none;">
-    <h3 id="endeDescription" class="panel-title" style="margin-top: 5px;"></h3><br>
-    <div style="width: 100%;" class="btn-group" role="group" aria-label="...">
-        <button style="width: 50%;" type="button" class="btn btn-success toggleLayout">
-            <span id="toggleLayoutSpan" class="" aria-hidden="true">Beschreibung</span>
-            <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
-        </button>
-        <button style="width: 50%;" type="button" class="btn btn-danger deleteroute">
-            <span class="" aria-hidden="true">Route löschen </span>
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-        </button>
+    <div class="input-group inputGroupR">
+        <span class="input-group-addon">Uhrzeit</span>
+        <input type="time" id="timeButton" class="form-control changedUhrzeit" aria-describedby="basic-addon2" min="00:00" max="23:59" value="<% var date = new Date(); print (date.toLocaleTimeString()) %>">
     </div>
 </div>
 
-<div class="panel-description" id="input-group-description" style="display: none;">
-    <h3 class="panel-title ">Ihre verkehrsbeeinflusste und schnellste Route:</h3>
-    <br>
-    <ul class="list-group">
+<div class="calc" style="<% if (routelayer === '') {print ('display: none');} %>">
+    <h4 id="summary"><% if (routelayer !== '') {print ('Sie erreichen Ihr Ziel nach ' + sumLength + ' km (' + sumTime + ' Min.):');} %></h4>
+    <ul id="description" class="list-group">
+        <%
+            _.each(description, function (item, index) {
+                var tracDesc = "<strong>" + item.Description.split(". ")[0] + ".</strong>",
+                    tracLength = "<em>" + item.Description.split(". ")[1] + "</em>";
+
+                print("<li id='teil" + index.toString() + "' class='list-group-item'><span class=''>" + tracDesc + "<br>" + tracLength + "</span></li>");
+            });
+        %>
     </ul>
+    <h4 id="endeDescription"><% if (routelayer !== '') {print (endDescription)} %></h4>
 </div>
+
