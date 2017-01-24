@@ -11,12 +11,10 @@ define(function (require) {
         pContent: [],
 
         /**
-         * params: [0] = Objekt mit name und url; [1] = Koordinate
+         * params: [0] = Objekt mit name und url
          */
         requestFeatures: function (params) {
-
-            this.groupContentByTyp(params[0]);
-            this.setGFIPosition(params[1]);
+            this.groupContentByTyp(params);
             this.pContent = [];
 
             if (this.has("gfiWMSContent")) {
@@ -31,7 +29,7 @@ define(function (require) {
             }
             else {
                 this.getGFIFeatureContent();
-                this.buildTemplate(this.getGFIPosition());
+                this.buildTemplate();
             }
 
             Radio.trigger("Util", "hideLoader");
@@ -40,7 +38,7 @@ define(function (require) {
         groupContentByTyp: function (content) {
             var groupByTyp = _.groupBy(content, function (obj) {
                 // WMS || WFS || GeoJSON
-                return obj.typ;
+                return obj.model.getTyp();
             });
 
             _.each(groupByTyp, function (value, key) {
@@ -73,7 +71,7 @@ define(function (require) {
 
                 window.open(visibleLayer.url, "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
                 this.getGFIFeatureContent();
-                this.buildTemplate(this.getGFIPosition());
+                this.buildTemplate();
                 this.unset("gfiWMSContent");
                 this.pContent = [];
             }
@@ -92,7 +90,7 @@ define(function (require) {
                     },
                     complete: function () {
                         this.getGFIFeatureContent();
-                        this.buildTemplate(this.getGFIPosition());
+                        this.buildTemplate();
                         this.unset("gfiWMSContent");
                         this.pContent = [];
                     }
@@ -105,8 +103,8 @@ define(function (require) {
 
             if (this.has("gfiWFSContent")) {
                 _.each(this.getGFIWFSContent(), function (visibleLayer) {
-                    gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.attributes);
-                    this.pushGFIContent(gfiContent, visibleLayer);
+                    gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.model.get("gfiAttributes"));
+                    this.pushGFIContent(gfiContent, visibleLayer.model);
                 }, this);
                 this.unset("gfiWFSContent");
             }
@@ -122,8 +120,8 @@ define(function (require) {
         pushGFIContent: function (gfiContent, visibleLayer) {
             this.pContent.push({
                 content: gfiContent,
-                name: visibleLayer.name,
-                ol_layer: visibleLayer.ol_layer
+                name: visibleLayer.getName(),
+                ol_layer: visibleLayer.getLayer()
             });
         },
 
@@ -141,17 +139,18 @@ define(function (require) {
             return featureList;
         },
 
-        setWMSPopupContent: function (params) {
+        setWMSPopupContent: function (obj) {
             var url,
-                data = "FEATURE_COUNT=" + params.ol_layer.get("featureCount").toString(),
+                data = "FEATURE_COUNT=" + obj.model.get("featureCount").toString(),
                 pgfi = [];
 
-            if (params.url.search(location.host) === -1) {
-                url = Radio.request("Util", "getProxyURL", params.url);
+            if (obj.model.getGfiUrl().search(location.host) === -1) {
+                url = Radio.request("Util", "getProxyURL", obj.model.getGfiUrl());
             }
             else {
-                url = params.url;
+                url = obj.model.getGfiUrl();
             }
+            url = url.replace(/SLD_BODY\=.*?\&/, "");
             ++this.requestCount;
             $.ajax({
                 url: url,
@@ -207,9 +206,9 @@ define(function (require) {
                     }
 
                     if (gfiList) {
-                        pgfi = this.translateGFI(gfiList, params.ol_layer.get("gfiAttributes"), params.ol_layer.get("gfiTheme"), "WMS");
+                        pgfi = this.translateGFI(gfiList, obj.model.get("gfiAttributes"), obj.model.get("gfiTheme"), "WMS");
                     }
-                    this.pushGFIContent(pgfi, params);
+                    this.pushGFIContent(pgfi, obj.model);
                 },
                 error: function (jqXHR, textStatus) {
                     alert("Ajax-Request " + textStatus);
@@ -219,7 +218,7 @@ define(function (require) {
 
                     if (this.requestCount === 0) {
                         this.getGFIFeatureContent();
-                        this.buildTemplate(this.getGFIPosition());
+                        this.buildTemplate();
                         this.unset("gfiWMSContent");
                     }
                 }
@@ -227,7 +226,7 @@ define(function (require) {
         },
 
         buildTemplate: function () {
-            Radio.trigger("Requestor", "renderResults", [this.pContent, this.getGFIPosition()]);
+            Radio.trigger("Requestor", "renderResults", this.pContent);
         },
 
         setGFIWMSContent: function (value) {
@@ -242,10 +241,6 @@ define(function (require) {
             this.set("gfiGeoJSONContent", value);
         },
 
-        setGFIPosition: function (value) {
-            this.set("gfiPosition", value);
-        },
-
         getGFIWMSContent: function () {
             return this.get("gfiWMSContent");
         },
@@ -256,10 +251,6 @@ define(function (require) {
 
         getGFIGeoJSONContent: function () {
             return this.get("gfiGeoJSONContent");
-        },
-
-        getGFIPosition: function () {
-            return this.get("gfiPosition");
         },
 
         isValidKey: function (key) {

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<div class="bg-primary container-fluid">
+    <h5 class="text-center"><strong>Ziele ab <em><%= standort %></em></strong></h5>
+</div>
+<table id="reisezeitentable" class="table table-condensed table-hover">
+    <tbody>
+        <% _.each(ziele, function (ziel) { %>
+            <tr class="showroute" colspan="2" title="Detaillierte Route anzeigen." id="<%= ziel.routenid %>">
+                <td>
+                    <%= ziel.zielort %>
+                </td>
+                <td>
+                    <span title="<%= ziel.anzeige %>" class="label label-info"><%= ziel.anzeige %></span>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>

@@ -31,7 +31,9 @@ define(function (require) {
                 },
                 "getLayers": this.getLayers,
                 "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
-                "createLayerIfNotExists": this.createLayerIfNotExists
+                "createLayerIfNotExists": this.createLayerIfNotExists,
+                "getEventPixel": this.getEventPixel,
+                "hasFeatureAtPixel": this.hasFeatureAtPixel
             }, this);
 
             channel.on({
@@ -45,16 +47,14 @@ define(function (require) {
                 "removeInteraction": this.removeInteraction,
                 "setBBox": this.setBBox,
                 "render": this.render,
-                "registerPostCompose": this.registerPostCompose,
-                "unregisterPostCompose": this.unregisterPostCompose,
                 "zoomToExtent": this.zoomToExtent,
                 "updatePrintPage": this.updatePrintPage,
-                "activateClick": this.activateClick,
                 "createVectorLayer": this.createVectorLayer,
                 "addLoadingLayer": this.addLoadingLayer,
                 "removeLoadingLayer": this.removeLoadingLayer,
                 "registerListener": this.registerListener,
-                "unregisterListener": this.unregisterListener
+                "unregisterListener": this.unregisterListener,
+                "forEachFeatureAtPixel": this.forEachFeatureAtPixel
             }, this);
 
             this.listenTo(this, {
@@ -76,12 +76,6 @@ define(function (require) {
 
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
-            var activeItem = Radio.request("Parser", "getItemByAttributes", {isActive: true});
-
-            if (!_.isUndefined(activeItem)) {
-                this.activateClick(activeItem.id);
-            }
-
         },
 
         /**
@@ -148,26 +142,17 @@ define(function (require) {
             return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
         },
 
-        GFIPopupVisibility: function (value) {
-            if (value === true) {
-                this.set("GFIPopupVisibility", true);
-            }
-            else {
-                this.set("GFIPopupVisibility", false);
-            }
-        },
+        // GFIPopupVisibility: function (value) {
+        //     if (value === true) {
+        //         this.set("GFIPopupVisibility", true);
+        //     }
+        //     else {
+        //         this.set("GFIPopupVisibility", false);
+        //     }
+        // },
 
         getMap: function () {
             return this.get("map");
-        },
-
-        activateClick: function (tool) {
-            if (tool === "gfi") {
-                this.get("map").on("click", this.setGFIParams, this);
-            }
-            else if (tool === "coords" || tool === "draw" || tool === "measure") {
-                this.get("map").un("click", this.setGFIParams, this);
-            }
         },
 
         /**
@@ -189,6 +174,33 @@ define(function (require) {
          */
         unregisterListener: function (event, callback, context) {
             this.getMap().un(event, callback, context);
+        },
+
+        /**
+         * Gibt die Kartenpixelposition für ein Browser-Event relative zum Viewport zurück
+         * @param  {Event} evt - Mouse Events | Keyboard Events | ...
+         * @return {ol.Pixel}
+         */
+        getEventPixel: function (evt) {
+            return this.getMap().getEventPixel(evt);
+        },
+
+        /**
+         * Ermittelt ob Features ein Pixel im Viewport schneiden
+         * @param  {ol.Pixel} pixel
+         * @return {Boolean}
+         */
+        hasFeatureAtPixel: function (pixel) {
+            return this.getMap().hasFeatureAtPixel(pixel);
+        },
+
+        /**
+         * Iteriert über alle Features, die ein Pixel auf dem Viewport schneiden
+         * @param  {ol.Pixel} pixel
+         * @param  {Function} callback - Die Feature Callback Funktion
+         */
+        forEachFeatureAtPixel: function (pixel, callback) {
+            this.getMap().forEachFeatureAtPixel(pixel, callback);
         },
 
         /**
@@ -249,7 +261,6 @@ define(function (require) {
         */
         removeLayer: function (layer) {
             this.get("map").removeLayer(layer);
-            // layers = this.get("map").getLayers().getArray();
         },
 
         /**
@@ -298,142 +309,10 @@ define(function (require) {
             });
         },
 
-        /**
-        * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
-        */
-        checkInsideSearchMarker: function (top, left) {
-            var button = Radio.request("MapMarker", "getCloseButtonCorners"),
-                bottomSM = button.bottom,
-                leftSM = button.left,
-                topSM = button.top,
-                rightSM = button.right;
-
-            if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
-                Radio.trigger("GFIPopup", "closeGFIParams");
-                return true;
-            }
-            else {
-                return false;
-            }
-        },
-        /**
-         * Stellt die notwendigen Parameter für GFI zusammen. Gruppenlayer werden nicht abgefragt, wohl aber deren ChildLayer.
-         */
-        setGFIParams: function (evt) {
-            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"}),
-                visibleGeoJSONLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GeoJSON"}),
-                visibleLayerList = _.union(visibleWMSLayerList, visibleGeoJSONLayerList),
-                gfiParams = [],
-                scale = Radio.request("MapView", "getOptions").scale,
-                // scale = _.findWhere(Radio.request("MapView", "getOptions"), {resolution: this.get("view").getResolution()}).scale,
-                eventPixel = this.get("map").getEventPixel(evt.originalEvent),
-                isFeatureAtPixel = this.get("map").hasFeatureAtPixel(eventPixel),
-                resolution = this.get("view").getResolution(),
-                projection = this.get("view").getProjection(),
-                coordinate = evt.coordinate;
-
-            // Abbruch, wenn auf SerchMarker x geklcikt wird.
-            if (this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true) {
-                return;
-            }
-
-            // WFS
-            Radio.trigger("ClickCounter", "gfi");
-            if (isFeatureAtPixel === true) {
-                this.get("map").forEachFeatureAtPixel(eventPixel, function (featureAtPixel, pLayer) {
-                    var modelByFeature = Radio.request("ModelList", "getModelByAttributes", {id: pLayer.get("id")});
-                    // Cluster Feature
-                    if (_.has(featureAtPixel.getProperties(), "features") === true) {
-                        _.each(featureAtPixel.get("features"), function (feature) {
-                             if (_.isUndefined(modelByFeature) === false) {
-                                 gfiParams.push({
-                                     typ: "WFS",
-                                     feature: feature,
-                                     attributes: modelByFeature.get("gfiAttributes"),
-                                     name: modelByFeature.get("name"),
-                                     ol_layer: modelByFeature.get("layer")
-                                 });
-                             }
-                        });
-                    }
-                    // Feature
-                    else {
-                        if (!_.isUndefined(modelByFeature)) {
-                            gfiParams.push({
-                                typ: "WFS",
-                                feature: featureAtPixel,
-                                attributes: modelByFeature.get("gfiAttributes"),
-                                name: modelByFeature.get("name"),
-                                ol_layer: modelByFeature.get("layer")
-                            });
-                        }
-                    }
-                });
-            }
-
-            // WMS und GeoJSON
-            _.each(visibleLayerList, function (element) {
-                if (element.get("typ") !== "GROUP") {
-                    var gfiAttributes = element.get("gfiAttributes");
-
-                    if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
-                        if (element.get("typ") === "WMS") {
-                            var gfiURL = element.getLayerSource().getGetFeatureInfoUrl(
-                                coordinate, resolution, projection,
-                                {INFO_FORMAT: element.getInfoFormat()}
-                            );
-
-                            gfiURL = gfiURL.replace(/SLD_BODY\=.*?\&/, "");
-                            gfiParams.push({
-                                typ: "WMS",
-                                infoFormat: element.getInfoFormat(),
-                                scale: scale,
-                                url: gfiURL,
-                                name: element.get("name"),
-                                ol_layer: element
-                            });
-                        }
-                    }
-                    else if (element.get("typ") === "GeoJSON" && isFeatureAtPixel === true) {
-                        this.get("map").forEachFeatureAtPixel(evt.pixel, function (feature) {
-                            gfiParams.push({
-                                typ: "GeoJSON",
-                                feature: feature,
-                                name: element.get("name"),
-                                ol_layer: element
-                            });
-                        });
-                    }
-                }
-                else {
-                    element.get("backbonelayers").forEach(function (layer) {
-                        var gfiAttributes = layer.get("gfiAttributes");
-
-                        if (_.isObject(gfiAttributes) || _.isString(gfiAttributes) && gfiAttributes.toUpperCase() !== "IGNORE") {
-                            if (layer.get("typ") === "WMS") {
-                                var gfiURL = layer.getLayerSource().getGetFeatureInfoUrl(
-                                    coordinate, resolution, projection,
-                                    {INFO_FORMAT: layer.getInfoFormat()}
-                                );
-
-                                gfiParams.push({
-                                    typ: "WMS",
-                                    infoFormat: layer.getInfoFormat(),
-                                    // scale: scale,
-                                    url: gfiURL,
-                                    name: layer.get("name"),
-                                    ol_layer: layer
-                                });
-                            }
-                        }
-                    });
-                }
-            }, this);
-            Radio.trigger("Map", "setGFIParams", [gfiParams, coordinate]);
-        },
         zoomToExtent: function (extent, options) {
             this.get("view").fit(extent, this.get("map").getSize(), options);
         },
+
         updatePrintPage: function (args) {
             this.set("layoutPrintPage", args[1]);
             this.set("scalePrintPage", args[2]);

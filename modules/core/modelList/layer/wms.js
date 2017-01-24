@@ -90,7 +90,6 @@ define(function (require) {
                 source: this.getLayerSource(),
                 name: this.get("name"),
                 typ: this.get("typ"),
-                gfiAttributes: this.get("gfiAttributes"),
                 legendURL: this.get("legendURL"),
                 routable: this.get("routable"),
                 gfiTheme: this.get("gfiTheme"),
@@ -228,6 +227,14 @@ define(function (require) {
 
         getInfoFormat: function () {
             return this.get("infoFormat");
+        },
+
+        getGfiUrl: function () {
+            var resolution = Radio.request("MapView", "getResolution").resolution,
+                projection = Radio.request("MapView", "getProjection"),
+                coordinate = Radio.request("GFI", "getCoordinate");
+
+            return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, { INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
         }
     });
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<% if (gfiContent[0]["Area pv_m2"] > 0) { %>
+    <h6><strong>Solarpotential des Gebäudes: <%= gfiContent[0]["Adrfull"] %></strong></h6>
+    <p>
+        Die Gesamteignungsfläche des Gebäudes beträgt <%= gfiContent[0]["Area pv_m2"] %> m².
+        Die mittlere Strahlungsmenge unter Berücksichtigung der Verschattung für dieses Gebäude beträgt <%= gfiContent[0]["Ic mean"] %> kWh/m²a.</br></br>
+        <b>Photovoltaik</b> - Installierbare PV-Fläche</br>
+        sehr gut geeignet (EK4): <%= gfiContent[0]["Area ek4_p"] %> m²</br>
+        gut geeignet (EK3): <%= gfiContent[0]["Area ek3_p"] %> m²</br>
+        geeignet (EK2): <%= gfiContent[0]["Area ek2_p"] %> m²</br>
+        bedingt geeignet (EK1): <%= gfiContent[0]["Area ek1_p"] %> m²</br></br>
+        Auf der Dachfläche kann eine PV-Anlage mit einer Peakleistung von ca. <%= gfiContent[0]["Powerp 15"] %> kWp installiert werden.</br>
+        Der prognostizierte Stromertrag der PV-Anlage beträgt ca. <%= gfiContent[0]["P pv_15"] %> MWh/a.</br>
+        Die mögliche CO2-Einsparung beträgt <%= gfiContent[0]["Co2 pv_15"] %> t/a.</br></br>
+        Die Angaben beziehen sich auf die Verwendung eines Solarmoduls mit 15 % Wirkungsgrad und einer Anlageneffektivität (Performance Ratio) von 80 %.</br></br>
+        <b>Solarthermie </b> - Installierbare Solarthermiefläche
+        sehr gut geeignet (EK2): <%= gfiContent[0]["Area st_2a"] %> m²</br>
+        gut geeignet (EK1): <%= gfiContent[0]["Area st_1a"] %> m²</br></br>
+        Der mögliche Wärmeertrag beträgt  <%= gfiContent[0]["P st_mwh_a"] %> MWh/a.
+    </p>
+<% }
+else { %>
+    <h6><strong>Solarpotential des Gebäudes: <%= gfiContent[0]["Adrfull"] %></strong></h6>
+    <p>
+        Dieses Gebäude ist für die Einrichtung einer Photovoltaik-Anlage nicht geeignet. Gegebenenfalls kann jedoch eine Solarthermie-Anlage nutzbringend betrieben werden.</br></br>
+        <b>Solarthermie </b> - Installierbare Solarthermiefläche</br>
+        sehr gut geeignet (EK2): <%= gfiContent[0]["Area st_2a"] %> m²</br>
+        gut geeignet (EK1): <%= gfiContent[0]["Area st_1a"] %> m²</br></br>
+        Der mögliche Wärmeertrag beträgt  <%= gfiContent[0]["P st_mwh_a"] %> MWh/a.
+    </p>
+<% } %>

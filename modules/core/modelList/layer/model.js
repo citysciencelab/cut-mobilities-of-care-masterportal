@@ -262,6 +262,14 @@ define(function (require) {
             return this.get("minScale");
         },
 
+        getTyp: function () {
+            return this.get("typ");
+        },
+
+        getGfiAttributes: function () {
+            return this.get("gfiAttributes");
+        },
+
         incTransparency: function () {
             if (this.getTransparency() <= 90) {
                 this.setTransparency(this.get("transparency") + 10);

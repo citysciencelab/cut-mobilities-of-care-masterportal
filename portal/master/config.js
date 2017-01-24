@@ -211,7 +211,7 @@ define(function () {
         * @desc Pfad zur json mit Druck- und WPS-Dienst.
         * @example restConf: "../components/lgv-config/rest-services-fhhnet.json"
         */
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         /**
         * @memberof config
         * @type {String}

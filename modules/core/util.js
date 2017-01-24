@@ -20,6 +20,7 @@ define([
                 "isOpera": this.isOpera,
                 "isWindows": this.isWindows,
                 "isChrome": this.isChrome,
+                "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny
             }, this);
 
@@ -33,7 +34,7 @@ define([
 
             this.listenTo(this, {
                 "change:isViewMobile": function () {
-                    channel.trigger("isViewMobileChanged");
+                    channel.trigger("isViewMobileChanged", this.getIsViewMobile());
                 }
             });
 

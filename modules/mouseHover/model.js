@@ -25,7 +25,10 @@ define([
 
             this.filterWFSList();
             this.set("element", this.get("mhpOverlay").getElement());
-            EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
+            // EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
+            this.listenTo(Radio.channel("GFI"), {
+                "isVisible": this.GFIPopupVisibility
+            }, this);
         },
 
         filterWFSList: function () {

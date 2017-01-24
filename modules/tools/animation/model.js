@@ -22,6 +22,12 @@ define(function (require) {
             animationLimit: 0
         },
         initialize: function () {
+            var channel = Radio.channel("Animation");
+
+            channel.reply({
+                "getLayer": this.getLayer
+            }, this);
+
             this.listenTo(Radio.channel("Window"), {
                 "winParams": function (args) {
                     this.setStatus(args);
@@ -67,14 +73,13 @@ define(function (require) {
 
             // Config auslesen oder default
             this.setDefaults();
-            
 
             this.sendRequest("GET", this.getParams(), this.parseKreise);
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), Radio.request("Map", "getLayers").getArray().length]);
         },
 
         setDefaults: function () {
-             if (_.has(Config, "animation")) { 
+             if (_.has(Config, "animation")) {
                 this.setZoomLevel(Config.animation.zoomlevel || 1);
                 this.setSteps(Config.animation.steps || 50);
                 this.setUrl(Config.animation.url || "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
@@ -487,7 +492,7 @@ define(function (require) {
             }
         },
         stopAnimation: function (features) {
-            Radio.trigger("Map", "unregisterPostCompose", "postcompose", this.moveFeature, this);
+            Radio.trigger("Map", "unregisterListener", "postcompose", this.moveFeature, this);
             this.set("animating", false);
             // Wenn Animation fertig alle Features als Vectoren auf neue Layer malen.
             // features ist undefined, wenn die Funktion üder den Resetknopf aufgerufen wird
@@ -657,6 +662,10 @@ define(function (require) {
 
         getZoomLevel: function () {
             return this.get("zoomLevel");
+        },
+
+        getLayer: function () {
+            return this.get("layer");
         },
 
         hideMapContent: function () {
