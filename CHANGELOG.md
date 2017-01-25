@@ -1,3 +1,11 @@
+# Changelog LGV Master-Portal 1.2.2
+FIXES:
+
+  - ce3e3ae7 gfipopup größe verändert sich nicht durch verschieben vom popup
+  - ccd07347 viomrouting
+  - 8f6aca60 Portal wird nicht geladen, wenn LayerID in JSON nicht definiert
+  - c8be5d5d Layerinformationen von Hintergrundlayern wurden nicht angezeigt und Title war nicht Datensatzname
+
 # Changelog LGV Master-Portal 1.2.1
 
 FIXES:
