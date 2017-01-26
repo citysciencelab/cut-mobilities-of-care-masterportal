@@ -19,7 +19,8 @@ define([
             isPoiOn: false,
             tracking: false, // Flag, ob derzeit getrackt wird.
             geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
-            position: ""
+            position: "",
+            isGeolocationDenied: false
         },
         initialize: function () {
             this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
@@ -66,20 +67,25 @@ define([
             this.removeOverlay();
         },
         track: function () {
-            var geolocation;
+            if (this.getIsGeolocationDenied() === false) {
+                var geolocation;
 
-            Radio.trigger("Map", "addOverlay", this.get("marker"));
-            if (this.get("geolocation") === null) {
-                geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
-                this.set("geolocation", geolocation);
+                Radio.trigger("Map", "addOverlay", this.get("marker"));
+                if (this.get("geolocation") === null) {
+                    geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
+                    this.set("geolocation", geolocation);
+                }
+                else {
+                    geolocation = this.get("geolocation");
+                    this.positioning();
+                }
+                geolocation.on ("change", this.positioning, this);
+                geolocation.on ("error", this.onError, this);
+                this.set("tracking", true);
             }
             else {
-                geolocation = this.get("geolocation");
-                this.positioning();
+                this.onError();
             }
-            this.set("tracking", true);
-            geolocation.on ("change", this.positioning, this);
-            geolocation.on ("error", this.onError, this);
         },
         positionMarker: function (position) {
             try {
@@ -117,11 +123,12 @@ define([
                 this.zoomAndCenter(centerPosition);
             }
         },
-        onError: function (evt) {
+        onError: function () {
             Radio.trigger("Alert", "alert", {
-                text: "<strong>Lokalisierung nicht verfügbar: </strong>" + evt.message,
+                text: "<strong>Lokalisierung wurde deaktiviert: </strong>",
                 kategorie: "alert-danger"
             });
+            this.setIsGeolocationDenied(true);
             this.untrack();
         },
         onPOIError: function (evt) {
@@ -200,6 +207,14 @@ define([
          */
         setIsPoiOn: function (value) {
             this.set("isPoiOn", value);
+        },
+
+        setIsGeolocationDenied: function (value) {
+          this.set("isGeolocationDenied", value);
+        },
+
+        getIsGeolocationDenied: function () {
+          return this.get("isGeolocationDenied");
         }
     });
 
