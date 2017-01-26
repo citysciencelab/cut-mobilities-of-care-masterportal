@@ -9,7 +9,7 @@ define([
             cc: [],
             ccToUser: false,
             bcc: [],
-            subject: "Supportanfrage zum Portal " + document.title,
+            subject: "Supportanfrage zum Portal " + _.isUndefined(Radio.request("Parser", "getPortalConfig").PortalTitle) === false ? Radio.request("Parser", "getPortalConfig").PortalTitle : document.title,
             textPlaceholder: "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;",
             text: "",
             systemInfo: "<br>==================<br>Platform: " + navigator.platform + "<br>" + "Cookies enabled: " + navigator.cookieEnabled + "<br>" + "UserAgent: " + navigator.userAgent,
