@@ -17,10 +17,7 @@ define([
         initialize: function () {
             var showGeolocation = true;
 
-            if (Radio.request("Util", "isChrome") === true && window.location.protocol === "http:") {
-                showGeolocation = false;
-            }
-            if (Radio.request("Util", "isApple") === true) {
+            if (window.location.protocol === "http:") {
                 showGeolocation = false;
             }
             // Chrome erlaubt nur bei https-Seiten die Lokalisierung (stand: 20.07.2016).
