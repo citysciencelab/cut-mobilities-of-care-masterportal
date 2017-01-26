@@ -103,7 +103,6 @@
         "contact": {
             "name": "Kontakt",
             "glyphicon": "glyphicon-envelope",
-            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
             "serviceID": "80001",
             "from": [
               {
@@ -120,7 +119,6 @@
             "ccToUser": true,
             "cc": [],
             "bcc": [],
-            "subject": "",
             "textPlaceholder": "Bitte formulieren",
             "includeSystemInfo": true
         }
