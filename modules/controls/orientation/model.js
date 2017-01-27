@@ -125,7 +125,7 @@ define([
         },
         onError: function () {
             Radio.trigger("Alert", "alert", {
-                text: "<strong>Lokalisierung wurde deaktiviert: </strong>",
+                text: "<strong>Lokalisierung nicht verfügbar: </strong>",
                 kategorie: "alert-danger"
             });
             this.setIsGeolocationDenied(true);
