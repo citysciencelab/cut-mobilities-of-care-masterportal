@@ -46,6 +46,7 @@ define([
             channel.on({
                 "setCategory": this.setCategory,
                 "addItem": this.addItem,
+                "addItemAtTop": this.addItemAtTop,
                 "addItems": this.addItems
             }, this);
 
@@ -176,7 +177,7 @@ define([
         },
 
         /**
-         * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) hinzu
+         * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Ende hinzu
          * @param {Object} obj - Item
          */
         addItem: function (obj) {
@@ -195,6 +196,19 @@ define([
             _.each(objs, function (obj) {
                 this.addItem(_.extend(obj, attr));
             }, this);
+        },
+
+        /**
+         * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Beginn hinzu
+         * @param {Object} obj - Item
+         */
+        addItemAtTop: function (obj) {
+            if (!_.isUndefined(obj.visibility)) {
+                obj.isSelected = obj.visibility;
+                obj.isVisibleInMap = obj.visibility;
+                delete obj.visibility;
+            }
+            this.getItemList().unshift(obj);
         },
 
         /**

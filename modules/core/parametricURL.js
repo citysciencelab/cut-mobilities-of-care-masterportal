@@ -74,15 +74,16 @@ define([
             } else {
                 _.each(layerIdList, function(val, index) {
                      var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                     layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val });
+                     layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val }),
+                     treeType = Radio.request("Parser", "getTreeType");
 
                      layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
 
-                     if (!layerConfigured && layerExisting) {
+                     if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType==="light") {
                          var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
-                         Radio.trigger("Parser", "addItem", layerToPush);
+                         Radio.trigger("Parser", "addItemAtTop", layerToPush);
                      }
-                     else if (!layerExisting){
+                     else if (_.isNull(layerExisting)){
                          Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
                      }
                 });
