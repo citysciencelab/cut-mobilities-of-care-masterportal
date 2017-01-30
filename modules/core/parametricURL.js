@@ -12,7 +12,6 @@ define([
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
-
             channel.reply({
                 "getResult": this.getResult,
                 "getLayerParams": this.getLayerParams,
@@ -53,31 +52,45 @@ define([
             return this.get("initString");
         },
         createLayerParams: function () {
+
             var layerIdString = _.values(_.pick(this.getResult(), "LAYERIDS"))[0],
-                visibilityListString = _.has(this.getResult(), "VISIBILITY") ? _.values(_.pick(this.getResult(), "VISIBILITY"))[0] : "",
-                transparencyListString = _.has(this.getResult(), "TRANSPARENCY") ? _.values(_.pick(this.getResult(), "TRANSPARENCY"))[0] : "",
-                layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
-                visibilityList = visibilityListString === "" ? _.map(layerIdList, function () {
-                    return true;
-                }) : visibilityListString.indexOf(",") > -1 ? _.map(visibilityListString.split(","), function (val) {
-                    return _String.toBoolean(val);
-                }) : new Array(_String.toBoolean(visibilityListString)),
-                transparencyList = transparencyListString === "" ? _.map(layerIdList, function () {
-                    return 0;
-                }) : transparencyListString.indexOf(",") > -1 ? _.map(transparencyListString.split(","), function (val) {
-                    return _String.toNumber(val);
-                }) : new Array(_String.toNumber(transparencyListString)),
-                layerParams = [];
+            visibilityListString = _.has(this.getResult(), "VISIBILITY") ? _.values(_.pick(this.getResult(), "VISIBILITY"))[0] : "",
+            transparencyListString = _.has(this.getResult(), "TRANSPARENCY") ? _.values(_.pick(this.getResult(), "TRANSPARENCY"))[0] : "",
+            layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
+            visibilityList = visibilityListString === "" ? _.map(layerIdList, function() {
+                return true;
+            }) : visibilityListString.indexOf(",") > -1 ? _.map(visibilityListString.split(","), function(val) {
+                return _String.toBoolean(val);
+            }) : new Array(_String.toBoolean(visibilityListString)),
+            transparencyList = transparencyListString === "" ? _.map(layerIdList, function() {
+                return 0;
+            }) : transparencyListString.indexOf(",") > -1 ? _.map(transparencyListString.split(","), function(val) {
+                return _String.toNumber(val);
+            }) : new Array(_String.toNumber(transparencyListString)),
+            layerParams = [];
 
             if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
-                Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Die Angaben zu LAYERIDS passen nicht zu VISIBILITY bzw. TRANSPARENCY. Die Parameter werden ignoriert.", kategorie: "alert-warning"});
-            }
-            else {
-                _.each(layerIdList, function (val, index) {
-                    layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
+                Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Die Angaben zu LAYERIDS passen nicht zu VISIBILITY bzw. TRANSPARENCY. Die Parameter werden ignoriert.", kategorie: "alert-warning" });
+            } else {
+                _.each(layerIdList, function(val, index) {
+                     var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
+                     layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val }),
+                     treeType = Radio.request("Parser", "getTreeType");
+
+                     layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
+
+                     if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType==="light") {
+                         var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
+                         Radio.trigger("Parser", "addItemAtTop", layerToPush);
+                     }
+                     else if (_.isNull(layerExisting)){
+                         Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
+                     }
                 });
                 this.setLayerParams(layerParams);
             }
+
+
         },
         createLayerParamsUsingMetaId: function (metaIds) {
             var layers = [],
