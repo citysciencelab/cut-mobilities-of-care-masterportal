@@ -17,10 +17,7 @@ define([
         initialize: function () {
             var showGeolocation = true;
 
-            if (Radio.request("Util", "isChrome") === true && window.location.protocol === "http:") {
-                showGeolocation = false;
-            }
-            if (Radio.request("Util", "isApple") === true) {
+            if (window.location.protocol === "http:") {
                 showGeolocation = false;
             }
             // Chrome erlaubt nur bei https-Seiten die Lokalisierung (stand: 20.07.2016).
@@ -40,6 +37,11 @@ define([
                 this.listenTo(this.model, {
                     "change:tracking": this.trackingChanged
                 }, this);
+
+                this.listenToOnce(this.model, {
+                    "change:isGeolocationDenied": this.toggleBackground
+                }, this);
+
                 this.render();
                 // erst nach render kann auf document.getElementById zugegriffen werden
                 this.model.get("marker").setElement(document.getElementById("geolocation_marker"));
@@ -48,6 +50,26 @@ define([
                         new POIView();
                     });
                 }
+            }
+        },
+
+        render: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.template(attr));
+        },
+
+        /**
+         * Ist die Lokalisierung deaktiviert, wird der Button ausgegraut
+         * und der POI-Button verschwindet.
+         */
+        toggleBackground: function () {
+            if (this.model.getIsGeolocationDenied() === true) {
+                this.$el.find(".glyphicon-map-marker").css("background-color", "rgb(221, 221, 221)");
+                this.$el.find(".glyphicon-record").css("display", "none");
+            }
+            else {
+                this.$el.find(".glyphicon-map-marker").css("background-color", "rgb(182, 0, 0)");
             }
         },
 
@@ -64,11 +86,6 @@ define([
             else {
                 $("#geolocate").removeClass("toggleButtonPressed");
             }
-        },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            this.$el.html(this.template(attr));
         },
         /*
         * schaltet POI-Control un-/sichtbar
