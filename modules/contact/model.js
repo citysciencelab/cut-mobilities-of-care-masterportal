@@ -6,19 +6,28 @@ define([
     var ContactModel = Backbone.Model.extend({
         defaults: {
             maxLines: Radio.request("Util", "isAny") ? "5" : "10",
+            from: [{
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+                }],
+            to: [{
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+                }],
             cc: [],
             ccToUser: false,
             bcc: [],
-            subject: "Supportanfrage zum Portal " + document.title,
             textPlaceholder: "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;",
             text: "",
-            systemInfo: "<br>==================<br>Platform: " + navigator.platform + "<br>" + "Cookies enabled: " + navigator.cookieEnabled + "<br>" + "UserAgent: " + navigator.userAgent,
             url: "",
             ticketID: "",
+            systemInfo: "",
+            subject: "",
             userName: "",
             userEmail: "",
             userTel: "",
-            isCurrentWin: false
+            isCurrentWin: false,
+            includeSystemInfo: false
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -28,18 +37,28 @@ define([
             this.setAttributes();
         },
         setAttributes: function () {
-            var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"});
-
-            this.set(toolModel.attributes);
-            var date = new Date(),
+            var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
+                isPortalTitleUndefined = _.isUndefined(Radio.request("Parser", "getPortalConfig").PortalTitle),
+                portaltitle = isPortalTitleUndefined === false ? Radio.request("Parser", "getPortalConfig").PortalTitle : document.title,
+                hrefString = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portaltitle + "</a>",
+                platformString = "<br>Platform: " + navigator.platform + "<br>",
+                cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
+                userAgentString = "UserAgent: " + navigator.userAgent,
+                systemInfo = hrefString + platformString + cookiesString + userAgentString,
+                isSubjectUndefined = _.isUndefined(toolModel.get("subject")),
+                subject = isSubjectUndefined === true ? "Supportanfrage zum Portal " + portaltitle : toolModel.get("subject"),
+                date = new Date(),
                 day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
                 month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
                 ticketID = month + day + "-" + _.random(1000, 9999),
                 resp = Radio.request("RestReader", "getServiceById", toolModel.get("serviceID"));
 
+            this.set(toolModel.attributes);
             if (resp && resp.length === 1) {
                 this.set("url", _.first(resp).get("url"));
                 this.set("ticketID", ticketID);
+                this.set("systemInfo", this.get("includeSystemInfo") === true ? systemInfo : "");
+                this.set("subject", subject);
             }
         },
 
@@ -82,7 +101,7 @@ define([
                 });
             }
 
-            var text = "Nutzer: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo"),
+            var text = "Name: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo"),
                 dataToSend = {
                     from: this.get("from"),
                     to: this.get("to"),
