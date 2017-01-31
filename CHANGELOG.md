@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.2.3
+
+FIXES:
+
+  - 3b2e44b layerid URL-parameter werden zugeladen falls vorhanden aber nicht konfiguriert
+
 # Changelog LGV Master-Portal 1.2.2
 FIXES:
 
