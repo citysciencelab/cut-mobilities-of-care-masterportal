@@ -11,7 +11,7 @@ define([
                   "name": "LGVGeoportalHilfe"
                 }],
             to: [{
-                  "email": "michael.bieler@gv.hamburg.de",
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
                   "name": "LGVGeoportalHilfe"
                 }],
             cc: [],
@@ -38,9 +38,15 @@ define([
         },
         setAttributes: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
-                portaltitle = _.isUndefined(Radio.request("Parser", "getPortalConfig").PortalTitle) === false ? Radio.request("Parser", "getPortalConfig").PortalTitle : document.title,
-                systemInfo = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portaltitle + "</a>" + "<br>Platform: " + navigator.platform + "<br>" + "Cookies enabled: " + navigator.cookieEnabled + "<br>" + "UserAgent: " + navigator.userAgent,
-                subject = _.isUndefined(toolModel.get("subject")) === true ? "Supportanfrage zum Portal " + portaltitle : toolModel.get("subject"),
+                isPortalTitleUndefined = _.isUndefined(Radio.request("Parser", "getPortalConfig").PortalTitle),
+                portaltitle = isPortalTitleUndefined === false ? Radio.request("Parser", "getPortalConfig").PortalTitle : document.title,
+                hrefString = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portaltitle + "</a>",
+                platformString = "<br>Platform: " + navigator.platform + "<br>",
+                cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
+                userAgentString = "UserAgent: " + navigator.userAgent,
+                systemInfo = hrefString + platformString + cookiesString + userAgentString,
+                isSubjectUndefined = _.isUndefined(toolModel.get("subject")),
+                subject = isSubjectUndefined === true ? "Supportanfrage zum Portal " + portaltitle : toolModel.get("subject"),
                 date = new Date(),
                 day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
                 month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
