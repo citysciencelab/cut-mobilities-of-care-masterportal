@@ -17,7 +17,7 @@ define([
             "cadastralDistrictNumber": "0", // default Flur
             "parcelDenominatorField": false, // sollen Flurstücksnenner verwendet werden? Aus config
             "parcelNumber": "", // default Flurstücksnummer
-            "parcelDenominatorNumber": "" // default Flurstücksnenner
+            "parcelDenominatorNumber": "0" // default Flurstücksnenner
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
