@@ -3,9 +3,8 @@ define([
     "backbone.radio",
     "modules/gfipopup/gfiObjects/img/view",
     "modules/gfipopup/gfiObjects/video/view",
-    "modules/gfipopup/gfiObjects/routable/view",
-    "modules/core/util"
-], function (Backbone, Radio, ImgView, VideoView, RoutableView, Util) {
+    "modules/gfipopup/gfiObjects/routable/view"
+], function (Backbone, Radio, ImgView, VideoView, RoutableView) {
     "use strict";
     var GFIContentDefaultModel = Backbone.Model.extend({
         /**
@@ -68,7 +67,7 @@ define([
                             val: imgView
                         });
                     }
-                    else if (key === "video" && Util.isAny() === null) {
+                    else if (key === "video" && Radio.request("Util", "isAny") === null) {
                         var videoView = new VideoView(val);
 
                         element[key] = "#";
@@ -80,7 +79,7 @@ define([
                             element.mobil_video = "#";
                         }
                     }
-                    else if (key === "mobil_video" && Util.isAny()) {
+                    else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
                         var videoView = new VideoView(val);
 
                         element[key] = "#";
