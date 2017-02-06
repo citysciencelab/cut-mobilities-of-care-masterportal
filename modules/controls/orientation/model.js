@@ -10,7 +10,7 @@ define([
 
     var OrientationModel = Backbone.Model.extend({
         defaults: {
-            zoomMode: "once", // once oder allways entsprechend Config
+            zoomMode: "once", // once oder always entsprechend Config
             firstGeolocation: true, // Flag, ob es sich um die erste geolocation handelt, damit "once" abgebildet werden kann.
             marker: new ol.Overlay({
                 positioning: "center-center",
@@ -195,7 +195,7 @@ define([
 
         /**
          * Setter Methode für das Attribut zoomMode
-         * @param {String} value - once oder allways
+         * @param {String} value - once oder always
          */
         setZoomMode: function (value) {
             this.set("zoomMode", value);
