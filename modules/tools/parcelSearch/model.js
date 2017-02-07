@@ -17,7 +17,7 @@ define([
             "cadastralDistrictNumber": "0", // default Flur
             "parcelDenominatorField": false, // sollen Flurstücksnenner verwendet werden? Aus config
             "parcelNumber": "", // default Flurstücksnummer
-            "parcelDenominatorNumber": "" // default Flurstücksnenner
+            "parcelDenominatorNumber": "0" // default Flurstücksnenner
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -115,10 +115,12 @@ define([
             this.set("parcelDenominatorNumber", value);
         },
         sendRequest: function () {
-            var flur = this.get("cadastralDistrictField") === true ? "flur=" + this.get("cadastralDistrictNumber") : "",
-                parcelNumber = _String.lpad(this.get("parcelNumber"), 5, "0"),
-                parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? "flurstuecksnummernenner=" + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "",
-                data = "&StoredQuery_ID=" + this.get("storedQueryID") + "&gemarkung=" + this.get("districtNumber") + flur + "&flurstuecksnummer=" + parcelNumber + parcelDenominatorNumber;
+            var storedQuery = "&StoredQuery_ID=" + this.get("storedQueryID"),
+                gemarkung = "&gemarkung=" + this.get("districtNumber"),
+                flur = this.get("cadastralDistrictField") === true ? "&flur=" + this.get("cadastralDistrictNumber") : "",
+                parcelNumber = "&flurstuecksnummer=" + _String.lpad(this.get("parcelNumber"), 5, "0"),
+                parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? "&flurstuecksnummernenner=" + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "",
+                data = storedQuery + gemarkung + flur + parcelNumber + parcelDenominatorNumber;
 
             $.ajax({
                 url: this.get("serviceURL"),
