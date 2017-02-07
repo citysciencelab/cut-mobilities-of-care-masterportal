@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.2.4
+
+FIXES:
+
+  - 760c7c1 hotfix 332 flurstueckssuche
+
 # Changelog LGV Master-Portal 1.2.3
 
 FIXES:
