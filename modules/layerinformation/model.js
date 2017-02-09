@@ -39,6 +39,8 @@ define([
                 this.fetchData({id: this.get("metaID")});
             }
             else {
+                this.set("title", this.get("layername"));
+                this.set("abstractText", "Keine Metadaten vorhanden.");
                 this.trigger("sync");
             }
         },
