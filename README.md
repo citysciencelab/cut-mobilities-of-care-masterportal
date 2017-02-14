@@ -5,6 +5,8 @@ LGV Master-Portal
 
 #Allgemeines
 
+Änderung im Original.
+
 #Readmeund Kommentare/md Dateien stylen:
 http://markdown.de/
 
