@@ -154,6 +154,18 @@ Einen lokalen Entwicklungsserver starten.
 
 yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
 
+## grunt test
+Unter Firefox funktioniert grunt server nicht, hier muss statt dessen mit "grunt test" gearbeitet werden
+
+```
+# grunt test
+```
+
+anschließend "localhost:8001" im Firefox öffnen
+
+
+
+
 
 ## grunt build
 Ein Portal für die Veröffentlichung fertig machen.
