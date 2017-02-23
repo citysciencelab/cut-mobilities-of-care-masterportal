@@ -28,7 +28,7 @@ define("app",
     });
     new RestReaderList();
 
-    require(["modules/remoteinterface/model"], function (Remoteinterface) {
+    require(["modules/remoteInterface/model"], function (Remoteinterface) {
         new Remoteinterface();
     });
 
@@ -82,7 +82,7 @@ define("app",
         }
 
         if (Config.clickCounter && Config.clickCounter.desktop && Config.clickCounter.desktop !== "" && Config.clickCounter.mobile && Config.clickCounter.mobile !== "") {
-            require(["modules/clickCounter/view"], function (ClickCounterView) {
+            require(["modules/ClickCounter/view"], function (ClickCounterView) {
                 new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
             });
         }
