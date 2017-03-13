@@ -1,17 +1,17 @@
->Zurück zur [Dokumentation Masterportal](https://bitbucket.org/lgv-g12/lgv/wiki/Dokumentation%20Masterportal).
+>Zurück zur [Dokumentation Masterportal](doc.md).
 
 [TOC]
 
 # style.json #
-Die *style.json* beinhaltet die Parameter für die WFS-Features. Die Verbindung zwischen den Layern und der *style.json* erfolgt über die Angabe der *Layer-ID* in der *style.json* und entsprechendem Verweis in der [config.json](https://bitbucket.org/lgv-g12/lgv/wiki/config.json) im Bereich *Themenconfig --> Fachdaten*. Sollten in der *Style.json* nicht alle notwendigen Parameter angegeben sein, wird auf die Default-Werte zurückgegriffen. Bei Farbwerten muss der Parameter entsprechend der Vorgabe von *OpenLayers* für *ol.style* aussehen.
+Die *style.json* beinhaltet die Parameter für die WFS-Features. Die Verbindung zwischen den Layern und der *style.json* erfolgt über die Angabe der *Layer-ID* in der *style.json* und entsprechendem Verweis in der [config.json](config.json.md) im Bereich *Themenconfig --> Fachdaten*. Sollten in der *Style.json* nicht alle notwendigen Parameter angegeben sein, wird auf die Default-Werte zurückgegriffen. Bei Farbwerten muss der Parameter entsprechend der Vorgabe von *OpenLayers* für *ol.style* aussehen.
 
 ## Allgemeine Style Parameter ##
 Beim Stylen der WFS-Features gibt es verschiedene Klassen nach denen wir den Style in der *style.json* unterscheiden. Die hier aufgeführten Parameter sind in allen Klassen verfügbar und können überschrieben werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|layerId|ja|String||ID des Styles, der in der [config.json](https://bitbucket.org/lgv-g12/lgv/wiki/config.json) angegeben wird, um entsprechend zugeordnet zu werden. In der Regel gleiche ID, wie die des Layers.|
-|styleFieldValue|ja|String||Wert des Attributes eines Features für die Zuordnung. Attribut wir in der [config.json](https://bitbucket.org/lgv-g12/lgv/wiki/config.json) angegeben.|
+|layerId|ja|String||ID des Styles, der in der [config.json](config.json.md) angegeben wird, um entsprechend zugeordnet zu werden. In der Regel gleiche ID, wie die des Layers.|
+|styleFieldValue|ja|String||Wert des Attributes eines Features für die Zuordnung. Attribut wir in der [config.json](config.json.md) angegeben.|
 |subclass|ja|String||Angabe der entsprechenden Klasse, nach der die Style-Information verwendet werden soll.|
 
 ## Spezielle Style Parameter ##
@@ -37,7 +37,7 @@ Icon, IconWithText und Circle sind anwendbar für Punktgeometrien und haben teil
 |clusterfillcolor|nein|Array []|[255, 255, 255, 1]|Füllfarbe für die Cluster-Zahl.|
 |clusteroffsetx|nein|String|"0"|Verschieben der Zahl in x-Richtung.|
 |clusteroffsety|nein|String|"0"|Verschieben der Zahl in y-Richtung.|
-|clusterscale|nein|String|"1"|Gibt die Skalierung des Icons/Kreises an bei WFS-Layern mit Clustern ([config.json](https://bitbucket.org/lgv-g12/lgv/wiki/config.json)).|
+|clusterscale|nein|String|"1"|Gibt die Skalierung des Icons/Kreises an bei WFS-Layern mit Clustern ([config.json](config.json.md)).|
 |clusterstrokecolor|nein|Array []|[0, 0, 0, 1]|Farbe der Umrisslinie.|
 |clusterstrokewidth|nein|String|"3"|Breite der Umrisslinie.|
 
@@ -45,7 +45,7 @@ Icon, IconWithText und Circle sind anwendbar für Punktgeometrien und haben teil
 
 
 ```
-#!javascript
+#!json
 
 {
         "layerId" : "2054_cluster",
@@ -71,7 +71,7 @@ Icon, IconWithText und Circle sind anwendbar für Punktgeometrien und haben teil
 |clusterfillcolor|nein|Array []|[255, 255, 255, 1]|Füllfarbe für die Cluster-Zahl.|
 |clusteroffsetx|nein|String|"0"|Verschieben der Zahl in x-Richtung.|
 |clusteroffsety|nein|String|"0"|Verschieben der Zahl in y-Richtung.|
-|clusterscale|nein|String|"12|Gibt die Skalierung des Icons/Kreises an bei WFS-Layern mit Clustern ([config.json](https://bitbucket.org/lgv-g12/lgv/wiki/config.json)).|
+|clusterscale|nein|String|"12|Gibt die Skalierung des Icons/Kreises an bei WFS-Layern mit Clustern ([config.json](config.json.md)).|
 |clusterstrokecolor|nein|Array []|[0, 0, 0, 1]|Farbe der Umrisslinie.|
 |clusterstrokewidth|nein|String|"3"|Breite der Umrisslinie.|
 |imagename|nein|String|"blank.png"|Gibt den Dateinamen für das Image an. Der Pfad wird in der *config.js* festgelegt.|
@@ -85,7 +85,7 @@ Icon, IconWithText und Circle sind anwendbar für Punktgeometrien und haben teil
 
 
 ```
-#!javascript
+#!json
 
 {
         "layerId" : "1711",
@@ -108,7 +108,7 @@ Icon, IconWithText und Circle sind anwendbar für Punktgeometrien und haben teil
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|imagename|nein|String|"blank.png"|Gibt den Dateinamen für das Image an. Der Pfad wird in der *config.js* festgelegt.|
+|imagename|nein|String|"blank.png"|Gibt den Dateinamen für das Image an. Der Pfad wird in der [config.js](config.js.md) festgelegt.|
 |imagescale|nein|String|"1"|Über diesen Parameter lässt sich das Icon skalieren.|
 |legendValue|nein|String||Text, der in der Legende am entsprechenden Image stehen soll.|
 |textfillcolor|nein|Array []|[255, 255, 255, 1]|Farbe für den Text.|
@@ -123,7 +123,7 @@ Icon, IconWithText und Circle sind anwendbar für Punktgeometrien und haben teil
 Beispiel subclass "IconWithText":
 
 ```
-#!javascript
+#!json
 
 {
         "layerId" : "47",
@@ -159,7 +159,7 @@ Beispiel subclass "IconWithText":
 
 
 ```
-#!javascript
+#!json
 
 {
         "layerId" : "2003",
@@ -171,4 +171,4 @@ Beispiel subclass "IconWithText":
 
 ```
 
->Zurück zur [Dokumentation Masterportal](https://bitbucket.org/lgv-g12/lgv/wiki/Dokumentation%20Masterportal).
+>Zurück zur [Dokumentation Masterportal](doc.md).).

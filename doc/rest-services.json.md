@@ -1,5 +1,6 @@
->Zurück zur [Dokumentation Masterportal](https://bitbucket.org/lgv-g12/lgv/wiki/Dokumentation%20Masterportal).
+>Zurück zur [Dokumentation Masterportal](doc.md).
 
+# rest-services.json
 
 Das in der *config.js* erzeugte Objekt enthält den Key *restConf*, dessen Value auf einen Pfad zu einer JSON – Datei verweist. Dieser Pfad wird initial ausgewertet und die Datei unter der entsprechenden URL geladen, ausgewertet und im Hauptspeicher abgelegt. Einzelne Module lesen die Webservice-Definition aus dieser Datei aus.
 

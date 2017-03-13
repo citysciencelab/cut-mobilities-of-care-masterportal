@@ -1,4 +1,4 @@
->Zurück zur [Dokumentation Masterportal](https://bitbucket.org/lgv-g12/lgv/wiki/Dokumentation%20Masterportal).
+>Zurück zur [Dokumentation Masterportal](doc.md).
 
 [TOC]
 
@@ -10,26 +10,26 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |----|-------------|---|-------|------------|--------|
 |[animation](#markdown-header-animation)|nein|Object||Modul, das einen WFS-Dienst animiert darstellt.|| 
 |[clickCounter](#markdown-header-clickcounter)|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
-|csw|nein|String|"1"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) aufgelöst.|`"1"`|
+|csw|nein|String|"1"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`"1"`|
 |customModules|nein|Array[String]||Pfad zu portalspezifischen Modulen. Der Pfad ist relativ zu *js/main.js*.| `["../portal/master/verkehrsfunctions"]`|
 |[footer](#markdown-header-footer)|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
 |gfiWindow|nein|String|"detached"|Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
 |ignoredKeys|nein|Array[String]||Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|
-|isMenubarVisible|nein|Boolean|true|Steuert, ob die Menubar sichtbar ist. Kann auch über [URL-Parameter](https://bitbucket.org/lgv-g12/lgv/wiki/URL-Parameter) gesteuert werden.|`true`|
-|layerConf|ja|String||Pfad zur [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json), die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-fhhnet-ALL.json"`|
-|mouseHover|nein|Boolean|false|Steuert, ob MouseHover für Vektorlayer (WFS) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in [config.json](https://bitbucket.org/lgv-g12/lgv/wiki/config.json) (*Themenconfig.Fachdaten.Layer*).|`true`|
+|isMenubarVisible|nein|Boolean|true|Steuert, ob die Menubar sichtbar ist. Kann auch über [URL-Parameter](URL-Parameter.md) gesteuert werden.|`true`|
+|layerConf|ja|String||Pfad zur [services.json](services.json.md), die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-fhhnet-ALL.json"`|
+|mouseHover|nein|Boolean|false|Steuert, ob MouseHover für Vektorlayer (WFS) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in [config.json](config.js.md) (*Themenconfig.Fachdaten.Layer*).|`true`|
 |namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme ([siehe Syntax](http://proj4js.org/#named-projections)).|`[["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`| 
-|[print](#markdown-header-print)|ja|Object||Konfiguration für den Druckdienst. Erwartet wird eine Instanz von [MapFish-Print 2](http://www.mapfish.org/doc/print/). Nur verpflichtend, wenn *config.json.portalconfig.tools.print* konfiguriert ist ([config.json](https://bitbucket.org/lgv-g12/lgv/wiki/config.json)).||
+|[print](#markdown-header-print)|ja|Object||Konfiguration für den Druckdienst. Erwartet wird eine Instanz von [MapFish-Print 2](http://www.mapfish.org/doc/print/). Nur verpflichtend, wenn *config.json.portalconfig.tools.print* konfiguriert ist ([config.json](config.js.md)).||
 |proxyUrl|ja|String||Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe [print](#markdown-header-print)).|`"/cgi-bin/proxy.cgi"`|
 |quickHelp|nein|Boolean|false|Aktiviert das QuickHelp-Modul. Dieses zeigt kontextsensitive Hilfe für die verfügbaren Funktionen an (bisher verfügbar für: Themenbaum und Suche).|`true`|
-|restConf|ja|String||Pfad zur [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json), die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-fhhnet.json"`|
+|restConf|ja|String||Pfad zur [rest-services.json](rest-services.json.md), die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-fhhnet.json"`|
 |scaleLine|nein|Boolean|false|Steuert, ob eine Maßstabsleiste unten auf der Karte angezeigt wird. Ist der *Footer* aktiv, wird die Leiste unten rechts, sonst unten links angezeigt.|`true`|
 |simpleMap|nein|Boolean|false|Fügt dem *„Auswahl speichern“-Dialog* eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls). Nicht für Portale mit Baumtyp: *„light“*.|`false`|
-|styleConf|ja|String||Pfad zur [style.json](https://bitbucket.org/lgv-g12/lgv/wiki/style.json), die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/style.json"`|
+|styleConf|ja|String||Pfad zur [style.json](style.json.md), die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/style.json"`|
 |view|ja|Object||Konfigurations-Einstellungen für die mapView. Leeres Objekt wird benötigt.|`{}`|
 |wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/img/"`|
-|wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) aufgelöst.|`""`|
-|[zoomToFeature](#markdown-header-zoomtofeature)|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe [URL-Parameter](https://bitbucket.org/lgv-g12/lgv/wiki/URL-Parameter).||
+|wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`""`|
+|[zoomToFeature](#markdown-header-zoomtofeature)|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe [URL-Parameter](URL-Parameter.md).||
 
 ******
 ## animation 
@@ -60,7 +60,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 **Beispiel animation:**
 
 ```
-#!javascript
+#!json
 
 
 animation: {
@@ -127,7 +127,7 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 **Beispiel:**
 
 ```
-#!javascript
+#!json
 
 footer: {
             visibility: true,
@@ -159,14 +159,14 @@ footer: {
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |gfi|nein|Boolean||Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
-|printID|ja|String||ID des Druckdienstes in der restConf. Siehe [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json).|
+|printID|ja|String||ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
 |title|ja|String||Der Titel erscheint auf dem Ausdruck der Karte.|
 
 **Beispiel:**
 
 
 ```
-#!javascript
+#!json
 
 print: {
             printID: "99999",
@@ -192,7 +192,7 @@ print: {
 **Beispiel:**
 
 ```
-#!javascript
+#!json
 
 zoomtofeature: {
             url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
@@ -205,4 +205,4 @@ zoomtofeature: {
 
 ```
 
->Zurück zur [Dokumentation Masterportal](https://bitbucket.org/lgv-g12/lgv/wiki/Dokumentation%20Masterportal).
+>Zurück zur [Dokumentation Masterportal](doc.md).

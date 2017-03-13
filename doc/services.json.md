@@ -1,4 +1,4 @@
->Zurück zur [Dokumentation Masterportal](https://bitbucket.org/lgv-g12/lgv/wiki/Dokumentation%20Masterportal).
+>Zurück zur [Dokumentation Masterportal](doc.md).
 
 [TOC]
 
@@ -10,7 +10,7 @@ Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS) bzw. deren Layer
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
 |cache|nein|Boolean||Ist dieser Layer Teil eines gecachten Dienstes? Wenn true wird bei Portalen, die in der [config.json](config.json.md) den „Baumtyp“ = „default“ benutzen, dieser Layer den Layern vorgezogen, die mit demselben Metadatensatz verknüpft sind, aber „cache“ = false haben. Bei anderen Baumtypen hat dieser Parameter keine Auswirkungen.|`false`|
-|[datasets](#markdown-header-wms_wfs_datasets)|nein|Object||Verknüpfung zu den Metadaten. Hier werden die Metadatensätze der Datensätze angegeben, die in diesem Layer dargestellt werden. Sie werden nach Click auf den „i“-Button des Layers in den Layerinformationen über die CSW-Schnittstelle angesprochen und dargestellt. Dazu muss in der [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) die URL des Metadatenkatalogs bzw. seiner CSW-Schnittstelle angegeben sein. Die Angaben unter *kategorie_opendata*, *kategorie_inspire* und *kategorie_organisation* werden verwandt, um die Layer in die entprechenden Kategorien einzuordnen, wenn in der [config.json](https://bitbucket.org/lgv-g12/lgv/wiki/config.json) der Baumtyp *default* gesetzt ist.||
+|[datasets](#markdown-header-wms_wfs_datasets)|nein|Object||Verknüpfung zu den Metadaten. Hier werden die Metadatensätze der Datensätze angegeben, die in diesem Layer dargestellt werden. Sie werden nach Click auf den „i“-Button des Layers in den Layerinformationen über die CSW-Schnittstelle angesprochen und dargestellt. Dazu muss in der [rest-services.json](rest-services.json.md) die URL des Metadatenkatalogs bzw. seiner CSW-Schnittstelle angegeben sein. Die Angaben unter *kategorie_opendata*, *kategorie_inspire* und *kategorie_organisation* werden verwandt, um die Layer in die entprechenden Kategorien einzuordnen, wenn in der [config.json](config.json.md) der Baumtyp *default* gesetzt ist.||
 |featureCount|ja|String||Anzahl der zurückzugebenden Features bei GFI-Abfragen. Entspricht dem *GetFeatureInfo-Parameter "FEATURE_COUNT"*|`"1"`|
 |format|ja|String||Grafikformat der Kachel, die vom Portal über den *GetMap* aufgerufen wird. Muss einem der Werte aus den Capabilities unter *Capability/Request/GetMap/Format* entsprechen.|`"image/jpeg"`|
 |gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"ignore"`| 
@@ -140,4 +140,4 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |kategorie_inspire|nein|String||Inspire-Kategorie aus der Inspire-Codeliste wenn vorhanden, wenn nicht vorhanden *„nicht Inspire-identifiziert“*|
 |kategorie_organisation|nein|String||Organisationsname der datenhaltenden Stelle|
 
->Zurück zur [Dokumentation Masterportal](https://bitbucket.org/lgv-g12/lgv/wiki/Dokumentation%20Masterportal).
+>Zurück zur [Dokumentation Masterportal](doc.md).

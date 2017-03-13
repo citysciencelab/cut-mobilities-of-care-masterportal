@@ -1,4 +1,4 @@
->Zurück zur [Dokumentation Masterportal](https://bitbucket.org/lgv-g12/lgv/wiki/Dokumentation%20Masterportal).
+>Zurück zur [Dokumentation Masterportal](doc.md).
 
 [TOC]
 
@@ -29,7 +29,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |scaleLine|nein|Boolean||true = die Maßstabsleiste wird unten rechts dargestellt, wenn kein footer vorhanden ist. Wenn ein footer vorhanden ist, wird die links angezeigt.|`true`|
 |[searchBar](#markdown-header-portalconfigsearchbar)|nein|Object||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden||
 |[simpleLister](#markdown-header-portalconfigsimplelister)|nein|Object||Der SimpleLister zeigt alle Features eines angegebenen Layers im Kartenausschnitt an.||
-|[mapMarkerModul](#markdown-header-portalconfigmapmarkermodul)|nein|Object||Gibt an ob der auf der Karte verwendete Marker-Pin verschiebbar sein soll, oder nicht.||
+|[mapMarkerModul](#markdown-header-portalconfigmapmarkermodul)|nein|Object||Gibt an, ob der auf der Karte verwendete Marker-Pin verschiebbar sein soll, oder nicht.||
 
 ******
 
@@ -49,7 +49,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 
 ```
-#!javascript
+#!json
 
 "controls": {
         "toggleMenu": true,
@@ -75,9 +75,8 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 
 ```
-#!javascript
-
- "mapView": {
+#!json
+"mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [561210, 5932600]
     }
@@ -100,7 +99,7 @@ Auch diese Konfigurationen sind vom Typ *object*. Sie sind ebenfalls verlinkt un
 
 ******
 
-### Portalconfig.simpleLister###
+### Portalconfig.simpleLister ###
 Listet die Features und deren Attribute eines angegebenen Layers auf, die sich im Kartenausschnitt befinden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -111,7 +110,7 @@ Listet die Features und deren Attribute eines angegebenen Layers auf, die sich i
 ******
 
 
-### Portalconfig.mapMarkerModul###
+### Portalconfig.mapMarkerModul ###
 Gibt an ob der in der Karte verwendete Marker verschiebbar sein soll.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -135,7 +134,7 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |includeSystemInfo||Boolean||Hier wird ausgewählt, ob vom User die Systeminfo in der Mail mit versandt werden soll.|
 |name|nein|String||Name des Moduls in der Oberfläche.|
-|serviceID||String||ID zum finden des EmailServices aus der [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json).|
+|serviceID||String||ID zum finden des EmailServices aus der [rest-services.json](rest-services.json.md).|
 |subject|nein|String|"Supportanfrage zum Portal " + *portalTitle*|Hier kann ein String mit übergeben werden, der oben in der Betreffzeile der Mail auftaucht. Eine TicketId wird dem Betreff in jedem Fall vorangestellt.|
 |textPlaceholder||String||Platzhalter für das Textfeld in dem der Anwender sein Anliegen eintragen kann.|
 |[to](#markdown-header-portalconfigmenucontactfrom)|nein|Array [Object]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de", "name": "LGVGeoportalHilfe"}]|Array der Empfänger. Wird immer mit **email** und **name** erwartet.|
@@ -174,7 +173,7 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 
  
 ```
-#!javascript
+#!json
 
 "contact": {
             "name": "Kontakt",
@@ -214,7 +213,7 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 
 
 ```
-#!javascript
+#!json
 
 "legend": {
         "name": "Legende",
@@ -265,7 +264,7 @@ Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Men�
 **Beispiel eines Werkzeuges, das in der Menüleiste ganz oben angebracht ist:**
 
 ```
-#!javascript
+#!json
 
 "menu" : {
 	"tree" : {
@@ -385,7 +384,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 ******
 ******
 
-###### Portalconfig.menu.tools.children.measure######
+###### Portalconfig.menu.tools.children.measure ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -408,7 +407,7 @@ Flurstücksuche
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
 |parcelDenominator|nein|Boolean|false|Gibt an ob auch Flure mit an die *StoredQuery* übergeben werden.|
-|serviceId|nein|String||ID, des Gazeteer-WFS. Wird in der [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) aufgelöst.|
+|serviceId|nein|String||ID, des Gazeteer-WFS. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
 |StoredQueryID|nein|String||Name der *StoredQuery*, die angesprochen werden soll.|
 
 ******
@@ -416,7 +415,6 @@ Flurstücksuche
 
 
 __Gemarkungen_xx.json__
-
 Die *gemarkungen_xx.json* wird benötigt, um anhand des Gemarkungsnamens die ID der Gemarkung aufzulösen. 
 Wird das Array für die Flure nicht gefüllt (Spezialfall für HH), so muss für das Werkzeug der Parameter *parcelDenominator* auf *false* gesetzt werden.
 Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „flur“-Einträge in der *gemarkung_xx.json*. In der Werkzeugoberfläche kann man nun die Flurstückssuche weiter auf die Flure einschränken.  
@@ -426,7 +424,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 
 
 ```
-#!javascript
+#!json
 
 {
     "Allermöhe": { "id": "0601", "flur": []},
@@ -442,7 +440,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 
 
 ```
-#!javascript
+#!json
 
 {
     "Allermöhe": { "id": "0601", "flur": [„Flur1“,“Flur2“]},
@@ -456,7 +454,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 ******
 ******
 
-###### Portalconfig.menu.tools.children.print######
+###### Portalconfig.menu.tools.children.print ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -474,12 +472,12 @@ Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Paramet
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |autostart|nein|Boolean|false|Gibt an, ob das Routingmodul beim initialen Laden des Portals geöffnet ist.|
-|bkgGeosearchID|nein|String||ID des GeoSuchdienstes des BKG. Anhand der vom Nutzer angeklickten finalen Adresse wandelt dieser Dienst den Namen in eine Koordinate um und gibt diese zurück. Die Koordinate wird benötigt, um den Routingdienst mit Daten zu füllen. Wird in der [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) aufgelöst.|
-|bkgSuggestID|nein|String||ID des Vorschlagsdienstes des BKG. Der Dienst gibt eine Trefferliste möglicher Adressen zurück, die auf den Eingabestring des Nutzers passen. Werden als Dropdown-Menü dargestellt. Wird in der [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) aufgelöst.|
+|bkgGeosearchID|nein|String||ID des GeoSuchdienstes des BKG. Anhand der vom Nutzer angeklickten finalen Adresse wandelt dieser Dienst den Namen in eine Koordinate um und gibt diese zurück. Die Koordinate wird benötigt, um den Routingdienst mit Daten zu füllen. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
+|bkgSuggestID|nein|String||ID des Vorschlagsdienstes des BKG. Der Dienst gibt eine Trefferliste möglicher Adressen zurück, die auf den Eingabestring des Nutzers passen. Werden als Dropdown-Menü dargestellt. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|viomRoutingID|nein|String||ID des Routing-Dienstes. Der Dienst berechnet aufgrund von Start- und Ziel-Koordinate die schnellste Route. Wird in der [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) aufgelöst.|
+|viomRoutingID|nein|String||ID des Routing-Dienstes. Der Dienst berechnet aufgrund von Start- und Ziel-Koordinate die schnellste Route. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
 
 
 ******
@@ -512,7 +510,7 @@ Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann
 
 
 ```
-#!javascript
+#!json
 
  "tools": {
         "name": "Werkzeuge",
@@ -602,7 +600,7 @@ Unter *tree* wird der Themenbaum konfiguriert.
 
 
 ```
-#!javascript
+#!json
 
 "tree": {
         "name": "Themen",
@@ -643,17 +641,17 @@ Der Suchdienst des BKG ([Bundesamt für Kartographie und Geodäsie](https://www.
 |epsg|nein|String|EPSG:25832|EPSG-Code des verwendeten Koordinatensystems.|
 |extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung in der gesucht wird.|
 |filter|nein|String|filter=(typ:*)|Filterstring|
-|geosearchServiceId|ja|String||Gibt die ID für die URL in der [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) vor|
+|geosearchServiceId|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
 |score|nein|Number|0.6|Score-Wert, der die Qualität der Ergebnisse auswertet.|
 |suggestCount|nein|Number|20|Anzahl der über *suggest* angefragten Vorschläge.|
-|suggestServiceId|ja|String||Gibt die ID für die URL in der [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) vor.|
+|suggestServiceId|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
 
 **Beispiel bkg:**
 
 
 ```
-#!javascript
+#!json
 
 "bkg": {
             "minChars": 3,
@@ -681,14 +679,14 @@ Der Gazetteer-Dienst des LGV wird angefragt.
 |searchParcels|nein|Boolean|false|Soll nach Flurstücken gesucht werden?|
 |searchStreetKey|nein|Boolean|false|Soll nach Strassenschlüsseln gesucht werden?|
 |searchStreets|nein|Boolean|false|Soll nach Straßennamen gesucht werden? Voraussetzung für *searchHouseNumbers*.|
-|serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](https://bitbucket.org/lgv-g12/lgv/wiki/rest-services.json) vor.|
+|serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
 |url||String||URL des WFS-Dienstes|
 
 **Beispiel gazetteer:**
 
 
 ```
-#!javascript
+#!json
 
 "gazetteer": {
             "minChars": 3,
@@ -725,7 +723,7 @@ Die definierten WFS-Dienste werden angefragt.
 
 
 ```
-#!javascript
+#!json
 
   "specialWFS": { 
             "minChar": 3,
@@ -757,7 +755,7 @@ Alle Layer, die im Themenbaum des Portals sind, werden durchsucht.
 
 
 ```
-#!javascript
+#!json
 
  "tree": {
            "minChars": 3
@@ -778,7 +776,7 @@ Die Namen aller sichtbaren WFS-Dienste werden durchsucht.
 
 
 ```
-#!javascript
+#!json
 
 "visibleWFS": {
            "minChars": 3
@@ -792,11 +790,11 @@ Die Namen aller sichtbaren WFS-Dienste werden durchsucht.
 ******
 
 ## Themenconfig ##
-Layer die in der [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json) beschrieben sind, können über die *Themenconfig* in das Portal über ihre ID eingebunden und zusätzlich konfiguriert werden. Die Konfiguration spiegelt die Themenbaumstruktur im Portal wieder. Sie ist unterteilt in Hintergrundkarten und Fachdaten.
+Layer die in der [services.json](services.json.md) beschrieben sind, können über die *Themenconfig* in das Portal über ihre ID eingebunden und zusätzlich konfiguriert werden. Die Konfiguration spiegelt die Themenbaumstruktur im Portal wieder. Sie ist unterteilt in Hintergrundkarten und Fachdaten.
 
 
 ```
-#!javascript
+#!json
 
 "Themenconfig":
   {
@@ -814,8 +812,8 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|id|ja|Array [String] oder String||ID aus [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json).|
-|name|nein|String|Name aus der [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json)|Layername|
+|id|ja|Array [String] oder String||ID aus [services.json](services.json.md).|
+|name|nein|String|Name aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
 
@@ -823,7 +821,7 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 
 
 ```
-#!javascript
+#!json
 
 "Hintergrundkarten":
     {
@@ -861,7 +859,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
 
 
 ```
-#!javascript
+#!json
 
  "Fachdaten":
         {
@@ -925,13 +923,13 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |displayInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden?|
-|gfiTheme|nein|String|Wert aus der [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json) sonst *"default"*|Style für das GFI-Popover *(„default“* / *„table“*).|
-|id|ja|Array [String] oder String||ID aus [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json).| 
-|layerAttribution|nein|HTML-String|Wert aus der [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json)|Zusatzinformationen zum Layer, die in der Karte angezeigt werden sollen. Voraussetzung Control [attributions](#markdown-header-portalconfigcontrols) ist aktiviert.|
-|legendURL|nein|Array[String] oder String|Wert aus der [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json)|URL zur Legende|
-|maxScale|nein|String|Wert aus der [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json)|Höchste Maßstabszahl, bei der ein Layer angezeigt wird.|
-|minScale|nein|String|Wert aus der [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json)|Niedrigste Maßstabszahl, bei der ein Layer angezeigt wird.|
-|name|nein|Array[String] oder String|Wert aus der [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json)|Layername|
+|gfiTheme|nein|String|Wert aus der [services.json](services.json.md) sonst *"default"*|Style für das GFI-Popover *(„default“* / *„table“*).|
+|id|ja|Array [String] oder String||ID aus [services.json](services.json.md).| 
+|layerAttribution|nein|HTML-String|Wert aus der [services.json](services.json.md)|Zusatzinformationen zum Layer, die in der Karte angezeigt werden sollen. Voraussetzung Control [attributions](#markdown-header-portalconfigcontrols) ist aktiviert.|
+|legendURL|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|URL zur Legende|
+|maxScale|nein|String|Wert aus der [services.json](services.json.md)|Höchste Maßstabszahl, bei der ein Layer angezeigt wird.|
+|minScale|nein|String|Wert aus der [services.json](services.json.md)|Niedrigste Maßstabszahl, bei der ein Layer angezeigt wird.|
+|name|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
 
@@ -942,7 +940,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |attributesToStyle|nein|Array[String]||Attribute über die gestlyt werden soll.|
 |featureCount|nein|Number|1|Anzahl der Features beim GFI-Request.|
 |geomType|nein|String||Geometrietyp des Layers, bisher nur Polygon.|
-|infoFormat|nein|String|Wert aus der [services.json](https://bitbucket.org/lgv-g12/lgv/wiki/services.json) sonst *„text/xml“*|Format für die GFI-Abfrage.|
+|infoFormat|nein|String|Wert aus der [services.json](services.json.md) sonst *„text/xml“*|Format für die GFI-Abfrage.|
 |styleable|nein|Boolean||True -> Layer kann im Client anders gestylt werden. Zusätzlich müssen *geomType* und *attributesToStyle* gesetzt werden.|
 |styles|nein|Array [String]||Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.|
 
@@ -953,12 +951,12 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |clusterDistance|nein|Number||Werte > 0 nutzen Clustering. Radius in Px auf der Karte, in welchem alle Features zu einem einzigen Feature aggregiert werden.|
 |extendedFilter|nein|Boolean||Um sämtliche verfügbare WFS zu filtern, muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug extendedFilter erlaubt werden, den Layer auch zu verwenden. Siehe [Portalconfig.menu.tools.children.extendedFilter](#markdown-header-PortalconfigmenutoolschildrenextendedFilter)|
 |[filterOptions](#markdown-header-filteroptions)|nein|Object||Filtereinstellungen für diesen Layer, wird vom Tool  [wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter) ausgewertet|
-|mouseHoverField|nein|Array [String] oder String||Attributename, der beim MouseHover-Event als Tooltip angzeigt wird. Voraussetzung Control „Mousehover“ ist aktiviert (siehe [config.js](https://bitbucket.org/lgv-g12/lgv/wiki/config.js)).|
+|mouseHoverField|nein|Array [String] oder String||Attributename, der beim MouseHover-Event als Tooltip angzeigt wird. Voraussetzung Control „Mousehover“ ist aktiviert (siehe [config.js](config.js.md)).|
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
 |searchField|nein|String||Attributname, über den die Suche die Featuers des Layers finden kann.|
-|styleField|nein|String||Zusätzliches Feld für die Style-Zuweisung aus der [style.json](https://bitbucket.org/lgv-g12/lgv/wiki/style.json).|
-|styleId|ja|String||Weist dem Layer den Style aus der [style.json](https://bitbucket.org/lgv-g12/lgv/wiki/style.json) zu.|
-|styleLabelField|nein|String||Zusätzliches Feld für die Style-Zuweisung aus der [style.json](https://bitbucket.org/lgv-g12/lgv/wiki/style.json).|
+|styleField|nein|String||Zusätzliches Feld für die Style-Zuweisung aus der [style.json](style.json.md).|
+|styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md) zu.|
+|styleLabelField|nein|String||Zusätzliches Feld für die Style-Zuweisung aus der [style.json](style.json.md).|
 
 
 #### filterOptions ####
@@ -973,7 +971,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 
 
 ```
-#!javascript
+#!json
 
 “Layer”: [
    {
@@ -1007,4 +1005,4 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 ]
 ```
 
->Zurück zur [Dokumentation Masterportal](https://bitbucket.org/lgv-g12/lgv/wiki/Dokumentation%20Masterportal).
+>Zurück zur [Dokumentation Masterportal](doc.md).
