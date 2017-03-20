@@ -18,7 +18,7 @@ Portalspezifische Konfigurationsdateien:
 
 Die folgende Abbildung zeigt schematisch das Zusammenspiel der Dateien. Wichtig ist, dass sich die Dateien index.html, [config.js](config.js.md) und [config.json](config.json.md) im selben Verzeichnis befinden.
 
-![Konfig-Überblick.png](https://bitbucket.org/repo/88K5GB/images/4248626536-Konfig-%C3%9Cberblick.png)
+![Konfig-Überblick.png](Konfig-Überblick.png)
 
 # URL-Parameter #
 Das Masterportal kann über [URL-Parameter](URL-Parameter.md) aufgerufen werden.
