@@ -149,7 +149,7 @@ var html = "<div id='my-id'></div>";
 * JSDoc Style Kommentare sind gut, aber erfordern mehr Zeit
 
 #### Backbone spezifische Konventionen
-* "listenTo" anstatt "on" als Eventlistener
+* "listenTo" anstatt "on" als Eventlistener (nicht Backbone.Radio)
 * Die initialize-Funktion ist die erste Funktion in den Backbone-Objekten
 * Die render-Funktion ist in jeder View die zweite Funktion
 * Die Logik wird im Model programmiert(Controller)
@@ -234,6 +234,7 @@ insert_final_newline = true
 * !improtant vermeiden
 * Nach dem Selektor gehört ein Leerzeichen
 * Regeln einrücken und über mehrere Zeilen und nicht in einer schreiben
+* CSS-Regeln die nur für ein Modul bestimmt sind, werden über das className-Attribut der entsprechenden Backbone.View erstellt
 
 "so nicht" Beispiel:
 ```css
@@ -242,7 +243,7 @@ insert_final_newline = true
 
 "so ja" Beispiel:
 ```css
-.btn-panel-submit {
+.print-tool > .btn-panel-submit {
     background-color: #e6e6e6;
     border-color: #ccc;
     color: #333;
