@@ -145,7 +145,6 @@ var html = "<div id='my-id'></div>";
 
 #### Kommentare
 * Mehrzeilige Kommentare sind gut
-* Kommentare am Zeilenende sind untersagt
 * JSDoc Style Kommentare sind gut, aber erfordern mehr Zeit
 
 #### Backbone spezifische Konventionen
