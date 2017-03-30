@@ -152,6 +152,45 @@ var html = "<div id='my-id'></div>";
 * Die initialize-Funktion ist die erste Funktion in den Backbone-Objekten
 * Die render-Funktion ist in jeder View die zweite Funktion
 * Die Logik wird im Model programmiert(Controller)
+* Variablen, die Model-weit verwendet werden, sind in die Defaults des Models einzutragen
+```javascript
+defaults: {
+    variable1: "test",
+    variable2: 123,
+    variable3: ["array"],
+    variable4: {name: "object"},
+    ...
+}
+```
+* Model-weite Variablen werden nur durch Setter- und Getter-Funktionen geholt oder gesetzt, die paarweise am Ende des Models stehen.
+```javascript
+setVariable1: function (value) {
+    this.set("variable1", value);
+},
+getVariable1: function () {
+    return this.get("variable1");
+},
+setVariable2: function (value) {
+    this.set("variable2", value);
+},
+getVariable2: function () {
+    return this.get("variable2");
+}
+```
+"so nicht" Beispiele:
+```javascript
+randomFunc: function () {
+    var modelVar1 = this.get("variable1");
+    ...
+}
+```
+"so ja" Beispiele:
+```javascript
+randomFunc: function () {
+    var modelVar1 = this.getVariable1();
+    ...
+}
+```
 
 #### Sonstiges
 * Comma-First-Formatierung ist verboten
