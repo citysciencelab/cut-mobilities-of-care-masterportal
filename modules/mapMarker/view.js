@@ -36,7 +36,9 @@ define([
         * @description View des Map Handlers
         */
         initialize: function () {
-            var channel = Radio.channel("MapMarker");
+            var markerPosition,
+                channel = Radio.channel("MapMarker");
+
             channel.on({
                 "showMarker": this.showMarker,
                 "hideMarker": this.hideMarker
@@ -86,8 +88,12 @@ define([
                 "mapHandler:zoomToBPlan": this.zoomToBPlan,
                 "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
             }, this);
-
             this.render();
+            // For BauInfo: requests customModule and askes for marker position to set.
+            markerPosition = Radio.request("CustomModule", "getMarkerPosition");
+            if (markerPosition) {
+                this.showMarker(markerPosition);
+            }
             this.model.askForMarkers();
         },
         render: function () {
