@@ -9,10 +9,11 @@ define([
 
         //
         defaults: {
+            MM_PER_INCHES: 25.4,
+            POINTS_PER_INCH: 72,
             title: Config.print.title,
             outputFilename: Config.print.outputFilename,
             outputFormat: "pdf",
-            isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
             center: Config.view.center,
             scale: {},
@@ -43,9 +44,8 @@ define([
         //
         initialize: function () {
             this.listenTo(this, {
-                "change:layout change:scale change:isActive": this.updatePrintPage,
+                "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
                 "change:specification": this.getPDFURL,
-                "change:isCurrentWin": this.setActive
             });
 
             this.listenTo(Radio.channel("MapView"), {
@@ -136,12 +136,18 @@ define([
                 this.set("isCurrentWin", false);
             }
         },
-        setActive: function () {
-            this.set("isActive", this.get("isCurrentWin"));
-        },
+
         updatePrintPage: function () {
             if (this.has("scale")) {
-                Radio.trigger("Map", "updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale").value]);
+                if (this.get("isCurrentWin") === true) {
+                    Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose, this);
+                    Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
+                }
+                else {
+                    Radio.trigger("Map", "unregisterListener", "precompose", this.handlePreCompose, this);
+                    Radio.trigger("Map", "unregisterListener", "postcompose", this.handlePostCompose, this);
+                }
+                Radio.trigger("Map", "render");
             }
         },
 
@@ -486,6 +492,63 @@ define([
             else {
                 return "pdf";
             }
+        },
+
+        handlePreCompose: function (evt) {
+            var ctx = evt.context;
+
+            ctx.save();
+        },
+
+        handlePostCompose: function (evt) {
+            var ctx = evt.context,
+                size = Radio.request("Map", "getSize"),
+                height = size[1] * ol.has.DEVICE_PIXEL_RATIO,
+                width = size[0] * ol.has.DEVICE_PIXEL_RATIO,
+                minx, miny, maxx, maxy,
+                printPageRectangle = this.calculatePageBoundsPixels(),
+                minx = printPageRectangle[0],
+                miny = printPageRectangle[1],
+                maxx = printPageRectangle[2],
+                maxy = printPageRectangle[3];
+
+            ctx.beginPath();
+            // Outside polygon, must be clockwise
+            ctx.moveTo(0, 0);
+            ctx.lineTo(width, 0);
+            ctx.lineTo(width, height);
+            ctx.lineTo(0, height);
+            ctx.lineTo(0, 0);
+            ctx.closePath();
+            // Inner polygon,must be counter-clockwise
+            ctx.moveTo(minx, miny);
+            ctx.lineTo(minx, maxy);
+            ctx.lineTo(maxx, maxy);
+            ctx.lineTo(maxx, miny);
+            ctx.lineTo(minx, miny);
+            ctx.closePath();
+            ctx.fillStyle = "rgba(0, 5, 25, 0.55)";
+            ctx.fill();
+            ctx.restore();
+        },
+
+        calculatePageBoundsPixels: function () {
+            var s = this.get("scale").value,
+                width = this.get("layout").map.width,
+                height = this.get("layout").map.height,
+                resolution = Radio.request("MapView", "getResolution").resolution,
+                w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                mapSize = Radio.request("Map", "getSize"),
+                center = [mapSize[0] * ol.has.DEVICE_PIXEL_RATIO / 2 ,
+                mapSize[1] * ol.has.DEVICE_PIXEL_RATIO / 2],
+                minx, miny, maxx, maxy;
+
+            minx = center[0] - (w / 2);
+            miny = center[1] - (h / 2);
+            maxx = center[0] + (w / 2);
+            maxy = center[1] + (h / 2);
+            return [minx, miny, maxx, maxy];
         }
     });
 

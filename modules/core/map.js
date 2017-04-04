@@ -12,8 +12,6 @@ define(function (require) {
          *
          */
         defaults: {
-            MM_PER_INCHES: 25.4,
-            POINTS_PER_INCH: 72,
             initalLoading: 0
         },
 
@@ -26,14 +24,12 @@ define(function (require) {
                 mapView = new MapView();
 
             channel.reply({
-                "getMap": function () {
-                    return this.get("map");
-                },
                 "getLayers": this.getLayers,
                 "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
                 "createLayerIfNotExists": this.createLayerIfNotExists,
                 "getEventPixel": this.getEventPixel,
-                "hasFeatureAtPixel": this.hasFeatureAtPixel
+                "hasFeatureAtPixel": this.hasFeatureAtPixel,
+                "getSize": this.getSize
             }, this);
 
             channel.on({
@@ -48,7 +44,6 @@ define(function (require) {
                 "setBBox": this.setBBox,
                 "render": this.render,
                 "zoomToExtent": this.zoomToExtent,
-                "updatePrintPage": this.updatePrintPage,
                 "createVectorLayer": this.createVectorLayer,
                 "addLoadingLayer": this.addLoadingLayer,
                 "removeLoadingLayer": this.removeLoadingLayer,
@@ -141,15 +136,6 @@ define(function (require) {
 
             return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
         },
-
-        // GFIPopupVisibility: function (value) {
-        //     if (value === true) {
-        //         this.set("GFIPopupVisibility", true);
-        //     }
-        //     else {
-        //         this.set("GFIPopupVisibility", false);
-        //     }
-        // },
 
         getMap: function () {
             return this.get("map");
@@ -313,74 +299,14 @@ define(function (require) {
             this.get("view").fit(extent, this.get("map").getSize(), options);
         },
 
-        updatePrintPage: function (args) {
-            this.set("layoutPrintPage", args[1]);
-            this.set("scalePrintPage", args[2]);
-            if (args[0] === true) {
-                this.get("map").on("precompose", this.handlePreCompose);
-                this.get("map").on("postcompose", this.handlePostCompose, this);
-            }
-            else {
-                this.get("map").un("precompose", this.handlePreCompose);
-                this.get("map").un("postcompose", this.handlePostCompose, this);
-            }
-            this.get("map").render();
+        /**
+         * Gibt die Größe in Pixel der Karte zurück.
+         * @return {ol.Size} - Ein Array mit zwei Zahlen [width, height]
+         */
+        getSize: function () {
+            return this.getMap().getSize();
         },
-        calculatePageBoundsPixels: function () {
-            var s = this.get("scalePrintPage"),
-                width = this.get("layoutPrintPage").width,
-                height = this.get("layoutPrintPage").height,
-                view = this.get("map").getView(),
-                resolution = view.getResolution(),
-                w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
-                h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
-                mapSize = this.get("map").getSize(),
-                center = [mapSize[0] * ol.has.DEVICE_PIXEL_RATIO / 2 ,
-                mapSize[1] * ol.has.DEVICE_PIXEL_RATIO / 2],
-                minx, miny, maxx, maxy;
 
-            minx = center[0] - (w / 2);
-            miny = center[1] - (h / 2);
-            maxx = center[0] + (w / 2);
-            maxy = center[1] + (h / 2);
-            return [minx, miny, maxx, maxy];
-        },
-        handlePreCompose: function (evt) {
-            var ctx = evt.context;
-
-            ctx.save();
-        },
-        handlePostCompose: function (evt) {
-            var ctx = evt.context,
-                size = this.get("map").getSize(),
-                height = size[1] * ol.has.DEVICE_PIXEL_RATIO,
-                width = size[0] * ol.has.DEVICE_PIXEL_RATIO,
-                minx, miny, maxx, maxy,
-                printPageRectangle = this.calculatePageBoundsPixels(),
-                minx = printPageRectangle[0],
-                miny = printPageRectangle[1],
-                maxx = printPageRectangle[2],
-                maxy = printPageRectangle[3];
-
-            ctx.beginPath();
-            // Outside polygon, must be clockwise
-            ctx.moveTo(0, 0);
-            ctx.lineTo(width, 0);
-            ctx.lineTo(width, height);
-            ctx.lineTo(0, height);
-            ctx.lineTo(0, 0);
-            ctx.closePath();
-            // Inner polygon,must be counter-clockwise
-            ctx.moveTo(minx, miny);
-            ctx.lineTo(minx, maxy);
-            ctx.lineTo(maxx, maxy);
-            ctx.lineTo(maxx, miny);
-            ctx.lineTo(minx, miny);
-            ctx.closePath();
-            ctx.fillStyle = "rgba(0, 5, 25, 0.55)";
-            ctx.fill();
-            ctx.restore();
-        },
         addLoadingLayer: function () {
             this.set("initalLoading", this.get("initalLoading") + 1);
         },
