@@ -282,7 +282,7 @@ define([
             EventBus.trigger("mapHandler:zoomTo", hit);
             // 4. Triggere Treffer über Eventbus
             // Wird benötigt für IDA und sgv-online, ...
-            EventBus.trigger("searchbar:hit", hit);
+            Radio.trigger("Searchbar", "hit", hit);
             // 5. Beende Event
             if (evt) {
                 evt.stopPropagation();

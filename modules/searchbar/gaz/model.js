@@ -35,8 +35,12 @@ define([
         initialize: function (config) {
             this.listenTo(EventBus, {
                 "setPastedHouseNumber": this.setPastedHouseNumber,
-                "searchbar:search": this.search,
-                "gaz:adressSearch": this.adressSearch
+                "searchbar:search": this.search
+                // "gaz:adressSearch": this.adressSearch
+            });
+
+            this.listenTo(Radio.channel("Gaz"), {
+                "adressSearch": this.adressSearch
             });
 
             var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
@@ -162,7 +166,8 @@ define([
         * @param {xml} data - Response
         */
         getAdress: function (data) {
-            EventBus.trigger("gaz:getAdress", data);
+            // EventBus.trigger("gaz:getAdress", data);
+            Radio.trigger("Gaz", "getAdress", data);
         },
         /**
          * [getStreets description]
