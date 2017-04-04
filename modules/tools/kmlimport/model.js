@@ -1,13 +1,11 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus",
     "backbone.radio",
     "proj4"
 ], function () {
     var Backbone = require("backbone"),
         ol = require("openlayers"),
-        EventBus = require("eventbus"),
         Radio = require("backbone.radio"),
         proj4 = require("proj4"),
         ImportTool;
