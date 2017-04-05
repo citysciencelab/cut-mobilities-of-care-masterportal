@@ -28,15 +28,6 @@ Proxies setzen:
 # git config --global https.proxy <proxy-url:port>
 ```
 
-## python in PATH
-python haben alle wegen ArcGIS schon installiert. Der Pfad zur python.exe muss in der PATH-Umgebungsvariable stehen, meist: C:\Program Files\Python27
-
-Test in cmd:
-
-```
-# python
-```
-
 ## [Node.js](http://nodejs.org)
 
 Via Windows-Installer von der Seite. Letzte als funktionierend bekannte Version: node-v4.2.2-x64 mit NPM 2.14.7
