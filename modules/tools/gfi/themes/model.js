@@ -134,25 +134,9 @@ define(function (require) {
 
             gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent);
-            gfiContent = this.getAmtlVergAddr(gfiContent);
-
+            gfiContent = this.getAmtlVergAddr(gfiContent);// sgvOnline
             this.setGfiContent(gfiContent);
             this.setIsReady(true);
-        },
-        getAmtlVergAddr: function (gfiContent) {
-            var key = "Amtlich vergebene Adresse",
-                val;
-
-            if (gfiContent[0].hasOwnProperty(key)) {
-                val = gfiContent[0][key];
-                if (val === "S" || val === "B") {
-                    gfiContent[0][key] = "Ja";
-                }
-                else {
-                    gfiContent[0][key] = "Nein";
-                }
-            }
-            return gfiContent;
         },
         // Setter
         setIsVisible: function (value) {

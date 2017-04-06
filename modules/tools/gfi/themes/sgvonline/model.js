@@ -88,6 +88,21 @@ define(function (require) {
                 this.set("children", children);
             }
             this.set("gfiContent", element);
+        },
+        getAmtlVergAddr: function (gfiContent) {
+            var key = "Amtlich vergebene Adresse",
+                val;
+
+            if (gfiContent[0].hasOwnProperty(key)) {
+                val = gfiContent[0][key];
+                if (val === "S" || val === "B") {
+                    gfiContent[0][key] = "Ja";
+                }
+                else {
+                    gfiContent[0][key] = "Nein";
+                }
+            }
+            return gfiContent;
         }
     });
 
