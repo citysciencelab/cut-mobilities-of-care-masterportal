@@ -13,6 +13,8 @@ define(function (require) {
         TrinkwasserTheme = require("modules/tools/gfi/themes/trinkwasser/model"),
         MietenspiegelThemeView = require("modules/tools/gfi/themes/mietenspiegel/view"),
         MietenspiegelTheme = require("modules/tools/gfi/themes/mietenspiegel/model"),
+        SgvOnlineTheme = require("modules/tools/gfi/themes/sgvonline/model"),
+        SgvOnlineThemeView = require("modules/tools/gfi/themes/sgvonline/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -31,6 +33,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "mietenspiegel") {
                 return new MietenspiegelTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "sgvonline") {
+                return new SgvOnlineTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -80,6 +85,10 @@ define(function (require) {
                 }
                 case "mietenspiegel": {
                     new MietenspiegelThemeView({model: model});
+                    break;
+                }
+                case "sgvonline": {
+                    new SgvOnlineThemeView({model: model});
                     break;
                 }
                 default: {

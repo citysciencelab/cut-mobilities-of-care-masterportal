@@ -134,10 +134,10 @@ define(function (require) {
 
             gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent);
+            gfiContent = this.getAmtlVergAddr(gfiContent);// sgvOnline
             this.setGfiContent(gfiContent);
             this.setIsReady(true);
         },
-
         // Setter
         setIsVisible: function (value) {
             this.set("isVisible", value);
@@ -233,6 +233,7 @@ define(function (require) {
 //                    });
                     _.each(gfiAttributes, function (value, key) {
                         key = preGfi[key];
+
                         if (key) {
                             gfi[value] = key;
                         }

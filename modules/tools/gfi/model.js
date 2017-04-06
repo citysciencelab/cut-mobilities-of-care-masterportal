@@ -32,7 +32,8 @@ define(function (require) {
             var channel = Radio.channel("GFI");
 
             channel.on({
-                "setIsVisible": this.setIsVisible
+                "setIsVisible": this.setIsVisible,
+                "setGfiParams": this.setGfiParamsFromCustomModule
             }, this);
 
             channel.reply({
@@ -153,7 +154,7 @@ define(function (require) {
 
             this.setCoordinate(evt.coordinate);
 
-            // Abbruch, wenn auf SerchMarker x geklcikt wird.
+            // Abbruch, wenn auf SearchMarker x geklickt wird.
             if (this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true) {
                 return;
             }
@@ -185,7 +186,18 @@ define(function (require) {
             this.getThemeList().reset(gfiParams);
             gfiParams = [];
         },
-
+        setGfiParamsFromCustomModule: function (params) {
+            this.setCoordinate(params.coordinates);
+            gfiParams = [{
+                name: params.name,
+                gfiAttributes: params.attributes,
+                typ: params.typ,
+                feature: params.feature,
+                gfiTheme: params.gfiTheme
+            }];
+            this.getThemeList().reset(gfiParams);
+            gfiParams = [];
+        },
         /**
          *
          * @param  {ol.Feature} featureAtPixel
