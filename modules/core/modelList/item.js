@@ -10,7 +10,7 @@ define([
             name: "",
             id: "",
             parentId: "",
-            type: "", // welcher Node-Type - folder/layer/tool ...
+            type: "", // welcher Node-Type - folder/layer/tool/staticlink ...
             title: "test", // angezeigter Titel
             glyphicon: "", // Bootstrap Glyphicon Class,
             isInThemen: false,

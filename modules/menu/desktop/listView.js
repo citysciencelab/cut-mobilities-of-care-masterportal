@@ -69,9 +69,8 @@ define([
                     return;
                 }
 
-                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
-
-                var models = this.collection.add(lightModels);
+                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
+                    models = this.collection.add(lightModels);
 
                 // Ordner öffnen, die initial geöffnet sein sollen
                 if (parentId === "Themen") {
