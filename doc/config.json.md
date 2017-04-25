@@ -23,7 +23,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |LogoLink|nein|String||Die Verlinkung zum Internetauftritt.|`"http://geoinfo.hamburg.de"`|
 |LogoToolTip|nein|String||Der Text des angezeigten Tooltips|`"Landesbetrieb Geoinformation und Vermessung"`|
 |[mapView](#markdown-header-portalconfigmapview)|nein|Object||Gibt den Hintergrund an, wenn keine Karte geladen ist.||
-|[menu](#markdown-header-portalconfigmenu)|nein|Object||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der config.json (siehe [Tools](#markdown-header-portalconfigmenutools)).|  
+|[menu](#markdown-header-portalconfigmenu)|nein|Object||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der config.json (siehe [Tools](#markdown-header-portalconfigmenutools)).|
 |PortalLogo|nein|String||Der Pfad zum Logo das in der Menüleiste angezeigt wird.|`"../img/hh-logo.png"`|
 |PortalTitle|nein|String||Der Titel, der in der Menüleiste angezeigt wird.|`"Master"`|
 |scaleLine|nein|Boolean||true = die Maßstabsleiste wird unten rechts dargestellt, wenn kein footer vorhanden ist. Wenn ein footer vorhanden ist, wird die links angezeigt.|`true`|
@@ -91,6 +91,7 @@ Auch diese Konfigurationen sind vom Typ *object*. Sie sind ebenfalls verlinkt un
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
+|[staticlinks](#markdown-header-portalconfigmenustaticlinks)|nein|Object||Das Modul *staticlinks* werden die Links zu anderen Webseiten, deren Reihenfolge und das Erscheinungsbild in der Menüleiste konfiguriert.|
 |[contact](#markdown-header-portalconfigmenucontact)|nein|Object||Das Modul *contact* gibt dem Anwender des Portals die Möglichkeit, eine Mail mit seiner Fehlermeldung/Rückmeldung/Anmerkung etc. an den Betreiber des Portals zu versenden.|
 |[legend](#markdown-header-portalconfigmenulegend)|nein|Object||Die *Legende* kann wie jedes andere Werkzeug/Tool sowohl einzeln direkt unter *Menu*, als auch unter *Tools* konfiguriert werden.|
 |[tools](#markdown-header-portalconfigmenutools)|nein|Object||Im Objekt *tools* werden die Werkzeuge, deren Reihenfolge und das Erscheinungsbild in der Menüleiste konfiguriert.|
@@ -120,8 +121,59 @@ Gibt an ob der in der Karte verwendete Marker verschiebbar sein soll.
 
 ******
 
+### Portalconfig.menu.staticlinks ###
+Gibt die Links zu externen Webseiten und deren Position im Menu an. Array von static link objekten.
+Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müssen die Objektattribute, die das Array definieren, im Namen "staticlinks" enthalten
+
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name, wie der Link im Menu angezeigt werden soll.|
+|glyphicon|ja|String||Glyphicon des Linkes für den Menueintrag.|
+|url|ja|String||URL zur externen Webseite.|
+
+
+**Beispiel staticlinks:**
+
+
+```
+#!json
+
+"info":{
+    "name": "Informationen",
+    "glyphicon": "glyphicon-info-sign",
+    "children": {
+        "staticlinks": [{
+            "name": "Wikipedia1",
+            "glyphicon": "glyphicon-globe",
+            "url": "https://www.wikipedia.de/"
+        }],
+        "contact": {
+            "name": "Kontakt",
+            "glyphicon": "glyphicon-envelope",
+            "serviceID": "80001",
+            "includeSystemInfo": true
+        },
+        "staticlinks2": [{
+            "name": "Wikipedia2",
+            "glyphicon": "glyphicon-globe",
+            "url": "https://www.wikipedia.de/"
+        },{
+            "name": "hamburg.de",
+            "glyphicon": "glyphicon-globe",
+            "url": "http://www.hamburg.de"
+        }]
+    }
+}
+
+```
+
+******
+******
+
+
 #### Portalconfig.menu.contact ####
-Das Modul *contact* gibt dem Anwender des Portals die Möglichkeit, eine Mail mit seiner Fehlermeldung/Rückmeldung/Anmerkung etc. an den Betreiber des Portals zu versenden. 
+Das Modul *contact* gibt dem Anwender des Portals die Möglichkeit, eine Mail mit seiner Fehlermeldung/Rückmeldung/Anmerkung etc. an den Betreiber des Portals zu versenden.
 
 Folgende Parameter stehen für die Konfiguration zur Verfügung:
 
@@ -171,7 +223,7 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 
 **Beispiel contact:**
 
- 
+
 ```
 #!json
 
@@ -258,7 +310,7 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 
 Werden mehrere Werkzeuge verwendet, so werden die Objekte mit Komma getrennt. Die Reihenfolge der Werkzeuge in der Konfiguration gibt die Reihenfolge der Werkzeuge im Portal wieder.
 
-Die Werkzeuge können auch direkt in die Menüleiste eingebunden werden. Dazu muss lediglich das Objekt, welches ein Werkzeug definiert, unter *menu* eingetragen werden.   
+Die Werkzeuge können auch direkt in die Menüleiste eingebunden werden. Dazu muss lediglich das Objekt, welches ein Werkzeug definiert, unter *menu* eingetragen werden.
 Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Menüleiste untergebracht, wohingegen das Werkzeug *Flurstückssuche* unter dem Reiter *Werkzeuge* positioniert würde. Dadurch ist es möglich, für das Portal wichtige, Funktionen sehr dominant zu positionieren.
 
 **Beispiel eines Werkzeuges, das in der Menüleiste ganz oben angebracht ist:**
@@ -415,9 +467,9 @@ Flurstücksuche
 
 
 __Gemarkungen_xx.json__
-Die *gemarkungen_xx.json* wird benötigt, um anhand des Gemarkungsnamens die ID der Gemarkung aufzulösen. 
+Die *gemarkungen_xx.json* wird benötigt, um anhand des Gemarkungsnamens die ID der Gemarkung aufzulösen.
 Wird das Array für die Flure nicht gefüllt (Spezialfall für HH), so muss für das Werkzeug der Parameter *parcelDenominator* auf *false* gesetzt werden.
-Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „flur“-Einträge in der *gemarkung_xx.json*. In der Werkzeugoberfläche kann man nun die Flurstückssuche weiter auf die Flure einschränken.  
+Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „flur“-Einträge in der *gemarkung_xx.json*. In der Werkzeugoberfläche kann man nun die Flurstückssuche weiter auf die Flure einschränken.
 **ACHTUNG:** Dieses Tool und Teile der Konfiguration sind abhängig von den nutzerseitig angelegten Web-Diensten und Datenbankfunktionen.
 
 **Beispiel einer *gemarkungs_xx.json* ohne „flur“:**
@@ -498,7 +550,7 @@ Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Paramet
 ******
 
 ###### Portalconfig.menu.tools.children.wfsFeatureFilter ######
-Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann nur nach den Attributen und -werten gefiltert werden, die in der WFS-Layer-Konfiguration in den [filterOptions](#markdown-header-filteroptions) definiert werden. 
+Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann nur nach den Attributen und -werten gefiltert werden, die in der WFS-Layer-Konfiguration in den [filterOptions](#markdown-header-filteroptions) definiert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -588,7 +640,7 @@ Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann
 
 
 #### Portalconfig.menu.tree ####
-Unter *tree* wird der Themenbaum konfiguriert. 
+Unter *tree* wird der Themenbaum konfiguriert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -725,7 +777,7 @@ Die definierten WFS-Dienste werden angefragt.
 ```
 #!json
 
-  "specialWFS": { 
+  "specialWFS": {
             "minChar": 3,
             "definitions": [
                 {
@@ -843,7 +895,7 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 
 ```
 
-Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche Möglichkeit, Layer unterhalb von Fachdaten  in Ordner zusammenzufassen. Ordner können wiederum auch Ordner enthalten, so kann eine beliebig tiefe Verschachtelung entstehen. 
+Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche Möglichkeit, Layer unterhalb von Fachdaten  in Ordner zusammenzufassen. Ordner können wiederum auch Ordner enthalten, so kann eine beliebig tiefe Verschachtelung entstehen.
 
 ******
 
@@ -888,7 +940,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
                     {
                       "id": "684",
                       "visibility": false
-                    },              
+                    },
                   ]
                 }
               ],
@@ -924,7 +976,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |----|-------------|---|-------|------------|
 |displayInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden?|
 |gfiTheme|nein|String|Wert aus der [services.json](services.json.md) sonst *"default"*|Style für das GFI-Popover *(„default“* / *„table“*).|
-|id|ja|Array [String] oder String||ID aus [services.json](services.json.md).| 
+|id|ja|Array [String] oder String||ID aus [services.json](services.json.md).|
 |layerAttribution|nein|HTML-String|Wert aus der [services.json](services.json.md)|Zusatzinformationen zum Layer, die in der Karte angezeigt werden sollen. Voraussetzung Control [attributions](#markdown-header-portalconfigcontrols) ist aktiviert.|
 |legendURL|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|URL zur Legende|
 |maxScale|nein|String|Wert aus der [services.json](services.json.md)|Höchste Maßstabszahl, bei der ein Layer angezeigt wird.|
@@ -967,7 +1019,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |filterString|ja|String||Mögliche Filterwerte, welche der Nutzer als Dropdown-Menü erhält.|
 |filterType|ja|String||Name des zulässigen Filtertyps. Derzeit nur combo.|
 
-**Beispiel Fachdaten:** 
+**Beispiel Fachdaten:**
 
 
 ```

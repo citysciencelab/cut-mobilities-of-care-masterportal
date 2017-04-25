@@ -27,14 +27,14 @@ define([
             },
             renderTopMenu: function () {
                 var models = _.filter(this.collection.models, function (model) {
-                        return model.attributes.type === "tool" || model.attributes.type === "staticlink" || model.attributes.type === "folder";
+                        return model.getType() === "tool" || model.getType() === "staticlink" || model.getType() === "folder";
                     });
 
                 this.parseViews(models);
             },
             parseViews: function (models) {
                 _.each(models, function (model) {
-                    switch (model.attributes.type) {
+                    switch (model.getType()) {
                         case "tool": {
                             this.addToolView(model);
                             break;

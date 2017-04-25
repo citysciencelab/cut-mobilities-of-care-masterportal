@@ -15,7 +15,9 @@ define([
             // Bootstrap Glyphicon Class
             glyphicon: "",
             // Name (Überschrift) der Funktion
-            name: ""
+            name: "",
+            // URL des Links
+            url: ""
         },
 
         initialize: function () {

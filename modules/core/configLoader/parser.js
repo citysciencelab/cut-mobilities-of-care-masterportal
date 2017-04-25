@@ -122,7 +122,7 @@ define([
                     this.parseMenu(value.children, value.name);
                 }
                 else {
-                    if (key.includes("staticlinks")) {
+                    if (key.search("staticlinks") !== -1) {
                         _.each(value, function (staticlink) {
                             var toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
 

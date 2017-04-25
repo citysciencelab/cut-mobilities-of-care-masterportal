@@ -63,3 +63,7 @@
 .item-settings > .layer-sort-item {
     margin-right: 40px;
 }
+/*staticlink*/
+.list-group-item a {
+    color: black;
+}
