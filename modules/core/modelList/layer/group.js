@@ -14,6 +14,8 @@ define([
             // TODO noch keine Typ unterscheidung -> nur WMS
             this.createChildLayerSources(this.get("layerdefinitions"));
             this.createChildLayers(this.get("layerdefinitions"));
+            this.setMaxScale(this.get("id"));
+            this.setMinScale(this.get("id"));
             this.createLayer();
         },
 
@@ -90,6 +92,21 @@ define([
             this.set("legendURL", legendURL);
         },
 
+        toggleLayerOnMap: function () {
+            if (Radio.request("Parser", "getTreeType") === "light") {console.log(this.getLayer());
+                this.getLayer().setVisible(false);debugger;
+                _.each(this.attributes.childlayers.getArray(), function (element) {
+                    console.log(element);
+                    element.setVisible(false);
+
+                });
+            }
+            else {
+
+            }
+            console.log(Radio.request("Map", "getLayers"));
+        },
+
         /**
          * [showLayerInformation description]
          * @return {[type]} [description]
@@ -162,6 +179,26 @@ define([
          */
         getChildLayers: function () {
             return this.get("childlayers");
+        },
+
+        /**
+         *
+         *
+         */
+        setMaxScale: function (layerId) {
+            var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
+
+            this.set("maxScale", layer.maxScale);
+        },
+
+        /**
+         *
+         *
+         */
+        setMinScale: function (layerId) {
+            var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
+
+            this.set("minScale", layer.minScale);
         }
 
     });

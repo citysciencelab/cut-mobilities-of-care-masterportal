@@ -172,7 +172,7 @@ define(function (require) {
                         model.attributes.gfiUrl = model.getGfiUrl();
                         gfiParams.push(model.attributes);
                     }
-                    else {
+                    else {console.log(model.get("backbonelayers"));
                         model.get("backbonelayers").forEach(function (layer) {
                             if (layer.get("gfiAttributes") !== "ignore") {
                                 model.attributes.gfiUrl = model.getGfiUrl();

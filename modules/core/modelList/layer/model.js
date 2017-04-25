@@ -76,8 +76,6 @@ define(function (require) {
                 }
             }
 
-            this.checkForScale(Radio.request("MapView", "getOptions"));
-
             //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
             //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
             //  selectionIDX benötigen, um verschoben werden zu können
@@ -93,6 +91,7 @@ define(function (require) {
                 Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
                 this.setIsVisibleInMap(this.getIsSelected());
             }
+            this.checkForScale(Radio.request("MapView", "getOptions"));
             this.setAttributes();
             this.createLegendURL();
         },
@@ -124,7 +123,7 @@ define(function (require) {
         createLayer: function () {},
         setAttributes: function () {},
 
-        getResolutions: function () {
+        getResolutions: function () {console.log(this.getLayer());
             var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
                 resoByMinScale = Radio.request("MapView", "getResoByScale", this.getMinScale(), "min");
 
