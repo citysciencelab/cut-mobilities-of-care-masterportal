@@ -190,6 +190,7 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 |subject|nein|String|"Supportanfrage zum Portal " + *portalTitle*|Hier kann ein String mit übergeben werden, der oben in der Betreffzeile der Mail auftaucht. Eine TicketId wird dem Betreff in jedem Fall vorangestellt.|
 |textPlaceholder||String||Platzhalter für das Textfeld in dem der Anwender sein Anliegen eintragen kann.|
 |[to](#markdown-header-portalconfigmenucontactfrom)|nein|Array [Object]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de", "name": "LGVGeoportalHilfe"}]|Array der Empfänger. Wird immer mit **email** und **name** erwartet.|
+|contactInfo|nein|String||Information, die über dem Kontaktformular angezeigt wird.|
 
 ##### Portalconfig.menu.contact.bcc #####
 
