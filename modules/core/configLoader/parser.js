@@ -101,7 +101,6 @@ define([
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
          */
         parseMenu: function (items, parentId) {
-
             _.each(items, function (value, key) {
                 if (_.has(value, "children") || key === "tree") {
                     var item = {
@@ -123,15 +122,24 @@ define([
                     this.parseMenu(value.children, value.name);
                 }
                 else {
-                    var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+                    if (key.search("staticlinks") !== -1) {
+                        _.each(value, function (staticlink) {
+                            var toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
 
-                    if (toolitem.id === "measure" || toolitem.id === "draw") {
-                        if (!Radio.request("Util", "isApple") && !Radio.request("Util", "isAndroid")) {
-                             this.addItem(toolitem);
-                         }
+                            this.addItem(toolitem);
+                        }, this);
                     }
                     else {
-                        this.addItem(toolitem);
+                        var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+
+                        if (toolitem.id === "measure" || toolitem.id === "draw") {
+                            if (!Radio.request("Util", "isApple") && !Radio.request("Util", "isAndroid")) {
+                                 this.addItem(toolitem);
+                             }
+                        }
+                        else {
+                            this.addItem(toolitem);
+                        }
                     }
                 }
             }, this);
@@ -375,7 +383,8 @@ define([
         createModelList: function () {
             new ModelList(_.filter(this.getItemList(), function (model) {
                 return model.parentId === "root" ||
-                    model.parentId === "Werkzeuge" || model.parentId === "Info";
+                    model.parentId === "Werkzeuge" ||
+                    model.parentId === "Informationen";
             }));
         },
 
