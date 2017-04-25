@@ -14,6 +14,9 @@ define(function (require) {
                 "change:isReady": function () {
                     this.replaceValuesWithChildObjects();
                     this.checkRoutable();
+                },
+                "change:gfiContent": function () {
+                    this.getAmtlVergAddr();
                 }
             });
         },
@@ -89,20 +92,19 @@ define(function (require) {
             }
             this.set("gfiContent", element);
         },
-        getAmtlVergAddr: function (gfiContent) {
+        getAmtlVergAddr: function () {
             var key = "Amtlich vergebene Adresse",
                 val;
 
-            if (gfiContent[0].hasOwnProperty(key)) {
-                val = gfiContent[0][key];
+            if (this.getGfiContent()[0].hasOwnProperty(key)) {
+                val = this.getGfiContent()[0][key];
                 if (val === "S" || val === "B") {
-                    gfiContent[0][key] = "Ja";
+                    this.getGfiContent()[0][key] = "Ja";
                 }
                 else {
-                    gfiContent[0][key] = "Nein";
+                    this.getGfiContent()[0][key] = "Nein";
                 }
             }
-            return gfiContent;
         }
     });
 

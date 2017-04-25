@@ -134,7 +134,6 @@ define(function (require) {
 
             gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent);
-            gfiContent = this.getAmtlVergAddr(gfiContent);// sgvOnline
             this.setGfiContent(gfiContent);
             this.setIsReady(true);
         },
