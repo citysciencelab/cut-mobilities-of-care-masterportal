@@ -173,15 +173,9 @@ define(function (require) {
                         gfiParams.push(model.attributes);
                     }
                     else {
-                        model.get("layerdefinitions").forEach(function (layer) {
-                            if (layer.gfiAttributes !== "ignore") {
-                                gfiParams.push({gfiUrl: model.getGfiUrl(layer),
-                                        gfiAttributes: layer.gfiAttributes,
-                                        name: layer.name,
-                                        typ: layer.typ,
-                                        gfiTheme: layer.gfiTheme
-                                });
-                            }
+                        model.get("gfiParams").forEach(function (params, index) {
+                            params.gfiUrl = model.getGfiUrl(index);
+                            gfiParams.push(model.getGfiParams()[index]);
                         });
                     }
                 }
