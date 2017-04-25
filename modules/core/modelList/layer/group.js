@@ -2,10 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "modules/core/modelList/layer/model",
-    "modules/core/modelList/layer/wms",
-    "modules/core/modelList/layer/wfs"
-], function (Backbone, Radio, ol, Layer, WMS, WFS) {
+    "modules/core/modelList/layer/model"
+], function (Backbone, Radio, ol, Layer) {
 
     var GroupLayer = Layer.extend({
 
