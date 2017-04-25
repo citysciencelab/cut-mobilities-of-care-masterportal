@@ -2,8 +2,10 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "modules/core/modelList/layer/model"
-], function (Backbone, Radio, ol, Layer) {
+    "modules/core/modelList/layer/model",
+    "modules/core/modelList/layer/wms",
+    "modules/core/modelList/layer/wfs"
+], function (Backbone, Radio, ol, Layer, WMS, WFS) {
 
     var GroupLayer = Layer.extend({
 
@@ -38,6 +40,7 @@ define([
                 });
 
                 sources.push(source);
+                child.source = source;
             });
             this.setChildLayerSources(sources);
         },
@@ -90,21 +93,6 @@ define([
                 }
             }, this);
             this.set("legendURL", legendURL);
-        },
-
-        toggleLayerOnMap: function () {
-            if (Radio.request("Parser", "getTreeType") === "light") {console.log(this.getLayer());
-                this.getLayer().setVisible(false);debugger;
-                _.each(this.attributes.childlayers.getArray(), function (element) {
-                    console.log(element);
-                    element.setVisible(false);
-
-                });
-            }
-            else {
-
-            }
-            console.log(Radio.request("Map", "getLayers"));
         },
 
         /**
@@ -199,6 +187,14 @@ define([
             var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
 
             this.set("minScale", layer.minScale);
+        },
+
+        getGfiUrl: function (layer) {
+            var resolution = Radio.request("MapView", "getResolution").resolution,
+                projection = Radio.request("MapView", "getProjection"),
+                coordinate = Radio.request("GFI", "getCoordinate");
+
+            return layer.source.getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: layer.infoFormat, FEATURE_COUNT: layer.featureCount});
         }
 
     });

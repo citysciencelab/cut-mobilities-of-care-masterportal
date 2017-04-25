@@ -419,7 +419,7 @@ define([
          * @param  {string[]} ids - Array von Ids deren Objekte gruppiert werden
          * @return {Object[]} layerlist - Objekte aus der services.json
          */
-        mergeObjectsByIds: function (ids, layerlist) {console.log(ids);
+        mergeObjectsByIds: function (ids, layerlist) {
             var objectsByIds = [],
                 newObject;
             // Objekte die gruppiert werden

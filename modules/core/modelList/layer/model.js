@@ -21,7 +21,11 @@ define(function (require) {
         initialize: function () {
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
-                "change:isSelected": this.createLayerSource,
+                "change:isSelected": function () {
+                    if (this.has("childLayerSources") === false) {
+                        this.createLayerSource();
+                    }
+                },
                 // Anschließend evt. die ClusterSource und der Layer
                 "change:layerSource": function () {
                     if (this.has("clusterDistance") === true) {
@@ -123,7 +127,7 @@ define(function (require) {
         createLayer: function () {},
         setAttributes: function () {},
 
-        getResolutions: function () {console.log(this.getLayer());
+        getResolutions: function () {
             var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
                 resoByMinScale = Radio.request("MapView", "getResoByScale", this.getMinScale(), "min");
 

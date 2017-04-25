@@ -489,6 +489,15 @@
                 {
                   "id": "2178",
                   "visibility": false
+                },
+                {
+                  "id": [{
+                    "id": "682"
+                  },{
+                    "id": "1731"
+                  }],
+                  "visibility": true,
+                  "name": "test"
                 }
               ]
             }
