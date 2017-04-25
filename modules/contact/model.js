@@ -27,7 +27,8 @@ define([
             userEmail: "",
             userTel: "",
             isCurrentWin: false,
-            includeSystemInfo: false
+            includeSystemInfo: false,
+            contactInfo: ""
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
