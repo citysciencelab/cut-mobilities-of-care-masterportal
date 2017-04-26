@@ -173,11 +173,9 @@ define(function (require) {
                         gfiParams.push(model.attributes);
                     }
                     else {
-                        model.get("backbonelayers").forEach(function (layer) {
-                            if (layer.get("gfiAttributes") !== "ignore") {
-                                model.attributes.gfiUrl = model.getGfiUrl();
-                                gfiParams.push(model.attributes);
-                            }
+                        model.get("gfiParams").forEach(function (params, index) {
+                            params.gfiUrl = model.getGfiUrl(index);
+                            gfiParams.push(model.getGfiParams()[index]);
                         });
                     }
                 }

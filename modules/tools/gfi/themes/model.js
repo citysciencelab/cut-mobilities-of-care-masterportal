@@ -25,7 +25,7 @@ define(function (require) {
          *
          */
         requestFeatureInfos: function () {
-            if (this.get("typ") === "WMS") {
+            if (this.get("typ") === "WMS" || this.get("typ") === "GROUP") {
                 if (this.get("infoFormat") === "text/html") {
                     this.getWmsHtmlGfi();
                 }

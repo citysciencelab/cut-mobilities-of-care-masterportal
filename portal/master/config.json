@@ -300,6 +300,15 @@
             "timeout": 60000
           },
           "visibility": false
+        },
+        {
+          "id": [{
+            "id": "682"
+          },{
+            "id": "1731"
+          }],
+          "visibility": true,
+          "name": "Kita und KH"
         }
       ]
     }

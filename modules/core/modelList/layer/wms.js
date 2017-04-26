@@ -55,7 +55,7 @@ define(function (require) {
                 context = this;
 
                 // wms_webatlasde
-                source.on("tileloaderror", function(event) {
+                source.on("tileloaderror", function () {
                   if (context.get("tileloaderror") === false) {
                     context.set("tileloaderror", true);
                     if (!navigator.cookieEnabled) {

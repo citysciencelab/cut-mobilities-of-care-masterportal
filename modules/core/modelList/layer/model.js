@@ -21,7 +21,11 @@ define(function (require) {
         initialize: function () {
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
-                "change:isSelected": this.createLayerSource,
+                "change:isSelected": function () {
+                    if (this.has("childLayerSources") === false) {
+                        this.createLayerSource();
+                    }
+                },
                 // Anschließend evt. die ClusterSource und der Layer
                 "change:layerSource": function () {
                     if (this.has("clusterDistance") === true) {
@@ -76,8 +80,6 @@ define(function (require) {
                 }
             }
 
-            this.checkForScale(Radio.request("MapView", "getOptions"));
-
             //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
             //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
             //  selectionIDX benötigen, um verschoben werden zu können
@@ -93,6 +95,7 @@ define(function (require) {
                 Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
                 this.setIsVisibleInMap(this.getIsSelected());
             }
+            this.checkForScale(Radio.request("MapView", "getOptions"));
             this.setAttributes();
             this.createLegendURL();
         },
