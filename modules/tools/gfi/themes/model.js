@@ -42,6 +42,7 @@ define(function (require) {
             // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
             if (this.get("id") === "2407" || this.get("id") === "4423") {
                 window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+                this.setIsReady(true);
             }
             else {
                 var gfiFeatures = {"html": this.get("gfiUrl")};
