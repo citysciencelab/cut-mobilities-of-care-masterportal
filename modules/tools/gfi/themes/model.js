@@ -125,9 +125,30 @@ define(function (require) {
             if (gfiList.length > 0) {
                 pgfi = this.translateGFI(gfiList, this.get("gfiAttributes"));
                 pgfi = this.getManipulateDate(pgfi);
+                pgfi = this.getManipulateDate(pgfi);
+                this.cloneCollModels(pgfi);
+
                 this.setGfiContent(pgfi);
             }
             this.setIsReady(true);
+        },
+        /**
+         * Klont die Models in der Collection, wenn ein Dienst mehr als ein Feature bei der GFI-Abfrage zurückliefert.
+         */
+        cloneCollModels: function (pgfi) {
+            _.each(pgfi, function (test, index) {
+                if (index > 0) {
+                    var clone = this.clone();
+
+                    clone.set("gfiContent", [test]);
+                    clone.set("id", _.uniqueId());
+                    clone.set("isReady", true);
+                    if (this.get("gfiTheme")) {
+                        clone.splitContent();
+                    }
+                    this.collection.add(clone);
+                }
+            }, this);
         },
 
         getVectorGfi: function () {
