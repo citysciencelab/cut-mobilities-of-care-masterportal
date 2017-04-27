@@ -143,7 +143,7 @@ define(function (require) {
                     clone.set("gfiContent", [test]);
                     clone.set("id", _.uniqueId());
                     clone.set("isReady", true);
-                    if (this.get("gfiTheme")) {
+                    if (this.get("gfiTheme") === "trinkwasser") {
                         clone.splitContent();
                     }
                     this.collection.add(clone);
