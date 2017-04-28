@@ -4,8 +4,9 @@ define([
     "config",
     "text!modules/featurelister/template.html",
     "modules/featurelister/model",
+    "backbone.radio",
     "jqueryui/widgets/draggable"
-], function (Backbone, EventBus, Config, Template, Model) {
+], function (Backbone, EventBus, Config, Template, Model, Radio) {
 
     var FeatureLister = Backbone.View.extend({
         model: Model,
@@ -347,6 +348,9 @@ define([
                     this.model.set("layerid", this.model.get("layerlist")[0].id);
                 }
                 this.setMaxHeight();
+            }
+            else {
+                Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
             }
             this.model.setPrevFeatureId(-1);
             this.model.unscaleFeature();
