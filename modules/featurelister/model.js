@@ -1,12 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "eventbus",
-    "config",
-    "modules/core/requestor"
-], function (Backbone, Radio, EventBus, Config, Requestor) {
+define(function (require) {
 
-    var FeatureListerModel = Backbone.Model.extend({
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Requestor = require("modules/core/requestor"),
+        FeatureListerModel;
+
+    FeatureListerModel = Backbone.Model.extend({
         defaults: {
             maxFeatures: 20, // über Config konfigurierbare Max-Anzahl an pro Layer geladenen Features
             isActive: false,
@@ -25,11 +24,7 @@ define([
             if (toolModel.has("lister") === true) {
                 this.set("maxFeatures", toolModel.get("lister"));
             }
-            // if(_.has(Config.menuItems.featureLister,"lister") === true) {
-            //     this.set("maxFeatures", Config.menuItems.featureLister.lister);
-            // }
             Radio.on("ModelList", "updateVisibleInMapList", this.checkVisibleLayer, this);
-            // EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
             Radio.on("Map", "setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
             this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
             this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
@@ -75,10 +70,7 @@ define([
 
                 // Zoom auf Extent
                 if (geometry) {
-                    EventBus.trigger("mapHandler:zoomTo", {
-                        type: "Feature-Lister-Click",
-                        coordinate: geometry
-                    });
+                    Radio.trigger("MapMarker", "mapHandler:zoomTo", {type: "Feature-Lister-Click", coordinate: geometry});
                 }
                 else {
                     Radio.trigger("Alert", "alert", {
@@ -117,7 +109,7 @@ define([
             var prevfeatureid = this.get("prevFeatureId"),
                 prevStyleScale = this.get("prevStyleScale");
 
-            if(prevfeatureid !== -1) {
+            if (prevfeatureid !== -1) {
                 var layer = this.get("layer"),
                     features = layer.features,
                     feature = _.find(features, function (feat) {

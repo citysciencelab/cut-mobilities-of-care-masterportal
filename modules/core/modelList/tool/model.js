@@ -1,11 +1,6 @@
-define([
-    "backbone.radio",
-    "modules/core/modelList/item",
-    "eventbus"
-], function () {
+define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
-        EventBus = require("eventbus"),
         Radio = require("backbone.radio"),
         Tool;
 
@@ -49,7 +44,7 @@ define([
                     Radio.trigger("Legend", "toggleLegendWin");
                 }
                 else if (this.getId() === "featureLister") {
-                    EventBus.trigger("toggleFeatureListerWin");
+                    Radio.trigger("FeatureListerView", "toggle");
                 }
                 else {
                     Radio.trigger("Window", "toggleWin", this);
