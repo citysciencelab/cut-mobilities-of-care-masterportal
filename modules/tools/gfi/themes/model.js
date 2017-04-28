@@ -41,8 +41,19 @@ define(function (require) {
         getWmsHtmlGfi: function () {
             // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
             if (this.get("id") === "2407" || this.get("id") === "4423") {
-                window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
-                this.setIsReady(true);
+                $.ajax({
+                    url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
+                    context: this,
+                    success: function (data) {
+                        var domNodes = $.parseHTML(data);
+
+                        // bei domNodes.length < 3 = nur der xml-header (?xml version='1.0' encoding='UTF-8'?) ohne html
+                        if (domNodes.length > 3) {
+                            window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+                            this.setIsReady(true);
+                        }
+                    }
+                });
             }
             else {
                 var gfiFeatures = {"html": this.get("gfiUrl")};
