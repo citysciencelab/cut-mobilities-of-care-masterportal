@@ -20,6 +20,11 @@ define([
             prevStyleScale: 1
         },
         initialize: function () {
+            var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "featureLister"});
+
+            if (toolModel.has("lister") === true) {
+                this.set("maxFeatures", toolModel.get("lister"));
+            }
             // if(_.has(Config.menuItems.featureLister,"lister") === true) {
             //     this.set("maxFeatures", Config.menuItems.featureLister.lister);
             // }
