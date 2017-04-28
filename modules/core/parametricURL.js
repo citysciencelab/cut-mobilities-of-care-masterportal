@@ -66,7 +66,7 @@ define([
                     return 0;
                 }) : transparencyListString.indexOf(",") > -1 ? _.map(transparencyListString.split(","), function (val) {
                     return _String.toNumber(val);
-                }) : new Array(_String.toNumber(transparencyListString)),
+                }) : [parseInt(transparencyList, 10)],
                 layerParams = [];
 
             if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
