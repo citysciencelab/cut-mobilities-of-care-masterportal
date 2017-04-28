@@ -50,8 +50,8 @@ define(function (require) {
                         // bei domNodes.length < 3 = nur der xml-header (?xml version='1.0' encoding='UTF-8'?) ohne html
                         if (domNodes.length > 3) {
                             window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
-                            this.setIsReady(true);
                         }
+                        this.setIsReady(true);
                     }
                 });
             }
