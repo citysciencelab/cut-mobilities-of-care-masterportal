@@ -97,7 +97,6 @@ define([
          */
         createLegendURL: function () {
             var legendURL = [];
-
             _.each(this.get("layerdefinitions"), function (layer) {
                 if (layer.legendURL === "" || layer.legendURL === undefined) {
                     var layerNames = layer.layers.split(",");
@@ -110,6 +109,9 @@ define([
                             legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
                         }, this);
                     }
+                }
+                else {
+                    legendURL.push(layer.legendURL);
                 }
             }, this);
             this.set("legendURL", legendURL);
