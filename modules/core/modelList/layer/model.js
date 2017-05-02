@@ -378,15 +378,15 @@ define(function (require) {
                 legendParams = Radio.request("Legend", "getLegendParams"),
                 name = this.get("name");
 
-                legendURL.push(_.findWhere(legendParams, {layername: name}));
+            legendURL.push(_.findWhere(legendParams, {layername: name}));
 
-                Radio.trigger("LayerInformation", "add", {
-                    "id": this.getId(),
-                    "legendURL": legendURL,
-                    "metaID": this.get("datasets")[0] ? this.get("datasets")[0].md_id : null,
-                    "layername": this.get("name")
-                });
-                this.setLayerInfoChecked(true);
+            Radio.trigger("LayerInformation", "add", {
+                "id": this.getId(),
+                "legendURL": legendURL,
+                "metaID": this.get("datasets")[0] ? this.get("datasets")[0].md_id : null,
+                "layername": this.get("name")
+            });
+            this.setLayerInfoChecked(true);
         },
         setSelectionIDX: function (idx) {
             this.set("selectionIDX", idx);
