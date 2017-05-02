@@ -167,6 +167,7 @@ require("jqueryui/widgets/draggable");
             $("#featurelist-details").hide();
             this.model.setPrevFeatureId(-1);
             this.model.unscaleFeature();
+            this.model.set("layerid", {});
         },
         /*
         * Wechselt den Tab
