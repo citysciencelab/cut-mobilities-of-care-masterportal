@@ -10,28 +10,32 @@
 <div class="content">
     <h4 class="subtitle" title="<%= title %>"><%= title %></h4>
     <p class="abstract"><%= abstractText %></p>
-    <% if (metaID !== null) { %>
+    <% _.each(metaURL, function (url) { %>
         <br>
-        <p class="metalink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
+        <p class="metalink"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
+    <% }); %>
+    <% if (date !== null) { %>
         <p>Stand der Daten: <%= date %></p>
     <% } %>
-    <% if (_.isObject(legendURL[0]) === true) { %>
+    <% _.each(legendURL, function (legendObj) {
+        if (!_.isObject(legendObj) === true) { return; }
+    %>
         <hr>
         <h4 class="subtitle">Legende</h4>
         <p>
            <%
-              if (legendURL[0].typ === "WFS") {
+              if (legendObj.typ === "WFS") {
               %>
                 <table>
                 <%
-                _.each(legendURL[0].img, function (image, index2) {
+                _.each(legendObj.img, function (image, index2) {
                 %>
                     <tr>
                        <td class="tdLegend">
                            <img src="<%= image %>">
                        </td>
                        <td class="tdLegend">
-                           <span><%= legendURL[0].legendname[index2] %></span>
+                           <span><%= legendObj.legendname[index2] %></span>
                        </td>
                    </tr>
                 <%
@@ -40,12 +44,12 @@
                 </table>
 
                 <%
-               }else if (legendURL[0].typ === "styleWMS") {
+               }else if (legendObj.typ === "styleWMS") {
                    %>
 
                     <table>
                   <%
-                     _.each(legendURL[0].params, function(param){
+                     _.each(legendObj.params, function(param){
                    %>
                         <tr>
                             <td><div class="styleWMS" style="background-color:<%=param.color%>"></div></td>
@@ -58,22 +62,22 @@
                 <%
                 }
             else {
-                if (typeof legendURL[0].img === "string") {
-                    if (legendURL[0].img.search(".pdf") !== -1) {
+                if (typeof legendObj.img === "string") {
+                    if (legendObj.img.search(".pdf") !== -1) {
                    %>
-                        <a href=<%= legendURL[0].img %> target="_blank">weitere Informationen</a>
+                        <a href=<%= legendObj.img %> target="_blank">weitere Informationen</a>
                     <%
                     } else {
                     %>
                         <p>
-                            <img src=<%= legendURL[0].img %>>
+                            <img src=<%= legendObj.img %>>
                         </p>
                     <%
                     }
                 }
                else {
-                    if (legendURL[0].img.length ===1 ) {
-                    _.each(legendURL[0].img, function (image) {
+                    if (legendObj.img.length ===1 ) {
+                    _.each(legendObj.img, function (image) {
                     %>
                         <p>
                             <img src=<%= image %>>
@@ -81,11 +85,11 @@
                 <%
                    });}else { %>
                     <p>
-                        <img src=<%= legendURL[0].img[0] %>>
+                        <img src=<%= legendObj.img[0] %>>
                     </p>
                 <%
                }}}
                %>
         </p>
-    <% } %>
+    <% }); %>
 </div>

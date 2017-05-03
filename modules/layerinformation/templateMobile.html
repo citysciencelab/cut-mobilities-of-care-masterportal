@@ -12,12 +12,19 @@
         <div class="modal-body">
             <h4 class="subtitle"><%= title %></h4>
             <p class="abstract"><%= abstractText %></p>
-            <% if (metaID !== null) { %>
+
+            <% _.each(metaURL, function (url) { %>
                 <br>
-                <p class="metalink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
+                <p class="metalink"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
+            <% }); %>
+
+            <% if (date !== null) { %>
                 <p>Stand der Daten: <%= date %></p>
             <% } %>
-            <% if (_.isObject(legendURL[0]) === true) { %>
+
+            <% _.each(legendURL, function (legendObj) {
+                if (!_.isObject(legendObj) === true) { return; }
+            %>
                 <hr>
                 <h4 class="subtitle">Legende</h4>
                 <p>
@@ -88,7 +95,7 @@
                 <%
                }}}
                %>
-            <% } %>
+            <% }); %>
             </p>
         </div>
     </div><!-- /.modal-content -->
