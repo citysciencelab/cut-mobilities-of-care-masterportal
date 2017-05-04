@@ -14,5 +14,5 @@ Weitere Infos bald auf der Webseite der Geowerkstatt Hamburg.
 * [lokale Entwicklungsumgebung einrichten](setup-dev.md)
 * [Code-Konventionen](conventions.md)
 * [Git-Workflow](git-workflow.md)
-* [Tutorial: Ein neues Modul erstellen](howtowriteamodule.md)
+* [Tutorial: Ein neues Modul erstellen](doc/howtowriteamodule.md)
 * [Community Board (Entwicklerforum, Issue Tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
