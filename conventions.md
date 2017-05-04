@@ -1,7 +1,6 @@
 >Konventionen für unseren Code.
 [TOC]
 
-# Code
 ### Allgemein
 * Alle Dokumente werden in utf-8 gespeichert
 * Jedes Dokument wird mit einer leeren Zeile beendet
