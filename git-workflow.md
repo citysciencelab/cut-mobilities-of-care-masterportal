@@ -5,7 +5,7 @@
 * Ein Commit repräsentiert eine Idee oder eine Änderung
 * Nutze Verben für die Commits **(add/remove/update/refactor/fix/config/hotfix)**
 * Es dürfen keine console.log Statements in den Commits vorhanden sein
-* Die einzigen zugelassen Commits auf dem stable-Branch sind "hotfix-Commits"
+* Die einzigen zugelassen Commits auf dem stable-Branch sind "hotfix-Commits". hotfix-Commits werden sowohl in den stable als auch in den dev-Branch gemerged, d.h. 1 Feature-Branch, 2 Pull Requests.
 
 ## Branches und Workflow
 * Die Entwicklung neuer Features und das BugFixing erfolgt in der Regel auf Feature Branches ausgehend vom dev-Branch. Wir setzen den [Gitflow Worklflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow) ein.
