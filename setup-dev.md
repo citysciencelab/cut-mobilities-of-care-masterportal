@@ -100,7 +100,7 @@ Dann die Build-Abhängigkeiten ziehen via NPM:
 # npm install
 ```
 
-Dann die App-Abhängigkeiten ziehen via Bower:
+Dann die App-Abhängigkeiten ziehen via Bower (alle Abhängigkeiten in der (../bower.json). 
 
 **Wichtig für externe Entwickler**: die Datei bower-public.json in bower.json umbenennen und in der Datei .bowerrc die Proxy-Einstellungen anpassen.
 
@@ -110,6 +110,7 @@ Dann die App-Abhängigkeiten ziehen via Bower:
 
 Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /components, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
 **Für externe Entwickler** sind es nach Umbenennen der bower-public.json diese Repositories: [build-config-public](https://bitbucket.org/lgv-g12/build-config-public) und [lgv-config-public](https://bitbucket.org/lgv-g12/lgv-config-public).
+A
 
 ## Grunt Tasks ausführen
 ### grunt server
