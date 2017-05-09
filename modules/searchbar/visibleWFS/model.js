@@ -75,11 +75,12 @@ define([
 
                             _.each(features, function (feature) {
                                 featureArray.push({
-                                    name: feature.get("name"),
-                                    type: "Krankenhaus",
+                                    name: feature.get(layer.attributes.searchField),
+                                    type: layer.get("name"),
                                     coordinate: feature.getGeometry().getCoordinates(),
                                     imageSrc: imageSrc,
-                                    id: feature.get("name").replace(/ /g, "") + layer.get("name")});
+                                    id: feature.get(layer.attributes.searchField).replace(/ /g, "") + layer.get("name")
+                                });
                             });
                         }
                     }
