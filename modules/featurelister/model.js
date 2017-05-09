@@ -133,6 +133,7 @@ define(function (require) {
             this.set("featureid", "");
             // Layer wegen Tab-switch-Reihenfolge erst hinterher setten.
             if (layer) {
+                this.getFeatureList(this.get("layerid"));
                 this.set("layer", layer);
             }
             else {
@@ -189,26 +190,26 @@ define(function (require) {
         /*
         * Übernimmt Features bei Selektion eines Layers.
         */
-        getFeatureList: function (layer) {
-            var gfiAttributes = layer.get("gfiAttributes"),
-                features = layer.get("layer").getSource().getFeatures(),
-                ll = [],
-                counter = 0;
+        getFeatureList: function (layerId) {
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+                gfiAttributes = layerModel.get("gfiAttributes"),
+                layerFromList = _.findWhere(this.get("layerlist"), {id: layerId}),
+                features = layerModel.get("layer").getSource().getFeatures(),
+                ll = [];
 
             // Es muss sichergetellt werden, dass auch Features ohne Geometrie verarbeitet werden können. Z.B. KitaEinrichtunen
-            _.each(features, function (feature) {
+            _.each(features, function (feature, index) {
                 if (feature.get("features")) {
-                    _.each(feature.get("features"), function (feat) {
+                    _.each(feature.get("features"), function (feat, index) {
                         var props = Requestor.translateGFI([feat.getProperties()], gfiAttributes)[0],
                             geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
                         ll.push({
-                            id: counter,
+                            id: index,
                             properties: props,
                             geometry: geom,
                             feature: feat
                         });
-                        counter += 1;
                     });
                 }
                 else {
@@ -216,27 +217,25 @@ define(function (require) {
                         geom = feature.getGeometry() ? feature.getGeometry().getExtent() : null;
 
                     ll.push({
-                        id: counter,
+                        id: index,
                         properties: props,
                         geometry: geom,
                         feature: feature
                     });
-                    counter += 1;
                 }
             }, this);
-            return ll;
+
+            layerFromList.features = ll;
         },
         /*
         * Fügt Layer zur Liste hinzu.
         */
         addLayerToList: function (layer) {
-            var layerlist = this.get("layerlist"),
-                featurelist = this.getFeatureList(layer);
+            var layerlist = this.get("layerlist");
 
             layerlist.push({
                 id: layer.id,
                 name: layer.get("name"),
-                features: featurelist,
                 style: layer.get("style")
             });
             this.unset("layerlist", {silent: true});

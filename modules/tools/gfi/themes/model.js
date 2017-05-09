@@ -137,7 +137,9 @@ define(function (require) {
                 pgfi = this.translateGFI(gfiList, this.get("gfiAttributes"));
                 pgfi = this.getManipulateDate(pgfi);
                 pgfi = this.getManipulateDate(pgfi);
-                this.cloneCollModels(pgfi);
+                if (this.get("gfiTheme") !== "table") {
+                    this.cloneCollModels(pgfi);
+                }
 
                 this.setGfiContent(pgfi);
             }
@@ -147,11 +149,11 @@ define(function (require) {
          * Klont die Models in der Collection, wenn ein Dienst mehr als ein Feature bei der GFI-Abfrage zurückliefert.
          */
         cloneCollModels: function (pgfi) {
-            _.each(pgfi, function (test, index) {
+            _.each(pgfi, function (singlePgfi, index) {
                 if (index > 0) {
                     var clone = this.clone();
 
-                    clone.set("gfiContent", [test]);
+                    clone.set("gfiContent", [singlePgfi]);
                     clone.set("id", _.uniqueId());
                     clone.set("isReady", true);
                     if (this.get("gfiTheme") === "trinkwasser") {
