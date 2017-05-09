@@ -377,20 +377,15 @@ define(function (require) {
          * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
          */
         showLayerInformation: function () {
-            var legendURL = [],
-                metaID = [],
+            var metaID = [],
                 legendParams = Radio.request("Legend", "getLegendParams"),
-                isGroupLayer = this.get("layerdefinitions") ? true : false;
+                isGroupLayer = this.get("layerdefinitions") ? true : false,
+                name = this.get("name"),
+                legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null;
 
             if (isGroupLayer) {
                 _.each(this.get("layerdefinitions"), function (layer) {
-                    var name = layer.name,
-                        legendDef = _.findWhere(legendParams, {layername: name}),
-                        layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
-
-                    if (legendDef) {
-                        legendURL.push(legendDef);
-                    }
+                    var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
 
                     if (layerMetaId) {
                         metaID.push(layerMetaId);
@@ -398,19 +393,16 @@ define(function (require) {
                 });
             }
             else {
-                var layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null,
-                    name = this.get("name"),
-                    legendDef = _.findWhere(legendParams, {layername: name});
+                var layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
                 metaID.push(layerMetaId);
-                legendURL.push(legendDef);
             }
 
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
                 "legendURL": legendURL,
                 "metaID": metaID,
-                "layername": this.get("name")
+                "layername": name
             });
 
             this.setLayerInfoChecked(true);

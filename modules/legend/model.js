@@ -195,14 +195,22 @@ define([
             }, this);
         },
 
-        // HVV-Quatsch funktioniert noch nicht richtig
+        /**
+         * Übergibt GroupLayer in den tempArray. Für jeden GroupLayer wird der Typ "Group" gesetzt und als legendURL ein Array übergeben.
+         */
         setLegendParamsFromGROUP: function () {
-            _.each(this.get("groupLayerList"), function (layer) {
+            var groupLayerList = this.get("groupLayerList");
+
+            _.each(groupLayerList, function (groupLayer) {
+                var legendURLS = groupLayer.get("legendURL"),
+                    name = groupLayer.get("name"),
+                    isVisibleInMap = groupLayer.get("isVisibleInMap");
+
                 this.push("tempArray", {
-                    layername: layer.get("name"),
-                    img: layer.get("legendURL"),
-                    typ: "WMS",
-                    isVisibleInMap: layer.get("isVisibleInMap")
+                    layername: name,
+                    img: legendURLS,
+                    typ: "GROUP",
+                    isVisibleInMap: isVisibleInMap
                 });
             }, this);
         },
