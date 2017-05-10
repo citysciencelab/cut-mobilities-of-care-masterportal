@@ -20,7 +20,22 @@ define([
             layerToPrint: [],
             fetched: false, // gibt an, ob info.json schon geladen wurde
             printGFI: Config.print.gfi ? Config.print.gfi : false,
-            printurl: ""
+            printurl: "",
+            printGfiMarker: {
+                outerCircle: {
+                    fill: false,
+                    pointRadius: 8,
+                    stroke: true,
+                    strokeColor: "#ff0000",
+                    strokeWidth: 3
+                },
+                point: {
+                    fill: true,
+                    pointRadius: 1,
+                    fillColor: "#000000",
+                    stroke: false
+                }
+            }
         },
 
         /*
@@ -44,6 +59,12 @@ define([
 
         //
         initialize: function () {
+            var printGfiMarker = Config.print.printGfiMarker ? Config.print.printGfiMarker : undefined;
+
+            if (_.isUndefined(printGfiMarker) === false) {
+                this.setPrintGfiMarker(printGfiMarker);
+            }
+
             this.listenTo(this, {
                 "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
                 "change:specification": this.getPDFURL
@@ -338,19 +359,8 @@ define([
                     type: "Vector",
                     styleProperty: "styleId",
                     styles: {
-                        0: {
-                            fill: false,
-                            pointRadius: 8,
-                            stroke: true,
-                            strokeColor: "#ff0000",
-                            strokeWidth: 3
-                        },
-                        1: {
-                            fill: true,
-                            pointRadius: 1,
-                            fillColor: "#000000",
-                            stroke: false
-                        }
+                        0: this.getPrintGfiMarker().outerCircle,
+                        1: this.getPrintGfiMarker().point
                     },
                     geoJson: {
                         type: "FeatureCollection",
@@ -561,6 +571,42 @@ define([
             maxx = center[0] + (w / 2);
             maxy = center[1] + (h / 2);
             return [minx, miny, maxx, maxy];
+        },
+
+        /**
+         * Setzt die Parameter aus der config.js für den GFI Marker im Druck, wenn vorhanden
+         */
+        setPrintGfiMarker: function (printGfiMarker) {
+            printGfiMarker.outerCircle ? this.setOuterCircle(printGfiMarker.outerCircle) : null;
+            printGfiMarker.point ? this.setPoint(printGfiMarker.point) : null;
+        },
+
+        /**
+         * Gibt die Parameter für den GFI Marker im Druck zurück
+         */
+        getPrintGfiMarker: function () {
+            return this.get("printGfiMarker");
+        },
+
+        /**
+         * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Kreis des GFI Markers im Druck
+         */
+        setOuterCircle: function (outerCircle) {
+            outerCircle.fill ? this.getPrintGfiMarker().outerCircle.fill = outerCircle.fill : null;
+            outerCircle.pointRadius ? this.getPrintGfiMarker().outerCircle.pointRadius = outerCircle.pointRadius : null;
+            outerCircle.stroke ? this.getPrintGfiMarker().outerCircle.stroke = outerCircle.stroke : null;
+            outerCircle.strokeColor ? this.getPrintGfiMarker().outerCircle.strokeColor = outerCircle.strokeColor : null;
+            outerCircle.strokeWidth ? this.getPrintGfiMarker().outerCircle.strokeWidth = outerCircle.strokeWidth : null;
+        },
+
+        /**
+         * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Punkt im Kreis des GFI Markers im Druck
+         */
+        setPoint: function (point) {
+            point.fill ? this.getPrintGfiMarker().point.fill = point.fill : null;
+            point.pointRadius ? this.getPrintGfiMarker().point.pointRadius = point.pointRadius : null;
+            point.fillColor ? this.getPrintGfiMarker().point.fillColor = point.fillColor : null;
+            point.stroke ? this.getPrintGfiMarker().point.stroke = point.stroke : null;
         }
     });
 
