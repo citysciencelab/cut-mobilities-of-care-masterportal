@@ -346,7 +346,7 @@ define([
                 this.add(lightModels);
                 // Parametrisierter Aufruf im lighttree
                 _.each(paramLayers, function (paramLayer) {
-                    this.setModelAttributesById(paramLayer.id, {isVisibleInMap: paramLayer.visibility, transparency: paramLayer.transparency});
+                    this.setModelAttributesById(paramLayer.id, {isSelected: paramLayer.visibility, transparency: paramLayer.transparency});
                 }, this);
             }
             // Parametrisierter Aufruf
