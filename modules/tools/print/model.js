@@ -28,10 +28,11 @@ define([
          */
         url: function () {
             var resp = Radio.request("RestReader", "getServiceById", Config.print.printID),
-                url = resp[0] && resp[0].get("url") ? resp[0].get("url") : null;
+                url = resp[0] && resp[0].get("url") ? resp[0].get("url") : null,
+                printurl;
 
             if (url) {
-                var printurl = _.has(Config.print, "configYAML") === true ? url + "/" + Config.print.configYAML : url + "/master";
+                printurl = _.has(Config.print, "configYAML") === true ? url + "/" + Config.print.configYAML : url + "/master";
 
                 this.set("printurl", printurl);
                 return Config.proxyURL + "?url=" + printurl + "/info.json";
@@ -45,7 +46,7 @@ define([
         initialize: function () {
             this.listenTo(this, {
                 "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
-                "change:specification": this.getPDFURL,
+                "change:specification": this.getPDFURL
             });
 
             this.listenTo(Radio.channel("MapView"), {
@@ -97,6 +98,8 @@ define([
 
         //
         setStatus: function (args) {
+            var scaletext;
+
             if (args[2].getId() === "print") {
                 if (this.get("fetched") === false) {
                     // get print config (info.json)
@@ -104,10 +107,10 @@ define([
                         cache: false,
                         success: function (model) {
                             _.each(model.get("scales"), function (scale) {
-                                var scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
+                                scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
 
                                 scale.name = "1: " + scaletext;
-                                scale.value = parseInt(scale.value);
+                                scale.value = parseInt(scale.value, 10);
                             });
                             model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                             model.setScaleByMapView();
@@ -156,20 +159,26 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
+            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
+            this.setLayer(Radio.request("Draw", "getLayer"));
             this.getGFIForPrint();
         },
         /**
         *
         */
         setLayerToPrint: function (layers) {
+            var params,
+                style,
+                layerURL;
+
             layers = _.sortBy(layers, function (layer) {
                 return layer.get("selectionIDX");
             });
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
-                var params = {},
-                    style = [],
-                    layerURL = layer.get("url");
+                params = {},
+                style = [],
+                layerURL = layer.get("url");
 
                 if (layer.has("SLDBody")) {
                     params.SLD_BODY = layer.get("SLDBody");
@@ -203,11 +212,14 @@ define([
          *
          */
         setLayer: function (layer) {
-            if (!_.isUndefined(layer)) {
-                var features = [],
-                    circleFeatures = [], // Kreise können nicht gedruckt werden
-                    featureStyles = {};
+            var features = [],
+                circleFeatures = [], // Kreise können nicht gedruckt werden
+                featureStyles = {},
+                type,
+                styles,
+                style;
 
+            if (!_.isUndefined(layer)) {
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
@@ -229,9 +241,9 @@ define([
                             }
                         });
 
-                        var type = feature.getGeometry().getType(),
-                            styles = feature.getStyleFunction().call(feature),
-                            style = styles[0];
+                        type = feature.getGeometry().getType(),
+                        styles = feature.getStyleFunction().call(feature),
+                        style = styles[0];
                         // Punkte
                         if (type === "Point") {
                             // Punkte ohne Text
@@ -281,15 +293,14 @@ define([
             var layers = Radio.request("Map", "getLayers").getArray(),
                 animationLayer = _.filter(layers, function (lay) {
                     return lay.get("name") === "animationLayer";
-                });
+                }),
+                specification;
 
-            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            this.setLayer(Radio.request("Draw", "getLayer"));
             if (animationLayer.length > 0) {
                 this.setLayer(animationLayer[0]);
             }
 
-            var specification = {
+            specification = {
                 // layout: $("#layoutField option:selected").html(),
                 layout: this.getLayout().name,
                 srs: Config.view.epsg,
@@ -448,12 +459,13 @@ define([
         // Gibt den hexadezimal String und die Opacity zurück.
         getColor: function (value) {
             var color = value,
-                opacity = 1;
+                opacity = 1,
+                begin;
             // color kommt als array--> parsen als String
             color = color.toString();
 
             if (color.search("#") === -1) {
-                var begin = color.indexOf("(") + 1;
+                begin = color.indexOf("(") + 1;
 
                 color = color.substring(begin, color.length - 1);
                 color = color.split(",");
