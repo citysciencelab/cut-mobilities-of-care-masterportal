@@ -170,9 +170,9 @@ define([
             }
 
             if (_.has(result, "FEATUREID")) {
-                var id = _.values(_.pick(result, "FEATUREID"))[0];
+                var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
-                Config.zoomtofeature.id = id;
+                Config.zoomtofeature.ids = ids.split(",");
             }
 
             /**
