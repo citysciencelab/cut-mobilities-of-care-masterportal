@@ -7,6 +7,22 @@
     "type": "git",
     "url": "https://bitbucket.org/lgv-g12/lgv-config.git"
   },
+  "Dependencies": {
+    "backbone": "1.x",
+    "backbone.radio": "1.x",
+    "bootstrap": "3.x",
+    "bootstrap-colorpicker": "2.x",
+    "jquery": "2.x",
+    "proj4": "2.x",
+    "requirejs": "2.x",
+    "requirejs-text": "2.x",
+    "underscore": "1.x",
+    "underscore.string": "3.3.x",
+    "jquery-ui": "1.x",
+    "video.js": "5.x",
+    "moment": "2.x",
+    "openlayers": "3.15"
+  },
   "devDependencies": {
     "bower": "1.x",
     "deep-extend": "^0.3.2",
@@ -27,22 +43,8 @@
     "jaguarjs-jsdoc": "0.0.1",
     "jit-grunt": "^0.9.0",
     "time-grunt": "1.0.0",
-    "backbone": "1.x",
-    "backbone.radio": "1.x",
-    "bootstrap": "3.x",
-    "bootstrap-colorpicker": "2.x",
-    "jquery": "2.x",
-    "proj4": "2.x",
-    "requirejs": "2.x",
-    "requirejs-text": "2.x",
-    "underscore": "1.x",
-    "underscore.string": "3.3.x",
-    "jquery-ui": "1.x",
     "build-config": "git+https://mbgvhh:p3FJ6WMIQGbunVJOnlYr@bitbucket.org/lgv-g12/build-config.git#npmtest",
     "lgv-config": "git+http://mbgvhh:p3FJ6WMIQGbunVJOnlYr@bitbucket.org/lgv-g12/lgv-config.git#npmtest",
-    "video.js": "5.x",
-    "moment": "2.x",
-    "openlayers": "3.15"
   },
   "title": "LGV Master"
 }
