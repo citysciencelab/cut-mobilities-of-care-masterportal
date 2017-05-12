@@ -39,8 +39,8 @@
     "underscore.string": "3.3.x",
     "jquery-ui": "1.x",
     "build-config": "git+https://mbgvhh:p3FJ6WMIQGbunVJOnlYr@bitbucket.org/lgv-g12/build-config.git#npmtest",
-    "lgv-config": "git+https://mbgvhh:p3FJ6WMIQGbunVJOnlYr@bitbucket.org/lgv-g12/lgv-config.git#npmtest",
-    "video.js": "4.x",
+    "lgv-config": "git+http://mbgvhh:p3FJ6WMIQGbunVJOnlYr@bitbucket.org/lgv-g12/lgv-config.git#npmtest",
+    "video.js": "5.x",
     "moment": "2.x",
     "openlayers": "3.15"
   },
