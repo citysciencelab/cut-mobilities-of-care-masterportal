@@ -84,7 +84,8 @@
           },
           "print": {
             "name": "Karte drucken",
-            "glyphicon": "glyphicon-print"
+            "glyphicon": "glyphicon-print",
+            "onlyDesktop": true
           },
           "searchByCoord": {
             "name": "Koordinatensuche",
@@ -92,7 +93,8 @@
           },
           "kmlimport": {
             "name": "KML Import",
-            "glyphicon": "glyphicon-import"
+            "glyphicon": "glyphicon-import",
+            "onlyDesktop": true
           },
           "wfsFeatureFilter": {
             "name": "Filter",
@@ -111,16 +113,19 @@
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
-            "glyphicon": "glyphicon-pencil"
+            "glyphicon": "glyphicon-pencil",
+            "onlyDesktop": true
           },
           "featureLister": {
               "name": "Liste",
               "glyphicon": "glyphicon-menu-hamburger",
-              "lister": 10
+              "lister": 10,
+              "onlyDesktop": true
           },
           "animation": {
             "name": "Pendler Animation",
-            "glyphicon": "glyphicon-play-circle"
+            "glyphicon": "glyphicon-play-circle",
+            "onlyDesktop": true
           }
         }
       },
