@@ -214,7 +214,7 @@ printGfiMarker: {
 |layerid|ja|String||ID des Layers an den die Marker gekoppelt werden.|
 |typename|ja|String||Typename des WFS. Entspricht Tabelle. Wird für den WFS-Filter-Request benötigt.|
 |url|ja|String||Die URL zum WFS.|
-|valuereference|ja|String||Valuereference. Entspricht Spalte. Wird für den WFS-Filter-Request benötigt.|
+|attribute|ja|String||Attributname. Entspricht Attribut nach dem der WFS gefiltert wird.|
 |version|ja|String||Die Version des WFS.|
 
 **Beispiel:**
@@ -224,11 +224,11 @@ printGfiMarker: {
 
 zoomtofeature: {
             url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
-            version: "2.0.0",
+            version: "1.1.0",
             typename: "app:hamburgconvention",
-            valuereference: "app:flaechenid",
+            attribute: "flaechenid",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4426"
+            layerid: "4561"
         }
 
 ```
