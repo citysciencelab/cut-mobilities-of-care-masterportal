@@ -37,7 +37,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|[attributions](#markdown-header-portalconfigcontrolsattributions)|nein|Boolean/Object|false|Zeigt das vorhandene Attributions an.|
+|[attributions](#markdown-header-portalconfigcontrolsattributions)|nein|Boolean/Object|false|Boolean: Zeigt vorhandene Attributions an. Object: Zeigt vorhandene Attributions mit folgenden Eigenschaften an, siehe [Object](#markdown-header-portalconfigcontrolsattributions)|
 |fullScreen|nein|Boolean|false|Ermöglicht dem User die Darstellung im Vollbildmodus (ohne Tabs und Adressleiste) per Klick auf den Button. Ein erneuter Klick auf den Button wechselt wieder in den normalen Modus.|
 |mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
 |orientation|nein|String|"none"|Orientation ist eine Funktion zur Standortbestimmung des Nutzers. Mögliche Werte sind none (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
