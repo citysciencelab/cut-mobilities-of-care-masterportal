@@ -210,6 +210,18 @@ define([
                 if (layer.has("style")) {
                     style.push(layer.get("style"));
                 }
+                // Für jeden angegebenen Layer muss ein Style angegeben werden.
+                // Wenn ein Style mit einem Blank angegeben wird,
+                // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
+                else {
+                    var numberOfLayer = layer.get("layers").split(",").length,
+                        defaultStyle = "";
+
+                    for (var i = 1; i < numberOfLayer; i++) {
+                        defaultStyle += ",";
+                    }
+                    style.push(defaultStyle);
+                }
                 // Damit Web-Atlas gedruckt werden kann
                 if (layer.get("id") === "51" || layer.get("id") === "53") {
                     layerURL = layer.get("url") + "__108a7035-f163-6294-f7dc-a81a2cfa13d6";
