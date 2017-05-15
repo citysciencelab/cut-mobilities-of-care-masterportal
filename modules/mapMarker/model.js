@@ -1,10 +1,9 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus",
     "backbone.radio",
     "config"
-    ], function (Backbone, ol, EventBus, Radio, Config) {
+    ], function (Backbone, ol, Radio, Config) {
     "use strict";
     var MapHandlerModel = Backbone.Model.extend({
         defaults: {

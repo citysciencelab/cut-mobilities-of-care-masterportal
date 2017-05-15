@@ -30,12 +30,9 @@ define([
                     return this.getCenterList();
                 }
             }, this);
-            this.listenTo(EventBus, {
-                "layerlist:sendVisiblelayerList": this.checkLayer
-            });
 
             this.setPrefs(prefs);
-            this.getFeaturesFromWFS(prefs.ids);
+            this.getFeaturesFromWFS();
             this.createCenterList();
         },
         getFeaturesFromWFS: function () {
@@ -82,7 +79,7 @@ define([
                 attribute = prefs.attribute ? prefs.attribute : null,
                 features = this.getFeatures();
 
-            if (ids) {
+            if (_.isNull(ids) === false) {
                 _.each(ids, function (id) {
                     var feature = _.filter(features, function (feature) {
                         if (feature.get(attribute) === id) {
@@ -146,7 +143,7 @@ define([
                 attribute = prefs.attribute ? prefs.attribute : null,
                 features = this.getFeatures();
 
-            if (ids) {
+            if (_.isNull(ids) === false) {
                 _.each(ids, function (id, index) {
                     var feature = _.filter(features, function (feature) {
                         return (feature.get(attribute) === id) ? 1 : 0;
