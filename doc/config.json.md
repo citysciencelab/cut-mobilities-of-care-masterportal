@@ -7,12 +7,12 @@ Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In 
 ## Portalconfig ##
 In der *Portalconfig* kann die Oberfläche des Portals konfiguriert werden:
 
-1.	der Titel mit Logo, falls erforderlich
-2.	welche/r Suchdienst/e angesprochen werden soll/en
-3.	welche Themenbaumart genutzt werden soll (einfach/light oder mit Unterordnern/custom)
-4.	welche Werkzeuge geladen werden sollen
-5.	welche Interaktionen mit der Karte möglich sein sollen (zoomen, Menüzeile ein/ausblenden, Standortbestimmung des Nutzers,  Vollbildmodus, etc.)
-6.	welche Layer genutzt werden und ggf. in welchen Ordnern, sie in der Themenauswahl erscheinen sollen.
+1.  der Titel mit Logo, falls erforderlich
+2.  welche/r Suchdienst/e angesprochen werden soll/en
+3.  welche Themenbaumart genutzt werden soll (einfach/light oder mit Unterordnern/custom)
+4.  welche Werkzeuge geladen werden sollen
+5.  welche Interaktionen mit der Karte möglich sein sollen (zoomen, Menüzeile ein/ausblenden, Standortbestimmung des Nutzers,  Vollbildmodus, etc.)
+6.  welche Layer genutzt werden und ggf. in welchen Ordnern, sie in der Themenauswahl erscheinen sollen.
 
 Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden die Konfigurationen des Typs object verlinkt und später eingehend erläutert.
 
@@ -37,7 +37,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|attributions|nein|Boolean|false|Zeigt das vorhandene Attributions an.|
+|[attributions](#markdown-header-portalconfigscontrolsattributions)|nein|Boolean/Object|false|Zeigt das vorhandene Attributions an.|
 |fullScreen|nein|Boolean|false|Ermöglicht dem User die Darstellung im Vollbildmodus (ohne Tabs und Adressleiste) per Klick auf den Button. Ein erneuter Klick auf den Button wechselt wieder in den normalen Modus.|
 |mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
 |orientation|nein|String|"none"|Orientation ist eine Funktion zur Standortbestimmung des Nutzers. Mögliche Werte sind none (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
@@ -57,13 +57,24 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
         "orientation": "once",
         "poi": true,
         "fullScreen": true,
-        "mousePosition": true
+        "mousePosition": true,
+        "attributions": {
+            "isInitOpenDesktop": true,
+            "isInitOpenMobile": false
+        }
       }
 
 ```
 
 
 ******
+### Portalconfig.controls.attributions ###
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|isInitOpenDesktop|nein|Boolean|true|Legt fest, ob die Attributions (Desktop-Ansicht) initial ausgeklappt werden sollen.|
+|isInitOpenMobile|nein|Boolean|false|Legt fest, ob die Attributions (Mobile-Ansicht) initial ausgeklappt werden sollen.|
+
 ### Portalconfig.mapView ###
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -320,31 +331,31 @@ Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Men�
 #!json
 
 "menu" : {
-	"tree" : {
-		"name" : "Themen",
-		"glyphicon" : "glyphicon-list",
-		"isInitOpen" : true
-	},
-	"measure" : {
-		"name" : "Strecke / Fläche messen",
-		"glyphicon" : "glyphicon-resize-full",
-		"onlyDesktop" : true
-	},
-	"tools" : {
-		"name" : "Werkzeuge",
-		"glyphicon" : "glyphicon-wrench",
-		"children" : {
-			"parcelSearch" : {
-				"name" : "Flurstückssuche",
-				"glyphicon" : "glyphicon-search",
-				"serviceId" : "6",
-				"StoredQueryID" : "Flurstueck",
-				"configJSON":"/../../components/lgv-config/gemarkungen_hh.json",
-				"parcelDenominator" : false
-			},
-			{...}
-		}
-	}
+    "tree" : {
+        "name" : "Themen",
+        "glyphicon" : "glyphicon-list",
+        "isInitOpen" : true
+    },
+    "measure" : {
+        "name" : "Strecke / Fläche messen",
+        "glyphicon" : "glyphicon-resize-full",
+        "onlyDesktop" : true
+    },
+    "tools" : {
+        "name" : "Werkzeuge",
+        "glyphicon" : "glyphicon-wrench",
+        "children" : {
+            "parcelSearch" : {
+                "name" : "Flurstückssuche",
+                "glyphicon" : "glyphicon-search",
+                "serviceId" : "6",
+                "StoredQueryID" : "Flurstueck",
+                "configJSON":"/../../components/lgv-config/gemarkungen_hh.json",
+                "parcelDenominator" : false
+            },
+            {...}
+        }
+    }
 ```
 
 
