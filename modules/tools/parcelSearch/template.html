@@ -30,11 +30,11 @@
     <div class="form-group form-group-sm">
         <label for="parcelField" class="col-md-5 col-sm-5 control-label">Flurst&uuml;cksnummer</label>
         <div class="col-md-7 col-sm-7">
-             <div class="input-group">
-                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelField" class="form-control" type="number" min="1" max="99999" step="1" pattern="[0-9]" value="<%= parcelNumber %>"/>
+             <div class="input-group" style="width:100%">
+                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelField" class="form-control" type="number" min="1" max="99999" step="1" pattern="[0-9]+" required value="<%= parcelNumber %>" placeholder="Nummer eingeben"/>
                 <% if (this.model.get("parcelDenominatorField") === true) { %>
                 <span class="input-group-addon">/</span>
-                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelFieldDenominator" class="form-control" type="number" min="0" max="999" step="1" pattern="[0-9]" value="<%= parcelDenominatorNumber %>"/>
+                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelFieldDenominator" class="form-control" type="number" min="0" max="999" step="1" pattern="[0-9]+" required value="<%= parcelDenominatorNumber %>" placeholder="Nummer eingeben"/>
                 <% } %>
             </div>
         </div>
