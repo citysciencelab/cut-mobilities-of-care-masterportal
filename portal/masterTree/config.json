@@ -52,7 +52,8 @@
             },
             "measure": {
               "name": "Strecke / Fläche messen",
-              "glyphicon": "glyphicon-resize-full"
+              "glyphicon": "glyphicon-resize-full",
+              "onlyDesktop": true
             },
             "gfi": {
               "name": "Informationen abfragen",
@@ -61,7 +62,8 @@
             },
             "print": {
               "name": "Karte drucken",
-              "glyphicon": "glyphicon-print"
+              "glyphicon": "glyphicon-print",
+              "onlyDesktop": true
             },
             "coord": {
               "name": "Koordinaten abfragen",
@@ -73,11 +75,13 @@
             },
             "kmlimport": {
               "name": "KML Import",
-              "glyphicon": "glyphicon-import"
+              "glyphicon": "glyphicon-import",
+              "onlyDesktop": true
             },
             "draw": {
               "name": "Zeichnen / Schreiben",
-              "glyphicon": "glyphicon-pencil"
+              "glyphicon": "glyphicon-pencil",
+              "onlyDesktop": true
             },
             "saveSelection": {
               "name": "Auswahl speichern",
@@ -85,7 +89,8 @@
             },
             "addWMS": {
               "name": "WMS hinzufügen",
-              "glyphicon": "glyphicon-plus"
+              "glyphicon": "glyphicon-plus",
+              "onlyDesktop": true
             },
             "routing": {
               "name": "Routenplaner",
