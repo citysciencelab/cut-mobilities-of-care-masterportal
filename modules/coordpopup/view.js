@@ -1,8 +1,9 @@
 define([
     "backbone",
+    "backbone.radio",
     "modules/coordpopup/model",
     "text!modules/coordpopup/template.html"
-], function (Backbone, CoordPopup, CoordPopupTemplate) {
+], function (Backbone, Radio, CoordPopup, CoordPopupTemplate) {
 
     var CoordPopupView = Backbone.View.extend({
         model: new CoordPopup(),
@@ -33,7 +34,13 @@ define([
             this.model.showPopup();
         },
         destroy: function () {
+            var coordModel = Radio.request("ModelList", "getModelByAttributes", {id: "coord"});
+
+            if (coordModel) {
+                coordModel.setIsActive(false);
+            }
             this.model.destroyPopup();
+            Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
         }
     });
 
