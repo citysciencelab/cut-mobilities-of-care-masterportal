@@ -165,10 +165,20 @@ define([
                     ];
 
                     if (bezirk.length === 1) {
-                        Config.view.center = _.findWhere(bezirke, {number: bezirk}).position;
+                        this.set("center", {
+                            crs: "",
+                            x: _.findWhere(bezirke, {number: bezirk}).position[0],
+                            y: _.findWhere(bezirke, {number: bezirk}).position[1],
+                            z: 0
+                        });
                     }
                     else {
-                        Config.view.center = _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position;
+                        this.set("center", {
+                            crs: "",
+                            x: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[0],
+                            y: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[1],
+                            z: 0
+                        });
                     }
             }
 
