@@ -2,8 +2,7 @@ define([
     "backbone",
     "backbone.radio",
     "underscore.string",
-    "config",
-    "modules/core/configLoader/preparser"
+    "config"
 ], function (Backbone, Radio, _String, Config, Preparser) {
 
     var ParametricURL = Backbone.Model.extend({
@@ -88,6 +87,7 @@ define([
 
             _.each(metaIds, function (metaId) {
                 var metaIDlayers = Radio.request("Parser", "getItemsByMetaID", metaId);
+
                 _.each(metaIDlayers, function (layer) {
                     layers.push(layer);
                 });
