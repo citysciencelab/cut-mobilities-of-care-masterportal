@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "underscore.string",
-    "config",
-    "modules/core/configLoader/preparser"
-], function (Backbone, Radio, _String, Config, Preparser) {
+    "config"
+], function (Backbone, Radio, _String, Config) {
 
     var ParametricURL = Backbone.Model.extend({
         defaults: {
@@ -182,9 +181,9 @@ define([
             }
 
             if (_.has(result, "FEATUREID")) {
-                var id = _.values(_.pick(result, "FEATUREID"))[0];
+                var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
-                Config.zoomtofeature.id = id;
+                Config.zoomtofeature.ids = ids.split(",");
             }
 
             /**
