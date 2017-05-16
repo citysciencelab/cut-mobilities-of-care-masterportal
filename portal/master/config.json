@@ -146,7 +146,10 @@
       "zoom": true,
       "orientation": "once",
       "poi": true,
-      "attributions": true
+      "attributions": {
+        "isInitOpenDesktop": true,
+        "isInitOpenMobile": false
+      }
     },
     "scaleLine": true,
     "Baumtyp": "light"
