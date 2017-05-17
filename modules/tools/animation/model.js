@@ -679,6 +679,7 @@ define(function (require) {
         resetAnimationWindow: function () {
             this.setKreis("");
             this.set("pendlerLegend", []);
+            this.unset("postBody", {silent: true});
         }
     });
 
