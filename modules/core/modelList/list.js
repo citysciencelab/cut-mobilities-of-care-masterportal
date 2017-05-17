@@ -351,6 +351,10 @@ define([
             }
             // Parametrisierter Aufruf
             else if (paramLayers.length > 0) {
+                _.each(Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true}), function (layer) {
+                    layer.isVisibleInMap = false;
+                    layer.isSelected = false;
+                });
                 _.each(paramLayers, function (paramLayer) {
                     var lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
