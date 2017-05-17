@@ -67,7 +67,7 @@ define([
                     this.setItemList([]);
                     this.addTreeMenuItems();
                     this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
-                    Radio.trigger("ModelList", "removeModelsByParentId", "Themen");
+                    Radio.trigger("ModelList", "removeModelsByParentId", "tree");
                     Radio.trigger("ModelList", "renderTree");
                     Radio.trigger("ModelList", "setModelAttributesById", "Overlayer", {isExpanded: true});
                 }
@@ -78,8 +78,8 @@ define([
             this.parseMapView(this.getPortalConfig().mapView);
 
             if (this.getTreeType() === "light") {
-                this.parseTree(this.getOverlayer(), "Themen", 0);
-                this.parseTree(this.getBaselayer(), "Themen", 0);
+                this.parseTree(this.getOverlayer(), "tree", 0);
+                this.parseTree(this.getBaselayer(), "tree", 0);
             }
             else if (this.getTreeType() === "custom") {
                 this.addTreeMenuItems();
@@ -106,20 +106,20 @@ define([
                     var item = {
                         type: "folder",
                         parentId: parentId,
-                        id: value.name,
+                        id: key,
                         treeType: this.getTreeType()
                     };
 
                     // Attribute aus der config.json werden von item geerbt
                     _.extend(item, value);
                     // folder Themen bekommt noch den Baumtyp als Attribut
-                    if (value.name === "Themen") {
+                    if (key === "tree") {
                         this.addItem(_.extend(item, {treeType: this.getTreeType()}));
                     }
                     else {
                         this.addItem(item);
                     }
-                    this.parseMenu(value.children, value.name);
+                    this.parseMenu(value.children, key);
                 }
                 else {
                     if (key.search("staticlinks") !== -1) {
@@ -383,8 +383,8 @@ define([
         createModelList: function () {
             new ModelList(_.filter(this.getItemList(), function (model) {
                 return model.parentId === "root" ||
-                    model.parentId === "Werkzeuge" ||
-                    model.parentId === "Informationen";
+                    model.parentId === "tools" ||
+                    model.parentId === "info";
             }));
         },
 
@@ -394,7 +394,7 @@ define([
                 name: "Hintergrundkarten",
                 glyphicon: "glyphicon-plus-sign",
                 id: "Baselayer",
-                parentId: "Themen",
+                parentId: "tree",
                 isInThemen: true,
                 isInitiallyExpanded: false,
                 level: 0
@@ -404,7 +404,7 @@ define([
                 name: "Fachdaten",
                 glyphicon: "glyphicon-plus-sign",
                 id: "Overlayer",
-                parentId: "Themen",
+                parentId: "tree",
                 isInThemen: true,
                 isInitiallyExpanded: false,
                 level: 0
@@ -414,7 +414,7 @@ define([
                 name: "Auswahl der Themen",
                 glyphicon: "glyphicon-plus-sign",
                 id: "SelectedLayer",
-                parentId: "Themen",
+                parentId: "tree",
                 isLeafFolder: true,
                 isInThemen: true,
                 isInitiallyExpanded: true,

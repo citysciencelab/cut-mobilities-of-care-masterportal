@@ -18,7 +18,7 @@ define(function (require) {
             this.render();
 
             // Themenbaum wird initial aufgeklappt wenn in der config.json im tree-Objekt konfiguriert
-            if (this.collection.findWhere({id: "Themen"}).attributes.isInitOpen === true) {
+            if (this.collection.findWhere({id: "tree"}).attributes.isInitOpen === true) {
                 $("#" + "Themen").parent().addClass("open");
             }
         },

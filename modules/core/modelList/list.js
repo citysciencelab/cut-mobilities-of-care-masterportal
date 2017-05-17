@@ -453,14 +453,14 @@ define([
 
             this.add(lightSiblingsModels);
             // Abbruchbedingung
-            if (_.isUndefined(parentModel) === false && parentModel.id !== "Themen") {
+            if (_.isUndefined(parentModel) === false && parentModel.id !== "tree") {
                 this.addAndExpandModelsRecursive(parentModel.parentId);
                 this.get(parentModel.id).setIsExpanded(true);
             }
         },
 
         toggleCatalogs: function (id) {
-            _.each(this.where({parentId: "Themen"}), function (model) {
+            _.each(this.where({parentId: "tree"}), function (model) {
                 if (model.getId() !== id) {
                     model.setIsExpanded(false);
                 }

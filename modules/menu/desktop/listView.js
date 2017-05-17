@@ -38,7 +38,7 @@ define([
             render: function () {
                 $("#" + "Themen").html("");
                 // Eine Themenebene rendern
-                this.renderSubTree("Themen", 0, 0, true);
+                this.renderSubTree("tree", 0, 0, true);
                 $("ul#Themen ul#Overlayer").addClass("LayerListMaxHeight");
                 $("ul#Themen ul#SelectedLayer").addClass("LayerListMaxHeight");
                 $("ul#Themen ul#Baselayer").addClass("LayerListMaxHeight");
@@ -73,7 +73,7 @@ define([
                     models = this.collection.add(lightModels);
 
                 // Ordner öffnen, die initial geöffnet sein sollen
-                if (parentId === "Themen") {
+                if (parentId === "tree") {
                      _.each(models, function (model) {
                         if (model.getType() === "folder" && model.getIsInitiallyExpanded()) {
                             model.setIsExpanded(true);
@@ -105,13 +105,13 @@ define([
                     return model.getType() === "folder";
                 });
 
-                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Overlayer" && parentId !== "Themen") {
+                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Overlayer" && parentId !== "tree") {
                     folder = _.sortBy(folder, function (item) {
                         return item.getName();
                     });
                 }
 
-                if (parentId !== "Overlayer" && parentId !== "Themen") {
+                if (parentId !== "Overlayer" && parentId !== "tree") {
                     folder.reverse();
                 }
 
@@ -129,7 +129,7 @@ define([
                     return model.getType() === type;
                 });
 
-                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Themen") {
+                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "tree") {
                     items = _.sortBy(items, function (item) {
                         return item.getName();
                     });
@@ -145,7 +145,7 @@ define([
                 _.each(models, function (model) {
                     if (model.getType() === "folder") {
                         // Oberste ebene im Themenbaum?
-                        if (model.getParentId() === "Themen") {
+                        if (model.getParentId() === "tree") {
                             new CatalogFolderView({model: model});
                         }
                         else {
