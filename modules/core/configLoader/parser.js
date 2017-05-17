@@ -27,7 +27,8 @@ define([
             category: "Opendata",
             // Nur für Lighttree: Index der zuletzt eingefügten Layer,
             // wird für die Sortierung/das Verschieben benötigt
-            selectionIDX: -1
+            selectionIDX: -1,
+            onlyDesktopTools: ["measure", "print", "kmlimport", "draw", "featureLister", "animation", "addWMS"]
         },
 
         initialize: function () {
@@ -132,14 +133,14 @@ define([
                     else {
                         var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
 
-                        if (toolitem.id === "measure" || toolitem.id === "draw") {
-                            if (!Radio.request("Util", "isApple") && !Radio.request("Util", "isAndroid")) {
-                                 this.addItem(toolitem);
-                             }
+                        // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
+                        if (!_.has(toolitem, "onlyDesktop")) {
+                            // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
+                            if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
+                                toolitem = _.extend(toolitem, {onlyDesktop: true});
+                            }
                         }
-                        else {
-                            this.addItem(toolitem);
-                        }
+                        this.addItem(toolitem);
                     }
                 }
             }, this);
