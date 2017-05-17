@@ -4,9 +4,23 @@
 .table-gfi thead th {
     font-size: 13px;
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    width: 100px;
+    min-width: 87px;
 }
 
-.table-gfi th {
+.table-gfi td {
     font-weight: normal;
     font-size: 11px;
+    min-width: 87px;
+}
+
+.table-gfi thead, .table-gfi tbody, .table-gfi tr, .table-gfi td, .table-gfi th {
+  display: block;
+}
+
+.table-gfi tbody {
+  height: 180px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
 }

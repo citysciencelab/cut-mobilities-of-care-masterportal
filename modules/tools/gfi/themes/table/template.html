@@ -2,7 +2,7 @@
 <thead>
     <tr>
         <% _.each(colNames, function (name) { %>
-            <th><%= name %></th>
+            <th class="col-xs-2"><%= name %></th>
         <% }); %>
     </tr>
 </thead>
@@ -11,7 +11,7 @@
         <tr>
             <% _.each(obj, function (value) { %>
                 <% if (value !== "") { %>
-                    <th>
+                    <td class="col-xs-2">
                         <% if (value.search(".pdf") !== -1 && value.substr(0, 4) === "http") { %>
                             <!-- Hack für Flüchtlingsportal -->
                             <% _.each(value.split("$"), function (val, index) { %>
@@ -25,9 +25,9 @@
                         <% } else { %>
                             <%= value %>
                         <% } %>
-                    </th>
+                    </td>
                 <% } else { %>
-                    <th>---</th>
+                    <td class="col-xs-2">---</td>
                 <% } %>
             <% }); %>
         </tr>
