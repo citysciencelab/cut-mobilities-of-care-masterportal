@@ -1,7 +1,6 @@
 .portal-title {
     float: left;
     margin-left: 10px;
-    max-width: 30%;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
