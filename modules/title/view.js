@@ -24,7 +24,7 @@ define([
         setSize: function () {
             var rootWidth = $("#root").width(),
                 searchbarWidth = $("#searchbar").width(),
-                width = window.innerWidth - rootWidth - searchbarWidth - 35; // 35px toleranz wegen  passing und margin von #root, #searchbar und #portalTitle
+                width = $("#navbarRow").width() - rootWidth - searchbarWidth - 35; // 35px toleranz wegen  passing und margin von #root, #searchbar und #portalTitle
 
             $("#portalTitle").width(width);
         },
