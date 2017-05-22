@@ -36,12 +36,12 @@ define([
                 this.renderSelectedList();
             },
             render: function () {
-                $("#" + "Themen").html("");
+                $("#" + "tree").html("");
                 // Eine Themenebene rendern
                 this.renderSubTree("tree", 0, 0, true);
-                $("ul#Themen ul#Overlayer").addClass("LayerListMaxHeight");
-                $("ul#Themen ul#SelectedLayer").addClass("LayerListMaxHeight");
-                $("ul#Themen ul#Baselayer").addClass("LayerListMaxHeight");
+                $("ul#tree ul#Overlayer").addClass("LayerListMaxHeight");
+                $("ul#tree ul#SelectedLayer").addClass("LayerListMaxHeight");
+                $("ul#tree ul#Baselayer").addClass("LayerListMaxHeight");
                 Radio.trigger("Title", "setSize");
             },
             /**

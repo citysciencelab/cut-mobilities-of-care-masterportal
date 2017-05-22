@@ -421,7 +421,7 @@ define([
         scrollToLayer: function (overlayername) {
             var liLayer = _.findWhere($("#Overlayer").find("span"), {title: overlayername}),
             offsetFromTop = liLayer ? $(liLayer).offset().top : null,
-            heightThemen = $("#Themen").css("height"),
+            heightThemen = $("#tree").css("height"),
             scrollToPx = 0;
 
             if (offsetFromTop) {
