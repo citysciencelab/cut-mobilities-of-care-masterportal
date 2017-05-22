@@ -47,13 +47,6 @@ define("app",
          });
     }
 
-    // Macht noch Probleme
-    // if (Config.attributions && Config.attributions === true) {
-    //     require(["modules/attribution/view"], function (AttView) {
-    //         new AttView();
-    //     });
-    // }
-
     if (Config.geoAPI && Config.geoAPI === true) {
         require(["geoapi"], function () {
         });
@@ -294,7 +287,7 @@ define("app",
                         break;
                     }
                     case "attributions": {
-                        if (control.attr === true) {
+                        if (control.attr === true || typeof control.attr === "object") {
                             require(["modules/controls/attributions/view"], function (AttributionsView) {
                                 new AttributionsView();
                             });

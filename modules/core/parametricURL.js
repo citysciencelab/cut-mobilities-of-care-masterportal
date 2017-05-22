@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "underscore.string",
-    "config",
-    "modules/core/configLoader/preparser"
-], function (Backbone, Radio, _String, Config, Preparser) {
+    "config"
+], function (Backbone, Radio, _String, Config) {
 
     var ParametricURL = Backbone.Model.extend({
         defaults: {
@@ -62,15 +61,26 @@ define([
                 }) : visibilityListString.indexOf(",") > -1 ? _.map(visibilityListString.split(","), function (val) {
                     return _String.toBoolean(val);
                 }) : new Array(_String.toBoolean(visibilityListString)),
-                transparencyList = transparencyListString === "" ? _.map(layerIdList, function () {
-                    return 0;
-                }) : transparencyListString.indexOf(",") > -1 ? _.map(transparencyListString.split(","), function (val) {
-                    return _String.toNumber(val);
-                }) : [parseInt(transparencyList, 10)],
+                transparencyList,
                 layerParams = [];
 
+            // Tranzparenzwert auslesen. Wenn fehlend Null.
+            if (transparencyListString === "") {
+                transparencyList = _.map(layerIdList, function () {
+                   return 0;
+               });
+            }
+            else if (transparencyListString.indexOf(",") > -1) {
+                transparencyList = _.map(transparencyListString.split(","), function (val) {
+                     return _String.toNumber(val);
+                 });
+            }
+            else {
+                transparencyList = [parseInt(transparencyListString, 10)];
+            }
+
             if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
-                Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Die Angaben zu LAYERIDS passen nicht zu VISIBILITY bzw. TRANSPARENCY. Die Parameter werden ignoriert.", kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Die Angaben zu LAYERIDS passen nicht zu VISIBILITY bzw. TRANSPARENCY. Sie müssen jeweils in der gleichen Anzahl angegeben werden.", kategorie: "alert-warning"});
             }
             else {
                 _.each(layerIdList, function (val, index) {
@@ -88,6 +98,7 @@ define([
 
             _.each(metaIds, function (metaId) {
                 var metaIDlayers = Radio.request("Parser", "getItemsByMetaID", metaId);
+
                 _.each(metaIDlayers, function (layer) {
                     layers.push(layer);
                 });
@@ -154,10 +165,20 @@ define([
                     ];
 
                     if (bezirk.length === 1) {
-                        Config.view.center = _.findWhere(bezirke, {number: bezirk}).position;
+                        this.set("center", {
+                            crs: "",
+                            x: _.findWhere(bezirke, {number: bezirk}).position[0],
+                            y: _.findWhere(bezirke, {number: bezirk}).position[1],
+                            z: 0
+                        });
                     }
                     else {
-                        Config.view.center = _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position;
+                        this.set("center", {
+                            crs: "",
+                            x: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[0],
+                            y: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[1],
+                            z: 0
+                        });
                     }
             }
 
@@ -170,9 +191,9 @@ define([
             }
 
             if (_.has(result, "FEATUREID")) {
-                var id = _.values(_.pick(result, "FEATUREID"))[0];
+                var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
-                Config.zoomtofeature.id = id;
+                Config.zoomtofeature.ids = ids.split(",");
             }
 
             /**

@@ -2,9 +2,8 @@ define([
     "backbone",
     "openlayers",
     "backbone.radio",
-    "config",
-    "modules/core/util"
-    ], function (Backbone, ol, Radio, Config, Util) {
+    "config"
+    ], function (Backbone, ol, Radio, Config) {
     "use strict";
     var MapHandlerModel = Backbone.Model.extend({
         defaults: {
@@ -24,6 +23,7 @@ define([
             if (_.has(searchConf, "zoomLevel")) {
                 this.set("zoomLevel", searchConf.zoomLevel);
             }
+            this.askForMarkers();
         },
 
         getExtentFromString: function () {
@@ -95,20 +95,21 @@ define([
             return wkt;
         },
 
-        // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der BBOX pro Feature
+        // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der pro Feature-BBox
         askForMarkers: function () {
             if (_.has(Config, "zoomtofeature")) {
-                var centers = Radio.request("zoomtofeature", "getCenterList"),
+                var centers = Radio.request("ZoomToFeature", "getCenterList"),
                     imglink = Config.zoomtofeature.imglink;
 
-                _.each(centers, function (center, i){
-                    var id = "featureMarker" +i;
+                _.each(centers, function (center, i) {
+                    var id = "featureMarker" + i;
 
                     // lokaler Pfad zum IMG-Ordner ist anders
-                    $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Util.getPath(imglink) + "'></div>");
+                    $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Radio.request("Util", "getPath", imglink) + "'></div>");
 
                     var marker = new ol.Overlay({
                         id: id,
+                        offset: [-12, 0],
                         positioning: "bottom-center",
                         element: document.getElementById(id),
                         stopEvent: false
@@ -116,27 +117,12 @@ define([
 
                     marker.setPosition(center);
                     var markers = this.get("markers");
+
                     markers.push(marker);
                     this.set("markers", markers);
                     Radio.trigger("Map", "addOverlay", marker);
-
-                },this);
-            }
-        },
-        checkLayer: function (layerlist) {
-            if (Config.zoomtofeature) {
-                var layer = _.find(layerlist,{id:Config.zoomtofeature.layerid});
-
-                var markers = this.get("markers");
-
-                _.each(markers, function (marker) {
-                    if (layer === undefined) {
-                        Radio.trigger("Map", "removeOverlay", marker);
-                    }
-                    else {
-                        Radio.trigger("Map", "addOverlay", marker);
-                    }
-                });
+                }, this);
+                Radio.trigger("ZoomToFeature", "zoomtofeatures");
             }
         }
     });

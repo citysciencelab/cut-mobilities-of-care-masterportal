@@ -51,7 +51,7 @@ define(function (require) {
                     this.sendRequest("GET", this.getParams(), this.parseGemeinden);
                 },
                 "change:gemeinde": function () {
-                    this.unset("direction");
+                    this.unset("direction", {silent: true});
                 },
                 "change:direction": function (model, value) {
                     if (value === "arbeitsort") {
@@ -679,6 +679,7 @@ define(function (require) {
         resetAnimationWindow: function () {
             this.setKreis("");
             this.set("pendlerLegend", []);
+            this.unset("postBody", {silent: true});
         }
     });
 

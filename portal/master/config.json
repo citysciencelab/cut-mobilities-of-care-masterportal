@@ -70,8 +70,7 @@
           },
           "measure": {
             "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full",
-            "onlyDesktop": true
+            "glyphicon": "glyphicon-resize-full"
           },
           "coord": {
             "name": "Koordinaten abfragen",
@@ -141,7 +140,10 @@
       "zoom": true,
       "orientation": "once",
       "poi": true,
-      "attributions": true
+      "attributions": {
+        "isInitOpenDesktop": true,
+        "isInitOpenMobile": false
+      }
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -167,6 +169,10 @@
     "Fachdaten":
     {
       "Layer": [
+        {
+          "id": "4561",
+          "visibility": true
+        },
         {
           "id": "1748"
         },

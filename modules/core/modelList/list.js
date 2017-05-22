@@ -346,11 +346,15 @@ define([
                 this.add(lightModels);
                 // Parametrisierter Aufruf im lighttree
                 _.each(paramLayers, function (paramLayer) {
-                    this.setModelAttributesById(paramLayer.id, {isVisibleInMap: paramLayer.visibility, transparency: paramLayer.transparency});
+                    this.setModelAttributesById(paramLayer.id, {isSelected: paramLayer.visibility, transparency: paramLayer.transparency});
                 }, this);
             }
             // Parametrisierter Aufruf
             else if (paramLayers.length > 0) {
+                _.each(Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true}), function (layer) {
+                    layer.isVisibleInMap = false;
+                    layer.isSelected = false;
+                });
                 _.each(paramLayers, function (paramLayer) {
                     var lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 

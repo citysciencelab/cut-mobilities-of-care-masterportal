@@ -87,8 +87,7 @@ define(function (require) {
                     Radio.trigger("Util", "hideLoader");
                     try {
                         var wfsReader = new ol.format.WFS({
-                            featureNS: this.get("featureNS"),
-                            featureType: this.get("featureType")
+                            featureNS: this.get("featureNS")
                         });
 
                         this.getLayerSource().addFeatures(wfsReader.readFeatures(data));

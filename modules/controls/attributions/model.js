@@ -13,15 +13,26 @@ define([
             isContentVisible: true,
             // true wenn das Control auf der Karte angezeigt wird
             isVisibleInMap: false,
+            isInitOpenDesktop: true,
+            isInitOpenMobile: false,
             // Modellist mit Attributions
             modelList: []
         },
 
         initialize: function () {
+            var config = Radio.request("Parser", "getPortalConfig").controls.attributions;
+
+            if (typeof (config) === "object") {
+                if (_.has(config, "isInitOpenDesktop") === true) {
+                    this.setIsInitOpenDesktop(config.isInitOpenDesktop);
+                }
+                if (_.has(config, "isInitOpenMobile") === true) {
+                    this.setIsInitOpenMobile(config.isInitOpenMobile);
+                }
+            }
             this.listenTo(Radio.channel("ModelList"), {
                 "updateVisibleInMapList": this.checkModelsByAttributions
             });
-
             this.checkModelsByAttributions();
         },
 
@@ -79,6 +90,24 @@ define([
          */
         setModelList: function (value) {
             this.set("modelList", value);
+        },
+
+        // getter for isInitOpenDesktop
+        getIsInitOpenDesktop: function () {
+            return this.get("isInitOpenDesktop");
+        },
+        // setter for isInitOpenDesktop
+        setIsInitOpenDesktop: function (value) {
+            this.set("isInitOpenDesktop", value);
+        },
+
+        // getter for isInitOpenMobile
+        getIsInitOpenMobile: function () {
+            return this.get("isInitOpenMobile");
+        },
+        // setter for isInitOpenMobile
+        setIsInitOpenMobile: function (value) {
+            this.set("isInitOpenMobile", value);
         },
 
         /**
