@@ -1,11 +1,10 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus",
     "backbone.radio",
     "config",
     "modules/core/util"
-    ], function (Backbone, ol, EventBus, Radio, Config, Util) {
+    ], function (Backbone, ol, Radio, Config, Util) {
     "use strict";
     var MapHandlerModel = Backbone.Model.extend({
         defaults: {
@@ -14,22 +13,15 @@ define([
                 stopEvent: false
             }),
             wkt: "",
-            markers:[],
+            markers: [],
             source: new ol.source.Vector(),
             zoomLevel: 7
         },
         initialize: function () {
-//            this.set("layer", new ol.layer.Vector({
-//                source: this.get("source")
-//            }));
-//            EventBus.trigger("addLayer", this.get("layer"));
             Radio.trigger("Map", "addOverlay", this.get("marker"));
-            this.listenTo(EventBus, {
-                "layerlist:sendVisiblelayerList": this.checkLayer
-            });
             var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
 
-            if(_.has(searchConf, "zoomLevel")){
+            if (_.has(searchConf, "zoomLevel")) {
                 this.set("zoomLevel", searchConf.zoomLevel);
             }
         },
@@ -129,14 +121,12 @@ define([
                     Radio.trigger("Map", "addOverlay", marker);
 
                 },this);
-                EventBus.trigger("layerlist:getVisiblelayerList");
             }
         },
         checkLayer: function (layerlist) {
             if (Config.zoomtofeature) {
                 var layer = _.find(layerlist,{id:Config.zoomtofeature.layerid});
 
-                EventBus.trigger("mapMarker:getMarkers");
                 var markers = this.get("markers");
 
                 _.each(markers, function (marker) {

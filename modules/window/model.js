@@ -14,14 +14,13 @@ define([
             },
             initialize: function () {
                 EventBus.on("closeWindow", this.setVisible, this);
-                EventBus.on("collapseWindow", this.collapseWindow, this);
                 EventBus.on("uncollapseWindow", this.uncollapseWindow, this);
                 var channel = Radio.channel("Window");
 
                 channel.on({
                     "toggleWin": this.setParams,
                     "closeWin": this.setVisible,
-                    "CollapseWin": this.collapseWindow,
+                    "collapseWin": this.collapseWindow,
                     "uncollapseWin": this.uncollapseWindow
                 }, this);
             },

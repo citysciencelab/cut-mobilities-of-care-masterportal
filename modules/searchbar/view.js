@@ -84,13 +84,15 @@ define([
             this.className = "navbar-form col-xs-9";
 
             EventBus.on("searchInput:setFocus", this.setFocus, this);
-            EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
 
             // this.listenTo(this.model, "change:searchString", this.render);
             this.listenTo(this.model, "change:recommendedList", function () {
                 this.renderRecommendedList();
             });
 
+            this.listenTo(Radio.channel("Searchbar"), {
+                "deleteSearchString": this.deleteSearchString
+            });
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function () {
                     if ($(window).width() >= 768) {

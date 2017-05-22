@@ -35,6 +35,7 @@ define([
                 haveModelsAttributions = _.some(modelList, function (model) {
                     return model.getAttributions();
                 });
+
             this.setIsVisibleInMap(haveModelsAttributions);
             this.setIsContentVisible(haveModelsAttributions);
             if (haveModelsAttributions === true) {
