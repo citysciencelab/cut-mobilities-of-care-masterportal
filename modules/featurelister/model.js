@@ -70,7 +70,7 @@ define(function (require) {
 
                 // Zoom auf Extent
                 if (geometry) {
-                    Radio.trigger("MapMarker", "mapHandler:zoomTo", {type: "Feature-Lister-Click", coordinate: geometry});
+                    Radio.trigger("MapMarker", "zoomTo", {type: "Feature-Lister-Click", coordinate: geometry});
                 }
                 else {
                     Radio.trigger("Alert", "alert", {

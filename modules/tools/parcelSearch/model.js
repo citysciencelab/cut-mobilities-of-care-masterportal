@@ -156,7 +156,7 @@ define([
                 }).each(function (i, obj) {
                     _.extend(attributes, _.object([this.nodeName.split(":")[1]], [this.textContent]));
                 });
-                Radio.trigger("MapMarker", "mapHandler:zoomTo", {type: "Parcel", coordinate: coordinate});
+                Radio.trigger("MapMarker", "zoomTo", {type: "Parcel", coordinate: coordinate});
                 Radio.trigger("ParcelSearch", "parcelFound", attributes);
             }
         }

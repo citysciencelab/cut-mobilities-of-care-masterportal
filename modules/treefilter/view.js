@@ -1,9 +1,8 @@
 define([
     "backbone",
     "text!modules/treefilter/template.html",
-    "eventbus",
     "modules/treefilter/model"
-], function (Backbone, TreeFilterTemplate, EventBus, TreeFilter) {
+], function (Backbone, TreeFilterTemplate, TreeFilter) {
 
     var View = Backbone.View.extend({
         model: TreeFilter,
@@ -16,7 +15,6 @@ define([
             this.model.on("change:filterHits invalid change:errors", this.render, this);
             this.model.on("change:categoryArray", this.render, this);
             this.model.on("change:typeArray", this.render, this);
-            EventBus.on("toggleFilterTreeWin", this.toggleFilterTreeWin, this);
 
             // NOTE http://www.benknowscode.com/2013/12/bootstrap-dropdown-button-select-box-control.html
             $(document.body).on("click", ".categoryPick", this, function (evt) {

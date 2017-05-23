@@ -1,11 +1,9 @@
 define([
     "backbone",
-    "backbone.radio",
-    "eventbus"
+    "backbone.radio"
 ], function () {
 
     var Backbone = require("backbone"),
-        EventBus = require("eventbus"),
         Radio = require("backbone.radio"),
         LayerSearch;
 
@@ -28,8 +26,8 @@ define([
                 "change:idsFromTreeLayers": this.setUniqLayerList
             });
 
-            this.listenTo(EventBus, {
-                "searchbar:search": this.search
+            this.listenTo(Radio.channel("Searchbar"), {
+                "search": this.search
             });
 
             if (config.minChars) {
@@ -86,7 +84,7 @@ define([
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
                 this.searchInLayers(searchStringRegExp);
-                EventBus.trigger("createRecommendedList");
+                Radio.trigger("Searchbar", "createRecommendedList");
                 this.set("inUse", false);
             }
         },
@@ -108,7 +106,7 @@ define([
                         model: layer
                     };
 
-                    EventBus.trigger("searchbar:pushHits", "hitList", object);
+                    Radio.trigger("Searchbar", "pushHits", "hitList", object);
                 }
             }, this);
         }

@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "eventbus",
     "proj4"
-], function (Backbone, Radio, ol, EventBus, proj4) {
+], function (Backbone, Radio, ol, proj4) {
 
     var SearchByCoord = Backbone.Model.extend({
 
@@ -204,7 +203,7 @@ define([
             else if(this.get("coordSystem") === "ETRS89") {
                 this.set("newCenter", [this.get("coordinates")[0].coord, this.get("coordinates")[1].coord]);
             }
-            EventBus.trigger("mapHandler:zoomTo", {type: "SearchByCoord", coordinate: this.get("newCenter")});
+            Radio.trigger("MapMarker", "zoomTo", {type: "SearchByCoord", coordinate: this.get("newCenter")});
         }
     });
 

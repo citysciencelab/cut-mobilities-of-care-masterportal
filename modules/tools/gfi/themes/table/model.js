@@ -15,7 +15,6 @@ define(function (require) {
          * Ermittelt alle Namen(=Spaltennamen) der Eigenschaften der Objekte
          */
         identifyColNames: function () {
-            console.log(this.getGfiContent());
             if (_.isUndefined(this.get("gfiContent")) === false) {
                 var colNames = _.keys(this.getGfiContent()[0]);
 

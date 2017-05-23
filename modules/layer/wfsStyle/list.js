@@ -60,7 +60,7 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    Radio.trigger("Alert", "alert",{
+                    Radio.trigger("Alert", "alert", {
                         text: "Fehler beim Laden von: " + Radio.request("Util", "getPath", Config.styleConf),
                         kategorie: "alert-warning"
                     });

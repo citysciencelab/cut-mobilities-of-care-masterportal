@@ -1,8 +1,7 @@
 define([
     "backbone",
-    "backbone.radio",
-    "eventbus"
-    ], function (Backbone, Radio, EventBus) {
+    "backbone.radio"
+    ], function (Backbone, Radio) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -22,7 +21,9 @@ define([
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
-            EventBus.on("searchbar:search", this.prepSearch, this);
+            this.listenTo(Radio.channel("Searchbar"), {
+                "search": this.prepSearch
+            });
         },
         /**
         *
@@ -41,7 +42,7 @@ define([
 
                 this.setFeaturesForSearch(filterLayers);
                 this.searchInFeatures(searchStringRegExp);
-                EventBus.trigger("createRecommendedList");
+                Radio.trigger("Searchbar", "createRecommendedList");
                 this.set("inUse", false);
             }
         },
@@ -54,7 +55,7 @@ define([
 
                 // Prüft ob der Suchstring ein Teilstring vom Feature ist
                 if (featureName.search(searchStringRegExp) !== -1) {
-                    EventBus.trigger("searchbar:pushHits", "hitList", feature);
+                    Radio.trigger("Searchbar", "pushHits", "hitList", feature);
                 }
             }, this);
         },
