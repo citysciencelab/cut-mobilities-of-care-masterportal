@@ -132,6 +132,24 @@
           "glyphicon": "glyphicon-envelope",
           "serviceID": "80001",
           "includeSystemInfo": true
+      },
+      "info":{
+          "name": "Informationen",
+          "glyphicon": "glyphicon-info-sign",
+          "children": {
+            "staticlinks": [
+              {
+                "name": "Haftungsausschluss",
+                "glyphicon": "glyphicon-globe",
+                "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+              },
+              {
+                "name": "Hamburg",
+                "glyphicon": "glyphicon-globe",
+                "url": "http://www.hamburg.de"
+              }
+            ]
+          }
       }
     },
     "controls": {
