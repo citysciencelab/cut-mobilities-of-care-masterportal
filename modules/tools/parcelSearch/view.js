@@ -57,6 +57,7 @@ define([
          */
         render2Window: function () {
             var attr = this.model.toJSON();
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
@@ -77,6 +78,7 @@ define([
             if (this.model.get("districtNumber") !== "0" &&
                 (this.model.get("cadastralDistrictField") === false || this.model.get("cadastralDistrictNumber") !== "0") &&
                 this.model.get("parcelNumber") !== "" &&
+                _.isNumber(parseInt(this.model.get("parcelNumber"), 10)) &&
                 (this.model.get("parcelDenominatorField") === false || this.model.get("parcelDenominatorNumber") !== "")) {
                 $("#submitbutton").attr("disabled", false);
             }
@@ -136,7 +138,14 @@ define([
             $("#cadastralDistrictField").focus();
         },
         setParcelNumber: function (evt) {
-            this.model.setParcelNumber(evt.target.value);
+            if ($("#parcelField")[0].checkValidity() === false) {
+                $("input#parcelField").val("");
+                this.model.setParcelNumber("");
+                this.checkInput();
+            }
+            else {
+                this.model.setParcelNumber(evt.target.value);
+            }
         },
         setParcelDenominatorNumber: function (evt) {
             this.model.setParcelDenominatorNumber(evt.target.value);
