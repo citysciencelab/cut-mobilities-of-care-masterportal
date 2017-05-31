@@ -2,14 +2,15 @@ define([
     "backbone",
     "modules/menu/desktop/tool/view",
     "modules/menu/desktop/folder/viewMenu",
-      "bootstrap/dropdown",
+    "modules/menu/desktop/staticlink/view",
+    "bootstrap/dropdown",
     "bootstrap/collapse"
     ],
     function () {
         var Backbone = require("backbone"),
-            Radio = require("backbone.radio"),
             DesktopToolView = require("modules/menu/desktop/tool/view"),
             DesktopFolderView = require("modules/menu/desktop/folder/viewMenu"),
+            DesktopStaticLinkView = require("modules/menu/desktop/staticlink/view"),
             Menu;
 
         Menu = Backbone.View.extend({
@@ -25,24 +26,38 @@ define([
                 this.renderTopMenu();
             },
             renderTopMenu: function () {
-                var rootModels = this.collection.where({parentId: "root"}),
-                    folder = _.filter(rootModels, function (model) {
-                        return model.getType() === "folder";
+                var models = _.filter(this.collection.models, function (model) {
+                        return model.getType() === "tool" || model.getType() === "staticlink" || model.getType() === "folder";
                     });
 
-                this.addFolderViews(folder);
-
-                this.addToolViews(this.collection.where({type: "tool"}));
+                this.parseViews(models);
             },
-            addFolderViews: function (models) {
+            parseViews: function (models) {
                 _.each(models, function (model) {
-                    new DesktopFolderView({model: model});
+                    switch (model.getType()) {
+                        case "tool": {
+                            this.addToolView(model);
+                            break;
+                        }
+                        case "staticlink": {
+                            this.addStaticLinkView(model);
+                            break;
+                        }
+                        case "folder": {
+                            this.addFolderView(model);
+                            break;
+                        }
+                    }
                 }, this);
             },
-            addToolViews: function (models) {
-                _.each(models, function (model) {
-                    new DesktopToolView({model: model});
-                }, this);
+            addFolderView: function (model) {
+                new DesktopFolderView({model: model});
+            },
+            addToolView: function (model) {
+                new DesktopToolView({model: model});
+            },
+            addStaticLinkView: function (model) {
+                new DesktopStaticLinkView({model: model});
             },
             removeView: function () {
                 this.$el.find("ul.nav-menu").html("");

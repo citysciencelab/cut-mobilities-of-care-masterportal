@@ -1,13 +1,13 @@
-define([
-    "backbone",
-    "eventbus",
-    "config",
-    "text!modules/featurelister/template.html",
-    "modules/featurelister/model",
-    "jqueryui/widgets/draggable"
-], function (Backbone, EventBus, Config, Template, Model) {
+define(function (require) {
+require("jqueryui/widgets/draggable");
 
-    var FeatureLister = Backbone.View.extend({
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Template = require("text!modules/featurelister/template.html"),
+        Model = require("modules/featurelister/model"),
+        FeatureLister;
+
+    FeatureLister = Backbone.View.extend({
         model: Model,
         className: "featurelist-win",
         template: _.template(Template),
@@ -23,29 +23,31 @@ define([
             "click .featurelist-list-table-th": "orderList" // Klick auf Sortiersymbol in thead
         },
         initialize: function () {
-            EventBus.trigger("appendItemToMenubar", {
-                title: "Liste",
-                symbol: "glyphicon glyphicon-menu-hamburger hidden-sm",
-                classname: "featureLister",
-                clickFunction: function () {
-                    EventBus.trigger("toggleFeatureListerWin");
-                }
+            var channel = Radio.channel("FeatureListerView");
+
+            this.listenTo(channel, {
+                "toggle": this.toggle
+            }, this);
+
+            this.listenTo(this.model, {
+                "change:layerlist": this.updateVisibleLayer,
+                "change:layer": function () {
+                    this.updateLayerList();
+                    this.updateLayerHeader();
+                },
+                "change:featureProps": this.showFeatureProps,
+                "gfiHit": this.selectGFIHit,
+                "gfiClose": this.deselectGFIHit,
+                "switchTabToTheme": this.switchTabToTheme
             });
-            this.listenTo(this.model, {"change:layerlist": this.updateVisibleLayer});
-            this.listenTo(this.model, {"change:layer": this.updateLayerHeader});
-            this.listenTo(this.model, {"change:layer": this.updateLayerList});
-            this.listenTo(this.model, {"change:featureProps": this.showFeatureProps});
-            this.listenTo(this.model, {"gfiHit": this.selectGFIHit});
-            this.listenTo(this.model, {"gfiClose": this.deselectGFIHit});
-            this.listenTo(this.model, {"switchTabToTheme": this.switchTabToTheme});
-            this.listenTo(EventBus, {"toggleFeatureListerWin": this.toggle});
+
             this.render();
         },
         /*
         * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.
         */
         deselectGFIHit: function () {
-            $("#featurelist-list-table tr").each(function (int, tr) {
+            $("#featurelist-list-table tr").each(function (inte, tr) {
                 $(tr).removeClass("info");
             });
         },
@@ -56,8 +58,8 @@ define([
             var gesuchteId = evt.id;
 
             this.deselectGFIHit();
-            $("#featurelist-list-table tr").each(function (int, tr) {
-                var trId = parseInt($(tr).attr("id"));
+            $("#featurelist-list-table tr").each(function (inte, tr) {
+                var trId = parseInt($(tr).attr("id"), 10);
 
                 if (trId === gesuchteId) {
                     $(tr).addClass("info");
@@ -164,7 +166,13 @@ define([
             $("#featurelist-list").hide();
             $("#featurelist-details").hide();
             this.model.setPrevFeatureId(-1);
-            this.model.unscaleFeature();
+            // trycatch damit im IE nicht die Console aufgeht. Nach Merge Mml-->Dev überprüfen und ggf. entfernen
+            try {
+                this.model.unscaleFeature();
+            }
+            catch (e) {
+            }
+            this.model.set("layerid", {});
         },
         /*
         * Wechselt den Tab
@@ -199,8 +207,14 @@ define([
         */
         hoverTr: function (evt) {
             var featureid = evt.currentTarget.id;
-            this.model.unscaleFeature();
-            this.model.scaleFeature(featureid);
+
+            // trycatch damit im IE nicht die Console aufgeht. Nach Merge Mml-->Dev überprüfen und ggf. entfernen
+            try {
+                this.model.unscaleFeature();
+                this.model.scaleFeature(featureid);
+            }
+            catch (e) {
+            }
         },
         /*
         * Bei Klick auf Layer wird dieser gehighlighted und Layerid wird gesertzt
@@ -316,7 +330,7 @@ define([
         /*
         * Erzeugt Auflistung der selektierbaren Layer über EventBus.
         */
-        updateVisibleLayer: function (layerlist) {
+        updateVisibleLayer: function () {
             var ll = this.model.get("layerlist");
 
             $("#featurelist-themes-ul").empty();
@@ -348,16 +362,19 @@ define([
                 }
                 this.setMaxHeight();
             }
+            else {
+                Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
+            }
             this.model.setPrevFeatureId(-1);
             this.model.unscaleFeature();
         },
         setMaxHeight: function () {
             var totalFeaturesCount = this.model.get("layer").features ? this.model.get("layer").features.length : -1,
                 shownFeaturesCount = $("#featurelist-list-table tr").length - 1,
-                posY = this.$el[0].style.top ? parseInt(this.$el[0].style.top) : parseInt(this.$el.css("top")),
+                posY = this.$el[0].style.top ? parseInt(this.$el[0].style.top, 10) : parseInt(this.$el.css("top"), 10),
                 winHeight = $(window).height(),
-                marginTop = parseInt(this.$el.css("marginTop")),
-                marginBottom = parseInt(this.$el.css("marginBottom")),
+                marginTop = parseInt(this.$el.css("marginTop"), 10),
+                marginBottom = parseInt(this.$el.css("marginBottom"), 10),
                 header = 107,
                 footer = shownFeaturesCount < totalFeaturesCount ? 71 : 0,
                 maxHeight = winHeight - posY - marginTop - marginBottom - header - footer - 5,

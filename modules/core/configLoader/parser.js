@@ -27,7 +27,8 @@ define([
             category: "Opendata",
             // Nur für Lighttree: Index der zuletzt eingefügten Layer,
             // wird für die Sortierung/das Verschieben benötigt
-            selectionIDX: -1
+            selectionIDX: -1,
+            onlyDesktopTools: ["measure", "print", "kmlimport", "draw", "featureLister", "animation", "addWMS"]
         },
 
         initialize: function () {
@@ -46,8 +47,10 @@ define([
             channel.on({
                 "setCategory": this.setCategory,
                 "addItem": this.addItem,
-                "addItemAtTop": this.addItemAtTop,
-                "addItems": this.addItems
+                "addItems": this.addItems,
+                "addFolder": this.addFolder,
+                "addLayer": this.addLayer,
+                "addGeoJSONLayer": this.addGeoJSONLayer
             }, this);
 
             this.listenTo(this, {
@@ -65,7 +68,7 @@ define([
                     this.setItemList([]);
                     this.addTreeMenuItems();
                     this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
-                    Radio.trigger("ModelList", "removeModelsByParentId", "Themen");
+                    Radio.trigger("ModelList", "removeModelsByParentId", "tree");
                     Radio.trigger("ModelList", "renderTree");
                     Radio.trigger("ModelList", "setModelAttributesById", "Overlayer", {isExpanded: true});
                 }
@@ -76,8 +79,8 @@ define([
             this.parseMapView(this.getPortalConfig().mapView);
 
             if (this.getTreeType() === "light") {
-                this.parseTree(this.getOverlayer(), "Themen", 0);
-                this.parseTree(this.getBaselayer(), "Themen", 0);
+                this.parseTree(this.getOverlayer(), "tree", 0);
+                this.parseTree(this.getBaselayer(), "tree", 0);
             }
             else if (this.getTreeType() === "custom") {
                 this.addTreeMenuItems();
@@ -99,36 +102,44 @@ define([
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
          */
         parseMenu: function (items, parentId) {
-
             _.each(items, function (value, key) {
                 if (_.has(value, "children") || key === "tree") {
                     var item = {
                         type: "folder",
                         parentId: parentId,
-                        id: value.name,
+                        id: key,
                         treeType: this.getTreeType()
                     };
 
                     // Attribute aus der config.json werden von item geerbt
                     _.extend(item, value);
                     // folder Themen bekommt noch den Baumtyp als Attribut
-                    if (value.name === "Themen") {
+                    if (key === "tree") {
                         this.addItem(_.extend(item, {treeType: this.getTreeType()}));
                     }
                     else {
                         this.addItem(item);
                     }
-                    this.parseMenu(value.children, value.name);
+                    this.parseMenu(value.children, key);
                 }
                 else {
-                    var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+                    if (key.search("staticlinks") !== -1) {
+                        _.each(value, function (staticlink) {
+                            var toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
 
-                    if (toolitem.id === "measure" || toolitem.id === "draw") {
-                        if (!Radio.request("Util", "isApple") && !Radio.request("Util", "isAndroid")) {
-                             this.addItem(toolitem);
-                         }
+                            this.addItem(toolitem);
+                        }, this);
                     }
                     else {
+                        var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+
+                        // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
+                        if (!_.has(toolitem, "onlyDesktop")) {
+                            // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
+                            if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
+                                toolitem = _.extend(toolitem, {onlyDesktop: true});
+                            }
+                        }
                         this.addItem(toolitem);
                     }
                 }
@@ -196,6 +207,72 @@ define([
             _.each(objs, function (obj) {
                 this.addItem(_.extend(obj, attr));
             }, this);
+        },
+
+        addFolder: function (name, id, parentId, level) {
+            var folder = {
+                type: "folder",
+                name: name,
+                glyphicon: "glyphicon-plus-sign",
+                id: id,
+                parentId: parentId,
+                isExpanded: false,
+                level: level
+            };
+
+            this.addItem(folder);
+        },
+
+        addLayer: function (name, id, parentId, level, layers, url, version) {
+            console.log(name);
+            var layer = {
+                type: "layer",
+                name: name,
+                id: id,
+                parentId: parentId,
+                level: level,
+                url: url,
+                typ: "WMS",
+                layers: layers,
+                format: "image/png",
+                version: version,
+                singleTile: false,
+                transparent: true,
+                tilesize: "512",
+                gutter: "0",
+                featureCount: 3,
+                minScale: "0",
+                maxScale: "350000",
+                gfiAttributes: "showAll",
+                layerAttribution: "nicht vorhanden",
+                legendURL: "",
+                isbaselayer: false,
+                cache: false,
+                datasets: []
+            };
+
+            this.addItem(layer);
+        },
+
+        addGeoJSONLayer: function (name, id, features) {
+            var layer = {
+                type: "layer",
+                name: name,
+                id: id,
+                typ: "GeoJSON",
+                features: features,
+                transparent: true,
+                minScale: "0",
+                maxScale: "350000",
+                gfiAttributes: "showAll",
+                layerAttribution: "nicht vorhanden",
+                legendURL: "",
+                isbaselayer: false,
+                cache: false,
+                datasets: []
+            };
+
+            this.addItem(layer);
         },
 
         /**
@@ -320,7 +397,8 @@ define([
         createModelList: function () {
             new ModelList(_.filter(this.getItemList(), function (model) {
                 return model.parentId === "root" ||
-                    model.parentId === "Werkzeuge" || model.parentId === "Info";
+                    model.parentId === "tools" ||
+                    model.parentId === "info";
             }));
         },
 
@@ -330,7 +408,7 @@ define([
                 name: "Hintergrundkarten",
                 glyphicon: "glyphicon-plus-sign",
                 id: "Baselayer",
-                parentId: "Themen",
+                parentId: "tree",
                 isInThemen: true,
                 isInitiallyExpanded: false,
                 level: 0
@@ -340,7 +418,7 @@ define([
                 name: "Fachdaten",
                 glyphicon: "glyphicon-plus-sign",
                 id: "Overlayer",
-                parentId: "Themen",
+                parentId: "tree",
                 isInThemen: true,
                 isInitiallyExpanded: false,
                 level: 0
@@ -350,7 +428,7 @@ define([
                 name: "Auswahl der Themen",
                 glyphicon: "glyphicon-plus-sign",
                 id: "SelectedLayer",
-                parentId: "Themen",
+                parentId: "tree",
                 isLeafFolder: true,
                 isInThemen: true,
                 isInitiallyExpanded: true,
@@ -367,7 +445,7 @@ define([
         mergeObjectsByIds: function (ids, layerlist) {
             var objectsByIds = [],
                 newObject;
-                // Objekte die gruppiert werden
+            // Objekte die gruppiert werden
             _.each(ids, function (id) {
                 var lay = _.findWhere(layerlist, {id: id});
 

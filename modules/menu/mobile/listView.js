@@ -7,6 +7,7 @@ define([
     "modules/menu/mobile/layer/view",
     "modules/menu/mobile/layer/viewLight",
     "modules/menu/mobile/tool/view",
+    "modules/menu/mobile/staticlink/view",
     "modules/menu/mobile/breadCrumb/listView",
     "jqueryui/effect",
     "jqueryui/effects/effect-slide"
@@ -18,6 +19,7 @@ define([
             LayerView = require("modules/menu/mobile/layer/view"),
             LayerViewLight = require("modules/menu/mobile/layer/viewLight"),
             ToolView = require("modules/menu/mobile/tool/view"),
+            StaticLinkView = require("modules/menu/mobile/staticlink/view"),
             BreadCrumbListView = require("modules/menu/mobile/breadCrumb/listView"),
             Menu;
 
@@ -68,7 +70,7 @@ define([
             },
             updateLightTree: function () {
                 var models = [],
-                lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: "Themen"});
+                lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: "tree"});
 
                 models = this.collection.add(lightModels);
 
@@ -89,7 +91,7 @@ define([
                         return layer.getSelectionIDX();
                 }).reverse();
                 if (withAnimation) {
-                    this.slideModels("descent", models, "Themen", "Selection");
+                    this.slideModels("descent", models, "tree", "Selection");
                 }
                 else {
                     // Views löschen um doppeltes Zeichnen zu vermeiden
@@ -132,6 +134,7 @@ define([
 
                 $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"},
                     function () {
+
                         that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
                         // befinden wir uns in der Auswahl sind die models bereits nach ihrem SelectionIndex sortiert
                         if (currentList === "Selection") {
@@ -143,7 +146,7 @@ define([
                                 return (model.getType() === "folder" ? "folder" : "other");
                             }) ;
                             // Im default-Tree werden folder und layer alphabetisch sortiert
-                            if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].getParentId() !== "Themen") {
+                            if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].getParentId() !== "tree") {
                                 groupedModels.folder = _.sortBy(groupedModels.folder, function (item) {
                                     return item.getName();
                                 });
@@ -165,7 +168,6 @@ define([
                 models = _.reject(models, function (model) {
                     return model.get("onlyDesktop") === true;
                 });
-
                 _.each(models, function (model) {
                     model.setIsVisibleInTree(true);
                     switch (model.getType()){
@@ -175,6 +177,10 @@ define([
                         }
                         case "tool": {
                             nodeView = new ToolView({model: model});
+                            break;
+                        }
+                        case "staticlink": {
+                            nodeView = new StaticLinkView({model: model});
                             break;
                         }
                         case "layer": {
@@ -203,7 +209,7 @@ define([
                 if (tool) {
                     tool.setIsActive(true);
                 }
-             }
+            }
         });
         return Menu;
     }

@@ -1,13 +1,8 @@
-define([
-    "modules/core/modelList/layer/model",
-    "backbone.radio",
-    "openlayers"
-], function () {
+define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
-        // StyleList = require("modules/layer/wfsStyle/list"),
         WFSLayer;
 
     WFSLayer = Layer.extend({
@@ -65,6 +60,13 @@ define([
             return this.get("clusterLayerSource");
         },
 
+        getWfsFormat: function () {
+            return new ol.format.WFS({
+                featureNS: this.get("featureNS"),
+                featureType: this.get("featureType")
+            });
+        },
+
         updateData: function () {
             var params = {
                 REQUEST: "GetFeature",
@@ -75,7 +77,6 @@ define([
 
             Radio.trigger("Util", "showLoader");
 
-            // this.buildGetRequest();
             $.ajax({
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
                 data: params,
@@ -86,39 +87,17 @@ define([
                     Radio.trigger("Util", "hideLoader");
                     try {
                         var wfsReader = new ol.format.WFS({
-                            featureNS: this.get("featureNS"),
-                            featureType: this.get("featureType")
+                            featureNS: this.get("featureNS")
                         });
 
-                        if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
-                            // var src = new ol.source.Vector({
-                            //     attributions: this.get("olAttribution")
-                            // });
+                        this.getLayerSource().addFeatures(wfsReader.readFeatures(data));
+                        this.set("loadend", "ready");
 
-                            // src.addFeatures(wfsReader.readFeatures(data));
-                            this.getLayerSource().addFeatures(wfsReader.readFeatures(data));
-                            // this.set("source", src);
-                            // für WFS-T wichtig --> benutzt den ol-default Style
-                            if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
-                                this.styling();
-                            }
-                            this.getLayer().setStyle(this.get("style"));
-                            }
-                        else {
-                            // var src = new ol.source.Vector({
-                            //     attributions: this.get("olAttribution")
-                            // });
-                            this.getLayerSource().addFeatures(wfsReader.readFeatures(data));
-                            if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
-                                this.styling();
-                            }
-                            this.getLayer().setStyle(this.get("style"));
+                        // für WFS-T wichtig --> benutzt den ol-default Style
+                        if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
+                            this.styling();
                         }
-                        // this.get("layer").once("postcompose", function (e) {
-                        //     this.set("visibility", true);
-                        // }, this);
-                        // this.reload();
-
+                        this.getLayer().setStyle(this.get("style"));
                     }
                     catch (e) {
                         console.log(e);

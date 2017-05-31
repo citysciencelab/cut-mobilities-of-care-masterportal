@@ -20,17 +20,17 @@ define(function () {
             colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
         },
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
-        gfiWindow: "detached",
+        gfiWindow: "attached",
         simpleMap: false,
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
         zoomtofeature: {
-            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
-            version: "2.0.0",
+            url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
+            version: "1.1.0",
             typename: "app:hamburgconvention",
-            valuereference: "app:flaechenid",
+            attribute: "flaechenid",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4426"
+            layerid: "4561"
         },
         view: {},
         namedProjections: [
@@ -54,7 +54,7 @@ define(function () {
             // Organisations
             ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"]
         ],
-        customModules: ["../portal/master/verkehrsfunctions"],
+        customModules: [],
         footer: {
             visibility: true,
             urls: [
@@ -79,7 +79,7 @@ define(function () {
         },
         quickHelp: true,
         layerConf: "../components/lgv-config/services-internet.json",
-        restConf: "../components/lgv-config/rest-services-internet.json",
+        restConf: "../components/lgv-config/rest-services-fhhnet.json",
         styleConf: "../components/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
@@ -90,7 +90,7 @@ define(function () {
         print: {
             printID: "99999",
             title: "Master",
-            gfi: false
+            gfi: true
         },
         geoAPI: false,
         clickCounter: {}

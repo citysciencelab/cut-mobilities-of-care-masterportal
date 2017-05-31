@@ -1,12 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "eventbus",
-    "config",
-    "modules/core/requestor"
-], function (Backbone, Radio, EventBus, Config, Requestor) {
+define(function (require) {
 
-    var FeatureListerModel = Backbone.Model.extend({
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Requestor = require("modules/core/requestor"),
+        FeatureListerModel;
+
+    FeatureListerModel = Backbone.Model.extend({
         defaults: {
             maxFeatures: 20, // über Config konfigurierbare Max-Anzahl an pro Layer geladenen Features
             isActive: false,
@@ -20,11 +19,12 @@ define([
             prevStyleScale: 1
         },
         initialize: function () {
-            // if(_.has(Config.menuItems.featureLister,"lister") === true) {
-            //     this.set("maxFeatures", Config.menuItems.featureLister.lister);
-            // }
+            var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "featureLister"});
+
+            if (toolModel.has("lister") === true) {
+                this.set("maxFeatures", toolModel.get("lister"));
+            }
             Radio.on("ModelList", "updateVisibleInMapList", this.checkVisibleLayer, this);
-            // EventBus.on("layerlist:sendVisibleWFSlayerList", this.checkVisibleLayer, this); // wird automatisch getriggert, wenn sich visibility ändert
             Radio.on("Map", "setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
             this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
             this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
@@ -70,13 +70,10 @@ define([
 
                 // Zoom auf Extent
                 if (geometry) {
-                    EventBus.trigger("mapHandler:zoomTo", {
-                        type: "Feature-Lister-Click",
-                        coordinate: geometry
-                    });
+                    Radio.trigger("MapMarker", "mapHandler:zoomTo", {type: "Feature-Lister-Click", coordinate: geometry});
                 }
                 else {
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
                         kategorie: "alert-warning"
                     });
@@ -97,7 +94,9 @@ define([
                 feature = _.find(features, function (feat) {
                     return feat.id.toString() === id;
                 }),
-            style = layer.style(feature.feature)[0],
+            // layerstyle clonen, sonst wird die Änderung auf den ganzen
+            // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
+            style = this.get("layer").style[0].clone(),
             image = style.getImage();
 
             this.set("prevStyleScale", image.getScale());
@@ -112,13 +111,15 @@ define([
             var prevfeatureid = this.get("prevFeatureId"),
                 prevStyleScale = this.get("prevStyleScale");
 
-            if(prevfeatureid !== -1) {
+            if (prevfeatureid !== -1) {
                 var layer = this.get("layer"),
                     features = layer.features,
                     feature = _.find(features, function (feat) {
                         return feat.id.toString() === prevfeatureid;
                     }),
-                style = layer.style(feature.feature)[0],
+                // layerstyle clonen, sonst wird die Änderung auf den ganzen
+                // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
+                style = this.get("layer").style[0].clone(),
                 image = style.getImage();
 
                 image.setScale(prevStyleScale);
@@ -136,6 +137,7 @@ define([
             this.set("featureid", "");
             // Layer wegen Tab-switch-Reihenfolge erst hinterher setten.
             if (layer) {
+                this.getFeatureList(this.get("layerid"));
                 this.set("layer", layer);
             }
             else {
@@ -192,26 +194,26 @@ define([
         /*
         * Übernimmt Features bei Selektion eines Layers.
         */
-        getFeatureList: function (layer) {
-            var gfiAttributes = layer.get("gfiAttributes"),
-                features = layer.get("layer").getSource().getFeatures(),
-                ll = [],
-                counter = 0;
+        getFeatureList: function (layerId) {
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+                gfiAttributes = layerModel.get("gfiAttributes"),
+                layerFromList = _.findWhere(this.get("layerlist"), {id: layerId}),
+                features = layerModel.get("layer").getSource().getFeatures(),
+                ll = [];
 
             // Es muss sichergetellt werden, dass auch Features ohne Geometrie verarbeitet werden können. Z.B. KitaEinrichtunen
-            _.each(features, function (feature) {
+            _.each(features, function (feature, index) {
                 if (feature.get("features")) {
-                    _.each(feature.get("features"), function (feat) {
+                    _.each(feature.get("features"), function (feat, index) {
                         var props = Requestor.translateGFI([feat.getProperties()], gfiAttributes)[0],
                             geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
                         ll.push({
-                            id: counter,
+                            id: index,
                             properties: props,
                             geometry: geom,
                             feature: feat
                         });
-                        counter += 1;
                     });
                 }
                 else {
@@ -219,27 +221,25 @@ define([
                         geom = feature.getGeometry() ? feature.getGeometry().getExtent() : null;
 
                     ll.push({
-                        id: counter,
+                        id: index,
                         properties: props,
                         geometry: geom,
                         feature: feature
                     });
-                    counter += 1;
                 }
             }, this);
-            return ll;
+
+            layerFromList.features = ll;
         },
         /*
         * Fügt Layer zur Liste hinzu.
         */
         addLayerToList: function (layer) {
-            var layerlist = this.get("layerlist"),
-                featurelist = this.getFeatureList(layer);
+            var layerlist = this.get("layerlist");
 
             layerlist.push({
                 id: layer.id,
                 name: layer.get("name"),
-                features: featurelist,
                 style: layer.get("style")
             });
             this.unset("layerlist", {silent: true});

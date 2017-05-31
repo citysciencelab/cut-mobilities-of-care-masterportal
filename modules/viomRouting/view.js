@@ -45,8 +45,7 @@ define([
             if ($(evt.target).parent().hasClass("disabled") === false) {
                 $(evt.currentTarget).find(".active").removeClass("active");
                 $(evt.target).parent().addClass("active");
-                switch (evt.target.id)
-                    {
+                switch (evt.target.id) {
                         case "options": {
                             $(".calc").hide();
                             $(".address").hide();
@@ -109,6 +108,7 @@ define([
                 $("#input-group-ziel ul").hide();
             }
         },
+
         setRoutingDestination: function (coordinate) {
             Radio.trigger("GFIPopup", "closeGFIParams");
             Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "routing"}));
@@ -239,5 +239,6 @@ define([
             $(".win-heading").after(this.$el.html(this.template(attr)));
         }
     });
+
     return RoutingView;
 });

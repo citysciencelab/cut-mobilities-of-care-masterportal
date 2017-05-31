@@ -4,9 +4,8 @@ define([
     "modules/window/model",
     "text!modules/window/templateMax.html",
     "text!modules/window/templateMin.html",
-    "eventbus",
     "jqueryui/widgets/draggable"
-], function (Backbone, Radio, Window, templateMax, templateMin, EventBus) {
+], function (Backbone, Radio, Window, templateMax, templateMin) {
 
     var WindowView = Backbone.View.extend({
         id: "window",
@@ -76,7 +75,7 @@ define([
             this.$el.hide("slow");
             this.model.setVisible(false);
             this.model.sendParamsToWinCotent();
-            EventBus.trigger("onlyActivateGFI");
+            Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
         }
     });
 

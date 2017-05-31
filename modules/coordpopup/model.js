@@ -15,14 +15,22 @@ define([
             coordinateGeo: {}
         },
         initialize: function () {
-            this.listenTo(Radio.channel("Map"), {
-                "setPositionCoordPopup": this.setPosition
+            this.listenTo(Radio.channel("Tool"), {
+                "activatedTool": this.checkTool
             });
 
             this.setCoordOverlay(new ol.Overlay({
                 element: this.getElement()[0]
             }));
             Radio.trigger("Map", "addOverlay", this.getCoordOverlay());
+        },
+        checkTool: function (name) {
+            if (name === "coord") {
+                Radio.trigger("Map", "registerListener", "click", this.setPosition, this);
+            }
+            else {
+                Radio.trigger("Map", "unregisterListener", "click", this.setPosition, this);
+            }
         },
         getCoordOverlay: function () {
             return this.get("coordOverlay");
@@ -54,12 +62,12 @@ define([
         showPopup: function () {
             this.getElement().popover("show");
         },
-        setPosition: function (coordinate) {
-            this.getCoordOverlay().setPosition(coordinate);
-            this.setCoordinateUTM(coordinate);
+        setPosition: function (evt) {
+            this.getCoordOverlay().setPosition(evt.coordinate);
+            this.setCoordinateUTM(evt.coordinate);
             this.setCoordinateGeo(ol.coordinate.toStringHDMS(proj4(proj4(Config.view.epsg), proj4("EPSG:4326"), this.getCoordinateUTM())));
         }
     });
 
-    return new CoordPopup();
+    return CoordPopup;
 });

@@ -1,48 +1,73 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/core/util",
     "config",
     "openlayers"
-], function (Backbone, Radio, Util, Config, ol) {
+], function (Backbone, Radio, Config, ol) {
     "use strict";
     var model = Backbone.Model.extend({
 
         //
         defaults: {
+            MM_PER_INCHES: 25.4,
+            POINTS_PER_INCH: 72,
             title: Config.print.title,
             outputFilename: Config.print.outputFilename,
             outputFormat: "pdf",
-            isActive: false, // für map.js --- damit  die Karte weiß ob der Druckdienst aktiviert ist
             gfiToPrint: [], // die sichtbaren GFIs
             center: Config.view.center,
             scale: {},
             layerToPrint: [],
-            fetched: false // gibt an, ob info.json schon geladen wurde
+            fetched: false, // gibt an, ob info.json schon geladen wurde
+            printGFI: Config.print.gfi ? Config.print.gfi : false,
+            printurl: "",
+            printGfiMarker: {
+                outerCircle: {
+                    fill: false,
+                    pointRadius: 8,
+                    stroke: true,
+                    strokeColor: "#ff0000",
+                    strokeWidth: 3
+                },
+                point: {
+                    fill: true,
+                    pointRadius: 1,
+                    fillColor: "#000000",
+                    stroke: false
+                }
+            }
         },
 
-        //
+        /*
+         * Ermittelt die URL zum Fetchen in setStatus durch Abfrage der ServiceId
+         */
         url: function () {
-            var resp;
-            resp = Radio.request("RestReader", "getServiceById", Config.print.printID);
-            if (resp[0] && resp[0].get("url")) {
-                this.set("printurl", resp[0].get("url"));
-            }
+            var resp = Radio.request("RestReader", "getServiceById", Config.print.printID),
+                url = resp[0] && resp[0].get("url") ? resp[0].get("url") : null,
+                printurl;
 
-            if (_.has(Config.print, "configYAML") === true) {
-                return Config.proxyURL + "?url=" + this.get("printurl") + "/" + Config.print.configYAML + "/info.json";
+            if (url) {
+                printurl = _.has(Config.print, "configYAML") === true ? url + "/" + Config.print.configYAML : url + "/master";
+
+                this.set("printurl", printurl);
+                return Config.proxyURL + "?url=" + printurl + "/info.json";
             }
             else {
-                return Config.proxyURL + "?url=" + this.get("printurl") + "/master/info.json";
+                return "undefined"; // muss String übergeben, sonst Laufzeitfehler
             }
         },
 
         //
         initialize: function () {
+            var printGfiMarker = Config.print.printGfiMarker ? Config.print.printGfiMarker : undefined;
+
+            if (_.isUndefined(printGfiMarker) === false) {
+                this.setPrintGfiMarker(printGfiMarker);
+            }
+
             this.listenTo(this, {
-                "change:layout change:scale change:isActive": this.updatePrintPage,
-                "change:specification": this.getPDFURL,
-                "change:isCurrentWin": this.setActive
+                "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
+                "change:specification": this.getPDFURL
             });
 
             this.listenTo(Radio.channel("MapView"), {
@@ -94,6 +119,8 @@ define([
 
         //
         setStatus: function (args) {
+            var scaletext;
+
             if (args[2].getId() === "print") {
                 if (this.get("fetched") === false) {
                     // get print config (info.json)
@@ -101,10 +128,10 @@ define([
                         cache: false,
                         success: function (model) {
                             _.each(model.get("scales"), function (scale) {
-                                var scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
+                                scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
 
                                 scale.name = "1: " + scaletext;
-                                scale.value = parseInt(scale.value);
+                                scale.value = parseInt(scale.value, 10);
                             });
                             model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                             model.setScaleByMapView();
@@ -116,8 +143,12 @@ define([
                             Radio.trigger("Alert", "alert", {text: "<strong>Druckkonfiguration konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
                             Radio.trigger("Window", "closeWin");
                         },
-                        complete: Util.hideLoader,
-                        beforeSend: Util.showLoader
+                        complete: function () {
+                            Radio.trigger("Util", "hideLoader");
+                        },
+                        beforeSend: function () {
+                            Radio.trigger("Util", "showLoader");
+                        }
                     });
                 }
                 else {
@@ -129,12 +160,18 @@ define([
                 this.set("isCurrentWin", false);
             }
         },
-        setActive: function () {
-            this.set("isActive", this.get("isCurrentWin"));
-        },
+
         updatePrintPage: function () {
             if (this.has("scale")) {
-                Radio.trigger("Map", "updatePrintPage", [this.get("isActive"), this.get("layout").map, this.get("scale").value]);
+                if (this.get("isCurrentWin") === true) {
+                    Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose, this);
+                    Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
+                }
+                else {
+                    Radio.trigger("Map", "unregisterListener", "precompose", this.handlePreCompose, this);
+                    Radio.trigger("Map", "unregisterListener", "postcompose", this.handlePostCompose, this);
+                }
+                Radio.trigger("Map", "render");
             }
         },
 
@@ -143,21 +180,26 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
+            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
+            this.setLayer(Radio.request("Draw", "getLayer"));
             this.getGFIForPrint();
         },
         /**
         *
         */
         setLayerToPrint: function (layers) {
+            var params,
+                style,
+                layerURL;
+
             layers = _.sortBy(layers, function (layer) {
                 return layer.get("selectionIDX");
             });
-
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
-                var params = {},
-                    style = [],
-                    layerURL = layer.get("url");
+                params = {},
+                style = [],
+                layerURL = layer.get("url");
 
                 if (layer.has("SLDBody")) {
                     params.SLD_BODY = layer.get("SLDBody");
@@ -167,6 +209,18 @@ define([
                 }
                 if (layer.has("style")) {
                     style.push(layer.get("style"));
+                }
+                // Für jeden angegebenen Layer muss ein Style angegeben werden.
+                // Wenn ein Style mit einem Blank angegeben wird,
+                // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
+                else {
+                    var numberOfLayer = layer.get("layers").split(",").length,
+                        defaultStyle = "";
+
+                    for (var i = 1; i < numberOfLayer; i++) {
+                        defaultStyle += ",";
+                    }
+                    style.push(defaultStyle);
                 }
                 // Damit Web-Atlas gedruckt werden kann
                 if (layer.get("id") === "51" || layer.get("id") === "53") {
@@ -190,12 +244,15 @@ define([
         /**
          *
          */
-        setDrawLayer: function (layer) {
-            if (!_.isUndefined(layer)) {
-                var features = [],
-                    circleFeatures = [], // Kreise können nicht gedruckt werden
-                    featureStyles = {};
+        setLayer: function (layer) {
+            var features = [],
+                circleFeatures = [], // Kreise können nicht gedruckt werden
+                featureStyles = {},
+                type,
+                styles,
+                style;
 
+            if (!_.isUndefined(layer)) {
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
@@ -217,9 +274,9 @@ define([
                             }
                         });
 
-                        var type = feature.getGeometry().getType(),
-                            styles = feature.getStyleFunction().call(feature),
-                            style = styles[0];
+                        type = feature.getGeometry().getType(),
+                        styles = feature.getStyleFunction().call(feature),
+                        style = styles[0];
                         // Punkte
                         if (type === "Point") {
                             // Punkte ohne Text
@@ -265,10 +322,18 @@ define([
         /**
          *
          */
-        setSpecification: function () {
-            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            this.setDrawLayer(Radio.request("Draw", "getLayer"));
-            var specification = {
+        setSpecification: function (gfiPosition) {
+            var layers = Radio.request("Map", "getLayers").getArray(),
+                animationLayer = _.filter(layers, function (lay) {
+                    return lay.get("name") === "animationLayer";
+                }),
+                specification;
+
+            if (animationLayer.length > 0) {
+                this.setLayer(animationLayer[0]);
+            }
+
+            specification = {
                 // layout: $("#layoutField option:selected").html(),
                 layout: this.getLayout().name,
                 srs: Config.view.epsg,
@@ -288,7 +353,7 @@ define([
                 ]
             };
 
-            if (this.get("printGFIPosition") !== null) {
+            if (gfiPosition !== null) {
                 _.each(_.flatten(this.get("gfiParams")), function (element, index) {
                     specification.pages[0]["attr_" + index] = element;
                 }, this);
@@ -299,28 +364,15 @@ define([
         /**
          * Checkt, ob Kreis an GFI-Position gezeichnet werden soll und fügt ggf. Layer ein.
          */
-        setGFIPos: function () {
-            var position = this.get("printGFIPosition");
-
-            if (position !== null) {
-                position[0] = position[0] + 0.25; // Verbesserung der Punktlage im Print
+        setGFIPos: function (gfiPosition) {
+            if (gfiPosition !== null) {
+                gfiPosition[0] = gfiPosition[0] + 0.25; // Verbesserung der Punktlage im Print
                 this.push("layerToPrint", {
                     type: "Vector",
                     styleProperty: "styleId",
                     styles: {
-                        0: {
-                            fill: false,
-                            pointRadius: 8,
-                            stroke: true,
-                            strokeColor: "#ff0000",
-                            strokeWidth: 3
-                        },
-                        1: {
-                            fill: true,
-                            pointRadius: 1,
-                            fillColor: "#000000",
-                            stroke: false
-                        }
+                        0: this.getPrintGfiMarker().outerCircle,
+                        1: this.getPrintGfiMarker().point
                     },
                     geoJson: {
                         type: "FeatureCollection",
@@ -329,7 +381,7 @@ define([
                                 type: "Feature",
                                 geometry: {
                                     type: "Point",
-                                    coordinates: position
+                                    coordinates: gfiPosition
                                 },
                                 properties: {
                                     styleId: 0
@@ -339,7 +391,7 @@ define([
                                 type: "Feature",
                                 geometry: {
                                     type: "Point",
-                                    coordinates: position
+                                    coordinates: gfiPosition
                                 },
                                 properties: {
                                     styleId: 1
@@ -349,40 +401,30 @@ define([
                     }
                 });
             }
-            this.setSpecification();
+            this.setSpecification(gfiPosition);
         },
 
         /**
-        * Abfrage an popupmodel starten.
-        * @param {Array} values - values[0] = GFIs(Object), values[1] = Sichbarkeit GFIPopup(boolean)
+        * Setzt die createURL in Abhängigkeit der GFI
         */
         getGFIForPrint: function () {
-            var gfis = Radio.request("GFIPopup", "getGFIForPrint");
+            var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGFIForPrint") : null,
+                gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
+                gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
+                gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
+                printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
+                printurl = this.get("printurl"); // URL des Druckdienstes
 
-            if (_.isUndefined(gfis) === false) {
-                this.set("gfiParams", _.pairs(gfis[0]));
-                this.set("gfiTitle", gfis[1]);
-                this.set("printGFIPosition", gfis[2]);
-                // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
-                if (this.get("printGFIPosition") !== null && Config.print.gfi === true && this.get("gfiParams").length > 0 && _.has(Config.print, "configYAML") === false) {
-                    this.set("createURL", this.get("printurl") + "/master_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
-                }
-                else if (_.has(Config.print, "configYAML") === true && Config.print.gfi === true && this.get("gfiParams").length > 0) {
-                    this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
-                }
-                else {
-                    if (_.has(Config.print, "configYAML") === true) {
-                        this.set("createURL", this.get("printurl") + "/" + Config.print.configYAML + "/create.json");
-                    }
-                    else {
-                        this.set("createURL", this.get("printurl") + "/master/create.json");
-                    }
-                }
-                this.setGFIPos();
+            this.set("gfiParams", gfiParams);
+            this.set("gfiTitle", gfiTitle);
+            // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
+            if (!_.isNull(gfiPosition) && printGFI === true && gfiParams && gfiParams.length > 0) {
+                this.set("createURL", printurl + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
             }
             else {
-                this.setSpecification();
+                this.set("createURL", printurl + "/create.json");
             }
+            this.setGFIPos(gfiPosition);
         },
 
         /**
@@ -404,8 +446,12 @@ define([
                         kategorie: "alert-warning"
                     });
                 },
-                complete: Util.hideLoader,
-                beforeSend: Util.showLoader
+                complete: function () {
+                    Radio.trigger("Util", "hideLoader");
+                },
+                beforeSend: function () {
+                    Radio.trigger("Util", "showLoader");
+                }
             });
         },
 
@@ -435,12 +481,13 @@ define([
         // Gibt den hexadezimal String und die Opacity zurück.
         getColor: function (value) {
             var color = value,
-                opacity = 1;
+                opacity = 1,
+                begin;
             // color kommt als array--> parsen als String
             color = color.toString();
 
             if (color.search("#") === -1) {
-                var begin = color.indexOf("(") + 1;
+                begin = color.indexOf("(") + 1;
 
                 color = color.substring(begin, color.length - 1);
                 color = color.split(",");
@@ -479,6 +526,99 @@ define([
             else {
                 return "pdf";
             }
+        },
+
+        handlePreCompose: function (evt) {
+            var ctx = evt.context;
+
+            ctx.save();
+        },
+
+        handlePostCompose: function (evt) {
+            var ctx = evt.context,
+                size = Radio.request("Map", "getSize"),
+                height = size[1] * ol.has.DEVICE_PIXEL_RATIO,
+                width = size[0] * ol.has.DEVICE_PIXEL_RATIO,
+                minx, miny, maxx, maxy,
+                printPageRectangle = this.calculatePageBoundsPixels(),
+                minx = printPageRectangle[0],
+                miny = printPageRectangle[1],
+                maxx = printPageRectangle[2],
+                maxy = printPageRectangle[3];
+
+            ctx.beginPath();
+            // Outside polygon, must be clockwise
+            ctx.moveTo(0, 0);
+            ctx.lineTo(width, 0);
+            ctx.lineTo(width, height);
+            ctx.lineTo(0, height);
+            ctx.lineTo(0, 0);
+            ctx.closePath();
+            // Inner polygon,must be counter-clockwise
+            ctx.moveTo(minx, miny);
+            ctx.lineTo(minx, maxy);
+            ctx.lineTo(maxx, maxy);
+            ctx.lineTo(maxx, miny);
+            ctx.lineTo(minx, miny);
+            ctx.closePath();
+            ctx.fillStyle = "rgba(0, 5, 25, 0.55)";
+            ctx.fill();
+            ctx.restore();
+        },
+
+        calculatePageBoundsPixels: function () {
+            var s = this.get("scale").value,
+                width = this.get("layout").map.width,
+                height = this.get("layout").map.height,
+                resolution = Radio.request("MapView", "getResolution").resolution,
+                w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                mapSize = Radio.request("Map", "getSize"),
+                center = [mapSize[0] * ol.has.DEVICE_PIXEL_RATIO / 2 ,
+                mapSize[1] * ol.has.DEVICE_PIXEL_RATIO / 2],
+                minx, miny, maxx, maxy;
+
+            minx = center[0] - (w / 2);
+            miny = center[1] - (h / 2);
+            maxx = center[0] + (w / 2);
+            maxy = center[1] + (h / 2);
+            return [minx, miny, maxx, maxy];
+        },
+
+        /**
+         * Setzt die Parameter aus der config.js für den GFI Marker im Druck, wenn vorhanden
+         */
+        setPrintGfiMarker: function (printGfiMarker) {
+            printGfiMarker.outerCircle ? this.setOuterCircle(printGfiMarker.outerCircle) : null;
+            printGfiMarker.point ? this.setPoint(printGfiMarker.point) : null;
+        },
+
+        /**
+         * Gibt die Parameter für den GFI Marker im Druck zurück
+         */
+        getPrintGfiMarker: function () {
+            return this.get("printGfiMarker");
+        },
+
+        /**
+         * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Kreis des GFI Markers im Druck
+         */
+        setOuterCircle: function (outerCircle) {
+            outerCircle.fill ? this.getPrintGfiMarker().outerCircle.fill = outerCircle.fill : null;
+            outerCircle.pointRadius ? this.getPrintGfiMarker().outerCircle.pointRadius = outerCircle.pointRadius : null;
+            outerCircle.stroke ? this.getPrintGfiMarker().outerCircle.stroke = outerCircle.stroke : null;
+            outerCircle.strokeColor ? this.getPrintGfiMarker().outerCircle.strokeColor = outerCircle.strokeColor : null;
+            outerCircle.strokeWidth ? this.getPrintGfiMarker().outerCircle.strokeWidth = outerCircle.strokeWidth : null;
+        },
+
+        /**
+         * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Punkt im Kreis des GFI Markers im Druck
+         */
+        setPoint: function (point) {
+            point.fill ? this.getPrintGfiMarker().point.fill = point.fill : null;
+            point.pointRadius ? this.getPrintGfiMarker().point.pointRadius = point.pointRadius : null;
+            point.fillColor ? this.getPrintGfiMarker().point.fillColor = point.fillColor : null;
+            point.stroke ? this.getPrintGfiMarker().point.stroke = point.stroke : null;
         }
     });
 

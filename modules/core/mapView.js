@@ -99,6 +99,9 @@ define([
                 "getResolutions": function () {
                     return this.getResolutions();
                 },
+                "getResolution": function () {
+                    return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
+                },
                 "getResoByScale": this.getResoByScale,
                 "getScales": this.getScales
             }, this);
@@ -108,7 +111,8 @@ define([
                 "toggleBackground": this.toggleBackground,
                 "setZoomLevelUp": this.setZoomLevelUp,
                 "setZoomLevelDown": this.setZoomLevelDown,
-                "setScale": this.setScale
+                "setScale": this.setScale,
+                "resetView": this.resetView
             }, this);
 
             this.listenTo(this, {
@@ -156,6 +160,11 @@ define([
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
             }, this);
+        },
+        resetView: function () {
+            this.get("view").setCenter(this.get("startCenter"));
+            this.get("view").setZoom(2);
+            Radio.trigger("MapMarker","hideMarker");
         },
 
         /*
@@ -284,7 +293,7 @@ define([
                 proj = Radio.request("CRS", "getProjection", epsgCode);
 
             if (!proj) {
-                alert("Unknown CRS " + epsgCode + ". Can't set projection.");
+                Radio.trigger("Alert", "alert", "Unknown CRS " + epsgCode + ". Can't set projection.");
                 return;
             }
 

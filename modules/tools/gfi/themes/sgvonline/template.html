@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<tbody>
+<%  _.each(gfiContent[0], function(value, key) {
+        if (infoFormat === "text/html") { %>
+            <tr colspan="1" >
+                <td>
+                    <iframe src="<%= value%>" class="gfi-iFrame">
+                    </iframe>
+                </td>
+            </tr>
+        <% }
+        else { %>
+<%     if (_.isString(key) === false || _.isString(value)=== false) return; %>
+<% if (key === "Amtlich vergebene Adresse" || key === "Bezirk" || key === "Baublock"|| key === "Amtsgericht"|| key === "Wahlbezirk (Bürgerschaftswahl)") {%>
+    <tr colspan="2">
+        <td class="no-lines placeholder"></td>
+        <td class="no-lines placeholder"></td>
+    </tr>
+<%}%>
+<tr colspan="2">
+    <td class="no-lines bold">
+        <%= key + ''%>
+    </td>
+    <td class="no-lines">
+        <% if (value.search('.pdf') !== -1 && value.substr(0, 7) == 'http://') { %>
+            <!-- Hack für Flüchtlingsportal -->
+            <% _.each(value.split("$"), function (val, index) { %>
+                <a href="<%= val %>" target="_blank">Anhang <%= index + 1 %></a><br>
+            <% }); %>
+        <% } else if (value.search('.html') !== -1 || value.substr(0, 7) == 'http://') { %>
+            <a href="<%= value %>" target="_blank">Link</a>
+        <% } else if (value.substr(0, 4) == '040 ' || value.substr(0, 4) == '040-' || value.substr(0, 3) == '+49' || value.substr(0, 5) == '0800 ' || value.substr(0, 5) == '0800-') { %>
+            <a href="tel:<%= value.replace(' ', '').replace('-', '')%>"><%= value %></a>
+        <% } else { %>
+            <%= value %>
+        <% } %>
+    </td>
+</tr>
+
+<%}}); %>
+</tbody>

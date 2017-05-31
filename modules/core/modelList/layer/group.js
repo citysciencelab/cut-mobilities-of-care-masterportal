@@ -10,10 +10,34 @@ define([
         /**
          *
          */
+        setAttributes: function () {
+            var gfiParams = [];
+
+            _.each(this.get("layerdefinitions"), function (layerdef) {
+                if (layerdef.gfiAttributes !== "ignore") {
+                    gfiParams.push({
+                        featureCount: layerdef.featureCount ? layerdef.featureCount : 1,
+                        infoFormat: layerdef.infoFormat ? layerdef.infoFormat : "text/xml",
+                        gfiAttributes: layerdef.gfiAttributes,
+                        name: layerdef.name,
+                        typ: layerdef.typ,
+                        gfiTheme: layerdef.gfiTheme
+                    });
+                }
+            }, this);
+
+            this.setGfiParams(gfiParams);
+        },
+
+        /**
+         *
+         */
         createLayerSource: function () {
             // TODO noch keine Typ unterscheidung -> nur WMS
             this.createChildLayerSources(this.get("layerdefinitions"));
             this.createChildLayers(this.get("layerdefinitions"));
+            this.setMaxScale(this.get("id"));
+            this.setMinScale(this.get("id"));
             this.createLayer();
         },
 
@@ -36,6 +60,7 @@ define([
                 });
 
                 sources.push(source);
+                child.source = source;
             });
             this.setChildLayerSources(sources);
         },
@@ -126,7 +151,7 @@ define([
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
                 "legendURL": legendURL,
-                "metaID": this.get("layerdefinitions")[0].datasets[0].md_id,
+                "metaID": this.get("layerdefinitions")[0].datasets[0] ? this.get("layerdefinitions")[0].datasets[0].md_id : null,
                 "name": names,
                 "layername": this.get("name")
             });
@@ -162,6 +187,44 @@ define([
          */
         getChildLayers: function () {
             return this.get("childlayers");
+        },
+
+        /**
+         *
+         *
+         */
+        setMaxScale: function (layerId) {
+            var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
+
+            this.set("maxScale", layer.maxScale);
+        },
+
+        /**
+         *
+         *
+         */
+        setMinScale: function (layerId) {
+            var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
+
+            this.set("minScale", layer.minScale);
+        },
+
+        setGfiParams: function (value) {
+            this.set("gfiParams", value);
+        },
+
+        getGfiParams: function () {
+            return this.get("gfiParams");
+        },
+
+        getGfiUrl: function (index) {
+            var resolution = Radio.request("MapView", "getResolution").resolution,
+                projection = Radio.request("MapView", "getProjection"),
+                coordinate = Radio.request("GFI", "getCoordinate"),
+                gfiParams = this.getGfiParams()[index],
+                childLayer = this.getChildLayers().item(index);
+
+            return childLayer.getSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: gfiParams.infoFormat, FEATURE_COUNT: gfiParams.featureCount});
         }
 
     });

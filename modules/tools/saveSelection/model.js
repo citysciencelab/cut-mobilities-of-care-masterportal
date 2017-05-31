@@ -20,6 +20,10 @@ define([
             simpleMap: false
         },
         initialize: function () {
+            var channel = Radio.channel("SaveSelection");
+            channel.reply({
+                "getMapState": this.getMapState
+            }, this);
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.checkStatus
             });
@@ -214,8 +218,13 @@ define([
         },
         getSimpleMap: function () {
             return this.get("simpleMap");
+        },
+        getMapState: function () {
+            this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));
+            this.setCenterCoords(Radio.request("MapView", "getCenter"));
+            this.filterExternalLayer(Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
+            return this.get("url");
         }
     });
-
     return SaveSelection;
 });

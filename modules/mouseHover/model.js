@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "eventbus",
     "bootstrap/popover"
-], function (Backbone, Radio, ol, EventBus) {
+], function (Backbone, Radio, ol) {
 
     var MouseHoverPopup = Backbone.Model.extend({
         defaults: {
@@ -25,7 +24,9 @@ define([
 
             this.filterWFSList();
             this.set("element", this.get("mhpOverlay").getElement());
-            EventBus.on("GFIPopupVisibility", this.GFIPopupVisibility, this); // GFIPopupStatus auslösen. Trigger in GFIPopoupView
+            this.listenTo(Radio.channel("GFI"), {
+                "isVisible": this.GFIPopupVisibility
+            }, this);
         },
 
         filterWFSList: function () {

@@ -13,7 +13,7 @@ define("app",
     "modules/alerting/view"
     ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter) {
 
-    // Core lade
+    // Core laden
     new Autostarter();
     new Util();
     new RawLayerList();
@@ -27,6 +27,10 @@ define("app",
         new MenuLoader();
     });
     new RestReaderList();
+
+    require(["modules/remoteInterface/model"], function (Remoteinterface) {
+        new Remoteinterface();
+    });
 
     if (Config.allowParametricURL && Config.allowParametricURL === true && Config.zoomtofeature) {
         require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
@@ -42,13 +46,6 @@ define("app",
             });
          });
     }
-
-    // Macht noch Probleme
-    // if (Config.attributions && Config.attributions === true) {
-    //     require(["modules/attribution/view"], function (AttView) {
-    //         new AttView();
-    //     });
-    // }
 
     if (Config.geoAPI && Config.geoAPI === true) {
         require(["geoapi"], function () {
@@ -78,7 +75,7 @@ define("app",
         }
 
         if (Config.clickCounter && Config.clickCounter.desktop && Config.clickCounter.desktop !== "" && Config.clickCounter.mobile && Config.clickCounter.mobile !== "") {
-            require(["modules/clickCounter/view"], function (ClickCounterView) {
+            require(["modules/ClickCounter/view"], function (ClickCounterView) {
                 new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
             });
         }
@@ -114,10 +111,11 @@ define("app",
                     });
                     break;
                 }
-                case "gfi":{
-                    require(["modules/gfipopup/popup/popupLoader"], function (PopupLoader) {
-                        new PopupLoader();
+                case "gfi": {
+                    require(["modules/tools/gfi/model"], function (GfiModel) {
+                        new GfiModel();
                     });
+                    break;
                 }
                 case "coord": {
                     require(["modules/coordpopup/view"], function (CoordPopupView) {
@@ -224,6 +222,9 @@ define("app",
                             new LegendView();
                         }
                     });
+                    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
+                        new AddGeoJSON();
+                    });
                     break;
                 }
                 default: {
@@ -237,10 +238,10 @@ define("app",
             var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
                 controlsView = new ControlsView();
 
-            _.each(controls, function (control, index) {
+            _.each(controls, function (control) {
                 switch (control.id) {
                     case "toggleMenu": {
-                        if(control.attr === true){
+                        if (control.attr === true) {
                             var el = controlsView.addRow(control.id);
 
                             require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
@@ -250,7 +251,7 @@ define("app",
                         break;
                     }
                     case "zoom": {
-                        if(control.attr === true){
+                        if (control.attr === true) {
                             var el = controlsView.addRow(control.id);
 
                             require(["modules/controls/zoom/view"], function (ZoomControlView) {
@@ -268,7 +269,7 @@ define("app",
                         break;
                     }
                     case "mousePosition": {
-                        if(control.attr === true){
+                        if (control.attr === true) {
                             require(["modules/controls/mousePosition/view"], function (MousePositionView) {
                                 new MousePositionView();
                             });
@@ -276,7 +277,7 @@ define("app",
                         break;
                     }
                     case "fullScreen": {
-                        if(control.attr === true){
+                        if (control.attr === true) {
                             var el = controlsView.addRow(control.id);
 
                             require(["modules/controls/fullScreen/view"], function (FullScreenView) {
@@ -286,7 +287,7 @@ define("app",
                         break;
                     }
                     case "attributions": {
-                        if(control.attr === true){
+                        if (control.attr === true || typeof control.attr === "object") {
                             require(["modules/controls/attributions/view"], function (AttributionsView) {
                                 new AttributionsView();
                             });
@@ -305,8 +306,9 @@ define("app",
 
         if (sbconfig) {
             require(["modules/searchbar/view"], function (SearchbarView) {
-                new SearchbarView(sbconfig);
                 var title = Radio.request("Parser", "getPortalConfig").PortalTitle;
+
+                new SearchbarView(sbconfig);
                 if (title) {
                     require(["modules/title/view"], function (TitleView) {
                         new TitleView(title);

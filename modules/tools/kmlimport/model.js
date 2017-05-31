@@ -1,13 +1,11 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus",
     "backbone.radio",
     "proj4"
 ], function () {
     var Backbone = require("backbone"),
         ol = require("openlayers"),
-        EventBus = require("eventbus"),
         Radio = require("backbone.radio"),
         proj4 = require("proj4"),
         ImportTool;
@@ -98,7 +96,7 @@ define([
                 this.setFeatures(features);
             }
             else {
-                EventBus.trigger("alert", "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus");
+                Radio.trigger("Alert", "alert", "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus");
             }
         },
 
@@ -215,7 +213,7 @@ define([
                     break;
                 }
                 default: {
-                    EventBus.trigger("alert", "Unbekannte Geometry: <br><strong>" + geometry.getType());
+                    Radio.trigger("Alert", "alert", "Unbekannte Geometry: <br><strong>" + geometry.getType());
                 }
             }
             return transCoord;

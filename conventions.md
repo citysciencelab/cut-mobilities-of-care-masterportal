@@ -145,14 +145,52 @@ var html = "<div id='my-id'></div>";
 
 #### Kommentare
 * Mehrzeilige Kommentare sind gut
-* Kommentare am Zeilenende sind untersagt
 * JSDoc Style Kommentare sind gut, aber erfordern mehr Zeit
 
 #### Backbone spezifische Konventionen
-* "listenTo" anstatt "on" als Eventlistener
+* "listenTo" anstatt "on" als Eventlistener (nicht Backbone.Radio)
 * Die initialize-Funktion ist die erste Funktion in den Backbone-Objekten
 * Die render-Funktion ist in jeder View die zweite Funktion
 * Die Logik wird im Model programmiert(Controller)
+* Variablen, die Model-weit verwendet werden, sind in die Defaults des Models einzutragen
+```javascript
+defaults: {
+    variable1: "test",
+    variable2: 123,
+    variable3: ["array"],
+    variable4: {name: "object"},
+    ...
+}
+```
+* Model-weite Variablen werden nur durch Setter- und Getter-Funktionen geholt oder gesetzt, die paarweise am Ende des Models stehen.
+```javascript
+setVariable1: function (value) {
+    this.set("variable1", value);
+},
+getVariable1: function () {
+    return this.get("variable1");
+},
+setVariable2: function (value) {
+    this.set("variable2", value);
+},
+getVariable2: function () {
+    return this.get("variable2");
+}
+```
+"so nicht" Beispiele:
+```javascript
+randomFunc: function () {
+    var modelVar1 = this.get("variable1");
+    ...
+}
+```
+"so ja" Beispiele:
+```javascript
+randomFunc: function () {
+    var modelVar1 = this.getVariable1();
+    ...
+}
+```
 
 #### Sonstiges
 * Comma-First-Formatierung ist verboten
@@ -234,6 +272,7 @@ insert_final_newline = true
 * !improtant vermeiden
 * Nach dem Selektor gehört ein Leerzeichen
 * Regeln einrücken und über mehrere Zeilen und nicht in einer schreiben
+* CSS-Regeln die nur für ein Modul bestimmt sind, werden über das className-Attribut der entsprechenden Backbone.View erstellt
 
 "so nicht" Beispiel:
 ```css
@@ -242,7 +281,7 @@ insert_final_newline = true
 
 "so ja" Beispiel:
 ```css
-.btn-panel-submit {
+.print-tool > .btn-panel-submit {
     background-color: #e6e6e6;
     border-color: #ccc;
     color: #333;

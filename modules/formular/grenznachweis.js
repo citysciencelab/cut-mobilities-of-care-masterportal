@@ -39,25 +39,34 @@ define([
         },
         initialize: function () {
             // lese WPS-Url aus JSON ein
-            var resp, newURL;
+            var wpsService = Radio.request("RestReader", "getServiceById", Config.wpsID),
+                wpsURL = wpsService && wpsService[0] && wpsService[0].get("url") ? wpsService[0].get("url") : null,
+                newURL = wpsURL ? Radio.request("Util", "getProxyURL", wpsURL) : null;
 
-            resp = Radio.request("RestReader", "getServiceById", Config.wpsID);
-            newURL = Radio.request("Util", "getProxyURL", resp[0].get("url"));
-            this.set("wpsurl", newURL);
-            // Fenstermanagement
-            EventBus.on("winParams", this.setStatus, this);
-            this.set("layer", new ol.layer.Vector({
-                source: this.get("source"),
-                name: "grenznachweisDraw"
-            }));
-            Radio.trigger("Map", "addLayer", this.get("layer"));
-            // Cookie lesen
-            if (cookie.model.hasItem() === true) {
-                this.readCookie();
+            if (newURL) {
+                this.set("wpsurl", newURL);
+                // Fenstermanagement
+                this.listenTo(Radio.channel("Window"), {
+                    "winParams": this.setStatus
+                });
+                // Erzeuge OL-Layer für Geometrie
+                this.set("layer", new ol.layer.Vector({
+                    source: this.get("source"),
+                    name: "grenznachweisDraw"
+                }));
+                Radio.trigger("Map", "addLayer", this.get("layer"));
+                // Cookie lesen
+                if (cookie.model.hasItem() === true) {
+                    this.readCookie();
+                }
+            }
+            else {
+                Radio.trigger("Alert", "alert", "Die WPS-URL konnte nicht ermittelt werden.");
             }
         },
-        setStatus: function (args) { // Fenstermanagement
-            if (args[2] === "grenznachweis") {
+        setStatus: function (args) {
+            // Fenstermanagement
+            if (args[2].getId() === "formular") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -176,21 +185,27 @@ define([
             }
             else if (evt.target.id === "kundennummer") {
                 this.set("kundennummer", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenname") {
                 this.set("kundenname", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenadresse") {
                 this.set("kundenadresse", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenplz") {
                 this.set("kundenplz", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenort") {
                 this.set("kundenort", evt.target.value);
+                this.writeCookie();
             }
             else if (evt.target.id === "kundenemail") {
                 this.set("kundenemail", evt.target.value);
+                this.writeCookie();
             }
         },
         keyup: function (evt) {
@@ -494,7 +509,7 @@ define([
             $("#loader").show();
         },
         showErrorMessage: function () {
-            EventBus.trigger("alert", {
+            Radio.trigger("Alert", "alert", {
                 text: "<strong>Ihr Auftrag wurde leider nicht übermittelt.</strong> Bitte versuchen Sie es später erneut.",
                 kategorie: "alert-danger"
             });
@@ -508,7 +523,7 @@ define([
             else {
                 ergMsg = "";
             }
-            EventBus.trigger("alert", {
+            Radio.trigger("Alert", "alert", {
                 text: "<strong>Ihre Bestellung " + ergMsg + "wurde an unser Funktionspostfach übermittelt.</strong> Die Bearbeitungsdauer wird ca. ein bis drei Werktage betragen. Für telefonische Rückfragen steht Ihnen die Nummer (040) 42826 - 5204 von Montag bis Freitag (8:00-13:00) zur Verfügung. Wir danken für Ihren Auftrag! Sie erhalten umgehend eine E-Mail mit den Bestelldetails.",
                 kategorie: "alert-success"
             });
@@ -612,5 +627,5 @@ define([
         }
     });
 
-    return new GrenznachweisModel();
+    return GrenznachweisModel;
 });

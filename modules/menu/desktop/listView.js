@@ -36,12 +36,12 @@ define([
                 this.renderSelectedList();
             },
             render: function () {
-                $("#" + "Themen").html("");
+                $("#" + "tree").html("");
                 // Eine Themenebene rendern
-                this.renderSubTree("Themen", 0, 0, true);
-                $("ul#Themen ul#Overlayer").addClass("LayerListMaxHeight");
-                $("ul#Themen ul#SelectedLayer").addClass("LayerListMaxHeight");
-                $("ul#Themen ul#Baselayer").addClass("LayerListMaxHeight");
+                this.renderSubTree("tree", 0, 0, true);
+                $("ul#tree ul#Overlayer").addClass("LayerListMaxHeight");
+                $("ul#tree ul#SelectedLayer").addClass("LayerListMaxHeight");
+                $("ul#tree ul#Baselayer").addClass("LayerListMaxHeight");
                 Radio.trigger("Title", "setSize");
             },
             /**
@@ -69,12 +69,11 @@ define([
                     return;
                 }
 
-                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
-
-                var models = this.collection.add(lightModels);
+                var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
+                    models = this.collection.add(lightModels);
 
                 // Ordner öffnen, die initial geöffnet sein sollen
-                if (parentId === "Themen") {
+                if (parentId === "tree") {
                      _.each(models, function (model) {
                         if (model.getType() === "folder" && model.getIsInitiallyExpanded()) {
                             model.setIsExpanded(true);
@@ -106,13 +105,13 @@ define([
                     return model.getType() === "folder";
                 });
 
-                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Overlayer" && parentId !== "Themen") {
+                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Overlayer" && parentId !== "tree") {
                     folder = _.sortBy(folder, function (item) {
                         return item.getName();
                     });
                 }
 
-                if (parentId !== "Overlayer" && parentId !== "Themen") {
+                if (parentId !== "Overlayer" && parentId !== "tree") {
                     folder.reverse();
                 }
 
@@ -130,7 +129,7 @@ define([
                     return model.getType() === type;
                 });
 
-                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Themen") {
+                if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "tree") {
                     items = _.sortBy(items, function (item) {
                         return item.getName();
                     });
@@ -146,7 +145,7 @@ define([
                 _.each(models, function (model) {
                     if (model.getType() === "folder") {
                         // Oberste ebene im Themenbaum?
-                        if (model.getParentId() === "Themen") {
+                        if (model.getParentId() === "tree") {
                             new CatalogFolderView({model: model});
                         }
                         else {
@@ -170,7 +169,7 @@ define([
                 if (tool) {
                     tool.setIsActive(true);
                 }
-             }
+            }
         });
         return Menu;
     }

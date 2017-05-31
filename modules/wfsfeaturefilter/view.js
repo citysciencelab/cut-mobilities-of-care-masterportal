@@ -122,7 +122,12 @@ define([
                                 delete feature.defaultStyle;
                             }
                             else {
-                                feature.setStyle(layer.defaultStyle);
+                                if (layers[0].styleField){
+                                    feature.setStyle(layer.defaultStyle(feature));
+                                }
+                                else {
+                                    feature.setStyle(layer.defaultStyle);
+                                }
                             }
                         }
                         else if (featuredarstellen === false) {

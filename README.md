@@ -5,6 +5,8 @@ LGV Master-Portal
 
 #Allgemeines
 
+Änderung im Original.
+
 #Readmeund Kommentare/md Dateien stylen:
 http://markdown.de/
 
@@ -24,15 +26,6 @@ Proxies setzen:
 ```
 # git config --global http.proxy <proxy-url:port>
 # git config --global https.proxy <proxy-url:port>
-```
-
-## python in PATH
-python haben alle wegen ArcGIS schon installiert. Der Pfad zur python.exe muss in der PATH-Umgebungsvariable stehen, meist: C:\Program Files\Python27
-
-Test in cmd:
-
-```
-# python
 ```
 
 ## [Node.js](http://nodejs.org)
@@ -151,6 +144,18 @@ Einen lokalen Entwicklungsserver starten.
 ```
 
 yeaih! das Portal local ist für lokale Entwicklung konfiguriert.
+
+## grunt test
+Unter Firefox funktioniert grunt server nicht, hier muss statt dessen mit "grunt test" gearbeitet werden
+
+```
+# grunt test
+```
+
+anschließend "localhost:8001" im Firefox öffnen
+
+
+
 
 
 ## grunt build
