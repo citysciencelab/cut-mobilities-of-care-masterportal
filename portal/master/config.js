@@ -1,5 +1,5 @@
 define(function () {
-    
+
     var config = {
         animation: {
             steps: 30,
@@ -26,12 +26,12 @@ define(function () {
         wfsImgPath: "../components/lgv-config/img/",
         allowParametricURL: true,
         zoomtofeature: {
-            url: "http://geodienste.hamburg.de/Test_HH_WFST_Eventlotse",
-            version: "2.0.0",
+            url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
+            version: "1.1.0",
             typename: "app:hamburgconvention",
-            valuereference: "app:flaechenid",
+            attribute: "flaechenid",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4426"
+            layerid: "4561"
         },
         view: {},
         namedProjections: [

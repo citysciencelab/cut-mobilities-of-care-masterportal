@@ -22,7 +22,8 @@ define([
             "click .attributions-button": "toggleIsContentVisible"
         },
         initialize: function () {
-            var channel = Radio.channel("AttributionsView");
+            var channel = Radio.channel("AttributionsView"),
+                isViewMobile = Radio.request("Util", "isViewMobile");
 
             this.listenTo(channel, {
                 "renderAttributions": this.renderAttributions
@@ -36,10 +37,12 @@ define([
 
             this.render();
 
-            if (Radio.request("Util", "isAny") === true) {
-                this.toggleIsContentVisible();
+            if (isViewMobile === true) {
+                this.model.setIsContentVisible(this.model.getIsInitOpenMobile());
             }
-
+            else {
+                this.model.setIsContentVisible(this.model.getIsInitOpenDesktop());
+            }
         },
 
         render: function () {
