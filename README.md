@@ -213,3 +213,4 @@ Die Dokumentation erzeugen. Zurzeit nur für portale/master/config.js.
 ```
 
 aktualisiert die Verzeichnisse components/lgv-config und components/build-config, wenn dort neue Commits vorhanden sind.
+
