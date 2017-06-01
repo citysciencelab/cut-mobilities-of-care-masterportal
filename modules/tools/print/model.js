@@ -9,17 +9,18 @@ define([
 
         //
         defaults: {
+            printID: "99999",
             MM_PER_INCHES: 25.4,
             POINTS_PER_INCH: 72,
-            title: Config.print.title,
-            outputFilename: Config.print.outputFilename,
+            title: "PrintResult",
+            outputFilename: "Ausdruck",
             outputFormat: "pdf",
             gfiToPrint: [], // die sichtbaren GFIs
             center: Config.view.center,
             scale: {},
             layerToPrint: [],
             fetched: false, // gibt an, ob info.json schon geladen wurde
-            printGFI: Config.print.gfi ? Config.print.gfi : false,
+            printGFI: false,
             printurl: "",
             printGfiMarker: {
                 outerCircle: {
@@ -42,7 +43,7 @@ define([
          * Ermittelt die URL zum Fetchen in setStatus durch Abfrage der ServiceId
          */
         url: function () {
-            var resp = Radio.request("RestReader", "getServiceById", Config.print.printID),
+            var resp = Radio.request("RestReader", "getServiceById", this.getPrintID()),
                 url = resp[0] && resp[0].get("url") ? resp[0].get("url") : null,
                 printurl;
 
@@ -59,11 +60,7 @@ define([
 
         //
         initialize: function () {
-            var printGfiMarker = Config.print.printGfiMarker ? Config.print.printGfiMarker : undefined;
-
-            if (_.isUndefined(printGfiMarker) === false) {
-                this.setPrintGfiMarker(printGfiMarker);
-            }
+            this.setConfigParams();
 
             this.listenTo(this, {
                 "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
@@ -79,11 +76,31 @@ define([
                 "winParams": this.setStatus
             });
         },
+        setConfigParams: function () {
+            var printConf = Radio.request("ModelList", "getModelByAttributes", {id: "print"}),
+                printAttrs = printConf.attributes;
+            console.log(printAttrs);
 
+            if (_.has(printAttrs, "printID") === true) {
+                this.setPrintID(printAttrs.printID);
+            }
+            if (_.has(printAttrs, "title") === true) {
+                this.setTitle(printAttrs.title);
+            }
+            if (_.has(printAttrs, "printGFI") === true) {
+                this.setPrintGFI(printAttrs.printGFI);
+            }
+            if (_.has(printAttrs, "outputFilename") === true) {
+                this.setOutputFilename(printAttrs.outputFilename);
+            }
+            if (_.has(printAttrs, "printGfiMarker") === true) {
+                this.setPrintGfiMarker(printAttrs.printGfiMarker);
+            }
+        },
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
-        setTitle: function () {
+        setTitleFromForm: function () {
             if ($("#titleField").val()) {
-                this.set("title", $("#titleField").val());
+                this.setTitle($("#titleField").val());
             }
         },
 
@@ -96,6 +113,39 @@ define([
             return this.get("layout");
         },
 
+        // getter for printID
+        getPrintID: function () {
+            return this.get("printID");
+        },
+        // setter for printID
+        setPrintID: function (value) {
+            this.set("printID", value);
+        },
+        // getter for title
+        getTitle: function () {
+            return this.get("title");
+        },
+        // setter for title
+        setTitle: function (value) {
+            this.set("title", value);
+        },
+        // getter for printGFI
+        getPrintGFI: function () {
+            return this.get("printGFI");
+        },
+        // setter for printGFI
+        setPrintGFI: function (value) {
+            this.set("printGFI", value);
+        },
+
+        // getter for outputFilename
+        getOutputFilename: function () {
+            return this.get("outputFilename");
+        },
+        // setter for outputFilename
+        setOutputFilename: function (value) {
+            this.set("outputFilename", value);
+        },
         // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
         setScale: function (index) {
             var scaleval = this.get("scales")[index].value;
@@ -339,7 +389,7 @@ define([
                 srs: Config.view.epsg,
                 units: "m",
                 outputFilename: this.get("outputFilename"),
-                outputFormat: this.getoutputFormat(),
+                outputFormat: this.getOutputFormat(),
                 layers: this.get("layerToPrint"),
                 pages: [
                     {
@@ -519,13 +569,8 @@ define([
 
             return hex.length === 1 ? "0" + hex : hex;
         },
-        getoutputFormat: function () {
-            if (Config.print.outputFormat) {
-                return Config.print.outputFormat;
-            }
-            else {
-                return "pdf";
-            }
+        getOutputFormat: function () {
+            return this.get("outputFormat");
         },
 
         handlePreCompose: function (evt) {

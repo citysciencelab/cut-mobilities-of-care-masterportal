@@ -88,11 +88,11 @@ define(function () {
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
-        print: {
-            printID: "99999",
-            title: "Master",
-            gfi: true
-        },
+        // print: {
+        //     printID: "99999",
+        //     title: "Master",
+        //     gfi: true
+        // },
         geoAPI: false,
         clickCounter: {}
     };
