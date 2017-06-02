@@ -79,7 +79,6 @@ define([
         setConfigParams: function () {
             var printConf = Radio.request("ModelList", "getModelByAttributes", {id: "print"}),
                 printAttrs = printConf.attributes;
-            console.log(printAttrs);
 
             if (_.has(printAttrs, "printID") === true) {
                 this.setPrintID(printAttrs.printID);
