@@ -1,3 +1,13 @@
+# Changelog LGV Master-Portal 1.3.1
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  (none)
+
 # Changelog LGV Master-Portal 1.3.0
 
 NEU:
