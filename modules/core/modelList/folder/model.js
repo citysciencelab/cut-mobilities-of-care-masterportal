@@ -75,7 +75,7 @@ define([
             else {
                 this.setIsSelected(true);
             }
-            //this.collection.toggleIsSelectedLayers(this);
+            // this.collection.toggleIsSelectedLayers(this);
         },
         /**
          * Getter für Attribut "isLeafFolder"
@@ -91,7 +91,7 @@ define([
             else {
                 this.setIsExpanded(true);
             }
-            if (this.getParentId() === "Themen") {
+            if (this.getParentId() === "tree") {
                 this.collection.toggleCatalogs(this.getId());
             }
         },

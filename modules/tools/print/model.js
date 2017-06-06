@@ -20,7 +20,22 @@ define([
             layerToPrint: [],
             fetched: false, // gibt an, ob info.json schon geladen wurde
             printGFI: Config.print.gfi ? Config.print.gfi : false,
-            printurl: ""
+            printurl: "",
+            printGfiMarker: {
+                outerCircle: {
+                    fill: false,
+                    pointRadius: 8,
+                    stroke: true,
+                    strokeColor: "#ff0000",
+                    strokeWidth: 3
+                },
+                point: {
+                    fill: true,
+                    pointRadius: 1,
+                    fillColor: "#000000",
+                    stroke: false
+                }
+            }
         },
 
         /*
@@ -28,10 +43,11 @@ define([
          */
         url: function () {
             var resp = Radio.request("RestReader", "getServiceById", Config.print.printID),
-                url = resp[0] && resp[0].get("url") ? resp[0].get("url") : null;
+                url = resp[0] && resp[0].get("url") ? resp[0].get("url") : null,
+                printurl;
 
             if (url) {
-                var printurl = _.has(Config.print, "configYAML") === true ? url + "/" + Config.print.configYAML : url + "/master";
+                printurl = _.has(Config.print, "configYAML") === true ? url + "/" + Config.print.configYAML : url + "/master";
 
                 this.set("printurl", printurl);
                 return Config.proxyURL + "?url=" + printurl + "/info.json";
@@ -43,9 +59,15 @@ define([
 
         //
         initialize: function () {
+            var printGfiMarker = Config.print.printGfiMarker ? Config.print.printGfiMarker : undefined;
+
+            if (_.isUndefined(printGfiMarker) === false) {
+                this.setPrintGfiMarker(printGfiMarker);
+            }
+
             this.listenTo(this, {
                 "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
-                "change:specification": this.getPDFURL,
+                "change:specification": this.getPDFURL
             });
 
             this.listenTo(Radio.channel("MapView"), {
@@ -97,6 +119,8 @@ define([
 
         //
         setStatus: function (args) {
+            var scaletext;
+
             if (args[2].getId() === "print") {
                 if (this.get("fetched") === false) {
                     // get print config (info.json)
@@ -104,10 +128,10 @@ define([
                         cache: false,
                         success: function (model) {
                             _.each(model.get("scales"), function (scale) {
-                                var scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
+                                scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
 
                                 scale.name = "1: " + scaletext;
-                                scale.value = parseInt(scale.value);
+                                scale.value = parseInt(scale.value, 10);
                             });
                             model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                             model.setScaleByMapView();
@@ -156,20 +180,26 @@ define([
          */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
+            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
+            this.setLayer(Radio.request("Draw", "getLayer"));
             this.getGFIForPrint();
         },
         /**
         *
         */
         setLayerToPrint: function (layers) {
+            var params,
+                style,
+                layerURL;
+
             layers = _.sortBy(layers, function (layer) {
                 return layer.get("selectionIDX");
             });
             _.each(layers, function (layer) {
                 // nur wichtig für treeFilter
-                var params = {},
-                    style = [],
-                    layerURL = layer.get("url");
+                params = {},
+                style = [],
+                layerURL = layer.get("url");
 
                 if (layer.has("SLDBody")) {
                     params.SLD_BODY = layer.get("SLDBody");
@@ -179,6 +209,18 @@ define([
                 }
                 if (layer.has("style")) {
                     style.push(layer.get("style"));
+                }
+                // Für jeden angegebenen Layer muss ein Style angegeben werden.
+                // Wenn ein Style mit einem Blank angegeben wird,
+                // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
+                else {
+                    var numberOfLayer = layer.get("layers").split(",").length,
+                        defaultStyle = "";
+
+                    for (var i = 1; i < numberOfLayer; i++) {
+                        defaultStyle += ",";
+                    }
+                    style.push(defaultStyle);
                 }
                 // Damit Web-Atlas gedruckt werden kann
                 if (layer.get("id") === "51" || layer.get("id") === "53") {
@@ -203,11 +245,14 @@ define([
          *
          */
         setLayer: function (layer) {
-            if (!_.isUndefined(layer)) {
-                var features = [],
-                    circleFeatures = [], // Kreise können nicht gedruckt werden
-                    featureStyles = {};
+            var features = [],
+                circleFeatures = [], // Kreise können nicht gedruckt werden
+                featureStyles = {},
+                type,
+                styles,
+                style;
 
+            if (!_.isUndefined(layer)) {
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
@@ -229,9 +274,9 @@ define([
                             }
                         });
 
-                        var type = feature.getGeometry().getType(),
-                            styles = feature.getStyleFunction().call(feature),
-                            style = styles[0];
+                        type = feature.getGeometry().getType(),
+                        styles = feature.getStyleFunction().call(feature),
+                        style = styles[0];
                         // Punkte
                         if (type === "Point") {
                             // Punkte ohne Text
@@ -281,15 +326,14 @@ define([
             var layers = Radio.request("Map", "getLayers").getArray(),
                 animationLayer = _.filter(layers, function (lay) {
                     return lay.get("name") === "animationLayer";
-                });
+                }),
+                specification;
 
-            this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            this.setLayer(Radio.request("Draw", "getLayer"));
             if (animationLayer.length > 0) {
                 this.setLayer(animationLayer[0]);
             }
 
-            var specification = {
+            specification = {
                 // layout: $("#layoutField option:selected").html(),
                 layout: this.getLayout().name,
                 srs: Config.view.epsg,
@@ -327,19 +371,8 @@ define([
                     type: "Vector",
                     styleProperty: "styleId",
                     styles: {
-                        0: {
-                            fill: false,
-                            pointRadius: 8,
-                            stroke: true,
-                            strokeColor: "#ff0000",
-                            strokeWidth: 3
-                        },
-                        1: {
-                            fill: true,
-                            pointRadius: 1,
-                            fillColor: "#000000",
-                            stroke: false
-                        }
+                        0: this.getPrintGfiMarker().outerCircle,
+                        1: this.getPrintGfiMarker().point
                     },
                     geoJson: {
                         type: "FeatureCollection",
@@ -448,12 +481,13 @@ define([
         // Gibt den hexadezimal String und die Opacity zurück.
         getColor: function (value) {
             var color = value,
-                opacity = 1;
+                opacity = 1,
+                begin;
             // color kommt als array--> parsen als String
             color = color.toString();
 
             if (color.search("#") === -1) {
-                var begin = color.indexOf("(") + 1;
+                begin = color.indexOf("(") + 1;
 
                 color = color.substring(begin, color.length - 1);
                 color = color.split(",");
@@ -549,6 +583,42 @@ define([
             maxx = center[0] + (w / 2);
             maxy = center[1] + (h / 2);
             return [minx, miny, maxx, maxy];
+        },
+
+        /**
+         * Setzt die Parameter aus der config.js für den GFI Marker im Druck, wenn vorhanden
+         */
+        setPrintGfiMarker: function (printGfiMarker) {
+            printGfiMarker.outerCircle ? this.setOuterCircle(printGfiMarker.outerCircle) : null;
+            printGfiMarker.point ? this.setPoint(printGfiMarker.point) : null;
+        },
+
+        /**
+         * Gibt die Parameter für den GFI Marker im Druck zurück
+         */
+        getPrintGfiMarker: function () {
+            return this.get("printGfiMarker");
+        },
+
+        /**
+         * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Kreis des GFI Markers im Druck
+         */
+        setOuterCircle: function (outerCircle) {
+            outerCircle.fill ? this.getPrintGfiMarker().outerCircle.fill = outerCircle.fill : null;
+            outerCircle.pointRadius ? this.getPrintGfiMarker().outerCircle.pointRadius = outerCircle.pointRadius : null;
+            outerCircle.stroke ? this.getPrintGfiMarker().outerCircle.stroke = outerCircle.stroke : null;
+            outerCircle.strokeColor ? this.getPrintGfiMarker().outerCircle.strokeColor = outerCircle.strokeColor : null;
+            outerCircle.strokeWidth ? this.getPrintGfiMarker().outerCircle.strokeWidth = outerCircle.strokeWidth : null;
+        },
+
+        /**
+         * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Punkt im Kreis des GFI Markers im Druck
+         */
+        setPoint: function (point) {
+            point.fill ? this.getPrintGfiMarker().point.fill = point.fill : null;
+            point.pointRadius ? this.getPrintGfiMarker().point.pointRadius = point.pointRadius : null;
+            point.fillColor ? this.getPrintGfiMarker().point.fillColor = point.fillColor : null;
+            point.stroke ? this.getPrintGfiMarker().point.stroke = point.stroke : null;
         }
     });
 

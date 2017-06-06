@@ -3,7 +3,7 @@ define([
     "backbone.radio",
     "eventbus",
     "modules/searchbar/model"],
-function (Backbone, Radio, EventBus) {
+       function (Backbone, Radio, EventBus) {
         "use strict";
         return Backbone.Model.extend({
         /**
@@ -14,6 +14,7 @@ function (Backbone, Radio, EventBus) {
                 minChars: 3,
                 bPlans: [],
                 kita: [],
+                stoerfallbetrieb: [],
                 bplanURL: "" // bplan-URL für evtl. requests des mapHandlers
             },
         /**
@@ -26,17 +27,20 @@ function (Backbone, Radio, EventBus) {
          * @param {string} config.definitions[].definition.data - Query string des WFS-Request
          * @param {string} config.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|kita)
          */
-        initialize: function (config) {
-            if (config.minChars) {
-                this.set("minChars", config.minChars);
-            }
-            _.each(config.definitions, function (element) {
-                if (element.name === "bplan") {
-                    this.set("bplanURL", element.url);
-                    this.sendGetRequest(element.url, element.data, this.getFeaturesForBPlan, false);
+            initialize: function (config) {
+                if (config.minChars) {
+                    this.set("minChars", config.minChars);
                 }
+                _.each(config.definitions, function (element) {
+                    if (element.name === "bplan") {
+                        this.set("bplanURL", element.url);
+                        this.sendGetRequest(element.url, element.data, this.getFeaturesForBPlan, false);
+                    }
                 else if (element.name === "kita") {
                     this.sendRequest(element.url, element.data, this.getFeaturesForKita, false);
+                }
+                 else if (element.name === "stoerfallbetrieb") {
+                    this.sendRequest(element.url, element.data, this.getFeaturesForStoerfallbetrieb, false);
                 }
             }, this);
             EventBus.on("searchbar:search", this.search, this);
@@ -61,6 +65,9 @@ function (Backbone, Radio, EventBus) {
                 }
                 if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInKita(searchStringRegExp);
+                }
+                if (this.get("stoerfallbetrieb").length > 0 && searchString.length >= this.get("minChars")) {
+                    this.searchInStoerfallbetrieb(searchStringRegExp);
                 }
                 EventBus.trigger("createRecommendedList");
                 this.set("inUse", false);
@@ -92,6 +99,17 @@ function (Backbone, Radio, EventBus) {
                 // Prüft ob der Suchstring ein Teilstring vom kita ist
                 if (kita.name.search(searchStringRegExp) !== -1) {
                     EventBus.trigger("searchbar:pushHits", "hitList", kita);
+                }
+            }, this);
+        },
+        /**
+         *
+        */
+        searchInStoerfallbetrieb: function (searchStringRegExp) {
+            _.each(this.get("stoerfallbetrieb"), function (stoerfallbetrieb) {
+                // Prüft ob der Suchstring ein Teilstring vom stoerfallbetrieb ist
+                if (stoerfallbetrieb.name.search(searchStringRegExp) !== -1) {
+                    EventBus.trigger("searchbar:pushHits", "hitList", stoerfallbetrieb);
                 }
             }, this);
         },
@@ -171,6 +189,33 @@ function (Backbone, Radio, EventBus) {
                             coordinate: coordinate,
                             glyphicon: "glyphicon-home",
                             id: hitName.replace(/ /g, "") + "Kita"
+                        });
+                    }
+               }
+            }, this);
+        },
+            /**
+         * success-Funktion für die Störfallbetriebe. Schreibt Ergebnisse in "stoerfallbetrieb".
+         * @param  {xml} data - getFeature-Request
+         */
+        getFeaturesForStoerfallbetrieb: function (data) {
+            var hits = $("gml\\:featureMember,featureMember", data),
+                coordinate,
+                position,
+                hitName;
+
+            _.each(hits, function (hit) {
+               if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
+                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                    if ($(hit).find("app\\:standort, standort")[0] !== undefined) {
+                        hitName = $(hit).find("app\\:standort, standort")[0].textContent;
+                        this.get("stoerfallbetrieb").push({
+                            name: hitName,
+                            type: "Stoerfallbetrieb",
+                            coordinate: coordinate,
+                            glyphicon: "glyphicon-home",
+                            id: hitName.replace(/ /g, "") + "Stoerfallbetrieb"
                         });
                     }
                }

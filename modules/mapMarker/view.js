@@ -198,6 +198,11 @@ define([
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
+                case "Stoerfallbetrieb": {
+                    this.showMarker(hit.coordinate);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    break;
+                }
                 default: {
                     this.showMarker(hit.coordinate);
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));

@@ -78,7 +78,7 @@ define([
                     img = _.find(styleModels, function (num) {
                         return num.attributes.layerId === layer.attributes.id;
                     });
-
+                
                 if (distance <= maxDist) {
                     this.add(new PointOfInterest({
                         name: name,
