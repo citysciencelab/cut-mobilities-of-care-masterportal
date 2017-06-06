@@ -41,8 +41,9 @@ define([
         updateParamsStyleWMSArray: function (params) {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
             paramsStyleWMSArray2 = [];
-            _.each (paramsStyleWMSArray, function (paramsStyleWMS){
-                if(params.styleWMSName !== paramsStyleWMS.styleWMSName){
+
+            _.each (paramsStyleWMSArray, function (paramsStyleWMS) {
+                if (params.styleWMSName !== paramsStyleWMS.styleWMSName) {
                     paramsStyleWMSArray2.push(paramsStyleWMS);
                 }
             });
@@ -54,7 +55,7 @@ define([
 
         updateLegendFromStyleWMSArray: function () {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-                legendParams = this.get("legendParams")
+                legendParams = this.get("legendParams");
 
             _.each(this.get("legendParams"), function (legendParam, i) {
                     _.find (paramsStyleWMSArray, function (paramsStyleWMS) {
@@ -124,7 +125,7 @@ define([
             paramsStyleWMS = "";
 
             _.each(this.get("wmsLayerList"), function (layer) {
-                paramsStyleWMS = _.find(paramsStyleWMSArray, function(paramsStyleWMS){
+                paramsStyleWMS = _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
                     if (layer.get("name") === paramsStyleWMS.styleWMSName) {
                         return true;
                     }

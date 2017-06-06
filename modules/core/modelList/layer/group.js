@@ -97,6 +97,7 @@ define([
          */
         createLegendURL: function () {
             var legendURL = [];
+
             _.each(this.get("layerdefinitions"), function (layer) {
                 if (layer.legendURL === "" || layer.legendURL === undefined) {
                     var layerNames = layer.layers.split(",");
