@@ -118,6 +118,33 @@ define([
         },
 
         /**
+         * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
+         */
+        showLayerInformation: function () {
+            var metaID = [],
+                legendParams = Radio.request("Legend", "getLegendParams"),
+                name = this.get("name"),
+                legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null;
+
+            _.each(this.get("layerdefinitions"), function (layer) {
+                var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
+
+                if (layerMetaId) {
+                    metaID.push(layerMetaId);
+                }
+            });
+
+            Radio.trigger("LayerInformation", "add", {
+                "id": this.getId(),
+                "legendURL": legendURL,
+                "metaID": metaID,
+                "layername": name
+            });
+
+            this.setLayerInfoChecked(true);
+        },
+
+        /**
          * Setter für das Attribut "childLayerSources"
          * @param {ol.source[]} value
          */

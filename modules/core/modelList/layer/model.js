@@ -379,24 +379,11 @@ define(function (require) {
         showLayerInformation: function () {
             var metaID = [],
                 legendParams = Radio.request("Legend", "getLegendParams"),
-                isGroupLayer = this.get("layerdefinitions") ? true : false,
                 name = this.get("name"),
-                legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null;
+                legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null,
+                layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
-            if (isGroupLayer) {
-                _.each(this.get("layerdefinitions"), function (layer) {
-                    var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
-
-                    if (layerMetaId) {
-                        metaID.push(layerMetaId);
-                    }
-                });
-            }
-            else {
-                var layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
-
-                metaID.push(layerMetaId);
-            }
+            metaID.push(layerMetaId);
 
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
