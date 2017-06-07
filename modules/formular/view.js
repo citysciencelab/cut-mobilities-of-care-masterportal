@@ -1,12 +1,11 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "config",
     "modules/formular/grenznachweis",
     "text!modules/formular/grenznachweis.html",
     "text!modules/formular/grenznachweis.css"
-], function (Backbone, Radio, EventBus, Config, Grenznachweismodel, Grenznachweistemplate, Grenznachweiscss) {
+], function (Backbone, Radio, Config, Grenznachweismodel, Grenznachweistemplate, Grenznachweiscss) {
     "use strict";
     var formularView = Backbone.View.extend({
         id: "formularWin",
@@ -15,9 +14,6 @@ define([
                 this.model = new Grenznachweismodel();
                 this.template = _.template(Grenznachweistemplate);
                 $("head").prepend("<style>" + Grenznachweiscss + "</style>");
-                var clickFunction = function () {
-                    EventBus.trigger("toggleWin", ["grenznachweis", "Bestellung Grenznachweis", "glyphicon glyphicon-shopping-cart"]);
-                };
             }
             this.listenTo(this.model, {
                 "change:isCollapsed render invalid change:isCurrentWin": this.render

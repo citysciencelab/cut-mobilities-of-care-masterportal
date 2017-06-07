@@ -14,7 +14,6 @@ require.config({
         proj4: "../components/proj4/dist/proj4",
         videojs: "../components/video.js/dist/video-js/video",
         moment: "../components/moment/min/moment.min",
-        eventbus: "EventBus",
         geoapi: "GeoAPI",
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
         app: "app",
