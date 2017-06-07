@@ -528,7 +528,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |gfi|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
 |printID|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
 |title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
-|[printGfiMarker](#markdown-header-printGfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
+|[gfiMarker](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
 
 **Beispiel:**
 
@@ -541,9 +541,9 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
             "glyphicon": "glyphicon-print",
             "printID": "99999",
             "title": "Master",
-            "printGFI": true,
+            "gfi": true,
             "outputFilename": "DruckPDF",
-            "printGfiMarker": {
+            "gfiMarker": {
               "outerCircle": {
                 "fill": false,
                 "pointRadius": 8,
@@ -563,7 +563,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 
 ******
 ******
-#### Portalconfig.menu.tools.children.print.printGfiMarker ####
+#### Portalconfig.menu.tools.children.print.gfiMarker ####
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |outerCircle|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|

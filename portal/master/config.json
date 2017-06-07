@@ -86,9 +86,9 @@
             "glyphicon": "glyphicon-print",
             "printID": "99999",
             "title": "Master",
-            "printGFI": true,
+            "gfi": true,
             "outputFilename": "DruckPDF",
-            "printGfiMarker": {
+            "gfiMarker": {
               "outerCircle": {
                 "fill": false,
                 "pointRadius": 8,
