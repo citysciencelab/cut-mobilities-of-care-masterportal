@@ -4,34 +4,36 @@
 
 2. Im nächsten Schritt entpacken Sie die ZIP-Datei durch einen Rechtsklick auf den Ordner examples.zip.
 
-3. Um das Portal öffentlich zugänglich zu machen (zum Beispiel im Internet), ist es notwendig, das Portal auf einem Webserver aufzusetzen. Dazu verschieben Sie den entpackten Ordner auf den Webserver (z.B. in das htdocs-Verzeichnis eines Apache-Servers). 
+3. Um das Portal öffentlich zugänglich zu machen (zum Beispiel im Internet), ist es notwendig, das Portal auf einem Webserver aufzusetzen. Dazu verschieben Sie den entpackten Ordner auf den Webserver (z.B. in das htdocs-Verzeichnis eines Apache-Servers).
 
 4. Der Ordner enthält die folgende Struktur:
 
-    **components**
+    - components/
+    - css/
+    - doc/
+    - fonts/
+    - img/
+    - js/
+    - lgv-config/
+        - services*.json
+        - rest-services*.json
+        - style.json
+    - portale/
+        - simple/
+            - config.js
+            - config.json
+        - simpleTree/
+            - config.js
+            - config.json
 
-    **css**
+    Der Ordner *lgv-config* enthält die globalen Konfigurationsdateien [*services.json*](services.json.md), [*rest-services.json*](rest-services.json.md) und [*style.json*](style.json.md).
 
-    **doc**
-
-    **fonts**
-
-    **img**
-
-    **js**
-
-    **lgv-config**
-
-    **portale**
-
-    Der Ordner *lgv-config* enthält die globalen [Konfigurationsdateien](https://bitbucket.org/lgv-g12/lgv/src/5f1770187077f652ac92ce9ea48904a14865130e/doc/doc.md?at=doc-md&fileviewer=file-view-default) [*services.json*](https://bitbucket.org/lgv-g12/lgv/src/5f1770187077f652ac92ce9ea48904a14865130e/doc/services.json.md), [*rest-services.json*](https://bitbucket.org/lgv-g12/lgv/src/5f1770187077f652ac92ce9ea48904a14865130e/doc/rest-services.json.md) und [*style.json*](https://bitbucket.org/lgv-g12/lgv/src/5f1770187077f652ac92ce9ea48904a14865130e/doc/style.json.md).
-
-    Im Ordner *portale* befinden sich zwei vorkonfigurierte Beispiel-Anwendungen (simple und simpleTree) jeweils mit den portalspezifischen Konfigurationsdateien [*config.js*](https://bitbucket.org/lgv-g12/lgv/src/5f1770187077f652ac92ce9ea48904a14865130e/doc/config.js.md?fileviewer=file-view-default) und [*config.json*](https://bitbucket.org/lgv-g12/lgv/src/5f1770187077f652ac92ce9ea48904a14865130e/doc/config.json.md?fileviewer=file-view-default).
+    Im Ordner *portale* befinden sich zwei vorkonfigurierte Beispiel-Anwendungen (simple und simpleTree) jeweils mit den portalspezifischen Konfigurationsdateien [*config.js*](config.js.md) und [*config.json*](config.json.md).
 
 5. Wenn Sie den Ordnernamen *examples* belassen haben, können Sie die Beispielportale mit folgenden URLs über einen Browser aufrufen. Anderenfalls ersetzen Sie bitte *examples* durch den von Ihnen gewählten Ordnernamen.
 
     **[Name des Webservers]/examples/portale/simple/index.html** oder
-    
+
     **[Name des Webservers]/examples/portale/simpleTree/index.html**
 
 ![Browseraufruf.JPG](https://bitbucket.org/repo/88K5GB/images/864809418-Browseraufruf.JPG)
@@ -42,13 +44,13 @@
 
 2. Anschließend duplizieren Sie bitte den Ordner *simple* oder *simpleTree* im Verzeichnis *portale* und benennen ihn um (z.B. in *mein_portal*), sodass Sie nun drei Ordner im Verzeichnis *portale* haben.
 
-3. Sie können nun die Konfigurationsdateien ([config.js](https://bitbucket.org/lgv-g12/lgv/src/5f1770187077f652ac92ce9ea48904a14865130e/doc/config.js.md?fileviewer=file-view-default) und [config.json](https://bitbucket.org/lgv-g12/lgv/src/5f1770187077f652ac92ce9ea48904a14865130e/doc/config.json.md?fileviewer=file-view-Default)) innerhalb des neuen Ordners *mein_portal* anpassen (z.B. die Themen im Themenbaum festlegen, die passenden Werkzeuge zur Verfügung stellen, die Hintergrundkarten anpassen, den Namen des Portals ändern ...)
+3. Sie können nun die Konfigurationsdateien ([config.js](config.js.md) und [config.json](config.json.md)) innerhalb des neuen Ordners *mein_portal* anpassen (z.B. die Themen im Themenbaum festlegen, die passenden Werkzeuge zur Verfügung stellen, die Hintergrundkarten anpassen, den Namen des Portals ändern ...)
 
 4. Ihr neues Portal können Sie nun mit folgender URL über den Browser abrufen:
- 
+
     **[Name des Webservers]/examples/portale/mein_portal/index.html**
 
-#### Beispielcode für ein erstes individuelles Portal 
+#### Beispielcode für ein erstes individuelles Portal
 ```
 #!javascript
 {
@@ -72,14 +74,14 @@
           "id": "94",
           "visibility": true,
           "gfiAttributes": "ignore"
-        }, 
+        },
 		...      ]
     },
     "Fachdaten":
     {
       "Ordner": [
 	    {
-		  "Titel": "Test", 
+		  "Titel": "Test",
 		  "Layer": [
         {
           "id": "45",
@@ -93,7 +95,7 @@
         }
 		]
 		}
-		], 
+		],
 		"Layer": [
         {
           "id": "1711",
@@ -137,19 +139,19 @@ ________________________________________________
           "id": "95",
           "visibility": true,
           "gfiAttributes": "ignore"
-        }, 
+        },
 		 {
           "id": "94",
           "visibility": true,
           "gfiAttributes": "ignore"
-        }, 
+        },
         ...      ]
     },
     "Fachdaten":
     {
       "Ordner": [
 	    {
-		  "Titel": "Test", 
+		  "Titel": "Test",
 		  "Layer": [
                 {
           "id": "1561"
