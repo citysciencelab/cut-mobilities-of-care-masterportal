@@ -18,7 +18,7 @@
         - services*.json
         - rest-services*.json
         - style.json
-    - portale/
+    - portalconfigs/
         - simple/
             - config.js
             - config.json
@@ -32,9 +32,9 @@
 
 5. Wenn Sie den Ordnernamen *examples* belassen haben, können Sie die Beispielportale mit folgenden URLs über einen Browser aufrufen. Anderenfalls ersetzen Sie bitte *examples* durch den von Ihnen gewählten Ordnernamen.
 
-    **[Name des Webservers]/examples/portale/simple/index.html** oder
+    **[Name des Webservers]/examples/portalconfigs/simple/index.html** oder
 
-    **[Name des Webservers]/examples/portale/simpleTree/index.html**
+    **[Name des Webservers]/examples/portalconfigs/simpleTree/index.html**
 
 ![Browseraufruf.JPG](https://bitbucket.org/repo/88K5GB/images/864809418-Browseraufruf.JPG)
 ###### So sollte der Browseraufruf des Portals *simple* aussehen
@@ -42,7 +42,7 @@
 ## Und so wird aus einer Beispiel-Anwendung ein individuelles Portal
 1. Gegebenenfalls können Sie die globalen Konfigurationsdateien im Ordner *lgv-config* anpassen (z.B. Luftbilder anderer Bundesländer verfügbar machen, neue Icons hinzufügen, bestehende Icons verändern etc.)
 
-2. Anschließend duplizieren Sie bitte den Ordner *simple* oder *simpleTree* im Verzeichnis *portale* und benennen ihn um (z.B. in *mein_portal*), sodass Sie nun drei Ordner im Verzeichnis *portale* haben.
+2. Anschließend duplizieren Sie bitte den Ordner *simple* oder *simpleTree* im Verzeichnis *portale* und benennen ihn um (z.B. in *mein_portal*), sodass Sie nun drei Ordner im Verzeichnis *portalconfigs* haben.
 
 3. Sie können nun die Konfigurationsdateien ([config.js](config.js.md) und [config.json](config.json.md)) innerhalb des neuen Ordners *mein_portal* anpassen (z.B. die Themen im Themenbaum festlegen, die passenden Werkzeuge zur Verfügung stellen, die Hintergrundkarten anpassen, den Namen des Portals ändern ...)
 
