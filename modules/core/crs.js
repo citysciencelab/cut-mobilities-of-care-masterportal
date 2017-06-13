@@ -41,6 +41,8 @@ define([
                 "getProjection": function (name) {
                     return this.getProjection(name);
                 },
+                 "transformToMapProjection": this.transformToMapProjection,
+                 "transformFromMapProjection": this.transformFromMapProjection,
                 "transform": function (par) {
                     return this.transform(par);
                 }
@@ -50,7 +52,22 @@ define([
         getProjection: function (name) {
             return Proj4.defs(name);
         },
-
+        transformToMapProjection: function(sourceProjection, point) {
+            var mapProjection = Radio.request("MapView", "getProjection"),
+                targetProjection;
+            if(mapProjection && sourceProjection && point) {
+                targetProjection = this.getProjection(mapProjection.getCode());
+                return Proj4(sourceProjection, targetProjection, point);
+            }
+        },
+        transformFromMapProjection: function (targetProjection, point) {
+            var mapProjection = Radio.request("MapView", "getProjection"),
+                sourceProjection;
+            if(mapProjection && targetProjection && point) {
+                sourceProjection = this.getProjection(mapProjection.getCode());
+                return Proj4(sourceProjection, targetProjection, point);
+            }
+        },
         transform: function (par) {
             if (!this.getProjection(par.fromCRS) || !this.getProjection(par.toCRS) || !par.point) {
                 Radio.trigger("Alert", "alert", {text: "Koordinatentransformation mit ungültigen Eingaben wird abgebrochen.", kategorie: "alert-danger"});
