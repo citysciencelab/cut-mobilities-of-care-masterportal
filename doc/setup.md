@@ -36,7 +36,7 @@
 
     **[Name des Webservers]/examples/portalconfigs/simpleTree/index.html**
 
-![Browseraufruf.JPG](https://bitbucket.org/repo/88K5GB/images/864809418-Browseraufruf.JPG)
+![Browseraufruf.JPG](https://bitbucket.org/repo/88K5GB/images/3337234211-Browseraufruf.JPG)
 ###### So sollte der Browseraufruf des Portals *simple* aussehen
 
 ## Und so wird aus einer Beispiel-Anwendung ein individuelles Portal
@@ -169,7 +169,7 @@ ________________________________________________
 ________________________________________________
 ________________________________________________
 
-![VerkehrsPortal.JPG](https://bitbucket.org/repo/88K5GB/images/224471267-VerkehrsPortal.JPG)
+![VerkehrsPortal.JPG](https://bitbucket.org/repo/88K5GB/images/4037674783-VerkehrsPortal.JPG)
 ###### Dies könnte der Browseraufruf eines individuell erstellten Portals sein
 
 
