@@ -23,6 +23,7 @@ define([
                     // z.B.: {id: "5181", visible: false}
                     if (_.isString(layer.id)) {
                         var objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.id});
+
                         if (_.isNull(objFromRawList)) { // Wenn LayerID nicht definiert, dann Abbruch
                             return;
                         }
@@ -67,9 +68,10 @@ define([
                                     name: layer.name[index],
                                     id: layer.id + style.toLowerCase(),
                                     styles: layer.styles[index],
+                                    legendURL: layer.legendURL[index],
                                     level: level,
                                     isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
-                                }, _.omit(layer, "id", "name", "styles")));
+                                }, _.omit(layer, "id", "name", "styles", "legendURL")));
                         }, this);
                     }
                     else {
