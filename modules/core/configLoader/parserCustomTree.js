@@ -67,9 +67,10 @@ define([
                                     name: layer.name[index],
                                     id: layer.id + style.toLowerCase(),
                                     styles: layer.styles[index],
+                                    legendURL: layer.legendURL[index],
                                     level: level,
                                     isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
-                                }, _.omit(layer, "id", "name", "styles")));
+                                }, _.omit(layer, "id", "name", "styles", "legendURL")));
                         }, this);
                     }
                     else {
