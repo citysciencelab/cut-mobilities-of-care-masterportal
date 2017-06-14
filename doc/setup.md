@@ -10,7 +10,6 @@
 
     - components/
     - css/
-    - doc/
     - fonts/
     - img/
     - js/
