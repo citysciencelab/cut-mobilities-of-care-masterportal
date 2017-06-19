@@ -21,7 +21,6 @@ define([
             if (this.isGeoLocationPossible()) {
                 showGeolocation = true;
             }
-            
             if (showGeolocation) {// Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
 
                 var channel = Radio.channel("orientation");
@@ -73,7 +72,7 @@ define([
             }
         },
 
-        toggleLocateRemoveClass: function() {
+        toggleLocateRemoveClass: function () {
             $("#geolocate").removeClass("toggleButtonPressed");
         },
         /*

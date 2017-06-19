@@ -1,8 +1,7 @@
 define([
     "backbone",
-    "backbone.radio",
-    "eventbus"
-    ], function (Backbone, Radio, EventBus) {
+    "backbone.radio"
+    ], function (Backbone, Radio) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -23,8 +22,9 @@ define([
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
-            EventBus.on("searchbar:search", this.search, this);
-            EventBus.on("sendNodeChild", this.getNodesForSearch, this);
+            this.listenTo(Radio.channel("Searchbar"), {
+                "search": this.search
+            });
         },
         /**
         *
@@ -39,7 +39,7 @@ define([
 
                 this.searchInLayers(searchStringRegExp);
                 this.searchInNodes(searchStringRegExp);
-                EventBus.trigger("createRecommendedList");
+                Radio.trigger("Searchbar", "createRecommendedList");
                 this.set("inUse", false);
             }
         },
@@ -56,21 +56,9 @@ define([
                 var nodeName = node.name.replace(/ /g, "");
 
                 if (nodeName.search(searchStringRegExp) !== -1) {
-                    EventBus.trigger("searchbar:pushHits", "hitList", node);
+                    Radio.trigger("Searchbar", "pushHits", "hitList", node);
                 }
             }, this);
-        },
-        /**
-         * @description Lädt initial die Node in eine Variable. Wird in nodechild getriggert.
-         * @param {Object} Node
-         */
-        getNodesForSearch: function (node) {
-            this.get("nodes").push({
-                name: node.get("name"),
-                type: "Thema",
-                glyphicon: "glyphicon-list",
-                id: node.cid, model: node
-            });
         },
         /**
         * @description Führt die Suche in der Layervariablen mit Suchstring aus.
@@ -84,15 +72,15 @@ define([
                 if (layer.metaName !== null) {
                     metaName = layer.metaName.replace(/ /g, "");
                     if (metaName.search(searchStringRegExp) !== -1 && metaName === layerName) {
-                        EventBus.trigger("searchbar:pushHits", "hitList", layer);
+                        Radio.trigger("Searchbar", "pushHits", "hitList", layer);
                     }
                     else if (metaName.search(searchStringRegExp) !== -1 || layerName.search(searchStringRegExp) !== -1) {
-                        EventBus.trigger("searchbar:pushHits", "hitList", layer);
+                        Radio.trigger("Searchbar", "pushHits", "hitList", layer);
                     }
                 }
                 else {
                     if (layerName.search(searchStringRegExp) !== -1) {
-                        EventBus.trigger("searchbar:pushHits", "hitList", layer);
+                        Radio.trigger("Searchbar", "pushHits", "hitList", layer);
                     }
                 }
             }, this);

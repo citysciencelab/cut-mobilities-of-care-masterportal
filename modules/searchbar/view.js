@@ -4,9 +4,8 @@ define([
     "text!modules/searchbar/templateRecommendedList.html",
     "text!modules/searchbar/templateHitList.html",
     "modules/searchbar/model",
-    "eventbus",
     "backbone.radio"
-], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, EventBus, Radio) {
+], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, Radio) {
     "use strict";
     return Backbone.View.extend({
         model: Searchbar,
@@ -83,14 +82,15 @@ define([
             }
             this.className = "navbar-form col-xs-9";
 
-            EventBus.on("searchInput:setFocus", this.setFocus, this);
-            EventBus.on("searchInput:deleteSearchString", this.deleteSearchString, this);
-
             // this.listenTo(this.model, "change:searchString", this.render);
             this.listenTo(this.model, "change:recommendedList", function () {
                 this.renderRecommendedList();
             });
 
+            this.listenTo(Radio.channel("Searchbar"), {
+                "deleteSearchString": this.deleteSearchString,
+                "setFocus": this.setFocus
+            });
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function () {
                     if ($(window).width() >= 768) {
@@ -171,7 +171,7 @@ define([
                 this.collapseHits($(event.target));
             },
             "click .btn-search-question": function () {
-                EventBus.trigger("showWindowHelp", "search");
+                Radio.trigger("Quickhelp", "showWindowHelp", "search");
             },
             "keydown": "navigateList",
             "click": function () {
@@ -200,7 +200,7 @@ define([
             Radio.trigger("Title", "setSize");
         },
         /**
-        * @description Methode, um den Searchstring über den Eventbus zu steuern ohne Event auszulösen
+        * @description Methode, um den Searchstring über den Radio zu steuern ohne Event auszulösen
         * @param {string} searchstring - Der einzufügende Searchstring
         */
         setSearchbarString: function (searchstring) {
@@ -251,7 +251,7 @@ define([
             // }
         },
         /*
-         * Methode, um den Focus über den EventBus in SearchInput zu legen
+         * Methode, um den Focus über den Radio in SearchInput zu legen
          */
         setFocus: function () {
             $("#searchInput").focus();
@@ -279,8 +279,8 @@ define([
             // 2. Verberge Suchmenü
             this.hideMenu();
             // 3. Zoome ggf. auf Ergebnis
-            EventBus.trigger("mapHandler:zoomTo", hit);
-            // 4. Triggere Treffer über Eventbus
+            Radio.trigger("MapMarker", "zoomTo", hit);
+            // 4. Triggere Treffer über Radio
             // Wird benötigt für IDA und sgv-online, ...
             Radio.trigger("Searchbar", "hit", hit);
             // 5. Beende Event
@@ -516,7 +516,7 @@ define([
             $("#searchInput + span").hide();
             this.focusOnEnd($("#searchInput"));
             this.hideMarker();
-            EventBus.trigger("mapHandler:clearMarker", this);
+            Radio.trigger("MapMarker", "clearMarker");
             this.clearSelection();
             // Suchvorschläge löschen
             $("#searchInputUL").html("");
@@ -530,7 +530,7 @@ define([
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
 
             if (hit.type === "Adresse" || hit.type === "Stadtteil" || hit.type === "Olympiastandort" || hit.type === "Paralympiastandort") {
-                EventBus.trigger("mapHandler:showMarker", hit.coordinate);
+                Radio.trigger("MapMarker", "showMarker", hit.coordinate);
             }
         },
         /**
@@ -538,7 +538,7 @@ define([
         */
         hideMarker: function () {
             if ($(".dropdown-menu-search").css("display") === "block") {
-                EventBus.trigger("mapHandler:hideMarker", this);
+                Radio.trigger("MapMarker", "hideMarker");
             }
         },
 

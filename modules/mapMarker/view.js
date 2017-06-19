@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "modules/mapMarker/model",
-    "eventbus"
-    ], function (Backbone, Radio, ol, MapHandlerModel, EventBus) {
+    "modules/mapMarker/model"
+    ], function (Backbone, Radio, ol, MapHandlerModel) {
     "use strict";
 
     var searchVector = new ol.layer.Vector({
@@ -72,22 +71,14 @@ define([
             }, this);
 
             channel.on({
-                "mapHandler:clearMarker": this.clearMarker,
-                "mapHandler:zoomTo": this.zoomTo,
-                "mapHandler:hideMarker": this.hideMarker,
-                "mapHandler:showMarker": this.showMarker,
-                "mapHandler:zoomToBPlan": this.zoomToBPlan,
-                "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
+                "clearMarker": this.clearMarker,
+                "zoomTo": this.zoomTo,
+                "hideMarker": this.hideMarker,
+                "showMarker": this.showMarker,
+                "zoomToBPlan": this.zoomToBPlan,
+                "zoomToBKGSearchResult": this.zoomToBKGSearchResult
             }, this);
 
-            this.listenTo(EventBus, {
-                "mapHandler:clearMarker": this.clearMarker,
-                "mapHandler:zoomTo": this.zoomTo,
-                "mapHandler:hideMarker": this.hideMarker,
-                "mapHandler:showMarker": this.showMarker,
-                "mapHandler:zoomToBPlan": this.zoomToBPlan,
-                "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
-            }, this);
             this.render();
             // For BauInfo: requests customModule and askes for marker position to set.
             markerPosition = Radio.request("CustomModule", "getMarkerPosition");
@@ -116,7 +107,7 @@ define([
             this.clearMarker();
             switch (hit.type) {
                 case "Ort": {
-                    EventBus.trigger("bkg:bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
+                    Radio.trigger("Searchbar", "bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
                     break;
                 }
                 case "Straße": {
@@ -173,11 +164,11 @@ define([
                     break;
                 }
                 case "festgestellt": {
-                    EventBus.trigger("specialWFS:requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
+                    Radio.trigger("SpecialWFS", "requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
                     break;
                 }
                 case "im Verfahren": {
-                    EventBus.trigger("specialWFS:requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
+                    Radio.trigger("SpecialWFS", "requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
                     break;
                 }
                 case "SearchByCoord": {

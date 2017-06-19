@@ -521,10 +521,49 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|gfi|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
+|printID|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
+|title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
+|[gfiMarker](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
+
+**Beispiel:**
+
+
+```
+#!json
+
+"print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Master",
+            "gfi": true,
+            "outputFilename": "DruckPDF",
+            "gfiMarker": {
+              "outerCircle": {
+                "fill": false,
+                "pointRadius": 8,
+                "stroke": true,
+                "strokeColor": "#ff0000",
+                "strokeWidth": 3
+              },
+              "point": {
+                "fill": true,
+                "pointRadius": 1,
+                  "fillColor": "#000000",
+                  "stroke": false
+                }
+            }
+          }
+```
 
 ******
 ******
-
+#### Portalconfig.menu.tools.children.print.gfiMarker ####
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|outerCircle|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
+|point|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
 
 ###### Portalconfig.menu.tools.children.routing ######
 Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Parameter müssen am Werkzeug vorhanden sein:

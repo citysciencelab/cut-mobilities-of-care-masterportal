@@ -1,12 +1,11 @@
 define([
     "backbone",
-    "eventbus",
     "backbone.radio",
     "openlayers",
     "proj4",
     "config",
     "backbone.radio"
-], function (Backbone, EventBus, Radio, ol, proj4, Config, Radio) {
+], function (Backbone, Radio, ol, proj4, Config, Radio) {
 
     var OrientationModel = Backbone.Model.extend({
         defaults: {
@@ -185,7 +184,7 @@ define([
                 _.each(visibleWFSLayers, function (layer) {
                     if (layer.has("layerSource") === true) {
                         layer.get("layer").getSource().forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
-                            EventBus.trigger("setModel", feature, this.get("distance"), this.get("newCenter"), layer);
+                            Radio.trigger("Orientation", "setModel", feature, this.get("distance"), this.get("newCenter"), layer);
                         }, this);
                     }
                 }, this);

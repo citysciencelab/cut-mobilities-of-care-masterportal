@@ -13,11 +13,6 @@ define(function () {
        layerConf: "../components/lgv-config/services-fhhnet-ALL.json",
        restConf: "../components/lgv-config/rest-services-fhhnet.json",
        styleConf: "../components/lgv-config/style.json",
-       print: {
-           printID: "99999",
-           title: "Master-Portal",
-           gfi: false
-       },
        proxyURL: "/cgi-bin/proxy.cgi",
        mouseHover: true,
        scaleLine: true,
