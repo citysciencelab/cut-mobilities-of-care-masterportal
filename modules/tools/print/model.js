@@ -223,11 +223,15 @@ define([
                     style.push(defaultStyle);
                 }
                 // Damit Web-Atlas gedruckt werden kann
-                if (layer.get("id") === "51" || layer.get("id") === "53") {
-                    layerURL = layer.get("url") + "__108a7035-f163-6294-f7dc-a81a2cfa13d6";
+                if (layer.get("url").indexOf("gdi_mrh_themen") >= 0) {
+                    layerURL = layer.get("url").replace("gdi_mrh_themen", "gdi_mrh_themen_print");
                 }
-                if (layer.get("id") === "55") {
-                    layerURL = layer.get("url") + "__e5742a5e-f48c-9470-19c0-9d522cfa13d6";
+                else if (layer.get("url").indexOf("gdi_mrh") >= 0) {
+                    layerURL = layer.get("url").replace("gdi_mrh", "gdi_mrh_print");
+                }
+                else if (layer.get("url").startsWith("http://geoportal.metropolregion.hamburg.de") ||
+                         layer.get("url").startsWith("http://87.106.16.168")) {
+                    layerURL = layer.get("url") + "_print";
                 }
                 this.push("layerToPrint", {
                     type: layer.get("typ"),
