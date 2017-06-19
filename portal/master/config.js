@@ -1,5 +1,4 @@
 define(function () {
-
     var config = {
         animation: {
             steps: 30,

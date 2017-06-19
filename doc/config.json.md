@@ -234,8 +234,6 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 
 
 **Beispiel contact:**
-
-
 ```
 #!json
 
@@ -357,8 +355,6 @@ Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Men�
         }
     }
 ```
-
-
 
 ******
 ******
@@ -715,9 +711,6 @@ Unter *tree* wird der Themenbaum konfiguriert.
 
 ******
 ******
-
-
-
 
 ### Portalconfig.searchBar ###
 Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden. Auch diese Konfigurationen sind vom Typ *object*. Sie sind ebenfalls verlinkt und werden im Anschluss an diese Auflistung näher beschrieben.

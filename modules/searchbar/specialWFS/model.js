@@ -63,7 +63,7 @@ define([
             this.set("searchString", searchString);
             if (this.get("inUse") === false) {
                 this.set("inUse", true);
-                searchString = searchString.replace(/[()]/g, '\\$&');
+                searchString = searchString.replace(/[()]/g, "\\$&");
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
                 if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
