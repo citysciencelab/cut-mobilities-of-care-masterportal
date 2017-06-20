@@ -50,7 +50,7 @@ So wird aus einer Beispiel-Anwendung ein individuelles Portal:
 
 2. Anschließend duplizieren Sie bitte den Ordner *simple* oder *simpleTree* im Verzeichnis *portale* und benennen ihn um (z.B. in *mein_portal*), sodass Sie nun drei Ordner im Verzeichnis *portalconfigs* haben.
 
-3. Sie können nun die Konfigurationsdateien config.js.md und config.json innerhalb des neuen Ordners *mein_portal* anpassen (z.B. die Themen im Themenbaum festlegen, die passenden Werkzeuge zur Verfügung stellen, die Hintergrundkarten anpassen, den Namen des Portals ändern ...) Hier finden Sie die Dokumentation der [config.js](config.js.md) und der [config.json](config.json.md).
+3. Sie können nun die Konfigurationsdateien config.js und config.json innerhalb des neuen Ordners *mein_portal* anpassen (z.B. die Themen im Themenbaum festlegen, die passenden Werkzeuge zur Verfügung stellen, die Hintergrundkarten anpassen, den Namen des Portals ändern ...) Hier finden Sie die Dokumentation der [config.js](config.js.md) und der [config.json](config.json.md).
 
 4. Ihr neues Portal können Sie nun mit folgender URL über den Browser abrufen:
     - http://[Name des Webservers]/examples/portale/mein_portal/index.html
