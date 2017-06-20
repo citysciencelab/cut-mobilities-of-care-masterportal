@@ -141,7 +141,6 @@ define([
             });
 
             this.setConfig();
-            this.setOptions();
             this.setScales();
             this.setResolutions();
             this.setZoomLevels();
@@ -183,6 +182,13 @@ define([
                         this.set("startCenter", setting.attr);
                         break;
                     }
+                    case "options": {
+                        this.set("options", []);
+                        _.each(setting.attr, function (opt) {
+                            this.pushHits("options", opt);
+                        }, this);
+                        break;
+                    }
                 }
             }, this);
         },
@@ -201,15 +207,6 @@ define([
             }
             else {
                 this.setBackground("white");
-            }
-        },
-
-        setOptions: function () {
-            if (_.has(Config.view, "options")) {
-                this.set("options", []);
-                _.each(Config.view.options, function (opt) {
-                    this.pushHits("options", opt);
-                }, this);
             }
         },
 
