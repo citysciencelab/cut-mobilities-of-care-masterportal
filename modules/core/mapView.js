@@ -18,7 +18,7 @@ define([
         defaults: {
             background: "",
             backgroundImage: "",
-            startExtent: [510000.0, 5850000.0, 625000.4, 6000000.0],
+            extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
             options: [
                 {
                     resolution: 66.14579761460263,
@@ -145,7 +145,6 @@ define([
             this.setResolutions();
             this.setZoomLevels();
 
-            this.setExtent();
             this.setResolution();
             this.setProjection();
             this.setStartCenter();
@@ -163,7 +162,7 @@ define([
         resetView: function () {
             this.get("view").setCenter(this.get("startCenter"));
             this.get("view").setZoom(2);
-            Radio.trigger("MapMarker","hideMarker");
+            Radio.trigger("MapMarker", "hideMarker");
         },
 
         /*
@@ -187,6 +186,10 @@ define([
                         _.each(setting.attr, function (opt) {
                             this.pushHits("options", opt);
                         }, this);
+                        break;
+                    }
+                    case "extent": {
+                        this.set("extent", setting.attr);
                         break;
                     }
                 }
@@ -229,15 +232,6 @@ define([
 
         setZoomLevels: function () {
             this.set("zoomLevels", _.pluck(this.get("options"), "zoomLevel"));
-        },
-
-        /**
-         *
-         */
-        setExtent: function () {
-            if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
-                this.set("extent", Config.view.extent);
-            }
         },
 
         // Setzt die Resolution.
