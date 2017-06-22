@@ -16,6 +16,7 @@ define([
          *
          */
         defaults: {
+            epsg: "EPSG:25832",
             background: "",
             backgroundImage: "",
             extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
@@ -197,9 +198,23 @@ define([
                     }
                     case "zoomLevel": {
                         this.setResolution(this.get("resolutions")[setting.attr]);
+                        break;
+                    }
+                    case "epsg": {
+                        this.setEpsg(setting.attr);
+                        break;
                     }
                 }
             }, this);
+        },
+
+        // getter for epsg
+        getEpsg: function () {
+            return this.get("epsg");
+        },
+        // setter for epsg
+        setEpsg: function (value) {
+            this.set("epsg", value);
         },
 
         setBackground: function (value) {
@@ -282,11 +297,10 @@ define([
         },
 
         /**
-         *
+         * Setzt die ol Projektion anhand des epsg-Codes
          */
         setProjection: function () {
-            // check for crs
-            var epsgCode = Config.view.epsg ? Config.view.epsg : "EPSG:25832",
+            var epsgCode = this.getEpsg(),
                 proj = Radio.request("CRS", "getProjection", epsgCode);
 
             if (!proj) {
@@ -305,8 +319,10 @@ define([
             ol.proj.addProjection(proj);
 
             // attach epsg and projection object to Config.view for further access by other modules
-            Config.view.epsg = proj.getCode();
-            Config.view.proj = proj;
+            Config.view = {
+                epsg: proj.getCode(),
+                proj: proj
+            };
 
             this.set("projection", proj);
         },
