@@ -145,7 +145,6 @@ define([
             this.setResolutions();
             this.setZoomLevels();
 
-            this.setResolution();
             this.setProjection();
             this.setStartCenter();
             this.setView();
