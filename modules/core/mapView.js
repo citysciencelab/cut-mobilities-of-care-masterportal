@@ -188,7 +188,7 @@ define([
                         break;
                     }
                     case "extent": {
-                        this.set("extent", setting.attr);
+                        this.setExtent(setting.attr);
                         break;
                     }
                     case "resolution": {
@@ -247,7 +247,14 @@ define([
         setScale: function (scale) {
             this.set("scale", scale);
         },
-
+        // getter for extent
+        getExtent: function () {
+            return this.get("extent");
+        },
+        // setter for extent
+        setExtent: function (value) {
+            this.set("extent", value);
+        },
         /**
          *
          */
@@ -290,7 +297,7 @@ define([
             var proj = new ol.proj.Projection({
                 code: epsgCode,
                 units: this.get("units"),
-                extent: this.get("extent"),
+                extent: this.getExtent(),
                 axisOrientation: "enu",
                 global: false
             });
@@ -311,7 +318,7 @@ define([
             var view = new ol.View({
                 projection: this.get("projection"),
                 center: this.get("startCenter"),
-                extent: this.get("extent"),
+                extent: this.getExtent(),
                 resolution: this.get("resolution"),
                 resolutions: this.get("resolutions")
             });
