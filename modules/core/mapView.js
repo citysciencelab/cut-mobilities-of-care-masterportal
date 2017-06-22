@@ -192,6 +192,13 @@ define([
                         this.set("extent", setting.attr);
                         break;
                     }
+                    case "resolution": {
+                        this.setResolution(setting.attr);
+                        break;
+                    }
+                    case "zoomLevel": {
+                        this.setResolution(this.get("resolutions")[setting.attr]);
+                    }
                 }
             }, this);
         },
@@ -229,14 +236,12 @@ define([
             this.set("zoomLevels", _.pluck(this.get("options"), "zoomLevel"));
         },
 
-        // Setzt die Resolution.
-        setResolution: function () {
-            if (Config.view.resolution && _.isNumber(Config.view.resolution)) {
-                this.set("resolution", Config.view.resolution);
-            }
-            if (_.has(Config.view, "zoomLevel")) {
-                this.set("resolution", this.get("resolutions")[Config.view.zoomLevel]);
-            }
+        /**
+         * Setzt die Resolution auf den Wert val
+         * @param {float} val Resolution
+         */
+        setResolution: function (val) {
+            this.set("resolution", val);
         },
 
         // Setzt den Maßstab.
