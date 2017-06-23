@@ -143,6 +143,7 @@ define([
                     parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? " / " + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "";
 
                 Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
+                Radio.trigger("ParcelSearch", "noParcelFound");
             }
             else {
                 var position = $(member).find("gml\\:pos, pos")[0] ? $(member).find("gml\\:pos, pos")[0].textContent.split(" ") : null,
