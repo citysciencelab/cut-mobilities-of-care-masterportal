@@ -508,15 +508,23 @@
                 {
                   "id": "2178",
                   "visibility": false
-                },
+                }
+              ]
+            },
+            {
+              "Titel": "Gruppenlayer",
+              "Layer": [
                 {
-                  "id": [{
+                  "id": [
+                    {
                     "id": "682"
-                  },{
+                    },
+                    {
                     "id": "1731"
-                  }],
+                      }
+                  ],
                   "visibility": true,
-                  "name": "test"
+                  "name": "Kita und Krankenhäuser"
                 }
               ]
             }
