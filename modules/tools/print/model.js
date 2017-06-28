@@ -488,6 +488,7 @@ define([
                 url: Config.proxyURL + "?url=" + this.get("createURL"),
                 type: "POST",
                 context: this,
+                async: false,
                 data: JSON.stringify(this.get("specification")),
                 headers: {
                     "Content-Type": "application/json; charset=UTF-8"
