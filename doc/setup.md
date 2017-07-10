@@ -37,10 +37,10 @@ So setzen Sie in wenigen Schritten das erste Portal auf Ihrem eigenen Server auf
 4. Wenn Sie den Ordnernamen *examples* belassen haben, können Sie die Beispielportale mit folgenden URLs über einen Browser aufrufen (anderenfalls ersetzen Sie *examples* durch den von Ihnen gewählten Ordnernamen):
     - http://[Name-des-Webservers]/examples/portalconfigs/simple/index.html
     - http://[Name-des-Webservers]/examples/portalconfigs/simpleTree/index.html
-
-So sollte das Beispiel-Portal *simple* aussehen:
-
-![Browseraufruf.JPG](https://bitbucket.org/repo/88K5GB/images/3337234211-Browseraufruf.JPG)
+    
+5. Hier geht es zu den Beispielportalen auf unserem Server: 
+    - simple: [Portal](https://geoportal-hamburg.de/examples/portalconfigs/simple/), [config.json](https://geoportal-hamburg.de/examples/portalconfigs/simple/config.json), [config.js](https://geoportal-hamburg.de/examples/portalconfigs/simple/config.js)
+    - simpleTree: simple: [Portal](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/), [config.json](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/config.json), [config.js](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/config.js) 
 
 
 #### Beispiel-Anwendung anpassen
@@ -48,11 +48,11 @@ So wird aus einer Beispiel-Anwendung ein individuelles Portal:
 
 1. Gegebenenfalls können Sie die globalen Konfigurationsdateien im Ordner *lgv-config* anpassen (z.B. Luftbilder anderer Bundesländer verfügbar machen, neue Icons hinzufügen, bestehende Icons verändern etc.)
 
-2. Anschließend duplizieren Sie bitte den Ordner *simple* oder *simpleTree* im Verzeichnis *portale* und benennen ihn um (z.B. in *mein_portal*), sodass Sie nun drei Ordner im Verzeichnis *portalconfigs* haben.
+2. Anschließend duplizieren Sie bitte den Ordner *simple* oder *simpleTree* im Verzeichnis *portalconfigs* und benennen ihn um (z.B. in *mein_portal*), sodass Sie nun drei Ordner im Verzeichnis *portalconfigs* haben.
 
 3. Sie können nun die Konfigurationsdateien config.js und config.json innerhalb des neuen Ordners *mein_portal* anpassen (z.B. die Themen im Themenbaum festlegen, die passenden Werkzeuge zur Verfügung stellen, die Hintergrundkarten anpassen, den Namen des Portals ändern ...) Hier finden Sie die Dokumentation der [config.js](config.js.md) und der [config.json](config.json.md).
 
 4. Ihr neues Portal können Sie nun mit folgender URL über den Browser abrufen:
-    - http://[Name des Webservers]/examples/portale/mein_portal/index.html
+    - http://[Name des Webservers]/examples/portalconfigs/mein_portal/index.html
 
 
