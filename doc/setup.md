@@ -39,6 +39,7 @@ So setzen Sie in wenigen Schritten das erste Portal auf Ihrem eigenen Server auf
     - http://[Name-des-Webservers]/examples/portalconfigs/simpleTree/index.html
     
     Hier geht es zu den Beispielportalen auf unserem Server: 
+    
     - simple: [Portal](https://geoportal-hamburg.de/examples/portalconfigs/simple/), [config.json](https://geoportal-hamburg.de/examples/portalconfigs/simple/config.json), [config.js](https://geoportal-hamburg.de/examples/portalconfigs/simple/config.js)
     - simpleTree: [Portal](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/), [config.json](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/config.json), [config.js](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/config.js) 
 
