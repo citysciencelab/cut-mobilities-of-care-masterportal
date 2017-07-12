@@ -1,14 +1,14 @@
 define(function (require) {
 
     var ThemeView = require("modules/tools/gfi/themes/view"),
-        DefaultTemplate = require("text!modules/tools/gfi/themes/default/template.html"),
-        DefaultThemeView;
+        TableThemeTemplate = require("text!modules/tools/gfi/themes/default/template.html"),
+        TableThemeView;
 
-    DefaultThemeView = ThemeView.extend({
-        tagName: "table",
-        className: "table table-condensed table-hover",
-        template: _.template(DefaultTemplate)
+    TableThemeView = ThemeView.extend({
+        tagName: "div",
+        className: "table-wrapper-div",
+        template: _.template(TableThemeTemplate)
     });
 
-    return DefaultThemeView;
+    return TableThemeView;
 });

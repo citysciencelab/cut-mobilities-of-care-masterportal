@@ -1,95 +1,62 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        Radio = require("backbone.radio"),
-        ImgView = require("modules/tools/gfi/objects/image/view"),
-        VideoView = require("modules/tools/gfi/objects/video/view"),
-        RoutableView = require("modules/tools/gfi/objects/routingButton/view"),
-        DefaultTheme;
+        TableTheme;
 
-    DefaultTheme = Theme.extend({
-
+    TableTheme = Theme.extend({
         initialize: function () {
             this.listenTo(this, {
-                "change:isReady": function () {
-                    this.replaceValuesWithChildObjects();
-                    this.checkRoutable();
-                }
+                "change:isReady": this.identifyRowNames
             });
         },
 
         /**
-         * Prüft, ob der Button zum Routen angezeigt werden soll
+         * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
          */
-        checkRoutable: function () {
-            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
-                if (this.get("routable") === true) {
-                    this.set("routable", new RoutableView());
-                }
+        identifyRowNames: function () {
+            if (_.isUndefined(this.get("gfiContent")) === false) {
+                console.log(this.getGfiContent()[0]);
+                var rowNames = _.keys(this.getGfiContent()[0]);
+                _.each(rowNames, function (rowName) {
+                    if (rowName === "Zählstelle" || rowName === "Bezeichnung"){
+                        console.log("header gefunden");
+                    }
+                });
+                this.setRowNames(rowNames);
             }
         },
+
         /**
-         * Hier werden bei bestimmten Keywords Objekte anstatt von Texten für das template erzeugt. Damit können Bilder oder Videos als eigenständige Objekte erzeugt und komplex
-         * gesteuert werden. Im Template werden diese Keywords mit # ersetzt und rausgefiltert. Im view.render() werden diese Objekte attached.
-         * Eine leidige Ausnahme bildet z.Z. das Routing, da hier zwei features des Reisezeitenlayers benötigt werden. (1. Ziel(key) mit Dauer (val) und 2. Route mit ol.geom (val).
-         * Das Auswählen der richtigen Werte für die Übergabe erfolgt hier.
+         * Setter für Attribut "rowNames"
+         * @param {string[]} value - die Zeilennamen
          */
-        replaceValuesWithChildObjects: function () {
-            var element = this.get("gfiContent"),
-                children = [];
+        setRowNames: function (value) {
+            this.set("rowNames", value);
+        },
+        getRowNames: function () {
+            return this.get("rowNames");
+        },
 
-            if (_.isString(element) && element.match(/content="text\/html/g)) {
-                children.push(element);
-            }
-            else {
-                _.each(element, function (ele) {
-                    _.each(ele, function (val, key) {
-                        if (key === "Bild") {
-                            var imgView = new ImgView(val);
+        /**
+         * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
+         */
+        destroy: function () {
+            _.each(this.get("gfiContent"), function (element) {
+                if (_.has(element, "children")) {
+                    var children = _.values(_.pick(element, "children"))[0];
 
-                            element[key] = "#";
-                            children.push({
-                                key: imgView.model.get("id"),
-                                val: imgView
-                            });
-                        }
-                        else if (key === "video" && Radio.request("Util", "isAny") === null) {
-                            var videoView = new VideoView(val);
-
-                            element[key] = "#";
-                            children.push({
-                                key: videoView.model.get("id"),
-                                val: videoView
-                            });
-                            if (_.has(element, "mobil_video")) {
-                                element.mobil_video = "#";
-                            }
-                        }
-                        else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
-                            var videoView = new VideoView(val);
-
-                            element[key] = "#";
-                            children.push({
-                                key: videoView.model.get("id"),
-                                val: videoView
-                            });
-                            if (_.has(element, "video")) {
-                                element.video = "#";
-                            }
-                        }
-                        // lösche leere Dummy-Einträge wieder raus.
-                        element = _.omit(element, function (value) {
-                            return value === "#";
-                        });
+                    _.each(children, function (child) {
+                        child.val.remove();
                     }, this);
-                });
-            }
-            if (children.length > 0) {
-                this.set("children", children);
-            }
-            this.set("gfiContent", element);
+                }
+            }, this);
+            _.each(this.get("gfiRoutables"), function (element) {
+                if (_.isObject(element) === true) {
+                    element.remove();
+                }
+            }, this);
         }
     });
 
-    return DefaultTheme;
+    return TableTheme;
 });
