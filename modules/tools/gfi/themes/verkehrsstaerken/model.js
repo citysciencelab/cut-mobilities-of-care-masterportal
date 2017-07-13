@@ -6,7 +6,7 @@ define(function (require) {
     VerkehrsStaerkenTheme = Theme.extend({
         defaults: {
             ansicht: "Diagrammansicht",
-            link: "www.hamburg.de"
+            link: "https://test.geoportal-hamburg.de/test/test.pdf"
         },
         initialize: function () {
             this.listenTo(this, {
