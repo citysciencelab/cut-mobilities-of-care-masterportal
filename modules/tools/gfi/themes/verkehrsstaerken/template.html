@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<div class= "panel text-align-center">
+    <strong><%=zaehlstelle%>: <%=bezeichnung%></strong>
+    <br>
+    <small>Ebene: <%=ebene%></small>
+    <br>
+    <small>Art: <%=art%></small>
+</div>
+<br>
+<table class="table table-striped table-condensed ">
+    <thead>
+        <th>Kategorie</th>
+        <% _.each(years, function (year){%>
+        <th><%=year%></th>
+        <%});%>
+    </thead>
+    <tbody>
+        <% _.each(rowNames, function (name) { %>
+        <tr>
+            <td><%= name %></td>
+            <% _.each(years, function (year){%>
+            <td><%=_.findWhere(rowsDatasets, {attr: name})[year]%></td>
+            <% });%>
+        </tr>
+        <% });%>
+    </tbody>
+</table>
+<br>
+<div class="panel">
+    <span>Umschalten auf <a id="ansicht" class="pointer"><%=ansicht%></a></span>
+</div>
+<div class="panel">
+    <span>Link auf die vollständigen Daten zum <a href="<%=link%>" target="_blank">Download</a></span>
+</div>
