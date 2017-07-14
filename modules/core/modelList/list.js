@@ -346,11 +346,15 @@ define([
                 this.add(lightModels);
                 // Parametrisierter Aufruf im lighttree
                 _.each(paramLayers, function (paramLayer) {
-                    this.setModelAttributesById(paramLayer.id, {isVisibleInMap: paramLayer.visibility, transparency: paramLayer.transparency});
+                    this.setModelAttributesById(paramLayer.id, {isSelected: paramLayer.visibility, transparency: paramLayer.transparency});
                 }, this);
             }
             // Parametrisierter Aufruf
             else if (paramLayers.length > 0) {
+                _.each(Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true}), function (layer) {
+                    layer.isVisibleInMap = false;
+                    layer.isSelected = false;
+                });
                 _.each(paramLayers, function (paramLayer) {
                     var lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
@@ -417,7 +421,7 @@ define([
         scrollToLayer: function (overlayername) {
             var liLayer = _.findWhere($("#Overlayer").find("span"), {title: overlayername}),
             offsetFromTop = liLayer ? $(liLayer).offset().top : null,
-            heightThemen = $("#Themen").css("height"),
+            heightThemen = $("#tree").css("height"),
             scrollToPx = 0;
 
             if (offsetFromTop) {
@@ -449,14 +453,14 @@ define([
 
             this.add(lightSiblingsModels);
             // Abbruchbedingung
-            if (_.isUndefined(parentModel) === false && parentModel.id !== "Themen") {
+            if (_.isUndefined(parentModel) === false && parentModel.id !== "tree") {
                 this.addAndExpandModelsRecursive(parentModel.parentId);
                 this.get(parentModel.id).setIsExpanded(true);
             }
         },
 
         toggleCatalogs: function (id) {
-            _.each(this.where({parentId: "Themen"}), function (model) {
+            _.each(this.where({parentId: "tree"}), function (model) {
                 if (model.getId() !== id) {
                     model.setIsExpanded(false);
                 }

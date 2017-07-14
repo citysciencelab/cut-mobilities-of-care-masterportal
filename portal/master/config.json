@@ -70,8 +70,7 @@
           },
           "measure": {
             "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full",
-            "onlyDesktop": true
+            "glyphicon": "glyphicon-resize-full"
           },
           "coord": {
             "name": "Koordinaten abfragen",
@@ -133,6 +132,24 @@
           "glyphicon": "glyphicon-envelope",
           "serviceID": "80001",
           "includeSystemInfo": true
+      },
+      "info":{
+          "name": "Informationen",
+          "glyphicon": "glyphicon-info-sign",
+          "children": {
+            "staticlinks": [
+              {
+                "name": "Haftungsausschluss",
+                "glyphicon": "glyphicon-globe",
+                "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+              },
+              {
+                "name": "Hamburg",
+                "glyphicon": "glyphicon-globe",
+                "url": "http://www.hamburg.de"
+              }
+            ]
+          }
       }
     },
     "controls": {
@@ -141,7 +158,10 @@
       "zoom": true,
       "orientation": "once",
       "poi": true,
-      "attributions": true
+      "attributions": {
+        "isInitOpenDesktop": true,
+        "isInitOpenMobile": false
+      }
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -167,6 +187,10 @@
     "Fachdaten":
     {
       "Layer": [
+        {
+          "id": "4561",
+          "visibility": true
+        },
         {
           "id": "1748"
         },

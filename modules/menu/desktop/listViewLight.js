@@ -18,12 +18,12 @@ define(function (require) {
             this.render();
 
             // Themenbaum wird initial aufgeklappt wenn in der config.json im tree-Objekt konfiguriert
-            if (this.collection.findWhere({id: "Themen"}).attributes.isInitOpen === true) {
-                $("#" + "Themen").parent().addClass("open");
+            if (this.collection.findWhere({id: "tree"}).attributes.isInitOpen === true) {
+                $("#" + "tree").parent().addClass("open");
             }
         },
         render: function () {
-            $("#" + "Themen").html("");
+            $("#" + "tree").html("");
             var models = this.collection.where({type: "layer"});
 
             models = _.sortBy(models, function (model) {

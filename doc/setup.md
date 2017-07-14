@@ -37,11 +37,11 @@ So setzen Sie in wenigen Schritten das erste Portal auf Ihrem eigenen Server auf
 4. Wenn Sie den Ordnernamen *examples* belassen haben, können Sie die Beispielportale mit folgenden URLs über einen Browser aufrufen (anderenfalls ersetzen Sie *examples* durch den von Ihnen gewählten Ordnernamen):
     - http://[Name-des-Webservers]/examples/portalconfigs/simple/index.html
     - http://[Name-des-Webservers]/examples/portalconfigs/simpleTree/index.html
-    
-    Hier geht es zu den Beispielportalen auf unserem Server: 
-    
+
+    Hier geht es zu den Beispielportalen auf unserem Server:
+
     - simple: [Portal](https://geoportal-hamburg.de/examples/portalconfigs/simple/), [config.json](https://geoportal-hamburg.de/examples/portalconfigs/simple/config.json), [config.js](https://geoportal-hamburg.de/examples/portalconfigs/simple/config.js)
-    - simpleTree: [Portal](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/), [config.json](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/config.json), [config.js](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/config.js) 
+    - simpleTree: [Portal](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/), [config.json](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/config.json), [config.js](https://geoportal-hamburg.de/examples/portalconfigs/simpleTree/config.js)
 
 
 #### Beispiel-Anwendung anpassen
@@ -55,5 +55,3 @@ So wird aus einer Beispiel-Anwendung ein individuelles Portal:
 
 4. Ihr neues Portal können Sie nun mit folgender URL über den Browser abrufen:
     - http://[Name des Webservers]/examples/portalconfigs/mein_portal/index.html
-
-

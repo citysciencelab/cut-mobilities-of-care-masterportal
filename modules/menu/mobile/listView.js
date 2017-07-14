@@ -70,7 +70,7 @@ define([
             },
             updateLightTree: function () {
                 var models = [],
-                lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: "Themen"});
+                lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: "tree"});
 
                 models = this.collection.add(lightModels);
 
@@ -91,7 +91,7 @@ define([
                         return layer.getSelectionIDX();
                 }).reverse();
                 if (withAnimation) {
-                    this.slideModels("descent", models, "Themen", "Selection");
+                    this.slideModels("descent", models, "tree", "Selection");
                 }
                 else {
                     // Views löschen um doppeltes Zeichnen zu vermeiden
@@ -146,7 +146,7 @@ define([
                                 return (model.getType() === "folder" ? "folder" : "other");
                             }) ;
                             // Im default-Tree werden folder und layer alphabetisch sortiert
-                            if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].getParentId() !== "Themen") {
+                            if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].getParentId() !== "tree") {
                                 groupedModels.folder = _.sortBy(groupedModels.folder, function (item) {
                                     return item.getName();
                                 });

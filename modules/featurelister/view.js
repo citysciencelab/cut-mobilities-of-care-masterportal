@@ -166,7 +166,12 @@ require("jqueryui/widgets/draggable");
             $("#featurelist-list").hide();
             $("#featurelist-details").hide();
             this.model.setPrevFeatureId(-1);
-            this.model.unscaleFeature();
+            // trycatch damit im IE nicht die Console aufgeht. Nach Merge Mml-->Dev überprüfen und ggf. entfernen
+            try {
+                this.model.unscaleFeature();
+            }
+            catch (e) {
+            }
             this.model.set("layerid", {});
         },
         /*
@@ -203,8 +208,13 @@ require("jqueryui/widgets/draggable");
         hoverTr: function (evt) {
             var featureid = evt.currentTarget.id;
 
-            this.model.unscaleFeature();
-            this.model.scaleFeature(featureid);
+            // trycatch damit im IE nicht die Console aufgeht. Nach Merge Mml-->Dev überprüfen und ggf. entfernen
+            try {
+                this.model.unscaleFeature();
+                this.model.scaleFeature(featureid);
+            }
+            catch (e) {
+            }
         },
         /*
         * Bei Klick auf Layer wird dieser gehighlighted und Layerid wird gesertzt

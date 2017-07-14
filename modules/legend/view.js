@@ -66,6 +66,7 @@ define([
             }
             else {
                 legendModel.setIsActive(false);
+                Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
             }
         }
     });
