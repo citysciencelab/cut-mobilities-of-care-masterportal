@@ -7,7 +7,7 @@
     <small>Art: <%=art%></small>
 </div>
 <br>
-<table class="table table-striped table-condensed ">
+<table class="table table-striped table-condensed">
     <thead>
         <th>Kategorie</th>
         <% _.each(years, function (year){%>
@@ -25,6 +25,7 @@
         <% });%>
     </tbody>
 </table>
+<div id="d3-div" class="d3-div"></div>
 <br>
 <div class="panel">
     <span>Umschalten auf <a id="ansicht" class="pointer"><%=ansicht%></a></span>

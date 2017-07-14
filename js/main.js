@@ -18,7 +18,8 @@ require.config({
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
         app: "app",
         templates: "../templates",
-        modules: "../modules"
+        modules: "../modules",
+        d3: "../components/d3/d3.min"
     },
     shim: {
         bootstrap: {

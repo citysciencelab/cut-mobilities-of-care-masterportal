@@ -1,12 +1,13 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
+        d3 = require("d3"),
         VerkehrsStaerkenTheme;
 
     VerkehrsStaerkenTheme = Theme.extend({
         defaults: {
             ansicht: "Diagrammansicht",
-            link: "https://test.geoportal-hamburg.de/test/test.pdf"
+            link: "https://test.geoportal-hamburg.de/test/test.xlsx"
         },
         initialize: function () {
             this.listenTo(this, {
@@ -70,6 +71,7 @@ define(function (require) {
                 this.setYears(years);
                 this.setRowNames(newRowNames);
                 this.combineYearsData(dataPerYear, newRowNames);
+                this.initializeD3();
             }
         },
 
@@ -137,6 +139,27 @@ define(function (require) {
                     element.remove();
                 }
             }, this);
+        },
+        initializeD3: function () {
+
+            console.log("initializeD3");
+            var bodySelection = d3.select("body"),
+                theData = [1, 2, 3, 4];
+                // svgSelection = bodySelection.append("svg")
+                //     .attr("width", 50)
+                //     .attr("height", 50);
+
+            // svgSelection.append("circle")
+            //     .attr("cx", 25)
+            //     .attr("cy", 25)
+            //     .attr("r", 25)
+            //     .style("fill", "purple");
+
+            bodySelection
+                .data(theData)
+                .enter()
+                .append("p")
+                .text("hello ");
         },
         setFakeContent: function () {
              this.setGfiContent([{
