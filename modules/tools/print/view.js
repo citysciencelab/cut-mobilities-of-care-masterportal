@@ -25,7 +25,7 @@ define([
             this.model.setScale(evt.target.selectedIndex);
         },
         createPDF: function () {
-            this.model.setTitle();
+            this.model.setTitleFromForm();
             this.model.getLayersForPrint();
         },
         render: function () {

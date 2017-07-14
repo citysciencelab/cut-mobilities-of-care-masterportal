@@ -32,15 +32,21 @@ define([
             }, this);
         },
 
+        /**
+         * Wird über Trigger vom Layer gestartet und übernimmt die Attribute zur Darstellung
+         * @param {object} attrs Objekt mit Attributen zur Darstellung
+         * @fires sync#render-Funktion
+         */
         setAttributes: function (attrs) {
             this.set(attrs);
             this.setMetadataURL();
-            if (!_.isNull(this.get("metaID"))) {
-                this.fetchData({id: this.get("metaID")});
+            if (!_.isNull(this.get("metaID")[0])) {
+                this.fetchData({id: this.get("metaID")[0]});
             }
             else {
                 this.set("title", this.get("layername"));
                 this.set("abstractText", "Keine Metadaten vorhanden.");
+                this.set("date", null);
                 this.trigger("sync");
             }
         },
@@ -117,16 +123,30 @@ define([
             };
         },
 
+        /**
+         * Wertet das Array der der metaIDs aus und erzeugt Array metaURL mit vollständiger URL für Template, ohne Doppelte Einträge zuzulassen
+         */
         setMetadataURL: function () {
-            if (this.url().search("metaver") !== -1) {
-                this.set("metaURL", "http://metaver.de/trefferanzeige?docuuid=" + this.get("metaID"));
-            }
-            else if (this.url().search("geodatenmv.de") !== -1) {
-                this.set("metaURL", "http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=" + this.get("metaID"));
-            }
-            else {
-                this.set("metaURL", "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + this.get("metaID"));
-            }
+            var metaURLs = [],
+                metaIDs = this.get("metaID"),
+                url = this.url(),
+                metaURL = "";
+
+            _.each(metaIDs, function (metaID) {
+                if (url.search("metaver") !== -1) {
+                    metaURL = "http://metaver.de/trefferanzeige?docuuid=" + metaID;
+                }
+                else if (url.search("geodatenmv.de") !== -1) {
+                    metaURL = "http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=" + metaID;
+                }
+                else {
+                    metaURL = "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + metaID;
+                }
+                if (metaID !== "" && !_.contains(metaURLs, metaURL)) {
+                    metaURLs.push(metaURL);
+                }
+            });
+            this.set("metaURL", metaURLs);
         }
     });
 

@@ -1,16 +1,15 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/mouseHover/model",
-    "eventbus"
-], function (Backbone, Radio, MouseHoverPopup, EventBus) {
+    "modules/mouseHover/model"
+], function (Backbone, Radio, MouseHoverPopup) {
 
     var MouseHoverPopupView = Backbone.View.extend({
         model: MouseHoverPopup,
         id: "mousehoverpopup",
         initialize: function () {
             this.listenTo(this.model, "change:mhpresult", this.render);
-            EventBus.on("closeMouseHoverPopup", this.destroy, this);
+
             Radio.trigger("Map", "addOverlay", this.model.get("mhpOverlay"));
         },
         /**
@@ -26,9 +25,6 @@ define([
                 animation: true
             });
             this.model.showPopup();
-        },
-        destroy: function () {
-            this.model.destroyPopup();
         }
     });
 

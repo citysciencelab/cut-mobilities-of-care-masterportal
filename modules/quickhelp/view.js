@@ -4,10 +4,8 @@ define([
     "text!modules/quickhelp/templateSearch.html",
     "text!modules/quickhelp/templateTree.html",
     "text!modules/quickhelp/templateMeasureTool.html",
-    "eventbus",
-    "modules/core/util",
     "jqueryui/widgets/draggable"
-], function (Backbone, Radio, TemplateSearch, TemplateTree, TemplateMeasureTool, EventBus, Util) {
+], function (Backbone, Radio, TemplateSearch, TemplateTree, TemplateMeasureTool) {
 
     var view = Backbone.View.extend({
         templateSearch: _.template(TemplateSearch),
@@ -25,7 +23,7 @@ define([
                 "showWindowHelp": this.showWindow
             }, this);
             this.render();
-            EventBus.on("showWindowHelp", this.showWindow, this);
+
             this.$el.draggable({
                 containment: "#map",
                 handle: ".header"

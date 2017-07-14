@@ -18,7 +18,6 @@ define([
         },
         initialize: function () {
             Radio.trigger("Map", "addOverlay", this.get("marker"));
-
             var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
 
             if (_.has(searchConf, "zoomLevel")) {
@@ -122,7 +121,6 @@ define([
                     markers.push(marker);
                     this.set("markers", markers);
                     Radio.trigger("Map", "addOverlay", marker);
-
                 }, this);
                 Radio.trigger("ZoomToFeature", "zoomtofeatures");
             }

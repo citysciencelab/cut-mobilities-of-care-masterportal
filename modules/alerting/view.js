@@ -5,7 +5,7 @@ define([
     "bootstrap/alert"
 ], function (Backbone, Radio, Model) {
     /*
-     * Dieses Modul reagiert auf Events vom EventBus, nimmt als Parameter des Events ein hmtl-String oder ein Konfigurationsobjekt entgegen und stellt dies dar.
+     * Dieses Modul reagiert auf Events vom Radio, nimmt als Parameter des Events ein hmtl-String oder ein Konfigurationsobjekt entgegen und stellt dies dar.
      * Das Konfigurationsobjekt kann folgende Einstellungen überschrieben:
      * text: das html
      * kategorie: {alert-success|alert-info|alert-warning|alert-danger}

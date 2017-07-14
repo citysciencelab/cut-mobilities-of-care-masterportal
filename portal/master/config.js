@@ -32,7 +32,6 @@ define(function () {
             imglink: "../img/location_eventlotse.svg",
             layerid: "4561"
         },
-        view: {},
         namedProjections: [
             // GK DHDN
             ["EPSG:31461", "+proj=tmerc +lat_0=0 +lon_0=3 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -87,11 +86,6 @@ define(function () {
         mouseHover: true,
         isMenubarVisible: true,
         startUpModul: "",
-        print: {
-            printID: "99999",
-            title: "Master",
-            gfi: true
-        },
         geoAPI: false,
         clickCounter: {}
     };

@@ -1,6 +1,5 @@
 define([
     "backbone",
-    "eventbus",
     "backbone.radio"
 ], function () {
 
@@ -33,7 +32,7 @@ define([
 
         /**
          * Wird aufgerufen wenn das Model erzeugt wird
-         * Registriert Listener auf sich selbst und den EventBus
+         * Registriert Listener auf sich selbst und den Radio
          */
         initialize: function () {
             var channel = Radio.channel("StyleWMS");

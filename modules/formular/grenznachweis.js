@@ -1,11 +1,10 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "config",
     "openlayers",
     "modules/cookie/view"
-], function (Backbone, Radio, EventBus, Config, ol, cookie) {
+], function (Backbone, Radio, Config, ol, cookie) {
     "use strict";
     var GrenznachweisModel = Backbone.Model.extend({
         defaults: {
@@ -490,19 +489,19 @@ define([
                         this.showErrorMessage();
                     }
                     else {
-                        EventBus.trigger("searchInput:deleteSearchString");
+                        Radio.trigger("Searchbar", "deleteSearchString");
                         this.showSuccessMessage();
                         this.set("auftragsnummer", "");
                         this.set("lage", "");
                         this.set("freitext", "");
                         this.removeAllGeometries();
                     }
-                    EventBus.trigger("collapseWindow", this);
+                    Radio.trigger("Window", "collapseWin", this);
                     $("#loader").hide();
                 },
                 error: function () {
                     $("#loader").hide();
-                    EventBus.trigger("collapseWindow", this);
+                    Radio.trigger("Window", "collapseWin", this);
                     this.showErrorMessage();
                 }
             });
