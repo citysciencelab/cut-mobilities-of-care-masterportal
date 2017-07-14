@@ -43,8 +43,7 @@ define(function (require) {
                 return new VerkehrsStaerkenTheme(attrs, options);
             }
             else {
-                return new VerkehrsStaerkenTheme(attrs, options);
-                // return new DefaultTheme(attrs, options);
+                return new DefaultTheme(attrs, options);
             }
         },
         initialize: function () {
@@ -102,8 +101,7 @@ define(function (require) {
                     break;
                 }
                 default: {
-                    new VerkehrsStaerkenThemeView({model: model});
-                    // new DefaultThemeView({model: model});
+                    new DefaultThemeView({model: model});
                 }
             }
         },

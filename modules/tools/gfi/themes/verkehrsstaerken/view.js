@@ -18,12 +18,14 @@ define(function (require) {
             if (ansicht === "Diagrammansicht") {
                 this.model.setAnsicht("Tabellenansicht");
                 this.template = _.template(VerkehrsStaerkenThemeTemplateDiagramm);
+                this.render();
+                this.model.initializeD3();
             }
             else {
                 this.model.setAnsicht("Diagrammansicht");
                 this.template = _.template(VerkehrsStaerkenThemeTemplateTabelle);
+                this.render();
             }
-            this.render();
         }
     });
 

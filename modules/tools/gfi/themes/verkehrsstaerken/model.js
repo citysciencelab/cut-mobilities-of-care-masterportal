@@ -20,38 +20,59 @@ define(function (require) {
          */
         parseGfiContent: function () {
             if (_.isUndefined(this.get("gfiContent")) === false) {
-                // fakeGFIContent setzen, bis layer entsprechende Daten liefert
-                this.setFakeContent();
                 var gfiContent = this.getGfiContent()[0],
                     rowNames = _.keys(this.getGfiContent()[0]),
                     newRowNames = [],
                     zaehlstelle = "",
                     bezeichnung = "",
-                    ebene = "",
                     art = "",
                     yearData,
                     dataPerYear = [],
                     year,
-                    years = [];
+                    years = [],
+                    actualDataset = {};
 
                 _.each(rowNames, function (rowName) {
-                    year = parseInt(rowName.slice(0, 4), 10);
-                    if (rowName === "Zählstelle") {
+                    year = parseInt(rowName.slice(-4), 10);
+
+                    if (rowName === "Zaehlstelle") {
                         zaehlstelle = gfiContent[rowName];
                     }
                     else if (rowName === "Bezeichnung") {
                         bezeichnung = gfiContent[rowName];
                     }
-                    else if (rowName === "Ebene") {
-                        ebene = gfiContent[rowName];
-                    }
                     else if (rowName === "Art") {
                         art = gfiContent[rowName];
                     }
+                    else if (rowName.indexOf("aktuell") !== -1) {
+                         var newRowName = "",
+                            index = rowName.indexOf("aktuell") - 1,
+                            actualDigits = rowName.slice(-7).length,
+                            charBeforeAct = rowName.slice(index, -actualDigits);
+
+                        // vorzeichen vor "aktuell prüfen"
+                        if (charBeforeAct === "_") {
+                            newRowName = rowName.replace("_aktuell", "");
+                        }
+                        else {
+                            newRowName = rowName.replace(" aktuell", "");
+                        }
+                        actualDataset[newRowName] = gfiContent[rowName];
+                    }
                     // jahresDatensätze parsen
                     else if (!_.isNaN(year)) {
-                        var newRowName = rowName.replace(year + "_", "");
+                        var newRowName = "",
+                            index = rowName.indexOf(String(year)) - 1,
+                            yearDigits = rowName.slice(-4).length,
+                            charBeforeYear = rowName.slice(index, -yearDigits);
 
+                        // vorzeichen vor year prüfen
+                        if (charBeforeYear === "_") {
+                            newRowName = rowName.replace("_" + String(year), "");
+                        }
+                        else {
+                            newRowName = rowName.replace(" " + String(year), "");
+                        }
                         yearData = {
                             year: year,
                             attrName: newRowName,
@@ -64,14 +85,13 @@ define(function (require) {
                 }, this);
                 newRowNames = _.unique(newRowNames);
                 years = _.unique(years);
+                this.setActualDataset(actualDataset);
                 this.setZaehlstelle(zaehlstelle);
                 this.setBezeichnung(bezeichnung);
-                this.setEbene(ebene);
                 this.setArt(art);
                 this.setYears(years);
                 this.setRowNames(newRowNames);
                 this.combineYearsData(dataPerYear, newRowNames);
-                this.initializeD3();
             }
         },
 
@@ -105,10 +125,6 @@ define(function (require) {
         setArt: function (value) {
             this.set("art", value);
         },
-        // setter for ebene
-        setEbene: function (value) {
-            this.set("ebene", value);
-        },
         // setter for bezeichnung
         setBezeichnung: function (value) {
             this.set("bezeichnung", value);
@@ -120,6 +136,10 @@ define(function (require) {
         // setter for rowsDatasets
         setRowsDatasets: function (value) {
             this.set("rowsDatasets", value);
+        },
+        // setter for actualDataset
+        setActualDataset: function (value) {
+            this.set("actualDataset", value);
         },
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
@@ -141,69 +161,17 @@ define(function (require) {
             }, this);
         },
         initializeD3: function () {
-
             console.log("initializeD3");
-            var bodySelection = d3.select("body"),
-                theData = [1, 2, 3, 4];
-                // svgSelection = bodySelection.append("svg")
-                //     .attr("width", 50)
-                //     .attr("height", 50);
+            var data = [30, 86, 168, 281, 303, 365];
 
-            // svgSelection.append("circle")
-            //     .attr("cx", 25)
-            //     .attr("cy", 25)
-            //     .attr("r", 25)
-            //     .style("fill", "purple");
-
-            bodySelection
-                .data(theData)
+            d3.select(".chart")
+              .selectAll("div")
+              .data(data)
                 .enter()
-                .append("p")
-                .text("hello ");
-        },
-        setFakeContent: function () {
-             this.setGfiContent([{
-                Zählstelle: "1145",
-                Bezeichnung: "A7 SO AS HH-Othmarschen (Elbtunnel) T15 DP14",
-                Ebene: "15",
-                Art: "Dauerpegel",
-                "2004_DTV": "115000",
-                "2004_DTVw": "122000",
-                "2004_SV-Anteil am DTVw (%)": "17",
-                "2004_Baustelleneinfluss": "*",
-                "2005_DTV": "115111",
-                "2005_DTVw": "122111",
-                "2005_SV-Anteil am DTVw (%)": "11",
-                "2005_Baustelleneinfluss": "*",
-                "2006_DTV": "115222",
-                "2006_DTVw": "122222",
-                "2006_SV-Anteil am DTVw (%)": "22",
-                "2006_Baustelleneinfluss": "*",
-                "2007_DTV": "115333",
-                "2007_DTVw": "122333",
-                "2007_SV-Anteil am DTVw (%)": "33",
-                "2007_Baustelleneinfluss": "*",
-                "2008_DTV": "115444",
-                "2008_DTVw": "122444",
-                "2008_SV-Anteil am DTVw (%)": "44",
-                "2008_Baustelleneinfluss": "*",
-                "2009_DTV": "115555",
-                "2009_DTVw": "122555",
-                "2009_SV-Anteil am DTVw (%)": "55",
-                "2009_Baustelleneinfluss": "*",
-                "2010_DTV": "115666",
-                "2010_DTVw": "122666",
-                "2010_SV-Anteil am DTVw (%)": "66",
-                "2010_Baustelleneinfluss": "*",
-                "2011_DTV": "115777",
-                "2011_DTVw": "122777",
-                "2011_SV-Anteil am DTVw (%)": "77",
-                "2011_Baustelleneinfluss": "*",
-                "2012_DTV": "115888",
-                "2012_DTVw": "122888",
-                "2012_SV-Anteil am DTVw (%)": "88",
-                "2012_Baustelleneinfluss": "*"
-            }]);
+                .append("div")
+                .style("width", function(d) { return d + "px"; })
+                .style("background-color", "red")
+                .text(function(d) { return d; });
         }
     });
 
