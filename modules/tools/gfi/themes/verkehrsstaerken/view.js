@@ -32,8 +32,15 @@ define(function (require) {
         changeKat: function (evt) {
             this.render();
             this.model.set("attrToShowInD3", evt.currentTarget.id);
+            $(".btn-group").children("button").each(function () {
+                if ($(this)[0].id === evt.currentTarget.id) {
+                    $(this).addClass("active");
+                }
+                else {
+                    $(this).removeClass("active");
+                }
+            });
             this.model.createD3Document();
-            $(evt.currentTarget).addClass("active");
         }
     });
 

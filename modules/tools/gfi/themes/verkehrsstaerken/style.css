@@ -8,23 +8,13 @@
     width: 500px;
     height: 200px;
 }
-/*.axis text {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
-  fill: #F00;
-  stroke: #F00;
-  shape-rendering: crispEdges;
-}*/
 .line {
   fill: none;
   stroke: steelblue;
   stroke-width: 2px;
 }
 .dot {
-    /*cursor: pointer;*/
+    cursor: pointer;
     stroke: none;
     fill: steelblue;
 }
@@ -33,6 +23,11 @@
     stroke:#000;
 }
 .tooltip {
-    fill: steelblue;
-    color: red;
+    position: relative;
+    /*fill: steelblue;*/
+    color: black;
+    background: gray;
+    width: 50px;
+    border-radius: 10px !important;
+    text-align: center;
 }

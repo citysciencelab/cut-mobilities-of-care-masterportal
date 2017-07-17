@@ -204,6 +204,7 @@ define(function (require) {
                 .attr("class", "line")
                 .attr("d", valueline);
 
+            var div = d3.select(".tooltip");
             // Add the scatterplot
             svg.selectAll("dot")
                 .data(data)
@@ -211,7 +212,20 @@ define(function (require) {
                 .attr("cx", function(d) { return x(d.year); })
                 .attr("cy", function(d) { return y(d.value); })
                 .attr("r", 5)
-                .attr("class", "dot");
+                .attr("class", "dot")
+                .on("mouseover", function (d) {
+                    div.transition()
+                        .duration(200)
+                        .style("opacity", .9)
+                    div.html("(" + d.year + ")<br/> " + d.value)
+                        .style("left", (d3.event.offsetX + 5) + "px")
+                        .style("top", (d3.event.offsetY - 5) + "px");
+                    })
+                .on("mouseout", function(d) {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
 
             var xAxis = d3.svg.axis()
                 .scale(x)
@@ -219,35 +233,15 @@ define(function (require) {
             var yAxis = d3.svg.axis()
                 .scale(y)
                 .orient("left");
-              // Add the X Axis
-              svg.append("g")
-                  .attr("transform", "translate(0," + height + ")")
-                  .call(xAxis);
+            // Add the X Axis
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
 
-              // Add the Y Axis
-              svg.append("g")
-                  .call(yAxis);
+            // Add the Y Axis
+            svg.append("g")
+                .call(yAxis);
 
-            // var tooltip = d3.select("svg")
-            //     .append("g")
-            //     .attr("class", "tooltip")
-            //     .append("text")
-            //     .style("position", "absolute")
-            //     // .style("visibility", "hidden")
-            //     .style("background", "red")
-            //     .text("a simple tooltip");
-
-            // $(".dot")
-            //     .on("mouseover", function (d) {
-            //         console.log(d);
-            //         console.log(x(d.toElement.__data__.year));
-            //         console.log(y(d.toElement.__data__.value));
-            //         tooltip.attr("transform", "translate(" + x(d.toElement.__data__.year) + "," + y(d.toElement.__data__.value) + ")");
-            //         tooltip.select("text").text(d.toElement.__data__.value);
-            //         // return tooltip.style("visibility", "visible");
-            //     });
-                // .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
-                // .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
         }
     });
 
