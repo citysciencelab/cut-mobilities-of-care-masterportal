@@ -20,7 +20,6 @@ define(function (require) {
          */
         parseGfiContent: function () {
             if (_.isUndefined(this.get("gfiContent")) === false) {
-                this.setD3Data();
                 var gfiContent = this.getGfiContent()[0],
                     rowNames = _.keys(this.getGfiContent()[0]),
                     newRowNames = [],
@@ -86,30 +85,37 @@ define(function (require) {
                 }, this);
                 newRowNames = _.unique(newRowNames);
                 years = _.unique(years);
-                this.setActualDataset(actualDataset);
                 this.setZaehlstelle(zaehlstelle);
                 this.setBezeichnung(bezeichnung);
                 this.setArt(art);
                 this.setYears(years);
                 this.setRowNames(newRowNames);
-                this.combineYearsData(dataPerYear, newRowNames);
-
+                this.combineYearsData(dataPerYear, newRowNames, actualDataset);
             }
         },
 
-        combineYearsData: function (dataPerYear, rowNames) {
-            var rowsDatasets = [];
+        combineYearsData: function (dataPerYear, rowNames, actualDataset) {
+            var dataset = [];
 
             _.each(rowNames, function (rowName) {
                 var attrDataArray = _.where(dataPerYear, {attrName: rowName}),
-                    attrObject = {attr: rowName};
+                    attrObject = {attr: rowName},
+                    attrObjectDataArray = [];
 
                 _.each(attrDataArray, function (attrData) {
-                    attrObject[attrData.year] = attrData.value;
+                    attrObjectDataArray.push({
+                        year: attrData.year,
+                        value: attrData.value
+                    });
                 });
-                rowsDatasets.push(attrObject);
+                attrObjectDataArray.push({
+                    year: "Aktuell",
+                    value: actualDataset[rowName]
+                });
+                attrObject.data = attrObjectDataArray;
+                dataset.push(attrObject);
             });
-            this.setRowsDatasets(rowsDatasets);
+            this.setDataset(dataset);
         },
         // setter for rowNames
         setRowNames: function (value) {
@@ -135,81 +141,11 @@ define(function (require) {
         setZaehlstelle: function (value) {
             this.set("zaehlstelle", value);
         },
-        // setter for rowsDatasets
-        setRowsDatasets: function (value) {
-            this.set("rowsDatasets", value);
+        setDataset: function (value) {
+            this.set("dataset", value);
         },
-        // setter for actualDataset
-        setActualDataset: function (value) {
-            this.set("actualDataset", value);
-        },
-        setD3Data: function() {
-            this.set("d3Data",[
-                {
-                attr: "Dtv",
-                data: [
-                    {year: 2004, value: 115000},
-                    {year: 2005, value: 114000},
-                    {year: 2006, value: 114000},
-                    {year: 2007, value: 117000},
-                    {year: 2008, value: 116000},
-                    {year: 2009, value: 111000},
-                    {year: 2010, value: 111000},
-                    {year: 2011, value: 112000},
-                    {year: 2012, value: 110000},
-                    {year: 2013, value: 115000},
-                    {year: 2014, value: 107000},
-                    {year: "aktuell", value: 115000}]
-                },
-                {
-                attr: "Dtvw",
-                data: [
-                    {year: 2004, value: 122000},
-                    {year: 2005, value: 121000},
-                    {year: 2006, value: 122000},
-                    {year: 2007, value: 125000},
-                    {year: 2008, value: 123000},
-                    {year: 2009, value: 120000},
-                    {year: 2010, value: 119000},
-                    {year: 2011, value: 120000},
-                    {year: 2012, value: 118000},
-                    {year: 2013, value: 123000},
-                    {year: 2014, value: 113000},
-                    {year: "aktuell", value: 122000}]
-                },
-                {
-                attr: "Sv am_dtvw",
-                data: [
-                    {year: 2004, value: 18},
-                    {year: 2005, value: 16},
-                    {year: 2006, value: 16},
-                    {year: 2007, value: 18},
-                    {year: 2008, value: 17},
-                    {year: 2009, value: 19},
-                    {year: 2010, value: 19},
-                    {year: 2011, value: 19},
-                    {year: 2012, value: 18},
-                    {year: 2013, value: 16},
-                    {year: 2014, value: 17},
-                    {year: "aktuell", value: 17}]
-                },
-                {
-                attr: "Baustelleneinfluss",
-                data: [
-                    {year: 2004, value: "B"},
-                    {year: 2005, value: "B"},
-                    {year: 2006, value: "-"},
-                    {year: 2007, value: "-"},
-                    {year: 2008, value: "-"},
-                    {year: 2009, value: "-"},
-                    {year: 2010, value: "-"},
-                    {year: 2011, value: "-"},
-                    {year: 2012, value: "-"},
-                    {year: 2013, value: "-"},
-                    {year: 2014, value: "B"},
-                    {year: "aktuell", value: "B"}]
-                }
-                ]);
+        getDataset: function () {
+            return this.get("dataset");
         },
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
@@ -231,12 +167,11 @@ define(function (require) {
             }, this);
         },
         createD3Document: function () {
-            console.log("initializeD3");
-            var d3Data = this.get("d3Data"),
+            var dataset = this.getDataset(),
                 attrToShowInD3 = this.get("attrToShowInD3"),
-                dataset = _.findWhere(d3Data, {attr: attrToShowInD3}),
+                dataset = _.findWhere(dataset, {attr: attrToShowInD3}),
                 data = dataset.data;
-                console.log(data);
+
             // set the dimensions and margins of the graph
             var margin = {top: 20, right: 20, bottom: 30, left: 70},
                 width = 500 - margin.left - margin.right,

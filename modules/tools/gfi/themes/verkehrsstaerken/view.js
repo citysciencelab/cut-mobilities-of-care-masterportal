@@ -1,7 +1,7 @@
 define(function (require) {
 
     var ThemeView = require("modules/tools/gfi/themes/view"),
-        VerkehrsStaerkenThemeTemplateTabelle = require("text!modules/tools/gfi/themes/verkehrsstaerken/template.html"),
+        VerkehrsStaerkenThemeTemplateTabelle = require("text!modules/tools/gfi/themes/verkehrsstaerken/template_tabelle.html"),
         VerkehrsStaerkenThemeTemplateDiagramm = require("text!modules/tools/gfi/themes/verkehrsstaerken/template_diagramm.html"),
         VerkehrsStaerkenThemeView;
 
