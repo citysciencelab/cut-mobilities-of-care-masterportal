@@ -20,6 +20,7 @@ define(function (require) {
          */
         parseGfiContent: function () {
             if (_.isUndefined(this.get("gfiContent")) === false) {
+                this.setD3Data();
                 var gfiContent = this.getGfiContent()[0],
                     rowNames = _.keys(this.getGfiContent()[0]),
                     newRowNames = [],
@@ -92,6 +93,7 @@ define(function (require) {
                 this.setYears(years);
                 this.setRowNames(newRowNames);
                 this.combineYearsData(dataPerYear, newRowNames);
+
             }
         },
 
@@ -141,6 +143,74 @@ define(function (require) {
         setActualDataset: function (value) {
             this.set("actualDataset", value);
         },
+        setD3Data: function() {
+            this.set("d3Data",[
+                {
+                attr: "Dtv",
+                data: [
+                    {year: 2004, value: 115000},
+                    {year: 2005, value: 114000},
+                    {year: 2006, value: 114000},
+                    {year: 2007, value: 117000},
+                    {year: 2008, value: 116000},
+                    {year: 2009, value: 111000},
+                    {year: 2010, value: 111000},
+                    {year: 2011, value: 112000},
+                    {year: 2012, value: 110000},
+                    {year: 2013, value: 115000},
+                    {year: 2014, value: 107000},
+                    {year: "aktuell", value: 115000}]
+                },
+                {
+                attr: "Dtvw",
+                data: [
+                    {year: 2004, value: 122000},
+                    {year: 2005, value: 121000},
+                    {year: 2006, value: 122000},
+                    {year: 2007, value: 125000},
+                    {year: 2008, value: 123000},
+                    {year: 2009, value: 120000},
+                    {year: 2010, value: 119000},
+                    {year: 2011, value: 120000},
+                    {year: 2012, value: 118000},
+                    {year: 2013, value: 123000},
+                    {year: 2014, value: 113000},
+                    {year: "aktuell", value: 122000}]
+                },
+                {
+                attr: "Sv am_dtvw",
+                data: [
+                    {year: 2004, value: 18},
+                    {year: 2005, value: 16},
+                    {year: 2006, value: 16},
+                    {year: 2007, value: 18},
+                    {year: 2008, value: 17},
+                    {year: 2009, value: 19},
+                    {year: 2010, value: 19},
+                    {year: 2011, value: 19},
+                    {year: 2012, value: 18},
+                    {year: 2013, value: 16},
+                    {year: 2014, value: 17},
+                    {year: "aktuell", value: 17}]
+                },
+                {
+                attr: "Baustelleneinfluss",
+                data: [
+                    {year: 2004, value: "B"},
+                    {year: 2005, value: "B"},
+                    {year: 2006, value: "-"},
+                    {year: 2007, value: "-"},
+                    {year: 2008, value: "-"},
+                    {year: 2009, value: "-"},
+                    {year: 2010, value: "-"},
+                    {year: 2011, value: "-"},
+                    {year: 2012, value: "-"},
+                    {year: 2013, value: "-"},
+                    {year: 2014, value: "B"},
+                    {year: "aktuell", value: "B"}]
+                }
+                ]);
+        },
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
          */
@@ -160,18 +230,89 @@ define(function (require) {
                 }
             }, this);
         },
-        initializeD3: function () {
+        createD3Document: function () {
             console.log("initializeD3");
-            var data = [30, 86, 168, 281, 303, 365];
+            var d3Data = this.get("d3Data"),
+                attrToShowInD3 = this.get("attrToShowInD3"),
+                dataset = _.findWhere(d3Data, {attr: attrToShowInD3}),
+                data = dataset.data;
+                console.log(data);
+            // set the dimensions and margins of the graph
+            var margin = {top: 20, right: 20, bottom: 30, left: 70},
+                width = 500 - margin.left - margin.right,
+                height = 200 - margin.top - margin.bottom;
 
-            d3.select(".chart")
-              .selectAll("div")
-              .data(data)
-                .enter()
-                .append("div")
-                .style("width", function(d) { return d + "px"; })
-                .style("background-color", "red")
-                .text(function(d) { return d; });
+            // set the ranges
+            var x = d3.scale.ordinal().range([0, width])
+              .domain(data.map(function (d) { return d.year; }))
+              .rangePoints([0, width]);
+
+            var y = d3.scale.linear().range([height, 0])
+              .domain([d3.min(data, function (d) { return d.value; }), d3.max(data, function (d) { return d.value; })]);
+
+            // define the line
+            var valueline = d3.svg.line()
+                .x(function (d) { return x(d.year); })
+                .y(function (d) { return y(d.value); });
+
+            // append the svg obgect to the body of the page
+            // appends a 'group' element to 'svg'
+            // moves the 'group' element to the top left margin
+            var svg = d3.select(".chart").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+              // Add the valueline path.
+            svg.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", valueline);
+
+            // Add the scatterplot
+            svg.selectAll("dot")
+                .data(data)
+                .enter().append("circle")
+                .attr("cx", function(d) { return x(d.year); })
+                .attr("cy", function(d) { return y(d.value); })
+                .attr("r", 5)
+                .attr("class", "dot");
+
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+              // Add the X Axis
+              svg.append("g")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(xAxis);
+
+              // Add the Y Axis
+              svg.append("g")
+                  .call(yAxis);
+
+            // var tooltip = d3.select("svg")
+            //     .append("g")
+            //     .attr("class", "tooltip")
+            //     .append("text")
+            //     .style("position", "absolute")
+            //     // .style("visibility", "hidden")
+            //     .style("background", "red")
+            //     .text("a simple tooltip");
+
+            // $(".dot")
+            //     .on("mouseover", function (d) {
+            //         console.log(d);
+            //         console.log(x(d.toElement.__data__.year));
+            //         console.log(y(d.toElement.__data__.value));
+            //         tooltip.attr("transform", "translate(" + x(d.toElement.__data__.year) + "," + y(d.toElement.__data__.value) + ")");
+            //         tooltip.select("text").text(d.toElement.__data__.value);
+            //         // return tooltip.style("visibility", "visible");
+            //     });
+                // .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+                // .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
         }
     });
 

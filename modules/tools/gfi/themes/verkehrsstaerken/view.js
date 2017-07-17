@@ -10,7 +10,8 @@ define(function (require) {
         className: "table-wrapper-div",
         template: _.template(VerkehrsStaerkenThemeTemplateTabelle),
         events: {
-            "click #ansicht": "toggleAnsicht"
+            "click #ansicht": "toggleAnsicht",
+            "click .kat": "changeKat"
         },
         toggleAnsicht: function (evt) {
             var ansicht = evt.currentTarget.innerHTML;
@@ -19,13 +20,20 @@ define(function (require) {
                 this.model.setAnsicht("Tabellenansicht");
                 this.template = _.template(VerkehrsStaerkenThemeTemplateDiagramm);
                 this.render();
-                this.model.initializeD3();
+                this.model.set("attrToShowInD3", "Dtv");
+                this.model.createD3Document();
             }
             else {
                 this.model.setAnsicht("Diagrammansicht");
                 this.template = _.template(VerkehrsStaerkenThemeTemplateTabelle);
                 this.render();
             }
+        },
+        changeKat: function (evt) {
+            this.render();
+            this.model.set("attrToShowInD3", evt.currentTarget.id);
+            this.model.createD3Document();
+            $(evt.currentTarget).addClass("active");
         }
     });
 
