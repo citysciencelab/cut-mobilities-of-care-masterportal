@@ -90,31 +90,24 @@ define(function (require) {
                 this.setArt(art);
                 this.setYears(years);
                 this.setRowNames(newRowNames);
-                this.combineYearsData(dataPerYear, newRowNames, actualDataset);
+                this.combineYearsData(dataPerYear, years, newRowNames, actualDataset);
             }
         },
 
-        combineYearsData: function (dataPerYear, rowNames, actualDataset) {
+        combineYearsData: function (dataPerYear, years, rowNames, actualDataset) {
             var dataset = [];
 
-            _.each(rowNames, function (rowName) {
-                var attrDataArray = _.where(dataPerYear, {attrName: rowName}),
-                    attrObject = {attr: rowName},
-                    attrObjectDataArray = [];
+            _.each(years, function (year) {
+                var attrDataArray = _.where(dataPerYear, {year: year}),
+                    yearObject = {year: year};
 
                 _.each(attrDataArray, function (attrData) {
-                    attrObjectDataArray.push({
-                        year: attrData.year,
-                        value: attrData.value
-                    });
+                    yearObject[attrData.attrName] = attrData.value;
                 });
-                attrObjectDataArray.push({
-                    year: "Aktuell",
-                    value: actualDataset[rowName]
-                });
-                attrObject.data = attrObjectDataArray;
-                dataset.push(attrObject);
+                dataset.push(yearObject);
             });
+            actualDataset.year = "Aktuell";
+            dataset.push(actualDataset);
             this.setDataset(dataset);
         },
         // setter for rowNames
@@ -167,72 +160,109 @@ define(function (require) {
             }, this);
         },
         createD3Document: function () {
-            var dataset = this.getDataset(),
-                attrToShowInD3 = this.get("attrToShowInD3"),
-                dataset = _.findWhere(dataset, {attr: attrToShowInD3}),
-                data = dataset.data;
-
-            // set the dimensions and margins of the graph
-            var margin = {top: 20, right: 20, bottom: 30, left: 70},
+            console.log(this.getDataset());
+            var data = this.getDataset(),
+                attrToShow = this.get("attrToShowInD3"),
+                margin = {top: 20, right: 20, bottom: 30, left: 70},
                 width = 500 - margin.left - margin.right,
-                height = 200 - margin.top - margin.bottom;
+                height = 200 - margin.top - margin.bottom,
+                // set the ranges
+                minValue = d3.min(data, function (d) {
+                    return d[attrToShow];
+                }),
+                maxValue = d3.max(data, function (d) {
+                    return d[attrToShow];
+                }),
+                x = d3.scale.ordinal().range([0, width])
+                    .domain(data.map(function (d) {
+                        return d.year;
+                    }))
+                    .rangePoints([0, width]),
+                y = d3.scale.linear().range([height, 0])
+                    .domain([minValue, maxValue]),
+                // define the line
+                valueline = d3.svg.line()
+                    .x(function (d) {
+                        return x(d.year);
+                    })
+                    .y(function (d) {
+                        return y(d[attrToShow]);
+                    }),
+                // Tooltip-div needed for scatterplot points
+                div = d3.select(".tooltip"),
+                // set Axis
+                xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom"),
+                yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left"),
+                svg = d3.select(".chart").append("svg");
 
-            // set the ranges
-            var x = d3.scale.ordinal().range([0, width])
-              .domain(data.map(function (d) { return d.year; }))
-              .rangePoints([0, width]);
-
-            var y = d3.scale.linear().range([height, 0])
-              .domain([d3.min(data, function (d) { return d.value; }), d3.max(data, function (d) { return d.value; })]);
-
-            // define the line
-            var valueline = d3.svg.line()
-                .x(function (d) { return x(d.year); })
-                .y(function (d) { return y(d.value); });
-
-            // append the svg obgect to the body of the page
-            // appends a 'group' element to 'svg'
-            // moves the 'group' element to the top left margin
-            var svg = d3.select(".chart").append("svg")
-                .attr("width", width + margin.left + margin.right)
+            svg.attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-              // Add the valueline path.
+            // Add the valueline path.
             svg.append("path")
                 .data([data])
                 .attr("class", "line")
                 .attr("d", valueline);
 
-            var div = d3.select(".tooltip");
-            // Add the scatterplot
+            // Add the scatterplot for each point in line
             svg.selectAll("dot")
                 .data(data)
                 .enter().append("circle")
-                .attr("cx", function(d) { return x(d.year); })
-                .attr("cy", function(d) { return y(d.value); })
+                .attr("cx", function (d) {
+                    return x(d.year);
+                })
+                .attr("cy", function (d) {
+                    return y(d[attrToShow]);
+                })
                 .attr("r", 5)
                 .attr("class", "dot")
                 .on("mouseover", function (d) {
                     div.transition()
                         .duration(200)
-                        .style("opacity", .9)
-                    div.html("(" + d.year + ")<br/> " + d.value)
+                        .style("opacity", 0.9);
+                    div.html(d.Dtv)
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
                     })
-                .on("mouseout", function(d) {
+                .on("mouseout", function () {
                     div.transition()
                         .duration(500)
                         .style("opacity", 0);
                 });
+            // add Baustellen on x-Axis
+            svg.selectAll("dot")
+                .data(data)
+                .enter().append("g")
+                .attr("transform", function (d) {
+                    return "rotate(45," + x(d.year) + "," + y(minValue) + ")";
+                })
+                .append("g")
+                .append("rect")
+                .attr("x", function (d) {
+                    return x(d.year) - 5;
+                })
+                .attr("y", function () {
+                    return y(minValue) - 5;
+                })
+                .attr("width", 10)
+                .attr("height", 10)
+                .attr("class", function (d) {
+                    var returnVal = "";
 
-            var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom");
-            var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left");
+                    if (d.Baustelleneinfluss === "B") {
+                        returnVal = "dot_visible";
+                    }
+                    else {
+                        returnVal = "dot_invisible";
+                    }
+                    return returnVal;
+                });
+
             // Add the X Axis
             svg.append("g")
                 .attr("transform", "translate(0," + height + ")")

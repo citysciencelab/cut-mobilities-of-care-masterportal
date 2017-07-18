@@ -18,16 +18,25 @@
     stroke: none;
     fill: steelblue;
 }
+.dot_visible {
+    cursor: pointer;
+    stroke: none;
+    fill: red;
+}
+.dot_invisible {
+    display: none;
+}
 .domain {
     fill: none;
     stroke:#000;
 }
 .tooltip {
     position: relative;
-    /*fill: steelblue;*/
     color: black;
     background: gray;
     width: 50px;
+    height: 22px;
     border-radius: 10px !important;
+    border: 2px solid white;
     text-align: center;
 }

@@ -17,9 +17,9 @@
         <% _.each(rowNames, function (name) { %>
         <tr>
             <td><%= name %></td>
-            <td><%= _.findWhere(_.findWhere(dataset, {attr: name}).data, {year: "Aktuell"}).value %></td>
-            <% _.each(years, function (year){%>
-            <td><%=_.findWhere(_.findWhere(dataset, {attr: name}).data, {year: year}).value %></td>
+            <td><%= _.findWhere(dataset, {year: "Aktuell"})[name] %></td>
+            <% _.each(years, function(year) {%>
+            <td><%= _.findWhere(dataset, {year: year})[name] %></td>
             <% });%>
         </tr>
         <% });%>
