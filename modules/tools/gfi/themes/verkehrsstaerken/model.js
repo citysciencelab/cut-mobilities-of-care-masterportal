@@ -103,9 +103,9 @@ define(function (require) {
 
                 _.each(attrDataArray, function (attrData) {
                     yearObject[attrData.attrName] = attrData.value;
-                });
+                }, this);
                 dataset.push(yearObject);
-            });
+            }, this);
             actualDataset.year = "Aktuell";
             dataset.push(actualDataset);
             this.setDataset(dataset);
@@ -159,20 +159,40 @@ define(function (require) {
                 }
             }, this);
         },
+        // noData comes as "-" from WMS. turn noData into Value 0
+        parseNoDataFor3D: function (dataArray) {
+            var parsedDataArray = [];
+
+            _.each(dataArray, function (dataObj) {
+                var parsedDataObj = {};
+
+                _.each(dataObj, function (dataVal, dataAttr) {
+                    parsedDataObj[dataAttr] = this.parseNoData(dataVal);
+                }, this);
+                parsedDataArray.push(parsedDataObj);
+            }, this);
+            return parsedDataArray;
+        },
+        parseNoData: function (value) {
+            if (value === "-") {
+                value = 0;
+            }
+            return value;
+        },
         createD3Document: function () {
-            console.log(this.getDataset());
-            var data = this.getDataset(),
+            var data = this.parseNoDataFor3D(this.getDataset()),
                 attrToShow = this.get("attrToShowInD3"),
                 margin = {top: 20, right: 20, bottom: 30, left: 70},
-                width = 500 - margin.left - margin.right,
-                height = 200 - margin.top - margin.bottom,
+                width = $(".chart").width() - margin.left - margin.right,
+                height = $(".chart").height() - margin.top - margin.bottom,
                 // set the ranges
-                minValue = d3.min(data, function (d) {
-                    return d[attrToShow];
-                }),
                 maxValue = d3.max(data, function (d) {
                     return d[attrToShow];
                 }),
+                minValue = d3.min(data, function (d) {
+                    return d[attrToShow] - 1;
+                }),
+                // minValue = 0,
                 x = d3.scale.ordinal().range([0, width])
                     .domain(data.map(function (d) {
                         return d.year;
@@ -261,14 +281,14 @@ define(function (require) {
                     }
                     return returnVal;
                 })
-                .on("mouseover", function (d) {
+                .on("mouseover", function () {
                     div.transition()
                         .duration(200)
                         .style("opacity", 0.9);
                     div.html("Baustelleneinfluss")
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
-                    console.log(div);
+
                     })
                 .on("mouseout", function () {
                     div.transition()
