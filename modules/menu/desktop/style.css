@@ -31,6 +31,8 @@ ul#tree .glyphicon-info-sign {
 ul#tree.light {
     font-size: 12px;
     color: rgb(85, 85, 85);
+    max-height: calc(100vH - 75px);
+    overflow-y:auto;
 }
 
 ul#tree.light li {
