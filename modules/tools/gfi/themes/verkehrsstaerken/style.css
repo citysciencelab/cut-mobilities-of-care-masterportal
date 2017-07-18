@@ -31,10 +31,11 @@
     stroke:#000;
 }
 .tooltip {
+    display: inline;
     position: relative;
     color: black;
     background: gray;
-    width: 50px;
+    padding: 2px;
     height: 22px;
     border-radius: 10px !important;
     border: 2px solid white;

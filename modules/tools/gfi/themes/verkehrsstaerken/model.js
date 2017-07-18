@@ -197,12 +197,11 @@ define(function (require) {
                 yAxis = d3.svg.axis()
                     .scale(y)
                     .orient("left"),
-                svg = d3.select(".chart").append("svg");
-
-            svg.attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                svg = d3.select(".chart").append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             // Add the valueline path.
             svg.append("path")
                 .data([data])
@@ -225,7 +224,7 @@ define(function (require) {
                     div.transition()
                         .duration(200)
                         .style("opacity", 0.9);
-                    div.html(d.Dtv)
+                    div.html(d[attrToShow])
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
                     })
@@ -261,6 +260,20 @@ define(function (require) {
                         returnVal = "dot_invisible";
                     }
                     return returnVal;
+                })
+                .on("mouseover", function (d) {
+                    div.transition()
+                        .duration(200)
+                        .style("opacity", 0.9);
+                    div.html("Baustelleneinfluss")
+                        .style("left", (d3.event.offsetX + 5) + "px")
+                        .style("top", (d3.event.offsetY - 5) + "px");
+                    console.log(div);
+                    })
+                .on("mouseout", function () {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
                 });
 
             // Add the X Axis
