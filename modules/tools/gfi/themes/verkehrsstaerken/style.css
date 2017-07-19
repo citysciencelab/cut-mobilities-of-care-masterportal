@@ -4,7 +4,7 @@
 .pointer {
     cursor: pointer;
 }
-.chart {
+.graph {
     width: 500px;
     height: 200px;
 }
@@ -41,3 +41,4 @@
     border: 2px solid white;
     text-align: center;
 }
+

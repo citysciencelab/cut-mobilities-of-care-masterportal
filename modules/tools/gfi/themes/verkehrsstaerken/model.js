@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        d3 = require("d3"),
+        Radio = require("backbone.radio"),
         VerkehrsStaerkenTheme;
 
     VerkehrsStaerkenTheme = Theme.extend({
@@ -140,6 +140,14 @@ define(function (require) {
         getDataset: function () {
             return this.get("dataset");
         },
+        // getter for attrToShow
+        getAttrToShow: function () {
+            return this.get("attrToShow");
+        },
+        // setter for attrToShow
+        setAttrToShow: function (value) {
+            this.set("attrToShow", value);
+        },
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
          */
@@ -180,130 +188,141 @@ define(function (require) {
             return value;
         },
         createD3Document: function () {
-            var data = this.parseNoDataFor3D(this.getDataset()),
-                attrToShow = this.get("attrToShowInD3"),
-                margin = {top: 20, right: 20, bottom: 30, left: 70},
-                width = $(".chart").width() - margin.left - margin.right,
-                height = $(".chart").height() - margin.top - margin.bottom,
-                // set the ranges
-                maxValue = d3.max(data, function (d) {
-                    return d[attrToShow];
-                }),
-                minValue = d3.min(data, function (d) {
-                    return d[attrToShow] - 1;
-                }),
-                // minValue = 0,
-                x = d3.scale.ordinal().range([0, width])
-                    .domain(data.map(function (d) {
-                        return d.year;
-                    }))
-                    .rangePoints([0, width]),
-                y = d3.scale.linear().range([height, 0])
-                    .domain([minValue, maxValue]),
-                // define the line
-                valueline = d3.svg.line()
-                    .x(function (d) {
-                        return x(d.year);
-                    })
-                    .y(function (d) {
-                        return y(d[attrToShow]);
-                    }),
-                // Tooltip-div needed for scatterplot points
-                div = d3.select(".tooltip"),
-                // set Axis
-                xAxis = d3.svg.axis()
-                    .scale(x)
-                    .orient("bottom"),
-                yAxis = d3.svg.axis()
-                    .scale(y)
-                    .orient("left"),
-                svg = d3.select(".chart").append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
-                    .append("g")
-                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            // Add the valueline path.
-            svg.append("path")
-                .data([data])
-                .attr("class", "line")
-                .attr("d", valueline);
+            var graphConfig = {
+                graphType: "Linegraph",
+                selector: ".graph",
+                scaleTypeX: "ordinal",
+                scaleTypeY: "linear",
+                data: this.getDataset(),
+                xAttr: "year",
+                attrToShowArray: this.getAttrToShow()
+            };
 
-            // Add the scatterplot for each point in line
-            svg.selectAll("dot")
-                .data(data)
-                .enter().append("circle")
-                .attr("cx", function (d) {
-                    return x(d.year);
-                })
-                .attr("cy", function (d) {
-                    return y(d[attrToShow]);
-                })
-                .attr("r", 5)
-                .attr("class", "dot")
-                .on("mouseover", function (d) {
-                    div.transition()
-                        .duration(200)
-                        .style("opacity", 0.9);
-                    div.html(d[attrToShow])
-                        .style("left", (d3.event.offsetX + 5) + "px")
-                        .style("top", (d3.event.offsetY - 5) + "px");
-                    })
-                .on("mouseout", function () {
-                    div.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                });
-            // add Baustellen on x-Axis
-            svg.selectAll("dot")
-                .data(data)
-                .enter().append("g")
-                .attr("transform", function (d) {
-                    return "rotate(45," + x(d.year) + "," + y(minValue) + ")";
-                })
-                .append("g")
-                .append("rect")
-                .attr("x", function (d) {
-                    return x(d.year) - 5;
-                })
-                .attr("y", function () {
-                    return y(minValue) - 5;
-                })
-                .attr("width", 10)
-                .attr("height", 10)
-                .attr("class", function (d) {
-                    var returnVal = "";
+            Radio.trigger("Graph", "createGraph", graphConfig);
+            // var data = this.parseNoDataFor3D(this.getDataset()),
+            //     attrToShow = this.get("attrToShowInD3"),
+            //     margin = {top: 20, right: 20, bottom: 30, left: 70},
+            //     width = $(".chart").width() - margin.left - margin.right,
+            //     height = $(".chart").height() - margin.top - margin.bottom,
+            //     // set the ranges
+            //     maxValue = d3.max(data, function (d) {
+            //         return d[attrToShow];
+            //     }),
+            //     minValue = d3.min(data, function (d) {
+            //         return d[attrToShow] - 1;
+            //     }),
+            //     // minValue = 0,
+            //     x = d3.scale.ordinal().range([0, width])
+            //         .domain(data.map(function (d) {
+            //             return d.year;
+            //         }))
+            //         .rangePoints([0, width]),
+            //     y = d3.scale.linear().range([height, 0])
+            //         .domain([minValue, maxValue]),
+            //     // define the line
+            //     valueline = d3.svg.line()
+            //         .x(function (d) {
+            //             return x(d.year);
+            //         })
+            //         .y(function (d) {
+            //             return y(d[attrToShow]);
+            //         }),
+            //     // Tooltip-div needed for scatterplot points
+            //     div = d3.select(".tooltip"),
+            //     // set Axis
+            //     xAxis = d3.svg.axis()
+            //         .scale(x)
+            //         .orient("bottom"),
+            //     yAxis = d3.svg.axis()
+            //         .scale(y)
+            //         .orient("left"),
+            //     svg = d3.select(".chart").append("svg")
+            //         .attr("width", width + margin.left + margin.right)
+            //         .attr("height", height + margin.top + margin.bottom)
+            //         .append("g")
+            //         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            // // Add the valueline path.
+            // svg.append("path")
+            //     .data([data])
+            //     .attr("class", "line")
+            //     .attr("d", valueline);
 
-                    if (d.Baustelleneinfluss === "B") {
-                        returnVal = "dot_visible";
-                    }
-                    else {
-                        returnVal = "dot_invisible";
-                    }
-                    return returnVal;
-                })
-                .on("mouseover", function () {
-                    div.transition()
-                        .duration(200)
-                        .style("opacity", 0.9);
-                    div.html("Baustelleneinfluss")
-                        .style("left", (d3.event.offsetX + 5) + "px")
-                        .style("top", (d3.event.offsetY - 5) + "px");
+            // // Add the scatterplot for each point in line
+            // svg.selectAll("dot")
+            //     .data(data)
+            //     .enter().append("circle")
+            //     .attr("cx", function (d) {
+            //         return x(d.year);
+            //     })
+            //     .attr("cy", function (d) {
+            //         return y(d[attrToShow]);
+            //     })
+            //     .attr("r", 5)
+            //     .attr("class", "dot")
+            //     .on("mouseover", function (d) {
+            //         div.transition()
+            //             .duration(200)
+            //             .style("opacity", 0.9);
+            //         div.html(d[attrToShow])
+            //             .style("left", (d3.event.offsetX + 5) + "px")
+            //             .style("top", (d3.event.offsetY - 5) + "px");
+            //         })
+            //     .on("mouseout", function () {
+            //         div.transition()
+            //             .duration(500)
+            //             .style("opacity", 0);
+            //     });
+            // // add Baustellen on x-Axis
+            // svg.selectAll("dot")
+            //     .data(data)
+            //     .enter().append("g")
+            //     .attr("transform", function (d) {
+            //         return "rotate(45," + x(d.year) + "," + y(minValue) + ")";
+            //     })
+            //     .append("g")
+            //     .append("rect")
+            //     .attr("x", function (d) {
+            //         return x(d.year) - 5;
+            //     })
+            //     .attr("y", function () {
+            //         return y(minValue) - 5;
+            //     })
+            //     .attr("width", 10)
+            //     .attr("height", 10)
+            //     .attr("class", function (d) {
+            //         var returnVal = "";
 
-                    })
-                .on("mouseout", function () {
-                    div.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                });
+            //         if (d.Baustelleneinfluss === "B") {
+            //             returnVal = "dot_visible";
+            //         }
+            //         else {
+            //             returnVal = "dot_invisible";
+            //         }
+            //         return returnVal;
+            //     })
+            //     .on("mouseover", function () {
+            //         div.transition()
+            //             .duration(200)
+            //             .style("opacity", 0.9);
+            //         div.html("Baustelleneinfluss")
+            //             .style("left", (d3.event.offsetX + 5) + "px")
+            //             .style("top", (d3.event.offsetY - 5) + "px");
 
-            // Add the X Axis
-            svg.append("g")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
+            //         })
+            //     .on("mouseout", function () {
+            //         div.transition()
+            //             .duration(500)
+            //             .style("opacity", 0);
+            //     });
 
-            // Add the Y Axis
-            svg.append("g")
-                .call(yAxis);
+            // // Add the X Axis
+            // svg.append("g")
+            //     .attr("transform", "translate(0," + height + ")")
+            //     .call(xAxis);
+
+            // // Add the Y Axis
+            // svg.append("g")
+            //     .call(yAxis);
 
         }
     });
