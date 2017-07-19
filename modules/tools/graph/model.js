@@ -12,24 +12,11 @@ define(function (require) {
             channel.on({
                 "createGraph": this.createGraph
             }, this);
-            // testaufruf, kann später gelöscht werden
-            // this.createGraph({
-            //     graphType: "Linegraph",
-            //     selector: ".graph",
-            //     scaleTypeX: "ordinal",
-            //     scaleTypeY: "linear",
-            //     data: [
-            //         {year: 2004, attr1: 10, attr2: 20, attr3: 30},
-            //         {year: 2005, attr1: 12, attr2: 19, attr3: 20},
-            //         {year: 2006, attr1: 14, attr2: 18, attr3: 10},
-            //         {year: 2007, attr1: 16, attr2: 17, attr3: 20},
-            //         {year: 2008, attr1: 18, attr2: 16, attr3: 30},
-            //         {year: 2009, attr1: 20, attr2: 15, attr3: 40},
-            //         {year: "aktuell", attr1: 20, attr2: 15, attr3: 40}
-            //         ],
-            //     xAttr: "year",
-            //     attrToShowArray: ["attr1", "attr2", "attr3"]
-            // });
+            channel.reply({
+                "getGraphParams": function () {
+                    return this.getGraphParams();
+                    }
+            }, this);
         },
         createGraph: function (graphConfig) {
             if (graphConfig.graphType === "Linegraph") {
@@ -228,9 +215,11 @@ define(function (require) {
             // // Add the Axis
             this.appendXAxisToSvg(svg, height, width, xAxis, margin, xAttr);
             this.appendYAxisToSvg(svg, height, width, yAxis, margin, attrToShowArray[0]);
-        },
-        getDataset: function () {
-            return this.get("dataset");
+            this.setGraphParams({
+                scaleX: scaleX,
+                scaleY: scaleY,
+                tooltipDiv: div
+            });
         },
         // noData comes as "-" from WMS. turn noData into Value 0
         parseNoDataFor3D: function (dataArray) {
@@ -251,6 +240,15 @@ define(function (require) {
                 value = 0;
             }
             return value;
+        },
+
+        // getter for graphParams
+        getGraphParams: function () {
+            return this.get("graphParams");
+        },
+        // setter for graphParams
+        setGraphParams: function (value) {
+            this.set("graphParams", value);
         }
     });
 
