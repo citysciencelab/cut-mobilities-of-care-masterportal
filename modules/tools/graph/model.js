@@ -140,16 +140,31 @@ define(function (require) {
                 .attr("class", className)
                 .attr("d", object);
         },
-        appendXAxisToSvg: function (svg, height, xAxis) {
+        appendXAxisToSvg: function (svg, height, width, xAxis, marginObj, xAttr) {
             svg.append("g")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", "translate(0," + (height + 10) + ")")
                 .call(xAxis);
+            // text for xAxis
+            svg.append("text")
+                .attr("x", (width / 2))
+                .attr("y", height + marginObj.bottom - 5)
+                .style("text-anchor", "middle")
+                .text(xAttr);
         },
-        appendYAxisToSvg: function (svg, yAxis) {
+        appendYAxisToSvg: function (svg, height, width, yAxis, marginObj, attrToShow) {
             svg.append("g")
+                .attr("transform", "translate(-10,0)")
                 .call(yAxis);
+            // text for yAxis
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", (0 - marginObj.left + 5))
+                .attr("x", (0 - (height / 2)))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text(attrToShow);
         },
-        appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow) {
+        appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, div) {
             svg.selectAll("dot")
                 .data(data)
                 .enter().append("circle")
@@ -160,26 +175,27 @@ define(function (require) {
                     return scaleY(d[yAttrToShow]);
                 })
                 .attr("r", 5)
-                .attr("class", "dot");
-                // .on("mouseover", function (d) {
-                //     div.transition()
-                //         .duration(200)
-                //         .style("opacity", 0.9);
-                //     div.html(d[attrToShow])
-                //         .style("left", (d3.event.offsetX + 5) + "px")
-                //         .style("top", (d3.event.offsetY - 5) + "px");
-                //     })
-                // .on("mouseout", function () {
-                //     div.transition()
-                //         .duration(500)
-                //         .style("opacity", 0);
-                // });
+                .attr("class", "dot")
+                .on("mouseover", function (d) {
+                    div.transition()
+                        .duration(200)
+                        .style("opacity", 0.9);
+                    div.html(d[yAttrToShow])
+                        .attr("style", "background: gray")
+                        .style("left", (d3.event.offsetX + 5) + "px")
+                        .style("top", (d3.event.offsetY - 5) + "px");
+                    })
+                .on("mouseout", function () {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                    });
         },
         createSvg: function (selector, marginObj, width, height) {
             return d3.select(selector).append("svg")
                     .attr("width", width + marginObj.left + marginObj.right)
                     .attr("height", height + marginObj.top + marginObj.bottom)
-                    .attr("class", "chart")
+                    .attr("class", "graph-svg")
                     .append("g")
                     .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
         },
@@ -190,14 +206,14 @@ define(function (require) {
                 data = this.parseNoDataFor3D(graphConfig.data),
                 xAttr = graphConfig.xAttr,
                 attrToShowArray = graphConfig.attrToShowArray,
-                margin = {top: 20, right: 20, bottom: 30, left: 70},
+                margin = {top: 20, right: 20, bottom: 50, left: 100},
                 width = $(selector).width() - margin.left - margin.right,
                 height = $(selector).height() - margin.top - margin.bottom,
                 scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
                 scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
                 valueLine,
                 // Tooltip-div needed for scatterplot points
-                // div = d3.select(".tooltip"),
+                div = d3.select(".graph-tooltip"),
                 // set Axis
                 xAxis = this.createAxis(scaleX, "bottom"),
                 yAxis = this.createAxis(scaleY, "left"),
@@ -207,11 +223,11 @@ define(function (require) {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
                 this.appendDataToSvg(svg, data, "line", valueLine);
                 // Add the scatterplot for each point in line
-                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow);
+                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, div);
             }, this);
             // // Add the Axis
-            this.appendXAxisToSvg(svg, height, xAxis);
-            this.appendYAxisToSvg(svg, yAxis);
+            this.appendXAxisToSvg(svg, height, width, xAxis, margin, xAttr);
+            this.appendYAxisToSvg(svg, height, width, yAxis, margin, attrToShowArray[0]);
         },
         getDataset: function () {
             return this.get("dataset");
