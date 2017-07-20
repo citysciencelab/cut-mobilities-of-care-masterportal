@@ -6,7 +6,7 @@
 }
 .graph {
     width: 500px;
-    height: 200px;
+    height: 250px;
 }
 .line {
   fill: none;
@@ -30,14 +30,11 @@
     fill: none;
     stroke:#000;
 }
-.graph-tooltip {
+.graph-tooltip-div {
     display: inline-block;
     position: relative;
     color: black;
     padding: 2px;
-    height: 22px;
-    border-radius: 10px !important;
     border: 2px solid white;
     text-align: center;
 }
-

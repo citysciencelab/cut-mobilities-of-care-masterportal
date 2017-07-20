@@ -192,6 +192,7 @@ define(function (require) {
             var graphConfig = {
                 graphType: "Linegraph",
                 selector: ".graph",
+                selectorTooltip: ".graph-tooltip-div",
                 scaleTypeX: "ordinal",
                 scaleTypeY: "linear",
                 data: this.getDataset(),
@@ -203,31 +204,29 @@ define(function (require) {
             this.manipulateSVG();
         },
         manipulateSVG: function () {
-            var graphParams = Radio.request ("Graph", "getGraphParams");
-            console.log(graphParams);
-            var data = this.parseNoDataFor3D(this.getDataset()),
+            var graphParams = Radio.request ("Graph", "getGraphParams"),
+                data = this.parseNoDataFor3D(this.getDataset()),
                 svg = d3.select(".graph-svg"),
                 scaleX = graphParams.scaleX,
                 scaleY = graphParams.scaleY,
-                minValue = scaleY.domain()[0],
-                div = graphParams.tooltipDiv;
+                tooltipDiv = graphParams.tooltipDiv,
+                margin = graphParams.margin,
+                scaleOffset = graphParams.scaleOffset,
+                size = 10,
+                attrToShowArray = this.getAttrToShow();
 
             svg.selectAll("dot")
                 .data(data)
                 .enter().append("g")
-                // .attr("transform", function (d) {
-                //     return "rotate(45," + scaleX(d.year) + "," + scaleY(minValue) + ")";
-                // })
-                .append("g")
                 .append("rect")
                 .attr("x", function (d) {
-                    return scaleX(d.year) - 5;
+                    return scaleX(d.year) + margin.left - (size / 2);
                 })
-                .attr("y", function () {
-                    return scaleY(minValue) - 5;
+                .attr("y", function (d) {
+                    return scaleY(d[attrToShowArray[0]]) + (size / 2) + scaleOffset;
                 })
-                .attr("width", 10)
-                .attr("height", 10)
+                .attr("width", size)
+                .attr("height", size)
                 .attr("class", function (d) {
                     var returnVal = "";
 
@@ -239,20 +238,46 @@ define(function (require) {
                     }
                     return returnVal;
                 })
-                .on("mouseover", function () {
-                    div.transition()
+                .on("mouseover", function (d) {
+                    tooltipDiv.transition()
                         .duration(200)
                         .style("opacity", 0.9);
-                    div.html("Baustelleneinfluss")
+                    tooltipDiv.html(d[attrToShowArray[0]])
+                        .attr("style", "background: gray")
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
 
                     })
                 .on("mouseout", function () {
-                    div.transition()
+                    tooltipDiv.transition()
                         .duration(500)
                         .style("opacity", 0);
                 });
+            var legendBBox = svg.selectAll(".graph-legend").node().getBBox(),
+                width = legendBBox.width,
+                height = legendBBox.height,
+                x = legendBBox.x,
+                y = legendBBox.y;
+
+            svg.selectAll(".graph-legend").append("g")
+                .append("rect")
+                .attr("width", 10)
+                .attr("height", 10)
+                .attr("class", "dot_visible")
+                .attr("transform", "translate(" + (x + width + 10) + "," + (y + 2.5) + ")");
+
+            legendBBox = svg.selectAll(".graph-legend").node().getBBox();
+                width = legendBBox.width;
+                height = legendBBox.height;
+                x = legendBBox.x;
+                y = legendBBox.y;
+
+            svg.selectAll(".graph-legend").append("g")
+                .append("text")
+                .attr("x", 10)
+                .attr("y", 10)
+                .attr("transform", "translate(" + (x + width) + "," + (y + 2.5) + ")")
+                .text("Baustelleneinfluss");
         }
     });
 

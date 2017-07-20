@@ -127,31 +127,32 @@ define(function (require) {
                 .attr("class", className)
                 .attr("d", object);
         },
-        appendXAxisToSvg: function (svg, height, width, xAxis, marginObj, xAttr) {
-            svg.append("g")
-                .attr("transform", "translate(0," + (height + 10) + ")")
+        appendXAxisToSvg: function (svg, height, width, xAxis, marginObj, xAttr, scaleOffset, textOffset) {
+
+            var xAxis = svg.append("g")
+                .attr("transform", "translate(0," + (height + scaleOffset) + ")")
                 .call(xAxis);
             // text for xAxis
-            svg.append("text")
+            xAxis.append("text")
                 .attr("x", (width / 2))
-                .attr("y", height + marginObj.bottom - 5)
+                .attr("y", 2 * (scaleOffset + textOffset))
                 .style("text-anchor", "middle")
                 .text(xAttr);
         },
-        appendYAxisToSvg: function (svg, height, width, yAxis, marginObj, attrToShow) {
-            svg.append("g")
-                .attr("transform", "translate(-10,0)")
+        appendYAxisToSvg: function (svg, height, width, yAxis, marginObj, attrToShow, scaleOffset, textOffset) {
+            var yAxis = svg.append("g")
+                .attr("transform", "translate(-" + scaleOffset + ",0)")
                 .call(yAxis);
             // text for yAxis
-            svg.append("text")
+            yAxis.append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y", (0 - marginObj.left + 5))
+                .attr("y", (0 - marginObj.left + textOffset + scaleOffset))
                 .attr("x", (0 - (height / 2)))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .text(attrToShow);
         },
-        appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, div) {
+        appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv) {
             svg.selectAll("dot")
                 .data(data)
                 .enter().append("circle")
@@ -164,16 +165,16 @@ define(function (require) {
                 .attr("r", 5)
                 .attr("class", "dot")
                 .on("mouseover", function (d) {
-                    div.transition()
+                    tooltipDiv.transition()
                         .duration(200)
                         .style("opacity", 0.9);
-                    div.html(d[yAttrToShow])
+                    tooltipDiv.html(d[yAttrToShow])
                         .attr("style", "background: gray")
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
                     })
                 .on("mouseout", function () {
-                    div.transition()
+                    tooltipDiv.transition()
                         .duration(500)
                         .style("opacity", 0);
                     });
@@ -183,8 +184,37 @@ define(function (require) {
                     .attr("width", width + marginObj.left + marginObj.right)
                     .attr("height", height + marginObj.top + marginObj.bottom)
                     .attr("class", "graph-svg")
-                    .append("g")
-                    .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
+                        .append("g")
+                        .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
+        },
+        appendLegend: function (svg, attrToShowArray, marginObj, height, textOffset, scaleOffset) {
+            var legend = svg.append("g")
+                .attr("class", "graph-legend")
+                .selectAll("g")
+                .data(attrToShowArray)
+                .enter()
+                .append("g")
+                    .attr("class", "graph-legend-item")
+                    .attr("transform", function (d, i) {
+                    var deltaHeight = 15,
+                        x = 0 - marginObj.left + textOffset + scaleOffset,
+                        y = ((i * deltaHeight) + height + (3 * (textOffset + scaleOffset)));
+
+                    return "translate(" + x + "," + y + ")";
+                });
+
+            legend.append("circle")
+                .attr("cx", 5)
+                .attr("cy", 5)
+                .attr("r", 5)
+                .attr("class", "dot");
+
+            legend.append("text")
+                .attr("x", 10 + 10)
+                .attr("y", 10)
+                .text(function (d) {
+                    return d;
+                });
         },
         createLineGraph: function (graphConfig) {
             var selector = graphConfig.selector,
@@ -193,32 +223,36 @@ define(function (require) {
                 data = this.parseNoDataFor3D(graphConfig.data),
                 xAttr = graphConfig.xAttr,
                 attrToShowArray = graphConfig.attrToShowArray,
-                margin = {top: 20, right: 20, bottom: 50, left: 100},
+                margin = {top: 20, right: 20, bottom: 70, left: 100},
                 width = $(selector).width() - margin.left - margin.right,
                 height = $(selector).height() - margin.top - margin.bottom,
                 scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
                 scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
                 valueLine,
-                // Tooltip-div needed for scatterplot points
-                div = d3.select(".graph-tooltip"),
-                // set Axis
+                tooltipDiv = d3.select(graphConfig.selectorTooltip),
                 xAxis = this.createAxis(scaleX, "bottom"),
                 yAxis = this.createAxis(scaleY, "left"),
-                svg = this.createSvg(selector, margin, width, height);
+                svg = this.createSvg(selector, margin, width, height),
+                scaleOffset = 10,
+                textOffset = 5;
 
             _.each(attrToShowArray, function (yAttrToShow) {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
                 this.appendDataToSvg(svg, data, "line", valueLine);
                 // Add the scatterplot for each point in line
-                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, div);
+                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv);
             }, this);
             // // Add the Axis
-            this.appendXAxisToSvg(svg, height, width, xAxis, margin, xAttr);
-            this.appendYAxisToSvg(svg, height, width, yAxis, margin, attrToShowArray[0]);
+            this.appendXAxisToSvg(svg, height, width, xAxis, margin, xAttr, scaleOffset, textOffset);
+            this.appendYAxisToSvg(svg, height, width, yAxis, margin, attrToShowArray[0], scaleOffset, textOffset);
+            this.appendLegend(svg, attrToShowArray, margin, height, textOffset, scaleOffset);
             this.setGraphParams({
                 scaleX: scaleX,
                 scaleY: scaleY,
-                tooltipDiv: div
+                tooltipDiv: tooltipDiv,
+                margin: margin,
+                scaleOffset: scaleOffset,
+                textOffset: textOffset
             });
         },
         // noData comes as "-" from WMS. turn noData into Value 0
