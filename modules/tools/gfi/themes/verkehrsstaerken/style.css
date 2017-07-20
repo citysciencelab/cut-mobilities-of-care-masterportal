@@ -38,3 +38,9 @@
     border: 2px solid white;
     text-align: center;
 }
+.download {
+    float:right;
+    right: 10px;
+    font-size: 22px;
+    background-color: white;
+}

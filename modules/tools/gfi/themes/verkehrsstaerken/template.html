@@ -3,11 +3,14 @@
     <strong><%=zaehlstelle%>: <%=bezeichnung%></strong>
     <br>
     <small>Art: <%=art%></small>
+    <a href="<%=link%>" target="_blank" title="Link zum Download der Daten">
+        <span class="glyphicon glyphicon-save download"></span>
+    </a>
 </div>
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
-  <li><a data-toggle="tab" href="#diagramm">Diagramm</a></li></ul>
-
+  <li><a data-toggle="tab" href="#diagramm">Diagramm</a></li>
+</ul>
 <div class="tab-content">
     <div id="tabelle" class="tab-pane fade in active">
         <table class="table table-striped table-condensed">
@@ -41,8 +44,4 @@
         <div class="graph-tooltip-div"></div>
     </div>
   </div>
-</div>
-<br>
-<div class="panel">
-    <span>Link auf die vollständigen Daten zum <a href="<%=link%>" target="_blank">Download</a></span>
 </div>
