@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<div class= "panel text-align-center">
+    <strong><%=zaehlstelle%>: <%=bezeichnung%></strong>
+    <br>
+    <small>Art: <%=art%></small>
+</div>
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
+  <li><a data-toggle="tab" href="#diagramm">Diagramm</a></li></ul>
+
+<div class="tab-content">
+    <div id="tabelle" class="tab-pane fade in active">
+        <table class="table table-striped table-condensed">
+            <thead>
+                <th>Kategorie</th>
+                <th>Aktuell</th>
+                <% _.each(years, function (year){%>
+                <th><%=year%></th>
+                <%});%>
+            </thead>
+            <tbody>
+                <% _.each(rowNames, function (name) { %>
+                <tr>
+                    <td><%= name %></td>
+                    <td><%= _.findWhere(dataset, {year: "Aktuell"})[name] %></td>
+                    <% _.each(years, function(year) {%>
+                    <td><%= _.findWhere(dataset, {year: year})[name] %></td>
+                    <% });%>
+                </tr>
+                <% });%>
+            </tbody>
+        </table>
+    </div>
+  <div id="diagramm" class="tab-pane fade">
+    <div class="btn-group" role="group">
+        <button id= "Dtv" type="button" class="btn btn-default kat active" title="Durchschnittl. tägl. Verkehr">DTV</button>
+        <button id= "Dtvw" type="button" class="btn btn-default kat" title="Durchschnittl. werktägl. Verkehr">DTVw</button>
+        <button id= "Sv am_dtvw" type="button" class="btn btn-default kat" title="Schwerverkehranteil am DTVw">SV-Anteil am DTVw</button>
+    </div>
+    <div id="d3-div" class="graph">
+        <div class="graph-tooltip-div"></div>
+    </div>
+  </div>
+</div>
+<br>
+<div class="panel">
+    <span>Link auf die vollständigen Daten zum <a href="<%=link%>" target="_blank">Download</a></span>
+</div>

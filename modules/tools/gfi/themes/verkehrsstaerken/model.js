@@ -92,6 +92,20 @@ define(function (require) {
                 this.setYears(years);
                 this.setRowNames(newRowNames);
                 this.combineYearsData(dataPerYear, years, newRowNames, actualDataset);
+                var graphConfig = {
+                    graphType: "Linegraph",
+                    selector: ".graph",
+                    selectorTooltip: ".graph-tooltip-div",
+                    scaleTypeX: "ordinal",
+                    scaleTypeY: "linear",
+                    data: this.getDataset(),
+                    xAttr: "year",
+                    attrToShowArray: ["Dtv"]
+                    };
+
+                    console.log(graphConfig);
+                Radio.trigger("Graph", "createGraph", graphConfig);
+                // this.manipulateSVG();
             }
         },
 
@@ -114,10 +128,6 @@ define(function (require) {
         // setter for rowNames
         setRowNames: function (value) {
             this.set("rowNames", value);
-        },
-        // setter for ansicht
-        setAnsicht: function (value) {
-            this.set("ansicht", value);
         },
         // setter for years
         setYears: function (value) {
