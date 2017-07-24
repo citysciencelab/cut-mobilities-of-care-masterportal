@@ -71,6 +71,7 @@ define(function (require) {
             var params = {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
+                SRSNAME: Radio.request("MapView", "getProjection").getCode(),
                 TYPENAME: this.get("featureType"),
                 VERSION: this.getVersion()
             };
