@@ -5,13 +5,14 @@
       "searchBar": {
         "minChars": 3,
         "gazetteer": {
-           "minChars": 3,
-           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-           "searchStreets": true,
-           "searchHouseNumbers": true,
-           "searchDistricts": true,
-           "searchParcels": true
-       },
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+        },
 
        "specialWFS": {
            "minChar": 3,
