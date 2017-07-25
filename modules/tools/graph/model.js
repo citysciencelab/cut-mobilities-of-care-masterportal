@@ -110,6 +110,9 @@ define(function (require) {
         createAxis: function (scale, position) {
             return d3.svg.axis()
                     .scale(scale)
+                    .tickFormat(function (d) {
+                        return String(d);
+                    })
                     .orient(position);
         },
         createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow) {
@@ -127,27 +130,32 @@ define(function (require) {
                 .attr("class", className)
                 .attr("d", object);
         },
-        appendXAxisToSvg: function (svg, height, width, xAxis, marginObj, xAttr, scaleOffset, textOffset) {
-
-            var xAxis = svg.append("g")
-                .attr("transform", "translate(0," + (height + scaleOffset) + ")")
-                .call(xAxis);
+        appendXAxisToSvg: function (svg, xAxis, xAttr, offset) {
+            var svgBBox = svg.node().getBBox(),
+                xAxis = svg.append("g")
+                    .attr("transform", "translate(0," + svgBBox.height + ")")
+                    .attr("class", "xAxis")
+                    .call(xAxis),
+                xAxisBBox = svg.selectAll(".xAxis").node().getBBox();
             // text for xAxis
             xAxis.append("text")
-                .attr("x", (width / 2))
-                .attr("y", 2 * (scaleOffset + textOffset))
+                .attr("x", (xAxisBBox.width / 2))
+                .attr("y", (xAxisBBox.height + offset))
                 .style("text-anchor", "middle")
                 .text(xAttr);
         },
-        appendYAxisToSvg: function (svg, height, width, yAxis, marginObj, attrToShow, scaleOffset, textOffset) {
-            var yAxis = svg.append("g")
-                .attr("transform", "translate(-" + scaleOffset + ",0)")
-                .call(yAxis);
+        appendYAxisToSvg: function (svg, yAxis, attrToShow, offset) {
+            var svgBBox = svg.node().getBBox(),
+                yAxis = svg.append("g")
+                .attr("transform", "translate(" + svgBBox.x + ",0)")
+                .attr("class", "yAxis")
+                .call(yAxis),
+                yAxisBBox = svg.selectAll(".yAxis").node().getBBox();
             // text for yAxis
             yAxis.append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y", (0 - marginObj.left + textOffset + scaleOffset))
-                .attr("x", (0 - (height / 2)))
+                .attr("x", (0 - (yAxisBBox.height / 2)))
+                .attr("y", (0 - yAxisBBox.width - (2 * offset)))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .text(attrToShow);
@@ -187,21 +195,22 @@ define(function (require) {
                         .append("g")
                         .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
         },
-        appendLegend: function (svg, attrToShowArray, marginObj, height, textOffset, scaleOffset) {
-            var legend = svg.append("g")
-                .attr("class", "graph-legend")
-                .selectAll("g")
-                .data(attrToShowArray)
-                .enter()
-                .append("g")
-                    .attr("class", "graph-legend-item")
-                    .attr("transform", function (d, i) {
-                    var deltaHeight = 15,
-                        x = 0 - marginObj.left + textOffset + scaleOffset,
-                        y = ((i * deltaHeight) + height + (3 * (textOffset + scaleOffset)));
+        appendLegend: function (svg, attrToShowArray) {
+            var BBox = svg.node().getBBox(),
+                legend = svg.append("g")
+                    .attr("class", "graph-legend")
+                    .selectAll("g")
+                    .data(attrToShowArray)
+                    .enter()
+                    .append("g")
+                        .attr("class", "graph-legend-item")
+                        .attr("transform", function (d, i) {
+                        var deltaHeight = 15,
+                            x = BBox.x,
+                            y = ((i * deltaHeight) + BBox.height);
 
-                    return "translate(" + x + "," + y + ")";
-                });
+                        return "translate(" + x + "," + y + ")";
+                    });
 
             legend.append("circle")
                 .attr("cx", 5)
@@ -210,7 +219,7 @@ define(function (require) {
                 .attr("class", "dot");
 
             legend.append("text")
-                .attr("x", 10 + 10)
+                .attr("x", 20)
                 .attr("y", 10)
                 .text(function (d) {
                     return d;
@@ -233,8 +242,7 @@ define(function (require) {
                 xAxis = this.createAxis(scaleX, "bottom"),
                 yAxis = this.createAxis(scaleY, "left"),
                 svg = this.createSvg(selector, margin, width, height),
-                scaleOffset = 10,
-                textOffset = 5;
+                offset = 10;
 
             _.each(attrToShowArray, function (yAttrToShow) {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
@@ -242,17 +250,16 @@ define(function (require) {
                 // Add the scatterplot for each point in line
                 this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv);
             }, this);
-            // // Add the Axis
-            this.appendXAxisToSvg(svg, height, width, xAxis, margin, xAttr, scaleOffset, textOffset);
-            this.appendYAxisToSvg(svg, height, width, yAxis, margin, attrToShowArray[0], scaleOffset, textOffset);
-            this.appendLegend(svg, attrToShowArray, margin, height, textOffset, scaleOffset);
+            // Add the Axis
+            this.appendXAxisToSvg(svg, xAxis, xAttr, offset);
+            this.appendYAxisToSvg(svg, yAxis, attrToShowArray[0], offset);
+            this.appendLegend(svg, attrToShowArray);
             this.setGraphParams({
                 scaleX: scaleX,
                 scaleY: scaleY,
                 tooltipDiv: tooltipDiv,
                 margin: margin,
-                scaleOffset: scaleOffset,
-                textOffset: textOffset
+                offset: offset
             });
         },
         // noData comes as "-" from WMS. turn noData into Value 0

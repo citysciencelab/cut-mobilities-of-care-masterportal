@@ -92,19 +92,18 @@ define(function (require) {
                 this.setYears(years);
                 this.setRowNames(newRowNames);
                 this.combineYearsData(dataPerYear, years, newRowNames, actualDataset);
-                var graphConfig = {
-                    graphType: "Linegraph",
-                    selector: ".graph",
-                    selectorTooltip: ".graph-tooltip-div",
-                    scaleTypeX: "ordinal",
-                    scaleTypeY: "linear",
-                    data: this.getDataset(),
-                    xAttr: "year",
-                    attrToShowArray: ["Dtv"]
-                    };
+                // var graphConfig = {
+                //     graphType: "Linegraph",
+                //     selector: ".graph",
+                //     selectorTooltip: ".graph-tooltip-div",
+                //     scaleTypeX: "ordinal",
+                //     scaleTypeY: "linear",
+                //     data: this.getDataset(),
+                //     xAttr: "year",
+                //     attrToShowArray: ["Dtv"]
+                //     };
 
-                    console.log(graphConfig);
-                Radio.trigger("Graph", "createGraph", graphConfig);
+                // Radio.trigger("Graph", "createGraph", graphConfig);
                 // this.manipulateSVG();
             }
         },
@@ -221,7 +220,7 @@ define(function (require) {
                 scaleY = graphParams.scaleY,
                 tooltipDiv = graphParams.tooltipDiv,
                 margin = graphParams.margin,
-                scaleOffset = graphParams.scaleOffset,
+                offset = graphParams.offset,
                 size = 10,
                 attrToShowArray = this.getAttrToShow();
 
@@ -233,7 +232,7 @@ define(function (require) {
                     return scaleX(d.year) + margin.left - (size / 2);
                 })
                 .attr("y", function (d) {
-                    return scaleY(d[attrToShowArray[0]]) + (size / 2) + scaleOffset;
+                    return scaleY(d[attrToShowArray[0]]) + (size / 2) + offset;
                 })
                 .attr("width", size)
                 .attr("height", size)
