@@ -256,8 +256,8 @@ define([
                 if (layer.get("id") === "2298") {
                     style.push("strassenbaumkataster_grau");
                 }
-                if (layer.has("style")) {
-                    style.push(layer.get("style"));
+                if (layer.has("styles")) {
+                    style.push(layer.get("styles"));
                 }
                 // Für jeden angegebenen Layer muss ein Style angegeben werden.
                 // Wenn ein Style mit einem Blank angegeben wird,
