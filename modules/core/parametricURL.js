@@ -153,21 +153,20 @@ define([
                 ];
 
             if (bezirk.length === 1) {
-                this.set("center", {
-                    crs: "",
-                    x: _.findWhere(bezirke, {number: bezirk}).position[0],
-                    y: _.findWhere(bezirke, {number: bezirk}).position[1],
-                    z: 0
-                });
+                bezirk = _.findWhere(bezirke, {number: bezirk});
             }
             else {
-                this.set("center", {
-                    crs: "",
-                    x: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[0],
-                    y: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[1],
-                    z: 0
-                });
+                bezirk = _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()});
             }
+            if (_.isUndefined(bezirk)) {
+                return;
+            }
+            this.set("center", {
+                crs: "",
+                x: _.findWhere(bezirke, {name: bezirk.name}).position[0],
+                y: _.findWhere(bezirke, {name: bezirk.name}).position[1],
+                z: 0
+            });
         },
         parseFeatureId: function (result) {
             var ids = _.values(_.pick(result, "FEATUREID"))[0];
@@ -176,7 +175,7 @@ define([
         },
         parseZoomLevel: function (result) {
             var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
-            console.log(value);
+
             Config.view.zoomLevel = value;
         },
         parseIsMenuBarVisible: function (result) {
