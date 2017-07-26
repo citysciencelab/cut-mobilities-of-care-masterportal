@@ -49,7 +49,10 @@ define(function (require) {
                 "removeLoadingLayer": this.removeLoadingLayer,
                 "registerListener": this.registerListener,
                 "unregisterListener": this.unregisterListener,
-                "forEachFeatureAtPixel": this.forEachFeatureAtPixel
+                "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
+                "updateSize": function () {
+                    this.getMap().updateSize();
+                }
             }, this);
 
             this.listenTo(this, {
