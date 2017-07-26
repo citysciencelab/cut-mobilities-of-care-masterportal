@@ -9,7 +9,8 @@ define(function (require) {
         className: "table-wrapper-div",
         template: _.template(VerkehrsStaerkenThemeTemplate),
         events: {
-            "click .kat": "changeKat"
+            "click .kat": "changeKat",
+            "click #diagramm-tab": "initiallyLoadDiagramm"
         },
         changeKat: function (evt) {
             $(".graph svg").remove();
@@ -22,6 +23,11 @@ define(function (require) {
                     $(this).removeClass("active");
                 }
             });
+            this.model.createD3Document();
+        },
+        initiallyLoadDiagramm: function () {
+            $(".graph svg").remove();
+            this.model.setAttrToShow(["Dtv"]);
             this.model.createD3Document();
         }
     });

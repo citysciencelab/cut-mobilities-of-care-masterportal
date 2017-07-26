@@ -24,18 +24,18 @@ define(function (require) {
             }
         },
         createMaxValue: function (data, attrToShowArray) {
-            var maxValueArray = [];
+            var maxValue = data[0][attrToShowArray[0]];
 
             _.each(attrToShowArray, function (attrToShow) {
-                maxValueArray.push(d3.max(data, function (d) {
+                var value = d3.max(data, function (d) {
                     return d[attrToShow];
-                }));
+                });
+
+                if (value > maxValue) {
+                    maxValue = value;
+                }
             });
-            // sort desc
-            maxValueArray.sort(function (a, b) {
-                return b - a;
-            });
-            return maxValueArray[0];
+            return maxValue;
         },
         createMinValue: function (data, attrToShowArray) {
             var minValue = data[0][attrToShowArray[0]];
@@ -80,6 +80,7 @@ define(function (require) {
                 scale = this.createOrdinalScale(data, rangeArray, attrToShowArray);
             }
             else if (scaletype === "linear") {
+
                 minValue = this.createMinValue(data, attrToShowArray);
                 maxValue = this.createMaxValue(data, attrToShowArray);
                 scale = this.createLinearScale(minValue, maxValue, rangeArray);
@@ -229,7 +230,9 @@ define(function (require) {
             var selector = graphConfig.selector,
                 scaleTypeX = graphConfig.scaleTypeX,
                 scaleTypeY = graphConfig.scaleTypeY,
-                data = this.parseNoDataFor3D(graphConfig.data),
+                noParseFloatArray = graphConfig.noParseFloatArray,
+                data = this.parseData(graphConfig.data, noParseFloatArray),
+                // data = graphConfig.data,
                 xAttr = graphConfig.xAttr,
                 attrToShowArray = graphConfig.attrToShowArray,
                 margin = {top: 20, right: 20, bottom: 70, left: 100},
@@ -262,21 +265,30 @@ define(function (require) {
                 offset: offset
             });
         },
-        // noData comes as "-" from WMS. turn noData into Value 0
-        parseNoDataFor3D: function (dataArray) {
+        /*
+        * noData comes as "-" from WMS. turn noData into Value 0
+        * if data should not be converted, the attr name is in noParseFloatArray. then dont parseFloat
+        */
+        parseData: function (dataArray, noParseFloatArray) {
             var parsedDataArray = [];
 
             _.each(dataArray, function (dataObj) {
                 var parsedDataObj = {};
 
                 _.each(dataObj, function (dataVal, dataAttr) {
-                    parsedDataObj[dataAttr] = this.parseNoData(dataVal);
+                    if (_.contains(noParseFloatArray, dataAttr)) {
+                        parsedDataObj[dataAttr] = this.parseNoDataValue(dataVal);
+                    }
+                    else {
+                        parsedDataObj[dataAttr] = parseFloat(this.parseNoDataValue(dataVal));
+                    }
                 }, this);
                 parsedDataArray.push(parsedDataObj);
             }, this);
             return parsedDataArray;
         },
-        parseNoData: function (value) {
+
+        parseNoDataValue: function (value) {
             if (value === "-") {
                 value = 0;
             }
