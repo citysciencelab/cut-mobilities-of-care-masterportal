@@ -8,7 +8,8 @@ define([
     var ParametricURL = Backbone.Model.extend({
         defaults: {
             layerParams: [],
-            startUpModul: ""
+            startUpModul: "",
+            zoomToGeometry: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -18,7 +19,8 @@ define([
                 "getLayerParams": this.getLayerParams,
                 "getStartUpModul": this.getStartUpModul,
                 "getInitString": this.getInitString,
-                "getCenter": this.getCenter
+                "getCenter": this.getCenter,
+                "getZoomToGeometry": this.getZoomToGeometry
             }, this);
 
             this.parseURL();
@@ -159,6 +161,10 @@ define([
                 bezirk = _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()});
             }
             if (_.isUndefined(bezirk)) {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parametrisierte Aufruf des Portals leider schief gelaufen!</strong> <br> <small>Details: Konnte den Parameter Bezirk = " + _.values(_.pick(result, "BEZIRK"))[0] + " nicht auflösen.</small>",
+                    kategorie: "alert-warning"
+                });
                 return;
             }
             this.set("center", {
@@ -167,7 +173,9 @@ define([
                 y: _.findWhere(bezirke, {name: bezirk.name}).position[1],
                 z: 0
             });
+            this.setZoomToGeometry(bezirk.name);
         },
+
         parseFeatureId: function (result) {
             var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
@@ -314,6 +322,14 @@ define([
             if (_.has(result, "STYLE")) {
                 this.parseStyle(result);
             }
+        },
+        // getter for zoomToGeometry
+        getZoomToGeometry: function () {
+            return this.get("zoomToGeometry");
+        },
+        // setter for zoomToGeometry
+        setZoomToGeometry: function (value) {
+            this.set("zoomToGeometry", value);
         }
     });
 
