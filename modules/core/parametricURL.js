@@ -7,7 +7,8 @@ define([
 
     var ParametricURL = Backbone.Model.extend({
         defaults: {
-            layerParams: []
+            layerParams: [],
+            startUpModul: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -121,7 +122,112 @@ define([
             });
             this.setLayerParams(layerParams);
         },
+        parseMDID: function (result) {
+            var values = _.values(_.pick(result, "MDID"))[0].split(",");
 
+            Config.tree.metaIdsToSelected = values;
+            Config.view.zoomLevel = 0;
+            this.createLayerParamsUsingMetaId(values);
+        },
+        parseCenter: function (result) {
+            var crs = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[1] : "",
+                values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
+
+            this.set("center", {
+                crs: crs,
+                x: parseFloat(values[0]),
+                y: parseFloat(values[1]),
+                z: values[2] ? parseFloat(values[2]) : 0
+            });
+        },
+        parseBezirk: function (result) {
+            var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
+                bezirke = [
+                    {name: "ALTONA", number: "2", position: [556681, 5937664]},
+                    {name: "HAMBURG-HARBURG", number: "7", position: [560291, 5925817]},
+                    {name: "HAMBURG-NORD", number: "4", position: [567677, 5941650]},
+                    {name: "BERGEDORF", number: "6", position: [578779, 5924255]},
+                    {name: "EIMSBÜTTEL", number: "3", position: [561618, 5940019]},
+                    {name: "HAMBURG-MITTE", number: "1", position: [566380, 5932134]},
+                    {name: "WANDSBEK", number: "5", position: [574344, 5943750]}
+                ];
+
+            if (bezirk.length === 1) {
+                this.set("center", {
+                    crs: "",
+                    x: _.findWhere(bezirke, {number: bezirk}).position[0],
+                    y: _.findWhere(bezirke, {number: bezirk}).position[1],
+                    z: 0
+                });
+            }
+            else {
+                this.set("center", {
+                    crs: "",
+                    x: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[0],
+                    y: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[1],
+                    z: 0
+                });
+            }
+        },
+        parseFeatureId: function (result) {
+            var ids = _.values(_.pick(result, "FEATUREID"))[0];
+
+            Config.zoomtofeature.ids = ids.split(",");
+        },
+        parseZoomLevel: function (result) {
+            var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
+            console.log(value);
+            Config.view.zoomLevel = value;
+        },
+        parseIsMenuBarVisible: function (result) {
+            var value = _.values(_.pick(result, "ISMENUBARVISIBLE"))[0].toUpperCase();
+
+            if (value === "TRUE") {
+                Config.isMenubarVisible = true;
+            }
+            else {
+                Config.isMenubarVisible = false;
+            }
+        },
+        parseStartUpModul: function (result) {
+            this.set("startUpModul", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
+        },
+        parseQuery: function (result) {
+            var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
+                    initString = "";
+
+            // Bei " " oder "-" im Suchstring
+            if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
+
+                // nach " " splitten
+                var split = value.split(" ");
+
+                _.each (split, function (splitpart) {
+                    initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
+                });
+                initString = initString.substring(0, initString.length - 1);
+
+                // nach "-" splitten
+                split = "";
+                split = initString.split("-");
+                initString = "";
+                _.each (split, function (splitpart) {
+                    initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
+                });
+                initString = initString.substring(0, initString.length - 1);
+            }
+            else {
+                initString = value.substring(0, 1).toUpperCase() + value.substring(1);
+            }
+            this.set("initString", initString);
+        },
+        parseStyle: function (result) {
+            var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
+
+            if (value === "SIMPLE") {
+                $("#main-nav").hide();
+            }
+        },
         parseURL: function (result) {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
             var query = location.search.substr(1).toUpperCase(), // URL --> alles nach ? wenn vorhanden
@@ -141,11 +247,7 @@ define([
              * Die Metadatensatz-Id wird in die config geschrieben
              */
             if (_.has(result, "MDID")) {
-                var values = _.values(_.pick(result, "MDID"))[0].split(",");
-
-                Config.tree.metaIdsToSelected = values;
-                Config.view.zoomLevel = 0;
-                this.createLayerParamsUsingMetaId(values);
+                this.parseMDID(result);
             }
 
             /**
@@ -154,45 +256,11 @@ define([
              * Angabe des EPSG-Codes der Koordinate über "@"
              */
             if (_.has(result, "CENTER")) {
-                var crs = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[1] : "",
-                    values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
-
-                this.set("center", {
-                    crs: crs,
-                    x: parseFloat(values[0]),
-                    y: parseFloat(values[1]),
-                    z: values[2] ? parseFloat(values[2]) : 0
-                });
+                this.parseCenter(result);
             }
 
             if (_.has(result, "BEZIRK")) {
-                var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
-                    bezirke = [
-                        {name: "ALTONA", number: "2", position: [556681, 5937664]},
-                        {name: "HAMBURG-HARBURG", number: "7", position: [560291, 5925817]},
-                        {name: "HAMBURG-NORD", number: "4", position: [567677, 5941650]},
-                        {name: "BERGEDORF", number: "6", position: [578779, 5924255]},
-                        {name: "EIMSBÜTTEL", number: "3", position: [561618, 5940019]},
-                        {name: "HAMBURG-MITTE", number: "1", position: [566380, 5932134]},
-                        {name: "WANDSBEK", number: "5", position: [574344, 5943750]}
-                    ];
-
-                    if (bezirk.length === 1) {
-                        this.set("center", {
-                            crs: "",
-                            x: _.findWhere(bezirke, {number: bezirk}).position[0],
-                            y: _.findWhere(bezirke, {number: bezirk}).position[1],
-                            z: 0
-                        });
-                    }
-                    else {
-                        this.set("center", {
-                            crs: "",
-                            x: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[0],
-                            y: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[1],
-                            z: 0
-                        });
-                    }
+                this.parseBezirk(result);
             }
 
             /**
@@ -204,9 +272,7 @@ define([
             }
 
             if (_.has(result, "FEATUREID")) {
-                var ids = _.values(_.pick(result, "FEATUREID"))[0];
-
-                Config.zoomtofeature.ids = ids.split(",");
+                this.parseFeatureId(result);
             }
 
             /**
@@ -214,9 +280,7 @@ define([
              * Ist der Parameter "zoomLevel" vorhanden wird der Wert in die Config geschrieben und in der mapView ausgewertet.
              */
             if (_.has(result, "ZOOMLEVEL")) {
-                var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
-
-                Config.view.zoomLevel = value;
+                this.parseZoomLevel(result);
             }
 
             /**
@@ -225,14 +289,7 @@ define([
             *
             */
             if (_.has(result, "ISMENUBARVISIBLE")) {
-                var value = _.values(_.pick(result, "ISMENUBARVISIBLE"))[0].toUpperCase();
-
-                if (value === "TRUE") {
-                    Config.isMenubarVisible = true;
-                }
-                else {
-                    Config.isMenubarVisible = false;
-                }
+                this.parseIsMenuBarVisible(result);
             }
 
             /**
@@ -241,43 +298,14 @@ define([
             *
             */
             if (_.has(result, "STARTUPMODUL")) {
-                this.set("startUpModul", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
-            }
-            else {
-                this.set("startUpModul", "");
+                this.parseStartUpModul(result);
             }
 
             /**
             *
             */
             if (_.has(result, "QUERY")) {
-                var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
-                    initString = "";
-
-                // Bei " " oder "-" im Suchstring
-                if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
-
-                    // nach " " splitten
-                    var split = value.split(" ");
-
-                    _.each (split, function (splitpart) {
-                        initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
-                    });
-                    initString = initString.substring(0, initString.length - 1);
-
-                    // nach "-" splitten
-                    split = "";
-                    split = initString.split("-");
-                    initString = "";
-                    _.each (split, function (splitpart) {
-                        initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
-                    });
-                    initString = initString.substring(0, initString.length - 1);
-                }
-                else {
-                    initString = value.substring(0, 1).toUpperCase() + value.substring(1);
-                }
-                this.set("initString", initString);
+                this.parseQuery(result);
             }
 
             /**
@@ -285,11 +313,7 @@ define([
             *
             */
             if (_.has(result, "STYLE")) {
-                var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
-
-                if (value === "SIMPLE") {
-                    $("#main-nav").hide();
-                }
+                this.parseStyle(result);
             }
         }
     });
