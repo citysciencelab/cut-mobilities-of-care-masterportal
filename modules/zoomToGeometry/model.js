@@ -27,9 +27,9 @@ define(function (require) {
         zoomToGeometry: function (name, wfsParams) {
             var wfsParams = wfsParams || this.getWfsParams();
 
-            if (!this.validateWfsParams(wfsParams) ) {
+            if (!this.validateWfsParams(wfsParams)) {
                 return;
-            };
+            }
 
             this.getGeometryFromWFS(name, wfsParams);
         },
@@ -37,7 +37,7 @@ define(function (require) {
             var keysArray = _.keys(this.getWfsParams());
 
             _.each(keysArray, function (key) {
-                if (!_.contains(wfsParams, key) || _.isUndefined(wfsParams[key]) ) {
+                if (!_.contains(wfsParams, key) || _.isUndefined(wfsParams[key])) {
                     return false;
                 }
             });
@@ -70,7 +70,7 @@ define(function (require) {
 
                 if (_.isUndefined(foundFeature)) {
                     Radio.trigger("Alert", "alert", {
-                        text: "<strong>Der Parametrisierte Aufruf des Portals leider schief gelaufen!</strong> <br> <small>Details: Kein Objekt gefunden, dessen Attribut \""+ attribute +"\" den Wert \""+ name +"\" einnimmt.</small>",
+                        text: "<strong>Der Parametrisierte Aufruf des Portals leider schief gelaufen!</strong> <br> <small>Details: Kein Objekt gefunden, dessen Attribut \"" + attribute + "\" den Wert \"" + name + "\" einnimmt.</small>",
                         kategorie: "alert-warning"
                     });
                 }
@@ -88,6 +88,7 @@ define(function (require) {
                 }
                 return feature.get(attribute).toUpperCase().trim() === name.toUpperCase().trim();
             });
+
             return foundFeature[0];
 
         },
