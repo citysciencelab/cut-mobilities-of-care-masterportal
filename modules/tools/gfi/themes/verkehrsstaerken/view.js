@@ -25,10 +25,12 @@ define(function (require) {
             });
             this.model.createD3Document();
         },
-        initiallyLoadDiagramm: function () {
-            $(".graph svg").remove();
-            this.model.setAttrToShow(["Dtv"]);
-            this.model.createD3Document();
+        initiallyLoadDiagramm: function (evt) {
+            if (!$("#" + evt.currentTarget.id).hasClass("active")) {
+                $(".graph svg").remove();
+                this.model.setAttrToShow(["Dtv"]);
+                this.model.createD3Document();
+            }
         }
     });
 

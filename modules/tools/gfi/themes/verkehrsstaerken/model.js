@@ -15,11 +15,6 @@ define(function (require) {
                 "change:isReady": this.parseGfiContent
             });
         },
-
-        initiallyLoadDiagramm: function () {
-            this.setAttrToShow(["Dtv"]);
-            this.createD3Document();
-        },
         /**
          * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
          */
