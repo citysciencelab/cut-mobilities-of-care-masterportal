@@ -1,12 +1,24 @@
-.alert {
-    top: 25%;
-    text-align: justify;
+div#messages {
+    z-index: 2001;
+    position: absolute;
+    transform: translate(-50%, -50%);
 }
 
-.messages {
-    position: absolute;
+div#messages .alert {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+}
+
+div#messages.top-center {
     top: 25%;
-    z-index: 2001;
-    transform: translate(-50%);
+    left: 50%;
+}
+
+div#messages.center-center {
+    top: 50%;
+    left: 50%;
+}
+
+div#messages.bottom-center {
+    top: 75%;
     left: 50%;
 }
