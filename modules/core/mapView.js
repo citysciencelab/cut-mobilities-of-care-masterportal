@@ -16,9 +16,10 @@ define([
          *
          */
         defaults: {
+            epsg: "EPSG:25832",
             background: "",
             backgroundImage: "",
-            startExtent: [510000.0, 5850000.0, 625000.4, 6000000.0],
+            extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
             options: [
                 {
                     resolution: 66.14579761460263,
@@ -141,13 +142,10 @@ define([
             });
 
             this.setConfig();
-            this.setOptions();
             this.setScales();
             this.setResolutions();
             this.setZoomLevels();
 
-            this.setExtent();
-            this.setResolution();
             this.setProjection();
             this.setStartCenter();
             this.setView();
@@ -164,7 +162,7 @@ define([
         resetView: function () {
             this.get("view").setCenter(this.get("startCenter"));
             this.get("view").setZoom(2);
-            Radio.trigger("MapMarker","hideMarker");
+            Radio.trigger("MapMarker", "hideMarker");
         },
 
         /*
@@ -183,8 +181,40 @@ define([
                         this.set("startCenter", setting.attr);
                         break;
                     }
+                    case "options": {
+                        this.set("options", []);
+                        _.each(setting.attr, function (opt) {
+                            this.pushHits("options", opt);
+                        }, this);
+                        break;
+                    }
+                    case "extent": {
+                        this.setExtent(setting.attr);
+                        break;
+                    }
+                    case "resolution": {
+                        this.setResolution(setting.attr);
+                        break;
+                    }
+                    case "zoomLevel": {
+                        this.setResolution(this.get("resolutions")[setting.attr]);
+                        break;
+                    }
+                    case "epsg": {
+                        this.setEpsg(setting.attr);
+                        break;
+                    }
                 }
             }, this);
+        },
+
+        // getter for epsg
+        getEpsg: function () {
+            return this.get("epsg");
+        },
+        // setter for epsg
+        setEpsg: function (value) {
+            this.set("epsg", value);
         },
 
         setBackground: function (value) {
@@ -204,15 +234,6 @@ define([
             }
         },
 
-        setOptions: function () {
-            if (_.has(Config.view, "options")) {
-                this.set("options", []);
-                _.each(Config.view.options, function (opt) {
-                    this.pushHits("options", opt);
-                }, this);
-            }
-        },
-
         setScales: function () {
             this.set("scales", _.pluck(this.get("options"), "scale"));
         },
@@ -222,12 +243,7 @@ define([
         },
 
         setResolutions: function () {
-            if (Config.view.resolutions && _.isArray(Config.view.resolutions)) {
-                this.set("resolutions", Config.view.resolutions);
-            }
-            else {
-                this.set("resolutions", _.pluck(this.get("options"), "resolution"));
-            }
+            this.set("resolutions", _.pluck(this.get("options"), "resolution"));
         },
 
         setZoomLevels: function () {
@@ -235,29 +251,25 @@ define([
         },
 
         /**
-         *
+         * Setzt die Resolution auf den Wert val
+         * @param {float} val Resolution
          */
-        setExtent: function () {
-            if (Config.view.extent && _.isArray(Config.view.extent) && Config.view.extent.length === 4) {
-                this.set("extent", Config.view.extent);
-            }
-        },
-
-        // Setzt die Resolution.
-        setResolution: function () {
-            if (Config.view.resolution && _.isNumber(Config.view.resolution)) {
-                this.set("resolution", Config.view.resolution);
-            }
-            if (_.has(Config.view, "zoomLevel")) {
-                this.set("resolution", this.get("resolutions")[Config.view.zoomLevel]);
-            }
+        setResolution: function (val) {
+            this.set("resolution", val);
         },
 
         // Setzt den Maßstab.
         setScale: function (scale) {
             this.set("scale", scale);
         },
-
+        // getter for extent
+        getExtent: function () {
+            return this.get("extent");
+        },
+        // setter for extent
+        setExtent: function (value) {
+            this.set("extent", value);
+        },
         /**
          *
          */
@@ -285,11 +297,10 @@ define([
         },
 
         /**
-         *
+         * Setzt die ol Projektion anhand des epsg-Codes
          */
         setProjection: function () {
-            // check for crs
-            var epsgCode = Config.view.epsg ? Config.view.epsg : "EPSG:25832",
+            var epsgCode = this.getEpsg(),
                 proj = Radio.request("CRS", "getProjection", epsgCode);
 
             if (!proj) {
@@ -300,7 +311,7 @@ define([
             var proj = new ol.proj.Projection({
                 code: epsgCode,
                 units: this.get("units"),
-                extent: this.get("extent"),
+                extent: this.getExtent(),
                 axisOrientation: "enu",
                 global: false
             });
@@ -308,8 +319,10 @@ define([
             ol.proj.addProjection(proj);
 
             // attach epsg and projection object to Config.view for further access by other modules
-            Config.view.epsg = proj.getCode();
-            Config.view.proj = proj;
+            Config.view = {
+                epsg: proj.getCode(),
+                proj: proj
+            };
 
             this.set("projection", proj);
         },
@@ -321,7 +334,7 @@ define([
             var view = new ol.View({
                 projection: this.get("projection"),
                 center: this.get("startCenter"),
-                extent: this.get("extent"),
+                extent: this.getExtent(),
                 resolution: this.get("resolution"),
                 resolutions: this.get("resolutions")
             });

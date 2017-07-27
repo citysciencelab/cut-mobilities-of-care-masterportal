@@ -70,7 +70,7 @@ define(function (require) {
 
                 // Zoom auf Extent
                 if (geometry) {
-                    Radio.trigger("MapMarker", "mapHandler:zoomTo", {type: "Feature-Lister-Click", coordinate: geometry});
+                    Radio.trigger("MapMarker", "zoomTo", {type: "Feature-Lister-Click", coordinate: geometry});
                 }
                 else {
                     Radio.trigger("Alert", "alert", {
@@ -94,7 +94,9 @@ define(function (require) {
                 feature = _.find(features, function (feat) {
                     return feat.id.toString() === id;
                 }),
-            style = layer.style(feature.feature)[0],
+            // layerstyle clonen, sonst wird die Änderung auf den ganzen
+            // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
+            style = this.get("layer").style[0].clone(),
             image = style.getImage();
 
             this.set("prevStyleScale", image.getScale());
@@ -115,7 +117,9 @@ define(function (require) {
                     feature = _.find(features, function (feat) {
                         return feat.id.toString() === prevfeatureid;
                     }),
-                style = layer.style(feature.feature)[0],
+                // layerstyle clonen, sonst wird die Änderung auf den ganzen
+                // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
+                style = this.get("layer").style[0].clone(),
                 image = style.getImage();
 
                 image.setScale(prevStyleScale);

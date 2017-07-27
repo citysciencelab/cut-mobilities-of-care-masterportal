@@ -8,7 +8,6 @@
 @import "lgv.css";
 @import "glyphiconbutton.css";
 @import "copyright.css";
-@import "../modules/attribution/style.css";
 @import "../modules/viomRouting/style.css";
 @import "../modules/window/style.css";
 @import "../modules/scaleline/style.css";
@@ -50,3 +49,4 @@
 @import "../modules/tools/gfi/themes/table/style.css";
 @import "../modules/tools/gfi/themes/reisezeiten/style.css";
 @import "../modules/tools/gfi/themes/sgvonline/style.css";
+@import "../modules/tools/gfi/themes/verkehrsstaerken/style.css";

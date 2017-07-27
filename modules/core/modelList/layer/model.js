@@ -373,20 +373,26 @@ define(function (require) {
                 this.getLayer().setOpacity(opacity);
             }
         },
+        /**
+         * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
+         */
         showLayerInformation: function () {
-            var legendURL = [],
+            var metaID = [],
                 legendParams = Radio.request("Legend", "getLegendParams"),
-                name = this.get("name");
+                name = this.get("name"),
+                legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null,
+                layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
-                legendURL.push(_.findWhere(legendParams, {layername: name}));
+            metaID.push(layerMetaId);
 
-                Radio.trigger("LayerInformation", "add", {
-                    "id": this.getId(),
-                    "legendURL": legendURL,
-                    "metaID": this.get("datasets")[0] ? this.get("datasets")[0].md_id : null,
-                    "layername": this.get("name")
-                });
-                this.setLayerInfoChecked(true);
+            Radio.trigger("LayerInformation", "add", {
+                "id": this.getId(),
+                "legendURL": legendURL,
+                "metaID": metaID,
+                "layername": name
+            });
+
+            this.setLayerInfoChecked(true);
         },
         setSelectionIDX: function (idx) {
             this.set("selectionIDX", idx);

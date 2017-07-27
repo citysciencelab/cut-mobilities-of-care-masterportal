@@ -3,10 +3,9 @@ define([
     "text!modules/legend/template.html",
     "text!modules/legend/templateMobile.html",
     "modules/legend/model",
-    "eventbus",
     "backbone.radio",
     "jqueryui/widgets/draggable"
-], function (Backbone, LegendTemplate, LegendTemplateMobile, Legend, EventBus, Radio) {
+], function (Backbone, LegendTemplate, LegendTemplateMobile, Legend, Radio) {
 
     var LegendView = Backbone.View.extend({
         model: new Legend(),
@@ -66,6 +65,7 @@ define([
             }
             else {
                 legendModel.setIsActive(false);
+                Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
             }
         }
     });

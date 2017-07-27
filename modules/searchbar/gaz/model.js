@@ -1,9 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "modules/searchbar/model"
-], function (Backbone, Radio, EventBus) {
+], function (Backbone, Radio) {
     "use strict";
     return Backbone.Model.extend({
         defaults: {
@@ -30,10 +29,9 @@ define([
          * @param {integer} [config.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
          */
         initialize: function (config) {
-            this.listenTo(EventBus, {
-                "setPastedHouseNumber": this.setPastedHouseNumber,
-                "searchbar:search": this.search
-                // "gaz:adressSearch": this.adressSearch
+            this.listenTo(Radio.channel("Searchbar"), {
+                "search": this.search,
+                "setPastedHouseNumber": this.setPastedHouseNumber
             });
 
             this.listenTo(Radio.channel("Gaz"), {
@@ -158,14 +156,13 @@ define([
                 }
             }
             $("#searchInput").val(searchString);
-            EventBus.trigger("createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList");
         },
         /**
         * @description Methode zur Weiterleitung der adressSearch
         * @param {xml} data - Response
         */
         getAdress: function (data) {
-            // EventBus.trigger("gaz:getAdress", data);
             Radio.trigger("Gaz", "getAdress", data);
         },
         /**
@@ -183,7 +180,7 @@ define([
                 hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
                 hitNames.push(hitName);
                 // "Hitlist-Objekte"
-                EventBus.trigger("searchbar:pushHits", "hitList", {
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: hitName,
                     type: "Straße",
                     coordinate: coordinates,
@@ -210,7 +207,7 @@ define([
                     }, this);
                 }
             }
-            EventBus.trigger("createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList");
         },
         /**
          * [getDistricts description]
@@ -228,15 +225,14 @@ define([
                 coordinate = [parseFloat(position[0]), parseFloat(position[1])];
                 hitName = $(hit).find("iso19112\\:geographicIdentifier , geographicIdentifier")[0].textContent;
                 // "Hitlist-Objekte"
-                EventBus.trigger("searchbar:pushHits", "hitList", {
-                    name: hitName,
+                Radio.trigger("Searchbar", "pushHits", "hitList", { name: hitName,
                     type: "Stadtteil",
                     coordinate: coordinate,
                     glyphicon: "glyphicon-map-marker",
                     id: hitName.replace(/ /g, "") + "Stadtteil"
                 });
             }, this);
-            EventBus.trigger("createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList");
         },
         searchInHouseNumbers: function () {
             var address;
@@ -248,7 +244,7 @@ define([
                     var number = houseNumber.adress.housenumber + houseNumber.adress.affix;
 
                     if (number === this.get("pastedHouseNumber")) {
-                        EventBus.trigger("searchbar:pushHits", "hitList", houseNumber);
+                        Radio.trigger("Searchbar", "pushHits", "hitList", houseNumber);
                     }
                 }, this);
                 this.unset("pastedHouseNumber");
@@ -258,7 +254,7 @@ define([
                     address = houseNumber.name.replace(/ /g, "");
 
                     if (address.search(this.get("searchStringRegExp")) !== -1) {
-                        EventBus.trigger("searchbar:pushHits", "hitList", houseNumber);
+                        Radio.trigger("Searchbar", "pushHits", "hitList", houseNumber);
                     }
                 }, this);
             }
@@ -329,7 +325,7 @@ define([
                 coordinate = [parseFloat(position[0]), parseFloat(position[1])];
                 geom = $(hit).find("gml\\:posList, posList")[0].textContent;
                 // "Hitlist-Objekte"
-                EventBus.trigger("searchbar:pushHits", "hitList", {
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: "Flurstück " + gemarkung + "/" + flurstueck,
                     type: "Parcel",
                     coordinate: coordinate,
@@ -338,7 +334,7 @@ define([
                     id: "Parcel"
                 });
             }, this);
-            EventBus.trigger("createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList");
         },
         /**
          *
@@ -352,7 +348,7 @@ define([
                 coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
                 hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
                 // "Hitlist-Objekte"
-                EventBus.trigger("searchbar:pushHits", "hitList", {
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: hitName,
                     type: "Straße",
                     coordinate: coordinates,
@@ -360,7 +356,7 @@ define([
                     id: hitName.replace(/ /g, "") + "Straße"
                 });
             }, this);
-            EventBus.trigger("createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList");
         },
         /**
          * @description Führt einen HTTP-GET-Request aus.

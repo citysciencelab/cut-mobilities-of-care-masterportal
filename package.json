@@ -1,27 +1,11 @@
 {
   "name": "LGV-Master",
-  "version": "1.2.1",
+  "version": "1.3.2",
   "description": "LGV Master",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://bitbucket.org/lgv-g12/lgv-config.git"
-  },
-  "Dependencies": {
-    "backbone": "1.x",
-    "backbone.radio": "1.x",
-    "bootstrap": "3.x",
-    "bootstrap-colorpicker": "2.x",
-    "jquery": "2.x",
-    "proj4": "2.x",
-    "requirejs": "2.x",
-    "requirejs-text": "2.x",
-    "underscore": "1.x",
-    "underscore.string": "3.3.x",
-    "jquery-ui": "1.x",
-    "video.js": "5.x",
-    "moment": "2.x",
-    "openlayers": "3.15"
   },
   "devDependencies": {
     "bower": "1.x",
@@ -44,7 +28,7 @@
     "jit-grunt": "^0.9.0",
     "time-grunt": "1.0.0",
     "build-config": "git+https://mbgvhh:p3FJ6WMIQGbunVJOnlYr@bitbucket.org/lgv-g12/build-config.git#npmtest",
-    "lgv-config": "git+http://mbgvhh:p3FJ6WMIQGbunVJOnlYr@bitbucket.org/lgv-g12/lgv-config.git#npmtest",
+    "lgv-config": "git+http://mbgvhh:p3FJ6WMIQGbunVJOnlYr@bitbucket.org/lgv-g12/lgv-config.git#npmtest"
   },
   "title": "LGV Master"
 }

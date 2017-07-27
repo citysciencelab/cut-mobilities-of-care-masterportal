@@ -1,5 +1,5 @@
 /**************** Layer Settings ****************/
-ul#Themen .layer-settings {
+ul#tree .layer-settings {
     clear: both;
     margin-top: 32px;
     border-top: 1px solid #ddd;
@@ -7,11 +7,11 @@ ul#Themen .layer-settings {
     font-size: 12px;
 }
 
-ul#Themen .layer-settings .glyphicon {
+ul#tree .layer-settings .glyphicon {
     padding: 0 0px;
 }
 
-ul#Themen .layer-settings .glyphicon-picture {
+ul#tree .layer-settings .glyphicon-picture {
     padding-right: 16px;
 }
 

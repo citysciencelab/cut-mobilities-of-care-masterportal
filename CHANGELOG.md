@@ -1,3 +1,74 @@
+# Changelog LGV Master-Portal 1.3.2
+
+FIXES:
+
+  - d7d98f21 mrh print benötigt _print für speziellen proxy
+
+# Changelog LGV Master-Portal 1.3.1
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  (none)
+
+# Changelog LGV Master-Portal 1.3.0
+
+NEU:
+
+  - 798a35e gfi-theme für sgv-online
+  - 81bb340 Anwender-Dokumentation
+  - 6907236 modul autostarter, um Tools per Parameter STARTUPMODUL starten zu können
+  - ac54221 Merge branch 'dev' into RemoteInterface + EPSG definitions for masterTree && FHH Atlas
+
+FIXES:
+
+  - d735d0c Ungültiger Wert für Flurstücksnummer wird bei der Eingabe abgefangen.
+  - 3c94d2f portaltitel geoportal-verkehr springt nicht mehr in zweite zeile
+  - 7b14c38 - Animation Tool wirft beim Schließen einen Fehler
+  - ff9d07c routing url über proxy leiten
+  - ed6a75e tree layer über config.json sichtbar werden bei paramAufruf layerids visibility false
+  - e0424bd urlparameter layerids, visibility & transparency werden nicht in Karte übernommen
+  - 987da2f urlparameter bezirk funktioniert nicht
+  - 89f3080 mergeconflict
+  - 13468d7 Drucken von Gruppenlayern kann zu Problemen führen
+  - 70d0bf5 wfs esri polygon
+  - c3cca96 drucken gfi marker und linter fehler
+  - b8e64dd group Layer funktionierte nicht mehr
+  - c6ecb1f orientation module auch auf localhost anbieten.
+  - 22591c1 Fehler in console, wenn keine MetadatenId zum Layer vorhanden ist
+  - e84c5fa flurstuecksnummernenner
+  - 7f01ca8 Lokalisierungs-Button ist ausgegraut, falls die Funktion deaktiviert ist
+  - c3c98d0 wird das Portal über https aufgerufen, funktioniert die Lokalisierung in allen Browsern
+  - 0d2c861 printError mit neuem GFI Modul
+  - e8286a8 routing
+  - 0b65b2f Portal wird nicht geladen, wenn LayerID in JSON nicht definiert
+  - 8d721c8 Layerinformationen von Hintergrundlayern wurden  nicht angezeigt und Title war nicht Datensatzname
+  - 3da16b7 GFI wird beim drucken immer mit ausgegeben, auch wenn GFI wieder geschlossen
+  - 22811e5 Fehler beim Suchen von Baselayern in Suchschlitz behoben
+
+# Changelog LGV Master-Portal 1.2.4
+
+FIXES:
+
+  - 760c7c1 hotfix 332 flurstueckssuche
+
+# Changelog LGV Master-Portal 1.2.3
+
+FIXES:
+
+  - 3b2e44b layerid URL-parameter werden zugeladen falls vorhanden aber nicht konfiguriert
+
+# Changelog LGV Master-Portal 1.2.2
+FIXES:
+
+  - ce3e3ae7 gfipopup größe verändert sich nicht durch verschieben vom popup
+  - ccd07347 viomrouting
+  - 8f6aca60 Portal wird nicht geladen, wenn LayerID in JSON nicht definiert
+  - c8be5d5d Layerinformationen von Hintergrundlayern wurden nicht angezeigt und Title war nicht Datensatzname
+
 # Changelog LGV Master-Portal 1.2.1
 
 FIXES:

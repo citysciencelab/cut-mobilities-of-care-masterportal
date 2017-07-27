@@ -7,12 +7,12 @@ Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In 
 ## Portalconfig ##
 In der *Portalconfig* kann die Oberfläche des Portals konfiguriert werden:
 
-1.	der Titel mit Logo, falls erforderlich
-2.	welche/r Suchdienst/e angesprochen werden soll/en
-3.	welche Themenbaumart genutzt werden soll (einfach/light oder mit Unterordnern/custom)
-4.	welche Werkzeuge geladen werden sollen
-5.	welche Interaktionen mit der Karte möglich sein sollen (zoomen, Menüzeile ein/ausblenden, Standortbestimmung des Nutzers,  Vollbildmodus, etc.)
-6.	welche Layer genutzt werden und ggf. in welchen Ordnern, sie in der Themenauswahl erscheinen sollen.
+1.  der Titel mit Logo, falls erforderlich
+2.  welche/r Suchdienst/e angesprochen werden soll/en
+3.  welche Themenbaumart genutzt werden soll (einfach/light oder mit Unterordnern/custom)
+4.  welche Werkzeuge geladen werden sollen
+5.  welche Interaktionen mit der Karte möglich sein sollen (zoomen, Menüzeile ein/ausblenden, Standortbestimmung des Nutzers,  Vollbildmodus, etc.)
+6.  welche Layer genutzt werden und ggf. in welchen Ordnern, sie in der Themenauswahl erscheinen sollen.
 
 Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden die Konfigurationen des Typs object verlinkt und später eingehend erläutert.
 
@@ -37,7 +37,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|attributions|nein|Boolean|false|Zeigt das vorhandene Attributions an.|
+|[attributions](#markdown-header-portalconfigcontrolsattributions)|nein|Boolean/Object|false|Boolean: Zeigt vorhandene Attributions an. Object: Zeigt vorhandene Attributions mit folgenden Eigenschaften an, siehe [Object](#markdown-header-portalconfigcontrolsattributions)|
 |fullScreen|nein|Boolean|false|Ermöglicht dem User die Darstellung im Vollbildmodus (ohne Tabs und Adressleiste) per Klick auf den Button. Ein erneuter Klick auf den Button wechselt wieder in den normalen Modus.|
 |mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
 |orientation|nein|String|"none"|Orientation ist eine Funktion zur Standortbestimmung des Nutzers. Mögliche Werte sind none (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
@@ -57,19 +57,35 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
         "orientation": "once",
         "poi": true,
         "fullScreen": true,
-        "mousePosition": true
+        "mousePosition": true,
+        "attributions": {
+            "isInitOpenDesktop": true,
+            "isInitOpenMobile": false
+        }
       }
 
 ```
 
 
 ******
+### Portalconfig.controls.attributions ###
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|isInitOpenDesktop|nein|Boolean|true|Legt fest, ob die Attributions (Desktop-Ansicht) initial ausgeklappt werden sollen.|
+|isInitOpenMobile|nein|Boolean|false|Legt fest, ob die Attributions (Mobile-Ansicht) initial ausgeklappt werden sollen.|
+
 ### Portalconfig.mapView ###
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |backgroundImage|nein|String||Gibt den Hintergrund an, wenn keine Karte geladen ist.|
 |startCenter|nein|Array|[565874, 5934140]|Die initiale Zentrumskoordinate.|
+|options|nein|Array|[{resolution:66.14579761460263,scale:250000,zoomLevel:0},{resolution:26.458319045841044,scale:100000,zoomLevel:1},{resolution:15.874991427504629,scale:60000,zoomLevel:2},{resolution: 10.583327618336419,scale:40000,zoomLevel:3},{resolution:5.2916638091682096,scale:20000,zoomLevel:4},{resolution:2.6458319045841048,scale:10000,zoomLevel:5},{resolution:1.3229159522920524,scale:5000,zoomLevel:6},{resolution:0.6614579761460262,scale:2500,zoomLevel:7},{resolution:0.2645831904584105,scale: 1000,zoomLevel:8},{resolution:0.13229159522920521,scale:500,zoomLevel:9}]|Die initialen Maßstabsstufen und deren Auflösungen.|
+|extent|nein|Array|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|
+|resolution|nein|Float|15.874991427504629|Die initiale Auflösung der Karte aus options. Alternativ zu zoomLevel.|
+|zoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Alternativ zu resolution.|
+|epsg|nein|String|EPSG:25832|Der EPSG-Code der Projektion der Karte. Der EPSG-Code muss als namedProjection definiert sein.|
 
 **Beispiel mapView:**
 
@@ -78,7 +94,68 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 #!json
 "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
-        "startCenter": [561210, 5932600]
+        "startCenter": [561210, 5932600],
+        "options": [
+        {
+          "resolution": 611.4974492763076,
+          "scale": 2311167,
+          "zoomLevel": 0
+        },
+        {
+          "resolution": 305.7487246381551,
+          "scale": 1155583,
+          "zoomLevel": 1
+        },
+        {
+          "resolution": 152.87436231907702,
+          "scale": 577791,
+          "zoomLevel": 2
+        },
+        {
+          "resolution": 76.43718115953851,
+          "scale": 288896,
+          "zoomLevel": 3
+        },
+        {
+          "resolution": 38.21859057976939,
+          "scale": 144448,
+          "zoomLevel": 4
+        },
+        {
+          "resolution": 19.109295289884642,
+          "scale": 72223,
+          "zoomLevel": 5
+        },
+        {
+          "resolution": 9.554647644942321,
+          "scale": 36112,
+          "zoomLevel": 6
+        },
+        {
+          "resolution": 4.7773238224711605,
+          "scale": 18056,
+          "zoomLevel": 7
+        },
+        {
+          "resolution": 2.3886619112355802,
+          "scale": 9028,
+          "zoomLevel": 8
+        },
+        {
+          "resolution": 1.1943309556178034,
+          "scale": 4514,
+          "zoomLevel": 9
+        },
+        {
+          "resolution": 0.5971654778089017,
+          "scale": 2257,
+          "zoomLevel": 10
+        }
+      ],
+      "extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
+      "resolution": 15.874991427504629,
+      "zoomLevel": 1,
+      "epsg": "EPSG:25832"
     }
 ```
 
@@ -223,8 +300,6 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 
 
 **Beispiel contact:**
-
-
 ```
 #!json
 
@@ -320,34 +395,32 @@ Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Men�
 #!json
 
 "menu" : {
-	"tree" : {
-		"name" : "Themen",
-		"glyphicon" : "glyphicon-list",
-		"isInitOpen" : true
-	},
-	"measure" : {
-		"name" : "Strecke / Fläche messen",
-		"glyphicon" : "glyphicon-resize-full",
-		"onlyDesktop" : true
-	},
-	"tools" : {
-		"name" : "Werkzeuge",
-		"glyphicon" : "glyphicon-wrench",
-		"children" : {
-			"parcelSearch" : {
-				"name" : "Flurstückssuche",
-				"glyphicon" : "glyphicon-search",
-				"serviceId" : "6",
-				"StoredQueryID" : "Flurstueck",
-				"configJSON":"/../../components/lgv-config/gemarkungen_hh.json",
-				"parcelDenominator" : false
-			},
-			{...}
-		}
-	}
+    "tree" : {
+        "name" : "Themen",
+        "glyphicon" : "glyphicon-list",
+        "isInitOpen" : true
+    },
+    "measure" : {
+        "name" : "Strecke / Fläche messen",
+        "glyphicon" : "glyphicon-resize-full",
+        "onlyDesktop" : true
+    },
+    "tools" : {
+        "name" : "Werkzeuge",
+        "glyphicon" : "glyphicon-wrench",
+        "children" : {
+            "parcelSearch" : {
+                "name" : "Flurstückssuche",
+                "glyphicon" : "glyphicon-search",
+                "serviceId" : "6",
+                "StoredQueryID" : "Flurstueck",
+                "configJSON":"/../../components/lgv-config/gemarkungen_hh.json",
+                "parcelDenominator" : false
+            },
+            {...}
+        }
+    }
 ```
-
-
 
 ******
 ******
@@ -514,10 +587,49 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|gfi|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
+|printID|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
+|title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
+|[gfiMarker](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
+
+**Beispiel:**
+
+
+```
+#!json
+
+"print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Master",
+            "gfi": true,
+            "outputFilename": "DruckPDF",
+            "gfiMarker": {
+              "outerCircle": {
+                "fill": false,
+                "pointRadius": 8,
+                "stroke": true,
+                "strokeColor": "#ff0000",
+                "strokeWidth": 3
+              },
+              "point": {
+                "fill": true,
+                "pointRadius": 1,
+                  "fillColor": "#000000",
+                  "stroke": false
+                }
+            }
+          }
+```
 
 ******
 ******
-
+#### Portalconfig.menu.tools.children.print.gfiMarker ####
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|outerCircle|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
+|point|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
 
 ###### Portalconfig.menu.tools.children.routing ######
 Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Parameter müssen am Werkzeug vorhanden sein:
@@ -665,9 +777,6 @@ Unter *tree* wird der Themenbaum konfiguriert.
 
 ******
 ******
-
-
-
 
 ### Portalconfig.searchBar ###
 Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden. Auch diese Konfigurationen sind vom Typ *object*. Sie sind ebenfalls verlinkt und werden im Anschluss an diese Auflistung näher beschrieben.

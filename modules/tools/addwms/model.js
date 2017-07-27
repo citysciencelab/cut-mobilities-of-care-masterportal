@@ -59,7 +59,7 @@ define([
                         this.setWMSVersion(capability.version);
                         this.setWMSUrl(Radio.request("Util", "getProxyURL", url));
                         if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
-                            Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "Themen", 0);
+                            Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "tree", 0);
                             Radio.trigger("ModelList", "renderTree");
                             $("#Overlayer").parent().after($("#ExternalLayer").parent());
                         }

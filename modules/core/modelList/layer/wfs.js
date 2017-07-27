@@ -87,8 +87,7 @@ define(function (require) {
                     Radio.trigger("Util", "hideLoader");
                     try {
                         var wfsReader = new ol.format.WFS({
-                            featureNS: this.get("featureNS"),
-                            featureType: this.get("featureType")
+                            featureNS: this.get("featureNS")
                         });
 
                         this.getLayerSource().addFeatures(wfsReader.readFeatures(data));
@@ -102,19 +101,11 @@ define(function (require) {
                     }
                     catch (e) {
                         console.log(e);
-                        // EventBus.trigger("alert", {
-                        //     text: "<strong>Fehler bei Datenverarbeitung aufgetreten! </strong>" + e.message,
-                        //     kategorie: "alert-warning"
-                        // });
                     }
                 },
                 error: function (jqXHR, errorText, error) {
                     console.log(error);
                     Radio.trigger("Util", "hideLoader");
-                    // EventBus.trigger("alert", {
-                    //     text: "<strong>Fehler bei Dienstabfrage aufgetreten </strong>" + errorText + error,
-                    //     kategorie: "alert-warning"
-                    // });
                 }
             });
         },
