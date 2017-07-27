@@ -394,14 +394,14 @@ define([
                     // kein Text, muss also Punkt sein
                     if (!$(placemark).find("name")[0]) {
                         var style = $(placemark).find("Style")[0],
-                            pointStyle = "<PointStyle>";
+                            pointStyle = "<pointstyle>";
 
                         pointStyle += "<color>" + pointColors[i] + "</color>";
                         pointStyle += "<transparency>" + pointOpacities[i] + "</transparency>";
                         pointStyle += "<radius>" + pointRadiuses[i] + "</radius>";
-                        pointStyle += "</PointStyle>";
+                        pointStyle += "</pointstyle>";
 
-                        $(style).append(pointStyle);
+                        $(style).append($(pointStyle));
                     }
 
                 });
