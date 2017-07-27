@@ -138,6 +138,7 @@ define(function (require) {
                     .attr("class", "xAxis")
                     .call(xAxis),
                 xAxisBBox = svg.selectAll(".xAxis").node().getBBox();
+
             // text for xAxis
             xAxis.append("text")
                 .attr("x", (xAxisBBox.width / 2))
@@ -193,8 +194,8 @@ define(function (require) {
                     .attr("width", width + marginObj.left + marginObj.right)
                     .attr("height", height + marginObj.top + marginObj.bottom)
                     .attr("class", "graph-svg")
-                        .append("g")
-                        .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
+                    .append("g")
+                    .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
         },
         appendLegend: function (svg, attrToShowArray) {
             var BBox = svg.node().getBBox(),

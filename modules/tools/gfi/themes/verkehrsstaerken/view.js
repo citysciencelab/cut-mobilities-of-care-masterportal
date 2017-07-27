@@ -10,7 +10,7 @@ define(function (require) {
         template: _.template(VerkehrsStaerkenThemeTemplate),
         events: {
             "click .kat": "changeKat",
-            "click #diagramm-tab": "initiallyLoadDiagramm"
+            "shown.bs.tab #diagramm-tab": "initiallyLoadDiagramm"
         },
         changeKat: function (evt) {
             $(".graph svg").remove();
@@ -26,7 +26,8 @@ define(function (require) {
             this.model.createD3Document();
         },
         initiallyLoadDiagramm: function (evt) {
-            if (!$("#" + evt.currentTarget.id).hasClass("active")) {
+            if ($("#" + evt.currentTarget.id).hasClass("active")) {
+
                 $(".graph svg").remove();
                 this.model.setAttrToShow(["Dtv"]);
                 this.model.createD3Document();
