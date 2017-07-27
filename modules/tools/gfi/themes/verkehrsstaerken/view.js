@@ -6,7 +6,7 @@ define(function (require) {
 
     VerkehrsStaerkenThemeView = ThemeView.extend({
         tagName: "div",
-        className: "table-wrapper-div",
+        className: "table-diagramm-div",
         template: _.template(VerkehrsStaerkenThemeTemplate),
         events: {
             "click .kat": "changeKat",

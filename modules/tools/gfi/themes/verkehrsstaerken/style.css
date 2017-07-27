@@ -4,6 +4,9 @@
 .pointer {
     cursor: pointer;
 }
+.table-diagramm-div {
+    overflow: scroll;
+}
 .graph {
     width: 500px;
     height: 250px;
