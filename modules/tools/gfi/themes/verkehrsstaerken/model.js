@@ -8,7 +8,13 @@ define(function (require) {
     VerkehrsStaerkenTheme = Theme.extend({
         defaults: {
             ansicht: "Diagrammansicht",
-            link: "https://test.geoportal-hamburg.de/test/test.xlsx"
+            link: "https://test.geoportal-hamburg.de/test/test.xlsx",
+            zaehlstelle: "",
+            bezeichnung: "",
+            art: "",
+            years: [],
+            rowNames: [],
+            dataset: []
         },
         initialize: function () {
             this.listenTo(this, {
@@ -108,6 +114,7 @@ define(function (require) {
             }, this);
             actualDataset.year = "Aktuell";
             dataset.push(actualDataset);
+            dataset = this.parseData(dataset);
             this.setDataset(dataset);
         },
         // setter for rowNames
@@ -167,22 +174,26 @@ define(function (require) {
         * noData comes as "-" from WMS. turn noData into Value 0
         * if data should not be converted, the attr name is in noParseFloatArray. then dont parseFloat
         */
-        parseData: function (dataArray, noParseFloatArray) {
+        parseData: function (dataArray) {
             var parsedDataArray = [];
 
             _.each(dataArray, function (dataObj) {
                 var parsedDataObj = {};
 
                 _.each(dataObj, function (dataVal, dataAttr) {
-                    if (_.contains(noParseFloatArray, dataAttr)) {
-                        parsedDataObj[dataAttr] = this.parseNoDataValue(dataVal);
+                    var dataVal = this.parseNoDataValue(dataVal),
+                        parseFloatVal = parseFloat(dataVal);
+
+                    if (isNaN(parseFloatVal)) {
+                        parsedDataObj[dataAttr] = dataVal;
                     }
                     else {
-                        parsedDataObj[dataAttr] = parseFloat(this.parseNoDataValue(dataVal));
+                        parsedDataObj[dataAttr] = parseFloat(dataVal);
                     }
                 }, this);
                 parsedDataArray.push(parsedDataObj);
             }, this);
+
             return parsedDataArray;
         },
 
@@ -193,8 +204,7 @@ define(function (require) {
             return value;
         },
         createD3Document: function () {
-            var noParseFloatArray = ["year", "Baustelleneinfluss"],
-                graphConfig = {
+            var graphConfig = {
                 graphType: "Linegraph",
                 selector: ".graph",
                 selectorTooltip: ".graph-tooltip-div",
@@ -202,16 +212,15 @@ define(function (require) {
                 scaleTypeY: "linear",
                 data: this.getDataset(),
                 xAttr: "year",
-                attrToShowArray: this.getAttrToShow(),
-                noParseFloatArray: noParseFloatArray
+                attrToShowArray: this.getAttrToShow()
             };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
-            this.manipulateSVG(noParseFloatArray);
+            this.manipulateSVG();
         },
-        manipulateSVG: function (noParseFloatArray) {
+        manipulateSVG: function () {
             var graphParams = Radio.request ("Graph", "getGraphParams"),
-                data = this.parseData(this.getDataset(), noParseFloatArray),
+                data = this.getDataset(),
                 svg = d3.select(".graph-svg"),
                 scaleX = graphParams.scaleX,
                 scaleY = graphParams.scaleY,

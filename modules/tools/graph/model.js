@@ -230,9 +230,7 @@ define(function (require) {
             var selector = graphConfig.selector,
                 scaleTypeX = graphConfig.scaleTypeX,
                 scaleTypeY = graphConfig.scaleTypeY,
-                noParseFloatArray = graphConfig.noParseFloatArray,
-                data = this.parseData(graphConfig.data, noParseFloatArray),
-                // data = graphConfig.data,
+                data = graphConfig.data,
                 xAttr = graphConfig.xAttr,
                 attrToShowArray = graphConfig.attrToShowArray,
                 margin = {top: 20, right: 20, bottom: 70, left: 100},
@@ -264,35 +262,6 @@ define(function (require) {
                 margin: margin,
                 offset: offset
             });
-        },
-        /*
-        * noData comes as "-" from WMS. turn noData into Value 0
-        * if data should not be converted, the attr name is in noParseFloatArray. then dont parseFloat
-        */
-        parseData: function (dataArray, noParseFloatArray) {
-            var parsedDataArray = [];
-
-            _.each(dataArray, function (dataObj) {
-                var parsedDataObj = {};
-
-                _.each(dataObj, function (dataVal, dataAttr) {
-                    if (_.contains(noParseFloatArray, dataAttr)) {
-                        parsedDataObj[dataAttr] = this.parseNoDataValue(dataVal);
-                    }
-                    else {
-                        parsedDataObj[dataAttr] = parseFloat(this.parseNoDataValue(dataVal));
-                    }
-                }, this);
-                parsedDataArray.push(parsedDataObj);
-            }, this);
-            return parsedDataArray;
-        },
-
-        parseNoDataValue: function (value) {
-            if (value === "-") {
-                value = 0;
-            }
-            return value;
         },
 
         // getter for graphParams
