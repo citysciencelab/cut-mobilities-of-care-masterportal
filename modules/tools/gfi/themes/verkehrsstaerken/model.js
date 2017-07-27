@@ -267,7 +267,16 @@ define(function (require) {
                     tooltipDiv.transition()
                         .duration(500)
                         .style("opacity", 0);
-                });
+                })
+                .on("click", function (d) {
+                    tooltipDiv.transition()
+                        .duration(200)
+                        .style("opacity", 0.9);
+                    tooltipDiv.html(d[attrToShowArray[0]])
+                        .attr("style", "background: gray")
+                        .style("left", (d3.event.offsetX + 5) + "px")
+                        .style("top", (d3.event.offsetY - 5) + "px");
+                    });
             var legendBBox = svg.selectAll(".graph-legend").node().getBBox(),
                 width = legendBBox.width,
                 height = legendBBox.height,
