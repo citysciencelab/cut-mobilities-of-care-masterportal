@@ -102,7 +102,7 @@ Dann die Build-Abhängigkeiten ziehen via NPM (alle Abhängigkeiten in der [pack
 
 Dann die App-Abhängigkeiten ziehen via Bower (alle Abhängigkeiten in der [bower.json](../bower.json)):
 
-**Wichtig für externe Entwickler**: die Datei bower-public.json in bower.json umbenennen und in der Datei .bowerrc die Proxy-Einstellungen anpassen.
+**Wichtig für externe Entwickler**: die Datei bower-public.json in bower.json umbenennen und in der Datei .bowerrc die **Proxy-Einstellungen anpassen**.
 
 ```
 # bower install
