@@ -26,10 +26,17 @@ define(function (require) {
             this.model.createD3Document();
         },
         initiallyLoadDiagramm: function (evt) {
-            if ($("#" + evt.currentTarget.id).hasClass("active")) {
 
+            if ($("#" + evt.currentTarget.id).hasClass("active")) {
+                var attr;
+
+                $("#diagramm").find("button").each(function (i, button) {
+                    if ($(button).hasClass("active")) {
+                        attr = $(button)[0].id;
+                    }
+                });
                 $(".graph svg").remove();
-                this.model.setAttrToShow(["Dtv"]);
+                this.model.setAttrToShow([attr]);
                 this.model.createD3Document();
             }
         }
