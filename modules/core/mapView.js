@@ -396,7 +396,7 @@ define([
                         return this.getResolutions()[index];
                     }
                     else {
-                        return this.getResolutions()[index - 1];
+                        return this.getResolutions()[index];
                     }
                 }
                 else if (scaleType === "min") {
