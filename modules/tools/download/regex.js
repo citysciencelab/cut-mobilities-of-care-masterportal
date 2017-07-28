@@ -1,0 +1,1 @@
+var result = filename.match(/^[0-9a-zA-Z ]+(\.[0-9a-zA-Z]+)?$/);

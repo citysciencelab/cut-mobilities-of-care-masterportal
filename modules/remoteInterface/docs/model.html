@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>model.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>model.js</h1>
+        
+
+        
+      </div>
+
+      
+        
+        
+        
+          <div class='highlight'><pre>define(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+
+    <span class="hljs-keyword">var</span> RemoteInterface = Backbone.Model.extend({
+        <span class="hljs-attr">initialize</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">var</span> channel = Radio.channel(<span class="hljs-string">"RemoteInterface"</span>);
+
+            channel.reply({</pre></div>
+        
+      
+        
+        <p>kommentar</p>
+
+        
+          <div class='highlight'><pre>                <span class="hljs-string">"getCenter"</span>: <span class="hljs-keyword">this</span>.getCenter,
+                <span class="hljs-string">"getMapState"</span>: <span class="hljs-keyword">this</span>.getMapState,
+                <span class="hljs-string">"getMeldePinAddress"</span>: <span class="hljs-keyword">this</span>.getMeldePinAddress,
+                <span class="hljs-string">"getMeldePinPosition"</span>: <span class="hljs-keyword">this</span>.getMeldePinPosition,
+                <span class="hljs-string">"getWGS84MapSizeBBOX"</span>: <span class="hljs-keyword">this</span>.getWGS84MapSizeBBOX,
+                <span class="hljs-string">"getZoomLevel"</span>: <span class="hljs-keyword">this</span>.getZoomLevel
+            }, <span class="hljs-keyword">this</span>);
+
+            channel.on({
+                <span class="hljs-string">"addFeatures"</span>: <span class="hljs-keyword">this</span>.addFeatures,
+                <span class="hljs-string">"hideAllFeatures"</span>: <span class="hljs-keyword">this</span>.showAllFeatures,
+                <span class="hljs-string">"hideFeatures"</span>: <span class="hljs-keyword">this</span>.showFeatures,
+                <span class="hljs-string">"hideLayer"</span>: <span class="hljs-keyword">this</span>.hideLayer,
+                <span class="hljs-string">"hideMapMarker"</span>: <span class="hljs-keyword">this</span>.hideMapMarker,
+                <span class="hljs-string">"setCenter"</span>: <span class="hljs-keyword">this</span>.setCenter,
+                <span class="hljs-string">"setMeldePinPosition"</span>: <span class="hljs-keyword">this</span>.setMeldePinPosition,
+                <span class="hljs-string">"setZoomLevel"</span>: <span class="hljs-keyword">this</span>.setZoomLevel,
+                <span class="hljs-string">"showAllFeatures"</span>: <span class="hljs-keyword">this</span>.showAllFeatures,
+                <span class="hljs-string">"showFeatures"</span>: <span class="hljs-keyword">this</span>.showFeatures,
+                <span class="hljs-string">"showLayer"</span>: <span class="hljs-keyword">this</span>.showLayer,
+                <span class="hljs-string">"showMapMarker"</span>: <span class="hljs-keyword">this</span>.showMapMarker,
+                <span class="hljs-string">"zoomToFeature"</span>: <span class="hljs-keyword">this</span>.zoomToFeature,
+                <span class="hljs-string">"zoomToFeatures"</span>: <span class="hljs-keyword">this</span>.zoomToFeatures
+            }, <span class="hljs-keyword">this</span>);
+        },</pre></div>
+        
+      
+        
+        <p>tolle funktion</p>
+
+        
+          <div class='highlight'><pre>        addFeatures: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">features, name</span>) </span>{
+            Radio.trigger(<span class="hljs-string">"AddFeatures"</span>, <span class="hljs-string">"addFeatures"</span>, features, name);
+        },</pre></div>
+        
+      
+        
+        <p>spitzen funktion</p>
+
+        
+          <div class='highlight'><pre>        getCenter: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">return</span> Radio.request(<span class="hljs-string">"MapView"</span>, <span class="hljs-string">"getCenter"</span>);
+        },
+        <span class="hljs-comment">/**
+        *Funktion xy
+        *
+        **/</span>
+        getMapState: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">return</span> Radio.request(<span class="hljs-string">"SaveSelection"</span>, <span class="hljs-string">"getMapState"</span>);
+        },
+
+        <span class="hljs-attr">getMeldePinAddress</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">return</span> Radio.request(<span class="hljs-string">"MeldePin"</span>, <span class="hljs-string">"getAddress"</span>);
+        },
+
+        <span class="hljs-attr">getMeldePinPosition</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">return</span> Radio.request(<span class="hljs-string">"MeldePin"</span>, <span class="hljs-string">"getPosition"</span>);
+        },
+
+        <span class="hljs-attr">getWGS84MapSizeBBOX</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">return</span> Radio.request(<span class="hljs-string">"Map"</span>, <span class="hljs-string">"getWGS84MapSizeBBOX"</span>);
+        },
+
+        <span class="hljs-attr">getZoomLevel</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">return</span> Radio.request(<span class="hljs-string">"MapView"</span>, <span class="hljs-string">"getZoomLevel"</span>);
+        },
+
+        <span class="hljs-attr">hideLayer</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">value</span>) </span>{
+            Radio.trigger(<span class="hljs-string">"ModelList"</span>, <span class="hljs-string">"hideLayer"</span>, value);
+        },
+
+        <span class="hljs-attr">hideMarker</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            Radio.trigger(<span class="hljs-string">"MapMarker"</span>, <span class="hljs-string">"hideMarker"</span>);
+        },
+
+        <span class="hljs-attr">setZoomLevel</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">value</span>) </span>{
+            Radio.trigger(<span class="hljs-string">"MapView"</span>, <span class="hljs-string">"setZoomLevel"</span>, value);
+        },
+
+        <span class="hljs-attr">setCenter</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">value</span>) </span>{
+            Radio.trigger(<span class="hljs-string">"MapView"</span>, <span class="hljs-string">"setCenter"</span>, value);
+        },
+
+        <span class="hljs-attr">setMeldePinPosition</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">value</span>) </span>{
+            Radio.trigger(<span class="hljs-string">"MeldePin"</span>, <span class="hljs-string">"setPosition"</span>, value);
+        },
+
+        <span class="hljs-attr">showLayer</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">value</span>) </span>{
+            Radio.trigger(<span class="hljs-string">"ModelList"</span>, <span class="hljs-string">"showLayer"</span>, value);
+        },
+
+        <span class="hljs-attr">showMarker</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">value</span>) </span>{
+            Radio.trigger(<span class="hljs-string">"MapMarker"</span>, <span class="hljs-string">"showMarker"</span>, value);
+        },
+
+        <span class="hljs-attr">zoomToFeature</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">feature</span>) </span>{
+            Radio.trigger(<span class="hljs-string">"MapView"</span>, <span class="hljs-string">"zoomToFeature"</span>, feature);
+        },
+
+        <span class="hljs-attr">zoomToFeatures</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">features</span>) </span>{
+            Radio.trigger(<span class="hljs-string">"MapView"</span>, <span class="hljs-string">"zoomToFeatures"</span>, features);
+        }
+    });
+
+    <span class="hljs-keyword">return</span> RemoteInterface;
+});</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
