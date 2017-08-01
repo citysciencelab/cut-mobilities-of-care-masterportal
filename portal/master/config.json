@@ -125,7 +125,8 @@
             "glyphicon": "glyphicon-road",
             "viomRoutingID": "7",
             "bkgSuggestID": "4",
-            "bkgGeosearchID": "5"
+            "bkgGeosearchID": "5",
+            "isInitOpen": true
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
