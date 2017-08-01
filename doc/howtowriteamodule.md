@@ -20,11 +20,11 @@ Ins Verzeichnis "modules" wechsel und einen neuen Ordner erstellen. Aus dem Ordn
 ### Scale View erstellen und zurückgeben
 Datei *modules/scale/view.js* öffnen und View mit folgendem Standardschema erzeugen.
 ```js
-define([
-  "backbone"
-], function (Backbone) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        View;
 
-    var View = Backbone.View.extend({
+    View = Backbone.View.extend({
       // wird aufgerufen wenn die View erstellt wird
       initialize: function () {}
     });
@@ -51,35 +51,32 @@ Datei *modules/scale/template.html* öffnen, Template coden und mit Bootstrap Kl
   <option>3</option>
 </select>
 ```
-
 ### Template in die View einbinden
 ```js
-define([
-  "backbone",
-  "underscore",
-  // stellt das Template als String Variable zur Verfügung
-  "text!modules/scale/template.html"
-], function (Backbone, _, ScaleTemplate) {
+define(function (require) {
+ var Backbone = require("backbone"),
+     _ = require("underscore"),
+     ScaleTemplate = "text!modules/scale/template.html",
+     View;
 
-    var View = Backbone.View.extend({
-      // underscore template Funktion
-      template: _.template(ScaleTemplate),
-      initialize: function () {}
+    View = Backbone.View.extend({
+        // underscore template Funktion
+        template: _.template(ScaleTemplate),
+        initialize: function () {}
     });
-
     return View;
 });
 ```
 ### Template initial rendern
 ```js
-define([
-  "backbone",
-  "underscore",
-  "text!modules/scale/template.html",
-  "jquery"
-], function (Backbone, _, ScaleTemplate, $) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        _ = require("underscore"),
+        ScaleTemplate = require("text!modules/scale/template.html"),
+        $ = require("jquery"),
+        View;
 
-    var View = Backbone.View.extend({
+    View = Backbone.View.extend({
       template: _.template(ScaleTemplate),
       initialize: function () {
         this.render();
@@ -99,14 +96,14 @@ Standardeinstellung für das DOM Element ist ein *div* Tag.
 
 ### View Id zuweisen
 ```js
-define([
-  "backbone",
-  "underscore",
-  "text!modules/scale/template.html",
-  "jquery"
-], function (Backbone, _, ScaleTemplate, $) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        _ = require("underscore"),
+        ScaleTemplate = require("text!modules/scale/template.html"),
+        $ = require("jquery"),
+        View;
 
-    var View = Backbone.View.extend({
+    View = Backbone.View.extend({
       // Konvention: Id = Name des Moduls
       id: "scale",
       ...
@@ -145,11 +142,11 @@ Datei *css/style.css* öffnen und *modules/scale/style.css* importieren
 ### Model erstellen und zurückgeben
 Datei *modules/scale/model.js* öffnen und Model definieren.
 ```js
-define([
-  "backbone"
-], function (Backbone) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        Model;
 
-    var Model = Backbone.Model.extend({
+    Model = Backbone.Model.extend({
       // wird aufgerufen wenn das Model erstellt wird
       initialize: function () {...}
     });
@@ -160,15 +157,14 @@ define([
 
 ### Model der View zuweisen
 ```js
-define([
-  "backbone",
-  "underscore",
-  "text!modules/scale/template.html",
-  "jquery",
-  "modules/scale/model"
-], function (Backbone, _, ScaleTemplate, $, ScaleModel) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        _ = require("underscore"),
+        ScaleTemplate = require("text!modules/scale/template.html"),
+        $ = require("jquery"),
+        View;
 
-    var View = Backbone.View.extend({
+    View = Backbone.View.extend({
       id: "scale",
       model: new ScaleModel(),
       ...
@@ -180,11 +176,11 @@ define([
 
 ### Setter Methoden für das Model schreiben
 ```js
-define([
-  "backbone"
-], function (Backbone) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        Model;
 
-    var Model = Backbone.Model.extend({
+    Model = Backbone.Model.extend({
       initialize: function () {...},
       // Setter für alle verfügbaren Maßstäbe
       setScales: function (value) {
@@ -202,17 +198,15 @@ define([
 
 ### Maßstäbe der Karte abfragen und setzen
 ```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Model;
 
-    var Model = Backbone.Model.extend({
+    Model = Backbone.Model.extend({
       initialize: function () {
         // initial alle Scales der Karte abfragen
-        var scales = Radio.request("MapView", "getScales");
-
-        this.setScales(scales);
+        this.setScales(Radio.request("MapView", "getScales"));
       },
       setScales: function (value) {...},
       setCurrentScale: function (value) {...}
@@ -225,12 +219,12 @@ Die Kommunikation mit anderen Modulen erfolgt über Backbone.Radio. In diesem Fa
 
 ### Aktuellen Kartenmaßstab abfragen und setzen
 ```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Model;
 
-    var Model = Backbone.Model.extend({
+    Model = Backbone.Model.extend({
       initialize: function () {
         this.setScales(Radio.request("MapView", "getScales"));
         this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
@@ -245,16 +239,15 @@ define([
 
 ### Model Attribute ans Template übergeben
 ```js
-define([
-  "backbone",
-  "underscore",
-  "text!modules/scale/template.html",
-  "jquery",
-  "modules/scale/model"
-], function (Backbone, _, ScaleTemplate, $, ScaleModel) {
+define(function (require) {
 
-    var View = Backbone.View.extend({
-      ...
+    var Backbone = require("backbone"),
+        _ = require("underscore"),
+        ScaleTemplate = require("text!modules/scale/template.html"),
+        $ = require("jquery"),
+        View;
+
+    View = Backbone.View.extend({
       template: _.template(ScaleTemplate),
       initialize: function () {
         this.render();
@@ -314,12 +307,12 @@ define([
 
 ### Getter Methode für den aktuellen Maßstab schreiben
 ```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Model;
 
-    var Model = Backbone.Model.extend({
+    Model = Backbone.Model.extend({
       initialize: function () {...},
       setScales: function (value) {...},
       setCurrentScale: function (value) {...},
@@ -334,12 +327,12 @@ define([
 
 ### Model Listener auf change:currentScale
 ```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Model;
 
-    var Model = Backbone.Model.extend({
+    Model = Backbone.Model.extend({
       initialize: function () {
         this.listenTo(this, {
             "change:currentScale": function () {
@@ -363,12 +356,12 @@ define([
 
 ### Model Listener auf MapView changedOptions
 ```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Model;
 
-    var Model = Backbone.Model.extend({
+    Model = Backbone.Model.extend({
       initialize: function () {
         this.listenTo(Radio.channel("MapView"), {
             // Wird ausgelöst wenn sich Zoomlevel, Center
