@@ -4,10 +4,10 @@ Eine Schritt für Schritt Dokumentation zur Erstellung eines neuen Moduls.
 
 ### Beispiel Anforderung
 Wir wollen ein Tool schreiben, über welches man den Kartenmaßstab steuern kann. Dabei soll über ein Drop-Down-Menü der Maßstab ausgewählt werden. Sobald der Maßstab gesetzt wurde, soll sich die Karte anpassen.
-Darüber hinaus soll unser Tool auf Änderungen des Kartenmaßstabes reagieren und den entsprechend aktuellen Maßstab anzeigen.
+Darüber hinaus soll unser Tool auf Änderungen des Kartenmaßstabes reagieren und den entsprechend aktuellen Maßstab im Drop-Down-Menu anzeigen.
 
 ### Neues Modul anlegen
-Ins Verzeichnis "modules" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen sollte ersichtlich sein, um was für ein Modul es sich dabei handelt - z.B. "scale". Die für dieses Modul benötigten Dateien anlegen. Im View (view.js) wird auf Interaktion mit dem Nutzer reagiert und das Tool neu gerendered. Dazu wird das Template (template.html) benötigt, welches den Bauplan des Tools enthält. Im Model (model.js) werden die Daten und deren Logik vorgehalten.
+Ins Verzeichnis "modules" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen sollte ersichtlich sein, um was für ein Modul es sich dabei handelt - z.B. "scale". Die für dieses Modul benötigten Dateien anlegen. In der View (view.js) wird auf Interaktion mit dem Nutzer reagiert und das Tool neu gerendert. Dazu wird das Template (template.html) benötigt, welches den Bauplan des Tools enthält. Im Model (model.js) werden die Daten und deren Logik vorgehalten.
 ```
 -  modules
    | -> scale
@@ -18,7 +18,7 @@ Ins Verzeichnis "modules" wechseln und einen neuen Ordner erstellen. Aus dem Ord
 ```
 
 ### Scale View erstellen und zurückgeben
-Datei *modules/scale/view.js* öffnen und View mit folgendem Standardschema erzeugen.
+Datei *modules/scale/view.js* öffnen und die View mit folgendem Standardschema erzeugen.
 ```js
 define(function (require) {
     var Backbone = require("backbone"),
@@ -53,7 +53,7 @@ Datei *modules/scale/template.html* öffnen, Template coden und mit Bootstrap Kl
 </select>
 ```
 ### Template in die View einbinden
-Das Template muss in den View eingebunden werden. Hierzu wird in einer neuen Variable (ScaleTemplate) das Template required und mithilfe von underscore ("_") als Template zur Verfügung gestellt. Dieses Template wird dem View als Attribut "template" zugefügt.
+Das Template muss in die View eingebunden werden. Hierzu wird in einer neuen Variable (ScaleTemplate) das Template required und mithilfe von underscore ("_") als Template zur Verfügung gestellt. Selbstverständlich muss auch Underscore required werden. Dieses Template wird dem View als Attribut "template" zugefügt.
 ```js
 define(function (require) {
  var ...,
@@ -71,9 +71,9 @@ define(function (require) {
 });
 ```
 ### Template initial rendern
-Beim Laden des Views, soll sich sofort das Tool in der Karte rendern. Dazu wird in der initialize()-Funktion die render()-Funktion aufgerufen. Dort passiert folgendes:
-Dem View wird das Template zugefügt.
-Danach zeichnet sich der  View an den HTML-Body.
+Beim Laden der View, soll sich sofort das Tool in der Karte rendern. Dazu wird in der initialize()-Funktion die render()-Funktion aufgerufen. Dazu benötigen wir "jquery" und requiren dieses als "$". In der render-Funktion passiert folgendes:
+Der View wird das Template zugefügt.
+Danach zeichnet sich die View an den HTML-Body.
 ```js
 define(function (require) {
     var ...,
