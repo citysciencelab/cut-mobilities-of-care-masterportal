@@ -85,7 +85,6 @@ define(function () {
         scaleLine: true,
         mouseHover: true,
         isMenubarVisible: true,
-        startUpModul: "",
         geoAPI: false,
         clickCounter: {}
     };

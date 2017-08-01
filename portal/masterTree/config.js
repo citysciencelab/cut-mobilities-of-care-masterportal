@@ -13,7 +13,6 @@ define(function () {
        proxyURL: "/cgi-bin/proxy.cgi",
        mouseHover: true,
        scaleLine: true,
-       startUpModul: "",
        gemarkungen: "../components/lgv-config/gemarkung.json"
    };
 
