@@ -20,12 +20,6 @@ define([
             Radio.on("MenuLoader", "ready", this.menuLoaded, this);
 
             Radio.on("ParametricURL", "ready", this.parametersAnalysed, this);
-
-            this.listenTo(this, {
-                "change:configAnalysed": this.check,
-                "change:parametersAnalysed": this.check,
-                "check": this.check
-            });
         },
         /*
          * speichert sich alle geladenen Module, die geladen wurden und prinzipiell geöffnet werden können.
@@ -35,7 +29,7 @@ define([
 
             initializedModuls.push(id.toLowerCase());
             this.set("initializedModuls", initializedModuls);
-            this.trigger("check");
+            this.check();
         },
         /*
          * erst nachdem das Menü geladen ist kann der Parser per Radio abgefragt werden. In der config.json wird nach Modulen mit isInitOpen: true gesucht.
@@ -49,6 +43,7 @@ define([
                 }
             }, this);
             this.set("configAnalysed", true);
+            this.check();
         },
         /*
          * wenn die Paramter der URL untersucht wurden, werden die isInitOpen Module in Erfahrung gebracht
@@ -65,6 +60,7 @@ define([
             }
             this.set("autostartModuls", autostartModuls);
             this.set("parametersAnalysed", true);
+            this.check();
         },
         /*
          * sofern das Modul in Erfahrung gebracht hat, welche Module gestartet werden sollen, werden alle zwischenzeitlich geladenen Module verglichen und ggf. gestartet.

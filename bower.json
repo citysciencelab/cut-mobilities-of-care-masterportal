@@ -36,6 +36,6 @@
     "openlayers": "https://github.com/openlayers/ol3/releases/download/v3.15.1/v3.15.1-dist.zip"
   },
   "devDependencies": {
-    "build-config": "https://bitbucket.org/lgv-g12/build-config.git#latest"
+    "build-config": "https://bitbucket.org/lgv-g12/build-config.git#bower"
   }
 }
