@@ -37,6 +37,6 @@
     "d3": "3.5.17"
   },
   "devDependencies": {
-    "build-config": "https://bitbucket.org/lgv-g12/build-config.git#latest"
+    "build-config": "https://bitbucket.org/lgv-g12/build-config.git#bower"
   }
 }
