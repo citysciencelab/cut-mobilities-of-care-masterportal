@@ -147,7 +147,6 @@ define([
             this.setZoomLevels();
 
             this.setProjection();
-            this.setStartCenter();
             this.setView();
 
             // Listener für ol.View
@@ -269,31 +268,6 @@ define([
         // setter for extent
         setExtent: function (value) {
             this.set("extent", value);
-        },
-        /**
-         *
-         */
-        setStartCenter: function () {
-            var center = Radio.request("ParametricURL", "getCenter");
-
-            if (center) {
-                var fromCRSName = center.crs,
-                    position = [center.x, center.y],
-                    toCRSName = this.get("projection").getCode();
-
-                if (fromCRSName !== "" && fromCRSName !== toCRSName) {
-                    // transform
-                    var fromCRS = Radio.request("CRS", "getProjection", fromCRSName);
-
-                    if (!fromCRS) {
-                        Radio.trigger("Alert", "alert", {text: "<strong>" + fromCRSName + " des <i>CENTER</i>-Parameters unbekannt.</strong> Default wird verwendet.", kategorie: "alert-info"});
-                    }
-                    else {
-                        position = Radio.request("CRS", "transform", {fromCRS: fromCRSName, toCRS: toCRSName, point: position});
-                    }
-                }
-                this.set("startCenter", position);
-            }
         },
 
         /**

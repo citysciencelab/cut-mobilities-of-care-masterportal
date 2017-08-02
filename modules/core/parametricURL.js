@@ -145,13 +145,13 @@ define([
         parseBezirk: function (result) {
             var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
                 bezirke = [
-                    {name: "ALTONA", number: "2", position: [556681, 5937664]},
-                    {name: "HAMBURG-HARBURG", number: "7", position: [560291, 5925817]},
-                    {name: "HAMBURG-NORD", number: "4", position: [567677, 5941650]},
-                    {name: "BERGEDORF", number: "6", position: [578779, 5924255]},
-                    {name: "EIMSBÜTTEL", number: "3", position: [561618, 5940019]},
-                    {name: "HAMBURG-MITTE", number: "1", position: [566380, 5932134]},
-                    {name: "WANDSBEK", number: "5", position: [574344, 5943750]}
+                    {name: "ALTONA", number: "2"},
+                    {name: "HAMBURG-HARBURG", number: "7"},
+                    {name: "HAMBURG-NORD", number: "4"},
+                    {name: "BERGEDORF", number: "6"},
+                    {name: "EIMSBÜTTEL", number: "3"},
+                    {name: "HAMBURG-MITTE", number: "1"},
+                    {name: "WANDSBEK", number: "5"}
                 ];
 
             if (bezirk.length === 1) {
@@ -167,12 +167,6 @@ define([
                 });
                 return;
             }
-            this.set("center", {
-                crs: "",
-                x: _.findWhere(bezirke, {name: bezirk.name}).position[0],
-                y: _.findWhere(bezirke, {name: bezirk.name}).position[1],
-                z: 0
-            });
             this.setZoomToGeometry(bezirk.name);
         },
 
