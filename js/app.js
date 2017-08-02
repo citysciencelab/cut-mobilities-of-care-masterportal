@@ -32,6 +32,10 @@ define("app",
         new Remoteinterface();
     });
 
+    require(["modules/zoomToGeometry/model"], function (ZoomToGeometry) {
+        new ZoomToGeometry();
+    });
+
     if (Config.allowParametricURL && Config.allowParametricURL === true && Config.zoomtofeature) {
         require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
             new ZoomToFeature();
