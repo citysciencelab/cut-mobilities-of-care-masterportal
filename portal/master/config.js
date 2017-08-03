@@ -22,7 +22,7 @@ define(function () {
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
         gfiWindow: "attached",
         simpleMap: false,
-        wfsImgPath: "../components/lgv-config/img/",
+        wfsImgPath: "../node_modules/lgv-config/img/",
         allowParametricURL: true,
         zoomtofeature: {
             url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
@@ -77,9 +77,9 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-fhhnet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        styleConf: "../components/lgv-config/style.json",
+        layerConf: "../node_modules/lgv-config/services-fhhnet.json",
+        restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
+        styleConf: "../node_modules/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,
