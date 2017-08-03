@@ -37,33 +37,17 @@ define(function (require) {
             });
             return maxValue;
         },
-        createMinValue: function (data, attrToShowArray) {
-            var minValue = data[0][attrToShowArray[0]];
-
-            _.each(attrToShowArray, function (attrToShow) {
-                var value = d3.min(data, function (d) {
-                    return d[attrToShow];
-                });
-
-                if (value < minValue) {
-                    minValue = value;
-                }
-            });
-            return minValue;
-        },
         createScaleX: function (data, size, scaletype, attr) {
             var rangeArray = [0, size],
                 scale,
-                minValue,
                 maxValue;
 
             if (scaletype === "ordinal") {
                 scale = this.createOrdinalScale(data, rangeArray, [attr]);
             }
             else if (scaletype === "linear") {
-                minValue = this.createMinValue(data, [attr]);
                 maxValue = this.createMaxValue(data, [attr]);
-                scale = this.createLinearScale(minValue, maxValue, rangeArray);
+                scale = this.createLinearScale(0, maxValue, rangeArray);
             }
             else {
                 alert("Scaletype not found");
@@ -73,17 +57,14 @@ define(function (require) {
         createScaleY: function (data, size, scaletype, attrToShowArray) {
             var rangeArray = [size, 0],
                 scale,
-                minValue,
                 maxValue;
 
             if (scaletype === "ordinal") {
                 scale = this.createOrdinalScale(data, rangeArray, attrToShowArray);
             }
             else if (scaletype === "linear") {
-
-                minValue = this.createMinValue(data, attrToShowArray);
                 maxValue = this.createMaxValue(data, attrToShowArray);
-                scale = this.createLinearScale(minValue, maxValue, rangeArray);
+                scale = this.createLinearScale(0, maxValue, rangeArray);
             }
             else {
                 alert("Scaletype not found");
@@ -116,10 +97,10 @@ define(function (require) {
                     })
                     .orient(position);
         },
-        createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow) {
+        createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow, offset) {
             return d3.svg.line()
                     .x(function (d) {
-                        return scaleX(d[xAttr]);
+                        return scaleX(d[xAttr]) + offset;
                     })
                     .y(function (d) {
                         return scaleY(d[yAttrToShow]);
@@ -134,7 +115,7 @@ define(function (require) {
         appendXAxisToSvg: function (svg, xAxis, xAttr, offset) {
             var svgBBox = svg.node().getBBox(),
                 xAxis = svg.append("g")
-                    .attr("transform", "translate(0," + svgBBox.height + ")")
+                    .attr("transform", "translate(" + offset + "," + svgBBox.height + ")")
                     .attr("class", "xAxis")
                     .call(xAxis),
                 xAxisBBox = svg.selectAll(".xAxis").node().getBBox();
@@ -162,12 +143,12 @@ define(function (require) {
                 .style("text-anchor", "middle")
                 .text(attrToShow);
         },
-        appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv) {
+        appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset) {
             svg.selectAll("dot")
                 .data(data)
                 .enter().append("circle")
                 .attr("cx", function (d) {
-                    return scaleX(d[xAttr]);
+                    return scaleX(d[xAttr]) + offset;
                 })
                 .attr("cy", function (d) {
                     return scaleY(d[yAttrToShow]);
@@ -244,8 +225,10 @@ define(function (require) {
                 xAttr = graphConfig.xAttr,
                 attrToShowArray = graphConfig.attrToShowArray,
                 margin = {top: 20, right: 20, bottom: 70, left: 100},
-                width = $(selector).width() - margin.left - margin.right,
-                height = $(selector).height() - margin.top - margin.bottom,
+                // width = $(selector).width() - margin.left - margin.right,
+                // height = $(selector).height() - margin.top - margin.bottom,
+                width = graphConfig.width - margin.left - margin.right,
+                height = graphConfig.height - margin.top - margin.bottom,
                 scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
                 scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
                 valueLine,
@@ -256,14 +239,14 @@ define(function (require) {
                 offset = 10;
 
             _.each(attrToShowArray, function (yAttrToShow) {
-                valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
+                valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow, offset);
                 this.appendDataToSvg(svg, data, "line", valueLine);
                 // Add the scatterplot for each point in line
-                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv);
+                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset);
             }, this);
             // Add the Axis
-            this.appendXAxisToSvg(svg, xAxis, xAttr, offset);
             this.appendYAxisToSvg(svg, yAxis, attrToShowArray[0], offset);
+            this.appendXAxisToSvg(svg, xAxis, xAttr, offset);
             this.appendLegend(svg, attrToShowArray);
             this.setGraphParams({
                 scaleX: scaleX,

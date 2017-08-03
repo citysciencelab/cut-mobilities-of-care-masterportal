@@ -35,8 +35,7 @@ define(function (require) {
                     yearData,
                     dataPerYear = [],
                     year,
-                    years = [],
-                    actualDataset = {};
+                    years = [];
 
                 _.each(rowNames, function (rowName) {
                     year = parseInt(rowName.slice(-4), 10);
@@ -49,21 +48,6 @@ define(function (require) {
                     }
                     else if (rowName === "Art") {
                         art = gfiContent[rowName];
-                    }
-                    else if (rowName.indexOf("aktuell") !== -1) {
-                         var newRowName = "",
-                            index = rowName.indexOf("aktuell") - 1,
-                            actualDigits = rowName.slice(-7).length,
-                            charBeforeAct = rowName.slice(index, -actualDigits);
-
-                        // vorzeichen vor "aktuell prüfen"
-                        if (charBeforeAct === "_") {
-                            newRowName = rowName.replace("_aktuell", "");
-                        }
-                        else {
-                            newRowName = rowName.replace(" aktuell", "");
-                        }
-                        actualDataset[newRowName] = gfiContent[rowName];
                     }
                     // jahresDatensätze parsen
                     else if (!_.isNaN(year)) {
@@ -96,11 +80,11 @@ define(function (require) {
                 this.setArt(art);
                 this.setYears(years);
                 this.setRowNames(newRowNames);
-                this.combineYearsData(dataPerYear, years, newRowNames, actualDataset);
+                this.combineYearsData(dataPerYear, years);
             }
         },
 
-        combineYearsData: function (dataPerYear, years, rowNames, actualDataset) {
+        combineYearsData: function (dataPerYear, years) {
             var dataset = [];
 
             _.each(years, function (year) {
@@ -112,8 +96,6 @@ define(function (require) {
                 }, this);
                 dataset.push(yearObject);
             }, this);
-            actualDataset.year = "Aktuell";
-            dataset.push(actualDataset);
             dataset = this.parseData(dataset);
             this.setDataset(dataset);
         },
@@ -171,8 +153,8 @@ define(function (require) {
             }, this);
         },
          /*
-        * noData comes as "-" from WMS. turn noData into Value 0
-        * if data should not be converted, the attr name is in noParseFloatArray. then dont parseFloat
+        * noData comes as "-" from WMS. turn noData into ""
+        * try to parse data to float
         */
         parseData: function (dataArray) {
             var parsedDataArray = [];
@@ -199,14 +181,21 @@ define(function (require) {
 
         parseNoDataValue: function (value) {
             if (value === "-") {
-                value = 0;
+                value = "";
             }
             return value;
         },
         createD3Document: function () {
-            var graphConfig = {
+            var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
+                heightPegelHeader = $(".pegelHeader").css("height").slice(0, -2),
+                heightNavbar = $(".pegelNavbar").css("height").slice(0, -2),
+                height = heightGfiContent - heightPegelHeader - heightNavbar,
+                width = $(".gfi-content").css("width").slice(0, -2),
+                graphConfig = {
                 graphType: "Linegraph",
                 selector: ".graph",
+                width: width,
+                height: height,
                 selectorTooltip: ".graph-tooltip-div",
                 scaleTypeX: "ordinal",
                 scaleTypeY: "linear",
@@ -214,7 +203,8 @@ define(function (require) {
                 xAttr: "year",
                 attrToShowArray: this.getAttrToShow()
             };
-
+console.log(height);
+console.log(width);
             Radio.trigger("Graph", "createGraph", graphConfig);
             this.manipulateSVG();
         },
@@ -235,7 +225,7 @@ define(function (require) {
                 .enter().append("g")
                 .append("rect")
                 .attr("x", function (d) {
-                    return scaleX(d.year) + margin.left - (size / 2);
+                    return scaleX(d.year) + margin.left - (size / 2) + offset;
                 })
                 .attr("y", function (d) {
                     return scaleY(d[attrToShowArray[0]]) + (size / 2) + offset;
