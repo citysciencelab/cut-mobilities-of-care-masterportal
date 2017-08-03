@@ -131,7 +131,7 @@ define(function (require) {
             var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
                 resoByMinScale = Radio.request("MapView", "getResoByScale", this.getMinScale(), "min");
 
-            this.setMaxResolution(resoByMaxScale + 1);
+            this.setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
             this.setMinResolution(resoByMinScale);
         },
 

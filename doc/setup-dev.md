@@ -99,7 +99,10 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # https://<user>:<pw>@bitbucket.org/lgv-g12/build-config.git#master
 ```
 
+
 Dann die Build-Abhängigkeiten ziehen via NPM (alle Abhängigkeiten in der [package.json](../package.json)):
+
+In der Admin-cmd ausführen:
 ```
 # npm install
 ```

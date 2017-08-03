@@ -119,6 +119,7 @@ define([
             this.listenTo(this, {
                 "change:resolution": function () {
                     channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+
                     // triggert das Zoom in / out übers Mausrad / Touch
                     Radio.trigger("ClickCounter", "zoomChanged");
                 },
@@ -152,7 +153,8 @@ define([
 
             // Listener für ol.View
             this.get("view").on("change:resolution", function () {
-                this.set("resolution", this.get("view").getResolution());
+                 this.set("resolution", this.get("view").constrainResolution(this.get("view").getResolution()));
+                // this.set("resolution", this.get("view").getResolution());
                 channel.trigger("changedZoomLevel", this.getZoom());
             }, this);
             this.get("view").on("change:center", function () {
@@ -394,7 +396,7 @@ define([
                         return this.getResolutions()[index];
                     }
                     else {
-                        return this.getResolutions()[index - 1];
+                        return this.getResolutions()[index];
                     }
                 }
                 else if (scaleType === "min") {
