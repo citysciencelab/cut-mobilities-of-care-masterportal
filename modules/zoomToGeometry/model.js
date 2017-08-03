@@ -20,10 +20,18 @@ define(function (require) {
             channel.on({
                 "zoomToGeometry": this.zoomToGeometry
             });
+
+            this.listenTo(this, {
+                "change:featureGeometry": this.createFeatureCoordinates
+            });
+
             if (name.length > 0) {
                 this.zoomToGeometry(name, this.getWfsParams());
             }
+
+            Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
         },
+
         zoomToGeometry: function (name, wfsParams) {
             var wfsParams = wfsParams || this.getWfsParams();
 
@@ -78,6 +86,7 @@ define(function (require) {
                     extent = this.calcExtent(foundFeature);
                     Radio.trigger("Map", "zoomToExtent", extent);
                 }
+                this.setFeatureGeometry(foundFeature.getGeometry());
         },
         parseFeatures: function (data, name, attribute) {
             var format = new ol.format.WFS(),
@@ -90,11 +99,50 @@ define(function (require) {
             });
 
             return foundFeature[0];
-
         },
         calcExtent: function (feature) {
             return feature.getGeometry().getExtent();
         },
+
+        handlePostCompose: function (evt) {
+            var canvas = evt.context;
+
+            canvas.beginPath();
+            this.drawOutsidePolygon(canvas);
+            this.drawInsidePolygon(canvas);
+            canvas.fillStyle = "rgba(0, 0, 0, 0.4)";
+            canvas.fill();
+            canvas.restore();
+        },
+
+        drawOutsidePolygon: function (canvas) {
+            var size = Radio.request("Map", "getSize"),
+                height = size[1] * ol.has.DEVICE_PIXEL_RATIO,
+                width = size[0] * ol.has.DEVICE_PIXEL_RATIO;
+
+            canvas.moveTo(0, 0);
+            canvas.lineTo(width, 0);
+            canvas.lineTo(width, height);
+            canvas.lineTo(0, height);
+            canvas.lineTo(0, 0);
+            canvas.closePath();
+        },
+
+        drawInsidePolygon: function (canvas) {
+            var geometry = this.getFeatureGeometry(),
+                // geometry ist ein Multipolygon
+                polygon = geometry.getPolygon(0),
+                // Damit es als inneres Polygon erkannt wird, muss es gegen die Uhrzeigerrichtung gezeichnet werden
+                coordinates = polygon.getCoordinates()[0].reverse();
+
+            _.each(coordinates, function (coordinate) {
+                var coord = Radio.request("Map", "getPixelFromCoordinate", coordinate);
+
+                canvas.lineTo(coord[0], coord[1]);
+            });
+            canvas.closePath();
+        },
+
         // getter for wfsParams
         getWfsParams: function () {
             return this.get("wfsParams");
@@ -102,6 +150,14 @@ define(function (require) {
         // setter for wfsParams
         setWfsParams: function (value) {
             this.set("wfsParams", value);
+        },
+        // setter for bezirk Geometry
+        setFeatureGeometry: function (value) {
+            this.set("featureGeometry", value);
+        },
+        // getter for bezirk Geometry
+        getFeatureGeometry: function () {
+            return this.get("featureGeometry");
         }
     });
     return ZoomToGeometry;

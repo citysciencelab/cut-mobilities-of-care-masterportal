@@ -29,7 +29,9 @@ define(function (require) {
                 "createLayerIfNotExists": this.createLayerIfNotExists,
                 "getEventPixel": this.getEventPixel,
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
-                "getSize": this.getSize
+                "getSize": this.getSize,
+                "getPixelFromCoordinate": this.getPixelFromCoordinate,
+                "getMap": this.getMap
             }, this);
 
             channel.on({
@@ -172,6 +174,15 @@ define(function (require) {
          */
         getEventPixel: function (evt) {
             return this.getMap().getEventPixel(evt);
+        },
+
+        /**
+         * Gibt die Pixelposition im Viewport zu einer Koordinate zurück
+         * @param  {ol.Coordinate} value
+         * @return {ol.Pixel}
+         */
+        getPixelFromCoordinate: function (value) {
+            return this.getMap().getPixelFromCoordinate(value);
         },
 
         /**
