@@ -135,7 +135,7 @@ define(function (require) {
         appendYAxisToSvg: function (svg, yAxis, attrToShow, offset) {
             var svgBBox = svg.node().getBBox(),
                 yAxis = svg.append("g")
-                .attr("transform", "translate(" + svgBBox.x + ",0)")
+                .attr("transform", "translate(" + svgBBox.x - offset + ",0)")
                 .attr("class", "yAxis")
                 .call(yAxis),
                 yAxisBBox = svg.selectAll(".yAxis").node().getBBox();
