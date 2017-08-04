@@ -114,7 +114,7 @@ define([
             _.each(layerModels, function (model) {
                 this.get("layers").push({
                     name: model.name,
-                    metaName: (_.has(model.datasets[0], "md_name")) ? model.datasets[0].md_name : model.name,
+                    metaName: _.has(model, "datasets") && _.has(model.datasets[0], "md_name") ? model.datasets[0].md_name : model.name,
                     type: "Thema",
                     glyphicon: "glyphicon-list",
                     id: model.id

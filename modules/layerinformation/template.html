@@ -72,19 +72,29 @@
                     }
                 }
                else {
-                    if (legendURL[0].img.length ===1 ) {
-                    _.each(legendURL[0].img, function (image) {
-                    %>
+                    if (_.has(legendURL[0], "img")) {
+                        if (legendURL[0].img.length ===1 ) {
+                        _.each(legendURL[0].img, function (image) {
+                        %>
+                            <p>
+                                <img src=<%= image %>>
+                            </p>
+                    <%
+                       });}else { %>
                         <p>
-                            <img src=<%= image %>>
+                            <img src=<%= legendURL[0].img[0] %>>
                         </p>
-                <%
-                   });}else { %>
-                    <p>
-                        <img src=<%= legendURL[0].img[0] %>>
-                    </p>
-                <%
-               }}}
+                    <%
+                        }
+                    }
+                    else {
+                        %>
+                         <p>
+                             <img src=<%= legendURL[0][0] %>>
+                         </p>
+                         <%
+                    }
+               }}
                %>
         </p>
     <% } %>
