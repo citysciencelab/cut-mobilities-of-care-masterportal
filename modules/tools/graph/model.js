@@ -89,11 +89,16 @@ define(function (require) {
             return d3.scale.linear().range(rangeArray)
                     .domain([minValue, maxValue]);
         },
-        createAxis: function (scale, position) {
+        // create Axis. if Separator === true (for yAxis), then set thousands-separator "."
+        createAxis: function (scale, position, separator) {
             return d3.svg.axis()
                     .scale(scale)
                     .tickFormat(function (d) {
-                        return String(d);
+                        d = d.toString();
+                        if (separator) {
+                            d = d.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        }
+                        return d;
                     })
                     .orient(position);
         },
@@ -233,8 +238,8 @@ define(function (require) {
                 scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
                 valueLine,
                 tooltipDiv = d3.select(graphConfig.selectorTooltip),
-                xAxis = this.createAxis(scaleX, "bottom"),
-                yAxis = this.createAxis(scaleY, "left"),
+                xAxis = this.createAxis(scaleX, "bottom", false),
+                yAxis = this.createAxis(scaleY, "left", true),
                 svg = this.createSvg(selector, margin, width, height),
                 offset = 10;
 

@@ -203,8 +203,7 @@ define(function (require) {
                 xAttr: "year",
                 attrToShowArray: this.getAttrToShow()
             };
-console.log(height);
-console.log(width);
+
             Radio.trigger("Graph", "createGraph", graphConfig);
             this.manipulateSVG();
         },
