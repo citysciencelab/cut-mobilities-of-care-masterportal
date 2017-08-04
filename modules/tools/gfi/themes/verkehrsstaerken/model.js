@@ -163,7 +163,7 @@ define(function (require) {
                 var parsedDataObj = {};
 
                 _.each(dataObj, function (dataVal, dataAttr) {
-                    var dataVal = this.parseNoDataValue(dataVal),
+                    var dataVal = this.parseDataValue(dataVal),
                         parseFloatVal = parseFloat(dataVal);
 
                     if (isNaN(parseFloatVal)) {
@@ -179,9 +179,12 @@ define(function (require) {
             return parsedDataArray;
         },
 
-        parseNoDataValue: function (value) {
+        parseDataValue: function (value) {
             if (value === "-") {
                 value = "";
+            }
+            if (value === "*") {
+                value = "Ja";
             }
             return value;
         },
