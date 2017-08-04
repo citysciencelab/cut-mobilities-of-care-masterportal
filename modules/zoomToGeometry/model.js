@@ -11,19 +11,17 @@ define(function (require) {
                 version: "1.1.0",
                 typename: "app:bezirke",
                 attribute: "bezirk_name"
-            }
+            },
+            isRender: true
         },
         initialize: function () {
             var name = Radio.request("ParametricURL", "getZoomToGeometry"),
                 channel = Radio.channel("ZoomToGeometry");
 
             channel.on({
-                "zoomToGeometry": this.zoomToGeometry
-            });
-
-            this.listenTo(this, {
-                "change:featureGeometry": this.createFeatureCoordinates
-            });
+                "zoomToGeometry": this.zoomToGeometry,
+                "setIsRender": this.setIsRender
+            }, this);
 
             if (name.length > 0) {
                 this.zoomToGeometry(name, this.getWfsParams());
@@ -39,6 +37,7 @@ define(function (require) {
                 return;
             }
 
+            this.setIsRender(true);
             this.getGeometryFromWFS(name, wfsParams);
         },
         validateWfsParams: function (wfsParams) {
@@ -107,12 +106,14 @@ define(function (require) {
         handlePostCompose: function (evt) {
             var canvas = evt.context;
 
-            canvas.beginPath();
-            this.drawOutsidePolygon(canvas);
-            this.drawInsidePolygon(canvas);
-            canvas.fillStyle = "rgba(0, 0, 0, 0.4)";
-            canvas.fill();
-            canvas.restore();
+            if (this.getIsRender() === true && _.isUndefined(this.getFeatureGeometry()) === false) {
+                canvas.beginPath();
+                this.drawOutsidePolygon(canvas);
+                this.drawInsidePolygon(canvas);
+                canvas.fillStyle = "rgba(0, 0, 0, 0.4)";
+                canvas.fill();
+                canvas.restore();
+            }
         },
 
         drawOutsidePolygon: function (canvas) {
@@ -158,6 +159,12 @@ define(function (require) {
         // getter for bezirk Geometry
         getFeatureGeometry: function () {
             return this.get("featureGeometry");
+        },
+        setIsRender: function (value) {
+            this.set("isRender", value);
+        },
+        getIsRender: function () {
+            return this.get("isRender");
         }
     });
     return ZoomToGeometry;
