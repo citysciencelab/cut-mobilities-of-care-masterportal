@@ -66,7 +66,7 @@ define([
                                     type: "layer",
                                     parentId: parentId,
                                     name: layer.name[index],
-                                    id: layer.id + style.toLowerCase(),
+                                    id: layer.id + style,
                                     styles: layer.styles[index],
                                     legendURL: layer.legendURL[index],
                                     level: level,
