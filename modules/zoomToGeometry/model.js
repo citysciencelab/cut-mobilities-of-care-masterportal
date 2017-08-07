@@ -19,7 +19,7 @@ define(function (require) {
 
             channel.on({
                 "zoomToGeometry": this.zoomToGeometry
-            });
+            }, this);
             if (name.length > 0) {
                 this.zoomToGeometry(name, this.getWfsParams());
             }
