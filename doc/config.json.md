@@ -199,7 +199,8 @@ Gibt an ob der in der Karte verwendete Marker verschiebbar sein soll.
 ******
 
 ### Portalconfig.menu.staticlinks ###
-Gibt die Links zu externen Webseiten und deren Position im Menu an. Array von static link objekten.
+Gibt die Links zu externen Webseiten und deren Position im Menu an. Zusätzlich kann für jeden Link ein Radiotrigger definiert werden, der beim click einen Internen Ablauf startet.
+Wird die URL oder der Radio trigger weggelassen, dann wird nur jeweils die andere Aktion ausgeführt.
 Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müssen die Objektattribute, die das Array definieren, im Namen "staticlinks" enthalten
 
 
@@ -207,7 +208,8 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
 |----|-------------|---|-------|------------|
 |name|ja|String||Name, wie der Link im Menu angezeigt werden soll.|
 |glyphicon|ja|String||Glyphicon des Linkes für den Menueintrag.|
-|url|ja|String||URL zur externen Webseite.|
+|url|nein|String||URL zur externen Webseite. |
+|onClickTrigger|nein|Object: {"channel": String ,"event": String, "data": String || Enthält den Channel namen, das Event, welches getriggert wird und die daten die mitgeschickt werden.|
 
 
 **Beispiel staticlinks:**
@@ -235,10 +237,20 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
             "name": "Wikipedia2",
             "glyphicon": "glyphicon-globe",
             "url": "https://www.wikipedia.de/"
-        },{
+        },
+        {
             "name": "hamburg.de",
             "glyphicon": "glyphicon-globe",
             "url": "http://www.hamburg.de"
+        },
+        {
+            "name": "Altona",
+            "glyphicon": "glyphicon-globe",
+            "onClickTrigger": {
+                "channel": "ZoomToGeometry",
+                "event": "zoomToGeometry",
+                "data": "Altona"
+            }
         }]
     }
 }
