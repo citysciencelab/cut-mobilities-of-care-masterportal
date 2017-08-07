@@ -3,6 +3,6 @@
  */
 'use strict';
 
-var Gruntfile = require('./components/build-config/Gruntfile.main');
+var Gruntfile = require('./node_modules/build-config/Gruntfile.main');
 
 module.exports = Gruntfile;
