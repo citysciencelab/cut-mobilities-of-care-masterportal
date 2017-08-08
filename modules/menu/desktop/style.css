@@ -1,3 +1,10 @@
+/**************** Menu ***********************/
+.submenu-style {
+    padding: 5px 0;
+    border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+
 /**************** Themenbaum ****************/
 ul#tree {
     border: none;
@@ -155,6 +162,3 @@ ul#tree .SelectedLayer .layer-selection-save {
     cursor: pointer;
 }
 
-.dropdown-folder .glyphicon {
-    font-size: 12px;
-}

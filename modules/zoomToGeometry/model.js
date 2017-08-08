@@ -29,7 +29,11 @@ define(function (require) {
 
             Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
         },
-
+        /**
+        * Zoomt auf eine Geometrie, die auf einem WFS geladen wird.
+        * param name string naem des Features auf das gezommt werdem soll
+        * wfsParams string optional die Parameter, des WFS, von dem die Featurs geladen werden sollen, wenn nicht angegeben, dann werden standardwerte des Moduls genommen.
+        **/
         zoomToGeometry: function (name, wfsParams) {
             var wfsParams = wfsParams || this.getWfsParams();
 
@@ -71,13 +75,17 @@ define(function (require) {
                 }
             });
         },
+        /**
+        * zommt auf das Feature, das vom WFS geladen wurde.
+        *
+        **/
         zoomToFeature: function (data, name, attribute) {
             var foundFeature = this.parseFeatures(data, name, attribute),
                 extent;
 
                 if (_.isUndefined(foundFeature)) {
                     Radio.trigger("Alert", "alert", {
-                        text: "<strong>Der Parametrisierte Aufruf des Portals leider schief gelaufen!</strong> <br> <small>Details: Kein Objekt gefunden, dessen Attribut \"" + attribute + "\" den Wert \"" + name + "\" einnimmt.</small>",
+                        text: "<strong>Leider konnten die Objekte zu denen gezommt werden soll nicht geladen werden</strong> <br> <small>Details: Kein Objekt gefunden, dessen Attribut \"" + attribute + "\" den Wert \"" + name + "\" einnimmt.</small>",
                         kategorie: "alert-warning"
                     });
                 }
@@ -87,6 +95,12 @@ define(function (require) {
                 }
                 this.setFeatureGeometry(foundFeature.getGeometry());
         },
+        /**
+        * durchsucht ein GML String nach einem bestimmten Feature
+        * param data der GML String
+        * name Name des Features
+        * attribut GML-Attribut das nach dem Namen durchsucht werden soll
+        **/
         parseFeatures: function (data, name, attribute) {
             var format = new ol.format.WFS(),
             features = format.readFeatures(data),

@@ -18,7 +18,7 @@ define([
             this.listenTo(this.model, {
                 "change:isCollapsed render invalid change:isCurrentWin": this.render
             });
-            Radio.trigger("Autostart", "initializedTool", "formular");
+            Radio.trigger("Autostart", "initializedModul", "formular");
         },
         events: {
             // anonymisierte Events
