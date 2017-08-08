@@ -45,13 +45,13 @@ define(function (require) {
             this.set("onClickTrigger", value);
         },
         getViewElementClasses: function () {
-            var classes = "dropdown dropdown-tools";
+            var classes = "dropdown";
 
              if (this.get("parentId") === "root") {
                 classes += " menu-style hidden-sm";
             }
             else {
-                classes += " tool-style";
+                classes += " submenu-style";
             }
             return classes;
         }
