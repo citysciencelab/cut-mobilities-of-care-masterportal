@@ -28,7 +28,7 @@ define(function (require) {
         toggle: function () {
             if (this.model.getIsVisible() === true) {
                 this.$el.show();
-                $(".gfi").css("left", window.innerWidth - $(".gfi-content").width() - 50);
+                $(".gfi").css("left", window.innerWidth - $(".gfi-content").width() - 40);
                 $(".gfi-content").css("width", $(".gfi-content").width());
                 Radio.trigger("MapMarker", "showMarker", this.model.getCoordinate());
                 Radio.trigger("MapView", "setCenter", this.model.getCoordinate());
