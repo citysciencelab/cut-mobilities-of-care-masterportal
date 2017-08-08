@@ -36,6 +36,7 @@ define([
             });
 
             this.setAttributes();
+            Radio.trigger("Autostart", "initializedModul", "contact");
         },
         setAttributes: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),

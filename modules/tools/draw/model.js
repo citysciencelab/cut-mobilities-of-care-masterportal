@@ -119,6 +119,7 @@ define([
             this.set("source", drawLayer.getSource());
             this.get("selectClick").setActive(false);
             Radio.trigger("Map", "addInteraction", this.get("selectClick"));
+            Radio.trigger("Autostart", "initializedModul", "draw");
         },
 
         setStatus: function (args) {

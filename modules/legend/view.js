@@ -36,6 +36,7 @@ define([
             });
 
             this.render();
+            Radio.trigger("Autostart", "initializedModul", "legend");
         },
 
         paramsChanged: function () {

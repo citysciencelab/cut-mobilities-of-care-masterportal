@@ -8,7 +8,7 @@ define([
     var ParametricURL = Backbone.Model.extend({
         defaults: {
             layerParams: [],
-            startUpModul: "",
+            isInitOpen: "",
             zoomToGeometry: ""
         },
         initialize: function () {
@@ -17,7 +17,7 @@ define([
             channel.reply({
                 "getResult": this.getResult,
                 "getLayerParams": this.getLayerParams,
-                "getStartUpModul": this.getStartUpModul,
+                "getIsInitOpen": this.getIsInitOpen,
                 "getInitString": this.getInitString,
                 "getCenter": this.getCenter,
                 "getZoomToGeometry": this.getZoomToGeometry
@@ -43,8 +43,8 @@ define([
             return this.get("layerParams");
         },
 
-        getStartUpModul: function () {
-            return this.get("startUpModul");
+        getIsInitOpen: function () {
+            return this.get("isInitOpen");
         },
 
         getCenter: function () {
@@ -190,8 +190,8 @@ define([
                 Config.isMenubarVisible = false;
             }
         },
-        parseStartUpModul: function (result) {
-            this.set("startUpModul", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
+        parseIsInitOpen: function (result) {
+            this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
         parseQuery: function (result) {
             var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
@@ -298,8 +298,8 @@ define([
             * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
             *
             */
-            if (_.has(result, "STARTUPMODUL")) {
-                this.parseStartUpModul(result);
+            if (_.has(result, "ISINITOPEN")) {
+                this.parseIsInitOpen(result);
             }
 
             /**

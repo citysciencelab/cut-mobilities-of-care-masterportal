@@ -121,7 +121,6 @@ define(function () {
             legend: true,
             routing: false
         },
-        startUpModul: '',
         /**
         * @memberof config
         * @desc Beschreibung
