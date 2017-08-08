@@ -167,7 +167,6 @@ define([
                 });
                 return;
             }
-            debugger;
             this.setZoomToGeometry(bezirk.name);
         },
 
