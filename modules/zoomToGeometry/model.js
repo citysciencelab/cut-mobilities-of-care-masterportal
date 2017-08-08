@@ -100,7 +100,18 @@ define(function (require) {
             return foundFeature[0];
         },
         calcExtent: function (feature) {
-            return feature.getGeometry().getExtent();
+            var coordLength = 0,
+                polygonIndex = 0;
+            // feature.getGeometry() = Multipolygon
+            // für den Extent wird das größte Polygon genommen
+            _.each(feature.getGeometry().getPolygons(), function (polygon, index) {
+                if (polygon.getCoordinates()[0].length > coordLength) {
+                    coordLength = polygon.getCoordinates()[0].length;
+                    polygonIndex = index;
+                }
+            });
+
+            return feature.getGeometry().getPolygon(polygonIndex).getExtent();
         },
 
         handlePostCompose: function (evt) {
@@ -130,18 +141,18 @@ define(function (require) {
         },
 
         drawInsidePolygon: function (canvas) {
-            var geometry = this.getFeatureGeometry(),
-                // geometry ist ein Multipolygon
-                polygon = geometry.getPolygon(0),
+
+            _.each(this.getFeatureGeometry().getPolygons(), function (polygon) {
                 // Damit es als inneres Polygon erkannt wird, muss es gegen die Uhrzeigerrichtung gezeichnet werden
-                coordinates = polygon.getCoordinates()[0].reverse();
+                var coordinates = polygon.getCoordinates()[0].reverse();
 
-            _.each(coordinates, function (coordinate) {
-                var coord = Radio.request("Map", "getPixelFromCoordinate", coordinate);
+                _.each(coordinates, function (coordinate) {
+                    var coord = Radio.request("Map", "getPixelFromCoordinate", coordinate);
 
-                canvas.lineTo(coord[0], coord[1]);
+                    canvas.lineTo(coord[0], coord[1]);
+                });
+                canvas.closePath();
             });
-            canvas.closePath();
         },
 
         // getter for wfsParams
