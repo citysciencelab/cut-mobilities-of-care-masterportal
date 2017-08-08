@@ -27,7 +27,7 @@ define(function (require) {
 
         initialize: function () {
         },
-        trigger: function () {
+        triggerRadioEvent: function () {
             var onClickTrigger = this.getOnClickTrigger(),
                 data = onClickTrigger.data;
 

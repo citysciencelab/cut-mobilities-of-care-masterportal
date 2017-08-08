@@ -15,7 +15,7 @@ define(function (require) {
         },
         events: {
             "click": function () {
-                this.model.trigger();
+                this.model.triggerRadioEvent();
             }
         },
         render: function () {

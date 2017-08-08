@@ -70,7 +70,7 @@ define(function (require) {
 
                 if (_.isUndefined(foundFeature)) {
                     Radio.trigger("Alert", "alert", {
-                        text: "<strong>Der Parametrisierte Aufruf des Portals leider schief gelaufen!</strong> <br> <small>Details: Kein Objekt gefunden, dessen Attribut \"" + attribute + "\" den Wert \"" + name + "\" einnimmt.</small>",
+                        text: "<strong>Leider konnten die Objekte zu denen gezommt werden soll nicht geladen werden</strong> <br> <small>Details: Kein Objekt gefunden, dessen Attribut \"" + attribute + "\" den Wert \"" + name + "\" einnimmt.</small>",
                         kategorie: "alert-warning"
                     });
                 }
