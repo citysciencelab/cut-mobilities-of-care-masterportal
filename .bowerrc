@@ -1,7 +1,0 @@
-{
-    "strict-ssl": false,
-    "registry": "http://bower.herokuapp.com",
-	"directory": "components",
-	"proxy":"http://wall.lit.hamburg.de:80",
-	"https-proxy":"http://wall.lit.hamburg.de:80"
-}
