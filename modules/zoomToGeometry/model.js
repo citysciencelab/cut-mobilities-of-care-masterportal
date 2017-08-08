@@ -24,6 +24,11 @@ define(function (require) {
                 this.zoomToGeometry(name, this.getWfsParams());
             }
         },
+        /**
+        * Zoomt auf eine Geometrie, die auf einem WFS geladen wird.
+        * param name string naem des Features auf das gezommt werdem soll
+        * wfsParams string optional die Parameter, des WFS, von dem die Featurs geladen werden sollen, wenn nicht angegeben, dann werden standardwerte des Moduls genommen.
+        **/
         zoomToGeometry: function (name, wfsParams) {
             var wfsParams = wfsParams || this.getWfsParams();
 
@@ -64,6 +69,10 @@ define(function (require) {
                 }
             });
         },
+        /**
+        * zommt auf das Feature, das vom WFS geladen wurde.
+        *
+        **/
         zoomToFeature: function (data, name, attribute) {
             var foundFeature = this.parseFeatures(data, name, attribute),
                 extent;
@@ -79,6 +88,12 @@ define(function (require) {
                     Radio.trigger("Map", "zoomToExtent", extent);
                 }
         },
+        /**
+        * durchsucht ein GML String nach einem bestimmten Feature
+        * param data der GML String
+        * name Name des Features
+        * attribut GML-Attribut das nach dem Namen durchsucht werden soll
+        **/
         parseFeatures: function (data, name, attribute) {
             var format = new ol.format.WFS(),
             features = format.readFeatures(data),
