@@ -170,7 +170,7 @@ define(function (require) {
                         parsedDataObj[dataAttr] = dataVal;
                     }
                     else {
-                        parsedDataObj[dataAttr] = parseFloat(dataVal);
+                        parsedDataObj[dataAttr] = parseFloatVal;
                     }
                 }, this);
                 parsedDataArray.push(parsedDataObj);
@@ -181,7 +181,7 @@ define(function (require) {
 
         parseDataValue: function (value) {
             if (value === "-") {
-                value = "";
+                value = "-";
             }
             if (value === "*") {
                 value = "Ja";
@@ -222,6 +222,9 @@ define(function (require) {
                 size = 10,
                 attrToShowArray = this.getAttrToShow();
 
+            data = _.filter(data, function (obj) {
+                return obj[attrToShowArray[0]] !== "-";
+            });
             svg.selectAll("dot")
                 .data(data)
                 .enter().append("g")
@@ -230,14 +233,15 @@ define(function (require) {
                     return scaleX(d.year) + margin.left - (size / 2) + offset;
                 })
                 .attr("y", function (d) {
-                    return scaleY(d[attrToShowArray[0]]) + (size / 2) + offset;
+                    console.log(d);
+                    return scaleY(d[attrToShowArray[0]]) + (size / 2) + offset + margin.top;
                 })
                 .attr("width", size)
                 .attr("height", size)
                 .attr("class", function (d) {
                     var returnVal = "";
 
-                    if (d.Baustelleneinfluss === "B") {
+                    if (_.has(d, "Baustelleneinfluss") && d[attrToShowArray] !== "-") {
                         returnVal = "dot_visible";
                     }
                     else {
@@ -293,7 +297,19 @@ define(function (require) {
                 .attr("x", 10)
                 .attr("y", 10)
                 .attr("transform", "translate(" + (x + width) + "," + (y + 2.5) + ")")
-                .text("Baustelleneinfluss");
+                .text(this.createAndGetLegendText(attrToShowArray[0]));
+        },
+
+        createAndGetLegendText: function (value) {
+            if (value === "Dtv") {
+                return "DTV (Kfz/24h) mit Baustelleneinfluss";
+            }
+            else if (value === "Dtvw") {
+                return "DTVw (Kfz/24h) mit Baustelleneinfluss";
+            }
+            else {
+                return "SV-Anteil am DTVw (%) mit Baustelleneinfluss";
+            }
         }
     });
 

@@ -24,18 +24,14 @@ define(function (require) {
             }
         },
         createMaxValue: function (data, attrToShowArray) {
-            var maxValue = data[0][attrToShowArray[0]];
+            var value;
 
             _.each(attrToShowArray, function (attrToShow) {
-                var value = d3.max(data, function (d) {
+                value = _.max(data, function (d) {
                     return d[attrToShow];
                 });
-
-                if (value > maxValue) {
-                    maxValue = value;
-                }
             });
-            return maxValue;
+            return value[attrToShowArray[0]];
         },
         createScaleX: function (data, size, scaletype, attr) {
             var rangeArray = [0, size],
@@ -69,6 +65,7 @@ define(function (require) {
             else {
                 alert("Scaletype not found");
             }
+
             return scale;
         },
         createOrdinalScale: function (data, rangeArray, attrArray) {
@@ -109,12 +106,20 @@ define(function (require) {
                     })
                     .y(function (d) {
                         return scaleY(d[yAttrToShow]);
+                    })
+                    .defined(function (d) {
+                        return !isNaN(d[yAttrToShow]);
                     });
         },
         appendDataToSvg: function (svg, data, className, object) {
+            var data = _.filter(data, function (obj) {
+                return obj.yAttrToShow !== "-";
+            });
+
             svg.append("path")
                 .data([data])
                 .attr("class", className)
+                .attr("transform", "translate(0, 20)")
                 .attr("d", object);
         },
         appendXAxisToSvg: function (svg, xAxis, xAttr, offset) {
@@ -129,13 +134,11 @@ define(function (require) {
             xAxis.append("text")
                 .attr("x", (xAxisBBox.width / 2))
                 .attr("y", (xAxisBBox.height + offset))
-                .style("text-anchor", "middle")
-                .text(xAttr);
+                .style("text-anchor", "middle");
         },
         appendYAxisToSvg: function (svg, yAxis, attrToShow, offset) {
-            var svgBBox = svg.node().getBBox(),
-                yAxis = svg.append("g")
-                .attr("transform", "translate(" + svgBBox.x - offset + ",0)")
+            var yAxis = svg.append("g")
+                .attr("transform", "translate(0, 20)")
                 .attr("class", "yAxis")
                 .call(yAxis),
                 yAxisBBox = svg.selectAll(".yAxis").node().getBBox();
@@ -145,13 +148,17 @@ define(function (require) {
                 .attr("x", (0 - (yAxisBBox.height / 2)))
                 .attr("y", (0 - yAxisBBox.width - (2 * offset)))
                 .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .text(attrToShow);
+                .style("text-anchor", "middle");
         },
         appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset) {
+            var data = _.filter(data, function (obj) {
+                return obj[yAttrToShow] !== "-";
+            });
+
             svg.selectAll("dot")
                 .data(data)
                 .enter().append("circle")
+                .attr("transform", "translate(0, 20)")
                 .attr("cx", function (d) {
                     return scaleX(d[xAttr]) + offset;
                 })
@@ -193,20 +200,15 @@ define(function (require) {
                     .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
         },
         appendLegend: function (svg, attrToShowArray) {
-            var BBox = svg.node().getBBox(),
-                legend = svg.append("g")
+            var legend = svg.append("g")
                     .attr("class", "graph-legend")
                     .selectAll("g")
-                    .data(attrToShowArray)
+                    .data([this.createAndGetLegendText(attrToShowArray[0])])
                     .enter()
                     .append("g")
                         .attr("class", "graph-legend-item")
-                        .attr("transform", function (d, i) {
-                        var deltaHeight = 15,
-                            x = BBox.x,
-                            y = ((i * deltaHeight) + BBox.height);
-
-                        return "translate(" + x + "," + y + ")";
+                        .attr("transform", function () {
+                            return "translate(" + -60 + "," + -20 + ")";
                     });
 
             legend.append("circle")
@@ -222,6 +224,19 @@ define(function (require) {
                     return d;
                 });
         },
+
+        createAndGetLegendText: function (value) {
+            if (value === "Dtv") {
+                return "DTV (Kfz/24h)";
+            }
+            else if (value === "Dtvw") {
+                return "DTVw (Kfz/24h)";
+            }
+            else {
+                return "SV-Anteil am DTVw (%)";
+            }
+        },
+
         createLineGraph: function (graphConfig) {
             var selector = graphConfig.selector,
                 scaleTypeX = graphConfig.scaleTypeX,
@@ -229,7 +244,7 @@ define(function (require) {
                 data = graphConfig.data,
                 xAttr = graphConfig.xAttr,
                 attrToShowArray = graphConfig.attrToShowArray,
-                margin = {top: 20, right: 20, bottom: 70, left: 100},
+                margin = {top: 20, right: 40, bottom: 100, left: 70},
                 // width = $(selector).width() - margin.left - margin.right,
                 // height = $(selector).height() - margin.top - margin.bottom,
                 width = graphConfig.width - margin.left - margin.right,
@@ -243,7 +258,9 @@ define(function (require) {
                 svg = this.createSvg(selector, margin, width, height),
                 offset = 10;
 
+            this.appendLegend(svg, attrToShowArray);
             _.each(attrToShowArray, function (yAttrToShow) {
+
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow, offset);
                 this.appendDataToSvg(svg, data, "line", valueLine);
                 // Add the scatterplot for each point in line
@@ -252,7 +269,7 @@ define(function (require) {
             // Add the Axis
             this.appendYAxisToSvg(svg, yAxis, attrToShowArray[0], offset);
             this.appendXAxisToSvg(svg, xAxis, xAttr, offset);
-            this.appendLegend(svg, attrToShowArray);
+
             this.setGraphParams({
                 scaleX: scaleX,
                 scaleY: scaleY,

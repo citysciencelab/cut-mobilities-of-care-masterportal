@@ -1,3 +1,19 @@
+.verkehrsstaerken td {
+    white-space: nowrap;
+}
+
+.verkehrsstaerken .nav-pills {
+    padding: 6px;
+}
+
+.verkehrsstaerken .btn-group {
+    padding: 6px;
+}
+
+.verkehrsstaerken .tab-content {
+    overflow: auto;
+}
+
 .text-align-center {
     text-align: center;
 }
@@ -40,7 +56,7 @@
 }
 .download {
     float:right;
-    right: 10px;
+    padding: 5px;
     font-size: 22px;
     background-color: white;
 }
