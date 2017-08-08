@@ -47,7 +47,7 @@
         "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
     },
     "mapView": {
-        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [561210, 5932600]
     },
     "menu": {
@@ -65,7 +65,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "StoredQueryID": "Flurstueck",
-            "configJSON": "/../../components/lgv-config/gemarkungen_hh.json",
+            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure": {
