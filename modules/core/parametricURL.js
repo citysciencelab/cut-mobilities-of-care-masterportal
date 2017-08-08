@@ -146,7 +146,7 @@ define([
             var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
                 bezirke = [
                     {name: "ALTONA", number: "2"},
-                    {name: "HAMBURG-HARBURG", number: "7"},
+                    {name: "HARBURG", number: "7"},
                     {name: "HAMBURG-NORD", number: "4"},
                     {name: "BERGEDORF", number: "6"},
                     {name: "EIMSBÜTTEL", number: "3"},
