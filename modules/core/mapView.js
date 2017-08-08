@@ -142,9 +142,9 @@ define([
                 }
             });
 
+            this.setResolutions();
             this.setConfig();
             this.setScales();
-            this.setResolutions();
             this.setZoomLevels();
 
             this.setProjection();
@@ -162,7 +162,7 @@ define([
         },
         resetView: function () {
             this.get("view").setCenter(this.get("startCenter"));
-            this.get("view").setZoom(2);
+            this.get("view").setResolution(this.get("startResolution"));
             Radio.trigger("MapMarker", "hideMarker");
         },
 
@@ -195,10 +195,12 @@ define([
                     }
                     case "resolution": {
                         this.setResolution(setting.attr);
+                        this.set("startResolution", this.get("resolution"));
                         break;
                     }
                     case "zoomLevel": {
                         this.setResolution(this.get("resolutions")[setting.attr]);
+                        this.set("startResolution", this.get("resolution"));
                         break;
                     }
                     case "epsg": {
