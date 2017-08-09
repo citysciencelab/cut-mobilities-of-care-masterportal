@@ -48,11 +48,11 @@ define(function(require) {
             });
         });
         describe("getIsAwake", function () {
-            // type test using expect
+            // Lieber zwei kleine Test schnell...
             it("getIsAwake should return fale when coffeeCount = 0", function () {
                 expect(model.getIsAwake({name: "Robin", coffeeCount: 0})).to.be.false;
             });
-            // type test using expect
+            // ... runter schreiben als mit komplizierten konstrukten Werte bereiche testen
             it("getIsAwake should return false when coffeeCount = 0", function () {
                 expect(model.getIsAwake({name: "Robin", coffeeCount: 1})).to.be.false;
             });
@@ -72,11 +72,11 @@ define(function(require) {
                 console.log("beforeEach getSleepingEmployeeNames");
                 model.setEmployees([{name: "Robin", coffeeCount: 0}, {name: "Jonas", coffeeCount: 1}, {name: "Sebastian", coffeeCount: 2}, {name: "Michael", coffeeCount: 3}]);
             });
-            // type test using expect
+            // positiv test
             it("getSleepingEmployeeNames should return employee with coffecounts below 2", function () {
                 expect(model.getSleepingEmployeeNames()).to.deep.equal(["Robin", "Jonas"]);
             });
-            // type test using expect
+            // negativ test
             it("getSleepingEmployeeNames should not return employee with coffecounts > 2", function () {
                 expect(model.getSleepingEmployeeNames()).to.not.include("Sebastian").and.to.not.include("Michael");
             });
