@@ -12,6 +12,11 @@
     border: 1px solid rgb(229, 229, 229);
 }
 
+.layerinformation-win hr {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
 .layerinformation-win > .header {
     padding-left: 10px;
     border-bottom: 1px solid rgb(229, 229, 229);

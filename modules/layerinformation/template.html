@@ -17,6 +17,15 @@
     <% if (date !== null) { %>
         <p>Stand der Daten: <%= date %></p>
     <% } %>
+    <% if (downloadLinks.length > 0) { %>
+        <hr>
+        <h4 class="subtitle">Download</h4>
+        <ul class="list-unstyled">
+            <% _.each(downloadLinks, function (downloadLink) { %>
+                <li><a href="<%= downloadLink[1] %>"><%= downloadLink[0] %> </a><li>
+            <% }); %>
+        </ul>
+    <% } %>
     <% if (_.isObject(legendURL) === true) {
     %>
     <hr>

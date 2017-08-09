@@ -2,8 +2,9 @@ define([
     "backbone",
     "backbone.radio",
     "config",
-    "moment"
-], function (Backbone, Radio, Config, moment) {
+    "moment",
+    "underscore.string"
+], function (Backbone, Radio, Config, moment, uString) {
 
     var LayerInformation = Backbone.Model.extend({
         defaults: {
@@ -71,7 +72,7 @@ define([
 
         parse: function (xmlDoc) {
             var layername = this.get("layername"); // CI_Citation fall-back-level
-
+// console.log($("gmd\\:abstract,abstract", xmlDoc)[0].textContent;);
             return {
                 "abstractText": function () {
                     var abstractText = $("gmd\\:abstract,abstract", xmlDoc)[0].textContent;
@@ -84,27 +85,22 @@ define([
                     }
                 }(),
                 "date": function () {
-
-                    var dates = $("gmd\\:CI_Date,CI_Date", xmlDoc),
+                    var citation = $("gmd\\:citation,citation", xmlDoc),
+                        dates = $("gmd\\:CI_Date,CI_Date", citation),
                         datetype, revisionDateTime, publicationDateTime, dateTime;
 
-                    if (dates.length === 1) {
-                        dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", dates)[0].textContent;
-                    }
-                    else {
-                        dates.each(function (index, element) {
-                            datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
-                            if ($(datetype).attr("codeListValue") === "revision") {
-                                revisionDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-                            }
-                            else if ($(datetype).attr("codeListValue") === "publication") {
-                                publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-                            }
-                            else {
-                                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-                            }
-                        });
-                    }
+                    dates.each(function (index, element) {
+                        datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
+                        if ($(datetype).attr("codeListValue") === "revision") {
+                            revisionDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                        }
+                        else if ($(datetype).attr("codeListValue") === "publication") {
+                            publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                        }
+                        else {
+                            dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                        }
+                    });
                     if (revisionDateTime) {
                         dateTime = revisionDateTime;
                     }
@@ -119,6 +115,26 @@ define([
                         title = _.isUndefined(gmdTitle) === false ? gmdTitle[0].textContent : layername;
 
                     return title;
+                }(),
+                "downloadLinks": function () {
+                    var transferOptions = $("gmd\\:MD_DigitalTransferOptions,MD_DigitalTransferOptions", xmlDoc),
+                        downloadLinks = [],
+                        linkName,
+                        link,
+                        datetype;
+
+                    transferOptions.each(function (index, element) {
+                        datetype = $("gmd\\:CI_OnLineFunctionCode,CI_OnLineFunctionCode", element);
+                        if ($(datetype).attr("codeListValue") === "download") {
+                            linkName = $("gmd\\:name,name", element)[0].textContent;
+                            if (linkName.indexOf("Download") !== -1) {
+                                linkName = uString.replaceAll(linkName, "Download", "");
+                            }
+                            link = $("gmd\\:URL,URL", element)[0].textContent;
+                            downloadLinks.push([linkName, link]);
+                        }
+                    });
+                    return downloadLinks;
                 }()
             };
         },
