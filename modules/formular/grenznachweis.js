@@ -39,7 +39,7 @@ define([
         initialize: function () {
             // lese WPS-Url aus JSON ein
             var wpsService = Radio.request("RestReader", "getServiceById", Config.wpsID),
-                wpsURL = wpsService && wpsService[0] && wpsService[0].get("url") ? wpsService[0].get("url") : null,
+                wpsURL = wpsService && wpsService && wpsService.get("url") ? wpsService.get("url") : null,
                 newURL = wpsURL ? Radio.request("Util", "getProxyURL", wpsURL) : null;
 
             if (newURL) {

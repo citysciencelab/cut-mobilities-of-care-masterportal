@@ -35,12 +35,12 @@ define([
             var suggestService = Radio.request("RestReader", "getServiceById", config.suggestServiceId),
                 geosearchService = Radio.request("RestReader", "getServiceById", config.geosearchServiceId);
 
-            if (suggestService[0] && suggestService[0].get("url")) {
-                this.set("bkgSuggestURL", suggestService[0].get("url"));
+            if (suggestService && suggestService.get("url")) {
+                this.set("bkgSuggestURL", suggestService.get("url"));
             }
 
-            if (geosearchService[0] && geosearchService[0].get("url")) {
-                this.set("bkgSearchURL", geosearchService[0].get("url"));
+            if (geosearchService && geosearchService.get("url")) {
+                this.set("bkgSearchURL", geosearchService.get("url"));
             }
 
             if (config.minChars) {

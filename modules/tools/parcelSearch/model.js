@@ -47,7 +47,7 @@ define([
         readConfig: function (psconfig) {
             var serviceId = psconfig.serviceId ? psconfig.serviceId : null,
                 restService = serviceId ? Radio.request("RestReader", "getServiceById", serviceId) : null,
-                serviceURL = restService && restService[0] && restService[0].get("url") ? restService[0].get("url") : null,
+                serviceURL = restService && restService.get("url") ? restService.get("url") : null,
                 configJSON = psconfig.configJSON ? psconfig.configJSON : null,
                 parcelDenominatorField = psconfig.parcelDenominator ? psconfig.parcelDenominator : false,
                 storedQueryID = psconfig.StoredQueryID ? psconfig.StoredQueryID : null;

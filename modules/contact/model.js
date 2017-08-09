@@ -56,8 +56,8 @@ define([
                 resp = Radio.request("RestReader", "getServiceById", toolModel.get("serviceID"));
 
             this.set(toolModel.attributes);
-            if (resp && resp.length === 1) {
-                this.set("url", _.first(resp).get("url"));
+            if (resp && resp.get("url")) {
+                this.set("url", resp.get("url"));
                 this.set("ticketID", ticketID);
                 this.set("systemInfo", this.get("includeSystemInfo") === true ? systemInfo : "");
                 this.set("subject", subject);
