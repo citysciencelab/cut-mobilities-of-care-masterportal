@@ -17,24 +17,25 @@ define(function (require) {
             // URL des Links
             url: "",
             // Trigger Event
-            onClickTrigger: {
+            onClickTrigger: [{
                 event: "",
                 channel: "",
                 data: ""
-            },
+            }],
             inSubMenue: false
         },
-
-        initialize: function () {
+        triggerRadioEvent: function (trigger) {
+            _.each(this.getOnClickTrigger(), function (trigger) {
+                this.triggerEvent(trigger);
+            }, this);
         },
-        triggerRadioEvent: function () {
-            var onClickTrigger = this.getOnClickTrigger(),
-                data = onClickTrigger.data;
+        triggerEvent: function (triggerParams) {
+            data = triggerParams.data;
 
-            if (onClickTrigger.event === "" || onClickTrigger.channel === "") {
+            if (triggerParams.event === "" || triggerParams.channel === "") {
                 return;
             }
-            Radio.trigger(onClickTrigger.channel, onClickTrigger.event, data);
+            Radio.trigger(triggerParams.channel, triggerParams.event, data);
         },
         // getter for onClickTrigger
         getOnClickTrigger: function () {
