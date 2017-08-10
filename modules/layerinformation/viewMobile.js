@@ -1,25 +1,20 @@
-define([
-    "backbone",
-    "modules/layerinformation/model",
-    "text!modules/layerinformation/templateMobile.html"
-], function (Backbone, Layerinformation, LayerInformationMobileTemplate) {
+define(function (require) {
+    var TemplateMobile = require("text!modules/layerinformation/templateMobile.html"),
+        LayerInformationViewMobile;
 
-    var LayerInformationView = Backbone.View.extend({
-        model: new Layerinformation(),
-        className: "modal fade",
-        template: _.template(LayerInformationMobileTemplate),
+    LayerInformationViewMobile = Backbone.View.extend({
+        className: "modal fade layerinformation",
+        template: _.template(TemplateMobile),
         events: {
-            "click .glyphicon-remove": "hide"
+            // Das Event wird ausgelöst, sobald das Modal verborgen ist
+            "hidden.bs.modal": "setIsVisibleToFalse"
         },
 
         initialize: function () {
             this.listenTo(this.model, {
-                "sync": this.render
-            });
-            this.$el.on({
-                click: function (e) {
-                    e.stopPropagation();
-                }
+                // model.fetch() feuert das Event sync, sobald der Request erfoglreich war
+                "sync": this.render,
+                "removeView": this.remove
             });
         },
 
@@ -27,15 +22,13 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            this.$el.modal({
-                show: true
-            });
+            this.$el.modal("show");
         },
 
-        hide: function () {
-            this.$el.modal("hide");
+        setIsVisibleToFalse: function () {
+            this.model.setIsVisible(false);
         }
     });
 
-    return LayerInformationView;
+    return LayerInformationViewMobile;
 });

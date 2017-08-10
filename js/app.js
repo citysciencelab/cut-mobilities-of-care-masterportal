@@ -61,16 +61,9 @@ define("app",
         "backbone.radio"
     ], function (Config, Radio) {
 
-        if (Radio.request("Util", "isAny")) {
-            require(["modules/layerinformation/viewMobile"], function (MobileLayerInformationView) {
-                new MobileLayerInformationView();
-            });
-        }
-        else {
-            require(["modules/layerinformation/view"], function (LayerInformationView) {
-                new LayerInformationView();
-            });
-        }
+        require(["modules/layerinformation/model"], function (LayerinformationModel) {
+            new LayerinformationModel();
+        });
 
         if (Config.footer && Config.footer.visibility === true) {
             require(["modules/footer/view"], function (FooterView) {
