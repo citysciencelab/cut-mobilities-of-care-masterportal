@@ -50,6 +50,12 @@ define(function(require) {
             });
         });
         describe("getIsAwake", function () {
+            var model;
+            before(function () {
+                /* runs before the first it() is executed */
+                console.log("before getAlertness");
+                model = new Model();
+            });
             // Lieber zwei kleine Test schnell...
             it("getIsAwake should return fale when coffeeCount = 0", function () {
                 expect(model.getIsAwake({name: "Robin", coffeeCount: 0})).to.be.false;
