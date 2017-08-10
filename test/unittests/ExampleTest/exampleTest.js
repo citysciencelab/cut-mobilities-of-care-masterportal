@@ -6,6 +6,7 @@ define(function(require) {
 
     describe("testModul", function () {
         describe("getEmployeesByName", function () {
+            var model;
              before(function () {
                 /* runs before the first it() is executed */
                 console.log("before getEmployeesByName");
@@ -29,10 +30,11 @@ define(function(require) {
             });
         });
         describe("giveCoffee", function () {
+            var model;
             before(function () {
                 /* runs before the first it() is executed */
                 console.log("before givecoffee");
-                var model = new Model();
+                model = new Model();
             });
             beforeEach(function () {
                 /* runs before each it() is executed */
@@ -62,10 +64,11 @@ define(function(require) {
             });
         });
         describe("getSleepingEmployeeNames", function () {
+            var model;
             before(function () {
                 /* runs before the first it() is executed */
                 console.log("before getAlertness");
-                var model = new Model();
+                model = new Model();
             });
             beforeEach(function () {
                 /* runs before each it() is executed */
