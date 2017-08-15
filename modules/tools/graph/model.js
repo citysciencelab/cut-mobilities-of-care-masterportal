@@ -78,29 +78,35 @@ define(function (require) {
             });
             values = _.uniq(values);
             values.sort();
-            return d3.scale.ordinal()
-                    .domain(values)
-                    .rangePoints(rangeArray);
+            return d3.scaleBand()
+                    .range(rangeArray)
+                    .domain(values);
         },
         createLinearScale: function (minValue, maxValue, rangeArray) {
-            return d3.scale.linear().range(rangeArray)
+            return d3.scaleLinear().range(rangeArray)
                     .domain([minValue, maxValue]);
         },
-        // create Axis. if Separator === true (for yAxis), then set thousands-separator "."
-        createAxis: function (scale, position, separator) {
-            return d3.svg.axis()
-                    .scale(scale)
+        // create bottomAxis.
+        createAxisBottom: function (scale) {
+            return d3.axisBottom(scale)
+                    .tickFormat(function (d) {
+                        d = d.toString();
+                        return d;
+                    });
+        },
+        // create leftAxis. if separator === true (for yAxis), then set thousands-separator "."
+        createAxisLeft: function (scale, separator) {
+            return d3.axisLeft(scale)
                     .tickFormat(function (d) {
                         d = d.toString();
                         if (separator) {
                             d = d.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                         }
                         return d;
-                    })
-                    .orient(position);
+                    });
         },
         createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow, offset) {
-            return d3.svg.line()
+            return d3.line()
                     .x(function (d) {
                         return scaleX(d[xAttr]) + offset;
                     })
@@ -253,8 +259,8 @@ define(function (require) {
                 scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
                 valueLine,
                 tooltipDiv = d3.select(graphConfig.selectorTooltip),
-                xAxis = this.createAxis(scaleX, "bottom", false),
-                yAxis = this.createAxis(scaleY, "left", true),
+                xAxis = this.createAxisBottom(scaleX),
+                yAxis = this.createAxisLeft(scaleY, true),
                 svg = this.createSvg(selector, margin, width, height),
                 offset = 10;
 

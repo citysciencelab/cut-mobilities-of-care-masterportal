@@ -180,9 +180,6 @@ define(function (require) {
         },
 
         parseDataValue: function (value) {
-            if (value === "-") {
-                value = "-";
-            }
             if (value === "*") {
                 value = "Ja";
             }
@@ -191,7 +188,7 @@ define(function (require) {
         createD3Document: function () {
             var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
                 heightPegelHeader = $(".pegelHeader").css("height").slice(0, -2),
-                heightNavbar = $(".pegelNavbar").css("height").slice(0, -2),
+                heightNavbar = $(".verkehrsstaerken .nav").css("height").slice(0, -2),
                 height = heightGfiContent - heightPegelHeader - heightNavbar,
                 width = $(".gfi-content").css("width").slice(0, -2),
                 graphConfig = {
@@ -233,7 +230,6 @@ define(function (require) {
                     return scaleX(d.year) + margin.left - (size / 2) + offset;
                 })
                 .attr("y", function (d) {
-                    console.log(d);
                     return scaleY(d[attrToShowArray[0]]) + (size / 2) + offset + margin.top;
                 })
                 .attr("width", size)

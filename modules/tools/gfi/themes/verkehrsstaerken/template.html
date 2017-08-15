@@ -7,7 +7,7 @@
     <br>
     <small>Art: <%=art%></small>
 </div>
-<ul class="nav nav-pills pegelNavbar">
+<ul class="nav nav-pills">
   <li class="active"><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
   <li id="diagramm-tab"><a data-toggle="tab" href="#diagramm">Diagramm</a></li>
 </ul>
@@ -45,9 +45,9 @@
     </div>
   <div id="diagramm" class="tab-pane fade">
     <div class="btn-group btn-group-sm" role="group">
-        <button id= "Dtv" type="button" class="btn btn-default kat active" title="Durchschnittliche tägliche Verkehrsstärken (Mo-So)">DTV</button>
-        <button id= "Dtvw" type="button" class="btn btn-default kat" title="Durchschnittliche werktägliche Verkehrsstärken (Mo-Fr)">DTVw</button>
-        <button id= "Sv am_dtvw" type="button" class="btn btn-default kat" title="Schwerverkehrsanteil am DTVw">SV-Anteil am DTVw</button>
+        <button id= "Dtv" value="Dtv" type="button" class="btn btn-default kat active" title="Durchschnittliche tägliche Verkehrsstärken (Mo-So)">DTV</button>
+        <button id= "Dtvw" value="Dtvw" type="button" class="btn btn-default kat" title="Durchschnittliche werktägliche Verkehrsstärken (Mo-Fr)">DTVw</button>
+        <button id= "Sv am_dtvw" value="Sv am_dtvw" type="button" class="btn btn-default kat" title="Schwerverkehrsanteil am DTVw">SV-Anteil am DTVw</button>
     </div>
     <div id="d3-div" class="graph">
         <div class="graph-tooltip-div"></div>
