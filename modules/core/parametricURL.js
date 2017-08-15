@@ -8,7 +8,8 @@ define([
     var ParametricURL = Backbone.Model.extend({
         defaults: {
             layerParams: [],
-            startUpModul: ""
+            isInitOpen: "",
+            zoomToGeometry: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -16,9 +17,10 @@ define([
             channel.reply({
                 "getResult": this.getResult,
                 "getLayerParams": this.getLayerParams,
-                "getStartUpModul": this.getStartUpModul,
+                "getIsInitOpen": this.getIsInitOpen,
                 "getInitString": this.getInitString,
-                "getCenter": this.getCenter
+                "getCenter": this.getCenter,
+                "getZoomToGeometry": this.getZoomToGeometry
             }, this);
 
             this.parseURL();
@@ -41,8 +43,8 @@ define([
             return this.get("layerParams");
         },
 
-        getStartUpModul: function () {
-            return this.get("startUpModul");
+        getIsInitOpen: function () {
+            return this.get("isInitOpen");
         },
 
         getCenter: function () {
@@ -86,7 +88,7 @@ define([
             else {
                 _.each(layerIdList, function (val, index) {
                      var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                     layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val }),
+                     layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
                      treeType = Radio.request("Parser", "getTreeType");
 
                      layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
@@ -96,7 +98,7 @@ define([
 
                          Radio.trigger("Parser", "addItemAtTop", layerToPush);
                      }
-                     else if (_.isNull(layerExisting)) {
+                     else if (_.isNull(layerConfigured)) {
                          Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
                      }
                 });
@@ -143,13 +145,13 @@ define([
         parseBezirk: function (result) {
             var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
                 bezirke = [
-                    {name: "ALTONA", number: "2", position: [556681, 5937664]},
-                    {name: "HAMBURG-HARBURG", number: "7", position: [560291, 5925817]},
-                    {name: "HAMBURG-NORD", number: "4", position: [567677, 5941650]},
-                    {name: "BERGEDORF", number: "6", position: [578779, 5924255]},
-                    {name: "EIMSBÜTTEL", number: "3", position: [561618, 5940019]},
-                    {name: "HAMBURG-MITTE", number: "1", position: [566380, 5932134]},
-                    {name: "WANDSBEK", number: "5", position: [574344, 5943750]}
+                    {name: "ALTONA", number: "2"},
+                    {name: "HARBURG", number: "7"},
+                    {name: "HAMBURG-NORD", number: "4"},
+                    {name: "BERGEDORF", number: "6"},
+                    {name: "EIMSBÜTTEL", number: "3"},
+                    {name: "HAMBURG-MITTE", number: "1"},
+                    {name: "WANDSBEK", number: "5"}
                 ];
 
             if (bezirk.length === 1) {
@@ -159,15 +161,15 @@ define([
                 bezirk = _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()});
             }
             if (_.isUndefined(bezirk)) {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parametrisierte Aufruf des Portals leider schief gelaufen!</strong> <br> <small>Details: Konnte den Parameter Bezirk = " + _.values(_.pick(result, "BEZIRK"))[0] + " nicht auflösen.</small>",
+                    kategorie: "alert-warning"
+                });
                 return;
             }
-            this.set("center", {
-                crs: "",
-                x: _.findWhere(bezirke, {name: bezirk.name}).position[0],
-                y: _.findWhere(bezirke, {name: bezirk.name}).position[1],
-                z: 0
-            });
+            this.setZoomToGeometry(bezirk.name);
         },
+
         parseFeatureId: function (result) {
             var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
@@ -188,8 +190,8 @@ define([
                 Config.isMenubarVisible = false;
             }
         },
-        parseStartUpModul: function (result) {
-            this.set("startUpModul", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
+        parseIsInitOpen: function (result) {
+            this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
         parseQuery: function (result) {
             var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
@@ -229,13 +231,13 @@ define([
         },
         parseURL: function (result) {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
-            var query = location.search.substr(1).toUpperCase(), // URL --> alles nach ? wenn vorhanden
+            var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {};
 
             query.split("&").forEach(function (keyValue) {
                 var item = keyValue.split("=");
 
-                result[item[0]] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
+                result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
             });
 
             this.setResult(result);
@@ -296,8 +298,8 @@ define([
             * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
             *
             */
-            if (_.has(result, "STARTUPMODUL")) {
-                this.parseStartUpModul(result);
+            if (_.has(result, "ISINITOPEN")) {
+                this.parseIsInitOpen(result);
             }
 
             /**
@@ -314,6 +316,14 @@ define([
             if (_.has(result, "STYLE")) {
                 this.parseStyle(result);
             }
+        },
+        // getter for zoomToGeometry
+        getZoomToGeometry: function () {
+            return this.get("zoomToGeometry");
+        },
+        // setter for zoomToGeometry
+        setZoomToGeometry: function (value) {
+            this.set("zoomToGeometry", value);
         }
     });
 

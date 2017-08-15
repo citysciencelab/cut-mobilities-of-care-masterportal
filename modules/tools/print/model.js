@@ -44,7 +44,7 @@ define([
          */
         url: function () {
             var resp = Radio.request("RestReader", "getServiceById", this.getPrintID()),
-                url = resp[0] && resp[0].get("url") ? resp[0].get("url") : null,
+                url = resp && resp.get("url") ? resp.get("url") : null,
                 printurl;
 
             if (url) {

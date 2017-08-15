@@ -40,8 +40,8 @@ define([
 
             var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
 
-            if (gazService[0] && gazService[0].get("url")) {
-                this.set("gazetteerURL", gazService[0].get("url"));
+            if (gazService && gazService.get("url")) {
+                this.set("gazetteerURL", gazService.get("url"));
             }
             if (config.searchStreets) {
                 this.set("searchStreets", config.searchStreets);

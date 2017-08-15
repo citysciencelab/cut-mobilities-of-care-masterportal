@@ -16,7 +16,7 @@ Es ist möglich, über Parameter in der URL spezielle Einstellungen der Konfigur
 |ismenubarvisible|Steuert das initiale Anzeigen oder Verbergen der Menüleiste.|`&ismenubarvisible=false`|
 |layerids|Legt fest, dass die Layer mit den angegebenen IDs initial ausgewählt und sichtbar geschaltet werden.|`&layerids=453,2128`|
 |query|Führt eine Adresssuche im Suchschlitz mit dem angegebenen String aus.|`&query=Tegelweg`|
-|startupmodul|Die übergebene Tool-ID wird initial geöffnet. Dies ist nur mit einer begrenzten Anzahl an Tools möglich.|`&startupmodul=routing`|
+|isinitopen|Die übergebene Modul-ID wird initial geöffnet. Von Modulen des Typs Tools, die sich in einem Fenster öffnen, kann immer nur eins offen sein. |`&isinitopen=routing`|
 |transparency|nur gemeinsam mit layerids zu verwenden. Transparenz der Layer von 0-100. Kann für jeden Layer in layerids angegeben werden.|`&layerids=453,2128&transparency=0,40`|
 |visibility|nur gemeinsam mit layerids zu verwenden. Sichtbarkeit der Layer als Boolean (true, false)|`&layerids=453,2128&visibility=true,false`|
 |zoomlevel|Zoomt auf die Maßstabsstufe, die angegeben wurde (siehe [config.view.options](config.js.md)).|`&zoomlevel=2`|

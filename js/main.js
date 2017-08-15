@@ -1,3 +1,5 @@
+var Radio;
+
 require.config({
     waitSeconds: 60,
     paths: {
@@ -35,9 +37,6 @@ require.config({
     urlArgs: "bust=" + (new Date()).getTime()
 });
 
-define(["app"], function () {
-});
-
 // Überschreibt das Errorhandling von Require so,
 // dass der ursprüngliche Fehler sammt Stacjtrace ausgegeben wird.
 // funktioniert obwohl der Linter meckert
@@ -49,3 +48,12 @@ requirejs.onError = function (err) {
         throw err;
     }
 };
+
+// zuerst libs laden, die alle Module brauchen
+// die sind dann im globalen Namespace verfügbar
+// https://gist.github.com/jjt/3306911
+require(["backbone", "backbone.radio"], function () {
+    // dann unsere app laden, die von diesen globalen libs abhängen
+    Radio = Backbone.Radio;
+    require(["app"]);
+});

@@ -27,7 +27,7 @@ define([
                 "setRoutingDestination": this.setRoutingDestination
             }, this);
 
-            Radio.trigger("Autostart", "initializedTool", "routing");
+            Radio.trigger("Autostart", "initializedModul", "routing");
         },
         events: {
             "click #calc": "routeBerechnen",

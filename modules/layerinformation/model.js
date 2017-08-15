@@ -1,35 +1,65 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config",
-    "moment"
-], function (Backbone, Radio, Config, moment) {
+define(function (require) {
+    var ViewMobile = require("modules/layerinformation/viewMobile"),
+        View = require("modules/layerinformation/view"),
+        Config = require("config"),
+        Moment = require("moment"),
+        LayerInformation;
 
-    var LayerInformation = Backbone.Model.extend({
+    LayerInformation = Backbone.Model.extend({
         defaults: {
-            cswID: "1"
+            // konfiguriert in der rest-services.json
+            cswId: "3",
+            // true wenn die Layerinformation sichtbar ist
+            isVisible: false
         },
 
+        /**
+         * Gibt die Url aus der rest-services.json passend zu "cswId" zurück
+         * @return {String} - CSW GetRecordById Request-String
+         */
         url: function () {
-            var resp;
+            var cswService = Radio.request("RestReader", "getServiceById", this.getCswId());
 
-            if (_.has(Config, "csw")) {
-                resp = Radio.request("RestReader", "getServiceById", Config.csw.id);
-            }
-            else {
-                resp = Radio.request("RestReader", "getServiceById", this.get("cswID"));
-            }
-
-            if (resp[0] && resp[0].get("url")) {
-                return Radio.request("Util", "getProxyURL", resp[0].get("url"));
+            if (_.isUndefined(cswService) === false) {
+                return Radio.request("Util", "getProxyURL", cswService.get("url"));
             }
         },
+
         initialize: function () {
             var channel = Radio.channel("LayerInformation");
 
-            channel.on({
-                "add": this.setAttributes
-            }, this);
+            this.listenTo(channel, {
+                "add": function (attrs) {
+                    this.setAttributes(attrs);
+                    this.setIsVisible(true);
+                }
+            });
+
+            this.listenTo(Radio.channel("Util"), {
+                "isViewMobileChanged": function (isMobile) {
+                    this.trigger("removeView");
+                    this.bindView(isMobile);
+                }
+            });
+
+            if (_.has(Config, "csw")) {
+                this.setCswId(Config.csw.id);
+            }
+            this.bindView(Radio.request("Util", "isViewMobile"));
+        },
+
+        bindView: function (isMobile) {
+            var currentView;
+
+            if (isMobile === true) {
+                currentView = new ViewMobile({model: this});
+            }
+            else {
+                currentView = new View({model: this});
+            }
+            if (this.getIsVisible() === true) {
+                currentView.render();
+            }
         },
 
         /**
@@ -84,34 +114,29 @@ define([
                     }
                 }(),
                 "date": function () {
-
-                    var dates = $("gmd\\:CI_Date,CI_Date", xmlDoc),
+                    var citation = $("gmd\\:citation,citation", xmlDoc),
+                        dates = $("gmd\\:CI_Date,CI_Date", citation),
                         datetype, revisionDateTime, publicationDateTime, dateTime;
 
-                    if (dates.length === 1) {
-                        dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", dates)[0].textContent;
-                    }
-                    else {
-                        dates.each(function (index, element) {
-                            datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
-                            if ($(datetype).attr("codeListValue") === "revision") {
-                                revisionDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-                            }
-                            else if ($(datetype).attr("codeListValue") === "publication") {
-                                publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-                            }
-                            else {
-                                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-                            }
-                        });
-                    }
+                    dates.each(function (index, element) {
+                        datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
+                        if ($(datetype).attr("codeListValue") === "revision") {
+                            revisionDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                        }
+                        else if ($(datetype).attr("codeListValue") === "publication") {
+                            publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                        }
+                        else {
+                            dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                        }
+                    });
                     if (revisionDateTime) {
                         dateTime = revisionDateTime;
                     }
                     else if (publicationDateTime) {
                         dateTime = publicationDateTime;
                     }
-                    return moment(dateTime).format("DD.MM.YYYY");
+                    return Moment(dateTime).format("DD.MM.YYYY");
                 }(),
                 "title": function () {
                     var ci_Citation = $("gmd\\:CI_Citation,CI_Citation", xmlDoc)[0],
@@ -119,6 +144,26 @@ define([
                         title = _.isUndefined(gmdTitle) === false ? gmdTitle[0].textContent : layername;
 
                     return title;
+                }(),
+                "downloadLinks": function () {
+                    var transferOptions = $("gmd\\:MD_DigitalTransferOptions,MD_DigitalTransferOptions", xmlDoc),
+                        downloadLinks = [],
+                        linkName,
+                        link,
+                        datetype;
+
+                    transferOptions.each(function (index, element) {
+                        datetype = $("gmd\\:CI_OnLineFunctionCode,CI_OnLineFunctionCode", element);
+                        if ($(datetype).attr("codeListValue") === "download") {
+                            linkName = $("gmd\\:name,name", element)[0].textContent;
+                            if (linkName.indexOf("Download") !== -1) {
+                                linkName = linkName.replace("Download", "");
+                            }
+                            link = $("gmd\\:URL,URL", element)[0].textContent;
+                            downloadLinks.push([linkName, link]);
+                        }
+                    });
+                    return downloadLinks;
                 }()
             };
         },
@@ -128,15 +173,13 @@ define([
          */
         setMetadataURL: function () {
             var metaURLs = [],
-                metaIDs = this.get("metaID"),
-                url = this.url(),
                 metaURL = "";
 
-            _.each(metaIDs, function (metaID) {
-                if (url.search("metaver") !== -1) {
+            _.each(this.get("metaID"), function (metaID) {
+                if (this.url().search("metaver") !== -1) {
                     metaURL = "http://metaver.de/trefferanzeige?docuuid=" + metaID;
                 }
-                else if (url.search("geodatenmv.de") !== -1) {
+                else if (this.url().search("geodatenmv.de") !== -1) {
                     metaURL = "http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=" + metaID;
                 }
                 else {
@@ -145,8 +188,24 @@ define([
                 if (metaID !== "" && !_.contains(metaURLs, metaURL)) {
                     metaURLs.push(metaURL);
                 }
-            });
+            }, this);
             this.set("metaURL", metaURLs);
+        },
+
+        setIsVisible: function (value) {
+            this.set("isVisible", value);
+        },
+
+        getIsVisible: function () {
+            return this.get("isVisible");
+        },
+
+        setCswId: function (value) {
+            this.set("cswId", value);
+        },
+
+        getCswId: function () {
+            return this.get("cswId");
         }
     });
 

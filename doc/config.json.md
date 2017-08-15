@@ -199,7 +199,8 @@ Gibt an ob der in der Karte verwendete Marker verschiebbar sein soll.
 ******
 
 ### Portalconfig.menu.staticlinks ###
-Gibt die Links zu externen Webseiten und deren Position im Menu an. Array von static link objekten.
+Gibt die Links zu externen Webseiten und deren Position im Menu an. Zusätzlich kann für jeden Link ein Radiotrigger definiert werden, der beim click einen Internen Ablauf startet.
+Wird die URL oder der Radio trigger weggelassen, dann wird nur jeweils die andere Aktion ausgeführt.
 Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müssen die Objektattribute, die das Array definieren, im Namen "staticlinks" enthalten
 
 
@@ -207,7 +208,8 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
 |----|-------------|---|-------|------------|
 |name|ja|String||Name, wie der Link im Menu angezeigt werden soll.|
 |glyphicon|ja|String||Glyphicon des Linkes für den Menueintrag.|
-|url|ja|String||URL zur externen Webseite.|
+|url|nein|String||URL zur externen Webseite. |
+|onClickTrigger|nein|Object: {"channel": String ,"event": String, "data": String || Enthält den Channel namen, das Event, welches getriggert wird und die daten die mitgeschickt werden.|
 
 
 **Beispiel staticlinks:**
@@ -235,10 +237,20 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
             "name": "Wikipedia2",
             "glyphicon": "glyphicon-globe",
             "url": "https://www.wikipedia.de/"
-        },{
+        },
+        {
             "name": "hamburg.de",
             "glyphicon": "glyphicon-globe",
             "url": "http://www.hamburg.de"
+        },
+        {
+            "name": "Altona",
+            "glyphicon": "glyphicon-globe",
+            "onClickTrigger": {
+                "channel": "ZoomToGeometry",
+                "event": "zoomToGeometry",
+                "data": "Altona"
+            }
         }]
     }
 }
@@ -268,6 +280,7 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 |textPlaceholder||String||Platzhalter für das Textfeld in dem der Anwender sein Anliegen eintragen kann.|
 |[to](#markdown-header-portalconfigmenucontactfrom)|nein|Array [Object]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de", "name": "LGVGeoportalHilfe"}]|Array der Empfänger. Wird immer mit **email** und **name** erwartet.|
 |contactInfo|nein|String||Information, die über dem Kontaktformular angezeigt wird.|
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Modul *contact* beim initialen Laden des Portals geöffnet ist.|
 
 ##### Portalconfig.menu.contact.bcc #####
 
@@ -336,6 +349,7 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 |----|-------------|---|-------|------------|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Reiters unter dem die Legende in der Menüleiste erscheint.|
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Legendenmodul beim initialen Laden des Portals geöffnet ist.|
 
 **Beispiel legend:**
 
@@ -456,6 +470,7 @@ Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten,
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
 
 ******
 ******
@@ -636,7 +651,7 @@ Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Paramet
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|autostart|nein|Boolean|false|Gibt an, ob das Routingmodul beim initialen Laden des Portals geöffnet ist.|
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Routingmodul beim initialen Laden des Portals geöffnet ist.|
 |bkgGeosearchID|nein|String||ID des GeoSuchdienstes des BKG. Anhand der vom Nutzer angeklickten finalen Adresse wandelt dieser Dienst den Namen in eine Koordinate um und gibt diese zurück. Die Koordinate wird benötigt, um den Routingdienst mit Daten zu füllen. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
 |bkgSuggestID|nein|String||ID des Vorschlagsdienstes des BKG. Der Dienst gibt eine Trefferliste möglicher Adressen zurück, die auf den Eingabestring des Nutzers passen. Werden als Dropdown-Menü dargestellt. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|

@@ -398,7 +398,8 @@ define([
             new ModelList(_.filter(this.getItemList(), function (model) {
                 return model.parentId === "root" ||
                     model.parentId === "tools" ||
-                    model.parentId === "info";
+                    model.parentId === "info" ||
+                    model.parentId === "bezirke";
             }));
         },
 

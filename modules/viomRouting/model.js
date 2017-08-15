@@ -44,10 +44,10 @@ define([
                     epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "",
                     bbox = args[2].get("bbox") && epsgCode !== "" ? "&bbox=" + args[2].get("bbox") + epsgCode : null;
 
-                this.set("bkgSuggestURL", bkgSuggestID[0].get("url"));
-                this.set("bkgGeosearchURL", bkgGeosearchID[0].get("url"));
-                this.set("viomRoutingURL", viomRoutingID[0].get("url"));
-                this.set("viomProviderID", viomRoutingID[0].get("providerID"));
+                this.set("bkgSuggestURL", bkgSuggestID.get("url"));
+                this.set("bkgGeosearchURL", bkgGeosearchID.get("url"));
+                this.set("viomRoutingURL", viomRoutingID.get("url"));
+                this.set("viomProviderID", viomRoutingID.get("providerID"));
                 this.set("bbox", bbox);
                 this.set("epsgCode", epsgCode);
             }

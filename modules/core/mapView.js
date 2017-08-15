@@ -119,6 +119,7 @@ define([
             this.listenTo(this, {
                 "change:resolution": function () {
                     channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+
                     // triggert das Zoom in / out übers Mausrad / Touch
                     Radio.trigger("ClickCounter", "zoomChanged");
                 },
@@ -141,18 +142,18 @@ define([
                 }
             });
 
+            this.setResolutions();
             this.setConfig();
             this.setScales();
-            this.setResolutions();
             this.setZoomLevels();
 
             this.setProjection();
-            this.setStartCenter();
             this.setView();
 
             // Listener für ol.View
             this.get("view").on("change:resolution", function () {
-                this.set("resolution", this.get("view").getResolution());
+                 this.set("resolution", this.get("view").constrainResolution(this.get("view").getResolution()));
+                // this.set("resolution", this.get("view").getResolution());
                 channel.trigger("changedZoomLevel", this.getZoom());
             }, this);
             this.get("view").on("change:center", function () {
@@ -161,7 +162,7 @@ define([
         },
         resetView: function () {
             this.get("view").setCenter(this.get("startCenter"));
-            this.get("view").setZoom(2);
+            this.get("view").setResolution(this.get("startResolution"));
             Radio.trigger("MapMarker", "hideMarker");
         },
 
@@ -194,10 +195,12 @@ define([
                     }
                     case "resolution": {
                         this.setResolution(setting.attr);
+                        this.set("startResolution", this.get("resolution"));
                         break;
                     }
                     case "zoomLevel": {
                         this.setResolution(this.get("resolutions")[setting.attr]);
+                        this.set("startResolution", this.get("resolution"));
                         break;
                     }
                     case "epsg": {
@@ -269,31 +272,6 @@ define([
         // setter for extent
         setExtent: function (value) {
             this.set("extent", value);
-        },
-        /**
-         *
-         */
-        setStartCenter: function () {
-            var center = Radio.request("ParametricURL", "getCenter");
-
-            if (center) {
-                var fromCRSName = center.crs,
-                    position = [center.x, center.y],
-                    toCRSName = this.get("projection").getCode();
-
-                if (fromCRSName !== "" && fromCRSName !== toCRSName) {
-                    // transform
-                    var fromCRS = Radio.request("CRS", "getProjection", fromCRSName);
-
-                    if (!fromCRS) {
-                        Radio.trigger("Alert", "alert", {text: "<strong>" + fromCRSName + " des <i>CENTER</i>-Parameters unbekannt.</strong> Default wird verwendet.", kategorie: "alert-info"});
-                    }
-                    else {
-                        position = Radio.request("CRS", "transform", {fromCRS: fromCRSName, toCRS: toCRSName, point: position});
-                    }
-                }
-                this.set("startCenter", position);
-            }
         },
 
         /**
@@ -394,7 +372,7 @@ define([
                         return this.getResolutions()[index];
                     }
                     else {
-                        return this.getResolutions()[index - 1];
+                        return this.getResolutions()[index];
                     }
                 }
                 else if (scaleType === "min") {

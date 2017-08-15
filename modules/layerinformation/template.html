@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <div class="header">
-    <p class="buttons pull-right">
+    <p class="pull-right">
         <span class="glyphicon glyphicon-remove" title="Schließen"></span>
     </p>
-    <p class="title">
+    <p>
         <span>Informationen und Legende</span>
     </p>
 </div>
 <div class="content">
     <h4 class="subtitle" title="<%= title %>"><%= title %></h4>
-    <p class="abstract"><%= abstractText %></p>
+    <div><%= abstractText %></div>
     <% _.each(metaURL, function (url) { %>
         <br>
-        <p class="metalink"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
+        <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
     <% }); %>
     <% if (date !== null) { %>
         <p>Stand der Daten: <%= date %></p>
+    <% } %>
+    <% if (downloadLinks.length > 0) { %>
+        <hr>
+        <h4 class="subtitle">Download</h4>
+        <ul class="list-unstyled">
+            <% _.each(downloadLinks, function (downloadLink) { %>
+                <li><a href="<%= downloadLink[1] %>"><%= downloadLink[0] %> </a><li>
+            <% }); %>
+        </ul>
     <% } %>
     <% if (_.isObject(legendURL) === true) {
     %>
