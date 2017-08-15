@@ -4,7 +4,7 @@ define([
 ], function (Backbone, Radio) {
 
     var ControlsView = Backbone.View.extend({
-        className: "container-fluid controls-view",
+        className: "controls-view",
         initialize: function () {
             this.render();
 
@@ -16,9 +16,8 @@ define([
         },
         render: function () {
             var result = Radio.request("ParametricURL", "getResult");
-
             if (!_.has(result, "STYLE") || _.values(_.pick(result, "STYLE"))[0].toUpperCase() !== "SIMPLE") {
-                $(".navbar").after(this.$el);
+                $("#map .ol-overlaycontainer-stopevent").append(this.$el);
             }
         },
         addRow: function (id) {
