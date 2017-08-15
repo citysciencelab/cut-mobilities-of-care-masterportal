@@ -128,10 +128,11 @@ define(function (require) {
                 .attr("transform", "translate(0, 20)")
                 .attr("d", object);
         },
-        appendXAxisToSvg: function (svg, xAxis, xAttr, offset) {
+        appendXAxisToSvg: function (svg, xAxis, xAxisLabel, offset, marginTop) {
             var svgBBox = svg.node().getBBox(),
                 xAxis = svg.append("g")
-                    .attr("transform", "translate(" + offset + "," + svgBBox.height + ")")
+                    // .attr("transform", "translate(" + offset + "," + svgBBox.height + ")")
+                    .attr("transform", "translate(" + offset + "," + (svgBBox.height - marginTop) + ")")
                     .attr("class", "xAxis")
                     .call(xAxis),
                 xAxisBBox = svg.selectAll(".xAxis").node().getBBox();
@@ -139,10 +140,12 @@ define(function (require) {
             // text for xAxis
             xAxis.append("text")
                 .attr("x", (xAxisBBox.width / 2))
-                .attr("y", (xAxisBBox.height + offset))
-                .style("text-anchor", "middle");
+                .attr("y", (xAxisBBox.height + offset + 10))
+                .style("text-anchor", "middle")
+                .style("fill", "#000")
+                .text(xAxisLabel);
         },
-        appendYAxisToSvg: function (svg, yAxis, attrToShow, offset) {
+        appendYAxisToSvg: function (svg, yAxis, yAxisLabel, offset) {
             var yAxis = svg.append("g")
                 .attr("transform", "translate(0, 20)")
                 .attr("class", "yAxis")
@@ -154,7 +157,9 @@ define(function (require) {
                 .attr("x", (0 - (yAxisBBox.height / 2)))
                 .attr("y", (0 - yAxisBBox.width - (2 * offset)))
                 .attr("dy", "1em")
-                .style("text-anchor", "middle");
+                .style("text-anchor", "middle")
+                .style("fill", "#000")
+                .text(yAxisLabel);
         },
         appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset) {
             var data = _.filter(data, function (obj) {
@@ -249,10 +254,10 @@ define(function (require) {
                 scaleTypeY = graphConfig.scaleTypeY,
                 data = graphConfig.data,
                 xAttr = graphConfig.xAttr,
+                xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : graphConfig.xAttr,
+                yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : this.createAndGetLegendText(graphConfig.attrToShowArray[0]),
                 attrToShowArray = graphConfig.attrToShowArray,
-                margin = {top: 20, right: 40, bottom: 100, left: 70},
-                // width = $(selector).width() - margin.left - margin.right,
-                // height = $(selector).height() - margin.top - margin.bottom,
+                margin = {top: 20, right: 40, bottom: 70, left: 70},
                 width = graphConfig.width - margin.left - margin.right,
                 height = graphConfig.height - margin.top - margin.bottom,
                 scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
@@ -273,8 +278,8 @@ define(function (require) {
                 this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset);
             }, this);
             // Add the Axis
-            this.appendYAxisToSvg(svg, yAxis, attrToShowArray[0], offset);
-            this.appendXAxisToSvg(svg, xAxis, xAttr, offset);
+            this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset);
+            this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset, margin.top);
 
             this.setGraphParams({
                 scaleX: scaleX,

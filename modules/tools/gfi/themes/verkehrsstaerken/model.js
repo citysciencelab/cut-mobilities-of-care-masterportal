@@ -201,6 +201,7 @@ define(function (require) {
                 scaleTypeY: "linear",
                 data: this.getDataset(),
                 xAttr: "year",
+                xAxisLabel: "Jahr",
                 attrToShowArray: this.getAttrToShow()
             };
 
