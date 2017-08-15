@@ -13,6 +13,7 @@ require.config({
         text: "../node_modules/requirejs-text/text",
         bootstrap: "../node_modules/bootstrap/js",
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
+        slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         proj4: "../node_modules/proj4/dist/proj4",
         videojs: "../node_modules/video.js/dist/video",
         moment: "../node_modules/moment/min/moment.min",

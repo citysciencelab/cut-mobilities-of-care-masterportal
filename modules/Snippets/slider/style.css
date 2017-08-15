@@ -1,0 +1,21 @@
+.slider-container {
+    margin: 10px;
+    padding: 10px;
+}
+
+.slider {
+    width: 100%;
+}
+
+.slider-selection {
+    background: rgba(60, 60, 60, 0.25);
+}
+
+.slider-handle {
+    background: rgba(0, 92, 169, 1)
+}
+/*dunkelblau rgb(0, 48, 99)
+blau rgb(0, 92, 169)
+rot (rgb (225, 0, 25))
+grau rgb(227, 227, 227)
+dunkelgrau (60, 60,60)*/
