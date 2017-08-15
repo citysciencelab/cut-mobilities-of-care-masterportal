@@ -83,7 +83,8 @@ define(function (require) {
                     .domain(values);
         },
         createLinearScale: function (minValue, maxValue, rangeArray) {
-            return d3.scaleLinear().range(rangeArray)
+            return d3.scaleLinear()
+                    .range(rangeArray)
                     .domain([minValue, maxValue])
                     .nice();
         },
@@ -96,15 +97,12 @@ define(function (require) {
                     });
         },
         // create leftAxis. if separator === true (for yAxis), then set thousands-separator "."
-        createAxisLeft: function (scale, separator) {
+        createAxisLeft: function (scale) {
             return d3.axisLeft(scale)
                     .tickFormat(function (d) {
-                        d = d.toString();
-                        if (separator) {
-                            d = d.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                        }
-                        return d;
+                        return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     });
+                    // .tickFormat(d3.format("d"));
         },
         createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow, offset) {
             return d3.line()
@@ -266,7 +264,7 @@ define(function (require) {
                 valueLine,
                 tooltipDiv = d3.select(graphConfig.selectorTooltip),
                 xAxis = this.createAxisBottom(scaleX),
-                yAxis = this.createAxisLeft(scaleY, true),
+                yAxis = this.createAxisLeft(scaleY),
                 svg = this.createSvg(selector, margin, width, height),
                 offset = 10;
 
