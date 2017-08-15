@@ -29,9 +29,6 @@ define(function (require) {
                 var gfiContent = this.getGfiContent()[0],
                     rowNames = _.keys(this.getGfiContent()[0]),
                     newRowNames = [],
-                    zaehlstelle = "",
-                    bezeichnung = "",
-                    art = "",
                     yearData,
                     dataPerYear = [],
                     year,
@@ -41,13 +38,13 @@ define(function (require) {
                     year = parseInt(rowName.slice(-4), 10);
 
                     if (rowName === "Zaehlstelle") {
-                        zaehlstelle = gfiContent[rowName];
+                        this.setZaehlstelle(gfiContent[rowName]);
                     }
                     else if (rowName === "Bezeichnung") {
-                        bezeichnung = gfiContent[rowName];
+                        this.setBezeichnung(gfiContent[rowName]);
                     }
                     else if (rowName === "Art") {
-                        art = gfiContent[rowName];
+                        this.setArt(gfiContent[rowName]);
                     }
                     // jahresDatensätze parsen
                     else if (!_.isNaN(year)) {
@@ -75,9 +72,6 @@ define(function (require) {
                 }, this);
                 newRowNames = _.unique(newRowNames);
                 years = _.unique(years);
-                this.setZaehlstelle(zaehlstelle);
-                this.setBezeichnung(bezeichnung);
-                this.setArt(art);
                 this.setYears(years);
                 this.setRowNames(newRowNames);
                 this.combineYearsData(dataPerYear, years);
@@ -228,7 +222,7 @@ define(function (require) {
                 .enter().append("g")
                 .append("rect")
                 .attr("x", function (d) {
-                    return scaleX(d.year) + margin.left - (size / 2) + offset;
+                    return scaleX(d.year) + margin.left - (size / 2) + (offset + scaleX.bandwidth() / 2);
                 })
                 .attr("y", function (d) {
                     return scaleY(d[attrToShowArray[0]]) + (size / 2) + offset + margin.top;

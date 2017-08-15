@@ -84,7 +84,8 @@ define(function (require) {
         },
         createLinearScale: function (minValue, maxValue, rangeArray) {
             return d3.scaleLinear().range(rangeArray)
-                    .domain([minValue, maxValue]);
+                    .domain([minValue, maxValue])
+                    .nice();
         },
         // create bottomAxis.
         createAxisBottom: function (scale) {
@@ -108,7 +109,7 @@ define(function (require) {
         createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow, offset) {
             return d3.line()
                     .x(function (d) {
-                        return scaleX(d[xAttr]) + offset;
+                        return scaleX(d[xAttr]) + (offset + scaleX.bandwidth() / 2);
                     })
                     .y(function (d) {
                         return scaleY(d[yAttrToShow]);
@@ -171,7 +172,7 @@ define(function (require) {
                 .enter().append("circle")
                 .attr("transform", "translate(0, 20)")
                 .attr("cx", function (d) {
-                    return scaleX(d[xAttr]) + offset;
+                    return scaleX(d[xAttr]) + (offset + scaleX.bandwidth() / 2);
                 })
                 .attr("cy", function (d) {
                     return scaleY(d[yAttrToShow]);
