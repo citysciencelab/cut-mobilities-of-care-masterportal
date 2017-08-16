@@ -26,7 +26,8 @@ define(function (require) {
             // Index für das aktuelle Theme
             themeIndex: 0,
             // Anzahl der Themes
-            numberOfThemes: 0
+            numberOfThemes: 0,
+            active3d: false
         },
         initialize: function () {
             var channel = Radio.channel("GFI");
@@ -92,6 +93,11 @@ define(function (require) {
                 "activatedTool": this.checkTool
             });
 
+            this.listenTo(Radio.channel("Map"), {
+                "clickedWindowPosition": this.setGfiParams3d
+            }, this);
+
+
             if (_.has(Config, "gfiWindow")) {
                 this.setDesktopViewType(Config.gfiWindow);
             }
@@ -109,9 +115,11 @@ define(function (require) {
         checkTool: function (id) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
+                this.active3d = true;
             }
             else {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
+                this.active3d = false;
             }
         },
 
@@ -139,6 +147,55 @@ define(function (require) {
                 }
             }
             this.setCurrentView(new CurrentView({model: this}));
+        },
+
+        setGfiParams3d: function(event) {
+            if(this.active3d) {
+                if (Radio.request("Map", "isMap3d")) {
+                    this.setCoordinate(event.coordinate);
+
+                    // Abbruch, wenn auf SearchMarker x geklickt wird.
+                    if (this.checkInsideSearchMarker(event.position.x, event.position.y) === true) {
+                        return;
+                    }
+
+                    var features = Radio.request("Map", "getFeatures3dAtPosition", event.position);
+                    features.forEach(function (object) {
+                        if(object) {
+                            if (object instanceof Cesium.Cesium3DTileFeature) {
+                                var properties = {};
+                                var propertyNames = object.getPropertyNames();
+                                var length = propertyNames.length;
+                                for (var i = 0; i < length; ++i) {
+                                    var propertyName = propertyNames[i];
+                                    properties[propertyName] = object.getProperty(propertyName);
+                                }
+                                if(properties.attributes && properties.id){
+                                    properties.attributes.gmlid = properties.id;
+                                }
+                                var modelattributes = {
+                                    attributes: properties.attributes ? properties.attributes : properties,
+                                    gfiAttributes: "showAll",
+                                    typ: "Cesium3DTileFeature",
+                                    name: "Buildings"
+                                };
+                                gfiParams.push(modelattributes);
+                                console.log(properties);
+                            } else if (object.primitive) {
+                                var feature = object.primitive.olFeature;
+                                var layer = object.primitive.olLayer;
+                                if (feature && layer) {
+                                    this.searchModelByFeature(feature, layer);
+                                }
+                            }
+                        }
+                    }.bind(this));
+
+                    this.setThemeIndex(0);
+                    this.getThemeList().reset(gfiParams);
+                    gfiParams = [];
+                }
+            }
         },
 
         /**

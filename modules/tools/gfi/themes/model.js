@@ -32,8 +32,9 @@ define(function (require) {
                 else {
                     this.getWmsGfi(this.parseWmsGfi);
                 }
-            }
-            else {
+            } else if (this.get("typ") === "Cesium3DTileFeature"){
+                this.getCesium3DTileFeatureGfi();
+            } else {
                 this.getVectorGfi();
             }
         },
@@ -162,6 +163,15 @@ define(function (require) {
                     this.collection.add(clone);
                 }
             }, this);
+        },
+
+        getCesium3DTileFeatureGfi: function () {
+            var gfiContent;
+
+            gfiContent = this.translateGFI([this.get("attributes")], this.get("gfiAttributes"));
+            gfiContent = this.getManipulateDate(gfiContent);
+            this.setGfiContent(gfiContent);
+            this.setIsReady(true);
         },
 
         getVectorGfi: function () {
