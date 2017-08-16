@@ -89,13 +89,13 @@ define([
                      treeType = Radio.request("Parser", "getTreeType");
 
                      layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
-
+console.log(layerConfigured);
                      if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
                          var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
 
                          Radio.trigger("Parser", "addItemAtTop", layerToPush);
                      }
-                     else if (_.isNull(layerConfigured)) {
+                     else if (_.isUndefined(layerConfigured)) {
                          Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
                      }
                 });
