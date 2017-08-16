@@ -21,7 +21,8 @@ define(function (require) {
             // Name (Überschrift) der Funktion
             name: "",
             // true wenn das Tool aktiviert ist
-            isActive: false
+            isActive: false,
+            supportedIn3d: ['coord', 'gfi', 'wfsFeatureFilter', 'searchByCoord', 'legend', 'contact']
         },
 
         initialize: function () {
