@@ -202,7 +202,7 @@ define([
                 this.set("newCenter", proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [easting, northing]));
             }
             else if(this.get("coordSystem") === "ETRS89") {
-                this.set("newCenter", [this.get("coordinates")[0].coord, this.get("coordinates")[1].coord]);
+                this.set("newCenter", [Number.parseFloat(this.get("coordinates")[0].coord), Number.parseFloat(this.get("coordinates")[1].coord)]);
             }
             EventBus.trigger("mapHandler:zoomTo", {type: "SearchByCoord", coordinate: this.get("newCenter")});
         }
