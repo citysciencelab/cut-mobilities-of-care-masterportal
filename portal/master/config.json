@@ -161,7 +161,8 @@
       "attributions": {
         "isInitOpenDesktop": true,
         "isInitOpenMobile": false
-      }
+      },
+      "button3d": true
     },
     "scaleLine": true,
     "Baumtyp": "light"

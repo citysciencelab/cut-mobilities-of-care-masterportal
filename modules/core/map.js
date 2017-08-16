@@ -3,6 +3,7 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
+        Cesium = require("cesium"),
         MapView = require("modules/core/mapView"),
         Map;
 
@@ -29,7 +30,11 @@ define(function (require) {
                 "createLayerIfNotExists": this.createLayerIfNotExists,
                 "getEventPixel": this.getEventPixel,
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
-                "getSize": this.getSize
+                "getSize": this.getSize,
+                "isMap3d" : this.isMap3d,
+                "getMap3d" : this.getMap3d,
+                "getMapMode" : this.getMapMode,
+                "getFeatures3dAtPosition": this.getFeatures3dAtPosition
             }, this);
 
             channel.on({
@@ -49,7 +54,9 @@ define(function (require) {
                 "removeLoadingLayer": this.removeLoadingLayer,
                 "registerListener": this.registerListener,
                 "unregisterListener": this.unregisterListener,
-                "forEachFeatureAtPixel": this.forEachFeatureAtPixel
+                "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
+                "activateMap3d" : this.activateMap3d,
+                "deactivateMap3d" : this.deactivateMap3d
             }, this);
 
             this.listenTo(this, {
@@ -68,6 +75,9 @@ define(function (require) {
                 controls: [],
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
+
+            this.getMap().on('click', this.reactToClickEvent, this);
+
 
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
@@ -126,6 +136,96 @@ define(function (require) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }
         },
+         /**
+          *
+          */
+         getMapMode: function () {
+             return this.getMap3d() && this.getMap3d().getEnabled() ? "3D" : "2D";
+         },
+         /**
+          *
+          */
+        isMap3d: function () {
+            return this.getMap3d() && this.getMap3d().getEnabled();
+        },
+        /**
+         */
+        activateMap3d: function () {
+            if(!this.getMap3d()) {
+                this.setMap3d(new olcs.OLCesium({
+                    map: this.getMap(),
+                    createSynchronizers: function(map, scene){
+                        return [
+                            new olcs.WMSRasterSynchronizer(map, scene),
+                            new olcs.VectorSynchronizer(map, scene),
+                            new olcs.OverlaySynchronizer(map, scene)
+                        ];
+                    }
+                }));
+
+                var eventHandler = new Cesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
+                eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), Cesium.ScreenSpaceEventType["LEFT_CLICK"]);
+            }
+            this.getMap3d().setEnabled(true);
+            Radio.trigger("Map", "change", "3D");
+        },
+
+
+         getFeatures3dAtPosition : function(position) {
+            if(this.getMap3d()) {
+                var scene = this.getMap3d().getCesiumScene();
+                var objects = scene.drillPick(position);
+                return objects;
+            }
+        },
+        reactToClickEvent : function(evt) {
+            var coords = evt.coordinate;
+            Radio.trigger("Map", "clickedMAP", coords);
+        },
+
+        reactTo3DClickEvent : function(event){
+            var scene = this.getMap3d().getCesiumScene();
+            var ray = scene.camera.getPickRay(event.position);
+            var cartesian = scene.globe.pick(ray, scene);
+            var longitude;
+            var latitude;
+            var height;
+            var coords;
+            if (cartesian) {
+                var cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+                coords = [Cesium.Math.toDegrees(cartographic.longitude), Cesium.Math.toDegrees(cartographic.latitude)];
+                height = scene.globe.getHeight(cartographic);
+                if(height){
+                    coords = coords.concat([height]);
+                }
+            }
+            var mapProjection = Radio.request("MapView", "getProjection");
+            var transformedCoords = ol.proj.transform(coords, ol.proj.get("EPSG:4326"), mapProjection);
+            Radio.trigger("Map", "clickedMAP", transformedCoords);
+            Radio.trigger("Map", "clickedWindowPosition", {position:event.position, coordinate:transformedCoords});
+         },
+         /**
+          */
+         deactivateMap3d: function () {
+             if(this.getMap3d()) {
+                 this.getMap3d().setEnabled(false);
+                 Radio.trigger("Map", "change", "2D");
+             }
+         },
+
+         /**
+          *
+          */
+         setMap3d: function (map3d) {
+             return this.set("map3d", map3d);
+         },
+
+         /**
+          *
+          */
+         getMap3d: function () {
+             return this.get("map3d");
+         },
 
         getWGS84MapSizeBBOX: function () {
             var bbox = this.get("view").calculateExtent(this.get("map").getSize()),

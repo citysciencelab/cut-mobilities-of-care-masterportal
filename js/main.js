@@ -1,7 +1,8 @@
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: "../components/openlayers/ol-debug",
+        openlayers: "../lib/olcesium",
+        cesium: "../lib/Cesium/Cesium",
         jquery: "../components/jquery/dist/jquery.min",
         jqueryui: "../components/jquery-ui/ui",
         underscore: "../components/underscore/underscore-min",
@@ -30,6 +31,9 @@ require.config({
         },
         openlayers: {
             exports: "ol"
+        },
+        cesium: {
+            exports: "Cesium"
         }
     },
     urlArgs: "bust=" + (new Date()).getTime()

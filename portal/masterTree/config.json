@@ -113,7 +113,8 @@
         "orientation": "once",
         "poi": true,
         "fullScreen": true,
-        "mousePosition": true
+        "mousePosition": true,
+        "button3d": true
       },
       "scaleLine": true,
       "Baumtyp": "custom"

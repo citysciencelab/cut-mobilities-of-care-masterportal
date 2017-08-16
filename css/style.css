@@ -3,7 +3,8 @@
 @import "../components/bootstrap/dist/css/bootstrap.css";
 @import "../components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
 @import "../components/video.js/dist/video-js/video-js.css";
-@import "../components/openlayers/ol.css";
+@import "../lib/ol.css";
+@import "../lib/olcs.css";
 @import "../components/lgv-config/css/fonts.css";
 @import "lgv.css";
 @import "glyphiconbutton.css";

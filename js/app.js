@@ -294,6 +294,16 @@ define("app",
                         }
                         break;
                     }
+                    case "button3d": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRow(control.id);
+
+                            require(["modules/controls/button3d/view"], function (Button3dView) {
+                                new Button3dView({el: el});
+                            });
+                        }
+                        break;
+                    }
                 }
             });
         });
