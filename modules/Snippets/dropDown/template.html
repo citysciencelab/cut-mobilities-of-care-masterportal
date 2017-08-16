@@ -1,0 +1,9 @@
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <%_.each(attr.options, function (option) { %>
+        <li> <%=option%></li>
+    <% });%>
+  </ul>
+</div>
