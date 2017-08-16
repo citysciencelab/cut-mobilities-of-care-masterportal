@@ -98,7 +98,7 @@ define([
 
                          Radio.trigger("Parser", "addItemAtTop", layerToPush);
                      }
-                     else if (_.isNull(layerConfigured)) {
+                     else if (_.isUndefined(layerConfigured)) {
                          Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
                      }
                 });
