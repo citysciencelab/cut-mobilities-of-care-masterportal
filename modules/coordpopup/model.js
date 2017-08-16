@@ -12,13 +12,17 @@ define([
             element: $("#popup"),
             coordOverlay: {},
             coordinateUTM: {},
-            coordinateGeo: {}
+            coordinateGeo: {},
+            active: false,
         },
         initialize: function () {
             this.listenTo(Radio.channel("Tool"), {
                 "activatedTool": this.checkTool
             });
 
+            this.listenTo(Radio.channel("Map"), {
+                "clickedMAP": this.setPosition
+            });
             this.setCoordOverlay(new ol.Overlay({
                 element: this.getElement()[0]
             }));
@@ -26,10 +30,10 @@ define([
         },
         checkTool: function (name) {
             if (name === "coord") {
-                Radio.trigger("Map", "registerListener", "click", this.setPosition, this);
+                this.active = true;
             }
             else {
-                Radio.trigger("Map", "unregisterListener", "click", this.setPosition, this);
+                this.active = false;
             }
         },
         getCoordOverlay: function () {
@@ -62,10 +66,13 @@ define([
         showPopup: function () {
             this.getElement().popover("show");
         },
-        setPosition: function (evt) {
-            this.getCoordOverlay().setPosition(evt.coordinate);
-            this.setCoordinateUTM(evt.coordinate);
-            this.setCoordinateGeo(ol.coordinate.toStringHDMS(proj4(proj4(Config.view.epsg), proj4("EPSG:4326"), this.getCoordinateUTM())));
+        setPosition: function (coords) {
+             if(this.active) {
+                 this.getCoordOverlay().setPosition(coords);
+                 this.setCoordinateUTM(coords);
+                 var coords4326 = Radio.request("CRS", "transformFromMapProjection", proj4("EPSG:4326"), this.getCoordinateUTM());
+                 this.setCoordinateGeo(ol.coordinate.toStringHDMS(coords4326));//proj4(proj4(Config.view.epsg), proj4("EPSG:4326"), this.getCoordinateUTM())));
+             }
         }
     });
 
