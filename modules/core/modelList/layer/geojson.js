@@ -32,10 +32,9 @@ define(function (require) {
                 id: this.getId()
             }));
 
-            this.updateData();
+            this.updateData(this.handleData);
         },
-
-        updateData: function () {
+        updateData: function (callback) {
             Radio.trigger("Util", "showLoader");
 
             $.ajax({
@@ -43,48 +42,31 @@ define(function (require) {
                 async: false,
                 type: "GET",
                 context: this,
-                success: function (data) {
-                    Radio.trigger("Util", "hideLoader");
-                    var crs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:25832",
-                        geojsonReader = new ol.format.GeoJSON(),
-                        features = geojsonReader.readFeatures(data);
-                        console.log(crs);
-                    _.each(features, function (feature) {
-                        var geometry = feature.getGeometry();
-
-                        geometry.transform("EPSG:4326", "EPSG:25832");
-                        console.log(geometry);
-                        // _.each(coords, function (coord) {
-
-                        //         console.log(coord);
-                        //     if (_.isArray(coord)) {
-                        //         var transformObject = {
-                        //                 fromCRS: crs,
-                        //                 toCRS: "EPSG:25832",
-                        //                 point: coord
-                        //             },
-                        //             newCoord = Radio.request("CRS", "transform", transformObject);
-                        //         console.log(newCoord);
-                        //         newCoords.push(newCoord);
-                        //     }
-                        //     else {
-                        //     }
-                        // });
-                        // geometry.setCoordinates(newCoords);
-
-
-                    });
-
-
-                    this.getLayerSource().addFeatures(features);
-                    this.set("loadend", "ready");
-                    this.getLayer().setStyle(this.get("style"));
-
-                },
+                success: callback,
                 error: function (jqXHR, errorText, error) {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
+        },
+        handleData: function (data) {
+            Radio.trigger("Util", "hideLoader");
+            var crs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
+                geojsonReader = new ol.format.GeoJSON(),
+                features = geojsonReader.readFeatures(data);
+
+            features = this.transformFeatures(features, crs);
+
+            this.getLayerSource().addFeatures(features);
+            this.set("loadend", "ready");
+            this.getLayer().setStyle(this.get("style"));
+        },
+        transformFeatures: function (features, crs) {
+            _.each(features, function (feature) {
+                var geometry = feature.getGeometry();
+
+                geometry.transform(crs, "EPSG:25832");
+            });
+            return features;
         },
         /**
          * Zeigt alle Features mit dem Default-Style an
