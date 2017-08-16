@@ -1,21 +1,31 @@
 .slider-container {
     margin: 10px;
-    padding: 10px;
+    padding: 10px 15px;
 }
 
-.slider {
+.slider-container .slider {
     width: 100%;
+    margin-top: 6px;
 }
 
 .slider-selection {
-    background: rgba(60, 60, 60, 0.25);
+    background: rgba(60, 60, 60, 0.5);
 }
 
-.slider-handle {
-    background: rgba(0, 92, 169, 1)
+.slider-track-high {
+    background: rgba(60, 60, 60, 0.2);
 }
-/*dunkelblau rgb(0, 48, 99)
-blau rgb(0, 92, 169)
-rot (rgb (225, 0, 25))
-grau rgb(227, 227, 227)
-dunkelgrau (60, 60,60)*/
+
+.slider-track-low {
+    background: rgba(60, 60, 60, 0.2);
+}
+
+.slider-container input.form-control {
+    width: 50px;
+    height: 26px;
+}
+
+.slider-container label {
+    margin-bottom: 0;
+    padding-top: 4px;
+}
