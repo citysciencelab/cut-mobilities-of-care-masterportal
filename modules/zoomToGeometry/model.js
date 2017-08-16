@@ -23,7 +23,7 @@ define(function (require) {
                 "setIsRender": this.setIsRender
             }, this);
 
-            if (name.length > 0) {
+            if (name.length > 0 && name !== "ALL") {
                 this.zoomToGeometry(name, this.getWfsParams());
             }
 
