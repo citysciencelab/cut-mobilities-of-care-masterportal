@@ -1,34 +1,56 @@
 <!DOCTYPE html>
-<div class= "panel text-align-center">
+<div class= "panel text-align-center pegelHeader">
     <strong><%=zaehlstelle%>: <%=bezeichnung%></strong>
+    <a href="<%=link%>" target="_blank" title="Link zum Download der Daten">
+        <span class="glyphicon glyphicon-save download"></span>
+    </a>
     <br>
     <small>Art: <%=art%></small>
 </div>
-<br>
-<table class="table table-striped table-condensed ">
-    <thead>
-        <th>Kategorie</th>
-        <th>Aktuell</th>
-        <% _.each(years, function (year){%>
-        <th><%=year%></th>
-        <%});%>
-    </thead>
-    <tbody>
-        <% _.each(rowNames, function (name) { %>
-        <tr>
-            <td><%= name %></td>
-            <td><%= actualDataset[name] %></td>
-            <% _.each(years, function (year){%>
-            <td><%=_.findWhere(rowsDatasets, {attr: name})[year]%></td>
-            <% });%>
-        </tr>
-        <% });%>
-    </tbody>
-</table>
-<br>
-<div class="panel">
-    <span>Umschalten auf <a id="ansicht" class="pointer"><%=ansicht%></a></span>
-</div>
-<div class="panel">
-    <span>Link auf die vollständigen Daten zum <a href="<%=link%>" target="_blank">Download</a></span>
+<ul class="nav nav-pills">
+  <li class="active"><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
+  <li id="diagramm-tab"><a data-toggle="tab" href="#diagramm">Diagramm</a></li>
+</ul>
+<div class="tab-content">
+    <div id="tabelle" class="tab-pane fade in active">
+        <table class="table table-striped">
+            <thead>
+                <th>Kategorie</th>
+                <% _.each(years, function (year){%>
+                <th><%=year%></th>
+                <%});%>
+            </thead>
+            <tbody>
+                <% _.each(rowNames, function (name) { %>
+                <tr>
+                    <% if (name === "Dtv") { %>
+                        <td>DTV (Kfz/24h)</td>
+                    <% }
+                    else if (name === "Dtvw") { %>
+                        <td>DTVw (Kfz/24h)</td>
+                    <% }
+                    else if (name === "Sv am_dtvw") { %>
+                        <td>SV-Anteil am DTVw (%)</td>
+                    <% }
+                    else { %>
+                        <td>Baustelleneinfluss</td>
+                    <% }
+                    _.each(years, function(year) {%>
+                    <td><%= _.findWhere(dataset, {year: year})[name] %></td>
+                    <% });%>
+                </tr>
+                <% });%>
+            </tbody>
+        </table>
+    </div>
+  <div id="diagramm" class="tab-pane fade">
+    <div class="btn-group btn-group-sm" role="group">
+        <button id= "Dtv" value="Dtv" type="button" class="btn btn-default kat active" title="Durchschnittliche tägliche Verkehrsstärken (Mo-So)">DTV</button>
+        <button id= "Dtvw" value="Dtvw" type="button" class="btn btn-default kat" title="Durchschnittliche werktägliche Verkehrsstärken (Mo-Fr)">DTVw</button>
+        <button id= "Sv am_dtvw" value="Sv am_dtvw" type="button" class="btn btn-default kat" title="Schwerverkehrsanteil am DTVw">SV-Anteil am DTVw</button>
+    </div>
+    <div id="d3-div" class="graph">
+        <div class="graph-tooltip-div"></div>
+    </div>
+  </div>
 </div>
