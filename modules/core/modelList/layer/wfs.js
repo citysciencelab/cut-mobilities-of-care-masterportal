@@ -94,14 +94,16 @@ define(function (require) {
                             featureNS: this.get("featureNS")
                         });
 
-                        this.getLayerSource().addFeatures(wfsReader.readFeatures(data));
-                        this.set("loadend", "ready");
-
-                        // für WFS-T wichtig --> benutzt den ol-default Style
                         if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
                             this.styling();
                         }
                         this.getLayer().setStyle(this.get("style"));
+
+                        this.getLayerSource().addFeatures(wfsReader.readFeatures(data));
+                        this.set("loadend", "ready");
+
+                        // für WFS-T wichtig --> benutzt den ol-default Style
+
                     }
                     catch (e) {
                         console.log(e);
