@@ -6,7 +6,10 @@ define(function (require) {
         WMSLayer;
 
     WMSLayer = Layer.extend({
-
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            supported: ['2D', '3D'],
+            showSettings: true
+        }),
         setAttributes: function () {
             if (_.isUndefined(this.getInfoFormat()) === true) {
                 this.setInfoFormat("text/xml");
@@ -235,6 +238,13 @@ define(function (require) {
                 coordinate = Radio.request("GFI", "getCoordinate");
 
             return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, { INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
+        },
+        updateSupported: function() {
+            if(this.getSingleTile()){
+                this.set("supported", ['2D']);
+            }else {
+                this.set("supported", ['2D', '3D']);
+            }
         }
     });
 

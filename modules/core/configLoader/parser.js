@@ -248,7 +248,9 @@ define([
                 legendURL: "",
                 isbaselayer: false,
                 cache: false,
-                datasets: []
+                datasets: [],
+                supported: ['2D', '3D'],
+                showSettings: true
             };
 
             this.addItem(layer);

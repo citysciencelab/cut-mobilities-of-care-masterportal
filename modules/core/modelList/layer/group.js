@@ -6,6 +6,10 @@ define([
 ], function (Backbone, Radio, ol, Layer) {
 
     var GroupLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            supported: ['2D', '3D'],
+            showSettings: true
+        }),
 
         /**
          *

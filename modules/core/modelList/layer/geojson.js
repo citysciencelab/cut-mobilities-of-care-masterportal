@@ -5,6 +5,10 @@ define(function (require) {
         GeoJSONLayer;
 
     GeoJSONLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            supported: ['2D', '3D'],
+            showSettings: true
+        }),
 
         /**
          * [createLayerSource description]

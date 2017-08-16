@@ -16,7 +16,9 @@ define(function (require) {
             transparency: 0,
             // der Index der die Reihenfolge der selektierten Models beim Zeichnen in "Auswahl der Themen" bestimmt
             selectionIDX: 0,
-            layerInfoClicked: false
+            layerInfoClicked: false,
+            supported: ['2D'],
+            showSettings: true
         },
         initialize: function () {
             this.listenToOnce(this, {
@@ -47,7 +49,7 @@ define(function (require) {
                 "setLayerInfoChecked": function (layerInfoChecked) {
                     this.setLayerInfoChecked(layerInfoChecked);
                 }
-              });
+            });
 
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
@@ -98,6 +100,7 @@ define(function (require) {
             this.checkForScale(Radio.request("MapView", "getOptions"));
             this.setAttributes();
             this.createLegendURL();
+            this.updateSupported();
         },
 
         getLayerInfoChecked: function () {
@@ -423,6 +426,9 @@ define(function (require) {
             else {
                     return undefined;
             }
+        },
+
+        updateSupported: function() {
         }
     });
 

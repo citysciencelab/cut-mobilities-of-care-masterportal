@@ -6,6 +6,10 @@ define(function (require) {
         WFSLayer;
 
     WFSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            supported: ['2D', '3D'],
+            showSettings: true
+        }),
 
         /**
          * [createLayerSource description]
