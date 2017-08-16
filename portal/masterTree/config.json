@@ -150,7 +150,13 @@
             },
             {
               "id": "453"
+            },
+            {
+              "id": "terrain",
+              "name": "Gelände",
+              "visibility": true
             }
+
           ]
         },
       "Fachdaten":
@@ -391,6 +397,7 @@
                 }
               ]
             },
+
             {
               "Titel": "Luftverkehr",
               "Layer": [
@@ -501,6 +508,13 @@
                   "name": "test"
                 }
               ]
+            }
+          ],
+          "Layer" : [
+            {
+              "id": "buildings",
+              "name": "Gebäude LoD2",
+              "visibility": true
             }
           ]
         }

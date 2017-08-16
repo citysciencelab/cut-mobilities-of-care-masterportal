@@ -5,6 +5,8 @@ define([
     "modules/core/modelList/layer/wfs",
     "modules/core/modelList/layer/geojson",
     "modules/core/modelList/layer/group",
+    "modules/core/modelList/layer/terrain",
+    "modules/core/modelList/layer/tileset",
     "modules/core/modelList/folder/model",
     "modules/core/modelList/tool/model",
     "modules/core/modelList/staticlink/model",
@@ -15,6 +17,8 @@ define([
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
+        TerrainLayer = require("modules/core/modelList/layer/terrain"),
+        TileSetLayer = require("modules/core/modelList/layer/tileset"),
         StyleList = require("modules/layer/wfsStyle/list"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
@@ -100,6 +104,12 @@ define([
                 }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
+                }
+                else if (attrs.typ === "Terrain") {
+                    return new TerrainLayer(attrs, options);
+                }
+                else if (attrs.typ === "TileSet") {
+                    return new TileSetLayer(attrs, options);
                 }
             }
             else if (attrs.type === "folder") {

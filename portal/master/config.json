@@ -182,6 +182,16 @@
           "id": ["713", "714", "715", "716"],
           "name": "Geobasiskarten (schwarz-weiß)",
           "visibility": true
+        },
+        {
+          "id": "terrain",
+          "name": "Gelände",
+          "visibility": true
+        },
+        {
+          "id": "buildings",
+          "name": "Gebäude LoD2",
+          "visibility": true
         }
       ]
     },
