@@ -258,14 +258,21 @@ define(function (require) {
                 styleField = this.get("styleField");
 
             this.set("style", function (feature) {
-                var size = feature.get("features").length,
-                    stylelistmodel;
-
-                if (size > 1) {
-                    stylelistmodel = Radio.request("StyleList", "returnModelById", styleId + "_cluster");
+                var features = feature.get("features");
+                var size, stylelistmodel;
+                if (features) {
+                    size = features.length;
+                    if (size > 1) {
+                        stylelistmodel = Radio.request("StyleList", "returnModelById", styleId + "_cluster");
+                    }
                 }
                 if (!stylelistmodel) {
-                    var styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), styleField))[0];
+                    var styleFieldValue;
+                    if(features) {
+                        styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), styleField))[0];
+                    } else {
+                        styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0];
+                    }
 
                     stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
                 }
