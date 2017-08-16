@@ -89,7 +89,7 @@ define([
                      treeType = Radio.request("Parser", "getTreeType");
 
                      layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
-console.log(layerConfigured);
+
                      if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
                          var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
 
