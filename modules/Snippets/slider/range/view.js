@@ -1,10 +1,12 @@
 define(function (require) {
     require("slider");
 
-    var Template = require("text!modules/Snippets/slider/template.html"),
+    var Template = require("text!modules/Snippets/slider/range/template.html"),
+        SliderRangeModel = require("modules/Snippets/slider/range/model"),
         SliderView;
 
     SliderView = Backbone.View.extend({
+        model: new SliderRangeModel(),
         className: "slider-container",
         template: _.template(Template),
         events: {
@@ -18,7 +20,7 @@ define(function (require) {
             // var attr = this.model.toJSON();
 
             this.$el.html(this.template());
-            this.$el.find("input.slider").slider();
+            this.$el.find("input.slider").slider({ });
             $(".sidebar").append(this.$el);
         },
 
@@ -27,7 +29,8 @@ define(function (require) {
          * @param  {Event} evt - slideStop
          */
         setValue: function (evt) {
-            console.log(evt.value);
+            console.log("leftValue:" + evt.value[0]);
+            console.log("rightValue:" + evt.value[1]);
         }
     });
 
