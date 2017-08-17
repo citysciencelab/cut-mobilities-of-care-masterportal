@@ -20,7 +20,7 @@ define(function (require) {
                 content: this.$el,
                 html: true,
                 placement: function () {
-                    if (this.getPosition().top > window.innerHeight / 2) {
+                    if (this.getPosition().top > $("#map").height() / 2) {
                         return "top";
                     }
                     else {
