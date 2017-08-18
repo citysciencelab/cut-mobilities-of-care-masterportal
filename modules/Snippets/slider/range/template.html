@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <form class="form-inline">
     <div class="form-group form-group-sm">
-        <label>Label Name</label>
+        <label><%= label %></label>
     </div>
     <div class="form-group form-group-sm pull-right">
-        <input type="text" class="form-control" placeholder="von" readonly>
+        <input type="text" class="form-control" placeholder="<%= minValue %>" readonly>
         <label>-</label>
-        <input type="text" class="form-control" placeholder="bis" readonly>
+        <input type="text" class="form-control" placeholder="<%= maxValue %>" readonly>
     </div>
 </form>
-<input class="slider" type="text" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-tooltip="hide" data-slider-value="[250,450]" />
+<input class="slider" type="text" data-slider-tooltip="hide" />

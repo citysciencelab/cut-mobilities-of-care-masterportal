@@ -6,39 +6,54 @@ define(function (require) {
         SliderView;
 
     SliderView = Backbone.View.extend({
-        model: new SliderModel(),
+        model: new SliderModel({type: "slider", label: "Label Name", values: [0, 40]}),
         className: "slider-container",
         template: _.template(Template),
         events: {
-            // Das Event wird getriggert wenn der Slider stoppt
-            "slideStop .slider": "setFilterValue",
-            "slide .slider": "setValue"
+            // This event fires when the dragging stops or has been clicked on
+            "slideStop input.slider": "setValues",
+            // This event fires when the slider is dragged
+            "slide input.slider": "setInputControlValue"
         },
         initialize: function () {
             this.render();
+            this.initSlider();
         },
         render: function () {
             var attr = this.model.toJSON();
-console.log(attr);
+
             this.$el.html(this.template(attr));
-            this.$el.find("input.slider").slider();
             $(".sidebar").append(this.$el);
         },
 
         /**
-         * [description]
-         * @param  {Event} evt - slideStop
+         * init the slider
          */
-        setFilterValue: function (evt) {
-            console.log(evt.value);
-            // this.model.set("value", evt.value);
+        initSlider: function () {
+            this.$el.find("input.slider").slider({
+                min: this.model.getMinValue(),
+                max: this.model.getMaxValue(),
+                step: this.model.getStep(),
+                value: this.model.getValues()
+            });
+        },
+
+        /**
+         * set the input value
+         * @param {Event} evt - slide
+         */
+        setInputControlValue: function (evt) {
             this.$el.find("input.form-control").val(evt.value);
         },
 
-        setValue: function (evt) {
-            this.$el.find("input.form-control").val(evt.value);
-            console.log(evt.value);
+        /**
+         * Call the function "setValues" in the model
+         * @param {Event} evt - slideStop
+         */
+        setValues: function (evt) {
+            this.model.setValues(evt.value);
         }
+
     });
 
     return SliderView;
