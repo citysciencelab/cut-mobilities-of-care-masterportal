@@ -151,7 +151,8 @@ define([
                     {name: "BERGEDORF", number: "6"},
                     {name: "EIMSBÜTTEL", number: "3"},
                     {name: "HAMBURG-MITTE", number: "1"},
-                    {name: "WANDSBEK", number: "5"}
+                    {name: "WANDSBEK", number: "5"},
+                    {name: "ALL", number: "0"}
                 ];
 
             if (bezirk.length === 1) {
@@ -162,7 +163,7 @@ define([
             }
             if (_.isUndefined(bezirk)) {
                 Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals leider schief gelaufen!</strong> <br> <small>Details: Konnte den Parameter Bezirk = " + _.values(_.pick(result, "BEZIRK"))[0] + " nicht auflösen.</small>",
+                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Konnte den Parameter Bezirk = " + _.values(_.pick(result, "BEZIRK"))[0] + " nicht auflösen.</small>",
                     kategorie: "alert-warning"
                 });
                 return;

@@ -23,7 +23,7 @@ define(function (require) {
                 "setIsRender": this.setIsRender
             }, this);
 
-            if (name.length > 0) {
+            if (name.length > 0 && name !== "ALL") {
                 this.zoomToGeometry(name, this.getWfsParams());
             }
 
@@ -163,7 +163,7 @@ define(function (require) {
                 _.each(coordinates, function (coordinate) {
                     var coord = Radio.request("Map", "getPixelFromCoordinate", coordinate);
 
-                    canvas.lineTo(coord[0], coord[1]);
+                    canvas.lineTo(coord[0] * ol.has.DEVICE_PIXEL_RATIO, coord[1] * ol.has.DEVICE_PIXEL_RATIO);
                 });
                 canvas.closePath();
             });
