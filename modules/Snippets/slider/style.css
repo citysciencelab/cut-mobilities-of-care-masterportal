@@ -22,7 +22,8 @@
 
 .slider-container input.form-control {
     width: 50px;
-    height: 26px;
+    height: 24px;
+    text-align: center;
 }
 
 .slider-container label {
