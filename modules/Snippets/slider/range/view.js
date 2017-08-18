@@ -11,7 +11,9 @@ define(function (require) {
         template: _.template(Template),
         events: {
             // Das Event wird getriggert wenn der Slider stoppt
-            "slideStop .slider": "setValue"
+            "slideStop .slider": "setFilterValue",
+            // "slideStop .slider": "setValue",
+            "slide .slider": "setValue"
         },
         initialize: function () {
             this.render();
@@ -29,8 +31,14 @@ define(function (require) {
          * @param  {Event} evt - slideStop
          */
         setValue: function (evt) {
-            console.log("leftValue:" + evt.value[0]);
-            console.log("rightValue:" + evt.value[1]);
+            var inputControls = this.$el.find("input.form-control");
+
+            $(inputControls[0]).val(evt.value[0]);
+            $(inputControls[1]).val(evt.value[1]);
+        },
+
+        setFilterValue: function (evt) {
+            console.log(evt.value);
         }
     });
 
