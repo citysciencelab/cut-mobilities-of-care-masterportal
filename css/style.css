@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
+@import "../node_modules/bootstrap-select/dist/css/bootstrap-select.css";
 @import "../node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
 @import "../node_modules/bootstrap-slider/dist/css/bootstrap-slider.css";
 @import "../node_modules/video.js/dist/video-js.css";
@@ -50,4 +51,5 @@
 @import "../modules/tools/gfi/themes/sgvonline/style.css";
 @import "../modules/tools/gfi/themes/verkehrsstaerken/style.css";
 @import "../modules/Snippets/slider/style.css";
+@import "../modules/Snippets/dropdown/style.css";
 @import "../portalconfigs/fluechtlingsunt_internet/table/style.css";

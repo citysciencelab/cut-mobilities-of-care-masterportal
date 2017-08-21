@@ -61,9 +61,10 @@ define("app",
         "backbone.radio"
     ], function (Config, Radio) {
 
-        require(["modules/Snippets/slider/view", "modules/Snippets/slider/range/view"], function (SliderView, SliderRangeView) {
+        require(["modules/Snippets/slider/view", "modules/Snippets/slider/range/view", "modules/Snippets/dropdown/view"], function (SliderView, SliderRangeView, DropdownView) {
             new SliderView();
             new SliderRangeView();
+            new DropdownView();
         });
         require(["modules/layerinformation/model"], function (LayerinformationModel) {
             new LayerinformationModel();

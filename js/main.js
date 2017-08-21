@@ -12,6 +12,7 @@ require.config({
         "backbone.radio": "../node_modules/backbone.radio/build/backbone.radio.min",
         text: "../node_modules/requirejs-text/text",
         bootstrap: "../node_modules/bootstrap/js",
+        "bootstrap-select": "../node_modules/bootstrap-select/dist/js/bootstrap-select.min",
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         proj4: "../node_modules/proj4/dist/proj4",
