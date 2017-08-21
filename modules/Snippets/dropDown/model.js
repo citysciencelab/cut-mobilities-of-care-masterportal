@@ -6,7 +6,7 @@ define(function () {
         },
 
         initialize: function () {
-
+            console.log(this);
         },
 
         /**

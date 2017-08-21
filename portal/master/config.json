@@ -60,6 +60,25 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
+          "filter": {
+            "name": "Filter",
+            "glyphicon": "glyphicon-filter",
+            "isGeneric": false,
+            "isInitOpen": false,
+            "predefinedQueries": [
+              {
+                "layerId": "1711",
+                "isActive": true,
+                "isSelected": true,
+                "isVisible": true,
+                "name": "Krankenhaus",
+                "attributeList": {
+                  "isWhiteList": true,
+                  "attributesNames": ["name", "strasse", "teilnahme_geburtsklinik", "anzahl_planbetten", "anzahl_plaetze_teilstationaer"]
+                }
+              }
+            ]
+          },
           "parcelSearch": {
             "name": "Flurstückssuche",
             "glyphicon": "glyphicon-search",

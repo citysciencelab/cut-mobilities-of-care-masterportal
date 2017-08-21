@@ -61,6 +61,10 @@ define("app",
         "backbone.radio"
     ], function (Config, Radio) {
 
+        require(["modules/tools/filter/view"], function (FilterView) {
+            new FilterView();
+        });
+
         require(["modules/Snippets/slider/view", "modules/Snippets/slider/range/view", "modules/Snippets/dropdown/view"], function (SliderView, SliderRangeView, DropdownView) {
             new SliderView();
             new SliderRangeView();

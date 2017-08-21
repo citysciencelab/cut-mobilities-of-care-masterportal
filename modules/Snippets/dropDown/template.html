@@ -1,10 +1,10 @@
 <form class="form-inline">
     <div class="form-group form-group-sm">
-        <label>Label Name</label>
+        <label><%= displayName %></label>
     </div>
 </form>
 <select class="selectpicker" multiple>
-    <option value="Mustard">Mustard</option>
-    <option value="Ketchup">Ketchup</option>
-    <option value="Relish">Relish</option>
+    <% _.each(values, function (value) { %>
+        <option value="<%= value %>"><%= value %></option>
+    <% }); %>
 </select>

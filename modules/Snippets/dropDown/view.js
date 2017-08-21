@@ -14,14 +14,16 @@ define(function (require) {
             "changed.bs.select": "setValues"
         },
         initialize: function () {
-            this.render();
-            this.initDropdown();
+            // this.render();
         },
         render: function () {
-            // var attr = this.model.toJSON();
+            var attr = this.model.toJSON();
 
-            this.$el.html(this.template());
-            $(".sidebar").append(this.$el);
+            this.$el.html(this.template(attr));
+            this.initDropdown();
+            // $(".sidebar").append(this.$el);
+            console.log(this.$el);
+            return this.$el;
         },
 
         /**
