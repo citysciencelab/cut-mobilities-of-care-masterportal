@@ -31,7 +31,8 @@ define(function (require) {
          */
         initDropdown: function () {
             this.$el.find(".selectpicker").selectpicker({
-                width: "100%"
+                width: "100%",
+                selectedTextFormat: "static"
             });
         },
 

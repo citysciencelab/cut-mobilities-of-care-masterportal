@@ -1,9 +1,4 @@
-<form class="form-inline">
-    <div class="form-group form-group-sm">
-        <label><%= displayName %></label>
-    </div>
-</form>
-<select class="selectpicker" multiple>
+<select class="selectpicker" title="<%= displayName %>" multiple>
     <% _.each(values, function (value) { %>
         <option value="<%= value %>"><%= value %></option>
     <% }); %>

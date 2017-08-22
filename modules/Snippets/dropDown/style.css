@@ -2,3 +2,8 @@
     margin: 10px;
     padding: 10px 15px;
 }
+
+.dropdown-container .dropdown-menu {
+    right: 0;
+    /*left: auto;*/
+}
