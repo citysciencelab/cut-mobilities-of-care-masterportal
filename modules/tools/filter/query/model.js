@@ -4,13 +4,10 @@ define(function (require) {
         QueryModel;
 
     QueryModel = Backbone.Model.extend({
-        defaults: {
-            snippets: new Backbone.Collection()
-        },
-        initialize: function () {
+        // initialize: function () {
             // interaktion mit modellist query hinzufügen(sichtbare layer) und entfernen
-            console.log(this);
-        },
+            // console.log(this);
+        // },
 
         createSnippets: function (typeMap) {
             _.each(typeMap, function (type) {
@@ -20,13 +17,14 @@ define(function (require) {
         },
 
         createSnippet: function (attr) {
+            // console.log(this.get("snippets").length);
             if (attr.type === "string") {
                 this.get("snippets").add(new SnippetDropdownModel(attr));
             }
             else if (attr.type === "integer") {
-                console.log("integer");
+                // console.log("integer");
             }
-            console.log(this.get("snippets"));
+            // console.log(this.get("snippets"));
         },
 
         createTypeMap: function (resp) {
@@ -36,8 +34,10 @@ define(function (require) {
             typeMap = this.mapDisplayNames(typeMap);
             typeMap = this.setValues(typeMap);
             this.setTypeMap(typeMap);
-            if (this.get("isVisible") === true) {
-                this.createSnippets(typeMap);
+            // console.log(typeMap);
+            this.createSnippets(typeMap);
+            // isLayerVisible und isSelected
+            if (this.get("isSelected") === true) {
                 this.trigger("renderSubViews");
             }
         },
@@ -71,6 +71,10 @@ define(function (require) {
 
         setTypeMap: function (value) {
             this.set("typeMap", value);
+        },
+
+        setIsSelected: function (value) {
+            this.set("isSelected", value);
         }
     });
 

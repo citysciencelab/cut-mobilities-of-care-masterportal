@@ -5,14 +5,21 @@ define(function (require) {
 
     QueryDetailView = Backbone.View.extend({
         initialize: function () {
-            console.log(this.model);
+            // console.log(this.model);
             this.listenTo(this.model, {
                 "renderSubViews": this.renderSubViews,
-                "render": this.render
+                "render": this.render,
+                "change:isSelected": function (model, value) {
+                    if (value === false) {console.log(value);
+                        this.remove();
+                    }
+                }
             }, this);
         },
         render: function () {
-            $(".test").append(this.el);
+            // $(".test").append(this.el);
+            // this.$el.html(this.template(attr));
+            return this.el;
         },
 
         renderSubViews: function () {

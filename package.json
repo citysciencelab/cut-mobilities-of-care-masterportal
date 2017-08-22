@@ -45,8 +45,8 @@
     "time-grunt": "1.0.0",
     "mocha": "3.5.0",
     "chai": "4.1.1",
-    "build-config": "git+https://bitbucket.org/lgv-g12/build-config-public.git",
-    "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config-public.git"
+    "build-config": "git+https://bitbucket.org/lgv-g12/build-config.git",
+    "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config.git"
   },
   "title": "LGV Master"
 }

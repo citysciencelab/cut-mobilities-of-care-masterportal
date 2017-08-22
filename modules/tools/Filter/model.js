@@ -1,7 +1,7 @@
 define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/source/wfs"),
-        QueryView = require("modules/tools/filter/query/detailView"),
+        QueryDetailView = require("modules/tools/filter/query/detailView"),
         FilterModel;
 
     FilterModel = Backbone.Model.extend({
@@ -13,9 +13,24 @@ define(function (require) {
             queries: new Backbone.Collection()
         },
         initialize: function () {
+            this.listenTo(this.get("queries"), {
+                "deselectAllModels": function () {
+                    // debugger;
+                    _.each(this.get("queries").models, function (model) {
+                        // if (model.get("isSelected") === true && model.cid !== newModel.cid) {
+                        //     console.log("443");
+                            model.setIsSelected(false);
+                        // }
+                    });
+                    // console.log(this);
+                    // this.trigger("renderDetailView", newModel);
+                }
+            }, this);
             this.setDefaults();
             this.createQueries(this.getConfiguredQueries());
-            this.get("queries").at(0).trigger("render");
+            // console.log(this.get("queries").at(0).get("snippets"));
+            console.log(this.get("queries"));
+            // this.get("queries").at(0).trigger("render");
         },
 
         setDefaults: function () {
@@ -36,7 +51,9 @@ define(function (require) {
             var query = new QueryModel(model);
 
             this.getQueries().add(query);
-            new QueryView({model: query});
+            // if (query.get("isSelected") === true) {
+            //     new QueryDetailView({model: query});
+            // }
         },
         getQueries: function () {
             return this.get("queries");

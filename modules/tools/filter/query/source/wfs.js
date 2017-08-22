@@ -4,17 +4,22 @@ define(function (require) {
         WfsQueryModel;
 
     WfsQueryModel = QueryModel.extend({
+        // defaults: {
+        //     snippets: new Backbone.Collection({})
+        // },
         initialize: function () {
+            this.set("snippets", new Backbone.Collection());
             var model = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")});
 
             this.describeFeatureTypRequest(model.get("url"), model.get("featureType"), model.get("version"));
+            console.log(this);
         },
 
         describeFeatureTypRequest: function (url, featureType, version) {
             $.ajax({
                 url: url,
                 context: this,
-                data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename" + featureType,
+                data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
                 success: this.createTypeMap
             });
         },

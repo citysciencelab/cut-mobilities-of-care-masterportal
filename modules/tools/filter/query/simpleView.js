@@ -4,11 +4,21 @@ define(function (require) {
         QuerySimpleView;
 
     QuerySimpleView = Backbone.View.extend({
+        events: {
+            "click": "setIsSelected"
+        },
         initialize: function () {
         },
         render: function () {
             // var attr = this.model.toJSON();
-            return this.el;
+
+
+            return this.$el.html("<span class='badge'>" + this.model.get("name") + "</span>");
+        },
+
+        setIsSelected: function () {
+            this.model.trigger("deselectAllModels");
+            this.model.setIsSelected(true);
         }
     });
 

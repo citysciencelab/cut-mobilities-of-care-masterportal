@@ -70,6 +70,7 @@
                 "layerId": "8190",
                 "isActive": true,
                 "isSelected": true,
+                "isVisible": true,
                 "name": "Grundschulen",
                 "predefinedRules": [
                   {

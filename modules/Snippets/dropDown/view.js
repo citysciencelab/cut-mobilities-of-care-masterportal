@@ -22,7 +22,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initDropdown();
             // $(".sidebar").append(this.$el);
-            console.log(this.$el);
+            // console.log(this.$el);
             return this.$el;
         },
 
