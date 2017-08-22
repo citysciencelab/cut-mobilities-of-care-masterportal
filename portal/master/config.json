@@ -67,17 +67,86 @@
             "isInitOpen": false,
             "predefinedQueries": [
               {
-                "layerId": "1711",
+                "layerId": "8190",
                 "isActive": true,
                 "isSelected": true,
-                "isVisible": true,
-                "name": "Krankenhaus",
+                "name": "Grundschulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Grundschulen"]
+                  }
+                ],
                 "attributeList": {
                   "isWhiteList": true,
-                  "attributesNames": ["name", "strasse", "teilnahme_geburtsklinik", "anzahl_planbetten", "anzahl_plaetze_teilstationaer"]
+                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
+                }
+              },
+              {
+                "layerId": "8190",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Stadtteilschulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Stadtteilschulen"]
+                  }
+                ],
+                "attributeList": {
+                  "isWhiteList": true,
+                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "schwerpunktschule", "fremdsprache", "schulische_ausrichtung"]
+                }
+              },
+              {
+                "layerId": "8190",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Gymnasien",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Gymnasien"]
+                  }
+                ],
+                "attributeList": {
+                  "isWhiteList": true,
+                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "fremdsprache", "schulische_ausrichtung"]
+                }
+              },
+              {
+                "layerId": "8190",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Sonderschulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Sonderschulen"]
+                  }
+                ],
+                "attributeList": {
+                  "isWhiteList": true,
+                  "attributesNames": ["bezirk", "stadtteil", "ganztagsform", "abschluss", "anzahl_schüler", "foerderschwerpunkt"]
+                }
+              },
+              {
+                "layerId": "8190",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Berufliche Schulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Berufliche Schulen"]
+                  }
+                ],
+                "attributeList": {
+                  "isWhiteList": true,
+                  "attributesNames": ["bezirk", "stadtteil", "schulform", "abschluss"]
                 }
               }
-            ]
+              ]
           },
           "parcelSearch": {
             "name": "Flurstückssuche",
@@ -316,7 +385,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
@@ -335,6 +404,12 @@
               "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
             }
           ]
+        },
+        {
+          "id": "8190",
+          "name": "Schulinfosystem",
+          "styleId": "1711",
+          "visibility": true
         },
         {
           "id": "753",
