@@ -346,11 +346,14 @@ define(function (require) {
         },
         getHiddenStyle: function () {
             return new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(255, 255, 255, 0)"
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(255, 255, 255, 0)"
+                image: new ol.style.Circle({
+                    radius: 2,
+                    fill: new ol.style.Fill({
+                        color: "rgba(0, 0, 0, 0)"
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: "rgba(0, 0, 0, 0)"
+                    })
                 })
             });
         }
