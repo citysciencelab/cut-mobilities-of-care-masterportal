@@ -78,14 +78,7 @@
                     "values": ["Grundschulen"]
                   }
                 ],
-<<<<<<< HEAD
                 "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
-=======
-                "attributeList": {
-                  "isWhiteList": true,
-                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "zuegigkeit_kl_1", "schwerpunktschule", "bilingual"]
-                }
->>>>>>> a53df24a7ff86065430f09d1cb3bd908466cba2e
               },
               {
                 "layerId": "8190",
@@ -98,14 +91,7 @@
                     "values": ["Stadtteilschulen"]
                   }
                 ],
-<<<<<<< HEAD
                 "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "schwerpunktschule", "fremdsprache", "schulische_ausrichtung"]
-=======
-                "attributeList": {
-                  "isWhiteList": true,
-                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "zuegigkeit_kl_5", "schwerpunktschule", "fremdsprache", "schulische_ausrichtung"]
-                }
->>>>>>> a53df24a7ff86065430f09d1cb3bd908466cba2e
               },
               {
                 "layerId": "8190",
@@ -118,14 +104,7 @@
                     "values": ["Gymnasien"]
                   }
                 ],
-<<<<<<< HEAD
                 "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "fremdsprache", "schulische_ausrichtung"]
-=======
-                "attributeList": {
-                  "isWhiteList": true,
-                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "zuegigkeit_kl_5", "fremdsprache", "schulische_ausrichtung"]
-                }
->>>>>>> a53df24a7ff86065430f09d1cb3bd908466cba2e
               },
               {
                 "layerId": "8190",
@@ -138,14 +117,7 @@
                     "values": ["Sonderschulen"]
                   }
                 ],
-<<<<<<< HEAD
                 "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "abschluss", "anzahl_schüler", "foerderschwerpunkt"]
-=======
-                "attributeList": {
-                  "isWhiteList": true,
-                  "attributesNames": ["bezirk", "stadtteil", "ganztagsform", "abschluss", "anzahl_schueler", "foerderart"]
-                }
->>>>>>> a53df24a7ff86065430f09d1cb3bd908466cba2e
               },
               {
                 "layerId": "8190",
