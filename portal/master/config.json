@@ -79,7 +79,7 @@
                 ],
                 "attributeList": {
                   "isWhiteList": true,
-                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
+                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "zuegigkeit_kl_1", "schwerpunktschule", "bilingual"]
                 }
               },
               {
@@ -95,7 +95,7 @@
                 ],
                 "attributeList": {
                   "isWhiteList": true,
-                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "schwerpunktschule", "fremdsprache", "schulische_ausrichtung"]
+                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "zuegigkeit_kl_5", "schwerpunktschule", "fremdsprache", "schulische_ausrichtung"]
                 }
               },
               {
@@ -111,7 +111,7 @@
                 ],
                 "attributeList": {
                   "isWhiteList": true,
-                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "fremdsprache", "schulische_ausrichtung"]
+                  "attributesNames": ["bezirk", "stadtteil", "schulform", "ganztagsform", "zuegigkeit_kl_5", "fremdsprache", "schulische_ausrichtung"]
                 }
               },
               {
@@ -127,7 +127,7 @@
                 ],
                 "attributeList": {
                   "isWhiteList": true,
-                  "attributesNames": ["bezirk", "stadtteil", "ganztagsform", "abschluss", "anzahl_schüler", "foerderschwerpunkt"]
+                  "attributesNames": ["bezirk", "stadtteil", "ganztagsform", "abschluss", "anzahl_schueler", "foerderart"]
                 }
               },
               {
@@ -408,7 +408,13 @@
         {
           "id": "8190",
           "name": "Schulinfosystem",
-          "styleId": "1711",
+          "visibility": true,
+          "styleId": "8190",
+          "styleField": "schul_icon"
+        },
+        {
+          "id": "8189",
+          "name": "Schulinfosystem WMS",
           "visibility": true
         },
         {
