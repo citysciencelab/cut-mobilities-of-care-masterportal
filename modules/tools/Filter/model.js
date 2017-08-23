@@ -15,7 +15,6 @@ define(function (require) {
             this.set("queryCollection", new Backbone.Collection());
             this.listenTo(this.get("queryCollection"), {
                 "deselectAllModels": function () {
-                    console.log(this.get("queryCollection"));
                     _.each(this.get("queryCollection").models, function (model) {
                         model.setIsSelected(false);
                     });
