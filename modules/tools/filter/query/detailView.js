@@ -5,28 +5,21 @@ define(function (require) {
 
     QueryDetailView = Backbone.View.extend({
         initialize: function () {
-            // console.log(this.model);
             this.listenTo(this.model, {
                 "renderSubViews": this.renderSubViews,
                 "render": this.render,
-                "change:isSelected": function (model, value) {
-                    if (value === false) {console.log(value);
-                        this.remove();
-                    }
-                }
+                "change:isSelected": this.removeView
             }, this);
         },
+
         render: function () {
-            // $(".test").append(this.el);
-            // this.$el.html(this.template(attr));
             return this.el;
         },
 
         renderSubViews: function () {
             var view;
 
-            _.each(this.model.get("snippets").models, function (snippet) {
-                // debugger;
+            _.each(this.model.get("snippetCollection").models, function (snippet) {
                 if (snippet.get("type") === "string") {
                     view = new SnippetDropdownView({model: snippet});
                     this.$el.append(view.render());
@@ -35,6 +28,12 @@ define(function (require) {
                     console.log("else");
                 }
             }, this);
+        },
+
+        removeView: function (model, value) {
+            if (value === false) {
+                this.remove();
+            }
         }
     });
 

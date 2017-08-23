@@ -10,9 +10,6 @@ define(function (require) {
         initialize: function () {
         },
         render: function () {
-            // var attr = this.model.toJSON();
-
-
             return this.$el.html("<span class='badge'>" + this.model.get("name") + "</span>");
         },
 

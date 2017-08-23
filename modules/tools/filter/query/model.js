@@ -4,73 +4,89 @@ define(function (require) {
         QueryModel;
 
     QueryModel = Backbone.Model.extend({
-        // initialize: function () {
-            // interaktion mit modellist query hinzufügen(sichtbare layer) und entfernen
-            // console.log(this);
-        // },
 
-        createSnippets: function (typeMap) {
-            _.each(typeMap, function (type) {
-                this.createSnippet(type);
-            }, this);
-
+        /**
+         * kann von erbenen Objekten augerufen werden
+         */
+        superInitialize: function () {
+            this.set("snippetCollection", new Backbone.Collection());
         },
 
-        createSnippet: function (attr) {
-            // console.log(this.get("snippets").length);
-            if (attr.type === "string") {
-                this.get("snippets").add(new SnippetDropdownModel(attr));
+        /**
+         * [description]
+         * @param  {[type]} featureAttributesMap [description]
+         * @return {[type]}                      [description]
+         */
+        addSnippets: function (featureAttributesMap) {
+            _.each(featureAttributesMap, function (featureAttribute) {
+                this.addSnippet(featureAttribute);
+            }, this);
+        },
+
+        addSnippet: function (featureAttribute) {
+            if (featureAttribute.type === "string") {
+                this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
-            else if (attr.type === "integer") {
+            else if (featureAttribute.type === "integer") {
                 // console.log("integer");
             }
-            // console.log(this.get("snippets"));
         },
 
-        createTypeMap: function (resp) {
-            var typeMap = this.parseResponse(resp);
+        /**
+         * [description]
+         * @param  {XML} response
+         */
+        createSnippets: function (response) {
+            var featureAttributesMap = this.parseResponse(response);
 
-            typeMap = this.trimAttributes(typeMap);
-            typeMap = this.mapDisplayNames(typeMap);
-            typeMap = this.setValues(typeMap);
-            this.setTypeMap(typeMap);
-            // console.log(typeMap);
-            this.createSnippets(typeMap);
+            featureAttributesMap = this.trimAttributes(featureAttributesMap);
+            featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
+            featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
+            this.setFeatureAttributesMap(featureAttributesMap);
+            this.addSnippets(featureAttributesMap);
             // isLayerVisible und isSelected
             if (this.get("isSelected") === true) {
                 this.trigger("renderSubViews");
             }
         },
 
-        trimAttributes: function (typeMap) {
-            if (this.has("attributeList") === true) {
-                typeMap = _.filter(typeMap, function (elem) {
-                    return _.contains(this.get("attributeList").attributesNames, elem.name);
+        /**
+         * Entfernt alle Attribute die nicht in der Whitelist stehen
+         * @param  {object} featureAttributesMap - Mapobject
+         * @return {object} featureAttributesMap - gefiltertes Mapobject
+         */
+        trimAttributes: function (featureAttributesMap) {
+            if (this.has("attributeWhiteList") === true) {
+                featureAttributesMap = _.filter(featureAttributesMap, function (featureAttribute) {
+                    return _.contains(this.get("attributeWhiteList"), featureAttribute.name);
                 }, this);
             }
 
-            return typeMap;
+            return featureAttributesMap;
         },
 
-        mapDisplayNames: function (typeMap) {
+        /**
+         * Konfigurierter Labeltext wird den Features zugeordnet
+         * @param  {object} featureAttributesMap - Mapobject
+         * @return {object} featureAttributesMap - gefiltertes Mapobject
+         */
+        mapDisplayNames: function (featureAttributesMap) {
             var displayNames = Radio.request("RawLayerList", "getDisplayNamesOfFeatureAttributes", this.get("layerId"));
 
-            if (_.isUndefined(displayNames) === false) {
-                _.each(typeMap, function (elem) {
-                    if (_.has(displayNames, elem.name) === true) {
-                        elem.displayName = displayNames[elem.name];
-                    }
-                    else {
-                        elem.displayName = elem.name;
-                    }
-                });
-            }
+            _.each(featureAttributesMap, function (featureAttribute) {
+                if (_.isArray(displayNames) === true && _.has(displayNames, featureAttribute.name) === true) {
+                    featureAttribute.displayName = displayNames[featureAttribute.name];
+                }
+                else {
+                    featureAttribute.displayName = featureAttribute.name;
+                }
+            });
 
-            return typeMap;
+            return featureAttributesMap;
         },
 
-        setTypeMap: function (value) {
-            this.set("typeMap", value);
+        setFeatureAttributesMap: function (value) {
+            this.set("featureAttributesMap", value);
         },
 
         setIsSelected: function (value) {

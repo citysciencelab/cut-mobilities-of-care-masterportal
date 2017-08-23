@@ -1,7 +1,6 @@
 define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/source/wfs"),
-        QueryDetailView = require("modules/tools/filter/query/detailView"),
         FilterModel;
 
     FilterModel = Backbone.Model.extend({
@@ -10,27 +9,20 @@ define(function (require) {
             isInitOpen: false,
             isVisible: false,
             id: "filter",
-            queries: new Backbone.Collection()
+            queryCollection: {}
         },
         initialize: function () {
-            this.listenTo(this.get("queries"), {
+            this.set("queryCollection", new Backbone.Collection());
+            this.listenTo(this.get("queryCollection"), {
                 "deselectAllModels": function () {
-                    // debugger;
-                    _.each(this.get("queries").models, function (model) {
-                        // if (model.get("isSelected") === true && model.cid !== newModel.cid) {
-                        //     console.log("443");
-                            model.setIsSelected(false);
-                        // }
+                    console.log(this.get("queryCollection"));
+                    _.each(this.get("queryCollection").models, function (model) {
+                        model.setIsSelected(false);
                     });
-                    // console.log(this);
-                    // this.trigger("renderDetailView", newModel);
                 }
             }, this);
             this.setDefaults();
             this.createQueries(this.getConfiguredQueries());
-            // console.log(this.get("queries").at(0).get("snippets"));
-            console.log(this.get("queries"));
-            // this.get("queries").at(0).trigger("render");
         },
 
         setDefaults: function () {
@@ -50,13 +42,7 @@ define(function (require) {
         createQuery: function (model) {
             var query = new QueryModel(model);
 
-            this.getQueries().add(query);
-            // if (query.get("isSelected") === true) {
-            //     new QueryDetailView({model: query});
-            // }
-        },
-        getQueries: function () {
-            return this.get("queries");
+            this.get("queryCollection").add(query);
         },
 
         getConfiguredQueries: function () {

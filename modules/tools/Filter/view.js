@@ -8,8 +8,8 @@ define(function (require) {
     FilterView = Backbone.View.extend({
         initialize: function () {
             this.model = new FilterModel();
-            this.listenTo(this.model.get("queries"), {
-                "change:isSelected": function (model, value) {//console.log(value);
+            this.listenTo(this.model.get("queryCollection"), {
+                "change:isSelected": function (model, value) {
                     if (value === true) {
                         this.renderDetailView(model);
                     }
@@ -18,7 +18,7 @@ define(function (require) {
             this.render();
 
             this.renderSimpleViews();
-            this.renderDetailView(this.model.get("queries").findWhere({isSelected: true}));
+            this.renderDetailView(this.model.get("queryCollection").findWhere({isSelected: true}));
         },
         render: function () {
             $(".sidebar").append(this.$el);
@@ -26,23 +26,16 @@ define(function (require) {
 
         renderDetailView: function (selectedModel) {
             var view;
-            // var selectedModel = this.model.get("queries").findWhere({isSelected: true});
-// console.log(this.$el);
-            // console.log(selectedModel);
-            // _.each(this.model.get("queries").models, function (query) {
-                view = new QueryDetailView({model: selectedModel});
-                // if (query.get("isSelected") === true) {
-                    this.$el.append(view.render());
-                    view.renderSubViews();
-                // }
-            // }, this);
+
+            view = new QueryDetailView({model: selectedModel});
+            this.$el.append(view.render());
+            view.renderSubViews();
         },
 
         renderSimpleViews: function () {
             var view;
 
-            _.each(this.model.get("queries").models, function (query) {
-                // debugger;
+            _.each(this.model.get("queryCollection").models, function (query) {
                 view = new QuerySimpleView({model: query});
                 this.$el.append(view.render());
             }, this);

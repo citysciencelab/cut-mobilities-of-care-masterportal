@@ -4,51 +4,65 @@ define(function (require) {
         WfsQueryModel;
 
     WfsQueryModel = QueryModel.extend({
-        // defaults: {
-        //     snippets: new Backbone.Collection({})
-        // },
         initialize: function () {
-            this.set("snippets", new Backbone.Collection());
-            var model = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")});
+            var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")});
 
-            this.describeFeatureTypRequest(model.get("url"), model.get("featureType"), model.get("version"));
-            console.log(this);
+            // parent (QueryModel) initialize
+            this.superInitialize();
+            this.requestMetadata(layerObject.get("url"), layerObject.get("featureType"), layerObject.get("version"));
         },
 
-        describeFeatureTypRequest: function (url, featureType, version) {
+        /**
+         * Führt DescriptFeatureType Request aus
+         * @param  {string} url - WFS Url
+         * @param  {string} featureType - WFS FeatureType
+         * @param  {string} version - WFS Version
+         */
+        requestMetadata: function (url, featureType, version) {
             $.ajax({
                 url: url,
                 context: this,
                 data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
-                success: this.createTypeMap
+                // parent (QueryModel) function
+                success: this.createSnippets
             });
         },
 
-        parseResponse: function (resp) {
-            var elements = $("element", resp),
-                typeMap = [];
+        /**
+         * Extract Attribute names and types from DescribeFeatureType-Response
+         * @param  {XML} response
+         * @return {object} - Mapobject containing names and types
+         */
+        parseResponse: function (response) {
+            var elements = $("element", response),
+                featureAttributesMap = [];
 
             _.each(elements, function (element) {
-                typeMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
+                featureAttributesMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
             });
 
-            return typeMap;
+            return featureAttributesMap;
         },
 
-        setValues: function (typeMap) {
+        /**
+         * [description]
+         * @param  {[type]} typeMap [description]
+         * @return {[type]}         [description]
+         */
+        collectAttributeValues: function (featureAttributesMap) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
                 features = model.getLayerSource().getFeatures(),
                 values = [];
 
-            _.each(typeMap, function (elem) {
+            _.each(featureAttributesMap, function (featureAttribute) {
                 values = [];
                 _.each(features, function (feature) {
-                    values.push(feature.get(elem.name));
+                    values.push(feature.get(featureAttribute.name));
                 });
-                elem.values = _.unique(values);
+                featureAttribute.values = _.unique(values);
             }, this);
 
-            return typeMap;
+            return featureAttributesMap;
         }
     });
 
