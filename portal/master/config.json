@@ -413,11 +413,6 @@
           "styleField": "schul_icon"
         },
         {
-          "id": "8189",
-          "name": "Schulinfosystem WMS",
-          "visibility": true
-        },
-        {
           "id": "753",
           "styleId": "753",
           "visibility": false,
