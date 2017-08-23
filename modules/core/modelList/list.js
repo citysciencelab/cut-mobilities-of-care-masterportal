@@ -42,6 +42,7 @@ define([
             channel.on({
                 "setModelAttributesById": this.setModelAttributesById,
                 "showAllFeatures": this.showAllFeatures,
+                "hideAllFeatures": this.hideAllFeatures,
                 "showFeaturesById": this.showFeaturesById,
                 "removeModelsByParentId": this.removeModelsByParentId,
                 // Initial sichtbare Layer etc.
@@ -493,6 +494,11 @@ define([
             var model = this.get(id);
 
             model.showFeaturesByIds(featureIds);
+        },
+        hideAllFeatures: function (id) {
+            var model = this.get(id);
+
+            model.hideAllFeatures();
         }
 
     });
