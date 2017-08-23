@@ -1,6 +1,7 @@
 define(function (require) {
 
     var SnippetDropdownModel = require("modules/Snippets/dropDown/model"),
+        SnippetSliderModel = require("modules/Snippets/slider/model"),
         QueryModel;
 
     QueryModel = Backbone.Model.extend({
@@ -28,7 +29,7 @@ define(function (require) {
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
             else if (featureAttribute.type === "integer") {
-                // console.log("integer");
+                this.get("snippetCollection").add(new SnippetSliderModel(featureAttribute));
             }
         },
 
