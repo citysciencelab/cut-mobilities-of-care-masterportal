@@ -14,10 +14,6 @@ define(function () {
          * Zeichnet die SimpleView (Filter-Header) für die Query
          */
         render: function () {
-            // wenn eine Query initial selektiert ist
-            if (this.model.get("isSelected") === true) {
-                this.addSelectedBtnClass();
-            }
             return this.$el.text(this.model.get("name"));
         },
 
