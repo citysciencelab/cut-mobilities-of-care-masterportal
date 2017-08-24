@@ -9,6 +9,7 @@ define(function (require) {
     FilterView = Backbone.View.extend({
         id: "filter-view",
         template: _.template(template),
+        className: "filter",
         initialize: function () {
             this.model = new FilterModel();
             this.listenTo(this.model.get("queryCollection"), {
@@ -23,9 +24,7 @@ define(function (require) {
             this.renderDetailView(this.model.get("queryCollection").findWhere({isSelected: true}));
         },
         render: function () {
-            var attr = this.model.toJSON();
-
-            $(".sidebar").append(this.$el.html(this.template(attr)));
+            $(".sidebar").append(this.$el.html(this.template));
         },
 
         renderDetailView: function (selectedModel) {
@@ -41,7 +40,6 @@ define(function (require) {
 
             _.each(this.model.get("queryCollection").models, function (query) {
                 view = new QuerySimpleView({model: query});
-
                 this.$el.find(".simple-views").append(view.render());
             }, this);
         }

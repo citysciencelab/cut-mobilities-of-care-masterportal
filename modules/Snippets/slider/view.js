@@ -15,15 +15,13 @@ define(function (require) {
             // This event fires when the slider is dragged
             "slide input.slider": "setInputControlValue"
         },
-        initialize: function () {
-            this.render();
-            this.initSlider();
-        },
+
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            $(".sidebar").append(this.$el);
+            this.initSlider();
+            return this.$el;
         },
 
         /**
@@ -31,10 +29,10 @@ define(function (require) {
          */
         initSlider: function () {
             this.$el.find("input.slider").slider({
-                min: this.model.getMinValue(),
-                max: this.model.getMaxValue(),
-                step: this.model.getStep(),
-                value: this.model.getValues()
+                min: this.model.get("minValue"),
+                max: this.model.get("maxValue"),
+                step: this.model.get("step"),
+                value: this.model.get("values")
             });
         },
 

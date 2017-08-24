@@ -3,6 +3,7 @@ define(function (require) {
     var SnippetDropdownView = require("modules/Snippets/dropDown/view"),
         QueryValuesView = require("modules/tools/filter/query/valuesView"),
         Template = require("text!modules/tools/filter/query/templateDetailView.html"),
+        SnippetSliderView = require("modules/Snippets/slider/range/view"),
         QueryDetailView;
 
     QueryDetailView = Backbone.View.extend({
@@ -34,7 +35,8 @@ define(function (require) {
                     this.$el.append(view.render());
                 }
                 else {
-                    console.log("else");
+                    view = new SnippetSliderView({model: snippet});
+                    this.$el.append(view.render());
                 }
             }, this);
         },

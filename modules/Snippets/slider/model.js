@@ -7,12 +7,10 @@ define(function () {
         },
 
         initialize: function () {
-            this.setMinValue(this.getValues()[0]);
-            this.setMaxValue(this.getValues()[1]);
+            this.setMinValue(_.min(this.get("values")));
+            this.setMaxValue(_.max(this.get("values")));
 
-            if (this.get("type") === "slider") {
-                this.setValues(this.getMinValue());
-            }
+            this.setValues([this.get("minValue"), this.get("maxValue")]);
         },
 
         /**
@@ -24,14 +22,6 @@ define(function () {
         },
 
         /**
-         * get the minimum possible value
-         * @return {number}
-         */
-        getMinValue: function () {
-            return this.get("minValue");
-        },
-
-        /**
          * set the maximum possible value
          * @param  {number} value
          */
@@ -40,35 +30,11 @@ define(function () {
         },
 
         /**
-         * get the maximum possible value
-         * @return {number}
-         */
-        getMaxValue: function () {
-            return this.get("maxValue");
-        },
-
-        /**
          * set the slider value(s)
          * @param  {number | array} value - depending on type
          */
         setValues: function (value) {
             this.set("values", value);
-        },
-
-        /**
-         * get the slider value(s)
-         * @return {number | array}
-         */
-        getValues: function () {
-            return this.get("values");
-        },
-
-        /**
-         * get the increment step
-         * @return {number}
-         */
-        getStep: function () {
-            return this.get("step");
         }
     });
 

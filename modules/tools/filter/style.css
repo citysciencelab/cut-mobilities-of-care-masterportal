@@ -1,0 +1,18 @@
+.filter .simple-views {
+    padding: 15px;
+    border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+.filter .detail-view {
+    padding: 15px;
+}
+
+.filter .simple-views button {
+    margin: 5px;
+}
+
+.filter .btn-select {
+    color: #fff;
+    border-color: rgb(51, 122, 183);
+    background-color: rgb(51, 122, 183);
+}

@@ -57,7 +57,12 @@ define(function (require) {
             _.each(featureAttributesMap, function (featureAttribute) {
                 values = [];
                 _.each(features, function (feature) {
-                    values.push(feature.get(featureAttribute.name));
+                    if (featureAttribute.type === "integer") {
+                        values.push(parseInt(feature.get(featureAttribute.name), 10));
+                    }
+                    else {
+                        values.push(feature.get(featureAttribute.name));
+                    }
                 });
                 featureAttribute.values = _.unique(values);
             }, this);
