@@ -4,21 +4,28 @@ define(function (require) {
         QueryValuesView;
 
     QueryValuesView = Backbone.View.extend({
+        className: "valueView",
         events: {
-            "click .close": "removeBadge"
+            "click .glyphicon-remove": "removeBadge"
         },
         initialize: function () {
+            this.listenTo(this.model, {
+                "removeView": this.removeView
+            });
         },
         render: function () {
             if (this.model.get("isSelected")) {
-                var html = "<span class='badge'>" + this.model.get("value") + "<button type='button' class='close'><span aria-hidden='true'>&times;</span></button></span>";
+                var html = "" + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
 
                 return this.$el.html(html);
             }
         },
+        removeView: function () {
+            this.remove();
+        },
         removeBadge: function () {
             this.model.set("isSelected", false);
-            this.remove();
+            this.removeView();
         }
     });
 

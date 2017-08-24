@@ -43,11 +43,12 @@ define(function (require) {
         renderValueViews: function () {
              var view;
 
-            this.$el.find(".values-view").html("");
+            // this.$el.find(".value-views-container").html("");
+
             _.each(this.model.get("snippetCollection").models, function (snippet) {
                 _.each(snippet.get("valuesCollection").models, function (value) {
                     view = new QueryValuesView({model: value});
-                    this.$el.find(".values-view").append(view.render());
+                    this.$el.find(".value-views-container").append(view.render());
                 }, this);
             }, this);
         },

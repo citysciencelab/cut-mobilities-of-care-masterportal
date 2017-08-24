@@ -16,14 +16,9 @@ define(function (require) {
         initialize: function () {
             // this.render();
             this.listenTo(this.model.get("valuesCollection"), {
-                "change:isSelected": function () {
-                    var models = this.model.get("valuesCollection").where({isSelected: true}),
-                        attributes = [];
-
-                    _.each(models, function (model){
-                        attributes.push(model.get("value"));
-                    });
-                    this.$el.find(".selectpicker").selectpicker("val", attributes);
+                "change:isSelected": function (model, value) {
+                    this.removeValueView(model);
+                    this.updateSelectPicker();
                 }
             }, this);
         },
@@ -35,6 +30,18 @@ define(function (require) {
             // $(".sidebar").append(this.$el);
             // console.log(this.$el);
             return this.$el;
+        },
+        updateSelectPicker: function () {
+            var models = this.model.get("valuesCollection").where({isSelected: true}),
+                attributes = [];
+
+            _.each(models, function (model) {
+                attributes.push(model.get("value"));
+            });
+            this.$el.find(".selectpicker").selectpicker("val", attributes);
+        },
+        removeValueView: function (model) {
+            model.trigger("removeView");
         },
         /**
          * init the dropdown

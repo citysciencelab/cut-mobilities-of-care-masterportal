@@ -1,0 +1,21 @@
+.filter .valueView {
+    color: #fff;
+    float: left;
+    margin: 2px;
+    padding: 2px;
+    font-size: 12px;
+    background-color: rgba(0,0,0,.5);
+}
+.filter .valueView .glyphicon-remove {
+    padding-left: 1px;
+    cursor: pointer;
+}
+.filter .value-views-container {
+    width: 100%;
+    border-bottom: 1px solid rgb(229, 229, 229);
+    padding: 15px;
+    color:#000;
+}
+.filter .value-views-container .text{
+    float:left;
+}
