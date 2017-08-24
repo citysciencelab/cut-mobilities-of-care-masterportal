@@ -14,11 +14,9 @@ define(function (require) {
             });
         },
         render: function () {
-            if (this.model.get("isSelected")) {
-                var html = "" + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
+            var html = "" + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
 
-                return this.$el.html(html);
-            }
+            return this.$el.html(html);
         },
         removeView: function () {
             this.remove();

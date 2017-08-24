@@ -47,7 +47,7 @@ define(function (require) {
             this.addSnippets(featureAttributesMap);
             // isLayerVisible und isSelected
             if (this.get("isSelected") === true) {
-                this.trigger("renderSubViews");
+                this.trigger("renderSnippets");
             }
         },
 

@@ -10,7 +10,7 @@ define(function (require) {
         template: _.template(Template),
         initialize: function () {
             this.listenTo(this.model, {
-                "renderSubViews": this.renderSubViews,
+                "renderSnippets": this.renderSnippets,
                 "render": this.render,
                 "change:isSelected": this.removeView
             }, this);
@@ -20,13 +20,12 @@ define(function (require) {
         },
 
         render: function () {
-            // return this.el;
             var attr = this.model.toJSON();
 
             return this.$el.html(this.template(attr));
         },
 
-        renderSubViews: function () {
+        renderSnippets: function () {
             var view;
 
             _.each(this.model.get("snippetCollection").models, function (snippet) {
@@ -40,15 +39,19 @@ define(function (require) {
                 }
             }, this);
         },
+        /**
+         * Rendert die View in der die ausgewählten Werte stehen, nach denen derzeit gefiltert wird.
+         * Die Werte werden in den Snippets gespeichert.
+         */
         renderValueViews: function () {
-             var view;
-
-            // this.$el.find(".value-views-container").html("");
-
             _.each(this.model.get("snippetCollection").models, function (snippet) {
-                _.each(snippet.get("valuesCollection").models, function (value) {
-                    view = new QueryValuesView({model: value});
-                    this.$el.find(".value-views-container").append(view.render());
+                _.each(snippet.get("valuesCollection").models, function (valueModel) {
+                    valueModel.trigger("removeView");
+                    if (valueModel.get("isSelected")) {
+                        var view = new QueryValuesView({model: valueModel});
+
+                        this.$el.find(".value-views-container").append(view.render());
+                    }
                 }, this);
             }, this);
         },

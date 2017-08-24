@@ -14,9 +14,8 @@ define(function (require) {
             "changed.bs.select": "setSelectedValues"
         },
         initialize: function () {
-            // this.render();
             this.listenTo(this.model.get("valuesCollection"), {
-                "change:isSelected": function (model, value) {
+                "change:isSelected": function (model) {
                     this.removeValueView(model);
                     this.updateSelectPicker();
                 }
@@ -27,8 +26,6 @@ define(function (require) {
 
             this.$el.html(this.template(attr));
             this.initDropdown();
-            // $(".sidebar").append(this.$el);
-            // console.log(this.$el);
             return this.$el;
         },
         updateSelectPicker: function () {

@@ -28,11 +28,10 @@ define(function (require) {
         },
 
         renderDetailView: function (selectedModel) {
-            var view;
+            var view = new QueryDetailView({model: selectedModel});
 
-            view = new QueryDetailView({model: selectedModel});
             this.$el.find(".detail-view-container").append(view.render());
-            view.renderSubViews();
+            view.renderSnippets();
             view.renderValueViews();
         },
 
