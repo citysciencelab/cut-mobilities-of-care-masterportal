@@ -11,10 +11,21 @@ define(function (require) {
         template: _.template(Template),
         events: {
             // This event fires after the select's value has been changed
-            "changed.bs.select": "setValues"
+            "changed.bs.select": "setSelectedValues"
         },
         initialize: function () {
             // this.render();
+            this.listenTo(this.model.get("valuesCollection"), {
+                "change:isSelected": function () {
+                    var models = this.model.get("valuesCollection").where({isSelected: true}),
+                        attributes = [];
+
+                    _.each(models, function (model){
+                        attributes.push(model.get("value"));
+                    });
+                    this.$el.find(".selectpicker").selectpicker("val", attributes);
+                }
+            }, this);
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -25,7 +36,6 @@ define(function (require) {
             // console.log(this.$el);
             return this.$el;
         },
-
         /**
          * init the dropdown
          */
@@ -40,8 +50,8 @@ define(function (require) {
          * Call the function "setValues" in the model
          * @param {Event} evt - changed
          */
-        setValues: function (evt) {
-            this.model.setValues($(evt.target).val());
+        setSelectedValues: function (evt) {
+            this.model.setSelectedValues($(evt.target).val());
         }
 
     });
