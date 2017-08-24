@@ -33,6 +33,7 @@ define(function (require) {
             view = new QueryDetailView({model: selectedModel});
             this.$el.find(".detail-view").append(view.render());
             view.renderSubViews();
+            view.renderValueViews();
         },
 
         renderSimpleViews: function () {
