@@ -96,8 +96,9 @@ define(function (require) {
                 this.setDesktopViewType(Config.gfiWindow);
             }
 
-            if (!_.isUndefined(Radio.request("Parser", "getItemByAttributes", {isActive: true}))) {
-                this.checkTool(Radio.request("Parser", "getItemByAttributes", {isActive: true}).id);
+            var tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+            if (!_.isUndefined(tool)) {
+                this.toggleGFI(tool.id);
             }
             this.initView();
         },
@@ -106,11 +107,11 @@ define(function (require) {
          * Prüft ob GFI aktiviert ist und registriert entsprechend den Listener oder eben nicht
          * @param  {String} id - Tool Id
          */
-        checkTool: function (id) {
+        toggleGFI: function (id, deaktivateGFI) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
-            else {
+            if (deaktivateGFI) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
         },
