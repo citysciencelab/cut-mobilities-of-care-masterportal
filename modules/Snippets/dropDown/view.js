@@ -26,6 +26,7 @@ define(function (require) {
 
             this.$el.html(this.template(attr));
             this.initDropdown();
+            this.updateSelectPicker();
             return this.$el;
         },
         updateSelectPicker: function () {
