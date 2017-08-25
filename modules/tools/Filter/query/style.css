@@ -3,7 +3,7 @@
     float: left;
     margin: 2px;
     padding: 2px;
-    font-size: 14px;
+    font-size: 12px;
     background-color: rgba(0,0,0,.5);
 }
 .filter .valueView .glyphicon-remove {
