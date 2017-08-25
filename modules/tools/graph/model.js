@@ -189,7 +189,11 @@ define(function (require) {
                 .on("mouseout", function () {
                     tooltipDiv.transition()
                         .duration(500)
-                        .style("opacity", 0);
+                        .style("opacity", 0)
+                        .on("end", function () {
+                            tooltipDiv.style("left", "0px");
+                            tooltipDiv.style("top", "0px");
+                        });
                     })
                 .on("click", function (d) {
                     tooltipDiv.transition()
@@ -256,7 +260,7 @@ define(function (require) {
                 xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : graphConfig.xAttr,
                 yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : this.createAndGetLegendText(graphConfig.attrToShowArray[0]),
                 attrToShowArray = graphConfig.attrToShowArray,
-                margin = {top: 20, right: 40, bottom: 70, left: 70},
+                margin = {top: 20, right: 20, bottom: 70, left: 70},
                 width = graphConfig.width - margin.left - margin.right,
                 height = graphConfig.height - margin.top - margin.bottom,
                 scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),

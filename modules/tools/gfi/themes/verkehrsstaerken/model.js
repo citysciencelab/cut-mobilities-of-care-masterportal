@@ -183,7 +183,8 @@ define(function (require) {
             var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
                 heightPegelHeader = $(".pegelHeader").css("height").slice(0, -2),
                 heightNavbar = $(".verkehrsstaerken .nav").css("height").slice(0, -2),
-                height = heightGfiContent - heightPegelHeader - heightNavbar,
+                heightBtnGroup = $(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2),
+                height = heightGfiContent - heightPegelHeader - heightNavbar - heightBtnGroup,
                 width = $(".gfi-content").css("width").slice(0, -2),
                 graphConfig = {
                 graphType: "Linegraph",

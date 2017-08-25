@@ -21,6 +21,7 @@
     cursor: pointer;
 }
 .graph {
+    position: relative;
     width: 500px;
     height: 250px;
 }
@@ -48,7 +49,7 @@
 }
 .graph-tooltip-div {
     display: inline-block;
-    position: relative;
+    position: absolute;
     color: black;
     padding: 2px;
     border: 2px solid white;
