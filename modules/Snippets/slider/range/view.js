@@ -8,6 +8,20 @@ define(function (require) {
         template: _.template(Template),
 
         /**
+         * init the slider
+         */
+        initSlider: function () {
+            var valueModels = this.model.get("valuesCollection").models;
+
+            this.$el.find("input.slider").slider({
+                min: this.model.get("rangeMinValue"),
+                max: this.model.get("rangeMaxValue"),
+                step: 1,
+                value: [valueModels[0].get("value"), valueModels[1].get("value")]
+            });
+        },
+
+        /**
          * set the inputs value
          * @param  {Event} evt - slide
          */

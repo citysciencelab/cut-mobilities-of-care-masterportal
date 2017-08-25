@@ -10,13 +10,6 @@ Snippet = Backbone.Model.extend({
     },
     superInitialize: function () {
         this.set("valuesCollection", new Backbone.Collection());
-        _.each(this.get("values"), function (value) {
-            this.get("valuesCollection").add({
-                attr: this.get("name"),
-                value: value,
-                isSelected: false
-            });
-        }, this);
     },
     // getter for id
     getId: function () {

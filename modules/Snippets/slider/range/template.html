@@ -4,9 +4,9 @@
         <label><%= displayName %></label>
     </div>
     <div class="form-group form-group-sm pull-right">
-        <input type="text" class="form-control" placeholder="<%= minValue %>" readonly>
+        <input type="text" class="form-control" placeholder="<%= valuesCollection.at(0).get('value') %>" readonly>
         <label>-</label>
-        <input type="text" class="form-control" placeholder="<%= maxValue %>" readonly>
+        <input type="text" class="form-control" placeholder="<%= valuesCollection.at(1).get('value') %>" readonly>
     </div>
 </form>
 <input class="slider" type="text" data-slider-tooltip="hide" />
