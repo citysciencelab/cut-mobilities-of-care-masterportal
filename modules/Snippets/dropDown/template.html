@@ -1,4 +1,4 @@
-<select class="selectpicker <%= name %>" title="<%= displayName %>" multiple>
+<select class="selectpicker <%= name %>" title="<%= displayName %>" <% if(type === "boolean"){print('');} else {print('multiple');}%>>
     <% _.each(valuesCollection.models, function (model) {%>
         <option value="<%= model.attributes.value %>"><%= model.attributes.value %></option>
     <% }); %>

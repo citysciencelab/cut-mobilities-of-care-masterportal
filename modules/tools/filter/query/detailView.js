@@ -33,6 +33,10 @@ define(function (require) {
                     view = new SnippetDropdownView({model: snippet});
                     this.$el.append(view.render());
                 }
+                else if (snippet.get("type") === "boolean") {
+                    view = new SnippetDropdownView({model: snippet});
+                    this.$el.append(view.render());
+                }
                 else {
                     view = new SnippetSliderView({model: snippet});
                     this.$el.append(view.render());

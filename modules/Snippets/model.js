@@ -14,7 +14,8 @@ Snippet = Backbone.Model.extend({
             this.get("valuesCollection").add({
                 attr: this.get("name"),
                 value: value,
-                isSelected: false
+                isSelected: false,
+                type: this.get("type")
             });
         }, this);
     },

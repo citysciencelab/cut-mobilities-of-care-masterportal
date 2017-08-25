@@ -14,7 +14,23 @@ define(function (require) {
             });
         },
         render: function () {
-            var html = "" + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
+            var html = "";
+
+            if (this.model.get("type") === "boolean") {
+                var val = this.model.get("value");
+
+                if (val === "Ja") {
+                    html = "<span>" + this.model.get("attr") + "<span><span class='glyphicon glyphicon-remove'></span>";
+                }
+                else {
+                    // html = "<span class='line-through'>" + this.model.get("attr") + "</span><span class='glyphicon glyphicon-remove'></span>";
+                    // html = "<span class='line-through'><span class='value-text'>" + this.model.get("attr") + "</span></span></span><span class='glyphicon glyphicon-remove'></span>";
+                    html = "<span class='strikethrough'><span class='value-text'>" + this.model.get("attr") + "</span></span><span class='glyphicon glyphicon-remove'></span>";
+                }
+            }
+            else {
+                html = "" + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
+            }
 
             return this.$el.html(html);
         },
