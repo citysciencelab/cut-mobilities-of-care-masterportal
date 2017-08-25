@@ -8,6 +8,7 @@
 }
 .filter .valueView .glyphicon-remove {
     padding-left: 1px;
+    font-size: 10px;
     cursor: pointer;
 }
 .filter .value-views-container {
