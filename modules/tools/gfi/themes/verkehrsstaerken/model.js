@@ -37,7 +37,7 @@ define(function (require) {
                 _.each(rowNames, function (rowName) {
                     year = parseInt(rowName.slice(-4), 10);
 
-                    if (rowName === "Zaehlstelle") {
+                    if (rowName === "Zählstelle") {
                         this.setZaehlstelle(gfiContent[rowName]);
                     }
                     else if (rowName === "Bezeichnung") {

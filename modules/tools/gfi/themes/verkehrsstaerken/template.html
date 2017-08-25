@@ -23,13 +23,13 @@
             <tbody>
                 <% _.each(rowNames, function (name) { %>
                 <tr>
-                    <% if (name === "Dtv") { %>
+                    <% if (name === "DTV") { %>
                         <td>DTV (Kfz/24h)</td>
                     <% }
-                    else if (name === "Dtvw") { %>
+                    else if (name === "DTVw") { %>
                         <td>DTVw (Kfz/24h)</td>
                     <% }
-                    else if (name === "Sv am_dtvw") { %>
+                    else if (name === "Schwerverkehrsanteil am DTVw") { %>
                         <td>SV-Anteil am DTVw (%)</td>
                     <% }
                     else { %>
@@ -45,9 +45,9 @@
     </div>
   <div id="diagramm" class="tab-pane fade">
     <div class="btn-group btn-group-sm" role="group">
-        <button id= "Dtv" value="Dtv" type="button" class="btn btn-default kat active" title="Durchschnittliche tägliche Verkehrsstärken (Mo-So)">DTV</button>
-        <button id= "Dtvw" value="Dtvw" type="button" class="btn btn-default kat" title="Durchschnittliche werktägliche Verkehrsstärken (Mo-Fr)">DTVw</button>
-        <button id= "Sv am_dtvw" value="Sv am_dtvw" type="button" class="btn btn-default kat" title="Schwerverkehrsanteil am DTVw">SV-Anteil am DTVw</button>
+        <button id= "DTV" value="DTV" type="button" class="btn btn-default kat active" title="Durchschnittliche tägliche Verkehrsstärken (Mo-So)">DTV</button>
+        <button id= "DTVw" value="DTVw" type="button" class="btn btn-default kat" title="Durchschnittliche werktägliche Verkehrsstärken (Mo-Fr)">DTVw</button>
+        <button id= "Schwerverkehrsanteil am DTVw" value="Schwerverkehrsanteil am DTVw" type="button" class="btn btn-default kat" title="Schwerverkehrsanteil am DTVw">SV-Anteil am DTVw</button>
     </div>
     <div id="d3-div" class="graph">
         <div class="graph-tooltip-div"></div>
