@@ -13,7 +13,7 @@
     "bootstrap": "3.x",
     "bootstrap-colorpicker": "2.x",
     "bootstrap-slider": "9.x",
-    "bootstrap-select": "x.x.x",
+    "bootstrap-select": "1.x.x",
     "jquery": "2.x",
     "proj4": "2.x",
     "requirejs": "2.x",
