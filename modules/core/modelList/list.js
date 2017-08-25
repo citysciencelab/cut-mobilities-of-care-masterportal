@@ -229,12 +229,16 @@ define([
             }
         },
 
-        setActiveToolToFalse: function (model) {
-            var tool = _.without(this.where({isActive: true}), model)[0];
+        setActiveToolToFalse: function (model, deactivateGFI) {
+            var tools = _.without(this.where({isActive: true}), model);
 
-            if (_.isUndefined(tool) === false) {
-                tool.setIsActive(false);
-            }
+            _.each(tools, function (tool) {
+                if (!_.isUndefined(tool)) {
+                    if (tool.getId() !== "gfi" || deactivateGFI) {
+                        tool.setIsActive(false);
+                    }
+                }
+            });
         },
 
         insertIntoSelectionIDX: function (model) {
