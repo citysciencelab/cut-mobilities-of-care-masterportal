@@ -27,6 +27,7 @@ define(function () {
             // die Query-Collection hört im Filter-Model auf diesen Trigger
             this.model.collection.trigger("deselectAllModels");
             this.model.setIsSelected(true);
+            this.model.runPredefinedRules();
             this.addSelectedBtnClass();
         },
 

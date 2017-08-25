@@ -1,40 +1,101 @@
-define(function () {
+define(function (require) {
 
-    var SliderModel = Backbone.Model.extend({
-        defaults: {
-            // increment step
-            step: 1
+    var SnippetModel = require("modules/Snippets/model"),
+        SliderModel;
+
+    SliderModel = SnippetModel.extend({
+        initialize: function () {
+            // parent (SnippetModel) initialize
+            this.superInitialize();
+            // slider range
+            this.setRangeMinValue(_.min(this.get("values")));
+            this.setRangeMaxValue(_.max(this.get("values")));
+            this.addValueModels();
         },
 
-        initialize: function () {
-            this.setMinValue(_.min(this.get("values")));
-            this.setMaxValue(_.max(this.get("values")));
+        /**
+         * add minValueModel and maxValueModel to valuesCollection
+         */
+        addValueModels: function () {
+            this.get("valuesCollection").add([
+                {
+                    id: "minModel",
+                    attr: this.get("name"),
+                    displayName: ">=",
+                    value: this.get("rangeMinValue"),
+                    isSelected: false
+                },
+                {
+                    id: "maxModel",
+                    attr: this.get("name"),
+                    displayName: "<=",
+                    value: this.get("rangeMaxValue"),
+                    isSelected: false
+                }
+            ]);
+        },
 
-            this.setValues([this.get("minValue"), this.get("maxValue")]);
+        /**
+         * set the slider min value
+         * if min value unqequal rangeMinValue, set isSelected on true
+         * @param  {number} value - slider min value
+         */
+        updateMinValueModel: function (value) {
+            var minModel = this.get("valuesCollection").at(0);
+
+            minModel.set("value", value);
+            if (value !== this.get("rangeMinValue")) {
+                minModel.set("isSelected", true);
+            }
+        },
+
+        /**
+         * set the slider max value
+         * if max value unqequal rangeMaxValue, set isSelected on true
+         * @param  {number} value - slider max value
+         */
+        updateMaxValueModel: function (value) {
+            var maxModel = this.get("valuesCollection").at(1);
+
+            maxModel.set("value", value);
+            if (value !== this.get("rangeMaxValue")) {
+                maxModel.set("isSelected", true);
+            }
+        },
+
+        /**
+         * call the updateMinValueModel function and/or the updateMaxValueModel
+         * trigger the valueChanged event on snippetCollection in queryModel
+         * @param  {number | array} value - depending on slider type
+         */
+        updateValueModels: function (snippetValues) {
+            // range slider
+            if (_.isArray(snippetValues) === true) {
+                this.updateMinValueModel(snippetValues[0]);
+                this.updateMaxValueModel(snippetValues[1]);
+            }
+            // slider
+            else {
+                this.updateMinValueModel(snippetValues);
+            }
+            // listener in filter/query/detailView
+            this.trigger("valuesChanged");
         },
 
         /**
          * set the minimum possible value
          * @param  {number} value
          */
-        setMinValue: function (value) {
-            this.set("minValue", value);
+        setRangeMinValue: function (value) {
+            this.set("rangeMinValue", value);
         },
 
         /**
          * set the maximum possible value
          * @param  {number} value
          */
-        setMaxValue: function (value) {
-            this.set("maxValue", value);
-        },
-
-        /**
-         * set the slider value(s)
-         * @param  {number | array} value - depending on type
-         */
-        setValues: function (value) {
-            this.set("values", value);
+        setRangeMaxValue: function (value) {
+            this.set("rangeMaxValue", value);
         }
     });
 

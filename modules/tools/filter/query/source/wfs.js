@@ -79,6 +79,26 @@ define(function (require) {
 
             return featureAttributesMap;
         },
+
+        /**
+         * Collect the feature Ids that match the predefined rules
+         * and trigger them to the ModelList
+         */
+        runPredefinedRules: function () {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+                features = model.getLayerSource().getFeatures(),
+                featureIds = [];
+
+            _.each(features, function (feature) {
+                _.each(this.get("predefinedRules"), function (rule) {
+                    if (_.contains(rule.values, feature.get(rule.attrName))) {
+                        featureIds.push(feature.getId());
+                    }
+                });
+            }, this);
+            Radio.trigger("ModelList", "showFeaturesById", this.get("layerId"), featureIds);
+        },
+
         /**
          * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten
          * @param  {[type]} feature          [description]

@@ -6,14 +6,23 @@ define(function (require) {
         SliderView;
 
     SliderView = Backbone.View.extend({
-        model: new SliderModel({type: "slider", label: "Label Name", values: [0, 40]}),
+        model: new SliderModel(),
         className: "slider-container",
         template: _.template(Template),
         events: {
             // This event fires when the dragging stops or has been clicked on
-            "slideStop input.slider": "setValues",
+            "slideStop input.slider": function (evt) {
+                this.updateValueModels(evt);
+                this.setInputControlValue(evt);
+            },
             // This event fires when the slider is dragged
             "slide input.slider": "setInputControlValue"
+        },
+
+        initialize: function () {
+            this.listenTo(this.model.get("valuesCollection"), {
+                "change:isSelected": this.updateValueModel
+            });
         },
 
         render: function () {
@@ -29,11 +38,37 @@ define(function (require) {
          */
         initSlider: function () {
             this.$el.find("input.slider").slider({
-                min: this.model.get("minValue"),
-                max: this.model.get("maxValue"),
-                step: this.model.get("step"),
-                value: this.model.get("values")
+                min: this.model.get("rangeMinValue"),
+                max: this.model.get("rangeMaxValue"),
+                step: 1,
+                value: this.model.get("rangeMinValue")
             });
+        },
+
+        /**
+         * If the value model is no longer select,
+         * the corresponding update function is called up in the model
+         * @param  {Backbone.Model} valueModel
+         * @param  {boolean} value - isSelected
+         */
+        updateValueModel: function (valueModel, value) {
+            if (value === false) {
+                if (valueModel.get("id") === "minModel") {
+                    this.model.updateMinValueModel(this.model.get("rangeMinValue"));
+                }
+                else if (valueModel.get("id") === "maxModel") {
+                    this.model.updateMaxValueModel(this.model.get("rangeMaxValue"));
+                }
+                this.render();
+            }
+        },
+
+        /**
+        * Call the function "updateValueModels" in the model
+        * @param {Event} evt - slideStop
+        */
+        updateValueModels: function (evt) {
+            this.model.updateValueModels(evt.value);
         },
 
         /**
@@ -42,14 +77,6 @@ define(function (require) {
          */
         setInputControlValue: function (evt) {
             this.$el.find("input.form-control").val(evt.value);
-        },
-
-        /**
-         * Call the function "setValues" in the model
-         * @param {Event} evt - slideStop
-         */
-        setValues: function (evt) {
-            this.model.setValues(evt.value);
         }
 
     });

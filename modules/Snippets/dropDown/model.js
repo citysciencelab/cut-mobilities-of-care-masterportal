@@ -2,9 +2,16 @@ define(function (require) {
 
 var SnippetModel = require("modules/Snippets/model"),
     DropdownModel = SnippetModel.extend({
-    defaults: _.extend({}, SnippetModel.prototype.defaults, {}),
     initialize: function () {
         this.superInitialize();
+
+        _.each(this.get("values"), function (value) {
+            this.get("valuesCollection").add({
+                attr: this.get("name"),
+                value: value,
+                isSelected: false
+            });
+        }, this);
     },
 
     /**
