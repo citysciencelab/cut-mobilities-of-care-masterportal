@@ -61,9 +61,11 @@ define(function (require) {
                         values.push(parseInt(feature.get(featureAttribute.name), 10));
                     }
                     else {
-                        values.push(feature.get(featureAttribute.name));
+                        var stringValues = this.parseStringType(feature, featureAttribute);
+
+                        values = _.union(values, stringValues);
                     }
-                });
+                }, this);
                 featureAttribute.values = _.unique(values);
             }, this);
 
@@ -87,6 +89,30 @@ define(function (require) {
                 });
             }, this);
             Radio.trigger("ModelList", "showFeaturesById", this.get("layerId"), featureIds);
+        },
+
+        /**
+         * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten
+         * @param  {[type]} feature          [description]
+         * @param  {[type]} featureAttribute [description]
+         * @return {[type]}                  [description]
+         */
+        parseStringType: function (feature, featureAttribute) {
+            var values = [];
+
+            if (!_.isUndefined(feature.get(featureAttribute.name))) {
+                if (feature.get(featureAttribute.name).indexOf("|") !== -1) {
+                    var featureValues = feature.get(featureAttribute.name).split("|");
+
+                    _.each(featureValues, function (value) {
+                        values.push(value);
+                    });
+                }
+                else {
+                    values.push(feature.get(featureAttribute.name));
+                }
+            }
+            return values;
         }
     });
 

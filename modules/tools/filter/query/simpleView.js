@@ -4,10 +4,13 @@ define(function () {
         tagName: "button",
         className: "btn btn-default",
         events: {
-            "click": "setIsSelectedOnTrue"
+            "click": "selectThis"
         },
         initialize: function () {
             this.listenTo(this.model, "change:isSelected", this.removeBtnClass);
+            if (this.model.get("isSelected")) {
+                this.addSelectedBtnClass();
+            }
         },
 
         /**
@@ -20,7 +23,7 @@ define(function () {
         /**
          *
          */
-        setIsSelectedOnTrue: function () {
+        selectThis: function () {
             // die Query-Collection hört im Filter-Model auf diesen Trigger
             this.model.collection.trigger("deselectAllModels");
             this.model.setIsSelected(true);

@@ -28,11 +28,10 @@ define(function (require) {
         },
 
         renderDetailView: function (selectedModel) {
-            var view;
+            var view = new QueryDetailView({model: selectedModel});
 
-            view = new QueryDetailView({model: selectedModel});
-            this.$el.find(".detail-view").append(view.render());
-            view.renderSubViews();
+            this.$el.find(".detail-view-container").append(view.render());
+            view.renderSnippets();
             view.renderValueViews();
         },
 
@@ -41,7 +40,7 @@ define(function (require) {
 
             _.each(this.model.get("queryCollection").models, function (query) {
                 view = new QuerySimpleView({model: query});
-                this.$el.find(".simple-views").append(view.render());
+                this.$el.find(".simple-views-container").append(view.render());
             }, this);
         }
     });

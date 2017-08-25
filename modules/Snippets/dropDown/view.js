@@ -14,16 +14,10 @@ define(function (require) {
             "changed.bs.select": "setSelectedValues"
         },
         initialize: function () {
-            // this.render();
             this.listenTo(this.model.get("valuesCollection"), {
-                "change:isSelected": function () {
-                    var models = this.model.get("valuesCollection").where({isSelected: true}),
-                        attributes = [];
-
-                    _.each(models, function (model){
-                        attributes.push(model.get("value"));
-                    });
-                    this.$el.find(".selectpicker").selectpicker("val", attributes);
+                "change:isSelected": function (model) {
+                    this.removeValueView(model);
+                    this.updateSelectPicker();
                 }
             }, this);
         },
@@ -32,9 +26,20 @@ define(function (require) {
 
             this.$el.html(this.template(attr));
             this.initDropdown();
-            // $(".sidebar").append(this.$el);
-            // console.log(this.$el);
+            this.updateSelectPicker();
             return this.$el;
+        },
+        updateSelectPicker: function () {
+            var models = this.model.get("valuesCollection").where({isSelected: true}),
+                attributes = [];
+
+            _.each(models, function (model) {
+                attributes.push(model.get("value"));
+            });
+            this.$el.find(".selectpicker").selectpicker("val", attributes);
+        },
+        removeValueView: function (model) {
+            model.trigger("removeView");
         },
         /**
          * init the dropdown
