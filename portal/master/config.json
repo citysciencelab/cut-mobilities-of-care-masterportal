@@ -144,7 +144,8 @@
           },
           "measure": {
             "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full"
+            "glyphicon": "glyphicon-resize-full",
+            "deaktivateGFI": true
           },
           "coord": {
             "name": "Koordinaten abfragen",
@@ -180,7 +181,8 @@
           },
           "searchByCoord": {
             "name": "Koordinatensuche",
-            "glyphicon": "glyphicon-record"
+            "glyphicon": "glyphicon-record",
+            "deaktivateGFI": true
           },
           "kmlimport": {
             "name": "KML Import",
@@ -204,7 +206,8 @@
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
-            "glyphicon": "glyphicon-pencil"
+            "glyphicon": "glyphicon-pencil",
+            "deaktivateGFI": true
           },
           "featureLister": {
               "name": "Liste",
