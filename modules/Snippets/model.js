@@ -1,43 +1,41 @@
 define(function (require) {
 
-var Snipped;
+var Snippet;
 
-Snipped = Backbone.Model.extend({
+Snippet = Backbone.Model.extend({
     defaults: {
-        id: 0,
         name: "",
-        attr: {}
+        attr: {},
+        valuesCollection: {}
     },
-    initialize: function () {},
-
+    superInitialize: function () {
+        this.set("valuesCollection", new Backbone.Collection());
+    },
     // getter for id
-    getid: function {
-        return id;
+    getId: function () {
+        return this.get("id");
     },
-
     // setter for id
-    setId: function(value) {
-        this.id = value;
+    setId: function (value) {
+        this.set("id", value);
     },
-
     // getter for name
     getName: function () {
-        return this.name;
+        return this.get("name");
     },
-
     // setter for name
     setName: function (value) {
-        this.name = value;
+        this.set("name", value);
     },
-
     // getter for attr
     getAttr: function () {
-        return this.attr;
+        return this.get("attr");
     },
     // setter for attr
     setAttr: function (value) {
-        this.attr = value;
+        this.set("attr", value);
     }
- }
- return Snipped;
+ });
+
+return Snippet;
 });

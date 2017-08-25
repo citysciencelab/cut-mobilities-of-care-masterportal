@@ -1,6 +1,7 @@
 define(function (require) {
 
     var SnippetDropdownModel = require("modules/Snippets/dropDown/model"),
+        SnippetSliderModel = require("modules/Snippets/slider/model"),
         QueryModel;
 
     QueryModel = Backbone.Model.extend({
@@ -27,8 +28,11 @@ define(function (require) {
             if (featureAttribute.type === "string") {
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
+            else if (featureAttribute.type === "boolean") {
+                this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
+            }
             else if (featureAttribute.type === "integer") {
-                // console.log("integer");
+                this.get("snippetCollection").add(new SnippetSliderModel(featureAttribute));
             }
         },
 
@@ -46,7 +50,7 @@ define(function (require) {
             this.addSnippets(featureAttributesMap);
             // isLayerVisible und isSelected
             if (this.get("isSelected") === true) {
-                this.trigger("renderSubViews");
+                this.trigger("renderSnippets");
             }
         },
 
@@ -55,15 +59,19 @@ define(function (require) {
          * @param  {object} featureAttributesMap - Mapobject
          * @return {object} featureAttributesMap - gefiltertes Mapobject
          */
-        trimAttributes: function (featureAttributesMap) {
-            if (this.has("attributeWhiteList") === true) {
-                featureAttributesMap = _.filter(featureAttributesMap, function (featureAttribute) {
-                    return _.contains(this.get("attributeWhiteList"), featureAttribute.name);
-                }, this);
-            }
+         trimAttributes: function (featureAttributesMap) {
+             var trimmedFeatureAttributesMap = [],
+                 featureAttribute;
 
-            return featureAttributesMap;
-        },
+             _.each(this.get("attributeWhiteList"), function (attr) {
+                 featureAttribute = _.findWhere(featureAttributesMap, {name: attr});
+                 if (featureAttribute !== undefined) {
+                     trimmedFeatureAttributesMap.push(featureAttribute);
+                 }
+             });
+
+             return trimmedFeatureAttributesMap;
+         },
 
         /**
          * Konfigurierter Labeltext wird den Features zugeordnet

@@ -33,7 +33,8 @@ define(function (require) {
 
             channel.on({
                 "setIsVisible": this.setIsVisible,
-                "setGfiParams": this.setGfiParamsFromCustomModule
+                "setGfiParams": this.setGfiParamsFromCustomModule,
+                "hideGFI": this.hideGFI
             }, this);
 
             channel.reply({
@@ -101,6 +102,11 @@ define(function (require) {
                 this.toggleGFI(tool.id);
             }
             this.initView();
+        },
+
+        hideGFI: function () {
+            console.log(1);
+            this.trigger("hideGFI");
         },
 
         /**

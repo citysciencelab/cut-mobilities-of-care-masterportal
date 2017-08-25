@@ -3,32 +3,31 @@ define(function (require) {
     var FilterModel = require("modules/tools/filter/model"),
         QueryDetailView = require("modules/tools/filter/query/detailView"),
         QuerySimpleView = require("modules/tools/filter/query/simpleView"),
-        Template = require("text!modules/tools/filter/template.html"),
+        template = require("text!modules/tools/filter/template.html"),
         FilterView;
 
     FilterView = Backbone.View.extend({
+        id: "filter-view",
+        template: _.template(template),
         className: "filter",
-        template: _.template(Template),
-        events: {
-            "click .close": "closeFilter"
-        },
         initialize: function (attr) {
             this.domTarget = attr.domTarget;
             this.model = new FilterModel();
-            this.listenTo(this.model.get("queryCollection"), {
-                "change:isSelected": function (model, value) {
-                    if (value === true) {
-                        this.renderDetailView(model);
-                    }
-                }
-            }, this);
-             this.listenTo(this.model, {
+            this.listenTo(this.model, {
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
                         this.render();
                     } else {
                         this.$el.remove();
                     }
+                }
+            }),
+            this.listenTo(this.model.get("queryCollection"), {
+                "change:isSelected": function (model, value) {
+                    if (value === true) {
+                        this.renderDetailView(model);
+                    }
+                    this.model.closeGFI();
                 }
              });
         },
@@ -43,11 +42,11 @@ define(function (require) {
         },
 
         renderDetailView: function (selectedModel) {
-            var view;
+            var view = new QueryDetailView({model: selectedModel});
 
-            view = new QueryDetailView({model: selectedModel});
-            this.$el.append(view.render());
-            view.renderSubViews();
+            this.$el.find(".detail-view-container").append(view.render());
+            view.renderSnippets();
+            view.renderValueViews();
         },
 
         renderSimpleViews: function () {
@@ -55,7 +54,7 @@ define(function (require) {
 
             _.each(this.model.get("queryCollection").models, function (query) {
                 view = new QuerySimpleView({model: query});
-                this.$el.append(view.render());
+                this.$el.find(".simple-views-container").append(view.render());
             }, this);
         },
         closeFilter: function () {

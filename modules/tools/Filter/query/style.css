@@ -1,0 +1,51 @@
+.filter .valueView {
+    color: #fff;
+    float: left;
+    margin: 2px;
+    padding: 2px;
+    font-size: 12px;
+    background-color: rgba(0,0,0,.5);
+}
+.filter .valueView .glyphicon-remove {
+    padding-left: 1px;
+    font-size: 10px;
+    cursor: pointer;
+}
+.filter .value-views-container {
+    width: 100%;
+    border-bottom: 1px solid rgb(229, 229, 229);
+    padding: 15px;
+    color:#000;
+}
+.filter .value-views-container .text {
+    float:left;
+}
+.filter .valueView .line-through .value-text {
+    color: #fff;
+}
+.filter .valueView .line-through {
+    color: #f00;
+    text-decoration: line-through;
+    text-decoration-style: dashed;
+}
+.filter .valueView .strikethrough {
+    position: relative;
+}
+.filter .valueView .strikethrough:before {
+    color:red;
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 50%;
+    right: 0;
+    width:100%;
+    border-top: 1px solid;
+    border-color: inherit;
+
+    -webkit-transform:rotate(-7deg);
+    -moz-transform:rotate(-7deg);
+    -ms-transform:rotate(-7deg);
+    -o-transform:rotate(-7deg);
+    transform:rotate(-7deg);
+}
+
