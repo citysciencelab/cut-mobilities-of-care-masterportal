@@ -12,7 +12,6 @@ define(function (require) {
             });
         },
         toggle: function (model, isOpen) {
-            console.log(isOpen);
             if (isOpen) {
                 this.render();
             }
@@ -25,13 +24,11 @@ define(function (require) {
             $("#map").css("width", "100%");
         },
         render: function () {
-            console.log("render");
             $("#map").css("width", "70%");
 
             $("#map").after(this.$el);
         },
         closeSidebar: function () {
-            console.log("closeSidebar");
             this.model.setIsOpen(false);
         }
     });

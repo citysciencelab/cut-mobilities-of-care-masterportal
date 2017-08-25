@@ -105,7 +105,6 @@ define(function (require) {
         },
 
         hideGFI: function () {
-            console.log(1);
             this.trigger("hideGFI");
         },
 

@@ -17,7 +17,6 @@ define(function (require) {
         },
 
         startShowingRoute: function (evt) {
-            // console.log(evt);
             this.model.showRoute(evt.currentTarget.id);
             Radio.trigger("GFI", "setIsVisible", false);
         },

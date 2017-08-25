@@ -101,11 +101,9 @@ define(function (require) {
                         this.getLayer().setStyle(this.get("style"));
                     }
                     catch (e) {
-                        console.log(e);
                     }
                 },
                 error: function (jqXHR, errorText, error) {
-                    console.log(error);
                     Radio.trigger("Util", "hideLoader");
                 }
             });
