@@ -15,8 +15,7 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model.get("valuesCollection"), {
-                "change:isSelected": function (model) {
-                    this.removeValueView(model);
+                "change:isSelected": function () {
                     this.updateSelectPicker();
                 }
             }, this);
@@ -38,9 +37,7 @@ define(function (require) {
             });
             this.$el.find(".selectpicker").selectpicker("val", attributes);
         },
-        removeValueView: function (model) {
-            model.trigger("removeView");
-        },
+
         /**
          * init the dropdown
          */

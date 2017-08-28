@@ -12,6 +12,11 @@ var SnippetModel = require("modules/Snippets/model"),
                 type: this.get("type")
             });
         }, this);
+        this.listenTo(this.get("valuesCollection"), {
+            "change:isSelected": function () {
+                this.trigger("valuesChanged");
+            }
+        });
     },
 
     /**
@@ -41,7 +46,6 @@ var SnippetModel = require("modules/Snippets/model"),
                 valueModel.set("isSelected", false);
             }
         });
-        this.trigger("valuesChanged");
     }
 });
 

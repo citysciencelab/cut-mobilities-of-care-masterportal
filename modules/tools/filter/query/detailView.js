@@ -15,7 +15,9 @@ define(function (require) {
                 "change:isSelected": this.removeView
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
-                "valuesChanged": this.renderValueViews
+                "valuesChanged": function () {
+                    this.renderValueViews();
+                }
             }, this);
         },
 
@@ -58,8 +60,6 @@ define(function (require) {
                     }
                 }, this);
             }, this);
-
-            this.model.runFilter();
         },
 
         removeView: function (model, value) {

@@ -16,7 +16,7 @@ define(function (require) {
                 "change:isActive": this.render
             });
             if (this.model.get("isActive")) {
-                this.model.runPredefinedRules();
+                this.model.runFilter();
             }
         },
 
@@ -30,10 +30,11 @@ define(function (require) {
         },
         deactivate: function () {
             this.model.setIsActive(false);
+            this.model.runFilter();
         },
         activate: function () {
             this.model.setIsActive(true);
-            this.model.runPredefinedRules();
+            this.model.runFilter();
         },
         /**
          *
@@ -42,8 +43,9 @@ define(function (require) {
             // die Query-Collection hört im Filter-Model auf diesen Trigger
             this.model.collection.trigger("deselectAllModels");
             this.model.setIsSelected(true);
+            this.model.setIsActive(true);
             if (this.model.get("isActive")) {
-                this.model.runPredefinedRules();
+                this.model.runFilter();
             }
         }
     });

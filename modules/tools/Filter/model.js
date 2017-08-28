@@ -23,6 +23,24 @@ define(function (require) {
                     _.each(this.get("queryCollection").models, function (model) {
                         model.setIsSelected(false);
                     });
+                },
+                "featureIdsChanged": function () {
+
+                    // console.log(this.get("queryCollection").groupBy("layerId"));
+                    _.each(this.get("queryCollection").groupBy("layerId"), function (group) {
+                        var featureIdList = [];
+                        _.each(group, function (query) {
+                            if (query.get("isActive") === true) {
+                                _.each(query.get("featureIds"), function (featureId) {
+                                    featureIdList.push(featureId);
+                                });
+                            }
+                        });
+                        // console.log(featureIdList);
+                        // console.log(_.unique(featureIdList));
+                        Radio.trigger("ModelList", "showFeaturesById", group[0].get("layerId"), _.unique(featureIdList));
+                    });
+
                 }
             }, this);
             this.setDefaults();

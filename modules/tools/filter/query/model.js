@@ -6,11 +6,19 @@ define(function (require) {
 
     QueryModel = Backbone.Model.extend({
 
+        defaults: {
+            featureIds: []
+        },
+
         /**
          * kann von erbenen Objekten augerufen werden
          */
         superInitialize: function () {
             this.set("snippetCollection", new Backbone.Collection());
+
+            this.listenTo(this.get("snippetCollection"), {
+                "valuesChanged": this.runFilter
+            }, this);
         },
 
         /**
@@ -102,6 +110,10 @@ define(function (require) {
         },
         setIsActive: function (value) {
             this.set("isActive", value);
+        },
+
+        setFeatureIds: function (value) {
+            this.set("featureIds", value);
         }
     });
 

@@ -87,44 +87,68 @@ define(function (require) {
         runPredefinedRules: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
                 features = model.getLayerSource().getFeatures(),
-                featureIds = [];
+                newFeatures = [];
 
             _.each(features, function (feature) {
                 _.each(this.get("predefinedRules"), function (rule) {
                     if (_.contains(rule.values, feature.get(rule.attrName))) {
-                        featureIds.push(feature.getId());
+                        newFeatures.push(feature);
                     }
                 });
             }, this);
-            Radio.trigger("ModelList", "showFeaturesById", this.get("layerId"), featureIds);
+            return newFeatures;
         },
 
         runFilter: function () {
             console.log("runFilter");
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
-                features = model.getLayerSource().getFeatures(),
-                selectedValues = [],
+            var features = this.runPredefinedRules(),
+                attributes = [],
                 featureIds = [];
 
-                this.get("snippetCollection").forEach(function (snippet) {
-                    selectedValues.push(snippet.get("valuesCollection").where({isSelected: true}));
-                });
+            this.get("snippetCollection").forEach(function (snippet) {
+                var selectedModels = snippet.get("valuesCollection").where({isSelected: true}),
+                    obj = {
+                        attrName: snippet.get("name"),
+                        values: []
+                    };
 
-            if (selectedValues.length > 0) {
-                _.each(_.flatten(selectedValues), function (valueModel, index) {
-                    if (featureIds[valueModel.get("attr")] === undefined) {
-                        featureIds[valueModel.get("attr")] = [];
-                    }
-                    _.each(features, function (feature) {
-                        if (valueModel.get("value") === feature.get(valueModel.get("attr"))) {
-                            featureIds[valueModel.get("attr")].push(feature.getId());
-                        }
+                if (selectedModels.length > 0) {
+                    _.each(selectedModels, function (model) {
+                        obj.values.push({value: model.get("value")});
                     });
-                    console.log(featureIds[valueModel.get("attr")]);
+                    attributes.push(obj);
+                }
+            });
+
+            if (attributes.length > 0) {
+                _.each(features, function (feature) {
+                    var booltest = this.findFeatureIds(attributes, feature);
+
+                    if (booltest) {
+                        featureIds.push(feature.getId());
+                    }
                 }, this);
             }
-            Radio.trigger("ModelList", "showFeaturesById", this.get("layerId"), _.intersection(featureIds["bezirk"], featureIds["stadtteil"]));
+            else {
+                _.each(features, function (feature) {
+                    featureIds.push(feature.getId());
+                }, this);
+            }
+            this.setFeatureIds(featureIds);
+            this.trigger("featureIdsChanged");
         },
+
+        findFeatureIds: function (attributes, feature) {
+            var booltest = false;
+
+            booltest = _.every(attributes, function (attribute) {
+                return _.find(attribute.values, function (value) {
+                    return feature.get(attribute.attrName).indexOf(value.value) !== -1;
+                });
+            });
+            return booltest;
+        },
+
         /**
          * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten
          * @param  {[type]} feature          [description]
