@@ -99,6 +99,9 @@ define(function (require) {
 
         setIsSelected: function (value) {
             this.set("isSelected", value);
+        },
+        setIsActive: function (value) {
+            this.set("isActive", value);
         }
     });
 
