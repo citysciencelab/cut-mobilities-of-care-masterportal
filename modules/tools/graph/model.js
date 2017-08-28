@@ -240,10 +240,10 @@ define(function (require) {
         },
 
         createAndGetLegendText: function (value) {
-            if (value === "Dtv") {
+            if (value === "DTV") {
                 return "DTV (Kfz/24h)";
             }
-            else if (value === "Dtvw") {
+            else if (value === "DTVw") {
                 return "DTVw (Kfz/24h)";
             }
             else {
