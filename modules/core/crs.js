@@ -11,12 +11,25 @@ define([
         Config = require("config"),
         CRS;
 
+
+
     CRS = Backbone.Model.extend({
         /**
          *
          */
+        defaults: {
+            namedProjections: [
+                ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
+            ],
+        },
+
         initialize: function () {
-            Proj4.defs(Config.namedProjections);
+            if (Config.namedProjections) {
+                Proj4.defs(Config.namedProjections);
+            }
+            else {
+                Proj4.defs(this.get("namedProjections"));
+            }
             var channel = Radio.channel("CRS");
 
             channel.reply({
