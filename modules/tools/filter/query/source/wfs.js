@@ -91,6 +91,32 @@ define(function (require) {
             Radio.trigger("ModelList", "showFeaturesById", this.get("layerId"), featureIds);
         },
 
+        runFilter: function () {
+            console.log("runFilter");
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+                features = model.getLayerSource().getFeatures(),
+                selectedValues = [],
+                featureIds = [];
+
+                this.get("snippetCollection").forEach(function (snippet) {
+                    selectedValues.push(snippet.get("valuesCollection").where({isSelected: true}));
+                });
+
+            if (selectedValues.length > 0) {
+                _.each(_.flatten(selectedValues), function (valueModel, index) {
+                    if (featureIds[valueModel.get("attr")] === undefined) {
+                        featureIds[valueModel.get("attr")] = [];
+                    }
+                    _.each(features, function (feature) {
+                        if (valueModel.get("value") === feature.get(valueModel.get("attr"))) {
+                            featureIds[valueModel.get("attr")].push(feature.getId());
+                        }
+                    });
+                    console.log(featureIds[valueModel.get("attr")]);
+                }, this);
+            }
+            Radio.trigger("ModelList", "showFeaturesById", this.get("layerId"), _.intersection(featureIds["bezirk"], featureIds["stadtteil"]));
+        },
         /**
          * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten
          * @param  {[type]} feature          [description]

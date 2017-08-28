@@ -54,6 +54,8 @@ define(function (require) {
                     }
                 }, this);
             }, this);
+
+            this.model.runFilter();
         },
 
         removeView: function (model, value) {
