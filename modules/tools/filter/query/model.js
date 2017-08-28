@@ -28,6 +28,9 @@ define(function (require) {
             if (featureAttribute.type === "string") {
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
+            else if (featureAttribute.type === "boolean") {
+                this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
+            }
             else if (featureAttribute.type === "integer") {
                 this.get("snippetCollection").add(new SnippetSliderModel(featureAttribute));
             }
@@ -96,6 +99,9 @@ define(function (require) {
 
         setIsSelected: function (value) {
             this.set("isSelected", value);
+        },
+        setIsActive: function (value) {
+            this.set("isActive", value);
         }
     });
 

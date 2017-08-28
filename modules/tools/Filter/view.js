@@ -10,21 +10,38 @@ define(function (require) {
         id: "filter-view",
         template: _.template(template),
         className: "filter",
-        initialize: function () {
+        events: {
+            "click .close": "closeFilter"
+        },
+        initialize: function (attr) {
+            this.domTarget = attr.domTarget;
             this.model = new FilterModel();
+            this.listenTo(this.model, {
+                "change:isActive": function (model, isActive) {
+                    if (isActive) {
+                        this.render();
+                    } else {
+                        this.$el.remove();
+                    }
+                }
+            }),
             this.listenTo(this.model.get("queryCollection"), {
                 "change:isSelected": function (model, value) {
                     if (value === true) {
                         this.renderDetailView(model);
                     }
+                    this.model.closeGFI();
                 }
-            }, this);
-            this.render();
-            this.renderSimpleViews();
-            this.renderDetailView(this.model.get("queryCollection").findWhere({isSelected: true}));
+             });
         },
         render: function () {
-            $(".sidebar").append(this.$el.html(this.template));
+            var attr = this.model.toJSON();
+
+            // Target wird in der app.js übergeben
+            this.domTarget.append(this.$el.html(this.template(attr)));
+            this.renderSimpleViews();
+            this.renderDetailView(this.model.get("queryCollection").findWhere({isSelected: true}));
+            this.delegateEvents();
         },
 
         renderDetailView: function (selectedModel) {
@@ -42,6 +59,10 @@ define(function (require) {
                 view = new QuerySimpleView({model: query});
                 this.$el.find(".simple-views-container").append(view.render());
             }, this);
+        },
+        closeFilter: function () {
+            this.model.setIsActive(false);
+            this.$el.remove();
         }
     });
 

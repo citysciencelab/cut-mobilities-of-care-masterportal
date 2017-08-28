@@ -1,6 +1,7 @@
 define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/source/wfs"),
+        Radio = require("backbone.radio"),
         FilterModel;
 
     FilterModel = Backbone.Model.extend({
@@ -9,9 +10,13 @@ define(function (require) {
             isInitOpen: false,
             isVisible: false,
             id: "filter",
-            queryCollection: {}
+            queryCollection: {},
+            isActive: false
         },
         initialize: function () {
+            this.listenTo(Radio.channel("Tool"), {
+                "activatedTool": this.activate
+            }),
             this.set("queryCollection", new Backbone.Collection());
             this.listenTo(this.get("queryCollection"), {
                 "deselectAllModels": function () {
@@ -23,7 +28,11 @@ define(function (require) {
             this.setDefaults();
             this.createQueries(this.getConfiguredQueries());
         },
-
+        activate: function (id) {
+            if (this.get("id") === id) {
+                this.setIsActive(true);
+            }
+        },
         setDefaults: function () {
             var config = Radio.request("Parser", "getItemByAttributes", {id: "filter"});
 
@@ -46,6 +55,19 @@ define(function (require) {
 
         getConfiguredQueries: function () {
             return this.get("predefinedQueries");
+        },
+
+        setIsActive: function (value) {
+            this.set("isActive", value);
+            if (!value) {
+                var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
+
+                model.setIsActive(false);
+                Radio.trigger("Sidebar", "toggle", false);
+            }
+        },
+        closeGFI: function () {
+            Radio.trigger("GFI", "hideGFI");
         }
     });
 

@@ -60,6 +60,14 @@ define(function (require) {
                     if (featureAttribute.type === "integer") {
                         values.push(parseInt(feature.get(featureAttribute.name), 10));
                     }
+                    if (featureAttribute.type === "boolean") {
+                        if (feature.get(featureAttribute.name) === "true") {
+                            values.push("Ja");
+                        }
+                        else {
+                            values.push("Nein");
+                        }
+                    }
                     else {
                         var stringValues = this.parseStringType(feature, featureAttribute);
 

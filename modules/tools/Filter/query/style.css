@@ -1,3 +1,48 @@
+.filter .no-cursor {
+    cursor: default;
+}
+.filter .glyphicon-eye-open {
+    border-left: 2px solid #bbb;
+    padding-left: 4px;
+    color:#aaa;
+    cursor: pointer;
+}
+.filter .glyphicon-eye-open:hover{
+    color:#000;
+}
+.filter .btn-select .glyphicon-eye-open {
+    color:#fff;
+}
+.filter .btn-select .glyphicon-eye-open:hover {
+    color:#000;
+}
+.filter .strikethrough-glyph {
+    position: relative;
+}
+.filter .strikethrough-glyph:before {
+    z-index: 99999;
+    color:red;
+    position: absolute;
+    content: "";
+    left: 3px;
+    top: 40%;
+    right: 0;
+    width:100%;
+    border-top: 1px solid;
+    border-color: inherit;
+
+    -webkit-transform:rotate(-30deg);
+    -moz-transform:rotate(-30deg);
+    -ms-transform:rotate(-30deg);
+    -o-transform:rotate(-30deg);
+    transform:rotate(-30deg);
+}
+.filter .name {
+    cursor: pointer;
+}
+.filter .name:hover {
+    font-weight: bold;
+}
 .filter .valueView {
     color: #fff;
     float: left;
@@ -17,6 +62,36 @@
     padding: 15px;
     color:#000;
 }
-.filter .value-views-container .text{
+.filter .value-views-container .text {
     float:left;
 }
+.filter .valueView .line-through .value-text {
+    color: #fff;
+}
+.filter .valueView .line-through {
+    color: #f00;
+    text-decoration: line-through;
+    text-decoration-style: dashed;
+}
+.filter .strikethrough {
+    position: relative;
+}
+.filter .strikethrough:before {
+    z-index: 99999;
+    color:red;
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 50%;
+    right: 0;
+    width:100%;
+    border-top: 1px solid;
+    border-color: inherit;
+
+    -webkit-transform:rotate(-7deg);
+    -moz-transform:rotate(-7deg);
+    -ms-transform:rotate(-7deg);
+    -o-transform:rotate(-7deg);
+    transform:rotate(-7deg);
+}
+

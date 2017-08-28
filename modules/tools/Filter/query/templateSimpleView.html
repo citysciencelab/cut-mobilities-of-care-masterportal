@@ -1,0 +1,6 @@
+<button class="btn btn-default no-cursor <% if(isSelected){print('btn-select');}%>">
+    <span class="name"><%= name %></span>
+    <span class="<%if(!isActive){print('strikethrough-glyph')}%>">
+        <span class= "glyphicon glyphicon-eye-open" title="<% if(isActive){print('Filter ist aktiv');}else {print('Filter ist inaktiv');}%>"></span>
+    </span>
+</button>

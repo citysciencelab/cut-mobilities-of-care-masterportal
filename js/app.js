@@ -61,10 +61,6 @@ define("app",
         "backbone.radio"
     ], function (Config, Radio) {
 
-        require(["modules/tools/filter/view"], function (FilterView) {
-            new FilterView();
-        });
-
         require(["modules/Snippets/slider/view", "modules/Snippets/slider/range/view", "modules/Snippets/dropdown/view"], function (SliderView, SliderRangeView, DropdownView) {
             // new SliderView();
             // new SliderRangeView();
@@ -107,136 +103,145 @@ define("app",
         require(["modules/window/view"], function (WindowView) {
             new WindowView();
         });
-
-        // Tools
-        _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
-            switch (tool.id) {
-                case "animation": {
-                    require(["modules/tools/animation/view"], function (AnimationView) {
-                        new AnimationView();
-                    });
-                    break;
+            // Module laden
+        require(["modules/sidebar/view"], function (SidebarView) {
+            var sidebarView = new SidebarView();
+            // Tools
+            _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
+                switch (tool.id) {
+                    case "animation": {
+                        require(["modules/tools/animation/view"], function (AnimationView) {
+                            new AnimationView();
+                        });
+                        break;
+                    }
+                    case "filter": {
+                        require(["modules/tools/filter/view"], function (FilterView) {
+                            new FilterView({domTarget: sidebarView.$el});
+                        });
+                        break;
+                    }
+                    case "gfi": {
+                        require(["modules/tools/gfi/model"], function (GfiModel) {
+                            new GfiModel();
+                        });
+                        break;
+                    }
+                    case "coord": {
+                        require(["modules/coordpopup/view"], function (CoordPopupView) {
+                            new CoordPopupView();
+                        });
+                        break;
+                    }
+                    case "measure": {
+                        require(["modules/tools/measure/view"], function (MeasureView) {
+                            new MeasureView();
+                        });
+                        break;
+                    }
+                    case "draw": {
+                        require(["modules/tools/draw/view"], function (DrawView) {
+                            new DrawView();
+                        });
+                        break;
+                    }
+                    case "print": {
+                        require(["modules/tools/print/view"], function (PrintView) {
+                            new PrintView();
+                        });
+                        break;
+                    }
+                    case "parcelSearch": {
+                        require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
+                            new ParcelSearchView();
+                        });
+                        break;
+                    }
+                    case "searchByCoord": {
+                        require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
+                            new SearchByCoordView();
+                        });
+                        break;
+                    }
+                    case "saveSelection": {
+                        require(["modules/tools/saveSelection/view"], function (SaveSelectionView) {
+                            new SaveSelectionView();
+                        });
+                        break;
+                    }
+                    case "kmlimport": {
+                        require(["modules/tools/kmlimport/view"], function (ImportView) {
+                            new ImportView();
+                        });
+                        break;
+                    }
+                    case "wfsFeatureFilter": {
+                        require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
+                            new WFSFeatureFilterView();
+                        });
+                        break;
+                    }
+                    case "extendedFilter": {
+                        require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
+                            new ExtendedFilterView();
+                        });
+                        break;
+                    }
+                    case "treeFilter": {
+                        require(["modules/treefilter/view"], function (TreeFilterView) {
+                            new TreeFilterView();
+                        });
+                        break;
+                    }
+                    case "routing": {
+                        require(["modules/viomRouting/view"], function (RoutingView) {
+                            new RoutingView();
+                        });
+                        break;
+                    }
+                    case "contact": {
+                        require(["modules/contact/view"], function (Contact) {
+                            new Contact();
+                        });
+                        break;
+                    }
+                    case "addWMS": {
+                        require(["modules/tools/addwms/view"], function (AddWMSView) {
+                            new AddWMSView();
+                        });
+                        break;
+                    }
+                    case "featureLister": {
+                        require(["modules/featurelister/view"], function (FeatureLister) {
+                            new FeatureLister();
+                        });
+                        break;
+                    }
+                    case "formular": {
+                        require(["modules/formular/view"], function (Formular) {
+                            new Formular(tool.modelname);
+                        });
+                        break;
+                    }
+                    case "legend": {
+                        require(["modules/legend/view", "modules/legend/viewMobile"], function (LegendView, MobileLegendView) {
+                            if (Radio.request("Util", "isAny")) {
+                                new MobileLegendView();
+                            }
+                            else {
+                                new LegendView();
+                            }
+                        });
+                        require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
+                            new AddGeoJSON();
+                        });
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
-                case "gfi": {
-                    require(["modules/tools/gfi/model"], function (GfiModel) {
-                        new GfiModel();
-                    });
-                    break;
-                }
-                case "coord": {
-                    require(["modules/coordpopup/view"], function (CoordPopupView) {
-                        new CoordPopupView();
-                    });
-                    break;
-                }
-                case "measure": {
-                    require(["modules/tools/measure/view"], function (MeasureView) {
-                        new MeasureView();
-                    });
-                    break;
-                }
-                case "draw": {
-                    require(["modules/tools/draw/view"], function (DrawView) {
-                        new DrawView();
-                    });
-                    break;
-                }
-                case "print": {
-                    require(["modules/tools/print/view"], function (PrintView) {
-                        new PrintView();
-                    });
-                    break;
-                }
-                case "parcelSearch": {
-                    require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
-                        new ParcelSearchView();
-                    });
-                    break;
-                }
-                case "searchByCoord": {
-                    require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
-                        new SearchByCoordView();
-                    });
-                    break;
-                }
-                case "saveSelection": {
-                    require(["modules/tools/saveSelection/view"], function (SaveSelectionView) {
-                        new SaveSelectionView();
-                    });
-                    break;
-                }
-                case "kmlimport": {
-                    require(["modules/tools/kmlimport/view"], function (ImportView) {
-                        new ImportView();
-                    });
-                    break;
-                }
-                case "wfsFeatureFilter": {
-                    require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
-                        new WFSFeatureFilterView();
-                    });
-                    break;
-                }
-                case "extendedFilter": {
-                    require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
-                        new ExtendedFilterView();
-                    });
-                    break;
-                }
-                case "treeFilter": {
-                    require(["modules/treefilter/view"], function (TreeFilterView) {
-                        new TreeFilterView();
-                    });
-                    break;
-                }
-                case "routing": {
-                    require(["modules/viomRouting/view"], function (RoutingView) {
-                        new RoutingView();
-                    });
-                    break;
-                }
-                case "contact": {
-                    require(["modules/contact/view"], function (Contact) {
-                        new Contact();
-                    });
-                    break;
-                }
-                case "addWMS": {
-                    require(["modules/tools/addwms/view"], function (AddWMSView) {
-                        new AddWMSView();
-                    });
-                    break;
-                }
-                case "featureLister": {
-                    require(["modules/featurelister/view"], function (FeatureLister) {
-                        new FeatureLister();
-                    });
-                    break;
-                }
-                case "formular": {
-                    require(["modules/formular/view"], function (Formular) {
-                        new Formular(tool.modelname);
-                    });
-                    break;
-                }
-                case "legend": {
-                    require(["modules/legend/view", "modules/legend/viewMobile"], function (LegendView, MobileLegendView) {
-                        if (Radio.request("Util", "isAny")) {
-                            new MobileLegendView();
-                        }
-                        else {
-                            new LegendView();
-                        }
-                    });
-                    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
-                        new AddGeoJSON();
-                    });
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
+            });
         });
 
         // controls

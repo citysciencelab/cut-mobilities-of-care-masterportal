@@ -1,15 +1,22 @@
-define(function () {
-
-    var QuerySimpleView = Backbone.View.extend({
-        tagName: "button",
-        className: "btn btn-default",
+define(function (require) {
+    var Template = require("text!modules/tools/filter/query/templateSimpleView.html"),
+        QuerySimpleView = Backbone.View.extend({
+        // tagName: "button",
+        // className: "btn btn-default",
+        className: "btn-group simple-view",
+        template: _.template(Template),
         events: {
-            "click": "selectThis"
+            "click .name": "selectThis",
+            "click .glyphicon-eye-open": "deactivate",
+            "click .strikethrough-glyph": "activate"
         },
         initialize: function () {
-            this.listenTo(this.model, "change:isSelected", this.removeBtnClass);
-            if (this.model.get("isSelected")) {
-                this.addSelectedBtnClass();
+            this.listenTo(this.model, {
+                "change:isSelected": this.render,
+                "change:isActive": this.render
+            });
+            if (this.model.get("isActive")) {
+                this.model.runPredefinedRules();
             }
         },
 
@@ -17,9 +24,17 @@ define(function () {
          * Zeichnet die SimpleView (Filter-Header) für die Query
          */
         render: function () {
-            return this.$el.text(this.model.get("name"));
-        },
+            var attr = this.model.toJSON();
 
+            return this.$el.html(this.template(attr));
+        },
+        deactivate: function () {
+            this.model.setIsActive(false);
+        },
+        activate: function () {
+            this.model.setIsActive(true);
+            this.model.runPredefinedRules();
+        },
         /**
          *
          */
@@ -27,25 +42,8 @@ define(function () {
             // die Query-Collection hört im Filter-Model auf diesen Trigger
             this.model.collection.trigger("deselectAllModels");
             this.model.setIsSelected(true);
-            this.model.runPredefinedRules();
-            this.addSelectedBtnClass();
-        },
-
-        /**
-         * Fügt die css-Klasse "btn-select" dem Button hinzu
-         */
-        addSelectedBtnClass: function () {
-            this.$el.addClass("btn-select");
-        },
-
-        /**
-         * Entfernt die css-Klasse "btn-select" vom Button
-         * @param  {Backbone.Model} model - this
-         * @param  {boolean} value - model.get("isSelected")
-         */
-        removeBtnClass: function (model, value) {
-            if (value === false) {
-                this.$el.removeClass("btn-select");
+            if (this.model.get("isActive")) {
+                this.model.runPredefinedRules();
             }
         }
     });
