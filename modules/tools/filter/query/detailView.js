@@ -8,6 +8,9 @@ define(function (require) {
 
     QueryDetailView = Backbone.View.extend({
         template: _.template(Template),
+        events: {
+            "click .toggleIsActive": "toggleIsActive"
+        },
         initialize: function () {
             this.listenTo(this.model, {
                 "renderSnippets": this.renderSnippets,
@@ -59,7 +62,17 @@ define(function (require) {
                 }, this);
             }, this);
         },
-
+        toggleIsActive: function () {
+            this.model.setIsActive(!this.model.get("isActive"));
+            this.$el.find("button .glyphicon").toggleClass("glyphicon-ok");
+            this.$el.find("button .glyphicon").toggleClass("glyphicon-remove");
+            if (this.model.get("isActive")) {
+                this.$el.find(".toggleIsActive").prop("title", "Filter aktiv. Klick zum Deaktivieren.");
+            }
+            else {
+                this.$el.find(".toggleIsActive").prop("title", "Filter inaktiv. Klick zum Aktivieren.");
+            }
+        },
         removeView: function (model, value) {
             if (value === false) {
                 this.remove();

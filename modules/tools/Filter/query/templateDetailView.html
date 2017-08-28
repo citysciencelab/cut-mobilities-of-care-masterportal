@@ -1,4 +1,9 @@
 <!DOCTYPE html>
 <div class="value-views-container btn-group btn-group-sm">
+    <span class="value-view-text"><b><%=name%></b>
+        <button class= "btn btn-default toggleIsActive" title="<%if(!isActive){print('Filter inaktiv. Klick zum Aktivieren.')}else {print('Filter aktiv. Klick zum Deaktivieren.')}%>">
+            <span class="glyphicon <%if(!isActive){print('glyphicon-remove')}else {print('glyphicon-ok')}%>"></span>
+        </button>
+    </span><br>
     <span class="text">Ihre Auswahl: </span>
 </div>
