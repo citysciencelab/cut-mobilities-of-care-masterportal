@@ -60,8 +60,9 @@ in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen).
 # npm config set https-proxy <proxy-url:port>
 
 außerdem
-# set http_proxy=<proxy-url:port>
-# set https_proxy=<proxy-url:port>
+# setx http_proxy <proxy-url:port>
+# setx https_proxy <proxy-url:port>
+--> danach alle cmds schließen und neu starten, damit die Änderungen wirksam werden
 
 ```
 
