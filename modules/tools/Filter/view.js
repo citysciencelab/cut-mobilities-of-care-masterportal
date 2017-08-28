@@ -10,6 +10,9 @@ define(function (require) {
         id: "filter-view",
         template: _.template(template),
         className: "filter",
+        events: {
+            "click .close": "closeFilter"
+        },
         initialize: function (attr) {
             this.domTarget = attr.domTarget;
             this.model = new FilterModel();

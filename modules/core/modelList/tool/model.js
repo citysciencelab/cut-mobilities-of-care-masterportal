@@ -22,7 +22,7 @@ define(function (require) {
             name: "",
             // true wenn das Tool aktiviert ist
             isActive: false,
-            // deaktiviert GFI, wenn es geöffnet wird
+            // deaktiviert GFI, wenn dieses tool geöffnet wird
             deaktivateGFI: false
         },
 
