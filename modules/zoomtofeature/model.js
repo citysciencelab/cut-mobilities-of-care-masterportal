@@ -99,11 +99,12 @@ define([
 
         // baut sich aus den Config-prefs die URL zusammen
         requestFeaturesFromWFS: function (prefs) {
-            var url = prefs.url,
-                version = prefs.version,
-                typename = prefs.typename,
+            var LayerId = prefs.layerid,
+                LayerPrefs = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: LayerId}),
+                url = LayerPrefs.url,
+                version = LayerPrefs.version,
+                typename = LayerPrefs.name,
                 data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename;
-
             this.sendRequest(url, data);
         },
 
