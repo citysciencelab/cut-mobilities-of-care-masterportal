@@ -23,7 +23,8 @@ define(function (require) {
             // true wenn das Tool aktiviert ist
             isActive: false,
             // deaktiviert GFI, wenn dieses tool geöffnet wird
-            deaktivateGFI: false
+            deaktivateGFI: false,
+            isVisibleInMenu: true
         },
 
         initialize: function () {
@@ -79,6 +80,9 @@ define(function (require) {
 
         getEmail: function () {
             return this.get("email");
+        },
+        getIsVisibleInMenu: function () {
+            return this.get("isVisibleInMenu");
         }
     });
 

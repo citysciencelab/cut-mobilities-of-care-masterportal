@@ -23,7 +23,9 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+            if (this.model.getIsVisibleInMenu() !== false) {
+                $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+            }
         },
 
         /**

@@ -509,6 +509,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isActive|nein|Boolean|false|Werkzeug wird initial (beim Laden des Portals) aktiviert.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|isVisibleInMenu|nein|Boolean|true|Gibt an ob das Werkzeug im Menu angezeigt wird.|
 
 
 ******
