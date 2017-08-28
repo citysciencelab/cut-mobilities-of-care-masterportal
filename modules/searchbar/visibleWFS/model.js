@@ -64,27 +64,34 @@ define([
         */
         setFeaturesForSearch: function (layermodels) {
             this.set("features", []);
-            var featureArray = [],
-                imageSrc;
+            var featureArray = [];
 
             _.each(layermodels, function (layer) {
                 if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "" && layer.get("searchField") !== undefined) {
-                    if (layer.get("layer").getStyle()[0]) {
-                        imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
-                        if (imageSrc) {
-                            var features = layer.get("layer").getSource().getFeatures();
+                    var features = layer.get("layer").getSource().getFeatures();
 
-                            _.each(features, function (feature) {
-                                featureArray.push({
-                                    name: feature.get(layer.attributes.searchField),
-                                    type: layer.get("name"),
-                                    coordinate: feature.getGeometry().getCoordinates(),
-                                    imageSrc: imageSrc,
-                                    id: feature.get(layer.attributes.searchField).replace(/ /g, "") + layer.get("name")
-                                });
-                            });
-                        }
-                    }
+                    _.each(features, function (feature) {
+                        var layerStyle = layer.get("layer").getStyle(feature),
+                            style,
+                            imageSrc;
+
+                            // layerStyle returns style
+                            if (typeof layerStyle === "object") {
+                                imageSrc = layerStyle[0].getImage().getSrc();
+                            }
+                            // layerStyle returns stylefunction
+                            else {
+                                style = layerStyle(feature);
+                                imageSrc = style[0].getImage().getSrc();
+                            }
+                        featureArray.push({
+                            name: feature.get(layer.attributes.searchField),
+                            type: layer.get("name"),
+                            coordinate: feature.getGeometry().getCoordinates(),
+                            imageSrc: imageSrc,
+                            id: feature.get(layer.attributes.searchField).replace(/ /g, "") + layer.get("name")
+                        });
+                    });
                 }
             });
             this.set("features", featureArray);
