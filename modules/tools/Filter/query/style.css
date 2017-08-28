@@ -1,41 +1,5 @@
-.filter .no-cursor {
-    cursor: default;
-}
-.filter .glyphicon-eye-open {
-    border-left: 2px solid #bbb;
-    padding-left: 4px;
-    color:#aaa;
-    cursor: pointer;
-}
-.filter .glyphicon-eye-open:hover{
-    color:#000;
-}
-.filter .btn-select .glyphicon-eye-open {
-    color:#fff;
-}
-.filter .btn-select .glyphicon-eye-open:hover {
-    color:#000;
-}
-.filter .strikethrough-glyph {
-    position: relative;
-}
-.filter .strikethrough-glyph:before {
-    z-index: 99999;
-    color:red;
-    position: absolute;
-    content: "";
-    left: 3px;
-    top: 40%;
-    right: 0;
-    width:100%;
-    border-top: 1px solid;
-    border-color: inherit;
-
-    -webkit-transform:rotate(-30deg);
-    -moz-transform:rotate(-30deg);
-    -ms-transform:rotate(-30deg);
-    -o-transform:rotate(-30deg);
-    transform:rotate(-30deg);
+.filter .toggleIsActive .glyphicon-remove {
+    color:#bbb;
 }
 .filter .name {
     cursor: pointer;
@@ -62,7 +26,16 @@
     padding: 15px;
     color:#000;
 }
+.filter .value-views-container .value-view-text {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    width: 100%;
+    text-align: center;
+    float: left;
+    font-size: 16px;
+}
 .filter .value-views-container .text {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 16px;
     float:left;
 }
 .filter .valueView .line-through .value-text {

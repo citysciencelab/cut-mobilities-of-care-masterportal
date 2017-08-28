@@ -5,6 +5,16 @@
 .filter .simple-views-container .btn-group {
     margin: 5px;
 }
+.filter .tool-name-glyph {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.filter .tool-name {
+    padding-top: 15px;
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 16px;
+}
 .filter .btn-select {
     color: #fff;
     border-color: rgb(51, 122, 183);
@@ -12,4 +22,11 @@
 }
 .filter .btn-select .name:hover {
     font-weight: normal;
+}
+.filter .underline {
+    width: 100%;
+    border-bottom: 1px solid rgb(229,229,229);
+}
+.filter .underline .close{
+    padding: 10px!important;
 }

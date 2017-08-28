@@ -2,6 +2,9 @@ define(function (require) {
 
 var SnippetModel = require("modules/Snippets/model"),
     DropdownModel = SnippetModel.extend({
+        defaults: {
+            numOfOptions: 10
+        },
     initialize: function () {
         this.superInitialize();
         _.each(this.get("values"), function (value) {

@@ -6,9 +6,7 @@ define(function (require) {
         className: "btn-group simple-view",
         template: _.template(Template),
         events: {
-            "click .name": "selectThis",
-            "click .glyphicon-eye-open": "deactivate",
-            "click .strikethrough-glyph": "activate"
+            "click button": "selectThis"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -27,14 +25,6 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             return this.$el.html(this.template(attr));
-        },
-        deactivate: function () {
-            this.model.setIsActive(false);
-            this.model.runFilter();
-        },
-        activate: function () {
-            this.model.setIsActive(true);
-            this.model.runFilter();
         },
         /**
          *

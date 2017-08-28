@@ -33,6 +33,11 @@ define(function (require) {
                     this.model.closeGFI();
                 }
              });
+            if (this.model.get("isInitOpen")) {
+                Radio.trigger("Sidebar", "toggle", true);
+                this.model.set("isActive", true);
+                // this.render();
+            }
         },
         render: function () {
             var attr = this.model.toJSON();
