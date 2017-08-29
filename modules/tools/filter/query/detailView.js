@@ -16,7 +16,7 @@ define(function (require) {
             this.listenTo(this.model, {
                 "renderSnippets": this.renderSnippets,
                 "render": this.render,
-                "change:isActive": this.runFilter,
+                "change:isSelected": this.runFilter,
                 "change:isSelected": this.removeView
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {

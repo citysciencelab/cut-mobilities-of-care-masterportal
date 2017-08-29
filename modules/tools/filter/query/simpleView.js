@@ -31,16 +31,24 @@ define(function (require) {
          *
          */
         selectThis: function () {
-            // die Query-Collection hört im Filter-Model auf diesen Trigger
-            this.model.collection.trigger("deselectAllModels");
-            this.model.setIsActive(true);
-            this.model.setIsSelected(true);
-            if (this.model.get("isActive")) {
-                this.model.runFilter();
+            if (this.model.get("isSelected") === true) {
+                this.model.setIsActive(false);
+                this.model.setIsSelected(false);
             }
+            else {
+                // die Query-Collection hört im Filter-Model auf diesen Trigger
+                this.model.collection.trigger("deselectAllModels");
+                this.model.setIsActive(true);
+                this.model.setIsSelected(true);
+            }
+            // if (this.model.get("isActive")) {
+                this.model.runFilter();
+            // }
         },
 
         toggleButton: function (value) {
+
+            // console.log(value);
             if (value === true) {
                 this.$el.addClass("btn-select");
             }

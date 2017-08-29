@@ -21,15 +21,15 @@ define(function (require) {
             this.listenTo(this.get("queryCollection"), {
                 "deselectAllModels": function () {
                     _.each(this.get("queryCollection").models, function (model) {
+                        model.setIsActive(false);
                         model.setIsSelected(false);
                     });
                 },
                 "featureIdsChanged": function () {
-
                     _.each(this.get("queryCollection").groupBy("layerId"), function (group) {
                         var featureIdList = [];
                         _.each(group, function (query) {
-                            if (query.get("isActive") === true) {
+                            if (query.get("isSelected") === true) {
                                 _.each(query.get("featureIds"), function (featureId) {
                                     featureIdList.push(featureId);
                                 });
@@ -37,7 +37,9 @@ define(function (require) {
                         });
                         Radio.trigger("ModelList", "showFeaturesById", group[0].get("layerId"), _.unique(featureIdList));
                     });
-
+                    if (_.contains(this.get("queryCollection").pluck("isSelected"), true) === false) {
+                        Radio.trigger("ModelList", "showAllFeatures", "8190");
+                    }
                 }
             }, this);
             this.setDefaults();
