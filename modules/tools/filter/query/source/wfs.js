@@ -100,7 +100,6 @@ define(function (require) {
         },
 
         runFilter: function () {
-            console.log("runFilter");
             var features = this.runPredefinedRules(),
                 attributes = [],
                 featureIds = [];

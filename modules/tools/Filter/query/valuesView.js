@@ -15,7 +15,7 @@ define(function (require) {
         },
         render: function () {
             var html = "";
-console.log(this.model);
+
             if (this.model.get("type") === "boolean") {
                 var val = this.model.get("value");
 

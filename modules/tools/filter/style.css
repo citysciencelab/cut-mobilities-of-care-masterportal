@@ -2,8 +2,8 @@
     padding: 15px;
     border-bottom: 1px solid rgb(229, 229, 229);
 }
-.filter .simple-views-container .btn-group {
-    margin: 5px;
+.filter .simple-views-container .btn-default {
+    margin: 4px;
 }
 .filter .tool-name-glyph {
     padding-top: 15px;
@@ -17,7 +17,6 @@
 }
 .filter .btn-select {
     color: #fff;
-    border-color: rgb(51, 122, 183);
     background-color: rgba(0, 0, 0,.5);
 }
 .filter .btn-select .name:hover {

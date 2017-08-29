@@ -1,17 +1,18 @@
 define(function (require) {
     var Template = require("text!modules/tools/filter/query/templateSimpleView.html"),
         QuerySimpleView = Backbone.View.extend({
-        // tagName: "button",
-        // className: "btn btn-default",
-        className: "btn-group simple-view",
+        tagName: "button",
+        className: "btn btn-default",
         template: _.template(Template),
         events: {
-            "click button": "selectThis"
+            "click": "selectThis"
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isSelected": this.render,
-                "change:isActive": this.render
+                "change:isSelected change:isActive": function (model, value) {
+                    this.render();
+                    this.toggleButton(value);
+                }
             });
             if (this.model.get("isActive")) {
                 this.model.runFilter();
@@ -36,6 +37,15 @@ define(function (require) {
             this.model.setIsActive(true);
             if (this.model.get("isActive")) {
                 this.model.runFilter();
+            }
+        },
+
+        toggleButton: function (value) {
+            if (value === true) {
+                this.$el.addClass("btn-select");
+            }
+            else {
+                this.$el.removeClass("btn-select");
             }
         }
     });
