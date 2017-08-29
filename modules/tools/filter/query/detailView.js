@@ -4,17 +4,19 @@ define(function (require) {
         QueryValuesView = require("modules/tools/filter/query/valuesView"),
         Template = require("text!modules/tools/filter/query/templateDetailView.html"),
         SnippetSliderView = require("modules/Snippets/slider/range/view"),
+        SnippetCheckboxView = require("modules/Snippets/checkbox/view"),
         QueryDetailView;
 
     QueryDetailView = Backbone.View.extend({
         template: _.template(Template),
         events: {
-            "click .toggleIsActive": "toggleIsActive"
+            "change .checkbox-toggle" : "toggleIsActive"
         },
         initialize: function () {
             this.listenTo(this.model, {
                 "renderSnippets": this.renderSnippets,
                 "render": this.render,
+                "change:isActive": this.runFilter,
                 "change:isSelected": this.removeView
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
@@ -27,9 +29,21 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            return this.$el.html(this.template(attr));
+            this.$el.html(this.template(attr));
+            this.$el.find(".toggle").append(new SnippetCheckboxView({
+                values: [{
+                        size: "small",
+                        label: "Filter:",
+                        labelChecked: "An",
+                        labelUnchecked: "Aus",
+                        isChecked: this.model.get("isActive")
+                    }]
+            }).render());
+            return this.$el;
         },
-
+        runFilter: function () {
+            this.model.runFilter();
+        },
         renderSnippets: function () {
             var view;
 
@@ -53,27 +67,26 @@ define(function (require) {
          * Die Werte werden in den Snippets gespeichert.
          */
         renderValueViews: function () {
+            var countSelectedValues = 0;
             _.each(this.model.get("snippetCollection").models, function (snippet) {
                 _.each(snippet.get("valuesCollection").models, function (valueModel) {
                     valueModel.trigger("removeView");
+
                     if (valueModel.get("isSelected")) {
+                        countSelectedValues++;
                         var view = new QueryValuesView({model: valueModel});
 
                         this.$el.find(".value-views-container").append(view.render());
                     }
                 }, this);
             }, this);
+
+            //this.model.setIsNoValueSelected(countSelectedValues === 0);
+            countSelectedValues === 0 ? this.$el.find(".default-text").show() : this.$el.find(".default-text").hide();
         },
-        toggleIsActive: function () {
-            this.model.setIsActive(!this.model.get("isActive"));
-            this.$el.find("button .glyphicon").toggleClass("glyphicon-ok");
-            this.$el.find("button .glyphicon").toggleClass("glyphicon-remove");
-            if (this.model.get("isActive")) {
-                this.$el.find(".toggleIsActive").prop("title", "Filter aktiv. Klick zum Deaktivieren.");
-            }
-            else {
-                this.$el.find(".toggleIsActive").prop("title", "Filter inaktiv. Klick zum Aktivieren.");
-            }
+        toggleIsActive: function (evt) {
+            this.model.setIsActive($(evt.target).prop("checked"));
+            console.log(this.model.get("isActive"));
         },
         removeView: function (model, value) {
             if (value === false) {

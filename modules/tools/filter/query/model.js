@@ -106,6 +106,9 @@ define(function (require) {
         },
 
         setIsSelected: function (value) {
+            if (value) {
+                this.setIsActive(true);
+            }
             this.set("isSelected", value);
         },
         setIsActive: function (value) {
@@ -114,6 +117,9 @@ define(function (require) {
 
         setFeatureIds: function (value) {
             this.set("featureIds", value);
+        },
+        setIsNoValueSelected: function (value) {
+            this.set("isNoValueSelected", value);
         }
     });
 

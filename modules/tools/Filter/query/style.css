@@ -26,17 +26,28 @@
     padding: 15px;
     color:#000;
 }
-.filter .value-views-container .value-view-text {
+.filter .detailview-head {
+    padding: 15px;
+}
+.filter .detailview-head .toggle {
+    float: right;
+}
+.filter .detailview-head .heading {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    width: 100%;
     text-align: center;
     float: left;
-    font-size: 16px;
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 .filter .value-views-container .text {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     font-size: 16px;
     float:left;
+}
+.filter .value-views-container .default-text {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 12px;
+    float:right;
 }
 .filter .valueView .line-through .value-text {
     color: #fff;

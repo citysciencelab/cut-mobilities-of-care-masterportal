@@ -3,6 +3,7 @@ var Radio;
 require.config({
     waitSeconds: 60,
     paths: {
+        "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.min",
         openlayers: "../node_modules/openlayers/dist/ol-debug",
         jquery: "../node_modules/jquery/dist/jquery.min",
         jqueryui: "../node_modules/jquery-ui/ui",
