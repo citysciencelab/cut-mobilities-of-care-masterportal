@@ -9,7 +9,7 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isSelected change:isActive": function (model, value) {
+                "change:isSelected": function (model, value) {
                     this.render();
                     this.toggleButton(value);
                 }
@@ -33,8 +33,8 @@ define(function (require) {
         selectThis: function () {
             // die Query-Collection hört im Filter-Model auf diesen Trigger
             this.model.collection.trigger("deselectAllModels");
-            this.model.setIsSelected(true);
             this.model.setIsActive(true);
+            this.model.setIsSelected(true);
             if (this.model.get("isActive")) {
                 this.model.runFilter();
             }
