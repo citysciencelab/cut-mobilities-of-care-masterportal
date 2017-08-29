@@ -33,6 +33,7 @@ define(function (require) {
         },
 
         addSnippet: function (featureAttribute) {
+            featureAttribute.values.sort();
             if (featureAttribute.type === "string") {
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
