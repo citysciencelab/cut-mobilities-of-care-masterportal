@@ -24,9 +24,11 @@ define(function (require) {
             $("#map").css("width", "100%");
         },
         render: function () {
-            $("#map").css("width", "70%");
+            var mapHeight = $("#map").height();
 
+            $("#map").css("width", "70%");
             $("#map").after(this.$el);
+            $(".sidebar").css("height", mapHeight + "px");
         },
         closeSidebar: function () {
             this.model.setIsOpen(false);
