@@ -15,7 +15,7 @@ define(function (require) {
         },
         render: function () {
             var html = "";
-console.log(this.model);
+
             if (this.model.get("type") === "boolean") {
                 var val = this.model.get("value");
 
@@ -29,7 +29,7 @@ console.log(this.model);
                 }
             }
             else if (this.model.get("type") === "integer") {
-                html = "<span>" + this.model.get("attr") + this.model.get("displayName") + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
+                html = "<span>" + this.model.get("attr") + " " + this.model.get("displayName") + " " + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
             }
             else {
                 html = "" + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";

@@ -21,7 +21,7 @@ define(function (require) {
                 {
                     id: "minModel",
                     attr: this.get("name"),
-                    displayName: ">=",
+                    displayName: "ab",
                     value: this.get("rangeMinValue"),
                     isSelected: false,
                     type: this.get("type")
@@ -29,7 +29,7 @@ define(function (require) {
                 {
                     id: "maxModel",
                     attr: this.get("name"),
-                    displayName: "<=",
+                    displayName: "bis",
                     value: this.get("rangeMaxValue"),
                     isSelected: false,
                     type: this.get("type")

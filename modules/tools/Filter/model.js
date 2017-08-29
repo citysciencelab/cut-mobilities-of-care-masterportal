@@ -26,7 +26,6 @@ define(function (require) {
                 },
                 "featureIdsChanged": function () {
 
-                    // console.log(this.get("queryCollection").groupBy("layerId"));
                     _.each(this.get("queryCollection").groupBy("layerId"), function (group) {
                         var featureIdList = [];
                         _.each(group, function (query) {
@@ -36,8 +35,6 @@ define(function (require) {
                                 });
                             }
                         });
-                        // console.log(featureIdList);
-                        // console.log(_.unique(featureIdList));
                         Radio.trigger("ModelList", "showFeaturesById", group[0].get("layerId"), _.unique(featureIdList));
                     });
 

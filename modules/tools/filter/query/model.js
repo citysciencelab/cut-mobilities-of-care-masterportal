@@ -115,6 +115,9 @@ define(function (require) {
 
         setFeatureIds: function (value) {
             this.set("featureIds", value);
+        },
+        setIsNoValueSelected: function (value) {
+            this.set("isNoValueSelected", value);
         }
     });
 
