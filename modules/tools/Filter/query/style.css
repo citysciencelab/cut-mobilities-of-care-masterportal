@@ -50,7 +50,6 @@
     position: relative;
 }
 .filter .strikethrough:before {
-    z-index: 99999;
     color:red;
     position: absolute;
     content: "";
