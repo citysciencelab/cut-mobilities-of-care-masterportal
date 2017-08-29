@@ -21,16 +21,18 @@ define(function (require) {
                 {
                     id: "minModel",
                     attr: this.get("name"),
-                    displayName: ">=",
+                    displayName: "ab",
                     value: this.get("rangeMinValue"),
-                    isSelected: false
+                    isSelected: false,
+                    type: this.get("type")
                 },
                 {
                     id: "maxModel",
                     attr: this.get("name"),
-                    displayName: "<=",
+                    displayName: "bis",
                     value: this.get("rangeMaxValue"),
-                    isSelected: false
+                    isSelected: false,
+                    type: this.get("type")
                 }
             ]);
         },

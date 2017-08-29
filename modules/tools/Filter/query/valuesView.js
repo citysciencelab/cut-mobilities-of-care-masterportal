@@ -28,6 +28,9 @@ define(function (require) {
                     html = "<span class='strikethrough'><span class='value-text'>" + this.model.get("attr") + "</span></span><span class='glyphicon glyphicon-remove'></span>";
                 }
             }
+            else if (this.model.get("type") === "integer") {
+                html = "<span>" + this.model.get("attr") + " " + this.model.get("displayName") + " " + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
+            }
             else {
                 html = "" + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
             }

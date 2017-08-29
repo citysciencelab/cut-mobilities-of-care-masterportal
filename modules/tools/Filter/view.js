@@ -50,11 +50,13 @@ define(function (require) {
         },
 
         renderDetailView: function (selectedModel) {
-            var view = new QueryDetailView({model: selectedModel});
+            if (_.isUndefined(selectedModel) === false) {
+                var view = new QueryDetailView({model: selectedModel});
 
-            this.$el.find(".detail-view-container").append(view.render());
-            view.renderSnippets();
-            view.renderValueViews();
+                this.$el.find(".detail-view-container").append(view.render());
+                view.renderSnippets();
+                view.renderValueViews();
+            }
         },
 
         renderSimpleViews: function () {

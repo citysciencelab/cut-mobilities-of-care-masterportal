@@ -68,6 +68,7 @@ define(function (require) {
          */
         renderValueViews: function () {
             var countSelectedValues = 0;
+
             _.each(this.model.get("snippetCollection").models, function (snippet) {
                 _.each(snippet.get("valuesCollection").models, function (valueModel) {
                     valueModel.trigger("removeView");
@@ -81,12 +82,10 @@ define(function (require) {
                 }, this);
             }, this);
 
-            //this.model.setIsNoValueSelected(countSelectedValues === 0);
             countSelectedValues === 0 ? this.$el.find(".default-text").show() : this.$el.find(".default-text").hide();
         },
         toggleIsActive: function (evt) {
             this.model.setIsActive($(evt.target).prop("checked"));
-            console.log(this.model.get("isActive"));
         },
         removeView: function (model, value) {
             if (value === false) {
