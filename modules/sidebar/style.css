@@ -1,4 +1,6 @@
 .sidebar {
- width: 30%;
- float: left;
+    height: 100%;
+    width: 30%;
+    float: left;
+    overflow: auto;
 }
