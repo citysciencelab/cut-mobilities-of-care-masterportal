@@ -60,7 +60,7 @@ define(function (require) {
                     if (featureAttribute.type === "integer") {
                         values.push(parseInt(feature.get(featureAttribute.name), 10));
                     }
-                    if (featureAttribute.type === "boolean") {
+                    else if (featureAttribute.type === "boolean") {
                         if (feature.get(featureAttribute.name) === "true") {
                             values.push("Ja");
                         }
@@ -143,7 +143,9 @@ define(function (require) {
 
             booltest = _.every(attributes, function (attribute) {
                 return _.find(attribute.values, function (value) {
-                    return feature.get(attribute.attrName).indexOf(value.value) !== -1;
+                    if (_.isUndefined(feature.get(attribute.attrName)) === false) {
+                        return feature.get(attribute.attrName).indexOf(value.value) !== -1;
+                    }
                 });
             });
             return booltest;
