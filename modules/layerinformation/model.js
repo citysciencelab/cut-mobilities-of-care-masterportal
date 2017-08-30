@@ -100,7 +100,8 @@ define(function (require) {
         },
 
         parse: function (xmlDoc) {
-            var layername = this.get("layername"); // CI_Citation fall-back-level
+            var layername = this.get("layername"),
+                layerid = this.get("id"); // CI_Citation fall-back-level
 
             return {
                 "abstractText": function () {
@@ -163,7 +164,17 @@ define(function (require) {
                             downloadLinks.push([linkName, link]);
                         }
                     });
+                                debugger;
                     return downloadLinks;
+                }(),
+                "wmsUrl": function () {               
+                    var layerAttr = Backbone.Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerid}),
+                        wmsUrl;
+
+                    if (layerAttr.typ == "WMS") {
+                        wmsUrl = layerAttr.url;
+                    }
+                    return wmsUrl;
                 }()
             };
         },

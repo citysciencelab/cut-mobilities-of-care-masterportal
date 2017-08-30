@@ -11,6 +11,26 @@
     margin: 15px 0px 10px 0px;
 }
 
+#layerinformation-desktop .content > ul > li{
+    border-right: 1px solid rgb(229, 229, 229);
+    border-left: 1px solid rgb(229, 229, 229);
+    border-top: 1px solid rgb(229, 229, 229);
+    background-color: white;
+}
+
+#layerinformation-desktop .content > ul > li.active{
+    border-right: 1px solid rgb(229, 229, 229);
+    border-left: 1px solid rgb(229, 229, 229);
+    border-top: 1px solid rgb(229, 229, 229);
+    background-color: lightgrey;
+}
+
+#layerinformation-desktop .content > ul > li > a{
+    color: black;
+}
+
+
+
 /***** Destop *****/
 #layerinformation-desktop {
     position: absolute;
