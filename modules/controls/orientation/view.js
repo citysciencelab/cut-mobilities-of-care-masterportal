@@ -49,6 +49,9 @@ define([
                         new POIView();
                     });
                 }
+
+                // initialer check, ob WFS-Layer sichtbar sind, damit nach render #geolocatePOI sichtbar wird.
+                this.checkWFS();
             }
         },
 
