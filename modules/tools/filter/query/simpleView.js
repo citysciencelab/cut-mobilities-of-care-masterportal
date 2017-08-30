@@ -25,6 +25,9 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
+            if (this.model.get("isSelected")) {
+                this.toggleButton(true);
+            }
             return this.$el.html(this.template(attr));
         },
         /**
@@ -48,7 +51,6 @@ define(function (require) {
 
         toggleButton: function (value) {
 
-            // console.log(value);
             if (value === true) {
                 this.$el.addClass("btn-select");
             }
