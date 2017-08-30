@@ -150,14 +150,16 @@ define(function (require) {
                 visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"}),
                 visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList),
                 eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
-                isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel);
-
-            this.setCoordinate(evt.coordinate);
+                isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel),
+                isXButton = this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true;
 
             // Abbruch, wenn auf SearchMarker x geklickt wird.
-            if (this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true) {
+            if (isXButton) {
+                this.setIsVisible(false);
                 return;
             }
+
+            this.setCoordinate(evt.coordinate);
 
             // Vector
             Radio.trigger("ClickCounter", "gfi");
@@ -316,7 +318,6 @@ define(function (require) {
                 rightSM = button.right;
 
             if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
-                this.setIsVisible(false);
                 return true;
             }
             else {
