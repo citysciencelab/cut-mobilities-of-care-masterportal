@@ -156,10 +156,8 @@ footer: {
 |----|-------------|---|-------|------------|
 |imglink|ja|String||Link für den Marker.|
 |layerid|ja|String||ID des Layers an den die Marker gekoppelt werden.|
-|typename|ja|String||Typename des WFS. Entspricht Tabelle. Wird für den WFS-Filter-Request benötigt.|
-|url|ja|String||Die URL zum WFS.|
+|WFSid|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
 |attribute|ja|String||Attributname. Entspricht Attribut nach dem der WFS gefiltert wird.|
-|version|ja|String||Die Version des WFS.|
 
 **Beispiel:**
 
@@ -167,11 +165,9 @@ footer: {
 #!json
 
 zoomtofeature: {
-            url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
-            version: "1.1.0",
-            typename: "app:hamburgconvention",
             attribute: "flaechenid",
             imglink: "../img/location_eventlotse.svg",
+            WFSid: "4560",
             layerid: "4561"
         }
 
