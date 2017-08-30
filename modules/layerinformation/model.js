@@ -10,7 +10,9 @@ define(function (require) {
             // konfiguriert in der rest-services.json
             cswId: "3",
             // true wenn die Layerinformation sichtbar ist
-            isVisible: false
+            isVisible: false,
+            downloadLinks: null,
+            legendURL: null
         },
 
         /**
@@ -163,7 +165,7 @@ define(function (require) {
                             downloadLinks.push([linkName, link]);
                         }
                     });
-                    return downloadLinks;
+                    return downloadLinks.length > 0 ? downloadLinks : null;
                 }()
             };
         },
