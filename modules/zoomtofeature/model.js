@@ -105,6 +105,7 @@ define([
                 version = LayerPrefs.version,
                 typename = LayerPrefs.name,
                 data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename;
+
             this.sendRequest(url, data);
         },
 
