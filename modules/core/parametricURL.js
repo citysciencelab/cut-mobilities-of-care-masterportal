@@ -59,13 +59,24 @@ define([
                 visibilityListString = _.has(this.getResult(), "VISIBILITY") ? _.values(_.pick(this.getResult(), "VISIBILITY"))[0] : "",
                 transparencyListString = _.has(this.getResult(), "TRANSPARENCY") ? _.values(_.pick(this.getResult(), "TRANSPARENCY"))[0] : "",
                 layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
-                visibilityList = visibilityListString === "" ? _.map(layerIdList, function () {
-                    return true;
-                }) : visibilityListString.indexOf(",") > -1 ? _.map(visibilityListString.split(","), function (val) {
-                    return _String.toBoolean(val);
-                }) : new Array(_String.toBoolean(visibilityListString)),
+                visibilityList,
                 transparencyList,
                 layerParams = [];
+
+            // Sichtbarkeit auslesen. Wenn fehlend true
+            if (visibilityListString === "") {
+                visibilityList = _.map(layerIdList, function () {
+                   return true;
+               });
+            }
+            else if (visibilityListString.indexOf(",") > -1) {
+                visibilityList = _.map(visibilityListString.split(","), function (val) {
+                     return _String.toBoolean(val);
+                 });
+            }
+            else {
+                visibilityList = new Array(_String.toBoolean(visibilityListString));
+            }
 
             // Tranzparenzwert auslesen. Wenn fehlend Null.
             if (transparencyListString === "") {
@@ -79,31 +90,32 @@ define([
                  });
             }
             else {
-                transparencyList = [parseInt(transparencyListString, 10)];
+                transparencyList = [parseInt(transparencyListString, 0)];
             }
 
             if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
                 Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Die Angaben zu LAYERIDS passen nicht zu VISIBILITY bzw. TRANSPARENCY. Sie müssen jeweils in der gleichen Anzahl angegeben werden.", kategorie: "alert-warning"});
+                return;
             }
-            else {
-                _.each(layerIdList, function (val, index) {
-                     var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                     layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
-                     treeType = Radio.request("Parser", "getTreeType");
 
-                     layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
+            _.each(layerIdList, function (val, index) {
+                 var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
+                 layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
+                 treeType = Radio.request("Parser", "getTreeType");
 
-                     if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
-                         var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
+                 layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
 
-                         Radio.trigger("Parser", "addItemAtTop", layerToPush);
-                     }
-                     else if (_.isUndefined(layerConfigured)) {
-                         Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
-                     }
-                });
-                this.setLayerParams(layerParams);
-            }
+                 if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
+                     var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
+
+                     Radio.trigger("Parser", "addItemAtTop", layerToPush);
+                 }
+                 else if (_.isUndefined(layerConfigured)) {
+                     Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
+                 }
+            }, this);
+
+            this.setLayerParams(layerParams);
         },
         createLayerParamsUsingMetaId: function (metaIds) {
             var layers = [],
