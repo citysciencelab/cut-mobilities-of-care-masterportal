@@ -63,9 +63,11 @@ define(function (require) {
                     else if (featureAttribute.type === "boolean") {
                         if (feature.get(featureAttribute.name) === "true") {
                             values.push("Ja");
+                            feature.set(featureAttribute.name, "Ja");
                         }
                         else {
                             values.push("Nein");
+                            feature.set(featureAttribute.name, "Nein");
                         }
                     }
                     else {
