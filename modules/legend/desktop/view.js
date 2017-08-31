@@ -29,12 +29,13 @@ define([
                 "toggleLegendWin": this.toggle
             });
 
-            this.listenTo(Radio.channel("Util"), {
-                "isViewMobileChanged": this.render
-            });
-
             this.render();
+
             Radio.trigger("Autostart", "initializedModul", "legend");
+
+            if (this.model.getVisible()) {
+                this.toggle();
+            }
         },
 
         paramsChanged: function () {
@@ -54,8 +55,10 @@ define([
         },
 
         toggle: function () {
-            var legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"});
+            var legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"}),
+                visible = !this.$el.is(":visible");
 
+            this.model.setVisible(visible); // speichere neuen Status
             this.render();
             this.$el.toggle();
 

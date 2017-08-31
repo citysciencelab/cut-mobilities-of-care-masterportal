@@ -9,6 +9,9 @@ define([
         id: "base-modal-legend",
         className: "modal bs-example-modal-sm legend fade in",
         template: _.template(LegendTemplate),
+        events: {
+            "click .glyphicon-remove": "toggle"
+        },
         initialize: function (Model) {
             this.model = Model;
 
@@ -21,6 +24,10 @@ define([
             });
 
             this.render();
+
+            if (this.model.getVisible()) {
+                this.toggle();
+            }
         },
 
         render: function () {
@@ -30,6 +37,9 @@ define([
         },
 
         toggle: function () {
+            var visible = !this.$el.is(":visible");
+
+            this.model.setVisible(visible); // speichere neuen Status
             this.$el.modal({
                 backdrop: true,
                 show: true

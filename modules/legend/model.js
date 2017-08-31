@@ -10,7 +10,8 @@ define([
             legendParams: [],
             wmsLayerList: [],
             paramsStyleWMS: [],
-            paramsStyleWMSArray: []
+            paramsStyleWMSArray: [],
+            visible: false
         },
 
         initialize: function () {
@@ -35,6 +36,14 @@ define([
             });
 
             this.setLayerList();
+        },
+
+        setVisible: function (val) {
+            this.set("visible", val);
+        },
+
+        getVisible: function () {
+            return this.get("visible");
         },
 
         updateParamsStyleWMSArray: function (params) {
