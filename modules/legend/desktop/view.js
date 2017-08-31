@@ -1,21 +1,19 @@
 define([
     "backbone",
-    "text!modules/legend/template.html",
-    "text!modules/legend/templateMobile.html",
-    "modules/legend/model",
+    "text!modules/legend/desktop/template.html",
     "backbone.radio",
     "jqueryui/widgets/draggable"
-], function (Backbone, LegendTemplate, LegendTemplateMobile, Legend, Radio) {
+], function (Backbone, LegendTemplate, Radio) {
 
     var LegendView = Backbone.View.extend({
-        model: new Legend(),
         className: "legend-win",
         template: _.template(LegendTemplate),
-        templateMobile: _.template(LegendTemplateMobile),
         events: {
             "click .glyphicon-remove": "toggle"
         },
-        initialize: function () {
+        initialize: function (Model) {
+            this.model = Model;
+
             $(window).resize(function () {
                 if ($(".legend-win-content").height() !== null) {
                     $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
@@ -68,6 +66,14 @@ define([
                 legendModel.setIsActive(false);
                 Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
             }
+        },
+        /**
+         * Entfernt diese view
+         */
+        removeView: function () {
+            this.$el.hide();
+
+            this.remove();
         }
     });
 
