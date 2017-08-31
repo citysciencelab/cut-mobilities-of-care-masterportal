@@ -9,7 +9,9 @@ define(function (require) {
 
             // parent (QueryModel) initialize
             this.superInitialize();
-            this.requestMetadata(layerObject.get("url"), layerObject.get("featureType"), layerObject.get("version"));
+            if (!_.isUndefined(layerObject)) {
+                this.requestMetadata(layerObject.get("url"), layerObject.get("featureType"), layerObject.get("version"));
+            }
         },
 
         /**
@@ -100,7 +102,6 @@ define(function (require) {
             }, this);
             return newFeatures;
         },
-
         runFilter: function () {
             var features = this.runPredefinedRules(),
                 attributes = [],
@@ -115,7 +116,7 @@ define(function (require) {
 
                 if (selectedModels.length > 0) {
                     _.each(selectedModels, function (model) {
-                        obj.values.push({value: model.get("value")});
+                        obj.values.push(model.get("value"));
                     });
                     attributes.push(obj);
                 }
@@ -123,7 +124,7 @@ define(function (require) {
 
             if (attributes.length > 0) {
                 _.each(features, function (feature) {
-                    var booltest = this.findFeatureIds(attributes, feature);
+                    var booltest = this.isFilterMatch(feature, attributes);
 
                     if (booltest) {
                         featureIds.push(feature.getId());
@@ -139,18 +140,26 @@ define(function (require) {
             this.trigger("featureIdsChanged");
         },
 
-        findFeatureIds: function (attributes, feature) {
-            var booltest = false;
+        isValueMatch: function (feature, attribute) {
+            var isMatch = false;
 
-            booltest = _.every(attributes, function (attribute) {
-                return _.find(attribute.values, function (value) {
+            isMatch = _.find(attribute.values, function (value) {
                     if (_.isUndefined(feature.get(attribute.attrName)) === false) {
-                        return feature.get(attribute.attrName).indexOf(value.value) !== -1;
+                        return feature.get(attribute.attrName).indexOf(value) !== -1;
                     }
                 });
-            });
-            return booltest;
+            return !_.isUndefined(isMatch);
         },
+
+        isFilterMatch: function (feature, filterAttr) {
+            var isMatch = false;
+
+            isMatch = _.every(filterAttr, function (attribute) {
+                return this.isValueMatch(feature, attribute);
+            }, this);
+            return isMatch;
+        },
+
 
         /**
          * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten
