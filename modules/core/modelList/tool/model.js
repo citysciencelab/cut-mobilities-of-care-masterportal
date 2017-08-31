@@ -21,16 +21,21 @@ define(function (require) {
             // Name (Überschrift) der Funktion
             name: "",
             // true wenn das Tool aktiviert ist
-            isActive: false
+            isActive: false,
+            // deaktiviert GFI, wenn dieses tool geöffnet wird
+            deaktivateGFI: false,
+            isVisibleInMenu: true
         },
 
         initialize: function () {
             var channel = Radio.channel("Tool");
 
             this.listenTo(this, {
-                "change:isActive": function () {
-                    this.activateTool();
-                    channel.trigger("activatedTool", this.getId());
+                "change:isActive": function (model, value) {
+                    if (value) {
+                        this.activateTool();
+                        channel.trigger("activatedTool", this.getId(), this.get("deaktivateGFI"));
+                    }
                 }
             });
         },
@@ -39,12 +44,16 @@ define(function (require) {
             if (this.getIsActive() === true) {
                 // triggert das Ändern eines Tools
                 Radio.trigger("ClickCounter", "toolChanged");
-                this.collection.setActiveToolToFalse(this);
+                this.collection.setActiveToolToFalse(this, this.get("deaktivateGFI"));
+
                 if (this.getId() === "legend") {
                     Radio.trigger("Legend", "toggleLegendWin");
                 }
                 else if (this.getId() === "featureLister") {
                     Radio.trigger("FeatureListerView", "toggle");
+                }
+                else if (this.getId() === "filter") {
+                    Radio.trigger("Sidebar", "toggle", true);
                 }
                 else {
                     Radio.trigger("Window", "toggleWin", this);
@@ -71,6 +80,9 @@ define(function (require) {
 
         getEmail: function () {
             return this.get("email");
+        },
+        getIsVisibleInMenu: function () {
+            return this.get("isVisibleInMenu");
         }
     });
 

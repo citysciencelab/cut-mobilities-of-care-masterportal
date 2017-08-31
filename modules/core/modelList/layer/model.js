@@ -430,6 +430,10 @@ define(function (require) {
             else {
                     return undefined;
             }
+        },
+
+        getUrl: function () {
+            return this.get("url");
         }
     });
 

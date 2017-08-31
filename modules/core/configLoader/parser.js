@@ -224,7 +224,6 @@ define([
         },
 
         addLayer: function (name, id, parentId, level, layers, url, version) {
-            console.log(name);
             var layer = {
                 type: "layer",
                 name: name,

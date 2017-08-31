@@ -135,7 +135,6 @@ define(function (require) {
                 context: this,
                 success: successFunction,
                 error: function (jqXHR, errorText, error) {
-                    console.log(error);
                 }
             });
         },

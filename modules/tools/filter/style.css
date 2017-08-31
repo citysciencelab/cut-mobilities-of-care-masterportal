@@ -1,0 +1,31 @@
+.filter .simple-views-container {
+    padding: 15px;
+    border-bottom: 1px solid rgb(229, 229, 229);
+}
+.filter .simple-views-container .btn-default {
+    margin: 4px;
+}
+.filter .tool-name-glyph {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.filter .tool-name {
+    padding-top: 15px;
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 16px;
+}
+.filter .btn-select {
+    color: #fff;
+    background-color: rgba(0, 0, 0,.5);
+}
+.filter .btn-select .name:hover {
+    font-weight: normal;
+}
+.filter .underline {
+    width: 100%;
+    border-bottom: 1px solid rgb(229,229,229);
+}
+.filter .underline .close{
+    padding: 10px!important;
+}

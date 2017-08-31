@@ -20,8 +20,13 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
-            return this;
+            if (this.model.getIsVisibleInMenu() !== false) {
+                this.$el.html(this.template(attr));
+                return this;
+            }
+            else {
+                return "";
+            }
         },
         checkItem: function () {
             if (this.model.getId() === "legend") {
