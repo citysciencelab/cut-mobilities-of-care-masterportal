@@ -11,24 +11,9 @@
     margin: 15px 0px 10px 0px;
 }
 
-#layerinformation-desktop .content > ul > li{
-    border-right: 1px solid rgb(229, 229, 229);
-    border-left: 1px solid rgb(229, 229, 229);
-    border-top: 1px solid rgb(229, 229, 229);
+#layerinformation-desktop .content > ul  {
     background-color: white;
 }
-
-#layerinformation-desktop .content > ul > li.active{
-    border-right: 1px solid rgb(229, 229, 229);
-    border-left: 1px solid rgb(229, 229, 229);
-    border-top: 1px solid rgb(229, 229, 229);
-    background-color: lightgrey;
-}
-
-#layerinformation-desktop .content > ul > li > a{
-    color: black;
-}
-
 
 
 /***** Destop *****/
@@ -61,4 +46,20 @@
     overflow-x: hidden;
     padding: 5px 10px;
     font-size: 12px;
+}
+
+
+.layerinformation-modal .nav-tabs > li  {
+    font-size: 12px;
+    max-width: 33%;
+}
+
+
+
+.layerinformation-modal .tab-content .tab-pane > ul>  li > a {
+    font-size: 12px;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 95%;
+    overflow: hidden;
 }

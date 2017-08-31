@@ -18,10 +18,10 @@
         <p>Stand der Daten: <%= date %></p>
     <% } %>
         <hr>
-        <ul class="nav nav-pills">
+        <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
             <% if (downloadLinks.length > 0) { %>
-            <li><a data-toggle="tab" href="#download">Datensatz downloaden</a></li>
+            <li><a data-toggle="tab" href="#download">Datensatz herunterladen</a></li>
             <% } %>
             <% if (wmsUrl) { %>
             <li><a data-toggle="tab" href="#wmsurl">WMS-Adresse</a></li>

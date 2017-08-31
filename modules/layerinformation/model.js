@@ -164,10 +164,9 @@ define(function (require) {
                             downloadLinks.push([linkName, link]);
                         }
                     });
-                                debugger;
                     return downloadLinks;
                 }(),
-                "wmsUrl": function () {               
+                "wmsUrl": function () {
                     var layerAttr = Backbone.Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerid}),
                         wmsUrl;
 
