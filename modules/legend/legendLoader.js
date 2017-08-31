@@ -14,23 +14,22 @@ define([
 
             if (isMobile) {
                 require(["modules/legend/mobile/view"], function (Legend) {
-                    caller.currentMenu = new Legend(Model);
+                    caller.currentLegend = new Legend(Model);
                 });
             }
             else {
                 require(["modules/legend/desktop/view"], function (Legend) {
-                    caller.currentMenu = new Legend(Model);
+                    caller.currentLegend = new Legend(Model);
                 });
             }
         };
 
-        this.currentMenu = this.loadMenu(this);
+        this.currentLegend = this.loadMenu(this, false);
 
         Radio.on("Util", {
             "isViewMobileChanged": function () {
-                this.currentMenu.removeView();
-
-                this.currentMenu = this.loadMenu(this);
+                this.currentLegend.removeView();
+                this.currentLegend = this.loadMenu(this);
             }
         }, this);
     };
