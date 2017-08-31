@@ -279,11 +279,13 @@ define([
             // 2. Verberge Suchmenü
             this.hideMenu();
             // 3. Zoome ggf. auf Ergebnis
+            Radio.trigger("GFI", "setIsVisible", false);
+            // 4. Zoome ggf. auf Ergebnis
             Radio.trigger("MapMarker", "zoomTo", hit);
-            // 4. Triggere Treffer über Radio
+            // 5. Triggere Treffer über Radio
             // Wird benötigt für IDA und sgv-online, ...
             Radio.trigger("Searchbar", "hit", hit);
-            // 5. Beende Event
+            // 6. Beende Event
             if (evt) {
                 evt.stopPropagation();
             }

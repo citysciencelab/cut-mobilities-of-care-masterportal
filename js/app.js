@@ -22,6 +22,11 @@ define("app",
     new CRS();
     new Map();
 
+    // Graph laden
+    require(["modules/tools/graph/model"], function (GraphModel) {
+        new GraphModel();
+    });
+
     // Module laden
     require(["modules/menu/menuLoader"], function (MenuLoader) {
         new MenuLoader();

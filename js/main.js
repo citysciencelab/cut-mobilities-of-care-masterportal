@@ -22,7 +22,9 @@ require.config({
         geoapi: "GeoAPI",
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
         app: "app",
-        modules: "../modules"
+        templates: "../templates",
+        modules: "../modules",
+        d3: "../node_modules/d3/build/d3.min"
     },
     shim: {
         bootstrap: {
