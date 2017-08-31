@@ -14,10 +14,10 @@ Es ist möglich, über Parameter in der URL spezielle Einstellungen der Konfigur
 |bezirk|Zoomt auf den Umring des angegebenen Hamburger Bezirks.|`&bezirk=wandsbek`|
 |center|Verschiebt den Kartenausschnitt auf die angegebene Adresse. Die Koordinaten müssen dem angegebenen Koordinatensystem angehören (siehe [config.namedProjections.epsg](config.js.md)).|`&center=565874,5934140`|
 |ismenubarvisible|Steuert das initiale Anzeigen oder Verbergen der Menüleiste.|`&ismenubarvisible=false`|
-|layerids|Legt fest, dass die Layer mit den angegebenen IDs initial ausgewählt und sichtbar geschaltet werden.|`&layerids=453,2128`|
+|layerids|Mit diesem Parameter können initial anzuzeigende Layer überschrieben werden. Die Wirkung ist von [config.Portalconfig.Baumtyp](config.json.md) abhängig. Bei *light* werden die layerIds ergänzend sichtbar geschaltet. Ansonsten wird die Voreinstellung komplett überschrieben.***Diese Einstellung kann um [Sichtbarkeit](#markdown-header-visibility) und [Transparenz](#markdown-header-transparency) ergänzt werden.|`&layerids=453,2128`|
 |query|Führt eine Adresssuche im Suchschlitz mit dem angegebenen String aus.|`&query=Tegelweg`|
 |isinitopen|Die übergebene Modul-ID wird initial geöffnet. Von Modulen des Typs Tools, die sich in einem Fenster öffnen, kann immer nur eins offen sein. |`&isinitopen=routing`|
-|transparency|nur gemeinsam mit layerids zu verwenden. Transparenz der Layer von 0-100. Kann für jeden Layer in layerids angegeben werden.|`&layerids=453,2128&transparency=0,40`|
-|visibility|nur gemeinsam mit layerids zu verwenden. Sichtbarkeit der Layer als Boolean (true, false)|`&layerids=453,2128&visibility=true,false`|
+|######transparency|nur gemeinsam mit layerids zu verwenden. Transparenz der Layer von 0-100. Kann für jeden Layer in layerids angegeben werden.|`&layerids=453,2128&transparency=0,40`|
+|######visibility|nur gemeinsam mit layerids zu verwenden. Sichtbarkeit der Layer als Boolean (true, false)|`&layerids=453,2128&visibility=true,false`|
 |zoomlevel|Zoomt auf die Maßstabsstufe, die angegeben wurde (siehe [config.view.options](config.js.md)).|`&zoomlevel=2`|
 |featureid|Zoomt auf die Features des WFS-Dienstes, der in der config.js konfiguriert ist (siehe [config.zoomtofeature](config.js.md)).|`&featureid=18,26`|
