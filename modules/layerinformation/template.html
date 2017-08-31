@@ -17,19 +17,18 @@
     <% if (date !== null) { %>
         <p>Stand der Daten: <%= date %></p>
     <% } %>
-    <% if (downloadLinks.length > 0) { %>
+    <% if (!_.isNull(legendURL) || !_.isNull(downloadLinks)) { %>
         <hr>
         <ul class="nav nav-pills">
-            <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
-            <li><a data-toggle="tab" href="#download">Download</a></li>
+            <li class="<% !_.isNull(legendURL) ? print ('active') : print ('hidden') %>"><a data-toggle="tab" href="#legende">Legende</a></li>
+            <li class="<% !_.isNull(downloadLinks) && _.isNull(legendURL) === true ? print ('active') : _.isNull(downloadLinks) ? print ('hidden') : print ('') %>"><a data-toggle="tab" href="#download">Download</a></li>
         </ul>
         <br>
         <div class="tab-content">
+            <% if (!_.isNull(legendURL)) { %>
             <div id="legende" class="tab-pane fade in active">
                 <p>
-                   <%
-                      if (legendURL.typ === "WFS") {
-                      %>
+                   <% if (legendURL.typ === "WFS") { %>
                         <table>
                         <%
                         _.each(legendURL.img, function (image, index2) {
@@ -95,13 +94,16 @@
                       }}} %>
                     </p>
             </div>
-            <div id="download" class="tab-pane fade">
+            <% } %>
+            <% if (!_.isNull(downloadLinks)) { %>
+            <div id="download" class="tab-pane fade <% _.isNull(legendURL) ? print ('in active') : print ('') %>">
                 <ul class="list-unstyled">
                     <% _.each(downloadLinks, function (downloadLink) { %>
                         <li><a href="<%= downloadLink[1] %>"><%= downloadLink[0] %> </a><li>
                     <% }); %>
                 </ul>
             </div>
+            <% } %>
         </div>
     <% } %>
 </div>
