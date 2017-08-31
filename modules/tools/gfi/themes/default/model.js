@@ -42,12 +42,15 @@ define(function (require) {
                 children.push(element);
             }
             else {
-                _.each(element, function (ele) {
+                _.each(element, function (ele, index) {
                     _.each(ele, function (val, key) {
                         if (key === "Bild") {
                             var imgView = new ImgView(val);
 
-                            element[key] = "#";
+                            //wenn das Bild hinterher als Bild mit direkt-Link ins GFI eingefügt wird, braucht man in der Tabelle keine Zeile "Bild = Link" mehr. CB 31.8.2017
+                            // gilt das auch für Video?
+                            element[index] = _.omit(element[index], key);
+                            
                             children.push({
                                 key: imgView.model.get("id"),
                                 val: imgView
