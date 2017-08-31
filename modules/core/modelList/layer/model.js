@@ -375,6 +375,7 @@ define(function (require) {
         },
         /**
          * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
+         * In layerinformation/model wird bei Layern ohne LegendURL auf null getestet.
          */
         showLayerInformation: function () {
             var metaID = [],
