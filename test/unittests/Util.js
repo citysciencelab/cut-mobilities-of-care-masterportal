@@ -1,5 +1,4 @@
 define(function (require) {
-    require("proj4");
     var proj = new ol.proj.Projection({
         code: "EPSG:25832",
         units: "m",

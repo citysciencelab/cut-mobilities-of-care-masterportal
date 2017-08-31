@@ -13,7 +13,6 @@ define(function(require) {
             model = new Model();
             utilModel = new Util();
             testFeatures = utilModel.createTestFeatures();
-            console.log(testFeatures[0]);
         });
         describe("isValueMatch", function () {
             it("should match when feature matches at least one attribute value", function () {
