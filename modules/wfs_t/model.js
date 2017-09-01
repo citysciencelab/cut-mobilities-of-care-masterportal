@@ -173,7 +173,6 @@ define([
                     this.set("showAttrTable", false);
                 }
                 if(evt.selected.length) {
-                    console.log(evt.selected[0].getProperties());
                     _.each(this.get("attributions"), function (attribut) {
                         if (_.has(evt.selected[0].getProperties(), attribut) === false) {
                             evt.selected[0].set(attribut, "");

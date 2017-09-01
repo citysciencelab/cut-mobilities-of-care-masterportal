@@ -2,6 +2,10 @@ html, body {
     height: 100%;
 }
 
+.lgv-container {
+    height: 100%;
+}
+
 label {
     font-weight: normal;
 }
