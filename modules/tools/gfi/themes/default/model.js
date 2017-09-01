@@ -44,13 +44,11 @@ define(function (require) {
             else {
                 _.each(element, function (ele, index) {
                     _.each(ele, function (val, key) {
-                        if (key === "Bild") {
+                        if(val.substr(0, 7) == 'http://' && (val.search(/\.jpg/i) !== -1 || val.search(/\.png/i) !== -1 )){
                             var imgView = new ImgView(val);
 
-                            //wenn das Bild hinterher als Bild mit direkt-Link ins GFI eingefügt wird, braucht man in der Tabelle keine Zeile "Bild = Link" mehr. CB 31.8.2017
-                            // gilt das auch für Video?
-                            element[index] = _.omit(element[index], key);
-                            
+                            element[index][key] = "#";
+
                             children.push({
                                 key: imgView.model.get("id"),
                                 val: imgView
@@ -59,7 +57,7 @@ define(function (require) {
                         else if (key === "video" && Radio.request("Util", "isAny") === null) {
                             var videoView = new VideoView(val);
 
-                            element[key] = "#";
+                            element[index][key] = "#";
                             children.push({
                                 key: videoView.model.get("id"),
                                 val: videoView
@@ -71,7 +69,7 @@ define(function (require) {
                         else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
                             var videoView = new VideoView(val);
 
-                            element[key] = "#";
+                            element[index][key] = "#";
                             children.push({
                                 key: videoView.model.get("id"),
                                 val: videoView
@@ -80,8 +78,9 @@ define(function (require) {
                                 element.video = "#";
                             }
                         }
+                        
                         // lösche leere Dummy-Einträge wieder raus.
-                        element = _.omit(element, function (value) {
+                        element[index] = _.omit(element[index], function (value) {
                             return value === "#";
                         });
                     }, this);
