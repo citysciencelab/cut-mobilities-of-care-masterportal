@@ -339,20 +339,28 @@ define([
         */
         addInitialyNeededModels: function () {
             // lighttree: Alle models gleich hinzufÃ¼gen, weil es nicht viele sind und sie direkt einen Selection index
-            // benÃ¶tigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
-            // wie sie hinzugefÃ¼gt werden
+            // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
+            // wie sie hinzugefügt werden
             var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
-            treeType = Radio.request("Parser", "getTreeType");
+                treeType = Radio.request("Parser", "getTreeType");
 
             if (treeType === "light") {
                 var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 
                 lightModels.reverse();
+
+                // Merge die parametrisierten Einstellungen an die geparsten Models
+                _.each(lightModels, function (lightModel) {
+                    var hit = _.find(paramLayers, function (paramLayer) {
+                        return paramLayer.id === lightModel.id;
+                    });
+
+                    if (hit) {
+                        lightModel.isSelected = hit.visibility;
+                        lightModel.transparency = hit.transparency;
+                    }
+                });
                 this.add(lightModels);
-                // Parametrisierter Aufruf im lighttree
-                _.each(paramLayers, function (paramLayer) {
-                    this.setModelAttributesById(paramLayer.id, {isSelected: paramLayer.visibility, transparency: paramLayer.transparency});
-                }, this);
             }
             // Parametrisierter Aufruf
             else if (paramLayers.length > 0) {
