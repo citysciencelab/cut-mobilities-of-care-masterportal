@@ -30,7 +30,11 @@
         <br>
         <div class="tab-content">
             <div id="legende" class="tab-pane fade in active">
-                <p>
+                <p><% if (!legendURL) { %>
+                <p>Keine Legende vorhanden</p>
+                <% }
+                else { %>
+
                    <%
                       if (legendURL.typ === "WFS") {
                       %>
@@ -97,7 +101,8 @@
                             </p>
                         <%
                       }}} %>
-                    </p>
+                <% } %>
+                </p>
             </div>
             <div id="download" class="tab-pane fade">
                 <ul class="list-unstyled">
