@@ -53,7 +53,7 @@ define(function () {
             // Organisations
             ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"]
         ],
-        customModules: [],
+        customModules: ["../portalconfigs/fluechtlingsunterkuenfte/table/view"],
         footer: {
             visibility: true,
             urls: [
@@ -77,7 +77,7 @@ define(function () {
             ]
         },
         quickHelp: true,
-        layerConf: "../node_modules/lgv-config/services-fhhnet.json",
+        layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
         styleConf: "../node_modules/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",

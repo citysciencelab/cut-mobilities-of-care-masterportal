@@ -3,6 +3,7 @@ var Radio;
 require.config({
     waitSeconds: 60,
     paths: {
+        "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.min",
         openlayers: "../node_modules/openlayers/dist/ol-debug",
         jquery: "../node_modules/jquery/dist/jquery.min",
         jqueryui: "../node_modules/jquery-ui/ui",
@@ -12,7 +13,9 @@ require.config({
         "backbone.radio": "../node_modules/backbone.radio/build/backbone.radio.min",
         text: "../node_modules/requirejs-text/text",
         bootstrap: "../node_modules/bootstrap/js",
+        "bootstrap-select": "../node_modules/bootstrap-select/dist/js/bootstrap-select.min",
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
+        slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         proj4: "../node_modules/proj4/dist/proj4",
         videojs: "../node_modules/video.js/dist/video",
         moment: "../node_modules/moment/min/moment.min",

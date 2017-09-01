@@ -7,8 +7,15 @@ require.config({
     proj4: "../../node_modules/proj4/dist/proj4",
     "backbone.radio": "../../node_modules/backbone.radio/build/backbone.radio.min",
     mocha: "../../node_modules/mocha/mocha",
-    chai: "../../node_modules/chai/chai"
-  }
+    chai: "../../node_modules/chai/chai",
+    modules: "../../modules",
+    util: "util"
+  },
+  shim: {
+        openlayers: {
+            exports: "ol"
+        }
+    }
 });
 
 define(function(require) {
@@ -17,12 +24,15 @@ define(function(require) {
 
     require("openlayers");
     require("backbone");
+    require("backbone.radio");
 
     mocha.setup("bdd");
     require([
     /********* load Testfiles here!!!**********/
-    "modules/tools/download/modelTest.js"
+    "modules/tools/download/modelTest.js",
+    "modules/tools/filter/query/source/testWfs.js"
     ], function (require) {
+        Radio =Backbone.Radio;
         mocha.run();
     });
 
