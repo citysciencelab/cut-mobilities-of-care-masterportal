@@ -30,7 +30,8 @@ define(function(require) {
     require([
     /********* load Testfiles here!!!**********/
     "modules/tools/download/modelTest.js",
-    "modules/tools/filter/query/source/testWfs.js"
+    "modules/tools/filter/query/source/testWfs.js",
+    "modules/snippets/slider/testModel.js"
     ], function (require) {
         Radio =Backbone.Radio;
         mocha.run();

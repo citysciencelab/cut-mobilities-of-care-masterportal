@@ -4,13 +4,33 @@ define(function (require) {
         SliderModel;
 
     SliderModel = SnippetModel.extend({
-        initialize: function () {
+        initialize: function (attributes) {
+            var parsedValues;
             // parent (SnippetModel) initialize
             this.superInitialize();
+            parsedValues = this.parseValues(attributes.values);
             // slider range
-            this.setRangeMinValue(_.min(this.get("values")));
-            this.setRangeMaxValue(_.max(this.get("values")));
+            this.setRangeMinValue(_.min(parsedValues));
+            this.setRangeMaxValue(_.max(parsedValues));
             this.addValueModels();
+        },
+
+        /**
+         * parse strings into numbers if necessary
+         * @param  {array} valueList
+         * @return {number[]} parsedValueList
+         */
+        parseValues: function (valueList) {
+            var parsedValueList = [];
+
+            _.each(valueList, function (value) {
+                if (_.isString(value)) {
+                    value = parseInt(value, 10);
+                }
+                parsedValueList.push(value);
+            });
+
+            return parsedValueList;
         },
 
         /**
