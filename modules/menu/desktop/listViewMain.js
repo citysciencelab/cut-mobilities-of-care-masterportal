@@ -67,7 +67,7 @@ define([
                 this.collection.setAllModelsInvisible();
                 // Das Dom-Element wird für den mobile-View beim wechsel benötigt
                 // deswegen wieder anhängen.
-                $("body").append(this.el);
+                $("#map").before(this.el);
             }
         });
         return Menu;
