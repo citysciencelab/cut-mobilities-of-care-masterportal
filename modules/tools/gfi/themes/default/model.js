@@ -44,14 +44,15 @@ define(function (require) {
             else {
                 _.each(element, function (ele, index) {
                     _.each(ele, function (val, key) {
-                        if(val.substr(0, 7) == 'http://' && (val.search(/\.jpg/i) !== -1 || val.search(/\.png/i) !== -1 )){
+                        if (val.substr(0, 7) == "http://" && (val.search(/\.jpg/i) !== -1 || val.search(/\.png/i) !== -1)) {
                             var imgView = new ImgView(val);
 
                             element[index][key] = "#";
 
                             children.push({
                                 key: imgView.model.get("id"),
-                                val: imgView
+                                val: imgView,
+                                type: "image"
                             });
                         }
                         else if (key === "video" && Radio.request("Util", "isAny") === null) {
@@ -60,7 +61,8 @@ define(function (require) {
                             element[index][key] = "#";
                             children.push({
                                 key: videoView.model.get("id"),
-                                val: videoView
+                                val: videoView,
+                                type: "video"
                             });
                             if (_.has(element, "mobil_video")) {
                                 element.mobil_video = "#";
@@ -72,13 +74,13 @@ define(function (require) {
                             element[index][key] = "#";
                             children.push({
                                 key: videoView.model.get("id"),
-                                val: videoView
+                                val: videoView,
+                                type: "mobil_video"
                             });
                             if (_.has(element, "video")) {
                                 element.video = "#";
                             }
                         }
-                        
                         // lösche leere Dummy-Einträge wieder raus.
                         element[index] = _.omit(element[index], function (value) {
                             return value === "#";
