@@ -1,0 +1,31 @@
+.slider-container {
+    padding: 15px 15px 5px 15px;
+}
+
+.slider-container label {
+    margin-bottom: 0;
+    padding-top: 4px;
+}
+
+.slider-container input.form-control {
+    width: 50px;
+    height: 24px;
+    text-align: center;
+}
+
+.slider-container .slider {
+    width: 100%;
+    margin-top: 6px;
+}
+
+.slider-container .slider-selection {
+    background: rgba(60, 60, 60, 0.5);
+}
+
+.slider-container .slider-track-high {
+    background: rgba(60, 60, 60, 0.2);
+}
+
+.slider-container .slider-track-low {
+    background: rgba(60, 60, 60, 0.2);
+}

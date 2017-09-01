@@ -21,7 +21,8 @@ define([
                 "getLayerWhere": this.getLayerWhere,
                 "getLayerAttributesWhere": this.getLayerAttributesWhere,
                 "getLayerListWhere": this.getLayerListWhere,
-                "getLayerAttributesList": this.getLayerAttributesList
+                "getLayerAttributesList": this.getLayerAttributesList,
+                "getDisplayNamesOfFeatureAttributes": this.getDisplayNamesOfFeatureAttributes
             }, this);
 
             this.fetch({async: false});
@@ -246,6 +247,10 @@ define([
          */
         getLayerAttributesList: function () {
             return this.toJSON();
+        },
+
+        getDisplayNamesOfFeatureAttributes: function (layerId) {
+            return this.get(layerId).get("gfiAttributes");
         }
     });
 

@@ -195,13 +195,11 @@ define(function (require) {
 
         registerTileloadError: function () {
             this.getLayerSource().on("tileloaderror", function () {
-                console.log("tileloaderror");
             }, this);
         },
 
         registerImageloadError: function () {
             this.getLayerSource().on("imageloaderror", function () {
-                console.log("imageloaderror");
             }, this);
         },
 

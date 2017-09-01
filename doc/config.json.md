@@ -389,6 +389,7 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 |[draw](#markdown-header-portalconfigmenutoolschildrendraw)|nein|Object||Zeichnen / Schreiben|
 |[extendedFilter](#markdown-header-portalconfigmenutoolschildrenextendedfilter)|nein|Object||Erweiterter Filter|
 |[featureLister](#markdown-header-portalconfigmenutoolschildrenfeaturelister)|nein|Object||WFS-Liste|
+|[filter](#markdown-header-portalconfigmenutoolschildrenfilter)|nein|Object||Feature-Filter|
 |[gfi](#markdown-header-portalconfigmenutoolschildrengfi)|nein|Object||Informationen abfragen|
 |[kmlimport](#markdown-header-portalconfigmenutoolschildrenkmlimport)|nein|Object||KML Import|
 |[measure](#markdown-header-portalconfigmenutoolschildrenmeasure)|nein|Object||Strecke / Fläche messen|
@@ -497,6 +498,61 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
 
+******
+******
+
+###### Portalconfig.menu.tools.children.filter ######
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|nein|String||Name des Werkzeuges im Menüeintrag|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|isGeneric|nein|String|false||
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
+|predefinedQueries|nein|Object||Vordefinierter Filter der beim Aktivieren automatisch ausgeführt wird
+
+
+******
+******
+
+
+#### Portalconfig.menu.tools.children.filter.predefinedQueries ####
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|layerId|ja|String||Id vom Layer auf dem der Filter ausgeführt wird|
+|isActive|nein|Boolean||Wird der Filter initial ausgeführt|
+|isSelected|nein|Boolean||Ist der Filter initial ausgewählt|
+|isVisible|nein|Boolean|||
+|name|nein|String||Name des Filters
+|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e) 
+|attributeWhiteList|nein|Array||Filterbare Attribute
+**Beispiel:**
+
+```
+#!json
+
+"filter": {
+     "name": "Filter",
+     "glyphicon": "glyphicon-filter",
+     "isGeneric": false,
+     "isInitOpen": true,
+     "predefinedQueries": [
+         {
+             "layerId": "8190",
+             "isActive": false,
+             "isSelected": false,
+             "isVisible": false,
+             "name": "Grundschulen",
+             "predefinedRules": [
+                 {
+                     "attrName": "kapitelbezeichnung",
+                     "values": ["Grundschulen"]
+                 }
+             ],
+             "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
+         }
+     ]
+ }
+```
 
 ******
 ******
@@ -509,6 +565,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isActive|nein|Boolean|false|Werkzeug wird initial (beim Laden des Portals) aktiviert.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|isVisibleInMenu|nein|Boolean|true|Gibt an ob das Werkzeug im Menu angezeigt wird.|
 
 
 ******

@@ -1,7 +1,7 @@
 .controls-view {
     position: absolute;
-    top: 50px;
-    right: 0;
+    top: 0;
+    right: 12px;
 }
 
 .toggleButtonPressed {

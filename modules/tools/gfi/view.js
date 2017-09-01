@@ -5,7 +5,7 @@ define(function (require) {
 
     GFIView = Backbone.View.extend({
         events: {
-            "click .glyphicon-remove": "hide",
+            "click .glyphicon-remove": "hideGFI",
             "click .pager-right": "renderNext",
             "click .pager-left": "renderPrevious"
         },
@@ -15,7 +15,8 @@ define(function (require) {
                 // wird in den Subclasses aufgerufen
                 "change:isVisible": this.toggle,
                 // wird in gfi/desktop/detached/view.js aufgerufen
-                "change:coordinate": this.setMarker
+                "change:coordinate": this.setMarker,
+                "hideGFI": this.hideGFI
             });
 
             // Die attached View braucht für ol.Overlay noch ein Dom-Element
@@ -84,7 +85,7 @@ define(function (require) {
         /**
          * Ruft die Funktion setIsVisible im Model auf
          */
-        hide: function () {
+        hideGFI: function () {
             this.model.setIsVisible(false);
         }
     });
