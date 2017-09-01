@@ -200,7 +200,6 @@ define([
                 this.breadCrumbListView.removeView();
                 this.remove();
                 this.collection.setAllModelsInvisible();
-                console.log(this.el);
                 $("#map").before(this.el);
             },
             startModul: function (modulId) {
