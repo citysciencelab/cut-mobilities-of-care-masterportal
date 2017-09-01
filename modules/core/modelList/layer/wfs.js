@@ -101,11 +101,9 @@ define(function (require) {
                         this.getLayer().setStyle(this.get("style"));
                     }
                     catch (e) {
-                        console.log(e);
                     }
                 },
                 error: function (jqXHR, errorText, error) {
-                    console.log(error);
                     Radio.trigger("Util", "hideLoader");
                 }
             });
@@ -314,6 +312,48 @@ define(function (require) {
 
                 this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
             }
+        },
+        /**
+         * Versteckt alle Features mit dem Hidden-Style
+         */
+        hideAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures();
+
+            collection.forEach(function (feature) {
+                feature.setStyle(this.getHiddenStyle());
+            }, this);
+        },
+        showAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures();
+
+            collection.forEach(function (feature) {
+                feature.setStyle(this.get("style")(feature)[0]);
+            }, this);
+        },
+        /**
+         * Zeigt nur die Features an, deren Id übergeben wird
+         * @param  {string[]} featureIdList
+         */
+        showFeaturesByIds: function (featureIdList) {
+            this.hideAllFeatures();
+            _.each(featureIdList, function (id) {
+                var feature = this.getLayerSource().getFeatureById(id);
+
+                feature.setStyle(this.get("style")(feature)[0]);
+            }, this);
+        },
+        getHiddenStyle: function () {
+            return new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 2,
+                    fill: new ol.style.Fill({
+                        color: "rgba(0, 0, 0, 0)"
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: "rgba(0, 0, 0, 0)"
+                    })
+                })
+            });
         }
     });
 

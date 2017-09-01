@@ -23,8 +23,8 @@ define([
 
         setSize: function () {
             var rootWidth = $("#root").width(),
-                searchbarWidth = $("#searchbar").width(),
-                width = $("#navbarRow").width() - rootWidth - searchbarWidth - 35; // 35px toleranz wegen  passing und margin von #root, #searchbar und #portalTitle
+                searchbarWidth = $("#searchbar").width() + 20, //20 searchbar padding
+                width = $("#navbarRow").width() - rootWidth - searchbarWidth - 40; // 35px toleranz wegen padding und margin von #root, #searchbar , .navbar-collapse und #portalTitle
 
             $("#portalTitle").width(width);
         },

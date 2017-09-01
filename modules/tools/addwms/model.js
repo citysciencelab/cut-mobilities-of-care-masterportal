@@ -69,7 +69,6 @@ define([
                         }, this);
                     }
                     catch (e) {
-                        console.log(e);
                         this.displayError();
                     }
                 },

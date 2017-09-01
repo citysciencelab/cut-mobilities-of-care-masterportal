@@ -19,6 +19,7 @@ define(function (require) {
             $(this.model.getOverlayElement()).popover({
                 content: this.$el,
                 html: true,
+                viewport: ".ol-viewport",
                 placement: function () {
                     if (this.getPosition().top > $("#map").height() / 2) {
                         return "top";

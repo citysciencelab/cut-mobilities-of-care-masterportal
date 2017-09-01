@@ -142,8 +142,8 @@ define([
                 }
             });
 
-            this.setResolutions();
             this.setConfig();
+            this.setResolutions();
             this.setScales();
             this.setZoomLevels();
 

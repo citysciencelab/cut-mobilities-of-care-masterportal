@@ -60,6 +60,80 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
+          "filter": {
+            "name": "Filter",
+            "glyphicon": "glyphicon-filter",
+            "isGeneric": false,
+            "isInitOpen": false,
+            "predefinedQueries": [
+              {
+                "layerId": "8190",
+                "isActive": true,
+                "isSelected": true,
+                "isVisible": true,
+                "name": "Grundschulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Grundschulen"]
+                  }
+                ],
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
+              },
+              {
+                "layerId": "8190",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Stadtteilschulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Stadtteilschulen"]
+                  }
+                ],
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "schwerpunktschule", "fremdsprache", "schulische_ausrichtung"]
+              },
+              {
+                "layerId": "8190",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Gymnasien",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Gymnasien"]
+                  }
+                ],
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "fremdsprache", "schulische_ausrichtung"]
+              },
+              {
+                "layerId": "8190",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Sonderschulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Sonderschulen"]
+                  }
+                ],
+                "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "abschluss", "anzahl_schueler", "foerderschwerpunkt"]
+              },
+              {
+                "layerId": "8190",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Berufliche Schulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Berufliche Schulen"]
+                  }
+                ],
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "abschluss"]
+              }
+              ]
+          },
           "parcelSearch": {
             "name": "Flurstückssuche",
             "glyphicon": "glyphicon-search",
@@ -70,7 +144,8 @@
           },
           "measure": {
             "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full"
+            "glyphicon": "glyphicon-resize-full",
+            "deaktivateGFI": true
           },
           "coord": {
             "name": "Koordinaten abfragen",
@@ -106,7 +181,8 @@
           },
           "searchByCoord": {
             "name": "Koordinatensuche",
-            "glyphicon": "glyphicon-record"
+            "glyphicon": "glyphicon-record",
+            "deaktivateGFI": true
           },
           "kmlimport": {
             "name": "KML Import",
@@ -130,7 +206,8 @@
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
-            "glyphicon": "glyphicon-pencil"
+            "glyphicon": "glyphicon-pencil",
+            "deaktivateGFI": true
           },
           "featureLister": {
               "name": "Liste",
@@ -207,6 +284,14 @@
     "Fachdaten":
     {
       "Layer": [
+        {
+          "id": "8194",
+          "visibility": true
+        },
+        {
+          "id": "5104",
+          "visibility": true
+        },
         {
           "id": "2426",
           "visibility": true
@@ -297,7 +382,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
@@ -316,6 +401,13 @@
               "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
             }
           ]
+        },
+        {
+          "id": "8190",
+          "name": "Schulinfosystem",
+          "visibility": true,
+          "styleId": "8190",
+          "styleField": "schul_icon"
         },
         {
           "id": "753",

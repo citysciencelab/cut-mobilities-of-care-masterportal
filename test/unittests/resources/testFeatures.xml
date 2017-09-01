@@ -1,0 +1,946 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://www.deegree.org/app http://lgvfds03.fhhnet.stadt.hamburg.de/fachdaten_public/services/wfs_hh_krankenhaeuser?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=text%2Fxml%3B+subtype%3Dgml%2F3.1.1&amp;TYPENAME=app:krankenhaeuser_hh&amp;NAMESPACE=xmlns(app=http%3A%2F%2Fwww.deegree.org%2Fapp)" xmlns:wfs="http://www.opengis.net/wfs" timeStamp="2017-08-30T12:31:07Z" xmlns:gml="http://www.opengis.net/gml">
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_9">
+      <app:kh_nummer>20</app:kh_nummer>
+      <app:name>Evangelisches Krankenhaus Alsterdorf</app:name>
+      <app:strasse>Bodelschwinghstraße 24</app:strasse>
+      <app:ort>22337  Hamburg</app:ort>
+      <app:homepage>http://www.evangelisches-krankenhaus-alsterdorf.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1180268/alsterdorf.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>252</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>43</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_9_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_9_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>567708.612 5941076.513</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_33">
+      <app:kh_nummer>83</app:kh_nummer>
+      <app:name>Heinrich Sengelmann Krankenhaus</app:name>
+      <app:strasse>Kayhuder Straße 65</app:strasse>
+      <app:ort>23863  Bargfeld-Stegen</app:ort>
+      <app:homepage>http://www.heinrich-sengelmann-krankenhaus.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1544418/heinrich-sengelmann.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>70</app:anzahl_planbetten>
+      <app:hinweiszeile>Weitere Betten sind in den Krankenhausplan des Landes Schleswig-Holstein aufgenommen.</app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>20</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_33_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_33_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>576048.895 5957194.601</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_1">
+      <app:kh_nummer>14a</app:kh_nummer>
+      <app:name>Albertinen-Krankenhaus</app:name>
+      <app:strasse>Süntelstraße 11a</app:strasse>
+      <app:ort>22457  Hamburg</app:ort>
+      <app:homepage>http://www.albertinen.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1170932/albertinen.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>569</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>30</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Perinatalzentrum Level 2</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_1_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_1_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>559875.673 5942894.742</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_3">
+      <app:kh_nummer>26</app:kh_nummer>
+      <app:name>Agaplesion Diakonieklinikum Hamburg</app:name>
+      <app:strasse>Hohe Weide 17</app:strasse>
+      <app:ort>20259  Hamburg</app:ort>
+      <app:homepage>http://www.d-k-h.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1180368/diakonieklinikum.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>370</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>20</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Geburtsklinik</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_3_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_3_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>563903.182 5936206.832</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_21">
+      <app:kh_nummer>90</app:kh_nummer>
+      <app:name>Universitäres Herzzentrum Hamburg GmbH</app:name>
+      <app:strasse>Martinistraße 52</app:strasse>
+      <app:ort>20251  Hamburg</app:ort>
+      <app:homepage>http://www.uhz.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1144492/herzzentrum.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>242</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Eingeschränkt</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_21_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_21_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>564559.690 5938588.471</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_2">
+      <app:kh_nummer>31</app:kh_nummer>
+      <app:name>Facharztklinik Hamburg</app:name>
+      <app:strasse>Martinistraße 78</app:strasse>
+      <app:ort>20251  Hamburg</app:ort>
+      <app:homepage>http://www.facharztklinik-hamburg.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1243384/facharztklinik.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>57</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_2_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_2_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>564418.835 5938122.552</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_7">
+      <app:kh_nummer>42</app:kh_nummer>
+      <app:name>Psychiatrische Tagesklinik der Praxisklinik Mümmelmannsberg</app:name>
+      <app:strasse>Oskar-Schlemmer-Straße 9-17</app:strasse>
+      <app:ort>22115  Hamburg</app:ort>
+      <app:homepage>http://www.drguth.de/praxisklinik</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1277282/praxisklinik-muemmelmannsberg.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>0</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>30</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_7_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_7_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>576066.413 5931696.705</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_4">
+      <app:kh_nummer>19</app:kh_nummer>
+      <app:name>Asklepios Westklinikum Hamburg</app:name>
+      <app:strasse>Suurheid 20</app:strasse>
+      <app:ort>22559  Hamburg</app:ort>
+      <app:homepage>http://www.asklepios.com/HamburgRissen</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1244080/westklinikum.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>517</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>133</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_4_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_4_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>551345.653 5937357.370</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_5">
+      <app:kh_nummer>16</app:kh_nummer>
+      <app:name>Altonaer Kinderkrankenhaus</app:name>
+      <app:strasse>Bleickenallee 38</app:strasse>
+      <app:ort>22763  Hamburg</app:ort>
+      <app:homepage>http://www.kinderkrankenhaus.net</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1180108/akk.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>205</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>26</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_5_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_5_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>560454.246 5934070.879</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_24">
+      <app:kh_nummer>24</app:kh_nummer>
+      <app:name>Katholisches Kinderkrankenhaus Wilhelmstift</app:name>
+      <app:strasse>Liliencronstraße 130</app:strasse>
+      <app:ort>22149  Hamburg</app:ort>
+      <app:homepage>http://www.kkh-wilhelmstift.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1180208/wilhelmstift.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>208</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>39</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_24_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_24_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>577058.577 5938151.951</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_0">
+      <app:kh_nummer>07c</app:kh_nummer>
+      <app:name>Asklepios Klinik Nord - Wandsbek (Psychiatrie)</app:name>
+      <app:strasse>Jüthornstraße 71</app:strasse>
+      <app:ort>22043  Hamburg</app:ort>
+      <app:homepage>http://www.asklepios.com/klinikumnord</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1143358/nord.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>130</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>20</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_0_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_0_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>571958.877 5936133.060</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_10">
+      <app:kh_nummer>04</app:kh_nummer>
+      <app:name>Schön Klinik Hamburg Eilbek</app:name>
+      <app:strasse>Dehnhaide 120</app:strasse>
+      <app:ort>22081  Hamburg</app:ort>
+      <app:homepage>http://www.schoen-kliniken.de/ptp/kkh/eil/</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1144408/eilbek.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>754</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>88</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_10_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_10_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>569773.549 5937127.029</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_11">
+      <app:kh_nummer>84</app:kh_nummer>
+      <app:name>Fachklinik Bokholt</app:name>
+      <app:strasse>Hanredder 32</app:strasse>
+      <app:ort>25335  Bokholt-Hanredder</app:ort>
+      <app:homepage>http://www.fachklinik-bokholt.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1544592/bokholt.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>23</app:anzahl_planbetten>
+      <app:hinweiszeile>Weitere Betten sind in den Krankenhausplan des Landes Schleswig-Holstein aufgenommen.</app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_11_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_11_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>547858.468 5960653.753</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_13">
+      <app:kh_nummer>81</app:kh_nummer>
+      <app:name>LungenClinic Großhansdorf</app:name>
+      <app:strasse>Wöhrendamm 80</app:strasse>
+      <app:ort>22927  Großhansdorf</app:ort>
+      <app:homepage>http://www.lungenclinic.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1544580/grosshansdorf.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>100</app:anzahl_planbetten>
+      <app:hinweiszeile>Weitere Betten sind in den Krankenhausplan des Landes Schleswig-Holstein aufgenommen.</app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_13_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_13_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>584635.381 5946471.911</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_20">
+      <app:kh_nummer>82</app:kh_nummer>
+      <app:name>Psychiatrisches Zentrum Rickling</app:name>
+      <app:strasse>Daldorfer Straße 2</app:strasse>
+      <app:ort>24635  Rickling</app:ort>
+      <app:homepage>http://www.pkh-rickling.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1544756/rickling.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>16</app:anzahl_planbetten>
+      <app:hinweiszeile>Weitere Betten sind in den Krankenhausplan des Landes Schleswig-Holstein aufgenommen.</app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_20_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_20_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>576984.537 5984174.061</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_12">
+      <app:kh_nummer>17</app:kh_nummer>
+      <app:name>Ev. Amalie-Sieveking-Krankenhaus</app:name>
+      <app:strasse>Haselkamp 33</app:strasse>
+      <app:ort>22359  Hamburg</app:ort>
+      <app:homepage>http://www.amalie.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1180512/amalie-sieveking.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>302</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>20</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Geburtsklinik</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_12_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_12_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>576088.133 5944238.987</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_23">
+      <app:kh_nummer>02</app:kh_nummer>
+      <app:name>Asklepios Klinik St. Georg</app:name>
+      <app:strasse>Lohmühlenstraße 5</app:strasse>
+      <app:ort>20099  Hamburg</app:ort>
+      <app:homepage>http://www.asklepios.com/sanktgeorg</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/2709558/stgeorg.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>732</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>58</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_23_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_23_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>567400.712 5935052.146</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_40">
+      <app:kh_nummer>07a</app:kh_nummer>
+      <app:name>Asklepios Klinik Nord - Ochsenzoll (Psychiatrie)</app:name>
+      <app:strasse>Langenhorner Chaussee 560</app:strasse>
+      <app:ort>22419  Hamburg</app:ort>
+      <app:homepage>http://www.asklepios.com/klinikumnord</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1143358/nord.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>468</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>149</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_40_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_40_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>566291.696 5947680.638</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_16">
+      <app:kh_nummer>13</app:kh_nummer>
+      <app:name>Bundeswehrkrankenhaus Hamburg</app:name>
+      <app:strasse>Lesserstraße 180</app:strasse>
+      <app:ort>22049  Hamburg</app:ort>
+      <app:homepage>http://www.bundeswehrkrankenhaus-hamburg.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1144576/bundeswehrkrankenhaus.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>163</app:anzahl_planbetten>
+      <app:hinweiszeile>Das Krankenhaus verfügt über insgesamt 305 Betten. In den Krankenhausplan aufgenommen, sind nur die Betten, die Zivilpatientinnen und -patienten zuzuordnen sind.</app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_16_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_16_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>571250.750 5938997.361</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_26">
+      <app:kh_nummer>32</app:kh_nummer>
+      <app:name>Wilhelmsburger Krankenhaus Groß-Sand</app:name>
+      <app:strasse>Groß-Sand  3</app:strasse>
+      <app:ort>21107  Hamburg</app:ort>
+      <app:homepage>http://www.gross-sand.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1244000/gross-sand.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>208</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>20</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_26_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_26_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>565400.918 5928763.710</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_22">
+      <app:kh_nummer>37</app:kh_nummer>
+      <app:name>Klinik Dr. Guth</app:name>
+      <app:strasse>Jürgensallee 46-48</app:strasse>
+      <app:ort>22609  Hamburg</app:ort>
+      <app:homepage>http://www.drguth.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1277972/drguth.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>47</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_22_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_22_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>556547.841 5934556.182</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_27">
+      <app:kh_nummer>52</app:kh_nummer>
+      <app:name>Klinik Fleetinsel Hamburg</app:name>
+      <app:strasse>Admiralitätsstraße 4</app:strasse>
+      <app:ort>20459  Hamburg</app:ort>
+      <app:homepage>http://www.klinik-fleetinsel.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/4384370/fleetinsel.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>30</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_27_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_27_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>565270.918 5933765.972</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_28">
+      <app:kh_nummer>53</app:kh_nummer>
+      <app:name>Praxisklinik Bergedorf </app:name>
+      <app:strasse>Alte Holstenstraße 2 - 16</app:strasse>
+      <app:ort>21031  Hamburg</app:ort>
+      <app:homepage>http://www.praxis-klinik-bergedorf.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1544380/praxisklinik-bergedorf.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>17</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_28_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_28_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>580035.085 5927916.489</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_30">
+      <app:kh_nummer>91</app:kh_nummer>
+      <app:name>Verhaltenstherapie Falkenried</app:name>
+      <app:strasse>Jarrestraße 6</app:strasse>
+      <app:ort>22303  Hamburg</app:ort>
+      <app:homepage>http://www.private-tagesklinik.vt-falkenried.de/</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/4439082/vtf-falkenried.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>0</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>12</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_30_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_30_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>567506.567 5937685.087</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_32">
+      <app:kh_nummer>93</app:kh_nummer>
+      <app:name>Stadtteilklinik Hamburg</app:name>
+      <app:strasse>Oskar-Schlemmer-Straße 9-17</app:strasse>
+      <app:ort>22115  Hamburg</app:ort>
+      <app:homepage>http://www.stadtteilklinik.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1277282/stadtteilklinik.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>15</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_32_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_32_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>576073.684 5931735.100</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_6">
+      <app:kh_nummer>07b</app:kh_nummer>
+      <app:name>Asklepios Klinik Nord - Heidberg (Somatik)</app:name>
+      <app:strasse>Tangstedter Landstraße 400</app:strasse>
+      <app:ort>22417  Hamburg</app:ort>
+      <app:homepage>http://www.asklepios.com/klinikumnord</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1143358/nord.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>584</app:anzahl_planbetten>
+      <app:hinweiszeile>Über diese Bettenzahl hinaus sind weitere Betten in den Krankenhausplan des Landes Schleswig-Holstein aufgenommen.</app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>24</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Perinatalzentrum Level 1</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_6_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_6_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>567955.583 5947803.779</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_18">
+      <app:kh_nummer>08</app:kh_nummer>
+      <app:name>Asklepios Klinik Wandsbek</app:name>
+      <app:strasse>Alphonsstraße 14</app:strasse>
+      <app:ort>22043  Hamburg</app:ort>
+      <app:homepage>http://www.asklepios.com/wandsbek</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1143466/wandsbek.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>475</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>20</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Perinataler Schwerpunkt</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_18_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_18_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>572117.612 5936208.925</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_38">
+      <app:kh_nummer>03</app:kh_nummer>
+      <app:name>Asklepios Klinik Barmbek</app:name>
+      <app:strasse>Rübenkamp 220</app:strasse>
+      <app:ort>22307  Hamburg</app:ort>
+      <app:homepage>http://www.asklepios.com/barmbek</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1143354/barmbek.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>656</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>6</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Perinatalzentrum Level 1</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_38_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_38_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>568533.692 5940230.772</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_37">
+      <app:kh_nummer>30</app:kh_nummer>
+      <app:name>Katholisches Marienkrankenhaus</app:name>
+      <app:strasse>Alfredstraße 9</app:strasse>
+      <app:ort>22087  Hamburg</app:ort>
+      <app:homepage>http://www.marienkrankenhaus.org</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1171048/marienkrankenhaus.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>605</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>37</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Perinatalzentrum Level 1</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_37_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_37_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>568337.853 5934980.619</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_15">
+      <app:kh_nummer>28</app:kh_nummer>
+      <app:name>HELIOS Mariahilf Klinik Hamburg</app:name>
+      <app:strasse>Stader Straße 203c</app:strasse>
+      <app:ort>21075  Hamburg</app:ort>
+      <app:homepage>http://www.helios-kliniken.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1243914/mariahilf.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>168</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Perinatalzentrum Level 2</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_15_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_15_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>562262.842 5925048.447</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_36">
+      <app:kh_nummer>06</app:kh_nummer>
+      <app:name>Asklepios Klinikum Harburg</app:name>
+      <app:strasse>Eißendorfer Pferdeweg 52</app:strasse>
+      <app:ort>21075  Hamburg</app:ort>
+      <app:homepage>http://www.asklepios.com/harburg</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1143268/harburg.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>868</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>128</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Geburtsklinik</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_36_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_36_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>563085.727 5924016.116</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_31">
+      <app:kh_nummer>05</app:kh_nummer>
+      <app:name>Asklepios Klinik Altona</app:name>
+      <app:strasse>Paul-Ehrlich-Straße 1</app:strasse>
+      <app:ort>22763  Hamburg</app:ort>
+      <app:homepage>http://www.asklepios.com/altona</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/981932/altona.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>657</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>3</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Perinatalzentrum Level 1</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_31_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_31_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>559714.651 5934317.484</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_25">
+      <app:kh_nummer>22</app:kh_nummer>
+      <app:name>Bethesda Krankenhaus Bergedorf</app:name>
+      <app:strasse>Glindersweg 80</app:strasse>
+      <app:ort>21029  Hamburg</app:ort>
+      <app:homepage>http://www.klinik-bergedorf.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1243654/bergedorf.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>329</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>50</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Geburtsklinik</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_25_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_25_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>582009.282 5927074.125</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_14">
+      <app:kh_nummer>29</app:kh_nummer>
+      <app:name>Krankenhaus Tabea</app:name>
+      <app:strasse>Kösterbergstraße 32</app:strasse>
+      <app:ort>22587  Hamburg</app:ort>
+      <app:homepage>http://www.tabea-fachklinik.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1244008/tabea.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>75</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_14_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_14_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>552406.014 5935396.345</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_17">
+      <app:kh_nummer>14b</app:kh_nummer>
+      <app:name>Albertinen-Haus - Medizinisch-Geriatrische Klinik</app:name>
+      <app:strasse>Sellhopsweg 18-20</app:strasse>
+      <app:ort>22459  Hamburg</app:ort>
+      <app:homepage>http://www.albertinen.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1170932/albertinen.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>127</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>35</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_17_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_17_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>561436.788 5942506.403</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_19">
+      <app:kh_nummer>23</app:kh_nummer>
+      <app:name>Israelitisches Krankenhaus</app:name>
+      <app:strasse>Orchideenstieg 14</app:strasse>
+      <app:ort>22297  Hamburg</app:ort>
+      <app:homepage>http://www.ik-h.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1243244/israelitisches.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>138</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_19_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_19_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>565596.456 5940130.858</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_29">
+      <app:kh_nummer>27</app:kh_nummer>
+      <app:name>Krankenhaus Jerusalem</app:name>
+      <app:strasse>Moorkamp 2-6</app:strasse>
+      <app:ort>20357  Hamburg</app:ort>
+      <app:homepage>http://www.krankenhaus-jerusalem.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/2784448/jerusalem.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>21</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_29_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_29_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>564008.182 5936048.920</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_35">
+      <app:kh_nummer>18</app:kh_nummer>
+      <app:name>BG Klinikum Hamburg gGmbH</app:name>
+      <app:strasse>Bergedorfer Straße 10</app:strasse>
+      <app:ort>21033  Hamburg</app:ort>
+      <app:homepage>http://www.buk-hamburg.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1170712/boberg.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>271</app:anzahl_planbetten>
+      <app:hinweiszeile>Das Krankenhaus verfügt insgesamt über rund 585 Betten. In den Krankenhausplan aufgenommen sind nur die Betten, die für GKV-Versicherte zur Verfügung stehen. </app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Eingeschränkt</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_35_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_35_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>578193.047 5929288.173</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_34">
+      <app:kh_nummer>34</app:kh_nummer>
+      <app:name>Helios Endo-Klinik Hamburg</app:name>
+      <app:strasse>Holstenstraße 2</app:strasse>
+      <app:ort>22767  Hamburg</app:ort>
+      <app:homepage>http://www.helios-kliniken.de/klinik/hamburg-endo-klinik.html</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1244888/endoklinik.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>203</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>0</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_34_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_34_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>563277.892 5934019.332</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_39">
+      <app:kh_nummer>56</app:kh_nummer>
+      <app:name>Psychiatrische Tagesklinik Hamburg-Mitte</app:name>
+      <app:strasse>Budapester Straße 38</app:strasse>
+      <app:ort>20359  Hamburg</app:ort>
+      <app:homepage>http://www.tagesklinik-hh-mitte.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1277750/janssen-haus.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>0</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>26</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_39_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_39_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>563897.527 5934384.741</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:krankenhaeuser_hh xmlns:app="http://www.deegree.org/app" gml:id="APP_KRANKENHAEUSER_HH_8">
+      <app:kh_nummer>01</app:kh_nummer>
+      <app:name>Universitätsklinikum Hamburg-Eppendorf</app:name>
+      <app:strasse>Martinistraße 52</app:strasse>
+      <app:ort>20251  Hamburg</app:ort>
+      <app:homepage>http://www.uke.de</app:homepage>
+      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1143816/uke.html</app:krankenhausverzeichnis>
+      <app:anzahl_planbetten>1436</app:anzahl_planbetten>
+      <app:hinweiszeile></app:hinweiszeile>
+      <app:anzahl_plaetze_teilstationaer>137</app:anzahl_plaetze_teilstationaer>
+      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
+      <app:geburtsklinik_differenziert>Ja&lt;br>Perinatalzentrum Level 1</app:geburtsklinik_differenziert>
+      <app:stand>01.01.2016</app:stand>
+      <app:geom>
+        <!--Inlined geometry 'APP_KRANKENHAEUSER_HH_8_APP_GEOM'-->
+        <gml:Point gml:id="APP_KRANKENHAEUSER_HH_8_APP_GEOM" srsName="EPSG:25832">
+          <gml:pos>564559.558 5938337.224</gml:pos>
+        </gml:Point>
+      </app:geom>
+    </app:krankenhaeuser_hh>
+  </gml:featureMember>
+</wfs:FeatureCollection>

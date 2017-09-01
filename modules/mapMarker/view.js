@@ -38,10 +38,6 @@ define([
             var markerPosition,
                 channel = Radio.channel("MapMarker");
 
-            channel.on({
-                "showMarker": this.showMarker,
-                "hideMarker": this.hideMarker
-            }, this);
             channel.reply({
                 "getCloseButtonCorners": function () {
                     if (this.$el.is(":visible") === false) {

@@ -21,7 +21,8 @@ define(function (require) {
         initialize: function () {
             this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
             var channel = Radio.channel("Map"),
-                mapView = new MapView();
+                mapView = new MapView(),
+                mapHeight;
 
             channel.reply({
                 "getLayers": this.getLayers,
@@ -76,6 +77,9 @@ define(function (require) {
 
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
+
+            mapHeight = $(".lgv-container").height() - $("#main-nav").height();
+            $("#map").css("height", mapHeight + "px");
         },
 
         /**

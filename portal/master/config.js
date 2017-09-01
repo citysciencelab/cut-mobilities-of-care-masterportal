@@ -53,31 +53,20 @@ define(function () {
             // Organisations
             ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"]
         ],
-        customModules: ["../portalconfigs/fluechtlingsunt_internet/table/view"],
+        customModules: ["../portalconfigs/fluechtlingsunterkuenfte/table/view"],
         footer: {
             visibility: true,
             urls: [
                 {
                     "bezeichnung": "Kartographie und Gestaltung: ",
                     "url": "http://www.geoinfo.hamburg.de/",
-                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias": "Landesbetrieb Geoinformation und Vermessung",
                     "alias_mobil": "LGV"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-                    "alias": "SDP Download",
-                    "alias_mobil": "SDP"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://www.hamburg.de/bsu/timonline",
-                    "alias": "Kartenunstimmigkeit"
                 }
             ]
         },
         quickHelp: true,
-        layerConf: "../node_modules/lgv-config/services-fhhnet.json",
+        layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
         styleConf: "../node_modules/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",

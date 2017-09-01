@@ -33,7 +33,8 @@ define(function (require) {
 
             channel.on({
                 "setIsVisible": this.setIsVisible,
-                "setGfiParams": this.setGfiParamsFromCustomModule
+                "setGfiParams": this.setGfiParamsFromCustomModule,
+                "hideGFI": this.hideGFI
             }, this);
 
             channel.reply({
@@ -96,21 +97,26 @@ define(function (require) {
                 this.setDesktopViewType(Config.gfiWindow);
             }
 
-            if (!_.isUndefined(Radio.request("Parser", "getItemByAttributes", {isActive: true}))) {
-                this.checkTool(Radio.request("Parser", "getItemByAttributes", {isActive: true}).id);
+            var tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+            if (!_.isUndefined(tool)) {
+                this.toggleGFI(tool.id);
             }
             this.initView();
+        },
+
+        hideGFI: function () {
+            this.trigger("hideGFI");
         },
 
         /**
          * Prüft ob GFI aktiviert ist und registriert entsprechend den Listener oder eben nicht
          * @param  {String} id - Tool Id
          */
-        checkTool: function (id) {
+        toggleGFI: function (id, deaktivateGFI) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
-            else {
+            if (deaktivateGFI) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
         },
@@ -150,14 +156,16 @@ define(function (require) {
                 visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"}),
                 visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList),
                 eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
-                isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel);
-
-            this.setCoordinate(evt.coordinate);
+                isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel),
+                isXButton = this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true;
 
             // Abbruch, wenn auf SearchMarker x geklickt wird.
-            if (this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true) {
+            if (isXButton) {
+                this.setIsVisible(false);
                 return;
             }
+
+            this.setCoordinate(evt.coordinate);
 
             // Vector
             Radio.trigger("ClickCounter", "gfi");
@@ -316,7 +324,6 @@ define(function (require) {
                 rightSM = button.right;
 
             if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
-                this.setIsVisible(false);
                 return true;
             }
             else {
