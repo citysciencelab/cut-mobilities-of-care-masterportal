@@ -150,7 +150,7 @@ define([
          * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
          */
         toggleIsViewMobile: function () {
-            if ($(window).width() >= 768) {
+            if (window.innerWidth >= 768) {
                 this.setIsViewMobile(false);
             }
             else {
