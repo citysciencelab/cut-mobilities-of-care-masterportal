@@ -20,17 +20,18 @@ define([
             }
         },
         toggleNavigation: function () {
+            var mapHeight;
+
             $(".toggleButton > span").toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
-            if ($(".controls-view").css("top") === "0px") {
-                $(".controls-view").css("top", "50px");
-                $(".toggleButton").attr("title", "Menü ausblenden");
-                $("nav").show();
+            $("#main-nav").toggle();
+            if ($("#main-nav").css("display") === "none") {
+                mapHeight = $(".lgv-container").height();
             }
             else {
-                $(".controls-view").css("top", "0px");
-                $(".toggleButton").attr("title", "Menü einblenden");
-                $("nav").hide();
+                mapHeight = $(".lgv-container").height() - $("#main-nav").height();
             }
+            $("#map").css("height", mapHeight + "px");
+            Radio.trigger("Map", "updateSize");
         }
     });
 
