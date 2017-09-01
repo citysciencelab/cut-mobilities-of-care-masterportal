@@ -17,6 +17,8 @@ define(function (require) {
         SgvOnlineThemeView = require("modules/tools/gfi/themes/sgvonline/view"),
         VerkehrsStaerkenTheme = require("modules/tools/gfi/themes/verkehrsstaerken/model"),
         VerkehrsStaerkenThemeView = require("modules/tools/gfi/themes/verkehrsstaerken/view"),
+        SchulInfoTheme = require("modules/tools/gfi/themes/schulinfo/model"),
+        SchulInfoThemeView = require("modules/tools/gfi/themes/schulinfo/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -41,6 +43,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "verkehrsstaerken") {
                 return new VerkehrsStaerkenTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "schulinfo") {
+                return new SchulInfoTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -98,6 +103,10 @@ define(function (require) {
                 }
                 case "verkehrsstaerken": {
                     new VerkehrsStaerkenThemeView({model: model});
+                    break;
+                }
+                case "schulinfo": {
+                    new SchulInfoThemeView({model: model});
                     break;
                 }
                 default: {
