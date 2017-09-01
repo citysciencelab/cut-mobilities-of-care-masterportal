@@ -2,6 +2,7 @@ define([
     "backbone",
     "modules/menu/desktop/tool/view",
     "modules/menu/desktop/folder/viewMenu",
+    "modules/menu/desktop/folder/viewCatalog",
     "modules/menu/desktop/staticlink/view",
     "bootstrap/dropdown",
     "bootstrap/collapse"
@@ -10,6 +11,7 @@ define([
         var Backbone = require("backbone"),
             DesktopToolView = require("modules/menu/desktop/tool/view"),
             DesktopFolderView = require("modules/menu/desktop/folder/viewMenu"),
+            CatalogFolderView = require("modules/menu/desktop/folder/viewCatalog"),
             DesktopStaticLinkView = require("modules/menu/desktop/staticlink/view"),
             Menu;
 
@@ -44,13 +46,22 @@ define([
                             break;
                         }
                         case "folder": {
-                            this.addFolderView(model);
+                            // Oberste ebene im Themenbaum?
+                            if (model.getParentId() === "tree") {
+                                this.addCatalogFolderView(model);
+                            }
+                            else {
+                                this.addDesktopFolderView(model);
+                            }
                             break;
                         }
                     }
                 }, this);
             },
-            addFolderView: function (model) {
+            addCatalogFolderView: function (model) {
+                new CatalogFolderView({model: model});
+            },
+            addDesktopFolderView: function (model) {
                 new DesktopFolderView({model: model});
             },
             addToolView: function (model) {
@@ -67,7 +78,7 @@ define([
                 this.collection.setAllModelsInvisible();
                 // Das Dom-Element wird für den mobile-View beim wechsel benötigt
                 // deswegen wieder anhängen.
-                $("body").append(this.el);
+                $("#map").before(this.el);
             }
         });
         return Menu;

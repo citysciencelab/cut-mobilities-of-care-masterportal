@@ -200,7 +200,7 @@ define([
                 this.breadCrumbListView.removeView();
                 this.remove();
                 this.collection.setAllModelsInvisible();
-                $("body").append(this.el);
+                $("#map").before(this.el);
             },
             startModul: function (modulId) {
                 var modul = _.findWhere(this.collection.models, {id: modulId});
