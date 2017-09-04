@@ -45,7 +45,18 @@ define(function (require) {
                 _.each(element, function (ele, index) {
                     _.each(ele, function (val, key) {
                         if (val.substr(0, 7) == "http://" && (val.search(/\.jpg/i) !== -1 || val.search(/\.png/i) !== -1)) {
-                            var imgView = new ImgView(val);
+                            // Prüfen, ob es auch ein Copyright für das Bild gibt, dann dieses ebenfalls an ImgView übergeben, damit es im Bild dargestellt wird
+                            var copyright = "";
+                            if(element[index]["Copyright"] != null){
+                                copyright = element[index]["Copyright"];
+                                element[index]["Copyright"] = "#";
+                            }
+                            else if(element[index]["copyright"] != null){
+                                copyright = element[index]["copyright"];
+                                element[index]["copyright"] = "#";
+                            }
+                            
+                            var imgView = new ImgView(val, copyright);
 
                             element[index][key] = "#";
 
