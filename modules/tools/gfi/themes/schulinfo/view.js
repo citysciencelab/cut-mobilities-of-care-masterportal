@@ -12,6 +12,7 @@ define(function (require) {
         },
         btnClicked: function (evt) {
             this.model.updateFeatureInfos(evt.currentTarget.value);
+            this.render();
         }
     });
 

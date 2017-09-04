@@ -1,6 +1,9 @@
 .schulinfo td {
     font-family: font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
 }
+.schulinfo .bold td {
+    font-weight: bold;
+}
 .schulinfo .gfi-head {
     padding: 10px;
     border-bottom: 1px solid rgb(229,229,229);

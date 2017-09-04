@@ -11,7 +11,7 @@
         <tbody>
         <%_.each(selectedContent.attributes, function (attribute) {%>
             <tr colspan = "2">
-                <td><%=attribute.attrName + ""%></td>
+                <td class="bold"><%=attribute.attrName + ""%></td>
                 <td>
                 <%if (attribute.attrValue.search("http") !== -1) {%>
                     <a href="<%= attribute.attrValue %>" target="_blank"><%= attribute.attrValue %></a>
