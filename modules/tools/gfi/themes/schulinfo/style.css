@@ -15,10 +15,13 @@
     padding: 10px;
     border-bottom: 1px solid rgb(229,229,229);
 }
-.schulinfo .btn-default {
+.schulinfo .btn-group-sm .btn-default {
     margin: 4px;
 }
 .schulinfo .btn-select {
     color: #fff;
     background-color: rgba(0,0,0,.5);
+}
+.schulinfo table {
+    margin-top: 10px;
 }
