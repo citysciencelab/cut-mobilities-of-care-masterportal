@@ -41,19 +41,26 @@
 }
 
 #layerinformation-desktop .content {
-    max-height: 45vh;
+    max-height: 66vh;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 5px 10px;
     font-size: 12px;
 }
 
+.layerinformation-modal .nav-tabs {
+    display: flex;
+}
+
 
 .layerinformation-modal .nav-tabs > li  {
     font-size: 12px;
-    max-width: 33%;
 }
 
+.layerinformation-modal .nav-tabs > li > a {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 
 
 .layerinformation-modal .tab-content .tab-pane > ul>  li > a {
@@ -63,3 +70,9 @@
     max-width: 95%;
     overflow: hidden;
 }
+
+.layerinformation-modal .tab-content #legende {
+    max-width: 95%;
+    overflow: auto;
+}
+

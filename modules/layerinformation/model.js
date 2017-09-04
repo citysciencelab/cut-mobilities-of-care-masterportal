@@ -77,6 +77,8 @@ define(function (require) {
                 this.set("title", this.get("layername"));
                 this.set("abstractText", "Keine Metadaten vorhanden.");
                 this.set("date", null);
+                this.set("downloadLinks", null);
+                this.set("wmsUrl", this.setWmsUrl(this.get("id")));
                 this.trigger("sync");
             }
         },
@@ -164,17 +166,9 @@ define(function (require) {
                             downloadLinks.push([linkName, link]);
                         }
                     });
-                    return downloadLinks;
+                    return downloadLinks.length > 0 ? downloadLinks : null;
                 }(),
-                "wmsUrl": function () {
-                    var layerAttr = Backbone.Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerid}),
-                        wmsUrl;
-
-                    if (layerAttr.typ == "WMS") {
-                        wmsUrl = layerAttr.url;
-                    }
-                    return wmsUrl;
-                }()
+                "wmsUrl": this.setWmsUrl(layerid)
             };
         },
 
@@ -200,6 +194,19 @@ define(function (require) {
                 }
             }, this);
             this.set("metaURL", metaURLs);
+        },
+
+        setWmsUrl: function (layerid) {
+            var layerAttr = Backbone.Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerid}),
+                wmsUrl;
+
+            if (layerAttr.typ == "WMS") {
+                wmsUrl = layerAttr.url;
+            }
+            else {
+                wmsUrl = null;
+            }
+            return wmsUrl;
         },
 
         setIsVisible: function (value) {

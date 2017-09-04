@@ -20,10 +20,10 @@
                 <hr>
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
-                    <% if (downloadLinks.length > 0) { %>
+                    <% if (!_.isNull(downloadLinks)) { %>
                     <li><a data-toggle="tab" href="#download">Datensatz herunterladen</a></li>
                     <% } %>
-                    <% if (wmsUrl) { %>
+                    <% if (!_.isNull(wmsUrl)) { %>
                     <li><a data-toggle="tab" href="#wmsurl">WMS-Adresse</a></li>
                     <% } %>
                 </ul>
