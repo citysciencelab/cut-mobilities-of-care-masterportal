@@ -1,7 +1,6 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        Radio = require("backbone.radio"),
         SchulInfoTheme;
 
     SchulInfoTheme = Theme.extend({
@@ -97,9 +96,16 @@ define(function (require) {
             if (_.isUndefined(this.get("gfiContent")) === false) {
 
                 var gfiContent = this.getGfiContent()[0],
-                    featureInfos = [];
+                    featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
 
-                _.each(this.get("themeConfig").kategories, function (kategory) {
+                this.setFeatureInfos(featureInfos);
+                this.determineSelectedContent(featureInfos);
+            }
+        },
+        createFeatureInfos: function (gfiContent, themeConfig) {
+            var featureInfos = [];
+
+            _.each(themeConfig.kategories, function (kategory) {
                     var kategoryObj = {
                         name: kategory.name,
                         isSelected: kategory.isSelected ? kategory.isSelected : false,
@@ -117,13 +123,12 @@ define(function (require) {
                     featureInfos.push(kategoryObj);
                 }, this);
 
-                console.log(featureInfos);
-                this.setFeatureInfos(featureInfos);
-                this.determineSelectedContent(featureInfos);
-            }
+            return featureInfos;
         },
         determineSelectedContent: function (featureInfos) {
-            var selectedContent = this.getSelectedContent(featureInfos);
+            var selectedContent = _.filter(featureInfos, function (featureInfo) {
+                return featureInfo.isSelected;
+            })[0];
 
             this.setSelectedContent(selectedContent);
         },
@@ -136,18 +141,12 @@ define(function (require) {
 
             return isAttributeFound;
         },
-        getSelectedContent: function (featureInfos) {
-            return _.filter(featureInfos, function (featureInfo) {
-                return featureInfo.isSelected;
-            })[0];
-        },
         updateFeatureInfos: function (newSelectedName) {
             var featureInfos = this.get("featureInfos");
 
             featureInfos = this.setIsSelected(newSelectedName, featureInfos);
             this.setFeatureInfos(featureInfos);
             this.determineSelectedContent(featureInfos);
-            console.log(this.get("selectedContent"));
         },
         setIsSelected: function (newSelectedName, featureInfos) {
             _.each(featureInfos, function (featureInfo) {
