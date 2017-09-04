@@ -56,7 +56,7 @@ define(function(require) {
             });
         });
         describe("isNewNameInFeatureInfos", function () {
-            it("finds \"Schulgöße\" in featureInfos", function () {
+            it("finds \"Schulgröße\" in featureInfos", function () {
                 expect(model.isNewNameInFeatureInfos("Schulgröße", featureInfos)).to.be.true;
             });
             it("does not find \"Ganztag\" in featureInfos", function () {
