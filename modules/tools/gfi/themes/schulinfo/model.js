@@ -104,6 +104,12 @@ define(function (require) {
                 this.determineSelectedContent(featureInfos);
             }
         },
+        /**
+         * categorizes gfiContent according to categories in themeConfig
+         * @param  {[type]} gfiContent  [description]
+         * @param  {[type]} themeConfig [description]
+         * @return {[type]}             [description]
+         */
         createFeatureInfos: function (gfiContent, themeConfig) {
             var featureInfos = [];
 
@@ -130,6 +136,11 @@ define(function (require) {
 
             return featureInfos;
         },
+        /**
+         * determines Selected Content to show in .gfi-content
+         * @param  {[type]} featureInfos [description]
+         * @return {[type]}              [description]
+         */
         determineSelectedContent: function (featureInfos) {
             var selectedContent = _.filter(featureInfos, function (featureInfo) {
                 return featureInfo.isSelected;
@@ -137,6 +148,12 @@ define(function (require) {
 
             this.setSelectedContent(selectedContent);
         },
+        /**
+         * checks if attribute is in gfiContent
+         * @param  {[type]} gfiContent [description]
+         * @param  {[type]} attribute  [description]
+         * @return {[type]}            [description]
+         */
         checkForAttribute: function (gfiContent, attribute) {
             var isAttributeFound = false;
 
@@ -146,13 +163,23 @@ define(function (require) {
 
             return isAttributeFound;
         },
-        updateFeatureInfos: function (newSelectedName) {
+        /**
+         * updates featureInfos.
+         * @param  {[type]} newName [description]
+         * @return {[type]}                 [description]
+         */
+        updateFeatureInfos: function (newName) {
             var featureInfos = this.get("featureInfos");
 
-            featureInfos = this.setIsSelected(newSelectedName, featureInfos);
+            featureInfos = this.setIsSelected(newName, featureInfos);
             this.setFeatureInfos(featureInfos);
             this.determineSelectedContent(featureInfos);
         },
+        /**
+         * setsFeature selected where feature.name === newName
+         * @param {[type]} newName      [description]
+         * @param {[type]} featureInfos [description]
+         */
         setIsSelected: function (newName, featureInfos) {
             var newNameFound = false;
 
@@ -169,6 +196,12 @@ define(function (require) {
             }
             return featureInfos;
         },
+        /**
+         * checks is newName is in featureInfos
+         * @param  {[type]}  newName      [description]
+         * @param  {[type]}  featureInfos [description]
+         * @return {Boolean}              [description]
+         */
         isNewNameInFeatureInfos: function (newName, featureInfos) {
             var newNameFound = false,
                 filterArray;
