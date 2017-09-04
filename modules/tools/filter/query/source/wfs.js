@@ -23,6 +23,21 @@ define(function (require) {
             else {
                 this.listenToFeaturesLoaded();
             }
+            return features;
+        },
+        /**
+         * Waits for the Layer to load its features and proceeds requests the metadata
+         * @return {[type]} [description]
+         */
+        listenToFeaturesLoaded: function () {
+            this.listenTo(Radio.channel("WFSLayer"), {
+                "featuresLoaded": function (layerId, features) {
+                    if (layerId = this.get("layerId")) {
+                        this.setFeatures(features);
+                        this.buildQueryDatastructure();
+                    }
+                }
+            });
         },
         /**
          * request the features for this query from the modellist
