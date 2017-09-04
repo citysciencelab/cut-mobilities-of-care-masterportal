@@ -9,10 +9,12 @@
             <h4 class="subtitle"><%= title %></h4>
             <p><%= abstractText %></p>
 
-            <% _.each(metaURL, function (url) { %>
-                <br>
-                <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
-            <% }); %>
+            <% if (!_.isNull(metaURL)) { %>
+              <% _.each(metaURL, function (url) { %>
+                  <br>
+                  <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
+              <% }); %>
+            <% } %>
 
             <% if (date !== null) { %>
                 <p>Stand der Daten: <%= date %></p>
