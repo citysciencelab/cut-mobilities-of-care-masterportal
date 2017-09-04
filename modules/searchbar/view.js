@@ -93,8 +93,8 @@ define([
             });
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function () {
-                    if ($(window).width() >= 768) {
-                        $("#searchInput").width($(window).width() - $(".desktop").width() - 150);
+                    if (window.innerWidth >= 768) {
+                        $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
                     }
                 }
             });
@@ -145,12 +145,12 @@ define([
 
             // Hack für flexible Suchleiste
             $(window).on("resize", function () {
-                if ($(window).width() >= 768) {
-                    $("#searchInput").width($(window).width() - $(".desktop").width() - 150);
+                if (window.innerWidth >= 768) {
+                    $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
                 }
             });
-            if ($(window).width() >= 768) {
-                $("#searchInput").width($(window).width() - $(".desktop").width() - 150);
+            if (window.innerWidth >= 768) {
+                $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
             }
         },
         events: {

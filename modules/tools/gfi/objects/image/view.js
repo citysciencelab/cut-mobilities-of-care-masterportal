@@ -7,9 +7,10 @@ define([
     var ImgView = Backbone.View.extend({
         template: _.template(ImgTemplate),
 
-        initialize: function (url) {
+        initialize: function (url, copyright) {
             this.model = new ImgModel();
             this.model.set("url", url);
+            this.model.set("copyright", copyright);
             this.render();
             this.listenTo(this.model, "change:reloadVersuch", this.checkReloadVersuch);
             this.model.set("zufallszahl", Math.floor(Math.random() * (20000 - 0 + 1)) + 0);
