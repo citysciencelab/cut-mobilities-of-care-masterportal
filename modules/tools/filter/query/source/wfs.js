@@ -59,10 +59,7 @@ define(function (require) {
             _.each(featureAttributesMap, function (featureAttribute) {
                 values = [];
                 _.each(features, function (feature) {
-                    if (featureAttribute.type === "integer") {
-                        values.push(parseInt(feature.get(featureAttribute.name), 10));
-                    }
-                    else if (featureAttribute.type === "boolean") {
+                    if (featureAttribute.type === "boolean") {
                         if (feature.get(featureAttribute.name) === "true") {
                             values.push("Ja");
                             feature.set(featureAttribute.name, "Ja");
@@ -106,21 +103,28 @@ define(function (require) {
             var features = this.runPredefinedRules(),
                 attributes = [],
                 featureIds = [];
-
+// console.log(this.get("snippetCollection"));
             this.get("snippetCollection").forEach(function (snippet) {
-                var selectedModels = snippet.get("valuesCollection").where({isSelected: true}),
-                    obj = {
-                        attrName: snippet.get("name"),
-                        values: []
-                    };
+                console.log(snippet.hasSelectedValues());
+                // var selectedModels = snippet.get("valuesCollection").where({isSelected: true}),
+                //     obj = {
+                //         attrName: snippet.get("name"),
+                //         type: snippet.get("type"),
+                //         values: []
+                //     };
+                //
+                // if (selectedModels.length > 0) {
+                //     _.each(selectedModels, function (model) {
+                //         obj.values.push(model.get("value"));
+                //     });
+                //     console.log(snippet.getSelectedValues());
+                    if (snippet.hasSelectedValues() === true) {
 
-                if (selectedModels.length > 0) {
-                    _.each(selectedModels, function (model) {
-                        obj.values.push(model.get("value"));
-                    });
-                    attributes.push(obj);
-                }
+                        attributes.push(snippet.getSelectedValues());
+                    }
+                // }
             });
+            console.log(attributes);
 
             if (attributes.length > 0) {
                 _.each(features, function (feature) {
@@ -136,6 +140,7 @@ define(function (require) {
                     featureIds.push(feature.getId());
                 }, this);
             }
+            console.log(featureIds);
             this.setFeatureIds(featureIds);
             this.trigger("featureIdsChanged");
         },
@@ -155,7 +160,12 @@ define(function (require) {
             var isMatch = false;
 
             isMatch = _.every(filterAttr, function (attribute) {
-                return this.isValueMatch(feature, attribute);
+                // if (attribute.type === "integer") {
+                //     console.log(attribute);
+                // }
+                // else {
+                    return this.isValueMatch(feature, attribute);
+                // }
             }, this);
             return isMatch;
         },

@@ -39,7 +39,7 @@ define(function (require) {
         addValueModels: function () {
             this.get("valuesCollection").add([
                 {
-                    id: "minModel",
+                    range: "min",
                     attr: this.get("name"),
                     displayName: "ab",
                     value: this.get("rangeMinValue"),
@@ -47,7 +47,7 @@ define(function (require) {
                     type: this.get("type")
                 },
                 {
-                    id: "maxModel",
+                    range: "max",
                     attr: this.get("name"),
                     displayName: "bis",
                     value: this.get("rangeMaxValue"),
@@ -104,6 +104,22 @@ define(function (require) {
             this.trigger("valuesChanged");
         },
 
+        // getSelectedValues: function () {
+        //     var selectedModels = this.get("valuesCollection").where({isSelected: true}),
+        //         obj = {
+        //             attrName: this.get("name"),
+        //             type: this.get("type"),
+        //             range: snippet.get("range"),
+        //             values: []
+        //         };
+        //
+        //     if (selectedModels.length > 0) {
+        //         _.each(selectedModels, function (model) {
+        //             obj.values.push(model.get("value"));
+        //         });
+        //         attributes.push(obj);
+        //     }
+        // },
         /**
          * set the minimum possible value
          * @param  {number} value
