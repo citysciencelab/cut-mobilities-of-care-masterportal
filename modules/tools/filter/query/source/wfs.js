@@ -5,31 +5,89 @@ define(function (require) {
 
     WfsQueryModel = QueryModel.extend({
         initialize: function () {
-            var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")});
-
-            // parent (QueryModel) initialize
             this.superInitialize();
-            if (!_.isUndefined(layerObject)) {
-                this.requestMetadata(layerObject.get("url"), layerObject.get("featureType"), layerObject.get("version"));
+            this.prepareQuery();
+        },
+        /**
+         * gathers Information for this Query including the wfs features and metadata
+         * waits for WFS features to be loaded if they aren't loaded already.
+         * @return {[type]} [description]
+         */
+        prepareQuery: function () {
+            var features = this.getFeaturesFromWFS();
+
+            if (features.length > 0) {
+                this.setFeatures(features);
+                this.buildQueryDatastructure();
             }
+            else {
+                this.listenToFeaturesLoaded();
+            }
+        },
+        /**
+         * request the features for this query from the modellist
+         * @return {[type]} [description]
+         */
+        getFeaturesFromWFS: function () {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+                features = [];
+
+            if (!_.isUndefined(model)) {
+                features = model.getLayerSource().getFeatures();
+            }
+            return features;
+        },
+        /**
+         * Waits for the Layer to load its features and proceeds requests the metadata
+         * @return {[type]} [description]
+         */
+        listenToFeaturesLoaded: function () {
+            this.listenTo(Radio.channel("WFSLayer"), {
+                "featuresLoaded": function (layerId, features) {
+                    if (layerId = this.get("layerId")) {
+                        this.setFeatures(features);
+                        this.buildQueryDatastructure();
+                    }
+                }
+            });
         },
 
         /**
-         * Führt DescriptFeatureType Request aus
+         * Sends a DescriptFeatureType Request for the Layer asscociated with this Query
+         * and proceeds to build the datastructure including the snippets for this query
          * @param  {string} url - WFS Url
          * @param  {string} featureType - WFS FeatureType
          * @param  {string} version - WFS Version
          */
-        requestMetadata: function (url, featureType, version) {
+        buildQueryDatastructure: function () {
+            var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
+                url,
+                featureType,
+                version;
+
+            if (!_.isUndefined(layerObject)) {
+                url = Radio.request("Util", "getProxyURL", layerObject.get("url"));
+                featureType = layerObject.get("featureType");
+                version = layerObject.get("version");
+                this.requestMetadata(url, featureType, version, this.createSnippets);
+            }
+        },
+        /**
+         * Führt DescriptFeatureType Request aus
+         * @param  {[type]} url         [description]
+         * @param  {[type]} featureType [description]
+         * @param  {[type]} version     [description]
+         * @return {[type]}             [description]
+         */
+        requestMetadata: function (url, featureType, version, callback) {
             $.ajax({
                 url: url,
                 context: this,
                 data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
                 // parent (QueryModel) function
-                success: this.createSnippets
+                success: callback
             });
         },
-
         /**
          * Extract Attribute names and types from DescribeFeatureType-Response
          * @param  {XML} response
@@ -52,9 +110,9 @@ define(function (require) {
          * @return {[type]}         [description]
          */
         collectAttributeValues: function (featureAttributesMap) {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
-                features = model.getLayerSource().getFeatures(),
-                values = [];
+
+                var values = [],
+                    features = this.get("features");
 
             _.each(featureAttributesMap, function (featureAttribute) {
                 values = [];
@@ -195,6 +253,9 @@ define(function (require) {
                 }
             }
             return values;
+        },
+        setFeatures: function (value) {
+            this.set("features", value);
         }
     });
 

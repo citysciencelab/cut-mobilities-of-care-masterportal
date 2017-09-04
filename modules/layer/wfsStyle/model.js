@@ -128,7 +128,8 @@ define([
                         width: width,
                         height: height,
                         scale: scale,
-                        anchor: offset
+                        anchor: offset,
+                        imgSize: [width, height]
     //                    anchorXUnits: "pixels",
     //                    anchorYUnits: "pixels"
                     });
