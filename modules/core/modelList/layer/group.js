@@ -6,6 +6,9 @@ define([
 ], function (Backbone, Radio, ol, Layer) {
 
     var GroupLayer = Layer.extend({
+        initialize: function () {
+            this.superInitialize();
+        },
 
         /**
          *

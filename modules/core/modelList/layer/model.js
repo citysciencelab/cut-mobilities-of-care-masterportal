@@ -18,7 +18,7 @@ define(function (require) {
             selectionIDX: 0,
             layerInfoClicked: false
         },
-        initialize: function () {
+        superInitialize: function () {
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {

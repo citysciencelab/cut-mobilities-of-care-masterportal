@@ -5,6 +5,9 @@ define(function (require) {
         GeoJSONLayer;
 
     GeoJSONLayer = Layer.extend({
+        initialize: function () {
+            this.superInitialize();
+        },
 
         /**
          * [createLayerSource description]
