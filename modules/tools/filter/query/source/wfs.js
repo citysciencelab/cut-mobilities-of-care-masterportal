@@ -103,28 +103,12 @@ define(function (require) {
             var features = this.runPredefinedRules(),
                 attributes = [],
                 featureIds = [];
-// console.log(this.get("snippetCollection"));
-            this.get("snippetCollection").forEach(function (snippet) {
-                console.log(snippet.hasSelectedValues());
-                // var selectedModels = snippet.get("valuesCollection").where({isSelected: true}),
-                //     obj = {
-                //         attrName: snippet.get("name"),
-                //         type: snippet.get("type"),
-                //         values: []
-                //     };
-                //
-                // if (selectedModels.length > 0) {
-                //     _.each(selectedModels, function (model) {
-                //         obj.values.push(model.get("value"));
-                //     });
-                //     console.log(snippet.getSelectedValues());
-                    if (snippet.hasSelectedValues() === true) {
 
-                        attributes.push(snippet.getSelectedValues());
-                    }
-                // }
+            this.get("snippetCollection").forEach(function (snippet) {
+                if (snippet.hasSelectedValues() === true) {
+                    attributes.push(snippet.getSelectedValues());
+                }
             });
-            console.log(attributes);
 
             if (attributes.length > 0) {
                 _.each(features, function (feature) {
@@ -140,7 +124,6 @@ define(function (require) {
                     featureIds.push(feature.getId());
                 }, this);
             }
-            console.log(featureIds);
             this.setFeatureIds(featureIds);
             this.trigger("featureIdsChanged");
         },
@@ -156,20 +139,39 @@ define(function (require) {
             return !_.isUndefined(isMatch);
         },
 
+        /**
+         * checks if a value is within a range of values
+         * @param  {ol.feature} feature
+         * @param  {object} attribute
+         * @return {boolean}
+         */
+        isIntegerInRange: function (feature, attribute) {
+            var isMatch = false,
+                valueList = _.extend([], attribute.values);
+
+            if (_.isUndefined(feature.get(attribute.attrName)) === false) {
+                var featureValue = parseInt(feature.get(attribute.attrName), 10);
+
+                valueList.push(featureValue);
+                valueList = _.sortBy(valueList);
+                isMatch = valueList[1] === featureValue;
+            }
+            return isMatch;
+        },
+
         isFilterMatch: function (feature, filterAttr) {
             var isMatch = false;
 
             isMatch = _.every(filterAttr, function (attribute) {
-                // if (attribute.type === "integer") {
-                //     console.log(attribute);
-                // }
-                // else {
+                if (attribute.type === "integer") {
+                    return this.isIntegerInRange(feature, attribute);
+                }
+                else {
                     return this.isValueMatch(feature, attribute);
-                // }
+                }
             }, this);
             return isMatch;
         },
-
 
         /**
          * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten

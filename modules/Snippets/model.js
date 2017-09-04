@@ -35,8 +35,8 @@ var Snippet = Backbone.Model.extend({
     },
 
     /**
-     * [description]
-     * @return {[type]} [description]
+     * returns true if any of the value models is selected
+     * @return {boolean}
      */
     hasSelectedValues: function () {
         return this.get("valuesCollection").some(function (model) {
