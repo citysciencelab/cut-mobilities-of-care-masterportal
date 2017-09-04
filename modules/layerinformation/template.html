@@ -10,10 +10,12 @@
 <div class="content">
     <h4 class="subtitle" title="<%= title %>"><%= title %></h4>
     <div><%= abstractText %></div>
+    <% if (!_.isNull(metaURL)) { %>
     <% _.each(metaURL, function (url) { %>
         <br>
         <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
     <% }); %>
+    <% } %>
     <% if (date !== null) { %>
         <p>Stand der Daten: <%= date %></p>
     <% } %>
@@ -113,7 +115,7 @@
             </div>
             <div id="wmsurl" class="tab-pane fade">
                 <ul class="list-unstyled">
-                <li><a href="<%= wmsUrl %>"><%= wmsUrl %> </a><li>
+                <li><a href="<%= wmsUrl +'?SERVICE=WMS&REQUEST=GetCapabilities' %>" target="_blank"><%= wmsUrl %> </a><li>
                 </ul>
             </div>
         </div>

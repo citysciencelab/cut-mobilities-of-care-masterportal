@@ -77,6 +77,7 @@ define(function (require) {
                 this.set("title", this.get("layername"));
                 this.set("abstractText", "Keine Metadaten vorhanden.");
                 this.set("date", null);
+                this.set("metaURL", null);
                 this.set("downloadLinks", null);
                 this.set("wmsUrl", this.setWmsUrl(this.get("id")));
                 this.trigger("sync");
