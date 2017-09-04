@@ -93,17 +93,21 @@ define(function (require) {
          * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
          */
         parseGfiContent: function () {
-            if (_.isUndefined(this.get("gfiContent")) === false) {
+            if (!_.isUndefined(this.getGfiContent()[0])) {
 
                 var gfiContent = this.getGfiContent()[0],
-                    featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
+                    themeConfig = this.get("themeConfig"),
+                    featureInfos = [];
 
+                featureInfos = this.createFeatureInfos(gfiContent, themeConfig);
                 this.setFeatureInfos(featureInfos);
                 this.determineSelectedContent(featureInfos);
             }
         },
         createFeatureInfos: function (gfiContent, themeConfig) {
             var featureInfos = [];
+
+            if (!_.isUndefined(themeConfig)) {
 
             _.each(themeConfig.kategories, function (kategory) {
                     var kategoryObj = {
@@ -122,6 +126,7 @@ define(function (require) {
                     }, this);
                     featureInfos.push(kategoryObj);
                 }, this);
+            }
 
             return featureInfos;
         },
@@ -148,16 +153,38 @@ define(function (require) {
             this.setFeatureInfos(featureInfos);
             this.determineSelectedContent(featureInfos);
         },
-        setIsSelected: function (newSelectedName, featureInfos) {
-            _.each(featureInfos, function (featureInfo) {
-                if (featureInfo.name === newSelectedName) {
-                    featureInfo.isSelected = true;
+        setIsSelected: function (newName, featureInfos) {
+            var newNameFound = false;
+
+            newNameFound = this.isNewNameInFeatureInfos(newName, featureInfos);
+            if (newNameFound) {
+                _.each(featureInfos, function (featureInfo) {
+                    if (featureInfo.name === newName) {
+                        featureInfo.isSelected = true;
+                    }
+                    else {
+                        featureInfo.isSelected = false;
+                    }
+                });
+            }
+            return featureInfos;
+        },
+        isNewNameInFeatureInfos: function (newName, featureInfos) {
+            var newNameFound = false,
+                filterArray;
+
+            filterArray = _.filter(featureInfos, function (featureObject) {
+                if (featureObject.name === newName) {
+                    return true;
                 }
                 else {
-                    featureInfo.isSelected = false;
+                    return false;
                 }
             });
-            return featureInfos;
+            if (filterArray.length > 0) {
+                newNameFound = true;
+            }
+            return newNameFound;
         },
         // setter for selectedContent
         setSelectedContent: function (value) {
