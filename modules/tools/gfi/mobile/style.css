@@ -26,6 +26,21 @@
     overflow-y: auto;
 }
 
+.gfi-mobile .gfi-image-zoom-button {
+    top: -17px; 
+    background-color: white; 
+    padding: 2px;
+}
+
+
+.gfi-mobile .gfi-image-copyright {
+    top: -19px; 
+    position: relative; 
+    font-size: 0.9em; 
+    padding: 2px;
+    background-color: white;
+}
+
 .gfi-mobile table {
     margin: 0;
 }
