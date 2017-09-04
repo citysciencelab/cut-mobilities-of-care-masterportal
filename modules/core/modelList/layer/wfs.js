@@ -7,6 +7,11 @@ define(function (require) {
 
     WFSLayer = Layer.extend({
 
+        initialize: function () {
+            this.superInitialize();
+            var channel = Radio.channel("WFSLayer");
+        },
+
         /**
          * [createLayerSource description]
          * @return {[type]} [description]
@@ -88,12 +93,13 @@ define(function (require) {
                     Radio.trigger("Util", "hideLoader");
                     try {
                         var wfsReader = new ol.format.WFS({
-                            featureNS: this.get("featureNS")
-                        });
+                                featureNS: this.get("featureNS")
+                            }),
+                            features = wfsReader.readFeatures(data);
 
-                        this.getLayerSource().addFeatures(wfsReader.readFeatures(data));
+                        this.getLayerSource().addFeatures(features);
                         this.set("loadend", "ready");
-
+                        Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
                         // für WFS-T wichtig --> benutzt den ol-default Style
                         if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
                             this.styling();
