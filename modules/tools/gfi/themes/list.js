@@ -55,7 +55,9 @@ define(function (require) {
             this.listenTo(this, {
                 "reset": function () {
                     this.forEach(function (model) {
-                        model.requestFeatureInfos();
+                        if (!_.isUndefined(model)) {
+                            model.requestFeatureInfos();
+                        }
                     });
                 },
                 "change:isReady": function () {
