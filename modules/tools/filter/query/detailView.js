@@ -17,7 +17,8 @@ define(function (require) {
                 "renderSnippets": this.renderSnippets,
                 "render": this.render,
                 "change:isSelected": this.runFilter,
-                "change:isSelected": this.removeView
+                "change:isSelected": this.removeView,
+                "featureIdsChanged": this.updateFeatureCount
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
                 "valuesChanged": function () {
@@ -40,6 +41,11 @@ define(function (require) {
                     }]
             }).render());
             return this.$el;
+        },
+        updateFeatureCount: function () {
+            var featureCount = this.model.get("featureIds").length;
+
+            this.$el.find(".featureCount").html("(" + featureCount + ")");
         },
         runFilter: function () {
             this.model.runFilter();
