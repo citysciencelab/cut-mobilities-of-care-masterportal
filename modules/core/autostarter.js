@@ -8,18 +8,19 @@ define([
             autostartModuls: [], // Liste aller zu startenden Module
             initializedModuls: [], // Liste aller geladenen Module
             parametersAnalysed: false, // Boolean, ob ParametricURL abgefragt wurde
-            configAnalysed: false // Boolean, ob config.json abgefragt wurde
+            configAnalysed: false, // Boolean, ob config.json abgefragt wurde
+            channel: Radio.channel("Autostart")
         },
         initialize: function () {
-            var channel = Radio.channel("Autostart");
+            var channel = this.get("channel");
 
             channel.on({
                 "initializedModul": this.setInitializedModul
             }, this);
 
-            Radio.on("MenuLoader", "ready", this.menuLoaded, this);
+            Radio.once("MenuLoader", "ready", this.menuLoaded, this);
 
-            Radio.on("ParametricURL", "ready", this.parametersAnalysed, this);
+            Radio.once("ParametricURL", "ready", this.parametersAnalysed, this);
         },
         /*
          * speichert sich alle geladenen Module, die geladen wurden und prinzipiell geöffnet werden können.
@@ -75,7 +76,7 @@ define([
 
                 if (autostartModuls.length === 0) {
                     // es werden keine Module automatisch gestartet. Autostarter wird nicht benötigt.
-                    this.destroy();
+                    this.unloadModule();
                 }
                 else if (initializedModuls.length > 0) {
                     // sofern Module schon initialisiert sind, können sie gestartet werden.
@@ -87,10 +88,17 @@ define([
                     }, this);
 
                     if (this.get("autostartModuls").length === 0) {
-                        this.destroy();
+                        this.unloadModule();
                     }
                 }
             }
+        },
+        unloadModule: function () {
+            var channel = this.get("channel");
+
+            channel.reset(); // reset all channels from the radio object
+            this.clear();
+            this.destroy();
         }
     });
 

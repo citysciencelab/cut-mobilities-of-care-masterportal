@@ -11,6 +11,11 @@
     margin: 15px 0px 10px 0px;
 }
 
+#layerinformation-desktop .content > ul  {
+    background-color: white;
+}
+
+
 /***** Destop *****/
 #layerinformation-desktop {
     position: absolute;
@@ -36,9 +41,38 @@
 }
 
 #layerinformation-desktop .content {
-    max-height: 45vh;
+    max-height: 66vh;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 5px 10px;
     font-size: 12px;
 }
+
+.layerinformation-modal .nav-tabs {
+    display: flex;
+}
+
+
+.layerinformation-modal .nav-tabs > li  {
+    font-size: 12px;
+}
+
+.layerinformation-modal .nav-tabs > li > a {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+
+.layerinformation-modal .tab-content .tab-pane > ul>  li > a {
+    font-size: 12px;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 95%;
+    overflow: hidden;
+}
+
+.layerinformation-modal .tab-content #legende {
+    max-width: 95%;
+    overflow: auto;
+}
+
