@@ -1,17 +1,14 @@
 .schulinfo {
-    width: 45vw;
-    height: 50vh;
+    width: 35vw;
+    height: 40vh;
 }
 .schulinfo td {
     font-family: font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
 }
-.gfi .gfi-content {
-    width:100%;
-}
 .schulinfo .bold td {
     font-weight: bold;
 }
-.schulinfo .gfi-head {
+.schulinfo .schulinfo-head {
     padding: 10px;
 }
 .schulinfo .btn-group-sm .btn-default {
