@@ -203,6 +203,9 @@ define([
         parseIsInitOpen: function (result) {
             this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
+        parseStartupModul: function (result) {
+            this.set("isInitOpen", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
+        },
         parseQuery: function (result) {
             var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
                     initString = "";
@@ -310,6 +313,13 @@ define([
             */
             if (_.has(result, "ISINITOPEN")) {
                 this.parseIsInitOpen(result);
+            }
+
+            /**
+            * Rückwärtskompatibel: entspricht isinitopen
+            */
+            if (_.has(result, "STARTUPMODUL")) {
+                this.parseStartupModul(result);
             }
 
             /**
