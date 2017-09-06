@@ -87,7 +87,8 @@ define("app",
             });
         }
 
-        if (Config.mouseHover && Config.mouseHover === true) {
+        if (Config.mouseHover && Config.mouseHover.show && Config.mouseHover.show === true) {
+
             require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
                 new MouseHoverPopupView();
             });

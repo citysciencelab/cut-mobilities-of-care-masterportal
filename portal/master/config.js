@@ -72,7 +72,11 @@ define(function () {
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,
-        mouseHover: true,
+        mouseHover: {
+            show: true,
+            numFeaturesToShow: 2,
+            infoText: "(weitere Objekte. Bitte zoomen.)"
+        },
         isMenubarVisible: true,
         geoAPI: false,
         clickCounter: {}
