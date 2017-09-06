@@ -99,7 +99,7 @@ define([
 
         // baut sich aus den Config-prefs die URL zusammen
         requestFeaturesFromWFS: function (prefs) {
-            var LayerId = prefs.layerid,
+            var LayerId = prefs.WFSid,
                 LayerPrefs = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: LayerId}),
                 url = LayerPrefs.url,
                 version = LayerPrefs.version,
