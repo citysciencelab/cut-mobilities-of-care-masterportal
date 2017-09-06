@@ -11,18 +11,21 @@ define(function (require) {
         template: _.template(Template),
         events: {
             // This event fires after the select's value has been changed
-            "changed.bs.select": "setSelectedValues"
+            "changed.bs.select": "setSelectedValues",
+            "hidden.bs.select": "render"
         },
         initialize: function () {
-            this.listenTo(this.model.get("valuesCollection"), {
-                "change:isSelected": function () {
-                    this.updateSelectPicker();
+             this.listenTo(this.model, {
+                "render": function () {
+                    this.render();
                 }
-            }, this);
+            });
         },
-        render: function () {
+        render: function (evt) {
+            // console.log(evt);
+            var modelsToShow = _.isUndefined(this.model.get("valuesCollection").findWhere({isSelected: true})) ? this.model.get("valuesCollection").where({isSelectable: true}): this.model.get("valuesCollection").where({isSelected: true});
+            this.model.set("modelsToShow", modelsToShow);
             var attr = this.model.toJSON();
-
             this.$el.html(this.template(attr));
             this.initDropdown();
             this.updateSelectPicker();

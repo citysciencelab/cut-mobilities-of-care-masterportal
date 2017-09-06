@@ -34,7 +34,24 @@ Snippet = Backbone.Model.extend({
     // setter for attr
     setAttr: function (value) {
         this.set("attr", value);
+    },
+    removeView: function () {
+        console.log("removeView");
+        this.trigger("removeView");
+    },
+    /**
+     * resetCollection
+     * @return {[type]} [description]
+     */
+    resetValues: function () {
+        var collection = this.get("valuesCollection").models,
+            modelsToRemove = [];
+
+         _.each(collection.models, function (model) {
+            model.set("isSelectable", true);
+         }, this);
     }
+
  });
 
 return Snippet;
