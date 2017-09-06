@@ -128,7 +128,7 @@ define(function (require) {
                         if (isAttributeFound) {
                             kategoryObj.attributes.push({
                                 attrName: attribute,
-                                attrValue: gfiContent[attribute]});
+                                attrValue: this.beautifyAttribute(gfiContent[attribute])});
                         }
                     }, this);
                     featureInfos.push(kategoryObj);
@@ -136,6 +136,12 @@ define(function (require) {
             }
 
             return featureInfos;
+        },
+        beautifyAttribute: function (attribute) {
+            if (attribute.indexOf("|") !== -1) {
+                attribute = attribute.split("|").join(", ");
+            }
+            return attribute;
         },
         /**
          * determines Selected Content to show in .gfi-content
