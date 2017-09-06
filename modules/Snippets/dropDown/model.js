@@ -49,6 +49,22 @@ var SnippetModel = require("modules/Snippets/model"),
                 valueModel.set("isSelected", false);
             }
         });
+    },
+
+    getSelectedValues: function () {
+        var selectedModels = this.get("valuesCollection").where({isSelected: true}),
+            obj = {
+                attrName: this.get("name"),
+                type: this.get("type"),
+                values: []
+            };
+
+        if (selectedModels.length > 0) {
+            _.each(selectedModels, function (model) {
+                obj.values.push(model.get("value"));
+            });
+        }
+        return obj;
     }
 });
 

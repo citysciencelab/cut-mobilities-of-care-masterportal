@@ -1,8 +1,6 @@
-define(function (require) {
+define(function () {
 
-var Snippet;
-
-Snippet = Backbone.Model.extend({
+var Snippet = Backbone.Model.extend({
     defaults: {
         name: "",
         attr: {},
@@ -34,8 +32,18 @@ Snippet = Backbone.Model.extend({
     // setter for attr
     setAttr: function (value) {
         this.set("attr", value);
+    },
+
+    /**
+     * returns true if any of the value models is selected
+     * @return {boolean}
+     */
+    hasSelectedValues: function () {
+        return this.get("valuesCollection").some(function (model) {
+            return model.get("isSelected") === true;
+        });
     }
- });
+});
 
 return Snippet;
 });

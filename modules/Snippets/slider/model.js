@@ -4,13 +4,33 @@ define(function (require) {
         SliderModel;
 
     SliderModel = SnippetModel.extend({
-        initialize: function () {
+        initialize: function (attributes) {
+            var parsedValues;
             // parent (SnippetModel) initialize
             this.superInitialize();
+            parsedValues = this.parseValues(attributes.values);
             // slider range
-            this.setRangeMinValue(_.min(this.get("values")));
-            this.setRangeMaxValue(_.max(this.get("values")));
+            this.setRangeMinValue(_.min(parsedValues));
+            this.setRangeMaxValue(_.max(parsedValues));
             this.addValueModels();
+        },
+
+        /**
+         * parse strings into numbers if necessary
+         * @param  {array} valueList
+         * @return {number[]} parsedValueList
+         */
+        parseValues: function (valueList) {
+            var parsedValueList = [];
+
+            _.each(valueList, function (value) {
+                if (_.isString(value)) {
+                    value = parseInt(value, 10);
+                }
+                parsedValueList.push(value);
+            });
+
+            return parsedValueList;
         },
 
         /**
@@ -19,7 +39,6 @@ define(function (require) {
         addValueModels: function () {
             this.get("valuesCollection").add([
                 {
-                    id: "minModel",
                     attr: this.get("name"),
                     displayName: "ab",
                     value: this.get("rangeMinValue"),
@@ -27,7 +46,6 @@ define(function (require) {
                     type: this.get("type")
                 },
                 {
-                    id: "maxModel",
                     attr: this.get("name"),
                     displayName: "bis",
                     value: this.get("rangeMaxValue"),
@@ -49,6 +67,9 @@ define(function (require) {
             if (value !== this.get("rangeMinValue")) {
                 minModel.set("isSelected", true);
             }
+            else {
+                minModel.set("isSelected", false);
+            }
         },
 
         /**
@@ -62,6 +83,9 @@ define(function (require) {
             maxModel.set("value", value);
             if (value !== this.get("rangeMaxValue")) {
                 maxModel.set("isSelected", true);
+            }
+            else {
+                maxModel.set("isSelected", false);
             }
         },
 
@@ -82,6 +106,18 @@ define(function (require) {
             }
             // listener in filter/query/detailView
             this.trigger("valuesChanged");
+        },
+
+        /**
+         * returns an object with the slider name and its values
+         * @return {object} - contains the selected values
+         */
+        getSelectedValues: function () {
+            return {
+                attrName: this.get("name"),
+                type: this.get("type"),
+                values: this.get("valuesCollection").pluck("value")
+            };
         },
 
         /**
