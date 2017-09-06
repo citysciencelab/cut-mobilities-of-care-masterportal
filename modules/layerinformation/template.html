@@ -10,25 +10,36 @@
 <div class="content">
     <h4 class="subtitle" title="<%= title %>"><%= title %></h4>
     <div><%= abstractText %></div>
+    <% if (!_.isNull(metaURL)) { %>
     <% _.each(metaURL, function (url) { %>
         <br>
         <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
     <% }); %>
+    <% } %>
     <% if (date !== null) { %>
         <p>Stand der Daten: <%= date %></p>
     <% } %>
-    <% if (!_.isNull(legendURL) || !_.isNull(downloadLinks)) { %>
         <hr>
-        <ul class="nav nav-pills">
-            <li class="<% !_.isNull(legendURL) ? print ('active') : print ('hidden') %>"><a data-toggle="tab" href="#legende">Legende</a></li>
-            <li class="<% !_.isNull(downloadLinks) && _.isNull(legendURL) === true ? print ('active') : _.isNull(downloadLinks) ? print ('hidden') : print ('') %>"><a data-toggle="tab" href="#download">Download</a></li>
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
+            <% if (!_.isNull(downloadLinks)) { %>
+            <li><a data-toggle="tab" href="#download">Datensatz herunterladen</a></li>
+            <% } %>
+            <% if (!_.isNull(wmsUrl)) { %>
+            <li><a data-toggle="tab" href="#wmsurl">WMS-Adresse</a></li>
+            <% } %>
         </ul>
         <br>
         <div class="tab-content">
-            <% if (!_.isNull(legendURL)) { %>
             <div id="legende" class="tab-pane fade in active">
-                <p>
-                   <% if (legendURL.typ === "WFS") { %>
+                <p><% if (!legendURL) { %>
+                <p>Keine Legende vorhanden</p>
+                <% }
+                else { %>
+
+                   <%
+                      if (legendURL.typ === "WFS") {
+                      %>
                         <table>
                         <%
                         _.each(legendURL.img, function (image, index2) {
@@ -92,18 +103,20 @@
                             </p>
                         <%
                       }}} %>
-                    </p>
+                <% } %>
+                </p>
             </div>
-            <% } %>
-            <% if (!_.isNull(downloadLinks)) { %>
-            <div id="download" class="tab-pane fade <% _.isNull(legendURL) ? print ('in active') : print ('') %>">
+            <div id="download" class="tab-pane fade">
                 <ul class="list-unstyled">
                     <% _.each(downloadLinks, function (downloadLink) { %>
                         <li><a href="<%= downloadLink[1] %>"><%= downloadLink[0] %> </a><li>
                     <% }); %>
                 </ul>
             </div>
-            <% } %>
+            <div id="wmsurl" class="tab-pane fade">
+                <ul class="list-unstyled">
+                <li><a href="<%= wmsUrl +'?SERVICE=WMS&REQUEST=GetCapabilities' %>" target="_blank"><%= wmsUrl %> </a><li>
+                </ul>
+            </div>
         </div>
-    <% } %>
 </div>
