@@ -11,6 +11,7 @@ define([
             id: "",
             zufallszahl: "",
             url: "",
+            copyright: "",
             gfiImgReloadTime: 0,
             checkInterval: "",
             reloadInterval: "",

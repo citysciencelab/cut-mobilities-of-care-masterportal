@@ -1,21 +1,19 @@
 define([
     "backbone",
-    "text!modules/legend/template.html",
-    "text!modules/legend/templateMobile.html",
-    "modules/legend/model",
+    "text!modules/legend/desktop/template.html",
     "backbone.radio",
     "jqueryui/widgets/draggable"
-], function (Backbone, LegendTemplate, LegendTemplateMobile, Legend, Radio) {
+], function (Backbone, LegendTemplate, Radio) {
 
     var LegendView = Backbone.View.extend({
-        model: new Legend(),
         className: "legend-win",
         template: _.template(LegendTemplate),
-        templateMobile: _.template(LegendTemplateMobile),
         events: {
             "click .glyphicon-remove": "toggle"
         },
-        initialize: function () {
+        initialize: function (Model) {
+            this.model = Model;
+
             $(window).resize(function () {
                 if ($(".legend-win-content").height() !== null) {
                     $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
@@ -31,12 +29,13 @@ define([
                 "toggleLegendWin": this.toggle
             });
 
-            this.listenTo(Radio.channel("Util"), {
-                "isViewMobileChanged": this.render
-            });
-
             this.render();
+
             Radio.trigger("Autostart", "initializedModul", "legend");
+
+            if (this.model.getVisible()) {
+                this.toggle();
+            }
         },
 
         paramsChanged: function () {
@@ -56,8 +55,10 @@ define([
         },
 
         toggle: function () {
-            var legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"});
+            var legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"}),
+                visible = !this.$el.is(":visible");
 
+            this.model.setVisible(visible); // speichere neuen Status
             this.render();
             this.$el.toggle();
 
@@ -68,6 +69,14 @@ define([
                 legendModel.setIsActive(false);
                 Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
             }
+        },
+        /**
+         * Entfernt diese view
+         */
+        removeView: function () {
+            this.$el.hide();
+
+            this.remove();
         }
     });
 

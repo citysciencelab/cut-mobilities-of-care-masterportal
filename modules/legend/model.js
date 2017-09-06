@@ -1,7 +1,6 @@
 define([
     "backbone",
-    "backbone.radio",
-    "bootstrap/modal"
+    "backbone.radio"
 ], function (Backbone, Radio) {
 
     var Legend = Backbone.Model.extend({
@@ -11,7 +10,8 @@ define([
             legendParams: [],
             wmsLayerList: [],
             paramsStyleWMS: [],
-            paramsStyleWMSArray: []
+            paramsStyleWMSArray: [],
+            visible: false
         },
 
         initialize: function () {
@@ -36,6 +36,14 @@ define([
             });
 
             this.setLayerList();
+        },
+
+        setVisible: function (val) {
+            this.set("visible", val);
+        },
+
+        getVisible: function () {
+            return this.get("visible");
         },
 
         updateParamsStyleWMSArray: function (params) {
@@ -229,5 +237,5 @@ define([
         }
     });
 
-    return Legend;
+    return new Legend();
 });
