@@ -1,12 +1,12 @@
-define([
-    "config",
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "bootstrap/popover"
-], function (Config, Backbone, Radio, ol) {
+define(function (require) {
+    require("bootstrap/popover");
+    var Config = require("config"),
+        Backbone = require("backbone"),
+        Radio = require ("backbone.radio"),
+        ol = require("openlayers"),
+        MouseHoverPopup;
 
-    var MouseHoverPopup = Backbone.Model.extend({
+    MouseHoverPopup = Backbone.Model.extend({
         defaults: {
             wfsList: [],
             mhpresult: "",
@@ -248,5 +248,5 @@ define([
         }
     });
 
-    return new MouseHoverPopup();
+    return MouseHoverPopup;
 });

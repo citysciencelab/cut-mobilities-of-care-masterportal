@@ -1,11 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/mouseHover/model"
-], function (Backbone, Radio, MouseHoverPopup) {
+define(function (require) {
+    var Backbone = require ("backbone"),
+        Radio = require("backbone.radio"),
+        MouseHoverPopup = require ("modules/mouseHover/model"),
+        MouseHoverPopupView;
 
-    var MouseHoverPopupView = Backbone.View.extend({
-        model: MouseHoverPopup,
+    MouseHoverPopupView = Backbone.View.extend({
+        model: new MouseHoverPopup(),
         id: "mousehoverpopup",
         initialize: function () {
             this.listenTo(this.model, "change:mhpresult", this.render);
@@ -17,7 +17,6 @@ define([
         * erkannt werden
         */
         render: function () {
-            console.log(this.model.get("mhpresult"));
             $(this.model.get("element")).tooltip({
                 html: true,
                 title: this.model.get("mhpresult"),
