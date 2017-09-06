@@ -90,12 +90,13 @@ define(function (require) {
             }, this);
 
             this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": this.checkTool
+                "activatedTool": this.toggleGFI(id, deaktivateGFI)
             });
 
             if (_.has(Config, "gfiWindow")) {
                 this.setDesktopViewType(Config.gfiWindow);
             }
+
 
             var tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
             if (!_.isUndefined(tool)) {
