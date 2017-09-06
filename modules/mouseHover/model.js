@@ -10,10 +10,14 @@ define([
             wfsList: [],
             mhpresult: "",
             mhpcoordinates: [],
-            oldSelection: "",
-            GFIPopupVisibility: false
+            oldSelection: ""
         },
         initialize: function () {
+            var channel = Radio.channel("MouseHover");
+            channel.on({
+                "registerListener": this.registerListener,
+                "unregisterListener": this.unregisterListener
+            }, this);
             Radio.trigger("Map", "registerListener", "pointermove", this.checkForEachFeatureAtPixel, this);
 
             $("body").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
@@ -24,11 +28,13 @@ define([
 
             this.filterWFSList();
             this.set("element", this.get("mhpOverlay").getElement());
-            this.listenTo(Radio.channel("GFI"), {
-                "isVisible": this.GFIPopupVisibility
-            }, this);
         },
-
+        registerListener: function () {
+            Radio.trigger("Map", "registerListener", "pointermove", this.checkForEachFeatureAtPixel, this);
+        },
+        unregisterListener: function () {
+            Radio.trigger("Map", "unregisterListener", "pointermove", this.checkForEachFeatureAtPixel, this);
+        },
         filterWFSList: function () {
             var wfsList = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),
                 wfsListFiltered = [];
@@ -43,10 +49,6 @@ define([
             });
 
             this.set("wfsList", wfsListFiltered);
-        },
-
-        GFIPopupVisibility: function (GFIPopupVisibility) {
-            this.set("GFIPopupVisibility", GFIPopupVisibility);
         },
 
         /**
