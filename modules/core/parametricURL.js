@@ -20,6 +20,7 @@ define([
                 "getIsInitOpen": this.getIsInitOpen,
                 "getInitString": this.getInitString,
                 "getCenter": this.getCenter,
+                "getZoomLevel": this.getZoomLevel,
                 "getZoomToGeometry": this.getZoomToGeometry
             }, this);
 
@@ -147,12 +148,8 @@ define([
             var crs = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[1] : "",
                 values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
 
-            this.set("center", {
-                crs: crs,
-                x: parseFloat(values[0]),
-                y: parseFloat(values[1]),
-                z: values[2] ? parseFloat(values[2]) : 0
-            });
+            this.set("center", values);
+
         },
         parseBezirk: function (result) {
             var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
@@ -191,7 +188,7 @@ define([
         parseZoomLevel: function (result) {
             var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
 
-            Config.view.zoomLevel = value;
+            this.set("zoomLevel", value);
         },
         parseIsMenuBarVisible: function (result) {
             var value = _.values(_.pick(result, "ISMENUBARVISIBLE"))[0].toUpperCase();
@@ -337,6 +334,14 @@ define([
         // setter for zoomToGeometry
         setZoomToGeometry: function (value) {
             this.set("zoomToGeometry", value);
+        },
+        // getter for zoomToLevel
+        getZoomLevel: function () {
+            return this.get("zoomLevel");
+        },
+        // setter for zoomLevel
+        setZoomLevel: function (value) {
+            this.set("zoomLevel", value);
         }
     });
 
