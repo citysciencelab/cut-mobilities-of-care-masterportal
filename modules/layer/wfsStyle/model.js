@@ -118,6 +118,7 @@ define([
             this.set("imagepath", Radio.request("Util", "getPath", Config.wfsImgPath))
             if (this.get("subclass") === "Icon") {
                 var src = this.get("imagepath") + this.get("imagename"),
+                    isSVG = src.indexOf(".svg") > -1 ? true : false,
                     width = this.get("imagewidth"),
                     height = this.get("imageheight"),
                     scale = parseFloat(this.get("imagescale")),
@@ -129,9 +130,7 @@ define([
                         height: height,
                         scale: scale,
                         anchor: offset,
-                        imgSize: [width, height]
-    //                    anchorXUnits: "pixels",
-    //                    anchorYUnits: "pixels"
+                        imgSize: isSVG ? [width, height] : ""
                     });
             }
             else if (this.get("subclass") === "IconWithText") {
