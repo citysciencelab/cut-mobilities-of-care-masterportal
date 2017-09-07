@@ -10,14 +10,17 @@ define(function (require) {
     QueryDetailView = Backbone.View.extend({
         template: _.template(Template),
         events: {
-            "change .checkbox-toggle" : "toggleIsActive"
+            "change .checkbox-toggle": "toggleIsActive"
         },
         initialize: function () {
             this.listenTo(this.model, {
                 "renderSnippets": this.renderSnippets,
                 "render": this.render,
-                "change:isSelected": this.runFilter,
-                "change:isSelected": this.removeView
+                "change:isSelected": function (model, value) {
+                    this.runFilter();
+                    this.removeView(model, value);
+                },
+                "featureIdsChanged": this.updateFeatureCount
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
                 "valuesChanged": function () {
@@ -40,6 +43,11 @@ define(function (require) {
                     }]
             }).render());
             return this.$el;
+        },
+        updateFeatureCount: function () {
+            var featureCount = this.model.get("featureIds").length;
+
+            this.$el.find(".feature-count").html(featureCount + " Treffer");
         },
         runFilter: function () {
             this.model.runFilter();
