@@ -47,7 +47,6 @@ ul#tree.light li {
     border-right: 0;
     padding: 8px 6px;
     max-width: 500px;
-    min-width: 380px;
     overflow: auto;
     font-weight: normal;
 }
