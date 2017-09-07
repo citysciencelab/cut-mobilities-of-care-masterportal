@@ -11,9 +11,16 @@ require.config({
     modules: "../../modules",
     util: "util",
     config: "testConfig",
-    moment: "../../node_modules/moment/min/moment.min"
+    moment: "../../node_modules/moment/min/moment.min",
+    bootstrap: "../../node_modules/bootstrap/js",
   },
   shim: {
+        bootstrap: {
+            deps: ["jquery"]
+        },
+        "bootstrap/popover": {
+            deps: ["bootstrap/tooltip"]
+        },
         openlayers: {
             exports: "ol"
         }
@@ -32,6 +39,7 @@ define(function(require) {
     require([
     /********* load Testfiles here!!!**********/
     "modules/tools/download/modelTest.js",
+    "modules/mouseHover/testModel.js",
     "modules/tools/filter/query/source/testWfs.js",
     "modules/snippets/slider/testModel.js",
     "modules/tools/gfi/themes/schulinfo/testModel.js"

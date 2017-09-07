@@ -82,7 +82,7 @@ define(function (require) {
             var pFeatureArray = [];
 
             // featuresAtPixel.layer !== null --> kleiner schneller Hack da sonst beim zeichnen die ganze Zeit versucht wird ein Popup zu zeigen?? SD 01.09.2015
-            if (featureAtPixel !== undefined && featureAtPixel.layer !== null) {
+            if (!_.isUndefined(featureAtPixel) && featureAtPixel.layer !== null) {
                 var selFeature = featureAtPixel.feature;
 
                 if (this.isClusterFeature(selFeature)) {
@@ -220,7 +220,7 @@ define(function (require) {
                         featureGeometry = element.feature.getGeometry(),
                         layerInfos = this.getLayerInfosFromWfsList(element);
 
-                    if (layerInfos) {
+                    if (!_.isUndefined(layerInfos)) {
                         var mouseHoverField = layerInfos.fieldname;
 
                         value = this.pickValue(mouseHoverField, featureProperties);

@@ -21,7 +21,6 @@ define(function (require) {
                 html: true,
                 title: this.model.get("mhpresult"),
                 placement: "auto",
-                position: {my: "left center", at: "left center", of: $("#map"), collision: "flipfit" },
                 template: "<div class='tooltip' role='tooltip'><div class='tooltip-inner mouseHover'></div></div>",
                 animation: true
             });
