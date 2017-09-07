@@ -250,7 +250,6 @@
       }
     },
     "controls": {
-      "toggleMenu": true,
       "fullScreen": true,
       "zoom": true,
       "orientation": "once",
