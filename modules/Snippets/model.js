@@ -36,7 +36,6 @@ Snippet = Backbone.Model.extend({
         this.set("attr", value);
     },
     removeView: function () {
-        console.log("removeView");
         this.trigger("removeView");
     },
     /**

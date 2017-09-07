@@ -12,7 +12,13 @@ define(function (require) {
         events: {
             // This event fires after the select's value has been changed
             "changed.bs.select": "setSelectedValues",
-            "hidden.bs.select": "render"
+            //"hidden.bs.select": "render"
+        },
+        filter: function () {
+            this.model.trigger("valuesChanged");
+        },
+        show: function () {
+            this.$el.find(".selectpicker").selectpicker("toggle");
         },
         initialize: function () {
              this.listenTo(this.model, {
@@ -22,19 +28,22 @@ define(function (require) {
             });
         },
         render: function (evt) {
-            // console.log(evt);
-            var modelsToShow = _.isUndefined(this.model.get("valuesCollection").findWhere({isSelected: true})) ? this.model.get("valuesCollection").where({isSelectable: true}): this.model.get("valuesCollection").where({isSelected: true});
-            this.model.set("modelsToShow", modelsToShow);
-            var attr = this.model.toJSON();
-            this.$el.html(this.template(attr));
-            this.initDropdown();
+            if(this.$el.find(".dropdown-menu.inner").css("display") === "block") {
+
+                var modelsToShow = this.model.get("valuesCollection").filter(function (model) { return model.get("isSelected") || model.get("isSelectable")});
+
+                this.model.set("modelsToShow", modelsToShow);
+                console.log(modelsToShow);
+                var attr = this.model.toJSON();
+                this.$el.html(this.template(attr));
+                this.initDropdown();
+            }
             this.updateSelectPicker();
             return this.$el;
         },
         updateSelectPicker: function () {
             var models = this.model.get("valuesCollection").where({isSelected: true}),
                 attributes = [];
-
             _.each(models, function (model) {
                 attributes.push(model.get("value"));
             });

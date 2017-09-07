@@ -112,17 +112,14 @@ define(function (require) {
          * @param  {[type]} typeMap [description]
          * @return {[type]}         [description]
          */
-        getRemainingAttributeValues: function (featureAttributesMap, matchedIds) {
+        getRemainingAttributeValues: function (featureAttributesMap, features) {
             var values = [],
-                features = this.get("features");
+                features = features || this.get("features");
 
             _.each(featureAttributesMap, function (featureAttribute) {
                 featureAttribute.values = [];
 
                 _.each(features, function (feature) {
-                    if (!_.isUndefined(matchedIds) && !_.contains(matchedIds, feature.getId())) {
-                        return;
-                    }
 
                     featureAttribute.values = _.union(featureAttribute.values, this.getValuesFromFeature(feature, featureAttribute));
                 }, this);
@@ -219,7 +216,6 @@ define(function (require) {
             if (attributes.length > 0) {
                 _.each(features, function (feature) {
                     var isMatch = this.isFilterMatch(feature, attributes);
-
                     if (isMatch) {
                         featureIds.push(feature.getId());
                     }
@@ -230,17 +226,66 @@ define(function (require) {
                     featureIds.push(feature.getId());
                 }, this);
             }
-
-
-            this.updateSnippets(this.get("featureAttributesMap"), featureIds, model);
+            this.collectSelectableOptions(features, attributes);
 
             this.setFeatureIds(featureIds);
             this.trigger("featureIdsChanged");
         },
 
-        updateSnippets: function (featureAttributesMap, featureIds, model) {
 
-            var featureAttributesMap = this.getRemainingAttributeValues(featureAttributesMap, featureIds),
+
+        collectSelectableOptions: function (features, attributes) {
+            var selectableOptions = [];
+            if(attributes.length === 0) {
+           /*     attributes = this.get("featureAttributesMap");
+                _.each(attributes, function (attribute) {
+                    var selectableValues =  {name: attribute.name, values: []};
+
+                    _.each(features, function (feature) {
+                        selectableValues.values.push(feature.get(attribute.name));
+                    });
+                    selectableValues.values = _.unique(selectableValues.values);
+                    selectableOptions.push(selectableValues);
+                });*/
+                selectableOptions = this.getRemainingAttributeValues(this.get("featureAttributesMap"), features);
+
+            }
+            else {
+                var attributesMap = this.get("featureAttributesMap");
+                _.each(attributesMap, function (attribute) {
+                        var selectableValues =  {name: attribute.name, values: []};
+                    _.each(features, function (feature) {
+                        var isMatch = this.isFilterMatch(feature, _.filter(attributes, function (attr) {return attr.attrName !== attribute.name}));
+
+                        if (isMatch) {
+                            if(feature.get("kapitelbezeichnung") === "Grundschulen"  && attribute.name === "schulform") {
+                               // debugger;
+                            }
+                            selectableValues.values.push(this.getValuesFromFeature(feature, attribute));//feature.get(attribute.name));
+                        }
+                    }, this);
+                    selectableValues.values = _.unique(_.flatten(selectableValues.values));
+                    selectableOptions.push(selectableValues);
+                }, this);
+            }
+
+            console.log(selectableOptions);
+            this.updateSnippets(selectableOptions);
+
+        },
+
+        updateSnippets: function (selectableOptions) {
+            var snippets = this.get("snippetCollection");
+
+            _.each(snippets.models, function (snippet) {
+                    snippet.resetValues();
+                    var attribute = _.find(selectableOptions, {name: snippet.get("name")});
+                    console.log(attribute);
+                    snippet.updateValues(attribute.values);
+            });
+
+
+            /*var featureAttributesMap = this.getRemainingAttributeValues(featureAttributesMap, featureIds),
                 snippets = this.get("snippetCollection");
 
                 _.each(snippets.models, function (snippet) {
@@ -248,13 +293,17 @@ define(function (require) {
                     var attribute = _.find(featureAttributesMap, {name: snippet.get("name")});
 
                     if (!_.isUndefined(attribute)) {
-
-                       // if (snippet.get("name") !== model.get("attr")) {
+                        if(!_.isUndefined(model) && model.get("isSelected")) {
+                            if (snippet.get("name") !== model.get("attr")) {
+                               snippet.updateValues(attribute.values);
+                            }
+                        }
+                        else {
                             snippet.updateValues(attribute.values);
-                        //}
+                        }
                     }
-                });
-               this.trigger("rerenderSnippets", model);
+                });*/
+               //this.trigger("rerenderSnippets", model);
         },
 
         isValueMatch: function (feature, attribute) {

@@ -59,7 +59,6 @@ var SnippetModel = require("modules/Snippets/model"),
     updateValues: function (values) {
         var collection = this.get("valuesCollection"),
             modelsToRemove = [];
-            // console.log(321);
         // find valueModels to remove
         collection.each(function (model) {
 
@@ -74,14 +73,14 @@ var SnippetModel = require("modules/Snippets/model"),
                 return model.get("value") === value;
             });
             if (!_.isUndefined(model)) {
-                if(model.get("attr") === "bezirk") {
-                console.log(model.get("value"));
-                // debugger;
-                }
-
                 model.set("isSelectable", true);
             }
         }, this);
+        _.each(collection.models, function (model) {
+            console.log( model.get("attr"));
+            console.log( model.get("isSelectable"));
+        });
+        this.trigger("render");
     }
 });
 
