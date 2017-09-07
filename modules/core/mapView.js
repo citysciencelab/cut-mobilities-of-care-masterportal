@@ -144,9 +144,9 @@ define([
 
             this.setConfig();
             this.setResolutions();
+            this.setUrlParams();
             this.setScales();
             this.setZoomLevels();
-
             this.setProjection();
             this.setView();
 
@@ -170,6 +170,9 @@ define([
         * Finalisierung der Initialisierung für config.json
         */
         setConfig: function () {
+            /*
+            *   Auslesen und Überschreiben durch Werte aus Config.json
+            */
             _.each(Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}), function (setting) {
                 switch (setting.id) {
                     case "backgroundImage": {
@@ -209,6 +212,23 @@ define([
                     }
                 }
             }, this);
+        },
+
+        setUrlParams: function () {
+            /*
+            *   Auslesen und Überschreiben durch Werte aus ParamUrl
+            */
+            var centerFromParamUrl = Radio.request("ParametricURL", "getCenter"),
+                zoomLevelFromParamUrl = Radio.request("ParametricURL", "getZoomLevel");
+
+            if (!_.isUndefined(centerFromParamUrl)) {
+                this.set("startCenter", centerFromParamUrl);
+            }
+
+            if (!_.isUndefined(zoomLevelFromParamUrl)) {
+                this.setResolution(this.get("resolutions")[zoomLevelFromParamUrl]);
+                this.set("startResolution", this.get("resolution"));
+            }
         },
 
         // getter for epsg

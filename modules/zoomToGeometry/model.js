@@ -12,7 +12,7 @@ define(function (require) {
                 typename: "app:bezirke",
                 attribute: "bezirk_name"
             },
-            isRender: true
+            isRender: false
         },
         initialize: function () {
             var name = Radio.request("ParametricURL", "getZoomToGeometry"),
@@ -41,7 +41,6 @@ define(function (require) {
                 return;
             }
 
-            this.setIsRender(true);
             this.getGeometryFromWFS(name, wfsParams);
         },
         validateWfsParams: function (wfsParams) {
