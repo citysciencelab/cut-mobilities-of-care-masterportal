@@ -47,7 +47,7 @@ define(function (require) {
         updateFeatureCount: function () {
             var featureCount = this.model.get("featureIds").length;
 
-            this.$el.find(".featureCount").html(featureCount + " Treffer");
+            this.$el.find(".feature-count").html(featureCount + " Treffer");
         },
         runFilter: function () {
             this.model.runFilter();

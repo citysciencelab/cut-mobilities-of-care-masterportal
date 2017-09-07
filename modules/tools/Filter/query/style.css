@@ -1,7 +1,9 @@
-.filter .badge {
+.filter .feature-count {
     margin-left: 5px;
     color:#fff;
-    background-color: rgba(0,0,0,.5);
+    background-color: rgb(190,190,190);
+    font-weight: bold;
+    white-space: nowrap;
 }
 .filter .toggleIsActive .glyphicon-remove {
     color:#bbb;
