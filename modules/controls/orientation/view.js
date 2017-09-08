@@ -30,10 +30,7 @@ define([
                 });
 
                 this.listenTo(this.model, {
-                    "change:tracking": this.trackingChanged
-                }, this);
-
-                this.listenToOnce(this.model, {
+                    "change:tracking": this.trackingChanged,
                     "change:isGeolocationDenied": this.toggleBackground
                 }, this);
 
