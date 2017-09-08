@@ -23,6 +23,21 @@ define(function (require) {
             else {
                 this.listenToFeaturesLoaded();
             }
+            return features;
+        },
+        /**
+         * Waits for the Layer to load its features and proceeds requests the metadata
+         * @return {[type]} [description]
+         */
+        listenToFeaturesLoaded: function () {
+            this.listenTo(Radio.channel("WFSLayer"), {
+                "featuresLoaded": function (layerId, features) {
+                    if (layerId = this.get("layerId")) {
+                        this.setFeatures(features);
+                        this.buildQueryDatastructure();
+                    }
+                }
+            });
         },
         /**
          * request the features for this query from the modellist
@@ -107,6 +122,42 @@ define(function (require) {
         collectAttributeValues: function (featureAttributesMap) {
             return this.getRemainingAttributeValues(featureAttributesMap);
         },
+
+        /**
+ * [description]
+ * @param  {[type]} typeMap [description]
+ * @return {[type]}         [description]
+ */
+// collectAttributeValues: function (featureAttributesMap) {
+//
+//         var values = [],
+//             features = this.get("features");
+//
+//     _.each(featureAttributesMap, function (featureAttribute) {
+//         values = [];
+//         _.each(features, function (feature) {
+//             if (featureAttribute.type === "boolean") {
+//                 if (feature.get(featureAttribute.name) === "true") {
+//                     values.push("Ja");
+//                     feature.set(featureAttribute.name, "Ja");
+//                 }
+//                 else {
+//                     values.push("Nein");
+//                     feature.set(featureAttribute.name, "Nein");
+//                 }
+//             }
+//             else {
+//                 var stringValues = this.parseStringType(feature, featureAttribute);
+//
+//                 values = _.union(values, stringValues);
+//             }
+//         }, this);
+//         featureAttribute.values = _.unique(values);
+//     }, this);
+//
+//     return featureAttributesMap;
+// },
+
         /**
          * [description]
          * @param  {[type]} typeMap [description]
@@ -199,17 +250,8 @@ define(function (require) {
                 featureIds = [];
 
             this.get("snippetCollection").forEach(function (snippet) {
-                var selectedModels = snippet.get("valuesCollection").where({isSelected: true}),
-                    obj = {
-                        attrName: snippet.get("name"),
-                        values: []
-                    };
-
-                if (selectedModels.length > 0) {
-                    _.each(selectedModels, function (model) {
-                        obj.values.push(model.get("value"));
-                    });
-                    attributes.push(obj);
+                if (snippet.hasSelectedValues() === true) {
+                    attributes.push(snippet.getSelectedValues());
                 }
             });
 
@@ -317,15 +359,39 @@ define(function (require) {
             return !_.isUndefined(isMatch);
         },
 
+        /**
+         * checks if a value is within a range of values
+         * @param  {ol.feature} feature
+         * @param  {object} attribute
+         * @return {boolean}
+         */
+        isIntegerInRange: function (feature, attribute) {
+            var isMatch = false,
+                valueList = _.extend([], attribute.values);
+
+            if (_.isUndefined(feature.get(attribute.attrName)) === false) {
+                var featureValue = parseInt(feature.get(attribute.attrName), 10);
+
+                valueList.push(featureValue);
+                valueList = _.sortBy(valueList);
+                isMatch = valueList[1] === featureValue;
+            }
+            return isMatch;
+        },
+
         isFilterMatch: function (feature, filterAttr) {
             var isMatch = false;
 
             isMatch = _.every(filterAttr, function (attribute) {
-                return this.isValueMatch(feature, attribute);
+                if (attribute.type === "integer") {
+                    return this.isIntegerInRange(feature, attribute);
+                }
+                else {
+                    return this.isValueMatch(feature, attribute);
+                }
             }, this);
             return isMatch;
         },
-
 
         /**
          * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten

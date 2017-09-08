@@ -6,7 +6,6 @@ define(function (require) {
         SliderView;
 
     SliderView = Backbone.View.extend({
-        model: new SliderModel(),
         className: "slider-container",
         template: _.template(Template),
         events: {

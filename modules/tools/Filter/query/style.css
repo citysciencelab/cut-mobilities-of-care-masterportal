@@ -1,3 +1,10 @@
+.filter .feature-count {
+    margin-left: 5px;
+    color:#fff;
+    background-color: rgb(190,190,190);
+    font-weight: bold;
+    white-space: nowrap;
+}
 .filter .toggleIsActive .glyphicon-remove {
     color:#bbb;
 }

@@ -17,8 +17,11 @@ define(function (require) {
                 "rerenderSnippets": this.rerenderSnippets,
                 "renderSnippets": this.renderSnippets,
                 "render": this.render,
-                "change:isSelected": this.runFilter,
-                "change:isSelected": this.removeView
+                "change:isSelected": function (model, value) {
+                    this.runFilter();
+                    this.removeView(model, value);
+                },
+                "featureIdsChanged": this.updateFeatureCount
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
                 "valuesChanged": function () {
@@ -47,6 +50,11 @@ define(function (require) {
                     snippet.trigger("render");
                 }
             });
+        },
+        updateFeatureCount: function () {
+            var featureCount = this.model.get("featureIds").length;
+
+            this.$el.find(".feature-count").html(featureCount + " Treffer");
         },
         runFilter: function () {
             this.model.runFilter();
