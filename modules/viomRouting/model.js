@@ -1,9 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "openlayers",
-    "config"
-], function (Backbone, Radio, ol, Config) {
+    "openlayers"
+], function (Backbone, Radio, ol) {
 
     var RoutingModel = Backbone.Model.extend({
         defaults: {
@@ -23,11 +22,13 @@ define([
             zielAdresse: "",
             bbox: "",
             routelayer: "",
-            mhpOverlay: ""
+            mhpOverlay: "",
+            isGeolocationPossible: false
         },
         initialize: function () {
             Radio.on("Window", "winParams", this.setStatus, this);
             Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
+            Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
         },
         setStartpoint: function (geoloc) {
             this.set("fromCoord", geoloc);
@@ -201,7 +202,7 @@ define([
                     Radio.trigger("Map", "zoomToExtent", olFeature.getGeometry().getExtent());
                     this.addOverlay(olFeature);
                 },
-                error: function (data) {
+                error: function () {
                     $("#loader").hide();
                     this.set("description", "");
                     this.set("endDescription", "");
@@ -226,6 +227,14 @@ define([
             this.set("mhpOverlay", new ol.Overlay({ element: $("#routingoverlay")[0]}));
             this.get("mhpOverlay").setPosition([position[0] + 7, position[1] - 7]);
             Radio.trigger("Map", "addOverlay", this.get("mhpOverlay"));
+        },
+        // getter for isGeolocationPossible
+        getIsGeolocationPossible: function () {
+            return this.get("isGeolocationPossible");
+        },
+        // setter for isGeolocationPossible
+        setIsGeolocationPossible: function (value) {
+            this.set("isGeolocationPossible", value);
         }
     });
 

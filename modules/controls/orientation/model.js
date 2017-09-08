@@ -23,7 +23,6 @@ define([
             isGeoLocationPossible: false
         },
         initialize: function () {
-            this.setIsGeoLocationPossible();
             this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
             if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "poi"})) === false) {
                 this.setIsPoiOn(Radio.request("Parser", "getItemByAttributes", {id: "poi"}).attr);
@@ -39,6 +38,14 @@ define([
                 "getPOI": this.getPOI,
                 "sendPosition": this.sendPosition
             }, this);
+
+            this.listenTo(this, {
+                "change:isGeoLocationPossible": function () {
+                    channel.trigger("changedGeoLocationPossible", this.getIsGeoLocationPossible());
+                }
+            }, this);
+
+            this.setIsGeoLocationPossible();
         },
         /*
         * Triggert die Standpunktkoordinate auf Radio
@@ -212,6 +219,7 @@ define([
 
         setIsGeolocationDenied: function (value) {
             this.set("isGeolocationDenied", value);
+            this.set("isGeoLocationPossible", false);
         },
 
         getIsGeolocationDenied: function () {
