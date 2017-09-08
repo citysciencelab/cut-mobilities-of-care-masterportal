@@ -1,88 +1,107 @@
 define(function (require) {
 
-var SnippetModel = require("modules/Snippets/model"),
+    var SnippetModel = require("modules/Snippets/model"),
+        DropdownModel;
+
     DropdownModel = SnippetModel.extend({
         defaults: {
+            // true if the dropdown is open
+            isOpen: false,
+            // init dropdown values
+            values: [],
+            // number of entries displayed
             numOfOptions: 10
         },
-    initialize: function () {
-        this.superInitialize();
-        _.each(this.get("values"), function (value) {
-            this.addValue(value);
-        }, this);
-        this.listenTo(this.get("valuesCollection"), {
-            "change:isSelected": function (model) {
-                this.trigger("valuesChanged", model);
-            }
-        });
-    },
 
-    addValue: function (value) {
-        this.get("valuesCollection").add({
+        initialize: function () {
+            this.superInitialize();
+            this.addValueModels(this.get("values"));
+            this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
+
+            this.listenTo(this.get("valuesCollection"), {
+                "change:isSelected": function (model) {
+                    this.trigger("valuesChanged", model);
+                }
+            });
+        },
+
+        /**
+         * calls addValueModel for each value
+         * @param {string[]} valueList - init dropdown values
+         */
+        addValueModels: function (valueList) {
+            _.each(valueList, function (value) {
+                this.addValueModel(value);
+            }, this);
+        },
+
+        /**
+         * creates a model value and adds it to the value collection
+         * @param  {string} value
+         */
+        addValueModel: function (value) {
+            this.get("valuesCollection").add({
                 attr: this.get("name"),
                 value: value,
                 isSelected: false,
                 isSelectable: true,
                 type: this.get("type")
             });
-    },
+        },
 
-    /**
-     * set the dropdown value(s)
-     * @param  {string[]} value
-     */
-    setValues: function (value) {
-        this.set("values", value);
-    },
-
-    /**
-     * get the dropdown value(s)
-     * @return {string[]}
-     */
-    getValues: function () {
-        return this.get("values");
-    },
-    setSelectedValues: function (snippetValues) {
-        // wenn mehrere values zurück kommt ist snippetValues ein array, wenn nur ein value zurück kommt ein string
-        if (typeof snippetValues === "string") {
-            snippetValues = [snippetValues];
-        }
-        _.each(this.get("valuesCollection").models, function (valueModel) {
-            if (_.contains(snippetValues, valueModel.get("value"))) {
-                valueModel.set("isSelected", true);
+        /**
+         * checks the value models if they are selected or not
+         * @param {string|string[]} values - selected value(s) in the dropdown list
+         */
+        updateSelectedValues: function (values) {
+            if (_.isString(values)) {
+                values = [values];
             }
-            else {
-                valueModel.set("isSelected", false);
-            }
-        });
-    },
-    updateValues: function (values) {
-        var collection = this.get("valuesCollection"),
-            modelsToRemove = [];
-        // find valueModels to remove
-        collection.each(function (model) {
-
-            if (!_.contains(values, model.get("value"))  && !model.get("isSelected")) {
-                model.set("isSelectable", false);
-            }
-        }, this);
-
-        // createModels to add
-        _.each(values, function (value) {
-            var model = _.find(collection.models, function (model) {
-                return model.get("value") === value;
+            _.each(this.get("valuesCollection").models, function (valueModel) {
+                if (_.contains(values, valueModel.get("value"))) {
+                    valueModel.set("isSelected", true);
+                }
+                else {
+                    valueModel.set("isSelected", false);
+                }
             });
-            if (!_.isUndefined(model)) {
-                model.set("isSelectable", true);
-            }
-        }, this);
-        _.each(collection.models, function (model) {
-            console.log( model.get("attr"));
-            console.log( model.get("isSelectable"));
-        });
-        this.trigger("render");
-    }
-});
+        },
+
+        /**
+         * checks the value models if they are selectable or not
+         * @param {string[]} values - filtered values
+         * @fires DropdownView#render
+         */
+        updateSelectableValues: function (values) {
+            this.get("valuesCollection").each(function (valueModel) {
+                if (!_.contains(values, valueModel.get("value")) && !valueModel.get("isSelected")) {
+                    valueModel.set("isSelectable", false);
+                }
+                else {
+                    valueModel.set("isSelectable", true);
+                }
+            }, this);
+
+            this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
+            this.trigger("render");
+        },
+
+        /**
+         * sets the isOpen attribute
+         * @param  {boolean} value
+         */
+        setIsOpen: function (value) {
+            this.set("isOpen", value);
+        },
+
+        /**
+         * sets the valueModelsToShow attribute
+         * @param  {Backbone.Model[]} value - all value models that can be selected
+         */
+        setValueModelsToShow: function (value) {
+            this.set("valueModelsToShow", value);
+        }
+    });
 
     return DropdownModel;
 });

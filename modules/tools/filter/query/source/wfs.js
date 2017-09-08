@@ -269,7 +269,7 @@ define(function (require) {
                 }, this);
             }
 
-            console.log(selectableOptions);
+            // console.log(selectableOptions);
             this.updateSnippets(selectableOptions);
 
         },
@@ -280,8 +280,8 @@ define(function (require) {
             _.each(snippets.models, function (snippet) {
                     snippet.resetValues();
                     var attribute = _.find(selectableOptions, {name: snippet.get("name")});
-                    console.log(attribute);
-                    snippet.updateValues(attribute.values);
+                    // console.log(attribute);
+                    snippet.updateSelectableValues(attribute.values);
             });
 
 

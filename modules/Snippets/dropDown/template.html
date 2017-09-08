@@ -1,5 +1,5 @@
-<select class="selectpicker <%= name %>" title="<%= displayName %>" <% if(type === "boolean"){print('');} else {print('multiple');}%> data-size="<%=numOfOptions%>">
-    <% _.each(modelsToShow, function (model) {%>
-        <option value="<%= model.attributes.value %>"><%= model.attributes.value %></option>
+<select class="selectpicker" title="<%= displayName %>" <% if (type === "string") { print('multiple'); } %>>
+    <% _.each(valueModelsToShow, function (model) { %>
+        <option value="<%= model.get('value') %>"><%= model.get('value') %></option>
     <% }); %>
 </select>
