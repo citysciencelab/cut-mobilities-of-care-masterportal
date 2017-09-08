@@ -1,5 +1,4 @@
 .portal-title {
-    float: left;
     margin-left: 10px;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -13,5 +12,5 @@
 
 .portal-title > a > img {
     /*height: 44px;*/
-    margin: 5px;
+    margin: 5px 5px 5px 10px;
 }
