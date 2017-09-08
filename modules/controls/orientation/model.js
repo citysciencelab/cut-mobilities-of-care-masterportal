@@ -19,9 +19,11 @@ define([
             tracking: false, // Flag, ob derzeit getrackt wird.
             geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
             position: "",
-            isGeolocationDenied: false
+            isGeolocationDenied: false,
+            isGeoLocationPossible: false
         },
         initialize: function () {
+            this.setIsGeoLocationPossible();
             this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
             if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "poi"})) === false) {
                 this.setIsPoiOn(Radio.request("Parser", "getItemByAttributes", {id: "poi"}).attr);
@@ -209,11 +211,17 @@ define([
         },
 
         setIsGeolocationDenied: function (value) {
-          this.set("isGeolocationDenied", value);
+            this.set("isGeolocationDenied", value);
         },
 
         getIsGeolocationDenied: function () {
-          return this.get("isGeolocationDenied");
+            return this.get("isGeolocationDenied");
+        },
+        getIsGeoLocationPossible: function () {
+            return this.get("isGeoLocationPossible");
+        },
+        setIsGeoLocationPossible: function () {
+            this.set("isGeoLocationPossible", window.location.protocol === "https:" || _.contains(["localhost","127.0.0.1"], window.location.hostname));
         }
     });
 
