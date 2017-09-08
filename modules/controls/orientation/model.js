@@ -39,6 +39,12 @@ define([
                 "sendPosition": this.sendPosition
             }, this);
 
+            channel.reply({
+                "isGeoLocationPossible": function () {
+                    return this.getIsGeoLocationPossible();
+                }
+            }, this);
+
             this.listenTo(this, {
                 "change:isGeoLocationPossible": function () {
                     channel.trigger("changedGeoLocationPossible", this.getIsGeoLocationPossible());

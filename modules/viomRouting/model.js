@@ -23,7 +23,7 @@ define([
             bbox: "",
             routelayer: "",
             mhpOverlay: "",
-            isGeolocationPossible: false
+            isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true ? true : false
         },
         initialize: function () {
             Radio.on("Window", "winParams", this.setStatus, this);
