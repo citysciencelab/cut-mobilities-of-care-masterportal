@@ -46,6 +46,20 @@
     overflow: auto;
 }
 
+.gfi .gfi-image-zoom-button {
+    top: -17px; 
+    background-color: white; 
+    padding: 2px;
+}
+
+.gfi .gfi-image-copyright {
+    top: -19px; 
+    position: relative; 
+    font-size: 0.9em; 
+    padding: 2px;
+    background-color: white;
+}
+
 .gfi table {
     margin: 0;
 }

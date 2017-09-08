@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<div class = "schulinfo-head">
+    <div class= "btn-group btn-group-sm">
+    <%_.each(featureInfos, function (kategory) {%>
+        <%if (kategory.attributes.length > 0){%>
+            <button value = "<%=kategory.name%>" class="btn btn-default <%if(kategory.isSelected) {print('btn-select');}%>"><%=kategory.name%></button>
+        <%}%>
+    <%});%>
+    </div>
+</div>
+<div class = "schulinfo-content">
+    <table class="table table-condensed table-hover">
+        <tbody>
+        <%_.each(selectedContent.attributes, function (attribute) {%>
+            <tr colspan = "2">
+                <td class="bold"><%=attribute.attrName + ""%></td>
+                <td>
+                <%if (attribute.attrValue.search("http") !== -1) {%>
+                    <a href="<%= attribute.attrValue %>" target="_blank"><%= attribute.attrValue %></a>
+                <%}else {%>
+                    <%=attribute.attrValue%>
+                <%}%>
+                </td>
+            </tr>
+        <%});%>
+        </tbody>
+    </table>
+</div>
+

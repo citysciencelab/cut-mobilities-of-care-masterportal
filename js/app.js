@@ -229,13 +229,8 @@ define("app",
                         break;
                     }
                     case "legend": {
-                        require(["modules/legend/view", "modules/legend/viewMobile"], function (LegendView, MobileLegendView) {
-                            if (Radio.request("Util", "isAny")) {
-                                new MobileLegendView();
-                            }
-                            else {
-                                new LegendView();
-                            }
+                        require(["modules/legend/legendLoader"], function (LegendLoader) {
+                            new LegendLoader();
                         });
                         require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
                             new AddGeoJSON();
