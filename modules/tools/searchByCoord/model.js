@@ -18,8 +18,8 @@ define(function (require) {
         },
         validate: function (attributes) {
             var validETRS89 = /^[0-9]{6,7}[.]{0,1}[0-9]{0,3}$/,
-            validWGS84 = /^\d[0-9]{0,2}[°′″'"]{0,1}$/,
-            validWGS84_dez = /^[0-9]{1,3}[.]{1}[0-9]{0,5}\d[°]{0,1}$/;
+                validWGS84 = /^\d[0-9]{0,2}[°′″'"]{0,1}$/,
+                validWGS84_dez = /^[0-9]{1,3}[.]{1}[0-9]{0,5}\d[°]{0,1}$/;
 
             if (attributes.coordSystem === "ETRS89") {
                 _.each(attributes.coordinates, function (value, key) {
@@ -56,8 +56,8 @@ define(function (require) {
 
             else if (attributes.coordSystem === "WGS84") {
                 _.each(attributes.coordinates[0].coord, function (value, key) {
-                    if (attributes.coordinates[0].coord[key].length < 1) {
-                        attributes.coordinates[0].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[0].key + " ein";
+                    if (attributes.coordinates[0].coord.length < 3) {
+                        attributes.coordinates[0].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[0].key + " vollständig ein";
                         $("#coordinatesEastingField + .text-danger").html("");
                         $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                         $("#coordinatesEastingField").parent().addClass("has-error");
@@ -75,8 +75,8 @@ define(function (require) {
                     }
                 });
                 _.each(attributes.coordinates[1].coord, function (value, key) {
-                    if (attributes.coordinates[1].coord[key].length < 1) {
-                        attributes.coordinates[1].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[1].key + " ein";
+                    if (attributes.coordinates[1].coord.length < 3) {
+                        attributes.coordinates[1].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[1].key + " vollständig ein";
                         $("#coordinatesNorthingField + .text-danger").html("");
                         $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                         $("#coordinatesNorthingField").parent().addClass("has-error");
