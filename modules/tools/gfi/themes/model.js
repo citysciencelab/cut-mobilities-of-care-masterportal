@@ -281,7 +281,7 @@ define(function (require) {
         },
 
         /**
-         * Guckt alle Werte durch und prüft, ob es sich dabei um ein ISO8601-konformes Datum handelt.
+         * Guckt alle Werte durch und prüft, ob es sich dabei um ein "DD-MM-YYYY"-konformes Datum handelt.
          * Falls ja, wird es in das Format DD.MM.YYYY umgewandelt.
          * @param  {object} content - GFI Attribute
          * @return {object} content
@@ -289,7 +289,7 @@ define(function (require) {
         getManipulateDate: function (content) {
             _.each(content, function (element) {
                 _.each(element, function (value, key, list) {
-                    if (Moment(value, Moment.ISO_8601, true).isValid() === true) {
+                    if (Moment(value, "DD-MM-YYYY", true).isValid() === true) {
                         list[key] = Moment(value).format("DD.MM.YYYY");
                     }
                 });
