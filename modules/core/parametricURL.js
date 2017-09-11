@@ -85,7 +85,7 @@ define([
             else {
                 _.each(layerIdList, function (val, index) {
                      var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                     layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val }),
+                     layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
                      treeType = Radio.request("Parser", "getTreeType");
 
                      layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
@@ -95,7 +95,7 @@ define([
 
                          Radio.trigger("Parser", "addItemAtTop", layerToPush);
                      }
-                     else if (_.isNull(layerExisting)) {
+                     else if (_.isUndefined(layerConfigured)) {
                          Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
                      }
                 });
@@ -124,13 +124,13 @@ define([
 
         parseURL: function (result) {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
-            var query = location.search.substr(1).toUpperCase(), // URL --> alles nach ? wenn vorhanden
+            var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {};
 
             query.split("&").forEach(function (keyValue) {
                 var item = keyValue.split("=");
 
-                result[item[0]] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
+                result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
             });
 
             this.setResult(result);

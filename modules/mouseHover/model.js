@@ -181,7 +181,7 @@ define([
                                 coord = _.flatten(featureGeometry.getInteriorPoints().getCoordinates());
                             }
                             else {
-                                coord = featureGeometry.getCoordinates();
+                                coord = _.flatten(featureGeometry.getCoordinates());
                             }
                         }
                     }

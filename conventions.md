@@ -1,6 +1,7 @@
+>Konventionen für unseren Code.
+
 [TOC]
 
-# Code
 ### Allgemein
 * Alle Dokumente werden in utf-8 gespeichert
 * Jedes Dokument wird mit einer leeren Zeile beendet
@@ -288,34 +289,4 @@ insert_final_newline = true
 }
 ```
 
-# Branchworkflow
-![Branchworkflow](/img/branchworkflow.jpg)
 
-
-Portale werden nur auf dem stable-branch (hier Master) gebaut. Bei neuen Portalen oder Änderungen an bestehenden,
-wird dem Commit das Verb config vorangestellt (z.B. git commit -m "config FHH-Atlas Druckdienst entfernt"). Andere Commits sind auf dem stable-branch nicht erlaubt.
-# Git
-## Commit
-* Committe früh und oft
-* Ein Commit repräsentiert eine Idee oder eine Änderung
-* Nutze Verben für die Commits **(add/remove/update/refactor/fix/config/hotfix)**
-* Es dürfen keine console.log Statements in den Commits vorhanden sein
-* Die einzigen zugelassen Commits auf dem stable-Branch sind "hotfix-Commits"
-
-## Branches
-* Bei aufwändigeren Neuentwicklungen werden Branches angelegt. Dies soll bei allen zeitaufwändigeren oder komplexeren und nicht zeitkritischen Aktualisierungen beachtet werden. Lediglich wichtige Fixes können zeitnah direkt ins master gespielt werden.
-* Bezeichnung der Branches: #43_add_GFI oder 56_update_draw (IssueNummer_Verb_Modul)
-* Nutze Verben für die Merge-Commits **(add/remove/update/refactor/fix/config/hotfix)**. Die Merging-Commit-Messages sollen deutsch und sprechend sein. Die "add"- und "fix"-Messages der Merges fließen bei neuen Stable-Versionen in die CHANGELOG.md! "hotfix"-Messages fließen ebenso in die CHANGELOG.md, wenn minor-updates gemacht werden.
-* Branches werden nach dem Mergen gelöscht
-
-## Pushen
-* Die Commits werden mit thematisch umschließenden Pushes ins Repository geschrieben, wobei es nicht Ziel ist, ganze Features in einem Push zu umschließen, sondern Tätigkeiten. Mit der lokalen Entwicklungsumgebung ist eine tägliche Sicherung ins Repository empfehlenswert um Datenverlust zu verhindern.
-
-## Pullrequests
-* Die in Branches abgelegten Commits werden vorm mergen in Pullrequests dem restlichen (verfügbaren) Team zum reviewen angeboten. Diese werden gebeten, möglichst zeitnah einen Blick auf den Code zu werfen, um evtl. Schwachstellen aufzudecken. Es ist nicht notwendig, den Code hinsichtlich seiner Funktionsfähigkeit zu untersuchen. Fehler können dann im Code oder im Pullrequest kommentiert werden. Es reicht bereits ein accept aus, um den Pullrequest in dev zu mergen.
-
-### Accept
-* Werden keine produktionsverhindernden Gründe gefunden, soll der Pullrequest baldmöglichst accepted werden.
-
-### Decline
-* Im Falle von produktionsverhindernden Gründen wird der Pullrequest declined. Damit kann er in Bitbucket nicht mehr accepted werden und ein neuer Pullrequest muss nach Behebung der Fehler gestellt werden. Der requestor wird über die Gründe informiert.

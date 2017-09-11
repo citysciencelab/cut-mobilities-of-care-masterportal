@@ -23,6 +23,7 @@ define([
                     // z.B.: {id: "5181", visible: false}
                     if (_.isString(layer.id)) {
                         var objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.id});
+
                         if (_.isNull(objFromRawList)) { // Wenn LayerID nicht definiert, dann Abbruch
                             return;
                         }
@@ -65,7 +66,7 @@ define([
                                     type: "layer",
                                     parentId: parentId,
                                     name: layer.name[index],
-                                    id: layer.id + style.toLowerCase(),
+                                    id: layer.id + style,
                                     styles: layer.styles[index],
                                     legendURL: layer.legendURL[index],
                                     level: level,

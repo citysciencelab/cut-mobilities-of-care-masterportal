@@ -1,3 +1,19 @@
+# Changelog LGV Master-Portal 1.3.3
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  (none)
+
+# Changelog LGV Master-Portal 1.3.2
+
+FIXES:
+
+  - d7d98f21 mrh print benötigt _print für speziellen proxy
+
 # Changelog LGV Master-Portal 1.3.1
 
 NEU:
