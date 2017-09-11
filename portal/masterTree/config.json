@@ -129,7 +129,6 @@
         }
       },
       "controls": {
-        "toggleMenu": true,
         "zoom": true,
         "orientation": "once",
         "poi": true,

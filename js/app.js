@@ -251,16 +251,6 @@ define("app",
 
             _.each(controls, function (control) {
                 switch (control.id) {
-                    case "toggleMenu": {
-                        if (control.attr === true) {
-                            var el = controlsView.addRow(control.id);
-
-                            require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
-                                new ToggleMenuControlView({el: el});
-                            });
-                        }
-                        break;
-                    }
                     case "zoom": {
                         if (control.attr === true) {
                             var el = controlsView.addRow(control.id);

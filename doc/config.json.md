@@ -42,7 +42,6 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
 |orientation|nein|String|"none"|Orientation ist eine Funktion zur Standortbestimmung des Nutzers. Mögliche Werte sind none (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
 |poi|nein|Boolean|false|Zeigt eine Liste von Features in der Umgebung an. Funktioniert nur wenn die Standortbestimmung (orientation) aktiviert ist. |
-|toggleMenu|nein|Boolean|false|Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.|
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
 
 **Beispiel controls:**
@@ -52,7 +51,6 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 #!json
 
 "controls": {
-        "toggleMenu": true,
         "zoom": true,
         "orientation": "once",
         "poi": true,
@@ -523,7 +521,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isSelected|nein|Boolean||Ist der Filter initial ausgewählt|
 |isVisible|nein|Boolean|||
 |name|nein|String||Name des Filters
-|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e) 
+|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
 |attributeWhiteList|nein|Array||Filterbare Attribute
 **Beispiel:**
 
