@@ -63,6 +63,7 @@
           "filter": {
             "name": "Filter",
             "glyphicon": "glyphicon-filter",
+            "deaktivateGFI": false,
             "isGeneric": false,
             "isInitOpen": false,
             "predefinedQueries": [
@@ -144,8 +145,7 @@
           },
           "measure": {
             "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full",
-            "deaktivateGFI": true
+            "glyphicon": "glyphicon-resize-full"
           },
           "coord": {
             "name": "Koordinaten abfragen",
@@ -181,8 +181,7 @@
           },
           "searchByCoord": {
             "name": "Koordinatensuche",
-            "glyphicon": "glyphicon-record",
-            "deaktivateGFI": true
+            "glyphicon": "glyphicon-record"
           },
           "kmlimport": {
             "name": "KML Import",
@@ -206,8 +205,7 @@
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
-            "glyphicon": "glyphicon-pencil",
-            "deaktivateGFI": true
+            "glyphicon": "glyphicon-pencil"
           },
           "featureLister": {
               "name": "Liste",

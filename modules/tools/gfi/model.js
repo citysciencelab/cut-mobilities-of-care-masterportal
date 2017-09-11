@@ -90,15 +90,17 @@ define(function (require) {
             }, this);
 
             this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": this.toggleGFI(id, deaktivateGFI)
+                "activatedTool": function (id, deaktivateGFI) {
+                    this.toggleGFI(id, deaktivateGFI);
+                }
             });
 
             if (_.has(Config, "gfiWindow")) {
                 this.setDesktopViewType(Config.gfiWindow);
             }
 
-
             var tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+
             if (!_.isUndefined(tool)) {
                 this.toggleGFI(tool.id);
             }
@@ -117,7 +119,10 @@ define(function (require) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
-            if (deaktivateGFI) {
+            else if (deaktivateGFI == true) {
+                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
+            }
+            else if (_.isUndefined(deaktivateGFI)) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
         },
