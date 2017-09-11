@@ -1,7 +1,7 @@
 .filter .header {
     width: 100%;
     border-bottom: 1px solid rgb(229,229,229);
-    padding: 5px 10px;
+    padding: 10px 10px;
 }
 
 .filter .simple-views-container {
@@ -14,6 +14,9 @@
         padding: 5px 10px;
         font-size: 12px;
         line-height: 1.5;
+    }
+    .filter .header {
+        padding: 5px 10px;
     }
 }
 
