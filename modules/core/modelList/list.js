@@ -268,7 +268,12 @@ define([
             return idx;
         },
         removeFromSelectionIDX: function (idx) {
-            this.selectionIDX.splice(idx, 1);
+            var deleteCid = idx.cid,
+                filteredIDX = _.reject(this.selectionIDX, function (i) {
+                    return i.cid === deleteCid;
+                });
+
+            this.selectionIDX = filteredIDX;
             this.updateModelIndeces();
         },
 
