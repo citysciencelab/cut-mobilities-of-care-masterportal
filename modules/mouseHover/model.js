@@ -17,12 +17,6 @@ define(function (require) {
             infoText: Config.mouseHover.infoText ? Config.mouseHover.infoText : "(weitere Objekte. Bitte zoomen.)"
         },
         initialize: function () {
-            var channel = Radio.channel("MouseHover");
-
-            channel.on({
-                "registerListener": this.registerListener,
-                "unregisterListener": this.unregisterListener
-            }, this);
             Radio.trigger("Map", "registerListener", "pointermove", this.checkForEachFeatureAtPixel, this);
 
             $("#map").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
@@ -33,12 +27,6 @@ define(function (require) {
 
             this.filterWFSList();
             this.set("element", this.get("mhpOverlay").getElement());
-        },
-        registerListener: function () {
-            Radio.trigger("Map", "registerListener", "pointermove", this.checkForEachFeatureAtPixel, this);
-        },
-        unregisterListener: function () {
-            Radio.trigger("Map", "unregisterListener", "pointermove", this.checkForEachFeatureAtPixel, this);
         },
         filterWFSList: function () {
             var wfsList = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),

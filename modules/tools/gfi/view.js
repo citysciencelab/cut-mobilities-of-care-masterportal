@@ -24,12 +24,6 @@ define(function (require) {
                 this.renderDomElementToBody();
                 this.model.setOverlayElement(document.getElementById("gfipopup"));
             }
-            this.$el.on("mouseenter", function () {
-                Radio.trigger("MouseHover", "unregisterListener");
-            });
-            this.$el.on("mouseleave", function () {
-                Radio.trigger("MouseHover", "registerListener");
-            });
         },
 
         /**
