@@ -164,42 +164,17 @@ define(function (require) {
          * @return {[type]}         [description]
          */
         getRemainingAttributeValues: function (featureAttributesMap, features) {
-            var values = [],
-                features = features || this.get("features");
+            var features = features || this.get("features");
 
             _.each(featureAttributesMap, function (featureAttribute) {
                 featureAttribute.values = [];
 
                 _.each(features, function (feature) {
 
-                    featureAttribute.values = _.union(featureAttribute.values, this.getValuesFromFeature(feature, featureAttribute));
+                    featureAttribute.values = _.union(featureAttribute.values, this.parseStringType(feature, featureAttribute));
                 }, this);
             }, this);
             return featureAttributesMap;
-        },
-
-        getValuesFromFeature: function (feature, featureAttribute) {
-            var values = [];
-
-            if (featureAttribute.type === "boolean") {
-                values = [this.getBooleanDisplayNames(feature, featureAttribute.name)];
-            }
-            else {
-                var stringValues = this.parseStringType(feature, featureAttribute);
-
-                values = stringValues;
-            }
-
-            return _.unique(values);
-        },
-
-        getBooleanDisplayNames: function (feature, name) {
-            if (feature.get(name) === "true") {
-                return "Ja";
-            }
-            else {
-                return "Nein";
-            }
         },
 
         /**
@@ -223,7 +198,7 @@ define(function (require) {
                     values.push(feature.get(featureAttribute.name));
                 }
             }
-            return values;
+            return _.unique(values);
         },
 
         /**
@@ -322,7 +297,6 @@ define(function (require) {
             _.each(snippets.models, function (snippet) {
                     snippet.resetValues();
                     var attribute = _.find(selectableOptions, {name: snippet.get("name")});
-                    // console.log(attribute);
                     snippet.updateSelectableValues(attribute.values);
             });
 

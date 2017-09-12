@@ -37,10 +37,25 @@ define(function (require) {
             this.get("valuesCollection").add({
                 attr: this.get("name"),
                 value: value,
+                displayName: this.getDisplayName(value),
                 isSelected: false,
                 isSelectable: true,
                 type: this.get("type")
             });
+        },
+
+        getDisplayName: function (value) {
+            if (this.get("type") === "boolean") {
+                if (value === "true") {
+                    return "Ja";
+                }
+                else {
+                    return "Nein";
+                }
+            }
+            else {
+                return value;
+            }
         },
 
         /**
@@ -48,7 +63,7 @@ define(function (require) {
          * @param {string|string[]} values - selected value(s) in the dropdown list
          */
         updateSelectedValues: function (values) {
-            if (_.isString(values)) {
+            if (!_.isArray(values)) {
                 values = [values];
             }
             _.each(this.get("valuesCollection").models, function (valueModel) {
