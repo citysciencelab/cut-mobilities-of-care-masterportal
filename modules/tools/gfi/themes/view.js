@@ -39,7 +39,7 @@ define(function (require) {
             var children = this.model.get("children");
 
             _.each(children, function (element) {
-                if (element.type && element.type == "image") {
+                if (element.type && element.type === "image") {
                     this.$el.before(element.val.$el);
                 }
                 else {

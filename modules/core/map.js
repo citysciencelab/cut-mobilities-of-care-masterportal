@@ -80,6 +80,7 @@ define(function (require) {
 
             mapHeight = $(".lgv-container").height() - $("#main-nav").height();
             $("#map").css("height", mapHeight + "px");
+            this.stopMouseMoveEvent();
         },
 
         /**
@@ -371,6 +372,27 @@ define(function (require) {
                 Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
             }
             return resultLayer;
+        },
+        /**
+         * Der ol-overlaycontainer-stopevent Container stoppt nicht jedes Event.
+         * Unter anderem das Mousemove Event. Das übernimmt diese Methode.
+         *
+         * @see {@link https://github.com/openlayers/openlayers/issues/4953}
+         */
+        stopMouseMoveEvent: function () {
+            var browser = navigator.userAgent.toLowerCase();
+
+            // Warum Firefox eine extra Behandlung braucht, weiß ich nicht.
+            if (browser.indexOf("firefox") > -1) {
+                $(".ol-overlaycontainer-stopevent").on("mousemove", function (evt) {
+                    evt.stopPropagation();
+                });
+            }
+            else {
+                $(".ol-overlaycontainer-stopevent").on("pointermove", function (evt) {
+                    evt.stopPropagation();
+                });
+            }
         }
     });
 

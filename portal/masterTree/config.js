@@ -11,7 +11,10 @@ define(function () {
        restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
        styleConf: "../node_modules/lgv-config/style.json",
        proxyURL: "/cgi-bin/proxy.cgi",
-       mouseHover: true,
+       mouseHover: {
+            numFeaturesToShow: 2,
+            infoText: "(weitere Objekte. Bitte zoomen.)"
+        },
        scaleLine: true,
        gemarkungen: "../node_modules/lgv-config/gemarkung.json"
    };
