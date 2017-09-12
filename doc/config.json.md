@@ -853,7 +853,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |title|nein|String|Master|Name des Portals.|
-|logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, ss wird nur der Titel ohne Bild dargestellt.|
+|logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, so wird nur der Titel ohne Bild dargestellt.|
 |link|nein|String|http://geoinfo.hamburg.de|URL der externen Seite, auf die verlinkt wird.|
 |tooltip|nein|String|Landesbetrieb Geoinformation und Vermessung|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
 
