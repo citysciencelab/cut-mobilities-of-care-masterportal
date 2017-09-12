@@ -8,6 +8,12 @@ var Snippet = Backbone.Model.extend({
     },
     superInitialize: function () {
         this.set("valuesCollection", new Backbone.Collection());
+
+        this.listenTo(this.get("valuesCollection"), {
+            "change:isSelected": function (model) {
+                this.trigger("valuesChanged", model);
+            }
+        });
     },
     // getter for id
     getId: function () {

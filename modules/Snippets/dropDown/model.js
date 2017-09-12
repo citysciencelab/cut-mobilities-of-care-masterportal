@@ -17,12 +17,6 @@ define(function (require) {
             this.superInitialize();
             this.addValueModels(this.get("values"));
             this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
-
-            this.listenTo(this.get("valuesCollection"), {
-                "change:isSelected": function (model) {
-                    this.trigger("valuesChanged", model);
-                }
-            });
         },
 
         /**

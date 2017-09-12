@@ -84,6 +84,7 @@ define(function (require) {
             }
             else {
                 this.model.setIsOpen(false);
+                this.render();
             }
         }
 
