@@ -12,7 +12,6 @@ define(function () {
        styleConf: "../node_modules/lgv-config/style.json",
        proxyURL: "/cgi-bin/proxy.cgi",
        mouseHover: {
-            show: true,
             numFeaturesToShow: 2,
             infoText: "(weitere Objekte. Bitte zoomen.)"
         },

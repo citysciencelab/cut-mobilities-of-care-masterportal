@@ -223,6 +223,7 @@ define(function (require) {
                         var mouseHoverField = layerInfos.fieldname;
 
                         value = this.pickValue(mouseHoverField, featureProperties);
+                        // if multiple features in mouseHover. The first feature coordinate is used
                         if (_.isUndefined(coord)) {
                             coord = this.pickCoord(featureGeometry);
                         }

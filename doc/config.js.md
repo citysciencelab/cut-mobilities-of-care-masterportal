@@ -33,7 +33,6 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 ## mouseHover ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|show|nein|Boolean|false|Gibt an ob MouseHover angezeigt werden sollen.|
 |numFeaturesToShow|nein|Integer|2|maximale Anzahl an MouseHovers, bevor ein InfoText dem MosueHover zugefügt wird.|
 |infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
 ******

@@ -73,7 +73,6 @@ define(function () {
         attributions: true,
         scaleLine: true,
         mouseHover: {
-            show: true,
             numFeaturesToShow: 2,
             infoText: "(weitere Objekte. Bitte zoomen.)"
         },
