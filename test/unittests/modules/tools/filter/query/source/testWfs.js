@@ -32,6 +32,38 @@ define(function(require) {
             });
         });
 
+        describe("initIsMatch", function () {
+            it("should set isMatch to true on all passed features", function () {
+                model.initIsMatchToTrue(testFeatures);
+                _.each(testFeatures, function (testFeature) {
+                    expect(testFeature.get("isMatch")).to.be.true;
+                });
+            });
+        });
+        describe("collectAttributeValues", function () {
+            before(function () {
+                model = new Model();
+                utilModel = new Util();
+                testFeatures = [],
+                values = [];
+                allTestFeatures = utilModel.createTestFeatures();
+                // use subset for easier testing
+                for (var i = 0; i <= 2; i++) {
+                    testFeatures.push(allTestFeatures[i]);
+                }
+                _.each(testFeatures, function (feature) {
+                    _.each(feature.values_, function (value) {
+                        values.push(value);
+                    });
+                });
+            });
+            it("should update Snippets so that only available options are rendered", function () {
+                model.initIsMatchToFalse(testFeatures);
+                _.each(testFeatures, function (testFeature) {
+                    expect(testFeature.get("isMatch")).to.be.true;
+                });
+            });
+        });
         describe("isIntegerInRange", function () {
             it("should match if feature value is within a range", function () {
                 var attribute = {attrName: "anzahl_planbetten", values: ["120", "300"]};
@@ -48,6 +80,6 @@ define(function(require) {
 
                 expect(model.isIntegerInRange(testFeatures[0], attribute)).to.be.false;
             });
-        })
+        });
     });
 });

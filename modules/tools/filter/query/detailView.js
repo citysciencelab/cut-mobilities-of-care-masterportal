@@ -14,6 +14,7 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model, {
+                "rerenderSnippets": this.rerenderSnippets,
                 "renderSnippets": this.renderSnippets,
                 "render": this.render,
                 "change:isSelected": function (model, value) {
@@ -28,12 +29,11 @@ define(function (require) {
                 }
             }, this);
         },
-
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            this.$el.find(".toggle").append(new SnippetCheckboxView({
+        /*    this.$el.find(".toggle").append(new SnippetCheckboxView({
                 values: [{
                         size: "small",
                         label: "Filter:",
@@ -41,8 +41,15 @@ define(function (require) {
                         labelUnchecked: "Aus",
                         isChecked: this.model.get("isActive")
                     }]
-            }).render());
+            }).render());*/
             return this.$el;
+        },
+        rerenderSnippets: function (changedValue) {
+            _.each(this.model.get("snippetCollection").models, function (snippet) {
+                if (_.isUndefined(changedValue) || snippet.get("name") !== changedValue.get("attr")) {
+                    snippet.trigger("render");
+                }
+            });
         },
         updateFeatureCount: function () {
             var featureCount = this.model.get("featureIds").length;
@@ -56,19 +63,19 @@ define(function (require) {
             var view;
 
             _.each(this.model.get("snippetCollection").models, function (snippet) {
-                if (snippet.get("type") === "string") {
-                    view = new SnippetDropdownView({model: snippet});
-                    this.$el.append(view.render());
-                }
-                else if (snippet.get("type") === "boolean") {
-                    view = new SnippetDropdownView({model: snippet});
-                    this.$el.append(view.render());
-                }
-                else {
-                    view = new SnippetSliderView({model: snippet});
-                    this.$el.append(view.render());
-                }
-            }, this);
+                    if (snippet.get("type") === "string") {
+                        view = new SnippetDropdownView({model: snippet});
+                        this.$el.append(view.render());
+                    }
+                    else if (snippet.get("type") === "boolean") {
+                        view = new SnippetDropdownView({model: snippet});
+                        this.$el.append(view.render());
+                    }
+                    else {
+                        view = new SnippetSliderView({model: snippet});
+                        this.$el.append(view.render());
+                    }
+                }, this);
         },
         /**
          * Rendert die View in der die ausgewählten Werte stehen, nach denen derzeit gefiltert wird.

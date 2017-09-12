@@ -33,7 +33,21 @@ var Snippet = Backbone.Model.extend({
     setAttr: function (value) {
         this.set("attr", value);
     },
+    removeView: function () {
+        this.trigger("removeView");
+    },
+    /**
+     * resetCollection
+     * @return {[type]} [description]
+     */
+    resetValues: function () {
+        var collection = this.get("valuesCollection").models,
+            modelsToRemove = [];
 
+         _.each(collection.models, function (model) {
+            model.set("isSelectable", true);
+         }, this);
+    },
     /**
      * returns true if any of the value models is selected
      * @return {boolean}
@@ -43,7 +57,8 @@ var Snippet = Backbone.Model.extend({
             return model.get("isSelected") === true;
         });
     }
-});
+
+ });
 
 return Snippet;
 });

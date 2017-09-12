@@ -2,15 +2,12 @@
     padding: 15px 15px 5px 15px;
 }
 
-.dropdown-container:first-child {
-    padding: 5px 0 15px 0;
-}
-
-.dropdown-container button {
-    padding: 5px 10px;
-    font-size: 12px;
-    line-height: 1.5;
-    border-radius: 3px;
+@media (min-width: 768px) {
+    .dropdown-container button {
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
 }
 
 .dropdown-container .dropdown-menu {

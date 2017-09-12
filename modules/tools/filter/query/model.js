@@ -17,7 +17,9 @@ define(function (require) {
             this.set("snippetCollection", new Backbone.Collection());
 
             this.listenTo(this.get("snippetCollection"), {
-                "valuesChanged": this.runFilter
+                "valuesChanged": function (model) {
+                    this.runFilter(model);
+                }
             }, this);
         },
 
@@ -46,7 +48,7 @@ define(function (require) {
         },
 
         /**
-         * [description]
+         * Uses the WFS Features and Meta Data to build a Query consisting of one or more Snippets, where Snippets like DropDowns or Sliders
          * @param  {XML} response
          */
         createSnippets: function (response) {
@@ -54,13 +56,14 @@ define(function (require) {
 
             featureAttributesMap = this.trimAttributes(featureAttributesMap);
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
+
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
             // isLayerVisible und isSelected
-            if (this.get("isSelected") === true) {
+            /*if (this.get("isSelected") === true) {
                 this.trigger("renderSnippets");
-            }
+            }*/
         },
 
         /**
