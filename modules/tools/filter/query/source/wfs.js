@@ -278,7 +278,7 @@ define(function (require) {
                             if(feature.get("kapitelbezeichnung") === "Grundschulen"  && attribute.name === "schulform") {
                                // debugger;
                             }
-                            selectableValues.values.push(this.getValuesFromFeature(feature, attribute));//feature.get(attribute.name));
+                            selectableValues.values.push(this.parseStringType(feature, attribute));//feature.get(attribute.name));
                         }
                     }, this);
                     selectableValues.values = _.unique(_.flatten(selectableValues.values));
