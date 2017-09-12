@@ -307,12 +307,10 @@ define("app",
 
         if (sbconfig) {
             require(["modules/searchbar/view"], function (SearchbarView) {
-                var title = Radio.request("Parser", "getPortalConfig").PortalTitle;
-
                 new SearchbarView(sbconfig);
-                if (title) {
+                if (Radio.request("Parser", "getPortalConfig").portalTitle) {
                     require(["modules/title/view"], function (TitleView) {
-                        new TitleView(title);
+                        new TitleView();
                     });
                 }
             });
