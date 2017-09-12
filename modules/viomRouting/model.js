@@ -172,7 +172,7 @@ define([
             }
             $("#loader").show();
             $.ajax({
-                url: this.get("viomRoutingURL"),
+                url: Radio.request("Util", "getProxyURL", this.get("viomRoutingURL")),
                 data: request,
                 async: true,
                 context: this,
