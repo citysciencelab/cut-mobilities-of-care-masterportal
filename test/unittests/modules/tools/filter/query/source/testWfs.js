@@ -114,7 +114,6 @@ define(function(require) {
                     .to.deep.include({name: "strasse", values: ["Süntelstraße 11a"]})
                     .to.deep.include({name: "name", values: ["Albertinen-Krankenhaus"]})
                     .to.deep.include({name: "teilnahme_notversorgung", values: ["Nein", "Ja"]});
-                    //.to.have.deep.members(["Kayhuder Straße 65", "Süntelstraße 11a"]);
             });
         });
         describe("isIntegerInRange", function () {
