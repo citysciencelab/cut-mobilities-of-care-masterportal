@@ -28,6 +28,7 @@ define(function (require) {
                 this.appendChildren();
                 this.appendRoutableButton();
             }
+            this.delegateEvents();
         },
 
         /**
