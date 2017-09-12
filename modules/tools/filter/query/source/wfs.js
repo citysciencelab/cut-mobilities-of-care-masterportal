@@ -124,41 +124,6 @@ define(function (require) {
         },
 
         /**
- * [description]
- * @param  {[type]} typeMap [description]
- * @return {[type]}         [description]
- */
-// collectAttributeValues: function (featureAttributesMap) {
-//
-//         var values = [],
-//             features = this.get("features");
-//
-//     _.each(featureAttributesMap, function (featureAttribute) {
-//         values = [];
-//         _.each(features, function (feature) {
-//             if (featureAttribute.type === "boolean") {
-//                 if (feature.get(featureAttribute.name) === "true") {
-//                     values.push("Ja");
-//                     feature.set(featureAttribute.name, "Ja");
-//                 }
-//                 else {
-//                     values.push("Nein");
-//                     feature.set(featureAttribute.name, "Nein");
-//                 }
-//             }
-//             else {
-//                 var stringValues = this.parseStringType(feature, featureAttribute);
-//
-//                 values = _.union(values, stringValues);
-//             }
-//         }, this);
-//         featureAttribute.values = _.unique(values);
-//     }, this);
-//
-//     return featureAttributesMap;
-// },
-
-        /**
          * [description]
          * @param  {[type]} typeMap [description]
          * @return {[type]}         [description]
@@ -171,30 +136,28 @@ define(function (require) {
                 featureAttribute.values = [];
 
                 _.each(features, function (feature) {
+                    var featureValues = this.getValuesFromFeature(feature, featureAttribute.name, featureAttribute.type);
 
-                    featureAttribute.values = _.union(featureAttribute.values, this.getValuesFromFeature(feature, featureAttribute));
+                    featureAttribute.values = _.union(featureAttribute.values, featureValues);
                 }, this);
             }, this);
             return featureAttributesMap;
         },
 
-        getValuesFromFeature: function (feature, featureAttribute) {
+        getValuesFromFeature: function (feature, attrName, attrType) {
             var values = [];
 
-            if (featureAttribute.type === "boolean") {
-                values = [this.getBooleanDisplayNames(feature, featureAttribute.name)];
+            if (attrType === "boolean") {
+                values.push(this.getBooleanDisplayNames(feature.get(attrName)));
             }
             else {
-                var stringValues = this.parseStringType(feature, featureAttribute);
-
-                values = stringValues;
+                values = this.parseValuesFromString(feature, attrName);
             }
-
             return _.unique(values);
         },
 
-        getBooleanDisplayNames: function (feature, name) {
-            if (feature.get(name) === "true") {
+        getBooleanDisplayNames: function (value) {
+            if (value === "true") {
                 return "Ja";
             }
             else {
@@ -208,19 +171,19 @@ define(function (require) {
          * @param  {[type]} featureAttribute [description]
          * @return {[type]}                  [description]
          */
-        parseStringType: function (feature, featureAttribute) {
+        parseValuesFromString: function (feature, attrName) {
             var values = [];
 
-            if (!_.isUndefined(feature.get(featureAttribute.name))) {
-                if (feature.get(featureAttribute.name).indexOf("|") !== -1) {
-                    var featureValues = feature.get(featureAttribute.name).split("|");
+            if (!_.isUndefined(feature.get(attrName))) {
+                if (feature.get(attrName).indexOf("|") !== -1) {
+                    var featureValues = feature.get(attrName).split("|");
 
                     _.each(featureValues, function (value) {
                         values.push(value);
                     });
                 }
                 else {
-                    values.push(feature.get(featureAttribute.name));
+                    values.push(feature.get(attrName));
                 }
             }
             return values;
@@ -258,6 +221,7 @@ define(function (require) {
             if (attributes.length > 0) {
                 _.each(features, function (feature) {
                     var isMatch = this.isFilterMatch(feature, attributes);
+
                     if (isMatch) {
                         featureIds.push(feature.getId());
                     }
@@ -268,84 +232,56 @@ define(function (require) {
                     featureIds.push(feature.getId());
                 }, this);
             }
-            this.collectSelectableOptions(features, attributes);
 
+            this.updateSnippets(features, attributes);
             this.setFeatureIds(featureIds);
             this.trigger("featureIdsChanged");
         },
 
-
-
-        collectSelectableOptions: function (features, attributes) {
+        /**
+         * [collectSelectableOptions description]
+         * @param  {[type]} features   [description]
+         * @param  {[type]} attributes [description]
+         * @return {[type]}            [description]
+         */
+        collectSelectableOptions: function (features, selectedAttributes, attributesMap) {
             var selectableOptions = [];
-            if(attributes.length === 0) {
-           /*     attributes = this.get("featureAttributesMap");
-                _.each(attributes, function (attribute) {
-                    var selectableValues =  {name: attribute.name, values: []};
 
-                    _.each(features, function (feature) {
-                        selectableValues.values.push(feature.get(attribute.name));
-                    });
-                    selectableValues.values = _.unique(selectableValues.values);
-                    selectableOptions.push(selectableValues);
-                });*/
-                selectableOptions = this.getRemainingAttributeValues(this.get("featureAttributesMap"), features);
-
+            if (selectedAttributes.length === 0) {
+                selectableOptions = this.getRemainingAttributeValues(attributesMap, features);
             }
             else {
-                var attributesMap = this.get("featureAttributesMap");
+                var attributesMap = attributesMap;
+
                 _.each(attributesMap, function (attribute) {
                         var selectableValues =  {name: attribute.name, values: []};
+                       // debugger;
                     _.each(features, function (feature) {
-                        var isMatch = this.isFilterMatch(feature, _.filter(attributes, function (attr) {return attr.attrName !== attribute.name}));
+                        var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
+                            return attr.attrName !== attribute.name;
+                        }));
 
                         if (isMatch) {
-                            if(feature.get("kapitelbezeichnung") === "Grundschulen"  && attribute.name === "schulform") {
-                               // debugger;
-                            }
-                            selectableValues.values.push(this.getValuesFromFeature(feature, attribute));//feature.get(attribute.name));
+                            selectableValues.values.push(this.getValuesFromFeature(feature, attribute.name, attribute.type));
                         }
                     }, this);
                     selectableValues.values = _.unique(_.flatten(selectableValues.values));
                     selectableOptions.push(selectableValues);
                 }, this);
             }
-
-            // console.log(selectableOptions);
-            this.updateSnippets(selectableOptions);
-
+            return selectableOptions;
         },
 
-        updateSnippets: function (selectableOptions) {
-            var snippets = this.get("snippetCollection");
+        updateSnippets: function (features, attributes) {
+            var snippets = this.get("snippetCollection"),
+                selectableOptions = this.collectSelectableOptions(features, attributes, this.get("featureAttributesMap"));
 
             _.each(snippets.models, function (snippet) {
                     snippet.resetValues();
                     var attribute = _.find(selectableOptions, {name: snippet.get("name")});
-                    // console.log(attribute);
+
                     snippet.updateSelectableValues(attribute.values);
             });
-
-
-            /*var featureAttributesMap = this.getRemainingAttributeValues(featureAttributesMap, featureIds),
-                snippets = this.get("snippetCollection");
-
-                _.each(snippets.models, function (snippet) {
-                    snippet.resetValues();
-                    var attribute = _.find(featureAttributesMap, {name: snippet.get("name")});
-
-                    if (!_.isUndefined(attribute)) {
-                        if(!_.isUndefined(model) && model.get("isSelected")) {
-                            if (snippet.get("name") !== model.get("attr")) {
-                               snippet.updateValues(attribute.values);
-                            }
-                        }
-                        else {
-                            snippet.updateValues(attribute.values);
-                        }
-                    }
-                });*/
-               //this.trigger("rerenderSnippets", model);
         },
 
         isValueMatch: function (feature, attribute) {
