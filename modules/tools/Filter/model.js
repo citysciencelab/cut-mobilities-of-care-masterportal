@@ -25,7 +25,7 @@ define(function (require) {
                         model.setIsSelected(false);
                     });
                 },
-                "featureIdsChanged": this.sendFeatureIds
+                "featureIdsChanged": this.sendFeatureIds,
             }, this);
             this.setDefaults();
             this.createQueries(this.getConfiguredQueries());
@@ -33,7 +33,7 @@ define(function (require) {
         sendFeatureIds: function () {
             var allFeatureIds = [];
             // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
-            if (_.contains(this.get("queryCollection").pluck("isSelected"), true)) {
+            if (!_.contains(this.get("queryCollection").pluck("isSelected"), true)) {
                 _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
                     var featureIdList = [],
                         uniqueFeatureIds;

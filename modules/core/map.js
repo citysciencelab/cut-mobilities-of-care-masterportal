@@ -319,28 +319,22 @@ define(function (require) {
             this.get("view").fit(extent, this.get("map").getSize(), options);
         },
 
-        zoomToFilteredFeatures: function (idMap) {
-            var allFeatures = [],
-                extent;
+        zoomToFilteredFeatures: function (ids, layerId) {
+            var extent,
+                features,
+                layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId, type: "layer"}),
+                layerFeatures = [];
 
-            _.each(idMap, function (elem) {
-                var layer = Radio.request("ModelList", "getModelByAttributes", {id: elem.layer, type: "layer"}),
-                    layerFeatures = [];
-
-                if (!_.isUndefined(layer) && !_.isUndefined(layer.get("layer").getSource())) {
-                    layerFeatures = layer.get("layer").getSource().getFeatures();
-                }
-                var features = _.filter(layerFeatures, function (feature) {
-                    return _.contains(elem.ids, feature.getId());
-                });
-
-                if (!_.isUndefined(features)) {
-                    allFeatures.push(features);
-                }
+            if (!_.isUndefined(layer) && !_.isUndefined(layer.get("layer").getSource())) {
+                layerFeatures = layer.get("layer").getSource().getFeatures();
+            }
+            features = _.filter(layerFeatures, function (feature) {
+                return _.contains(ids, feature.getId());
             });
-            allFeatures = _.flatten(allFeatures);
-            extent = this.calculateExtent(allFeatures);
-            this.zoomToExtent(extent);
+            if (features.length > 0) {
+                extent = this.calculateExtent(features);
+                this.zoomToExtent(extent);
+            }
         },
         calculateExtent: function (features) {
             // extent = [xMin, yMin, xMax, yMax]

@@ -249,7 +249,9 @@ define(function (require) {
             this.trigger("featureIdsChanged");
         },
 
-
+        zoomToSelectedFeatures: function () {
+            Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+        },
 
         collectSelectableOptions: function (features, attributes) {
             var selectableOptions = [];
