@@ -20,7 +20,8 @@ define(function (require) {
 
         initialize: function () {
              this.listenTo(this.model, {
-                "render": this.render
+                "render": this.render,
+                "removeView": this.removeView
             });
         },
 
@@ -28,7 +29,7 @@ define(function (require) {
          * renders the view depending on the isOpen attribute
          * @return {jQuery} - this DOM element as a jQuery object
          */
-        render: function () {
+        render: function () {//console.log(this.model);
             if (this.model.get("isOpen") === false) {
                 var attr = this.model.toJSON();
 
@@ -86,6 +87,15 @@ define(function (require) {
                 this.model.setIsOpen(false);
                 this.render();
             }
+        },
+
+        /**
+         * calls the function "setIsOpen" in the model with parameter false
+         * removes this view and its el from the DOM
+         */
+        removeView: function () {
+            this.model.setIsOpen(false);
+            this.remove();
         }
 
     });
