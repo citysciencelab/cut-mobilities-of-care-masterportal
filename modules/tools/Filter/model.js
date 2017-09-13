@@ -33,7 +33,7 @@ define(function (require) {
         sendFeatureIds: function () {
             var allFeatureIds = [];
 
-            _.each(this.get("queryCollection").groupBy("layerId"), function (group) {
+            _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
                 var featureIdList = [],
                     uniqueFeatureIds;
 
@@ -45,17 +45,20 @@ define(function (require) {
                     }
                 });
                 uniqueFeatureIds = _.unique(featureIdList);
-
-                Radio.trigger("ModelList", "showFeaturesById", group[0].get("layerId"), uniqueFeatureIds);
+                Radio.trigger("ModelList", "showFeaturesById", layerId, uniqueFeatureIds);
                 allFeatureIds.push({
-                    layer: group[0].get("layerId"),
+                    layer: layerId,
                     ids: uniqueFeatureIds
                 });
             });
             if (_.contains(this.get("queryCollection").pluck("isSelected"), true) === false) {
-                Radio.trigger("ModelList", "showAllFeatures", "8190");
+                 _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
+                    Radio.trigger("ModelList", "showAllFeatures", layerId);
+                 });
             }
-            Radio.trigger("Map", "zoomToFilteredFeatures", allFeatureIds);
+            else {
+                Radio.trigger("Map", "zoomToFilteredFeatures", allFeatureIds);
+            }
         },
         activate: function (id) {
             if (this.get("id") === id) {

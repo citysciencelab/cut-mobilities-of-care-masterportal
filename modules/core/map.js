@@ -339,30 +339,24 @@ define(function (require) {
                 }
             });
             allFeatures = _.flatten(allFeatures);
-
             extent = this.calculateExtent(allFeatures);
-            if (!_.isUndefined(extent)) {
-                this.zoomToExtent(extent);
-            }
+            this.zoomToExtent(extent);
 
         },
         calculateExtent: function (features) {
-            var extent;
+            var extent = features[0].getGeometry().getExtent();
 
-            if (features.length > 0) {
-                extent = features[0].getGeometry().getExtent();
-                _.each(features, function (feature) {
-                    var featureExtent = feature.getGeometry().getExtent();
+            _.each(features, function (feature) {
+                var featureExtent = feature.getGeometry().getExtent();
 
-                    if (feature.getId() === "APP_STAATLICHE_SCHULEN_4099") {
-                        return;
-                    }
-                    (featureExtent[0] < extent[0]) && (extent[0] = featureExtent[0]);
-                    (featureExtent[1] < extent[1]) && (extent[1] = featureExtent[1]);
-                    (featureExtent[2] > extent[2]) && (extent[2] = featureExtent[2]);
-                    (featureExtent[3] > extent[3]) && (extent[3] = featureExtent[3]);
-                });
-            }
+                if (feature.getId() === "APP_STAATLICHE_SCHULEN_4099") {
+                    return;
+                }
+                (featureExtent[0] < extent[0]) && (extent[0] = featureExtent[0]);
+                (featureExtent[1] < extent[1]) && (extent[1] = featureExtent[1]);
+                (featureExtent[2] > extent[2]) && (extent[2] = featureExtent[2]);
+                (featureExtent[3] > extent[3]) && (extent[3] = featureExtent[3]);
+            });
             return extent;
         },
         /**
