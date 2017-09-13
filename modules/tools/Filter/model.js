@@ -32,32 +32,32 @@ define(function (require) {
         },
         sendFeatureIds: function () {
             var allFeatureIds = [];
+            // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
+            if (_.contains(this.get("queryCollection").pluck("isSelected"), true)) {
+                _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
+                    var featureIdList = [],
+                        uniqueFeatureIds;
 
-            _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
-                var featureIdList = [],
-                    uniqueFeatureIds;
-
-                _.each(group, function (query) {
-                    if (query.get("isSelected") === true) {
-                        _.each(query.get("featureIds"), function (featureId) {
-                            featureIdList.push(featureId);
-                        });
-                    }
+                    _.each(group, function (query) {
+                        if (query.get("isSelected") === true) {
+                            _.each(query.get("featureIds"), function (featureId) {
+                                featureIdList.push(featureId);
+                            });
+                        }
+                    });
+                    uniqueFeatureIds = _.unique(featureIdList);
+                    Radio.trigger("ModelList", "showFeaturesById", layerId, uniqueFeatureIds);
+                    allFeatureIds.push({
+                        layer: layerId,
+                        ids: uniqueFeatureIds
+                    });
                 });
-                uniqueFeatureIds = _.unique(featureIdList);
-                Radio.trigger("ModelList", "showFeaturesById", layerId, uniqueFeatureIds);
-                allFeatureIds.push({
-                    layer: layerId,
-                    ids: uniqueFeatureIds
-                });
-            });
-            if (_.contains(this.get("queryCollection").pluck("isSelected"), true) === false) {
-                 _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
-                    Radio.trigger("ModelList", "showAllFeatures", layerId);
-                 });
+                Radio.trigger("Map", "zoomToFilteredFeatures", allFeatureIds);
             }
             else {
-                Radio.trigger("Map", "zoomToFilteredFeatures", allFeatureIds);
+                _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
+                    Radio.trigger("ModelList", "showAllFeatures", layerId);
+                });
             }
         },
         activate: function (id) {
