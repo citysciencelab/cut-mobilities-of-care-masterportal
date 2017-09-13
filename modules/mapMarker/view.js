@@ -27,44 +27,12 @@ define([
         model: new MapHandlerModel(),
         id: "searchMarker",
         className: "glyphicon glyphicon-map-marker",
-        template: _.template("<span class='glyphicon glyphicon-remove'></span>"),
-        events: {
-            "click .glyphicon-remove": "hideMarker"
-        },
         /**
         * @description View des Map Handlers
         */
         initialize: function () {
             var markerPosition,
                 channel = Radio.channel("MapMarker");
-
-            channel.reply({
-                "getCloseButtonCorners": function () {
-                    if (this.$el.is(":visible") === false) {
-                        return {
-                            top: -1,
-                            bottom: -1,
-                            left: -1,
-                            right: -1
-                        };
-                    }
-                    else {
-                        var bottomSM = $("#searchMarker .glyphicon-remove").offset().top,
-                            leftSM = $("#searchMarker .glyphicon-remove").offset().left,
-                            widthSM = $("#searchMarker .glyphicon-remove").outerWidth(),
-                            heightSM = $("#searchMarker .glyphicon-remove").outerHeight(),
-                            topSM = bottomSM + heightSM,
-                            rightSM = leftSM + widthSM;
-
-                        return {
-                            top: topSM,
-                            bottom: bottomSM,
-                            left: leftSM,
-                            right: rightSM
-                        };
-                    }
-                }
-            }, this);
 
             channel.on({
                 "clearMarker": this.clearMarker,
@@ -84,8 +52,6 @@ define([
             this.model.askForMarkers();
         },
         render: function () {
-            this.$el.html(this.template());
-
             this.model.get("marker").setElement(this.$el[0]);
         },
         /**
