@@ -244,7 +244,7 @@ define(function (require) {
                     mouseHoverObj.values.push("<span class='info'>" + this.get("infoText") + "</span>");
                 }
                 this.get("mhpOverlay").setPosition(mouseHoverObj.coord);
-                this.get("mhpOverlay").setOffset([10, -15]);
+                // this.get("mhpOverlay").setOffset([10, -15]);
                 this.set("mhpcoordinates", mouseHoverObj.coord);
                 this.set("mhpresult", mouseHoverObj.values);
             }

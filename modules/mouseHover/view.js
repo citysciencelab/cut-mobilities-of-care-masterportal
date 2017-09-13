@@ -20,7 +20,15 @@ define(function (require) {
             $(this.model.get("element")).tooltip({
                 html: true,
                 title: this.model.get("mhpresult"),
-                placement: "auto",
+                placement: function () {
+                    position = this.getPosition().top;
+                    if (this.getPosition().top > $("#map").height() / 2) {
+                        return "top";
+                    }
+                    else {
+                        return "bottom";
+                    }
+                },
                 template: "<div class='tooltip' role='tooltip'><div class='tooltip-inner mouseHover'></div></div>",
                 animation: true,
                 viewport: "#map"
