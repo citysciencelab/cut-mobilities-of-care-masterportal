@@ -341,10 +341,10 @@ define(function (require) {
             allFeatures = _.flatten(allFeatures);
             extent = this.calculateExtent(allFeatures);
             this.zoomToExtent(extent);
-
         },
         calculateExtent: function (features) {
-            var extent = features[0].getGeometry().getExtent();
+            // extent = [xMin, yMin, xMax, yMax]
+            var extent = [9999999, 9999999, 0, 0];
 
             _.each(features, function (feature) {
                 var featureExtent = feature.getGeometry().getExtent();
