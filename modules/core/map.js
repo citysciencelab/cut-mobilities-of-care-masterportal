@@ -339,16 +339,17 @@ define(function (require) {
                 }
             });
             allFeatures = _.flatten(allFeatures);
+
             extent = this.calculateExtent(allFeatures);
             if (!_.isUndefined(extent)) {
-                this.zoomToExtent();
+                this.zoomToExtent(extent);
             }
 
         },
         calculateExtent: function (features) {
             var extent;
 
-            if (features.length < 0) {
+            if (features.length > 0) {
                 extent = features[0].getGeometry().getExtent();
                 _.each(features, function (feature) {
                     var featureExtent = feature.getGeometry().getExtent();
