@@ -25,25 +25,37 @@ define(function (require) {
                         model.setIsSelected(false);
                     });
                 },
-                "featureIdsChanged": function () {
-                    _.each(this.get("queryCollection").groupBy("layerId"), function (group) {
-                        var featureIdList = [];
-                        _.each(group, function (query) {
-                            if (query.get("isSelected") === true) {
-                                _.each(query.get("featureIds"), function (featureId) {
-                                    featureIdList.push(featureId);
-                                });
-                            }
-                        });
-                        Radio.trigger("ModelList", "showFeaturesById", group[0].get("layerId"), _.unique(featureIdList));
-                    });
-                    if (_.contains(this.get("queryCollection").pluck("isSelected"), true) === false) {
-                        Radio.trigger("ModelList", "showAllFeatures", "8190");
-                    }
-                }
+                "featureIdsChanged": this.sendFeatureIds
             }, this);
             this.setDefaults();
             this.createQueries(this.getConfiguredQueries());
+        },
+        sendFeatureIds: function () {
+            var allFeatureIds = [];
+
+            _.each(this.get("queryCollection").groupBy("layerId"), function (group) {
+                var featureIdList = [];
+
+                _.each(group, function (query) {
+                    if (query.get("isSelected") === true) {
+                        console.log(1);
+                        _.each(query.get("featureIds"), function (featureId) {
+                            featureIdList.push(featureId);
+                        });
+                    }
+                });
+                var uniqueFeatureIds =  _.unique(featureIdList);
+
+                Radio.trigger("ModelList", "showFeaturesById", group[0].get("layerId"), uniqueFeatureIds);
+                allFeatureIds.push({
+                    layer: group[0].get("layerId"),
+                    ids: uniqueFeatureIds
+                });
+            });
+            if (_.contains(this.get("queryCollection").pluck("isSelected"), true) === false) {
+                Radio.trigger("ModelList", "showAllFeatures", "8190");
+            }
+            Radio.trigger("Map", "zoomToFilteredFeatures", allFeatureIds);
         },
         activate: function (id) {
             if (this.get("id") === id) {

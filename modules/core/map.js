@@ -47,6 +47,7 @@ define(function (require) {
                 "setBBox": this.setBBox,
                 "render": this.render,
                 "zoomToExtent": this.zoomToExtent,
+                "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
                 "createVectorLayer": this.createVectorLayer,
                 "addLoadingLayer": this.addLoadingLayer,
                 "removeLoadingLayer": this.removeLoadingLayer,
@@ -318,6 +319,48 @@ define(function (require) {
             this.get("view").fit(extent, this.get("map").getSize(), options);
         },
 
+        zoomToFilteredFeatures: function (idMap) {
+            var allFeatures = [];
+
+            _.each(idMap, function (elem) {
+                var layer = Radio.request("ModelList", "getModelByAttributes", {id: elem.layer, type: "layer"}),
+                    layerFeatures = [];
+
+                if (!_.isUndefined(layer) && !_.isUndefined(layer.get("layer").getSource())) {
+                    layerFeatures = layer.get("layer").getSource().getFeatures();
+                }
+                var features = _.filter(layerFeatures, function (feature) {
+                    return _.contains(elem.ids, feature.getId());
+                });
+
+                if (!_.isUndefined(features)) {
+                    allFeatures.push(features);
+                }
+            });
+            console.log(allFeatures);
+            allFeatures = _.flatten(allFeatures);
+            console.log(allFeatures);
+            this.zoomToExtent(this.calculateExtent(allFeatures));
+
+        },
+        calculateExtent: function (features) {
+            var extent = features[0].getGeometry().getExtent();
+
+            _.each(features, function (feature) {
+                var featureExtent = feature.getGeometry().getExtent();
+
+                if (feature.getId() === "APP_STAATLICHE_SCHULEN_4099"){
+                    return
+                };
+
+                (featureExtent[0] < extent[0]) && (extent[0] = featureExtent[0]);
+                (featureExtent[1] < extent[1]) && (extent[1] = featureExtent[1]);
+                (featureExtent[2] > extent[2]) && (extent[2] = featureExtent[2]);
+                (featureExtent[3] > extent[3]) && (extent[3] = featureExtent[3]);
+            });
+            console.log(extent);
+            return extent;
+        },
         /**
          * Gibt die Größe in Pixel der Karte zurück.
          * @return {ol.Size} - Ein Array mit zwei Zahlen [width, height]

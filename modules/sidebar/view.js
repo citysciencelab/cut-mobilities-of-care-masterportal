@@ -18,12 +18,14 @@ define(function (require) {
                 "change:isVisible": this.toggle,
                 "change:isMobile": this.toggleCssClass
             });
+            this.render();
         },
 
         render: function () {
             $("#map").after(this.$el);
             if (!this.model.get("isMobile")) {
                 $("#map").css("width", "70%");
+                Radio.trigger("Map", "updateSize");
                 this.removeBackdrop();
             }
             else {
@@ -58,6 +60,8 @@ define(function (require) {
         removeView: function () {
             this.$el.remove();
             $("#map").css("width", "100%");
+
+            Radio.trigger("Map", "updateSize");
         },
 
         addBackdrop: function () {
