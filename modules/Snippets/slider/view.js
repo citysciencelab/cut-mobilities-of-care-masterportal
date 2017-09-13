@@ -22,6 +22,10 @@ define(function (require) {
             this.listenTo(this.model.get("valuesCollection"), {
                 "change:isSelected": this.updateValueModel
             });
+
+            this.listenTo(this.model, {
+                "render": this.render
+            });
         },
 
         render: function () {

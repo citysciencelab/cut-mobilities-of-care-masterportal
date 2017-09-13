@@ -4,7 +4,7 @@ define(function (require) {
         SchulInfoTheme;
 
     SchulInfoTheme = Theme.extend({
-        defaults: {
+        defaults: _.extend({}, Theme.prototype.defaults, {
             themeConfig: {
                 kategories: [{
                     name: "Grundsätzliche Informationen",
@@ -84,7 +84,7 @@ define(function (require) {
                         "Kiosk"]
                 }]
             }
-        },
+        }),
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent

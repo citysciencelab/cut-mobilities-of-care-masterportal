@@ -114,6 +114,9 @@ define(function (require) {
         * Selektion angestpßen.
         */
         checkForEachFeatureAtPixel: function (evt) {
+            if (evt.dragging) {
+                return;
+            }
             var pFeaturesArray = [],
                 pFeatureArray = [],
                 featuresAtPixel = this.getFeaturesAtPixel(evt);

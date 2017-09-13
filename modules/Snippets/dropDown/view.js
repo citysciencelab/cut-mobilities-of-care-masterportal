@@ -57,13 +57,13 @@ define(function (require) {
          */
         markSelectedValues: function () {
             var models = this.model.get("valuesCollection").where({isSelected: true}),
-                attributes = [];
+                values = [];
 
             _.each(models, function (model) {
-                attributes.push(model.get("value"));
+                values.push(model.get("value"));
             });
 
-            this.$el.find(".selectpicker").selectpicker("val", attributes);
+            this.$el.find(".selectpicker").selectpicker("val", values);
         },
 
         /**
@@ -84,6 +84,7 @@ define(function (require) {
             }
             else {
                 this.model.setIsOpen(false);
+                this.render();
             }
         }
 

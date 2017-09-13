@@ -13,6 +13,21 @@ define(function (require) {
             this.setRangeMinValue(_.min(parsedValues));
             this.setRangeMaxValue(_.max(parsedValues));
             this.addValueModels();
+
+            this.listenToOnce(this, {
+                "change:rangeMaxValue": function (model, value) {
+                    var minModel = this.get("valuesCollection").at(1);
+
+                    minModel.set("value", value);
+                    this.trigger("render");
+                },
+                "change:rangeMinValue": function (model, value) {
+                    var minModel = this.get("valuesCollection").at(0);
+
+                    minModel.set("value", value);
+                    this.trigger("render");
+                }
+            });
         },
 
         /**
@@ -106,6 +121,13 @@ define(function (require) {
             }
             // listener in filter/query/detailView
             this.trigger("valuesChanged");
+        },
+
+        updateSelectableValues: function (values) {
+            var parsedValues = this.parseValues(values);
+
+            this.setRangeMinValue(_.min(parsedValues));
+            this.setRangeMaxValue(_.max(parsedValues));
         },
 
         /**
