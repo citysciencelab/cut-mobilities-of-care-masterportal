@@ -34,17 +34,17 @@ define(function (require) {
             var allFeatureIds = [];
 
             _.each(this.get("queryCollection").groupBy("layerId"), function (group) {
-                var featureIdList = [];
+                var featureIdList = [],
+                    uniqueFeatureIds;
 
                 _.each(group, function (query) {
                     if (query.get("isSelected") === true) {
-                        console.log(1);
                         _.each(query.get("featureIds"), function (featureId) {
                             featureIdList.push(featureId);
                         });
                     }
                 });
-                var uniqueFeatureIds =  _.unique(featureIdList);
+                uniqueFeatureIds = _.unique(featureIdList);
 
                 Radio.trigger("ModelList", "showFeaturesById", group[0].get("layerId"), uniqueFeatureIds);
                 allFeatureIds.push({
