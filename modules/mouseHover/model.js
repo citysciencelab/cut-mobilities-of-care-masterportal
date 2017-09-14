@@ -17,6 +17,12 @@ define(function (require) {
             infoText: Config.mouseHover.infoText ? Config.mouseHover.infoText : "(weitere Objekte. Bitte zoomen.)"
         },
         initialize: function () {
+            var channel = Radio.channel("MouseHover");
+
+            this.listenTo(channel, {
+                "hide": this.destroyPopup
+            });
+
             Radio.trigger("Map", "registerListener", "pointermove", this.checkForEachFeatureAtPixel, this);
 
             $("#map").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");

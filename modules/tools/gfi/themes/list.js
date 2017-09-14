@@ -117,6 +117,7 @@ define(function (require) {
         appendTheme: function (value) {
             this.setAllInVisible();
             this.at(value).setIsVisible(true);
+            Radio.trigger("MouseHover", "hide");
         },
 
         /**
