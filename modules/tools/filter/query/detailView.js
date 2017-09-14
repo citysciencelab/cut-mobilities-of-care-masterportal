@@ -34,15 +34,6 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-        /*    this.$el.find(".toggle").append(new SnippetCheckboxView({
-                values: [{
-                        size: "small",
-                        label: "Filter:",
-                        labelChecked: "An",
-                        labelUnchecked: "Aus",
-                        isChecked: this.model.get("isActive")
-                    }]
-            }).render());*/
             return this.$el;
         },
         rerenderSnippets: function (changedValue) {
