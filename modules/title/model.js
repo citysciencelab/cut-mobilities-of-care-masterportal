@@ -6,10 +6,11 @@ define(function (require) {
 
      TitleModel = Backbone.Model.extend({
         defaults: {
-            title: "Master",
-            logo: "",
-            link: "http://geoinfo.hamburg.de",
-            tooltip: "Landesbetrieb Geoinformation und Vermessung"
+            // Abwärtskompatibilität muss beachtet werden
+            title: Radio.request("Parser", "getPortalConfig").PortalTitle || "Master",
+            logo: Radio.request("Parser", "getPortalConfig").PortalLogo || "",
+            link: Radio.request("Parser", "getPortalConfig").LogoLink || "http://geoinfo.hamburg.de",
+            tooltip: Radio.request("Parser", "getPortalConfig").LogoToolTip || "Landesbetrieb Geoinformation und Vermessung"
         },
         initialize: function () {
             var portalTitle = Radio.request("Parser", "getPortalConfig").portalTitle;
