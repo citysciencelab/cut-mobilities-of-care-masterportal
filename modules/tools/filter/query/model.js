@@ -60,10 +60,12 @@ define(function (require) {
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
+
             // isLayerVisible und isSelected
-            /*if (this.get("isSelected") === true) {
+            if (this.get("isSelected") === true) {
+                this.runFilter();
                 this.trigger("renderSnippets");
-            }*/
+            }
         },
 
         /**
@@ -94,7 +96,7 @@ define(function (require) {
             var displayNames = Radio.request("RawLayerList", "getDisplayNamesOfFeatureAttributes", this.get("layerId"));
 
             _.each(featureAttributesMap, function (featureAttribute) {
-                if (_.isArray(displayNames) === true && _.has(displayNames, featureAttribute.name) === true) {
+                if (_.isObject(displayNames) === true && _.has(displayNames, featureAttribute.name) === true) {
                     featureAttribute.displayName = displayNames[featureAttribute.name];
                 }
                 else {

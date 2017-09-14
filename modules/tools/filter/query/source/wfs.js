@@ -129,8 +129,7 @@ define(function (require) {
          * @return {[type]}         [description]
          */
         getRemainingAttributeValues: function (featureAttributesMap, features) {
-            var values = [],
-                features = features || this.get("features");
+            var features = features || this.get("features");
 
             _.each(featureAttributesMap, function (featureAttribute) {
                 featureAttribute.values = [];
@@ -138,7 +137,7 @@ define(function (require) {
                 _.each(features, function (feature) {
                     var featureValues = this.getValuesFromFeature(feature, featureAttribute.name, featureAttribute.type);
 
-                    featureAttribute.values = _.union(featureAttribute.values, featureValues);
+                    featureAttribute.values = _.union(featureAttribute.values, this.parseStringType(feature, featureAttribute));
                 }, this);
             }, this);
             return featureAttributesMap;
@@ -186,7 +185,7 @@ define(function (require) {
                     values.push(feature.get(attrName));
                 }
             }
-            return values;
+            return _.unique(values);
         },
 
         /**

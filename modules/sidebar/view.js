@@ -1,37 +1,72 @@
 define(function (require) {
 
-    var Model = require("modules/sidebar/model"),
+    var SidebarModel = require("modules/sidebar/model"),
         SidebarView;
 
     SidebarView = Backbone.View.extend({
-        model: new Model(),
-        className: "sidebar",
+        model: new SidebarModel(),
+        className: function () {
+            if (this.model.get("isMobile")) {
+                return "sidebar-mobile";
+            }
+            else {
+                return "sidebar";
+            }
+        },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isOpen": this.toggle
+                "change:isVisible": this.toggle,
+                "change:isMobile": this.toggleCssClass
             });
         },
-        toggle: function (model, isOpen) {
-            if (isOpen) {
+
+        render: function () {
+            $("#map").after(this.$el);
+            this.$el.css("height", $("#map").height());
+            if (!this.model.get("isMobile")) {
+                $("#map").css("width", "70%");
+                this.removeBackdrop();
+            }
+            else {
+                this.addBackdrop();
+            }
+        },
+
+        toggle: function (model, isVisible) {
+            if (isVisible) {
                 this.render();
             }
             else {
                 this.removeView();
+                this.removeBackdrop();
             }
         },
+
+        toggleCssClass: function (model, value) {
+            if (value) {
+                this.$el.removeClass("sidebar");
+                this.$el.addClass("sidebar-mobile");
+            }
+            else {
+                this.$el.removeClass("sidebar-mobile");
+                this.$el.addClass("sidebar");
+            }
+            if (this.model.get("isVisible")) {
+                this.render();
+            }
+        },
+
         removeView: function () {
             this.$el.remove();
             $("#map").css("width", "100%");
         },
-        render: function () {
-            var mapHeight = $("#map").height();
 
-            $("#map").css("width", "70%");
-            $("#map").after(this.$el);
-            $(".sidebar").css("height", mapHeight + "px");
+        addBackdrop: function () {
+            $(".lgv-container").append("<div class='backdrop'></div>");
         },
-        closeSidebar: function () {
-            this.model.setIsOpen(false);
+
+        removeBackdrop: function () {
+            $(".backdrop").remove();
         }
     });
     return SidebarView;

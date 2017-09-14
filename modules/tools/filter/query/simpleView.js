@@ -35,8 +35,8 @@ define(function (require) {
          */
         selectThis: function () {
             if (this.model.get("isSelected") === true) {
-                this.model.setIsActive(false);
-                this.model.setIsSelected(false);
+                // this.model.setIsActive(false);
+                // this.model.setIsSelected(false);
             }
             else {
                 // die Query-Collection hört im Filter-Model auf diesen Trigger

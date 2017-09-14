@@ -19,7 +19,7 @@ define(function (require) {
             if (this.model.get("type") === "boolean") {
                 var val = this.model.get("value");
 
-                if (val === "Ja") {
+                if (val === "true") {
                     html = "<span>" + this.model.get("attr") + "<span><span class='glyphicon glyphicon-remove'></span>";
                 }
                 else {

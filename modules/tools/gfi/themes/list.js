@@ -55,19 +55,16 @@ define(function (require) {
             this.listenTo(this, {
                 "reset": function () {
                     this.forEach(function (model) {
-                        if (!_.isUndefined(model)) {
-                            model.requestFeatureInfos();
-                        }
+                        model.requestFeatureInfos();
                     });
                 },
                 "change:isReady": function () {
-                    // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                     if (_.contains(this.pluck("isReady"), false) === false) {
+                    // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                         // WMS Layer die beim Klickpunkt keine GFIs haben
                         var removeModels = this.filter(function (model) {
                             return model.get("gfiContent") === undefined;
                         });
-
                         this.remove(removeModels);
                         this.forEach(this.addView, this);
                         // listener in modules/tools/gfi/model.js
@@ -120,6 +117,7 @@ define(function (require) {
         appendTheme: function (value) {
             this.setAllInVisible();
             this.at(value).setIsVisible(true);
+            Radio.trigger("MouseHover", "hide");
         },
 
         /**

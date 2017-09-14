@@ -84,7 +84,7 @@ define(function(require) {
             it("should return all available Values for Boolean Attributes in AttributesMap fo given Features", function () {
                 expect(model.getRemainingAttributeValues(featureAttributesMap, testFeatures)[0].values)
                     .to.be.an("array")
-                    .to.have.deep.members(["Nein", "Ja"]);
+                    .to.have.deep.members(["false", "true"]);
             });
 
             it("should return all available Values for the String Attributes in AttributesMap fo given Features", function () {

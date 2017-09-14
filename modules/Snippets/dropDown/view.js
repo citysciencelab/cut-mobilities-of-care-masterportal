@@ -20,7 +20,8 @@ define(function (require) {
 
         initialize: function () {
              this.listenTo(this.model, {
-                "render": this.render
+                "render": this.render,
+                "removeView": this.removeView
             });
         },
 
@@ -28,7 +29,7 @@ define(function (require) {
          * renders the view depending on the isOpen attribute
          * @return {jQuery} - this DOM element as a jQuery object
          */
-        render: function () {
+        render: function () {//console.log(this.model);
             if (this.model.get("isOpen") === false) {
                 var attr = this.model.toJSON();
 
@@ -57,13 +58,13 @@ define(function (require) {
          */
         markSelectedValues: function () {
             var models = this.model.get("valuesCollection").where({isSelected: true}),
-                attributes = [];
+                values = [];
 
             _.each(models, function (model) {
-                attributes.push(model.get("value"));
+                values.push(model.get("value"));
             });
 
-            this.$el.find(".selectpicker").selectpicker("val", attributes);
+            this.$el.find(".selectpicker").selectpicker("val", values);
         },
 
         /**
@@ -84,7 +85,17 @@ define(function (require) {
             }
             else {
                 this.model.setIsOpen(false);
+                this.render();
             }
+        },
+
+        /**
+         * calls the function "setIsOpen" in the model with parameter false
+         * removes this view and its el from the DOM
+         */
+        removeView: function () {
+            this.model.setIsOpen(false);
+            this.remove();
         }
 
     });

@@ -104,6 +104,9 @@ define(function (require) {
         },
         removeView: function (model, value) {
             if (value === false) {
+                model.get("snippetCollection").forEach(function (model) {
+                    model.trigger("removeView");
+                });
                 this.remove();
             }
         }
