@@ -44,9 +44,7 @@ define(function (require) {
                 this.model.setIsActive(true);
                 this.model.setIsSelected(true);
             }
-            // if (this.model.get("isActive")) {
-                this.model.runFilter();
-            // }
+            this.model.runFilter();
         },
 
         toggleButton: function (value) {

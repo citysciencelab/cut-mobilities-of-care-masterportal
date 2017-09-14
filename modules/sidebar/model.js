@@ -33,8 +33,6 @@ define(function () {
          */
         setIsVisible: function (value) {
             this.set("isVisible", value);
-
-            Radio.trigger("Map", "updateSize");
         }
     });
 

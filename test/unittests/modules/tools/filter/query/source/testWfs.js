@@ -105,7 +105,9 @@ define(function(require) {
                 featureAttributesMap.push({name: "teilnahme_notversorgung", type: "boolean", values: ["true", "false"]});
                 testFeatures.push(utilModel.createTestFeatures()[1]);
                 testFeatures.push(utilModel.createTestFeatures()[2]);
-
+                console.log(testFeatures);
+                console.log(selectedAttributes);
+                console.log(featureAttributesMap);
             });
              it("should return all selectable Values for the String Attributes in AttributesMap for given Features", function () {
                 console.log(model.collectSelectableOptions(testFeatures, selectedAttributes, featureAttributesMap));

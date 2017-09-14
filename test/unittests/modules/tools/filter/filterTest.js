@@ -6,12 +6,11 @@ define(function(require) {
     describe("modules/tools/filter/model", function () {
         before(function () {
             model = new Model();
+            testFeatures = utilModel.createTestFeatures();
         });
         describe("collectFilteredIds", function () {
             it("should return empty array for undefined input", function () {
-                expect(model.collectFilteredIds(undefined))
-                    .to.be.an("array")
-                    .to.be.empty;
+                expect(model.collectFilteredIds(undefined).to.be.an.empty.("array");
             });
         });
     });

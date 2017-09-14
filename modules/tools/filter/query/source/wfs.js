@@ -208,18 +208,18 @@ define(function (require) {
         },
         runFilter: function (model) {
             var features = this.runPredefinedRules(),
-                attributes = [],
+                selectedAttributes = [],
                 featureIds = [];
 
             this.get("snippetCollection").forEach(function (snippet) {
                 if (snippet.hasSelectedValues() === true) {
-                    attributes.push(snippet.getSelectedValues());
+                    selectedAttributes.push(snippet.getSelectedValues());
                 }
             });
 
-            if (attributes.length > 0) {
+            if (selectedAttributes.length > 0) {
                 _.each(features, function (feature) {
-                    var isMatch = this.isFilterMatch(feature, attributes);
+                    var isMatch = this.isFilterMatch(feature, selectedAttributes);
 
                     if (isMatch) {
                         featureIds.push(feature.getId());
@@ -232,29 +232,25 @@ define(function (require) {
                 }, this);
             }
 
-            this.updateSnippets(features, attributes);
+            this.updateSnippets(features, selectedAttributes);
             this.setFeatureIds(featureIds);
             this.trigger("featureIdsChanged");
         },
 
-        /**
-         * [collectSelectableOptions description]
-         * @param  {[type]} features   [description]
-         * @param  {[type]} attributes [description]
-         * @return {[type]}            [description]
-         */
-        collectSelectableOptions: function (features, selectedAttributes, attributesMap) {
+        zoomToSelectedFeatures: function () {
+            Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+        },
+
+        collectSelectableOptions: function (features, selectedAttributes, allAttributes) {
             var selectableOptions = [];
 
-            if (selectedAttributes.length === 0) {
-                selectableOptions = this.getRemainingAttributeValues(attributesMap, features);
+            if (allAttributes.length === 0) {
+                selectableOptions = this.getRemainingAttributeValues(allAttributes, features);
             }
             else {
-                var attributesMap = attributesMap;
-
-                _.each(attributesMap, function (attribute) {
+                _.each(allAttributes, function (attribute) {
                         var selectableValues =  {name: attribute.name, values: []};
-                       // debugger;
+
                     _.each(features, function (feature) {
                         var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
                             return attr.attrName !== attribute.name;
@@ -271,9 +267,9 @@ define(function (require) {
             return selectableOptions;
         },
 
-        updateSnippets: function (features, attributes) {
+        updateSnippets: function (features, selectedAttributes) {
             var snippets = this.get("snippetCollection"),
-                selectableOptions = this.collectSelectableOptions(features, attributes, this.get("featureAttributesMap"));
+                selectableOptions = this.collectSelectableOptions(features, selectedAttributes, this.get("featureAttributesMap"));
 
             _.each(snippets.models, function (snippet) {
                     snippet.resetValues();
