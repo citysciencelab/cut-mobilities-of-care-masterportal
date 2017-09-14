@@ -16,7 +16,7 @@
                 <td class="bold"><%=attribute.attrName + ""%></td>
                 <td>
                 <%if (attribute.attrValue.search("http") !== -1) {%>
-                    <a href="<%= attribute.attrValue %>" target="_blank"><%= attribute.attrValue %></a>
+                    <a href="<%= attribute.attrValue %>" target="_blank"><%= attribute.attrValue.substring(7) %></a>
                 <%}else {%>
                     <%=attribute.attrValue%>
                 <%}%>
@@ -26,4 +26,3 @@
         </tbody>
     </table>
 </div>
-
