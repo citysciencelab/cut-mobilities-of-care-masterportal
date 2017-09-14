@@ -172,11 +172,6 @@ define([
                 else {
                     $("#" + modulId).parent().addClass("open");
                 }
-            },
-            /**
-             * Entfernt diesen ListView und alle subViews
-             */
-            removeView: function () {
             }
         });
         return Menu;

@@ -19,7 +19,8 @@ define([
             tracking: false, // Flag, ob derzeit getrackt wird.
             geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
             position: "",
-            isGeolocationDenied: false
+            isGeolocationDenied: false,
+            isGeoLocationPossible: false
         },
         initialize: function () {
             this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
@@ -37,6 +38,20 @@ define([
                 "getPOI": this.getPOI,
                 "sendPosition": this.sendPosition
             }, this);
+
+            channel.reply({
+                "isGeoLocationPossible": function () {
+                    return this.getIsGeoLocationPossible();
+                }
+            }, this);
+
+            this.listenTo(this, {
+                "change:isGeoLocationPossible": function () {
+                    channel.trigger("changedGeoLocationPossible", this.getIsGeoLocationPossible());
+                }
+            }, this);
+
+            this.setIsGeoLocationPossible();
         },
         /*
         * Triggert die Standpunktkoordinate auf Radio
@@ -209,11 +224,18 @@ define([
         },
 
         setIsGeolocationDenied: function (value) {
-          this.set("isGeolocationDenied", value);
+            this.set("isGeolocationDenied", value);
+            this.set("isGeoLocationPossible", false);
         },
 
         getIsGeolocationDenied: function () {
-          return this.get("isGeolocationDenied");
+            return this.get("isGeolocationDenied");
+        },
+        getIsGeoLocationPossible: function () {
+            return this.get("isGeoLocationPossible");
+        },
+        setIsGeoLocationPossible: function () {
+            this.set("isGeoLocationPossible", window.location.protocol === "https:" || _.contains(["localhost","127.0.0.1"], window.location.hostname));
         }
     });
 

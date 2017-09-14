@@ -70,7 +70,6 @@ define(function () {
         attributions: true,
         scaleLine: true,
         mouseHover: true,
-        isMenubarVisible: true,
         geoAPI: false,
         clickCounter: {}
     };
