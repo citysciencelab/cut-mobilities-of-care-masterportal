@@ -20,12 +20,12 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |----|-------------|---|-------|------------|--------|
 |Baumtyp|ja|String||Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|`"light"`|
 |[controls](#markdown-header-portalconfigcontrols)|nein|Object||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.||
-|LogoLink|nein|String||Die Verlinkung zum Internetauftritt.|`"http://geoinfo.hamburg.de"`|
-|LogoToolTip|nein|String||Der Text des angezeigten Tooltips|`"Landesbetrieb Geoinformation und Vermessung"`|
+|LogoLink|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
+|LogoToolTip|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
 |[mapView](#markdown-header-portalconfigmapview)|nein|Object||Gibt den Hintergrund an, wenn keine Karte geladen ist.||
 |[menu](#markdown-header-portalconfigmenu)|nein|Object||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der config.json (siehe [Tools](#markdown-header-portalconfigmenutools)).|
-|PortalLogo|nein|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
-|PortalTitle|nein|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
+|PortalLogo|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
+|PortalTitle|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
 |[portalTitle](#markdown-header-portalconfigportalTitle)|nein|Object||Der Titel, der in der Menüleiste angezeigt wird.||
 |scaleLine|nein|Boolean||true = die Maßstabsleiste wird unten rechts dargestellt, wenn kein footer vorhanden ist. Wenn ein footer vorhanden ist, wird die links angezeigt.|`true`|
 |[searchBar](#markdown-header-portalconfigsearchbar)|nein|Object||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden||
