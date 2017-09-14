@@ -64,6 +64,7 @@ define(function (require) {
             // isLayerVisible und isSelected
             if (this.get("isSelected") === true) {
                 this.runFilter();
+                this.trigger("renderSnippets");
             }
         },
 
