@@ -27,6 +27,7 @@ define(function (require) {
 
             this.filterWFSList();
             this.set("element", this.get("mhpOverlay").getElement());
+            Radio.trigger("Map", "addOverlay", this.get("mhpOverlay"));
         },
         filterWFSList: function () {
             var wfsList = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),
@@ -52,12 +53,7 @@ define(function (require) {
             this.unset("mhpresult", {silent: true});
             $(this.get("element")).tooltip("destroy");
         },
-        /**
-         * Zeigt das Popup.
-         */
-        showPopup: function () {
-            $(this.get("element")).tooltip("show");
-        },
+
         getFeaturesAtPixel: function (evt) {
             var features = [];
 

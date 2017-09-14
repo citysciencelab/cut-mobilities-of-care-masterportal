@@ -1,7 +1,5 @@
 define(function (require) {
-    var Backbone = require ("backbone"),
-        Radio = require("backbone.radio"),
-        MouseHoverPopup = require ("modules/mouseHover/model"),
+    var MouseHoverPopup = require ("modules/mouseHover/model"),
         MouseHoverPopupView;
 
     MouseHoverPopupView = Backbone.View.extend({
@@ -9,8 +7,6 @@ define(function (require) {
         id: "mousehoverpopup",
         initialize: function () {
             this.listenTo(this.model, "change:mhpresult", this.render);
-
-            Radio.trigger("Map", "addOverlay", this.model.get("mhpOverlay"));
         },
         /**
         * html = true damit </br> korrekt bei cluster
@@ -21,7 +17,6 @@ define(function (require) {
                 html: true,
                 title: this.model.get("mhpresult"),
                 placement: function () {
-                    position = this.getPosition().top;
                     if (this.getPosition().top > $("#map").height() / 2) {
                         return "top";
                     }
@@ -33,7 +28,7 @@ define(function (require) {
                 animation: true,
                 viewport: "#map"
             });
-            this.model.showPopup();
+            $(this.model.get("element")).tooltip("show");
         }
     });
 
