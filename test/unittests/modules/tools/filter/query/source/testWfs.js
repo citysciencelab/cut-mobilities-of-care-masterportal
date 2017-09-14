@@ -49,23 +49,10 @@ define(function(require) {
                     .that.includes("www.google.com")
                     .that.includes("www.hamburg.de");
             });
-            it("should return 'Nein' for a Attribute 'teilnahme_notversorgung'", function () {
+            it("should return 'false' for a Attribute 'teilnahme_notversorgung'", function () {
                 expect(model.getValuesFromFeature(testFeature, "teilnahme_notversorgung", "boolean"))
                     .to.be.an("array")
-                    .that.includes("Nein");
-            });
-        });
-        describe("getBooleanDisplayNames", function () {
-            var testFeature = {};
-
-            before(function () {
-                testFeature = utilModel.createTestFeatures()[0];
-            });
-            it("should return 'Ja' for true", function () {
-                expect(model.getBooleanDisplayNames("true")).to.be.a("string").that.equals("Ja");
-            });
-            it("should return 'Nein' for false", function () {
-                expect(model.getBooleanDisplayNames("false")).to.be.a("string").that.equals("Nein");
+                    .that.includes("false");
             });
         });
         describe("getRemainingAttributeValues", function () {
@@ -100,23 +87,27 @@ define(function(require) {
 
             before(function () {
                 selectedAttributes.push({attrName: "teilnahme_notversorgung", type: "boolean", values: ["true"]});
-                featureAttributesMap.push({name: "strasse", type: "string", values: ["Bodelschwinghstraße 24", "Kayhuder Straße 65"]});
-                featureAttributesMap.push({name: "name", type: "string", values: ["Evangelisches Krankenhaus Alsterdorf", "Heinrich Sengelmann Krankenhaus"]});
-                featureAttributesMap.push({name: "teilnahme_notversorgung", type: "boolean", values: ["true", "false"]});
+                featureAttributesMap.push({name: "strasse", type: "string", values: ["Kayhuder Straße 65", "Süntelstraße 11a"]});
+                featureAttributesMap.push({name: "name", type: "string", values: ["Heinrich Sengelmann Krankenhaus", "Albertinen-Krankenhaus"]});
+                featureAttributesMap.push({name: "teilnahme_notversorgung", type: "boolean", values: ["false", "true"]});
                 testFeatures.push(utilModel.createTestFeatures()[1]);
                 testFeatures.push(utilModel.createTestFeatures()[2]);
-                console.log(testFeatures);
-                console.log(selectedAttributes);
-                console.log(featureAttributesMap);
             });
-             it("should return all selectable Values for the String Attributes in AttributesMap for given Features", function () {
-                console.log(model.collectSelectableOptions(testFeatures, selectedAttributes, featureAttributesMap));
+            it("should return all selectable Values for the String Attributes in AttributesMap for given Features", function () {
                 expect(model.collectSelectableOptions(testFeatures, selectedAttributes, featureAttributesMap))
                     .to.be.an("array")
                     .to.deep.include({name: "strasse", values: ["Süntelstraße 11a"]})
                     .to.deep.include({name: "name", values: ["Albertinen-Krankenhaus"]})
-                    .to.deep.include({name: "teilnahme_notversorgung", values: ["Nein", "Ja"]});
+                    .to.deep.include({name: "teilnahme_notversorgung", values: ["false", "true"]});
             });
+            it("should return all values from featureAttributesMap if selectedAttributes is empty", function () {
+                expect(model.collectSelectableOptions(testFeatures, [], featureAttributesMap))
+                    .to.be.an("array")
+                    .to.deep.include(_.omit(featureAttributesMap[0], "type"))
+                    .to.deep.include(_.omit(featureAttributesMap[1], "type"))
+                    .to.deep.include(_.omit(featureAttributesMap[2], "type"));
+            });
+
         });
         describe("isIntegerInRange", function () {
             it("should match if feature value is within a range", function () {

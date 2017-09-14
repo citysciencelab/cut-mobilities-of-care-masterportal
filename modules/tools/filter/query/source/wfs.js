@@ -144,24 +144,8 @@ define(function (require) {
         },
 
         getValuesFromFeature: function (feature, attrName, attrType) {
-            var values = [];
-
-            if (attrType === "boolean") {
-                values.push(this.getBooleanDisplayNames(feature.get(attrName)));
-            }
-            else {
-                values = this.parseValuesFromString(feature, attrName);
-            }
+            var values =  this.parseValuesFromString(feature, attrName);
             return _.unique(values);
-        },
-
-        getBooleanDisplayNames: function (value) {
-            if (value === "true") {
-                return "Ja";
-            }
-            else {
-                return "Nein";
-            }
         },
 
         /**
