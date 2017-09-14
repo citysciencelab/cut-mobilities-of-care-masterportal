@@ -20,11 +20,7 @@
              <ul id="start" class="suggestlist dropdown-menu-search dropdown-menu-right" aria-labelledby="startAdresse">
             </ul>
         </div>
-        <%
-           if ($("#geolocate").length > 0) {
-                print ("<span id='startAdressePositionSpan' class='input-group-addon glyphicon glyphicon-map-marker routinglocator startAdressePosition' aria-hidden='true'></span>");
-           }
-        %>
+        <span id="startAdressePositionSpan" class="<% if (!isGeolocationPossible) {print ('hidden ');} %>input-group-addon glyphicon glyphicon-map-marker routinglocator startAdressePosition" aria-hidden="true"></span>
     </div>
     <h4>Zieladresse:</h4>
     <div class="input-group inputGroupR" id="input-group-ziel">
