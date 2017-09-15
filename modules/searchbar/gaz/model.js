@@ -217,17 +217,22 @@ define([
         getDistricts: function (data) {
             var hits = $("wfs\\:member,member", data),
                 coordinate,
-                position,
-                hitName;
+                polygon,
+                hitName,
+                pos,
+                posList;
 
             _.each(hits, function (hit) {
-                position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                posList = $(hit).find("gml\\:posList,posList")[0];
+                pos = $(hit).find("gml\\:pos,pos")[0];
+                coordinate = pos ? [parseFloat(pos.textContent.split(" ")[0]), parseFloat(pos.textContent.split(" ")[1])] : "";
+                polygon = posList ? posList.textContent : "";
                 hitName = $(hit).find("iso19112\\:geographicIdentifier , geographicIdentifier")[0].textContent;
                 // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", { name: hitName,
                     type: "Stadtteil",
                     coordinate: coordinate,
+                    polygon: polygon,
                     glyphicon: "glyphicon-map-marker",
                     id: hitName.replace(/ /g, "") + "Stadtteil"
                 });

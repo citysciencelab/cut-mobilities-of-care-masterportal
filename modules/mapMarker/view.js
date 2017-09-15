@@ -99,6 +99,9 @@ define([
         * @param {Object} hit - Treffer der Searchbar
         */
         zoomTo: function (hit) {
+            // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
+            var resolutions = Radio.request("MapView", "getResolutions"),
+                index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105);
 
             this.clearMarker();
             switch (hit.type) {
@@ -108,9 +111,6 @@ define([
                 }
                 case "Straße": {
                     this.model.getWKTFromString("POLYGON", hit.coordinate);
-                    // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
-                    var resolutions = Radio.request("MapView", "getResolutions"),
-                        index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105);
 
                     Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
                     break;
@@ -130,8 +130,16 @@ define([
                     break;
                 }
                 case "Stadtteil": {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    var hasPolygon = hit.polygon ? true : false;
+
+                    if (hasPolygon) {
+                        this.model.getWKTFromString("POLYGON", hit.polygon);
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
+                    }
+                    else {
+                        this.showMarker(hit.coordinate);
+                        Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    }
                     break;
                 }
                 case "Thema": {
