@@ -50,8 +50,7 @@ var Snippet = Backbone.Model.extend({
      * @return {[type]} [description]
      */
     resetValues: function () {
-        var collection = this.get("valuesCollection").models,
-            modelsToRemove = [];
+        var collection = this.get("valuesCollection").models;
 
          _.each(collection.models, function (model) {
             model.set("isSelectable", true);
@@ -64,6 +63,15 @@ var Snippet = Backbone.Model.extend({
     hasSelectedValues: function () {
         return this.get("valuesCollection").some(function (model) {
             return model.get("isSelected") === true;
+        });
+    },
+
+    /**
+     * deselects all value models in the values collection
+     */
+    deselectValueModels: function () {
+        this.get("valuesCollection").forEach(function (model) {
+            model.set("isSelected", false);
         });
     }
 
