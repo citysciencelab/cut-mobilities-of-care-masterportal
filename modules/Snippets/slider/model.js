@@ -15,37 +15,13 @@ define(function (require) {
             this.addValueModels();
 
             this.listenToOnce(this, {
-                "change:rangeMaxValue": function (model, value) {
-                    var minModel = this.get("valuesCollection").at(1);
-
-                    minModel.set("value", value);
-                    this.trigger("render");
-                },
-                "change:rangeMinValue": function (model, value) {
-                    var minModel = this.get("valuesCollection").at(0);
-
-                    minModel.set("value", value);
-                    this.trigger("render");
+                "setRangeOnce": function (parsedValues) {
+                    this.setRangeMinValue(_.min(parsedValues));
+                    this.setRangeMaxValue(_.max(parsedValues));
+                    this.resetValueModel(this.get("valuesCollection").at(0));
+                    this.resetValueModel(this.get("valuesCollection").at(1));
                 }
             });
-        },
-
-        /**
-         * parse strings into numbers if necessary
-         * @param  {array} valueList
-         * @return {number[]} parsedValueList
-         */
-        parseValues: function (valueList) {
-            var parsedValueList = [];
-
-            _.each(valueList, function (value) {
-                if (_.isString(value)) {
-                    value = parseInt(value, 10);
-                }
-                parsedValueList.push(value);
-            });
-
-            return parsedValueList;
         },
 
         /**
@@ -71,63 +47,57 @@ define(function (require) {
         },
 
         /**
-         * set the slider min value
-         * if min value unqequal rangeMinValue, set isSelected on true
-         * @param  {number} value - slider min value
-         */
-        updateMinValueModel: function (value) {
-            var minModel = this.get("valuesCollection").at(0);
-
-            minModel.set("value", value);
-            if (value !== this.get("rangeMinValue")) {
-                minModel.set("isSelected", true);
-            }
-            else {
-                minModel.set("isSelected", false);
-            }
-        },
-
-        /**
-         * set the slider max value
-         * if max value unqequal rangeMaxValue, set isSelected on true
-         * @param  {number} value - slider max value
-         */
-        updateMaxValueModel: function (value) {
-            var maxModel = this.get("valuesCollection").at(1);
-
-            maxModel.set("value", value);
-            if (value !== this.get("rangeMaxValue")) {
-                maxModel.set("isSelected", true);
-            }
-            else {
-                maxModel.set("isSelected", false);
-            }
-        },
-
-        /**
-         * call the updateMinValueModel function and/or the updateMaxValueModel
+         * call the updateValueModel function and/or the updateMaxValueModel
          * trigger the valueChanged event on snippetCollection in queryModel
          * @param  {number | array} value - depending on slider type
          */
-        updateValueModels: function (snippetValues) {
+        updateSelectedValues: function (snippetValues) {
             // range slider
             if (_.isArray(snippetValues) === true) {
-                this.updateMinValueModel(snippetValues[0]);
-                this.updateMaxValueModel(snippetValues[1]);
+                this.updateValueModel(this.get("valuesCollection").at(0), snippetValues[0], this.get("rangeMinValue"));
+                this.updateValueModel(this.get("valuesCollection").at(1), snippetValues[1], this.get("rangeMaxValue"));
             }
             // slider
             else {
-                this.updateMinValueModel(snippetValues);
+                this.updateValueModel(this.get("valuesCollection").at(0), snippetValues[0], this.get("rangeMinValue"));
             }
-            // listener in filter/query/detailView
-            this.trigger("valuesChanged");
+        },
+
+        /**
+         * set the slider value
+         * if value unqequal rangeValue, set isSelected on true
+         * @param  {number} value - slider min value
+         */
+        updateValueModel: function (valueModel, value, rangeValue) {
+            valueModel.set("value", value);
+            if (value !== rangeValue) {
+                valueModel.set("isSelected", true);
+                this.trigger("valuesChanged", valueModel);
+            }
+            else {
+                valueModel.set("isSelected", false);
+            }
+        },
+
+        /**
+        * If the value model is no longer selected,
+        * sets the value to the range value
+        * @param  {Backbone.Model} valueModel
+        */
+        resetValueModel: function (valueModel) {
+            if (valueModel.get("displayName") === "ab") {
+                valueModel.set("value", this.get("rangeMinValue"));
+            }
+            else if (valueModel.get("displayName") === "bis") {
+                valueModel.set("value", this.get("rangeMaxValue"));
+            }
+            this.trigger("render");
         },
 
         updateSelectableValues: function (values) {
             var parsedValues = this.parseValues(values);
 
-            this.setRangeMinValue(_.min(parsedValues));
-            this.setRangeMaxValue(_.max(parsedValues));
+            this.trigger("setRangeOnce", parsedValues);
         },
 
         /**
@@ -140,6 +110,24 @@ define(function (require) {
                 type: this.get("type"),
                 values: this.get("valuesCollection").pluck("value")
             };
+        },
+
+        /**
+         * parse strings into numbers if necessary
+         * @param  {array} valueList
+         * @return {number[]} parsedValueList
+         */
+        parseValues: function (valueList) {
+            var parsedValueList = [];
+
+            _.each(valueList, function (value) {
+                if (_.isString(value)) {
+                    value = parseInt(value, 10);
+                }
+                parsedValueList.push(value);
+            });
+
+            return parsedValueList;
         },
 
         /**

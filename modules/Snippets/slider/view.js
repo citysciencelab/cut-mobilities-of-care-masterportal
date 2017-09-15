@@ -2,7 +2,6 @@ define(function (require) {
     require("slider");
 
     var Template = require("text!modules/Snippets/slider/template.html"),
-        SliderModel = require("modules/Snippets/slider/model"),
         SliderView;
 
     SliderView = Backbone.View.extend({
@@ -11,7 +10,7 @@ define(function (require) {
         events: {
             // This event fires when the dragging stops or has been clicked on
             "slideStop input.slider": function (evt) {
-                this.updateValueModels(evt);
+                this.updateSelectedValues(evt);
                 this.setInputControlValue(evt);
             },
             // This event fires when the slider is dragged
@@ -19,10 +18,6 @@ define(function (require) {
         },
 
         initialize: function () {
-            this.listenTo(this.model.get("valuesCollection"), {
-                "change:isSelected": this.updateValueModel
-            });
-
             this.listenTo(this.model, {
                 "render": this.render
             });
@@ -49,29 +44,11 @@ define(function (require) {
         },
 
         /**
-         * If the value model is no longer select,
-         * the corresponding update function is called up in the model
-         * @param  {Backbone.Model} valueModel
-         * @param  {boolean} value - isSelected
-         */
-        updateValueModel: function (valueModel, value) {
-            if (value === false) {
-                if (valueModel.get("id") === "minModel") {
-                    this.model.updateMinValueModel(this.model.get("rangeMinValue"));
-                }
-                else if (valueModel.get("id") === "maxModel") {
-                    this.model.updateMaxValueModel(this.model.get("rangeMaxValue"));
-                }
-                this.render();
-            }
-        },
-
-        /**
-        * Call the function "updateValueModels" in the model
+        * Call the function "updateSelectedValues" in the model
         * @param {Event} evt - slideStop
         */
-        updateValueModels: function (evt) {
-            this.model.updateValueModels(evt.value);
+        updateSelectedValues: function (evt) {
+            this.model.updateSelectedValues(evt.value);
         },
 
         /**

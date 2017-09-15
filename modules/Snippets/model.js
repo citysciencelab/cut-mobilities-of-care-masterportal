@@ -10,8 +10,11 @@ var Snippet = Backbone.Model.extend({
         this.set("valuesCollection", new Backbone.Collection());
 
         this.listenTo(this.get("valuesCollection"), {
-            "change:isSelected": function (model) {
+            "change:isSelected": function (model, value) {
                 this.trigger("valuesChanged", model);
+                if (model.get("type") === "integer" && value === false) {
+                    this.resetValueModel(model);
+                }
             }
         });
     },
