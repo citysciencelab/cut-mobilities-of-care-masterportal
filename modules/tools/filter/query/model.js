@@ -60,7 +60,6 @@ define(function (require) {
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
-
             // isLayerVisible und isSelected
             if (this.get("isSelected") === true) {
                 this.runFilter();

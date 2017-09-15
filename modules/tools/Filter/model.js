@@ -25,25 +25,66 @@ define(function (require) {
                         model.setIsSelected(false);
                     });
                 },
-                "featureIdsChanged": function () {
-                    _.each(this.get("queryCollection").groupBy("layerId"), function (group) {
-                        var featureIdList = [];
-                        _.each(group, function (query) {
-                            if (query.get("isSelected") === true) {
-                                _.each(query.get("featureIds"), function (featureId) {
-                                    featureIdList.push(featureId);
-                                });
-                            }
-                        });
-                        Radio.trigger("ModelList", "showFeaturesById", group[0].get("layerId"), _.unique(featureIdList));
-                    });
-                    if (_.contains(this.get("queryCollection").pluck("isSelected"), true) === false) {
-                        Radio.trigger("ModelList", "showAllFeatures", "8190");
-                    }
-                }
+                "featureIdsChanged": this.updateMap
             }, this);
             this.setDefaults();
             this.createQueries(this.getConfiguredQueries());
+        },
+        /**
+         * updates the Features shown on thge Map
+         * @return {[type]} [description]
+         */
+        updateMap: function () {
+            // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
+            if (_.contains(this.get("queryCollection").pluck("isSelected"), true)) {
+                var allFeatureIds = this.collectFeaturesIdsOfAllLayers(this.get("queryCollection"));
+
+                _.each(allFeatureIds, function (layerFeatures) {
+                    Radio.trigger("ModelList", "showFeaturesById", layerFeatures.layer, layerFeatures.ids);
+                });
+                Radio.trigger("Map", "zoomToFilteredFeatures", allFeatureIds);
+            }
+            else {
+                _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
+                    Radio.trigger("ModelList", "showAllFeatures", layerId);
+                });
+            }
+        },
+        /**
+         * collects the ids from of all features that match the filter, maps them to the layerids
+         * @param  {[object]} queries query objects
+         * @return {object} Map object mapping layers to featuresids
+         */
+        collectFeaturesIdsOfAllLayers: function (queries) {
+            var allFeatureIds = [];
+
+            _.each(queries.groupBy("layerId"), function (group, layerId) {
+                featureIds = this.collectFilteredIds(group);
+                allFeatureIds.push({
+                    layer: layerId,
+                    ids: featureIds
+                });
+            }, this);
+            return allFeatureIds;
+        },
+
+        /**
+         * collects all featureIds of a group of queries into a list of uniqueIds
+         * @param  {[object]} queryGroup group of queries
+         * @return {[string]} unique list of all feature ids
+         */
+        collectFilteredIds: function (queryGroup) {
+            var featureIdList = [],
+                uniqueFeatureIds;
+
+             _.each(queryGroup, function (query) {
+                if (query.get("isSelected") === true) {
+                    _.each(query.get("featureIds"), function (featureId) {
+                        featureIdList.push(featureId);
+                    });
+                }
+            });
+            return _.unique(featureIdList);
         },
         activate: function (id) {
             if (this.get("id") === id) {

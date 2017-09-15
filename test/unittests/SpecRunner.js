@@ -41,6 +41,7 @@ define(function(require) {
     "modules/tools/download/modelTest.js",
     "modules/mouseHover/testModel.js",
     "modules/tools/filter/query/source/testWfs.js",
+    "modules/tools/filter/testFilter.js",
     "modules/snippets/slider/testModel.js",
     "modules/tools/gfi/themes/schulinfo/testModel.js"
     ], function (require) {

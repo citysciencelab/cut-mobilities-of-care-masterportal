@@ -10,7 +10,8 @@ define(function (require) {
     QueryDetailView = Backbone.View.extend({
         template: _.template(Template),
         events: {
-            "change .checkbox-toggle": "toggleIsActive"
+            "change .checkbox-toggle": "toggleIsActive",
+            "click .btn-feature-count": "zoomToSelectedFeatures"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -33,15 +34,6 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-        /*    this.$el.find(".toggle").append(new SnippetCheckboxView({
-                values: [{
-                        size: "small",
-                        label: "Filter:",
-                        labelChecked: "An",
-                        labelUnchecked: "Aus",
-                        isChecked: this.model.get("isActive")
-                    }]
-            }).render());*/
             return this.$el;
         },
         rerenderSnippets: function (changedValue) {
@@ -54,7 +46,10 @@ define(function (require) {
         updateFeatureCount: function () {
             var featureCount = this.model.get("featureIds").length;
 
-            this.$el.find(".feature-count").html(featureCount + " Treffer");
+            this.$el.find(".feature-count").html("" + featureCount + " Treffer");
+        },
+        zoomToSelectedFeatures: function () {
+            this.model.zoomToSelectedFeatures();
         },
         runFilter: function () {
             this.model.runFilter();

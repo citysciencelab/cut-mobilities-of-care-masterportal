@@ -47,6 +47,7 @@ define(function (require) {
                 "setBBox": this.setBBox,
                 "render": this.render,
                 "zoomToExtent": this.zoomToExtent,
+                "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
                 "createVectorLayer": this.createVectorLayer,
                 "addLoadingLayer": this.addLoadingLayer,
                 "removeLoadingLayer": this.removeLoadingLayer,
@@ -318,6 +319,40 @@ define(function (require) {
             this.get("view").fit(extent, this.get("map").getSize(), options);
         },
 
+        zoomToFilteredFeatures: function (ids, layerId) {
+            var extent,
+                features,
+                layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId, type: "layer"}),
+                layerFeatures = [];
+
+            if (!_.isUndefined(layer) && !_.isUndefined(layer.get("layer").getSource())) {
+                layerFeatures = layer.get("layer").getSource().getFeatures();
+            }
+            features = _.filter(layerFeatures, function (feature) {
+                return _.contains(ids, feature.getId());
+            });
+            if (features.length > 0) {
+                extent = this.calculateExtent(features);
+                this.zoomToExtent(extent);
+            }
+        },
+        calculateExtent: function (features) {
+            // extent = [xMin, yMin, xMax, yMax]
+            var extent = [9999999, 9999999, 0, 0];
+
+            _.each(features, function (feature) {
+                var featureExtent = feature.getGeometry().getExtent();
+
+                if (feature.getId() === "APP_STAATLICHE_SCHULEN_4099") {
+                    return;
+                }
+                (featureExtent[0] < extent[0]) && (extent[0] = featureExtent[0]);
+                (featureExtent[1] < extent[1]) && (extent[1] = featureExtent[1]);
+                (featureExtent[2] > extent[2]) && (extent[2] = featureExtent[2]);
+                (featureExtent[3] > extent[3]) && (extent[3] = featureExtent[3]);
+            });
+            return extent;
+        },
         /**
          * Gibt die Größe in Pixel der Karte zurück.
          * @return {ol.Size} - Ein Array mit zwei Zahlen [width, height]
