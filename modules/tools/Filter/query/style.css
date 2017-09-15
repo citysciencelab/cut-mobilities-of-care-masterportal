@@ -1,7 +1,18 @@
-.filter .detailview-head .btn-feature-count {
+.filter .btn-feature-count {
     font-size: 12px;
     float:right;
     margin: 0;
+    background-color: rgba(8, 88, 158, .5);
+}
+.filter .btn-feature-count.update {
+    font-weight: bold;
+    background-color: rgb(8, 88, 158);
+    color: #fff;
+}
+.filter .btn-feature-count.update:hover {
+    background-color: rgba(8, 88, 158, .5);
+    font-weight: normal;
+    color:#000;
 }
 .filter .toggleIsActive .glyphicon-remove {
     color:#bbb;

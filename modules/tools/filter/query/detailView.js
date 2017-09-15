@@ -47,9 +47,14 @@ define(function (require) {
             var featureCount = this.model.get("featureIds").length;
 
             this.$el.find(".feature-count").html("" + featureCount + " Treffer");
+            this.$el.find(".btn-feature-count").addClass("update");
         },
         zoomToSelectedFeatures: function () {
             this.model.zoomToSelectedFeatures();
+            this.$el.find(".btn-feature-count").removeClass("update");
+            if (Radio.request("Util", "isViewMobile") === true) {
+                this.model.trigger("closeFilter");
+            }
         },
         runFilter: function () {
             this.model.runFilter();
