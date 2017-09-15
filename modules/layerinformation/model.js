@@ -201,7 +201,7 @@ define(function (require) {
             var layerAttr = Backbone.Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerid}),
                 wmsUrl;
 
-            if (layerAttr.typ == "WMS") {
+            if (layerAttr && layerAttr.typ === "WMS") {
                 wmsUrl = layerAttr.url;
             }
             else {
