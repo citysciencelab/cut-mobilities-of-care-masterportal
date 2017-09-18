@@ -18,12 +18,12 @@ define(function (require) {
                 "change:isVisible": this.toggle,
                 "change:isMobile": this.toggleCssClass
             });
-            this.render();
+            // this.render();
         },
 
         render: function () {
             $("#map").after(this.$el);
-            this.$el.css("height", $("#map").height());
+            // this.$el.css("height", $("#map").height());
             if (!this.model.get("isMobile")) {
                 $("#map").css("width", "70%");
                 Radio.trigger("Map", "updateSize");
@@ -66,6 +66,7 @@ define(function (require) {
         },
 
         addBackdrop: function () {
+            // debugger;
             $(".lgv-container").append("<div class='backdrop'></div>");
         },
 
