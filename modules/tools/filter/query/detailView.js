@@ -4,30 +4,24 @@ define(function (require) {
         QueryValuesView = require("modules/tools/filter/query/valuesView"),
         Template = require("text!modules/tools/filter/query/templateDetailView.html"),
         SnippetSliderView = require("modules/Snippets/slider/range/view"),
-        SnippetCheckboxView = require("modules/Snippets/checkbox/view"),
         QueryDetailView;
 
     QueryDetailView = Backbone.View.extend({
         template: _.template(Template),
         events: {
             "change .checkbox-toggle": "toggleIsActive",
-            "click .btn-feature-count": "zoomToSelectedFeatures"
+            "click .detailview-head .btn": "zoomToSelectedFeatures"
         },
         initialize: function () {
             this.listenTo(this.model, {
                 "rerenderSnippets": this.rerenderSnippets,
                 "renderSnippets": this.renderSnippets,
                 "render": this.render,
-                "change:isSelected": function (model, value) {
-                    this.runFilter();
-                    this.removeView(model, value);
-                },
-                "featureIdsChanged": this.updateFeatureCount
+                "change:isSelected": this.removeView,
+                "change:featureIds": this.updateFeatureCount
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
-                "valuesChanged": function () {
-                    this.renderValueViews();
-                }
+                "valuesChanged": this.renderValueViews
             }, this);
         },
         render: function () {
@@ -43,13 +37,24 @@ define(function (require) {
                 }
             });
         },
-        updateFeatureCount: function () {
-            var featureCount = this.model.get("featureIds").length;
 
-            this.$el.find(".feature-count").html("" + featureCount + " Treffer");
+        /**
+         * updates the display of the feature hits
+         * @param  {Backbone.Model} model - QueryModel
+         * @param  {string[]} value - featureIds
+         */
+        updateFeatureCount: function (model, value) {
+            this.$el.find(".feature-count").html(value.length + " Treffer");
+            this.$el.find(".detailview-head .btn")
+                .animate({opacity: 0.4}, 500)
+                .animate({opacity: 0.8}, 500);
         },
+
         zoomToSelectedFeatures: function () {
             this.model.zoomToSelectedFeatures();
+            if (Radio.request("Util", "isViewMobile") === true) {
+                this.model.trigger("closeFilter");
+            }
         },
         runFilter: function () {
             this.model.runFilter();
@@ -98,6 +103,7 @@ define(function (require) {
             this.model.setIsActive($(evt.target).prop("checked"));
         },
         removeView: function (model, value) {
+            this.runFilter();
             if (value === false) {
                 model.get("snippetCollection").forEach(function (model) {
                     model.trigger("removeView");

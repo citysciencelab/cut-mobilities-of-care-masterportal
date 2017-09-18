@@ -1,6 +1,5 @@
 define(function(require) {
     var expect = require("chai").expect,
-        Radio = require("backbone.radio"),
         Model = require("../../../../modules/mouseHover/model.js");
 
     describe("mouseHover", function () {

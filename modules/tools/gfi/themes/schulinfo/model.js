@@ -12,9 +12,9 @@ define(function (require) {
                     attributes: [
                         "Name",
                         "Schulform",
+                        "Schultyp",
                         "Zusatzinformation zur Schulform",
                         "Schwerpunktschule",
-                        "StandortID",
                         "Strasse",
                         "Ort",
                         "Stadtteil",
@@ -23,8 +23,9 @@ define(function (require) {
                         "Email",
                         "Schulportrait",
                         "Homepage",
-                        "Schulleiter",
+                        "Schulleitung",
                         "Zuständiges ReBBZ",
+                        "Homepage des ReBBZ",
                         "Schulaufsicht",
                         "Tag d. offenen Tür"]
                 },
@@ -50,7 +51,7 @@ define(function (require) {
                     attributes: [
                         "Auszeichnung",
                         "Schülerzeitung",
-                        "Ausrichtung",
+                        "Schwerpunkte in den Angeboten",
                         "Schulpartnerschaft",
                         "Schulinspektion",
                         "Schulportrait",
@@ -128,18 +129,24 @@ define(function (require) {
                         if (isAttributeFound) {
                             kategoryObj.attributes.push({
                                 attrName: attribute,
-                                attrValue: this.beautifyAttribute(gfiContent[attribute])});
+                                attrValue: this.beautifyAttribute(gfiContent[attribute])
+                            });
                         }
                     }, this);
                     featureInfos.push(kategoryObj);
                 }, this);
             }
-
             return featureInfos;
         },
         beautifyAttribute: function (attribute) {
             if (attribute.indexOf("|") !== -1) {
-                attribute = attribute.split("|").join(", ");
+                attribute = attribute.split("|").join("<br>");
+            }
+            if (attribute === "true" || attribute === "ja") {
+                attribute = "Ja";
+            }
+            if (attribute === "false" || attribute === "nein") {
+                attribute = "Nein";
             }
             return attribute;
         },
