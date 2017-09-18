@@ -523,7 +523,8 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isSelected|nein|Boolean||Ist der Filter initial ausgewählt|
 |isVisible|nein|Boolean|||
 |name|nein|String||Name des Filters
-|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e) 
+|info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
+|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
 |attributeWhiteList|nein|Array||Filterbare Attribute
 **Beispiel:**
 

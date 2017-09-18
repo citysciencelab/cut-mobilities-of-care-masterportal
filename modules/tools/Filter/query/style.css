@@ -1,8 +1,6 @@
 .filter .detailview-head .btn {
-    float: right;
     margin: 0;
     color: #fff;
-    padding: 6px 20px;
     background-color: rgba(8, 88, 158, 0.8);
 }
 
@@ -50,10 +48,16 @@
 }
 .filter .detailview-head .heading {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    text-align: center;
-    float: left;
     font-size: 18px;
+    padding-left: 0;
 }
+
+.filter .info-text {
+    font-size: 11px;
+    padding: 15px;
+    clear: both;
+}
+
 .filter .value-views-container .text {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     font-size: 14px;
