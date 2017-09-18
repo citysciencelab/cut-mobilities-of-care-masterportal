@@ -8,7 +8,7 @@ define([
 ], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, Radio) {
     "use strict";
     return Backbone.View.extend({
-        model: Searchbar,
+        model: new Searchbar(),
         id: "searchbar", // wird ignoriert, bei renderToDOM
         className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
         searchbarKeyNavSelector: "#searchInputUL",
@@ -235,38 +235,12 @@ define([
         prepareAttrStrings: function (hitlist) {
             // kepps hit.names from overflowing
             _.each(hitlist, function (hit) {
-                hit.name = this.shortenNames(hit.name, 35);
+                hit.name = this.model.shortenNames(hit.name, 35);
                 // IE 11 svg bug -> png
-                hit.imageSrc = this.changeFileExtension(hit.imageSrc, ".png");
-                console.log(hit);
+                hit.imageSrc = this.model.changeFileExtension(hit.imageSrc, ".png");
              }, this);
         },
-        /**
-         * changes the filename extension of given filepath
-         * @param  {[type]} hitlist [description]
-         * @param  {[type]} ext     [description]
-         * @return {[type]}         [description]
-         */
-        changeFileExtension: function (src, ext) {
-            if (_.isUndefined(src)) {
-                return;
-            }
-            if (src.substring(src.length - ext.length, src.length) !== ext) {
-                return src.substring(0, src.length - ext.length) + ext;
-            }
-            return src;
-        },
-        /**
-         * crops names of hits to length zeichen
-         * @param  {[type]} hitlist [the search result]
-         * @param  {[type]} length  [name length]
-         */
-        shortenNames: function (name, length) {
-            if (name.length > length) {
-                return name.substring(0, length) + "...";
-            }
-            return name;
-        },
+
         /**
         *
         */
