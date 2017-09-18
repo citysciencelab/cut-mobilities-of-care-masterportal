@@ -25,7 +25,10 @@ define(function (require) {
                         model.setIsSelected(false);
                     });
                 },
-                "featureIdsChanged": this.updateMap
+                "featureIdsChanged": this.updateMap,
+                "closeFilter": function () {
+                    this.setIsActive(false);
+                }
             }, this);
             this.setDefaults();
             this.createQueries(this.getConfiguredQueries());
