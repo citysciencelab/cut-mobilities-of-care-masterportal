@@ -216,10 +216,11 @@ define([
         *
         */
         renderRecommendedList: function () {
-            // if (this.model.get("isHitListReady") === true) {
                 var attr = this.model.toJSON(),
+                    template;
                     // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
                     // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+                    this.shortenNames(attr.hitList);
                     template = _.template(SearchbarRecommendedListTemplate);
 
                 $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
@@ -230,6 +231,12 @@ define([
                 this.hitSelected();
             }
             this.model.unset("initSearchString", true);
+        },
+
+        shortenNames: function (hitlist, length) {
+            _.each(hitlist, function (hit) {
+                hit.name.length > 35 && (hit.name = hit.name.substring(0, 35) + "...");
+            });
         },
         /**
         *
