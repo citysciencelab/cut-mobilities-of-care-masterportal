@@ -1,19 +1,19 @@
-.filter .btn-feature-count {
-    font-size: 12px;
-    float:right;
+.filter .detailview-head .btn {
+    float: right;
     margin: 0;
-    background-color: rgba(8, 88, 158, .5);
-}
-.filter .btn-feature-count.update {
-    font-weight: bold;
-    background-color: rgb(8, 88, 158);
     color: #fff;
+    padding: 6px 20px;
+    background-color: rgba(8, 88, 158, 0.8);
 }
-.filter .btn-feature-count.update:hover {
-    background-color: rgba(8, 88, 158, .5);
-    font-weight: normal;
-    color:#000;
+
+.filter .detailview-head .btn:hover {
+    background-color: rgba(8, 88, 158, 0.6);
 }
+
+.filter .feature-count {
+    margin-left: 8px;
+}
+
 .filter .toggleIsActive .glyphicon-remove {
     color:#bbb;
 }
