@@ -220,7 +220,7 @@ define([
                     template;
                     // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
                     // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
-                    this.shortenNames(attr.hitList);
+                    this.prepareAttrStrings(attr.hitList);
                     template = _.template(SearchbarRecommendedListTemplate);
 
                 $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
@@ -232,11 +232,40 @@ define([
             }
             this.model.unset("initSearchString", true);
         },
-
-        shortenNames: function (hitlist, length) {
+        prepareAttrStrings: function (hitlist) {
+            // kepps hit.names from overflowing
             _.each(hitlist, function (hit) {
-                hit.name.length > 35 && (hit.name = hit.name.substring(0, 35) + "...");
-            });
+                hit.name = this.shortenNames(hit.name, 35);
+                // IE 11 svg bug -> png
+                hit.imageSrc = this.changeFileExtension(hit.imageSrc, ".png");
+                console.log(hit);
+             }, this);
+        },
+        /**
+         * changes the filename extension of given filepath
+         * @param  {[type]} hitlist [description]
+         * @param  {[type]} ext     [description]
+         * @return {[type]}         [description]
+         */
+        changeFileExtension: function (src, ext) {
+            if (_.isUndefined(src)) {
+                return;
+            }
+            if (src.substring(src.length - ext.length, src.length) !== ext) {
+                return src.substring(0, src.length - ext.length) + ext;
+            }
+            return src;
+        },
+        /**
+         * crops names of hits to length zeichen
+         * @param  {[type]} hitlist [the search result]
+         * @param  {[type]} length  [name length]
+         */
+        shortenNames: function (name, length) {
+            if (name.length > length) {
+                return name.substring(0, length) + "...";
+            }
+            return name;
         },
         /**
         *
