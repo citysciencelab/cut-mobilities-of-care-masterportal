@@ -229,6 +229,7 @@ define([
 
             if (value === "SIMPLE") {
                 $("#main-nav").hide();
+                $("#map").css("height", "100%");
             }
         },
         parseURL: function (result) {
