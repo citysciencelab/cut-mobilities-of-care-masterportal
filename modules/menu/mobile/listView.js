@@ -30,7 +30,7 @@ define([
             breadCrumbListView: {},
             initialize: function () {
                 this.collection = Radio.request("ModelList", "getCollection");
-                Radio.on("Autostart", "startTool", this.startTool, this);
+                Radio.on("Autostart", "startModul", this.startModul, this);
                 this.listenTo(this.collection,
                 {
                     "traverseTree": this.traverseTree,
@@ -200,14 +200,16 @@ define([
                 this.breadCrumbListView.removeView();
                 this.remove();
                 this.collection.setAllModelsInvisible();
-                $("body").append(this.el);
+                $("#map").before(this.el);
             },
-            startTool: function (toolId) {
-                var tools = this.collection.where({type: "tool"}),
-                    tool = _.findWhere(tools, {id: toolId});
+            startModul: function (modulId) {
+                var modul = _.findWhere(this.collection.models, {id: modulId});
 
-                if (tool) {
-                    tool.setIsActive(true);
+                if (modul.attributes.type === "tool") {
+                    modul.setIsActive(true);
+                }
+                else {
+                    $("#" + modulId).parent().addClass("open");
                 }
             }
         });

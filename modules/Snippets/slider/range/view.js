@@ -1,0 +1,37 @@
+define(function (require) {
+
+    var Template = require("text!modules/Snippets/slider/range/template.html"),
+        SliderView = require("modules/Snippets/slider/view"),
+        SliderRangeView;
+
+    SliderRangeView = SliderView.extend({
+        template: _.template(Template),
+
+        /**
+         * init the slider
+         */
+        initSlider: function () {
+            var valueModels = this.model.get("valuesCollection").models;
+
+            this.$el.find("input.slider").slider({
+                min: this.model.get("rangeMinValue"),
+                max: this.model.get("rangeMaxValue"),
+                step: 1,
+                value: [valueModels[0].get("value"), valueModels[1].get("value")]
+            });
+        },
+
+        /**
+         * set the inputs value
+         * @param  {Event} evt - slide
+         */
+        setInputControlValue: function (evt) {
+            var inputControls = this.$el.find("input.form-control");
+
+            $(inputControls[0]).val(evt.value[0]);
+            $(inputControls[1]).val(evt.value[1]);
+        }
+    });
+
+    return SliderRangeView;
+});

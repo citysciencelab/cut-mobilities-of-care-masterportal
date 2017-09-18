@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "openlayers",
-    "modules/mapMarker/model",
-    "eventbus"
-    ], function (Backbone, Radio, ol, MapHandlerModel, EventBus) {
+    "modules/mapMarker/model"
+    ], function (Backbone, Radio, ol, MapHandlerModel) {
     "use strict";
 
     var searchVector = new ol.layer.Vector({
@@ -28,10 +27,6 @@ define([
         model: new MapHandlerModel(),
         id: "searchMarker",
         className: "glyphicon glyphicon-map-marker",
-        template: _.template("<span class='glyphicon glyphicon-remove'></span>"),
-        events: {
-            "click .glyphicon-remove": "hideMarker"
-        },
         /**
         * @description View des Map Handlers
         */
@@ -40,54 +35,14 @@ define([
                 channel = Radio.channel("MapMarker");
 
             channel.on({
+                "clearMarker": this.clearMarker,
+                "zoomTo": this.zoomTo,
+                "hideMarker": this.hideMarker,
                 "showMarker": this.showMarker,
-                "hideMarker": this.hideMarker
-            }, this);
-            channel.reply({
-                "getCloseButtonCorners": function () {
-                    if (this.$el.is(":visible") === false) {
-                        return {
-                            top: -1,
-                            bottom: -1,
-                            left: -1,
-                            right: -1
-                        };
-                    }
-                    else {
-                        var bottomSM = $("#searchMarker .glyphicon-remove").offset().top,
-                            leftSM = $("#searchMarker .glyphicon-remove").offset().left,
-                            widthSM = $("#searchMarker .glyphicon-remove").outerWidth(),
-                            heightSM = $("#searchMarker .glyphicon-remove").outerHeight(),
-                            topSM = bottomSM + heightSM,
-                            rightSM = leftSM + widthSM;
-
-                        return {
-                            top: topSM,
-                            bottom: bottomSM,
-                            left: leftSM,
-                            right: rightSM
-                        };
-                    }
-                }
+                "zoomToBPlan": this.zoomToBPlan,
+                "zoomToBKGSearchResult": this.zoomToBKGSearchResult
             }, this);
 
-            channel.on({
-                "mapHandler:clearMarker": this.clearMarker,
-                "mapHandler:zoomTo": this.zoomTo,
-                "mapHandler:hideMarker": this.hideMarker,
-                "mapHandler:showMarker": this.showMarker,
-                "mapHandler:zoomToBPlan": this.zoomToBPlan,
-                "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
-            }, this);
-
-            this.listenTo(EventBus, {
-                "mapHandler:clearMarker": this.clearMarker,
-                "mapHandler:zoomTo": this.zoomTo,
-                "mapHandler:hideMarker": this.hideMarker,
-                "mapHandler:showMarker": this.showMarker,
-                "mapHandler:zoomToBPlan": this.zoomToBPlan,
-                "mapHandler:zoomToBKGSearchResult": this.zoomToBKGSearchResult
-            }, this);
             this.render();
             // For BauInfo: requests customModule and askes for marker position to set.
             markerPosition = Radio.request("CustomModule", "getMarkerPosition");
@@ -97,8 +52,6 @@ define([
             this.model.askForMarkers();
         },
         render: function () {
-            this.$el.html(this.template());
-
             this.model.get("marker").setElement(this.$el[0]);
         },
         /**
@@ -112,18 +65,18 @@ define([
         * @param {Object} hit - Treffer der Searchbar
         */
         zoomTo: function (hit) {
+            // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
+            var resolutions = Radio.request("MapView", "getResolutions"),
+                index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105);
 
             this.clearMarker();
             switch (hit.type) {
                 case "Ort": {
-                    EventBus.trigger("bkg:bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
+                    Radio.trigger("Searchbar", "bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
                     break;
                 }
                 case "Straße": {
                     this.model.getWKTFromString("POLYGON", hit.coordinate);
-                    // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
-                    var resolutions = Radio.request("MapView", "getResolutions"),
-                        index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105);
 
                     Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
                     break;
@@ -143,8 +96,16 @@ define([
                     break;
                 }
                 case "Stadtteil": {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    var hasPolygon = hit.polygon ? true : false;
+
+                    if (hasPolygon) {
+                        this.model.getWKTFromString("POLYGON", hit.polygon);
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
+                    }
+                    else {
+                        this.showMarker(hit.coordinate);
+                        Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    }
                     break;
                 }
                 case "Thema": {
@@ -173,11 +134,11 @@ define([
                     break;
                 }
                 case "festgestellt": {
-                    EventBus.trigger("specialWFS:requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
+                    Radio.trigger("SpecialWFS", "requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
                     break;
                 }
                 case "im Verfahren": {
-                    EventBus.trigger("specialWFS:requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
+                    Radio.trigger("SpecialWFS", "requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
                     break;
                 }
                 case "SearchByCoord": {

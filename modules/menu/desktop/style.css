@@ -1,3 +1,10 @@
+/**************** Menu ***********************/
+.submenu-style {
+    padding: 5px 0;
+    border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+
 /**************** Themenbaum ****************/
 ul#tree {
     border: none;
@@ -31,6 +38,7 @@ ul#tree .glyphicon-info-sign {
 ul#tree.light {
     font-size: 12px;
     color: rgb(85, 85, 85);
+    overflow-y:auto;
 }
 
 ul#tree.light li {
@@ -39,7 +47,6 @@ ul#tree.light li {
     border-right: 0;
     padding: 8px 6px;
     max-width: 500px;
-    min-width: 380px;
     overflow: auto;
     font-weight: normal;
 }
@@ -154,6 +161,3 @@ ul#tree .SelectedLayer .layer-selection-save {
     cursor: pointer;
 }
 
-.dropdown-folder .glyphicon {
-    font-size: 12px;
-}

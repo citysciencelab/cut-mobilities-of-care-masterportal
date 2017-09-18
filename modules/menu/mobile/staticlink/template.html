@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<span class="glyphicon <%= glyphicon %>"></span>
-<span class="title">
-    <a target="_blank" href="<%= url %>"><%= name %></a>
-</span>
+<span class="static-link glyphicon <%= glyphicon %>"></span>
+<a target="_blank" href="<%= url %>" <% if(url==="") {%> onClick='event.preventDefault();'<% } %> ">
+    <%= name %>
+</a>

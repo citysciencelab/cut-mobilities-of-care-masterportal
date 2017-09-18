@@ -3,11 +3,11 @@
 Eine Schritt für Schritt Dokumentation zur Erstellung eines neuen Moduls.
 
 ### Beispiel Anforderung
-Über ein Feld, in dem immer der aktuell verwendete Maßstab angezeigt wird, können über ein Drop-down-Menü voreingestellte Maßstabszahlen ausgewählt werden.
-Das Kartenbild springt anschließend zu der entsprechenden Zoomstufe.
+Wir wollen ein Tool schreiben, über welches man den Kartenmaßstab steuern kann. Dabei soll über ein Drop-Down-Menü der Maßstab ausgewählt werden. Sobald der Maßstab gesetzt wurde, soll sich die Karte anpassen.
+Darüber hinaus soll unser Tool auf Änderungen des Kartenmaßstabes reagieren und den entsprechend aktuellen Maßstab im Drop-Down-Menu anzeigen.
 
 ### Neues Modul anlegen
-Ins Verzeichnis "modules" wechsel und einen neuen Ordner erstellen. Aus dem Ordnernamen sollte ersichtlich sein, um was für ein Modul es sich dabei handelt - z.B. "scale". Die für dieses Modul benötigten Dateien anlegen.
+Ins Verzeichnis "modules" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen sollte ersichtlich sein, um was für ein Modul es sich dabei handelt - z.B. "scale". Die für dieses Modul benötigten Dateien anlegen. In der View (view.js) wird auf Interaktion mit dem Nutzer reagiert und das Tool neu gerendert. Dazu wird das Template (template.html) benötigt, welches den Bauplan des Tools enthält. Im Model (model.js) werden die Daten und deren Logik vorgehalten.
 ```
 -  modules
    | -> scale
@@ -18,15 +18,16 @@ Ins Verzeichnis "modules" wechsel und einen neuen Ordner erstellen. Aus dem Ordn
 ```
 
 ### Scale View erstellen und zurückgeben
-Datei *modules/scale/view.js* öffnen und View mit folgendem Standardschema erzeugen.
+Datei *modules/scale/view.js* öffnen und die View mit folgendem Standardschema erzeugen.
 ```js
-define([
-  "backbone"
-], function (Backbone) {
+define(function (require) {
+    var Backbone = require("backbone"),
+      View;
 
-    var View = Backbone.View.extend({
+  View = Backbone.View.extend({
       // wird aufgerufen wenn die View erstellt wird
-      initialize: function () {}
+      initialize: function () {
+      }
     });
 
     return View;
@@ -34,7 +35,7 @@ define([
 ```
 
 ### Scale View initialisieren
-In die datei *js/app.js* wechsel, Scale View laden und initialiseren. Darauf achten, dass das Modul erst nach dem Core geladen wird. Zurzeit ab Zeile 25.
+In die datei *js/app.js* wechseln, Scale View laden und initialiseren. Darauf achten, dass das Modul erst nach dem Core geladen wird. Zurzeit ab Zeile 25.
 ```js
 require(["modules/scale/view"], function (ScaleView) {
     new ScaleView();
@@ -51,35 +52,35 @@ Datei *modules/scale/template.html* öffnen, Template coden und mit Bootstrap Kl
   <option>3</option>
 </select>
 ```
-
 ### Template in die View einbinden
+Das Template muss in die View eingebunden werden. Hierzu wird in einer neuen Variable (ScaleTemplate) das Template required und mithilfe von underscore ("_") als Template zur Verfügung gestellt. Selbstverständlich muss auch Underscore required werden. Dieses Template wird dem View als Attribut "template" zugefügt.
 ```js
-define([
-  "backbone",
-  "underscore",
-  // stellt das Template als String Variable zur Verfügung
-  "text!modules/scale/template.html"
-], function (Backbone, _, ScaleTemplate) {
+define(function (require) {
+ var ...,
+   _ = require("underscore"),
+   ScaleTemplate = "text!modules/scale/template.html",
+   View;
 
-    var View = Backbone.View.extend({
-      // underscore template Funktion
+  View = Backbone.View.extend({
+    // underscore template Funktion
       template: _.template(ScaleTemplate),
-      initialize: function () {}
+    initialize: function () {
+    }
     });
-
     return View;
 });
 ```
 ### Template initial rendern
+Beim Laden der View, soll sich sofort das Tool in der Karte rendern. Dazu wird in der initialize()-Funktion die render()-Funktion aufgerufen. Dazu benötigen wir "jquery" und requiren dieses als "$". In der render-Funktion passiert folgendes:
+Der View wird das Template zugefügt.
+Danach zeichnet sich die View an den HTML-Body.
 ```js
-define([
-  "backbone",
-  "underscore",
-  "text!modules/scale/template.html",
-  "jquery"
-], function (Backbone, _, ScaleTemplate, $) {
+define(function (require) {
+    var ...,
+      $ = require("jquery"),
+      View;
 
-    var View = Backbone.View.extend({
+  View = Backbone.View.extend({
       template: _.template(ScaleTemplate),
       initialize: function () {
         this.render();
@@ -95,18 +96,16 @@ define([
 });
 ```
 Jede View bekommt automatisch ein top level DOM Element (this.el) zugewiesen.
-Standardeinstellung für das DOM Element ist ein *div* Tag.
+Standardeinstellung für das DOM Element ist ein *div* Tag. In diesem Fall zeichnet sich beim rendern ein *div* an den Body. Dieser *div* ist befüllt mit dem Inhalt des *templates*.
 
 ### View Id zuweisen
+Dem View wird nun noch eine ID zugewiesen. Über diese ID werden beispielsweise CSS-Regeln angewendet.
 ```js
-define([
-  "backbone",
-  "underscore",
-  "text!modules/scale/template.html",
-  "jquery"
-], function (Backbone, _, ScaleTemplate, $) {
+define(function (require) {
+    var ...,
+      View;
 
-    var View = Backbone.View.extend({
+    View = Backbone.View.extend({
       // Konvention: Id = Name des Moduls
       id: "scale",
       ...
@@ -135,9 +134,6 @@ Damit es keine Probleme mit CSS Regeln anderer Module gibt, immer von Id der Vie
 Datei *css/style.css* öffnen und *modules/scale/style.css* importieren
 ```css
 @charset "utf-8";
-
-@import "../components/bootstrap/dist/css/bootstrap.css";
-@import "../components/openlayers/ol.css";
 ...
 @import "../modules/scale/style.css";
 ```
@@ -145,11 +141,11 @@ Datei *css/style.css* öffnen und *modules/scale/style.css* importieren
 ### Model erstellen und zurückgeben
 Datei *modules/scale/model.js* öffnen und Model definieren.
 ```js
-define([
-  "backbone"
-], function (Backbone) {
+define(function (require) {
+    var Backbone = require("backbone"),
+      Model;
 
-    var Model = Backbone.Model.extend({
+  Model = Backbone.Model.extend({
       // wird aufgerufen wenn das Model erstellt wird
       initialize: function () {...}
     });
@@ -159,16 +155,14 @@ define([
 ```
 
 ### Model der View zuweisen
+In der View wird das Model required und per new ScaleModel() instanziiert.
 ```js
-define([
-  "backbone",
-  "underscore",
-  "text!modules/scale/template.html",
-  "jquery",
-  "modules/scale/model"
-], function (Backbone, _, ScaleTemplate, $, ScaleModel) {
+define(function (require) {
+    var ...,
+      ScaleModel = require("modules/scale/model")
+      View;
 
-    var View = Backbone.View.extend({
+  View = Backbone.View.extend({
       id: "scale",
       model: new ScaleModel(),
       ...
@@ -179,12 +173,13 @@ define([
 ```
 
 ### Setter Methoden für das Model schreiben
+Mithilfe von Setter-Methoden werden Member-Variablen im Model definiert bzw überschrieben.
 ```js
-define([
-  "backbone"
-], function (Backbone) {
+define(function (require) {
+    var Backbone = require("backbone"),
+      Model;
 
-    var Model = Backbone.Model.extend({
+  Model = Backbone.Model.extend({
       initialize: function () {...},
       // Setter für alle verfügbaren Maßstäbe
       setScales: function (value) {
@@ -201,42 +196,38 @@ define([
 ```
 
 ### Maßstäbe der Karte abfragen und setzen
+Die Kommunikation mit anderen Modulen erfolgt über Backbone.Radio. In diesem Fall mit dem *MapView* Modul (*modules/core/mapView.js*), in dem alle Scales definiert sind. Das *MapView* Modul stellt bereits über Backbone.Radio die Funktion *getScales* zur Verfügung, über die alle Scales abgefragt werden können.
+Um Radio anzusprechen muss Radio als neue Variable required werden. Diese Maßstäbe werden mittels *Radio* requested und im ScaleModel über die entsprechende Setter-Funktion gesetzt.
 ```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+  var ...,
+      Radio = require("backbone.radio"),
+      Model;
 
-    var Model = Backbone.Model.extend({
+  Model = Backbone.Model.extend({
       initialize: function () {
         // initial alle Scales der Karte abfragen
-        var scales = Radio.request("MapView", "getScales");
-
-        this.setScales(scales);
+        this.setScales(Radio.request("MapView", "getScales"));
       },
-      setScales: function (value) {...},
-      setCurrentScale: function (value) {...}
+      ...
     });
 
     return Model;
 });
 ```
-Die Kommunikation mit anderen Modulen erfolgt über Backbone.Radio. In diesem Fall mit dem *MapView* Modul (*modules/core/mapView.js*), in dem alle Scales definiert sind. Das *MapView* Modul stellt bereits über Backbone.Radio die Funktion *getScales* zur Verfügung, über die alle Scales abgefragt werden können.
-
 ### Aktuellen Kartenmaßstab abfragen und setzen
+Analog zu "getScales" können von der MapView auch der aktuelle Maßstab abgefragt werden. Hierzu werden die aktuellen Optionen requested und von diesem Objekt das Attribut "scale" verwendet. Dieses wird über den entsprechenden Setter als Model-Variable gesetzt.
 ```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+    var ...,
+      Model;
 
-    var Model = Backbone.Model.extend({
+  Model = Backbone.Model.extend({
       initialize: function () {
-        this.setScales(Radio.request("MapView", "getScales"));
+        ...
         this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
       },
-      setScales: function (value) {...},
-      setCurrentScale: function (value) {...}
+      ...
     });
 
     return Model;
@@ -244,17 +235,13 @@ define([
 ```
 
 ### Model Attribute ans Template übergeben
+Da sich das Template dynamisch aus den Daten des Models erzeugen soll, muss die render()-Funktion erweitert werden. Indem das Model an das Template übergeben wird, können die Model-Variablen im Template verwendet werden.
 ```js
-define([
-  "backbone",
-  "underscore",
-  "text!modules/scale/template.html",
-  "jquery",
-  "modules/scale/model"
-], function (Backbone, _, ScaleTemplate, $, ScaleModel) {
+define(function (require) {
+    var ...,
+      View;
 
-    var View = Backbone.View.extend({
-      ...
+  View = Backbone.View.extend({
       template: _.template(ScaleTemplate),
       initialize: function () {
         this.render();
@@ -273,6 +260,7 @@ define([
 ```
 
 ### Maßstäbe in der View anzeigen bzw. ins Template scripten
+
 ```html
 <!DOCTYPE html>
 <select class="form-control input-sm">
@@ -288,14 +276,14 @@ define([
 ```
 
 ### User Input in der View registrieren
+In der View haben wir die Möglichkeit auf events im HTMl zu hören. In diesem Fall wollen wir darauf hören wenn sich im Drop-Down-Menü ein Eintrag geändert hat. Wenn dieses Event eintrifft, überschreiben wir im Model das Attribut "currentScale" mit dem Wert aus dem Drop-Down-Menü. Dafür verwenden wir die Setter-Methode "setCurrentScale".
 ```js
-define([
-  ...
-], function (...) {
+define(function (require) {
+    var ...,
+      View;
 
-    var View = Backbone.View.extend({
-      ...
-      template: _.template(ScaleTemplate),
+  View = Backbone.View.extend({
+      ...,
       events: {
         // DOM Change Event führt this.setCurrentScale aus
         "change .form-control": "setCurrentScale"
@@ -313,13 +301,13 @@ define([
 ```
 
 ### Getter Methode für den aktuellen Maßstab schreiben
+Über Getter-Methoden können Member-Variablen abgefragt werden. Hier schreiben wir eine Methode, welche die "currentScale", also den aktuellen Maßstab zurückgibt.
 ```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+  var ...,
+    Model;
 
-    var Model = Backbone.Model.extend({
+  Model = Backbone.Model.extend({
       initialize: function () {...},
       setScales: function (value) {...},
       setCurrentScale: function (value) {...},
@@ -333,13 +321,14 @@ define([
 ```
 
 ### Model Listener auf change:currentScale
-```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
 
-    var Model = Backbone.Model.extend({
+```js
+define(function (require) {
+  var Backbone = require("backbone"),
+      Radio = require("backbone.radio"),
+      Model;
+
+  Model = Backbone.Model.extend({
       initialize: function () {
         this.listenTo(this, {
             "change:currentScale": function () {
@@ -362,13 +351,15 @@ define([
 ```
 
 ### Model Listener auf MapView changedOptions
+Wir wollen nicht nur den Maßstab der Karte setzen können , sondern auch auf Veränderungen des Maßstabs reagieren. Ändert sich der Kartenmaßstab, soll sich in unserem Tool der aktuelle Maßstab anpassen.
+Dazu wird in der Initialize-Funktion ein Listener geschrieben. Dieser Hört per Radio auf ein "changedOptions"-Event des Radio-Channels "MapView". Sobald ein solches Event getriggert wird, wird mithilfe unserer Setter-Methode *setCurrentScale()* der aktuelle Maßstab im Model überschrieben.
 ```js
-define([
-  "backbone",
-  "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+  var Backbone = require("backbone"),
+      Radio = require("backbone.radio"),
+      Model;
 
-    var Model = Backbone.Model.extend({
+  Model = Backbone.Model.extend({
       initialize: function () {
         this.listenTo(Radio.channel("MapView"), {
             // Wird ausgelöst wenn sich Zoomlevel, Center
@@ -379,11 +370,7 @@ define([
         });
         ...
       },
-      setScales: function (value) {...},
-      setCurrentScale: function (value) {...},
-      getCurrentScale: function () {
-        return this.get("currentScale");
-      }
+      ...
     });
 
     return Model;
@@ -391,20 +378,20 @@ define([
 ```
 
 ### View Listener auf change currentScale im Model
+Bisher erkennt nur das Model eine Veränderung des aktuellen Kartenmaßstabes. Die View muss jedoch auch darauf hören, wenn sich in seinem Model der aktuelle Maßstab verändert. Denn dann muss sich das Tool neu zeichnen, sodass der aktuelle Maßstab angezeigt wird.
 ```js
 define([
   ...
 ], function (...) {
-
     var View = Backbone.View.extend({
       ...
       events: {...}
       initialize: function () {
         this.listenTo(this.model, {
-            // Verändert sich der Maßstab der Karte,
-            // wird die View neu gezeichnet.
+        // Verändert sich der Maßstab der Karte und damit der currentScale
+            // des Models, wird die View neu gezeichnet.
             "change:currentScale": this.render
-        });
+          });
         this.render();
       },
       render: function () {...},

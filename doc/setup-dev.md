@@ -15,7 +15,7 @@ Da das git-Protokoll von Firewalls geblockt werden kann, git so konfigurieren, d
 ```
 
 Ggf. müssen Proxy-Einstellungen gesetzt werden:
-
+in der normalen shell **UND** in der Admin-shell (git-shell als Admin ausführen).
 ```
 # git config --global http.proxy <proxy-url:port>
 # git config --global https.proxy <proxy-url:port>
@@ -58,6 +58,12 @@ in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen).
 ```
 # npm config set proxy <proxy-url:port>
 # npm config set https-proxy <proxy-url:port>
+
+außerdem
+# setx http_proxy <proxy-url:port>
+# setx https_proxy <proxy-url:port>
+--> danach alle cmds schließen und neu starten, damit die Änderungen wirksam werden
+
 ```
 
 #### npm-Pakete global als Admin installieren
@@ -80,12 +86,6 @@ Test in normaler cmd:
 # grunt
 ```
 
-### Bower
-[Bower](http://bower.io) in der Admin-cmd global installieren
-
-```
-# npm install -g bower
-```
 
 ## Installation des Masterportals
 Repository klonen und in das erstellte Verzeichnis wechseln:
@@ -94,22 +94,23 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # cd lgv
 ```
 
+**Wichtig**: in der Datei package.json bei den dev-dependencies "lgv-config" und "build-config" ggf. die eigenen Config-Repos inkl. credentials einbinden, z.B.
+
+```
+# https://<user>:<pw>@bitbucket.org/lgv-g12/build-config.git#master
+```
+
+
 Dann die Build-Abhängigkeiten ziehen via NPM (alle Abhängigkeiten in der [package.json](../package.json)):
 
+In der Admin-cmd ausführen:
 ```
 # npm install
 ```
 
-Dann die App-Abhängigkeiten ziehen via Bower (alle Abhängigkeiten in der [bower.json](../bower.json)):
 
-**Wichtig für externe Entwickler**: die Datei bower-public.json in bower.json umbenennen und in der Datei .bowerrc die Proxy-Einstellungen anpassen.
+Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /node_modules, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
 
-```
-# bower install
-```
-
-Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /components, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
-**Für externe Entwickler** sind es nach Umbenennen der bower-public.json diese Repositories: [build-config-public](https://bitbucket.org/lgv-g12/build-config-public) und [lgv-config-public](https://bitbucket.org/lgv-g12/lgv-config-public).
 
 ## Grunt Tasks ausführen
 ### grunt server

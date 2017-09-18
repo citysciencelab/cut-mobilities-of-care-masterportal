@@ -71,6 +71,7 @@ define(function (require) {
             var params = {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
+                SRSNAME: Radio.request("MapView", "getProjection").getCode(),
                 TYPENAME: this.get("featureType"),
                 VERSION: this.getVersion()
             };
@@ -100,20 +101,10 @@ define(function (require) {
                         this.getLayer().setStyle(this.get("style"));
                     }
                     catch (e) {
-                        console.log(e);
-                        // EventBus.trigger("alert", {
-                        //     text: "<strong>Fehler bei Datenverarbeitung aufgetreten! </strong>" + e.message,
-                        //     kategorie: "alert-warning"
-                        // });
                     }
                 },
                 error: function (jqXHR, errorText, error) {
-                    console.log(error);
                     Radio.trigger("Util", "hideLoader");
-                    // EventBus.trigger("alert", {
-                    //     text: "<strong>Fehler bei Dienstabfrage aufgetreten </strong>" + errorText + error,
-                    //     kategorie: "alert-warning"
-                    // });
                 }
             });
         },
@@ -321,6 +312,48 @@ define(function (require) {
 
                 this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
             }
+        },
+        /**
+         * Versteckt alle Features mit dem Hidden-Style
+         */
+        hideAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures();
+
+            collection.forEach(function (feature) {
+                feature.setStyle(this.getHiddenStyle());
+            }, this);
+        },
+        showAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures();
+
+            collection.forEach(function (feature) {
+                feature.setStyle(this.get("style")(feature)[0]);
+            }, this);
+        },
+        /**
+         * Zeigt nur die Features an, deren Id übergeben wird
+         * @param  {string[]} featureIdList
+         */
+        showFeaturesByIds: function (featureIdList) {
+            this.hideAllFeatures();
+            _.each(featureIdList, function (id) {
+                var feature = this.getLayerSource().getFeatureById(id);
+
+                feature.setStyle(this.get("style")(feature)[0]);
+            }, this);
+        },
+        getHiddenStyle: function () {
+            return new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 2,
+                    fill: new ol.style.Fill({
+                        color: "rgba(0, 0, 0, 0)"
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: "rgba(0, 0, 0, 0)"
+                    })
+                })
+            });
         }
     });
 

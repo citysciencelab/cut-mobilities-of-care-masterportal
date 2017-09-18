@@ -14,6 +14,11 @@ define(function (require) {
                 "change:isVisibleInTree": this.removeIfNotVisible
             });
         },
+        events: {
+            "click": function () {
+                this.model.triggerRadioEvent();
+            }
+        },
         render: function () {
             var attr = this.model.toJSON();
 

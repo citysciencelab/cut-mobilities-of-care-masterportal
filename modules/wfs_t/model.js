@@ -1,9 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "openlayers",
-    "eventbus"
-], function (Backbone, Radio, ol, EventBus) {
+    "openlayers"
+], function (Backbone, Radio, ol) {
 
     var WFS_T = Backbone.Model.extend({
 
@@ -20,9 +19,8 @@ define([
 
         //
         initialize: function () {
-            this.listenTo(EventBus, {
-                "winParams": this.setStatus,
-                "layerlist:sendEditablelayerList": this.setRequestParams
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
             });
 
             this.listenTo(this, {
@@ -38,8 +36,6 @@ define([
                 },
                 "change:recordData": this.sendTransaction
             });
-
-            EventBus.trigger("layerlist:getEditableLayerList");
         },
 
         // Hört auf "winParams".
@@ -54,16 +50,6 @@ define([
                 this.set("activeButton", "");
                 Radio.trigger("Map", "removeInteraction", this.get("interaction"));
             }
-        },
-
-        // Hört auf "layerlist:sendEditablelayerList".
-        // model --> WFS-Model deren Features editierbar sind.
-        // Setzt die Attribute die für die Transaction gebraucht werden.
-        setRequestParams: function (model) {
-            this.set("featureType", model[0].get("featureType"));
-            this.set("featureNS", model[0].get("featureNS"));
-            this.set("url", model[0].get("url"));
-            this.set("source", model[0].get("source"));
         },
 
         // Hört auf "change:url".
@@ -187,7 +173,6 @@ define([
                     this.set("showAttrTable", false);
                 }
                 if(evt.selected.length) {
-                    console.log(evt.selected[0].getProperties());
                     _.each(this.get("attributions"), function (attribut) {
                         if (_.has(evt.selected[0].getProperties(), attribut) === false) {
                             evt.selected[0].set(attribut, "");

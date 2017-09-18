@@ -1,7 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/menu/mobile/breadCrumb/model"
+    "modules/menu/mobile/breadCrumb/model",
+    "bootstrap/collapse"
 ], function () {
 
     var Backbone = require("backbone"),
@@ -58,11 +59,17 @@ define([
             var modelIndex = this.indexOf(model),
                 models = this.filter(function (model, index) {
                     return index > modelIndex;
-                });
+                }),
+                hasModels = models.length > 0;
 
-            this.remove(models);
-            Radio.trigger("ModelList", "setAllDescendantsInvisible", models[0].getId());
-            Radio.trigger("ModelList", "setModelAttributesById", models[0], {isExpanded: false});
+            if (hasModels) {
+                this.remove(models);
+                Radio.trigger("ModelList", "setAllDescendantsInvisible", models[0].getId());
+                Radio.trigger("ModelList", "setModelAttributesById", models[0], {isExpanded: false});
+            }
+            else if (modelIndex === 0) {
+                $("div.collapse.navbar-collapse").removeClass("in");
+            }
         },
 
         /**

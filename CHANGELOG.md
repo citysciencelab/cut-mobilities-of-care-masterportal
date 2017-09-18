@@ -1,12 +1,38 @@
-# Changelog LGV Master-Portal 1.3.3
+# Changelog LGV Master-Portal 1.4.0
 
 NEU:
 
-  (none)
+  - 35ae3ff 1.Version Features-Filter
+  - 1b9ed32 epsg code in wfs-request ergänzt
 
 FIXES:
 
-  (none)
+  - 118a569 Änderung der Layerreihenfolge wurde im Tree nicht umgesetzt
+  - f36cf06 wenn android tastatur aufpoppt wurde window vom footer geteilt und eine Eingabe war nur schlecht möglich
+  - 442ef1a im IE wird bei abfragen der Layerinformationen ein Fehler geworfen, wenn keine Layerattribute definiert sind.
+  - 03d2ac1 wurde in der navbar gescrollt, scrollte auch #map, weil die navbar relativ positioniert war
+  - a15def9 drawmodul style
+  - c9e0aa8 Titelzeile wird zweizeilig weil render nicht bei switch mobile<->desktop erneut ausgeführt wurde
+  - 0fdc72a beim Entfernen eines Layers in non-simple-tree wurde falscher IDX-Layer entfernt, wodurch andere Layer nicht mehr unvisible/visible geswitched werden konnten
+  - ad30a70 klick auf Menü wirft Fehler in console, weil models[0] war undefined
+  - 47ebe3c gfi always on
+  - 5bdf0ff Koordinatensuche nach WGS84 (Dezimalgrad) funktioniert nicht, wegen parseFloat Problem
+  - d046d4e WFS mit png wird nicht mehr geladen
+  - 0b357de Scrollleiste in Themenbaum light
+  - f7c15bc fix UrlParams zoomlevel und Center fix Canvas wird defaultmäßig nicht erzeugt fix UrlParam featureId über LayerIds Parameter StartupModul behalten
+  - 4fd80fa Bild wird im GFI als Bild und als Link angezeigt, soll nur Bild sein
+  - 7d36d03 AutostartModul beendet sich nach einmaligem vollständigem Startvorgang selbst
+  - 9b9ddb3 272 LegendeSwitch
+  - 1e23b31 271 param
+  - fc87c13 mapview-options aus config werden nicht übernommen
+  - 3fdd4f6 keine Koppelung der LegendURL mit Dowmload im Layerinfo Fenster
+  - 71dc8f4 multipoint mousehover position
+  - 37c3ad0 schließe GFI nach Adresssuche-hit
+  - 8f5f06d kml ie punkte linien und polygone
+  - 326bad7 lighttree laeuft ueber
+  - 9cd072c safari drucken
+  - a3c4633 mrh drucken
+  - ed8b4c6 layerinfos gruppenlayer unvollstaendig
 
 # Changelog LGV Master-Portal 1.3.2
 

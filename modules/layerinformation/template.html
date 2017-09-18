@@ -1,101 +1,122 @@
 <!DOCTYPE html>
 <div class="header">
-    <p class="buttons pull-right">
+    <p class="pull-right">
         <span class="glyphicon glyphicon-remove" title="Schließen"></span>
     </p>
-    <p class="title">
+    <p>
         <span>Informationen und Legende</span>
     </p>
 </div>
 <div class="content">
     <h4 class="subtitle" title="<%= title %>"><%= title %></h4>
-    <p class="abstract"><%= abstractText %></p>
-    <% if (metaID !== null) { %>
+    <div><%= abstractText %></div>
+    <% if (!_.isNull(metaURL)) { %>
+    <% _.each(metaURL, function (url) { %>
         <br>
-        <p class="metalink"><a href="<%= metaURL %>" target="_blank">weitere Metadaten</a></p>
+        <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
+    <% }); %>
+    <% } %>
+    <% if (date !== null) { %>
         <p>Stand der Daten: <%= date %></p>
     <% } %>
-    <% if (_.isObject(legendURL[0]) === true) { %>
         <hr>
-        <h4 class="subtitle">Legende</h4>
-        <p>
-           <%
-              if (legendURL[0].typ === "WFS") {
-              %>
-                <table>
-                <%
-                _.each(legendURL[0].img, function (image, index2) {
-                %>
-                    <tr>
-                       <td class="tdLegend">
-                           <img src="<%= image %>">
-                       </td>
-                       <td class="tdLegend">
-                           <span><%= legendURL[0].legendname[index2] %></span>
-                       </td>
-                   </tr>
-                <%
-                });
-                %>
-                </table>
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
+            <% if (!_.isNull(downloadLinks)) { %>
+            <li><a data-toggle="tab" href="#LayerInfoDataDownload">Datensatz herunterladen</a></li>
+            <% } %>
+            <% if (!_.isNull(wmsUrl)) { %>
+            <li><a data-toggle="tab" href="#wmsurl">WMS-Adresse</a></li>
+            <% } %>
+        </ul>
+        <br>
+        <div class="tab-content">
+            <div id="legende" class="tab-pane fade in active">
+                <p><% if (!legendURL) { %>
+                <p>Keine Legende vorhanden</p>
+                <% }
+                else { %>
 
-                <%
-               }else if (legendURL[0].typ === "styleWMS") {
-                   %>
-
-                    <table>
-                  <%
-                     _.each(legendURL[0].params, function(param){
-                   %>
-                        <tr>
-                            <td><div class="styleWMS" style="background-color:<%=param.color%>"></div></td>
-                            <td><%=param.startRange%> - <%=param.stopRange%></td>
-                        </tr>
                    <%
-                   });
-                   %>
-                    </table>
-                <%
-                }
-            else {
-                if (typeof legendURL[0].img === "string") {
-                    if (legendURL[0].img.search(".pdf") !== -1) {
-                   %>
-                        <a href=<%= legendURL[0].img %> target="_blank">weitere Informationen</a>
-                    <%
-                    } else {
-                    %>
-                        <p>
-                            <img src=<%= legendURL[0].img %>>
-                        </p>
-                    <%
-                    }
-                }
-               else {
-                    if (_.has(legendURL[0], "img")) {
-                        if (legendURL[0].img.length ===1 ) {
-                        _.each(legendURL[0].img, function (image) {
+                      if (legendURL.typ === "WFS") {
+                      %>
+                        <table>
+                        <%
+                        _.each(legendURL.img, function (image, index2) {
                         %>
-                            <p>
-                                <img src=<%= image %>>
-                            </p>
-                    <%
-                       });}else { %>
-                        <p>
-                            <img src=<%= legendURL[0].img[0] %>>
-                        </p>
-                    <%
+                            <tr>
+                               <td class="tdLegend">
+                                   <img src="<%= image %>">
+                               </td>
+                               <td class="tdLegend">
+                                   <span><%= legendURL.legendname[index2] %></span>
+                               </td>
+                           </tr>
+                        <%
+                        });
+                        %>
+                        </table>
+
+                        <%
+                      }
+                      else if (legendURL.typ === "styleWMS") { %>
+
+                            <table>
+                          <%
+                             _.each(legendURL.params, function(param){
+                           %>
+                                <tr>
+                                    <td><div class="styleWMS" style="background-color:<%=param.color%>"></div></td>
+                                    <td><%=param.startRange%> - <%=param.stopRange%></td>
+                                </tr>
+                           <%
+                           });
+                           %>
+                            </table>
+                        <%
+                      }
+                      else {
+                        if (typeof legendURL.img === "string") {
+                            if (legendURL.img.search(".pdf") !== -1) {
+                           %>
+                                <a href=<%= legendURL.img %> target="_blank">weitere Informationen</a>
+                            <%
+                            } else {
+                            %>
+                                <p>
+                                    <img src=<%= legendURL.img %>>
+                                </p>
+                            <%
+                            }
                         }
-                    }
-                    else {
-                        %>
-                         <p>
-                             <img src=<%= legendURL[0][0] %>>
-                         </p>
-                         <%
-                    }
-               }}
-               %>
-        </p>
-    <% } %>
+                        else {
+                            if (legendURL.img.length > 1 ) {
+                            _.each(legendURL.img, function (image) {
+                            %>
+                                <p>
+                                    <img src=<%= image %>>
+                                </p>
+                        <%
+                           });}else { %>
+                            <p>
+                                <img src=<%= legendURL.img[0] %>>
+                            </p>
+                        <%
+                      }}} %>
+                <% } %>
+                </p>
+            </div>
+            <div id="LayerInfoDataDownload" class="tab-pane fade">
+                <ul class="list-unstyled">
+                    <% _.each(downloadLinks, function (downloadLink) { %>
+                        <li><a href="<%= downloadLink[1] %>" target="_blank"><%= downloadLink[0] %> </a><li>
+                    <% }); %>
+                </ul>
+            </div>
+            <div id="wmsurl" class="tab-pane fade">
+                <ul class="list-unstyled">
+                <li><a href="<%= wmsUrl +'?SERVICE=WMS&REQUEST=GetCapabilities' %>" target="_blank"><%= wmsUrl %> </a><li>
+                </ul>
+            </div>
+        </div>
 </div>

@@ -14,7 +14,7 @@ define([
             // Das Modul, das den Download gestartet hat
             caller: {},
             // download button selector
-            dlBtnSel: "a.download",
+            dlBtnSel: "a.downloadFile",
             initialize: function () {
                 this.listenTo(Radio.channel("Window"), {
                     "winParams": this.setStatus
@@ -103,13 +103,16 @@ define([
              * validates Filename
              */
              validateFilename: function (filename) {
+                if (_.isUndefined(filename) || _.isNull(filename)) {
+                    return false;
+                }
                 filename.trim();
-                var result = filename.match(/^[0-9a-zA-Z ]+(\.[0-9a-zA-Z]+)?$/);
+                var result = filename.match(/^[0-9a-zA-Z]+(\.[0-9a-zA-Z]+)?$/);
 
-                if (!result) {
+                if (_.isUndefined(result) && _.isNull(result)) {
                     Radio.trigger("Alert", "alert", "Bitte geben Sie einen gültigen Dateinamen ein! (Erlaubt sind Klein-,Großbuchstaben und Zahlen.)");
                 }
-                return result;
+                return !_.isUndefined(result) && !_.isNull(result);
              },
              appendFileExtension: function (filename, format) {
 
@@ -225,7 +228,7 @@ define([
                 data = "text/json;charset=utf-8," + data;
 
                 a.href = "data:" + data;
-                a.download = filename;
+                a.downloadFile = filename;
                 $(a).hide();
                 $(".win-body").append(a);
                 return a;
@@ -391,14 +394,14 @@ define([
                     // kein Text, muss also Punkt sein
                     if (!$(placemark).find("name")[0]) {
                         var style = $(placemark).find("Style")[0],
-                            pointStyle = "<PointStyle>";
+                            pointStyle = "<pointstyle>";
 
                         pointStyle += "<color>" + pointColors[i] + "</color>";
                         pointStyle += "<transparency>" + pointOpacities[i] + "</transparency>";
                         pointStyle += "<radius>" + pointRadiuses[i] + "</radius>";
-                        pointStyle += "</PointStyle>";
+                        pointStyle += "</pointstyle>";
 
-                        $(style).append(pointStyle);
+                        $(style).append($(pointStyle));
                     }
 
                 });

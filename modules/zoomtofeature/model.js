@@ -2,13 +2,11 @@ define([
     "backbone",
     "config",
     "backbone.radio",
-    "eventbus",
     "openlayers"
 ], function () {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         Config = require("config"),
-        EventBus = require("eventbus"),
         ol = require("openlayers"),
 
         ZoomToFeature = Backbone.Model.extend({
@@ -101,9 +99,11 @@ define([
 
         // baut sich aus den Config-prefs die URL zusammen
         requestFeaturesFromWFS: function (prefs) {
-            var url = prefs.url,
-                version = prefs.version,
-                typename = prefs.typename,
+            var LayerId = prefs.WFSid,
+                LayerPrefs = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: LayerId}),
+                url = LayerPrefs.url,
+                version = LayerPrefs.version,
+                typename = LayerPrefs.name,
                 data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename;
 
             this.sendRequest(url, data);

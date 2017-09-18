@@ -47,7 +47,7 @@ define([
         readConfig: function (psconfig) {
             var serviceId = psconfig.serviceId ? psconfig.serviceId : null,
                 restService = serviceId ? Radio.request("RestReader", "getServiceById", serviceId) : null,
-                serviceURL = restService && restService[0] && restService[0].get("url") ? restService[0].get("url") : null,
+                serviceURL = restService && restService.get("url") ? restService.get("url") : null,
                 configJSON = psconfig.configJSON ? psconfig.configJSON : null,
                 parcelDenominatorField = psconfig.parcelDenominator ? psconfig.parcelDenominator : false,
                 storedQueryID = psconfig.StoredQueryID ? psconfig.StoredQueryID : null;
@@ -143,6 +143,7 @@ define([
                     parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? " / " + _String.lpad(this.get("parcelDenominatorNumber"), 3, "0") : "";
 
                 Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
+                Radio.trigger("ParcelSearch", "noParcelFound");
             }
             else {
                 var position = $(member).find("gml\\:pos, pos")[0] ? $(member).find("gml\\:pos, pos")[0].textContent.split(" ") : null,
@@ -156,7 +157,7 @@ define([
                 }).each(function (i, obj) {
                     _.extend(attributes, _.object([this.nodeName.split(":")[1]], [this.textContent]));
                 });
-                Radio.trigger("MapMarker", "mapHandler:zoomTo", {type: "Parcel", coordinate: coordinate});
+                Radio.trigger("MapMarker", "zoomTo", {type: "Parcel", coordinate: coordinate});
                 Radio.trigger("ParcelSearch", "parcelFound", attributes);
             }
         }

@@ -328,7 +328,7 @@ require("jqueryui/widgets/draggable");
             $("#featurelist-list-header").text(name);
         },
         /*
-        * Erzeugt Auflistung der selektierbaren Layer über EventBus.
+        * Erzeugt Auflistung der selektierbaren Layer.
         */
         updateVisibleLayer: function () {
             var ll = this.model.get("layerlist");

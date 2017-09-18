@@ -21,7 +21,6 @@
             text: 'components/requirejs-text/text',
             bootstrap: 'components/bootstrap/dist/js/bootstrap',
             proj4: 'components/proj4/dist/proj4',
-            eventbus: 'js/EventBus',
             views: 'js/views',
             models: 'js/models',
             collections: 'js/collections',

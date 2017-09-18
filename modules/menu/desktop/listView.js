@@ -18,7 +18,7 @@ define([
             initialize: function () {
                 this.collection = Radio.request("ModelList", "getCollection");
 
-                Radio.on("Autostart", "startTool", this.startTool, this);
+                Radio.on("Autostart", "startModul", this.startModul, this);
                 this.listenTo(this.collection, {
                     "updateOverlayerView": function (parentId) {
                         this.updateOverlayer(parentId);
@@ -34,6 +34,7 @@ define([
                 this.renderMain();
                 this.render();
                 this.renderSelectedList();
+                Radio.trigger("Autostart", "initializedModul", "tree");
             },
             render: function () {
                 $("#" + "tree").html("");
@@ -162,12 +163,14 @@ define([
                    new SelectionView({model: model});
                 }, this);
             },
-            startTool: function (toolId) {
-                var tools = this.collection.where({type: "tool"}),
-                    tool = _.findWhere(tools, {id: toolId});
+            startModul: function (modulId) {
+                var modul = _.findWhere(this.collection.models, {id: modulId});
 
-                if (tool) {
-                    tool.setIsActive(true);
+                if (modul.attributes.type === "tool") {
+                    modul.setIsActive(true);
+                }
+                else {
+                    $("#" + modulId).parent().addClass("open");
                 }
             }
         });

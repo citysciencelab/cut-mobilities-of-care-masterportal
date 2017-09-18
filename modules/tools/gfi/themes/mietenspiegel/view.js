@@ -4,7 +4,6 @@ define(function (require) {
         MietenspiegelTemplate = require("text!modules/tools/gfi/themes/mietenspiegel/template.html"),
         MietenspiegelFormularTemplate = ("text!modules/tools/gfi/themes/mietenspiegel/template-formular.html"),
         Radio = require("backbone.radio"),
-        EventBus = require("eventbus"),
         MietenspiegelThemeView;
 
     MietenspiegelThemeView = ThemeView.extend({
@@ -42,7 +41,6 @@ define(function (require) {
                 "isVisible": this.popupRendered
             }, this);
 
-            // EventBus.on("GFIPopupVisibility", this.popupRendered, this); // trigger in popup/model.js
             this.listenToOnce(this.model, "change:readyState", function () { // Beim ersten Abfragen läuft initialize durch, bevor das Model fertig ist. Daher wird change:readyState getriggert
                 this.model.newWindow (layer, response, coordinate);
                 $(".gfi-content").append(this.$el.html(this.template(this.model.toJSON())));
@@ -61,7 +59,6 @@ define(function (require) {
             this.model.defaultErgebnisse();
 
             this.render();
-            EventBus.trigger ("gfipopup:rerender", this); // im mietenspiegel-formular keine Auswirkung, weil Modul nicht geladen.
             this.trigger("setFocusToInput"); // triggere im mietenspiegel und mietenspiegel-formular immer setFocusToInput, Methode aber nicht immer registriert.
             this.focusNextMerkmal(0);
         },
@@ -145,7 +142,7 @@ define(function (require) {
         * Methode wird nur im Mietenspiegel-Formular registriert
         */
         setFocusToInput: function () {
-            EventBus.trigger("searchInput:setFocus", this);
+            Radio.trigger("Searchbar", "setFocus");
         },
         /*
          * Wenn GFI-Popup gerendert wurde. --> initialzize der View
@@ -170,7 +167,6 @@ define(function (require) {
         showErgebnisse: function () {
             $("#msergdiv").show();
             $("#msmetadaten").hide();
-            EventBus.trigger("gfipopup:rerender", this);
         },
         hideErgebnisse: function () {
             $("#msergdiv").hide();

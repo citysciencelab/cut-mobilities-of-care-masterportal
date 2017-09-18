@@ -21,7 +21,8 @@ define(function (require) {
         initialize: function () {
             this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
             var channel = Radio.channel("Map"),
-                mapView = new MapView();
+                mapView = new MapView(),
+                mapHeight;
 
             channel.reply({
                 "getLayers": this.getLayers,
@@ -29,7 +30,9 @@ define(function (require) {
                 "createLayerIfNotExists": this.createLayerIfNotExists,
                 "getEventPixel": this.getEventPixel,
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
-                "getSize": this.getSize
+                "getSize": this.getSize,
+                "getPixelFromCoordinate": this.getPixelFromCoordinate,
+                "getMap": this.getMap
             }, this);
 
             channel.on({
@@ -49,7 +52,10 @@ define(function (require) {
                 "removeLoadingLayer": this.removeLoadingLayer,
                 "registerListener": this.registerListener,
                 "unregisterListener": this.unregisterListener,
-                "forEachFeatureAtPixel": this.forEachFeatureAtPixel
+                "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
+                "updateSize": function () {
+                    this.getMap().updateSize();
+                }
             }, this);
 
             this.listenTo(this, {
@@ -169,6 +175,15 @@ define(function (require) {
          */
         getEventPixel: function (evt) {
             return this.getMap().getEventPixel(evt);
+        },
+
+        /**
+         * Gibt die Pixelposition im Viewport zu einer Koordinate zurück
+         * @param  {ol.Coordinate} value
+         * @return {ol.Pixel}
+         */
+        getPixelFromCoordinate: function (value) {
+            return this.getMap().getPixelFromCoordinate(value);
         },
 
         /**

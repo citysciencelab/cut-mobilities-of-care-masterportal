@@ -2,9 +2,8 @@ define([
     "backbone",
     "modules/layer/wfsStyle/model",
     "config",
-    "eventbus",
     "backbone.radio"
-], function (Backbone, WFSStyle, Config, EventBus, Radio) {
+], function (Backbone, WFSStyle, Config, Radio) {
 
     var StyleList = Backbone.Collection.extend ({
         model: WFSStyle,
@@ -61,13 +60,12 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-                    EventBus.trigger("alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "Fehler beim Laden von: " + Radio.request("Util", "getPath", Config.styleConf),
                         kategorie: "alert-warning"
                     });
                 },
                 success: function () {
-                //    console.log(collection);
                 }
             });
         },

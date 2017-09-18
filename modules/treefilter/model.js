@@ -35,7 +35,6 @@ define([
             else {
                 Radio.trigger("Alert", "alert", "Layer 182 (Straßenbäume) nicht definiert");
             }
-            // var t = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
             this.listenTo(this, "change:searchCategoryString", this.setCategoryArray);
             this.listenTo(this, "change:treeCategory", this.setTypeArray);
             this.listenTo(this, "change:searchTypeString", this.setTypeArray);
@@ -46,7 +45,6 @@ define([
                 cache: false,
                 async: false,
                 error: function () {
-//                    console.log("Service Request failure");
                 },
                 success: function (model) {
                     // speichert alle Baumgattung in ein Array

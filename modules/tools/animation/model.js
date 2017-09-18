@@ -135,7 +135,6 @@ define(function (require) {
                 context: this,
                 success: successFunction,
                 error: function (jqXHR, errorText, error) {
-                    console.log(error);
                 }
             });
         },
@@ -196,12 +195,12 @@ define(function (require) {
             if (this.getDirection() === "wohnort") {
                 coords = this.getLineFeatures()[0].getGeometry().getFirstCoordinate();
                 Radio.trigger("MapView", "setCenter", coords, this.getZoomLevel());
-                Radio.trigger("MapMarker", "mapHandler:showMarker", coords);
+                Radio.trigger("MapMarker", "showMarker", coords);
             }
             else {
                 coords = this.getLineFeatures()[0].getGeometry().getLastCoordinate();
                 Radio.trigger("MapView", "setCenter", coords, this.getZoomLevel());
-                Radio.trigger("MapMarker", "mapHandler:showMarker", coords);
+                Radio.trigger("MapMarker", "showMarker", coords);
             }
         },
 
@@ -673,7 +672,7 @@ define(function (require) {
                 Radio.trigger("Map", "removeLayer", this.get("animationLayer"));
 
             }
-            Radio.trigger("MapMarker", "mapHandler:hideMarker");
+            Radio.trigger("MapMarker", "hideMarker");
         },
 
         resetAnimationWindow: function () {

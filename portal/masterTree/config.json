@@ -1,17 +1,20 @@
 {
   "Portalconfig":
     {
-      "PortalTitle": "GeoViewer",
+      "portalTitle": {
+        "title": "GeoViewer"
+      },
       "searchBar": {
         "minChars": 3,
         "gazetteer": {
-           "minChars": 3,
-           "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-           "searchStreets": true,
-           "searchHouseNumbers": true,
-           "searchDistricts": true,
-           "searchParcels": true
-       },
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+        },
 
        "specialWFS": {
            "minChar": 3,
@@ -40,7 +43,8 @@
       "menu": {
         "tree": {
           "name": "Themen",
-          "glyphicon": "glyphicon-list"
+          "glyphicon": "glyphicon-list",
+          "isInitOpen": true
         },
         "tools": {
           "name": "Werkzeuge",
@@ -60,9 +64,28 @@
               "isActive": true
             },
             "print": {
-              "name": "Karte drucken",
-              "glyphicon": "glyphicon-print"
-            },
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Master-Portal",
+            "gfi": false,
+            "outputFilename": "DruckPDF",
+            "gfiMarker": {
+              "outerCircle": {
+                "fill": false,
+                "pointRadius": 8,
+                "stroke": true,
+                "strokeColor": "#ff0000",
+                "strokeWidth": 3
+              },
+              "point": {
+                "fill": true,
+                "pointRadius": 1,
+                  "fillColor": "#000000",
+                  "stroke": false
+                }
+            }
+          },
             "coord": {
               "name": "Koordinaten abfragen",
               "glyphicon": "glyphicon-screenshot"
@@ -108,7 +131,6 @@
         }
       },
       "controls": {
-        "toggleMenu": true,
         "zoom": true,
         "orientation": "once",
         "poi": true,
@@ -489,15 +511,23 @@
                 {
                   "id": "2178",
                   "visibility": false
-                },
+                }
+              ]
+            },
+            {
+              "Titel": "Gruppenlayer",
+              "Layer": [
                 {
-                  "id": [{
+                  "id": [
+                    {
                     "id": "682"
-                  },{
+                    },
+                    {
                     "id": "1731"
-                  }],
+                      }
+                  ],
                   "visibility": true,
-                  "name": "test"
+                  "name": "Kita und Krankenhäuser"
                 }
               ]
             }

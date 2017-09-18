@@ -1,9 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "modules/searchbar/model"],
-       function (Backbone, Radio, EventBus) {
+       function (Backbone, Radio) {
         "use strict";
         return Backbone.Model.extend({
         /**
@@ -43,8 +42,15 @@ define([
                     this.sendRequest(element.url, element.data, this.getFeaturesForStoerfallbetrieb, false);
                 }
             }, this);
-            EventBus.on("searchbar:search", this.search, this);
-            EventBus.on("specialWFS:requestbplan", this.requestbplan, this);
+
+            this.listenTo(Radio.channel("Searchbar"), {
+                "search": this.search
+            });
+
+            this.listenTo(Radio.channel("SpecialWFS"), {
+                "requestbplan": this.requestbplan
+            });
+
             if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
                 this.search(Radio.request("ParametricURL", "getInitString"));
             }
@@ -57,7 +63,7 @@ define([
             this.set("searchString", searchString);
             if (this.get("inUse") === false) {
                 this.set("inUse", true);
-                searchString = searchString.replace(/[()]/g, '\\$&');
+                searchString = searchString.replace(/[()]/g, "\\$&");
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
                 if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
@@ -69,7 +75,7 @@ define([
                 if (this.get("stoerfallbetrieb").length > 0 && searchString.length >= this.get("minChars")) {
                     this.searchInStoerfallbetrieb(searchStringRegExp);
                 }
-                EventBus.trigger("createRecommendedList");
+                Radio.trigger("Searchbar", "createRecommendedList");
                 this.set("inUse", false);
             }
         },
@@ -89,7 +95,7 @@ define([
         * @param {string} data - Die Data-XML.
         */
         getExtentFromBPlan: function (data) {
-            EventBus.trigger("mapHandler:zoomToBPlan", data);
+            Radio.trigger("MapMarker", "zoomToBPlan", data);
         },
         /**
         *
@@ -98,7 +104,7 @@ define([
             _.each(this.get("kita"), function (kita) {
                 // Prüft ob der Suchstring ein Teilstring vom kita ist
                 if (kita.name.search(searchStringRegExp) !== -1) {
-                    EventBus.trigger("searchbar:pushHits", "hitList", kita);
+                    Radio.trigger("Searchbar", "pushHits", "hitList", kita);
                 }
             }, this);
         },
@@ -109,7 +115,7 @@ define([
             _.each(this.get("stoerfallbetrieb"), function (stoerfallbetrieb) {
                 // Prüft ob der Suchstring ein Teilstring vom stoerfallbetrieb ist
                 if (stoerfallbetrieb.name.search(searchStringRegExp) !== -1) {
-                    EventBus.trigger("searchbar:pushHits", "hitList", stoerfallbetrieb);
+                    Radio.trigger("Searchbar", "pushHits", "hitList", stoerfallbetrieb);
                 }
             }, this);
         },
@@ -125,7 +131,7 @@ define([
                 var searchBplanStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i");
                 // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
                  if (bPlan.name.search(searchBplanStringRegExp) !== -1) {
-                    EventBus.trigger("searchbar:pushHits", "hitList", bPlan);
+                    Radio.trigger("Searchbar", "pushHits", "hitList", bPlan);
                 }
             }, this);
         },

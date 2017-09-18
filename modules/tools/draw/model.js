@@ -1,12 +1,10 @@
 define([
     "backbone",
     "openlayers",
-    "eventbus",
     "backbone.radio"
 ], function () {
     var Backbone = require("backbone"),
         ol = require("openlayers"),
-        EventBus = require("eventbus"),
         Radio = require("backbone.radio"),
         DrawTool;
 
@@ -102,8 +100,7 @@ define([
                 "change:text": this.setStyle,
                 "change:selectedFont": this.setStyle,
                 "change:selectedFontSize": this.setStyle,
-                "change:selectedColor change:radius change:selectedStrokeWidth change:selectedOpacity": this.setStyle,
-                "change:drawendCoords": this.triggerDrawendCoords
+                "change:selectedColor change:radius change:selectedStrokeWidth change:selectedOpacity": this.setStyle
             });
 
             this.get("selectClick").on("select", function (evt) {
@@ -122,6 +119,7 @@ define([
             this.set("source", drawLayer.getSource());
             this.get("selectClick").setActive(false);
             Radio.trigger("Map", "addInteraction", this.get("selectClick"));
+            Radio.trigger("Autostart", "initializedModul", "draw");
         },
 
         setStatus: function (args) {
@@ -392,10 +390,6 @@ define([
             var geoJSON = new ol.format.GeoJSON();
 
             this.set("drawendCoords", geoJSON.writeGeometry(geom));
-        },
-
-        triggerDrawendCoords: function () {
-            EventBus.trigger("getDrawendCoords", this.get("drawendCoords"));
         },
 
         createcircleTooltip: function () {

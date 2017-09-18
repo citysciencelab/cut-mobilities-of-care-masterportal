@@ -1,9 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "modules/searchbar/model"
-    ], function (Backbone, Radio, EventBus) {
+    ], function (Backbone, Radio) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -36,12 +35,12 @@ define([
             var suggestService = Radio.request("RestReader", "getServiceById", config.suggestServiceId),
                 geosearchService = Radio.request("RestReader", "getServiceById", config.geosearchServiceId);
 
-            if (suggestService[0] && suggestService[0].get("url")) {
-                this.set("bkgSuggestURL", suggestService[0].get("url"));
+            if (suggestService && suggestService.get("url")) {
+                this.set("bkgSuggestURL", suggestService.get("url"));
             }
 
-            if (geosearchService[0] && geosearchService[0].get("url")) {
-                this.set("bkgSearchURL", geosearchService[0].get("url"));
+            if (geosearchService && geosearchService.get("url")) {
+                this.set("bkgSearchURL", geosearchService.get("url"));
             }
 
             if (config.minChars) {
@@ -62,8 +61,11 @@ define([
             if (config.score) {
                 this.set("score", config.score);
             }
-            EventBus.on("searchbar:search", this.search, this);
-            EventBus.on("bkg:bkgSearch", this.bkgSearch, this);
+
+            this.listenTo(Radio.channel("Searchbar"), {
+                "bkgSearch": this.bkgSearch,
+                "search": this.search
+            });
         },
         /**
         * Wird von der Searchbar getriggert.
@@ -72,7 +74,7 @@ define([
             if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.set("inUse", true);
                 this.suggestByBKG(searchString);
-                EventBus.trigger("createRecommendedList");
+                Radio.trigger("Searchbar", "createRecommendedList");
                 this.set("inUse", false);
             }
         },
@@ -91,7 +93,7 @@ define([
         pushSuggestions: function (data) {
             _.each(data, function (hit) {
                 if (hit.score > this.get("score")) {
-                    EventBus.trigger("searchbar:pushHits", "hitList", {
+                    Radio.trigger("Searchbar", "pushHits", "hitList", {
                         name: hit.suggestion,
                         type: "Ort",
                         bkg: true,
@@ -115,7 +117,7 @@ define([
          * @param  {string} data - Data-XML des request
          */
         handleBKGSearchResult: function (data) {
-            EventBus.trigger("mapHandler:zoomToBKGSearchResult", data);
+            Radio.trigger("MapMarker", "zoomToBKGSearchResult", data);
         },
         /**
          * @description Führt einen HTTP-GET-Request aus.

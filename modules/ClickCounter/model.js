@@ -44,5 +44,6 @@ define([
             $("#" + id).attr("src", url);
         }
     });
+
     return ClickCounter;
 });

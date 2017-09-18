@@ -15,6 +15,8 @@ define(function (require) {
         MietenspiegelTheme = require("modules/tools/gfi/themes/mietenspiegel/model"),
         SgvOnlineTheme = require("modules/tools/gfi/themes/sgvonline/model"),
         SgvOnlineThemeView = require("modules/tools/gfi/themes/sgvonline/view"),
+        VerkehrsStaerkenTheme = require("modules/tools/gfi/themes/verkehrsstaerken/model"),
+        VerkehrsStaerkenThemeView = require("modules/tools/gfi/themes/verkehrsstaerken/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -36,6 +38,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "sgvonline") {
                 return new SgvOnlineTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "verkehrsstaerken") {
+                return new VerkehrsStaerkenTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -89,6 +94,10 @@ define(function (require) {
                 }
                 case "sgvonline": {
                     new SgvOnlineThemeView({model: model});
+                    break;
+                }
+                case "verkehrsstaerken": {
+                    new VerkehrsStaerkenThemeView({model: model});
                     break;
                 }
                 default: {

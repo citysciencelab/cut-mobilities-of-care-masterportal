@@ -2,8 +2,7 @@ define([
     "backbone",
     "backbone.radio",
     "text!modules/viomRouting/template.html",
-    "modules/viomRouting/model",
-    "modules/controls/orientation/model"
+    "modules/viomRouting/model"
 ], function (Backbone, Radio, RoutingWin, RoutingModel) {
 
     var RoutingView = Backbone.View.extend({
@@ -20,6 +19,7 @@ define([
             this.listenTo(this.model, "change:toList", this.toListChanged);
             this.listenTo(this.model, "change:startAdresse", this.changeStartAdresse);
             this.listenTo(this.model, "change:zielAdresse", this.changeZielAdresse);
+            this.listenTo(this.model, "change:isGeolocationPossible", this.changeGeolocationPossible, this);
 
             var channel = Radio.channel("ViomRouting");
 
@@ -27,7 +27,7 @@ define([
                 "setRoutingDestination": this.setRoutingDestination
             }, this);
 
-            Radio.trigger("Autostart", "initializedTool", "routing");
+            Radio.trigger("Autostart", "initializedModul", "routing");
         },
         events: {
             "click #calc": "routeBerechnen",
@@ -237,6 +237,14 @@ define([
 
             this.$el.html("");
             $(".win-heading").after(this.$el.html(this.template(attr)));
+        },
+        changeGeolocationPossible: function (that, val) {
+            if (val === true) {
+                $("#startAdressePositionSpan").removeClass("hidden");
+            }
+            else {
+                $("#startAdressePositionSpan").addClass("hidden");
+            }
         }
     });
 

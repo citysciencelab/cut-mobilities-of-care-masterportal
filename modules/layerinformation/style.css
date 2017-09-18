@@ -1,60 +1,4 @@
-/***** Destop *****/
-.layerinformation-win {
-    position: absolute;
-    top: 20px;
-    right: 60px;
-    width: 500px;
-    margin: 60px 10px 30px 10px;
-    display: none;
-    z-index: 1010;
-    background-color: rgb(255, 255, 255);
-    box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
-    border: 1px solid rgb(229, 229, 229);
-}
-
-.layerinformation-win > .header {
-    padding-left: 10px;
-    border-bottom: 1px solid rgb(229, 229, 229);
-}
-
-.layerinformation-win > .header > .title {
-    cursor: move;
-    font-size: 14px;
-    padding-top: 10px;
-    padding-bottom: 5px;
-    color: rgb(85, 85, 85);
-}
-
-.layerinformation-win > .header > .buttons {
-    color: rgb(85, 85, 85);
-    font-size: 14px;
-    margin: 0;
-}
-
-.layerinformation-win > .header > .buttons > span {
-    padding: 8px;
-    cursor: pointer;
-}
-
-.layerinformation-win > .header > .buttons > span:hover {
-    opacity: 0.7;
-}
-
-.layerinformation-win > .content {
-    max-height: 450px;
-    background-color: white;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-bottom: 5px;
-    padding-left: 10px;
-}
-
-.layerinformation-win > .content > p {
-    font-size: 12px;
-    color: rgb(85, 85, 85);
-}
-
-.layerinformation-win > .content > .subtitle {
+.layerinformation .subtitle {
     color: rgb(182, 0, 0);
     white-space: nowrap;
     overflow: hidden;
@@ -63,42 +7,72 @@
     max-width: 100%;
 }
 
-.layerinformation-win > .content > .metalink {
-    float:right;
+.layerinformation hr {
+    margin: 15px 0px 10px 0px;
 }
 
-.layerinformation-win > .content > .metalink > a {
-    color: rgb(8, 88, 158);
+#layerinformation-desktop .content > ul  {
+    background-color: white;
 }
 
-.layerinformation-win > .content > hr {
-    border-color: rgb(229,229,229);
-    margin-right: 10px;
+
+/***** Destop *****/
+#layerinformation-desktop {
+    position: absolute;
+    top: 20px;
+    right: 60px;
+    width: 45vw;
+    margin: 60px 10px 30px 10px;
+    z-index: 1010;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
+    border: 1px solid rgb(229, 229, 229);
 }
 
-/***** Mobil *****/
-.layerinformation-modal > .modal-header > .title {
-    font-size: 14px;
-    color: rgb(85, 85, 85);
+#layerinformation-desktop .header {
+    padding: 10px 0 5px 10px;
+    border-bottom: 1px solid rgb(229, 229, 229);
+    cursor: move;
 }
 
-.layerinformation-modal > .modal-header > .buttons {
-    color: rgb(85, 85, 85);
-    font-size: 16px;
-}
-
-.layerinformation-modal > .modal-header > .buttons:hover {
+#layerinformation-desktop .glyphicon-remove:hover {
     opacity: 0.7;
+    cursor: pointer;
 }
 
-.layerinformation-modal > .modal-body > .subtitle {
-    color: rgb(182, 0, 0);
-}
-
-.layerinformation-modal > .modal-body > p {
+#layerinformation-desktop .content {
+    max-height: 66vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 5px 10px;
     font-size: 12px;
 }
 
-.layerinformation-modal > .modal-body > .metalink {
-    float: right;
+.layerinformation-modal .nav-tabs {
+    display: flex;
 }
+
+
+.layerinformation-modal .nav-tabs > li  {
+    font-size: 12px;
+}
+
+.layerinformation-modal .nav-tabs > li > a {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+
+.layerinformation-modal .tab-content .tab-pane > ul>  li > a {
+    font-size: 12px;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 95%;
+    overflow: hidden;
+}
+
+.layerinformation-modal .tab-content #legende {
+    max-width: 95%;
+    overflow: auto;
+}
+

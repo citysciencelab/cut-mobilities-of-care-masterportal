@@ -1,7 +1,6 @@
 define("geoapi", [
-    "backbone",
-    "eventbus"
-], function (Backbone, EventBus) {
+    "backbone"
+], function (Backbone) {
 
     var GeoAPI = parent.GeoAPI = _.extend({}, Backbone.Events);
 

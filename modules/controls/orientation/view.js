@@ -15,13 +15,8 @@ define([
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
-            var showGeolocation = false;
+            var showGeolocation = this.model.getIsGeoLocationPossible();
 
-            // Die Abfrage der Geolocation ist nur erlaubt, wenn die Seite per https oder localhost aufgerufen wird.
-            if (this.isGeoLocationPossible()) {
-                showGeolocation = true;
-            }
-            
             if (showGeolocation) {// Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
 
                 var channel = Radio.channel("orientation");
@@ -35,10 +30,7 @@ define([
                 });
 
                 this.listenTo(this.model, {
-                    "change:tracking": this.trackingChanged
-                }, this);
-
-                this.listenToOnce(this.model, {
+                    "change:tracking": this.trackingChanged,
                     "change:isGeolocationDenied": this.toggleBackground
                 }, this);
 
@@ -50,6 +42,9 @@ define([
                         new POIView();
                     });
                 }
+
+                // initialer check, ob WFS-Layer sichtbar sind, damit nach render #geolocatePOI sichtbar wird.
+                this.checkWFS();
             }
         },
 
@@ -73,7 +68,7 @@ define([
             }
         },
 
-        toggleLocateRemoveClass: function() {
+        toggleLocateRemoveClass: function () {
             $("#geolocate").removeClass("toggleButtonPressed");
         },
         /*
@@ -99,13 +94,6 @@ define([
             else {
                 $("#geolocatePOI").show();
             }
-        },
-        /*
-        * Prueft, ob die Geo-Lokalisierung grundsaetzlich angeboten werden kann.
-        * Die Seite muss auf localhost oder per https aufgerufen werden.
-        */
-        isGeoLocationPossible: function () {
-            return window.location.protocol === "https:" || _.contains(["localhost","127.0.0.1"], window.location.hostname);
         },
         /*
         * ButtonCall

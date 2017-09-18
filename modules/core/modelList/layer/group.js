@@ -111,50 +111,38 @@ define([
                         }, this);
                     }
                 }
+                else {
+                    legendURL.push(layer.legendURL);
+                }
             }, this);
             this.set("legendURL", legendURL);
         },
 
         /**
-         * [showLayerInformation description]
-         * @return {[type]} [description]
+         * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
          */
         showLayerInformation: function () {
-            var legendURL = [],
-                names = [],
-                styleList = Radio.request("StyleList", "returnAllModelsById", this.attributes.id);
+            var metaID = [],
+                legendParams = Radio.request("Legend", "getLegendParams"),
+                name = this.get("name"),
+                legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null;
 
-           if (styleList.length > 0) {
-                _.each(styleList, function (style) {
-                    legendURL.push(style.get("imagepath") + style.get("imagename"));
-                    if (style.has("legendValue")) {
-                        names.push(style.get("legendValue"));
-                    }
-                    else {
-                        names.push(style.get("styleFieldValue"));
-                    }
-                });
-            }
-            else {
-                if (this.get("legendURL").length > 1) {
-                    _.each(this.get("legendURL"), function (singleLegendURL) {
-                        legendURL.push(singleLegendURL);
-                    });
+            _.each(this.get("layerdefinitions"), function (layer) {
+                var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
+
+                if (layerMetaId) {
+                    metaID.push(layerMetaId);
                 }
-                else {
-                    legendURL.push(this.get("legendURL"));
-                }
-                if (! _.isUndefined(this.get("datasets"))) {
-                    names.push(this.get("datasets")[0].md_name);
-                }
-            }
+            });
+
             Radio.trigger("LayerInformation", "add", {
                 "id": this.getId(),
                 "legendURL": legendURL,
-                "metaID": this.get("layerdefinitions")[0].datasets[0] ? this.get("layerdefinitions")[0].datasets[0].md_id : null,
-                "name": names,
-                "layername": this.get("name")
+                "metaID": metaID,
+                "layername": name
             });
+
+            this.setLayerInfoChecked(true);
         },
 
         /**

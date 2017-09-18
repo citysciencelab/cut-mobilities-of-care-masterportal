@@ -1,39 +1,32 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/layerinformation/model",
-    "text!modules/layerinformation/template.html",
-    "jqueryui/widgets/draggable"
-], function (Backbone, Radio, Layerinformation, LayerInformationTemplate) {
+define(function (require) {
+    require("jqueryui/widgets/draggable");
 
-    var LayerInformationView = Backbone.View.extend({
-        model: new Layerinformation(),
-        className: "layerinformation-win",
-        template: _.template(LayerInformationTemplate),
+    var Template = require("text!modules/layerinformation/template.html"),
+        LayerInformationView;
+
+    LayerInformationView = Backbone.View.extend({
+        id: "layerinformation-desktop",
+        className: "layerinformation",
+        template: _.template(Template),
         events: {
-            "click .glyphicon-remove": "hide",
-            "click .glyphicon-minus": "minimize",
-            "click .glyphicon-print": "print"
+            "click .glyphicon-remove": "hide"
         },
 
         initialize: function () {
             this.listenTo(this.model, {
-                "sync": this.render
-            });
-            this.$el.on({
-                click: function (e) {
-                    e.stopPropagation();
-                }
+                // model.fetch() feuert das Event sync, sobald der Request erfoglreich war
+                "sync": this.render,
+                "removeView": this.remove
             });
         },
 
         render: function () {
             var attr = this.model.toJSON();
 
-            $("body").append(this.$el.html(this.template(attr)));
+            $("#map").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
                 containment: "#map",
-                handle: ".header > .title"
+                handle: ".header"
             });
             this.$el.show();
         },
@@ -41,6 +34,7 @@ define([
         hide: function () {
             Radio.trigger("Layer", "setLayerInfoChecked", false);
             this.$el.hide();
+            this.model.setIsVisible(false);
         }
     });
 

@@ -5,97 +5,100 @@ define([
 
     var Autostarter = Backbone.Model.extend({
         defaults: {
-            autostartTools: [], // Liste aller zu startenden Tools
-            initializedTools: [], // Liste aller geladenen Tools
+            autostartModuls: [], // Liste aller zu startenden Module
+            initializedModuls: [], // Liste aller geladenen Module
             parametersAnalysed: false, // Boolean, ob ParametricURL abgefragt wurde
-            configAnalysed: false // Boolean, ob config.json abgefragt wurde
+            configAnalysed: false, // Boolean, ob config.json abgefragt wurde
+            channel: Radio.channel("Autostart")
         },
         initialize: function () {
-            var channel = Radio.channel("Autostart");
+            var channel = this.get("channel");
 
             channel.on({
-                "initializedTool": this.setInitializedTool
+                "initializedModul": this.setInitializedModul
             }, this);
 
-            Radio.on("MenuLoader", "ready", this.menuLoaded, this);
+            Radio.once("MenuLoader", "ready", this.menuLoaded, this);
 
-            Radio.on("ParametricURL", "ready", this.parametersAnalysed, this);
-
-            this.listenTo(this, {
-                "change:configAnalysed": this.check,
-                "change:parametersAnalysed": this.check,
-                "check": this.check
-            });
+            Radio.once("ParametricURL", "ready", this.parametersAnalysed, this);
         },
         /*
-         * speichert sich alle geladenen Tools, die geladen wurden und prinzipiell geöffnet werden können.
+         * speichert sich alle geladenen Module, die geladen wurden und prinzipiell geöffnet werden können.
          */
-        setInitializedTool: function (id) {
-            var initializedTools = this.get("initializedTools");
+        setInitializedModul: function (id) {
+            var initializedModuls = this.get("initializedModuls");
 
-            initializedTools.push(id.toLowerCase());
-            this.set("initializedTools", initializedTools);
-            this.trigger("check");
+            initializedModuls.push(id.toLowerCase());
+            this.set("initializedModuls", initializedModuls);
+            this.check();
         },
         /*
-         * erst nachdem das Menü geladen ist kann der Parser per Radio abgefragt werden. In der config.json wird nach Tools mit autostart: true gesucht.
+         * erst nachdem das Menü geladen ist kann der Parser per Radio abgefragt werden. In der config.json wird nach Modulen mit isInitOpen: true gesucht.
          */
         menuLoaded: function () {
-            var configAutostart = Radio.request("Parser", "getItemsByAttributes", {autostart: true}),
-                autostartTools = this.get("autostartTools"),
-                configAutostartTools = [];
+            var configAutostart = Radio.request("Parser", "getItemsByAttributes", {isInitOpen: true});
 
-            _.each(configAutostart, function (tool) {
-                if (_.has(tool, "type") && tool.type === "tool" && _.has(tool, "id")) {
-                   configAutostartTools.push(tool.id.toLowerCase());
+            _.each(configAutostart, function (modul) {
+                if (_.has(modul, "id")) {
+                   this.get("autostartModuls").push(modul.id.toLowerCase());
                 }
-            });
-            if (configAutostartTools.length > 0) {
-                this.set("autostartTools", configAutostartTools);
-            }
+            }, this);
             this.set("configAnalysed", true);
+            this.check();
         },
         /*
-         * wenn die Paramter der URL untersucht wurden, wird das StartUpModul in Erfahrung gebracht
+         * wenn die Paramter der URL untersucht wurden, werden die isInitOpen Module in Erfahrung gebracht
          */
         parametersAnalysed: function () {
-            var parametricAutostart = Radio.request("ParametricURL", "getStartUpModul").toString(),
+            var parametricAutostart = Radio.request("ParametricURL", "getIsInitOpen").toString(),
                 autostartParameter = parametricAutostart ? parametricAutostart : null,
-                autostartTools = this.get("autostartTools");
+                autostartModuls = this.get("autostartModuls");
 
             if (autostartParameter) {
-                autostartTools.push(autostartParameter.toLowerCase());
-                this.set("autostartTools", autostartTools);
+                _.each(autostartParameter.toLowerCase().split(","), function (paramEl) {
+                    autostartModuls.push(paramEl);
+                });
             }
+            this.set("autostartModuls", autostartModuls);
             this.set("parametersAnalysed", true);
+            this.check();
         },
         /*
-         * sofern das Modul in Erfahrung gebracht hat, welche Tools gestartet werden sollen, werden alle zwischenzeitlich geladenen Tools verglichen und ggf. gestartet.
-         * Jedes gestartete Tool wird aus "autostartTools" wieder entfernt, damit dieses Modul sich am Ende selbst destroyen kann.
+         * sofern das Modul in Erfahrung gebracht hat, welche Module gestartet werden sollen, werden alle zwischenzeitlich geladenen Module verglichen und ggf. gestartet.
+         * Jedes gestartete Modul wird aus "autostartModuls" wieder entfernt, damit dieses Modul sich am Ende selbst destroyen kann.
+         * Jedes später geladene Tool, welches initial geöffnet sein soll schließt bereits vorher geöffnete.
+         * Parameter werden vor der config gelesen.
          */
         check: function () {
             if (this.get("parametersAnalysed") === true && this.get("configAnalysed") === true) {
-                var autostartTools = this.get("autostartTools"),
-                    initializedTools = this.get("initializedTools");
+                var autostartModuls = this.get("autostartModuls"),
+                    initializedModuls = this.get("initializedModuls");
 
-                if (autostartTools.length === 0) {
-                    // es werden keine Tools automatisch gestartet. Autostarter wird nicht benötigt.
-                    this.destroy();
+                if (autostartModuls.length === 0) {
+                    // es werden keine Module automatisch gestartet. Autostarter wird nicht benötigt.
+                    this.unloadModule();
                 }
-                else if (initializedTools.length > 0) {
+                else if (initializedModuls.length > 0) {
                     // sofern Module schon initialisiert sind, können sie gestartet werden.
-                    _.each(autostartTools, function (idToStart) {
-                        if (_.indexOf(initializedTools, idToStart) !== -1) {
-                            Radio.trigger("Autostart", "startTool", idToStart);
-                            this.set("autostartTools", _.without(autostartTools, idToStart));
+                    _.each(autostartModuls, function (idToStart) {
+                        if (_.indexOf(initializedModuls, idToStart) !== -1) {
+                            Radio.trigger("Autostart", "startModul", idToStart);
+                            this.set("autostartModuls", _.without(autostartModuls, idToStart));
                         }
                     }, this);
 
-                    if (this.get("autostartTools").length === 0) {
-                        this.destroy();
+                    if (this.get("autostartModuls").length === 0) {
+                        this.unloadModule();
                     }
                 }
             }
+        },
+        unloadModule: function () {
+            var channel = this.get("channel");
+
+            channel.reset(); // reset all channels from the radio object
+            this.clear();
+            this.destroy();
         }
     });
 

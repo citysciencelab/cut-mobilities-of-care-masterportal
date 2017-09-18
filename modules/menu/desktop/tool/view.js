@@ -7,7 +7,7 @@ define(function (require) {
 
     ItemView = Backbone.View.extend({
         tagName: "li",
-        className: "dropdown dropdown-tools",
+        className: "dropdown",
         template: _.template(ItemTemplate),
         events: {
             "click": "checkItem"
@@ -23,7 +23,9 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+            if (this.model.getIsVisibleInMenu() !== false) {
+                $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+            }
         },
 
         /**
@@ -36,7 +38,7 @@ define(function (require) {
                 this.$el.find("span").addClass("hidden-sm");
             }
             else {
-                this.$el.addClass("tool-style");
+                this.$el.addClass("submenu-style");
             }
         },
 

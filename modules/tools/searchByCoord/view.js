@@ -1,10 +1,10 @@
-define([
-    "backbone",
-    "text!modules/tools/searchByCoord/template.html",
-    "modules/tools/searchByCoord/model"
-], function (Backbone, SearchByCoordTemplate, SearchByCoord) {
+define(function (require) {
 
-    var SearchByCoordView = Backbone.View.extend({
+    var SearchByCoordTemplate = require("text!modules/tools/searchByCoord/template.html"),
+        SearchByCoord = require("modules/tools/searchByCoord/model"),
+        SearchByCoordView;
+
+    SearchByCoordView = Backbone.View.extend({
         model: SearchByCoord,
         className: "win-body",
         template: _.template(SearchByCoordTemplate),
@@ -38,7 +38,7 @@ define([
             if (evt.keyCode === 13) {
                 this.model.validateCoordinates();
             }
-            this.model.setCoordinates($("#coordinatesEastingField").val(),$("#coordinatesNorthingField").val());
+            this.model.setCoordinates($("#coordinatesEastingField").val(), $("#coordinatesNorthingField").val());
         },
         setFocusToCoordSystemInput: function () {
             $("#coordSystemField").focus();

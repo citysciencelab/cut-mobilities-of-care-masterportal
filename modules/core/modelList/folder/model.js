@@ -3,6 +3,7 @@ define([
 ], function () {
 
     var Item = require("modules/core/modelList/item"),
+        Radio = require("backbone.radio"),
         Folder;
 
     Folder = Item.extend({
@@ -27,7 +28,17 @@ define([
         }),
 
         initialize: function () {
-            // console.log(this);
+            // Wenn alle Layer in einem Folder selektiert sind, wird der Folder auch selektiert
+            if (this.getParentId() === "Overlayer") {
+                var items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.getId()}),
+                    isEveryLayerSelected = _.every(items, function (item) {
+                        return item.isSelected === true;
+                    });
+
+                if (isEveryLayerSelected === true) {
+                    this.setIsSelected(true);
+                }
+            }
         },
 
         /**

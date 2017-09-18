@@ -7,7 +7,9 @@ define([
 
     var ParametricURL = Backbone.Model.extend({
         defaults: {
-            layerParams: []
+            layerParams: [],
+            isInitOpen: "",
+            zoomToGeometry: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -15,9 +17,11 @@ define([
             channel.reply({
                 "getResult": this.getResult,
                 "getLayerParams": this.getLayerParams,
-                "getStartUpModul": this.getStartUpModul,
+                "getIsInitOpen": this.getIsInitOpen,
                 "getInitString": this.getInitString,
-                "getCenter": this.getCenter
+                "getCenter": this.getCenter,
+                "getZoomLevel": this.getZoomLevel,
+                "getZoomToGeometry": this.getZoomToGeometry
             }, this);
 
             this.parseURL();
@@ -40,8 +44,8 @@ define([
             return this.get("layerParams");
         },
 
-        getStartUpModul: function () {
-            return this.get("startUpModul");
+        getIsInitOpen: function () {
+            return this.get("isInitOpen");
         },
 
         getCenter: function () {
@@ -56,13 +60,24 @@ define([
                 visibilityListString = _.has(this.getResult(), "VISIBILITY") ? _.values(_.pick(this.getResult(), "VISIBILITY"))[0] : "",
                 transparencyListString = _.has(this.getResult(), "TRANSPARENCY") ? _.values(_.pick(this.getResult(), "TRANSPARENCY"))[0] : "",
                 layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
-                visibilityList = visibilityListString === "" ? _.map(layerIdList, function () {
-                    return true;
-                }) : visibilityListString.indexOf(",") > -1 ? _.map(visibilityListString.split(","), function (val) {
-                    return _String.toBoolean(val);
-                }) : new Array(_String.toBoolean(visibilityListString)),
+                visibilityList,
                 transparencyList,
                 layerParams = [];
+
+            // Sichtbarkeit auslesen. Wenn fehlend true
+            if (visibilityListString === "") {
+                visibilityList = _.map(layerIdList, function () {
+                   return true;
+               });
+            }
+            else if (visibilityListString.indexOf(",") > -1) {
+                visibilityList = _.map(visibilityListString.split(","), function (val) {
+                     return _String.toBoolean(val);
+                 });
+            }
+            else {
+                visibilityList = new Array(_String.toBoolean(visibilityListString));
+            }
 
             // Tranzparenzwert auslesen. Wenn fehlend Null.
             if (transparencyListString === "") {
@@ -76,31 +91,32 @@ define([
                  });
             }
             else {
-                transparencyList = [parseInt(transparencyListString, 10)];
+                transparencyList = [parseInt(transparencyListString, 0)];
             }
 
             if (layerIdList.length !== visibilityList.length || visibilityList.length !== transparencyList.length) {
                 Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Die Angaben zu LAYERIDS passen nicht zu VISIBILITY bzw. TRANSPARENCY. Sie müssen jeweils in der gleichen Anzahl angegeben werden.", kategorie: "alert-warning"});
+                return;
             }
-            else {
-                _.each(layerIdList, function (val, index) {
-                     var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                     layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
-                     treeType = Radio.request("Parser", "getTreeType");
 
-                     layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
+            _.each(layerIdList, function (val, index) {
+                 var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
+                 layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
+                 treeType = Radio.request("Parser", "getTreeType");
 
-                     if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
-                         var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
+                 layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
 
-                         Radio.trigger("Parser", "addItemAtTop", layerToPush);
-                     }
-                     else if (_.isUndefined(layerConfigured)) {
-                         Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
-                     }
-                });
-                this.setLayerParams(layerParams);
-            }
+                 if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
+                     var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
+
+                     Radio.trigger("Parser", "addItemAtTop", layerToPush);
+                 }
+                 else if (_.isUndefined(layerConfigured)) {
+                     Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
+                 }
+            }, this);
+
+            this.setLayerParams(layerParams);
         },
         createLayerParamsUsingMetaId: function (metaIds) {
             var layers = [],
@@ -121,9 +137,103 @@ define([
             });
             this.setLayerParams(layerParams);
         },
+        parseMDID: function (result) {
+            var values = _.values(_.pick(result, "MDID"))[0].split(",");
 
+            Config.tree.metaIdsToSelected = values;
+            Config.view.zoomLevel = 0;
+            this.createLayerParamsUsingMetaId(values);
+        },
+        parseCenter: function (result) {
+            var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
+
+            this.set("center", values);
+
+        },
+        parseBezirk: function (result) {
+            var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
+                bezirke = [
+                    {name: "ALTONA", number: "2"},
+                    {name: "HARBURG", number: "7"},
+                    {name: "HAMBURG-NORD", number: "4"},
+                    {name: "BERGEDORF", number: "6"},
+                    {name: "EIMSBÜTTEL", number: "3"},
+                    {name: "HAMBURG-MITTE", number: "1"},
+                    {name: "WANDSBEK", number: "5"},
+                    {name: "ALL", number: "0"}
+                ];
+
+            if (bezirk.length === 1) {
+                bezirk = _.findWhere(bezirke, {number: bezirk});
+            }
+            else {
+                bezirk = _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()});
+            }
+            if (_.isUndefined(bezirk)) {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Konnte den Parameter Bezirk = " + _.values(_.pick(result, "BEZIRK"))[0] + " nicht auflösen.</small>",
+                    kategorie: "alert-warning"
+                });
+                return;
+            }
+            this.setZoomToGeometry(bezirk.name);
+        },
+
+        parseFeatureId: function (result) {
+            var ids = _.values(_.pick(result, "FEATUREID"))[0];
+
+            Config.zoomtofeature.ids = ids.split(",");
+        },
+        parseZoomLevel: function (result) {
+            var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
+
+            this.set("zoomLevel", value);
+        },
+        parseIsInitOpen: function (result) {
+            this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
+        },
+        parseStartupModul: function (result) {
+            this.set("isInitOpen", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
+        },
+        parseQuery: function (result) {
+            var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
+                    initString = "";
+
+            // Bei " " oder "-" im Suchstring
+            if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
+
+                // nach " " splitten
+                var split = value.split(" ");
+
+                _.each (split, function (splitpart) {
+                    initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
+                });
+                initString = initString.substring(0, initString.length - 1);
+
+                // nach "-" splitten
+                split = "";
+                split = initString.split("-");
+                initString = "";
+                _.each (split, function (splitpart) {
+                    initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
+                });
+                initString = initString.substring(0, initString.length - 1);
+            }
+            else {
+                initString = value.substring(0, 1).toUpperCase() + value.substring(1);
+            }
+            this.set("initString", initString);
+        },
+        parseStyle: function (result) {
+            var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
+
+            if (value === "SIMPLE") {
+                $("#main-nav").hide();
+                $("#map").css("height", "100%");
+            }
+        },
         parseURL: function (result) {
-            // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
+            // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {};
 
@@ -141,11 +251,7 @@ define([
              * Die Metadatensatz-Id wird in die config geschrieben
              */
             if (_.has(result, "MDID")) {
-                var values = _.values(_.pick(result, "MDID"))[0].split(",");
-
-                Config.tree.metaIdsToSelected = values;
-                Config.view.zoomLevel = 0;
-                this.createLayerParamsUsingMetaId(values);
+                this.parseMDID(result);
             }
 
             /**
@@ -154,45 +260,11 @@ define([
              * Angabe des EPSG-Codes der Koordinate über "@"
              */
             if (_.has(result, "CENTER")) {
-                var crs = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[1] : "",
-                    values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
-
-                this.set("center", {
-                    crs: crs,
-                    x: parseFloat(values[0]),
-                    y: parseFloat(values[1]),
-                    z: values[2] ? parseFloat(values[2]) : 0
-                });
+                this.parseCenter(result);
             }
 
             if (_.has(result, "BEZIRK")) {
-                var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
-                    bezirke = [
-                        {name: "ALTONA", number: "2", position: [556681, 5937664]},
-                        {name: "HAMBURG-HARBURG", number: "7", position: [560291, 5925817]},
-                        {name: "HAMBURG-NORD", number: "4", position: [567677, 5941650]},
-                        {name: "BERGEDORF", number: "6", position: [578779, 5924255]},
-                        {name: "EIMSBÜTTEL", number: "3", position: [561618, 5940019]},
-                        {name: "HAMBURG-MITTE", number: "1", position: [566380, 5932134]},
-                        {name: "WANDSBEK", number: "5", position: [574344, 5943750]}
-                    ];
-
-                    if (bezirk.length === 1) {
-                        this.set("center", {
-                            crs: "",
-                            x: _.findWhere(bezirke, {number: bezirk}).position[0],
-                            y: _.findWhere(bezirke, {number: bezirk}).position[1],
-                            z: 0
-                        });
-                    }
-                    else {
-                        this.set("center", {
-                            crs: "",
-                            x: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[0],
-                            y: _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()}).position[1],
-                            z: 0
-                        });
-                    }
+                this.parseBezirk(result);
             }
 
             /**
@@ -204,9 +276,7 @@ define([
             }
 
             if (_.has(result, "FEATUREID")) {
-                var ids = _.values(_.pick(result, "FEATUREID"))[0];
-
-                Config.zoomtofeature.ids = ids.split(",");
+                this.parseFeatureId(result);
             }
 
             /**
@@ -214,70 +284,29 @@ define([
              * Ist der Parameter "zoomLevel" vorhanden wird der Wert in die Config geschrieben und in der mapView ausgewertet.
              */
             if (_.has(result, "ZOOMLEVEL")) {
-                var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
-
-                Config.view.zoomLevel = value;
+                this.parseZoomLevel(result);
             }
 
             /**
-            * Gibt den Wert für die config-Option isMenubarVisible zurück.
-            * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
+            * Initial zu startendes Modul
             *
             */
-            if (_.has(result, "ISMENUBARVISIBLE")) {
-                var value = _.values(_.pick(result, "ISMENUBARVISIBLE"))[0].toUpperCase();
-
-                if (value === "TRUE") {
-                    Config.isMenubarVisible = true;
-                }
-                else {
-                    Config.isMenubarVisible = false;
-                }
+            if (_.has(result, "ISINITOPEN")) {
+                this.parseIsInitOpen(result);
             }
 
             /**
-            * Gibt den Wert für die config-Option isMenubarVisible zurück.
-            * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
-            *
+            * Rückwärtskompatibel: entspricht isinitopen
             */
             if (_.has(result, "STARTUPMODUL")) {
-                this.set("startUpModul", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
-            }
-            else {
-                this.set("startUpModul", "");
+                this.parseStartupModul(result);
             }
 
             /**
             *
             */
             if (_.has(result, "QUERY")) {
-                var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
-                    initString = "";
-
-                // Bei " " oder "-" im Suchstring
-                if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
-
-                    // nach " " splitten
-                    var split = value.split(" ");
-
-                    _.each (split, function (splitpart) {
-                        initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
-                    });
-                    initString = initString.substring(0, initString.length - 1);
-
-                    // nach "-" splitten
-                    split = "";
-                    split = initString.split("-");
-                    initString = "";
-                    _.each (split, function (splitpart) {
-                        initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
-                    });
-                    initString = initString.substring(0, initString.length - 1);
-                }
-                else {
-                    initString = value.substring(0, 1).toUpperCase() + value.substring(1);
-                }
-                this.set("initString", initString);
+                this.parseQuery(result);
             }
 
             /**
@@ -285,12 +314,24 @@ define([
             *
             */
             if (_.has(result, "STYLE")) {
-                var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
-
-                if (value === "SIMPLE") {
-                    $("#main-nav").hide();
-                }
+                this.parseStyle(result);
             }
+        },
+        // getter for zoomToGeometry
+        getZoomToGeometry: function () {
+            return this.get("zoomToGeometry");
+        },
+        // setter for zoomToGeometry
+        setZoomToGeometry: function (value) {
+            this.set("zoomToGeometry", value);
+        },
+        // getter for zoomToLevel
+        getZoomLevel: function () {
+            return this.get("zoomLevel");
+        },
+        // setter for zoomLevel
+        setZoomLevel: function (value) {
+            this.set("zoomLevel", value);
         }
     });
 

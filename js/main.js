@@ -1,25 +1,30 @@
+var Radio;
+
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: "../components/openlayers/ol-debug",
-        jquery: "../components/jquery/dist/jquery.min",
-        jqueryui: "../components/jquery-ui/ui",
-        underscore: "../components/underscore/underscore-min",
-        "underscore.string": "../components/underscore.string/dist/underscore.string.min",
-        backbone: "../components/backbone/backbone",
-        "backbone.radio": "../components/backbone.radio/build/backbone.radio.min",
-        text: "../components/requirejs-text/text",
-        bootstrap: "../components/bootstrap/js",
-        colorpicker: "../components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
-        proj4: "../components/proj4/dist/proj4",
-        videojs: "../components/video.js/dist/video-js/video",
-        moment: "../components/moment/min/moment.min",
-        eventbus: "EventBus",
+        "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.min",
+        openlayers: "../node_modules/openlayers/dist/ol-debug",
+        jquery: "../node_modules/jquery/dist/jquery.min",
+        jqueryui: "../node_modules/jquery-ui/ui",
+        underscore: "../node_modules/underscore/underscore-min",
+        "underscore.string": "../node_modules/underscore.string/dist/underscore.string.min",
+        backbone: "../node_modules/backbone/backbone",
+        "backbone.radio": "../node_modules/backbone.radio/build/backbone.radio.min",
+        text: "../node_modules/requirejs-text/text",
+        bootstrap: "../node_modules/bootstrap/js",
+        "bootstrap-select": "../node_modules/bootstrap-select/dist/js/bootstrap-select.min",
+        colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
+        slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
+        proj4: "../node_modules/proj4/dist/proj4",
+        videojs: "../node_modules/video.js/dist/video",
+        moment: "../node_modules/moment/min/moment.min",
         geoapi: "GeoAPI",
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
         app: "app",
         templates: "../templates",
-        modules: "../modules"
+        modules: "../modules",
+        d3: "../node_modules/d3/build/d3.min"
     },
     shim: {
         bootstrap: {
@@ -35,9 +40,6 @@ require.config({
     urlArgs: "bust=" + (new Date()).getTime()
 });
 
-define(["app"], function () {
-});
-
 // Überschreibt das Errorhandling von Require so,
 // dass der ursprüngliche Fehler sammt Stacjtrace ausgegeben wird.
 // funktioniert obwohl der Linter meckert
@@ -49,3 +51,12 @@ requirejs.onError = function (err) {
         throw err;
     }
 };
+
+// zuerst libs laden, die alle Module brauchen
+// die sind dann im globalen Namespace verfügbar
+// https://gist.github.com/jjt/3306911
+require(["backbone", "backbone.radio"], function () {
+    // dann unsere app laden, die von diesen globalen libs abhängen
+    Radio = Backbone.Radio;
+    require(["app"]);
+});

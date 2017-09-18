@@ -224,7 +224,6 @@ define([
         },
 
         addLayer: function (name, id, parentId, level, layers, url, version) {
-            console.log(name);
             var layer = {
                 type: "layer",
                 name: name,
@@ -398,7 +397,8 @@ define([
             new ModelList(_.filter(this.getItemList(), function (model) {
                 return model.parentId === "root" ||
                     model.parentId === "tools" ||
-                    model.parentId === "info";
+                    model.parentId === "info" ||
+                    model.parentId === "bezirke";
             }));
         },
 

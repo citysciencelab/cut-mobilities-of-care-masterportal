@@ -20,12 +20,13 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |----|-------------|---|-------|------------|--------|
 |Baumtyp|ja|String||Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|`"light"`|
 |[controls](#markdown-header-portalconfigcontrols)|nein|Object||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.||
-|LogoLink|nein|String||Die Verlinkung zum Internetauftritt.|`"http://geoinfo.hamburg.de"`|
-|LogoToolTip|nein|String||Der Text des angezeigten Tooltips|`"Landesbetrieb Geoinformation und Vermessung"`|
+|LogoLink|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
+|LogoToolTip|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
 |[mapView](#markdown-header-portalconfigmapview)|nein|Object||Gibt den Hintergrund an, wenn keine Karte geladen ist.||
 |[menu](#markdown-header-portalconfigmenu)|nein|Object||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der config.json (siehe [Tools](#markdown-header-portalconfigmenutools)).|
-|PortalLogo|nein|String||Der Pfad zum Logo das in der Menüleiste angezeigt wird.|`"../img/hh-logo.png"`|
-|PortalTitle|nein|String||Der Titel, der in der Menüleiste angezeigt wird.|`"Master"`|
+|PortalLogo|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
+|PortalTitle|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
+|[portalTitle](#markdown-header-portalconfigportalTitle)|nein|Object||Der Titel, der in der Menüleiste angezeigt wird.||
 |scaleLine|nein|Boolean||true = die Maßstabsleiste wird unten rechts dargestellt, wenn kein footer vorhanden ist. Wenn ein footer vorhanden ist, wird die links angezeigt.|`true`|
 |[searchBar](#markdown-header-portalconfigsearchbar)|nein|Object||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden||
 |[simpleLister](#markdown-header-portalconfigsimplelister)|nein|Object||Der SimpleLister zeigt alle Features eines angegebenen Layers im Kartenausschnitt an.||
@@ -42,7 +43,6 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
 |orientation|nein|String|"none"|Orientation ist eine Funktion zur Standortbestimmung des Nutzers. Mögliche Werte sind none (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
 |poi|nein|Boolean|false|Zeigt eine Liste von Features in der Umgebung an. Funktioniert nur wenn die Standortbestimmung (orientation) aktiviert ist. |
-|toggleMenu|nein|Boolean|false|Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.|
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
 
 **Beispiel controls:**
@@ -52,7 +52,6 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 #!json
 
 "controls": {
-        "toggleMenu": true,
         "zoom": true,
         "orientation": "once",
         "poi": true,
@@ -81,6 +80,11 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |----|-------------|---|-------|------------|
 |backgroundImage|nein|String||Gibt den Hintergrund an, wenn keine Karte geladen ist.|
 |startCenter|nein|Array|[565874, 5934140]|Die initiale Zentrumskoordinate.|
+|options|nein|Array|[{resolution:66.14579761460263,scale:250000,zoomLevel:0},{resolution:26.458319045841044,scale:100000,zoomLevel:1},{resolution:15.874991427504629,scale:60000,zoomLevel:2},{resolution: 10.583327618336419,scale:40000,zoomLevel:3},{resolution:5.2916638091682096,scale:20000,zoomLevel:4},{resolution:2.6458319045841048,scale:10000,zoomLevel:5},{resolution:1.3229159522920524,scale:5000,zoomLevel:6},{resolution:0.6614579761460262,scale:2500,zoomLevel:7},{resolution:0.2645831904584105,scale: 1000,zoomLevel:8},{resolution:0.13229159522920521,scale:500,zoomLevel:9}]|Die initialen Maßstabsstufen und deren Auflösungen.|
+|extent|nein|Array|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|
+|resolution|nein|Float|15.874991427504629|Die initiale Auflösung der Karte aus options. Alternativ zu zoomLevel.|
+|zoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Alternativ zu resolution.|
+|epsg|nein|String|EPSG:25832|Der EPSG-Code der Projektion der Karte. Der EPSG-Code muss als namedProjection definiert sein.|
 
 **Beispiel mapView:**
 
@@ -89,7 +93,68 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 #!json
 "mapView": {
         "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
-        "startCenter": [561210, 5932600]
+        "startCenter": [561210, 5932600],
+        "options": [
+        {
+          "resolution": 611.4974492763076,
+          "scale": 2311167,
+          "zoomLevel": 0
+        },
+        {
+          "resolution": 305.7487246381551,
+          "scale": 1155583,
+          "zoomLevel": 1
+        },
+        {
+          "resolution": 152.87436231907702,
+          "scale": 577791,
+          "zoomLevel": 2
+        },
+        {
+          "resolution": 76.43718115953851,
+          "scale": 288896,
+          "zoomLevel": 3
+        },
+        {
+          "resolution": 38.21859057976939,
+          "scale": 144448,
+          "zoomLevel": 4
+        },
+        {
+          "resolution": 19.109295289884642,
+          "scale": 72223,
+          "zoomLevel": 5
+        },
+        {
+          "resolution": 9.554647644942321,
+          "scale": 36112,
+          "zoomLevel": 6
+        },
+        {
+          "resolution": 4.7773238224711605,
+          "scale": 18056,
+          "zoomLevel": 7
+        },
+        {
+          "resolution": 2.3886619112355802,
+          "scale": 9028,
+          "zoomLevel": 8
+        },
+        {
+          "resolution": 1.1943309556178034,
+          "scale": 4514,
+          "zoomLevel": 9
+        },
+        {
+          "resolution": 0.5971654778089017,
+          "scale": 2257,
+          "zoomLevel": 10
+        }
+      ],
+      "extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
+      "resolution": 15.874991427504629,
+      "zoomLevel": 1,
+      "epsg": "EPSG:25832"
     }
 ```
 
@@ -133,7 +198,8 @@ Gibt an ob der in der Karte verwendete Marker verschiebbar sein soll.
 ******
 
 ### Portalconfig.menu.staticlinks ###
-Gibt die Links zu externen Webseiten und deren Position im Menu an. Array von static link objekten.
+Gibt die Links zu externen Webseiten und deren Position im Menu an. Zusätzlich kann für jeden Link ein Radiotrigger definiert werden, der beim click einen Internen Ablauf startet.
+Wird die URL oder der Radio trigger weggelassen, dann wird nur jeweils die andere Aktion ausgeführt.
 Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müssen die Objektattribute, die das Array definieren, im Namen "staticlinks" enthalten
 
 
@@ -141,7 +207,8 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
 |----|-------------|---|-------|------------|
 |name|ja|String||Name, wie der Link im Menu angezeigt werden soll.|
 |glyphicon|ja|String||Glyphicon des Linkes für den Menueintrag.|
-|url|ja|String||URL zur externen Webseite.|
+|url|nein|String||URL zur externen Webseite. |
+|onClickTrigger|nein|Object: {"channel": String ,"event": String, "data": String || Enthält den Channel namen, das Event, welches getriggert wird und die daten die mitgeschickt werden.|
 
 
 **Beispiel staticlinks:**
@@ -169,10 +236,20 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
             "name": "Wikipedia2",
             "glyphicon": "glyphicon-globe",
             "url": "https://www.wikipedia.de/"
-        },{
+        },
+        {
             "name": "hamburg.de",
             "glyphicon": "glyphicon-globe",
             "url": "http://www.hamburg.de"
+        },
+        {
+            "name": "Altona",
+            "glyphicon": "glyphicon-globe",
+            "onClickTrigger": {
+                "channel": "ZoomToGeometry",
+                "event": "zoomToGeometry",
+                "data": "Altona"
+            }
         }]
     }
 }
@@ -202,6 +279,7 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 |textPlaceholder||String||Platzhalter für das Textfeld in dem der Anwender sein Anliegen eintragen kann.|
 |[to](#markdown-header-portalconfigmenucontactfrom)|nein|Array [Object]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de", "name": "LGVGeoportalHilfe"}]|Array der Empfänger. Wird immer mit **email** und **name** erwartet.|
 |contactInfo|nein|String||Information, die über dem Kontaktformular angezeigt wird.|
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Modul *contact* beim initialen Laden des Portals geöffnet ist.|
 
 ##### Portalconfig.menu.contact.bcc #####
 
@@ -270,6 +348,7 @@ Folgende Parameter stehen für die Konfiguration zur Verfügung:
 |----|-------------|---|-------|------------|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Reiters unter dem die Legende in der Menüleiste erscheint.|
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Legendenmodul beim initialen Laden des Portals geöffnet ist.|
 
 **Beispiel legend:**
 
@@ -309,6 +388,7 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 |[draw](#markdown-header-portalconfigmenutoolschildrendraw)|nein|Object||Zeichnen / Schreiben|
 |[extendedFilter](#markdown-header-portalconfigmenutoolschildrenextendedfilter)|nein|Object||Erweiterter Filter|
 |[featureLister](#markdown-header-portalconfigmenutoolschildrenfeaturelister)|nein|Object||WFS-Liste|
+|[filter](#markdown-header-portalconfigmenutoolschildrenfilter)|nein|Object||Feature-Filter|
 |[gfi](#markdown-header-portalconfigmenutoolschildrengfi)|nein|Object||Informationen abfragen|
 |[kmlimport](#markdown-header-portalconfigmenutoolschildrenkmlimport)|nein|Object||KML Import|
 |[measure](#markdown-header-portalconfigmenutoolschildrenmeasure)|nein|Object||Strecke / Fläche messen|
@@ -390,6 +470,7 @@ Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten,
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
 
 ******
 ******
@@ -416,6 +497,61 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
 
+******
+******
+
+###### Portalconfig.menu.tools.children.filter ######
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|nein|String||Name des Werkzeuges im Menüeintrag|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|isGeneric|nein|String|false||
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
+|predefinedQueries|nein|Object||Vordefinierter Filter der beim Aktivieren automatisch ausgeführt wird
+
+
+******
+******
+
+
+#### Portalconfig.menu.tools.children.filter.predefinedQueries ####
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|layerId|ja|String||Id vom Layer auf dem der Filter ausgeführt wird|
+|isActive|nein|Boolean||Wird der Filter initial ausgeführt|
+|isSelected|nein|Boolean||Ist der Filter initial ausgewählt|
+|isVisible|nein|Boolean|||
+|name|nein|String||Name des Filters
+|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
+|attributeWhiteList|nein|Array||Filterbare Attribute
+**Beispiel:**
+
+```
+#!json
+
+"filter": {
+     "name": "Filter",
+     "glyphicon": "glyphicon-filter",
+     "isGeneric": false,
+     "isInitOpen": true,
+     "predefinedQueries": [
+         {
+             "layerId": "8190",
+             "isActive": false,
+             "isSelected": false,
+             "isVisible": false,
+             "name": "Grundschulen",
+             "predefinedRules": [
+                 {
+                     "attrName": "kapitelbezeichnung",
+                     "values": ["Grundschulen"]
+                 }
+             ],
+             "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
+         }
+     ]
+ }
+```
 
 ******
 ******
@@ -428,6 +564,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isActive|nein|Boolean|false|Werkzeug wird initial (beim Laden des Portals) aktiviert.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|isVisibleInMenu|nein|Boolean|true|Gibt an ob das Werkzeug im Menu angezeigt wird.|
 
 
 ******
@@ -521,17 +658,56 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|gfi|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
+|printID|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
+|title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
+|[gfiMarker](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
+
+**Beispiel:**
+
+
+```
+#!json
+
+"print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Master",
+            "gfi": true,
+            "outputFilename": "DruckPDF",
+            "gfiMarker": {
+              "outerCircle": {
+                "fill": false,
+                "pointRadius": 8,
+                "stroke": true,
+                "strokeColor": "#ff0000",
+                "strokeWidth": 3
+              },
+              "point": {
+                "fill": true,
+                "pointRadius": 1,
+                  "fillColor": "#000000",
+                  "stroke": false
+                }
+            }
+          }
+```
 
 ******
 ******
-
+#### Portalconfig.menu.tools.children.print.gfiMarker ####
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|outerCircle|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
+|point|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
 
 ###### Portalconfig.menu.tools.children.routing ######
 Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Parameter müssen am Werkzeug vorhanden sein:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|autostart|nein|Boolean|false|Gibt an, ob das Routingmodul beim initialen Laden des Portals geöffnet ist.|
+|isInitOpen|nein|Boolean|false|Gibt an, ob das Routingmodul beim initialen Laden des Portals geöffnet ist.|
 |bkgGeosearchID|nein|String||ID des GeoSuchdienstes des BKG. Anhand der vom Nutzer angeklickten finalen Adresse wandelt dieser Dienst den Namen in eine Koordinate um und gibt diese zurück. Die Koordinate wird benötigt, um den Routingdienst mit Daten zu füllen. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
 |bkgSuggestID|nein|String||ID des Vorschlagsdienstes des BKG. Der Dienst gibt eine Trefferliste möglicher Adressen zurück, die auf den Eingabestring des Nutzers passen. Werden als Dropdown-Menü dargestellt. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
@@ -671,6 +847,33 @@ Unter *tree* wird der Themenbaum konfiguriert.
 ```
 
 ******
+******
+
+### Portalconfig.portalTitle ###
+In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die Breite der Leiste ausreicht. Der Portaltitle ist mobil nicht verfügbar.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|title|nein|String|Master|Name des Portals.|
+|logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, so wird nur der Titel ohne Bild dargestellt.|
+|link|nein|String|http://geoinfo.hamburg.de|URL der externen Seite, auf die verlinkt wird.|
+|tooltip|nein|String|Landesbetrieb Geoinformation und Vermessung|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
+
+**Beispiel portalTitle:**
+
+
+```
+#!json
+
+"portalTitle": {
+  "title": "Master",
+  "logo": "../../img/hh-logo.png",
+  "link": "http://geoinfo.hamburg.de",
+  "toolTip": "Landesbetrieb Geoinformation und Vermessung"
+}
+
+```
+
 ******
 
 ### Portalconfig.searchBar ###

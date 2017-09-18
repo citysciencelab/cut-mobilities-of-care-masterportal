@@ -1,7 +1,6 @@
 define([
     "backbone",
-    "backbone.radio",
-    "bootstrap/modal"
+    "backbone.radio"
 ], function (Backbone, Radio) {
 
     var Legend = Backbone.Model.extend({
@@ -11,7 +10,8 @@ define([
             legendParams: [],
             wmsLayerList: [],
             paramsStyleWMS: [],
-            paramsStyleWMSArray: []
+            paramsStyleWMSArray: [],
+            visible: false
         },
 
         initialize: function () {
@@ -38,11 +38,20 @@ define([
             this.setLayerList();
         },
 
+        setVisible: function (val) {
+            this.set("visible", val);
+        },
+
+        getVisible: function () {
+            return this.get("visible");
+        },
+
         updateParamsStyleWMSArray: function (params) {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
             paramsStyleWMSArray2 = [];
-            _.each (paramsStyleWMSArray, function (paramsStyleWMS){
-                if(params.styleWMSName !== paramsStyleWMS.styleWMSName){
+
+            _.each (paramsStyleWMSArray, function (paramsStyleWMS) {
+                if (params.styleWMSName !== paramsStyleWMS.styleWMSName) {
                     paramsStyleWMSArray2.push(paramsStyleWMS);
                 }
             });
@@ -54,7 +63,7 @@ define([
 
         updateLegendFromStyleWMSArray: function () {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-                legendParams = this.get("legendParams")
+                legendParams = this.get("legendParams");
 
             _.each(this.get("legendParams"), function (legendParam, i) {
                     _.find (paramsStyleWMSArray, function (paramsStyleWMS) {
@@ -124,7 +133,7 @@ define([
             paramsStyleWMS = "";
 
             _.each(this.get("wmsLayerList"), function (layer) {
-                paramsStyleWMS = _.find(paramsStyleWMSArray, function(paramsStyleWMS){
+                paramsStyleWMS = _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
                     if (layer.get("name") === paramsStyleWMS.styleWMSName) {
                         return true;
                     }
@@ -195,14 +204,22 @@ define([
             }, this);
         },
 
-        // HVV-Quatsch funktioniert noch nicht richtig
+        /**
+         * Übergibt GroupLayer in den tempArray. Für jeden GroupLayer wird der Typ "Group" gesetzt und als legendURL ein Array übergeben.
+         */
         setLegendParamsFromGROUP: function () {
-            _.each(this.get("groupLayerList"), function (layer) {
+            var groupLayerList = this.get("groupLayerList");
+
+            _.each(groupLayerList, function (groupLayer) {
+                var legendURLS = groupLayer.get("legendURL"),
+                    name = groupLayer.get("name"),
+                    isVisibleInMap = groupLayer.get("isVisibleInMap");
+
                 this.push("tempArray", {
-                    layername: layer.get("name"),
-                    img: layer.get("legendURL"),
-                    typ: "WMS",
-                    isVisibleInMap: layer.get("isVisibleInMap")
+                    layername: name,
+                    img: legendURLS,
+                    typ: "GROUP",
+                    isVisibleInMap: isVisibleInMap
                 });
             }, this);
         },
@@ -220,5 +237,5 @@ define([
         }
     });
 
-    return Legend;
+    return new Legend();
 });

@@ -2,7 +2,7 @@ Masterportal
 =================
 Das Masterportal ist ein Baukasten für Geo-Anwendungen im Web auf Basis von [OpenLayers](https://openlayers.org) und [Backbone.js](https://backbonejs.org). Das Masterportal ist OpenSource Software. Es ist unter der [MIT-Lizenz](https://bitbucket.org/lgv-g12/lgv/src/stable/License.txt) veröffentlicht.
 
-Weitere Infos bald auf der Webseite der [Geowerkstatt Hamburg](http://geowerkstatt-hamburg.de)
+Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](http://geowerkstatt-hamburg.de).
 
 ## für Anwender
 * [Download](https://bitbucket.org/lgv-g12/lgv/downloads/)

@@ -34,7 +34,7 @@ define([
             return this.models;
         },
         getServiceById: function (id) {
-            return this.where({id: id});
+            return this.findWhere({id: id});
         }
     });
 

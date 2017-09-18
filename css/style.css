@@ -1,10 +1,13 @@
 @charset "utf-8";
 
-@import "../components/bootstrap/dist/css/bootstrap.css";
-@import "../components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
-@import "../components/video.js/dist/video-js/video-js.css";
-@import "../components/openlayers/ol.css";
-@import "../components/lgv-config/css/fonts.css";
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
+@import "../node_modules/bootstrap-select/dist/css/bootstrap-select.css";
+@import "../node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
+@import "../node_modules/bootstrap-slider/dist/css/bootstrap-slider.css";
+@import "../node_modules/bootstrap-toggle/css/bootstrap-toggle.css";
+@import "../node_modules/video.js/dist/video-js.css";
+@import "../node_modules/openlayers/dist/ol.css";
+@import "../node_modules/lgv-config/css/fonts.css";
 @import "lgv.css";
 @import "glyphiconbutton.css";
 @import "copyright.css";
@@ -35,8 +38,6 @@
 @import "../modules/tools/kmlimport/style.css";
 @import "../modules/menu/style.css";
 @import "../modules/menu/desktop/style.css";
-@import "../modules/menu/desktop/tool/style.css";
-@import "../modules/menu/desktop/staticlink/style.css";
 @import "../modules/tools/styleWMS/style.css";
 @import "../modules/menu/desktop/layer/style.css";
 @import "../modules/core/style.css";
@@ -49,3 +50,10 @@
 @import "../modules/tools/gfi/themes/table/style.css";
 @import "../modules/tools/gfi/themes/reisezeiten/style.css";
 @import "../modules/tools/gfi/themes/sgvonline/style.css";
+@import "../modules/tools/gfi/themes/verkehrsstaerken/style.css";
+@import "../modules/Snippets/slider/style.css";
+@import "../modules/Snippets/dropdown/style.css";
+@import "../modules/tools/filter/style.css";
+@import "../modules/tools/filter/query/style.css";
+@import "../portalconfigs/fluechtlingsunterkuenfte/table/style.css";
+@import "../modules/sidebar/style.css";

@@ -1,9 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "eventbus",
     "config"
-], function (Backbone, Radio, EventBus, Config) {
+], function (Backbone, Radio, Config) {
     "use strict";
     var SearchbarModel = Backbone.Model.extend({
         defaults: {
@@ -22,8 +21,10 @@ define([
             if (Config.quickHelp) {
                 this.set("quickHelp", Config.quickHelp);
             }
-            EventBus.on("createRecommendedList", this.createRecommendedList, this);
-            EventBus.on("searchbar:pushHits", this.pushHits, this);
+            this.listenTo(Radio.channel("Searchbar"), {
+                "createRecommendedList": this.createRecommendedList,
+                "pushHits": this.pushHits
+            });
 
             if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
                 this.setInitSearchString(Radio.request("ParametricURL", "getInitString"));
@@ -50,13 +51,13 @@ define([
                     streetName = value.substr(0, value.length - houseNumber.length - 1);
 
                 this.set("searchString", streetName);
-                EventBus.trigger("setPastedHouseNumber", houseNumber);
+                Radio.trigger("Searchbar", "setPastedHouseNumber", houseNumber);
             }
             else {
                 this.set("searchString", value);
             }
             this.set("hitList", []);
-            EventBus.trigger("searchbar:search", this.get("searchString"));
+            Radio.trigger("Searchbar", "search", this.get("searchString"));
             $(".dropdown-menu-search").show();
         },
         /**

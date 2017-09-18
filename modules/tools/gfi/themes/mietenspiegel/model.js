@@ -70,13 +70,6 @@ define(function (require) {
             ms = _.extend(ms, _.object(["Hinweis"], [this.get("msHinweis")]));
             return [ms, "Mietenspiegel-Auswertung"];
         },
-        /*
-         * Initialize wird erst beim initialen Aufruf der View ausgeführt.
-         */
-        // initialize: function () {
-        //     EventBus.on("layerlist:sendBaselayerList", this.layerListReady, this); // in gebauter Version
-        //     this.layerListReady(); // bei Entwicklung
-        // },
         layerListReady: function () {
             // var layerList = Radio.request("LayerList", "getLayerList");
 

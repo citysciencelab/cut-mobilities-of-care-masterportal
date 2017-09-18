@@ -15,7 +15,7 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            $("body").append(this.$el.html(this.template(attr)));
+            $(".ol-viewport").append(this.$el.html(this.template(attr)));
         }
     });
 

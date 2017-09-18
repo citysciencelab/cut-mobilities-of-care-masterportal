@@ -1,8 +1,7 @@
 define([
     "backbone",
-    "backbone.radio",
-    "eventbus"
-    ], function (Backbone, Radio, EventBus) {
+    "backbone.radio"
+    ], function (Backbone, Radio) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -22,7 +21,9 @@ define([
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
-            EventBus.on("searchbar:search", this.prepSearch, this);
+            this.listenTo(Radio.channel("Searchbar"), {
+                "search": this.prepSearch
+            });
         },
         /**
         *
@@ -41,7 +42,7 @@ define([
 
                 this.setFeaturesForSearch(filterLayers);
                 this.searchInFeatures(searchStringRegExp);
-                EventBus.trigger("createRecommendedList");
+                Radio.trigger("Searchbar", "createRecommendedList");
                 this.set("inUse", false);
             }
         },
@@ -54,7 +55,7 @@ define([
 
                 // Prüft ob der Suchstring ein Teilstring vom Feature ist
                 if (featureName.search(searchStringRegExp) !== -1) {
-                    EventBus.trigger("searchbar:pushHits", "hitList", feature);
+                    Radio.trigger("Searchbar", "pushHits", "hitList", feature);
                 }
             }, this);
         },
@@ -63,27 +64,34 @@ define([
         */
         setFeaturesForSearch: function (layermodels) {
             this.set("features", []);
-            var featureArray = [],
-                imageSrc;
+            var featureArray = [];
 
             _.each(layermodels, function (layer) {
                 if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "" && layer.get("searchField") !== undefined) {
-                    if (layer.get("layer").getStyle()[0]) {
-                        imageSrc = layer.get("layer").getStyle()[0].getImage().getSrc();
-                        if (imageSrc) {
-                            var features = layer.get("layer").getSource().getFeatures();
+                    var features = layer.get("layer").getSource().getFeatures();
 
-                            _.each(features, function (feature) {
-                                featureArray.push({
-                                    name: feature.get(layer.attributes.searchField),
-                                    type: layer.get("name"),
-                                    coordinate: feature.getGeometry().getCoordinates(),
-                                    imageSrc: imageSrc,
-                                    id: feature.get(layer.attributes.searchField).replace(/ /g, "") + layer.get("name")
-                                });
-                            });
-                        }
-                    }
+                    _.each(features, function (feature) {
+                        var layerStyle = layer.get("layer").getStyle(feature),
+                            style,
+                            imageSrc;
+
+                            // layerStyle returns style
+                            if (typeof layerStyle === "object") {
+                                imageSrc = layerStyle[0].getImage().getSrc();
+                            }
+                            // layerStyle returns stylefunction
+                            else {
+                                style = layerStyle(feature);
+                                imageSrc = style[0].getImage().getSrc();
+                            }
+                        featureArray.push({
+                            name: feature.get(layer.attributes.searchField),
+                            type: layer.get("name"),
+                            coordinate: feature.getGeometry().getCoordinates(),
+                            imageSrc: imageSrc,
+                            id: feature.get(layer.attributes.searchField).replace(/ /g, "") + layer.get("name")
+                        });
+                    });
                 }
             });
             this.set("features", featureArray);

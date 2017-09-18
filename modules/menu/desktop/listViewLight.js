@@ -8,7 +8,7 @@ define(function (require) {
     Menu = listView.extend({
         initialize: function () {
             this.collection = Radio.request("ModelList", "getCollection");
-            Radio.on("Autostart", "startTool", this.startTool, this);
+            Radio.on("Autostart", "startModul", this.startModul, this);
             this.listenTo(this.collection, {
                 "updateLightTree": function () {
                     this.render();
@@ -16,11 +16,7 @@ define(function (require) {
             });
             this.renderMain();
             this.render();
-
-            // Themenbaum wird initial aufgeklappt wenn in der config.json im tree-Objekt konfiguriert
-            if (this.collection.findWhere({id: "tree"}).attributes.isInitOpen === true) {
-                $("#" + "tree").parent().addClass("open");
-            }
+            Radio.trigger("Autostart", "initializedModul", "tree");
         },
         render: function () {
             $("#" + "tree").html("");
@@ -32,18 +28,21 @@ define(function (require) {
 
             this.addViews(models);
             Radio.trigger("Title", "setSize");
+            $("ul#tree.light").css("max-height", $("#map").height() - 160);
         },
         addViews: function (models) {
             _.each(models, function (model) {
                  new DesktopLayerViewLight({model: model});
             }, this);
         },
-        startTool: function (toolId) {
-            var tools = this.collection.where({type: "tool"}),
-                tool = _.findWhere(tools, {id: toolId});
+        startModul: function (modulId) {
+            var modul = _.findWhere(this.collection.models, {id: modulId});
 
-            if (tool) {
-                tool.setIsActive(true);
+            if (modul.attributes.type === "tool") {
+                modul.setIsActive(true);
+            }
+            else {
+                $("#" + modulId).parent().addClass("open");
             }
         }
     });

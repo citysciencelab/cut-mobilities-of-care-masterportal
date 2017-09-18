@@ -15,18 +15,15 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[footer](#markdown-header-footer)|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
 |gfiWindow|nein|String|"detached"|Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
 |ignoredKeys|nein|Array[String]||Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|
-|isMenubarVisible|nein|Boolean|true|Steuert, ob die Menubar sichtbar ist. Kann auch über [URL-Parameter](URL-Parameter.md) gesteuert werden.|`true`|
 |layerConf|ja|String||Pfad zur [services.json](services.json.md), die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-fhhnet-ALL.json"`|
 |mouseHover|nein|Boolean|false|Steuert, ob MouseHover für Vektorlayer (WFS) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in [config.json](config.json.md) (*Themenconfig.Fachdaten.Layer*).|`true`|
 |namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme ([siehe Syntax](http://proj4js.org/#named-projections)).|`[["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
-|[print](#markdown-header-print)|ja|Object||Konfiguration für den Druckdienst. Erwartet wird eine Instanz von [MapFish-Print 2](http://www.mapfish.org/doc/print/). Nur verpflichtend, wenn *config.json.portalconfig.tools.print* konfiguriert ist ([config.json](config.json.md)).||
 |proxyUrl|ja|String||Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe [print](#markdown-header-print)).|`"/cgi-bin/proxy.cgi"`|
 |quickHelp|nein|Boolean|false|Aktiviert das QuickHelp-Modul. Dieses zeigt kontextsensitive Hilfe für die verfügbaren Funktionen an (bisher verfügbar für: Themenbaum und Suche).|`true`|
 |restConf|ja|String||Pfad zur [rest-services.json](rest-services.json.md), die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-fhhnet.json"`|
 |scaleLine|nein|Boolean|false|Steuert, ob eine Maßstabsleiste unten auf der Karte angezeigt wird. Ist der *Footer* aktiv, wird die Leiste unten rechts, sonst unten links angezeigt.|`true`|
 |simpleMap|nein|Boolean|false|Fügt dem *„Auswahl speichern“-Dialog* eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls). Nicht für Portale mit Baumtyp: *„light“*.|`false`|
 |styleConf|ja|String||Pfad zur [style.json](style.json.md), die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/style.json"`|
-|view|ja|Object||Konfigurations-Einstellungen für die mapView. Leeres Objekt wird benötigt.|`{}`|
 |wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/img/"`|
 |wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`""`|
 |[zoomToFeature](#markdown-header-zoomtofeature)|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe [URL-Parameter](URL-Parameter.md).||
@@ -153,68 +150,13 @@ footer: {
         }
 ```
 
-********
-
-## print ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|gfi|nein|Boolean||Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
-|printID|ja|String||ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
-|title|ja|String||Der Titel erscheint auf dem Ausdruck der Karte.|
-|[printGfiMarker](#markdown-header-printGfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
-
-**Beispiel:**
-
-
-```
-#!json
-
-print: {
-            printID: "99999",
-            title: "Master",
-            gfi: true
-        }
-```
-
-
-******
-
-## printGfiMarker ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|outerCircle|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
-|point|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
-**Beispiel:**
-
-
-```
-#!json
-printGfiMarker: {
-    outerCircle: {
-            fill: false,
-            pointRadius: 8,
-            stroke: true,
-            strokeColor: "#ff0000",
-            strokeWidth: 3
-        },
-        point: {
-            fill: true,
-            pointRadius: 1,
-            fillColor: "#000000",
-            stroke: false
-        }
-    }
-```
-********
 ## zoomToFeature ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |imglink|ja|String||Link für den Marker.|
 |layerid|ja|String||ID des Layers an den die Marker gekoppelt werden.|
-|typename|ja|String||Typename des WFS. Entspricht Tabelle. Wird für den WFS-Filter-Request benötigt.|
-|url|ja|String||Die URL zum WFS.|
+|WFSid|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
 |attribute|ja|String||Attributname. Entspricht Attribut nach dem der WFS gefiltert wird.|
-|version|ja|String||Die Version des WFS.|
 
 **Beispiel:**
 
@@ -222,11 +164,9 @@ printGfiMarker: {
 #!json
 
 zoomtofeature: {
-            url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
-            version: "1.1.0",
-            typename: "app:hamburgconvention",
             attribute: "flaechenid",
             imglink: "../img/location_eventlotse.svg",
+            WFSid: "4560",
             layerid: "4561"
         }
 

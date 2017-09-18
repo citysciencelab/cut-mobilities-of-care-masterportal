@@ -115,7 +115,7 @@ define([
 
                     // kein Text
                     if (!$(placemark).find("name")[0]) {
-                        var pointStyle = $(placemark).find("PointStyle")[0];
+                        var pointStyle = $(placemark).find("pointstyle")[0];
                         var color = $(pointStyle).find("color")[0],
                             transparency = $(pointStyle).find("transparency")[0],
                             radius = $(pointStyle).find("radius")[0];
@@ -239,6 +239,7 @@ define([
             return transCoord;
         },
         transformPoint: function (point, projections) {
+            point.pop();
             return proj4(projections.sourceProj, projections.destProj, point);
         },
         // Features in die Karte laden

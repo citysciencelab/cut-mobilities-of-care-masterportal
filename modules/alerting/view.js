@@ -1,68 +1,48 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/alerting/model",
-    "bootstrap/alert"
-], function (Backbone, Radio, Model) {
-    /*
-     * Dieses Modul reagiert auf Events vom EventBus, nimmt als Parameter des Events ein hmtl-String oder ein Konfigurationsobjekt entgegen und stellt dies dar.
-     * Das Konfigurationsobjekt kann folgende Einstellungen überschrieben:
-     * text: das html
-     * kategorie: {alert-success|alert-info|alert-warning|alert-danger}
-     * dismissable: {true|false}
-     */
-    var AlertingView = Backbone.View.extend({
-        model: Model,
+define(function (require) {
+    require("bootstrap/alert");
+
+    var Backbone = require("backbone"),
+        AlertingModel = require("modules/alerting/model"),
+        AlertingTemplate = require("text!modules/alerting/template.html"),
+        AlertingView;
+
+    AlertingView = Backbone.View.extend({
+        id: "messages",
+        className: "top-center",
+        model: new AlertingModel(),
+        template: _.template(AlertingTemplate),
         initialize: function () {
-            var channel = Radio.channel("Alert");
-
-            channel.on({
-                "alert": this.checkVal,
-                "alert:remove": this.remove
+            this.listenTo(this.model, {
+                "render": this.render,
+                "removeAll": this.removeAll,
+                "change:position": this.positionAlerts
             }, this);
+
+            $("body").prepend(this.$el);
         },
+        render: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.append(this.template(attr));
+        },
+
         /**
-        * @memberof config
-        * @type {String|Object}
-        * @desc entweder ein String und die Defaultwerte werden verwendet oder ein Konfigurationsobjekt
-        */
-        checkVal: function (val) {
-            var html = "",
-                kategorie = "",
-                dismissable = "";
+         * Positioniert der Alerts über css-Klassen
+         * @param  {Backbone.Model} model - this.model
+         * @param  {String} value - this.model.get("position")
+         */
+        positionAlerts: function (model, value) {
+            var currentClassName = this.$el.attr("class");
 
-            if (_.isString(val)) {
-                html = val,
-                kategorie = this.model.get("kategorie"),
-                dismissable = this.model.get("dismissable");
-            }
-            else if (_.isObject(val)) {
-                html = val.text,
-                kategorie = (val.kategorie) ? val.kategorie : this.model.get("kategorie"),
-                dismissable = (val.dismissable) ? val.dismissable : this.model.get("dismissable");
-            }
-            this.render(html, kategorie, dismissable);
+            this.$el.removeClass(currentClassName)
+            this.$el.addClass(value);
         },
-        render: function (message, kategorie, dismissable) {
-            var dismissablestring = (dismissable === true) ? " alert-dismissable" : "",
-                html = "<div id='alertmessage' class='alert " + kategorie + dismissablestring + "' role='alert'>",
-                messagediv = "<div id='messages' class='messages'></div>";
 
-            if (dismissable === true) {
-                html += "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times</span></button>";
-            }
-            html += message;
-            html += "</div>";
-
-            if (!$("#messages").length) {
-                $("body").prepend(messagediv);
-            }
-
-            $("#messages").prepend(html);
-
-        },
-        remove: function () {
-            $("#alertmessage").remove();
+        /**
+         * Entfernt alle Meldungen
+         */
+        removeAll: function () {
+            this.$el.find(".alert").remove();
         }
     });
 

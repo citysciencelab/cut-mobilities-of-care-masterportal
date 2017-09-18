@@ -22,17 +22,14 @@ define(function () {
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
         gfiWindow: "attached",
         simpleMap: false,
-        wfsImgPath: "../components/lgv-config/img/",
+        wfsImgPath: "../node_modules/lgv-config/img/",
         allowParametricURL: true,
         zoomtofeature: {
-            url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
-            version: "1.1.0",
-            typename: "app:hamburgconvention",
             attribute: "flaechenid",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4561"
+            layerid: "4561",
+            WFSid: "4560"
         },
-        view: {},
         namedProjections: [
             // GK DHDN
             ["EPSG:31461", "+proj=tmerc +lat_0=0 +lon_0=3 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -54,44 +51,25 @@ define(function () {
             // Organisations
             ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"]
         ],
-        customModules: [],
         footer: {
             visibility: true,
             urls: [
                 {
                     "bezeichnung": "Kartographie und Gestaltung: ",
                     "url": "http://www.geoinfo.hamburg.de/",
-                    "alias": "Landesbetrieb Geoniformation und Vermessung",
+                    "alias": "Landesbetrieb Geoinformation und Vermessung",
                     "alias_mobil": "LGV"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-                    "alias": "SDP Download",
-                    "alias_mobil": "SDP"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://www.hamburg.de/bsu/timonline",
-                    "alias": "Kartenunstimmigkeit"
                 }
             ]
         },
         quickHelp: true,
-        layerConf: "../components/lgv-config/services-internet.json",
-        restConf: "../components/lgv-config/rest-services-fhhnet.json",
-        styleConf: "../components/lgv-config/style.json",
+        layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
+        restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
+        styleConf: "../node_modules/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,
         mouseHover: true,
-        isMenubarVisible: true,
-        startUpModul: "",
-        print: {
-            printID: "99999",
-            title: "Master",
-            gfi: true
-        },
         geoAPI: false,
         clickCounter: {}
     };

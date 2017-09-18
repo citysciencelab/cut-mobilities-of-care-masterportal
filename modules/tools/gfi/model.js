@@ -33,7 +33,8 @@ define(function (require) {
 
             channel.on({
                 "setIsVisible": this.setIsVisible,
-                "setGfiParams": this.setGfiParamsFromCustomModule
+                "setGfiParams": this.setGfiParamsFromCustomModule,
+                "hideGFI": this.hideGFI
             }, this);
 
             channel.reply({
@@ -89,28 +90,39 @@ define(function (require) {
             }, this);
 
             this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": this.checkTool
+                "activatedTool": function (id, deaktivateGFI) {
+                    this.toggleGFI(id, deaktivateGFI);
+                }
             });
 
             if (_.has(Config, "gfiWindow")) {
                 this.setDesktopViewType(Config.gfiWindow);
             }
 
-            if (!_.isUndefined(Radio.request("Parser", "getItemByAttributes", {isActive: true}))) {
-                this.checkTool(Radio.request("Parser", "getItemByAttributes", {isActive: true}).id);
+            var tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+
+            if (!_.isUndefined(tool)) {
+                this.toggleGFI(tool.id);
             }
             this.initView();
+        },
+
+        hideGFI: function () {
+            this.trigger("hideGFI");
         },
 
         /**
          * Prüft ob GFI aktiviert ist und registriert entsprechend den Listener oder eben nicht
          * @param  {String} id - Tool Id
          */
-        checkTool: function (id) {
+        toggleGFI: function (id, deaktivateGFI) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
-            else {
+            else if (deaktivateGFI == true) {
+                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
+            }
+            else if (_.isUndefined(deaktivateGFI)) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
         },
@@ -153,11 +165,6 @@ define(function (require) {
                 isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel);
 
             this.setCoordinate(evt.coordinate);
-
-            // Abbruch, wenn auf SearchMarker x geklickt wird.
-            if (this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true) {
-                return;
-            }
 
             // Vector
             Radio.trigger("ClickCounter", "gfi");
@@ -303,25 +310,6 @@ define(function (require) {
             var theme = this.getThemeList().at(this.getThemeIndex());
 
             return [theme.getGfiContent()[0], theme.get("name"), this.getCoordinate()];
-        },
-
-        /**
-        * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
-        */
-        checkInsideSearchMarker: function (top, left) {
-            var button = Radio.request("MapMarker", "getCloseButtonCorners"),
-                bottomSM = button.bottom,
-                leftSM = button.left,
-                topSM = button.top,
-                rightSM = button.right;
-
-            if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
-                this.setIsVisible(false);
-                return true;
-            }
-            else {
-                return false;
-            }
         }
 
     });

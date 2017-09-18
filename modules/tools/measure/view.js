@@ -2,9 +2,8 @@ define([
     "backbone",
     "backbone.radio",
     "text!modules/tools/measure/template.html",
-    "modules/tools/measure/model",
-    "eventbus"
-], function (Backbone, Radio, MeasureTemplate, Measure, EventBus) {
+    "modules/tools/measure/model"
+], function (Backbone, Radio, MeasureTemplate, Measure) {
 
     var MeasureView = Backbone.View.extend({
         model: new Measure(),
@@ -15,7 +14,7 @@ define([
             "change select#unitField": "setUnit",
             "click button": "deleteFeatures",
             "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
-                    EventBus.trigger("showWindowHelp", "measure");
+                Radio.trigger("Quickhelp", "showWindowHelp", "measure");
             }
         },
 

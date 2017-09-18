@@ -3,6 +3,7 @@
     padding: 0;
     max-width: 600px;
     border: 0;
+    z-index: 1;
 }
 
 .popover-content {
@@ -17,7 +18,7 @@
 .gfi {
     border: 1px solid rgb(229, 229, 229);
     min-width: 25vw;
-    max-width: 40vw;
+    max-width: 45vw;
     color: rgb(85, 85, 85);
     font-family: "UniversNextW01-Regular",sans-serif;
 }
@@ -40,9 +41,23 @@
 }
 
 .gfi > .gfi-content {
-    max-height: 40vh;
+    max-height: 50vh;
     font-size: 13px;
     overflow: auto;
+}
+
+.gfi .gfi-image-zoom-button {
+    top: -17px; 
+    background-color: white; 
+    padding: 2px;
+}
+
+.gfi .gfi-image-copyright {
+    top: -19px; 
+    position: relative; 
+    font-size: 0.9em; 
+    padding: 2px;
+    background-color: white;
 }
 
 .gfi table {

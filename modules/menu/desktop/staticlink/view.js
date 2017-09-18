@@ -6,30 +6,22 @@ define(function (require) {
 
     ItemView = Backbone.View.extend({
         tagName: "li",
-        className: "dropdown dropdown-tools",
+        className: function () {
+            return this.model.getViewElementClasses();
+        },
         template: _.template(ItemTemplate),
         initialize: function () {
             this.render();
-            this.setCssClass();
+        },
+        events: {
+            "click": function () {
+                this.model.triggerRadioEvent();
+            }
         },
         render: function () {
             var attr = this.model.toJSON();
 
             $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
-        },
-
-        /**
-         * Abhängig davon ob ein Tool in die Menüleiste oder unter dem Punkt Werkzeuge gezeichnet wird,
-         * bekommt die View eine andere CSS-Klasse zugeordent
-         */
-        setCssClass: function () {
-            if (this.model.getParentId() === "root") {
-                this.$el.addClass("menu-style");
-                this.$el.find("span").addClass("hidden-sm");
-            }
-            else {
-                this.$el.addClass("tool-style");
-            }
         }
     });
 
