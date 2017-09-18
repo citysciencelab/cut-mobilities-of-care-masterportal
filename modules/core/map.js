@@ -77,9 +77,6 @@ define(function (require) {
 
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
-
-            mapHeight = $(".lgv-container").height() - $("#main-nav").height();
-            $("#map").css("height", mapHeight + "px");
         },
 
         /**

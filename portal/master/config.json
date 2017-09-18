@@ -1,10 +1,12 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "Master",
-    "PortalLogo": "../img/hh-logo.png",
-    "LogoLink": "http://geoinfo.hamburg.de",
-    "LogoToolTip": "Landesbetrieb Geoinformation und Vermessung",
+    "portalTitle": {
+      "title": "Master",
+      "logo": "../../img/hh-logo.png",
+      "link": "http://geoinfo.hamburg.de",
+      "toolTip": "Landesbetrieb Geoinformation und Vermessung"
+    },
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
@@ -248,7 +250,6 @@
       }
     },
     "controls": {
-      "toggleMenu": true,
       "fullScreen": true,
       "zoom": true,
       "orientation": "once",

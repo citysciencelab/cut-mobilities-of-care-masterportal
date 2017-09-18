@@ -189,16 +189,6 @@ define([
 
             this.set("zoomLevel", value);
         },
-        parseIsMenuBarVisible: function (result) {
-            var value = _.values(_.pick(result, "ISMENUBARVISIBLE"))[0].toUpperCase();
-
-            if (value === "TRUE") {
-                Config.isMenubarVisible = true;
-            }
-            else {
-                Config.isMenubarVisible = false;
-            }
-        },
         parseIsInitOpen: function (result) {
             this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
@@ -239,10 +229,11 @@ define([
 
             if (value === "SIMPLE") {
                 $("#main-nav").hide();
+                $("#map").css("height", "100%");
             }
         },
         parseURL: function (result) {
-            // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
+            // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {};
 
@@ -297,17 +288,7 @@ define([
             }
 
             /**
-            * Gibt den Wert für die config-Option isMenubarVisible zurück.
-            * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
-            *
-            */
-            if (_.has(result, "ISMENUBARVISIBLE")) {
-                this.parseIsMenuBarVisible(result);
-            }
-
-            /**
-            * Gibt den Wert für die config-Option isMenubarVisible zurück.
-            * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
+            * Initial zu startendes Modul
             *
             */
             if (_.has(result, "ISINITOPEN")) {

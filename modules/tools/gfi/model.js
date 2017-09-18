@@ -162,14 +162,7 @@ define(function (require) {
                 visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"}),
                 visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList),
                 eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
-                isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel),
-                isXButton = this.checkInsideSearchMarker (eventPixel[1], eventPixel[0]) === true;
-
-            // Abbruch, wenn auf SearchMarker x geklickt wird.
-            if (isXButton) {
-                this.setIsVisible(false);
-                return;
-            }
+                isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel);
 
             this.setCoordinate(evt.coordinate);
 
@@ -317,24 +310,6 @@ define(function (require) {
             var theme = this.getThemeList().at(this.getThemeIndex());
 
             return [theme.getGfiContent()[0], theme.get("name"), this.getCoordinate()];
-        },
-
-        /**
-        * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
-        */
-        checkInsideSearchMarker: function (top, left) {
-            var button = Radio.request("MapMarker", "getCloseButtonCorners"),
-                bottomSM = button.bottom,
-                leftSM = button.left,
-                topSM = button.top,
-                rightSM = button.right;
-
-            if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
-                return true;
-            }
-            else {
-                return false;
-            }
         }
 
     });

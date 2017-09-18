@@ -268,7 +268,12 @@ define([
             return idx;
         },
         removeFromSelectionIDX: function (idx) {
-            this.selectionIDX.splice(idx, 1);
+            var deleteCid = idx.cid,
+                filteredIDX = _.reject(this.selectionIDX, function (i) {
+                    return i.cid === deleteCid;
+                });
+
+            this.selectionIDX = filteredIDX;
             this.updateModelIndeces();
         },
 
@@ -287,7 +292,7 @@ define([
             newIDX = oldIDX - 1;
 
             if (oldIDX > 0) {
-                this.removeFromSelectionIDX(model.getSelectionIDX());
+                this.removeFromSelectionIDX(model);
                 this.insertIntoSelectionIDXAt(model, newIDX);
                 if (model.getIsSelected()) {
                     Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
@@ -303,7 +308,7 @@ define([
             newIDX = oldIDX + 1;
 
             if (oldIDX < this.selectionIDX.length - 1) {
-                this.removeFromSelectionIDX(model.getSelectionIDX());
+                this.removeFromSelectionIDX(model);
                 this.insertIntoSelectionIDXAt(model, newIDX);
                 // Auch wenn die Layer im simple Tree noch nicht selected wurde, kÃ¶nnen
                 // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugtt und ist undefined
