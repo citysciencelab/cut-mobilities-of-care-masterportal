@@ -92,14 +92,14 @@ define([
          * @param  {[type]} hitlist [the search result]
          * @param  {[type]} length  [name length]
          */
-        shortenNames: function (name, length) {
+        shortenString: function (s, length) {
             if (_.isUndefined(name)) {
-                return name;
+                return s;
             }
-            if (name.length > length && length > 0) {
-                return name.substring(0, length) + "...";
+            if (s.length > length && length > 0) {
+                return s.substring(0, length).trim() + "..";
             }
-            return name;
+            return s;
         },
 
         /**

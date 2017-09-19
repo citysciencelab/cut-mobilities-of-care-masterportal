@@ -222,7 +222,6 @@ define([
                     // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
                     this.prepareAttrStrings(attr.hitList);
                     template = _.template(SearchbarRecommendedListTemplate);
-
                 $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
                 $("ul.dropdown-menu-search").html(template(attr));
             // }
@@ -235,7 +234,12 @@ define([
         prepareAttrStrings: function (hitlist) {
             // kepps hit.names from overflowing
             _.each(hitlist, function (hit) {
-                hit.name = this.model.shortenNames(hit.name, 35);
+                if (!_.isUndefined(hit.additionalInfo)) {
+                    if ( hit.name.length + hit.additionalInfo.length > 50) {
+                        hit.shortName = this.model.shortenString(hit.name, 30);
+                        hit.additionalInfo = this.model.shortenString(hit.additionalInfo, 20);
+                    }
+                }
                 // IE 11 svg bug -> png
                 hit.imageSrc = this.model.changeFileExtension(hit.imageSrc, ".png");
              }, this);
@@ -279,6 +283,7 @@ define([
             }
             else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
                 hitID = evt.currentTarget.id;
+
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
             }
             else {
