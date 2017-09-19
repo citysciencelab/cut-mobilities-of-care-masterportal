@@ -16,7 +16,7 @@ FIXES:
   - 0fdc72a beim Entfernen eines Layers in non-simple-tree wurde falscher IDX-Layer entfernt, wodurch andere Layer nicht mehr unvisible/visible geswitched werden konnten
   - ad30a70 klick auf Menü wirft Fehler in console, weil models[0] war undefined
   - 47ebe3c gfi always on
-  - 5bdf0ff Koordinatensuche nach WGS84 (Dezimalgrad) funktioniert nicht, wegen parseFloat Problem
+  - 5bdf0ff Koordinatensuche nach WGS84 (mit Dezimalgrad) funktioniert nicht, wegen parseFloat Problem
   - d046d4e WFS mit png wird nicht mehr geladen
   - 0b357de Scrollleiste in Themenbaum light
   - f7c15bc fix UrlParams zoomlevel und Center fix Canvas wird defaultmäßig nicht erzeugt fix UrlParam featureId über LayerIds Parameter StartupModul behalten
