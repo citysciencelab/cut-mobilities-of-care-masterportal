@@ -5,7 +5,7 @@
       "title": "Master",
       "logo": "../../img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
-      "toolTip": "Landesbetrieb Geoinformation und Vermessung"
+      "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
     "searchBar": {
         "gazetteer": {
