@@ -34,6 +34,7 @@
     "build-config": "git+https://bitbucket.org/lgv-g12/build-config.git",
     "chai": "4.1.1",
     "deep-extend": "^0.3.2",
+    "fs": "0.0.1-security",
     "glob": "4.2.1",
     "grunt": "^0.4.5",
     "grunt-changelog": "^0.3.2",

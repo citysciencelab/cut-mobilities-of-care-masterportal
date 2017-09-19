@@ -2,6 +2,7 @@ var assert = require("chai").assert,
     expect = require("chai").expect,
     test = require("selenium-webdriver/testing"),
     webdriver = require("selenium-webdriver"),
+    fs = require("fs"),
     until = webdriver.until,
     driver,
     loader;
@@ -120,6 +121,7 @@ test.describe("Master in Chrome", function () {
                 expect(this.center).to.not.equal(center);
             });
 
+            geolocateButton.click();
         });
 
     });
@@ -264,6 +266,54 @@ test.describe("Master in Chrome", function () {
                 expect(this.center).to.not.equal(center);
             });
         });
+
+         test.it("should find Searchhits for 'haus' in 'Stadtteil' ", function () {
+            searchbar.clear();
+            searchbar.sendKeys("haus");
+            searchButton.click();
+            driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//li[text()='Stadtteil']")), 9000);
+            driver.findElement(webdriver.By.xpath("//li[text()='Stadtteil']")).click();
+            hit = driver.findElement(webdriver.By.id("HausbruchStadtteil"));
+
+            expect(hit).to.exist;
+        });
+
+        test.it("should relocate on hit 'HausbruchStadtteil' in 'Stadtteil' ", function () {
+            driver.executeScript(getCenter).then(function (center) {
+                this.center = center;
+                hit.click();
+            });
+
+            driver.takeScreenshot().then(function (data) {
+              writeScreenshot(data, "Stadtteil.png");
+            });
+
+            driver.executeScript(getCenter).then(function (center) {
+                expect(this.center).to.not.equal(center);
+            });
+        });
+
+        test.it("should find Searchhits for 'haus' in 'Straße' ", function () {
+            searchbar.clear();
+            searchbar.sendKeys("haus");
+            searchButton.click();
+            driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//li[text()='Straße']")), 9000);
+            driver.findElement(webdriver.By.xpath("//li[text()='Straße']")).click();
+            hit = driver.findElement(webdriver.By.id("HausbrucherBahnhofstraßeStraße"));
+
+            expect(hit).to.exist;
+        });
+
+        test.it("should relocate on hit 'HausbrucherBahnhofstraßeStraße' in 'Straße' ", function () {
+            driver.executeScript(getCenter).then(function (center) {
+                this.center = center;
+                hit.click();
+            });
+
+            driver.executeScript(getCenter).then(function (center) {
+                expect(this.center).to.not.equal(center);
+            });
+        });
     });
 
 /*
@@ -283,3 +333,11 @@ function getResolution () {
     resolution = Backbone.Radio.request("MapView", "getResolution").resolution;
     return resolution;
 };
+
+function writeScreenshot (data, name) {
+  name = name || "ss.png";
+  var screenshotPath = "test\\end2end\\Screenshots\\ScreenshotsTest";
+
+  fs.writeFileSync(screenshotPath + name, data, "base64");
+};
+
