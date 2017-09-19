@@ -17,6 +17,11 @@
 .filter .toggleIsActive .glyphicon-remove {
     color:#bbb;
 }
+.filter .info-text {
+    font-size: 11px;
+    padding: 15px;
+    clear: both;
+}
 
 .filter .value-views-container {
     display: inline-block;
