@@ -23,8 +23,8 @@ define(function (require) {
 
         render: function () {
             $("#map").after(this.$el);
-            // this.$el.css("height", $("#map").height());
             if (!this.model.get("isMobile")) {
+                this.$el.css("height", $("#map").height());
                 $("#map").css("width", "70%");
                 Radio.trigger("Map", "updateSize");
                 this.removeBackdrop();
