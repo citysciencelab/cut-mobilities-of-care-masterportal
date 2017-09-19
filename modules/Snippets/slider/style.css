@@ -2,15 +2,24 @@
     padding: 15px 15px 5px 15px;
 }
 
+.slider-container .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
 .slider-container label {
     margin-bottom: 0;
     padding-top: 4px;
+    color: #999;
 }
 
 .slider-container input.form-control {
     width: 50px;
     height: 24px;
     text-align: center;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .slider-container .slider {
