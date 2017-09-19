@@ -29,7 +29,7 @@ define(function (require) {
          * renders the view depending on the isOpen attribute
          * @return {jQuery} - this DOM element as a jQuery object
          */
-        render: function () {//console.log(this.model);
+        render: function () {
             if (this.model.get("isOpen") === false) {
                 var attr = this.model.toJSON();
 

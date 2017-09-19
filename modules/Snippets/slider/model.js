@@ -30,14 +30,14 @@ define(function (require) {
         addValueModels: function () {
             this.get("valuesCollection").add([
                 {
-                    attr: this.get("name"),
+                    attr: this.get("displayName"),
                     displayName: "ab",
                     value: this.get("rangeMinValue"),
                     isSelected: false,
                     type: this.get("type")
                 },
                 {
-                    attr: this.get("name"),
+                    attr: this.get("displayName"),
                     displayName: "bis",
                     value: this.get("rangeMaxValue"),
                     isSelected: false,

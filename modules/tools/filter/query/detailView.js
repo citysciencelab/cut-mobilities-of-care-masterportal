@@ -7,10 +7,12 @@ define(function (require) {
         QueryDetailView;
 
     QueryDetailView = Backbone.View.extend({
+        className: "detail-view-container",
         template: _.template(Template),
         events: {
             "change .checkbox-toggle": "toggleIsActive",
-            "click .detailview-head .btn": "zoomToSelectedFeatures"
+            "click .detailview-head button": "zoomToSelectedFeatures",
+            "click .remove-all": "deselectAllValueModels"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -92,12 +94,13 @@ define(function (require) {
                         countSelectedValues++;
                         var view = new QueryValuesView({model: valueModel});
 
-                        this.$el.find(".value-views-container").append(view.render());
+                        this.$el.find(".value-views-container .text:nth-child(1)").after(view.render());
                     }
                 }, this);
             }, this);
 
-            countSelectedValues === 0 ? this.$el.find(".default-text").show() : this.$el.find(".default-text").hide();
+            countSelectedValues === 0 ? this.$el.find(".text:last-child").show() : this.$el.find(".text:last-child").hide();
+            countSelectedValues > 1 ? this.$el.find(".remove-all").show() : this.$el.find(".remove-all").hide();
         },
         toggleIsActive: function (evt) {
             this.model.setIsActive($(evt.target).prop("checked"));
@@ -110,6 +113,13 @@ define(function (require) {
                 });
                 this.remove();
             }
+        },
+
+        /**
+         * calls deselectAllValueModels in the model
+         */
+        deselectAllValueModels: function () {
+            this.model.deselectAllValueModels();
         }
     });
 

@@ -274,6 +274,8 @@ define([
         * Wird ausgeführt, wenn ein Eintrag ausgewählt oder bestätigt wurde.
         */
         hitSelected: function (evt) {
+            Radio.trigger("Filter", "resetFilter");
+
             var hit,
                 hitID;
 
