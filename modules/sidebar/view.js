@@ -66,7 +66,6 @@ define(function (require) {
         },
 
         addBackdrop: function () {
-            // debugger;
             $(".lgv-container").append("<div class='backdrop'></div>");
         },
 
