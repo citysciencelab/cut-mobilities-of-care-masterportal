@@ -379,7 +379,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": false,
+          "visibility": true,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
