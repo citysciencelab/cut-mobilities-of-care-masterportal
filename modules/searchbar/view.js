@@ -283,7 +283,6 @@ define([
             }
             else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
                 hitID = evt.currentTarget.id;
-
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
             }
             else {
@@ -296,7 +295,7 @@ define([
             // 3. Zoome ggf. auf Ergebnis
             Radio.trigger("GFI", "setIsVisible", false);
             // 4. Zoome ggf. auf Ergebnis
-            Radio.trigger("MapMarker", "zoomTo", hit);
+            Radio.trigger("MapMarker", "zoomTo", hit, 5000);
             // 5. Triggere Treffer über Radio
             // Wird benötigt für IDA und sgv-online, ...
             Radio.trigger("Searchbar", "hit", hit);
