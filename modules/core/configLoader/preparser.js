@@ -18,15 +18,29 @@ define([
                 portalConfig: response.Portalconfig,
                 baselayer: response.Themenconfig.Hintergrundkarten,
                 overlayer: response.Themenconfig.Fachdaten,
-                treeType: response.Portalconfig.Baumtyp
+                treeType: response.Portalconfig.Baumtyp,
+                snippetInfos: this.requestSnippetInfos()
             };
 
-           if (attributes.treeType === "default") {
+            if (attributes.treeType === "default") {
                 new DefaultTreeParser(attributes);
             }
             else {
                 new CustomTreeParser(attributes);
             }
+        },
+
+        requestSnippetInfos: function () {
+            var infos;
+
+            $.ajax({
+                url: "info.json",
+                async: false,
+                success: function (data) {
+                    infos = data;
+                }
+            });
+            return infos;
         }
     });
 

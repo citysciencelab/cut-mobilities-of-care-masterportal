@@ -8,6 +8,7 @@ define(function (require) {
     DropdownView = Backbone.View.extend({
         model: new DropdownModel(),
         className: "dropdown-container",
+        // className: "container-fluid",
         template: _.template(Template),
         events: {
             // This event fires after the select's value has been changed
@@ -15,7 +16,9 @@ define(function (require) {
             // This event is fired when the dropdown has been made visible to the user
             "shown.bs.select": "setIsOpen",
             // This event is fired when the dropdown has finished being hidden from the user
-            "hidden.bs.select": "setIsOpen"
+            "hidden.bs.select": "setIsOpen",
+            // This event is fired when the info button is clicked
+            "click .info-icon": "toggleInfoText"
         },
 
         initialize: function () {
@@ -29,7 +32,7 @@ define(function (require) {
          * renders the view depending on the isOpen attribute
          * @return {jQuery} - this DOM element as a jQuery object
          */
-        render: function () {//console.log(this.model);
+        render: function () {
             if (this.model.get("isOpen") === false) {
                 var attr = this.model.toJSON();
 
@@ -46,7 +49,7 @@ define(function (require) {
          */
         initDropdown: function () {
             this.$el.find(".selectpicker").selectpicker({
-                width: "100%",
+                width: (_.isUndefined(this.model.get("infoText"))) ? "100%" : "85%",
                 selectedTextFormat: "static",
                 size: this.model.get("numOfOptions")
             });
@@ -87,6 +90,13 @@ define(function (require) {
                 this.model.setIsOpen(false);
                 this.render();
             }
+        },
+
+        /**
+         * toggle the info text
+         */
+        toggleInfoText: function () {
+            this.$el.find(".info-text").toggle();
         },
 
         /**

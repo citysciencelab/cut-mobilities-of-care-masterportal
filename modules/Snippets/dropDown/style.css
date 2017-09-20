@@ -14,3 +14,20 @@
     right: 0;
     /*left: auto;*/
 }
+
+.dropdown-container .info-icon {
+    float: right;
+    padding: 10px 0 10px 10px;
+    font-size: 16px;
+}
+
+.dropdown-container .info-text {
+    display: none;
+    font-size: 10px;
+    color: rgb(182, 0, 0);
+}
+
+.dropdown-container .info-icon:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}

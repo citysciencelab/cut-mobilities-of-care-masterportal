@@ -38,3 +38,20 @@
 .slider-container .slider-track-low {
     background: rgba(60, 60, 60, 0.2);
 }
+
+.slider-container .info-icon {
+    float: right;
+    padding: 3px 5px;
+    font-size: 16px;
+}
+
+.slider-container .info-icon:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.slider-container .info-text {
+    display: none;
+    font-size: 10px;
+    color: rgb(182, 0, 0);
+}
