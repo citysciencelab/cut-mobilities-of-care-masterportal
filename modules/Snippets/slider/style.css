@@ -1,25 +1,20 @@
 .slider-container {
-    padding: 15px 15px 5px 15px;
+    padding: 8px 25px;
 }
 
-.slider-container .form-group {
-    display: inline-block;
-    margin-bottom: 0;
-    vertical-align: middle;
+.slider-container form {
+    margin-left: -10px;
+    margin-right: -10px;
 }
-
 .slider-container label {
     margin-bottom: 0;
     padding-top: 4px;
-    color: #999;
 }
 
 .slider-container input.form-control {
     width: 50px;
     height: 24px;
     text-align: center;
-    display: inline-block;
-    vertical-align: middle;
 }
 
 .slider-container .slider {
@@ -37,4 +32,9 @@
 
 .slider-container .slider-track-low {
     background: rgba(60, 60, 60, 0.2);
+}
+
+.slider-container .slider-handle {
+    background-color: rgba(8, 88, 158, 1);
+    background-image: none;
 }

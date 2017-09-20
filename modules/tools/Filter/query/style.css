@@ -1,87 +1,101 @@
-.filter .detailview-head .btn {
+.filter .detailview-head button {
+    float:right;
     margin: 0;
     color: #fff;
     background-color: rgba(8, 88, 158, 0.8);
-}
-
-.filter .detailview-head .btn:hover {
-    background-color: rgba(8, 88, 158, 0.6);
 }
 
 .filter .feature-count {
     margin-left: 8px;
 }
 
+.filter .detailview-head .btn:hover {
+    background-color: rgba(8, 88, 158, 0.6);
+}
+
+
 .filter .toggleIsActive .glyphicon-remove {
     color:#bbb;
 }
-.filter .name {
-    cursor: pointer;
-}
-.filter .name:hover {
-    font-weight: bold;
-}
-.filter .valueView {
-    color: #fff;
-    float: left;
-    margin: 2px;
-    padding: 3px 6px;
-    font-size: 12px;
-    background-color: rgba(0,0,0,.5);
-}
-.filter .valueView .glyphicon-remove {
-    padding-left: 5px;
-    font-size: 10px;
-    cursor: pointer;
-}
-.filter .value-views-container {
-    width: 100%;
-    border-bottom: 1px solid rgb(229, 229, 229);
-    padding: 15px;
-    color:#000;
-}
-.filter .detailview-head {
-    padding: 15px;
-}
-.filter .detailview-head .toggle {
-    float: right;
-}
-.filter .detailview-head .heading {
-    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    font-size: 18px;
-    padding-left: 0;
-}
-
 .filter .info-text {
     font-size: 11px;
     padding: 15px;
     clear: both;
 }
 
+.filter .value-views-container {
+    display: inline-block;
+    width: 100%;
+    border-bottom: 1px solid rgb(229, 229, 229);
+    padding: 8px 15px;
+}
+.filter .detailview-head {
+    display: inline-block;
+    padding: 12px 15px 12px 15px;
+    width: 100%;
+    color: rgb(182, 0, 0);
+}
+
+.filter .detailview-head .heading {
+    padding-top: 4px;
+    padding-left: 0px;
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 18px;
+    text-align: center;
+}
 .filter .value-views-container .text {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     font-size: 14px;
     float:left;
     padding: 2px 4px 0 0;
 }
-.filter .value-views-container .default-text {
-    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+
+.filter .value-views-container span {
+    float:left;
+    margin: 2px;
+    padding: 3px 6px;
     font-size: 12px;
-    float:right;
 }
+
+.filter .valueView {
+    color: #fff;
+    background-color: rgba(0,0,0,.3);
+}
+
+.filter .valueView:hover {
+    background-color: rgba(0,0,0,.5);
+    cursor: pointer;
+}
+
+.filter .value-views-container .text {
+    padding-left: 0;
+}
+
+.filter .value-views-container .remove {
+    font-size: 9px;
+    padding: 0 0 0 8px;
+    float: right;
+}
+.filter .value-views-container .remove-all {
+    color: rgb(151,151,151);
+    background-color: rgba(0,0,0,.05);
+}
+.filter .value-views-container .remove-all:hover {
+    background-color: rgba(0,0,0,.1);
+    cursor: pointer;
+}
+
 .filter .valueView .line-through .value-text {
     color: #fff;
 }
-.filter .valueView .line-through {
-    color: #f00;
-    text-decoration: line-through;
-    text-decoration-style: dashed;
-}
-.filter .strikethrough {
+
+.filter .value-views-container .strikethrough {
     position: relative;
+    padding: 0;
+    margin: 0;
 }
 .filter .strikethrough:before {
-    color:red;
+    color: rgb(182, 0, 0);
     position: absolute;
     content: "";
     left: 0;

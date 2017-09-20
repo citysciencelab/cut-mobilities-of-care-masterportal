@@ -1,16 +1,17 @@
-define(function (require) {
+define(function () {
 
-    var Backbone = require("backbone"),
-        QueryValuesView;
-
-    QueryValuesView = Backbone.View.extend({
+    var QueryValuesView = Backbone.View.extend({
+        tagName: "span",
         className: "valueView",
+        attributes: {
+            title: "Auswahl löschen"
+        },
         events: {
-            "click .glyphicon-remove": "removeBadge"
+            "click": "removeView"
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "removeView": this.removeView
+                "removeView": this.remove
             });
         },
         render: function () {
@@ -20,29 +21,28 @@ define(function (require) {
                 var val = this.model.get("value");
 
                 if (val === "true") {
-                    html = "<span>" + this.model.get("attr") + "<span><span class='glyphicon glyphicon-remove'></span>";
+                    html = this.model.get("attr") + "<span class='remove'>&#x274C;</span>";
                 }
                 else {
                     // html = "<span class='line-through'>" + this.model.get("attr") + "</span><span class='glyphicon glyphicon-remove'></span>";
                     // html = "<span class='line-through'><span class='value-text'>" + this.model.get("attr") + "</span></span></span><span class='glyphicon glyphicon-remove'></span>";
-                    html = "<span class='strikethrough'><span class='value-text'>" + this.model.get("attr") + "</span></span><span class='glyphicon glyphicon-remove'></span>";
+                    html = "<span class='strikethrough'>" + this.model.get("attr") + "</span><span class='remove'>&#x274C;</span>";
                 }
             }
             else if (this.model.get("type") === "integer") {
-                html = "<span>" + this.model.get("attr") + " " + this.model.get("displayName") + " " + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
+                html = this.model.get("attr") + " " + this.model.get("displayName") + " " + this.model.get("value") + "<span class='remove'>&#x274C;</span>";
             }
             else {
-                html = "" + this.model.get("value") + "<span class='glyphicon glyphicon-remove'></span>";
+                html = this.model.get("value") + "<span class='remove'>&#x274C;</span>";
             }
 
-            return this.$el.html(html);
+            this.$el.html(html);
+            return this.$el;
         },
+
         removeView: function () {
-            this.remove();
-        },
-        removeBadge: function () {
             this.model.set("isSelected", false);
-            this.removeView();
+            this.remove();
         }
     });
 

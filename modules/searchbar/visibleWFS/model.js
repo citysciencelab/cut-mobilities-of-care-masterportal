@@ -73,7 +73,8 @@ define([
                     _.each(features, function (feature) {
                         var layerStyle = layer.get("layer").getStyle(feature),
                             style,
-                            imageSrc;
+                            imageSrc,
+                            additionalInfo = undefined;
 
                             // layerStyle returns style
                             if (typeof layerStyle === "object") {
@@ -84,12 +85,17 @@ define([
                                 style = layerStyle(feature);
                                 imageSrc = style[0].getImage().getSrc();
                             }
+
+                            if (!_.isUndefined(layer.get("additionalInfoField"))) {
+                                additionalInfo = feature.getProperties()[layer.get("additionalInfoField")];
+                            }
                         featureArray.push({
                             name: feature.get(layer.attributes.searchField),
                             type: layer.get("name"),
                             coordinate: feature.getGeometry().getCoordinates(),
                             imageSrc: imageSrc,
-                            id: feature.get(layer.attributes.searchField).replace(/ /g, "") + layer.get("name")
+                            id: feature.get(layer.attributes.searchField).replace(/ /g, "") + layer.get("name"),
+                            additionalInfo: additionalInfo
                         });
                     });
                 }
