@@ -47,6 +47,16 @@
     background-image: none;
 }
 
+@media (max-width: 767px) {
+    .slider-container .slider-handle {
+        width: 24px;
+        height: 24px;
+    }
+    .slider-container .slider .slider-track {
+        margin-top: -3px;
+    }
+}
+
 .slider-container .info-icon {
     float: right;
     padding: 3px 5px;
