@@ -121,6 +121,10 @@ define(function (require) {
             this.set("featureAttributesMap", value);
         },
 
+        // setter for isDefault
+        setIsDefault: function (value) {
+            this.set("isDefault", value);
+        },
         setIsSelected: function (value) {
             this.set("isSelected", value);
         },

@@ -135,6 +135,10 @@ define(function (require) {
         createQuery: function (model) {
             var query = new QueryModel(model);
 
+            if (query.get("isSelected")) {
+                query.setIsDefault(true);
+            }
+
             this.get("queryCollection").add(query);
         },
 
