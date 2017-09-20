@@ -10,6 +10,11 @@
     }
 }
 
+@media (max-width: 767px) {
+    .dropdown-container li a {
+        font-size: 14px;
+    }
+}
 .dropdown-container .dropdown-menu {
     right: 0;
     /*left: auto;*/
