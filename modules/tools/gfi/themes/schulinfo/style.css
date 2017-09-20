@@ -1,7 +1,10 @@
-.schulinfo {
-    width: 35vw;
-    height: 36vh;
+@media (min-width: 768px) {
+    .schulinfo {
+        width: 35vw;
+        height: 36vh;
+    }
 }
+
 .schulinfo td {
     font-family: font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
 }
