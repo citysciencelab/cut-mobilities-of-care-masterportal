@@ -8,7 +8,7 @@
     "url": "https://bitbucket.org/lgv-g12/lgv-config.git"
   },
   "scripts": {
-    "test": "mocha test/end2end/chrome.js"
+    "test": "mocha test/end2end/TestRunner.js"
   },
   "dependencies": {
     "backbone": "1.x",
