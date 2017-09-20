@@ -93,7 +93,7 @@ define([
          * @param  {[type]} length  [name length]
          */
         shortenString: function (s, length) {
-            if (_.isUndefined(name)) {
+            if (_.isUndefined(s)) {
                 return s;
             }
             if (s.length > length && length > 0) {
