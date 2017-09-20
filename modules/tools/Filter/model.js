@@ -14,17 +14,17 @@ define(function (require) {
             isActive: false
         },
         initialize: function () {
+            var channel = Radio.channel("Filter");
+
+            this.listenTo(channel, {
+                "resetFilter": this.resetFilter
+            });
             this.listenTo(Radio.channel("Tool"), {
                 "activatedTool": this.activate
-            }),
+            });
             this.set("queryCollection", new Backbone.Collection());
             this.listenTo(this.get("queryCollection"), {
-                "deselectAllModels": function () {
-                    _.each(this.get("queryCollection").models, function (model) {
-                        model.setIsActive(false);
-                        model.setIsSelected(false);
-                    });
-                },
+                "deselectAllModels": this.deselectAllModels,
                 "featureIdsChanged": this.updateMap,
                 "closeFilter": function () {
                     this.setIsActive(false);
@@ -32,6 +32,30 @@ define(function (require) {
             }, this);
             this.setDefaults();
             this.createQueries(this.getConfiguredQueries());
+        },
+        resetFilter: function () {
+            this.deselectAllModels();
+            this.resetAllQueries();
+            this.activateDefaultQuery();
+        },
+        activateDefaultQuery: function () {
+            var defaultQuery = this.get("queryCollection").findWhere({isDefault: true});
+
+            if (!_.isUndefined(defaultQuery)) {
+                defaultQuery.setIsActive(true);
+                defaultQuery.setIsSelected(true);
+            }
+        },
+        resetAllQueries: function () {
+            _.each(this.get("queryCollection").models, function (model) {
+                model.deselectAllValueModels();
+            }, this);
+        },
+        deselectAllModels: function () {
+            _.each(this.get("queryCollection").models, function (model) {
+                model.setIsActive(false);
+                model.setIsSelected(false);
+            });
         },
         /**
          * updates the Features shown on thge Map
@@ -110,6 +134,10 @@ define(function (require) {
 
         createQuery: function (model) {
             var query = new QueryModel(model);
+
+            if (query.get("isSelected")) {
+                query.setIsDefault(true);
+            }
 
             this.get("queryCollection").add(query);
         },

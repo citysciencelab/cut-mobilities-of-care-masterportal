@@ -106,10 +106,25 @@ define(function (require) {
             return featureAttributesMap;
         },
 
+
+        /**
+         * iterates over the snippet collection and
+         * calls in the snippet deselectValueModels
+         */
+        deselectAllValueModels: function () {
+            _.each(this.get("snippetCollection").models, function (snippet) {
+                snippet.deselectValueModels();
+            }, this);
+        },
+
         setFeatureAttributesMap: function (value) {
             this.set("featureAttributesMap", value);
         },
 
+        // setter for isDefault
+        setIsDefault: function (value) {
+            this.set("isDefault", value);
+        },
         setIsSelected: function (value) {
             this.set("isSelected", value);
         },
