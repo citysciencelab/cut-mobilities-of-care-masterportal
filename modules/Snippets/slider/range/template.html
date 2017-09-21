@@ -13,4 +13,6 @@
     </div>
 </form>
 <input class="slider" type="text" data-slider-tooltip="hide" />
-<div class="info-text"><%= infoText %></div>
+<% if (!_.isUndefined(this.model.get("infoText"))) { %>
+    <div class="info-text"><%= infoText %></div>
+<% } %>

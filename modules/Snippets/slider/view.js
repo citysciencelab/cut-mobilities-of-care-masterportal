@@ -27,7 +27,7 @@ define(function (require) {
 
         render: function () {
             var attr = this.model.toJSON();
-console.log(attr);
+
             this.$el.html(this.template(attr));
             this.initSlider();
             return this.$el;
