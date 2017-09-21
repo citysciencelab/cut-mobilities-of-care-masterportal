@@ -14,7 +14,7 @@ define(function (require) {
                         "Schulform",
                         "Schultyp",
                         "Zusatzinformation zur Schulform",
-                        "Schwerpunktschule",
+                        "Schwerpunktschule Inklusion",
                         "Strasse",
                         "Ort",
                         "Stadtteil",
