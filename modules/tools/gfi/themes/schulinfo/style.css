@@ -1,6 +1,7 @@
 @media (min-width: 768px) {
     .schulinfo {
-        width: 35vw;
+        max-width: 35vw;
+        min-width: 25vw;
         height: 36vh;
     }
 }
