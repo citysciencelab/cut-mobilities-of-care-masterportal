@@ -1,4 +1,7 @@
 define(function (require) {
+    require("bootstrap/tab");
+    require("bootstrap/modal");
+
     var TemplateMobile = require("text!modules/layerinformation/templateMobile.html"),
         LayerInformationViewMobile;
 
