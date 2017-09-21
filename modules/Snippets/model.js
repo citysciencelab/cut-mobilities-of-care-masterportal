@@ -2,10 +2,13 @@ define(function () {
 
 var Snippet = Backbone.Model.extend({
     defaults: {
+        // snippet info text
+        infoText: undefined,
         name: "",
         attr: {},
         valuesCollection: {}
     },
+
     superInitialize: function () {
         this.set("valuesCollection", new Backbone.Collection());
 
@@ -17,7 +20,21 @@ var Snippet = Backbone.Model.extend({
                 }
             }
         });
+
+        this.checkSnippetInfos(Radio.request("Parser", "getSnippetInfos"), this.get("name"));
     },
+
+    /**
+     * checks if info text is available and sets it
+     * @param {object} snippetInfos
+     * @param {string} name [description]
+     */
+    checkSnippetInfos: function (snippetInfos, name) {
+        if (_.has(snippetInfos, name)) {
+            this.set("infoText", snippetInfos[name]);
+        }
+    },
+
     // getter for id
     getId: function () {
         return this.get("id");

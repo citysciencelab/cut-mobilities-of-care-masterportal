@@ -41,7 +41,10 @@ define([
                 "getCategory": this.getCategory,
                 "getCategories": this.getCategories,
                 "getPortalConfig": this.getPortalConfig,
-                "getItemsByMetaID": this.getItemsByMetaID
+                "getItemsByMetaID": this.getItemsByMetaID,
+                "getSnippetInfos": function () {
+                    return this.get("snippetInfos");
+                }
             }, this);
 
             channel.on({

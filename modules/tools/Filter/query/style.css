@@ -17,11 +17,6 @@
 .filter .toggleIsActive .glyphicon-remove {
     color:#bbb;
 }
-.filter .info-text {
-    font-size: 11px;
-    padding: 15px;
-    clear: both;
-}
 
 .filter .value-views-container {
     display: inline-block;
@@ -42,6 +37,18 @@
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     font-size: 18px;
 }
+
+.filter .detail-view-container > .info-text {
+    font-size: 11px;
+    padding: 15px;
+    clear: both;
+}
+
+.filter .dropdown-container .info-text, .filter .slider-container .info-text {
+    font-size: 11px;
+}
+
+
 .filter .value-views-container .text {
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     font-size: 12px;

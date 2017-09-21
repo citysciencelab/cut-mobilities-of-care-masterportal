@@ -6,6 +6,12 @@
     margin-left: -10px;
     margin-right: -10px;
 }
+
+.slider-container .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
 .slider-container label {
     margin-bottom: 0;
     padding-top: 4px;
@@ -15,6 +21,8 @@
     width: 50px;
     height: 24px;
     text-align: center;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .slider-container .slider {
@@ -37,4 +45,31 @@
 .slider-container .slider-handle {
     background-color: rgba(8, 88, 158, 1);
     background-image: none;
+}
+
+@media (max-width: 767px) {
+    .slider-container .slider-handle {
+        width: 24px;
+        height: 24px;
+    }
+    .slider-container .slider .slider-track {
+        margin-top: -3px;
+    }
+}
+
+.slider-container .info-icon {
+    float: right;
+    padding: 3px 5px;
+    font-size: 16px;
+}
+
+.slider-container .info-icon:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.slider-container .info-text {
+    display: none;
+    font-size: 10px;
+    color: rgb(182, 0, 0);
 }
