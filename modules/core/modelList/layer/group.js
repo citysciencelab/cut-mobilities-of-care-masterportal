@@ -139,7 +139,9 @@ define([
                 "id": this.getId(),
                 "legendURL": legendURL,
                 "metaID": metaID,
-                "layername": name
+                "layername": name,
+                "url": null,
+                "typ": null
             });
 
             this.setLayerInfoChecked(true);

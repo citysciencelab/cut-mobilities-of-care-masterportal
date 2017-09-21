@@ -25,8 +25,8 @@
                     <% if (!_.isNull(downloadLinks)) { %>
                     <li><a data-toggle="tab" href="#LayerInfoDataDownload">Datensatz herunterladen</a></li>
                     <% } %>
-                    <% if (!_.isNull(wmsUrl)) { %>
-                    <li><a data-toggle="tab" href="#wmsurl">WMS-Adresse</a></li>
+                    <% if (!_.isNull(url)) { %>
+                    <li><a data-toggle="tab" href="#url"><%= typ %>-Adresse</a></li>
                     <% } %>
                 </ul>
                 <br>
@@ -112,9 +112,9 @@
                             <% }); %>
                         </ul>
                     </div>
-                    <div id="wmsurl" class="tab-pane fade">
+                    <div id="url" class="tab-pane fade">
                       <ul class="list-unstyled">
-                      <li><a href="<%= wmsUrl +'?SERVICE=WMS&REQUEST=GetCapabilities' %>" target="_blank"><%= wmsUrl %> </a><li>
+                        <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
                       </ul>
                   </div>
                 </div>
