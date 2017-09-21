@@ -30,7 +30,7 @@ define(function () {
                 }
             }
             else if (this.model.get("type") === "integer") {
-                html = this.model.get("attr") + " " + this.model.get("displayName") + " " + this.model.get("value") + "<span class='remove'>&#x274C;</span>";
+                html = this.model.get("displayName") + " " + this.model.get("value") + "<span class='remove'>&#x274C;</span>";
             }
             else {
                 html = this.model.get("value") + "<span class='remove'>&#x274C;</span>";

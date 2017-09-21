@@ -1,6 +1,7 @@
 define(function (require) {
 
     var SnippetModel = require("modules/Snippets/model"),
+        ValueModel = require("modules/Snippets/slider/valueModel"),
         SliderModel;
 
     SliderModel = SnippetModel.extend({
@@ -10,16 +11,20 @@ define(function (require) {
             this.superInitialize();
             parsedValues = this.parseValues(attributes.values);
             // slider range
-            this.setRangeMinValue(_.min(parsedValues));
-            this.setRangeMaxValue(_.max(parsedValues));
-            this.addValueModels();
+            /*this.setRangeMinValue(_.min(parsedValues));
+            this.setRangeMaxValue(_.max(parsedValues));*/
+            this.addValueModels(_.min(parsedValues), _.max(parsedValues));
 
-            this.listenToOnce(this, {
+            /*this.listenToOnce(this, {
                 "setRangeOnce": function (parsedValues) {
                     this.setRangeMinValue(_.min(parsedValues));
                     this.setRangeMaxValue(_.max(parsedValues));
-                    this.resetValueModel(this.get("valuesCollection").at(0));
-                    this.resetValueModel(this.get("valuesCollection").at(1));
+                    this.resetValueModels();
+                }
+            });*/
+            this.listenTo(this.get("valuesCollection"), {
+                "change:value": function (model, value) {
+                    this.triggerValuesChanged(model, value);
                 }
             });
         },
@@ -27,22 +32,22 @@ define(function (require) {
         /**
          * add minValueModel and maxValueModel to valuesCollection
          */
-        addValueModels: function () {
+        addValueModels: function (min, max) {
             this.get("valuesCollection").add([
-                {
-                    attr: this.get("displayName"),
-                    displayName: "ab",
-                    value: this.get("rangeMinValue"),
-                    isSelected: false,
-                    type: this.get("type")
-                },
-                {
-                    attr: this.get("displayName"),
-                    displayName: "bis",
-                    value: this.get("rangeMaxValue"),
-                    isSelected: false,
-                    type: this.get("type")
-                }
+                new ValueModel({
+                    attr: this.get("name"),
+                    displayName: this.get("displayName") + " ab",
+                    value: min,
+                    type: this.get("type"),
+                    isMin: true
+                }),
+                new ValueModel({
+                    attr: this.get("name"),
+                    displayName: this.get("displayName") + " bis",
+                    value: max,
+                    type: this.get("type"),
+                    isMin: false
+                })
             ]);
         },
 
@@ -51,53 +56,42 @@ define(function (require) {
          * trigger the valueChanged event on snippetCollection in queryModel
          * @param  {number | array} value - depending on slider type
          */
-        updateSelectedValues: function (snippetValues) {
+        updateValues: function (snippetValues) {
             // range slider
             if (_.isArray(snippetValues) === true) {
-                this.updateValueModel(this.get("valuesCollection").at(0), snippetValues[0], this.get("rangeMinValue"));
-                this.updateValueModel(this.get("valuesCollection").at(1), snippetValues[1], this.get("rangeMaxValue"));
+                this.get("valuesCollection").at(0).setValue(snippetValues[0]);
+                this.get("valuesCollection").at(1).setValue(snippetValues[1]);
             }
             // slider
             else {
-                this.updateValueModel(this.get("valuesCollection").at(0), snippetValues[0], this.get("rangeMinValue"));
+                this.get("valuesCollection").at(0).set("value", snippetValues);
             }
         },
 
-        /**
-         * set the slider value
-         * if value unqequal rangeValue, set isSelected on true
-         * @param  {number} value - slider min value
-         */
-        updateValueModel: function (valueModel, value, rangeValue) {
-            valueModel.set("value", value);
-            if (value !== rangeValue) {
-                valueModel.set("isSelected", true);
-                this.trigger("valuesChanged", valueModel);
-            }
-            else {
-                valueModel.set("isSelected", false);
-            }
-        },
-
+       /* resetValueModels: function () {
+            this.resetValueModel(this.get("valuesCollection").at(0));
+            this.resetValueModel(this.get("valuesCollection").at(1));
+        },*/
         /**
         * If the value model is no longer selected,
         * sets the value to the range value
         * @param  {Backbone.Model} valueModel
         */
+       /*
         resetValueModel: function (valueModel) {
-            if (valueModel.get("displayName") === "ab") {
+            if (valueModel.get("isMin")) {
                 valueModel.set("value", this.get("rangeMinValue"));
             }
-            else if (valueModel.get("displayName") === "bis") {
+            else {
                 valueModel.set("value", this.get("rangeMaxValue"));
             }
             this.trigger("render");
-        },
+        },*/
 
         updateSelectableValues: function (values) {
-            var parsedValues = this.parseValues(values);
+           /* var parsedValues = this.parseValues(values);
 
-            this.trigger("setRangeOnce", parsedValues);
+            this.trigger("setRangeOnce", parsedValues);*/
         },
 
         /**
@@ -134,17 +128,18 @@ define(function (require) {
          * set the minimum possible value
          * @param  {number} value
          */
+/*
         setRangeMinValue: function (value) {
             this.set("rangeMinValue", value);
-        },
+        },*/
 
         /**
          * set the maximum possible value
          * @param  {number} value
          */
-        setRangeMaxValue: function (value) {
+       /* setRangeMaxValue: function (value) {
             this.set("rangeMaxValue", value);
-        }
+        }*/
     });
 
     return SliderModel;

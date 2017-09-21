@@ -1,7 +1,7 @@
 define(function (require) {
 
     var SnippetDropdownView = require("modules/Snippets/dropDown/view"),
-        QueryValuesView = require("modules/tools/filter/query/valuesView"),
+        ValueView = require("modules/Snippets/value/view"),
         Template = require("text!modules/tools/filter/query/templateDetailView.html"),
         SnippetSliderView = require("modules/Snippets/slider/range/view"),
         QueryDetailView;
@@ -92,7 +92,7 @@ define(function (require) {
 
                     if (valueModel.get("isSelected")) {
                         countSelectedValues++;
-                        var view = new QueryValuesView({model: valueModel});
+                        var view = new ValueView({model: valueModel});
 
                         this.$el.find(".value-views-container .text:nth-child(1)").after(view.render());
                     }

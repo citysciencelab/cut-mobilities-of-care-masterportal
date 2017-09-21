@@ -1,6 +1,7 @@
 define(function (require) {
 
     var SnippetModel = require("modules/Snippets/model"),
+        ValueModel = require("modules/Snippets/value/model"),
         DropdownModel;
 
     DropdownModel = SnippetModel.extend({
@@ -17,6 +18,12 @@ define(function (require) {
             this.superInitialize();
             this.addValueModels(this.get("values"));
             this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
+            this.listenTo(this.get("valuesCollection"), {
+            "change:isSelected": function (model, value) {
+                this.triggerValuesChanged();
+            }
+        });
+
         },
 
         /**
@@ -34,14 +41,16 @@ define(function (require) {
          * @param  {string} value
          */
         addValueModel: function (value) {
-            this.get("valuesCollection").add({
-                attr: this.get("name"),
-                value: value,
-                displayName: this.getDisplayName(value),
-                isSelected: false,
-                isSelectable: true,
-                type: this.get("type")
-            });
+            this.get("valuesCollection").add(
+                new ValueModel({
+                    attr: this.get("name"),
+                    value: value,
+                    displayName: this.getDisplayName(value),
+                    isSelected: false,
+                    isSelectable: true,
+                    type: this.get("type")
+                })
+            );
         },
 
         getDisplayName: function (value) {

@@ -18,7 +18,6 @@ define(function (require) {
                 "change:isVisible": this.toggle,
                 "change:isMobile": this.toggleCssClass
             });
-            // this.render();
         },
 
         render: function () {

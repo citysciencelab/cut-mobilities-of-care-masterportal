@@ -10,7 +10,7 @@ define(function (require) {
         events: {
             // This event fires when the dragging stops or has been clicked on
             "slideStop input.slider": function (evt) {
-                this.updateSelectedValues(evt);
+                this.model.updateValues(evt.value);
                 this.setInputControlValue(evt);
             },
             // This event fires when the slider is dragged
@@ -35,20 +35,14 @@ define(function (require) {
          * init the slider
          */
         initSlider: function () {
-            this.$el.find("input.slider").slider({
-                min: this.model.get("rangeMinValue"),
-                max: this.model.get("rangeMaxValue"),
-                step: 1,
-                value: this.model.get("rangeMinValue")
-            });
-        },
+            var valueModel = this.model.get("valueCollection").models[0];
 
-        /**
-        * Call the function "updateSelectedValues" in the model
-        * @param {Event} evt - slideStop
-        */
-        updateSelectedValues: function (evt) {
-            this.model.updateSelectedValues(evt.value);
+            this.$el.find("input.slider").slider({
+                min: valueModel.get("min"),
+                max: valueModel.get("max"),
+                step: 1,
+                value: valueModel.value
+            });
         },
 
         /**

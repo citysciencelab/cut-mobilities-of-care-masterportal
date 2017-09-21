@@ -1,6 +1,7 @@
-define(function () {
+define(function (require) {
 
-var Snippet = Backbone.Model.extend({
+var ValueModel = require("modules/Snippets/value/model"),
+    Snippet = Backbone.Model.extend({
     defaults: {
         name: "",
         attr: {},
@@ -8,15 +9,6 @@ var Snippet = Backbone.Model.extend({
     },
     superInitialize: function () {
         this.set("valuesCollection", new Backbone.Collection());
-
-        this.listenTo(this.get("valuesCollection"), {
-            "change:isSelected": function (model, value) {
-                this.trigger("valuesChanged", model);
-                if (model.get("type") === "integer" && value === false) {
-                    this.resetValueModel(model);
-                }
-            }
-        });
     },
     // getter for id
     getId: function () {
@@ -73,8 +65,13 @@ var Snippet = Backbone.Model.extend({
         this.get("valuesCollection").forEach(function (model) {
             model.set("isSelected", false);
         });
+    },
+    extentBaseModel: function (obj) {
+        return _.extend({}, new ValueModel(), obj);
+    },
+    triggerValuesChanged: function (model, value) {
+        this.trigger("valuesChanged", model, value);
     }
-
  });
 
 return Snippet;

@@ -47,7 +47,7 @@ define(function (require) {
             }
         },
         resetAllQueries: function () {
-            _.each(this.get("queryCollection").models, function (model) {
+            _each(this.get("queryCollection").models, function (model) {
                 model.deselectAllValueModels();
             }, this);
         },

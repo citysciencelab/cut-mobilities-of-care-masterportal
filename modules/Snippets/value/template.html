@@ -1,0 +1,15 @@
+<span
+    <%  if (arguments[0].isMin === true)
+        {
+            print("data-isMin=\"true\"");
+        }
+    %>
+    <%  if (type === "boolean" && value === "false")
+        {
+            print("class=\"strikethrough\"");
+        }
+    %>
+>
+    <% print(this.model.getDisplayString()); %>
+</span>
+<span class='remove'>&#x274C;</span>
