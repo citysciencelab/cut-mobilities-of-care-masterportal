@@ -63,6 +63,7 @@ define(function (require) {
                     name: "Sprachen",
                     attributes: [
                         "Fremdsprachen",
+                        "Fremdsprachen ab Klassenstufe",
                         "Bilingual",
                         "Sprachzertifikat"]
                 },
