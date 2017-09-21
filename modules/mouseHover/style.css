@@ -20,3 +20,11 @@
     /*font-weight: normal;*/
     font-style: italic;
 }
+
+.tooltip.bottom {
+    margin-top: 8px;
+}
+
+.tooltip.top {
+    margin-top: -8px;
+}
