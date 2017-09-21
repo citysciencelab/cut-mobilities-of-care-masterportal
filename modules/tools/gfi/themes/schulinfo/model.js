@@ -12,7 +12,7 @@ define(function (require) {
                     attributes: [
                         "Name",
                         "Schulform",
-                        "Schultyp",
+                        "Schulstandort",
                         "Zusatzinformation zur Schulform",
                         "Schwerpunktschule Inklusion",
                         "Strasse",
