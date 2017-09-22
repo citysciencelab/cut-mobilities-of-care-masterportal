@@ -73,7 +73,7 @@
 
 .filter .value-views-container .remove {
     font-size: 9px;
-    padding: 0 0 0 8px;
+    padding: 3px 0 0 8px;
     float: right;
 }
 .filter .value-views-container .remove-all {

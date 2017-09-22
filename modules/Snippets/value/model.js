@@ -1,4 +1,4 @@
-define(function (require) {
+define(function () {
 
 var Model = Backbone.Model.extend({
         defaults: {
@@ -11,9 +11,7 @@ var Model = Backbone.Model.extend({
         setValue: function (value) {
             this.set("value", value);
         },
-        resetValueModels: function () {
-            this.trigger("resetValueModels");
-        },
+
         setIsSelected: function (value) {
             this.set("isSelected", value);
         },

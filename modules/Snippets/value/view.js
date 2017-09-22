@@ -1,11 +1,9 @@
 define(function (require) {
 
-    var Model = require("modules/snippets/value/model"),
-        Template = require("text!modules/snippets/value/template.html"),
+    var Template = require("text!modules/snippets/value/template.html"),
         View;
 
     View = Backbone.View.extend({
-        Model: {},
         tagName: "span",
         className: "valueView value-text",
         template: _.template(Template),
@@ -13,13 +11,13 @@ define(function (require) {
             title: "Auswahl löschen"
         },
         events: {
-            "click": "deselect"
+            "click": "unselect"
         },
         initialize: function () {
             this.listenTo(this.model, {
                 "removeView": this.remove,
-                "change:isSelected": function () {
-                    if (!this.model.get("isSelected")) {
+                "change:isSelected": function (model, isSelected) {
+                    if (!isSelected) {
                         this.remove();
                     }
                 }
@@ -31,7 +29,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             return this.$el;
         },
-        deselect: function () {
+        unselect: function () {
             this.model.setIsSelected(false);
         }
     });

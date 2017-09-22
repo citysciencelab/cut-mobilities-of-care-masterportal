@@ -11,19 +11,14 @@ var ValueModel,
     initialize: function () {
         this.setInitValue(this.get("value"));
     },
-    resetValue: function () {
-        if (this.get("value") !== this.get("initValue")) {
-            this.setValue(this.get("initValue"));
-        }
-        this.trigger("render");
-    },
-    getDisplayString: function () {
+
+    getDisplayString: function () {console.log(this.get("value"));
         return this.get("displayName") + " " + this.get("value");
     },
     setIsSelected: function (value) {
         this.set("isSelected", value);
         if (!value) {
-            this.resetValue();
+            this.setValue(this.get("initValue"));
         }
     },
     // setter for value
@@ -31,11 +26,8 @@ var ValueModel,
         if (value !== this.get("initValue")) {
             this.setIsSelected(true);
         }
+        console.log(value);
         this.set("value", value);
-
-        if (value === this.get("initValue")) {
-            this.setIsSelected(false);
-        }
     },
 
     // setter for initValue
