@@ -48,6 +48,7 @@ define(function (require) {
             {
                 name: "weitere Informationen",
                 attributes: [
+                    "foerderart",
                     "auszeichnung",
                     "schuelerzeitung",
                     "schulische_ausrichtung",
