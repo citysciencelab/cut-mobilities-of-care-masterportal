@@ -147,7 +147,7 @@ define(function (require) {
         },
         beautifyAttribute: function (attribute) {
             if (attribute.indexOf("|") !== -1) {
-                attribute = attribute.split("|").join("<br>");
+                attribute = attribute.split("|");
             }
             if (attribute === "true" || attribute === "ja") {
                 attribute = "Ja";
