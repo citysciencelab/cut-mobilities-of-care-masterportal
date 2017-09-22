@@ -196,7 +196,8 @@
           },
           "extendedFilter": {
             "name": "Erweiterter Filter",
-            "glyphicon": "glyphicon-filter"
+            "glyphicon": "glyphicon-filter",
+            "deaktivateGFI": false
           },
           "routing": {
             "name": "Routenplaner",
