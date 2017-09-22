@@ -5,93 +5,100 @@ define(function (require) {
 
     SchulInfoTheme = Theme.extend({
         defaults: _.extend({}, Theme.prototype.defaults, {
-            themeConfig: {
-                kategories: [{
-                    name: "Grundsätzliche Informationen",
-                    isSelected: true,
-                    attributes: [
-                        "Name",
-                        "Schulform",
-                        "Schulstandort",
-                        "Zusatzinformation zur Schulform",
-                        "Schwerpunktschule Inklusion",
-                        "Strasse",
-                        "Ort",
-                        "Stadtteil",
-                        "Bezirk",
-                        "Telefon",
-                        "Email",
-                        "Schulportrait",
-                        "Homepage",
-                        "Schulleitung",
-                        "Zuständiges ReBBZ",
-                        "Homepage des ReBBZ",
-                        "Schulaufsicht",
-                        "Tag d. offenen Tür"]
-                },
-                {
-                    name: "Schulgröße",
-                    attributes: [
-                        "Schülerzahl",
-                        "Parallelklassen (Kl. 1)",
-                        "Parallelklassen (Kl. 5)"
+            themeConfig: [{
+                name: "Grundsätzliche Informationen",
+                isSelected: true,
+                attributes: [
+                    "schulname",
+                    "schulform",
+                    "schultyp",
+                    // "Zusatzinformation zur Schulform", ?? SD
+                    "schwerpunktschule",
+                    "adresse_strasse_hausnr",
+                    "adresse_ort",
+                    "stadtteil",
+                    "bezirk",
+                    "schul_telefonnr",
+                    "schul_email",
+                    "schulportrait",
+                    "schul_homepage",
+                    "name_schulleiter",
+                    "zustaendiges_rebbz",
+                    "rebbz_homepage",
+                    "schulaufsicht",
+                    "offenetuer"]
+            },
+            {
+                name: "Schulgröße",
+                attributes: [
+                    "anzahl_schueler",
+                    "zuegigkeit_kl_1",
+                    "zuegigkeit_kl_5"
+                ]
+            },
+            {
+                name: "Abschlüsse",
+                attributes: [
+                    "abschluss",
+                    "schulentlassene_oa_anteil",
+                    "schulentlassene_mit_eas_anteil",
+                    "Schulentlassene_mit_msa_anteil",
+                    "Schulentlassene_mit_fhr_anteil"]
+            },
+            {
+                name: "weitere Informationen",
+                attributes: [
+                    "auszeichnung",
+                    "schuelerzeitung",
+                    "schulische_ausrichtung",
+                    "schulpartnerschaft",
+                    "schulinspektion_link",
+                    "schulportrait",
+                    "einzugsgebiet",
+                    "schulwahl_wohnort"
                     ]
-                },
-                {
-                    name: "Abschlüsse",
-                    attributes: [
-                        "Abschluss",
-                        "Schulentlassene ohne Abschluss (%)",
-                        "Schulentlassene mit ESA (%)",
-                        "Schulentlassene mit MSA (%)",
-                        "Schulentlassene mit FHR oder Abitur (%)"]
-                },
-                {
-                    name: "weitere Informationen",
-                    attributes: [
-                        "Auszeichnung",
-                        "Schülerzeitung",
-                        "Schwerpunkte in den Angeboten",
-                        "Schulpartnerschaft",
-                        "Schulinspektion",
-                        "Schulportrait",
-                        "Einzugsgebiet",
-                        "Schulwahl Wohnort"
-                        ]
-                },
-                {
-                    name: "Sprachen",
-                    attributes: [
-                        "Fremdsprachen",
-                        "Fremdsprachen ab Klassenstufe",
-                        "Bilingual",
-                        "Sprachzertifikat"]
-                },
-                {
-                    name: "Ganztag",
-                    attributes: [
-                        "Ganztagsform",
-                        "Kernzeitbetreuung",
-                        "Anteil Ferienbetreuung",
-                        "Kernunterricht"]
-                },
-                {
-                    name: "Mittagsversorgung",
-                    attributes: [
-                        "Mittagspause",
-                        "Kantine",
-                        "Wahlmöglichkeit Essen",
-                        "Vegetarisch",
-                        "Nutzung Kantine",
-                        "Kiosk"]
-                }]
-            }
+            },
+            {
+                name: "Sprachen",
+                attributes: [
+                    "fremdsprache",
+                    "fremdsprache_mit_klasse",
+                    "bilingual",
+                    "sprachzertifikat"]
+            },
+            {
+                name: "Ganztag",
+                attributes: [
+                    "ganztagsform",
+                    "kernzeitbetreuung",
+                    "ferienbetreuung_anteil",
+                    "kernunterricht"]
+            },
+            {
+                name: "Mittagsversorgung",
+                attributes: [
+                    "mittagspause",
+                    "kantine_vorh",
+                    "wahlmoeglichkeit_essen",
+                    "vegetarisch",
+                    "nutzung_kantine_anteil",
+                    "kiosk_vorh"]
+            }]
         }),
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
             });
         },
+
+        getVectorGfi: function () {
+            var gfiContent = _.pick(this.get("feature").getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
+
+            gfiContent = this.getManipulateDate([gfiContent]);
+            this.setGfiContent(gfiContent);
+            this.setIsReady(true);
+        },
+
         /**
          * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
          */
@@ -99,10 +106,9 @@ define(function (require) {
             if (!_.isUndefined(this.getGfiContent()[0])) {
 
                 var gfiContent = this.getGfiContent()[0],
-                    themeConfig = this.get("themeConfig"),
                     featureInfos = [];
 
-                featureInfos = this.createFeatureInfos(gfiContent, themeConfig);
+                featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
                 this.setFeatureInfos(featureInfos);
                 this.determineSelectedContent(featureInfos);
             }
@@ -118,7 +124,7 @@ define(function (require) {
 
             if (!_.isUndefined(themeConfig)) {
 
-            _.each(themeConfig.kategories, function (kategory) {
+            _.each(themeConfig, function (kategory) {
                     var kategoryObj = {
                         name: kategory.name,
                         isSelected: kategory.isSelected ? kategory.isSelected : false,
@@ -129,7 +135,7 @@ define(function (require) {
 
                         if (isAttributeFound) {
                             kategoryObj.attributes.push({
-                                attrName: attribute,
+                                attrName: this.get("gfiAttributes")[attribute],
                                 attrValue: this.beautifyAttribute(gfiContent[attribute])
                             });
                         }
