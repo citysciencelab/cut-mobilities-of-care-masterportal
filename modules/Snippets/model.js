@@ -63,7 +63,7 @@ var ValueModel = require("modules/Snippets/value/model"),
      */
     deselectValueModels: function () {
         this.get("valuesCollection").forEach(function (model) {
-            model.set("isSelected", false);
+            model.setIsSelected(false);
         });
     },
     extentBaseModel: function (obj) {

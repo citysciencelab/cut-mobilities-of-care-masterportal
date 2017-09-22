@@ -25,6 +25,9 @@ define(function (require) {
             this.listenTo(this.get("valuesCollection"), {
                 "change:value": function (model, value) {
                     this.triggerValuesChanged(model, value);
+                    if (model.get("initValue") === value) {
+                        this.trigger("render");
+                    }
                 }
             });
         },

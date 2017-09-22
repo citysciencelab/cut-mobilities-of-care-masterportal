@@ -14,8 +14,8 @@ define(function (require) {
             var valueModels = this.model.get("valuesCollection").models;
 
             this.$el.find("input.slider").slider({
-                min: valueModels[0].get("value"),
-                max: valueModels[1].get("value"),
+                min: valueModels[0].get("initValue"),
+                max: valueModels[1].get("initValue"),
                 step: 1,
                 value: [valueModels[0].get("value"), valueModels[1].get("value")]
             });
