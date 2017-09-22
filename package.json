@@ -24,7 +24,7 @@
     "jquery-ui": "1.x",
     "video.js": "5.x",
     "moment": "2.x",
-    "openlayers": "3.15",
+    "openlayers": "4.3.3",
     "d3": "4.9.x"
   },
   "devDependencies": {
