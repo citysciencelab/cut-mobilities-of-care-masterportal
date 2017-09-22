@@ -245,13 +245,9 @@ define([
         // Features in die Karte laden
         featuresToMap: function () {
             var features = this.getFeatures(),
-                source = this.getSource(),
-                layer = this.getLayer();
+                source = this.getSource();
 
             source.addFeatures(features);
-            layer.setSource(source);
-            Radio.trigger("Map", "addLayer", layer);
-
         }
 
     });
