@@ -135,10 +135,10 @@ define(function (require) {
                         var isAttributeFound = this.checkForAttribute(gfiContent, attribute);
 
                         if (isAttributeFound) {
-                            kategoryObj.attributes.push({
-                                attrName: this.get("gfiAttributes")[attribute],
-                                attrValue: this.beautifyAttribute(gfiContent[attribute])
-                            });
+                                kategoryObj.attributes.push({
+                                    attrName: _.isUndefined(this.get("gfiAttributes")[attribute]) ? attribute : this.get("gfiAttributes")[attribute],
+                                    attrValue: this.beautifyAttribute(gfiContent[attribute])
+                                });
                         }
                     }, this);
                     featureInfos.push(kategoryObj);
