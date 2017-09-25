@@ -67,34 +67,46 @@
             "isInitOpen": false,
             "predefinedQueries": [
               {
-                "layerId": "8190",
-                "isActive": true,
+                "layerId": "8712",
+                "isActive": false,
                 "isSelected": true,
-                "isVisible": true,
+                "name": "Alle Schulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Grundschulen", "Langformschulen", "Stadtteilschulen", "Gymnasien", "Sonderschulen", "Berufliche Schulen"]
+                  }
+                ],
+                "attributeWhiteList": ["bezirk", "stadtteil", "abschluss", "anzahl_schueler"]
+              },
+              {
+                "layerId": "8712",
+                "isActive": false,
+                "isSelected": false,
                 "name": "Grundschulen",
                 "predefinedRules": [
                   {
                     "attrName": "kapitelbezeichnung",
-                    "values": ["Grundschulen"]
+                    "values": ["Grundschulen", "Langformschulen"]
                   }
                 ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
               },
               {
-                "layerId": "8190",
+                "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
                 "name": "Stadtteilschulen",
                 "predefinedRules": [
                   {
                     "attrName": "kapitelbezeichnung",
-                    "values": ["Stadtteilschulen"]
+                    "values": ["Stadtteilschulen", "Langformschulen"]
                   }
                 ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "schwerpunktschule", "fremdsprache", "schulische_ausrichtung"]
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
               },
               {
-                "layerId": "8190",
+                "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
                 "name": "Gymnasien",
@@ -104,35 +116,9 @@
                     "values": ["Gymnasien"]
                   }
                 ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "fremdsprache", "schulische_ausrichtung"]
-              },
-              {
-                "layerId": "8190",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Sonderschulen",
-                "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Sonderschulen"]
-                  }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "abschluss", "anzahl_schueler", "foerderschwerpunkt"]
-              },
-              {
-                "layerId": "8190",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Berufliche Schulen",
-                "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Berufliche Schulen"]
-                  }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "abschluss"]
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse",  "schulische_ausrichtung"]
               }
-              ]
+            ]
           },
           "parcelSearch": {
             "name": "Flurstückssuche",
@@ -403,11 +389,15 @@
           ]
         },
         {
-          "id": "8190",
+          "id": "8712",
           "name": "Schulinfosystem",
           "visibility": true,
-          "styleId": "8190",
-          "styleField": "schul_icon"
+          "styleId": "8712",
+          "styleField": "kapitelbezeichnung",
+          "searchField": "schulname",
+          "mouseHoverField": ["schulname", "kapitelbezeichnung"],
+          "gfiTheme": "schulinfo",
+          "additionalInfoField": "adresse_strasse_hausnr"
         },
         {
           "id": "753",
