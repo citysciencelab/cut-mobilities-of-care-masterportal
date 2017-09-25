@@ -10,7 +10,30 @@
     }
 }
 
+@media (max-width: 767px) {
+    .dropdown-container li a {
+        font-size: 14px;
+    }
+}
 .dropdown-container .dropdown-menu {
     right: 0;
     /*left: auto;*/
+}
+
+.dropdown-container .info-icon {
+    float: right;
+    padding: 10px 0 10px 10px;
+    font-size: 16px;
+    opacity: 0.4;
+}
+
+.dropdown-container .info-text {
+    display: none;
+    font-size: 10px;
+    color: rgb(182, 0, 0);
+}
+
+.dropdown-container .info-icon:hover {
+    cursor: pointer;
+    opacity: 1;
 }

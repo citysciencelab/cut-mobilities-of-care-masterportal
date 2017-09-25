@@ -94,7 +94,7 @@ define([
                             type: layer.get("name"),
                             coordinate: feature.getGeometry().getCoordinates(),
                             imageSrc: imageSrc,
-                            id: feature.get(layer.attributes.searchField).replace(/ /g, "") + layer.get("name"),
+                            id: _.uniqueId(layer.get("name")),
                             additionalInfo: additionalInfo
                         });
                     });

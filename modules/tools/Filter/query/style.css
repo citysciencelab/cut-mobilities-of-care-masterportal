@@ -1,12 +1,12 @@
 .filter .detailview-head button {
-    float:right;
+    /*float: right;*/
     margin: 0;
     color: #fff;
     background-color: rgba(8, 88, 158, 0.8);
 }
 
 .filter .feature-count {
-    margin-left: 8px;
+    margin-left: 4px;
 }
 
 .filter .detailview-head .btn:hover {
@@ -17,11 +17,6 @@
 .filter .toggleIsActive .glyphicon-remove {
     color:#bbb;
 }
-.filter .info-text {
-    font-size: 11px;
-    padding: 15px;
-    clear: both;
-}
 
 .filter .value-views-container {
     display: inline-block;
@@ -31,23 +26,34 @@
 }
 .filter .detailview-head {
     display: inline-block;
-    padding: 12px 15px 12px 15px;
+    padding: 8px 15px;
     width: 100%;
     color: rgb(182, 0, 0);
 }
 
 .filter .detailview-head .heading {
-    padding-top: 4px;
     padding-left: 0px;
+    margin-bottom: 6px;
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     font-size: 18px;
-    text-align: center;
 }
+
+.filter .detail-view-container > .info-text {
+    font-size: 11px;
+    padding: 8px 15px;
+    clear: both;
+}
+
+.filter .dropdown-container .info-text, .filter .slider-container .info-text {
+    font-size: 11px;
+}
+
+
 .filter .value-views-container .text {
-    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    font-size: 14px;
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    font-size: 12px;
     float:left;
-    padding: 2px 4px 0 0;
+    padding: 6px 4px 0 0;
 }
 
 .filter .value-views-container .value-text {

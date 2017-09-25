@@ -14,7 +14,9 @@ define(function (require) {
                 this.setInputControlValue(evt);
             },
             // This event fires when the slider is dragged
-            "slide input.slider": "setInputControlValue"
+            "slide input.slider": "setInputControlValue",
+            // This event is fired when the info button is clicked
+            "click .info-icon": "toggleInfoText"
         },
 
         initialize: function () {
@@ -51,6 +53,13 @@ define(function (require) {
          */
         setInputControlValue: function (evt) {
             this.$el.find("input.form-control").val(evt.value);
+        },
+
+        /**
+         * toggle the info text
+         */
+        toggleInfoText: function () {
+            this.$el.find(".info-text").toggle();
         }
 
     });

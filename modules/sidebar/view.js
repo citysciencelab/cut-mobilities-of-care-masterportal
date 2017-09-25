@@ -29,6 +29,8 @@ define(function (require) {
                 this.removeBackdrop();
             }
             else {
+                this.$el.css("height", "");
+                $("#map").css("width", "100%");
                 this.addBackdrop();
             }
         },

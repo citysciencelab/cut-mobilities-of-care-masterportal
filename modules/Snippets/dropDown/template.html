@@ -3,3 +3,11 @@
         <option value="<%= model.get('value') %>"><%= model.get('displayName') %></option>
     <% }); %>
 </select>
+<% if (typeof infoText !== "undefined") { %>
+    <div class="info-icon">
+        <span class="glyphicon glyphicon-info-sign"></span>
+    </div>
+<% } %>
+<% if (!_.isUndefined(this.model.get("infoText"))) { %>
+    <div class="info-text"><%= infoText %></div>
+<% } %>

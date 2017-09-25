@@ -92,6 +92,7 @@ define(function (require) {
          * @return {object} featureAttributesMap - gefiltertes Mapobject
          */
         mapDisplayNames: function (featureAttributesMap) {
+            debugger;
             var displayNames = Radio.request("RawLayerList", "getDisplayNamesOfFeatureAttributes", this.get("layerId"));
 
             _.each(featureAttributesMap, function (featureAttribute) {
