@@ -199,7 +199,7 @@ define([
             });
         },
         /**
-        * Alle Layermodels von einem Leaffolder werden "selected" oder "unselected"
+        * Alle Layermodels von einem Leaffolder werden "selected" oder "deselected"
         * @param {Backbone.Model} model - folderModel
         */
         setIsSelectedOnChildLayers: function (model) {

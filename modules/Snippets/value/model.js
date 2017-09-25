@@ -17,6 +17,7 @@ var Model = Backbone.Model.extend({
         },
         getDisplayString: function () {
             var displayString = "";
+
             this.get("isMin");
             switch (this.get("type")) {
                 case "boolean": {

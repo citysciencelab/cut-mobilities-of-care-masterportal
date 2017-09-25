@@ -11,7 +11,7 @@ define(function (require) {
             title: "Auswahl löschen"
         },
         events: {
-            "click": "unselect"
+            "click": "deselect"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -29,7 +29,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             return this.$el;
         },
-        unselect: function () {
+        deselect: function () {
             this.model.setIsSelected(false);
         }
     });

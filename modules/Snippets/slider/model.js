@@ -10,18 +10,9 @@ define(function (require) {
             // parent (SnippetModel) initialize
             this.superInitialize();
             parsedValues = this.parseValues(attributes.values);
-            // slider range
-            /*this.setRangeMinValue(_.min(parsedValues));
-            this.setRangeMaxValue(_.max(parsedValues));*/
+
             this.addValueModels(_.min(parsedValues), _.max(parsedValues));
 
-            /*this.listenToOnce(this, {
-                "setRangeOnce": function (parsedValues) {
-                    this.setRangeMinValue(_.min(parsedValues));
-                    this.setRangeMaxValue(_.max(parsedValues));
-                    this.resetValueModels();
-                }
-            });*/
             this.listenTo(this.get("valuesCollection"), {
                 "change:value": function (model, value) {
                     this.triggerValuesChanged(model, value);
@@ -71,30 +62,7 @@ define(function (require) {
             }
         },
 
-       /* resetValueModels: function () {
-            this.resetValueModel(this.get("valuesCollection").at(0));
-            this.resetValueModel(this.get("valuesCollection").at(1));
-        },*/
-        /**
-        * If the value model is no longer selected,
-        * sets the value to the range value
-        * @param  {Backbone.Model} valueModel
-        */
-       /*
-        resetValueModel: function (valueModel) {
-            if (valueModel.get("isMin")) {
-                valueModel.set("value", this.get("rangeMinValue"));
-            }
-            else {
-                valueModel.set("value", this.get("rangeMaxValue"));
-            }
-            this.trigger("render");
-        },*/
-
         updateSelectableValues: function (values) {
-           /* var parsedValues = this.parseValues(values);
-
-            this.trigger("setRangeOnce", parsedValues);*/
         },
 
         /**
@@ -125,24 +93,7 @@ define(function (require) {
             });
 
             return parsedValueList;
-        },
-
-        /**
-         * set the minimum possible value
-         * @param  {number} value
-         */
-/*
-        setRangeMinValue: function (value) {
-            this.set("rangeMinValue", value);
-        },*/
-
-        /**
-         * set the maximum possible value
-         * @param  {number} value
-         */
-       /* setRangeMaxValue: function (value) {
-            this.set("rangeMaxValue", value);
-        }*/
+        }
     });
 
     return SliderModel;

@@ -233,7 +233,7 @@ define(function (require) {
             }
             else {
                 _.each(allAttributes, function (attribute) {
-                        var selectableValues =  {name: attribute.name, values: []};
+                    var selectableValues = {name: attribute.name, values: []};
 
                     _.each(features, function (feature) {
                         var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
