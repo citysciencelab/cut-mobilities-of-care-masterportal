@@ -68,6 +68,18 @@ define(function (require) {
         },
 
         /**
+        * resetCollection
+        * @return {[type]} [description]
+        */
+        resetValues: function () {
+            var collection = this.get("valuesCollection").models;
+
+            _.each(collection.models, function (model) {
+            model.set("isSelectable", true);
+            }, this);
+        },
+
+        /**
          * checks the value models if they are selected or not
          * @param {string|string[]} values - selected value(s) in the dropdown list
          */

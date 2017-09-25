@@ -62,9 +62,6 @@ define(function (require) {
             }
         },
 
-        updateSelectableValues: function (values) {
-        },
-
         /**
          * returns an object with the slider name and its values
          * @return {object} - contains the selected values

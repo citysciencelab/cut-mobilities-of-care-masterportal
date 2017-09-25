@@ -55,17 +55,6 @@ var ValueModel = require("modules/Snippets/value/model"),
         this.trigger("removeView");
     },
     /**
-     * resetCollection
-     * @return {[type]} [description]
-     */
-    resetValues: function () {
-        var collection = this.get("valuesCollection").models;
-
-         _.each(collection.models, function (model) {
-            model.set("isSelectable", true);
-         }, this);
-    },
-    /**
      * returns true if any of the value models is selected
      * @return {boolean}
      */

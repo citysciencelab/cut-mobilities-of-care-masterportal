@@ -255,11 +255,11 @@ define(function (require) {
             var snippets = this.get("snippetCollection"),
                 selectableOptions = this.collectSelectableOptions(features, selectedAttributes, this.get("featureAttributesMap"));
 
-            _.each(snippets.models, function (snippet) {
-                    snippet.resetValues();
-                    var attribute = _.find(selectableOptions, {name: snippet.get("name")});
+            _.each(snippets.where({"snippetType": "dropdown"}), function (snippet) {
+                snippet.resetValues();
+                var attribute = _.find(selectableOptions, {name: snippet.get("name")});
 
-                    snippet.updateSelectableValues(attribute.values);
+                snippet.updateSelectableValues(attribute.values);
             });
         },
 

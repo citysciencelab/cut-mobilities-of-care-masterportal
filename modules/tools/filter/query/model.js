@@ -37,12 +37,15 @@ define(function (require) {
         addSnippet: function (featureAttribute) {
             featureAttribute.values.sort();
             if (featureAttribute.type === "string") {
+                featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
             else if (featureAttribute.type === "boolean") {
+                featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
             else if (featureAttribute.type === "integer") {
+                featureAttribute = _.extend(featureAttribute, {"snippetType": "slider"});
                 this.get("snippetCollection").add(new SnippetSliderModel(featureAttribute));
             }
         },
@@ -92,7 +95,6 @@ define(function (require) {
          * @return {object} featureAttributesMap - gefiltertes Mapobject
          */
         mapDisplayNames: function (featureAttributesMap) {
-            debugger;
             var displayNames = Radio.request("RawLayerList", "getDisplayNamesOfFeatureAttributes", this.get("layerId"));
 
             _.each(featureAttributesMap, function (featureAttribute) {
