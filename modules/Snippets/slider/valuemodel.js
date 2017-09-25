@@ -15,17 +15,21 @@ var ValueModel,
     getDisplayString: function () {
         return this.get("displayName") + " " + this.get("value");
     },
-    setIsSelected: function (value) {
+    setIsSelected: function (value, silent) {
         this.set("isSelected", value);
-        if (!value) {
-            this.setValue(this.get("initValue"));
+        if (!value && !silent) {
+            this.setValue(this.get("initValue"), true);
         }
     },
     // setter for value
-    setValue: function (value) {
-        if (value !== this.get("initValue")) {
-            this.setIsSelected(true);
+    setValue: function (value, silent) {
+        if (value !== this.get("initValue") && !silent) {
+            this.setIsSelected(true, true);
         }
+        else {
+            this.setIsSelected(false, true);
+        }
+
         this.set("value", value);
     },
 
