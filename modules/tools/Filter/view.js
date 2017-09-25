@@ -71,6 +71,7 @@ define(function (require) {
         closeFilter: function () {
             this.model.setIsActive(false);
             this.$el.remove();
+            this.model.collapseOpenSnippet();
         }
     });
 

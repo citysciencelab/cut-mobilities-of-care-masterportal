@@ -417,17 +417,13 @@ define(function (require) {
         stopMouseMoveEvent: function () {
             var browser = navigator.userAgent.toLowerCase();
 
-            // Warum Firefox eine extra Behandlung braucht, weiß ich nicht.
-            if (browser.indexOf("firefox") > -1) {
-                $(".ol-overlaycontainer-stopevent").on("mousemove", function (evt) {
-                    evt.stopPropagation();
-                });
-            }
-            else {
-                $(".ol-overlaycontainer-stopevent").on("pointermove", function (evt) {
-                    evt.stopPropagation();
-                });
-            }
+            // Firefox & Safari.
+            $(".ol-overlaycontainer-stopevent").on("mousemove", function (evt) {
+                evt.stopPropagation();
+            });
+            $(".ol-overlaycontainer-stopevent").on("pointermove", function (evt) {
+                evt.stopPropagation();
+            });
         }
     });
 
