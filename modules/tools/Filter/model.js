@@ -83,7 +83,8 @@ define(function (require) {
          * @return {object} Map object mapping layers to featuresids
          */
         collectFeaturesIdsOfAllLayers: function (queries) {
-            var allFeatureIds = [];
+            var allFeatureIds = [],
+                featureIds;
 
             _.each(queries.groupBy("layerId"), function (group, layerId) {
                 featureIds = this.collectFilteredIds(group);
@@ -101,8 +102,7 @@ define(function (require) {
          * @return {[string]} unique list of all feature ids
          */
         collectFilteredIds: function (queryGroup) {
-            var featureIdList = [],
-                uniqueFeatureIds;
+            var featureIdList = [];
 
              _.each(queryGroup, function (query) {
                 if (query.get("isSelected") === true) {
@@ -157,6 +157,20 @@ define(function (require) {
         },
         closeGFI: function () {
             Radio.trigger("GFI", "hideGFI");
+        },
+        collapseOpenSnippet: function () {
+            var selectedQuery = this.get("queryCollection").findWhere({isSelected: true}),
+                snippetCollection,
+                openSnippet;
+
+            if (!_.isUndefined(selectedQuery)) {
+                snippetCollection = selectedQuery.get("snippetCollection");
+
+                openSnippet = snippetCollection.findWhere({isOpen: true});
+                if (!_.isUndefined(openSnippet)) {
+                    openSnippet.setIsOpen(false);
+                }
+            }
         }
     });
 
