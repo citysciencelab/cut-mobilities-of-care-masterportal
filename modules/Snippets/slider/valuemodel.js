@@ -12,7 +12,7 @@ var ValueModel,
         this.setInitValue(this.get("value"));
     },
 
-    getDisplayString: function () {console.log(this.get("value"));
+    getDisplayString: function () {
         return this.get("displayName") + " " + this.get("value");
     },
     setIsSelected: function (value) {
@@ -26,7 +26,6 @@ var ValueModel,
         if (value !== this.get("initValue")) {
             this.setIsSelected(true);
         }
-        console.log(value);
         this.set("value", value);
     },
 
