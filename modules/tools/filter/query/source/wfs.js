@@ -11,7 +11,7 @@ define(function (require) {
         /**
          * gathers Information for this Query including the wfs features and metadata
          * waits for WFS features to be loaded if they aren't loaded already.
-         * @return {[type]} [description]
+         * @return {ol.Feature[]}
          */
         prepareQuery: function () {
             var features = this.getFeaturesFromWFS();
@@ -41,7 +41,7 @@ define(function (require) {
         },
         /**
          * request the features for this query from the modellist
-         * @return {[type]} [description]
+         * @return {Object} - olFeatures
          */
         getFeaturesFromWFS: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
@@ -126,7 +126,12 @@ define(function (require) {
             }, this);
             return featureAttributesMap;
         },
-
+        /**
+         * [getValuesFromFeature description]
+         * @param  {ol.feature} feature
+         * @param  {string} attrName [description]
+         * @return {[string]}          [description]
+         */
         getValuesFromFeature: function (feature, attrName) {
             var values = this.parseValuesFromString(feature, attrName);
 
@@ -134,8 +139,8 @@ define(function (require) {
         },
 
         /**
-         * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten
-         * @param  {[type]} feature          [description]
+         * parses attribut values with pipe-sign ("|") and returnes array with single values
+         * @param  {ol.Feature} feature
          * @param  {[type]} featureAttribute [description]
          * @return {[type]}                  [description]
          */
@@ -178,6 +183,12 @@ define(function (require) {
             }, this);
             return newFeatures;
         },
+        /**
+         * runs predefined rules,
+         * determines selected values from snippets,
+         * derives featureIds from matching Features and triggers "featureIdsChanged" to filterModel
+         * @return {[type]} [description]
+         */
         runFilter: function () {
             var features = this.runPredefinedRules(),
                 selectedAttributes = [],
@@ -208,11 +219,20 @@ define(function (require) {
             this.setFeatureIds(featureIds);
             this.trigger("featureIdsChanged");
         },
-
+        /**
+         * triggers map to zoom to given features of given layer
+         * @return {[type]} [description]
+         */
         zoomToSelectedFeatures: function () {
             Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
         },
-
+        /**
+         * determines the attributes and their values that are still selectable
+         * @param  {ol.Feature[]} features
+         * @param  {object[]} selectedAttributes attribute object
+         * @param  {object[]} allAttributes      array of all attributes and their values
+         * @return {object[]}                    array of attributes and their values that are still selectable
+         */
         collectSelectableOptions: function (features, selectedAttributes, allAttributes) {
             var selectableOptions = [];
 
@@ -238,7 +258,11 @@ define(function (require) {
             }
             return selectableOptions;
         },
-
+        /**
+         * after every filtering the snippets get updated with selectable values
+         * @param  {ol.Feature[]} features
+         * @param  {object[]}     selectedAttributes [description]
+         */
         updateSnippets: function (features, selectedAttributes) {
             var snippets = this.get("snippetCollection"),
                 selectableOptions = this.collectSelectableOptions(features, selectedAttributes, this.get("featureAttributesMap"));
@@ -250,7 +274,12 @@ define(function (require) {
                 snippet.updateSelectableValues(attribute.values);
             });
         },
-
+        /**
+         * checks if feature hat attribute that contains value
+         * @param  {ol.Feature}  feature
+         * @param  {object}      attribute attributeObject
+         * @return {Boolean}               true if feature has attribute that contains value
+         */
         isValueMatch: function (feature, attribute) {
             var isMatch = false;
 
@@ -264,7 +293,7 @@ define(function (require) {
 
         /**
          * checks if a value is within a range of values
-         * @param  {ol.feature} feature
+         * @param  {ol.Feature} feature
          * @param  {object} attribute
          * @return {boolean}
          */
@@ -281,7 +310,12 @@ define(function (require) {
             }
             return isMatch;
         },
-
+        /**
+         * checks if feature matches the filter
+         * @param  {ol.Feature}  feature    [description]
+         * @param  {object[]}    filterAttr array of attributes and their values to filter
+         * @return {Boolean}            [description]
+         */
         isFilterMatch: function (feature, filterAttr) {
             var isMatch = false;
 
@@ -298,9 +332,9 @@ define(function (require) {
 
         /**
          * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten
-         * @param  {[type]} feature          [description]
-         * @param  {[type]} featureAttribute [description]
-         * @return {[type]}                  [description]
+         * @param  {ol.Feature} feature          [description]
+         * @param  {object}     featureAttribute [description]
+         * @return {string[]}
          */
         parseStringType: function (feature, featureAttribute) {
             var values = [];
