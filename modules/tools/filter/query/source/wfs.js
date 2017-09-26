@@ -163,9 +163,12 @@ define(function (require) {
          */
         runPredefinedRules: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
-                features = model.getLayerSource().getFeatures(),
+                features = [],
                 newFeatures = [];
 
+            if (!_.isUndefined(model)) {
+                features = model.getLayerSource().getFeatures();
+            }
             _.each(features, function (feature) {
                 _.each(this.get("predefinedRules"), function (rule) {
                     if (_.contains(rule.values, feature.get(rule.attrName))) {
