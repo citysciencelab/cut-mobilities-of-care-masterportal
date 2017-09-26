@@ -25,6 +25,10 @@
     margin: 4px;
 }
 
+.filter .simple-views-container .btn-default:focus {
+    outline: none;
+}
+
 .filter .tool-name {
     padding-left: 15px;
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
