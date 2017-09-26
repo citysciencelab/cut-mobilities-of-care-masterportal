@@ -52,20 +52,6 @@ define(function (require) {
             }
             return features;
         },
-        /**
-         * Waits for the Layer to load its features and proceeds requests the metadata
-         * @return {[type]} [description]
-         */
-        listenToFeaturesLoaded: function () {
-            this.listenTo(Radio.channel("WFSLayer"), {
-                "featuresLoaded": function (layerId, features) {
-                    if (layerId = this.get("layerId")) {
-                        this.setFeatures(features);
-                        this.buildQueryDatastructure();
-                    }
-                }
-            });
-        },
 
         /**
          * Sends a DescriptFeatureType Request for the Layer asscociated with this Query
@@ -135,16 +121,15 @@ define(function (require) {
                 featureAttribute.values = [];
 
                 _.each(features, function (feature) {
-                    var featureValues = this.getValuesFromFeature(feature, featureAttribute.name, featureAttribute.type);
-
                     featureAttribute.values = _.union(featureAttribute.values, this.parseStringType(feature, featureAttribute));
                 }, this);
             }, this);
             return featureAttributesMap;
         },
 
-        getValuesFromFeature: function (feature, attrName, attrType) {
-            var values =  this.parseValuesFromString(feature, attrName);
+        getValuesFromFeature: function (feature, attrName) {
+            var values = this.parseValuesFromString(feature, attrName);
+
             return _.unique(values);
         },
 
@@ -190,7 +175,7 @@ define(function (require) {
             }, this);
             return newFeatures;
         },
-        runFilter: function (model) {
+        runFilter: function () {
             var features = this.runPredefinedRules(),
                 selectedAttributes = [],
                 featureIds = [];

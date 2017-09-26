@@ -86,13 +86,15 @@ define(function (require) {
             var allFeatureIds = [],
                 featureIds;
 
-            _.each(queries.groupBy("layerId"), function (group, layerId) {
-                featureIds = this.collectFilteredIds(group);
-                allFeatureIds.push({
-                    layer: layerId,
-                    ids: featureIds
-                });
-            }, this);
+            if (!_.isUndefined(queries)) {
+                _.each(queries.groupBy("layerId"), function (group, layerId) {
+                    featureIds = this.collectFilteredIds(group);
+                    allFeatureIds.push({
+                        layer: layerId,
+                        ids: featureIds
+                    });
+                }, this);
+            }
             return allFeatureIds;
         },
 

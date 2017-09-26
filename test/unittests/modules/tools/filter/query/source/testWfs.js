@@ -1,6 +1,5 @@
 define(function(require) {
     var expect = require("chai").expect,
-        Radio = require("backbone.radio"),
         Util = require("util"),
         Model = require("../../../../../../../modules/tools/filter/query/source/wfs.js");
 

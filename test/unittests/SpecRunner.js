@@ -38,7 +38,7 @@ define(function(require) {
     mocha.setup("bdd");
     require([
     /********* load Testfiles here!!!**********/
-    "modules/tools/download/modelTest.js",
+    "modules/tools/download/testModel.js",
     "modules/mouseHover/testModel.js",
     "modules/searchbar/testModel.js",
     "modules/tools/filter/query/source/testWfs.js",

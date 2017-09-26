@@ -1,6 +1,5 @@
 define(function(require) {
     var expect = require("chai").expect,
-        Radio = require("backbone.radio"),
         Model = require("../../../../../../../modules/tools/filter/model.js");
 
     describe("modules/tools/filter/model", function () {
@@ -10,6 +9,13 @@ define(function(require) {
         describe("collectFilteredIds", function () {
             it("should return empty array for undefined input", function () {
                 expect(model.collectFilteredIds(undefined))
+                    .to.be.an("array")
+                    .to.be.empty;
+            });
+        });
+        describe("collectFeaturesIdsOfAllLayers", function () {
+            it("should return empty array for undefined input", function () {
+                expect(model.collectFeaturesIdsOfAllLayers(undefined))
                     .to.be.an("array")
                     .to.be.empty;
             });
