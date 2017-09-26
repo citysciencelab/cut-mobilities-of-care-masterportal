@@ -58,7 +58,7 @@ define(function (require) {
             });
         },
         /**
-         * updates the Features shown on thge Map
+         * updates the Features shown on the Map
          * @return {[type]} [description]
          */
         updateMap: function () {
