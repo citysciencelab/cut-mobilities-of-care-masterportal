@@ -23,10 +23,10 @@
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
             <% if (!_.isNull(downloadLinks)) { %>
-            <li><a data-toggle="tab" href="#download">Datensatz herunterladen</a></li>
+            <li><a data-toggle="tab" href="#LayerInfoDataDownload">Datensatz herunterladen</a></li>
             <% } %>
-            <% if (!_.isNull(wmsUrl)) { %>
-            <li><a data-toggle="tab" href="#wmsurl">WMS-Adresse</a></li>
+            <% if (!_.isNull(url)) { %>
+            <li><a data-toggle="tab" href="#url"><%= typ %>-Adresse</a></li>
             <% } %>
         </ul>
         <br>
@@ -106,16 +106,16 @@
                 <% } %>
                 </p>
             </div>
-            <div id="download" class="tab-pane fade">
+            <div id="LayerInfoDataDownload" class="tab-pane fade">
                 <ul class="list-unstyled">
                     <% _.each(downloadLinks, function (downloadLink) { %>
-                        <li><a href="<%= downloadLink[1] %>"><%= downloadLink[0] %> </a><li>
+                        <li><a href="<%= downloadLink[1] %>" target="_blank"><%= downloadLink[0] %> </a><li>
                     <% }); %>
                 </ul>
             </div>
-            <div id="wmsurl" class="tab-pane fade">
+            <div id="url" class="tab-pane fade">
                 <ul class="list-unstyled">
-                <li><a href="<%= wmsUrl +'?SERVICE=WMS&REQUEST=GetCapabilities' %>" target="_blank"><%= wmsUrl %> </a><li>
+                <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
                 </ul>
             </div>
         </div>

@@ -24,6 +24,7 @@ define([
             renderMain: function () {
                 $("div.collapse.navbar-collapse ul.nav-menu").addClass("nav navbar-nav desktop");
                 $("div.collapse.navbar-collapse ul.nav-menu").removeClass("list-group mobile");
+                $("div.collapse.navbar-collapse").removeClass("in");
 
                 this.renderTopMenu();
             },

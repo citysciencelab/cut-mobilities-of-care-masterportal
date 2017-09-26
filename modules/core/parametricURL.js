@@ -20,6 +20,7 @@ define([
                 "getIsInitOpen": this.getIsInitOpen,
                 "getInitString": this.getInitString,
                 "getCenter": this.getCenter,
+                "getZoomLevel": this.getZoomLevel,
                 "getZoomToGeometry": this.getZoomToGeometry
             }, this);
 
@@ -144,15 +145,10 @@ define([
             this.createLayerParamsUsingMetaId(values);
         },
         parseCenter: function (result) {
-            var crs = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[1] : "",
-                values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
+            var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
 
-            this.set("center", {
-                crs: crs,
-                x: parseFloat(values[0]),
-                y: parseFloat(values[1]),
-                z: values[2] ? parseFloat(values[2]) : 0
-            });
+            this.set("center", values);
+
         },
         parseBezirk: function (result) {
             var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
@@ -191,20 +187,13 @@ define([
         parseZoomLevel: function (result) {
             var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
 
-            Config.view.zoomLevel = value;
-        },
-        parseIsMenuBarVisible: function (result) {
-            var value = _.values(_.pick(result, "ISMENUBARVISIBLE"))[0].toUpperCase();
-
-            if (value === "TRUE") {
-                Config.isMenubarVisible = true;
-            }
-            else {
-                Config.isMenubarVisible = false;
-            }
+            this.set("zoomLevel", value);
         },
         parseIsInitOpen: function (result) {
             this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
+        },
+        parseStartupModul: function (result) {
+            this.set("isInitOpen", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
         },
         parseQuery: function (result) {
             var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
@@ -240,10 +229,11 @@ define([
 
             if (value === "SIMPLE") {
                 $("#main-nav").hide();
+                $("#map").css("height", "100%");
             }
         },
         parseURL: function (result) {
-            // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4&isMenubarVisible=false
+            // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {};
 
@@ -298,21 +288,18 @@ define([
             }
 
             /**
-            * Gibt den Wert für die config-Option isMenubarVisible zurück.
-            * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
-            *
-            */
-            if (_.has(result, "ISMENUBARVISIBLE")) {
-                this.parseIsMenuBarVisible(result);
-            }
-
-            /**
-            * Gibt den Wert für die config-Option isMenubarVisible zurück.
-            * Ist der Parameter "isMenubarVisible" vorhanden, wird dieser zurückgegeben, ansonsten der Standardwert.
+            * Initial zu startendes Modul
             *
             */
             if (_.has(result, "ISINITOPEN")) {
                 this.parseIsInitOpen(result);
+            }
+
+            /**
+            * Rückwärtskompatibel: entspricht isinitopen
+            */
+            if (_.has(result, "STARTUPMODUL")) {
+                this.parseStartupModul(result);
             }
 
             /**
@@ -337,6 +324,14 @@ define([
         // setter for zoomToGeometry
         setZoomToGeometry: function (value) {
             this.set("zoomToGeometry", value);
+        },
+        // getter for zoomToLevel
+        getZoomLevel: function () {
+            return this.get("zoomLevel");
+        },
+        // setter for zoomLevel
+        setZoomLevel: function (value) {
+            this.set("zoomLevel", value);
         }
     });
 

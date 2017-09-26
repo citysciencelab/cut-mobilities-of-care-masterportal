@@ -27,44 +27,12 @@ define([
         model: new MapHandlerModel(),
         id: "searchMarker",
         className: "glyphicon glyphicon-map-marker",
-        template: _.template("<span class='glyphicon glyphicon-remove'></span>"),
-        events: {
-            "click .glyphicon-remove": "hideMarker"
-        },
         /**
         * @description View des Map Handlers
         */
         initialize: function () {
             var markerPosition,
                 channel = Radio.channel("MapMarker");
-
-            channel.reply({
-                "getCloseButtonCorners": function () {
-                    if (this.$el.is(":visible") === false) {
-                        return {
-                            top: -1,
-                            bottom: -1,
-                            left: -1,
-                            right: -1
-                        };
-                    }
-                    else {
-                        var bottomSM = $("#searchMarker .glyphicon-remove").offset().top,
-                            leftSM = $("#searchMarker .glyphicon-remove").offset().left,
-                            widthSM = $("#searchMarker .glyphicon-remove").outerWidth(),
-                            heightSM = $("#searchMarker .glyphicon-remove").outerHeight(),
-                            topSM = bottomSM + heightSM,
-                            rightSM = leftSM + widthSM;
-
-                        return {
-                            top: topSM,
-                            bottom: bottomSM,
-                            left: leftSM,
-                            right: rightSM
-                        };
-                    }
-                }
-            }, this);
 
             channel.on({
                 "clearMarker": this.clearMarker,
@@ -84,8 +52,6 @@ define([
             this.model.askForMarkers();
         },
         render: function () {
-            this.$el.html(this.template());
-
             this.model.get("marker").setElement(this.$el[0]);
         },
         /**
@@ -99,6 +65,9 @@ define([
         * @param {Object} hit - Treffer der Searchbar
         */
         zoomTo: function (hit) {
+            // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
+            var resolutions = Radio.request("MapView", "getResolutions"),
+                index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105);
 
             this.clearMarker();
             switch (hit.type) {
@@ -108,9 +77,6 @@ define([
                 }
                 case "Straße": {
                     this.model.getWKTFromString("POLYGON", hit.coordinate);
-                    // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
-                    var resolutions = Radio.request("MapView", "getResolutions"),
-                        index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105);
 
                     Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
                     break;
@@ -130,8 +96,16 @@ define([
                     break;
                 }
                 case "Stadtteil": {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    var hasPolygon = hit.polygon ? true : false;
+
+                    if (hasPolygon) {
+                        this.model.getWKTFromString("POLYGON", hit.polygon);
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
+                    }
+                    else {
+                        this.showMarker(hit.coordinate);
+                        Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    }
                     break;
                 }
                 case "Thema": {

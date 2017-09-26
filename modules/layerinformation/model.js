@@ -79,7 +79,6 @@ define(function (require) {
                 this.set("date", null);
                 this.set("metaURL", null);
                 this.set("downloadLinks", null);
-                this.set("wmsUrl", this.setWmsUrl(this.get("id")));
                 this.trigger("sync");
             }
         },
@@ -168,8 +167,7 @@ define(function (require) {
                         }
                     });
                     return downloadLinks.length > 0 ? downloadLinks : null;
-                }(),
-                "wmsUrl": this.setWmsUrl(layerid)
+                }()
             };
         },
 
@@ -195,19 +193,6 @@ define(function (require) {
                 }
             }, this);
             this.set("metaURL", metaURLs);
-        },
-
-        setWmsUrl: function (layerid) {
-            var layerAttr = Backbone.Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerid}),
-                wmsUrl;
-
-            if (layerAttr.typ == "WMS") {
-                wmsUrl = layerAttr.url;
-            }
-            else {
-                wmsUrl = null;
-            }
-            return wmsUrl;
         },
 
         setIsVisible: function (value) {

@@ -29,7 +29,7 @@ define([
             "click .delete": "deleteFeatures",
             "click .modify": "modifyFeatures",
             "click .trash": "toggleInteractions",
-            "click .download": "downloadFeatures",
+            "click .downloadDrawing": "downloadFeatures",
             "keyup .drawText": "setText"
         },
         initialize: function () {
@@ -140,14 +140,14 @@ define([
             if ($(".modify").hasClass("btn-primary") === true) {
                 $(".win-body select").prop("disabled", true);
                 $(".win-body input").prop("disabled", true);
-                $(".download").prop("disabled", true);
+                $(".downloadDrawing").prop("disabled", true);
                 $(".trash").prop("disabled", true);
                 $(".delete").prop("disabled", true);
             }
             else {
                 $(".win-body select").prop("disabled", false);
                 $(".win-body input").prop("disabled", false);
-                $(".download").prop("disabled", false);
+                $(".downloadDrawing").prop("disabled", false);
                 $(".trash").prop("disabled", false);
                 $(".delete").prop("disabled", false);
             }
@@ -160,14 +160,14 @@ define([
             if ($(".trash").hasClass("btn-primary") === true) {
                 $(".win-body select").prop("disabled", true);
                 $(".win-body input").prop("disabled", true);
-                $(".download").prop("disabled", true);
+                $(".downloadDrawing").prop("disabled", true);
                 $(".modify").prop("disabled", true);
                 $(".delete").prop("disabled", true);
             }
             else {
                 $(".win-body select").prop("disabled", false);
                 $(".win-body input").prop("disabled", false);
-                $(".download").prop("disabled", false);
+                $(".downloadDrawing").prop("disabled", false);
                 $(".modify").prop("disabled", false);
                 $(".delete").prop("disabled", false);
             }

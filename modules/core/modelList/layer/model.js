@@ -390,7 +390,9 @@ define(function (require) {
                 "id": this.getId(),
                 "legendURL": legendURL,
                 "metaID": metaID,
-                "layername": name
+                "layername": name,
+                "url": this.getUrl(),
+                "typ": this.getTyp()
             });
 
             this.setLayerInfoChecked(true);

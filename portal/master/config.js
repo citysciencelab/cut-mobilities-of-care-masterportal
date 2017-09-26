@@ -25,12 +25,10 @@ define(function () {
         wfsImgPath: "../node_modules/lgv-config/img/",
         allowParametricURL: true,
         zoomtofeature: {
-            url: "http://geodienste.hamburg.de/HH_WFS_Eventlotse",
-            version: "1.1.0",
-            typename: "app:hamburgconvention",
             attribute: "flaechenid",
             imglink: "../img/location_eventlotse.svg",
-            layerid: "4561"
+            layerid: "4561",
+            WFSid: "4560"
         },
         namedProjections: [
             // GK DHDN
@@ -53,7 +51,6 @@ define(function () {
             // Organisations
             ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"]
         ],
-        customModules: ["../portalconfigs/fluechtlingsunterkuenfte/table/view"],
         footer: {
             visibility: true,
             urls: [

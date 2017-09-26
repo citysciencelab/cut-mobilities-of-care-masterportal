@@ -252,16 +252,6 @@ define("app",
 
             _.each(controls, function (control) {
                 switch (control.id) {
-                    case "toggleMenu": {
-                        if (control.attr === true) {
-                            var el = controlsView.addRow(control.id);
-
-                            require(["modules/controls/togglemenu/view"], function (ToggleMenuControlView) {
-                                new ToggleMenuControlView({el: el});
-                            });
-                        }
-                        break;
-                    }
                     case "zoom": {
                         if (control.attr === true) {
                             var el = controlsView.addRow(control.id);
@@ -318,12 +308,10 @@ define("app",
 
         if (sbconfig) {
             require(["modules/searchbar/view"], function (SearchbarView) {
-                var title = Radio.request("Parser", "getPortalConfig").PortalTitle;
-
                 new SearchbarView(sbconfig);
-                if (title) {
+                if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
                     require(["modules/title/view"], function (TitleView) {
-                        new TitleView(title);
+                        new TitleView();
                     });
                 }
             });

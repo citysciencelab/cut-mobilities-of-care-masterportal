@@ -14,7 +14,7 @@ define([
             // Das Modul, das den Download gestartet hat
             caller: {},
             // download button selector
-            dlBtnSel: "a.download",
+            dlBtnSel: "a.downloadFile",
             initialize: function () {
                 this.listenTo(Radio.channel("Window"), {
                     "winParams": this.setStatus
@@ -228,7 +228,7 @@ define([
                 data = "text/json;charset=utf-8," + data;
 
                 a.href = "data:" + data;
-                a.download = filename;
+                a.downloadFile = filename;
                 $(a).hide();
                 $(".win-body").append(a);
                 return a;

@@ -1,23 +1,32 @@
-define([
-    "backbone",
-    "text!modules/title/template.html",
-    "backbone.radio"
-], function (Backbone, TitleTemplate, Radio) {
+define(function (require) {
 
-    var TitleView = Backbone.View.extend({
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Template = require("text!modules/title/template.html"),
+        Model = require("modules/title/model"),
+        TitleView;
+
+     TitleView = Backbone.View.extend({
         className: "visible-lg-block portal-title",
         id: "portalTitle",
-        template: _.template(TitleTemplate),
-        initialize: function (title) {
-            var channel = Radio.channel("Title");
-
-            channel.on({
-                "setSize": this.setSize
-            }, this);
+        model: Model,
+        template: _.template(Template),
+        initialize: function () {
+            this.listenTo(Radio.channel("Title"), {
+                "setSize": function () {
+                    this.setSize();
+                }
+            });
 
             $(window).on("resize", this.setSize);
-            this.setLogo();
-            this.render(title);
+
+            this.listenTo(Radio.channel("Util"), {
+                "isViewMobileChanged": function () {
+                    this.render();
+                }
+            });
+
+            this.render();
             this.setSize();
         },
 
@@ -29,35 +38,11 @@ define([
             $("#portalTitle").width(width);
         },
 
-        render: function (portalTitle) {
-            this.$el.html(this.template({
-                title: portalTitle,
-                logo: Radio.request("Util", "getPath", this.getLogo()),
-                logoLink: Radio.request("Parser", "getPortalConfig").LogoLink || "http://geoinfo.hamburg.de",
-                logoTooltip: Radio.request("Parser", "getPortalConfig").LogoToolTip || "Landesbetrieb Geoinformation und Vermessung"
-            }));
+        render: function () {
+            var attr = this.model.toJSON();
 
+            this.$el.html(this.template(attr));
             $(".navbar-collapse").append(this.$el);
-        },
-
-        setLogo: function () {
-            var logo = Radio.request("Parser", "getPortalConfig").PortalLogo,
-                result = "";
-
-            if (logo === "none") {
-               result = null;
-            }
-            else if (_.isUndefined(logo)) {
-                result = "../img/hh-logo.png";
-            }
-            else {
-                result = logo;
-            }
-            this.logo = result;
-        },
-
-        getLogo: function () {
-            return this.logo;
         }
     });
 

@@ -136,7 +136,7 @@ define([
             _.each(metaIds, function (metaID) {
                 // Objekte mit derselben Metadaten-Id
                 objectsById = _.filter(response, function (layer) {
-                    return layer.datasets.length > 0 && layer.datasets[0].md_id === metaID;
+                    return layer.typ === "WMS" && layer.datasets.length > 0 && layer.datasets[0].md_id === metaID;
                 });
                 // Das erste Objekt wird kopiert
                 newObject = _.clone(objectsById[0]);
