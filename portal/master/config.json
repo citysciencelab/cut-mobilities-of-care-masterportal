@@ -72,7 +72,7 @@
               {
                 "layerId": "8712",
                 "isActive": false,
-                "isSelected": true,
+                "isSelected": false,
                 "name": "Alle Schulen",
                 "predefinedRules": [
                   {
@@ -120,6 +120,15 @@
                   }
                 ],
                 "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse",  "schulische_ausrichtung"]
+              },
+              {
+                "layerId": "1711",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Krankenhäuser",
+                "predefinedRules": [
+                ],
+                "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
               }
             ]
           },
@@ -271,26 +280,26 @@
       "Layer": [
         {
           "id": "8194",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "5104",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "2426",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "4561",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "1748"
         },
         {
           "id": "1562",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
@@ -342,7 +351,7 @@
         },
         {
            "id": "2404",
-           "visibility": false,
+           "visibility": true,
            "styleId": "45",
            "clusterDistance": 40,
            "routable": true
@@ -370,27 +379,12 @@
           "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
-          "searchField": "name",
-          "extendedFilter": true,
-          "filterOptions": [
-            {
-              "fieldName": "teilnahme_geburtsklinik",
-              "filterType": "combo",
-              "filterName": "Geburtsklinik",
-              "filterString": ["*", "Ja", "Nein"]
-            },
-            {
-              "fieldName": "teilnahme_notversorgung",
-              "filterType": "combo",
-              "filterName": "Not- und Unfallversorgung",
-              "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
-            }
-          ]
+          "searchField": "name"
         },
         {
           "id": "8712",
           "name": "Schulinfosystem",
-          "visibility": true,
+          "visibility": false,
           "styleId": "8712",
           "styleField": "kapitelbezeichnung",
           "searchField": "schulname",
@@ -436,7 +430,7 @@
           },{
             "id": "1731"
           }],
-          "visibility": true,
+          "visibility": false,
           "name": "Kita und KH"
         }
       ]
