@@ -18,23 +18,17 @@ define(function(require) {
             it("should return extent that is not undefined", function () {
                 expect(model.calculateExtent(features)).not.to.be.undefined;
             });
-            it("should return extent that does not contain 9999999", function () {
-                expect(model.calculateExtent(features)).to.be.an("array").that.not.includes(9999999);
+            it("should return extent of test-features with xMin = 547858.468", function () {
+                expect(model.calculateExtent(features)[0]).to.equal(547858.468);
             });
-            it("should return extent that does not contain 0", function () {
-                expect(model.calculateExtent(features)).to.be.an("array").that.not.includes(0);
+            it("should return extent of test-features with yMin = 5924016.116", function () {
+                expect(model.calculateExtent(features)[1]).to.equal(5924016.116);
             });
-            it("should return extent with 0 <= xMin <= 9999999", function () {
-                expect(model.calculateExtent(features)[0]).to.be.within(0, 9999999);
+            it("should return extent of test-features with xMax = 584635.381", function () {
+                expect(model.calculateExtent(features)[2]).to.equal(584635.381);
             });
-            it("should return extent with 0 <= yMin <= 9999999", function () {
-                expect(model.calculateExtent(features)[1]).to.be.within(0, 9999999);
-            });
-            it("should return extent with 0 <= xMax <= 9999999", function () {
-                expect(model.calculateExtent(features)[2]).to.be.within(0, 9999999);
-            });
-            it("should return extent with 0 <= yMax <= 9999999", function () {
-                expect(model.calculateExtent(features)[3]).to.be.within(0, 9999999);
+            it("should return extent of test-features with yMax = 5984174.061", function () {
+                expect(model.calculateExtent(features)[3]).to.equal(5984174.061);
             });
         });
     });
