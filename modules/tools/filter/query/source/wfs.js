@@ -32,7 +32,7 @@ define(function (require) {
         listenToFeaturesLoaded: function () {
             this.listenTo(Radio.channel("WFSLayer"), {
                 "featuresLoaded": function (layerId, features) {
-                    if (layerId = this.get("layerId")) {
+                    if (layerId === this.get("layerId")) {
                         this.setFeatures(features);
                         this.buildQueryDatastructure();
                     }
