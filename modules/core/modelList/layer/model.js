@@ -53,6 +53,7 @@ define(function (require) {
                 "change:isVisibleInMap": function () {
                     // triggert das Ein- und Ausschalten von Layern
                     Radio.trigger("ClickCounter", "layerVisibleChanged");
+                    Radio.trigger("Layer", "layerVisibleChanged", this.getId(), this.getIsVisibleInMap());
                     this.toggleLayerOnMap();
                     this.toggleAttributionsInterval();
                 },

@@ -7,7 +7,8 @@ define(function (require) {
     QueryModel = Backbone.Model.extend({
 
         defaults: {
-            featureIds: []
+            featureIds: [],
+            layerIsVisibleInMap: false
         },
 
         /**
@@ -21,8 +22,23 @@ define(function (require) {
                     this.runFilter(model);
                 }
             }, this);
+            this.checkLayerVisibility();
+            this.listenTo(Radio.channel("Layer"), {
+                "layerVisibleChanged": function (layerId, visible) {
+                    if (layerId === this.get("layerId")) {
+                        this.setLayerIsVisibleInMap(visible);
+                    }
+                }
+            }, this);
         },
 
+        checkLayerVisibility: function () {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
+
+            if (!_.isUndefined(model)) {
+                this.setLayerIsVisibleInMap(model.getIsVisibleInMap());
+            }
+        },
         /**
          * [description]
          * @param  {[type]} featureAttributesMap [description]
@@ -140,6 +156,9 @@ define(function (require) {
         },
         setIsNoValueSelected: function (value) {
             this.set("isNoValueSelected", value);
+        },
+        setLayerIsVisibleInMap: function (value) {
+            this.set("layerIsVisibleInMap", value);
         }
     });
 

@@ -12,6 +12,15 @@ define(function (require) {
                 "change:isSelected": function (model, value) {
                     this.render();
                     this.toggleButton(value);
+                },
+                "change:layerIsVisibleInMap": function (model, value) {
+                    console.log(value);
+                    if (value) {
+                        this.render();
+                    }
+                    else {
+                        this.$el.remove();
+                    }
                 }
             });
             if (this.model.get("isActive")) {
