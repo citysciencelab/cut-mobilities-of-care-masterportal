@@ -73,6 +73,7 @@
                 "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
+                "multipleQueries": false,
                 "name": "Alle Schulen",
                 "predefinedRules": [
                   {
@@ -86,6 +87,7 @@
                 "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
+                "multipleQueries": false,
                 "name": "Grundschulen",
                 "predefinedRules": [
                   {
@@ -99,6 +101,7 @@
                 "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
+                "multipleQueries": false,
                 "name": "Stadtteilschulen",
                 "predefinedRules": [
                   {
@@ -112,6 +115,7 @@
                 "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
+                "multipleQueries": false,
                 "name": "Gymnasien",
                 "predefinedRules": [
                   {
@@ -125,6 +129,7 @@
                 "layerId": "1711",
                 "isActive": false,
                 "isSelected": true,
+                "multipleQueries": true,
                 "name": "Krankenhäuser",
                 "predefinedRules": [
                 ],

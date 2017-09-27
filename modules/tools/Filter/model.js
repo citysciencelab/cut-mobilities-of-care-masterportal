@@ -104,18 +104,39 @@ define(function (require) {
          * @return {[string]} unique list of all feature ids
          */
         collectFilteredIds: function (queryGroup) {
-            var featureIdList = [];
-            console.log(queryGroup);
-             _.each(queryGroup, function (query) {
-                //TODO: hier muss isActive stehen, wenn wir active nutzen
-                if (query.get("isSelected") === true) {
+            var featureIdList = [],
+                isMultipleAllowed = this.isMultipleAllowed(queryGroup);
+
+            if (isMultipleAllowed) {
+                _.each(queryGroup, function (query) {
                     _.each(query.get("featureIds"), function (featureId) {
                         featureIdList.push(featureId);
                     });
-                }
-            });
-             console.log(_.unique(featureIdList));
+                });
+            }
+            else {
+                _.each(queryGroup, function (query) {
+                    // TODO: hier muss isActive stehen, wenn wir isActive nutzen
+                    if (query.get("isSelected") === true) {
+                        _.each(query.get("featureIds"), function (featureId) {
+                            featureIdList.push(featureId);
+                        });
+                    }
+                });
+            }
             return _.unique(featureIdList);
+        },
+        isMultipleAllowed: function (queryGroup) {
+            var isMultipleAllowed = false,
+                queries = [];
+
+            queries = _.filter(queryGroup, function (query) {
+                return query.get("multipleQueries");
+            });
+            if (queries.length > 0) {
+                isMultipleAllowed = true;
+            }
+            return isMultipleAllowed;
         },
         activate: function (id) {
             if (this.get("id") === id) {
