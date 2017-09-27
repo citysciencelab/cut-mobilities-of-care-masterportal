@@ -303,16 +303,6 @@
           "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
-          "id": "2128",
-          "styleId": "2128",
-          "visibility": false,
-          "clusterDistance": 0,
-          "searchField": "",
-          "mouseHoverField": "",
-          "filterOptions": [],
-          "styleLabelField": ""
-        },
-        {
           "id": "3302",
           "gfiTheme": "trinkwasser",
           "visibility": false,
@@ -351,7 +341,7 @@
         },
         {
            "id": "2404",
-           "visibility": true,
+           "visibility": false,
            "styleId": "45",
            "clusterDistance": 40,
            "routable": true
@@ -376,7 +366,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": false,
+          "visibility": true,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name"
@@ -384,7 +374,7 @@
         {
           "id": "8712",
           "name": "Schulinfosystem",
-          "visibility": false,
+          "visibility": true,
           "styleId": "8712",
           "styleField": "kapitelbezeichnung",
           "searchField": "schulname",

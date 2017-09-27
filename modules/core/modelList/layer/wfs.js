@@ -330,10 +330,13 @@ define(function (require) {
             }, this);
         },
         showAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures();
+            var collection = this.getLayerSource().getFeatures(),
+                style;
 
             collection.forEach(function (feature) {
-                feature.setStyle(this.get("style")(feature)[0]);
+                style = this.getStyleAsFunction(this.get("style"));
+
+                feature.setStyle(style(feature));
             }, this);
         },
         /**
@@ -343,10 +346,23 @@ define(function (require) {
         showFeaturesByIds: function (featureIdList) {
             this.hideAllFeatures();
             _.each(featureIdList, function (id) {
-                var feature = this.getLayerSource().getFeatureById(id);
+                var feature = this.getLayerSource().getFeatureById(id),
+                    style = [];
 
-                feature.setStyle(this.get("style")(feature)[0]);
+                style = this.getStyleAsFunction(this.get("style"));
+
+                feature.setStyle(style(feature));
             }, this);
+        },
+        getStyleAsFunction: function (style) {
+            if (_.isFunction(style)) {
+                return style;
+            }
+            else {
+                return function (feature) {
+                    return style;
+                }
+            }
         },
         getHiddenStyle: function () {
             return new ol.style.Style({
