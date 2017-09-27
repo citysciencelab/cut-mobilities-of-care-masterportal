@@ -20,7 +20,8 @@ define(function (require) {
                 "renderSnippets": this.renderSnippets,
                 "render": this.render,
                 "change:isSelected": this.removeView,
-                "change:featureIds": this.updateFeatureCount
+                "change:featureIds": this.updateFeatureCount,
+                "change:isLayerVisible": this.render
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
                 "valuesChanged": this.renderValueViews
@@ -30,6 +31,8 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            this.renderSnippets();
+            this.renderValueViews();
             return this.$el;
         },
         rerenderSnippets: function (changedValue) {
@@ -65,6 +68,7 @@ define(function (require) {
             var view;
 
             _.each(this.model.get("snippetCollection").models, function (snippet) {
+                if(this.model.get("isLayerVisible")) {
                     if (snippet.get("type") === "string") {
                         view = new SnippetDropdownView({model: snippet});
                         this.$el.append(view.render());
@@ -77,7 +81,11 @@ define(function (require) {
                         view = new SnippetSliderView({model: snippet});
                         this.$el.append(view.render());
                     }
-                }, this);
+                }
+                else {
+                    snippet.removeView();
+                }
+            }, this);
         },
         /**
          * Rendert die View in der die ausgewählten Werte stehen, nach denen derzeit gefiltert wird.

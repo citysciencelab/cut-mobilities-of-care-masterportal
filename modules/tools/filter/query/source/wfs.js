@@ -17,13 +17,25 @@ define(function (require) {
             var features = this.getFeaturesFromWFS();
 
             if (features.length > 0) {
-                this.setFeatures(features);
-                this.buildQueryDatastructure();
+                this.processFeatures(features);
             }
             else {
                 this.listenToFeaturesLoaded();
             }
             return features;
+        },
+        processFeatures: function (features) {
+            this.setFeatures(features);
+            this.setFeatureIds(this.collectAllFeatureIds(features));
+            this.buildQueryDatastructure();
+        },
+        collectAllFeatureIds: function (features) {
+            var featureIds = [];
+
+            _.each(features, function (feature) {
+                featureIds.push(feature.getId());
+            });
+            return featureIds;
         },
         /**
          * Waits for the Layer to load its features and proceeds requests the metadata
@@ -33,8 +45,7 @@ define(function (require) {
             this.listenTo(Radio.channel("WFSLayer"), {
                 "featuresLoaded": function (layerId, features) {
                     if (layerId === this.get("layerId")) {
-                        this.setFeatures(features);
-                        this.buildQueryDatastructure();
+                        this.processFeatures(features);
                     }
                 }
             });

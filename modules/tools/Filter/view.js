@@ -55,8 +55,6 @@ define(function (require) {
                 var view = new QueryDetailView({model: selectedModel});
 
                 this.$el.append(view.render());
-                view.renderSnippets();
-                view.renderValueViews();
             }
         },
 

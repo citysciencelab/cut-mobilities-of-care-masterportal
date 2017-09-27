@@ -33,6 +33,9 @@
 }
 
 /*SimpleView*/
+.simple-view {
+    display: inline-block;
+}
 .filter .btn-default {
     margin: 4px;
 }

@@ -2,6 +2,7 @@ define(function (require) {
     var Template = require("text!modules/tools/filter/query/templateSimpleView.html"),
         QuerySimpleView = Backbone.View.extend({
         template: _.template(Template),
+        className: "simple-view",
         events: {
             "click": "selectThis"
         },
@@ -10,14 +11,7 @@ define(function (require) {
                 "change:isSelected": function (model, value) {
                     this.render();
                 },
-                "change:layerIsVisibleInMap": function (model, value) {
-                    if (value) {
-                        this.$el.show();
-                    }
-                    else {
-                        this.$el.hide();
-                    }
-                }
+                "change:isLayerVisible": this.render
             });
             if (this.model.get("isActive")) {
                 this.model.runFilter();

@@ -8,7 +8,7 @@ define(function (require) {
 
         defaults: {
             featureIds: [],
-            layerIsVisibleInMap: false
+            isLayerVisible: false
         },
 
         /**
@@ -26,7 +26,7 @@ define(function (require) {
             this.listenTo(Radio.channel("Layer"), {
                 "layerVisibleChanged": function (layerId, visible) {
                     if (layerId === this.get("layerId")) {
-                        this.setLayerIsVisibleInMap(visible);
+                        this.setIsLayerVisible(visible);
                     }
                 }
             }, this);
@@ -36,7 +36,7 @@ define(function (require) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
             if (!_.isUndefined(model)) {
-                this.setLayerIsVisibleInMap(model.getIsVisibleInMap());
+                this.setIsLayerVisible(model.getIsVisibleInMap());
             }
         },
         /**
@@ -79,7 +79,6 @@ define(function (require) {
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
-            // isLayerVisible und isSelected
             if (this.get("isSelected") === true) {
                 this.runFilter();
                 this.trigger("renderSnippets");
@@ -157,8 +156,8 @@ define(function (require) {
         setIsNoValueSelected: function (value) {
             this.set("isNoValueSelected", value);
         },
-        setLayerIsVisibleInMap: function (value) {
-            this.set("layerIsVisibleInMap", value);
+        setIsLayerVisible: function (value) {
+            this.set("isLayerVisible", value);
         }
     });
 

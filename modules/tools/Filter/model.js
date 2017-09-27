@@ -64,7 +64,7 @@ define(function (require) {
         updateMap: function () {
             // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
             if (_.contains(this.get("queryCollection").pluck("isSelected"), true)) {
-                var allFeatureIds = this.collectFeaturesIdsOfAllLayers(this.get("queryCollection"));
+                var allFeatureIds = this.groupFeatureIdsByLayer(this.get("queryCollection"));
 
                 _.each(allFeatureIds, function (layerFeatures) {
                     Radio.trigger("ModelList", "showFeaturesById", layerFeatures.layer, layerFeatures.ids);
@@ -82,7 +82,7 @@ define(function (require) {
          * @param  {[object]} queries query objects
          * @return {object} Map object mapping layers to featuresids
          */
-        collectFeaturesIdsOfAllLayers: function (queries) {
+        groupFeatureIdsByLayer: function (queries) {
             var allFeatureIds = [],
                 featureIds;
 
@@ -105,14 +105,16 @@ define(function (require) {
          */
         collectFilteredIds: function (queryGroup) {
             var featureIdList = [];
-
+            console.log(queryGroup);
              _.each(queryGroup, function (query) {
+                //TODO: hier muss isActive stehen, wenn wir active nutzen
                 if (query.get("isSelected") === true) {
                     _.each(query.get("featureIds"), function (featureId) {
                         featureIdList.push(featureId);
                     });
                 }
             });
+             console.log(_.unique(featureIdList));
             return _.unique(featureIdList);
         },
         activate: function (id) {
