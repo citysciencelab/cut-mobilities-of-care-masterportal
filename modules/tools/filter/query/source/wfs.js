@@ -173,14 +173,20 @@ define(function (require) {
 
             if (!_.isUndefined(model)) {
                 features = model.getLayerSource().getFeatures();
+
+                if (!_.isUndefined(this.get("predefinedRules")) && this.get("predefinedRules").length > 0) {
+                    _.each(features, function (feature) {
+                        _.each(this.get("predefinedRules"), function (rule) {
+                            if (_.contains(rule.values, feature.get(rule.attrName))) {
+                                newFeatures.push(feature);
+                            }
+                        });
+                    }, this);
+                }
+                else {
+                    return features;
+                }
             }
-            _.each(features, function (feature) {
-                _.each(this.get("predefinedRules"), function (rule) {
-                    if (_.contains(rule.values, feature.get(rule.attrName))) {
-                        newFeatures.push(feature);
-                    }
-                });
-            }, this);
             return newFeatures;
         },
         /**
