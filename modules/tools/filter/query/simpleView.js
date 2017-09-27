@@ -1,8 +1,6 @@
 define(function (require) {
     var Template = require("text!modules/tools/filter/query/templateSimpleView.html"),
         QuerySimpleView = Backbone.View.extend({
-        tagName: "button",
-        className: "btn btn-default",
         template: _.template(Template),
         events: {
             "click": "selectThis"
@@ -11,15 +9,13 @@ define(function (require) {
             this.listenTo(this.model, {
                 "change:isSelected": function (model, value) {
                     this.render();
-                    this.toggleButton(value);
                 },
                 "change:layerIsVisibleInMap": function (model, value) {
-                    console.log(value);
                     if (value) {
-                        this.render();
+                        this.$el.show();
                     }
                     else {
-                        this.$el.remove();
+                        this.$el.hide();
                     }
                 }
             });
@@ -34,9 +30,6 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.get("isSelected")) {
-                this.toggleButton(true);
-            }
             return this.$el.html(this.template(attr));
         },
         /**
@@ -54,16 +47,6 @@ define(function (require) {
                 this.model.setIsSelected(true);
             }
             this.model.runFilter();
-        },
-
-        toggleButton: function (value) {
-
-            if (value === true) {
-                this.$el.addClass("btn-select");
-            }
-            else {
-                this.$el.removeClass("btn-select");
-            }
         }
     });
 

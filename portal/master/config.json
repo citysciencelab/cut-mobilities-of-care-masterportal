@@ -67,7 +67,7 @@
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false,
             "isGeneric": false,
-            "isInitOpen": false,
+            "isInitOpen": true,
             "predefinedQueries": [
               {
                 "layerId": "8712",
@@ -198,7 +198,7 @@
             "viomRoutingID": "7",
             "bkgSuggestID": "4",
             "bkgGeosearchID": "5",
-            "isInitOpen": true
+            "isInitOpen": false
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
