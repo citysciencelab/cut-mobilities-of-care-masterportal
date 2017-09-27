@@ -106,3 +106,7 @@
 .gfi-footer > .pager-right {
     float: right;
 }
+
+.gfi-iFrame {
+    width: 100%
+} 
