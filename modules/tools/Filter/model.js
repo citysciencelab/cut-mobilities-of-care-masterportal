@@ -25,7 +25,10 @@ define(function (require) {
             this.set("queryCollection", new Backbone.Collection());
             this.listenTo(this.get("queryCollection"), {
                 "deselectAllModels": this.deselectAllModels,
-                "featureIdsChanged": this.updateMap,
+                "featureIdsChanged": function (featureIds) {
+                    this.updateMap();
+                    this.updateGFI(featureIds);
+                },
                 "closeFilter": function () {
                     this.setIsActive(false);
                 }
@@ -77,6 +80,19 @@ define(function (require) {
                 });
             }
         },
+
+        updateGFI: function (featureIds) {
+            var getVisibleTheme = Radio.request("GFI", "getVisibleTheme");
+
+            if (getVisibleTheme) {
+                var featureId = getVisibleTheme.get("feature").getId();
+
+                if (!_.contains(featureIds, featureId)) {
+                    Radio.trigger("GFI", "hideGFI");
+                }
+            }
+        },
+
         /**
          * collects the ids from of all features that match the filter, maps them to the layerids
          * @param  {[object]} queries query objects
@@ -159,6 +175,7 @@ define(function (require) {
         },
         closeGFI: function () {
             Radio.trigger("GFI", "hideGFI");
+            Radio.trigger("MapMarker", "hideMarker");
         },
         collapseOpenSnippet: function () {
             var selectedQuery = this.get("queryCollection").findWhere({isSelected: true}),

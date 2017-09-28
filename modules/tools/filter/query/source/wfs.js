@@ -223,7 +223,7 @@ define(function (require) {
 
             this.updateSnippets(features, selectedAttributes);
             this.setFeatureIds(featureIds);
-            this.trigger("featureIdsChanged");
+            this.trigger("featureIdsChanged", featureIds);
         },
         /**
          * triggers map to zoom to given features of given layer

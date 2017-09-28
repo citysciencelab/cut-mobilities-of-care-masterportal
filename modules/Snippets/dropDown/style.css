@@ -30,7 +30,7 @@
 .dropdown-container .info-text {
     display: none;
     font-size: 10px;
-    color: rgb(182, 0, 0);
+    /*color: rgb(182, 0, 0);*/
 }
 
 .dropdown-container .info-icon:hover {
