@@ -97,10 +97,12 @@ define(function (require) {
             if (!_.isUndefined(queries)) {
                 _.each(queries.groupBy("layerId"), function (group, layerId) {
                     featureIds = this.collectFilteredIds(group);
-                    allFeatureIds.push({
-                        layer: layerId,
-                        ids: featureIds
-                    });
+                    if (featureIds.length > 0) {
+                        allFeatureIds.push({
+                            layer: layerId,
+                            ids: featureIds
+                        });
+                    }
                 }, this);
             }
             return allFeatureIds;
