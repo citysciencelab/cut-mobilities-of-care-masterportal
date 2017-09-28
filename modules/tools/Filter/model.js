@@ -11,7 +11,8 @@ define(function (require) {
             isVisible: false,
             id: "filter",
             queryCollection: {},
-            isActive: false
+            isActive: false,
+            allowMultipleQueriesPerLayer: true
         },
         initialize: function () {
             var channel = Radio.channel("Filter");
@@ -31,6 +32,7 @@ define(function (require) {
                 }
             }, this);
             this.setDefaults();
+
             this.createQueries(this.getConfiguredQueries());
         },
         resetFilter: function () {
@@ -51,11 +53,17 @@ define(function (require) {
                 model.deselectAllValueModels();
             }, this);
         },
-        deselectAllModels: function () {
+        deselectAllModels: function (selectedModel) {
             _.each(this.get("queryCollection").models, function (model) {
-                model.setIsActive(false);
+                // if only one Query per layer is allowed, deactivate queries that share a layer
+                // with the newly selected layer
+                if (!this.get("allowMultipleQueriesPerLayer") &&
+                    selectedModel.cid !== model.cid &&
+                    selectedModel.get("layerId") === model.get("layerId")) {
+                    model.setIsActive(false);
+                }
                 model.setIsSelected(false);
-            });
+            }, this);
         },
         /**
          * updates the Features shown on the Map
@@ -104,39 +112,17 @@ define(function (require) {
          * @return {[string]} unique list of all feature ids
          */
         collectFilteredIds: function (queryGroup) {
-            var featureIdList = [],
-                isMultipleAllowed = this.isMultipleAllowed(queryGroup);
+            var featureIdList = [];
 
-            if (isMultipleAllowed) {
-                _.each(queryGroup, function (query) {
+            _.each(queryGroup, function (query) {
+                if (query.get("isActive") === true) {
                     _.each(query.get("featureIds"), function (featureId) {
                         featureIdList.push(featureId);
                     });
-                });
-            }
-            else {
-                _.each(queryGroup, function (query) {
-                    // TODO: hier muss isActive stehen, wenn wir isActive nutzen
-                    if (query.get("isSelected") === true) {
-                        _.each(query.get("featureIds"), function (featureId) {
-                            featureIdList.push(featureId);
-                        });
-                    }
-                });
-            }
-            return _.unique(featureIdList);
-        },
-        isMultipleAllowed: function (queryGroup) {
-            var isMultipleAllowed = false,
-                queries = [];
-
-            queries = _.filter(queryGroup, function (query) {
-                return query.get("multipleQueries");
+                }
             });
-            if (queries.length > 0) {
-                isMultipleAllowed = true;
-            }
-            return isMultipleAllowed;
+
+            return _.unique(featureIdList);
         },
         activate: function (id) {
             if (this.get("id") === id) {
@@ -160,8 +146,13 @@ define(function (require) {
         createQuery: function (model) {
             var query = new QueryModel(model);
 
+            if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
+                _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+            }
+
             if (query.get("isSelected")) {
                 query.setIsDefault(true);
+                query.setIsActive(true);
             }
 
             this.get("queryCollection").add(query);
