@@ -23,7 +23,8 @@ define(function (require) {
                 "change:featureIds": this.updateFeatureCount
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
-                "valuesChanged": this.renderValueViews
+                "valuesChanged": this.renderValueViews,
+                "hideAllInfoText": this.hideAllInfoText
             }, this);
         },
         render: function () {
@@ -120,6 +121,13 @@ define(function (require) {
          */
         deselectAllValueModels: function () {
             this.model.deselectAllValueModels();
+        },
+
+        /**
+         * hides all infotexts in the filter
+         */
+        hideAllInfoText: function () {
+            this.$el.find(".info-text").hide();
         }
     });
 

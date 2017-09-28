@@ -96,6 +96,7 @@ define(function (require) {
          * toggle the info text
          */
         toggleInfoText: function () {
+            this.model.trigger("hideAllInfoText");
             this.$el.find(".info-text").toggle();
         },
 
