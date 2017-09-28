@@ -4,7 +4,7 @@ define(function (require) {
         template: _.template(Template),
         className: "simple-view",
         events: {
-            "click": "selectThis"
+            "click": "selectModel"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -13,9 +13,6 @@ define(function (require) {
                 },
                 "change:isLayerVisible": this.render
             });
-            if (this.model.get("isActive")) {
-                this.model.runFilter();
-            }
         },
 
         /**
@@ -29,18 +26,8 @@ define(function (require) {
         /**
          *
          */
-        selectThis: function () {
-            if (this.model.get("isSelected") === true) {
-                // this.model.setIsActive(false);
-                // this.model.setIsSelected(false);
-            }
-            else {
-                // die Query-Collection hört im Filter-Model auf diesen Trigger
-                this.model.collection.trigger("deselectAllModels");
-                this.model.setIsActive(true);
-                this.model.setIsSelected(true);
-            }
-            this.model.runFilter();
+        selectModel: function () {
+            this.model.selectThis();
         }
     });
 

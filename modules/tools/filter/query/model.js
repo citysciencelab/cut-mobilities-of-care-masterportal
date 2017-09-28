@@ -8,7 +8,8 @@ define(function (require) {
 
         defaults: {
             featureIds: [],
-            isLayerVisible: false
+            isLayerVisible: false,
+            activateOnSelection: false
         },
 
         /**
@@ -19,6 +20,7 @@ define(function (require) {
 
             this.listenTo(this.get("snippetCollection"), {
                 "valuesChanged": function (model) {
+                    this.setIsActive(true);
                     this.runFilter(model);
                 }
             }, this);
@@ -143,7 +145,19 @@ define(function (require) {
         setIsDefault: function (value) {
             this.set("isDefault", value);
         },
+        selectThis: function () {
+            if (!this.get("isSelected")) {
+                // die Query-Collection hört im Filter-Model auf diesen Trigger
+                this.collection.trigger("deselectAllModels", this);
+                this.setIsSelected(true);
+            }
+
+            this.runFilter();
+        },
         setIsSelected: function (value) {
+            if (this.get("activateOnSelection")) {
+                this.setIsActive(value);
+            }
             this.set("isSelected", value);
         },
         setIsActive: function (value) {
