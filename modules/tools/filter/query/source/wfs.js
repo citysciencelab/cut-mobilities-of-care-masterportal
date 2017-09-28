@@ -178,26 +178,22 @@ define(function (require) {
          * and trigger them to the ModelList
          */
         runPredefinedRules: function () {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
-                features = [],
+            var features = this.get("features"),
                 newFeatures = [];
 
-            if (!_.isUndefined(model)) {
-                features = model.getLayerSource().getFeatures();
-
-                if (!_.isUndefined(this.get("predefinedRules")) && this.get("predefinedRules").length > 0) {
-                    _.each(features, function (feature) {
-                        _.each(this.get("predefinedRules"), function (rule) {
-                            if (_.contains(rule.values, feature.get(rule.attrName))) {
-                                newFeatures.push(feature);
-                            }
-                        });
-                    }, this);
-                }
-                else {
-                    return features;
-                }
+            if (!_.isUndefined(this.get("predefinedRules")) && this.get("predefinedRules").length > 0) {
+                _.each(features, function (feature) {
+                    _.each(this.get("predefinedRules"), function (rule) {
+                        if (_.contains(rule.values, feature.get(rule.attrName))) {
+                            newFeatures.push(feature);
+                        }
+                    });
+                }, this);
             }
+            else {
+                return features;
+            }
+
             return newFeatures;
         },
         /**
