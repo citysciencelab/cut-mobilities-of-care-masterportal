@@ -41,7 +41,8 @@ define(function (require) {
                 "getIsVisible": this.getIsVisible,
                 "getGFIForPrint": this.getGFIForPrint,
                 "getCoordinate": this.getCoordinate,
-                "getCurrentView": this.getCurrentView
+                "getCurrentView": this.getCurrentView,
+                "getVisibleTheme": this.getVisibleTheme
             }, this);
 
             this.listenTo(this, {
@@ -311,6 +312,10 @@ define(function (require) {
             var theme = this.getThemeList().at(this.getThemeIndex());
 
             return [theme.getGfiContent()[0], theme.get("name"), this.getCoordinate()];
+        },
+
+        getVisibleTheme: function () {
+            return this.getThemeList().findWhere({isVisible: true});
         },
 
         /**
