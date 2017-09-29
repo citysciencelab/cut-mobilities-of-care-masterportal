@@ -150,9 +150,10 @@ define(function (require) {
                 // die Query-Collection hört im Filter-Model auf diesen Trigger
                 this.collection.trigger("deselectAllModels", this);
                 this.setIsSelected(true);
+                if (this.get("isActive")) {
+                    this.runFilter();
+                }
             }
-
-            this.runFilter();
         },
         setIsSelected: function (value) {
             if (this.get("activateOnSelection")) {

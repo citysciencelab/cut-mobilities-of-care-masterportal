@@ -61,9 +61,6 @@ define(function (require) {
                 this.model.trigger("closeFilter");
             }
         },
-        runFilter: function () {
-            this.model.runFilter();
-        },
         renderSnippets: function () {
             var view;
 
@@ -114,7 +111,6 @@ define(function (require) {
             this.model.setIsActive($(evt.target).prop("checked"));
         },
         removeView: function (model, value) {
-            this.runFilter();
             if (value === false) {
                 model.get("snippetCollection").forEach(function (model) {
                     model.trigger("removeView");
