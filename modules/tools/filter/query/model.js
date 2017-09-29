@@ -20,7 +20,7 @@ define(function (require) {
 
             this.listenTo(this.get("snippetCollection"), {
                 "valuesChanged": function (model) {
-                    this.setIsActive(true);
+                    // this.setIsActive(true);
                     this.runFilter(model);
                 }
             }, this);
@@ -32,8 +32,14 @@ define(function (require) {
                     }
                 }
             }, this);
+            this.setDefaults();
         },
+        setDefaults: function () {
+            var filterConfig = Radio.request("Parser", "getItemByAttributes", {id: "filter"}),
+                allow = (_.has(filterConfig, "allowMultipleQueriesPerLayer") && filterConfig.allowMultipleQueriesPerLayer === true);
 
+            this.setActivateOnSelection(allow);
+        },
         checkLayerVisibility: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
@@ -149,12 +155,14 @@ define(function (require) {
             if (!this.get("isSelected")) {
                 // die Query-Collection hört im Filter-Model auf diesen Trigger
                 this.collection.trigger("deselectAllModels", this);
+                this.collection.trigger("deactivateAllModels", this);
                 this.setIsSelected(true);
                 if (this.get("isActive")) {
                     this.runFilter();
                 }
             }
         },
+
         setIsSelected: function (value) {
             if (this.get("activateOnSelection")) {
                 this.setIsActive(value);
@@ -173,6 +181,9 @@ define(function (require) {
         },
         setIsLayerVisible: function (value) {
             this.set("isLayerVisible", value);
+        },
+        setActivateOnSelection: function (value) {
+            this.set("activateOnSelection", value);
         }
     });
 

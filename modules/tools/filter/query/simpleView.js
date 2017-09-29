@@ -7,6 +7,14 @@ define(function (require) {
             "click": "selectModel"
         },
         initialize: function () {
+            this.listenToOnce(this.model, {
+                "change:isSelected": function (model, value) {
+                    if (value) {
+                        this.model.setIsActive(value);
+                        this.model.runFilter();
+                    }
+                }
+            });
             this.listenTo(this.model, {
                 "change:isSelected": function (model, value) {
                     this.render();

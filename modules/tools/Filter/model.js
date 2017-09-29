@@ -25,6 +25,7 @@ define(function (require) {
             });
             this.set("queryCollection", new Backbone.Collection());
             this.listenTo(this.get("queryCollection"), {
+                "deactivateAllModels": this.deactivateAllModels,
                 "deselectAllModels": this.deselectAllModels,
                 "featureIdsChanged": this.updateMap,
                 "closeFilter": function () {
@@ -65,6 +66,13 @@ define(function (require) {
                 model.setIsSelected(false);
             }, this);
         },
+        deactivateAllModels: function () {
+            _.each(this.get("queryCollection").models, function (model) {
+                if (!this.get("allowMultipleQueriesPerLayer")) {
+                    model.setIsActive(false);
+                }
+            }, this);
+        },
         /**
          * updates the Features shown on the Map
          * @return {[type]} [description]
@@ -77,7 +85,6 @@ define(function (require) {
                 _.each(allFeatureIds, function (layerFeatures) {
                     Radio.trigger("ModelList", "showFeaturesById", layerFeatures.layer, layerFeatures.ids);
                 });
-                Radio.trigger("Map", "zoomToFilteredFeatures", allFeatureIds);
             }
             else {
                 _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
