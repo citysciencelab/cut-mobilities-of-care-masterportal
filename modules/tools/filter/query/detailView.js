@@ -2,6 +2,7 @@ define(function (require) {
 
     var SnippetDropdownView = require("modules/Snippets/dropDown/view"),
         ValueView = require("modules/Snippets/value/view"),
+        CheckBoxView = require("modules/Snippets/checkbox/view"),
         Template = require("text!modules/tools/filter/query/templateDetailView.html"),
         SnippetSliderView = require("modules/Snippets/slider/range/view"),
         QueryDetailView;
@@ -12,19 +13,21 @@ define(function (require) {
         events: {
             "change .checkbox-toggle": "toggleIsActive",
             "click .detailview-head button": "zoomToSelectedFeatures",
-            "click .remove-all": "deselectAllValueModels"
+            "click .remove-all": "deselectAllValueModels",
         },
         initialize: function () {
             this.listenTo(this.model, {
                 "rerenderSnippets": this.rerenderSnippets,
                 "renderSnippets": this.renderSnippets,
-                "render": this.render,
                 "change:isSelected": this.removeView,
                 "change:featureIds": this.updateFeatureCount,
                 "change:isLayerVisible": this.render
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
-                "valuesChanged": this.renderValueViews
+                "valuesChanged": function () {
+                    this.renderValueViews();
+                    // this.renderCheckbox();
+                }
             }, this);
         },
         render: function () {
@@ -33,6 +36,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.renderSnippets();
             this.renderValueViews();
+            this.renderCheckboxView();
             return this.$el;
         },
         rerenderSnippets: function (changedValue) {
@@ -42,7 +46,9 @@ define(function (require) {
                 }
             });
         },
-
+        renderCheckbox: function () {
+            $(".checkbox-toggle").prop("checked", this.model.get("isActive"));
+        },
         /**
          * updates the display of the feature hits
          * @param  {Backbone.Model} model - QueryModel
@@ -107,8 +113,14 @@ define(function (require) {
             countSelectedValues === 0 ? this.$el.find(".text:last-child").show() : this.$el.find(".text:last-child").hide();
             countSelectedValues > 1 ? this.$el.find(".remove-all").show() : this.$el.find(".remove-all").hide();
         },
+        renderCheckboxView: function () {
+            var view = new CheckBoxView();
+
+                this.$el.find(".div-checkbox-isActive").after(view.render());
+        },
         toggleIsActive: function (evt) {
             this.model.setIsActive($(evt.target).prop("checked"));
+            this.model.runFilter();
         },
         removeView: function (model, value) {
             if (value === false) {

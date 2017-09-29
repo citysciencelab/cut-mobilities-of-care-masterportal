@@ -2,16 +2,15 @@ define(function (require) {
     require("bootstrap-toggle");
     var Model = require("modules/snippets/checkbox/model"),
         Template = require("text!modules/snippets/checkbox/template.html"),
-        CheckbosSnippetView;
+        CheckboxSnippetView;
 
-    CheckbosSnippetView = Backbone.View.extend({
-        model: {},
+    CheckboxSnippetView = Backbone.View.extend({
+        model: new Model(),
         template: _.template(Template),
         events: {
             "change .checkbox-toggle" : "setSelectedValues"
         },
-        initialize: function (attr) {
-            this.model = new Model(attr);
+        initialize: function () {
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -27,5 +26,5 @@ define(function (require) {
             model.set("isChecked", $(evt.target).prop("checked"));
         }
     });
-    return CheckbosSnippetView;
+    return CheckboxSnippetView;
 });

@@ -129,8 +129,10 @@ define(function (require) {
                         featureIdList.push(featureId);
                     });
                 }
+                else {
+                    Radio.trigger("ModelList", "showAllFeatures", query.get("layerId"));
+                }
             });
-
             return _.unique(featureIdList);
         },
         activate: function (id) {

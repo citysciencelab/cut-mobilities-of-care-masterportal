@@ -19,9 +19,9 @@ define(function (require) {
             this.set("snippetCollection", new Backbone.Collection());
 
             this.listenTo(this.get("snippetCollection"), {
-                "valuesChanged": function (model) {
-                    // this.setIsActive(true);
-                    this.runFilter(model);
+                "valuesChanged": function () {
+                    this.setIsActive(true);
+                    this.runFilter();
                 }
             }, this);
             this.checkLayerVisibility();
@@ -32,13 +32,6 @@ define(function (require) {
                     }
                 }
             }, this);
-            this.setDefaults();
-        },
-        setDefaults: function () {
-            var filterConfig = Radio.request("Parser", "getItemByAttributes", {id: "filter"}),
-                allow = (_.has(filterConfig, "allowMultipleQueriesPerLayer") && filterConfig.allowMultipleQueriesPerLayer === true);
-
-            this.setActivateOnSelection(allow);
         },
         checkLayerVisibility: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
