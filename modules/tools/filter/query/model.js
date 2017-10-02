@@ -19,6 +19,9 @@ define(function (require) {
         superInitialize: function () {
             this.set("snippetCollection", new Backbone.Collection());
             this.set("btnIsActive", new SnippetCheckboxModel());
+            if (this.get("isActive")) {
+                this.get("btnIsActive").get("valuesCollection").models[0].set("isChecked", true);
+            }
             this.listenTo(this.get("btnIsActive"), {
                 "valuesChanged": function () {
                     var checkboxModel = this.get("btnIsActive"),

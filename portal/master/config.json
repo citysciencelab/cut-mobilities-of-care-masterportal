@@ -124,7 +124,7 @@
               },
               {
                 "layerId": "1711",
-                "isActive": false,
+                "isActive": true,
                 "isSelected": true,
                 "name": "Krankenhäuser",
                 "predefinedRules": [

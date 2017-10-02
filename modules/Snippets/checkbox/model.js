@@ -4,9 +4,6 @@ var SnippetModel = require("modules/snippets/model"),
     CheckboxSnippet;
 
 CheckboxSnippet = SnippetModel.extend({
-    defaults: {
-        isChecked: false
-    },
     initialize: function () {
         this.superInitialize();
         this.addValueModel(this.get("isChecked"));
@@ -15,10 +12,6 @@ CheckboxSnippet = SnippetModel.extend({
                 this.trigger("valuesChanged");
             }
         });
-    },
-    // setter for isChecked
-    setIsChecked: function (value) {
-        this.set("isChecked", value);
     },
     addValueModel: function (value) {
         this.get("valuesCollection").add(
