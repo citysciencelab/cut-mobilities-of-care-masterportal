@@ -27,6 +27,12 @@ CheckboxSnippet = SnippetModel.extend({
     },
     renderView: function () {
         this.trigger("renderView");
+    },
+    setIsChecked: function (value) {
+        this.get("valuesCollection").models[0].set("isChecked", value);
+    },
+    getIsChecked: function () {
+        return this.get("valuesCollection").models[0].get("isChecked");
     }
  });
  return CheckboxSnippet;

@@ -20,12 +20,12 @@ define(function (require) {
             this.set("snippetCollection", new Backbone.Collection());
             this.set("btnIsActive", new SnippetCheckboxModel());
             if (this.get("isActive")) {
-                this.get("btnIsActive").get("valuesCollection").models[0].set("isChecked", true);
+                this.get("btnIsActive").setIsChecked(true);
             }
             this.listenTo(this.get("btnIsActive"), {
                 "valuesChanged": function () {
                     var checkboxModel = this.get("btnIsActive"),
-                        isActive = this.get("btnIsActive").get("valuesCollection").models[0].get("isChecked");
+                        isActive = this.get("btnIsActive").getIsChecked();
 
                     checkboxModel.renderView();
                     this.setIsActive(isActive);
@@ -35,7 +35,7 @@ define(function (require) {
             this.listenTo(this.get("snippetCollection"), {
                 "valuesChanged": function () {
                     this.setIsActive(true);
-                    this.get("btnIsActive").get("valuesCollection").models[0].set("isChecked", true);
+                    this.get("btnIsActive").setIsChecked(true);
                     this.runFilter();
                 }
             }, this);
