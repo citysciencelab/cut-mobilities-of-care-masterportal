@@ -10,9 +10,6 @@ CheckboxSnippet = SnippetModel.extend({
     initialize: function () {
         this.superInitialize();
         this.addValueModel(this.get("isChecked"));
-        //  _.each(this.get("values"), function (value) {
-        //     this.get("valuesCollection").add(value);
-        // }, this);
         this.listenTo(this.get("valuesCollection"), {
             "change:isChecked": function () {
                 this.trigger("valuesChanged");
@@ -24,14 +21,17 @@ CheckboxSnippet = SnippetModel.extend({
         this.set("isChecked", value);
     },
     addValueModel: function (value) {
-            this.get("valuesCollection").add(
-                new SnippetModel({
-                    attr: this.get("name"),
-                    isChecked: value,
-                    type: this.get("type")
-                })
-            );
-        },
+        this.get("valuesCollection").add(
+            new SnippetModel({
+                attr: this.get("name"),
+                isChecked: value,
+                type: this.get("type")
+            })
+        );
+    },
+    renderView: function () {
+        this.trigger("renderView");
+    }
  });
  return CheckboxSnippet;
 });

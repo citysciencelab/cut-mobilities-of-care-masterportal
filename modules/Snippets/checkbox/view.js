@@ -11,6 +11,9 @@ define(function (require) {
             "change .checkbox-toggle" : "setSelectedValues"
         },
         initialize: function () {
+            this.listenTo(this.model, {
+                "renderView": this.render
+            }, this);
         },
         render: function () {
             var attr = this.model.toJSON();

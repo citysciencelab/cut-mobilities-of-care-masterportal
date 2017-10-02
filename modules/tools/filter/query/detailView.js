@@ -26,7 +26,6 @@ define(function (require) {
             this.listenTo(this.model.get("snippetCollection"), {
                 "valuesChanged": function () {
                     this.renderValueViews();
-                    // this.renderCheckbox();
                 }
             }, this);
         },
@@ -45,9 +44,6 @@ define(function (require) {
                     snippet.trigger("render");
                 }
             });
-        },
-        renderCheckbox: function () {
-            $(".checkbox-toggle").prop("checked", this.model.get("isActive"));
         },
         /**
          * updates the display of the feature hits
@@ -114,7 +110,7 @@ define(function (require) {
             countSelectedValues > 1 ? this.$el.find(".remove-all").show() : this.$el.find(".remove-all").hide();
         },
         renderCheckboxView: function () {
-            var view = new CheckBoxView();
+            var view = new CheckBoxView({model: this.model.get("btnIsActive")});
 
                 this.$el.find(".div-checkbox-isActive").after(view.render());
         },

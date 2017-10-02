@@ -2,6 +2,7 @@ define(function (require) {
 
     var SnippetDropdownModel = require("modules/Snippets/dropDown/model"),
         SnippetSliderModel = require("modules/Snippets/slider/model"),
+        SnippetCheckboxModel = require("modules/Snippets/checkbox/model"),
         QueryModel;
 
     QueryModel = Backbone.Model.extend({
@@ -17,10 +18,21 @@ define(function (require) {
          */
         superInitialize: function () {
             this.set("snippetCollection", new Backbone.Collection());
+            this.set("btnIsActive", new SnippetCheckboxModel());
+            this.listenTo(this.get("btnIsActive"), {
+                "valuesChanged": function () {
+                    var checkboxModel = this.get("btnIsActive"),
+                        isActive = this.get("btnIsActive").get("valuesCollection").models[0].get("isChecked");
 
+                    checkboxModel.renderView();
+                    this.setIsActive(isActive);
+                    this.runFilter();
+                }
+            }, this);
             this.listenTo(this.get("snippetCollection"), {
                 "valuesChanged": function () {
                     this.setIsActive(true);
+                    this.get("btnIsActive").get("valuesCollection").models[0].set("isChecked", true);
                     this.runFilter();
                 }
             }, this);
