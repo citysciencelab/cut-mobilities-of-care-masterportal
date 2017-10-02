@@ -54,7 +54,7 @@ define(function (require) {
          */
         updateFeatureCount: function (model, value) {
             this.$el.find(".feature-count").html(value.length + " Treffer");
-            this.$el.find(".detailview-head .btn")
+            this.$el.find(".detailview-head .zoom-btn")
                 .animate({opacity: 0.4}, 500)
                 .animate({opacity: 0.8}, 500);
         },
