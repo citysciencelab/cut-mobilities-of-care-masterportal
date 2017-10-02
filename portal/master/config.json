@@ -67,7 +67,8 @@
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false,
             "isGeneric": false,
-            "isInitOpen": false,
+            "isInitOpen": true,
+            "allowMultipleQueriesPerLayer": true,
             "predefinedQueries": [
               {
                 "layerId": "8712",
@@ -123,8 +124,8 @@
               },
               {
                 "layerId": "1711",
-                "isActive": false,
-                "isSelected": false,
+                "isActive": true,
+                "isSelected": true,
                 "name": "Krankenhäuser",
                 "predefinedRules": [
                 ],
@@ -198,7 +199,7 @@
             "viomRoutingID": "7",
             "bkgSuggestID": "4",
             "bkgGeosearchID": "5",
-            "isInitOpen": true
+            "isInitOpen": false
           },
           "draw": {
             "name": "Zeichnen / Schreiben",

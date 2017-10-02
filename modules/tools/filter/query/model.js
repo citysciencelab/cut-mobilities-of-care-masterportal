@@ -2,12 +2,15 @@ define(function (require) {
 
     var SnippetDropdownModel = require("modules/Snippets/dropDown/model"),
         SnippetSliderModel = require("modules/Snippets/slider/model"),
+        SnippetCheckboxModel = require("modules/Snippets/checkbox/model"),
         QueryModel;
 
     QueryModel = Backbone.Model.extend({
 
         defaults: {
-            featureIds: []
+            featureIds: [],
+            isLayerVisible: false,
+            activateOnSelection: false
         },
 
         /**
@@ -15,14 +18,43 @@ define(function (require) {
          */
         superInitialize: function () {
             this.set("snippetCollection", new Backbone.Collection());
+            this.set("btnIsActive", new SnippetCheckboxModel());
+            if (this.get("isActive")) {
+                this.get("btnIsActive").setIsChecked(true);
+            }
+            this.listenTo(this.get("btnIsActive"), {
+                "valuesChanged": function () {
+                    var checkboxModel = this.get("btnIsActive"),
+                        isActive = this.get("btnIsActive").getIsChecked();
 
+                    checkboxModel.renderView();
+                    this.setIsActive(isActive);
+                    this.runFilter();
+                }
+            }, this);
             this.listenTo(this.get("snippetCollection"), {
-                "valuesChanged": function (model) {
-                    this.runFilter(model);
+                "valuesChanged": function () {
+                    this.setIsActive(true);
+                    this.get("btnIsActive").setIsChecked(true);
+                    this.runFilter();
+                }
+            }, this);
+            this.checkLayerVisibility();
+            this.listenTo(Radio.channel("Layer"), {
+                "layerVisibleChanged": function (layerId, visible) {
+                    if (layerId === this.get("layerId")) {
+                        this.setIsLayerVisible(visible);
+                    }
                 }
             }, this);
         },
+        checkLayerVisibility: function () {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
+            if (!_.isUndefined(model)) {
+                this.setIsLayerVisible(model.getIsVisibleInMap());
+            }
+        },
         /**
          * [description]
          * @param  {[type]} featureAttributesMap [description]
@@ -63,7 +95,6 @@ define(function (require) {
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
-            // isLayerVisible und isSelected
             if (this.get("isSelected") === true) {
                 this.runFilter();
                 this.trigger("renderSnippets");
@@ -128,7 +159,22 @@ define(function (require) {
         setIsDefault: function (value) {
             this.set("isDefault", value);
         },
+        selectThis: function () {
+            if (!this.get("isSelected")) {
+                // die Query-Collection hört im Filter-Model auf diesen Trigger
+                this.collection.trigger("deselectAllModels", this);
+                this.collection.trigger("deactivateAllModels", this);
+                this.setIsSelected(true);
+                if (this.get("isActive")) {
+                    this.runFilter();
+                }
+            }
+        },
+
         setIsSelected: function (value) {
+            if (this.get("activateOnSelection")) {
+                this.setIsActive(value);
+            }
             this.set("isSelected", value);
         },
         setIsActive: function (value) {
@@ -140,6 +186,12 @@ define(function (require) {
         },
         setIsNoValueSelected: function (value) {
             this.set("isNoValueSelected", value);
+        },
+        setIsLayerVisible: function (value) {
+            this.set("isLayerVisible", value);
+        },
+        setActivateOnSelection: function (value) {
+            this.set("activateOnSelection", value);
         }
     });
 

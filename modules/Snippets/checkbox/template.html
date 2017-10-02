@@ -1,6 +1,11 @@
 
     <% _.each(valuesCollection.models, function (model) {%>
-       </span><input id="toggle" class="checkbox-toggle" type="checkbox" <% if (model.get("isChecked")) {print("checked");}%> data-toggle="toggle" data-on="<%=model.get("labelChecked")%>" data-off="<%=model.get("labelUnchecked")%>" data-onstyle="success" data-size="<%=model.get("size")%>">
+       <input class="checkbox-toggle" type="checkbox" <% if (model.get("isChecked")) {print("checked");} %>
+       data-toggle="toggle"
+       data-on="<%=model.get("labelChecked")%>" data-off="<%=model.get("labelUnchecked")%>"
+       data-onstyle="success"
+       data-size="<%=model.get("size")%>"
+       >
     <% }); %>
 
 

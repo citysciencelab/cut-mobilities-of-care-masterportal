@@ -2,6 +2,7 @@ define(function (require) {
 
     var SnippetDropdownView = require("modules/Snippets/dropDown/view"),
         ValueView = require("modules/Snippets/value/view"),
+        CheckBoxView = require("modules/Snippets/checkbox/view"),
         Template = require("text!modules/tools/filter/query/templateDetailView.html"),
         SnippetSliderView = require("modules/Snippets/slider/range/view"),
         QueryDetailView;
@@ -18,9 +19,9 @@ define(function (require) {
             this.listenTo(this.model, {
                 "rerenderSnippets": this.rerenderSnippets,
                 "renderSnippets": this.renderSnippets,
-                "render": this.render,
                 "change:isSelected": this.removeView,
-                "change:featureIds": this.updateFeatureCount
+                "change:featureIds": this.updateFeatureCount,
+                "change:isLayerVisible": this.render
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
                 "valuesChanged": this.renderValueViews,
@@ -31,6 +32,11 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            this.renderSnippets();
+            this.renderValueViews();
+            if (!this.model.get("activateOnSelection")) {
+                this.renderCheckboxView();
+            }
             return this.$el;
         },
         rerenderSnippets: function (changedValue) {
@@ -40,7 +46,6 @@ define(function (require) {
                 }
             });
         },
-
         /**
          * updates the display of the feature hits
          * @param  {Backbone.Model} model - QueryModel
@@ -48,7 +53,7 @@ define(function (require) {
          */
         updateFeatureCount: function (model, value) {
             this.$el.find(".feature-count").html(value.length + " Treffer");
-            this.$el.find(".detailview-head .btn")
+            this.$el.find(".detailview-head .zoom-btn")
                 .animate({opacity: 0.4}, 500)
                 .animate({opacity: 0.8}, 500);
         },
@@ -59,13 +64,11 @@ define(function (require) {
                 this.model.trigger("closeFilter");
             }
         },
-        runFilter: function () {
-            this.model.runFilter();
-        },
         renderSnippets: function () {
             var view;
 
-            _.each(this.model.get("snippetCollection").models, function (snippet) {
+            if (this.model.get("isLayerVisible")) {
+                _.each(this.model.get("snippetCollection").models, function (snippet) {
                     if (snippet.get("type") === "string") {
                         view = new SnippetDropdownView({model: snippet});
                         this.$el.append(view.render());
@@ -79,6 +82,10 @@ define(function (require) {
                         this.$el.append(view.render());
                     }
                 }, this);
+            }
+            else {
+                this.removeView();
+            }
         },
         /**
          * Rendert die View in der die ausgewählten Werte stehen, nach denen derzeit gefiltert wird.
@@ -103,15 +110,21 @@ define(function (require) {
             countSelectedValues === 0 ? this.$el.find(".text:last-child").show() : this.$el.find(".text:last-child").hide();
             countSelectedValues > 1 ? this.$el.find(".remove-all").show() : this.$el.find(".remove-all").hide();
         },
+        renderCheckboxView: function () {
+            var view = new CheckBoxView({model: this.model.get("btnIsActive")});
+
+                this.$el.find(".div-checkbox-isActive").append(view.render());
+        },
         toggleIsActive: function (evt) {
             this.model.setIsActive($(evt.target).prop("checked"));
+            this.model.runFilter();
         },
         removeView: function (model, value) {
-            this.runFilter();
             if (value === false) {
                 model.get("snippetCollection").forEach(function (model) {
                     model.trigger("removeView");
                 });
+                model.get("btnIsActive").removeView();
                 this.remove();
             }
         },

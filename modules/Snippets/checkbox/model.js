@@ -4,23 +4,35 @@ var SnippetModel = require("modules/snippets/model"),
     CheckboxSnippet;
 
 CheckboxSnippet = SnippetModel.extend({
-    defaults: {
-        isChecked: false
-    },
     initialize: function () {
         this.superInitialize();
-         _.each(this.get("values"), function (value) {
-            this.get("valuesCollection").add(value);
-        }, this);
+        this.addValueModel(this.get("isChecked"));
         this.listenTo(this.get("valuesCollection"), {
             "change:isChecked": function () {
                 this.trigger("valuesChanged");
             }
         });
     },
-    // setter for isChecked
+    addValueModel: function (value) {
+        this.get("valuesCollection").add(
+            new SnippetModel({
+                attr: this.get("name"),
+                isChecked: value,
+                type: this.get("type"),
+                labelChecked: "An",
+                labelUnchecked: "Aus",
+                size: "small"
+            })
+        );
+    },
+    renderView: function () {
+        this.trigger("renderView");
+    },
     setIsChecked: function (value) {
-        this.set("isChecked", value);
+        this.get("valuesCollection").models[0].set("isChecked", value);
+    },
+    getIsChecked: function () {
+        return this.get("valuesCollection").models[0].get("isChecked");
     }
  });
  return CheckboxSnippet;

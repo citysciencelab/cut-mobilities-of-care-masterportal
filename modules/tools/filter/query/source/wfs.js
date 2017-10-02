@@ -17,13 +17,25 @@ define(function (require) {
             var features = this.getFeaturesFromWFS();
 
             if (features.length > 0) {
-                this.setFeatures(features);
-                this.buildQueryDatastructure();
+                this.processFeatures(features);
             }
             else {
                 this.listenToFeaturesLoaded();
             }
             return features;
+        },
+        processFeatures: function (features) {
+            this.setFeatures(features);
+            this.setFeatureIds(this.collectAllFeatureIds(features));
+            this.buildQueryDatastructure();
+        },
+        collectAllFeatureIds: function (features) {
+            var featureIds = [];
+
+            _.each(features, function (feature) {
+                featureIds.push(feature.getId());
+            });
+            return featureIds;
         },
         /**
          * Waits for the Layer to load its features and proceeds requests the metadata
@@ -33,8 +45,7 @@ define(function (require) {
             this.listenTo(Radio.channel("WFSLayer"), {
                 "featuresLoaded": function (layerId, features) {
                     if (layerId === this.get("layerId")) {
-                        this.setFeatures(features);
-                        this.buildQueryDatastructure();
+                        this.processFeatures(features);
                     }
                 }
             });
@@ -167,26 +178,22 @@ define(function (require) {
          * and trigger them to the ModelList
          */
         runPredefinedRules: function () {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
-                features = [],
+            var features = this.get("features"),
                 newFeatures = [];
 
-            if (!_.isUndefined(model)) {
-                features = model.getLayerSource().getFeatures();
-
-                if (!_.isUndefined(this.get("predefinedRules")) && this.get("predefinedRules").length > 0) {
-                    _.each(features, function (feature) {
-                        _.each(this.get("predefinedRules"), function (rule) {
-                            if (_.contains(rule.values, feature.get(rule.attrName))) {
-                                newFeatures.push(feature);
-                            }
-                        });
-                    }, this);
-                }
-                else {
-                    return features;
-                }
+            if (!_.isUndefined(this.get("predefinedRules")) && this.get("predefinedRules").length > 0) {
+                _.each(features, function (feature) {
+                    _.each(this.get("predefinedRules"), function (rule) {
+                        if (_.contains(rule.values, feature.get(rule.attrName))) {
+                            newFeatures.push(feature);
+                        }
+                    });
+                }, this);
             }
+            else {
+                return features;
+            }
+
             return newFeatures;
         },
         /**

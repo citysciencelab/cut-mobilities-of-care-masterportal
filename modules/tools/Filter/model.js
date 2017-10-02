@@ -11,7 +11,8 @@ define(function (require) {
             isVisible: false,
             id: "filter",
             queryCollection: {},
-            isActive: false
+            isActive: false,
+            allowMultipleQueriesPerLayer: true
         },
         initialize: function () {
             var channel = Radio.channel("Filter");
@@ -24,6 +25,7 @@ define(function (require) {
             });
             this.set("queryCollection", new Backbone.Collection());
             this.listenTo(this.get("queryCollection"), {
+                "deactivateAllModels": this.deactivateAllModels,
                 "deselectAllModels": this.deselectAllModels,
                 "featureIdsChanged": function (featureIds) {
                     this.updateMap();
@@ -34,6 +36,7 @@ define(function (require) {
                 }
             }, this);
             this.setDefaults();
+
             this.createQueries(this.getConfiguredQueries());
         },
         resetFilter: function () {
@@ -54,11 +57,24 @@ define(function (require) {
                 model.deselectAllValueModels();
             }, this);
         },
-        deselectAllModels: function () {
+        deselectAllModels: function (selectedModel) {
             _.each(this.get("queryCollection").models, function (model) {
-                model.setIsActive(false);
+                // if only one Query per layer is allowed, deactivate queries that share a layer
+                // with the newly selected layer
+                if (!this.get("allowMultipleQueriesPerLayer") &&
+                    selectedModel.cid !== model.cid &&
+                    selectedModel.get("layerId") === model.get("layerId")) {
+                    model.setIsActive(false);
+                }
                 model.setIsSelected(false);
-            });
+            }, this);
+        },
+        deactivateAllModels: function () {
+            _.each(this.get("queryCollection").models, function (model) {
+                if (!this.get("allowMultipleQueriesPerLayer")) {
+                    model.setIsActive(false);
+                }
+            }, this);
         },
         /**
          * updates the Features shown on the Map
@@ -67,12 +83,11 @@ define(function (require) {
         updateMap: function () {
             // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
             if (_.contains(this.get("queryCollection").pluck("isSelected"), true)) {
-                var allFeatureIds = this.collectFeaturesIdsOfAllLayers(this.get("queryCollection"));
+                var allFeatureIds = this.groupFeatureIdsByLayer(this.get("queryCollection"));
 
                 _.each(allFeatureIds, function (layerFeatures) {
                     Radio.trigger("ModelList", "showFeaturesById", layerFeatures.layer, layerFeatures.ids);
                 });
-                Radio.trigger("Map", "zoomToFilteredFeatures", allFeatureIds);
             }
             else {
                 _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
@@ -98,17 +113,19 @@ define(function (require) {
          * @param  {[object]} queries query objects
          * @return {object} Map object mapping layers to featuresids
          */
-        collectFeaturesIdsOfAllLayers: function (queries) {
+        groupFeatureIdsByLayer: function (queries) {
             var allFeatureIds = [],
                 featureIds;
 
             if (!_.isUndefined(queries)) {
                 _.each(queries.groupBy("layerId"), function (group, layerId) {
                     featureIds = this.collectFilteredIds(group);
-                    allFeatureIds.push({
-                        layer: layerId,
-                        ids: featureIds
-                    });
+                    if (featureIds.length > 0) {
+                        allFeatureIds.push({
+                            layer: layerId,
+                            ids: featureIds
+                        });
+                    }
                 }, this);
             }
             return allFeatureIds;
@@ -122,11 +139,14 @@ define(function (require) {
         collectFilteredIds: function (queryGroup) {
             var featureIdList = [];
 
-             _.each(queryGroup, function (query) {
-                if (query.get("isSelected") === true) {
+            _.each(queryGroup, function (query) {
+                if (query.get("isActive") === true) {
                     _.each(query.get("featureIds"), function (featureId) {
                         featureIdList.push(featureId);
                     });
+                }
+                else {
+                    Radio.trigger("ModelList", "showAllFeatures", query.get("layerId"));
                 }
             });
             return _.unique(featureIdList);
@@ -153,8 +173,13 @@ define(function (require) {
         createQuery: function (model) {
             var query = new QueryModel(model);
 
+            if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
+                _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+            }
+
             if (query.get("isSelected")) {
                 query.setIsDefault(true);
+                query.setIsActive(true);
             }
 
             this.get("queryCollection").add(query);

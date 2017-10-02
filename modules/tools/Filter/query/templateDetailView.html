@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+<% if (isLayerVisible) { %>
 <div class="detailview-head">
-    <span class="heading col-sm-12 col-md-7 col-xs-7"><%= name %>-Filter</span>
-    <button class="btn btn-default btn-sm col-sm-12 col-md-5 col-xs-5" title="Zoom auf Treffer">
+    <span class="heading col-md-7 col-sm-12 col-xs-12"><%= name %>-Filter</span>
+    <button class="zoom-btn btn btn-default btn-sm col-md-5 col-sm-12 col-xs-12" title="Zoom auf Treffer">
         <span class="glyphicon glyphicon-search"></span>
         <span class="feature-count"><%= featureIds.length %> Treffer</span>
     </button>
+    <div class="div-checkbox-isActive col-md-7 col-sm-12 col-xs-12"></div>
 </div>
 <% if (this.model.has("info")) { %>
     <div class="info-text"><%= info %></div>
@@ -14,3 +16,4 @@
     <span class="remove-all value-text">Alle löschen</span>
     <div class="text">Noch keine Filteroption ausgewählt</div>
 </div>
+<%}%>
