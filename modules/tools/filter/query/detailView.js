@@ -24,9 +24,8 @@ define(function (require) {
                 "change:isLayerVisible": this.render
             }, this);
             this.listenTo(this.model.get("snippetCollection"), {
-                "valuesChanged": function () {
-                    this.renderValueViews();
-                }
+                "valuesChanged": this.renderValueViews,
+                "hideAllInfoText": this.hideAllInfoText
             }, this);
         },
         render: function () {
@@ -134,6 +133,13 @@ define(function (require) {
          */
         deselectAllValueModels: function () {
             this.model.deselectAllValueModels();
+        },
+
+        /**
+         * hides all infotexts in the filter
+         */
+        hideAllInfoText: function () {
+            this.$el.find(".info-text").hide();
         }
     });
 

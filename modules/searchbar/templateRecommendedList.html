@@ -11,7 +11,7 @@
         <% if (hit.glyphicon !== undefined) { %>
             <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><p id="searchInputLi"><span class="glyphicon <%= hit.glyphicon %>"></span><%= hit.name %><small><%= hit.type %></small></p></li>
         <% } else { %>
-            <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><img src="<%= hit.imageSrc %>"><span><%= _.isUndefined(hit.shortName)? hit.name : hit.shortName %></span><small><%= _.isUndefined(hit.additionalInfo)? hit.type: hit.additionalInfo %></small></li>
+            <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= _.isUndefined(hit.metaName)? hit.name: hit.metaName %>"><img src="<%= hit.imageSrc %>"><span><%= _.isUndefined(hit.shortName)? hit.name : hit.shortName %></span><small><%= _.isUndefined(hit.additionalInfo)? hit.type: hit.additionalInfo %></small></li>
         <% } %>
     <% } %>
 <% }); %>
