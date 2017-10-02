@@ -12,7 +12,8 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "renderView": this.render
+                "renderView": this.render,
+                "removeView": this.remove
             }, this);
         },
         render: function () {

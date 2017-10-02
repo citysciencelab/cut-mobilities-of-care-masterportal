@@ -67,8 +67,8 @@ define(function (require) {
         renderSnippets: function () {
             var view;
 
-            _.each(this.model.get("snippetCollection").models, function (snippet) {
-                if(this.model.get("isLayerVisible")) {
+            if (this.model.get("isLayerVisible")) {
+                _.each(this.model.get("snippetCollection").models, function (snippet) {
                     if (snippet.get("type") === "string") {
                         view = new SnippetDropdownView({model: snippet});
                         this.$el.append(view.render());
@@ -81,11 +81,11 @@ define(function (require) {
                         view = new SnippetSliderView({model: snippet});
                         this.$el.append(view.render());
                     }
-                }
-                else {
-                    snippet.removeView();
-                }
-            }, this);
+                }, this);
+            }
+            else {
+                this.removeView();
+            }
         },
         /**
          * Rendert die View in der die ausgewählten Werte stehen, nach denen derzeit gefiltert wird.
@@ -124,6 +124,7 @@ define(function (require) {
                 model.get("snippetCollection").forEach(function (model) {
                     model.trigger("removeView");
                 });
+                model.get("btnIsActive").removeView();
                 this.remove();
             }
         },
