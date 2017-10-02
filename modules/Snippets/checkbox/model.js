@@ -25,7 +25,10 @@ CheckboxSnippet = SnippetModel.extend({
             new SnippetModel({
                 attr: this.get("name"),
                 isChecked: value,
-                type: this.get("type")
+                type: this.get("type"),
+                labelChecked: "An",
+                labelUnchecked: "Aus",
+                size: "small"
             })
         );
     },

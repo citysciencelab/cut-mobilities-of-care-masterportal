@@ -36,7 +36,7 @@
 .simple-view {
     display: inline-block;
 }
-.filter .btn-default {
+.filter .simple-view .btn-default {
     margin: 4px;
 }
 

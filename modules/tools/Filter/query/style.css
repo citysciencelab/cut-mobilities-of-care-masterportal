@@ -1,3 +1,7 @@
+.filter .detailview-head .div-checkbox-isActive {
+    padding: 0px;
+}
+
 .filter .detailview-head button {
     /*float: right;*/
     margin: 0;

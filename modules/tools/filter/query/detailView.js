@@ -13,7 +13,7 @@ define(function (require) {
         events: {
             "change .checkbox-toggle": "toggleIsActive",
             "click .detailview-head button": "zoomToSelectedFeatures",
-            "click .remove-all": "deselectAllValueModels",
+            "click .remove-all": "deselectAllValueModels"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -35,7 +35,9 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.renderSnippets();
             this.renderValueViews();
-            this.renderCheckboxView();
+            if (!this.model.get("activateOnSelection")) {
+                this.renderCheckboxView();
+            }
             return this.$el;
         },
         rerenderSnippets: function (changedValue) {
@@ -112,7 +114,7 @@ define(function (require) {
         renderCheckboxView: function () {
             var view = new CheckBoxView({model: this.model.get("btnIsActive")});
 
-                this.$el.find(".div-checkbox-isActive").after(view.render());
+                this.$el.find(".div-checkbox-isActive").append(view.render());
         },
         toggleIsActive: function (evt) {
             this.model.setIsActive($(evt.target).prop("checked"));

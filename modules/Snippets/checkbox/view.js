@@ -8,7 +8,7 @@ define(function (require) {
         model: new Model(),
         template: _.template(Template),
         events: {
-            "change .checkbox-toggle" : "setSelectedValues"
+            "change .checkbox-toggle": "setSelectedValues"
         },
         initialize: function () {
             this.listenTo(this.model, {
