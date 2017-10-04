@@ -1,15 +1,4 @@
-
-    <% _.each(valuesCollection.models, function (model) {%>
-       <input class="checkbox-toggle" type="checkbox" <% if (model.get("isChecked")) {print("checked");} %>
-       data-toggle="toggle"
-       data-on="<%=model.get("labelChecked")%>" data-off="<%=model.get("labelUnchecked")%>"
-       data-onstyle="success"
-       data-size="<%=model.get("size")%>"
-       >
-    <% }); %>
-
-
-
-
-
-
+<% if (this.model.has("label")) { %>
+    <label><%= label %></label>
+<% } %>
+<input type="checkbox" title="Filter ausschalten" data-toggle="toggle" <% if (valuesCollection.at(0).get("isSelected")) {print("checked");} %>>

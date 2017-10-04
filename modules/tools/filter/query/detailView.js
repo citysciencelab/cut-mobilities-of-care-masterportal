@@ -12,7 +12,7 @@ define(function (require) {
         template: _.template(Template),
         events: {
             "change .checkbox-toggle": "toggleIsActive",
-            "click .detailview-head button": "zoomToSelectedFeatures",
+            "click .zoom-btn": "zoomToSelectedFeatures",
             "click .remove-all": "deselectAllValueModels"
         },
         initialize: function () {
@@ -34,9 +34,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.renderSnippets();
             this.renderValueViews();
-            if (!this.model.get("activateOnSelection")) {
-                this.renderCheckboxView();
-            }
+            this.renderCheckboxView();
             return this.$el;
         },
         rerenderSnippets: function (changedValue) {
@@ -54,8 +52,8 @@ define(function (require) {
         updateFeatureCount: function (model, value) {
             this.$el.find(".feature-count").html(value.length + " Treffer");
             this.$el.find(".detailview-head .zoom-btn")
-                .animate({opacity: 0.4}, 500)
-                .animate({opacity: 0.8}, 500);
+                .animate({opacity: 0.6}, 500)
+                .animate({opacity: 1.0}, 500);
         },
 
         zoomToSelectedFeatures: function () {
@@ -111,9 +109,14 @@ define(function (require) {
             countSelectedValues > 1 ? this.$el.find(".remove-all").show() : this.$el.find(".remove-all").hide();
         },
         renderCheckboxView: function () {
-            var view = new CheckBoxView({model: this.model.get("btnIsActive")});
+            if (!this.model.get("activateOnSelection")) {
+                var view = new CheckBoxView({model: this.model.get("btnIsActive")});
 
-                this.$el.find(".div-checkbox-isActive").append(view.render());
+                this.$el.find(".detailview-head").before(view.render());
+            }
+            else {
+                this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
+            }
         },
         toggleIsActive: function (evt) {
             this.model.setIsActive($(evt.target).prop("checked"));

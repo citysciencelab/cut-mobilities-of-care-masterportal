@@ -6,9 +6,10 @@ define(function (require) {
 
     CheckboxSnippetView = Backbone.View.extend({
         model: new Model(),
+        className: "checkbox-container",
         template: _.template(Template),
         events: {
-            "change .checkbox-toggle": "setSelectedValues"
+            "change input": "setIsSelected"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -20,14 +21,27 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            this.$el.find("input").bootstrapToggle();
-
+            this.initCheckbox();
             return this.$el;
         },
-        setSelectedValues: function (evt) {
-            var model = this.model.get("valuesCollection").models[0];
 
-            model.set("isChecked", $(evt.target).prop("checked"));
+        /**
+         * inits the Checkbox
+         */
+        initCheckbox: function () {
+            this.$el.find("input").bootstrapToggle({
+                on: this.model.get("textOn"),
+                off: this.model.get("textOff"),
+                size: this.model.get("size")
+            });
+        },
+
+        /**
+         * calls the function setIsSelected in the model
+         * @param {ChangeEvent} evt
+         */
+        setIsSelected: function (evt) {
+            this.model.setIsSelected($(evt.target).prop("checked"));
         }
     });
     return CheckboxSnippetView;

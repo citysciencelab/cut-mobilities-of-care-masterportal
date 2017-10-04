@@ -18,24 +18,11 @@ define(function (require) {
          */
         superInitialize: function () {
             this.set("snippetCollection", new Backbone.Collection());
-            this.set("btnIsActive", new SnippetCheckboxModel());
-            if (this.get("isActive")) {
-                this.get("btnIsActive").setIsChecked(true);
-            }
-            this.listenTo(this.get("btnIsActive"), {
-                "valuesChanged": function () {
-                    var checkboxModel = this.get("btnIsActive"),
-                        isActive = this.get("btnIsActive").getIsChecked();
-
-                    checkboxModel.renderView();
-                    this.setIsActive(isActive);
-                    this.runFilter();
-                }
-            }, this);
+            this.addIsActiveCheckbox();
             this.listenTo(this.get("snippetCollection"), {
                 "valuesChanged": function () {
                     this.setIsActive(true);
-                    this.get("btnIsActive").setIsChecked(true);
+                    this.get("btnIsActive").setIsSelected(true);
                     this.runFilter();
                 }
             }, this);
@@ -55,6 +42,27 @@ define(function (require) {
                 this.setIsLayerVisible(model.getIsVisibleInMap());
             }
         },
+
+        addIsActiveCheckbox: function () {
+            if (!this.get("activateOnSelection")) {
+                this.set("btnIsActive", new SnippetCheckboxModel({
+                    label: this.get("name") + "-Filter",
+                    isSelected: this.get("isActive")
+                }));
+
+                this.listenTo(this.get("btnIsActive"), {
+                    "valuesChanged": function () {
+                        var checkboxModel = this.get("btnIsActive"),
+                        isActive = this.get("btnIsActive").getIsSelected();
+
+                        checkboxModel.renderView();
+                        this.setIsActive(isActive);
+                        this.runFilter();
+                    }
+                }, this);
+            }
+        },
+
         /**
          * [description]
          * @param  {[type]} featureAttributesMap [description]

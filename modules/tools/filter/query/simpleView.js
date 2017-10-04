@@ -11,7 +11,7 @@ define(function (require) {
                 "change:isSelected": function (model, value) {
                     if (value) {
                         this.model.setIsActive(value);
-                        this.model.get("btnIsActive").get("valuesCollection").models[0].set("isChecked", value);
+                        this.model.get("btnIsActive").setIsSelected(value);
                         this.model.runFilter();
                     }
                 }

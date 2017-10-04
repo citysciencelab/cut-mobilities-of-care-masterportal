@@ -1,12 +1,18 @@
-.filter .detailview-head .div-checkbox-isActive {
-    padding: 0px;
+.filter .checkbox-container > label, .filter .detailview-head > label {
+    font-size: 16px;
+    color: rgb(182, 0, 0);
+    padding-top: 4px;
+}
+
+.filter .detailview-head {
+    padding: 8px 15px;
 }
 
 .filter .detailview-head button {
-    /*float: right;*/
-    margin: 0;
+    float: none;
+    /*margin-bottom: 8px;*/
     color: #fff;
-    background-color: rgba(8, 88, 158, 0.8);
+    background-color: rgb(8, 88, 158);
 }
 
 .filter .feature-count {
@@ -14,9 +20,8 @@
 }
 
 .filter .detailview-head .btn:hover {
-    background-color: rgba(8, 88, 158, 0.6);
+    opacity: 0.8;
 }
-
 
 .filter .toggleIsActive .glyphicon-remove {
     color:#bbb;
@@ -28,30 +33,10 @@
     border-bottom: 1px solid rgb(229, 229, 229);
     padding: 8px 15px;
 }
-.filter .detailview-head {
-    display: inline-block;
-    padding: 8px 15px;
-    width: 100%;
-    color: rgb(182, 0, 0);
-}
-
-.filter .detailview-head .heading {
-    padding-left: 0px;
-    margin-bottom: 6px;
-    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    font-size: 18px;
-}
-
-.filter .detail-view-container > .info-text {
-    font-size: 11px;
-    padding: 8px 15px;
-    clear: both;
-}
 
 .filter .dropdown-container .info-text, .filter .slider-container .info-text {
     font-size: 11px;
 }
-
 
 .filter .value-views-container .text {
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
