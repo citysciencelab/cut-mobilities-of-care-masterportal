@@ -11,7 +11,7 @@ define("app",
     "modules/core/crs",
     "modules/core/autostarter",
     "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter) {
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
 
     // Core laden
     new Autostarter();
@@ -87,7 +87,7 @@ define("app",
             });
         }
 
-        if (Config.mouseHover && Config.mouseHover === true) {
+        if (Config.mouseHover) {
             require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
                 new MouseHoverPopupView();
             });
@@ -109,9 +109,10 @@ define("app",
             new WindowView();
         });
             // Module laden
+
+        // Tools
         require(["modules/sidebar/view"], function (SidebarView) {
             var sidebarView = new SidebarView();
-            // Tools
             _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
                 switch (tool.id) {
                     case "animation": {

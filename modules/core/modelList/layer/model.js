@@ -18,11 +18,11 @@ define(function (require) {
             selectionIDX: 0,
             layerInfoClicked: false
         },
-        initialize: function () {
+        superInitialize: function () {
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
-                    if (this.has("childLayerSources") === false) {
+                    if (this.has("childLayerSources") === false && _.isUndefined(this.getLayerSource())) {
                         this.createLayerSource();
                     }
                 },
@@ -53,6 +53,7 @@ define(function (require) {
                 "change:isVisibleInMap": function () {
                     // triggert das Ein- und Ausschalten von Layern
                     Radio.trigger("ClickCounter", "layerVisibleChanged");
+                    Radio.trigger("Layer", "layerVisibleChanged", this.getId(), this.getIsVisibleInMap());
                     this.toggleLayerOnMap();
                     this.toggleAttributionsInterval();
                 },

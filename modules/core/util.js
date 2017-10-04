@@ -39,6 +39,12 @@ define([
             });
 
             $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
+            $(window).on("resize", _.bind(this.updateMapHeight, this));
+        },
+        updateMapHeight: function () {
+            var mapHeight = $(".lgv-container").height() - $("#main-nav").height();
+
+            $("#map").css("height", mapHeight + "px");
         },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);

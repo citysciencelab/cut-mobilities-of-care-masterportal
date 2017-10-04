@@ -5,7 +5,7 @@
 }
 
 .toggleButtonPressed {
-    background-color: blue!important;
+    background-color: rgb(8,88,158)!important;
 }
 
 .controls-view > .row > div > .glyphicon {

@@ -41,7 +41,8 @@ define(function (require) {
                 "getIsVisible": this.getIsVisible,
                 "getGFIForPrint": this.getGFIForPrint,
                 "getCoordinate": this.getCoordinate,
-                "getCurrentView": this.getCurrentView
+                "getCurrentView": this.getCurrentView,
+                "getVisibleTheme": this.getVisibleTheme
             }, this);
 
             this.listenTo(this, {
@@ -310,6 +311,28 @@ define(function (require) {
             var theme = this.getThemeList().at(this.getThemeIndex());
 
             return [theme.getGfiContent()[0], theme.get("name"), this.getCoordinate()];
+        },
+
+        getVisibleTheme: function () {
+            return this.getThemeList().findWhere({isVisible: true});
+        },
+
+        /**
+        * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
+        */
+        checkInsideSearchMarker: function (top, left) {
+            var button = Radio.request("MapMarker", "getCloseButtonCorners"),
+                bottomSM = button.bottom,
+                leftSM = button.left,
+                topSM = button.top,
+                rightSM = button.right;
+
+            if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
     });

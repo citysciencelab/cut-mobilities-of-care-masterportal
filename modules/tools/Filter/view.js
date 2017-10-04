@@ -20,7 +20,8 @@ define(function (require) {
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
                         this.render();
-                    } else {
+                    }
+                    else {
                         this.$el.remove();
                     }
                 }
@@ -53,9 +54,7 @@ define(function (require) {
             if (_.isUndefined(selectedModel) === false) {
                 var view = new QueryDetailView({model: selectedModel});
 
-                this.$el.find(".detail-view-container").append(view.render());
-                view.renderSnippets();
-                view.renderValueViews();
+                this.$el.append(view.render());
             }
         },
 
@@ -70,6 +69,7 @@ define(function (require) {
         closeFilter: function () {
             this.model.setIsActive(false);
             this.$el.remove();
+            this.model.collapseOpenSnippet();
         }
     });
 

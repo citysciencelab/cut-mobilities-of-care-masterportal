@@ -13,6 +13,7 @@
     padding: 4px 10px;
     width: 100%;
     z-index: 1030;
+    opacity: 0.7;
 }
 
 .footer > .glyphicon-option-vertical {

@@ -42,6 +42,10 @@
         "_",
         "JSON",
         "Radio",
-        "Backbone"
+        "Backbone",
+        "before",
+        "beforeEach",
+        "describe",
+        "it"
     ]
 }
