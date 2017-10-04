@@ -92,7 +92,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 ```
 #!json
 "mapView": {
-        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [561210, 5932600],
         "options": [
         {
@@ -428,7 +428,7 @@ Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Men�
                 "glyphicon" : "glyphicon-search",
                 "serviceId" : "6",
                 "StoredQueryID" : "Flurstueck",
-                "configJSON":"/../../components/lgv-config/gemarkungen_hh.json",
+                "configJSON":"/../../node_modules/lgv-config/gemarkungen_hh.json",
                 "parcelDenominator" : false
             },
             {...}
@@ -757,7 +757,7 @@ Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "StoredQueryID": "Flurstueck",
-            "configJSON": "/../../components/lgv-config/gemarkungen_hh.json",
+            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure": {
