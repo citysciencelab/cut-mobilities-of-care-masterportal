@@ -17,7 +17,7 @@
     <div class="input-group inputGroupR" id="input-group-start">
         <input type="text" class="form-control adresse" id="startAdresse" placeholder="Von:" aria-describedby="basic-addon1"  value="<%=startAdresse%>" autocomplete="off">
         <div style="position:relative;">
-             <ul id="start" class="suggestlist dropdown-menu-search dropdown-menu-right" aria-labelledby="startAdresse">
+             <ul id="start" class="dropdown-menu-routing" aria-labelledby="startAdresse">
             </ul>
         </div>
         <span id="startAdressePositionSpan" class="<% if (!isGeolocationPossible) {print ('hidden ');} %>input-group-addon glyphicon glyphicon-map-marker routinglocator startAdressePosition" aria-hidden="true"></span>
@@ -26,7 +26,7 @@
     <div class="input-group inputGroupR" id="input-group-ziel">
         <input type="text" class="form-control adresse" id="zielAdresse" placeholder="Nach:" aria-describedby="basic-addon1" value="<%=zielAdresse%>" autocomplete="off">
         <div style="position:relative;">
-            <ul id="ziel" class="suggestlist dropdown-menu-search dropdown-menu-right" role="menu" aria-labelledby="zielAdresse">
+            <ul id="ziel" class="dropdown-menu-routing" role="menu" aria-labelledby="zielAdresse">
             </ul>
         </div>
     </div>
