@@ -6,7 +6,9 @@ define(function (require) {
         WMSLayer;
 
     WMSLayer = Layer.extend({
-
+        initialize: function () {
+            this.superInitialize();
+        },
         setAttributes: function () {
             if (_.isUndefined(this.getInfoFormat()) === true) {
                 this.setInfoFormat("text/xml");

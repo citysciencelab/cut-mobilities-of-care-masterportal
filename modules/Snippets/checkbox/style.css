@@ -1,0 +1,27 @@
+.checkbox-container {
+    display: inline-block;
+    width: 100%;
+    padding: 8px 15px;
+}
+
+.checkbox-container .toggle {
+    float: right;
+    background-color: rgb(255, 255, 255);
+}
+
+.checkbox-container .toggle-group .btn-primary {
+    background-color: rgb(8, 88, 158);
+}
+
+.checkbox-container .toggle-group .btn-primary:hover {
+    opacity: 0.8;
+}
+
+.checkbox-container > label {
+    padding-top: 6px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 70%;
+    margin: 0;
+}

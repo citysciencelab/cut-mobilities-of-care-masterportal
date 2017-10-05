@@ -1,28 +1,38 @@
-define(function (require) {
+define(function () {
 
-var Sidebar,
-    Radio = require("backbone.radio");
-
-    Sidebar = Backbone.Model.extend({
+    var Sidebar = Backbone.Model.extend({
         defaults: {
-            isOpen: false
+            // true if sidebar is visible
+            isVisible: false,
+            // true if viewport width < 768px
+            isMobile: false
         },
         initialize: function () {
             var channel = Radio.channel("Sidebar");
 
-            channel.on({
-                "toggle": this.setIsOpen
-            }, this);
+            this.listenTo(channel, {
+                "toggle": this.setIsVisible
+            });
+            this.listenTo(Radio.channel("Util"), {
+                "isViewMobileChanged": this.setIsMobile
+            });
+            this.setIsMobile(Radio.request("Util", "isViewMobile"));
         },
-        // getter for isOpen
-        getisOpen: function () {
-            return isOpen;
-        },
-        // setter for isOpen
-        setIsOpen: function (value) {
-            this.set("isOpen", value);
 
-            Radio.trigger("Map", "updateSize");
+        /**
+         * sets the isMobile attribute
+         * @param  {boolean} value
+         */
+        setIsMobile: function (value) {
+            this.set("isMobile", value);
+        },
+
+        /**
+         * sets the isVisible attribute
+         * @param  {boolean} value
+         */
+        setIsVisible: function (value) {
+            this.set("isVisible", value);
         }
     });
 

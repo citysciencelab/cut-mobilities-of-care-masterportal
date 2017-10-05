@@ -8,7 +8,7 @@ define([
 ], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, Radio) {
     "use strict";
     return Backbone.View.extend({
-        model: Searchbar,
+        model: new Searchbar(),
         id: "searchbar", // wird ignoriert, bei renderToDOM
         className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
         searchbarKeyNavSelector: "#searchInputUL",
@@ -216,12 +216,12 @@ define([
         *
         */
         renderRecommendedList: function () {
-            // if (this.model.get("isHitListReady") === true) {
                 var attr = this.model.toJSON(),
+                    template;
                     // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
                     // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+                    this.prepareAttrStrings(attr.hitList);
                     template = _.template(SearchbarRecommendedListTemplate);
-
                 $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
                 $("ul.dropdown-menu-search").html(template(attr));
             // }
@@ -231,6 +231,20 @@ define([
             }
             this.model.unset("initSearchString", true);
         },
+        prepareAttrStrings: function (hitlist) {
+            // kepps hit.names from overflowing
+            _.each(hitlist, function (hit) {
+                if (!_.isUndefined(hit.additionalInfo)) {
+                    if ( hit.name.length + hit.additionalInfo.length > 50) {
+                        hit.shortName = this.model.shortenString(hit.name, 30);
+                        hit.additionalInfo = this.model.shortenString(hit.additionalInfo, 20);
+                    }
+                }
+                // IE 11 svg bug -> png
+                hit.imageSrc = this.model.changeFileExtension(hit.imageSrc, ".png");
+             }, this);
+        },
+
         /**
         *
         */
@@ -260,6 +274,8 @@ define([
         * Wird ausgeführt, wenn ein Eintrag ausgewählt oder bestätigt wurde.
         */
         hitSelected: function (evt) {
+            Radio.trigger("Filter", "resetFilter");
+
             var hit,
                 hitID;
 
@@ -281,7 +297,7 @@ define([
             // 3. Zoome ggf. auf Ergebnis
             Radio.trigger("GFI", "setIsVisible", false);
             // 4. Zoome ggf. auf Ergebnis
-            Radio.trigger("MapMarker", "zoomTo", hit);
+            Radio.trigger("MapMarker", "zoomTo", hit, 5000);
             // 5. Triggere Treffer über Radio
             // Wird benötigt für IDA und sgv-online, ...
             Radio.trigger("Searchbar", "hit", hit);

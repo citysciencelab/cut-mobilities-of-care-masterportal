@@ -7,11 +7,11 @@
       <app:strasse>Bodelschwinghstraße 24</app:strasse>
       <app:ort>22337  Hamburg</app:ort>
       <app:homepage>http://www.evangelisches-krankenhaus-alsterdorf.de</app:homepage>
-      <app:krankenhausverzeichnis>http://www.hamburg.de/krankenhausverzeichnis/1180268/alsterdorf.html</app:krankenhausverzeichnis>
+      <app:krankenhausverzeichnis>www.krankenhausverzeichnis.de|www.google.com|www.hamburg.de</app:krankenhausverzeichnis>
       <app:anzahl_planbetten>252</app:anzahl_planbetten>
       <app:hinweiszeile></app:hinweiszeile>
       <app:anzahl_plaetze_teilstationaer>43</app:anzahl_plaetze_teilstationaer>
-      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_notversorgung>false</app:teilnahme_notversorgung>
       <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
       <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
       <app:stand>01.01.2016</app:stand>
@@ -34,7 +34,7 @@
       <app:anzahl_planbetten>70</app:anzahl_planbetten>
       <app:hinweiszeile>Weitere Betten sind in den Krankenhausplan des Landes Schleswig-Holstein aufgenommen.</app:hinweiszeile>
       <app:anzahl_plaetze_teilstationaer>20</app:anzahl_plaetze_teilstationaer>
-      <app:teilnahme_notversorgung>Nein</app:teilnahme_notversorgung>
+      <app:teilnahme_notversorgung>false</app:teilnahme_notversorgung>
       <app:teilnahme_geburtsklinik>Nein</app:teilnahme_geburtsklinik>
       <app:geburtsklinik_differenziert>Nein</app:geburtsklinik_differenziert>
       <app:stand>01.01.2016</app:stand>
@@ -57,7 +57,7 @@
       <app:anzahl_planbetten>569</app:anzahl_planbetten>
       <app:hinweiszeile></app:hinweiszeile>
       <app:anzahl_plaetze_teilstationaer>30</app:anzahl_plaetze_teilstationaer>
-      <app:teilnahme_notversorgung>Ja</app:teilnahme_notversorgung>
+      <app:teilnahme_notversorgung>true</app:teilnahme_notversorgung>
       <app:teilnahme_geburtsklinik>Ja</app:teilnahme_geburtsklinik>
       <app:geburtsklinik_differenziert>Ja&lt;br>Perinatalzentrum Level 2</app:geburtsklinik_differenziert>
       <app:stand>01.01.2016</app:stand>
