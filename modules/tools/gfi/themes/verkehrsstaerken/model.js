@@ -55,10 +55,10 @@ define(function (require) {
 
                         // vorzeichen vor year prüfen
                         if (charBeforeYear === "_") {
-                            newRowName = rowName.replace("_" + String(year), "");
+                            newRowName = rowName.replace("_" + String(year), "").trim();
                         }
                         else {
-                            newRowName = rowName.replace(" " + String(year), "");
+                            newRowName = rowName.replace(" " + String(year), "").trim();
                         }
                         yearData = {
                             year: year,
