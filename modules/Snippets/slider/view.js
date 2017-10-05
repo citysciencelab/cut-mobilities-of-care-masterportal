@@ -2,26 +2,26 @@ define(function (require) {
     require("slider");
 
     var Template = require("text!modules/Snippets/slider/template.html"),
-        SliderModel = require("modules/Snippets/slider/model"),
         SliderView;
 
     SliderView = Backbone.View.extend({
-        model: new SliderModel(),
         className: "slider-container",
         template: _.template(Template),
         events: {
             // This event fires when the dragging stops or has been clicked on
             "slideStop input.slider": function (evt) {
-                this.updateValueModels(evt);
+                this.model.updateValues(evt.value);
                 this.setInputControlValue(evt);
             },
             // This event fires when the slider is dragged
-            "slide input.slider": "setInputControlValue"
+            "slide input.slider": "setInputControlValue",
+            // This event is fired when the info button is clicked
+            "click .info-icon": "toggleInfoText"
         },
 
         initialize: function () {
-            this.listenTo(this.model.get("valuesCollection"), {
-                "change:isSelected": this.updateValueModel
+            this.listenTo(this.model, {
+                "render": this.render
             });
         },
 
@@ -37,38 +37,14 @@ define(function (require) {
          * init the slider
          */
         initSlider: function () {
+            var valueModel = this.model.get("valueCollection").models[0];
+
             this.$el.find("input.slider").slider({
-                min: this.model.get("rangeMinValue"),
-                max: this.model.get("rangeMaxValue"),
+                min: valueModel.get("min"),
+                max: valueModel.get("max"),
                 step: 1,
-                value: this.model.get("rangeMinValue")
+                value: valueModel.value
             });
-        },
-
-        /**
-         * If the value model is no longer select,
-         * the corresponding update function is called up in the model
-         * @param  {Backbone.Model} valueModel
-         * @param  {boolean} value - isSelected
-         */
-        updateValueModel: function (valueModel, value) {
-            if (value === false) {
-                if (valueModel.get("id") === "minModel") {
-                    this.model.updateMinValueModel(this.model.get("rangeMinValue"));
-                }
-                else if (valueModel.get("id") === "maxModel") {
-                    this.model.updateMaxValueModel(this.model.get("rangeMaxValue"));
-                }
-                this.render();
-            }
-        },
-
-        /**
-        * Call the function "updateValueModels" in the model
-        * @param {Event} evt - slideStop
-        */
-        updateValueModels: function (evt) {
-            this.model.updateValueModels(evt.value);
         },
 
         /**
@@ -77,6 +53,14 @@ define(function (require) {
          */
         setInputControlValue: function (evt) {
             this.$el.find("input.form-control").val(evt.value);
+        },
+
+        /**
+         * toggle the info text
+         */
+        toggleInfoText: function () {
+            this.model.trigger("hideAllInfoText");
+            this.$el.find(".info-text").toggle();
         }
 
     });

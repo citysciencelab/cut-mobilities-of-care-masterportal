@@ -164,6 +164,11 @@ define([
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
+                case "Schulinfosystem": {
+                    this.showMarker(hit.coordinate);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, 6);
+                    break;
+                }
                 default: {
                     this.showMarker(hit.coordinate);
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
