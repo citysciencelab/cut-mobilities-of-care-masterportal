@@ -172,7 +172,6 @@ define(function (require) {
 
             return parsedDataArray;
         },
-
         parseDataValue: function (value) {
             if (value === "*") {
                 value = "Ja";
@@ -293,10 +292,10 @@ define(function (require) {
         },
 
         createAndGetLegendText: function (value) {
-            if (value === "Dtv") {
+            if (value === "DTV") {
                 return "DTV (Kfz/24h) mit Baustelleneinfluss";
             }
-            else if (value === "Dtvw") {
+            else if (value === "DTVw") {
                 return "DTVw (Kfz/24h) mit Baustelleneinfluss";
             }
             else {

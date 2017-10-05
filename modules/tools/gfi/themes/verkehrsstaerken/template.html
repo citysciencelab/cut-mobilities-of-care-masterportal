@@ -24,19 +24,23 @@
                 <% _.each(rowNames, function (name) { %>
                 <tr>
                     <% if (name === "DTV") { %>
-                        <td>DTV (Kfz/24h)</td>
+                        <td class="kategory">DTV (Kfz/24h)</td>
                     <% }
                     else if (name === "DTVw") { %>
-                        <td>DTVw (Kfz/24h)</td>
+                        <td class="kategory">DTVw (Kfz/24h)</td>
                     <% }
                     else if (name === "Schwerverkehrsanteil am DTVw") { %>
-                        <td>SV-Anteil am DTVw (%)</td>
+                        <td class="kategory">SV-Anteil am DTVw (%)</td>
                     <% }
                     else { %>
-                        <td>Baustelleneinfluss</td>
+                        <td class="kategory">Baustelleneinfluss</td>
                     <% }
-                    _.each(years, function(year) {%>
-                    <td><%= _.findWhere(dataset, {year: year})[name] %></td>
+                    _.each(years, function(year) { %>
+                        <td class="data">
+                        <% if(!_.isUndefined(_.findWhere(dataset, {year: year})[name])) {
+                        print(_.findWhere(dataset, {year: year})[name].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                        } %>
+                        </td>
                     <% });%>
                 </tr>
                 <% });%>
