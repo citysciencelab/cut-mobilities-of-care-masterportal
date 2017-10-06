@@ -1,5 +1,4 @@
 define(function (require) {
-
     var ThemeView = require("modules/tools/gfi/themes/view"),
         VerkehrsStaerkenThemeTemplate = require("text!modules/tools/gfi/themes/verkehrsstaerken/template.html"),
         VerkehrsStaerkenThemeView;
@@ -10,7 +9,7 @@ define(function (require) {
         template: _.template(VerkehrsStaerkenThemeTemplate),
         events: {
             "click .kat": "changeKat",
-            "shown.bs.tab #diagramm-tab": "initiallyLoadDiagramm"
+            "click .tab-toggle": "toggleTab"
         },
         changeKat: function (evt) {
             $(".graph svg").remove();
@@ -25,14 +24,30 @@ define(function (require) {
             });
             this.model.createD3Document();
         },
-        initiallyLoadDiagramm: function (evt) {
-            if ($("#" + evt.currentTarget.id).hasClass("active")) {
-                var attr;
+        loadDiagramm: function () {
+            var attr = $("#diagramm").find(".active")[0].value;
 
-                attr = $("#diagramm").find(".active")[0].value;
-                $(".graph svg").remove();
-                this.model.setAttrToShow([attr]);
-                this.model.createD3Document();
+            $(".graph svg").remove();
+            this.model.setAttrToShow([attr]);
+            this.model.createD3Document();
+        },
+        toggleTab: function (evt) {
+            var contentId = $(evt.currentTarget).attr("value");
+
+            // deactivate all tabs and their contents
+            $(evt.currentTarget).parent().find("li").each(function (index, li) {
+                var tabContentId = $(li).attr("value");
+
+                $(li).removeClass("active");
+                $("#" + tabContentId).removeClass("active");
+                $("#" + tabContentId).removeClass("in");
+            });
+            // activate selected tab and its content
+            $(evt.currentTarget).addClass("active");
+            $("#" + contentId).addClass("active");
+            $("#" + contentId).addClass("in");
+            if (contentId === "diagramm") {
+                this.loadDiagramm();
             }
         }
     });

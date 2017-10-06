@@ -17,7 +17,7 @@ define(function (require) {
 
             $("body").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
-                containment: "#map",
+                containment: ".lgv-container",
                 handle: ".gfi-header"
             });
         },

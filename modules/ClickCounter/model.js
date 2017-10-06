@@ -24,7 +24,7 @@ define([
                 "isViewMobileChanged": this.updateURL
             });
             // Erzeuge iFrame
-            $("<iframe ' src='" + this.get("usedURL") + "' id='" + this.get("countframeid") + "' width='0' height='0' frameborder='0'/>").appendTo("body");
+            $("<iframe style='display:none' src='" + this.get("usedURL") + "' id='" + this.get("countframeid") + "' width='0' height='0' frameborder='0'/>").appendTo("body");
         },
         updateURL: function (isMobile) {
             var usedURL;
