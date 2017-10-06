@@ -8,7 +8,7 @@ define(function (require) {
     VerkehrsStaerkenTheme = Theme.extend({
         defaults: {
             ansicht: "Diagrammansicht",
-            link: "https://test.geoportal-hamburg.de/test/test.xlsx",
+            link: "http://daten-hamburg.de/transport_verkehr/verkehrsstaerken/DTV_DTVw_2004-2015_Download.xlsx",
             zaehlstelle: "",
             bezeichnung: "",
             art: "",
@@ -55,10 +55,10 @@ define(function (require) {
 
                         // vorzeichen vor year prüfen
                         if (charBeforeYear === "_") {
-                            newRowName = rowName.replace("_" + String(year), "");
+                            newRowName = rowName.replace("_" + String(year), "").trim();
                         }
                         else {
-                            newRowName = rowName.replace(" " + String(year), "");
+                            newRowName = rowName.replace(" " + String(year), "").trim();
                         }
                         yearData = {
                             year: year,
@@ -172,7 +172,6 @@ define(function (require) {
 
             return parsedDataArray;
         },
-
         parseDataValue: function (value) {
             if (value === "*") {
                 value = "Ja";
@@ -293,10 +292,10 @@ define(function (require) {
         },
 
         createAndGetLegendText: function (value) {
-            if (value === "Dtv") {
+            if (value === "DTV") {
                 return "DTV (Kfz/24h) mit Baustelleneinfluss";
             }
-            else if (value === "Dtvw") {
+            else if (value === "DTVw") {
                 return "DTVw (Kfz/24h) mit Baustelleneinfluss";
             }
             else {
