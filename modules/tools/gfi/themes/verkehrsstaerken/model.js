@@ -8,7 +8,7 @@ define(function (require) {
     VerkehrsStaerkenTheme = Theme.extend({
         defaults: {
             ansicht: "Diagrammansicht",
-            link: "https://test.geoportal-hamburg.de/test/test.xlsx",
+            link: "http://daten-hamburg.de/transport_verkehr/verkehrsstaerken/DTV_DTVw_2004-2015_Download.xlsx",
             zaehlstelle: "",
             bezeichnung: "",
             art: "",
