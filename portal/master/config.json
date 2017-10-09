@@ -70,7 +70,7 @@
             "isInitOpen": false,
             "predefinedQueries": [
               {
-                "layerId": "8190",
+                "layerId": "8712",
                 "isActive": true,
                 "isSelected": true,
                 "isVisible": true,
@@ -84,7 +84,7 @@
                 "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
               },
               {
-                "layerId": "8190",
+                "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
                 "name": "Stadtteilschulen",
@@ -97,7 +97,7 @@
                 "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "schwerpunktschule", "fremdsprache", "schulische_ausrichtung"]
               },
               {
-                "layerId": "8190",
+                "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
                 "name": "Gymnasien",
@@ -110,7 +110,7 @@
                 "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "fremdsprache", "schulische_ausrichtung"]
               },
               {
-                "layerId": "8190",
+                "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
                 "name": "Sonderschulen",
@@ -123,7 +123,7 @@
                 "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "abschluss", "anzahl_schueler", "foerderschwerpunkt"]
               },
               {
-                "layerId": "8190",
+                "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
                 "name": "Berufliche Schulen",
@@ -402,11 +402,11 @@
           ]
         },
         {
-          "id": "8190",
+          "id": "8712",
           "name": "Schulinfosystem",
           "visibility": true,
-          "styleId": "8190",
-          "styleField": "schul_icon"
+          "styleId": "8712",
+          "styleField": "kapitelbezeichnung"
         },
         {
           "id": "753",

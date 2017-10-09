@@ -35,6 +35,7 @@ define(function (require) {
                 this.appendRoutableButton();
                 this.adjustGfiWindow(currentView, oldGfiWidth, oldLeft);
             }
+            this.delegateEvents();
         },
         adjustGfiWindow: function (currentView, oldGfiWidth, oldLeft) {
             var newGfiWidth,
