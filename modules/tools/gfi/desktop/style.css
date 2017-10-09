@@ -13,7 +13,9 @@
 .gfi .panel {
     margin-bottom: 0;
 }
-
+.gfi .has-image {
+    max-width: 25vw;
+}
 /* Desktop GFI */
 .gfi {
     border: 1px solid rgb(229, 229, 229);
