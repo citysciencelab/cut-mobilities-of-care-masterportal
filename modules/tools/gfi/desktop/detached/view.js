@@ -17,7 +17,7 @@ define(function (require) {
 
             $("body").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
-                containment: "#map",
+                containment: ".lgv-container",
                 handle: ".gfi-header",
                 stop: function (evt, ui) {
                     // helper, so that "left" is never 0. needed for gfi/themes/view.js adjustGfiWindow()
