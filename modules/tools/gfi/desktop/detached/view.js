@@ -18,7 +18,11 @@ define(function (require) {
             $("body").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
                 containment: ".lgv-container",
-                handle: ".gfi-header"
+                handle: ".gfi-header",
+                stop: function (evt, ui) {
+                    // helper, so that "left" is never 0. needed for gfi/themes/view.js adjustGfiWindow()
+                    $(".gfi").css("left", (ui.position.left + 1) + "px");
+                }
             });
         },
 
@@ -28,8 +32,6 @@ define(function (require) {
         toggle: function () {
             if (this.model.getIsVisible() === true) {
                 this.$el.show();
-                $(".gfi").css("left", window.innerWidth - $(".gfi-content").width() - 40);
-                $(".gfi-content").css("width", $(".gfi-content").width());
                 Radio.trigger("MapMarker", "showMarker", this.model.getCoordinate());
                 Radio.trigger("MapView", "setCenter", this.model.getCoordinate());
             }
