@@ -63,7 +63,7 @@ define(function () {
             ]
         },
         quickHelp: true,
-        portalConfPath: "../../portal/master/",
+        portalConf: "../../portal/master/",
         layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
         styleConf: "../node_modules/lgv-config/style.json",

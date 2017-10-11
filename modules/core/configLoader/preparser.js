@@ -12,7 +12,7 @@ define([
 
     Preparser = Backbone.Model.extend({
         url: function () {
-            var path = _.has(Config, "portalConfPath") === true ? Config.portalConfPath : "config.json";
+            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json";
 
             if (path.slice(-5) !== ".json") {
                 var addPath = Radio.request("ParametricURL", "getConfig"),
@@ -29,7 +29,8 @@ define([
                 }
                 else {
                     Radio.trigger("Alert", "alert", {
-                        text: "<strong>Das Portal konnte leider nicht geladen werden!</strong> <br> <small>Details: Das Portal benötigen den URL-Parameter \"config\".</small>",
+                        text: "<strong>Das Portal konnte leider nicht geladen werden!</strong> <br> " +
+                            "<small>Details: Das Portal benötigen den URL-Parameter \"config\".</small>",
                         kategorie: "alert-warning"
                     });
                 }
@@ -37,7 +38,15 @@ define([
             return path;
         },
         initialize: function () {
-            this.fetch({async: false});
+            this.fetch({async: false,
+                error: function () {
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Das Portal konnte leider nicht geladen werden!</strong> <br> " +
+                            "<small>Details: Das Portal kann \"config.json\" unter dem angegebenen Pfad nicht finden.</small>",
+                        kategorie: "alert-warning"
+                    });
+                }
+            });
         },
         parse: function (response) {
             var attributes = {
