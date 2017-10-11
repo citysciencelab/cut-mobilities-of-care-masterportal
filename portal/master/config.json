@@ -286,6 +286,11 @@
           "visibility": false
         },
         {
+          "id":"2128",
+          "styleId":"2128",
+          "clusterDistance":0
+        },
+        {
           "id": "5104",
           "visibility": false
         },
