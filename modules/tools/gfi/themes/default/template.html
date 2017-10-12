@@ -19,8 +19,8 @@
     <td>
         <% if (value.search(".pdf") !== -1 && value.substr(0, 4) === "http") { %>
             <!-- Hack für Flüchtlingsportal -->
-            <% _.each(value.split("$"), function (val, index) { %>
-                <a href="<%= val %>" target="_blank">Anhang <%= index + 1 %></a><br>
+            <% _.each(value.split("|"), function (val, index) { %>
+                <a href="<%= val %>" target="_blank">Anlage <%= index + 1 %></a><br>
             <% }); %>
         <% } else if (value.search(".html") !== -1 || value.substr(0, 4) === "http") { %>
             <a href="<%= value %>" target="_blank">Link</a>
