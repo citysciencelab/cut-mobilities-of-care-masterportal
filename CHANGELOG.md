@@ -1,3 +1,14 @@
+# Changelog LGV Master-Portal 1.4.1
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 427a269 Adresssuche in der Searchbar führte zum Füllen der Suggestliste vom viomRouting
+  - 73114e6 WMS-Adresse für Bezirkslayer wurde nicht angezeigt, weil id nicht in RawLayerList gefunden werden konnte
+
 # Changelog LGV Master-Portal 1.4.0
 
 NEU:

@@ -50,6 +50,7 @@ define([
             channel.on({
                 "setCategory": this.setCategory,
                 "addItem": this.addItem,
+                "addItemAtTop": this.addItemAtTop,
                 "addItems": this.addItems,
                 "addFolder": this.addFolder,
                 "addLayer": this.addLayer,

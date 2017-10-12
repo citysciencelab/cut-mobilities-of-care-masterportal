@@ -109,7 +109,7 @@ define([
                  layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
 
                  if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
-                     var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
+                     var layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
 
                      Radio.trigger("Parser", "addItemAtTop", layerToPush);
                  }
