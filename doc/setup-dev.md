@@ -166,11 +166,20 @@ Ein Portal vor Veröffentlichung optimieren.
 # grunt -h
 ```
 
-## Aktualisieren von build-config und lgv-config
+## Aktualisieren der Abhängigkeiten 
+
+für alle npm-Pakete:
 
 ```
-# bower update build-config
-# bower update lgv-config
+# npm update
 ```
 
-aktualisiert die Verzeichnisse components/lgv-config und components/build-config, wenn dort neue Commits vorhanden sind.
+für build-config und lgv-config:
+
+```
+# npm install
+```
+
+Vorsicht: Explizites Aufrufen von npm install build-config installiert ein falsches build-config.
+
+
