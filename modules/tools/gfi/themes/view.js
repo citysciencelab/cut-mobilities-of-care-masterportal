@@ -27,6 +27,9 @@ define(function (require) {
                     oldGfiWidth = currentView.$el.width(),
                     oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
 
+                if (_.isNaN(oldLeft)) {
+                    oldLeft = 0;
+                }
                 currentView.$el.css("left", "0px");
 
                 currentView.$el.find(".gfi-content").html(this.el);
