@@ -94,7 +94,7 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # cd lgv
 ```
 
-**Wichtig**: in der Datei package.json bei den dev-dependencies "lgv-config" und "build-config" ggf. die eigenen Config-Repos inkl. credentials einbinden, z.B.
+**Wichtig**: in der Datei package.json bei den dev-dependencies "lgv-config" und "build-config" ggf. die eigenen Config-Repos (z.B. dieses [öffentliche Repo für lgv-config] (https://bitbucket.org/lgv-g12/lgv-config-public/)) inkl. credentials einbinden, z.B.
 
 ```
 # https://<user>:<pw>@bitbucket.org/lgv-g12/build-config.git#master
