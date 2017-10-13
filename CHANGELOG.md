@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.4.4
+
+FIXES:
+
+  - d1766166 gfi initial links im ie
+
 # Changelog LGV Master-Portal 1.4.3
 
 NEU:
