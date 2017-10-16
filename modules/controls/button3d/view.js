@@ -15,12 +15,17 @@ define([
         },
         render: function () {
             this.$el.html(this.template);
+            if(Radio.request("Map", "isMap3d")){
+                $("#button3D").addClass("toggleButtonPressed");
+            }
         },
         mapChange: function () {
             if(Radio.request("Map", "isMap3d")){
                 Radio.trigger("Map", "deactivateMap3d");
+                $("#button3D").removeClass("toggleButtonPressed");
             }else{
                 Radio.trigger("Map", "activateMap3d");
+                $("#button3D").addClass("toggleButtonPressed");
             }
 
         }
