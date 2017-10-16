@@ -114,6 +114,7 @@
                 "isActive": false,
                 "isSelected": false,
                 "name": "Gymnasien",
+                "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den berufsbildenden Schulen.",
                 "predefinedRules": [
                   {
                     "attrName": "kapitelbezeichnung",
