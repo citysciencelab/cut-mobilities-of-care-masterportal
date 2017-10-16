@@ -14,9 +14,7 @@ define(function (require) {
          * @return {[type]} [description]
          */
         createLayerSource: function () {
-            this.setLayerSource(new ol.source.Vector({
-                features: this.getFeatures()
-            }));
+            this.setLayerSource(new ol.source.Vector());
         },
 
         /**
@@ -26,10 +24,40 @@ define(function (require) {
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
                 source: this.getLayerSource(),
-                style: this.getDefaultStyle()
+                name: this.get("name"),
+                typ: this.get("typ"),
+                gfiAttributes: this.get("gfiAttributes"),
+                routable: this.get("routable"),
+                gfiTheme: this.get("gfiTheme"),
+                id: this.getId()
             }));
+
+            this.updateData();
         },
 
+        updateData: function () {
+            Radio.trigger("Util", "showLoader");
+
+            $.ajax({
+                url: Radio.request("Util", "getProxyURL", this.get("url")),
+                async: false,
+                type: "GET",
+                context: this,
+                success: function (data) {
+                    Radio.trigger("Util", "hideLoader");
+                    var wfsReader = new ol.format.GeoJSON(),
+                        features = wfsReader.readFeatures(data);
+
+                    this.getLayerSource().addFeatures(features);
+                    this.set("loadend", "ready");
+                    this.getLayer().setStyle(this.get("style"));
+
+                },
+                error: function (jqXHR, errorText, error) {
+                    Radio.trigger("Util", "hideLoader");
+                }
+            });
+        },
         /**
          * Zeigt alle Features mit dem Default-Style an
          */
