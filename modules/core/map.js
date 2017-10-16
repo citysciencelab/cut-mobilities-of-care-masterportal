@@ -208,8 +208,11 @@ define(function (require) {
           */
          deactivateMap3d: function () {
              if(this.getMap3d()) {
-                 this.getMap3d().setEnabled(false);
-                 Radio.trigger("Map", "change", "2D");
+                 this.get("view").animate({rotation: 0}, function(){
+                     this.getMap3d().setEnabled(false);
+                     this.get("view").setRotation(0);
+                     Radio.trigger("Map", "change", "2D");
+                 }.bind(this));
              }
          },
 
