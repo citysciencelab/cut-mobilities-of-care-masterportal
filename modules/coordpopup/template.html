@@ -14,11 +14,19 @@
         <span>Rechtswert: <%= Math.round(coordinateUTM[0] * 100) / 100 %> m</span>
         <br>
         <span>Hochwert: <%= Math.round(coordinateUTM[1] * 100) / 100 %> m</span>
+        <% if(coordinateUTM[2]) { %>
+            <br>
+            <span>H&ouml;he: <%= Math.round(coordinateUTM[2] * 100) / 100 %> m</span>
+        <% } %>
     </p>
     <h5 class="subtitle">Geografische-Koordinate (WGS 84)</h5>
     <p>
         <span>Breite: <%= coordinateGeo.substr(0,13) %></span>
         <br>
         <span>L&auml;nge: <%= coordinateGeo.substr(14) %></span>
+        <% if(coordinateUTM[2]) { %>
+            <br>
+            <span>H&ouml;he: <%= Math.round(coordinateUTM[2] * 100) / 100 %> m</span>
+        <% } %>
     </p>
 </div>
