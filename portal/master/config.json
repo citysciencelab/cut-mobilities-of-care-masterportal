@@ -283,10 +283,12 @@
       "Layer": [
         {
           "id": "11111",
+          "name": "TestData:25832",
           "visibility": true
         },
         {
           "id": "11112",
+          "name": "TestData:4326",
           "visibility": true
         },
         {
