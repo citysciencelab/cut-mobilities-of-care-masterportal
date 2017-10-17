@@ -1,0 +1,23 @@
+{
+  "name" : "Landesgrenze_Jonas",
+  "type" : "FeatureCollection",
+  "crs" : {
+    "type" : "name",
+    "properties" : {
+      "name" : "EPSG:4326"
+    }
+  },
+  "features" : [
+    {
+      "type" : "Feature",
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [9.921741, 53.521385]
+      },
+      "properties" : {
+        "Id" : "1",
+        "Type": "Point"
+      }
+    }
+  ]
+}

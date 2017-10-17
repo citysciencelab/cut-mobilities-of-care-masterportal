@@ -45,8 +45,36 @@ define(function (require) {
                 context: this,
                 success: function (data) {
                     Radio.trigger("Util", "hideLoader");
-                    var wfsReader = new ol.format.GeoJSON(),
-                        features = wfsReader.readFeatures(data);
+                    var crs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:25832",
+                        geojsonReader = new ol.format.GeoJSON(),
+                        features = geojsonReader.readFeatures(data);
+
+                    _.each(features, function (feature) {
+                        var geometry = feature.getGeometry(),
+                            coords = geometry.getCoordinates(),
+                            newCoords = [];
+
+                        _.each(coords, function (coord) {
+
+                            if (_.isArray(coord)) {
+                                console.log(coord);
+                                var transformObject = {
+                                        fromCRS: crs,
+                                        toCRS: "EPSG:25832",
+                                        point: coord
+                                    },
+                                    newCoord = Radio.request("CRS", "transform", transformObject);
+                                console.log(newCoord);
+                                newCoords.push(newCoord);
+                            }
+                            else {
+                            }
+                        });
+                        geometry.setCoordinates(newCoords);
+
+
+                    });
+
 
                     this.getLayerSource().addFeatures(features);
                     this.set("loadend", "ready");
