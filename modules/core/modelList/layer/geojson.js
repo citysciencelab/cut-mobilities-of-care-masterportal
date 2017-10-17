@@ -50,11 +50,14 @@ define(function (require) {
         },
         handleData: function (data) {
             Radio.trigger("Util", "hideLoader");
-            var crs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
+            var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
+                mapCrs = Radio.request("MapView", "getProjection").getCode(),
                 geojsonReader = new ol.format.GeoJSON(),
                 features = geojsonReader.readFeatures(data);
 
-            features = this.transformFeatures(features, crs);
+            if (jsonCrs !== mapCrs) {
+                features = this.transformFeatures(features, jsonCrs);
+            }
 
             this.getLayerSource().addFeatures(features);
             this.set("loadend", "ready");
