@@ -93,7 +93,6 @@ define(function (require) {
                 else {
                     this.collection.insertIntoSelectionIDX(this);
                 }
-
                 this.createLayerSource();
                 Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
                 this.setIsVisibleInMap(this.getIsSelected());

@@ -257,13 +257,13 @@ define([
             this.addItem(layer);
         },
 
-        addGeoJSONLayer: function (name, id, features) {
+        addGeoJSONLayer: function (name, id, geojson) {
             var layer = {
                 type: "layer",
                 name: name,
                 id: id,
                 typ: "GeoJSON",
-                features: features,
+                geojson: geojson,
                 transparent: true,
                 minScale: "0",
                 maxScale: "350000",
@@ -271,6 +271,8 @@ define([
                 layerAttribution: "nicht vorhanden",
                 legendURL: "",
                 isbaselayer: false,
+                isSelected: true,
+                isVisibleInTree: true,
                 cache: false,
                 datasets: []
             };

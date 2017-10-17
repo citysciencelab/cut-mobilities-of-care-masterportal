@@ -320,7 +320,9 @@ define("app",
         require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
             new StyleWMSView();
         });
-
+        require(["modules/tools/addPointsFromFile/view"], function (AddPointsFromFileView) {
+            new AddPointsFromFileView();
+        });
         Radio.trigger("Util", "hideLoader");
     });
 });

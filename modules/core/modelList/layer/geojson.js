@@ -31,8 +31,12 @@ define(function (require) {
                 gfiTheme: this.get("gfiTheme"),
                 id: this.getId()
             }));
-
-            this.updateData(this.handleData);
+            if (_.isUndefined(this.get("geojson"))) {
+                this.updateData(this.handleData);
+            }
+            else {
+                this.handleData(this.get("geojson"));
+            }
         },
         updateData: function (callback) {
             Radio.trigger("Util", "showLoader");
@@ -56,18 +60,18 @@ define(function (require) {
                 features = geojsonReader.readFeatures(data);
 
             if (jsonCrs !== mapCrs) {
-                features = this.transformFeatures(features, jsonCrs);
+                features = this.transformFeatures(features, jsonCrs, mapCrs);
             }
-
             this.getLayerSource().addFeatures(features);
             this.set("loadend", "ready");
+
             this.getLayer().setStyle(this.get("style"));
         },
-        transformFeatures: function (features, crs) {
+        transformFeatures: function (features, crs, mapCrs) {
             _.each(features, function (feature) {
                 var geometry = feature.getGeometry();
 
-                geometry.transform(crs, "EPSG:25832");
+                geometry.transform(crs, mapCrs);
             });
             return features;
         },
