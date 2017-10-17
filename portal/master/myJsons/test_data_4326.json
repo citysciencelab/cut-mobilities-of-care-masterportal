@@ -1,5 +1,5 @@
 {
-  "name" : "Landesgrenze_Jonas",
+  "name" : "TestData_4326",
   "type" : "FeatureCollection",
   "crs" : {
     "type" : "name",
