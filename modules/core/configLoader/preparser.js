@@ -62,16 +62,19 @@ define([
         },
 
         requestSnippetInfos: function () {
-            var infos;
+            var infos,
+                url = _.has(Config, "infoJson") ? Config.infoJson : undefined;
 
-            $.ajax({
-                url: "info.json",
-                async: false,
-                success: function (data) {
-                    infos = data;
-                }
-            });
-            return infos;
+            if (!_.isUndefined(url)) {
+                $.ajax({
+                    url: url,
+                    async: false,
+                    success: function (data) {
+                        infos = data;
+                    }
+                });
+                return infos;
+            }
         }
     });
 
