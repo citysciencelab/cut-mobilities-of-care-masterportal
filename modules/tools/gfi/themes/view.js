@@ -2,14 +2,21 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
+        Config = require("config"),
         ThemeView;
 
     ThemeView = Backbone.View.extend({
+        defaults: {
+            gfiWindow: "detached"
+        },
         initialize: function () {
+            var gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached";
+
             this.listenTo(this.model, {
                  "change:isVisible": this.appendTheme
             });
 
+            this.gfiWindow = gfiWindow;
             this.render();
         },
 
@@ -22,10 +29,12 @@ define(function (require) {
         },
 
         appendTheme: function (model, value) {
+            var isViewMobile = Radio.request("Util", "isViewMobile"),
+                currentView = Radio.request("GFI", "getCurrentView"),
+                oldGfiWidth = currentView.$el.width(),
+                oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
+
             if (value === true) {
-                var currentView = Radio.request("GFI", "getCurrentView"),
-                    oldGfiWidth = currentView.$el.width(),
-                    oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
 
                 if (_.isNaN(oldLeft)) {
                     oldLeft = 0;
@@ -36,7 +45,9 @@ define(function (require) {
                 currentView.$el.find(".gfi-title").text(this.model.get("name"));
                 this.appendChildren();
                 this.appendRoutableButton();
-                this.adjustGfiWindow(currentView, oldGfiWidth, oldLeft);
+                if (this.gfiWindow === "detached" && !isViewMobile) {
+                    this.adjustGfiWindow(currentView, oldGfiWidth, oldLeft);
+                }
             }
             this.delegateEvents();
         },
