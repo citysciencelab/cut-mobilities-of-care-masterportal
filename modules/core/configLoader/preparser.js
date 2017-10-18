@@ -28,11 +28,7 @@ define([
                     path = path + "/" + addPath;
                 }
                 else {
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Das Portal konnte leider nicht geladen werden!</strong> <br> " +
-                            "<small>Details: Das Portal benötigen den URL-Parameter \"config\".</small>",
-                        kategorie: "alert-warning"
-                    });
+                    path = "config.json";
                 }
             }
             return path;
@@ -66,16 +62,19 @@ define([
         },
 
         requestSnippetInfos: function () {
-            var infos;
+            var infos,
+                url = _.has(Config, "infoJson") ? Config.infoJson : undefined;
 
-            $.ajax({
-                url: "info.json",
-                async: false,
-                success: function (data) {
-                    infos = data;
-                }
-            });
-            return infos;
+            if (!_.isUndefined(url)) {
+                $.ajax({
+                    url: url,
+                    async: false,
+                    success: function (data) {
+                        infos = data;
+                    }
+                });
+                return infos;
+            }
         }
     });
 

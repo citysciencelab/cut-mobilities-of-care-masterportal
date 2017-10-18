@@ -69,6 +69,7 @@ define(function () {
         layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
         styleConf: "../node_modules/lgv-config/style.json",
+        infoJson: "info.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,
