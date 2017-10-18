@@ -28,11 +28,7 @@ define([
                     path = path + "/" + addPath;
                 }
                 else {
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Das Portal konnte leider nicht geladen werden!</strong> <br> " +
-                            "<small>Details: Das Portal benötigen den URL-Parameter \"config\".</small>",
-                        kategorie: "alert-warning"
-                    });
+                    path = "config.json";
                 }
             }
             return path;
