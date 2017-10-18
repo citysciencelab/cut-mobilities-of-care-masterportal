@@ -43,7 +43,7 @@ define(function (require) {
                 type: "GET",
                 context: this,
                 success: callback,
-                error: function (jqXHR, errorText, error) {
+                error: function () {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
