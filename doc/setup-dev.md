@@ -136,7 +136,7 @@ Ein Portal vor Veröffentlichung optimieren.
 
 ```
 // grunt build --path=<pfad-zum-portal> --name=<Portalname> [--env=internet| default:fhhnet]
-# grunt build --path=portale/local --name=FHH-Atlas
+# grunt build --path=portal/master --name=master
 ```
 
 - baut das Portal und alles, was es braucht in den Ordner dist/<pkg.version>
