@@ -16,7 +16,9 @@ define(function (require) {
             transparency: 0,
             // der Index der die Reihenfolge der selektierten Models beim Zeichnen in "Auswahl der Themen" bestimmt
             selectionIDX: 0,
-            layerInfoClicked: false
+            layerInfoClicked: false,
+            minScale: "0",
+            maxScale: "1000000"
         },
         superInitialize: function () {
             this.listenToOnce(this, {

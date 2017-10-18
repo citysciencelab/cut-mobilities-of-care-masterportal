@@ -1,0 +1,86 @@
+{
+  "name" : "TestData_25832",
+  "type" : "FeatureCollection",
+  "crs" : {
+    "type" : "name",
+    "properties" : {
+      "name" : "EPSG:25832"
+    }
+  },
+  "features" : [
+    {
+      "type" : "Feature",
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [561210, 5932600]
+      },
+      "properties" : {
+        "Id" : "1",
+        "Type": "Point"
+      }
+    },
+    {
+      "type" : "Feature",
+      "geometry" : {
+        "type" : "MultiPoint",
+        "coordinates" : [[561410, 5932400], [561410, 5932300], [561410, 5932200]]
+      },
+      "properties" : {
+        "Id" : "2",
+        "Type": "MultiPoint"
+      }
+    },
+    {
+      "type" : "Feature",
+      "geometry" : {
+        "type" : "LineString",
+        "coordinates" : [[561510, 5932600],[561510, 5932900]]
+      },
+      "properties" : {
+        "Id" : "3",
+        "Type": "LineString"
+      }
+    },
+    {
+      "type" : "Feature",
+      "geometry" : {
+        "type" : "MultiLineString",
+        "coordinates" : [
+          [[562710, 5932600],[562710, 5932900]],
+          [[562810, 5932600],[562810, 5932900]],
+          [[562910, 5932600],[562910, 5932900]]
+        ]
+      },
+      "properties" : {
+        "Id" : "4",
+        "Type": "MultiLineString"
+      }
+    },
+    {
+      "type" : "Feature",
+      "geometry" : {
+        "type" : "Polygon",
+        "coordinates" : [[[561000, 5931000], [561500, 5931000], [561500, 5931500], [561000, 5931500], [561000, 5931000]]]
+      },
+      "properties" : {
+        "Id" : "5",
+        "Type": "Polygon"
+      }
+    },
+    {
+      "type" : "Feature",
+      "geometry" : {
+        "type" : "MultiPolygon",
+        "coordinates" : [
+          [[[561500, 5930000], [562000, 5930000], [562000, 5930500], [561500, 5930500], [561500, 5930000]]],
+          [[[562500, 5930000], [563000, 5930000], [563000, 5930500], [562500, 5930500], [562500, 5930000]]],
+          [[[563500, 5930000], [564000, 5930000], [564000, 5930500], [563500, 5930500], [563500, 5930000]]]
+        ]
+      },
+      "properties" : {
+        "Id" : "6",
+        "Type": "MultiPolygon"
+      }
+    }
+  ]
+}
