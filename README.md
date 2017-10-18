@@ -14,5 +14,6 @@ Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](http://geowerkstatt-
 * [lokale Entwicklungsumgebung einrichten](doc/setup-dev.md)
 * [Code-Konventionen](conventions.md)
 * [Git-Workflow](git-workflow.md)
-* [Tutorial: Ein neues Modul erstellen](doc/howtowriteamodule.md)
+* [Tutorial 01: Ein neues Modul erstellen (GeoJSON Loader)](doc/02_howtowriteamodule.md)
+* [Tutorial 02: Ein neues Modul erstellen](doc/howtowriteamodule.md)
 * [Community Board (Entwicklerforum, Issue Tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
