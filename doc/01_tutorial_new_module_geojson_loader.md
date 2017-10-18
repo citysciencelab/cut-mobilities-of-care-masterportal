@@ -1,5 +1,5 @@
 
-## Tutorial 01: Neues Tool erstellen (GeoJSON Loader)
+## Tutorial 01: Ein neues Modul erstellen (GeoJSON Loader)
 Eine Schritt für Schritt Dokumentation zur Erstellung eines neuen Moduls.
 
 ### Beispiel Anforderung
