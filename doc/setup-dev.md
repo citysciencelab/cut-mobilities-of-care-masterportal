@@ -31,6 +31,13 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # git clone https://bitbucket.org/lgv-g12/lgv.git
 # cd lgv
 ```
+**Für Teilnehmer des ITS-Hackathons:**
+Den branch "its-hackathon" auschecken
+
+```
+# git fetch && git checkout its-hackathon
+```
+
 
 **Wichtig**: in der Datei package.json bei *repository* und den *dev-dependencies* "lgv-config" mit "lgv-config-public" ersetzen.
 
