@@ -41,7 +41,7 @@ define(function () {
 
         scaleLine: true,
         mouseHover: true,
-        customModules: ["../portalconfigs/its-hackathon/verkehrsfunctions"],
+        customModules: ["../portal/its-hackathon/verkehrsfunctions"],
         gemarkungen: "../node_modules/lgv-config/gemarkung.json"
 
     };

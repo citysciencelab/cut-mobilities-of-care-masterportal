@@ -3,7 +3,7 @@
     {
       "portalTitle": {
       "title": "ITS Hackathon",
-      "logo": "/../lgv-config/img/hh-logo.png",
+      "logo": "/../node_modules/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -29,7 +29,7 @@
        "geoLocateHit": true
     },
      "mapView":{
-      "backgroundImage":"/../../node_modules/lgv-config/img/backgroundCanvas.jpeg"
+      "backgroundImage":"/../node_modules/lgv-config/img/backgroundCanvas.jpeg"
     },
       "menu": {
         "tree": {
