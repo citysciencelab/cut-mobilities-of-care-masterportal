@@ -12,6 +12,7 @@ Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](http://geowerkstatt-
 
 ## für Entwickler
 * [lokale Entwicklungsumgebung einrichten](doc/setup-dev.md)
+* [lokale Entwicklungsumgebung einrichten mit proxy](doc/setup-dev-proxy.md)
 * [Code-Konventionen](conventions.md)
 * [Git-Workflow](git-workflow.md)
 * [Tutorial 01: Ein neues Modul erstellen (GeoJSON Loader)](doc/01_tutorial_new_module_geojson_loader.md)
