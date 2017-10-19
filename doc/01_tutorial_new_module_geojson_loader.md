@@ -4,7 +4,7 @@ Eine Schritt für Schritt Dokumentation zur Erstellung eines neuen Moduls.
 
 ### Beispiel Anforderung
 Erstellen sie ein Modul nach dem MV* Muster. Das Modul soll einen einfachen Dialog einblenden, in dem der Dateiname angegeben wird. Nach der Eingabe soll ein Button geklickt werden können, der die Datei mit dem entsprechenden Namen einliest.
-Die in der Datei definierten Punkte sollen geparst werden und zu jedem dieser Punkte soll ein Punkt mit Standard-Style auf der Karte erscheinen. Den Inhalt der Datei finden Sie am Ende dieses Dokumentes.
+Die in der Datei definierten Punkte sollen geparst werden und zu jedem dieser Punkte soll ein Punkt mit Standard-Style auf der Karte erscheinen. Den Inhalt der Datei finden Sie am Ende der Anforderung. Kopieren Sie den Code, und speichern Sie ihn in Ihrem Dateisystem als JSON-Datei ab.
 Unter [unserem Wiki](https://bitbucket.org/lgv-g12/lgv/wiki/) finden Sie eine Beschreibung, wie ein Modul erstellt und eingebunden wird, sowie die einzuhaltenden Code-Konventionen.
 Bitte lösen Sie die Aufgabe möglichst, mit den von BackboneJs und UnderscoreJs zur Verfügung gestellten Funktionen und Strukturen ohne neue Bibliotheken einzubinden.
 Für das (ganz simple gehaltene) Styling bitte das bereits eingebundene Bootstrap verwenden.
@@ -48,8 +48,7 @@ Ins Verzeichnis "modules/tools" wechseln und einen neuen Ordner erstellen. Aus d
 Datei *modules/tools/addPointsFromFile/view.js* öffnen und die View mit folgendem Standardschema erzeugen.
 ```js
 define(function (require) {
-    var Backbone = require("backbone"),
-      AddPointsFromFileView;
+    var AddPointsFromFileView;
 
   AddPointsFromFileView = Backbone.View.extend({
       // wird aufgerufen wenn die View erstellt wird
@@ -74,8 +73,10 @@ Datei *modules/tools/addPointsFromFile/template.html* öffnen, Template coden un
 ```html
 <!DOCTYPE html>
 <div class="form-group">
-    <label for="usr">Name:</label>
-    <input type="text" class="form-control" id="usr" value="myJsons/points.json">
+    <label for="path">Path to JSON:</label>
+    <input type="text" class="form-control .path" id="path" value="" placeholder="Pfad eingeben">
+    <label for="layername">Layername:</label>
+    <input type="text" class="form-control .layername" id="layername" value="" placeholder="Layernamen eingeben">
     <button class="btn btn-default einlesen">Einlesen</button>
 </div>
 ```
@@ -247,25 +248,33 @@ Diese Parsed die eingegebene JSON-Datei, baut eine GeoJSON-Datei zusammen und f�
 
 ```js
 define(function (require) {
-    var AddPointFromFile;
+
+var AddPointFromFile;
 
 AddPointFromFile = Backbone.Model.extend({
-    url: "test",
+    url: "",
     initialize: function () {
 
     },
     readFile: function (evt) {
-        var val = $(evt.currentTarget).parent().find("input").val();
+        var val = $(evt.currentTarget).parent().find("#path").val().trim(),
+            layername = $(evt.currentTarget).parent().find("#layername").val().trim(),
+            layerid = _.uniqueId(layername);
 
-        if (val !== "") {
-            this.url = function() {
+        if (val !== "" && layername !== "") {
+            this.url = function () {
                 return val;
             };
             this.fetch({async: false});
             var rawPoints = this.get("points"),
                 geojson = this.createGeoJson(rawPoints);
 
-            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", "PointsAddedFromFile", "111111111", geojson);
+            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layername, layerid, geojson);
+        }
+        else {
+           Radio.trigger("Alert", "alert", {
+            text: "<strong>Fehler!</strong><br>Pfad und Layername müssen gesetzt werden.",
+            kategorie: "alert-warning" });
         }
     },
     createGeoJson: function (rawPoints) {
@@ -292,10 +301,11 @@ AddPointFromFile = Backbone.Model.extend({
 
             jsonObj.features.push(featureObj);
         });
-        return jsonObj
+        return jsonObj;
         }
     });
     return AddPointFromFile;
 });
+
 ```
 
