@@ -14,6 +14,13 @@ Da das git-Protokoll von Firewalls geblockt werden kann, git so konfigurieren, d
 # git config --global url.https://.insteadof git://
 ```
 
+Ggf. müssen Proxy-Einstellungen gesetzt werden:
+in der normalen shell **UND** in der Admin-shell (git-shell als Admin ausführen).
+```
+# git config --global http.proxy <proxy-url:port>
+# git config --global https.proxy <proxy-url:port>
+```
+
 ### Node.js
 [Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: node-v6.11.4-x64 mit NPM 3.10.10
 
@@ -43,6 +50,20 @@ npm legt einen Paket-Cache an. Per Default liegt der unter C:\Users\<user>\AppDa
 
 ```
 npm config set cache D:\npm-cache
+```
+
+#### Proxy-Einstellungen
+in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen).
+
+```
+# npm config set proxy <proxy-url:port>
+# npm config set https-proxy <proxy-url:port>
+
+außerdem
+# setx http_proxy <proxy-url:port>
+# setx https_proxy <proxy-url:port>
+--> danach alle cmds schließen und neu starten, damit die Änderungen wirksam werden
+
 ```
 
 #### npm-Pakete global als Admin installieren
