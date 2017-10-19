@@ -143,12 +143,15 @@ define(function (require) {
             var url,
                 data = "FEATURE_COUNT=" + obj.model.get("featureCount").toString(),
                 pgfi = [];
+            var resolution = Radio.request("MapView", "getResolution").resolution,
+                projection = Radio.request("MapView", "getProjection"),
+                coordinate = Radio.request("GFI", "getCoordinate");
 
-            if (obj.model.getGfiUrl().search(location.host) === -1) {
-                url = Radio.request("Util", "getProxyURL", obj.model.getGfiUrl());
+            if (obj.model.getGfiUrl(resolution, coordinate, projection).search(location.host) === -1) {
+                url = Radio.request("Util", "getProxyURL", obj.model.getGfiUrl(resolution, coordinate, projection));
             }
             else {
-                url = obj.model.getGfiUrl();
+                url = obj.model.getGfiUrl(resolution, coordinate, projection);
             }
             url = url.replace(/SLD_BODY\=.*?\&/, "");
             ++this.requestCount;

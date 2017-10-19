@@ -221,11 +221,8 @@ define([
             return this.get("gfiParams");
         },
 
-        getGfiUrl: function (index) {
-            var resolution = Radio.request("MapView", "getResolution").resolution,
-                projection = Radio.request("MapView", "getProjection"),
-                coordinate = Radio.request("GFI", "getCoordinate"),
-                gfiParams = this.getGfiParams()[index],
+        getGfiUrl: function (index, resolution, coordinate, projection) {
+            var gfiParams = this.getGfiParams()[index],
                 childLayer = this.getChildLayers().item(index);
 
             return childLayer.getSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: gfiParams.infoFormat, FEATURE_COUNT: gfiParams.featureCount});

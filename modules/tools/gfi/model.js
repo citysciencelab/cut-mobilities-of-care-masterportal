@@ -180,7 +180,6 @@ define(function (require) {
                                     name: "Buildings"
                                 };
                                 gfiParams.push(modelattributes);
-                                console.log(properties);
                             } else if (object.primitive) {
                                 var feature = object.primitive.olFeature;
                                 var layer = object.primitive.olLayer;
@@ -190,6 +189,29 @@ define(function (require) {
                             }
                         }
                     }.bind(this));
+
+                    var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"});
+                    var visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"});
+                    var visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList);
+
+                    var resolution = event.resolution;
+                    var projection = Radio.request("MapView", "getProjection");
+                    var coordinate = event.coordinate.slice(0,2);
+                    // WMS | GROUP
+                    _.each(visibleLayerList, function (model) {
+                        if (model.getGfiAttributes() !== "ignore") {
+                            if (model.getTyp() === "WMS") {
+                                model.attributes.gfiUrl = model.getGfiUrl(resolution, coordinate, projection);
+                                gfiParams.push(model.attributes);
+                            }
+                            else {
+                                model.get("gfiParams").forEach(function (params, index) {
+                                    params.gfiUrl = model.getGfiUrl(index, resolution, coordinate, projection);
+                                    gfiParams.push(model.getGfiParams()[index]);
+                                });
+                            }
+                        }
+                    }, this);
 
                     this.setThemeIndex(0);
                     this.getThemeList().reset(gfiParams);
@@ -221,17 +243,19 @@ define(function (require) {
             if (isFeatureAtPixel === true) {
                 Radio.trigger("Map", "forEachFeatureAtPixel", eventPixel, this.searchModelByFeature);
             }
-
+            var resolution = Radio.request("MapView", "getResolution").resolution,
+                projection = Radio.request("MapView", "getProjection"),
+                coordinate = evt.coordinate;
             // WMS | GROUP
             _.each(visibleLayerList, function (model) {
                 if (model.getGfiAttributes() !== "ignore") {
                     if (model.getTyp() === "WMS") {
-                        model.attributes.gfiUrl = model.getGfiUrl();
+                        model.attributes.gfiUrl = model.getGfiUrl(resolution, coordinate, projection);
                         gfiParams.push(model.attributes);
                     }
                     else {
                         model.get("gfiParams").forEach(function (params, index) {
-                            params.gfiUrl = model.getGfiUrl(index);
+                            params.gfiUrl = model.getGfiUrl(index, resolution, coordinate, projection);
                             gfiParams.push(model.getGfiParams()[index]);
                         });
                     }

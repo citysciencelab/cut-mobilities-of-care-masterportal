@@ -214,11 +214,14 @@ define(function (require) {
                 if(height){
                     coords = coords.concat([height]);
                 }
+
+                var distance = Cesium.Cartesian3.distance(cartesian, scene.camera.position);
+                var resolution =  this.getMap3d().getCamera().calcResolutionForDistance_(distance, cartographic.latitude);
+                var mapProjection = Radio.request("MapView", "getProjection");
+                var transformedCoords = ol.proj.transform(coords, ol.proj.get("EPSG:4326"), mapProjection);
+                Radio.trigger("Map", "clickedMAP", transformedCoords);
+                Radio.trigger("Map", "clickedWindowPosition", {position:event.position, coordinate:transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution});
             }
-            var mapProjection = Radio.request("MapView", "getProjection");
-            var transformedCoords = ol.proj.transform(coords, ol.proj.get("EPSG:4326"), mapProjection);
-            Radio.trigger("Map", "clickedMAP", transformedCoords);
-            Radio.trigger("Map", "clickedWindowPosition", {position:event.position, coordinate:transformedCoords});
          },
          /**
           */

@@ -232,11 +232,7 @@ define(function (require) {
             return this.get("infoFormat");
         },
 
-        getGfiUrl: function () {
-            var resolution = Radio.request("MapView", "getResolution").resolution,
-                projection = Radio.request("MapView", "getProjection"),
-                coordinate = Radio.request("GFI", "getCoordinate");
-
+        getGfiUrl: function (resolution, coordinate, projection) {
             return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, { INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
         },
         updateSupported: function() {
