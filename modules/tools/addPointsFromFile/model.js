@@ -3,22 +3,29 @@ define(function (require) {
 var AddPointFromFile;
 
 AddPointFromFile = Backbone.Model.extend({
-    url: "test",
+    url: "",
     initialize: function () {
 
     },
     readFile: function (evt) {
-        var val = $(evt.currentTarget).parent().find("input").val();
+        var val = $(evt.currentTarget).parent().find("#path").val().trim(),
+            layername = $(evt.currentTarget).parent().find("#layername").val().trim(),
+            layerid = _.uniqueId(layername);
 
-        if (val !== "") {
-            this.url = function() {
+        if (val !== "" && layername !== "") {
+            this.url = function () {
                 return val;
             };
             this.fetch({async: false});
             var rawPoints = this.get("points"),
                 geojson = this.createGeoJson(rawPoints);
 
-            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", "PointsAddedFromFile", "111111111", geojson);
+            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layername, layerid, geojson);
+        }
+        else {
+           Radio.trigger("Alert", "alert", {
+            text: "<strong>Fehler!</strong><br>Pfad und Layername müssen gesetzt werden.",
+            kategorie: "alert-warning" });
         }
     },
     createGeoJson: function (rawPoints) {
@@ -45,8 +52,7 @@ AddPointFromFile = Backbone.Model.extend({
 
             jsonObj.features.push(featureObj);
         });
-        return jsonObj
-        // return JSON.stringify(jsonObj);
+        return jsonObj;
         }
     });
     return AddPointFromFile;

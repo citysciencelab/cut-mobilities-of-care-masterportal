@@ -22,6 +22,10 @@ define("app",
     new CRS();
     new Map();
 
+    require(["modules/tools/addPointsFromFile/view"], function (AddPointsFromFileView) {
+       new AddPointsFromFileView();
+    });
+
     // Graph laden
     require(["modules/tools/graph/model"], function (GraphModel) {
         new GraphModel();
@@ -320,9 +324,7 @@ define("app",
         require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
             new StyleWMSView();
         });
-        require(["modules/tools/addPointsFromFile/view"], function (AddPointsFromFileView) {
-            new AddPointsFromFileView();
-        });
+
         Radio.trigger("Util", "hideLoader");
     });
 });
