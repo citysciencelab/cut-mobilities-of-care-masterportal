@@ -407,7 +407,6 @@ define([
 
         addModelsByAttributes: function (attrs) {
             var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
-
             this.add(lightModels);
         },
 
