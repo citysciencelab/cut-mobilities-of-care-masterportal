@@ -249,7 +249,13 @@ define([
                 this.set("resolution", Config.view.resolution);
             }
             if (_.has(Config.view, "zoomLevel")) {
-                this.set("resolution", this.get("resolutions")[Config.view.zoomLevel]);
+                var resolution = this.get("resolutions")[Config.view.zoomLevel];
+                if(!resolution) {
+                    resolution = this.get("resolutions")[Math.round(Config.view.zoomLevel)];
+                }
+                if(resolution) {
+                    this.set("resolution", resolution);
+                }
             }
         },
 
@@ -333,7 +339,12 @@ define([
          *
          */
         setCenter: function (coords, zoomLevel) {
-            this.get("view").setCenter(coords);
+            if(!_.isUndefined(coords)){
+                if(coords.length > 2) {
+                    coords = coords.slice(0,2);
+                }
+                this.get("view").setCenter(coords);
+            }
             if (!_.isUndefined(zoomLevel)) {
                 this.get("view").setZoom(zoomLevel);
             }

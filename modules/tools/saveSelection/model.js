@@ -37,13 +37,19 @@ define([
                  "changedCenter": this.setCenterCoords
             });
 
+            this.listenTo(Radio.channel("Map"), {
+                "change": this.setMapMode,
+                "cameraChanged" : this.setCameraParameter,
+            });
+
             this.listenTo(this, {
                 "change:isCurrentWin": function () {
                     this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));
                     this.setCenterCoords(Radio.request("MapView", "getCenter"));
+                    this.setMapMode(Radio.request("Map", "getMapMode"));
                     this.filterExternalLayer(Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
                 },
-                "change:zoomLevel change:centerCoords": this.setUrl,
+                "change:zoomLevel change:centerCoords change:mapMode change:cameraParameter": this.setUrl,
                 "change:url": this.setSimpleMapUrl
             });
 
@@ -150,10 +156,37 @@ define([
         },
 
         /**
+         * [setMapMode description]
+         * @param {[type]} mode [description]
+         */
+        setMapMode: function (mode) {
+            this.set("mapMode", mode);
+        },
+        /**
+         * [setCamera description]
+         * @param {[type]} cameraParameter [description]
+         */
+        setCameraParameter: function (cameraParameter) {
+            this.set("cameraParameter", cameraParameter);
+        },
+
+        /**
          * [setUrl description]
          */
         setUrl: function () {
-            this.set("url", location.origin + location.pathname + "?layerIDs=" + this.getLayerIdList() + "&visibility=" + this.getLayerVisibilityList() + "&transparency=" + this.getLayertransparencyList() + "&center=" + this.getCenterCoords() + "&zoomlevel=" + this.getZoomLevel());
+            var url = location.origin + location.pathname;
+            url += "?layerIDs=" + this.getLayerIdList();
+            url += "&visibility=" + this.getLayerVisibilityList();
+            url += "&transparency=" + this.getLayertransparencyList();
+            url += "&center=" + this.getCenterCoords();
+            url += "&zoomlevel=" + this.getZoomLevel();
+            url += "&map=" + this.getMapMode();
+            if(this.getMapMode() === "3D" && this.getCameraParameter()){
+                url += "&heading=" + this.getCameraParameter().heading;
+                url += "&tilt=" + this.getCameraParameter().tilt;
+                url += "&altitude=" + this.getCameraParameter().altitude;
+            }
+            this.set("url", url);
         },
 
         /**
@@ -219,9 +252,16 @@ define([
         getSimpleMap: function () {
             return this.get("simpleMap");
         },
+        getMapMode: function() {
+            return this.get("mapMode");
+        },
+        getCameraParameter: function() {
+            return this.get("cameraParameter");
+        },
         getMapState: function () {
             this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));
             this.setCenterCoords(Radio.request("MapView", "getCenter"));
+            this.setMapMode(Radio.request("Map", "getMapMode"));
             this.filterExternalLayer(Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
             return this.get("url");
         }

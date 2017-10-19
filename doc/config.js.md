@@ -30,7 +30,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/img/"`|
 |wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`""`|
 |[zoomToFeature](#markdown-header-zoomtofeature)|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe [URL-Parameter](URL-Parameter.md).||
-
+|startingMap3D|nein|Boolean|false|Legt fest ob der 3D Modus beim Start der Anwendung geladen werden soll.||
+|[cameraParameter](#markdown-header-cameraParameter)|nein|Object||Start Camera Parater||
 ******
 ## animation
 
@@ -231,5 +232,13 @@ zoomtofeature: {
         }
 
 ```
+********
+## cameraParameter ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|heading|nein|Number||Heading der Kamera in Radians.|
+|tilt|nein|Number||Tilt der Kamera in Radians.|
+|altitude|nein|Number||Höhe der Kamera in m.|
+
 
 >Zurück zur [Dokumentation Masterportal](doc.md).

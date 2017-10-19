@@ -22,7 +22,7 @@ define(function (require) {
             name: "",
             // true wenn das Tool aktiviert ist
             isActive: false,
-            supportedIn3d: ['coord', 'gfi', 'wfsFeatureFilter', 'searchByCoord', 'legend', 'contact']
+            supportedIn3d: ['coord', 'gfi', 'wfsFeatureFilter', 'searchByCoord', 'legend', 'contact', 'saveSelection']
         },
 
         initialize: function () {

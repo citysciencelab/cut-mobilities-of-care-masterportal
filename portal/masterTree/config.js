@@ -23,7 +23,8 @@ define(function () {
        mouseHover: true,
        scaleLine: true,
        startUpModul: "",
-       gemarkungen: "../components/lgv-config/gemarkung.json"
+       gemarkungen: "../components/lgv-config/gemarkung.json",
+       startingMap3D: false
    };
 
    return config;

@@ -94,7 +94,8 @@ define(function () {
             gfi: true
         },
         geoAPI: false,
-        clickCounter: {}
+        clickCounter: {},
+        startingMap3D: false
     };
 
     return config;

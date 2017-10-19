@@ -5,6 +5,7 @@ define(function (require) {
         ol = require("openlayers"),
         Cesium = require("cesium"),
         MapView = require("modules/core/mapView"),
+        Config = require("config"),
         Map;
 
      Map = Backbone.Model.extend({
@@ -81,6 +82,9 @@ define(function (require) {
 
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
+            if (Config.startingMap3D) {
+                this.activateMap3d();
+            }
         },
 
         /**
@@ -162,9 +166,23 @@ define(function (require) {
                         ];
                     }
                 }));
-
                 var eventHandler = new Cesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
                 eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), Cesium.ScreenSpaceEventType["LEFT_CLICK"]);
+                var camera = this.getMap3d().getCamera();
+                if (Config.cameraParameter.tilt) {
+                    var tilt = Number.parseFloat(Config.cameraParameter.tilt);
+                    camera.setTilt(tilt);
+                }
+                if (Config.cameraParameter.heading) {
+                    var heading = Number.parseFloat(Config.cameraParameter.heading);
+                    camera.setHeading(heading);
+                }
+                if (Config.cameraParameter.altitude) {
+                    var altitude  = Number.parseFloat(Config.cameraParameter.altitude);
+                    camera.setAltitude(altitude);
+                }
+                var cesiumCamera = this.getMap3d().getCesiumScene().camera;
+                cesiumCamera.changed.addEventListener(this.reactToCameraChanged, this);
             }
             this.getMap3d().setEnabled(true);
             Radio.trigger("Map", "change", "3D");
@@ -187,8 +205,6 @@ define(function (require) {
             var scene = this.getMap3d().getCesiumScene();
             var ray = scene.camera.getPickRay(event.position);
             var cartesian = scene.globe.pick(ray, scene);
-            var longitude;
-            var latitude;
             var height;
             var coords;
             if (cartesian) {
@@ -229,6 +245,13 @@ define(function (require) {
          getMap3d: function () {
              return this.get("map3d");
          },
+         /**
+          *
+          */
+         reactToCameraChanged: function() {
+             var camera = this.getMap3d().getCamera();
+             Radio.trigger("Map", "cameraChanged", {"heading" : camera.getHeading(), "altitude" : camera.getAltitude(), "tilt" : camera.getTilt()});
+        },
 
         getWGS84MapSizeBBOX: function () {
             var bbox = this.get("view").calculateExtent(this.get("map").getSize()),

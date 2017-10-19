@@ -291,6 +291,37 @@ define([
                     $("#main-nav").hide();
                 }
             }
+
+            /**
+             * passt den Config startingMap3D Parameter an.
+             */
+            if (_.has(result, "MAP")) {
+                var mapMode = _.values(_.pick(result, "MAP"))[0].toUpperCase();
+                if (mapMode === "2D") {
+                    Config.startingMap3D = false;
+                } else if(mapMode === "3D") {
+                    Config.startingMap3D = true;
+                }
+            }
+
+            if (!Config.cameraParameter) {
+                Config.cameraParameter = {};
+            }
+            /**
+             * wertet die Camera Parameter( heading, tilt, altitude) aus
+             */
+            if (_.has(result, "HEADING")) {
+                var heading = _.values(_.pick(result, "HEADING"))[0];
+                Config.cameraParameter.heading = heading;
+            }
+            if (_.has(result, "TILT")) {
+                var tilt = _.values(_.pick(result, "TILT"))[0];
+                Config.cameraParameter.tilt = tilt;
+            }
+            if (_.has(result, "ALTITUDE")) {
+                var altitude = _.values(_.pick(result, "ALTITUDE"))[0];
+                Config.cameraParameter.altitude = altitude;
+            }
         }
     });
 
