@@ -56,6 +56,22 @@
         "glyphicon": "glyphicon-list",
         "isInitOpen": true
       },
+      "ansichten": {
+        "name" : "Ansichten",
+        "glyphicon": "glyphicon-list",
+        "children": {
+          "view1": {
+            "name": "Ansicht1",
+            "type" : "viewpoint",
+            "glyphicon": "glyphicon-screenshot",
+            "heading": -0.30858728378862876,
+            "tilt": 0.9321791580603296,
+            "altitude" :272.3469798217454,
+            "center" : [564028.7954571751,5934555.967867207],
+            "zoomLevel" :  7.456437968949651
+          }
+        }
+      },
       "tools": {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",

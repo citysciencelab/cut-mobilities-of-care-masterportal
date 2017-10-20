@@ -57,7 +57,8 @@ define(function (require) {
                 "unregisterListener": this.unregisterListener,
                 "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
                 "activateMap3d" : this.activateMap3d,
-                "deactivateMap3d" : this.deactivateMap3d
+                "deactivateMap3d" : this.deactivateMap3d,
+                "setCameraParameter" : this.setCameraParameter
             }, this);
 
             this.listenTo(this, {
@@ -188,7 +189,23 @@ define(function (require) {
             Radio.trigger("Map", "change", "3D");
         },
 
-
+        setCameraParameter: function(parameter) {
+            if(this.getMap3d()) {
+                var camera = this.getMap3d().getCamera();
+                if (parameter.tilt) {
+                    var tilt = Number.parseFloat(parameter.tilt);
+                    camera.setTilt(tilt);
+                }
+                if (parameter.heading) {
+                    var heading = Number.parseFloat(parameter.heading);
+                    camera.setHeading(heading);
+                }
+                if (parameter.altitude) {
+                    var altitude = Number.parseFloat(parameter.altitude);
+                    camera.setAltitude(altitude);
+                }
+            }
+        },
          getFeatures3dAtPosition : function(position) {
             if(this.getMap3d()) {
                 var scene = this.getMap3d().getCesiumScene();

@@ -9,6 +9,7 @@ define([
     "modules/core/modelList/layer/tileset",
     "modules/core/modelList/folder/model",
     "modules/core/modelList/tool/model",
+    "modules/core/modelList/viewpoint/model",
     "modules/core/modelList/staticlink/model",
     "modules/layer/wfsStyle/list"
 ], function () {
@@ -23,6 +24,7 @@ define([
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
+        Viewpoint = require("modules/core/modelList/viewpoint/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
         Radio = require("backbone.radio"),
         ModelList;
@@ -120,6 +122,9 @@ define([
             }
             else if (attrs.type === "staticlink") {
                 return new StaticLink(attrs, options);
+            }
+            else if (attrs.type === "viewpoint") {
+                return new Viewpoint(attrs, options);
             }
         },
         /**

@@ -130,6 +130,10 @@ define([
                             this.addItem(toolitem);
                         }, this);
                     }
+                    else if (_.has(value, "type") && value.type === "viewpoint") {
+                        var ansicht = _.extend(value, {parentId: parentId, id: _.uniqueId(key + "_")});
+                        this.addItem(ansicht);
+                    }
                     else {
                         var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
 
@@ -400,7 +404,8 @@ define([
             new ModelList(_.filter(this.getItemList(), function (model) {
                 return model.parentId === "root" ||
                     model.parentId === "tools" ||
-                    model.parentId === "info";
+                    model.parentId === "info" ||
+                    model.parentId === "ansichten";
             }));
         },
 

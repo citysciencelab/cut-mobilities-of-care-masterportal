@@ -7,6 +7,7 @@ define([
     "modules/menu/mobile/layer/view",
     "modules/menu/mobile/layer/viewLight",
     "modules/menu/mobile/tool/view",
+    "modules/menu/mobile/viewpoint/view",
     "modules/menu/mobile/staticlink/view",
     "modules/menu/mobile/breadCrumb/listView",
     "jqueryui/effect",
@@ -19,6 +20,7 @@ define([
             LayerView = require("modules/menu/mobile/layer/view"),
             LayerViewLight = require("modules/menu/mobile/layer/viewLight"),
             ToolView = require("modules/menu/mobile/tool/view"),
+            ViewpointView = require("modules/menu/mobile/viewpoint/view"),
             StaticLinkView = require("modules/menu/mobile/staticlink/view"),
             BreadCrumbListView = require("modules/menu/mobile/breadCrumb/listView"),
             Menu;
@@ -185,6 +187,10 @@ define([
                         }
                         case "layer": {
                             nodeView = (treeType === "light" ? new LayerViewLight({model: model}) : new LayerView({model: model}));
+                            break;
+                        }
+                        case "viewpoint": {
+                            nodeView = new ViewpointView({model: model});
                             break;
                         }
                     }
