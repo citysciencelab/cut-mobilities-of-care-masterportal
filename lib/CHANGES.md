@@ -1,5 +1,40 @@
 # Changelog
 
+
+# v 1.32
+
+* Breaking changes
+  * Changed AbstractSynchronizer.createSingleLayerCounterparts Plugin API
+    in existing plugins the function has to be modified.
+    It now takes an object {layer: !ol.layer.Base, parents: Array<ol.layer.Group>}.
+    The parents are ordered with the first parent coming first and the last parent coming last.
+
+* Changes
+  * Enable googshift eslint rules to prepare for ES6 modules migration; move
+    source to the olcs directory and fix filenames.
+  * Add basic support for clustered sources: see https://github.com/openlayers/ol-cesium/pull/496.
+  * Added ol.layer.Group synchronization
+
+
+# v 1.31 - 2017-09-06
+
+* Changes
+  * Port to OpenLayers 4.3.2
+  * Port to Cesium 1.37
+  * Update OpenLayers to v4.3.1 to fix https://github.com/openlayers/ol-cesium/issues/479
+  * Get OpenLayers and Cesium dependencies through npm instead of git
+    submodules. On old clones you must remove manually the unused "ol" and
+    "cesium" directories.
+  * Switch to @camptocamp/closure-util fork to allow using goog.modules.
+  * Switch to @camptocamp/cesium to allow examples based on vector tiles and
+    advanced performance optimizations.
+
+# v 1.30 - 2017-08-03
+
+* Changes
+  * Port to Cesium 1.36. This fixes blinking of the vector example
+    https://github.com/openlayers/ol-cesium/issues/465.
+
 # v 1.29 - 2017-07-12
 
 * Changes
