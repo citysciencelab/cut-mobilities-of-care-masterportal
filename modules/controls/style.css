@@ -210,7 +210,9 @@
 }
 
 #orientation3d {
-    margin: 25px -80px;
+    position: absolute;
+    right:90px;
+    top:30px;
 }
 
 /***** 3DButton *****/
