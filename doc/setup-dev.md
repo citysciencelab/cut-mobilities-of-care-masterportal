@@ -49,6 +49,17 @@ Dann in der Admin-cmd ausführen:
 
 Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /node_modules, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
 
+### Grunt
+[Grunt](http://gruntjs.com/) in der Admin-cmd global installieren:
+```
+# npm install -g grunt-cli
+```
+
+Test in normaler cmd:
+```
+# grunt
+```
+
 ## Grunt Tasks ausführen
 ### grunt server
 Einen lokalen Entwicklungsserver starten.
