@@ -304,6 +304,16 @@ define("app",
                         }
                         break;
                     }
+                    case "orientation3d": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRow(control.id);
+
+                            require(["modules/controls/orientation3d/view"], function (Orientation3DView) {
+                                new Orientation3DView({ el: el });
+                            });
+                        }
+                        break;
+                    }
                 }
             });
         });

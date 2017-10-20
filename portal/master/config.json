@@ -155,6 +155,7 @@
     "controls": {
       "toggleMenu": true,
       "fullScreen": true,
+      "orientation3d": true,
       "zoom": true,
       "orientation": "once",
       "poi": true,
