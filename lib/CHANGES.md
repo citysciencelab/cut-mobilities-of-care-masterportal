@@ -13,7 +13,9 @@
   * Enable googshift eslint rules to prepare for ES6 modules migration; move
     source to the olcs directory and fix filenames.
   * Add basic support for clustered sources: see https://github.com/openlayers/ol-cesium/pull/496.
+  * Add support for Overlay synchronization, see example Overlays
   * Added ol.layer.Group synchronization
+  * Added calcResolutionForDistance and calcDistanceForResolution functions to Camera API
 
 
 # v 1.31 - 2017-09-06
@@ -160,9 +162,9 @@
     curves instead of straight lines. This functionality can be activated by
     setting the olcs.polygon_kind property to 'rectangle' on the OpenLayers
     geometry.
-  * Add support to set a proxy for Cesium to load layer not accessible 
-    due to missing CORS headers (eg. when user can't modify configuration 
-    of the mapservice used). This functionality can be activated by 
+  * Add support to set a proxy for Cesium to load layer not accessible
+    due to missing CORS headers (eg. when user can't modify configuration
+    of the mapservice used). This functionality can be activated by
     setting the olcs.proxy property to the OpenLayers source.
 
 ## v 1.15 - 2016-04-28
@@ -270,7 +272,7 @@
     * Core static functions for converting from OL3 features to Cesium primitives
       have been moved into a class designed for inheritance.
       The `olcs.FeatureConverter` may be extended and passed as a parameter of
-      the `olcs.VectorSynchronizer` constructor. See the synchronizer function 
+      the `olcs.VectorSynchronizer` constructor. See the synchronizer function
       parameter of the `olcs.OLCesium` constructor. Subclassing requires that
       the subclass and the library code be compiled together.
       One way of migrating existing code is to define a global variable:
