@@ -85,27 +85,16 @@ define(function (require) {
             }
         },
 
-        getInfoFormat: function () {
-            return this.get("infoFormat");
-        },
-        setInfoFormat: function (value) {
-            this.set("infoFormat", value);
-        },
-
-        setAttributes: function () {
-            if (_.isUndefined(this.getInfoFormat()) === true) {
-                this.setInfoFormat("text/xml");
-            }
-        },
-
         createTileSet: function() {
             if(this.has("tileSet") === false){
-                this.setTileSet(new Cesium.Cesium3DTileset({
-                    url: this.get("url")
-                }));
+                var options = {};
+                if(this.has("cesium3DTilesetOptions")){
+                    _.extend(options, this.get("cesium3DTilesetOptions"));
+                }
+                options.url = this.get("url");
+                this.setTileSet(new Cesium.Cesium3DTileset(options));
             }
         },
-
 
         /**
          * Setter für Attribut "isVisibleInMap"

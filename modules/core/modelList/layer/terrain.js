@@ -81,24 +81,15 @@ define(function (require) {
             }
         },
 
-        getInfoFormat: function () {
-            return this.get("infoFormat");
-        },
-        setInfoFormat: function (value) {
-            this.set("infoFormat", value);
-        },
-
-        setAttributes: function () {
-            if (_.isUndefined(this.getInfoFormat()) === true) {
-                this.setInfoFormat("text/xml");
-            }
-        },
 
         createTerrainProvider: function() {
             if(this.has("terrainProvider") === false){
-               this.setTerrainProvider(new Cesium.CesiumTerrainProvider({
-                   url: this.get("url")
-               }));
+                var options = {};
+                if(this.has("cesiumTerrainProviderOptions")){
+                    _.extend(options, this.get("cesiumTerrainProviderOptions"));
+                }
+                options.url = this.get("url");
+                this.setTerrainProvider(new Cesium.CesiumTerrainProvider(options));
             }
         },
 
