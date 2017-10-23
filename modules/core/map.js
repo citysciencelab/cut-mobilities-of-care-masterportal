@@ -233,11 +233,21 @@ define(function (require) {
                 }
 
                 var distance = Cesium.Cartesian3.distance(cartesian, scene.camera.position);
-                var resolution =  this.getMap3d().getCamera().calcResolutionForDistance_(distance, cartographic.latitude);
+                var resolution =  this.getMap3d().getCamera().calcResolutionForDistance(distance, cartographic.latitude);
                 var mapProjection = Radio.request("MapView", "getProjection");
                 var transformedCoords = ol.proj.transform(coords, ol.proj.get("EPSG:4326"), mapProjection);
+                var transformedPickedPosition = null;
+
+                if (scene.pickPositionSupported) {
+                    var pickedPositionCartesian = scene.pickPosition(event.position);
+                    if (pickedPositionCartesian) {
+                        var cartographicPickedPosition = scene.globe.ellipsoid.cartesianToCartographic(pickedPositionCartesian);
+                        transformedPickedPosition = ol.proj.transform([Cesium.Math.toDegrees(cartographicPickedPosition.longitude), Cesium.Math.toDegrees(cartographicPickedPosition.latitude)], ol.proj.get("EPSG:4326"), mapProjection);
+                        transformedPickedPosition.push(cartographicPickedPosition.height);
+                    }
+                }
                 Radio.trigger("Map", "clickedMAP", transformedCoords);
-                Radio.trigger("Map", "clickedWindowPosition", {position:event.position, coordinate:transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution});
+                Radio.trigger("Map", "clickedWindowPosition", {position:event.position, pickedPosition: transformedPickedPosition, coordinate:transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution});
             }
          },
          /**

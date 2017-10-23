@@ -152,22 +152,22 @@ define(function (require) {
         setGfiParams3d: function(event) {
             if(this.active3d) {
                 if (Radio.request("Map", "isMap3d")) {
-                    this.setCoordinate(event.coordinate);
-
                     // Abbruch, wenn auf SearchMarker x geklickt wird.
                     if (this.checkInsideSearchMarker(event.position.x, event.position.y) === true) {
                         return;
                     }
 
+
                     var features = Radio.request("Map", "getFeatures3dAtPosition", event.position);
-                    features.forEach(function (object) {
+                    for (var i = 0; i < features.length; i++) {
+                        var object = features[i];
                         if(object) {
                             if (object instanceof Cesium.Cesium3DTileFeature) {
                                 var properties = {};
                                 var propertyNames = object.getPropertyNames();
                                 var length = propertyNames.length;
-                                for (var i = 0; i < length; ++i) {
-                                    var propertyName = propertyNames[i];
+                                for (var j = 0; j < length; ++j) {
+                                    var propertyName = propertyNames[j];
                                     properties[propertyName] = object.getProperty(propertyName);
                                 }
                                 if(properties.attributes && properties.id){
@@ -180,39 +180,49 @@ define(function (require) {
                                     name: "Buildings"
                                 };
                                 gfiParams.push(modelattributes);
+                                break; // nur das erste 3D Objekt
                             } else if (object.primitive) {
                                 var feature = object.primitive.olFeature;
                                 var layer = object.primitive.olLayer;
                                 if (feature && layer) {
                                     this.searchModelByFeature(feature, layer);
+                                    break; // nur das erste 3D Objekt
                                 }
                             }
                         }
-                    }.bind(this));
+                    }
 
-                    var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"});
-                    var visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"});
-                    var visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList);
-
-                    var resolution = event.resolution;
-                    var projection = Radio.request("MapView", "getProjection");
-                    var coordinate = event.coordinate.slice(0,2);
-                    // WMS | GROUP
-                    _.each(visibleLayerList, function (model) {
-                        if (model.getGfiAttributes() !== "ignore") {
-                            if (model.getTyp() === "WMS") {
-                                model.attributes.gfiUrl = model.getGfiUrl(resolution, coordinate, projection);
-                                gfiParams.push(model.attributes);
-                            }
-                            else {
-                                model.get("gfiParams").forEach(function (params, index) {
-                                    params.gfiUrl = model.getGfiUrl(index, resolution, coordinate, projection);
-                                    gfiParams.push(model.getGfiParams()[index]);
-                                });
-                            }
+                    if (gfiParams.length >= 1) {
+                        if(event.pickedPosition && event.pickedPosition[2] >= event.coordinate[2]) {
+                            this.setCoordinate(event.pickedPosition);
+                        } else {
+                            this.setCoordinate(event.coordinate);
                         }
-                    }, this);
+                    } else { // wenn keine 3D Objekte gefunden wurden, check WMS Layer
+                        this.setCoordinate(event.coordinate);
+                        var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"});
+                        var visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"});
+                        var visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList);
 
+                        var resolution = event.resolution;
+                        var projection = Radio.request("MapView", "getProjection");
+                        var coordinate = event.coordinate.slice(0,2);
+                        // WMS | GROUP
+                        _.each(visibleLayerList, function (model) {
+                            if (model.getGfiAttributes() !== "ignore") {
+                                if (model.getTyp() === "WMS") {
+                                    model.attributes.gfiUrl = model.getGfiUrl(resolution, coordinate, projection);
+                                    gfiParams.push(model.attributes);
+                                }
+                                else {
+                                    model.get("gfiParams").forEach(function (params, index) {
+                                        params.gfiUrl = model.getGfiUrl(index, resolution, coordinate, projection);
+                                        gfiParams.push(model.getGfiParams()[index]);
+                                    });
+                                }
+                            }
+                        }, this);
+                    }
                     this.setThemeIndex(0);
                     this.getThemeList().reset(gfiParams);
                     gfiParams = [];
