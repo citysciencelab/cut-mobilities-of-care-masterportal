@@ -1,11 +1,12 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "modules/core/modelList/layer/model"
-], function (Backbone, Radio, ol, Layer) {
+define(function(require) {
 
-    var GroupLayer = Layer.extend({
+    var Layer = require("modules/core/modelList/layer/model"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        Config= require("config"),
+        GroupLayer;
+
+    GroupLayer = Layer.extend({
         defaults: _.extend({}, Layer.prototype.defaults, {
             supported: ['2D', '3D'],
             showSettings: true
@@ -53,6 +54,7 @@ define([
             var sources = [];
 
             _.each(childlayers, function (child) {
+                var tilesize = child.tilesize ? parseInt(child.tilesize, 10) : 512;
                 var source = new ol.source.TileWMS({
                     url: child.url,
                     params: {
@@ -60,12 +62,17 @@ define([
                         FORMAT: child.format,
                         VERSION: child.version,
                         TRANSPARENT: true
-                    }
+                    },
+                    tileGrid: new ol.tilegrid.TileGrid({
+                        resolutions: Radio.request("MapView", "getResolutions"),
+                        extent: this.getExtent(child),
+                        tileSize: tilesize
+                    })
                 });
 
                 sources.push(source);
                 child.source = source;
-            });
+            }, this);
             this.setChildLayerSources(sources);
         },
 
@@ -78,7 +85,8 @@ define([
 
             _.each(childlayers, function (childLayer, index) {
                 layer.push(new ol.layer.Tile({
-                    source: this.getChildLayerSources()[index]
+                    source: this.getChildLayerSources()[index],
+                    extent: this.getExtent(childLayer)
                 }));
             }, this);
             this.setChildLayers(layer);
@@ -89,7 +97,7 @@ define([
          */
         createLayer: function () {
             var groupLayer = new ol.layer.Group({
-                layers: this.getChildLayers()
+                layers: this.getChildLayers(),
             });
 
             this.setLayer(groupLayer);
@@ -226,8 +234,16 @@ define([
                 childLayer = this.getChildLayers().item(index);
 
             return childLayer.getSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: gfiParams.infoFormat, FEATURE_COUNT: gfiParams.featureCount});
+        },
+        getExtent: function(child) {
+            if(this.has("extent")) {
+                return this.get("extent");
+            } else if (child && child.extent) {
+                return child.extent;
+            } else {
+                return Config.baseData.extent;
+            }
         }
-
     });
 
     return GroupLayer;

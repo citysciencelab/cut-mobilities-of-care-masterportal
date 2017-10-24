@@ -3,12 +3,14 @@ define(function (require) {
     var Layer = require("modules/core/modelList/layer/model"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
+        Config= require("config"),
         WMSLayer;
 
     WMSLayer = Layer.extend({
         defaults: _.extend({}, Layer.prototype.defaults, {
             supported: ['2D', '3D'],
-            showSettings: true
+            showSettings: true,
+            extent: null
         }),
         setAttributes: function () {
             if (_.isUndefined(this.getInfoFormat()) === true) {
@@ -48,10 +50,7 @@ define(function (require) {
                     params: params,
                     tileGrid: new ol.tilegrid.TileGrid({
                         resolutions: Radio.request("MapView", "getResolutions"),
-                        origin: [
-                            442800,
-                            5809000
-                        ],
+                        extent: this.getExtent("extent"),
                         tileSize: parseInt(this.get("tilesize"), 10)
                     })
                 }),
@@ -96,7 +95,8 @@ define(function (require) {
                 legendURL: this.get("legendURL"),
                 routable: this.get("routable"),
                 gfiTheme: this.get("gfiTheme"),
-                infoFormat: this.get("infoFormat")
+                infoFormat: this.get("infoFormat"),
+                extent: this.getExtent()
             };
 
             if (this.getSingleTile() !== true) {
@@ -240,6 +240,13 @@ define(function (require) {
                 this.set("supported", ['2D']);
             }else {
                 this.set("supported", ['2D', '3D']);
+            }
+        },
+        getExtent: function() {
+            if(this.has("extent")){
+                return this.get("extent");
+            } else {
+                return Config.baseData.extent;
             }
         }
     });

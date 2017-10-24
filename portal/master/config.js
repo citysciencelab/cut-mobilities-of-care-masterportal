@@ -95,7 +95,11 @@ define(function () {
         },
         geoAPI: false,
         clickCounter: {},
-        startingMap3D: false
+        startingMap3D: false,
+        baseData: {
+            extent: [546000,5916500,589000,5957700],
+            maxLevel: 18
+        }
     };
 
     return config;
