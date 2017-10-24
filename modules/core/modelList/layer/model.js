@@ -50,7 +50,17 @@ define(function (require) {
                     this.setLayerInfoChecked(layerInfoChecked);
                 }
             });
-
+            this.listenTo(Radio.channel("Map"), {
+                "change": function(mode) {
+                    if (this.get("supported").indexOf(mode) >= 0) {
+                        if(this.getIsVisibleInMap()) {
+                            this.getLayer().setVisible(true);
+                        }
+                    } else {
+                        this.getLayer().setVisible(false);
+                    }
+                }
+            });
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
                     // triggert das Ein- und Ausschalten von Layern

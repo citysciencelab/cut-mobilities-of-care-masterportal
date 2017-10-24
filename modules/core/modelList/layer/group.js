@@ -241,7 +241,7 @@ define(function(require) {
             } else if (child && child.extent) {
                 return child.extent;
             } else {
-                return Config.baseData.extent;
+                return Config.extent;
             }
         }
     });

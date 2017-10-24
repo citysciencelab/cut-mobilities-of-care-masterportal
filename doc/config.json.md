@@ -873,6 +873,8 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 |name|nein|String|Name aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
+|supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
+|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung des WMS Dienstes, der WMS Dienst wird nur in dem Extent angezeigt (Die entsprechenden Kachel).||
 
 **Beispiel Hintergrundkarten:**
 
@@ -989,6 +991,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |name|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
+|supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
 
 **Folgende Layerkonfigurationen gelten nur für WMS:**
 
@@ -1000,6 +1003,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |infoFormat|nein|String|Wert aus der [services.json](services.json.md) sonst *„text/xml“*|Format für die GFI-Abfrage.|
 |styleable|nein|Boolean||True -> Layer kann im Client anders gestylt werden. Zusätzlich müssen *geomType* und *attributesToStyle* gesetzt werden.|
 |styles|nein|Array [String]||Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.|
+|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung des WMS Dienstes, der WMS Dienst wird nur in dem Extent angezeigt (Die entsprechenden Kachel).||
 
 **Folgende Layerkonfigurationen gelten nur für WFS:**
 

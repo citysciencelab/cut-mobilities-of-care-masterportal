@@ -246,7 +246,7 @@ define(function (require) {
             if(this.has("extent")){
                 return this.get("extent");
             } else {
-                return Config.baseData.extent;
+                return Config.extent;
             }
         }
     });

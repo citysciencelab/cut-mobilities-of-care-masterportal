@@ -32,7 +32,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[zoomToFeature](#markdown-header-zoomtofeature)|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe [URL-Parameter](URL-Parameter.md).||
 |startingMap3D|nein|Boolean|false|Legt fest ob der 3D Modus beim Start der Anwendung geladen werden soll.||
 |[cameraParameter](#markdown-header-cameraParameter)|nein|Object||Start Camera Parameter||
-|[cesiumParameter](#markdown-header-cesiumParameter)|nein|Object||Cesium Flags
+|[cesiumParameter](#markdown-header-cesiumParameter)|nein|Object||Cesium Flags||
+|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung der Anwendung.||
 ******
 ## animation
 

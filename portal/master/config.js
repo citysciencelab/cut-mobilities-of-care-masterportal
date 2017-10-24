@@ -107,10 +107,7 @@ define(function () {
             maximumScreenSpaceError: 2,
             fxaa: true
         },
-        baseData: {
-            extent: [546000,5916500,589000,5957700],
-            maxLevel: 18
-        }
+        extent: [546000,5916500,589000,5957700]
     };
 
     return config;
