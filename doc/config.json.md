@@ -44,6 +44,8 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |poi|nein|Boolean|false|Zeigt eine Liste von Features in der Umgebung an. Funktioniert nur wenn die Standortbestimmung (orientation) aktiviert ist. |
 |toggleMenu|nein|Boolean|false|Legt fest ob die Menüleiste ein- und ausgeblendet werden kann.|
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
+|button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung nach 3D angezeigt werden soll. |
+|orientation3d|nein|Boolean|false|Legt fest, ob ein im 3D Modus eine Navigationsrose anzeiget werden soll. |
 
 **Beispiel controls:**
 
