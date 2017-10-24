@@ -8,7 +8,7 @@ define(function (require) {
         Config = require("config"),
         Map;
 
-     Map = Backbone.Model.extend({
+    Map = Backbone.Model.extend({
 
         /**
          *
@@ -141,15 +141,12 @@ define(function (require) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }
         },
-         /**
-          *
-          */
-         getMapMode: function () {
-             return this.getMap3d() && this.getMap3d().getEnabled() ? "3D" : "2D";
-         },
-         /**
-          *
-          */
+        getMapMode: function () {
+            return this.getMap3d() && this.getMap3d().getEnabled() ? "3D" : "2D";
+        },
+        /**
+        *
+        */
         isMap3d: function () {
             return this.getMap3d() && this.getMap3d().getEnabled();
         },
@@ -276,38 +273,46 @@ define(function (require) {
                 Radio.trigger("Map", "clickedMAP", transformedCoords);
                 Radio.trigger("Map", "clickedWindowPosition", {position:event.position, pickedPosition: transformedPickedPosition, coordinate:transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution});
             }
-         },
-         /**
-          */
-         deactivateMap3d: function () {
-             if(this.getMap3d()) {
-                 this.get("view").animate({rotation: 0}, function(){
-                     this.getMap3d().setEnabled(false);
-                     this.get("view").setRotation(0);
-                     Radio.trigger("Map", "change", "2D");
-                 }.bind(this));
-             }
-         },
+        },
+        /**
+         */
+        deactivateMap3d: function () {
+            if(this.getMap3d()) {
+                this.get("view").animate({rotation: 0}, function(){
+                    this.getMap3d().setEnabled(false);
+                    this.get("view").setRotation(0);
+                    var resolution = this.get("view").getResolution();
+                    var resolutions = this.get("view").getResolutions();
+                    if (resolution > resolutions[0]) {
+                        this.get("view").setResolution(resolutions[0]);
+                    }
+                    if (resolution < resolutions[resolutions.length-1]) {
+                        this.get("view").setResolution(resolutions[resolutions.length-1]);
+                    }
+                    Radio.trigger("Map", "change", "2D");
+                }.bind(this));
+            }
+        },
 
-         /**
-          *
-          */
-         setMap3d: function (map3d) {
-             return this.set("map3d", map3d);
-         },
+        /**
+         *
+         */
+        setMap3d: function (map3d) {
+            return this.set("map3d", map3d);
+        },
 
-         /**
-          *
-          */
-         getMap3d: function () {
-             return this.get("map3d");
-         },
-         /**
-          *
-          */
-         reactToCameraChanged: function() {
-             var camera = this.getMap3d().getCamera();
-             Radio.trigger("Map", "cameraChanged", {"heading" : camera.getHeading(), "altitude" : camera.getAltitude(), "tilt" : camera.getTilt()});
+        /**
+         *
+         */
+        getMap3d: function () {
+            return this.get("map3d");
+        },
+        /**
+         *
+         */
+        reactToCameraChanged: function() {
+            var camera = this.getMap3d().getCamera();
+            Radio.trigger("Map", "cameraChanged", {"heading" : camera.getHeading(), "altitude" : camera.getAltitude(), "tilt" : camera.getTilt()});
         },
 
         getWGS84MapSizeBBOX: function () {
