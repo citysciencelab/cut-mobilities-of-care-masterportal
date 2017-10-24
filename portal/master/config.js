@@ -96,6 +96,17 @@ define(function () {
         geoAPI: false,
         clickCounter: {},
         startingMap3D: false,
+        cesiumParameter: {
+            tileCacheSize: 20,
+            enableLighting: false,
+            fog: {
+                enabled: true,
+                density: 0.0002,
+                screenSpaceErrorFactor: 2.0
+            },
+            maximumScreenSpaceError: 2,
+            fxaa: true
+        },
         baseData: {
             extent: [546000,5916500,589000,5957700],
             maxLevel: 18

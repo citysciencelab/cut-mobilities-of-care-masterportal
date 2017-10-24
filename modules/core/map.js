@@ -182,7 +182,34 @@ define(function (require) {
                     var altitude  = Number.parseFloat(Config.cameraParameter.altitude);
                     camera.setAltitude(altitude);
                 }
-                var cesiumCamera = this.getMap3d().getCesiumScene().camera;
+                var scene = this.getMap3d().getCesiumScene();
+                var cesiumCamera = scene.camera;
+                if (Config.cesiumParameter) {
+                    if (Config.cesiumParameter.fog) {
+                        if (_.isBoolean(Config.cesiumParameter.fog.enabled)) {
+                            scene.fog.enabled = Config.cesiumParameter.fog.enabled;
+                        }
+                        if (_.isNumber(Config.cesiumParameter.fog.density)) {
+                            scene.fog.density = Config.cesiumParameter.fog.density;
+                        }
+                        if (_.isNumber(Config.cesiumParameter.fog.screenSpaceErrorFactor)) {
+                            scene.fog.screenSpaceErrorFactor = Config.cesiumParameter.fog.screenSpaceErrorFactor;
+                        }
+                    }
+                    if (_.isNumber(Config.cesiumParameter.tileCacheSize)) {
+                        scene.globe.tileCacheSize = Config.cesiumParameter.tileCacheSize;
+                    }
+                    if (_.isNumber(Config.cesiumParameter.maximumScreenSpaceError)) {
+                        scene.globe.maximumScreenSpaceError = Config.cesiumParameter.maximumScreenSpaceError;
+                    }
+                    if (_.isBoolean(Config.cesiumParameter.fxaa)) {
+                        scene.fxaa = Config.cesiumParameter.fxaa;
+                    }
+                    if (_.isBoolean(Config.cesiumParameter.enableLighting)) {
+                        scene.globe.enableLighting = Config.cesiumParameter.enableLighting;
+                    }
+                }
+
                 cesiumCamera.changed.addEventListener(this.reactToCameraChanged, this);
             }
             this.getMap3d().setEnabled(true);
