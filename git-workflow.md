@@ -1,5 +1,7 @@
 >Unser git-Workflow.
 
+[TOC]
+
 ## Commit
 * Committe früh und oft
 * Ein Commit repräsentiert eine Idee oder eine Änderung
