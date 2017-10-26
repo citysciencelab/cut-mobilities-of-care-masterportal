@@ -13,10 +13,11 @@ define(function (require) {
                 "addGeoJsonToMap": this.addGeoJsonToMap
             });
         },
-
         /**
-         * Erzeugt aus den Attributen im "IT-GBM" Index OpenLayers Features
-         * @param  {Object[]} hits - Trefferliste mit Attributen
+         * Fügt die Geodaten aus einer GeoJson in eine neue Layer ein.
+         * @param {String} layerName Der Name der Layer (Kann beliebig alphanumerisch gewählt werden)
+         * @param {String} layerId   Die Id der Layer (Kann beliebig alphanumerisch gewählt werden, sollte aber unique sein)
+         * @param {String} geojson   Ein valides GeoJson. Wird kein crs in dem Json definiert, dann wird EPSG:4326 angenommen.
          */
         addGeoJsonToMap: function (layerName, layerId, geojson) {
             Radio.trigger("Parser", "addGeoJSONLayer", layerName, layerId, geojson);
