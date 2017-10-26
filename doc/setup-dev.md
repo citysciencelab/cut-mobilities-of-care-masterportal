@@ -68,7 +68,7 @@ Einen lokalen Entwicklungsserver starten.
 # grunt server
 ```
 
-Unter http://localhost:9001/portal/master gibt es eine umfassende Demo-Konfiguration.
+Unter https://localhost:9001/portal/master gibt es eine umfassende Demo-Konfiguration.
 
 ### grunt test
 Unter Firefox funktioniert grunt server nicht, hier muss statt dessen mit "grunt test" (ohne live reload) gearbeitet werden
