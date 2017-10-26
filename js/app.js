@@ -22,10 +22,6 @@ define("app",
     new CRS();
     new Map();
 
-    require(["modules/tools/addPointsFromFile/view"], function (AddPointsFromFileView) {
-       new AddPointsFromFileView();
-    });
-
     // Graph laden
     require(["modules/tools/graph/model"], function (GraphModel) {
         new GraphModel();
