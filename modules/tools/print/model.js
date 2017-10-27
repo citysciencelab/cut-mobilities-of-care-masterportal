@@ -465,7 +465,8 @@ define([
                 gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
                 gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
                 gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
-                printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
+                //printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
+                printGFI = this.get("gfi"), // soll laut config Parameter gedruckt werden?
                 printurl = this.get("printurl"); // URL des Druckdienstes
 
             this.set("gfiParams", gfiParams);

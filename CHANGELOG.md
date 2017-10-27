@@ -1,3 +1,40 @@
+# Changelog LGV Master-Portal 1.4.5
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - b033e0e gfi mobil rendert sich auf volle breite Merged in hotfix_gif_mobil (pull request #567)
+  - d176616 gfi initial links im ie
+
+# Changelog LGV Master-Portal 1.4.4
+
+FIXES:
+
+  - d1766166 gfi initial links im ie
+
+# Changelog LGV Master-Portal 1.4.3
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  (none)
+
+# Changelog LGV Master-Portal 1.4.2
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  (none)
+
 # Changelog LGV Master-Portal 1.4.1
 
 NEU:
