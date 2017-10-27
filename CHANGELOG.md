@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.4.6
+
+FIXES:
+
+  - 1a7337a Drucken mit GFI
+
 # Changelog LGV Master-Portal 1.4.5
 
 NEU:
