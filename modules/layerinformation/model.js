@@ -43,7 +43,7 @@ define(function (require) {
             });
 
             if (_.has(Config, "csw")) {
-                this.setCswId(Config.csw.id);
+                this.setCswId(Config.csw);
             }
             this.bindView(Radio.request("Util", "isViewMobile"));
         },
