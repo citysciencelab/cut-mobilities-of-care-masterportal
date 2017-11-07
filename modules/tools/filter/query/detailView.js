@@ -115,7 +115,7 @@ define(function (require) {
                 this.$el.find(".detailview-head").before(view.render());
             }
             else {
-                this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
+                this.$el.find(".detailview-head").prepend("<label>" + this.model.get("name") + "-Filter</label>");
             }
         },
         toggleIsActive: function (evt) {
