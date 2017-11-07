@@ -126,6 +126,9 @@ define(function (require) {
                             ids: featureIds
                         });
                     }
+                    else {
+                        Radio.trigger("ModelList", "hideAllFeatures", layerId);
+                    }
                 }, this);
             }
             return allFeatureIds;
