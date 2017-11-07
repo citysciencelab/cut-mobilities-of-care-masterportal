@@ -185,6 +185,14 @@ define(function (require) {
             this.set("isSelected", value);
         },
         setIsActive: function (value) {
+            // if (!this.get("isActive") && value) {
+            //     var featureIds = [];
+            //
+            //     _.each(this.get("features"), function (feature) {
+            //         featureIds.push(feature.getId());
+            //     }, this);
+            //     this.set("featureIds", featureIds);
+            // }
             this.set("isActive", value);
         },
 

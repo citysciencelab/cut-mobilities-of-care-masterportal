@@ -125,16 +125,22 @@ define(function (require) {
                 featureIds;
 
             if (!_.isUndefined(queries)) {
+
                 _.each(queries.groupBy("layerId"), function (group, layerId) {
+                    var isEveryQueryActive = _.every(group, function (model) {
+                        return !model.get("isActive");
+                    });
+
                     featureIds = this.collectFilteredIds(group);
-                    if (featureIds.length > 0) {
+
+                    if (isEveryQueryActive) {
+                        Radio.trigger("ModelList", "showAllFeatures", layerId);
+                    }
+                    else {
                         allFeatureIds.push({
                             layer: layerId,
                             ids: featureIds
                         });
-                    }
-                    else {
-                        Radio.trigger("ModelList", "hideAllFeatures", layerId);
                     }
                 }, this);
             }
@@ -154,9 +160,6 @@ define(function (require) {
                     _.each(query.get("featureIds"), function (featureId) {
                         featureIdList.push(featureId);
                     });
-                }
-                else {
-                    Radio.trigger("ModelList", "showAllFeatures", query.get("layerId"));
                 }
             });
             return _.unique(featureIdList);

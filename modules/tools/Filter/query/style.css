@@ -11,7 +11,8 @@
 }
 
 .filter .detailview-head .filter-info {
-    margin-bottom: 10px;
+    clear: both;
+    padding: 10px 15px;
 }
 
 .filter .detailview-head button {

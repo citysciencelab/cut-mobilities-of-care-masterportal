@@ -113,7 +113,7 @@ define(function (require) {
             if (!this.model.get("activateOnSelection")) {
                 var view = new CheckBoxView({model: this.model.get("btnIsActive")});
 
-                this.$el.find(".detailview-head").append(view.render());
+                this.$el.find(".detailview-head").after(view.render());
             }
         },
         toggleIsActive: function (evt) {
