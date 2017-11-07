@@ -8,6 +8,10 @@
     padding: 8px 15px;
 }
 
+.filter .detailview-head .filter-info {
+    margin-bottom: 10px;
+}
+
 .filter .detailview-head button {
     float: none;
     /*margin-bottom: 8px;*/
