@@ -46,7 +46,6 @@ define(function (require) {
         addIsActiveCheckbox: function () {
             if (!this.get("activateOnSelection")) {
                 this.set("btnIsActive", new SnippetCheckboxModel({
-                    label: this.get("name") + "-Filter",
                     isSelected: this.get("isActive")
                 }));
 

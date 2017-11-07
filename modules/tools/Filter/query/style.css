@@ -5,7 +5,9 @@
 }
 
 .filter .detailview-head {
-    padding: 8px 15px;
+    padding: 8px 0;
+    width: 100%;
+    display: inline-block;
 }
 
 .filter .detailview-head .filter-info {
@@ -13,8 +15,8 @@
 }
 
 .filter .detailview-head button {
-    float: none;
-    /*margin-bottom: 8px;*/
+    float: right;
+    margin-right: 15px;
     color: #fff;
     background-color: rgb(8, 88, 158);
 }
