@@ -74,19 +74,6 @@
                 "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
-                "name": "Alle Schulen",
-                "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Grundschulen", "Langformschulen", "Stadtteilschulen", "Gymnasien", "Sonderschulen", "Berufliche Schulen"]
-                  }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "abschluss", "anzahl_schueler"]
-              },
-              {
-                "layerId": "8712",
-                "isActive": false,
-                "isSelected": false,
                 "name": "Grundschulen",
                 "predefinedRules": [
                   {
