@@ -6,6 +6,9 @@ define([
 ], function (Backbone, Radio, ol, Layer) {
 
     var GroupLayer = Layer.extend({
+        initialize: function () {
+            this.superInitialize();
+        },
 
         /**
          *
@@ -139,7 +142,9 @@ define([
                 "id": this.getId(),
                 "legendURL": legendURL,
                 "metaID": metaID,
-                "layername": name
+                "layername": name,
+                "url": null,
+                "typ": null
             });
 
             this.setLayerInfoChecked(true);

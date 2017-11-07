@@ -5,15 +5,16 @@ define(function (require) {
         GeoJSONLayer;
 
     GeoJSONLayer = Layer.extend({
+        initialize: function () {
+            this.superInitialize();
+        },
 
         /**
          * [createLayerSource description]
          * @return {[type]} [description]
          */
         createLayerSource: function () {
-            this.setLayerSource(new ol.source.Vector({
-                features: this.getFeatures()
-            }));
+            this.setLayerSource(new ol.source.Vector());
         },
 
         /**
@@ -23,10 +24,57 @@ define(function (require) {
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
                 source: this.getLayerSource(),
-                style: this.getDefaultStyle()
+                name: this.get("name"),
+                typ: this.get("typ"),
+                gfiAttributes: this.get("gfiAttributes"),
+                routable: this.get("routable"),
+                gfiTheme: this.get("gfiTheme"),
+                id: this.getId()
             }));
+            if (_.isUndefined(this.get("geojson"))) {
+                this.updateData(this.handleData);
+            }
+            else {
+                this.handleData(this.get("geojson"));
+            }
         },
+        updateData: function (callback) {
+            Radio.trigger("Util", "showLoader");
 
+            $.ajax({
+                url: Radio.request("Util", "getProxyURL", this.get("url")),
+                async: false,
+                type: "GET",
+                context: this,
+                success: callback,
+                error: function () {
+                    Radio.trigger("Util", "hideLoader");
+                }
+            });
+        },
+        handleData: function (data) {
+            Radio.trigger("Util", "hideLoader");
+            var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
+                mapCrs = Radio.request("MapView", "getProjection").getCode(),
+                geojsonReader = new ol.format.GeoJSON(),
+                features = geojsonReader.readFeatures(data);
+
+            if (jsonCrs !== mapCrs) {
+                features = this.transformFeatures(features, jsonCrs, mapCrs);
+            }
+            this.getLayerSource().addFeatures(features);
+            this.set("loadend", "ready");
+
+            this.getLayer().setStyle(this.get("style"));
+        },
+        transformFeatures: function (features, crs, mapCrs) {
+            _.each(features, function (feature) {
+                var geometry = feature.getGeometry();
+
+                geometry.transform(crs, mapCrs);
+            });
+            return features;
+        },
         /**
          * Zeigt alle Features mit dem Default-Style an
          */

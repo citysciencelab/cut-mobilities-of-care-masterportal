@@ -41,12 +41,16 @@ define([
                 "getCategory": this.getCategory,
                 "getCategories": this.getCategories,
                 "getPortalConfig": this.getPortalConfig,
-                "getItemsByMetaID": this.getItemsByMetaID
+                "getItemsByMetaID": this.getItemsByMetaID,
+                "getSnippetInfos": function () {
+                    return this.get("snippetInfos");
+                }
             }, this);
 
             channel.on({
                 "setCategory": this.setCategory,
                 "addItem": this.addItem,
+                "addItemAtTop": this.addItemAtTop,
                 "addItems": this.addItems,
                 "addFolder": this.addFolder,
                 "addLayer": this.addLayer,
@@ -253,13 +257,13 @@ define([
             this.addItem(layer);
         },
 
-        addGeoJSONLayer: function (name, id, features) {
+        addGeoJSONLayer: function (name, id, geojson) {
             var layer = {
                 type: "layer",
                 name: name,
                 id: id,
                 typ: "GeoJSON",
-                features: features,
+                geojson: geojson,
                 transparent: true,
                 minScale: "0",
                 maxScale: "350000",
@@ -267,6 +271,8 @@ define([
                 layerAttribution: "nicht vorhanden",
                 legendURL: "",
                 isbaselayer: false,
+                isSelected: true,
+                isVisibleInTree: true,
                 cache: false,
                 datasets: []
             };

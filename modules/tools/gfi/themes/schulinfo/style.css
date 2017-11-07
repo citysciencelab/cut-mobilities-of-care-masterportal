@@ -1,0 +1,27 @@
+@media (min-width: 768px) {
+    .schulinfo {
+        max-width: 35vw;
+        min-width: 30vw;
+        height: 36vh;
+    }
+}
+
+.schulinfo td {
+    font-family: font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
+}
+.schulinfo .bold td {
+    font-weight: bold;
+}
+.schulinfo .schulinfo-head {
+    padding: 10px;
+}
+.schulinfo .btn-group-sm .btn-default {
+    margin: 4px;
+}
+.schulinfo .btn-select {
+    color: #fff;
+    background-color: rgba(0,0,0,.5);
+}
+.schulinfo table {
+    border-top: 3px solid rgb(229,229,229);
+}

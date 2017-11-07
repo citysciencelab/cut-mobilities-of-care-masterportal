@@ -9,7 +9,8 @@ define([
         defaults: {
             layerParams: [],
             isInitOpen: "",
-            zoomToGeometry: ""
+            zoomToGeometry: "",
+            config: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -21,7 +22,8 @@ define([
                 "getInitString": this.getInitString,
                 "getCenter": this.getCenter,
                 "getZoomLevel": this.getZoomLevel,
-                "getZoomToGeometry": this.getZoomToGeometry
+                "getZoomToGeometry": this.getZoomToGeometry,
+                "getConfig": this.getConfig
             }, this);
 
             this.parseURL();
@@ -107,7 +109,7 @@ define([
                  layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
 
                  if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
-                     var layerToPush = _.extend({type: "layer", parentId: "Themen", isVisibleInTree: "true"}, layerExisting);
+                     var layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
 
                      Radio.trigger("Parser", "addItemAtTop", layerToPush);
                  }
@@ -189,6 +191,19 @@ define([
 
             this.set("zoomLevel", value);
         },
+        parseConfig: function (result) {
+            var config = _.values(_.pick(result, "CONFIG"))[0];
+
+            if (config.slice(-5) === ".json") {
+                this.setConfig(config);
+            }
+            else {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Config-Parameter verlangt eine Datei mit der Endung \".json\".</small>",
+                    kategorie: "alert-warning"
+                });
+            }
+        },
         parseIsInitOpen: function (result) {
             this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
@@ -229,6 +244,7 @@ define([
 
             if (value === "SIMPLE") {
                 $("#main-nav").hide();
+                $("#map").css("height", "100%");
             }
         },
         parseURL: function (result) {
@@ -264,6 +280,9 @@ define([
 
             if (_.has(result, "BEZIRK")) {
                 this.parseBezirk(result);
+            }
+            if (_.has(result, "CONFIG")) {
+                this.parseConfig(result);
             }
 
             /**
@@ -331,6 +350,14 @@ define([
         // setter for zoomLevel
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
+        },
+        // getter for config
+        getConfig: function () {
+            return this.get("config");
+        },
+        // setter for config
+        setConfig: function (value) {
+            this.set("config", value);
         }
     });
 

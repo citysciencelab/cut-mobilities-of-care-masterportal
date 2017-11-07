@@ -1,5 +1,6 @@
 define(function (require) {
     require("jqueryui/widgets/draggable");
+    require("bootstrap/tab");
 
     var Template = require("text!modules/layerinformation/template.html"),
         LayerInformationView;

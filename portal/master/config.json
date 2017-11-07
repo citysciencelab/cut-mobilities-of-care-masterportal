@@ -1,10 +1,12 @@
 {
   "Portalconfig":
   {
-    "PortalTitle": "Master",
-    "PortalLogo": "../img/hh-logo.png",
-    "LogoLink": "http://geoinfo.hamburg.de",
-    "LogoToolTip": "Landesbetrieb Geoinformation und Vermessung",
+    "portalTitle": {
+      "title": "Master",
+      "logo": "/../lgv-config/img/hh-logo.png",
+      "link": "http://geoinfo.hamburg.de",
+      "tooltip": "Landesbetrieb Geoinformation und Vermessung"
+    },
     "searchBar": {
         "gazetteer": {
             "minChars": 3,
@@ -65,75 +67,72 @@
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false,
             "isGeneric": false,
-            "isInitOpen": false,
+            "isInitOpen": true,
+            "allowMultipleQueriesPerLayer": true,
             "predefinedQueries": [
               {
-                "layerId": "8190",
-                "isActive": true,
-                "isSelected": true,
-                "isVisible": true,
+                "layerId": "8712",
+                "isActive": false,
+                "isSelected": false,
+                "name": "Alle Schulen",
+                "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Grundschulen", "Langformschulen", "Stadtteilschulen", "Gymnasien", "Sonderschulen", "Berufliche Schulen"]
+                  }
+                ],
+                "attributeWhiteList": ["bezirk", "stadtteil", "abschluss", "anzahl_schueler"]
+              },
+              {
+                "layerId": "8712",
+                "isActive": false,
+                "isSelected": false,
                 "name": "Grundschulen",
                 "predefinedRules": [
                   {
                     "attrName": "kapitelbezeichnung",
-                    "values": ["Grundschulen"]
+                    "values": ["Grundschulen", "Langformschulen"]
                   }
                 ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
               },
               {
-                "layerId": "8190",
+                "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
                 "name": "Stadtteilschulen",
                 "predefinedRules": [
                   {
                     "attrName": "kapitelbezeichnung",
-                    "values": ["Stadtteilschulen"]
+                    "values": ["Stadtteilschulen", "Langformschulen"]
                   }
                 ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "schwerpunktschule", "fremdsprache", "schulische_ausrichtung"]
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
               },
               {
-                "layerId": "8190",
+                "layerId": "8712",
                 "isActive": false,
                 "isSelected": false,
                 "name": "Gymnasien",
+                "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
                 "predefinedRules": [
                   {
                     "attrName": "kapitelbezeichnung",
                     "values": ["Gymnasien"]
                   }
                 ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_5", "fremdsprache", "schulische_ausrichtung"]
+                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse",  "schulische_ausrichtung"]
               },
               {
-                "layerId": "8190",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Sonderschulen",
+                "layerId": "1711",
+                "isActive": true,
+                "isSelected": true,
+                "name": "Krankenhäuser",
                 "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Sonderschulen"]
-                  }
                 ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "abschluss", "anzahl_schueler", "foerderschwerpunkt"]
-              },
-              {
-                "layerId": "8190",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Berufliche Schulen",
-                "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Berufliche Schulen"]
-                  }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "abschluss"]
+                "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
               }
-              ]
+            ]
           },
           "parcelSearch": {
             "name": "Flurstückssuche",
@@ -189,11 +188,13 @@
           },
           "wfsFeatureFilter": {
             "name": "Filter",
-            "glyphicon": "glyphicon-filter"
+            "glyphicon": "glyphicon-filter",
+            "deaktivateGFI": false
           },
           "extendedFilter": {
             "name": "Erweiterter Filter",
-            "glyphicon": "glyphicon-filter"
+            "glyphicon": "glyphicon-filter",
+            "deaktivateGFI": false
           },
           "routing": {
             "name": "Routenplaner",
@@ -201,7 +202,7 @@
             "viomRoutingID": "7",
             "bkgSuggestID": "4",
             "bkgGeosearchID": "5",
-            "isInitOpen": true
+            "isInitOpen": false
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
@@ -283,37 +284,32 @@
       "Layer": [
         {
           "id": "8194",
-          "visibility": true
+          "visibility": false
+        },
+        {
+          "id":"2128",
+          "styleId":"2128",
+          "clusterDistance":0
         },
         {
           "id": "5104",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "2426",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "4561",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "1748"
         },
         {
           "id": "1562",
-          "visibility": true,
-          "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
-        },
-        {
-          "id": "2128",
-          "styleId": "2128",
           "visibility": false,
-          "clusterDistance": 0,
-          "searchField": "",
-          "mouseHoverField": "",
-          "filterOptions": [],
-          "styleLabelField": ""
+          "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
           "id": "3302",
@@ -382,29 +378,18 @@
           "visibility": true,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
-          "searchField": "name",
-          "extendedFilter": true,
-          "filterOptions": [
-            {
-              "fieldName": "teilnahme_geburtsklinik",
-              "filterType": "combo",
-              "filterName": "Geburtsklinik",
-              "filterString": ["*", "Ja", "Nein"]
-            },
-            {
-              "fieldName": "teilnahme_notversorgung",
-              "filterType": "combo",
-              "filterName": "Not- und Unfallversorgung",
-              "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
-            }
-          ]
+          "searchField": "name"
         },
         {
-          "id": "8190",
+          "id": "8712",
           "name": "Schulinfosystem",
           "visibility": true,
-          "styleId": "8190",
-          "styleField": "schul_icon"
+          "styleId": "8712",
+          "styleField": "kapitelbezeichnung",
+          "searchField": "schulname",
+          "mouseHoverField": ["schulname", "kapitelbezeichnung"],
+          "gfiTheme": "schulinfo",
+          "additionalInfoField": "adresse_strasse_hausnr"
         },
         {
           "id": "753",
@@ -444,7 +429,7 @@
           },{
             "id": "1731"
           }],
-          "visibility": true,
+          "visibility": false,
           "name": "Kita und KH"
         }
       ]

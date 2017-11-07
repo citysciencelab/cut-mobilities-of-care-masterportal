@@ -13,7 +13,9 @@
 .gfi .panel {
     margin-bottom: 0;
 }
-
+.gfi .has-image {
+    max-width: 25vw;
+}
 /* Desktop GFI */
 .gfi {
     border: 1px solid rgb(229, 229, 229);
@@ -38,6 +40,7 @@
 .gfi > .gfi-header > .buttons {
     margin: 0 0 0 10px;
     cursor: pointer;
+    font-size: 16px;
 }
 
 .gfi > .gfi-content {
@@ -47,15 +50,15 @@
 }
 
 .gfi .gfi-image-zoom-button {
-    top: -17px; 
-    background-color: white; 
+    top: -17px;
+    background-color: white;
     padding: 2px;
 }
 
 .gfi .gfi-image-copyright {
-    top: -19px; 
-    position: relative; 
-    font-size: 0.9em; 
+    top: -19px;
+    position: relative;
+    font-size: 0.9em;
     padding: 2px;
     background-color: white;
 }
@@ -105,4 +108,8 @@
 
 .gfi-footer > .pager-right {
     float: right;
+}
+
+.gfi-iFrame {
+    width: 100%
 }

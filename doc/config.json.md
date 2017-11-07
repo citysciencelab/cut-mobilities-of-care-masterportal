@@ -20,12 +20,13 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |----|-------------|---|-------|------------|--------|
 |Baumtyp|ja|String||Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|`"light"`|
 |[controls](#markdown-header-portalconfigcontrols)|nein|Object||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.||
-|LogoLink|nein|String||Die Verlinkung zum Internetauftritt.|`"http://geoinfo.hamburg.de"`|
-|LogoToolTip|nein|String||Der Text des angezeigten Tooltips|`"Landesbetrieb Geoinformation und Vermessung"`|
+|LogoLink|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
+|LogoToolTip|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
 |[mapView](#markdown-header-portalconfigmapview)|nein|Object||Gibt den Hintergrund an, wenn keine Karte geladen ist.||
 |[menu](#markdown-header-portalconfigmenu)|nein|Object||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der config.json (siehe [Tools](#markdown-header-portalconfigmenutools)).|
-|PortalLogo|nein|String||Der Pfad zum Logo das in der Menüleiste angezeigt wird.|`"../img/hh-logo.png"`|
-|PortalTitle|nein|String||Der Titel, der in der Menüleiste angezeigt wird.|`"Master"`|
+|PortalLogo|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
+|PortalTitle|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
+|[portalTitle](#markdown-header-portalconfigportalTitle)|nein|Object||Der Titel, der in der Menüleiste angezeigt wird.||
 |scaleLine|nein|Boolean||true = die Maßstabsleiste wird unten rechts dargestellt, wenn kein footer vorhanden ist. Wenn ein footer vorhanden ist, wird die links angezeigt.|`true`|
 |[searchBar](#markdown-header-portalconfigsearchbar)|nein|Object||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden||
 |[simpleLister](#markdown-header-portalconfigsimplelister)|nein|Object||Der SimpleLister zeigt alle Features eines angegebenen Layers im Kartenausschnitt an.||
@@ -91,7 +92,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 ```
 #!json
 "mapView": {
-        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [561210, 5932600],
         "options": [
         {
@@ -427,7 +428,7 @@ Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Men�
                 "glyphicon" : "glyphicon-search",
                 "serviceId" : "6",
                 "StoredQueryID" : "Flurstueck",
-                "configJSON":"/../../components/lgv-config/gemarkungen_hh.json",
+                "configJSON":"/../../node_modules/lgv-config/gemarkungen_hh.json",
                 "parcelDenominator" : false
             },
             {...}
@@ -520,7 +521,9 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isActive|nein|Boolean||Wird der Filter initial ausgeführt|
 |isSelected|nein|Boolean||Ist der Filter initial ausgewählt|
 |isVisible|nein|Boolean|||
+|allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
 |name|nein|String||Name des Filters
+|info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
 |predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
 |attributeWhiteList|nein|Array||Filterbare Attribute
 **Beispiel:**
@@ -533,6 +536,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
      "glyphicon": "glyphicon-filter",
      "isGeneric": false,
      "isInitOpen": true,
+     "allowMultipleQueriesPerLayer": false,
      "predefinedQueries": [
          {
              "layerId": "8190",
@@ -756,7 +760,7 @@ Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "StoredQueryID": "Flurstueck",
-            "configJSON": "/../../components/lgv-config/gemarkungen_hh.json",
+            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure": {
@@ -846,6 +850,33 @@ Unter *tree* wird der Themenbaum konfiguriert.
 ```
 
 ******
+******
+
+### Portalconfig.portalTitle ###
+In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die Breite der Leiste ausreicht. Der Portaltitle ist mobil nicht verfügbar.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|title|nein|String|Master|Name des Portals.|
+|logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, so wird nur der Titel ohne Bild dargestellt.|
+|link|nein|String|http://geoinfo.hamburg.de|URL der externen Seite, auf die verlinkt wird.|
+|tooltip|nein|String|Landesbetrieb Geoinformation und Vermessung|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
+
+**Beispiel portalTitle:**
+
+
+```
+#!json
+
+"portalTitle": {
+  "title": "Master",
+  "logo": "../../img/hh-logo.png",
+  "link": "http://geoinfo.hamburg.de",
+  "toolTip": "Landesbetrieb Geoinformation und Vermessung"
+}
+
+```
+
 ******
 
 ### Portalconfig.searchBar ###

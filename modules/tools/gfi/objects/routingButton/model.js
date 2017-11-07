@@ -9,7 +9,7 @@ define(function (require) {
             var routingTool = Radio.request("ModelList", "getModelByAttributes", {id: "routing"});
 
             routingTool.setIsActive(true);
-            Radio.trigger("Routing", "setRoutingDestination", Radio.request("GFI", "getCoordinate"));
+            Radio.trigger("ViomRouting", "setRoutingDestination", Radio.request("GFI", "getCoordinate"));
         }
     });
     return RoutingButton;

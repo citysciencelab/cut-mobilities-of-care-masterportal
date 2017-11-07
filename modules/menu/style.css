@@ -30,6 +30,10 @@
     border-right: 1px solid #e5e5e5;
 }
 .navbar-collapse.in {
+    position: absolute;
+    top: 50px;
+    z-index: 999;
+    width: 100%;
     padding: 0;
     max-height: 80vh;
 }

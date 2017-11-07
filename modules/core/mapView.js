@@ -202,7 +202,7 @@ define([
                         break;
                     }
                     case "zoomLevel": {
-                        this.setResolution(this.get("resolutions")[setting.attr]);
+                        this.setResolution(this.get("options")[setting.attr].resolution);
                         this.set("startResolution", this.get("resolution"));
                         break;
                     }

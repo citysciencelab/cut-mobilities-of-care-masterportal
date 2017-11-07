@@ -1,103 +1,95 @@
 define(function (require) {
 
     var SnippetModel = require("modules/Snippets/model"),
+        ValueModel = require("modules/Snippets/slider/valueModel"),
         SliderModel;
 
     SliderModel = SnippetModel.extend({
-        initialize: function () {
+        initialize: function (attributes) {
+            var parsedValues;
             // parent (SnippetModel) initialize
             this.superInitialize();
-            // slider range
-            this.setRangeMinValue(_.min(this.get("values")));
-            this.setRangeMaxValue(_.max(this.get("values")));
-            this.addValueModels();
+            parsedValues = this.parseValues(attributes.values);
+
+            this.addValueModels(_.min(parsedValues), _.max(parsedValues));
+
+            this.listenTo(this.get("valuesCollection"), {
+                "change:value": function (model, value) {
+                    this.triggerValuesChanged(model, value);
+                    if (model.get("initValue") === value) {
+                        this.trigger("render");
+                    }
+                }
+            });
         },
 
         /**
          * add minValueModel and maxValueModel to valuesCollection
          */
-        addValueModels: function () {
+        addValueModels: function (min, max) {
             this.get("valuesCollection").add([
-                {
-                    id: "minModel",
+                new ValueModel({
                     attr: this.get("name"),
-                    displayName: "ab",
-                    value: this.get("rangeMinValue"),
-                    isSelected: false,
-                    type: this.get("type")
-                },
-                {
-                    id: "maxModel",
+                    displayName: this.get("displayName") + " ab",
+                    value: min,
+                    type: this.get("type"),
+                    isMin: true
+                }),
+                new ValueModel({
                     attr: this.get("name"),
-                    displayName: "bis",
-                    value: this.get("rangeMaxValue"),
-                    isSelected: false,
-                    type: this.get("type")
-                }
+                    displayName: this.get("displayName") + " bis",
+                    value: max,
+                    type: this.get("type"),
+                    isMin: false
+                })
             ]);
         },
 
         /**
-         * set the slider min value
-         * if min value unqequal rangeMinValue, set isSelected on true
-         * @param  {number} value - slider min value
-         */
-        updateMinValueModel: function (value) {
-            var minModel = this.get("valuesCollection").at(0);
-
-            minModel.set("value", value);
-            if (value !== this.get("rangeMinValue")) {
-                minModel.set("isSelected", true);
-            }
-        },
-
-        /**
-         * set the slider max value
-         * if max value unqequal rangeMaxValue, set isSelected on true
-         * @param  {number} value - slider max value
-         */
-        updateMaxValueModel: function (value) {
-            var maxModel = this.get("valuesCollection").at(1);
-
-            maxModel.set("value", value);
-            if (value !== this.get("rangeMaxValue")) {
-                maxModel.set("isSelected", true);
-            }
-        },
-
-        /**
-         * call the updateMinValueModel function and/or the updateMaxValueModel
+         * call the updateValueModel function and/or the updateMaxValueModel
          * trigger the valueChanged event on snippetCollection in queryModel
          * @param  {number | array} value - depending on slider type
          */
-        updateValueModels: function (snippetValues) {
+        updateValues: function (snippetValues) {
             // range slider
             if (_.isArray(snippetValues) === true) {
-                this.updateMinValueModel(snippetValues[0]);
-                this.updateMaxValueModel(snippetValues[1]);
+                this.get("valuesCollection").at(0).setValue(snippetValues[0]);
+                this.get("valuesCollection").at(1).setValue(snippetValues[1]);
             }
             // slider
             else {
-                this.updateMinValueModel(snippetValues);
+                this.get("valuesCollection").at(0).set("value", snippetValues);
             }
-            // listener in filter/query/detailView
-            this.trigger("valuesChanged");
         },
 
         /**
-         * set the minimum possible value
-         * @param  {number} value
+         * returns an object with the slider name and its values
+         * @return {object} - contains the selected values
          */
-        setRangeMinValue: function (value) {
-            this.set("rangeMinValue", value);
+        getSelectedValues: function () {
+            return {
+                attrName: this.get("name"),
+                type: this.get("type"),
+                values: this.get("valuesCollection").pluck("value")
+            };
         },
 
         /**
-         * set the maximum possible value
-         * @param  {number} value
+         * parse strings into numbers if necessary
+         * @param  {array} valueList
+         * @return {number[]} parsedValueList
          */
-        setRangeMaxValue: function (value) {
-            this.set("rangeMaxValue", value);
+        parseValues: function (valueList) {
+            var parsedValueList = [];
+
+            _.each(valueList, function (value) {
+                if (_.isString(value)) {
+                    value = parseInt(value, 10);
+                }
+                parsedValueList.push(value);
+            });
+
+            return parsedValueList;
         }
     });
 

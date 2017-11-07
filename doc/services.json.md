@@ -4,6 +4,7 @@
 
 # services.json #
 Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS und WFS. Hier geht es zu einem [Beispiel](https://bitbucket.org/lgv-g12/lgv-config-public/raw/master/services-internet.json).
+Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beispiel GeoJSON).
 
 ## WMS-Layer ##
 
@@ -13,9 +14,9 @@ Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS) bzw. deren Layer
 |[datasets](#markdown-header-wms_wfs_datasets)|nein|Object||Verknüpfung zu den Metadaten. Hier werden die Metadatensätze der Datensätze angegeben, die in diesem Layer dargestellt werden. Sie werden nach Click auf den „i“-Button des Layers in den Layerinformationen über die CSW-Schnittstelle angesprochen und dargestellt. Dazu muss in der [rest-services.json](rest-services.json.md) die URL des Metadatenkatalogs bzw. seiner CSW-Schnittstelle angegeben sein. Die Angaben unter *kategorie_opendata*, *kategorie_inspire* und *kategorie_organisation* werden verwandt, um die Layer in die entprechenden Kategorien einzuordnen, wenn in der [config.json](config.json.md) der Baumtyp *default* gesetzt ist.||
 |featureCount|ja|String||Anzahl der zurückzugebenden Features bei GFI-Abfragen. Entspricht dem *GetFeatureInfo-Parameter "FEATURE_COUNT"*|`"1"`|
 |format|ja|String||Grafikformat der Kachel, die vom Portal über den *GetMap* aufgerufen wird. Muss einem der Werte aus den Capabilities unter *Capability/Request/GetMap/Format* entsprechen.|`"image/jpeg"`|
-|gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"ignore"`| 
+|gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"ignore"`|
 |gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
-|gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|	
+|gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
 |id|ja|String||Frei wählbare Layer-ID|`"8"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |layers|ja|String||Layername im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *Layer/Layer/Name* entsprechen.|`"1"`|
@@ -81,7 +82,7 @@ Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS) bzw. deren Layer
 |[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
 |featureNS|ja|String||featureNamespace. Ist gewöhnlich im Header der WFS-Capabilities referenziert und löst den Namespace auf, der unter FeatureType/Name angegeben wird.|`"http://www.deegree.org/app"`|
 |featureType|ja|String||featureType-Name im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *FeatureTypeList/FeatureType/Name* entsprechen. Allerdings ohne Namespace.|`"bab_vkl"`|
-|gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"showAll"`| 
+|gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"showAll"`|
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
@@ -140,4 +141,33 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |kategorie_inspire|nein|String||Inspire-Kategorie aus der Inspire-Codeliste wenn vorhanden, wenn nicht vorhanden *„nicht Inspire-identifiziert“*|
 |kategorie_organisation|nein|String||Organisationsname der datenhaltenden Stelle|
 
+
+## GeoJSON-Layer ##
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|gfiAttributes|nein|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"showAll"`|
+|id|ja|String||Frei wählbare Layer-ID|`"11111"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"lokale GeoJSON"`|
+|typ|ja|String||Diensttyp, in diesem Fall GeoJSON |`"GeoJSON"`|
+|url|ja|String||Pfad/URL zur GeoJSON. Der Pfad ist relativ zur index.html|`"/myJsons/test.json"`|
+
+**Beispiel GeoJSON:**
+
+
+```
+#!json
+
+{
+      "id" : "11111",
+      "name" : "lokale GeoJSON",
+      "url" : "myJsons/test.json",
+      "typ" : "GeoJSON",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+   }
+```
 >Zurück zur [Dokumentation Masterportal](doc.md).

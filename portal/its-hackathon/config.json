@@ -1,0 +1,2214 @@
+{
+  "Portalconfig":
+    {
+      "portalTitle": {
+      "title": "ITS Hackathon",
+      "logo": "/../node_modules/lgv-config/img/hh-logo.png",
+      "link": "http://geoinfo.hamburg.de",
+      "toolTip": "Landesbetrieb Geoinformation und Vermessung"
+    },
+
+    "searchBar": {
+        "minChars": 3,
+        "gazetteer": {
+           "minChars": 3,
+
+           "serviceId": "6",
+           "searchStreets": true,
+           "searchHouseNumbers": true,
+           "searchDistricts": true,
+           "searchParcels": true
+       },
+       "visibleWFS": {
+           "minChars": 3
+       },
+       "tree": {
+           "minChars": 3
+       },
+       "placeholder": "Suche nach Adresse/ Stadtteil/ Thema",
+       "geoLocateHit": true
+    },
+     "mapView":{
+      "backgroundImage":"/../node_modules/lgv-config/img/backgroundCanvas.jpeg"
+    },
+      "menu": {
+        "tree": {
+          "name": "Themen",
+          "glyphicon": "glyphicon-list"
+        },
+        "tools": {
+          "name": "Werkzeuge",
+          "glyphicon": "glyphicon-wrench",
+          "children": {
+            "parcelSearch": {
+              "name": "Flurstückssuche",
+              "glyphicon": "glyphicon-search",
+              "serviceId": "6",
+              "StoredQueryID": "Flurstueck",
+              "configJSON": "/lgv-config/gemarkungen_hh.json",
+              "parcelDenominator": false
+            },
+            "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full"
+            },
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+            },
+            "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print",
+              "printID": "99999",
+              "title": "ITS Hackathon",
+              "gfi": true,
+              "outputFilename": "DruckPDF"
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "searchByCoord": {
+              "name": "Koordinatensuche",
+              "glyphicon": "glyphicon-record"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
+            },
+            "saveSelection": {
+              "name": "Auswahl speichern",
+              "glyphicon": "glyphicon-share"
+            }
+          }
+        },
+        "legend": {
+          "name": "Legende",
+          "glyphicon": "glyphicon-book"
+        },
+         "routing": {
+            "name": "Routenplaner",
+            "glyphicon": "glyphicon-road",
+            "viomRoutingID": "7",
+            "bkgSuggestID": "4",
+            "bkgGeosearchID": "5",
+            "autostart": false,
+            "bbox":[
+              550000,
+              5926000,
+              588000,
+              5950000
+            ]
+        },
+         "contact": {
+            "name": "Kontakt",
+            "glyphicon": "glyphicon-envelope",
+            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+            "serviceID": "80001",
+            "from": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+              }
+            ],
+            "to": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+               }
+             ],
+            "ccToUser": true,
+            "cc": [],
+            "bcc": [],
+            "textPlaceholder": "Bitte formulieren",
+            "includeSystemInfo": true
+          },
+        "info":{
+            "name": "Informationen",
+             "glyphicon": "glyphicon-info-sign",
+             "children": {
+             "staticlinks": [
+              {
+                "name": "Code-Repository ",
+                "glyphicon": "glyphicon-book",
+                "url": "https://bitbucket.org/lgv-g12/lgv"
+              },
+              {
+                "name": "Über das Masterportal ",
+                "glyphicon": "glyphicon-globe",
+                "url": "http://www.hamburg.de/geowerkstatt/8856396/masterportal/"
+              }
+            ]
+          }
+        }
+    },
+        "controls":
+          {
+            "toggleMenu": true,
+            "zoom": true,
+            "orientation": "always",
+            "poi": true,
+            "fullScreen": true,
+            "mousePosition": true,
+            "attributions": true
+          },
+        "scaleLine": true,
+        "Baumtyp": "custom"
+    },
+
+  "Themenconfig":
+    {
+      "Hintergrundkarten":{
+      "Layer":[
+        {
+          "id":[
+            "717",
+            "718",
+            "719",
+            "720"
+          ],
+          "visibility":true,
+          "name":"Geobasiskarten (farbig)"
+        },
+        {
+          "id":[
+            "1043",
+            "1044",
+            "1045",
+            "1046"
+          ],
+          "name":"Geobasiskarten (grau-blau)"
+        },
+        {
+          "id":"452"
+        },
+        {
+          "id":[
+            "713",
+            "714",
+            "715",
+            "716"
+          ],
+          "name":"Stadtplan (schwarz-weiß)"
+        },
+        {
+          "id":"453"
+        }
+      ]
+    },
+
+
+      "Fachdaten":
+    {
+      "Ordner": [
+          {
+          "Titel": "Straßennetze",
+          "Layer": [
+            {
+              "id": "1559"
+            },
+            {
+              "id": "6138"
+            },
+            {
+              "id": "6191"
+            },
+            {
+              "id": ["1047","1048","1049","1050","1051","1052","1053","1054","1055","1056","1057","1058","1059","1060","1061","1062","1063","1064","1065","1066","1067","1068","1069","1070","1071","1072","1073","1074","1075","1076","1077","1078","1079","1080","1081","1082","1083","1084","1085","1086","1087","1088","1089","1090","1091","1092","1093","1094","1095","1096","1097","1099","1100"],
+              "name" : "Großraum- u. Schwertransport-Netz",
+              "metaName": "Großraum- u. Schwertransport-Netz"
+            },
+            {
+              "id": "8167"
+            },
+            {
+              "id": "1952"
+            },
+            {
+              "id": "6134"
+            },
+            {
+              "id": "6136"
+            }
+          ]
+        },
+        {
+          "Titel": "ÖV-Netze",
+
+          "Layer": [
+            {
+              "id": "1935",
+              "visibility": false,
+              "styles": ["geofox_Faehre",
+                         "geofox-bahn",
+                         "geofox-bus",
+                         "geofox_BusName"
+                        ],
+              "name": ["Fährverbindungen",
+                       "Bahnlinien", "Buslinien",
+                       "Busliniennummern"
+                      ],
+              "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png",
+                            "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
+            },
+            {
+              "id": "1933",
+              "maxScale": 20000,
+              "styles": ["geofox_stations"],
+              "name": ["Haltestellen"],
+              "legendURL": ["http://87.106.16.168/legende_mrh/hvv-bus.png"]
+            },
+            {
+              "id": "2679",
+              "name" : "Schienenverkehrsnetz MRH"
+            }
+          ],
+             "Ordner": [
+            {
+                "Titel": "Einzugsbereiche von HVV-Haltestellen",
+              "Layer": [
+                {
+                  "id": "4624",
+                  "name" : "RE/RB"
+                },
+                {
+                  "id": "4625",
+                  "name" : "AKN"
+                },
+                {
+                  "id": "4626",
+                  "name" : "S-Bahn"
+                },
+                {
+                  "id": "4627",
+                  "name" : "U-Bahn"
+                },
+                {
+                  "id": "4628",
+                  "name" : "Bus"
+                }
+              ]
+            }
+                ]
+        },
+
+        {
+          "Titel": "Rad- und Fußverkehr",
+          "Layer": [
+
+            {
+              "id": "6154",
+              "styleId": "6154",
+              "clusterDistance": 40
+            },
+            {
+              "id": "4866",
+              "name" : "Velorouten Übersicht"
+            },
+            {
+              "id": "4850",
+              "name" : "Freizeitrouten Übersicht"
+            }
+          ]
+        },
+
+        {
+          "Titel": "Mobilitätsinformationen",
+          "Layer": [
+            {
+                "id": "937"
+            }
+          ]
+        }
+          ,
+        {
+          "Titel": "Parken",
+              "Layer": [
+                {
+                    "id": "52",
+                    "styleId": "52",
+                    "clusterDistance": 10,
+                    "styleField": "situation",
+                    "routable": true
+                },
+                {
+                    "id": "2403",
+                    "styleId": "2403",
+                    "clusterDistance": 10,
+                    "routable": true
+                },
+                {
+                    "id": "50",
+                    "styleId": "50",
+                    "clusterDistance": 10,
+                    "routable": true
+                },
+                {
+                    "id": "48",
+                    "styleId": "48",
+                    "clusterDistance": 20,
+                    "routable": true
+                },
+                {
+                  "id": "1580",
+                  "visibility": false
+                },
+                {
+                  "id": "1578",
+                  "name" : "Parkuhren",
+                  "maxScale":2500
+                },
+                {
+                    "id": "2404",
+                    "styleId": "2404",
+                    "styleField":"symbol",
+                    "clusterDistance": 20,
+                    "routable": true
+                }
+
+            ]
+        },
+
+        {
+            "Titel": "Verkehrslage",
+                "Layer": [
+                {
+                    "id": [
+                        {"id": "947"},
+                        {"id": "946"}
+                        ],
+                    "name": "Verkehrslage auf Autobahnen",
+                    "layerAttribution":
+                        {
+                            "text": "",
+                            "channel": "Verkehrsfunctions",
+                            "eventname": "aktualisiereverkehrsnetz",
+                            "timeout": 60000
+                        }
+                },
+                {
+                    "id": "2092",
+                    "name" : "Verkehrslage Norddeutschland/ Stadtgebiet HH"
+                },
+                {
+                    "id": "2714",
+                    "gfiTheme": "reisezeiten",
+                    "styleId": "2119"
+                },
+                {
+                  "id": "5103"
+                }
+             ]
+        },
+
+        {
+            "Titel": "Verkehrskameras",
+                "Layer": [
+            {
+                "id": "49",
+                "styleId": "2128",
+                "clusterDistance": 0,
+                "searchField": "",
+                "mouseHoverField": "",
+                "filterOptions": [],
+                "styleLabelField": ""
+            }
+                ]
+        },
+
+        {
+            "Titel": "Dynamische Anzeigen",
+                "Layer": [
+            {
+                 "id": "2132",
+                "styleId": "2132",
+                "clusterDistance": 0,
+                "searchField": "",
+                "mouseHoverField": "",
+                "filterOptions": [],
+                "styleLabelField": ""
+            }
+                    ]
+        },
+
+        {
+          "Titel": "Baustellen",
+          "Layer": [
+            {
+                "id": "47",
+                "styleId": "47",
+                "styleLabelField": "id_kost",
+                "styleField": "typ",
+                "routable": false
+            },
+            {
+                 "id": "2156",
+                 "styleId": "2156",
+                 "styleField": "name",
+                 "routable": false
+            }
+          ]
+        },
+
+        {
+            "Titel": "Umwelt",
+            "Ordner": [
+              {
+                "Titel": "Lärmkarten - Straßenverkehr",
+                "Layer": [
+                    {
+                    "id": "96",
+                    "name": "Lärm Straßenverkehr Tag 2012"
+                    },
+                    {
+                    "id": "95",
+                     "name": "Lärm Straßenverkehr Nacht 2012"
+                    }
+                    ]
+              },
+                {
+                 "Titel": "Lärmkarten - Flugverkehr",
+                 "Layer": [
+                    {
+                        "id": ["2415","2413"],
+                        "name": "Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)"
+                    },
+                    {
+                        "id": ["2412","2415"],
+                        "name": "Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)"
+                    },
+                    {
+                        "id": ["2414","2416"],
+                         "name": "Nacht-Schutzzonen mit Isolinien LAeq in dB(A)"
+                    }
+                  ]
+                }
+              ]
+        },
+
+        {
+          "Titel": "Bauen und Wohnen",
+          "Layer": [
+            {
+              "id": "1561"
+            },
+            {
+              "id": "2834",
+              "maxScale": "40000",
+              "name" : "Hamburger Wohnlagenverzeichnis (ab 1 : 40 000)"
+            },
+            {
+                "id": ["4409","4410","4411","4412","4414"]
+            },
+            {
+              "id": ["2759","2760","2761"]
+            },
+            {
+              "id": "1747"
+            },
+            {
+              "id": "2042"
+            },
+            {
+              "id": ["2439","2440","2441","2442"],
+              "maxScale": "10000",
+              "name" : "ALKIS -  tatsächliche Nutzung (ab 1: 10 000)"
+            }
+          ]
+        },
+
+        {
+          "Titel": "Soziales",
+          "Layer": [
+            {
+              "id": ["682","683"],
+              "name" : "Kindertagesstätten"
+            },
+            {
+              "id": "1731",
+              "name" : "Krankenhäuser"
+            }
+          ]
+        },
+        {
+          "Titel": "Bildung",
+          "Layer": [
+            {
+              "id": "1585"
+            }
+          ]
+        },
+
+        {
+          "Titel": "Freizeit und Erholung",
+          "Layer": [
+
+            {
+              "id": "641",
+              "name": "Plätze",
+              "styleId": "641",
+              "visibility": false,
+              "mouseHoverField":["kategorie", "name"]
+            },
+            {
+              "id": "639",
+              "name": "Parkanlagen",
+              "styleId": "639",
+              "visibility": false,
+              "mouseHoverField": ["kategorie", "name"]
+            },
+            {
+              "id": "640",
+              "name": "Spielplätze",
+              "styleId": "640",
+              "visibility": false,
+              "mouseHoverField": ["kategorie", "name"]
+            },
+            {
+              "id": "1132",
+              "styleId": "1132",
+              "name": "Angebote in Park's",
+              "visibility": false,
+              "styleField": "icon_vi",
+              "mouseHoverField": ["kategorie", "titel"]
+            },
+            {
+              "id": "8145",
+              "styleId": "8145",
+              "mouseHoverField": "name",
+              "styleField": "kategorie",
+              "name": "Spaß im und am Wasser",
+              "visibility": false
+            }
+          ]
+        },
+
+        {
+          "Titel": "Verwaltungsgrenzen",
+          "Layer": [
+            {
+              "id": "2427",
+              "name" : "Hamburg-Grenzen"
+            },
+            {
+              "id": "2426",
+              "name" : "Bezirksgrenzen"
+            },
+            {
+              "id": "2425"
+            },
+            {
+              "id": "2424"
+            },
+            {
+              "id": "5743"
+            },
+            {
+              "id": "367",
+              "name" : "Polizeikommissariate"
+            }
+          ]
+        },
+
+        {
+        "Titel": "Erreichbarkeitsanalysen",
+        "Ordner": [
+
+            {
+              "Titel":"Einrichtungen",
+              "Layer":[
+                {
+                  "id":"4648"
+                },
+                {
+                  "id":"7595"
+                },
+                {
+                  "id":"7604"
+                },
+                {
+                  "id":"7610"
+                },
+                {
+                  "id":"8330"
+                },
+                {
+                  "id":"5312"
+                },
+                {
+                  "id":"7598"
+                },
+                {
+                  "id":"7607"
+                },
+                {
+                  "id":"7593"
+                },
+                {
+                  "id":"7600"
+                },
+                {
+                  "id":"5310"
+                },
+                {
+                  "id":"5311"
+                },
+                {
+                  "id":"8212"
+                },
+                {
+                  "id":"7599"
+                },
+                {
+                  "id":"7606",
+                  "name":"Verwaltungssitze"
+                }
+              ]
+            },
+            {
+              "Titel":"Einrichtungen - Verkehrsinfrastrukturen",
+              "Layer":[
+                {
+                  "id":"4643"
+                },
+                {
+                  "id":"4642"
+                },
+                {
+                  "id":"7609",
+                  "name":"Fernbahnhöfe"
+                },
+                {
+                  "id":"7596"
+                },
+                {
+                  "id":"7605"
+                },
+                {
+                  "id":"8283"
+                },
+                {
+                  "id":"8282"
+                }
+              ]
+            },
+            {
+              "Titel":"Arbeitsplätze",
+              "Layer":[
+                {
+                  "id":"5708",
+                  "name":"Mit dem Pkw in 30 Minuten erreichbare Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Pkw_AP30"
+                  ]
+                },
+                {
+                  "id":"5709",
+                  "name":"Mit dem ÖV in 30 Minuten erreichbare Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "OEV_AP30"
+                  ]
+                },
+                {
+                  "id":"5710",
+                  "name":"Mit dem ÖV ohne Umstieg erreichbare Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "OEV_APUH0"
+                  ]
+                },
+                {
+                  "id":"8284",
+                  "name":"Mit dem  Rad in 30 Minuten erreichbare Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Rad_AP30"
+                  ]
+                },
+                {
+                  "id":"8285",
+                  "name":"Zu Fuss in 30 Minuten erreichbare Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Fuss_AP30"
+                  ]
+                }
+              ]
+            },
+            {
+          "Titel":"Bildung",
+          "Ordner":[
+            {
+              "Titel":"Grundschulen",
+              "Layer":[
+                {
+                  "id":"7550",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7551",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"5713",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7552",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Förderschulen",
+              "Layer":[
+                {
+                  "id":"7541",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7542",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7544",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7543",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Oberstufen",
+              "Layer":[
+                {
+                  "id":"5712",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"5711",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"5714",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7549",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Weiterführende Schulen",
+              "Layer":[
+                {
+                  "id":"7553",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7554",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7540",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7539",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Hochschulen",
+              "Layer":[
+                {
+                  "id":"7545",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7546",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7548",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7547",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Titel":"Einzelhandel",
+          "Layer":[
+            {
+              "id":"5721",
+              "styleable":true,
+              "geomType":"Polygon",
+              "attributesToStyle":[
+                "Minuten_Pkw",
+                "Meter_Pkw"
+              ]
+            },
+            {
+              "id":"7514",
+              "styleable":true,
+              "geomType":"Polygon",
+              "attributesToStyle":[
+                "Minuten_OEV",
+                "Meter_NMIV"
+              ]
+            },
+            {
+              "id":"7515",
+              "styleable":true,
+              "geomType":"Polygon",
+              "attributesToStyle":[
+                "Minuten_Rad"
+              ]
+            },
+            {
+              "id":"5722",
+              "styleable":true,
+              "geomType":"Polygon",
+              "attributesToStyle":[
+                "Minuten_Fuss"
+              ]
+            },
+            {
+              "id":"8286",
+              "name":"Mit dem Pkw in 30 Minuten erreichbare Läden",
+              "styleable":true,
+              "geomType":"Polygon",
+              "attributesToStyle":[
+                "Pkw_EK30"
+              ]
+            },
+            {
+              "id":"8287",
+              "name":"Mit dem ÖV in 30 Minuten erreichbare Läden",
+              "styleable":true,
+              "geomType":"Polygon",
+              "attributesToStyle":[
+                "OEV_EK30"
+              ]
+            },
+            {
+              "id":"8288",
+              "name":"Mit dem Rad in 30 Minuten erreichbare Läden",
+              "styleable":true,
+              "geomType":"Polygon",
+              "attributesToStyle":[
+                "Rad_EK30"
+              ]
+            },
+            {
+              "id":"8289",
+              "name":"Zu Fuss in 30 Minuten erreichbare Läden",
+              "styleable":true,
+              "geomType":"Polygon",
+              "attributesToStyle":[
+                "Fuss_EK30"
+              ]
+            }
+          ]
+        },
+        {
+          "Titel":"Freizeit",
+          "Ordner":[
+            {
+              "Titel":"Einwohner",
+              "Layer":[
+                {
+                  "id":"8323",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Pkw_EW30"
+                  ]
+                },
+                {
+                  "id":"8322",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "OEV_EW30"
+                  ]
+                },
+                {
+                  "id":"8320",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Rad_EW30"
+                  ]
+                },
+                {
+                  "id":"8321",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Fuss_EW30"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Freizeitgelegenheiten",
+              "Layer":[
+                {
+                  "id":"8324",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Pkw_FZ30"
+                  ]
+                },
+                {
+                  "id":"8326",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "OEV_FZ30"
+                  ]
+                },
+                {
+                  "id":"8325",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Rad_FZ30"
+                  ]
+                },
+                {
+                  "id":"8327",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Fuss_FZ30"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Kino",
+              "Layer":[
+                {
+                  "id":"7462",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7463",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7464",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                },
+                {
+                  "id":"7465",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Schwimmen",
+              "Layer":[
+                {
+                  "id":"7466",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7467",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7469",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7468",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "Titel":"Gesundheit",
+          "Ordner":[
+            {
+              "Titel":"Apotheken",
+              "Layer":[
+                {
+                  "id":"7558",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7557",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7568",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7567",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Krankenhäusen",
+              "Layer":[
+                {
+                  "id":"7570",
+                  "name":"Reisezeit mit dem Pkw zum nächsten Krankenhaus",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7571",
+                  "name":"Reisezeit mit dem ÖV zum nächsten Krankenhaus",
+                  "visibility":false,
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7562",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7561",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Hausärzte",
+              "Layer":[
+                {
+                  "id":"5724",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"5725",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7569",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"5723",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Titel":"Raumplanung",
+          "Ordner":[
+            {
+              "Titel":"Mittelzentren",
+              "Layer":[
+                {
+                  "id":"5727",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"5728",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7574",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Oberzentren",
+              "Layer":[
+                {
+                  "id":"5726",
+                  "visibility":false,
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"5729",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7572",
+                  "visibility":false,
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Titel":"Soziale Infrastruktur/Behörden",
+          "Ordner":[
+            {
+              "Titel":"Jobcemter/Arbeitsargenturen",
+              "Layer":[
+                {
+                  "id":"7486",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7487",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7489",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7488",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Kita",
+              "Layer":[
+                {
+                  "id":"7482",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7483",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7485",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7484",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Verwaltungssitze",
+              "Layer":[
+                {
+                  "id":"7478",
+                  "name":"Reisezeit mit dem PKW zum nächsten Verwaltungssitz",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7479",
+                  "name":"Reisezeit mit dem ÖV zum nächsten Verwaltungssitz",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7480",
+                  "name":"Reisezeit mit dem Rad zum nächsten Verwaltungssitz",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                },
+                {
+                  "id":"7481",
+                  "name":"Gehezeit zum nächsten Verwaltungssitz",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Titel":"Verkehrsinfrastruktur",
+          "Ordner":[
+            {
+              "Titel":"Bahnhöfe",
+              "Layer":[
+                {
+                  "id":"7581",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7582",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7584",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7583",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Fernbahnhof",
+              "Layer":[
+                {
+                  "id":"7577",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7578",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7580",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7579",
+                  "visibility":false,
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Haltestellen",
+              "Layer":[
+                {
+                  "id":"7591",
+                  "styleable":false,
+                  "geomType":"Point",
+                  "attributesToStyle":[
+                    "Abfahrten_Montags"
+                  ]
+                },
+                {
+                  "id":"7592",
+                  "styleable":false,
+                  "geomType":"Point",
+                  "attributesToStyle":[
+                    "Abfahrten_Sonntags"
+                  ]
+                },
+                {
+                  "id":"8308",
+                  "name":"Anzahl der nächstgelegenen Einwohner in 350 Metern",
+                  "styleable":false,
+                  "geomType":"Point",
+                  "attributesToStyle":[
+                    "EW350m"
+                  ]
+                },
+                {
+                  "id":"8309",
+                  "name":"Anzahl der nächstgelegenen Einwohner  über 64 in 350 Metern",
+                  "styleable":false,
+                  "geomType":"Point",
+                  "attributesToStyle":[
+                    "EW64_350m"
+                  ]
+                },
+                {
+                  "id":"8312",
+                  "styleable":false,
+                  "geomType":"Point",
+                  "attributesToStyle":[
+                    "EW30"
+                  ]
+                },
+                {
+                  "id":"8314",
+                  "styleable":false,
+                  "geomType":"Point",
+                  "attributesToStyle":[
+                    "EWUH0"
+                  ]
+                },
+                {
+                  "id":"8310",
+                  "name":"Anzahl der nächstgelegenen Arbeitsplätze in 350 Metern",
+                  "styleable":false,
+                  "geomType":"Point",
+                  "attributesToStyle":[
+                    "AP350m"
+                  ]
+                },
+                {
+                  "id":"8311",
+                  "name":"Anzahl der mit dem ÖV in 30 Minuten erreichbaren Arbeitsplätze",
+                  "styleable":false,
+                  "geomType":"Point",
+                  "attributesToStyle":[
+                    "AP30"
+                  ]
+                },
+                {
+                  "id":"8313",
+                  "name":"Anzahl der mit dem ÖV ohne Umstieg erreichbaren Arbeitsplätze",
+                  "styleable":false,
+                  "geomType":"Point",
+                  "attributesToStyle":[
+                    "APUH0"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Park und Ride",
+              "Layer":[
+                {
+                  "id":"7576",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_PKW"
+                  ]
+                },
+                {
+                  "id":"8316",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    ""
+                  ]
+                },
+                {
+                  "id":"8317",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    ""
+                  ]
+                },
+                {
+                  "id":"8315",
+                  "name":"Anzahl der mit dem ÖV in 30 Minuten erreichbaren Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "AP30"
+                  ]
+                },
+                {
+                  "id":"8318",
+                  "name":"Anzahl der mit dem ÖV in ohne Umstieg erreichbaren Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "APUH0"
+                  ]
+                },
+                {
+                  "id":"8319",
+                  "name":"Anzahl der nächstgelegenen Einwohner mit dem Pkw",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "EW_Naechste"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Hamburg Hbf",
+              "Layer":[
+                {
+                  "id":"7588",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"5739",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7590",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7589",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Hamburg Flughafen",
+              "Layer":[
+                {
+                  "id":"7585",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"5740",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7587",
+                  "visibility":false,
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "Titel":"Flächendeckende Auswertungen",
+          "Ordner":[
+            {
+              "Titel":"Apotheke",
+              "Layer":[
+                {
+                  "id":"7502",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7503",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7505",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7504",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Arbeitsplätze",
+              "Layer":[
+                {
+                  "id":"8296",
+                  "name":"Mit dem Pkw in 30 Minuten erreichbare Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Pkw_AP30"
+                  ]
+                },
+                {
+                  "id":"8298",
+                  "name":"Mit dem ÖPNV in 30 Minuten erreichbare Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "OEV_AP30"
+                  ]
+                },
+                {
+                  "id":"8297",
+                  "name":"Mit dem Rad in 30 Minuten erreichbare Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Rad_AP30"
+                  ]
+                },
+                {
+                  "id":"8299",
+                  "name":"Zu Fuß in 30 Minuten erreichbare Arbeitsplätze",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Fuss_AP30"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Bahnhöfe",
+              "Layer":[
+                {
+                  "id":"7490",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7491",
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7493",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7492",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Freizeitgelegenheiten",
+              "Layer":[
+                {
+                  "id":"8300",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Pkw_FZ30"
+                  ]
+                },
+                {
+                  "id":"8301",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "OEV_FZ30"
+                  ]
+                },
+                {
+                  "id":"8302",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Rad_FZ30"
+                  ]
+                },
+                {
+                  "id":"8303",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Fuss_FZ30"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Grundschulen",
+              "Layer":[
+                {
+                  "id":"7494",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7495",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7497",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7496",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Oberstufen",
+              "Layer":[
+                {
+                  "id":"7498",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7499",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7501",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7500",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Hausärzte",
+              "Layer":[
+                {
+                  "id":"7506",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7507",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7509",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7508",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Mittelzentren",
+              "Layer":[
+                {
+                  "id":"8290",
+                  "name":"Reisezeit mit dem Pkw zum nächsten Mittelzentrum",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"8291",
+                  "name":"Reisezeit mit dem ÖV zum nächsten Mittelzentrum",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"8292",
+                  "name":"Reisezeit mit dem Rad zum nächsten Mittelzentrum",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Oberzentren",
+              "Layer":[
+                {
+                  "id":"8293",
+                  "name":"Reisezeit mit dem Pkw zum nächsten Oberzentrum",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"8294",
+                  "name":"Reisezeit mit dem ÖV zum nächsten Oberzentrum",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"8295",
+                  "name":"Reisezeit mit dem Rad zum nächsten Oberzentrum",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel":"Supermärkte",
+              "Layer":[
+                {
+                  "id":"7510",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Pkw",
+                    "Meter_Pkw"
+                  ]
+                },
+                {
+                  "id":"7511",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_OEV",
+                    "Meter_NMIV"
+                  ]
+                },
+                {
+                  "id":"7513",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Rad"
+                  ]
+                },
+                {
+                  "id":"7512",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Minuten_Fuss"
+                  ]
+                },
+                {
+                  "id":"8304",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Pkw_EK30"
+                  ]
+                },
+                {
+                  "id":"8306",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "OEV_EK30"
+                  ]
+                },
+                {
+                  "id":"8305",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Rad_EK30"
+                  ]
+                },
+                {
+                  "id":"8307",
+                  "styleable":true,
+                  "geomType":"Polygon",
+                  "attributesToStyle":[
+                    "Fuss_EK30"
+                  ]
+                }
+              ]
+             }
+            ]
+           }
+          ]
+        }
+      ]
+    }
+  }
+}

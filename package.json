@@ -1,6 +1,6 @@
 {
   "name": "LGV-Master",
-  "version": "1.4.0",
+  "version": "1.4.5",
   "description": "LGV Master",
   "license": "MIT",
   "repository": {
@@ -25,9 +25,9 @@
     "underscore": "1.x",
     "underscore.string": "3.3.x",
     "jquery-ui": "1.x",
-    "video.js": "5.x",
+    "video.js": "4.x",
     "moment": "2.x",
-    "openlayers": "3.15",
+    "openlayers": "4.3.3",
     "d3": "4.9.x"
   },
   "devDependencies": {

@@ -11,14 +11,14 @@ define("app",
     "modules/core/crs",
     "modules/core/autostarter",
     "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter) {
+    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
 
     // Core laden
     new Autostarter();
     new Util();
     new RawLayerList();
-    new Preparser();
     new ParametricURL();
+    new Preparser();
     new CRS();
     new Map();
 
@@ -87,7 +87,7 @@ define("app",
             });
         }
 
-        if (Config.mouseHover && Config.mouseHover === true) {
+        if (Config.mouseHover) {
             require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
                 new MouseHoverPopupView();
             });
@@ -109,9 +109,10 @@ define("app",
             new WindowView();
         });
             // Module laden
+
+        // Tools
         require(["modules/sidebar/view"], function (SidebarView) {
             var sidebarView = new SidebarView();
-            // Tools
             _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
                 switch (tool.id) {
                     case "animation": {
@@ -307,12 +308,10 @@ define("app",
 
         if (sbconfig) {
             require(["modules/searchbar/view"], function (SearchbarView) {
-                var title = Radio.request("Parser", "getPortalConfig").PortalTitle;
-
                 new SearchbarView(sbconfig);
-                if (title) {
+                if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
                     require(["modules/title/view"], function (TitleView) {
-                        new TitleView(title);
+                        new TitleView();
                     });
                 }
             });

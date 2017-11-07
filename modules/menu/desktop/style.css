@@ -11,6 +11,7 @@ ul#tree {
     font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
     padding: 0px 0;
     min-width:  380px;
+    overflow: auto;
 }
 
 ul#tree .glyphicon {

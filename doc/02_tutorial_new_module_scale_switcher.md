@@ -1,5 +1,5 @@
 
-## Tutorial: Ein neues Modul erstellen
+## Tutorial: Ein neues Modul erstellen (Scale-Switcher)
 Eine Schritt für Schritt Dokumentation zur Erstellung eines neuen Moduls.
 
 ### Beispiel Anforderung
