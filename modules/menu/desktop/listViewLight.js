@@ -11,7 +11,6 @@ define(function (require) {
             Radio.on("Autostart", "startModul", this.startModul, this);
             this.listenTo(this.collection, {
                 "updateLightTree": function () {
-                    console.log(123);
                     this.render();
                 }
             });

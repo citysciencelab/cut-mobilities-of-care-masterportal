@@ -25,7 +25,9 @@ define(function (require) {
             });
             this.set("queryCollection", new Backbone.Collection());
             this.listenTo(this.get("queryCollection"), {
-                "deactivateAllModels": this.deactivateAllModels,
+                "deactivateAllModels": function (model) {
+                    this.deactivateOtherModels(model);
+                },
                 "deselectAllModels": this.deselectAllModels,
                 "featureIdsChanged": function (featureIds) {
                     this.updateMap();
@@ -41,6 +43,7 @@ define(function (require) {
         },
         resetFilter: function () {
             this.deselectAllModels();
+            this.deactivateAllModels();
             this.resetAllQueries();
             this.activateDefaultQuery();
         },
@@ -51,6 +54,7 @@ define(function (require) {
                 defaultQuery.setIsActive(true);
                 defaultQuery.setIsSelected(true);
             }
+            defaultQuery.runFilter();
         },
         resetAllQueries: function () {
             _.each(this.get("queryCollection").models, function (model) {
@@ -59,22 +63,25 @@ define(function (require) {
         },
         deselectAllModels: function (selectedModel) {
             _.each(this.get("queryCollection").models, function (model) {
-                // if only one Query per layer is allowed, deactivate queries that share a layer
-                // with the newly selected layer
-                if (!this.get("allowMultipleQueriesPerLayer") &&
-                    selectedModel.cid !== model.cid &&
-                    selectedModel.get("layerId") === model.get("layerId")) {
-                    model.setIsActive(false);
-                }
                 model.setIsSelected(false);
             }, this);
         },
         deactivateAllModels: function () {
             _.each(this.get("queryCollection").models, function (model) {
-                if (!this.get("allowMultipleQueriesPerLayer")) {
                     model.setIsActive(false);
-                }
             }, this);
+        },
+
+        deactivateOtherModels: function (selectedModel) {
+            if (!this.get("allowMultipleQueriesPerLayer")) {
+                _.each(this.get("queryCollection").models, function (model) {
+                    if (!_.isUndefined(model) &&
+                        selectedModel.cid !== model.cid &&
+                        selectedModel.get("layerId") === model.get("layerId")) {
+                        model.setIsActive(false);
+                    }
+                }, this);
+            }
         },
         /**
          * updates the Features shown on the Map
