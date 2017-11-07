@@ -109,13 +109,11 @@ define(function (require) {
             countSelectedValues > 1 ? this.$el.find(".remove-all").show() : this.$el.find(".remove-all").hide();
         },
         renderCheckboxView: function () {
+            // this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
             if (!this.model.get("activateOnSelection")) {
                 var view = new CheckBoxView({model: this.model.get("btnIsActive")});
 
-                this.$el.find(".detailview-head").before(view.render());
-            }
-            else {
-                this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
+                this.$el.find(".detailview-head").append(view.render());
             }
         },
         toggleIsActive: function (evt) {
