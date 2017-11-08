@@ -41,9 +41,9 @@ define(function (require) {
                 attributes: [
                     "abschluss",
                     "schulentlassene_oa_anteil",
-                    "schulentlassene_mit_eas_anteil",
-                    "Schulentlassene_mit_msa_anteil",
-                    "Schulentlassene_mit_fhr_anteil"]
+                    "schulentlassene_mit_esa_anteil",
+                    "schulentlassene_mit_msa_anteil",
+                    "schulentlassenen_mit_fhr_anteil"]
             },
             {
                 name: "weitere Informationen",
