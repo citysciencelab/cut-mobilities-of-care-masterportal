@@ -56,7 +56,7 @@
       "tree": {
         "name": "Themen",
         "glyphicon": "glyphicon-list",
-        "isInitOpen": true
+        "isInitOpen": false
       },
       "tools": {
         "name": "Werkzeuge",
@@ -67,7 +67,7 @@
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false,
             "isGeneric": false,
-            "isInitOpen": true,
+            "isInitOpen": false,
             "allowMultipleQueriesPerLayer": true,
             "predefinedQueries": [
               {
@@ -256,6 +256,10 @@
       "attributions": {
         "isInitOpenDesktop": true,
         "isInitOpenMobile": false
+      },
+      "overviewmap": {
+        "resolution": 611.4974492763076,
+        "baselayer": "452"
       }
     },
     "scaleLine": true,
@@ -267,15 +271,15 @@
     {
       "Layer": [
         {
-          "id": "453"
+          "id": "453",
+          "visibility": true
         },
         {
           "id": "452"
         },
         {
           "id": ["713", "714", "715", "716"],
-          "name": "Geobasiskarten (schwarz-weiß)",
-          "visibility": true
+          "name": "Geobasiskarten (schwarz-weiß)"
         }
       ]
     },
@@ -375,7 +379,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name"
@@ -383,7 +387,7 @@
         {
           "id": "8712",
           "name": "Schulinfosystem",
-          "visibility": true,
+          "visibility": false,
           "styleId": "8712",
           "styleField": "kapitelbezeichnung",
           "searchField": "schulname",

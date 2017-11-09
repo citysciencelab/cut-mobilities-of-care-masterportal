@@ -44,7 +44,8 @@ define([
                 "getItemsByMetaID": this.getItemsByMetaID,
                 "getSnippetInfos": function () {
                     return this.get("snippetInfos");
-                }
+                },
+                "getInitVisibBaselayer" : this.getInitVisibBaselayer
             }, this);
 
             channel.on({
@@ -499,6 +500,20 @@ define([
             }, this);
 
             return layers;
+        },
+
+        /**
+         * Gibt den initial sichtbaren Baselayer aus der config.json zurück
+         * bei Array mehrer id wird nur die erste übergeben
+         * @return {String} layer - inital sichtbarer Baselayer
+         */
+        getInitVisibBaselayer: function () {
+            var layer = _.findWhere(this.getBaselayer().Layer, {visibility: true});
+
+            if (_.isArray(layer.id)) {
+                layer.id = layer.id[0];
+            };
+            return layer
         }
     });
 
