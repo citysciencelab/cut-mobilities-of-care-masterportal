@@ -30,7 +30,7 @@ define(function (require) {
         newOverviewmap: function() {
             var overviewmap = new ol.control.OverviewMap({
                     collapsible: false,
-                    className: "overviewmap ol-overviewmap ol-custom-overviewmap",
+                    className: "overviewmap ol-overviewmap ol-custom-overviewmap hidden-xs",
                     layers: [
                       this.getOvmLayer(this.getBaselayer())
                     ],
