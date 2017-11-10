@@ -1,6 +1,7 @@
 define(function (require) {
 
     var Radio = require("backbone.radio"),
+        ol = require("openlayers"),
         OverviewmapModel;
 
     OverviewmapModel = Backbone.Model.extend({
