@@ -61,10 +61,15 @@ define(function (require) {
         renderSimpleViews: function () {
             var view;
 
-            _.each(this.model.get("queryCollection").models, function (query) {
-                view = new QuerySimpleView({model: query});
-                this.$el.find(".simple-views-container").append(view.render());
-            }, this);
+            if (this.model.get("queryCollection").models.length > 1) {
+                _.each(this.model.get("queryCollection").models, function (query) {
+                    view = new QuerySimpleView({model: query});
+                    this.$el.find(".simple-views-container").append(view.render());
+                }, this);
+            }
+            else {
+                this.$el.find(".simple-views-container").remove();
+            }
         },
         closeFilter: function () {
             this.model.setIsActive(false);

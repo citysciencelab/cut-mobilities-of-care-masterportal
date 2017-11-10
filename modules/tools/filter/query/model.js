@@ -46,7 +46,6 @@ define(function (require) {
         addIsActiveCheckbox: function () {
             if (!this.get("activateOnSelection")) {
                 this.set("btnIsActive", new SnippetCheckboxModel({
-                    label: this.get("name") + "-Filter",
                     isSelected: this.get("isActive")
                 }));
 
@@ -186,6 +185,14 @@ define(function (require) {
             this.set("isSelected", value);
         },
         setIsActive: function (value) {
+            // if (!this.get("isActive") && value) {
+            //     var featureIds = [];
+            //
+            //     _.each(this.get("features"), function (feature) {
+            //         featureIds.push(feature.getId());
+            //     }, this);
+            //     this.set("featureIds", featureIds);
+            // }
             this.set("isActive", value);
         },
 

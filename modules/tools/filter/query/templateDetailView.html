@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <% if (isLayerVisible) { %>
 <div class="detailview-head">
-    <% if (this.model.has("info")) { %>
-        <div><%= info %></div>
-    <% } %>
-    <button class="zoom-btn btn btn-default btn-sm col-xs-12" title="Zoom auf Treffer">
+    <label class="col-xs-6 col-md-6 cols-sm-6"><%= name %>-Filter</label>
+    <button class="zoom-btn btn btn-default btn-sm col-xs-5 col-md-5 col-sm-5" title="Zoom auf Treffer">
         <span class="glyphicon glyphicon-search"></span>
         <span class="feature-count"><%= featureIds.length %> Treffer</span>
     </button>
+    <% if (this.model.has("info")) { %>
+        <div class="filter-info"><%= info %></div>
+    <% } %>
 </div>
 <div class="value-views-container">
     <div class="text">Ihre Auswahl: </div>
