@@ -6,11 +6,11 @@ define(function (require) {
 
     OverviewmapModel = Backbone.Model.extend({
         defaults: {
-            baselayer:"",
+            baselayer: "",
             newOvmView: ""
         },
         initialize: function () {
-            var map =  Radio.request("Map", "getMap"),
+            var map = Radio.request("Map", "getMap"),
                 mapView = map.get("view"),
                 layers = map.getLayers().getArray(),
                 ovmConfigRes = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}).attr,
@@ -28,7 +28,7 @@ define(function (require) {
             Radio.trigger("Map", "addControl", this.newOverviewmap());
         },
 
-        newOverviewmap: function() {
+        newOverviewmap: function () {
             var overviewmap = new ol.control.OverviewMap({
                     collapsible: false,
                     className: "overviewmap ol-overviewmap ol-custom-overviewmap hidden-xs",
@@ -41,9 +41,10 @@ define(function (require) {
             return overviewmap;
         },
         getBaseLayerFromMap: function (layers, baselayer) {
-            var olLayer =_.find(layers, function(layer) {
+            var olLayer = _.find(layers, function (layer) {
                 return layer.getProperties().id === baselayer;
             });
+
             return olLayer;
         },
 
@@ -57,9 +58,9 @@ define(function (require) {
                         attributions: baselayer.getSource().getAttributions(),
                         params: baselayer.getSource().getParams()
                     })
-                })
+                });
             }
-            return imageLayer
+            return imageLayer;
         },
 
         // getter for baselayer
