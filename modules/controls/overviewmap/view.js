@@ -18,7 +18,7 @@ define(function (require) {
             $("body").append(this.$el.html(this.template()));
 
         },
-        toggle: function () {console.log( $(".overviewmap > .glyphicon-globe").attr("title"));
+        toggle: function () {
             $(".overviewmap > div").toggle("slow");
             $(".overviewmap > .glyphicon").toggleClass("glyphicon-globe glyphicon-globe");
             $(".overviewmap > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden" ?
