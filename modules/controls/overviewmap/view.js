@@ -18,10 +18,13 @@ define(function (require) {
             $("body").append(this.$el.html(this.template()));
 
         },
-        toggle: function () {
+        toggle: function () {console.log( $(".overviewmap > .glyphicon-globe").attr("title"));
             $(".overviewmap > div").toggle("slow");
-            $(".overviewmap > .glyphicon glyphicon-globe").attr("title", "Übersichtskarte einblenden");
-            $(".overviewmap > .glyphicon glyphicon-globe").attr("title", " Übersichtskarte ausblenden");
+            $(".overviewmap > .glyphicon").toggleClass("glyphicon-globe glyphicon-globe");
+            $(".overviewmap > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden" ?
+            $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte einblenden") :
+            $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte ausblenden");
+
         }
     });
 
