@@ -62,10 +62,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
             "isInitOpenDesktop": true,
             "isInitOpenMobile": false
         },
-        "overviewmap": {
-            "resolution": 305.7487246381551,
-            "baselayer": "452"
-        }
+        "overviewmap": true
       }
 
 ```
@@ -86,6 +83,20 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |----|-------------|---|-------|------------|
 |resolution|nein|Integer||Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|
 |baselayer|nein|String||Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss die Id aus der services.json angegeben werden die für das Portal in der config.js im Parameter layerConf steht.|
+
+**Beispiel overviewmap mit Parametern:**
+
+
+```
+#!json
+
+      "overviewmap": {
+          "resolution": 305.7487246381551,
+          "baselayer": "452"
+      }
+
+
+```
 
 ### Portalconfig.mapView ###
 
