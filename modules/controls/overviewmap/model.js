@@ -11,7 +11,8 @@ define(function (require) {
         },
         initialize: function () {
             var map = Radio.request("Map", "getMap"),
-                mapView = map.get("view"),
+                maxResolution = _.first(Radio.request("MapView", "getResolutions")),
+                mapView = map.getView(),
                 layers = map.getLayers().getArray(),
                 ovmConfigRes = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}).attr,
                 initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer").id,
@@ -21,7 +22,7 @@ define(function (require) {
                 center: mapView.getCenter(),
                 projection: mapView.getProjection(),
                 resolution: mapView.getResolution(),
-                resolutions: [ovmConfigRes.resolution ? ovmConfigRes.resolution : mapView.getMaxResolution()]
+                resolutions: [ovmConfigRes.resolution ? ovmConfigRes.resolution : maxResolution]
             });
             this.setNewOvmView(newOlView);
             this.setBaselayer(ovmConfigRes.baselayer ? this.getBaseLayerFromMap(layers, ovmConfigRes.baselayer) : this.getBaseLayerFromMap(layers, initVisibBaselayer));
