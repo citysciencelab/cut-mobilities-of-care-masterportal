@@ -9,8 +9,7 @@ define([
         defaults: {
             layerParams: [],
             isInitOpen: "",
-            zoomToGeometry: "",
-            config: ""
+            zoomToGeometry: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -22,8 +21,7 @@ define([
                 "getInitString": this.getInitString,
                 "getCenter": this.getCenter,
                 "getZoomLevel": this.getZoomLevel,
-                "getZoomToGeometry": this.getZoomToGeometry,
-                "getConfig": this.getConfig
+                "getZoomToGeometry": this.getZoomToGeometry
             }, this);
 
             this.parseURL();
@@ -350,14 +348,6 @@ define([
         // setter for zoomLevel
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
-        },
-        // getter for config
-        getConfig: function () {
-            return this.get("config");
-        },
-        // setter for config
-        setConfig: function (value) {
-            this.set("config", value);
         }
     });
 

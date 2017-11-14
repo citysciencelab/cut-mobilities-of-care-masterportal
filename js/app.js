@@ -17,8 +17,8 @@ define("app",
     new Autostarter();
     new Util();
     new RawLayerList();
-    new ParametricURL();
     new Preparser();
+    new ParametricURL();
     new CRS();
     new Map();
 
