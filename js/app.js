@@ -296,6 +296,14 @@ define("app",
                         }
                         break;
                     }
+                    case "overviewmap": {
+                        if (control.attr === true || typeof control.attr === "object") {
+                            require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
+                                new OverviewmapView();
+                            });
+                        }
+                        break;
+                    }
                 }
             });
         });
