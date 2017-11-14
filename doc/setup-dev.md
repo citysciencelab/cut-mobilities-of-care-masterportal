@@ -68,7 +68,9 @@ Einen lokalen Entwicklungsserver starten.
 # grunt server
 ```
 
-Unter https://localhost:9001/portal/master gibt es eine umfassende Demo-Konfiguration.
+Unter https://localhost:9001/portal/master gibt es eine umfassende Demo-Konfiguration des Masterportals.
+
+Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen Proxy weitergeleitet werden. Auf diese Datei wird im build-config/tasks/connect.js verwiesen. Als Default ist dort dort der lgv-config Ordner angegeben. Bei Verwendung eines eigenen Ordners mit anderer Bezeichnung für die Dienste-json-Dateien müsste der Pfad im connect.js entsprechend angepasst werden. Beispiele für die Weiterleitung sind in der proxy-conf.json des lgv-config-public Repositories zu finden. 
 
 ### grunt test
 Unter Firefox funktioniert grunt server nicht, hier muss statt dessen mit "grunt test" (ohne live reload) gearbeitet werden
