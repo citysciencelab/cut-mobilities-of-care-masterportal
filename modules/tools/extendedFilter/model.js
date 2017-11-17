@@ -17,7 +17,7 @@ define(function (require){
             wfsList: [],
             currentFilterType: "Neuen Filter erstellen",
             currentFilters:[],
-            ignoredKeys : Config.ignoredKeys,
+            ignoredKeys : Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys"),
             filterCounter: 1
         },
         initialize: function () {
