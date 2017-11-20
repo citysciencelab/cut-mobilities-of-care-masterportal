@@ -15,7 +15,7 @@ define([
             var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json";
 
             if (path.slice(-5) !== ".json") {
-                var addPath = Radio.request("ParametricURL", "getConfig"),
+                var addPath = Radio.request("Util", "getConfig"),
                     isAddPathValid = addPath.length > 1 ? true : false;
                 // removes trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
                 if (isAddPathValid) {

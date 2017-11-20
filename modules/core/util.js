@@ -6,7 +6,8 @@ define([
 
     var Util = Backbone.Model.extend({
         defaults: {
-            // isViewMobile: false
+            // isViewMobile: false,
+            config: "",
             ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"]
         },
         initialize: function () {
@@ -23,6 +24,7 @@ define([
                 "isChrome": this.isChrome,
                 "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny,
+                "getConfig" : this.getConfig,
                 "getIgnoredKeys" : this.getIgnoredKeys
             }, this);
 
@@ -42,6 +44,8 @@ define([
 
             $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
             $(window).on("resize", _.bind(this.updateMapHeight, this));
+
+            this.parseConfigFromURL();
         },
         updateMapHeight: function () {
             var mapHeight = $(".lgv-container").height() - $("#main-nav").height();
@@ -164,6 +168,42 @@ define([
             else {
                 this.setIsViewMobile(true);
             }
+        },
+
+        parseConfigFromURL: function (result) {
+            var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
+                result = {},
+                config;
+
+            query.split("&").forEach(function (keyValue) {
+                var item = keyValue.split("=");
+
+                result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
+            });
+
+            if (_.has(result, "CONFIG")) {
+                config = _.values(_.pick(result, "CONFIG"))[0];
+
+                if (config.slice(-5) === ".json") {
+                    this.setConfig(config);
+                }
+                else {
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Config-Parameter verlangt eine Datei mit der Endung \".json\".</small>",
+                        kategorie: "alert-warning"
+                    });
+                }
+            }
+        },
+
+        // getter for config
+        getConfig: function () {
+            return this.get("config");
+        },
+
+        // setter for config
+        setConfig: function (value) {
+            this.set("config", value);
         },
 
         getIgnoredKeys: function () {
