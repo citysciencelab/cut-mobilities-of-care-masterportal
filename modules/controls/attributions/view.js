@@ -48,7 +48,7 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            $("body").append(this.$el.html(this.templateShow(attr)));
+            $("#map .ol-overlaycontainer-stopevent").append(this.$el.html(this.templateShow(attr)));
             if (this.model.getIsVisibleInMap() === true) {
                 this.$el.show();
                 this.$el.addClass("attributions-background-color");
