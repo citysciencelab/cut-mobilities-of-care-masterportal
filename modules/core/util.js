@@ -7,7 +7,8 @@ define([
     var Util = Backbone.Model.extend({
         defaults: {
             // isViewMobile: false,
-            config: ""
+            config: "",
+            ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"]
         },
         initialize: function () {
             var channel = Radio.channel("Util");
@@ -23,7 +24,8 @@ define([
                 "isChrome": this.isChrome,
                 "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny,
-                "getConfig" : this.getConfig
+                "getConfig" : this.getConfig,
+                "getIgnoredKeys" : this.getIgnoredKeys
             }, this);
 
             channel.on({
@@ -202,6 +204,10 @@ define([
         // setter for config
         setConfig: function (value) {
             this.set("config", value);
+        },
+
+        getIgnoredKeys: function () {
+            return this.get("ignoredKeys");
         }
     });
 

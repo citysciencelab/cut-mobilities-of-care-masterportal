@@ -39,11 +39,12 @@ define(function (require) {
             {
                 name: "Abschlüsse",
                 attributes: [
-                    "abschluss",
+                    "abschluss"/*,
                     "schulentlassene_oa_anteil",
                     "schulentlassene_mit_esa_anteil",
                     "schulentlassene_mit_msa_anteil",
-                    "schulentlassenen_mit_fhr_anteil"]
+                    "schulentlassenen_mit_fhr_anteil"*/
+                    ]
             },
             {
                 name: "weitere Informationen",
