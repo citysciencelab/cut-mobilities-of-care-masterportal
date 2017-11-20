@@ -48,16 +48,19 @@ define([
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
+                $("#map").removeClass("no-cursor");
                 $("#cursorGlyph").remove();
                 $("#map").off("mousemove");
                 this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
                 this.delegateEvents();
             }
             else if (this.model.get("isCurrentWin") === false) {
+                $("#map").removeClass("no-cursor");
                 $("#cursorGlyph").remove();
                 $("#map").off("mousemove");
             }
             else {
+                $("#map").removeClass("no-cursor");
                 $("#cursorGlyph").remove();
                 $("#map").off("mousemove");
                 this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
