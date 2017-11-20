@@ -36,6 +36,10 @@ define([
             if (this.model.getVisible()) {
                 this.toggle();
             }
+
+            this.listenTo(Radio.channel("Map"), {
+                "updateSize": this.updateLegendSize
+            });
         },
 
         paramsChanged: function () {
@@ -47,7 +51,7 @@ define([
 
             this.$el.html(this.template(attr));
             $("body").append(this.$el.html(this.template(attr)));
-            $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
+            $(".legend-win-content").css("max-height", ($(".lgv-container").height() * 0.7));
             this.$el.draggable({
                 containment: "#map",
                 handle: ".legend-win-header"
@@ -77,6 +81,14 @@ define([
             this.$el.hide();
 
             this.remove();
+        },
+
+        /**
+         * Passt die Höhe der Legende an die Klasse lgv-container an.
+         * Derzeit wird die Funktion ausgeführt auf die updateSize Funtkion der Map.
+         */
+        updateLegendSize: function () {
+            $(".legend-win-content").css("max-height", ($(".lgv-container").height() * 0.7));
         }
     });
 
