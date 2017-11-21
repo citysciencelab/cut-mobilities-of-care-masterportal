@@ -77,8 +77,14 @@
     cursor: pointer;
     position: absolute;
     bottom: 30px;
-    right: 12px;
-    padding: 6px;
+    right: 15px;
+}
+.attributions-view-withOverviewmap{
+    bottom: 200px;
+}
+
+.attributions-view-withOverviewmapHidden{
+    bottom: 70px;
 }
 
 .attributions-view dt {
@@ -118,6 +124,10 @@
     background: linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -o-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -ms-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
+.attributions-div {
+    padding: 3px;
 }
 
 @media (max-width: 767px) {

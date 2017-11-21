@@ -35,6 +35,11 @@ define([
                 "change:isVisibleInMap": this.toggleIsVisibleInMap
             });
 
+            this.listenTo(Radio.channel("Overviewmap"), {
+                "show": this.ovmShow,
+                "hide": this.ovmHide
+            });
+
             this.render();
 
             if (isViewMobile === true) {
@@ -46,7 +51,8 @@ define([
         },
 
         render: function () {
-            var attr = this.model.toJSON();
+            var attr = this.model.toJSON(),
+            isOverviewMap = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}) ? true : false;
 
             $("body").append(this.$el.html(this.templateShow(attr)));
             if (this.model.getIsVisibleInMap() === true) {
@@ -55,6 +61,12 @@ define([
             }
             else {
                 this.$el.hide();
+            }
+            if (isOverviewMap === true) {
+                this.$el.addClass("attributions-view-withOverviewmap")
+            }
+            if (attr.modelList.length === 0) {
+                $(".attributions-div").removeClass("attributions-div");
             }
         },
 
@@ -69,6 +81,12 @@ define([
                 this.$el.html(this.templateHide(attr));
                 this.$el.removeClass("attributions-background-color");
             }
+            if (_.isEmpty(attr.modelList) === true) {
+                $(".attributions-div").removeClass("attributions-div");
+            }
+            else {
+                $(".attributions-div").addClass("attributions-div")
+            }
         },
 
         toggleIsContentVisible: function () {
@@ -77,6 +95,24 @@ define([
 
         toggleIsVisibleInMap: function () {
             this.$el.toggle();
+        },
+
+        /**
+         * Wenn die Overviewmap offen ist wird die Position des buttons über hinzufügen/entfernen
+         * von css angepasst.
+         */
+        ovmShow: function () {console.log(1);
+            $(".attributions-view").addClass("attributions-view-withOverviewmap");
+            $(".attributions-view").removeClass("attributions-view-withOverviewmapHidden");
+        },
+
+        /**
+         * Wenn die Overviewmap versteckt ist wird die Position des buttons über hinzufügen/entfernen
+         * von css angepasst.
+         */
+        ovmHide: function () {console.log(2);
+            $(".attributions-view").addClass("attributions-view-withOverviewmapHidden");
+            $(".attributions-view").removeClass("attributions-view-withOverviewmap");
         }
     });
 
