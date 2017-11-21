@@ -34,11 +34,11 @@ define(function (require) {
             $(".overviewmap > .glyphicon").toggleClass("glyphicon-globe glyphicon-globe");
             if ($(".overviewmap > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden") {
                 $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte einblenden");
-                Radio.trigger("Overviewmap", "show");
+                Radio.trigger("Overviewmap", "hide");
             }
             else {
                 $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte ausblenden");
-                Radio.trigger("Overviewmap", "hide");
+                Radio.trigger("Overviewmap", "show");
             }
         }
     });
