@@ -147,6 +147,8 @@ define([
         parseCenter: function (result) {
             var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
 
+            // parse Strings to numbers
+            values = _.map(values, Number);
             this.set("center", values);
 
         },
