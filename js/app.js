@@ -272,8 +272,10 @@ define("app",
                     }
                     case "mousePosition": {
                         if (control.attr === true) {
+                            var el = controlsView.addRow(control.id);
+
                             require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                                new MousePositionView();
+                                new MousePositionView({el: el});
                             });
                         }
                         break;
@@ -290,16 +292,20 @@ define("app",
                     }
                     case "attributions": {
                         if (control.attr === true || typeof control.attr === "object") {
+                            var el = controlsView.addRow(control.id);
+
                             require(["modules/controls/attributions/view"], function (AttributionsView) {
-                                new AttributionsView();
+                                new AttributionsView({el: el});
                             });
                         }
                         break;
                     }
                     case "overviewmap": {
                         if (control.attr === true || typeof control.attr === "object") {
+                            var el = controlsView.addRow(control.id);
+
                             require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
-                                new OverviewmapView();
+                                new OverviewmapView({el: el});
                             });
                         }
                         break;

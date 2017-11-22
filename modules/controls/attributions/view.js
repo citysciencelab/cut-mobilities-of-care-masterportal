@@ -15,7 +15,6 @@ define([
 
     AttributionsView = Backbone.View.extend({
         model: new Attributions(),
-        className: "attributions-view",
         templateShow: _.template(TemplateShow),
         templateHide: _.template(TemplateHide),
         events: {
@@ -50,14 +49,14 @@ define([
             }
         },
 
-        render: function () {
+        render: function () {console.log(1);
             var attr = this.model.toJSON(),
             isOverviewMap = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}) ? true : false;
 
-            $("body").append(this.$el.html(this.templateShow(attr)));
+            this.$el.html(this.templateShow(attr));
             if (this.model.getIsVisibleInMap() === true) {
                 this.$el.show();
-                this.$el.addClass("attributions-background-color");
+                this.$el.addClass("attributions-view","attributions-background-color");
             }
             else {
                 this.$el.hide();
@@ -70,7 +69,7 @@ define([
             }
         },
 
-        renderAttributions: function () {
+        renderAttributions: function () {console.log(2);
             var attr = this.model.toJSON();
 
             if (this.model.getIsContentVisible() === true) {
@@ -101,7 +100,7 @@ define([
          * Wenn die Overviewmap offen ist wird die Position des buttons über hinzufügen/entfernen
          * von css angepasst.
          */
-        ovmShow: function () {console.log(1);
+        ovmShow: function () {
             $(".attributions-view").addClass("attributions-view-withOverviewmap");
             $(".attributions-view").removeClass("attributions-view-withOverviewmapHidden");
         },
@@ -110,7 +109,7 @@ define([
          * Wenn die Overviewmap versteckt ist wird die Position des buttons über hinzufügen/entfernen
          * von css angepasst.
          */
-        ovmHide: function () {console.log(2);
+        ovmHide: function () {
             $(".attributions-view").addClass("attributions-view-withOverviewmapHidden");
             $(".attributions-view").removeClass("attributions-view-withOverviewmap");
         }

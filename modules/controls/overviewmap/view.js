@@ -6,7 +6,6 @@ define(function (require) {
         OverviewmapView;
 
     OverviewmapView = Backbone.View.extend({
-        className: "overviewmap hidden-xs",
         template: _.template(template),
         events: {
             "click .glyphicon": "toggle"
@@ -20,7 +19,7 @@ define(function (require) {
         },
 
         render: function () {
-            $("body").append(this.$el.html(this.template()));
+            this.$el.html(this.template());
 
         },
 
@@ -31,13 +30,16 @@ define(function (require) {
          */
         toggle: function () {
             $(".overviewmap > div").toggle("slow");
+
             $(".overviewmap > .glyphicon").toggleClass("glyphicon-globe glyphicon-globe");
             if ($(".overviewmap > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden") {
+                $(".ol-custom-overviewmap").hide();
                 $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte einblenden");
                 Radio.trigger("Overviewmap", "hide");
             }
             else {
                 $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte ausblenden");
+                $(".ol-custom-overviewmap").show();
                 Radio.trigger("Overviewmap", "show");
             }
         }
