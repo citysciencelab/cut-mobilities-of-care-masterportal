@@ -1,12 +1,9 @@
 .mouse-position {
-    float: left;
-    position: absolute;
-    bottom: 0;
+    /*float: left;*/
     margin-bottom: 28px;
     background-color: rgb(182, 0, 0);
     color: rgb(255, 255, 255);
     font-size: 11px;
-    left: 0;
 }
 
 .mouse-position > div {

@@ -254,7 +254,7 @@ define("app",
                 switch (control.id) {
                     case "zoom": {
                         if (control.attr === true) {
-                            var el = controlsView.addRow(control.id);
+                            var el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/zoom/view"], function (ZoomControlView) {
                                 new ZoomControlView({el: el});
@@ -263,7 +263,7 @@ define("app",
                         break;
                     }
                     case "orientation": {
-                        var el = controlsView.addRow(control.id);
+                        var el = controlsView.addRowTR(control.id);
 
                         require(["modules/controls/orientation/view"], function (OrientationView) {
                             new OrientationView({el: el});
@@ -272,7 +272,7 @@ define("app",
                     }
                     case "mousePosition": {
                         if (control.attr === true) {
-                            var el = controlsView.addRow(control.id);
+                            var el = controlsView.addRowBL(control.id);
 
                             require(["modules/controls/mousePosition/view"], function (MousePositionView) {
                                 new MousePositionView({el: el});
@@ -282,7 +282,7 @@ define("app",
                     }
                     case "fullScreen": {
                         if (control.attr === true) {
-                            var el = controlsView.addRow(control.id);
+                            var el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/fullScreen/view"], function (FullScreenView) {
                                 new FullScreenView({el: el});
@@ -292,7 +292,7 @@ define("app",
                     }
                     case "attributions": {
                         if (control.attr === true || typeof control.attr === "object") {
-                            var el = controlsView.addRow(control.id);
+                            var el = controlsView.addRowBR(control.id);
 
                             require(["modules/controls/attributions/view"], function (AttributionsView) {
                                 new AttributionsView({el: el});
@@ -302,7 +302,7 @@ define("app",
                     }
                     case "overviewmap": {
                         if (control.attr === true || typeof control.attr === "object") {
-                            var el = controlsView.addRow(control.id);
+                            var el = controlsView.addRowBR(control.id);
 
                             require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
                                 new OverviewmapView({el: el});

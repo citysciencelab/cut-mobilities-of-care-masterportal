@@ -49,9 +49,10 @@ define([
             }
         },
 
-        render: function () {console.log(1);
+        render: function () {
             var attr = this.model.toJSON(),
-            isOverviewMap = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}) ? true : false;
+            isOverviewMap = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}) ? true : false,
+            isViewMobile = Radio.request("Util", "isViewMobile");
 
             this.$el.html(this.templateShow(attr));
             if (this.model.getIsVisibleInMap() === true) {
@@ -61,7 +62,7 @@ define([
             else {
                 this.$el.hide();
             }
-            if (isOverviewMap === true) {
+            if (isOverviewMap === true && isViewMobile === false) {
                 this.$el.addClass("attributions-view-withOverviewmap")
             }
             if (attr.modelList.length === 0) {

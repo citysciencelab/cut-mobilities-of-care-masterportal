@@ -1,11 +1,8 @@
 .overviewmap {
-    position: absolute;
     color: #f3f3f3;
-    bottom: 30px;
-    left: auto;
-    right: 12px;
-    top: auto;
+    margin-bottom: 30px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    float: right;
 }
 
 .overviewmap-div {
