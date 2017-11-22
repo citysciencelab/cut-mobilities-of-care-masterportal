@@ -6,6 +6,7 @@ var assert = require("chai").assert,
     suchtests = require(path.resolve(__dirname, "./tests/Suche.js")),
     zoomtests = require(path.resolve(__dirname, "./tests/Zoom.js")),
     controltests = require(path.resolve(__dirname, "./tests/Controls.js")),
+    parametricUrlTests = require(path.resolve(__dirname, "./tests/ParametricUrl.js")),
     themenbaumlighttests = require(path.resolve(__dirname, "./tests/ThemenbaumLight.js")),
     fs = require("fs"),
     until = webdriver.until,
@@ -13,57 +14,32 @@ var assert = require("chai").assert,
     loader;
 
 function Tests (driver) {
-  test.describe("MasterTests", function () {
-      this.timeout(25000);
-      test.before(function () {
-          /* runs before the first it() is executed */
-          driver.get("https://localhost:9001/portal/master");
-      });
+    test.describe("MasterTests", function () {
+        this.timeout(25000);
+        test.before(function () {
+            driver.get("https://localhost:9001/portal/master?layerIDs=717,1562&visibility=true,true&transparency=0,0&center=566460.0517668653,5935135.409368704&zoomlevel=6");
+        });
 
-  /*  
-  *  ------------------- Zoomen -----------------------------------------------------------------------------
-  */
-      zoomtests(driver);
-  
-  /*
-  *  ------------------- Search-----------------------------------------------------------------------------
-  */
-      suchtests(driver);
+        // --- ParametricUrl ---
+        parametricUrlTests(driver);
 
-  /*
-  *  ------------------- Controls-----------------------------------------------------------------------------
-  */
-      controltests(driver);
+        // --- Zoom ---
+        zoomtests(driver);
 
-  /*
-  *  ------------------- Themenbaum-----------------------------------------------------------------------------
-  */
-      themenbaumlighttests(driver);
+        // --- Search ---
+        suchtests(driver);
 
-  /*
-  *  ------------------- Browser schließen-----------------------------------------------------------------------------
-  */
-      test.after(function () {
-          driver.quit();
-      });
+        // --- Controls ---
+        controltests(driver);
+
+        // --- Themenbaum ---
+        themenbaumlighttests(driver);
+
+        // --- Browser schlißen ---
+        test.after(function () {
+            driver.quit();
+        });
   });
-
-  function getCenter () {
-      center = Backbone.Radio.request("MapView", "getCenter");
-      return center;
-  };
-
-  function getResolution () {
-      resolution = Backbone.Radio.request("MapView", "getResolution").resolution;
-      return resolution;
-  };
-
-  function writeScreenshot (data, name) {
-    name = name || "ss.png";
-    var screenshotPath = "test\\end2end\\Screenshots\\ScreenshotsTest\\";
-
-    fs.writeFileSync(screenshotPath + name, data, "base64");
-  }
 }
 
-module.exports = Tests
+module.exports = Tests;
