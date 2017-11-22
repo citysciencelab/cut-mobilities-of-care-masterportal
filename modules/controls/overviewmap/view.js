@@ -18,7 +18,7 @@ define(function (require) {
             this.render();
         },
 
-        render: function () {console.log(this.$el);
+        render: function () {
             this.$el.html(this.template());
 
         },

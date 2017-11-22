@@ -70,7 +70,7 @@ define([
             }
         },
 
-        renderAttributions: function () {console.log(2);
+        renderAttributions: function () {
             var attr = this.model.toJSON();
 
             if (this.model.getIsContentVisible() === true) {
