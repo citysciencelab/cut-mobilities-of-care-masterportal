@@ -56,7 +56,7 @@ define([
 
         render: function () {
             var attr = this.model.toJSON(),
-            isOverviewMap = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}) ? true : false,
+            isOverviewmap = this.model.get("isOverviewmap"),
             isViewMobile = Radio.request("Util", "isViewMobile");
 
             this.$el.html(this.templateShow(attr));
@@ -68,7 +68,7 @@ define([
                 this.$el.hide();
             }
 
-            this.isViewMobile(isViewMobile, isOverviewMap);
+            this.isViewMobile(isViewMobile, isOverviewmap);
 
             if (attr.modelList.length === 0) {
                 $(".attributions-div").removeClass("attributions-div");
@@ -139,18 +139,20 @@ define([
          * Wird aufgerufen wenn vie mobile ist und die wiederum ruft isViewMobile
          */
         isViewMobileChanged: function (isViewMobile) {
-            this.isViewMobile(isViewMobile, true);
+            var isOverviewmap = this.model.get("isOverviewmap");
+
+            this.isViewMobile(isViewMobile, isOverviewmap);
         },
 
         /**
          * Testet, ob Overviewmap vorhanden ist und fügt entsprechend eien Klasse hinzu
          * oder entfernt diese.
          */
-        isViewMobile: function (isViewMobile, isOverviewMap) {
-            if (isOverviewMap === true && isViewMobile === false) {
+        isViewMobile: function (isViewMobile, isOverviewmap) {
+            if (isViewMobile === false && isOverviewmap === true) {
                 this.addWithOverviewmapClass();
             }
-            else if (isOverviewMap === true && isViewMobile === true) {
+            else {
                 this.removeWithOverviewmapClass();
             }
         }

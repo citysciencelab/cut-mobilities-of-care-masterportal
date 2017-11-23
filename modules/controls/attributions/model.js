@@ -16,7 +16,8 @@ define([
             isInitOpenDesktop: true,
             isInitOpenMobile: false,
             // Modellist mit Attributions
-            modelList: []
+            modelList: [],
+            isOverviewmap: Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}) ? true : false
         },
 
         initialize: function () {
