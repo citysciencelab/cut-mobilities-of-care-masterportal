@@ -41,7 +41,7 @@ function ParametricUrlTests (driver) {
             }
 
             driver.executeScript(getCenter).then(function (center) {
-              expect(center).to.be.equal([566465.123,5935135.123]);
+                expect(center).to.have.ordered.members([566465.123, 5935135.123]);
             });
 
         });
