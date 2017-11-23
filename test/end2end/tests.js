@@ -21,19 +21,19 @@ function Tests (driver) {
         });
 
         // --- ParametricUrl ---
-        // parametricUrlTests(driver);
+        parametricUrlTests(driver);
 
         // --- Zoom ---
-        // zoomtests(driver);
+        zoomtests(driver);
 
         // --- Search ---
-        // suchtests(driver);
+        suchtests(driver);
 
         // --- Controls ---
         controltests(driver);
 
         // --- Themenbaum ---
-        // themenbaumlighttests(driver);
+        themenbaumlighttests(driver);
 
         // --- Browser schlißen ---
         test.after(function () {

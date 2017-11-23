@@ -9,7 +9,10 @@ var assert = require("chai").assert,
 
 function SuchTests (driver) {
       test.describe("Search", function () {
-          var searchbar, searchbutton, hit, center;
+        var searchbar,
+            searchbutton,
+            hit,
+            center;
 
           test.it("should have SearchBar", function () {
               searchbar = driver.findElement(webdriver.By.id("searchInput")),
@@ -136,20 +139,16 @@ function SuchTests (driver) {
   };
 
   function getCenter () {
-      center = Backbone.Radio.request("MapView", "getCenter");
-      return center;
-  };
+      var center = Backbone.Radio.request("MapView", "getCenter");
 
-  function getResolution () {
-      resolution = Backbone.Radio.request("MapView", "getResolution").resolution;
-      return resolution;
-  };
+      return center;
+  }
 
   function writeScreenshot (data, name) {
-    name = name || "ss.png";
-    var screenshotPath = "test\\end2end\\Screenshots\\ScreenshotsTest\\";
+    var name = name || "ss.png",
+        screenshotPath = "test\\end2end\\Screenshots\\ScreenshotsTest\\";
 
     fs.writeFileSync(screenshotPath + name, data, "base64");
-  };
+  }
 
-module.exports = SuchTests
+module.exports = SuchTests;
