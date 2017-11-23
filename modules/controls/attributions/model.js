@@ -33,6 +33,7 @@ define([
             this.listenTo(Radio.channel("ModelList"), {
                 "updateVisibleInMapList": this.checkModelsByAttributions
             });
+
             this.checkModelsByAttributions();
         },
 

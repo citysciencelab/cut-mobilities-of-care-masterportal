@@ -39,6 +39,11 @@ define([
                 "hide": this.ovmHide
             });
 
+            this.listenTo(Radio.channel("Util"), {
+                "isViewMobileChanged": this.isViewMobileChanged
+            });
+
+
             this.render();
 
             if (isViewMobile === true) {
@@ -62,9 +67,9 @@ define([
             else {
                 this.$el.hide();
             }
-            if (isOverviewMap === true && isViewMobile === false) {
-                this.$el.addClass("attributions-view-withOverviewmap")
-            }
+
+            this.isViewMobile(isViewMobile, isOverviewMap);
+
             if (attr.modelList.length === 0) {
                 $(".attributions-div").removeClass("attributions-div");
             }
@@ -102,7 +107,7 @@ define([
          * von css angepasst.
          */
         ovmShow: function () {
-            $(".attributions-view").addClass("attributions-view-withOverviewmap");
+            this.addWithOverviewmapClass();
             $(".attributions-view").removeClass("attributions-view-withOverviewmapHidden");
         },
 
@@ -112,8 +117,33 @@ define([
          */
         ovmHide: function () {
             $(".attributions-view").addClass("attributions-view-withOverviewmapHidden");
-            $(".attributions-view").removeClass("attributions-view-withOverviewmap");
+            this.removeWithOverviewmapClass();
+        },
+
+        addWithOverviewmapClass: function () {
+            this.$el.addClass("attributions-view-withOverviewmap")
+        },
+
+        removeWithOverviewmapClass: function () {
+            this.$el.removeClass("attributions-view-withOverviewmap")
+        },
+
+        isViewMobileChanged: function () {console.log(12);
+            var isOverviewMap = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}) ? true : false,
+            isViewMobile = Radio.request("Util", "isViewMobile");
+
+            this.isViewMobile(isViewMobile, isOverviewMap);
+        },
+
+        isViewMobile: function (isViewMobile, isOverviewMap) {//console.log(isOverviewMap);
+            if (isOverviewMap === true && isViewMobile === false) {
+                this.addWithOverviewmapClass();
+            }
+            else if (isOverviewMap === true && isViewMobile === true) {
+                this.removeWithOverviewmapClass();
+            }
         }
+
     });
 
     return AttributionsView;
