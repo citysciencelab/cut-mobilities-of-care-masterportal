@@ -120,22 +120,33 @@ define([
             this.removeWithOverviewmapClass();
         },
 
+        /**
+         * Fügt den attributions eine Klasse hinzu, um attributions weiter oben zu zeichnen
+         * Wird benutzt bei vorhandener Overviewmap
+         */
         addWithOverviewmapClass: function () {
             this.$el.addClass("attributions-view-withOverviewmap")
         },
 
+        /**
+         * Entfernt die Klasse für das positionieren mit Overviewmap
+         */
         removeWithOverviewmapClass: function () {
             this.$el.removeClass("attributions-view-withOverviewmap")
         },
 
-        isViewMobileChanged: function () {console.log(12);
-            var isOverviewMap = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}) ? true : false,
-            isViewMobile = Radio.request("Util", "isViewMobile");
-
-            this.isViewMobile(isViewMobile, isOverviewMap);
+        /**
+         * Wird aufgerufen wenn vie mobile ist und die wiederum ruft isViewMobile
+         */
+        isViewMobileChanged: function (isViewMobile) {
+            this.isViewMobile(isViewMobile, true);
         },
 
-        isViewMobile: function (isViewMobile, isOverviewMap) {//console.log(isOverviewMap);
+        /**
+         * Testet, ob Overviewmap vorhanden ist und fügt entsprechend eien Klasse hinzu
+         * oder entfernt diese.
+         */
+        isViewMobile: function (isViewMobile, isOverviewMap) {
             if (isOverviewMap === true && isViewMobile === false) {
                 this.addWithOverviewmapClass();
             }
