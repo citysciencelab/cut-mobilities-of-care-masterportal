@@ -5,7 +5,6 @@ define([
 ], function (Backbone, Radio, MousePositionTemplate) {
 
     var MousePositionView = Backbone.View.extend({
-        className: "mouse-position hidden-xs",
         template: _.template(MousePositionTemplate),
         events: {
             "click .glyphicon": "toggle"
@@ -16,7 +15,7 @@ define([
             this.render();
         },
         render: function () {
-            $("body").append(this.$el.html(this.template()));
+            this.$el.html(this.template());
         },
         setCoordinates: function (evt) {
             var coordinates = evt.map.getCoordinateFromPixel(evt.pixel),

@@ -15,7 +15,6 @@ define([
 
     AttributionsView = Backbone.View.extend({
         model: new Attributions(),
-        className: "attributions-view",
         templateShow: _.template(TemplateShow),
         templateHide: _.template(TemplateHide),
         events: {
@@ -35,6 +34,16 @@ define([
                 "change:isVisibleInMap": this.toggleIsVisibleInMap
             });
 
+            this.listenTo(Radio.channel("Overviewmap"), {
+                "show": this.ovmShow,
+                "hide": this.ovmHide
+            });
+
+            this.listenTo(Radio.channel("Util"), {
+                "isViewMobileChanged": this.isViewMobileChanged
+            });
+
+
             this.render();
 
             if (isViewMobile === true) {
@@ -46,15 +55,23 @@ define([
         },
 
         render: function () {
-            var attr = this.model.toJSON();
+            var attr = this.model.toJSON(),
+            isOverviewmap = this.model.get("isOverviewmap"),
+            isViewMobile = Radio.request("Util", "isViewMobile");
 
-            $("#map .ol-overlaycontainer-stopevent").append(this.$el.html(this.templateShow(attr)));
+            this.$el.html(this.templateShow(attr));
             if (this.model.getIsVisibleInMap() === true) {
                 this.$el.show();
-                this.$el.addClass("attributions-background-color");
+                this.$el.addClass("attributions-view","attributions-background-color");
             }
             else {
                 this.$el.hide();
+            }
+
+            this.isViewMobile(isViewMobile, isOverviewmap);
+
+            if (attr.modelList.length === 0) {
+                $(".attributions-div").removeClass("attributions-div");
             }
         },
 
@@ -69,6 +86,12 @@ define([
                 this.$el.html(this.templateHide(attr));
                 this.$el.removeClass("attributions-background-color");
             }
+            if (_.isEmpty(attr.modelList) === true) {
+                $(".attributions-div").removeClass("attributions-div");
+            }
+            else {
+                $(".attributions-div").addClass("attributions-div")
+            }
         },
 
         toggleIsContentVisible: function () {
@@ -77,7 +100,63 @@ define([
 
         toggleIsVisibleInMap: function () {
             this.$el.toggle();
+        },
+
+        /**
+         * Wenn die Overviewmap offen ist wird die Position des buttons über hinzufügen/entfernen
+         * von css angepasst.
+         */
+        ovmShow: function () {
+            this.addWithOverviewmapClass();
+            $(".attributions-view").removeClass("attributions-view-withOverviewmapHidden");
+        },
+
+        /**
+         * Wenn die Overviewmap versteckt ist wird die Position des buttons über hinzufügen/entfernen
+         * von css angepasst.
+         */
+        ovmHide: function () {
+            $(".attributions-view").addClass("attributions-view-withOverviewmapHidden");
+            this.removeWithOverviewmapClass();
+        },
+
+        /**
+         * Fügt den attributions eine Klasse hinzu, um attributions weiter oben zu zeichnen
+         * Wird benutzt bei vorhandener Overviewmap
+         */
+        addWithOverviewmapClass: function () {
+            this.$el.addClass("attributions-view-withOverviewmap")
+        },
+
+        /**
+         * Entfernt die Klasse für das positionieren mit Overviewmap
+         */
+        removeWithOverviewmapClass: function () {
+            this.$el.removeClass("attributions-view-withOverviewmap")
+        },
+
+        /**
+         * Wird aufgerufen wenn vie mobile ist und die wiederum ruft isViewMobile
+         */
+        isViewMobileChanged: function (isViewMobile) {
+            var isOverviewmap = this.model.get("isOverviewmap");
+
+            this.isViewMobile(isViewMobile, isOverviewmap);
+        },
+
+        /**
+         * Testet, ob Overviewmap vorhanden ist und fügt entsprechend eien Klasse hinzu
+         * oder entfernt diese.
+         */
+        isViewMobile: function (isViewMobile, isOverviewmap) {
+            if (isViewMobile === false && isOverviewmap === true) {
+                this.addWithOverviewmapClass();
+            }
+            else {
+                this.removeWithOverviewmapClass();
+            }
         }
+
     });
 
     return AttributionsView;

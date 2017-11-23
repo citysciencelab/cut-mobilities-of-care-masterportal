@@ -5,7 +5,6 @@ define([
 ], function (Backbone, Radio, ZoomControlTemplate) {
 
     var ZoomControlView = Backbone.View.extend({
-        className: "row",
         template: _.template(ZoomControlTemplate),
         events: {
             "click .glyphicon-plus": "setZoomLevelUp",

@@ -1,31 +1,30 @@
 .overviewmap {
-    position: absolute;
-    margin-bottom: 50px;
-    background-color: rgb(182, 0, 0);
     color: #f3f3f3;
-    bottom: 30px;
-    left: auto;
-    right: 15px;
-    top: auto;
+    margin-bottom: 30px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    float: right;
+}
+
+.overviewmap-div {
+    float: right;
 }
 
 .overviewmap > .glyphicon {
     cursor: pointer;
     font-size: 22px;
-    padding: 5px 8px 6px 5px;
+    padding: 5px 7px 6px 5px;
 }
 
 .ol-custom-overviewmap,
       .ol-custom-overviewmap.ol-uncollapsible {
         bottom: 30px;
         left: auto;
-        right: 15px;
+        right: 49px;
         top: auto;
       }
 
       .ol-custom-overviewmap:not(.ol-collapsed)  {
-        border: 1px solid black;
+        border: 0px solid black;
       }
 
       .ol-custom-overviewmap .ol-overviewmap-map {
