@@ -31,7 +31,7 @@ function ParametricUrlTests (driver) {
   *  ------------------- Center -----------------------------------------------------------------------------
   */
     test.describe("center", function () {
-        test.it("should take center=566460.0517668653,5935135.409368704 from ParametricUrl", function () {
+        test.it("should take center=566465.123,5935135.123 from ParametricUrl", function () {
             driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
             var center;
 
@@ -41,7 +41,7 @@ function ParametricUrlTests (driver) {
             }
 
             driver.executeScript(getCenter).then(function (center) {
-              expect(center).to.be.equal([566460.0517668653,5935135.409368704]);
+              expect(center).to.be.equal([566465.123,5935135.123]);
             });
 
         });
