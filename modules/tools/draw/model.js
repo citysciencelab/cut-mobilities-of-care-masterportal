@@ -344,11 +344,12 @@ define([
         setGlyphToCursor: function (glyphicon) {
             $("#map").after("<span id='cursorGlyph'></span>");
             $("#map").mousemove(function (e) {
-                    var cursorGlyph = $("#cursorGlyph");
+                var cursorGlyph = $("#cursorGlyph");
 
-                    $("#cursorGlyph").addClass(glyphicon);
-                    cursorGlyph.css("left", e.offsetX + 10);
-                    cursorGlyph.css("top", e.offsetY + 15);
+                $("#map").addClass("no-cursor");
+                $("#cursorGlyph").addClass(glyphicon);
+                cursorGlyph.css("left", e.offsetX + 5);
+                cursorGlyph.css("top", e.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
             });
         },
 
