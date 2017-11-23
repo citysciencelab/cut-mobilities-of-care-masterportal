@@ -13,12 +13,5 @@ define(function(require) {
                     .to.be.empty;
             });
         });
-        describe("collectFeaturesIdsOfAllLayers", function () {
-            it("should return empty array for undefined input", function () {
-                expect(model.collectFeaturesIdsOfAllLayers(undefined))
-                    .to.be.an("array")
-                    .to.be.empty;
-            });
-        });
     });
 });
