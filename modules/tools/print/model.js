@@ -147,7 +147,7 @@ define([
         },
         // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
         setScale: function (index) {
-            var scaleval = this.get("scales")[index].value;
+            var scaleval = this.get("scales")[index].valueInt;
 
             Radio.trigger("MapView", "setScale", scaleval);
         },
@@ -155,7 +155,7 @@ define([
         // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
         setScaleByMapView: function () {
             var scale = _.find(this.get("scales"), function (scale) {
-                return scale.value === Radio.request("MapView", "getOptions").scale;
+                return scale.valueInt === Radio.request("MapView", "getOptions").scale;
             });
 
             this.set("scale", scale);
@@ -177,10 +177,11 @@ define([
                         cache: false,
                         success: function (model) {
                             _.each(model.get("scales"), function (scale) {
-                                scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
-
+                                scale.valueInt = parseInt(scale.value, 10);
+                                scaletext = scale.valueInt.toString();
+                                // scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
+                                scaletext = scaletext < 10000 ? scaletext : scaletext.substring(0, scaletext.length - 3) + " " + scaletext.substring(scaletext.length - 3);
                                 scale.name = "1: " + scaletext;
-                                scale.value = parseInt(scale.value, 10);
                             });
                             model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                             model.setScaleByMapView();
