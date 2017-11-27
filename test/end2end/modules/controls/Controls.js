@@ -1,5 +1,4 @@
-var assert = require("chai").assert,
-    expect = require("chai").expect,
+var expect = require("chai").expect,
     test = require("selenium-webdriver/testing"),
     webdriver = require("selenium-webdriver"),
     fs = require("fs"),
@@ -19,7 +18,7 @@ function ControlTests (driver) {
           var fullscreen;
 
           test.it("should have Fullscreenbutton", function () {
-              driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
+              driver.wait(until.elementIsNotVisible(loader), 5000, "Loader nach timeout noch sichtbar");
               driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//div[@id='fullScreen']/div/span")), 9000);
               fullscreen = driver.findElement(webdriver.By.xpath("//div[@id='fullScreen']/div/span"));
 
@@ -27,17 +26,18 @@ function ControlTests (driver) {
           });
 
           test.it("should switch to fullscreen after click fullscreenbutton", function () {
-              driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
+            driver.wait(until.elementIsNotVisible(loader), 5000, "Loader nach timeout noch sichtbar");
 
-              fullscreen.click();
+            fullscreen.click();
 
-              driver.takeScreenshot().then(function (data) {
+            driver.takeScreenshot().then(function (data) {
                 writeScreenshot(data, "Fullscreen.png");
-              });
+            });
+            driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//div[@id='fullScreen']/div/span[@class='glyphicon glyphicon-remove']")), 9000);
+            driver.executeScript(checkFullscreen).then(function (fullscreen) {
+                expect(fullscreen).to.be.true;
+            });
 
-              driver.executeScript(checkFullscreen).then(function (fullscreen) {
-                  expect(fullscreen).to.be.true;
-              });
           });
 
           test.it("should switch back to normalscreen after click fullscreenbutton again", function () {
@@ -106,7 +106,7 @@ function ControlTests (driver) {
 
   /*
   *  ------------------- Pois -----------------------------------------------------------------------------
-  // */
+  */
       test.describe("PoiFunction", function () {
           var poiButton, center;
 
@@ -128,11 +128,6 @@ function ControlTests (driver) {
 
           test.it("should relocate after click item", function () {
 
-              function getCenter () {
-                  center = Backbone.Radio.request("MapView", "getCenter");
-                  return center;
-              };
-
               driver.executeScript(getCenter).then(function (center) {
                   this.center = center;
                   driver.findElement(webdriver.By.xpath("//div[@id='poiList']/div/div/span")).click();
@@ -144,32 +139,31 @@ function ControlTests (driver) {
           });
       });
     });
-  };
+  }
 
   function getCenter () {
-      center = Backbone.Radio.request("MapView", "getCenter");
+      var center = Backbone.Radio.request("MapView", "getCenter");
+
       return center;
-  };
+  }
 
   function writeScreenshot (data, name) {
-    name = name || "ss.png";
-    var screenshotPath = "test\\end2end\\Screenshots\\ScreenshotsTest\\";
+    var name = name || "ss.png",
+        screenshotPath = "test\\end2end\\Screenshots\\ScreenshotsTest\\";
 
     fs.writeFileSync(screenshotPath + name, data, "base64");
-  };
+  }
 
  function checkFullscreen () {
-    var fullscreen,
+    var fullscreen = false,
         windowValue = window.innerHeight,
-        screenValue = screen.height;
+        screenValue = screen.availHeight,
+        tolerance = 2;
 
-    if (windowValue == screenValue) {
+    if (windowValue >= screenValue - tolerance && windowValue <= screenValue + tolerance) {
           fullscreen = true;
     }
-    else {
-      fullscreen = false;
-    }
     return fullscreen;
-  };
+  }
 
-module.exports = ControlTests
+module.exports = ControlTests;
