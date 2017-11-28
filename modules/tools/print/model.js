@@ -179,7 +179,6 @@ define([
                             _.each(model.get("scales"), function (scale) {
                                 scale.valueInt = parseInt(scale.value, 10);
                                 scaletext = scale.valueInt.toString();
-                                // scaletext = scale.value < 10000 ? scale.value : scale.value.substring(0, scale.value.length - 3) + " " + scale.value.substring(scale.value.length - 3);
                                 scaletext = scaletext < 10000 ? scaletext : scaletext.substring(0, scaletext.length - 3) + " " + scaletext.substring(scaletext.length - 3);
                                 scale.name = "1: " + scaletext;
                             });
@@ -401,7 +400,7 @@ define([
                         scale: this.get("scale").value,
                         scaleText: this.get("scale").name,
                         geodetic: true,
-                        dpi: 96,
+                        dpi: "96",
                         mapTitle: this.get("title")
                     }
                 ]
