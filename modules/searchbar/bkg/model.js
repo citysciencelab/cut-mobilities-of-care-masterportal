@@ -61,11 +61,49 @@ define([
             if (config.score) {
                 this.set("score", config.score);
             }
+            if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+                this.directSearch(Radio.request("ParametricURL", "getInitString"));
+            }
 
             this.listenTo(Radio.channel("Searchbar"), {
                 "bkgSearch": this.bkgSearch,
                 "search": this.search
             });
+        },
+        /**
+        * @description Veränderte Suchabfolge bei initialer Suche z.B. furch URL-Parameter query
+        * @param {string} searchString - Suchstring
+        */
+        directSearch: function (searchString) {
+            if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
+                this.set("inUse", true);
+                $("#searchInput").val(searchString);
+
+                var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
+
+                this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false);
+
+                Radio.trigger("Searchbar", "createRecommendedList");
+                this.set("inUse", false);
+            }
+        },
+        directPushSuggestions: function (data) {
+            if (data.length === 1) {
+                this.bkgSearch(data[0].suggestion);
+            }
+            else {
+                _.each(data, function (hit) {
+                    if (hit.score > this.get("score")) {
+                        Radio.trigger("Searchbar", "pushHits", "hitList", {
+                            name: hit.suggestion,
+                            type: "Ort",
+                            bkg: true,
+                            glyphicon: "glyphicon-road",
+                            id: _.uniqueId("bkgSuggest")
+                        });
+                    }
+                }, this);
+            }
         },
         /**
         * Wird von der Searchbar getriggert.

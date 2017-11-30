@@ -216,17 +216,18 @@ define([
         *
         */
         renderRecommendedList: function () {
-                var attr = this.model.toJSON(),
-                    template;
-                    // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
-                    // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
-                    this.prepareAttrStrings(attr.hitList);
-                    template = _.template(SearchbarRecommendedListTemplate);
-                $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
-                $("ul.dropdown-menu-search").html(template(attr));
+            var attr = this.model.toJSON(),
+                template;
+                // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
+                // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+                this.prepareAttrStrings(attr.hitList);
+                template = _.template(SearchbarRecommendedListTemplate);
+
+            $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
+            $("ul.dropdown-menu-search").html(template(attr));
             // }
-            // Wird gerufen
-            if (this.model.getInitSearchString() !== undefined && this.model.get("hitList").length === 1) { // workaround für die initiale Suche von B-Plänen
+            // bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
+            if (this.model.getInitSearchString() !== undefined && this.model.get("hitList").length === 1) {
                 this.hitSelected();
             }
             this.model.unset("initSearchString", true);
@@ -235,7 +236,7 @@ define([
             // kepps hit.names from overflowing
             _.each(hitlist, function (hit) {
                 if (!_.isUndefined(hit.additionalInfo)) {
-                    if ( hit.name.length + hit.additionalInfo.length > 50) {
+                    if (hit.name.length + hit.additionalInfo.length > 50) {
                         hit.shortName = this.model.shortenString(hit.name, 30);
                         hit.additionalInfo = this.model.shortenString(hit.additionalInfo, 20);
                     }
