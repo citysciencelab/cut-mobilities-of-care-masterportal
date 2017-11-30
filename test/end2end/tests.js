@@ -17,7 +17,7 @@ function Tests (driver) {
     test.describe("MasterTests", function () {
         this.timeout(25000);
         test.before(function () {
-            driver.get("https://localhost:9001/portal/master?layerIDs=717,1562&visibility=true,true&transparency=0,0&center=566465.123,5935135.123&zoomlevel=6");
+            driver.get("https://localhost:9001/portal/master?layerIDs=717,1562&visibility=true,true&transparency=0,0&center=566465.123,5935135.123&zoomlevel=6&query=Neuenfelder Straße,19");
         });
 
         // --- ParametricUrl ---

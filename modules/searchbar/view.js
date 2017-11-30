@@ -108,7 +108,7 @@ define([
             this.render();
 
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                $("#searchInput").val(this.model.get("placeholder"));
+                $("#searchInput").attr("value", this.model.get("placeholder"));
             }
             $("#searchInput").blur();
             // bedarfsweises Laden der Suchalgorythmen
@@ -204,7 +204,7 @@ define([
         * @param {string} searchstring - Der einzufügende Searchstring
         */
         setSearchbarString: function (searchstring) {
-            $("#searchInput").val(searchstring);
+            $("#searchInput").attr("value", searchstring);
         },
         /**
         * @description Verbirgt die Menubar
@@ -511,16 +511,16 @@ define([
         toggleStyleForRemoveIcon: function (evt) {
             if (evt.type === "focusin") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                    if ($("#searchInput").val() === this.model.get("placeholder")) {
-                        $("#searchInput").val("");
+                    if ($("#searchInput").attr("value") === this.model.get("placeholder")) {
+                        $("#searchInput").attr("value", "");
                     }
                 }
                 $(".btn-deleteSearch").css("border-color", "#66afe9");
             }
             else if (evt.type === "focusout") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                    if ($("#searchInput").val() === "") {
-                        $("#searchInput").val(this.model.get("placeholder"));
+                    if ($("#searchInput").attr("value") === "") {
+                        $("#searchInput").attr("value", this.model.get("placeholder"));
                     }
                 }
                 $(".btn-deleteSearch").css("border-color", "#cccccc");
@@ -531,7 +531,7 @@ define([
         */
         deleteSearchString: function () {
             this.model.setSearchString("");
-            $("#searchInput").val("");
+            $("#searchInput").attr("value", "");
             $("#searchInput + span").hide();
             this.focusOnEnd($("#searchInput"));
             this.hideMarker();
