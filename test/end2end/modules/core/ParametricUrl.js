@@ -51,15 +51,16 @@ function ParametricUrlTests (driver) {
     test.describe("query", function () {
         test.it("should find \"Neuenfelder Straße,19\" in Searchbar input", function () {
             driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
-            driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//input[@id='searchInput' and @value='NeuenfelderStraße,19']")), 9000);
-            var hit = driver.findElement(webdriver.By.xpath("//input[@id='searchInput' and @value='NeuenfelderStraße,19']"));
+            driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//input[@id='searchInput' and @value='Neuenfelder Straße,19']")), 9000);
+            var hit = driver.findElement(webdriver.By.xpath("//input[@id='searchInput' and @value='Neuenfelder Straße,19']"));
             expect(hit).to.exist;
         });
     });
     test.describe("query", function () {
         test.it("should center to Neuenfelder Straße,19", function () {
             driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
-            driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//input[@id='searchInput' and @value='NeuenfelderStraße,19']")), 9000);
+            driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//input[@id='searchInput' and @value='Neuenfelder Straße,19']")), 9000);
+            driver.wait(webdriver.until.elementLocated(webdriver.By.id("searchMarker")), 9000);
             var center;
 
             function getCenter () {
