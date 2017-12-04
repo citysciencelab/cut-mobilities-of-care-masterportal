@@ -230,6 +230,7 @@ define([
             if (this.model.getInitSearchString() !== undefined && this.model.get("hitList").length === 1) {
                 this.hitSelected();
             }
+            $("#searchInput + span").show();
             this.model.unset("initSearchString", true);
         },
         prepareAttrStrings: function (hitlist) {
@@ -531,7 +532,7 @@ define([
         */
         deleteSearchString: function () {
             this.model.setSearchString("");
-            $("#searchInput").attr("value", "");
+            $("#searchInput").val("");
             $("#searchInput + span").hide();
             this.focusOnEnd($("#searchInput"));
             this.hideMarker();
