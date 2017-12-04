@@ -106,7 +106,6 @@ define([
         *
         */
         createRecommendedList: function () {
-
             var max = this.get("recommandedListLength"),
                 recommendedList = [];
 

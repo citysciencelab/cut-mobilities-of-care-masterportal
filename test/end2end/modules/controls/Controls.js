@@ -30,9 +30,9 @@ function ControlTests (driver) {
 
             fullscreen.click();
 
-            driver.takeScreenshot().then(function (data) {
-                writeScreenshot(data, "Fullscreen.png");
-            });
+            // driver.takeScreenshot().then(function (data) {
+            //     writeScreenshot(data, "Fullscreen.png");
+            // });
             driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//div[@id='fullScreen']/div/span[@class='glyphicon glyphicon-remove']")), 9000);
             driver.executeScript(checkFullscreen).then(function (fullscreen) {
                 expect(fullscreen).to.be.true;
@@ -45,9 +45,9 @@ function ControlTests (driver) {
 
               fullscreen.click();
 
-              driver.takeScreenshot().then(function (data) {
-                writeScreenshot(data, "FullscreenBack.png");
-              });
+              // driver.takeScreenshot().then(function (data) {
+              //   writeScreenshot(data, "FullscreenBack.png");
+              // });
 
               driver.executeScript(checkFullscreen).then(function (fullscreen) {
                   expect(fullscreen).to.be.false;

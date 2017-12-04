@@ -25,6 +25,7 @@ function SuchTests (driver) {
           });
 
           test.it("should find Searchhits for 'haus' in 'festgestellt' ", function () {
+              searchbar.clear();
               searchbar.sendKeys("haus");
               searchButton.click();
               driver.wait(webdriver.until.elementLocated(webdriver.By.xpath("//li[text()='festgestellt']")), 9000);
@@ -105,9 +106,9 @@ function SuchTests (driver) {
                   hit.click();
               });
 
-              driver.takeScreenshot().then(function (data) {
-                writeScreenshot(data, "Stadtteil.png");
-              });
+              // driver.takeScreenshot().then(function (data) {
+              //   writeScreenshot(data, "Stadtteil.png");
+              // });
 
               driver.executeScript(getCenter).then(function (center) {
                   expect(this.center).to.not.equal(center);
