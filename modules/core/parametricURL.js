@@ -191,20 +191,7 @@ define([
 
             this.set("zoomLevel", value);
         },
-        parseConfig: function (result) {
-            var config = _.values(_.pick(result, "CONFIG"))[0];
-
-            if (config.slice(-5) === ".json") {
-                this.setConfig(config);
-            }
-            else {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Config-Parameter verlangt eine Datei mit der Endung \".json\".</small>",
-                    kategorie: "alert-warning"
-                });
-            }
-        },
-        parseIsInitOpen: function (result) {
+       parseIsInitOpen: function (result) {
             this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
         parseStartupModul: function (result) {
@@ -280,9 +267,6 @@ define([
 
             if (_.has(result, "BEZIRK")) {
                 this.parseBezirk(result);
-            }
-            if (_.has(result, "CONFIG")) {
-                this.parseConfig(result);
             }
 
             /**
