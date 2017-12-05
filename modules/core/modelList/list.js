@@ -5,6 +5,7 @@ define([
     "modules/core/modelList/layer/wfs",
     "modules/core/modelList/layer/geojson",
     "modules/core/modelList/layer/group",
+    "modules/core/modelList/layer/SensorThings",
     "modules/core/modelList/folder/model",
     "modules/core/modelList/tool/model",
     "modules/core/modelList/staticlink/model",
@@ -17,6 +18,7 @@ define([
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
         StyleList = require("modules/layer/wfsStyle/list"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
+        SensorThingsLayer = require("modules/core/modelList/layer/SensorThings"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
@@ -101,6 +103,9 @@ define([
                 }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
+                }
+                else if (attrs.typ === "SensorThings") {
+                    return new SensorThingsLayer(attrs, options);
                 }
             }
             else if (attrs.type === "folder") {

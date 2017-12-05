@@ -275,10 +275,6 @@
     {
       "Layer": [
         {
-          "id": "8194",
-          "visibility": false
-        },
-        {
           "id":"2128",
           "styleId":"2128",
           "clusterDistance":0

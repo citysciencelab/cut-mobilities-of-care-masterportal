@@ -9,8 +9,8 @@ define(function () {
 
             ["EPSG:4326", "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
         ],
-       layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
-       restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
+       layerConf: "../node_modules/lgv-config/services-internet.json",
+       restConf: "../node_modules/lgv-config/rest-services-internet.json",
        styleConf: "../node_modules/lgv-config/style.json",
        proxyURL: "/cgi-bin/proxy.cgi",
        mouseHover: {
