@@ -10,6 +10,7 @@ define(function (require) {
         initialize: function () {
             this.superInitialize();
             var channel = Radio.channel("WFSLayer");
+            // console.log(this);
         },
 
         /**
@@ -89,13 +90,14 @@ define(function (require) {
                 async: true,
                 type: "GET",
                 context: this,
-                success: function (data) {
+                success: function (response) {
+                    debugger;
                     Radio.trigger("Util", "hideLoader");
                     try {
                         var wfsReader = new ol.format.WFS({
                                 featureNS: this.get("featureNS")
                             }),
-                            features = wfsReader.readFeatures(data);
+                            features = wfsReader.readFeatures(response);
 
                         this.getLayerSource().addFeatures(features);
                         this.set("loadend", "ready");
@@ -315,7 +317,6 @@ define(function (require) {
         createLegendURL: function () {
             if (!this.get("legendURL").length) {
                 var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
-
                 this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
             }
         },
