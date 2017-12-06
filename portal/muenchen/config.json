@@ -4,7 +4,7 @@
     "portalTitle": {
       "title": "Geoportal München",
       "logo": "kleineswappen.jpg",
-      "link": "https://www.muenchen.de/rathaus/Stadtverwaltung/Kommunalreferat/geodatenservice.html",
+      "link": "http://www.geodatenservice-muenchen.de",
       "tooltip": "Geodatenservice München"
     },
     "searchBar": {
@@ -21,32 +21,17 @@
             "minChars": 3,
             "suggestServiceId": "4",
             "geosearchServiceId": "5",
-            "extent": [277620.0, 5231960.0, 918470.0, 6100290.0],
+            "extent": [4440415.857659, 5304776.479065, 4488492.61182, 5360062.915772],
             "suggestCount": 10,
-            "epsg": "EPSG:25832",
+            "epsg": "EPSG:31468",
             "filter": "filter=(typ:*)",
             "score": 0.6
-        },
-        "specialWFS": {
-            "minChar": 3,
-            "definitions": [
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
-                    "name": "bplan"
-                },
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
-                    "name": "bplan"
-                }
-            ]
         },
         "visibleWFS": {
             "minChars": 3
         },
         "zoomLevel": 9,
-        "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
+        "placeholder": "Suche nach Adresse"
     },
     "mapView": {
         "backgroundImage": "/../lgv-config/img/backgroundCanvas.jpeg",
@@ -135,29 +120,6 @@
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
           },
-          "print": {
-            "name": "Karte drucken",
-            "glyphicon": "glyphicon-print",
-            "printID": "99999",
-            "title": "Master",
-            "gfi": true,
-            "outputFilename": "DruckPDF",
-            "gfiMarker": {
-              "outerCircle": {
-                "fill": false,
-                "pointRadius": 8,
-                "stroke": true,
-                "strokeColor": "#ff0000",
-                "strokeWidth": 3
-              },
-              "point": {
-                "fill": true,
-                "pointRadius": 1,
-                  "fillColor": "#000000",
-                  "stroke": false
-                }
-            }
-          },
           "searchByCoord": {
             "name": "Koordinatensuche",
             "glyphicon": "glyphicon-record"
@@ -165,16 +127,6 @@
           "kmlimport": {
             "name": "KML Import",
             "glyphicon": "glyphicon-import"
-          },
-          "wfsFeatureFilter": {
-            "name": "Filter",
-            "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
-          },
-          "extendedFilter": {
-            "name": "Erweiterter Filter",
-            "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
           },
           "draw": {
             "name": "Zeichnen / Schreiben",
@@ -198,14 +150,14 @@
           "children": {
             "staticlinks": [
               {
-                "name": "Haftungsausschluss",
+                "name": "Geowerkstatt Hamburg",
                 "glyphicon": "glyphicon-globe",
-                "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+                "url": "http://www.hamburg.de/geowerkstatt/"
               },
               {
-                "name": "Hamburg",
+                "name": "Geodatenservice München",
                 "glyphicon": "glyphicon-globe",
-                "url": "http://www.hamburg.de"
+                "url": "http://www.geodatenservice-muenchen.de"
               }
             ]
           }
