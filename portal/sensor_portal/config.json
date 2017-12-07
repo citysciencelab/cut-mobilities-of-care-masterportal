@@ -170,7 +170,22 @@
     {
       "Layer": [
         {
-          "id": "999999"
+          "id": "999999",
+          "styleId": "937",
+          "visibility": true
+        },
+        {
+          "id": "1711",
+          "styleId": "1711",
+          "visibility": false,
+          "layerAttribution": "<span>Attributierung für Fachlayer</span>",
+          "mouseHoverField": ["name", "strasse"],
+          "searchField": "name"
+        },
+        {
+          "id" : "937",
+        "styleId": "937",
+                  "visibility": false
         }
       ]
     }

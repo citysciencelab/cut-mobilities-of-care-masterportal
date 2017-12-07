@@ -91,7 +91,6 @@ define(function (require) {
                 type: "GET",
                 context: this,
                 success: function (response) {
-                    debugger;
                     Radio.trigger("Util", "hideLoader");
                     try {
                         var wfsReader = new ol.format.WFS({
