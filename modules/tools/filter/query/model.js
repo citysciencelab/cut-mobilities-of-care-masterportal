@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var SnippetDropdownModel = require("modules/snippets/dropDown/model"),
+    var SnippetDropdownModel = require("modules/snippets/dropdown/model"),
         SnippetSliderModel = require("modules/snippets/slider/model"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         QueryModel;

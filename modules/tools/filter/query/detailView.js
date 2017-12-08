@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var SnippetDropdownView = require("modules/snippets/dropDown/view"),
+    var SnippetDropdownView = require("modules/snippets/dropdown/view"),
         ValueView = require("modules/snippets/value/view"),
         CheckBoxView = require("modules/snippets/checkbox/view"),
         Template = require("text!modules/tools/filter/query/templateDetailView.html"),
