@@ -1,8 +1,8 @@
 define(function (require) {
 
-    var SnippetDropdownModel = require("modules/Snippets/dropDown/model"),
-        SnippetSliderModel = require("modules/Snippets/slider/model"),
-        SnippetCheckboxModel = require("modules/Snippets/checkbox/model"),
+    var SnippetDropdownModel = require("modules/snippets/dropDown/model"),
+        SnippetSliderModel = require("modules/snippets/slider/model"),
+        SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         QueryModel;
 
     QueryModel = Backbone.Model.extend({

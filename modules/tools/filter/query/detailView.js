@@ -1,10 +1,10 @@
 define(function (require) {
 
-    var SnippetDropdownView = require("modules/Snippets/dropDown/view"),
-        ValueView = require("modules/Snippets/value/view"),
-        CheckBoxView = require("modules/Snippets/checkbox/view"),
+    var SnippetDropdownView = require("modules/snippets/dropDown/view"),
+        ValueView = require("modules/snippets/value/view"),
+        CheckBoxView = require("modules/snippets/checkbox/view"),
         Template = require("text!modules/tools/filter/query/templateDetailView.html"),
-        SnippetSliderView = require("modules/Snippets/slider/range/view"),
+        SnippetSliderView = require("modules/snippets/slider/range/view"),
         QueryDetailView;
 
     QueryDetailView = Backbone.View.extend({
