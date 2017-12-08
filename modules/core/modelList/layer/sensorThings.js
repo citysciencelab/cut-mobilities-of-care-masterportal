@@ -16,12 +16,9 @@ define(function (require) {
             this.setLayerSource(new ol.source.Vector());
         },
 
-        createClusterLayerSource: function () {
-        },
-
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
-                source: (this.has("clusterDistance") === true) ? this.getClusterLayerSource() : this.getLayerSource(),
+                source: this.getLayerSource(),
                 name: this.get("name"),
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
@@ -33,11 +30,11 @@ define(function (require) {
             this.updateData();
         },
 
-        createLegendURL: function () {
-        },
+        // createLegendURL: function () {
+        // },
 
-        setAttributes: function () {
-        },
+        // setAttributes: function () {
+        // },
 
         updateData: function () {
             Radio.trigger("Util", "showLoader");
@@ -63,11 +60,22 @@ define(function (require) {
                         // Request with filter
                         var xy = response.value[i].Locations[0].location.geometry.coordinates,
                             res = response.value[i].Datastreams[0].Observations[0].result, //charging or available
-                            prop = response.value[0].properties;
+                            prop = response.value[0].properties,
                             xyTransfrom = ol.proj.transform(xy, "EPSG:4326", Config.view.epsg),
                             point = new ol.Feature({
                                 geometry: new ol.geom.Point(xyTransfrom)
                             });
+
+                            // set color
+                            if (res === "available") {
+                                point.setStyle(this.getAvailableStyle);
+                            }
+                            else if (res === "charging") {
+                                point.setStyle(this.getChargingStyle);
+                            }
+                            else {
+                                console.log("False Type" + res);
+                            };
 
                         points.push(point);
                     };
@@ -75,18 +83,16 @@ define(function (require) {
                     console.log(points);
                     // Features zum Vektorlayer hinzufuegen
                     this.getLayerSource().addFeatures(points);
-                    this.getLayerSource()
 
                     Radio.trigger("Util", "hideLoader");
                     try {
                         // this.set("loadend", "ready");
                         Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), points);
-                        // für WFS-T wichtig --> benutzt den ol-default Style
-                        // if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
-                        //     this.styling();
-                        // }
 
-                        this.getLayer().setStyle(this.get("style"));
+
+                        // this.getLayer().setStyle(this.get("style"));
+                        // this.getLayer().setStyle(this.getChargingStyle);
+                        // this.getLayer().setStyle(this.getAvailableStyle);
                     }
                     catch (err) {
                         console.log(err.message);
@@ -96,7 +102,41 @@ define(function (require) {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
-        }
+        },
+
+        getChargingStyle: function () {
+            var featureStyle = new ol.style.Style({
+                image:  new ol.style.Circle({
+                    radius: 5,
+                    fill: new ol.style.Fill({
+                        color: "rgba(255, 0, 0, 1.0)"
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: "rgba(255, 0, 0, 0.6)",
+                        width: 3
+                    })
+                })
+            });
+
+            return featureStyle;
+        },
+
+        getAvailableStyle: function () {
+            var featureStyle = new ol.style.Style({
+                image:  new ol.style.Circle({
+                    radius: 5,
+                    fill: new ol.style.Fill({
+                        color: "rgba(0, 255, 0, 1.0)"
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: "rgba(0, 255, 0, 0.6)",
+                        width: 3
+                    })
+                })
+            });
+
+            return featureStyle;
+        },
     });
 
     return SensorThingsLayer;
