@@ -35,7 +35,7 @@ define([
          */
         parse: function (response) {
             // Es gibt Layer in einem Dienst, die für unterschiedliche Portale unterschiedliche Daten/GFIs liefern --> z.B. Hochwasserrisikomanagement
-            // Da alle Layer demselben Metadtaensatz zugordnet sind, werden sie über die Id gelöscht
+            // Da alle Layer demselben Metadatansatz zugordnet sind, werden sie über die Id gelöscht
             if (_.has(Config.tree, "layerIDsToIgnore")) {
                 response = this.deleteLayersByIds(response, Config.tree.layerIDsToIgnore);
             }

@@ -172,7 +172,8 @@
         {
           "id": "999999",
           "styleId": "937",
-          "visibility": true
+          "visibility": true,
+          "mouseHoverField": []
         },
         {
           "id": "1711",
@@ -184,8 +185,8 @@
         },
         {
           "id" : "937",
-        "styleId": "937",
-                  "visibility": false
+          "styleId": "937",
+          "visibility": false
         }
       ]
     }

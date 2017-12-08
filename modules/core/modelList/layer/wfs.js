@@ -10,7 +10,6 @@ define(function (require) {
         initialize: function () {
             this.superInitialize();
             var channel = Radio.channel("WFSLayer");
-            // console.log(this);
         },
 
         /**
