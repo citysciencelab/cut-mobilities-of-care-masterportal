@@ -24,7 +24,6 @@ define(function (require) {
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
-                    console.log("isSelected");
                     if (this.has("childLayerSources") === false && _.isUndefined(this.getLayerSource())) {
                         this.createLayerSource();
                     }

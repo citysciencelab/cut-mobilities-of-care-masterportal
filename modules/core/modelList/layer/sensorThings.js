@@ -10,6 +10,35 @@ define(function (require) {
 
         initialize: function () {
             this.superInitialize();
+            var channel = Radio.channel("sensorThings");
+
+            channel.on({
+                "updateFromWebSocket": this.updateFromWebSocket
+            }, this);
+
+            var connection = new WebSocket("ws://127.0.0.1:1234");
+
+            // The connection ist open
+            connection.onopen = function () {
+                console.log("Websocket is open");
+            };
+
+            // Log errors
+            connection.onerror = function (error) {
+                console.log("Websocket Error: " + error);
+            };
+
+            // Log messages from the server
+            connection.onmessage = function (ev) {
+                console.log("Server: " + ev.data);
+                Radio.trigger("sensorThings", "updateData", JSON.parse(ev.data));
+            };
+
+            // The connection is terminated
+            connection.onclose = function () {
+                console.log("Websocket ist beendet");
+            }
+
         },
 
         createLayerSource: function () {
@@ -30,78 +59,61 @@ define(function (require) {
             this.updateData();
         },
 
-        // createLegendURL: function () {
-        // },
-
-        // setAttributes: function () {
-        // },
-
+        /**
+         * [initial request to sensorthings-api]
+         * @return {[type]} [description]
+         */
         updateData: function () {
-            Radio.trigger("Util", "showLoader");
-            $.ajax({
-                url: this.get("url"),
-                // data: params,
-                contentType: "application/json; charset=utf-8",
-                async: true,
-                type: "GET",
-                context: this,
+            var things = this.getResponse();
+            this.drawPoints(things);
+            Radio.trigger("Util", "hideLoader");
+        },
 
-                // Behandlung des Response
-                success: function (response) {
-                    var points = [];
+        /**
+         * [updates by event from Websocket]
+         * @param  {[type]} things [description]
+         * @return {[type]}        [description]
+         */
+        updateFromWebSocket: function (things) {
+            console.log(things);
+            this.drawPoints(things);
+            Radio.trigger("Util", "hideLoader");
+        },
 
-                    for (var i = 0; i < response.value.length; i++) {
+        /**
+         * [drawPoints by given response]
+         * @param  {[type]} things [description]
+         * @return {[type]}        [description]
+         */
+        drawPoints: function (things) {
+            var points = [];
+            // Iterate over things
+            for (var i = 0; i < things.value.length; i++) {
+                var xy = things.value[i].Locations[0].location.geometry.coordinates,
+                    obsLen = things.value[i].Datastreams[0].Observations.length, // newest observation
+                    res = things.value[i].Datastreams[0].Observations[obsLen - 1].result, //charging or available
+                    prop = things.value[i].properties,
+                    xyTransfrom = ol.proj.transform(xy, "EPSG:4326", Config.view.epsg),
+                    point = new ol.Feature({
+                        geometry: new ol.geom.Point(xyTransfrom)
+                    });
 
-                        // **********************************************************
-                        // Für Abfragen nach Locations
-                        // var xy = response.value[i].location.coordinates,
-                        // *********************************************************
-
-                        // Request with filter
-                        var xy = response.value[i].Locations[0].location.geometry.coordinates,
-                            res = response.value[i].Datastreams[0].Observations[0].result, //charging or available
-                            prop = response.value[0].properties,
-                            xyTransfrom = ol.proj.transform(xy, "EPSG:4326", Config.view.epsg),
-                            point = new ol.Feature({
-                                geometry: new ol.geom.Point(xyTransfrom)
-                            });
-
-                            // set color
-                            if (res === "available") {
-                                point.setStyle(this.getAvailableStyle);
-                            }
-                            else if (res === "charging") {
-                                point.setStyle(this.getChargingStyle);
-                            }
-                            else {
-                                console.log("False Type" + res);
-                            };
-
-                        points.push(point);
+                    // set color
+                    if (res === "available") {
+                        point.setStyle(this.getAvailableStyle);
+                    }
+                    else if (res === "charging") {
+                        point.setStyle(this.getChargingStyle);
+                    }
+                    else {
+                        point.setStyle(this.getFaileStyle);
+                        // console.log("False Type" + res);
                     };
+                points.push(point);
+            };
 
-                    console.log(points);
-                    // Features zum Vektorlayer hinzufuegen
-                    this.getLayerSource().addFeatures(points);
-
-                    Radio.trigger("Util", "hideLoader");
-                    try {
-                        // this.set("loadend", "ready");
-                        Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), points);
-
-
-                        // this.getLayer().setStyle(this.get("style"));
-                        // this.getLayer().setStyle(this.getChargingStyle);
-                        // this.getLayer().setStyle(this.getAvailableStyle);
-                    }
-                    catch (err) {
-                        console.log(err.message);
-                    }
-                },
-                error: function (jqXHR, errorText, error) {
-                    Radio.trigger("Util", "hideLoader");
-                }
-            });
+            // Add features to vectorlayer
+            this.getLayerSource().addFeatures(points);
         },
 
         getChargingStyle: function () {
@@ -110,10 +122,6 @@ define(function (require) {
                     radius: 5,
                     fill: new ol.style.Fill({
                         color: "rgba(255, 0, 0, 1.0)"
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: "rgba(255, 0, 0, 0.6)",
-                        width: 3
                     })
                 })
             });
@@ -127,16 +135,55 @@ define(function (require) {
                     radius: 5,
                     fill: new ol.style.Fill({
                         color: "rgba(0, 255, 0, 1.0)"
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: "rgba(0, 255, 0, 0.6)",
-                        width: 3
                     })
                 })
             });
 
             return featureStyle;
         },
+
+        getFaileStyle: function () {
+            var featureStyle = new ol.style.Style({
+                image:  new ol.style.Circle({
+                    radius: 5,
+                    fill: new ol.style.Fill({
+                        color: "rgba(0, 0, 255, 1.0)"
+                    })
+                })
+            });
+
+            return featureStyle;
+        },
+
+        /**
+         * [call to sensorthings by initial]
+         * @return {[type]} [description]
+         */
+        getResponse: function () {
+            var response;
+            Radio.trigger("Util", "showLoader");
+            $.ajax({
+                url: this.get("url"),
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                type: "GET",
+                context: this,
+
+                // Behandlung des Response
+                success: function (resp) {
+                    response = resp;
+                },
+                error: function (jqXHR, errorText, error) {
+                    Radio.trigger("Util", "hideLoader");
+                }
+            });
+
+            return response;
+        },
+
+        setAttributes: function () {
+
+        }
     });
 
     return SensorThingsLayer;

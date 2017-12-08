@@ -12,7 +12,6 @@ define([
             },
             initialize: function () {
                 var channel = Radio.channel("Window");
-
                 channel.on({
                     "toggleWin": this.setParams,
                     "closeWin": this.setVisible,
