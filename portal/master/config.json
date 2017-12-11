@@ -317,11 +317,13 @@
           "styleField": "kategorie"
         },
         {
-          "id": "4926",
+          "id": "5708",
           "visibility": false,
           "styleable": true,
           "geomType": "Polygon",
-          "attributesToStyle": ["ErreichbareArbeitsplaetzein30Min"]
+          "attributesToStyle":[
+            "Pkw_AP30"
+          ]
         },
         {
           "id": "2003",
