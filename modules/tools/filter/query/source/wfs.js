@@ -249,7 +249,7 @@ define(function (require) {
         collectSelectableOptions: function (features, selectedAttributes, allAttributes) {
             var selectableOptions = [];
 
-            if (allAttributes.length === 0) {
+            if (_.isUndefined(allAttributes) === false && allAttributes.length === 0) {
                 selectableOptions = this.getRemainingAttributeValues(allAttributes, features);
             }
             else {
