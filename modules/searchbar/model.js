@@ -71,11 +71,41 @@ define([
             tempArray.push(value);
             this.set(attribute, _.flatten(tempArray));
         },
+
+        /**
+         * changes the filename extension of given filepath
+         * @param  {[type]} hitlist [description]
+         * @param  {[type]} ext     [description]
+         * @return {[type]}         [description]
+         */
+        changeFileExtension: function (src, ext) {
+            if (_.isUndefined(src)) {
+                return src;
+            }
+            if (src.substring(src.lastIndexOf("."), src.length) !== ext) {
+                return src.substring(0, src.lastIndexOf(".")) + ext;
+            }
+            return src;
+        },
+        /**
+         * crops names of hits to length zeichen
+         * @param  {[type]} hitlist [the search result]
+         * @param  {[type]} length  [name length]
+         */
+        shortenString: function (s, length) {
+            if (_.isUndefined(s)) {
+                return s;
+            }
+            if (s.length > length && length > 0) {
+                return s.substring(0, length).trim() + "..";
+            }
+            return s;
+        },
+
         /**
         *
         */
         createRecommendedList: function () {
-
             var max = this.get("recommandedListLength"),
                 recommendedList = [];
 
@@ -114,5 +144,5 @@ define([
         }
     });
 
-    return new SearchbarModel();
+    return SearchbarModel;
 });

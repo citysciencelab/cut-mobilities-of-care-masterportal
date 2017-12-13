@@ -49,7 +49,9 @@ define(function () {
             // Pulkovo
             ["EPSG:4178", "+proj=longlat +ellps=krass +towgs84=24,-123,-94,0.02,-0.25,-0.13,1.1 +no_defs"],
             // Organisations
-            ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"]
+            ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"],
+            // WGS84
+            ["EPSG:4326", "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
         ],
         footer: {
             visibility: true,
@@ -63,13 +65,18 @@ define(function () {
             ]
         },
         quickHelp: true,
+        portalConf: "../../portal/master/",
         layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
         styleConf: "../node_modules/lgv-config/style.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,
-        mouseHover: true,
+        mouseHover: {
+            numFeaturesToShow: 2,
+            infoText: "(weitere Objekte. Bitte zoomen.)"
+        },
+        isMenubarVisible: true,
         geoAPI: false,
         clickCounter: {}
     };

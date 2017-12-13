@@ -8,7 +8,7 @@ define([
 ], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, Radio) {
     "use strict";
     return Backbone.View.extend({
-        model: Searchbar,
+        model: new Searchbar(),
         id: "searchbar", // wird ignoriert, bei renderToDOM
         className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
         searchbarKeyNavSelector: "#searchInputUL",
@@ -108,7 +108,7 @@ define([
             this.render();
 
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                $("#searchInput").val(this.model.get("placeholder"));
+                $("#searchInput").attr("value", this.model.get("placeholder"));
             }
             $("#searchInput").blur();
             // bedarfsweises Laden der Suchalgorythmen
@@ -204,7 +204,7 @@ define([
         * @param {string} searchstring - Der einzufügende Searchstring
         */
         setSearchbarString: function (searchstring) {
-            $("#searchInput").val(searchstring);
+            $("#searchInput").attr("value", searchstring);
         },
         /**
         * @description Verbirgt die Menubar
@@ -216,21 +216,37 @@ define([
         *
         */
         renderRecommendedList: function () {
-            // if (this.model.get("isHitListReady") === true) {
-                var attr = this.model.toJSON(),
-                    // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
-                    // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
-                    template = _.template(SearchbarRecommendedListTemplate);
+            var attr = this.model.toJSON(),
+                template;
+                // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
+                // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+                this.prepareAttrStrings(attr.hitList);
+                template = _.template(SearchbarRecommendedListTemplate);
 
-                $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
-                $("ul.dropdown-menu-search").html(template(attr));
+            $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
+            $("ul.dropdown-menu-search").html(template(attr));
             // }
-            // Wird gerufen
-            if (this.model.getInitSearchString() !== undefined && this.model.get("hitList").length === 1) { // workaround für die initiale Suche von B-Plänen
+            // bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
+            if (this.model.getInitSearchString() !== undefined && this.model.get("hitList").length === 1) {
                 this.hitSelected();
             }
+            $("#searchInput + span").show();
             this.model.unset("initSearchString", true);
         },
+        prepareAttrStrings: function (hitlist) {
+            // kepps hit.names from overflowing
+            _.each(hitlist, function (hit) {
+                if (!_.isUndefined(hit.additionalInfo)) {
+                    if (hit.name.length + hit.additionalInfo.length > 50) {
+                        hit.shortName = this.model.shortenString(hit.name, 30);
+                        hit.additionalInfo = this.model.shortenString(hit.additionalInfo, 20);
+                    }
+                }
+                // IE 11 svg bug -> png
+                hit.imageSrc = this.model.changeFileExtension(hit.imageSrc, ".png");
+             }, this);
+        },
+
         /**
         *
         */
@@ -260,6 +276,8 @@ define([
         * Wird ausgeführt, wenn ein Eintrag ausgewählt oder bestätigt wurde.
         */
         hitSelected: function (evt) {
+            Radio.trigger("Filter", "resetFilter");
+
             var hit,
                 hitID;
 
@@ -281,7 +299,7 @@ define([
             // 3. Zoome ggf. auf Ergebnis
             Radio.trigger("GFI", "setIsVisible", false);
             // 4. Zoome ggf. auf Ergebnis
-            Radio.trigger("MapMarker", "zoomTo", hit);
+            Radio.trigger("MapMarker", "zoomTo", hit, 5000);
             // 5. Triggere Treffer über Radio
             // Wird benötigt für IDA und sgv-online, ...
             Radio.trigger("Searchbar", "hit", hit);
@@ -494,16 +512,16 @@ define([
         toggleStyleForRemoveIcon: function (evt) {
             if (evt.type === "focusin") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                    if ($("#searchInput").val() === this.model.get("placeholder")) {
-                        $("#searchInput").val("");
+                    if ($("#searchInput").attr("value") === this.model.get("placeholder")) {
+                        $("#searchInput").attr("value", "");
                     }
                 }
                 $(".btn-deleteSearch").css("border-color", "#66afe9");
             }
             else if (evt.type === "focusout") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                    if ($("#searchInput").val() === "") {
-                        $("#searchInput").val(this.model.get("placeholder"));
+                    if ($("#searchInput").attr("value") === "") {
+                        $("#searchInput").attr("value", this.model.get("placeholder"));
                     }
                 }
                 $(".btn-deleteSearch").css("border-color", "#cccccc");

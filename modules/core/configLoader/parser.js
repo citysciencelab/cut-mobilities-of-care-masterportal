@@ -41,7 +41,11 @@ define([
                 "getCategory": this.getCategory,
                 "getCategories": this.getCategories,
                 "getPortalConfig": this.getPortalConfig,
-                "getItemsByMetaID": this.getItemsByMetaID
+                "getItemsByMetaID": this.getItemsByMetaID,
+                "getSnippetInfos": function () {
+                    return this.get("snippetInfos");
+                },
+                "getInitVisibBaselayer" : this.getInitVisibBaselayer
             }, this);
 
             channel.on({
@@ -254,13 +258,13 @@ define([
             this.addItem(layer);
         },
 
-        addGeoJSONLayer: function (name, id, features) {
+        addGeoJSONLayer: function (name, id, geojson) {
             var layer = {
                 type: "layer",
                 name: name,
                 id: id,
                 typ: "GeoJSON",
-                features: features,
+                geojson: geojson,
                 transparent: true,
                 minScale: "0",
                 maxScale: "350000",
@@ -268,6 +272,8 @@ define([
                 layerAttribution: "nicht vorhanden",
                 legendURL: "",
                 isbaselayer: false,
+                isSelected: true,
+                isVisibleInTree: true,
                 cache: false,
                 datasets: []
             };
@@ -494,6 +500,20 @@ define([
             }, this);
 
             return layers;
+        },
+
+        /**
+         * Gibt den initial sichtbaren Baselayer aus der config.json zurück
+         * bei Array mehrer id wird nur die erste übergeben
+         * @return {String} layer - inital sichtbarer Baselayer
+         */
+        getInitVisibBaselayer: function () {
+            var layer = _.findWhere(this.getBaselayer().Layer, {visibility: true});
+
+            if (_.isArray(layer.id)) {
+                layer.id = layer.id[0];
+            };
+            return layer
         }
     });
 

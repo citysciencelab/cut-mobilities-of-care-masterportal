@@ -7,7 +7,7 @@ define([
 
     FullScreenView = Backbone.View.extend({
         className: "row",
-        template: _.template("<div class='full-screen-button col-md-1' title='Vollbild aktivieren'><span class='glyphicon glyphicon-fullscreen'></span></div>"),
+        template: _.template("<div class='full-screen-button' title='Vollbild aktivieren'><span class='glyphicon glyphicon-fullscreen'></span></div>"),
         events: {
             "click .full-screen-button": "toggleFullScreen"
         },

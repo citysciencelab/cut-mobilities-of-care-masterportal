@@ -112,7 +112,7 @@ define([
                      Radio.trigger("Parser", "addItemAtTop", layerToPush);
                  }
                  else if (_.isUndefined(layerConfigured)) {
-                     Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.", kategorie: "alert-warning" });
+                     Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning" });
                  }
             }, this);
 
@@ -147,6 +147,8 @@ define([
         parseCenter: function (result) {
             var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
 
+            // parse Strings to numbers
+            values = _.map(values, Number);
             this.set("center", values);
 
         },
@@ -189,7 +191,7 @@ define([
 
             this.set("zoomLevel", value);
         },
-        parseIsInitOpen: function (result) {
+       parseIsInitOpen: function (result) {
             this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
         parseStartupModul: function (result) {

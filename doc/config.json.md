@@ -44,6 +44,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |orientation|nein|String|"none"|Orientation ist eine Funktion zur Standortbestimmung des Nutzers. Mögliche Werte sind none (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
 |poi|nein|Boolean|false|Zeigt eine Liste von Features in der Umgebung an. Funktioniert nur wenn die Standortbestimmung (orientation) aktiviert ist. |
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
+|[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
 
 **Beispiel controls:**
 
@@ -60,7 +61,8 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
         "attributions": {
             "isInitOpenDesktop": true,
             "isInitOpenMobile": false
-        }
+        },
+        "overviewmap": true
       }
 
 ```
@@ -73,6 +75,28 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |----|-------------|---|-------|------------|
 |isInitOpenDesktop|nein|Boolean|true|Legt fest, ob die Attributions (Desktop-Ansicht) initial ausgeklappt werden sollen.|
 |isInitOpenMobile|nein|Boolean|false|Legt fest, ob die Attributions (Mobile-Ansicht) initial ausgeklappt werden sollen.|
+
+******
+### Portalconfig.controls.overviewmap ###
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|resolution|nein|Integer||Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|
+|baselayer|nein|String||Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss die Id aus der services.json angegeben werden die für das Portal in der config.js im Parameter layerConf steht.|
+
+**Beispiel overviewmap mit Parametern:**
+
+
+```
+#!json
+
+      "overviewmap": {
+          "resolution": 305.7487246381551,
+          "baselayer": "452"
+      }
+
+
+```
 
 ### Portalconfig.mapView ###
 
@@ -92,7 +116,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 ```
 #!json
 "mapView": {
-        "backgroundImage": "/../../components/lgv-config/img/backgroundCanvas.jpeg",
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [561210, 5932600],
         "options": [
         {
@@ -428,7 +452,7 @@ Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Men�
                 "glyphicon" : "glyphicon-search",
                 "serviceId" : "6",
                 "StoredQueryID" : "Flurstueck",
-                "configJSON":"/../../components/lgv-config/gemarkungen_hh.json",
+                "configJSON":"/../../node_modules/lgv-config/gemarkungen_hh.json",
                 "parcelDenominator" : false
             },
             {...}
@@ -521,7 +545,9 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isActive|nein|Boolean||Wird der Filter initial ausgeführt|
 |isSelected|nein|Boolean||Ist der Filter initial ausgewählt|
 |isVisible|nein|Boolean|||
+|allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
 |name|nein|String||Name des Filters
+|info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
 |predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
 |attributeWhiteList|nein|Array||Filterbare Attribute
 **Beispiel:**
@@ -534,6 +560,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
      "glyphicon": "glyphicon-filter",
      "isGeneric": false,
      "isInitOpen": true,
+     "allowMultipleQueriesPerLayer": false,
      "predefinedQueries": [
          {
              "layerId": "8190",
@@ -757,7 +784,7 @@ Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "StoredQueryID": "Flurstueck",
-            "configJSON": "/../../components/lgv-config/gemarkungen_hh.json",
+            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure": {

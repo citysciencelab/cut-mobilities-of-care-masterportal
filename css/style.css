@@ -32,6 +32,7 @@
 @import "../modules/mouseHover/style.css";
 @import "../modules/featurelister/style.css";
 @import "../modules/controls/mousePosition/style.css";
+@import "../modules/controls/overviewmap/style.css";
 @import "../modules/contact/style.css";
 @import "../modules/tools/saveSelection/style.css";
 @import "../modules/tools/download/style.css";
@@ -51,9 +52,11 @@
 @import "../modules/tools/gfi/themes/reisezeiten/style.css";
 @import "../modules/tools/gfi/themes/sgvonline/style.css";
 @import "../modules/tools/gfi/themes/verkehrsstaerken/style.css";
+@import "../modules/tools/gfi/themes/schulinfo/style.css";
 @import "../modules/Snippets/slider/style.css";
 @import "../modules/Snippets/dropdown/style.css";
+@import "../modules/Snippets/checkbox/style.css";
 @import "../modules/tools/filter/style.css";
 @import "../modules/tools/filter/query/style.css";
-@import "../portalconfigs/fluechtlingsunterkuenfte/table/style.css";
 @import "../modules/sidebar/style.css";
+@import "../portalconfigs/fluechtlingsunterkuenfte/table/style.css";

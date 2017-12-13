@@ -17,6 +17,8 @@ define(function (require) {
         SgvOnlineThemeView = require("modules/tools/gfi/themes/sgvonline/view"),
         VerkehrsStaerkenTheme = require("modules/tools/gfi/themes/verkehrsstaerken/model"),
         VerkehrsStaerkenThemeView = require("modules/tools/gfi/themes/verkehrsstaerken/view"),
+        SchulInfoTheme = require("modules/tools/gfi/themes/schulinfo/model"),
+        SchulInfoThemeView = require("modules/tools/gfi/themes/schulinfo/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -42,6 +44,9 @@ define(function (require) {
             else if (attrs.gfiTheme === "verkehrsstaerken") {
                 return new VerkehrsStaerkenTheme(attrs, options);
             }
+            else if (attrs.gfiTheme === "schulinfo") {
+                return new SchulInfoTheme(attrs, options);
+            }
             else {
                 return new DefaultTheme(attrs, options);
             }
@@ -54,13 +59,12 @@ define(function (require) {
                     });
                 },
                 "change:isReady": function () {
-                    // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                     if (_.contains(this.pluck("isReady"), false) === false) {
+                    // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                         // WMS Layer die beim Klickpunkt keine GFIs haben
                         var removeModels = this.filter(function (model) {
                             return model.get("gfiContent") === undefined;
                         });
-
                         this.remove(removeModels);
                         this.forEach(this.addView, this);
                         // listener in modules/tools/gfi/model.js
@@ -100,6 +104,10 @@ define(function (require) {
                     new VerkehrsStaerkenThemeView({model: model});
                     break;
                 }
+                case "schulinfo": {
+                    new SchulInfoThemeView({model: model});
+                    break;
+                }
                 default: {
                     new DefaultThemeView({model: model});
                 }
@@ -109,6 +117,7 @@ define(function (require) {
         appendTheme: function (value) {
             this.setAllInVisible();
             this.at(value).setIsVisible(true);
+            Radio.trigger("MouseHover", "hide");
         },
 
         /**

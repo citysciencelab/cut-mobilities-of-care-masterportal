@@ -11,7 +11,20 @@
     box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 }
 
-.mouseHover span:first-child {
+.mouseHover .title {
     font-size: 13px;
     font-weight: bold;
+}
+.mouseHover .info {
+    font-size: 13px;
+    /*font-weight: normal;*/
+    font-style: italic;
+}
+
+.tooltip.bottom {
+    margin-top: 8px;
+}
+
+.tooltip.top {
+    margin-top: -8px;
 }

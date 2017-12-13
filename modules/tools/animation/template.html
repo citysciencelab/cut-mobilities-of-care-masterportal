@@ -15,7 +15,7 @@
 <% if (kreis !== "") { %>
 <div class="form-group">
     <select id="select-gemeinde" class="form-control">
-        <option disabled selected hidden>Gemeinde auswählen</option>
+        <option disabled selected hidden>Amt/Samtgemeinde auswählen</option>
         <% _.each(gemeinden, function (element) { %>
             <% if (typeof gemeinde !== "undefined" && element === gemeinde) { %>
                 <option selected><%= element %></option>

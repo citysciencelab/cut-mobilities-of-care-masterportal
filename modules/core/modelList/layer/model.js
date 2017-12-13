@@ -16,13 +16,15 @@ define(function (require) {
             transparency: 0,
             // der Index der die Reihenfolge der selektierten Models beim Zeichnen in "Auswahl der Themen" bestimmt
             selectionIDX: 0,
-            layerInfoClicked: false
+            layerInfoClicked: false,
+            minScale: "0",
+            maxScale: "1000000"
         },
-        initialize: function () {
+        superInitialize: function () {
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
-                    if (this.has("childLayerSources") === false) {
+                    if (this.has("childLayerSources") === false && _.isUndefined(this.getLayerSource())) {
                         this.createLayerSource();
                     }
                 },
@@ -53,6 +55,7 @@ define(function (require) {
                 "change:isVisibleInMap": function () {
                     // triggert das Ein- und Ausschalten von Layern
                     Radio.trigger("ClickCounter", "layerVisibleChanged");
+                    Radio.trigger("Layer", "layerVisibleChanged", this.getId(), this.getIsVisibleInMap());
                     this.toggleLayerOnMap();
                     this.toggleAttributionsInterval();
                 },
@@ -90,7 +93,6 @@ define(function (require) {
                 else {
                     this.collection.insertIntoSelectionIDX(this);
                 }
-
                 this.createLayerSource();
                 Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
                 this.setIsVisibleInMap(this.getIsSelected());

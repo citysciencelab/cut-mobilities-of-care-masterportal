@@ -15,6 +15,7 @@ define(function (require) {
             this.listenTo(this.model, {
                  "change:isVisible": this.appendTheme
             });
+
             this.gfiWindow = gfiWindow;
             this.render();
         },
@@ -34,6 +35,7 @@ define(function (require) {
                 oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
 
             if (value === true) {
+
                 if (_.isNaN(oldLeft)) {
                     oldLeft = 0;
                 }
@@ -43,7 +45,6 @@ define(function (require) {
                 currentView.$el.find(".gfi-title").text(this.model.get("name"));
                 this.appendChildren();
                 this.appendRoutableButton();
-
                 if (this.gfiWindow === "detached" && !isViewMobile) {
                     this.adjustGfiWindow(currentView, oldGfiWidth, oldLeft);
                 }

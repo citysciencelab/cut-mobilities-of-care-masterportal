@@ -199,7 +199,7 @@ define([
             });
         },
         /**
-        * Alle Layermodels von einem Leaffolder werden "selected" oder "unselected"
+        * Alle Layermodels von einem Leaffolder werden "selected" oder "deselected"
         * @param {Backbone.Model} model - folderModel
         */
         setIsSelectedOnChildLayers: function (model) {
@@ -407,7 +407,6 @@ define([
 
         addModelsByAttributes: function (attrs) {
             var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
-
             this.add(lightModels);
         },
 

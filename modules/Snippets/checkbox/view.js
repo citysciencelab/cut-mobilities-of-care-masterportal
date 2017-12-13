@@ -2,30 +2,47 @@ define(function (require) {
     require("bootstrap-toggle");
     var Model = require("modules/snippets/checkbox/model"),
         Template = require("text!modules/snippets/checkbox/template.html"),
-        CheckbosSnippetView;
+        CheckboxSnippetView;
 
-    CheckbosSnippetView = Backbone.View.extend({
-        model: {},
+    CheckboxSnippetView = Backbone.View.extend({
+        model: new Model(),
+        className: "checkbox-container",
         template: _.template(Template),
         events: {
-            "change .checkbox-toggle" : "setSelectedValues"
+            "change input": "setIsSelected"
         },
-        initialize: function (attr) {
-            this.model = new Model(attr);
+        initialize: function () {
+            this.listenTo(this.model, {
+                "renderView": this.render,
+                "removeView": this.remove
+            }, this);
         },
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            this.$el.find("input").bootstrapToggle();
-
+            this.initCheckbox();
             return this.$el;
         },
-        setSelectedValues: function (evt) {
-            var model = this.model.get("valuesCollection").models[0];
 
-            model.set("isChecked", $(evt.target).prop("checked"));
+        /**
+         * inits the Checkbox
+         */
+        initCheckbox: function () {
+            this.$el.find("input").bootstrapToggle({
+                on: this.model.get("textOn"),
+                off: this.model.get("textOff"),
+                size: this.model.get("size")
+            });
+        },
+
+        /**
+         * calls the function setIsSelected in the model
+         * @param {ChangeEvent} evt
+         */
+        setIsSelected: function (evt) {
+            this.model.setIsSelected($(evt.target).prop("checked"));
         }
     });
-    return CheckbosSnippetView;
+    return CheckboxSnippetView;
 });

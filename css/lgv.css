@@ -15,7 +15,7 @@ label {
 }
 
 
-#cursorGlyph {
+.lgv-container #cursorGlyph {
     position: absolute;
     z-index: 1000;
     cursor: none;
