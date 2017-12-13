@@ -62,7 +62,7 @@ define([
             this.$el.html(this.templateShow(attr));
             if (this.model.getIsVisibleInMap() === true) {
                 this.$el.show();
-                this.$el.addClass("attributions-view","attributions-background-color");
+                this.$el.addClass("attributions-view attributions-background-color");
             }
             else {
                 this.$el.hide();

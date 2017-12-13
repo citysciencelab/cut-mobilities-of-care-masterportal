@@ -114,7 +114,7 @@ define([
          * @param {[type]} zoomLevel [description]
          */
         setZoomLevel: function (zoomLevel) {
-            this.set("zoomLevel", zoomLevel);
+            this.set("zoomLevel", Math.round(zoomLevel));
         },
 
         /**

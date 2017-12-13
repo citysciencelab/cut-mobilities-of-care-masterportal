@@ -284,7 +284,7 @@
           "clusterDistance":0
         },
         {
-          "id": "5104",
+          "id": "8730",
           "visibility": false
         },
         {
@@ -294,9 +294,6 @@
         {
           "id": "4561",
           "visibility": false
-        },
-        {
-          "id": "1748"
         },
         {
           "id": "1562",
@@ -317,11 +314,13 @@
           "styleField": "kategorie"
         },
         {
-          "id": "4926",
+          "id": "5708",
           "visibility": false,
           "styleable": true,
           "geomType": "Polygon",
-          "attributesToStyle": ["ErreichbareArbeitsplaetzein30Min"]
+          "attributesToStyle":[
+            "Pkw_AP30"
+          ]
         },
         {
           "id": "2003",
