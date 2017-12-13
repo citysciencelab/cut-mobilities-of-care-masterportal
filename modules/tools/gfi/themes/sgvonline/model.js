@@ -98,7 +98,7 @@ define(function (require) {
 
             if (this.getGfiContent()[0].hasOwnProperty(key)) {
                 val = this.getGfiContent()[0][key];
-                if (val === "S" || val === "B") {
+                if (val === "S" || val === "B" || val === "Ja") {
                     this.getGfiContent()[0][key] = "Ja";
                 }
                 else {

@@ -1,3 +1,10 @@
+# Changelog LGV Master-Portal 1.4.7
+
+FIXES:
+
+  - d1db2bd fix csw Parameter aus config.js Pfad angepasst
+  - 340700f fix legende zeichnet sich nicht über Tabelle von fluechtlingsunterkuenfte
+
 # Changelog LGV Master-Portal 1.4.6
 
 FIXES:
