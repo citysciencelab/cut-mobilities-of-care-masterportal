@@ -1,7 +1,7 @@
 define(function () {
 
     var config = {
-       wfsImgPath: "..node_modules/lgv-config/img",
+       wfsImgPath: "../node_modules/lgv-config/img",
        allowParametricURL: true,
         namedProjections: [
             // ETRS89 UTM
