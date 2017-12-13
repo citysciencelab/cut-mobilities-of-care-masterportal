@@ -16,7 +16,14 @@ define(function (require) {
                 "updateFromWebSocket": this.updateFromWebSocket
             }, this);
 
-            var connection = new WebSocket("ws://127.0.0.1:1234");
+            // start socket connection
+            this.createWebSocket();
+
+        },
+
+        createWebSocket: function () {
+            // WebSocket to MQTT-Broker
+            var connection = new WebSocket("ws://127.0.0.1:8767");
 
             // The connection ist open
             connection.onopen = function () {
@@ -31,14 +38,14 @@ define(function (require) {
             // Log messages from the server
             connection.onmessage = function (ev) {
                 console.log("Server: " + ev.data);
-                Radio.trigger("sensorThings", "updateData", JSON.parse(ev.data));
+                jsonData = JSON.parse(ev.data);
+                Radio.trigger("sensorThings", "updateFromWebSocket", jsonData);
             };
 
             // The connection is terminated
             connection.onclose = function () {
                 console.log("Websocket ist beendet");
-            }
-
+            };
         },
 
         createLayerSource: function () {
@@ -64,9 +71,21 @@ define(function (require) {
          * @return {[type]} [description]
          */
         updateData: function () {
-            var things = this.getResponse();
-            this.drawPoints(things);
-            Radio.trigger("Util", "hideLoader");
+            if (!_.isUndefined(this.get("url"))) {
+                var things = this.getResponse(0),
+                    allThings = [];
+                    thingsCount = things["@iot.count"], // count of all things
+                    thingsLength = things.value.length; // count of things on one request
+
+                for ( var j = 0; j < thingsCount; j += thingsLength) {
+                    things = this.getResponse(j);
+                    allThings.push(things.value);
+                };
+
+                allThings = _.flatten(allThings);
+                this.drawPoints(allThings, this);
+                Radio.trigger("Util", "hideLoader");
+            }
         },
 
         /**
@@ -75,9 +94,10 @@ define(function (require) {
          * @return {[type]}        [description]
          */
         updateFromWebSocket: function (things) {
-            console.log(things);
-            this.drawPoints(things);
-            Radio.trigger("Util", "hideLoader");
+            // console.log(things);
+            console.log("updateFromWebSocket");
+            // this.drawPoints(things);
+            // Radio.trigger("Util", "hideLoader");
         },
 
         /**
@@ -85,29 +105,39 @@ define(function (require) {
          * @param  {[type]} things [description]
          * @return {[type]}        [description]
          */
-        drawPoints: function (things) {
+        drawPoints: function (allThings) {
             var points = [];
+
             // Iterate over things
-            for (var i = 0; i < things.value.length; i++) {
-                var xy = things.value[i].Locations[0].location.geometry.coordinates,
-                    obsLen = things.value[i].Datastreams[0].Observations.length, // newest observation
-                    res = things.value[i].Datastreams[0].Observations[obsLen - 1].result, //charging or available
-                    prop = things.value[i].properties,
+            for (var i = 0; i < allThings.length; i++) {
+                var xy = allThings[i].Locations[0].location.geometry.coordinates,
+                    obsLen = allThings[i].Datastreams[0].Observations.length, // newest observation
+                    prop = allThings[i].properties,
                     xyTransfrom = ol.proj.transform(xy, "EPSG:4326", Config.view.epsg),
                     point = new ol.Feature({
                         geometry: new ol.geom.Point(xyTransfrom)
                     });
 
-                    // set color
-                    if (res === "available") {
-                        point.setStyle(this.getAvailableStyle);
-                    }
-                    else if (res === "charging") {
-                        point.setStyle(this.getChargingStyle);
-                    }
-                    else {
-                        point.setStyle(this.getFaileStyle);
-                        // console.log("False Type" + res);
+                    point.setProperties(prop);
+
+                    // Hinzufügen der Anzahl der Ladestationen
+                    // point.setProperties({"count_station" : });
+
+                    if (obsLen > 0) {
+                        var res = allThings[i].Datastreams[0].Observations[obsLen - 1].result; // charging or available
+                        point.setProperties({status: res});
+
+                        // set color
+                        if (res === "available") {
+                            point.setStyle(this.getAvailableStyle);
+                        }
+                        else if (res === "charging") {
+                            point.setStyle(this.getChargingStyle);
+                        }
+                        else {
+                            point.setStyle(this.getFaileStyle);
+                            // console.log("False Type" + res);
+                        };
                     };
                 points.push(point);
             };
@@ -118,7 +148,7 @@ define(function (require) {
 
         getChargingStyle: function () {
             var featureStyle = new ol.style.Style({
-                image:  new ol.style.Circle({
+                image: new ol.style.Circle({
                     radius: 5,
                     fill: new ol.style.Fill({
                         color: "rgba(255, 0, 0, 1.0)"
@@ -130,8 +160,9 @@ define(function (require) {
         },
 
         getAvailableStyle: function () {
+            console.log("farbe");
             var featureStyle = new ol.style.Style({
-                image:  new ol.style.Circle({
+                image: new ol.style.Circle({
                     radius: 5,
                     fill: new ol.style.Fill({
                         color: "rgba(0, 255, 0, 1.0)"
@@ -144,7 +175,7 @@ define(function (require) {
 
         getFaileStyle: function () {
             var featureStyle = new ol.style.Style({
-                image:  new ol.style.Circle({
+                image: new ol.style.Circle({
                     radius: 5,
                     fill: new ol.style.Fill({
                         color: "rgba(0, 0, 255, 1.0)"
@@ -159,12 +190,20 @@ define(function (require) {
          * [call to sensorthings by initial]
          * @return {[type]} [description]
          */
-        getResponse: function () {
-            var response;
+        getResponse: function (skipCount) {
+            var response,
+                skipCountString;
+
+            if (!_.isString(skipCount)) {
+                skipCountString = String(skipCount);
+            }
+            else {
+                skipCountString = skipCount;
+            }
+
             Radio.trigger("Util", "showLoader");
             $.ajax({
-                url: this.get("url"),
-                contentType: "application/json; charset=utf-8",
+                url: (this.get("url") + "&$skip=" + skipCount),
                 async: false,
                 type: "GET",
                 context: this,
@@ -174,15 +213,12 @@ define(function (require) {
                     response = resp;
                 },
                 error: function (jqXHR, errorText, error) {
+                    console.log("Es konnte keine Verbindung zur URL hergetsellt werden");
                     Radio.trigger("Util", "hideLoader");
                 }
             });
 
             return response;
-        },
-
-        setAttributes: function () {
-
         }
     });
 
