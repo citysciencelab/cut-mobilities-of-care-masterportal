@@ -1,3 +1,22 @@
+# Changelog LGV Master-Portal 1.5.0
+
+NEU:
+
+  - 9a74933 end2end-test-infrastruktur
+  - ee4dd43 overviewmap als control
+  - 8279f7f Merge branch '81_add_removeFilter' into 80_suche_nach_schulnamen reset Filter on Search
+
+FIXES:
+
+  - f789319 hotfixes kw 45 fix csw Parameter aus config.js Pfad angepasst, legende zeichnet sich nicht über Tabelle von fluechtlingsunterkuenfte, verkehrsstaerken Theme Pfad zu Datei angepasst ohne Datum
+  - ca4cd86 gfi-detached opens initially on right side
+  - 6f0c43f Adresssuche in der Searchbar führte zum Füllen der Suggestliste vom viomRouting
+  - 8bc2a82 WMS-Adresse für Bezirkslayer wurde nicht angezeigt, weil id nicht in RawLayerList gefunden werden konnte
+  - 92849aa drawmodulstyle
+  - f029a7b gfi always on
+  - 3786af7 Scrollleiste in Themenbaum light
+  - cf931a1 fix UrlParams zoomlevel und Center fix Canvas wird defaultmäßig nicht erzeugt fix UrlParam featureId über LayerIds Parameter StartupModul behalten
+
 # Changelog LGV Master-Portal 1.4.6
 
 FIXES:
