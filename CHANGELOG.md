@@ -1,3 +1,9 @@
+# Changelog LGV Master-Portal 1.4.8
+
+FIXES:
+
+  - c54708ef sgvonline theme attr amtliche adresse immer nein
+
 # Changelog LGV Master-Portal 1.4.7
 
 FIXES:
