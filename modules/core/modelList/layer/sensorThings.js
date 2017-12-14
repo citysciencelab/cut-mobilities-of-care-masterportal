@@ -73,17 +73,26 @@ define(function (require) {
         updateData: function () {
             if (!_.isUndefined(this.get("url"))) {
                 var things = this.getResponse(0),
-                    allThings = [];
+                    allThings = [],
                     thingsCount = things["@iot.count"], // count of all things
-                    thingsLength = things.value.length; // count of things on one request
+                    thingsLength = things.value.length, // count of things on one request
+                    thingsMerge = [];
 
-                for ( var j = 0; j < thingsCount; j += thingsLength) {
+                for (var j = 0; j < thingsCount; j += thingsLength) {
                     things = this.getResponse(j);
                     allThings.push(things.value);
                 };
 
                 allThings = _.flatten(allThings);
-                this.drawPoints(allThings, this);
+                console.log(allThings);
+                allThings = this.mergeByCoordinates(allThings);
+                allThings = this.removeDoublicates(allThings);
+
+                _.each(allThings, function (things, index) {
+                    thingsMerge.push(this.aggreateArrays(things));
+                }, this);
+
+                this.drawPoints(thingsMerge);
                 Radio.trigger("Util", "hideLoader");
             }
         },
@@ -108,39 +117,33 @@ define(function (require) {
         drawPoints: function (allThings) {
             var points = [];
 
+            console.log(allThings);
+
             // Iterate over things
-            for (var i = 0; i < allThings.length; i++) {
-                var xy = allThings[i].Locations[0].location.geometry.coordinates,
-                    obsLen = allThings[i].Datastreams[0].Observations.length, // newest observation
-                    prop = allThings[i].properties,
-                    xyTransfrom = ol.proj.transform(xy, "EPSG:4326", Config.view.epsg),
+            _.each(allThings, function (thing) {
+                var xyTransfrom = ol.proj.transform(thing.location, "EPSG:4326", Config.view.epsg),
+                    state = thing.properties.state.split(" | ")[0],
                     point = new ol.Feature({
                         geometry: new ol.geom.Point(xyTransfrom)
                     });
 
-                    point.setProperties(prop);
+                    point.setProperties(thing.properties);
 
-                    // Hinzufügen der Anzahl der Ladestationen
-                    // point.setProperties({"count_station" : });
-
-                    if (obsLen > 0) {
-                        var res = allThings[i].Datastreams[0].Observations[obsLen - 1].result; // charging or available
-                        point.setProperties({status: res});
-
-                        // set color
-                        if (res === "available") {
-                            point.setStyle(this.getAvailableStyle);
-                        }
-                        else if (res === "charging") {
-                            point.setStyle(this.getChargingStyle);
-                        }
-                        else {
-                            point.setStyle(this.getFaileStyle);
-                            // console.log("False Type" + res);
-                        };
+// ***************************************************************************
+                    // set color
+                    if (state === "available") {
+                        point.setStyle(this.getAvailableStyle);
+                    }
+                    else if (state === "charging") {
+                        point.setStyle(this.getChargingStyle);
+                    }
+                    else {
+                        point.setStyle(this.getFaileStyle);
                     };
+// ***************************************************************************
+
                 points.push(point);
-            };
+            }, this);
 
             // Add features to vectorlayer
             this.getLayerSource().addFeatures(points);
@@ -160,7 +163,6 @@ define(function (require) {
         },
 
         getAvailableStyle: function () {
-            console.log("farbe");
             var featureStyle = new ol.style.Style({
                 image: new ol.style.Circle({
                     radius: 5,
@@ -219,6 +221,85 @@ define(function (require) {
             });
 
             return response;
+        },
+
+        removeDoublicates: function (mergeAllThings) {
+            var mergeAllThingsCopy = mergeAllThings;
+
+            for (var i = 0; i < mergeAllThings.length; i++) {
+                for (var j = i + 1; j < mergeAllThings.length; j++) {
+                    if (_.isEqual(mergeAllThings[i], mergeAllThings[j])) {
+                        mergeAllThingsCopy.splice(j, 1);
+                    };
+                };
+            };
+
+            return mergeAllThingsCopy;
+        },
+
+        // merge things with equal coordinates
+        mergeByCoordinates: function (allThings) {
+            var mergeAllThings = [];
+
+            for (var i = 0; i < allThings.length; i++) {
+                var xyThing = allThings[i].Locations[0].location.geometry.coordinates,
+                    equalThing = [];
+
+                for (var j = 0; j < allThings.length; j++) {
+                    var xyEqualThing = allThings[j].Locations[0].location.geometry.coordinates;
+
+                    if (_.isEqual(xyThing, xyEqualThing)) {
+                        equalThing.push(allThings[j]);
+                    }
+                };
+
+                mergeAllThings.push(equalThing);
+            };
+
+            return mergeAllThings;
+        },
+
+        aggreateArrays: function (thingsArray) {
+            var obj = {},
+                properties = {},
+                thingsProperties = [],
+                keys = _.keys(thingsArray[0].properties);
+
+            keys.push("state");
+            keys.push("dataStreamId");
+
+                _.each(thingsArray, function (thing) {
+                    var thisProperties = thing.properties,
+                        thingsObservationsLength = thing.Datastreams[0].Observations.length;
+
+                    if (thingsObservationsLength > 0) {
+                        thisProperties.state = thing.Datastreams[0].Observations[thingsObservationsLength - 1].result;
+                    }
+                    else {
+                        thisProperties.state = "";
+                    }
+                    thisProperties.dataStreamId = thing.Datastreams[0]["@iot.id"];
+                    thingsProperties.push(thisProperties);
+                });
+
+                _.each(keys, function (key) {
+                    var propList = _.pluck(thingsProperties, key),
+                        propString = propList[0];
+
+                    _.each(propList, function (prop, index) {
+                        if (index > 0) {
+                            propString = propString + " | " + prop;
+                        }
+                    });
+
+                    properties[key] = propString;
+                });
+
+            // add to Object
+            obj.location = thingsArray[0].Locations[0].location.geometry.coordinates;
+            obj.properties = properties;
+
+            return obj;
         }
     });
 
