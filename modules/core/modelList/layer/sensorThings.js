@@ -75,7 +75,7 @@ define(function (require) {
                 var things = this.getResponse(0),
                     allThings = [],
                     thingsCount = things["@iot.count"], // count of all things
-                    thingsLength = things.value.length, // count of things on one request
+                    thingsLength = things.value.length; // count of things on one request
                     thingsMerge = [];
 
                 for (var j = 0; j < thingsCount; j += thingsLength) {
@@ -84,7 +84,6 @@ define(function (require) {
                 };
 
                 allThings = _.flatten(allThings);
-                console.log(allThings);
                 allThings = this.mergeByCoordinates(allThings);
                 allThings = this.removeDoublicates(allThings);
 
@@ -103,10 +102,45 @@ define(function (require) {
          * @return {[type]}        [description]
          */
         updateFromWebSocket: function (things) {
-            // console.log(things);
-            console.log("updateFromWebSocket");
-            // this.drawPoints(things);
-            // Radio.trigger("Util", "hideLoader");
+            var keys = Object.keys(things),
+                thisDataStreamId = keys[0],
+                thisResult = things[thisDataStreamId].result,
+                thisPhenomTime = things[thisDataStreamId].phenomenonTime,
+                thisFeature,
+                thisPlugIndex,
+                datastreamStates,
+                states,
+                datastreamPhenomTime;
+
+            thisFeatureArray = this.getFeatureById(thisDataStreamId, this.getLayerSource().getFeatures());
+            thisPlugIndex = thisFeatureArray[0];
+            thisFeature = thisFeatureArray[1];
+
+            // change state and phenomTime
+            datastreamStates = thisFeature.values_["state"];
+            datastreamPhenomTime = thisFeature.values_["phenomenonTime"];
+
+            if (_.contains(datastreamStates, "|")) {
+                datastreamStates = datastreamStates.split(" | ");
+                datastreamPhenomTime = datastreamPhenomTime.split(" | ");
+            };
+
+            datastreamStates[thisPlugIndex] = thisResult;
+            datastreamPhenomTime[thisPlugIndex] = thisPhenomTime;
+
+            states = this.buildPropertiesAsString(datastreamStates);
+            phenomTime = this.buildPropertiesAsString(datastreamPhenomTime);
+
+            // update states in feature
+            thisFeature.values_.state = states;
+            thisFeature.values_.phenomenonTime = phenomTime;
+
+            this.setColor(thisFeature, thisResult);
+
+
+            console.log(thisFeature);
+            console.log(thisFeature.getGeometry().getCoordinates());
+            console.log(thisResult);
         },
 
         /**
@@ -116,8 +150,6 @@ define(function (require) {
          */
         drawPoints: function (allThings) {
             var points = [];
-
-            console.log(allThings);
 
             // Iterate over things
             _.each(allThings, function (thing) {
@@ -129,18 +161,7 @@ define(function (require) {
 
                     point.setProperties(thing.properties);
 
-// ***************************************************************************
-                    // set color
-                    if (state === "available") {
-                        point.setStyle(this.getAvailableStyle);
-                    }
-                    else if (state === "charging") {
-                        point.setStyle(this.getChargingStyle);
-                    }
-                    else {
-                        point.setStyle(this.getFaileStyle);
-                    };
-// ***************************************************************************
+            this.setColor(point, state);
 
                 points.push(point);
             }, this);
@@ -267,40 +288,85 @@ define(function (require) {
 
             keys.push("state");
             keys.push("dataStreamId");
+            keys.push("phenomenonTime");
 
-                _.each(thingsArray, function (thing) {
-                    var thisProperties = thing.properties,
-                        thingsObservationsLength = thing.Datastreams[0].Observations.length;
+            _.each(thingsArray, function (thing) {
+                var thisProperties = thing.properties,
+                    thingsObservationsLength = thing.Datastreams[0].Observations.length;
 
-                    if (thingsObservationsLength > 0) {
-                        thisProperties.state = thing.Datastreams[0].Observations[thingsObservationsLength - 1].result;
-                    }
-                    else {
-                        thisProperties.state = "";
-                    }
-                    thisProperties.dataStreamId = thing.Datastreams[0]["@iot.id"];
-                    thingsProperties.push(thisProperties);
-                });
+                // get newest observation, if existing
+                if (thingsObservationsLength > 0) {
+                    thisProperties.state = thing.Datastreams[0].Observations[0].result;
+                    thisProperties.phenomenonTime = thing.Datastreams[0].Observations[0].phenomenonTime;
+                }
+                else {
+                    thisProperties.state = "";
+                    thisProperties.phenomenonTime = "";
+                }
+                thisProperties.dataStreamId = thing.Datastreams[0]["@iot.id"];
+                thingsProperties.push(thisProperties);
+            });
 
-                _.each(keys, function (key) {
-                    var propList = _.pluck(thingsProperties, key),
-                        propString = propList[0];
+            _.each(keys, function (key) {
+                var propList = _.pluck(thingsProperties, key),
+                    propString = this.buildPropertiesAsString(propList);
 
-                    _.each(propList, function (prop, index) {
-                        if (index > 0) {
-                            propString = propString + " | " + prop;
-                        }
-                    });
-
-                    properties[key] = propString;
-                });
+                properties[key] = propString;
+            }, this);
 
             // add to Object
             obj.location = thingsArray[0].Locations[0].location.geometry.coordinates;
             obj.properties = properties;
 
             return obj;
+        },
+
+        buildPropertiesAsString: function (properties) {
+            propString = properties[0];
+            _.each(properties, function (prop, index) {
+                if (index > 0) {
+                    propString = propString + " | " + prop;
+                }
+            });
+
+            return propString;
+        },
+
+        getFeatureById: function (id, features) {
+            var thisFeatureArray = [];
+
+            _.each(features, function (feature) {
+                var datastreamIds = feature.values_.dataStreamId;
+
+                if (_.contains(datastreamIds, "|")) {
+                    datastreamIds = datastreamIds.split(" | ");
+                };
+
+                _.each(datastreamIds, function (thisId, index) {
+                    if (id === thisId) {
+                        thisFeatureArray.push(index);
+                        thisFeatureArray.push(feature);
+                    }
+
+                });
+            });
+
+            return thisFeatureArray;
+        },
+
+        setColor: function (point, state) {
+            // set color
+            if (state === "available") {
+                point.setStyle(this.getAvailableStyle);
+            }
+            else if (state === "charging") {
+                point.setStyle(this.getChargingStyle);
+            }
+            else {
+                point.setStyle(this.getFaileStyle);
+            };
         }
+
     });
 
     return SensorThingsLayer;
