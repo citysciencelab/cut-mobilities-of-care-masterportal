@@ -211,7 +211,6 @@ define([
                 new ol.style.Style({
                     image: imagestyle,
                     text: symbolText,
-                    zIndex: "Infinity",
                     stroke: strokestyle,
                     fill: fill
                 })

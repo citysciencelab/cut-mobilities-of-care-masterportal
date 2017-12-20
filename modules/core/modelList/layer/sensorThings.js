@@ -44,7 +44,7 @@ define(function (require) {
 
             // The connection is terminated
             connection.onclose = function () {
-                console.log("Websocket ist beendet");
+                console.log("Websocket is finished");
             };
         },
 
@@ -78,8 +78,11 @@ define(function (require) {
                     thingsLength = things.value.length; // count of things on one request
                     thingsMerge = [];
 
+                this.setSimpleStyle();
+
                 for (var j = 0; j < thingsCount; j += thingsLength) {
                     things = this.getResponse(j);
+
                     allThings.push(things.value);
                 };
 
@@ -135,12 +138,12 @@ define(function (require) {
             thisFeature.values_.state = states;
             thisFeature.values_.phenomenonTime = phenomTime;
 
-            this.setColor(thisFeature, thisResult);
+            this.setColor(thisFeature);
 
-
-            console.log(thisFeature);
+            // console.log(thisFeature);
             console.log(thisFeature.getGeometry().getCoordinates());
             console.log(thisResult);
+            console.log(thisDataStreamId);
         },
 
         /**
@@ -154,59 +157,18 @@ define(function (require) {
             // Iterate over things
             _.each(allThings, function (thing) {
                 var xyTransfrom = ol.proj.transform(thing.location, "EPSG:4326", Config.view.epsg),
-                    state = thing.properties.state.split(" | ")[0],
                     point = new ol.Feature({
                         geometry: new ol.geom.Point(xyTransfrom)
                     });
 
-                    point.setProperties(thing.properties);
-
-            this.setColor(point, state);
-
+                point.setProperties(thing.properties);
+                this.setColor(point);
                 points.push(point);
+
             }, this);
 
             // Add features to vectorlayer
             this.getLayerSource().addFeatures(points);
-        },
-
-        getChargingStyle: function () {
-            var featureStyle = new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 5,
-                    fill: new ol.style.Fill({
-                        color: "rgba(255, 0, 0, 1.0)"
-                    })
-                })
-            });
-
-            return featureStyle;
-        },
-
-        getAvailableStyle: function () {
-            var featureStyle = new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 5,
-                    fill: new ol.style.Fill({
-                        color: "rgba(0, 255, 0, 1.0)"
-                    })
-                })
-            });
-
-            return featureStyle;
-        },
-
-        getFaileStyle: function () {
-            var featureStyle = new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 5,
-                    fill: new ol.style.Fill({
-                        color: "rgba(0, 0, 255, 1.0)"
-                    })
-                })
-            });
-
-            return featureStyle;
         },
 
         /**
@@ -354,17 +316,131 @@ define(function (require) {
             return thisFeatureArray;
         },
 
-        setColor: function (point, state) {
-            // set color
-            if (state === "available") {
-                point.setStyle(this.getAvailableStyle);
-            }
-            else if (state === "charging") {
-                point.setStyle(this.getChargingStyle);
+        setColor: function (point) {
+            var states = point.values_.state.split(" | "),
+                availableCount = 0,
+                chargingCount = 0,
+                outoforderCount = 0,
+                svgAsString,
+                style;
+
+            _.each(states, function (state) {
+                if (state === "available") {
+                    availableCount++;
+                }
+                else if (state == "charging") {
+                    chargingCount++;
+                }
+                else {
+                    outoforderCount++;
+                }
+            });
+
+            svgAsString = this.drawNElements(availableCount, chargingCount, outoforderCount);
+
+            styleSVG = new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: 'data:image/svg+xml;utf8,' + svgAsString
+                })
+            });
+
+            // add both styles (png, svg)
+            styleIcon = this.getStyleAsFunction(this.get("style"));
+            point.setStyle([styleIcon(point)[0], styleSVG]);
+        },
+
+        drawNElements: function (available, charging, outoforder) {
+            var svg = '<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
+                n = available + charging + outoforder,
+                degreeSegment = 360 / n,
+                startAngelDegree = 0,
+                endAngelDegree = degreeSegment,
+                strokeWidth = 4,
+                fill = "none",
+                stroke;
+
+            svg = svg + '<circle cx="60" cy="60" r="23" stroke="white" stroke-width="4" fill="none"/>';
+
+            for (var i = 0; i < n; i++) {
+                var d = this.calculateCircularSegment(startAngelDegree, endAngelDegree);
+
+                // set color by status
+                if (i < available) {
+                    stroke = "#00ff00";
+                }
+                else if (i < (available + charging)) {
+                    stroke = "#ff0000";
+                }
+                else {
+                    stroke = "#aaaaaa";
+                }
+
+                svg = this.buildPathSVG(svg, fill, strokeWidth, stroke, d);
+
+                // set degree for next circular segment
+                startAngelDegree = startAngelDegree + degreeSegment;
+                endAngelDegree = endAngelDegree + degreeSegment;
+            };
+
+            svg = svg + '</svg>';
+
+            return svg;
+        },
+
+        calculateCircularSegment: function (startAngelDegree, endAngelDegree) {
+            var rad = Math.PI / 180,
+                radius = 23,
+                x = 60,
+                y = 60;
+
+            // convert angle from degree to radiant
+            startAngleRad = startAngelDegree * rad;
+            endAngleRad = (endAngelDegree - 10) * rad;
+
+            xStart = x + (Math.cos(startAngleRad) * radius);
+            yStart = y - (Math.sin(startAngleRad) * radius);
+
+            xEnd = x + (Math.cos(endAngleRad) * radius);
+            yEnd = y - (Math.sin(endAngleRad) * radius);
+
+            var d = [
+                "M", xStart, yStart,
+                "A", radius, radius, 0, 0, 0, xEnd, yEnd
+            ].join(" ");
+
+            return d;
+        },
+
+        buildPathSVG: function (svg, fill, strokeWidth, stroke, d) {
+            svg = svg + '<path ';
+            svg = svg + 'fill="' + fill + '" ';
+            svg = svg + 'stroke-width="' + strokeWidth + '" ';
+            svg = svg + 'stroke="' + stroke  + '" ';
+            svg = svg + 'd="' + d + '"/>';
+
+            return svg;
+        },
+
+        setSimpleStyle: function () {
+            var styleId = this.getStyleId(),
+                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
+
+            this.set("style", stylelistmodel.getSimpleStyle());
+        },
+
+        getStyleId: function () {
+            return this.get("styleId");
+        },
+
+        getStyleAsFunction: function (style) {
+            if (_.isFunction(style)) {
+                return style;
             }
             else {
-                point.setStyle(this.getFaileStyle);
-            };
+                return function (feature) {
+                    return style;
+                };
+            }
         }
 
     });
