@@ -1,7 +1,7 @@
 define(function (require) {
 
-    var Template = require("text!modules/Snippets/slider/range/template.html"),
-        SliderView = require("modules/Snippets/slider/view"),
+    var Template = require("text!modules/snippets/slider/range/template.html"),
+        SliderView = require("modules/snippets/slider/view"),
         SliderRangeView;
 
     SliderRangeView = SliderView.extend({

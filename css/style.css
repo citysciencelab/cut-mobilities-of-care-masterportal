@@ -53,9 +53,9 @@
 @import "../modules/tools/gfi/themes/sgvonline/style.css";
 @import "../modules/tools/gfi/themes/verkehrsstaerken/style.css";
 @import "../modules/tools/gfi/themes/schulinfo/style.css";
-@import "../modules/Snippets/slider/style.css";
-@import "../modules/Snippets/dropdown/style.css";
-@import "../modules/Snippets/checkbox/style.css";
+@import "../modules/snippets/slider/style.css";
+@import "../modules/snippets/dropdown/style.css";
+@import "../modules/snippets/checkbox/style.css";
 @import "../modules/tools/filter/style.css";
 @import "../modules/tools/filter/query/style.css";
 @import "../modules/sidebar/style.css";
