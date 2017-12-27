@@ -3,6 +3,7 @@ define("app",
     "jquery",
     "config",
     "modules/core/util",
+    "modules/vectorStyle/list",
     "modules/core/rawLayerList",
     "modules/restReader/collection",
     "modules/core/configLoader/preparser",
@@ -11,12 +12,13 @@ define("app",
     "modules/core/crs",
     "modules/core/autostarter",
     "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
+    ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
 
 
     // Core laden
     new Autostarter();
     new Util();
+    new StyleList();
     new RawLayerList();
     new Preparser();
     new ParametricURL();

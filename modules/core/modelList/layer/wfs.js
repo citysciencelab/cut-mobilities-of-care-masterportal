@@ -100,11 +100,10 @@ define(function (require) {
                         this.getLayerSource().addFeatures(features);
                         this.set("loadend", "ready");
                         Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
-                        // für WFS-T wichtig --> benutzt den ol-default Style
-                        if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
-                            this.styling();
-                        }
-                        this.getLayer().setStyle(this.get("style"));
+                        this.styling();
+                        _.each(this.getLayer().getSource().getFeatures(), function(feature) {
+                            feature.setStyle(this.getStyle(feature));
+                        }, this);
                     }
                     catch (e) {
                     }
@@ -173,43 +172,48 @@ define(function (require) {
             }
         },
         styling: function () {
+            var styleId = this.getStyleId(),
+                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
+
+            this.setStyle(stylelistmodel.getCreatedStyle());
+
             // NOTE Hier werden die Styles zugeordnet
-            if (this.get("styleField") && this.get("styleField") !== "") {
-                if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
-                    if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        this.setSimpleStyleForStyleFieldAndLabel();
-                    }
-                    else {
-                        this.setSimpleStyleForStyleField();
-                    }
-                }
-                else {
-                    if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        // TODO
-                    }
-                    else {
-                        this.setClusterStyleForStyleField();
-                    }
-                }
-            }
-            else {
-                if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
-                    if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        this.setSimpleCustomLabeledStyle();
-                    }
-                    else {
-                        this.setSimpleStyle();
-                    }
-                }
-                else {
-                    if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        this.getClusterStyle();
-                    }
-                    else {
-                        this.setClusterStyle();
-                    }
-                }
-            }
+            // if (this.get("styleField") && this.get("styleField") !== "") {
+            //     if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
+            //         if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
+            //             this.setSimpleStyleForStyleFieldAndLabel();
+            //         }
+            //         else {
+            //             this.setSimpleStyleForStyleField();
+            //         }
+            //     }
+            //     else {
+            //         if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
+            //             // TODO
+            //         }
+            //         else {
+            //             this.setClusterStyleForStyleField();
+            //         }
+            //     }
+            // }
+            // else {
+            //     if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
+            //         if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
+            //             this.setSimpleCustomLabeledStyle();
+            //         }
+            //         else {
+            //             this.setSimpleStyle();
+            //         }
+            //     }
+            //     else {
+            //         if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
+            //             this.getClusterStyle();
+            //         }
+            //         else {
+            //             this.setClusterStyle();
+            //         }
+            //     }
+            // }
         },
         setSimpleCustomLabeledStyle: function () {
             var styleId = this.getStyleId(),
@@ -279,30 +283,6 @@ define(function (require) {
                 return stylelistmodel.getClusterStyle(feature);
             });
         },
-        // buildGetRequest: function () {
-        //     var newURL;
-        //
-        //     if (this.get("url").search(location.host) === -1) {
-        //         newURL = Util.getProxyURL(this.get("url"));
-        //         this.set("url", newURL);
-        //     }
-        //
-        //     var data = "REQUEST=GetFeature&SERVICE=WFS&TYPENAME=" + this.get("featureType");
-        //
-        //     if (this.get("version") && this.get("version") !== "" && this.get("version") !== "nicht vorhanden") {
-        //         data += "&VERSION=" + this.get("version");
-        //     }
-        //     else {
-        //         data += "&VERSION=1.1.0";
-        //     }
-        //     if (this.get("srsname") && this.get("srsname") !== "" && this.get("srsname") !== "nicht vorhanden") {
-        //         data += "&SRSNAME=" + this.get("srsname");
-        //     }
-        //     else {
-        //         data += "&SRSNAME=" + Config.view.epsg;
-        //     }
-        //     this.set("data", data);
-        // },
         setProjection: function (proj) {
             this.set("projection", proj);
         },
@@ -376,6 +356,15 @@ define(function (require) {
                     })
                 })
             });
+        },
+
+        // getter for style
+        getStyle: function () {
+            return this.get("style");
+        },
+        // setter for style
+        setStyle: function (value) {
+            this.set("style", value);
         }
     });
 

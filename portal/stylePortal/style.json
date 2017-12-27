@@ -1,0 +1,51 @@
+[
+  {
+    "layerId" : "1711_SIMPLE",
+    "class": "POINT",
+    "subclass" : "SIMPLE",
+    "imagename" : "krankenhaus.png",
+    "imagescale" : "0.7",
+    "imageoffsetx" : 0.50,
+    "imageoffsety" : 0.50
+  },
+  {
+    "layerId" : "2060",
+    "styleFieldValue":"Brunnen",
+    "subclass" : "Icon",
+    "imagename" : "brunnen_10.png",
+    "imagescale" : "0.5",
+    "clusterscale" : "0"
+  },
+  {
+    "layerId" : "2060",
+    "styleFieldValue":"Wasserbauobjekt",
+    "subclass" : "Icon",
+    "imagename" : "wasserbauobjekt_10.png",
+    "imagescale" : "0.5",
+    "clusterscale" : "0"
+  },
+  {
+    "layerId" : "2060",
+    "styleFieldValue":"Brack",
+    "subclass" : "Icon",
+    "imagename" : "brack_10.png",
+    "imagescale" : "0.5",
+    "clusterscale" : "0"
+  },
+  {
+    "layerId" : "2060",
+    "styleFieldValue":"See",
+    "subclass" : "Icon",
+    "imagename" : "see_10.png",
+    "imagescale" : "0.5",
+    "clusterscale" : "0"
+  },
+  {
+    "layerId" : "2060",
+    "styleFieldValue":"Gewässer",
+    "subclass" : "Icon",
+    "imagename" : "gewaesser_10.png",
+    "imagescale" : "0.5",
+    "clusterscale" : "0"
+  }
+]
