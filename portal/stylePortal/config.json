@@ -161,7 +161,8 @@
       "Layer": [
         {
           "id": "1711",
-          "styleId": "1711_CIRCLE",
+          "styleId": "1711_SIMPLE",
+          "isClustered": true,
           "visibility": true,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
@@ -170,6 +171,7 @@
         {
           "id": "2060",
           "styleId": "2060_CUSTOM",
+          "isClustered": true,
           "visibility": true
         }
       ]

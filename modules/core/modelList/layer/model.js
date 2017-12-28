@@ -30,7 +30,7 @@ define(function (require) {
                 },
                 // Anschließend evt. die ClusterSource und der Layer
                 "change:layerSource": function () {
-                    if (this.has("clusterDistance") === true) {
+                    if (this.get("isClustered")) {
                         this.createClusterLayerSource();
                     }
                     this.createLayer();

@@ -37,7 +37,7 @@ define(function (require) {
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
-                source: (this.has("clusterDistance") === true) ? this.getClusterLayerSource() : this.getLayerSource(),
+                source: this.get("isClustered") ? this.getClusterLayerSource() : this.getLayerSource(),
                 name: this.get("name"),
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
@@ -91,32 +91,32 @@ define(function (require) {
                 context: this,
                 success: function (data) {
                     Radio.trigger("Util", "hideLoader");
-                    try {
-                        var wfsReader = new ol.format.WFS({
-                                featureNS: this.get("featureNS")
-                            }),
-                            features = wfsReader.readFeatures(data);
 
-                        this.getLayerSource().addFeatures(features);
-                        this.set("loadend", "ready");
-                        Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
-                        // this.styling();
-                        var styleId = this.getStyleId(),
-                        stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
+                    var wfsReader = new ol.format.WFS({
+                            featureNS: this.get("featureNS")
+                        }),
+                        features = wfsReader.readFeatures(data),
+                        isClustered = this.get("isClustered"),
+                        stylelistmodel = Radio.request("StyleList", "getModelById", this.getStyleId());
 
-                        _.each(this.getLayer().getSource().getFeatures(), function(feature) {
-                            feature.setStyle(stylelistmodel.createStyle(feature));
-                        }, this);
-                    }
-                    catch (e) {
-                    }
+                    this.getLayerSource().addFeatures(features);
+                    this.set("loadend", "ready");
+                    Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
+                    this.styling(isClustered);
+                    this.getLayer().setStyle(this.getStyle());
                 },
                 error: function (jqXHR, errorText, error) {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
         },
+        styling: function (isClustered) {
+            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
+            this.setStyle(function(feature) {
+                return stylelistmodel.createStyle(feature, isClustered);
+            });
+        },
         /*
         * Wenn MapView Option verändert werden: bei neuem Maßstab
         */
@@ -174,7 +174,7 @@ define(function (require) {
                 this.toggleEventAttribution(false);
             }
         },
-        styling: function () {
+        // styling: function () {
             // NOTE Hier werden die Styles zugeordnet
             // if (this.get("styleField") && this.get("styleField") !== "") {
             //     if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
@@ -212,75 +212,77 @@ define(function (require) {
             //         }
             //     }
             // }
-        },
-        setSimpleCustomLabeledStyle: function () {
-            var styleId = this.getStyleId(),
-                styleLabelField = this.get("styleLabelField");
+        // },
+        // setSimpleCustomLabeledStyle: function () {
+        //     var styleId = this.getStyleId(),
+        //         styleLabelField = this.get("styleLabelField");
 
-            this.set("style", function (feature) {
-                var stylelistmodel = Radio.request("StyleList", "returnModelById", styleId),
-                    label = _.values(_.pick(feature.getProperties(), styleLabelField))[0].toString();
+        //     this.set("style", function (feature) {
+        //         var stylelistmodel = Radio.request("StyleList", "returnModelById", styleId),
+        //             label = _.values(_.pick(feature.getProperties(), styleLabelField))[0].toString();
 
-                return stylelistmodel.getCustomLabeledStyle(label);
-            });
-        },
-        setSimpleStyleForStyleField: function () {
-            var styleId = this.getStyleId(),
-                styleField = this.get("styleField");
+        //         return stylelistmodel.getCustomLabeledStyle(label);
+        //     });
+        // },
+        // setSimpleStyleForStyleField: function () {
+        //     var styleId = this.getStyleId(),
+        //         styleField = this.get("styleField");
 
-            this.set("style", function (feature) {
-                var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
-                    stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
+        //     this.set("style", function (feature) {
+        //         var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
+        //             stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
 
-                return stylelistmodel.getSimpleStyle();
-            });
-        },
-        setSimpleStyleForStyleFieldAndLabel: function () {
-            var styleId = this.getStyleId(),
-                styleLabelField = this.get("styleLabelField"),
-                styleField = this.get("styleField");
+        //         return stylelistmodel.getSimpleStyle();
+        //     });
+        // },
+        // setSimpleStyleForStyleFieldAndLabel: function () {
+        //     var styleId = this.getStyleId(),
+        //         styleLabelField = this.get("styleLabelField"),
+        //         styleField = this.get("styleField");
 
-            this.set("style", function (feature) {
-                var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
-                    label = _.values(_.pick(feature.getProperties(), styleLabelField))[0],
-                    stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
+        //     this.set("style", function (feature) {
+        //         var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
+        //             label = _.values(_.pick(feature.getProperties(), styleLabelField))[0],
+        //             stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
 
-                return stylelistmodel.getCustomLabeledStyle(label);
-            });
-        },
-        setClusterStyleForStyleField: function () {
-            var styleId = this.getStyleId(),
-                styleField = this.get("styleField");
+        //         return stylelistmodel.getCustomLabeledStyle(label);
+        //     });
+        // },
+        // setClusterStyleForStyleField: function () {
+        //     var styleId = this.getStyleId(),
+        //         styleField = this.get("styleField");
 
-            this.set("style", function (feature) {
-                var size = feature.get("features").length,
-                    stylelistmodel;
+        //     this.set("style", function (feature) {
+        //         var size = feature.get("features").length,
+        //             stylelistmodel;
 
-                if (size > 1) {
-                    stylelistmodel = Radio.request("StyleList", "returnModelById", styleId + "_cluster");
-                }
-                if (!stylelistmodel) {
-                    var styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), styleField))[0];
+        //         if (size > 1) {
+        //             stylelistmodel = Radio.request("StyleList", "returnModelById", styleId + "_cluster");
+        //         }
+        //         if (!stylelistmodel) {
+        //             var styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), styleField))[0];
 
-                    stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
-                }
-                return stylelistmodel.getClusterStyle(feature);
-            });
-        },
-        setSimpleStyle: function () {
-            var styleId = this.getStyleId(),
-                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
+        //             stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
+        //         }
+        //         return stylelistmodel.getClusterStyle(feature);
+        //     });
+        // },
+        // setSimpleStyle: function () {
+        //     var styleId = this.getStyleId(),
+        //         stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
 
-            this.set("style", stylelistmodel.getSimpleStyle());
-        },
-        setClusterStyle: function () {
-            var styleId = this.getStyleId(),
-                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
+        //     this.set("style", function (feature) {
+        //         return stylelistmodel.createStyle()
+        //     });
+        // },
+        // setClusteredStyle: function () {
+        //     var styleId = this.getStyleId(),
+        //         stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
 
-            this.set("style", function (feature) {
-                return stylelistmodel.getClusterStyle(feature);
-            });
-        },
+        //     this.set("style", function (feature) {
+        //         return stylelistmodel.createStyle(feature);
+        //     });
+        // },
         setProjection: function (proj) {
             this.set("projection", proj);
         },
