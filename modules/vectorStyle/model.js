@@ -8,10 +8,12 @@ define([
     var WFSStyle = Backbone.Model.extend({
         defaults: {
             styleCache: [],
-            createdStyle: undefined,
             class: "POINT",
             subclass: "SIMPLE",
-            // für Icon
+            styleField: "",
+            styleFieldValues: [],
+            labelField: "",
+            // für SIMPLE
             imagename: "blank.png",
             imagewidth: 1,
             imageheight: 1,
@@ -22,11 +24,8 @@ define([
             circleradius: 10,
             circlefillcolor: [0, 153, 255, 1],
             circlestrokecolor: [0, 0, 0, 1],
-            // für Stroke
-            strokecolor: [150, 150, 150, 1],
-            strokewidth: 5,
-            // Für IconWithText
-            textlabel: "default",
+            // Für Label
+            textAlign: "left",
             textfont: "Courier",
             textscale: 1,
             textoffsetx: 0,
@@ -47,23 +46,38 @@ define([
         },
         initialize: function () {
             this.set("imagepath", Radio.request("Util", "getPath", Config.wfsImgPath))
-            this.createStyle();
         },
-        createStyle: function () {
-            var style = undefined,
+        createStyle: function (feature) {
+            var style,
                 styleClass = this.get("class").toUpperCase();
 
             if (styleClass === "POINT") {
-                style = this.createPointStyle();
+                style = this.createPointStyle(feature);
             }
-            this.setCreatedStyle(style);
+            return style;
         },
-        createPointStyle: function () {
-            var style = undefined,
-                styleSubClass = this.get("subclass").toUpperCase();
+        createPointStyle: function (feature) {
+            var style,
+                styleSubClass = this.get("subclass").toUpperCase(),
+                labelField = this.get("labelField");
 
             if (styleSubClass === "SIMPLE") {
                 style = this.createSimplePointStyle();
+                if (labelField.length > 0) {
+                    style.setText(this.createTextStyle(feature, labelField));
+                }
+            }
+            else if (styleSubClass === "CUSTOM") {
+                style = this.createCustomPointStyle(feature);
+                if (labelField.length > 0) {
+                    style.setText(this.createTextStyle(feature, labelField));
+                }
+            }
+            else if (styleSubClass === "CIRCLE") {
+                style = this.createCirclePointStyle();
+                if (labelField.length > 0) {
+                    style.setText(this.createTextStyle(feature, labelField));
+                }
             }
             return style;
         },
@@ -82,15 +96,88 @@ define([
                     anchor: offset,
                     imgSize: isSVG ? [width, height] : ""
                 }),
-                styleFunction = function (feature) {
-                    var style = new ol.style.Style({
-                        image: imagestyle
-                    });
+                style = new ol.style.Style({
+                    image: imagestyle
+                });
+
+            return style;
+        },
+        createCustomPointStyle: function (feature) {
+            var styleField = this.get("styleField"),
+                featureValue = feature.get(styleField),
+                styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
+                    return styleFieldValue.styleFieldValue === featureValue
+                })[0],
+                src = this.get("imagepath") + styleFieldValueObj.imagename,
+                isSVG = src.indexOf(".svg") > -1 ? true : false,
+                width = styleFieldValueObj.imagewidth ? styleFieldValueObj.imagewidth : this.get("imagewidth"),
+                height = styleFieldValueObj.imageheight ? styleFieldValueObj.imageheight : this.get("imageheight"),
+                scale = styleFieldValueObj.imagescale ? styleFieldValueObj.imagescale : parseFloat(this.get("imagescale")),
+                imageoffsetx = styleFieldValueObj.imageoffsetx ? styleFieldValueObj.imageoffsetx : this.get("imageoffsetx"),
+                imageoffsety = styleFieldValueObj.imageoffsety ? styleFieldValueObj.imageoffsety : this.get("imageoffsety"),
+                offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)],
+                imagestyle = new ol.style.Icon({
+                    src: src,
+                    width: width,
+                    height: height,
+                    scale: scale,
+                    anchor: offset,
+                    imgSize: isSVG ? [width, height] : ""
+                }),
+                style = new ol.style.Style({
+                    image: imagestyle
+                });
+
+            return style;
+        },
+        createCirclePointStyle: function () {
+            var radius = parseInt(this.get("circleradius"), 10),
+                fillcolor = this.returnColor(this.get("circlefillcolor")),
+                strokecolor = this.returnColor(this.get("circlestrokecolor")),
+                circleStyle = new ol.style.Circle({
+                    radius: radius,
+                    fill: new ol.style.Fill({
+                        color: fillcolor
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: strokecolor
+                    })
+                }),
+                style = new ol.style.Style({
+                    image: circleStyle
+                });
 
                 return style;
-                };
+        },
+        createTextStyle: function (feature, labelField) {
+            var text = feature.get(labelField),
+                textAlign = this.get("textAlign"),
+                font = this.get("textfont").toString(),
+                scale = parseInt(this.get("textscale"), 10),
+                offsetX = parseInt(this.get("textoffsetx"), 10),
+                offsetY = parseInt(this.get("textoffsety"), 10),
+                fillcolor = this.returnColor(this.get("textfillcolor")),
+                strokecolor = this.returnColor(this.get("textstrokecolor")),
+                strokewidth = parseInt(this.get("textstrokewidth"), 10),
+                textStyle;
 
-            return styleFunction;
+                textStyle = new ol.style.Text({
+                    text: text,
+                    textAlign: textAlign,
+                    offsetX: offsetX,
+                    offsetY: offsetY,
+                    font: font,
+                    scale: scale,
+                    fill: new ol.style.Fill({
+                        color: fillcolor
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: strokecolor,
+                        width: strokewidth
+                    })
+                });
+
+                return textStyle;
         },
         returnColor: function (textstring) {
             if (typeof textstring === "string") {

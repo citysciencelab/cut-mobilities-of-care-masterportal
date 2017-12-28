@@ -100,9 +100,12 @@ define(function (require) {
                         this.getLayerSource().addFeatures(features);
                         this.set("loadend", "ready");
                         Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
-                        this.styling();
+                        // this.styling();
+                        var styleId = this.getStyleId(),
+                        stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
+
                         _.each(this.getLayer().getSource().getFeatures(), function(feature) {
-                            feature.setStyle(this.getStyle(feature));
+                            feature.setStyle(stylelistmodel.createStyle(feature));
                         }, this);
                     }
                     catch (e) {
@@ -172,11 +175,6 @@ define(function (require) {
             }
         },
         styling: function () {
-            var styleId = this.getStyleId(),
-                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
-
-            this.setStyle(stylelistmodel.getCreatedStyle());
-
             // NOTE Hier werden die Styles zugeordnet
             // if (this.get("styleField") && this.get("styleField") !== "") {
             //     if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
@@ -293,11 +291,11 @@ define(function (require) {
 
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
-            if (!this.get("legendURL").length) {
-                var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+            // if (!this.get("legendURL").length) {
+            //     var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
-                this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
-            }
+            //     this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
+            // }
         },
         /**
          * Versteckt alle Features mit dem Hidden-Style
