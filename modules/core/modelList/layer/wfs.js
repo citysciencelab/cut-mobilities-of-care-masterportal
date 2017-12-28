@@ -96,8 +96,7 @@ define(function (require) {
                             featureNS: this.get("featureNS")
                         }),
                         features = wfsReader.readFeatures(data),
-                        isClustered = this.has("clusterDistance") ? true : false,
-                        stylelistmodel = Radio.request("StyleList", "getModelById", this.getStyleId());
+                        isClustered = this.has("clusterDistance") ? true : false;
 
                     this.getLayerSource().addFeatures(features);
                     this.set("loadend", "ready");

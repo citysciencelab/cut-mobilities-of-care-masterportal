@@ -79,7 +79,7 @@ define([
                 style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
             else if (styleSubClass === "CIRCLE") {
-                style = this.createCirclePointStyle();
+                style = this.createCirclePointStyle(feature, isClustered);
                 style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
             return style;
@@ -114,12 +114,12 @@ define([
                     });
                 }
                 else {
-                    src = this.get("imagePath") + this.get("imageName"),
-                    isSVG = src.indexOf(".svg") > -1 ? true : false,
-                    width = this.get("imageWidth"),
-                    height = this.get("imageHeight"),
-                    scale = parseFloat(this.get("imageScale")),
-                    offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))],
+                    src = this.get("imagePath") + this.get("imageName");
+                    isSVG = src.indexOf(".svg") > -1 ? true : false;
+                    width = this.get("imageWidth");
+                    height = this.get("imageHeight");
+                    scale = parseFloat(this.get("imageScale"));
+                    offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))];
                     imagestyle = new ol.style.Icon({
                         src: src,
                         width: width,
@@ -127,7 +127,7 @@ define([
                         scale: scale,
                         anchor: offset,
                         imgSize: isSVG ? [width, height] : ""
-                    }),
+                    });
                     style = new ol.style.Style({
                         image: imagestyle
                     });
@@ -213,8 +213,35 @@ define([
 
             return style;
         },
-        createCirclePointStyle: function () {
-            var radius = parseInt(this.get("circleRadius"), 10),
+        createCirclePointStyle: function (feature, isClustered) {
+            var radius,
+                fillcolor,
+                strokecolor,
+                circleStyle,
+                style;
+
+            if (isClustered && feature.get("features").length > 1) {
+                src = this.get("imagePath") + this.get("clusterImageName");
+                isSVG = src.indexOf(".svg") > -1 ? true : false;
+                width = this.get("clusterImageWidth");
+                height = this.get("clusterImageHeight");
+                scale = parseFloat(this.get("clusterImageScale"));
+                offset = [parseFloat(this.get("clusterImageOffsetX")), parseFloat(this.get("clusterImageOffsetY"))];
+                imagestyle = new ol.style.Icon({
+                    src: src,
+                    width: width,
+                    height: height,
+                    scale: scale,
+                    anchor: offset,
+                    imgSize: isSVG ? [width, height] : ""
+                });
+                style = new ol.style.Style({
+                    image: imagestyle
+                });
+
+            }
+            else {
+                radius = parseInt(this.get("circleRadius"), 10),
                 fillcolor = this.returnColor(this.get("circleFillColor")),
                 strokecolor = this.returnColor(this.get("circleStrokeColor")),
                 circleStyle = new ol.style.Circle({
@@ -229,8 +256,9 @@ define([
                 style = new ol.style.Style({
                     image: circleStyle
                 });
+            }
 
-                return style;
+            return style;
         },
         createTextStyle: function (feature, labelField, isClustered) {
             var text,

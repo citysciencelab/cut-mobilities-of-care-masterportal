@@ -13,6 +13,18 @@
     "clusterImageOffsetY" : 0.50
   },
   {
+    "layerId" : "1711_CIRCLE",
+    "class": "POINT",
+    "subClass" : "CIRCLE",
+    "circleRadius": 20,
+    "circleFillColor": [255,0,0,0.5],
+    "circleStrokeColor": [0,0,255,0.5],
+    "clusterImageName" : "marker_red_small.png",
+    "clusterImageScale" : "0.7",
+    "clusterImageOffsetX" : 0.50,
+    "clusterImageOffsetY" : 0.50
+  },
+  {
     "layerId" : "2060_CUSTOM",
     "class": "POINT",
     "subClass": "CUSTOM",
