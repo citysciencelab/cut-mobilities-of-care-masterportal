@@ -33,7 +33,14 @@ define([
             textFillColor: [255, 255, 255, 1],
             textStrokeColor: [0, 0, 0, 1],
             textStrokeWidth: 3,
-            // Für ClusterText
+            // Für Cluster Image
+            clusterImageName: "blank.png",
+            clusterImageWidth: 1,
+            clusterImageHeight: 1,
+            clusterImageScale: 1,
+            clusterImageOffsetX: 0,
+            clusterImageOffsetY: 0,
+            // Für Cluster Text
             clusterFont: "Courier",
             clusterScale: 1,
             clusterOffsetX: 0,
@@ -82,23 +89,53 @@ define([
             return style;
         },
         createSimplePointStyle: function (feature, isClustered) {
-            var src = this.get("imagePath") + this.get("imageName"),
-                isSVG = src.indexOf(".svg") > -1 ? true : false,
-                width = this.get("imageWidth"),
-                height = this.get("imageHeight"),
-                scale = parseFloat(this.get("imageScale")),
-                offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))],
-                imagestyle = new ol.style.Icon({
-                    src: src,
-                    width: width,
-                    height: height,
-                    scale: scale,
-                    anchor: offset,
-                    imgSize: isSVG ? [width, height] : ""
-                }),
-                style = new ol.style.Style({
-                    image: imagestyle
-                });
+            var src,
+                isSVG,
+                width,
+                height,
+                scale,
+                offset,
+                imagestyle,
+                style;
+
+                if (isClustered && feature.get("features").length > 1) {
+                    src = this.get("imagePath") + this.get("clusterImageName"),
+                    isSVG = src.indexOf(".svg") > -1 ? true : false,
+                    width = this.get("clusterImageWidth"),
+                    height = this.get("clusterImageHeight"),
+                    scale = parseFloat(this.get("clusterImageScale")),
+                    offset = [parseFloat(this.get("clusterImageOffsetX")), parseFloat(this.get("clusterImageOffsetY"))],
+                    imagestyle = new ol.style.Icon({
+                        src: src,
+                        width: width,
+                        height: height,
+                        scale: scale,
+                        anchor: offset,
+                        imgSize: isSVG ? [width, height] : ""
+                    }),
+                    style = new ol.style.Style({
+                        image: imagestyle
+                    });
+                }
+                else {
+                    src = this.get("imagePath") + this.get("imageName"),
+                    isSVG = src.indexOf(".svg") > -1 ? true : false,
+                    width = this.get("imageWidth"),
+                    height = this.get("imageHeight"),
+                    scale = parseFloat(this.get("imageScale")),
+                    offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))],
+                    imagestyle = new ol.style.Icon({
+                        src: src,
+                        width: width,
+                        height: height,
+                        scale: scale,
+                        anchor: offset,
+                        imgSize: isSVG ? [width, height] : ""
+                    }),
+                    style = new ol.style.Style({
+                        image: imagestyle
+                    });
+                }
 
             return style;
 
@@ -139,13 +176,13 @@ define([
                     }
                     // bei clusterstyle mit mehreren Features wird das Icon genommen, das im style unter imageName definiert ist
                     else {
-                        src = this.get("imagePath") + this.get("imageName");
+                        src = this.get("imagePath") + this.get("clusterImageName");
                         isSVG = src.indexOf(".svg") > -1 ? true : false;
-                        width = this.get("imageWidth");
-                        height = this.get("imageHeight");
-                        scale = parseFloat(this.get("imageScale"));
-                        imageoffsetx = this.get("imageOffsetX");
-                        imageoffsety = this.get("imageOffsetY");
+                        width = this.get("clusterImageWidth");
+                        height = this.get("clusterImageHeight");
+                        scale = parseFloat(this.get("clusterImageScale"));
+                        imageoffsetx = this.get("clusterImageOffsetX");
+                        imageoffsety = this.get("clusterImageOffsetY");
                         offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
                     }
 

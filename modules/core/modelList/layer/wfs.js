@@ -37,7 +37,7 @@ define(function (require) {
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
-                source: this.get("isClustered") ? this.getClusterLayerSource() : this.getLayerSource(),
+                source: this.has("clusterDistance") ? this.getClusterLayerSource() : this.getLayerSource(),
                 name: this.get("name"),
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
@@ -96,7 +96,7 @@ define(function (require) {
                             featureNS: this.get("featureNS")
                         }),
                         features = wfsReader.readFeatures(data),
-                        isClustered = this.get("isClustered"),
+                        isClustered = this.has("clusterDistance") ? true : false,
                         stylelistmodel = Radio.request("StyleList", "getModelById", this.getStyleId());
 
                     this.getLayerSource().addFeatures(features);
