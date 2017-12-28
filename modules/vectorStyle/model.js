@@ -41,13 +41,15 @@ define([
             clusterImageOffsetX: 0,
             clusterImageOffsetY: 0,
             // Für Cluster Text
-            clusterFont: "Courier",
-            clusterScale: 1,
-            clusterOffsetX: 0,
-            clusterOffsetY: 0,
-            clusterFillColor: [255, 255, 255, 1],
-            clusterStrokeColor: [0, 0, 0, 1],
-            clusterStrokeWidth: 3,
+            clusterText: "COUNTER",
+            clusterTextAlign: "left",
+            clusterTextFont: "Courier",
+            clusterTextScale: 1,
+            clusterTextOffsetX: 0,
+            clusterTextOffsetY: 0,
+            clusterTextFillColor: [255, 255, 255, 1],
+            clusterTextStrokeColor: [0, 0, 0, 1],
+            clusterTextStrokeWidth: 3,
             // Für Polygon
             fillColor: [255, 255, 255, 1]
         },
@@ -70,21 +72,15 @@ define([
 
             if (styleSubClass === "SIMPLE") {
                 style = this.createSimplePointStyle(feature, isClustered);
-                if (labelField.length > 0) {
-                    style.setText(this.createTextStyle(feature, labelField));
-                }
+                style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
             else if (styleSubClass === "CUSTOM") {
                 style = this.createCustomPointStyle(feature, isClustered);
-                if (labelField.length > 0) {
-                    style.setText(this.createTextStyle(feature, labelField));
-                }
+                style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
             else if (styleSubClass === "CIRCLE") {
                 style = this.createCirclePointStyle();
-                if (labelField.length > 0) {
-                    style.setText(this.createTextStyle(feature, labelField));
-                }
+                style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
             return style;
         },
@@ -237,23 +233,66 @@ define([
                 return style;
         },
         createTextStyle: function (feature, labelField, isClustered) {
-            var text = !_.isUndefined(labelField) ? feature.get(labelField): "",
-                textAlign = this.get("textAlign"),
-                font = this.get("textFont").toString(),
-                scale = parseInt(this.get("textScale"), 10),
-                offsetX = parseInt(this.get("textOffsetX"), 10),
-                offsetY = parseInt(this.get("textOffsetY"), 10),
-                fillcolor = this.returnColor(this.get("textFillColor")),
-                strokecolor = this.returnColor(this.get("textStrokeColor")),
-                strokewidth = parseInt(this.get("textStrokeWidth"), 10),
+            var text,
+                textAlign,
+                font,
+                scale,
+                offsetX,
+                offsetY,
+                fillcolor,
+                strokecolor,
+                strokewidth,
                 textStyle;
 
                 if (isClustered) {
-                    text = feature.get("features").length.toString();
-                    if (text === "1") {
-                        return null;
+                    if (feature.get("features").length === 1) {
+                        text = feature.get("features")[0].get(labelField);
+                        textAlign = this.get("textAlign");
+                        font = this.get("textFont").toString();
+                        scale = parseInt(this.get("textScale"), 10);
+                        offsetX = parseInt(this.get("textOffsetX"), 10);
+                        offsetY = parseInt(this.get("textOffsetY"), 10);
+                        fillcolor = this.returnColor(this.get("textFillColor"));
+                        strokecolor = this.returnColor(this.get("textStrokeColor"));
+                        strokewidth = parseInt(this.get("textStrokeWidth"), 10);
+                    }
+                    else {
+                        if (this.get("clusterText") === "COUNTER") {
+                            text = feature.get("features").length.toString();
+                        }
+                        else if (this.get("clusterText") === "NONE") {
+                            return;
+                        }
+                        else {
+                            text = this.get("clusterText")
+                        }
+                        textAlign = this.get("clusterTextAlign");
+                        font = this.get("clusterTextFont").toString();
+                        scale = parseInt(this.get("clusterTextScale"), 10);
+                        offsetX = parseInt(this.get("clusterTextOffsetX"), 10);
+                        offsetY = parseInt(this.get("clusterTextOffsetY"), 10);
+                        fillcolor = this.returnColor(this.get("clusterTextFillColor"));
+                        strokecolor = this.returnColor(this.get("clusterTextStrokeColor"));
+                        strokewidth = parseInt(this.get("clusterTextStrokeWidth"), 10);
                     }
                 }
+                else {
+                    if (labelField.length > 0) {
+                        return;
+                    }
+                    else {
+                        text = feature.get(labelField);
+                        textAlign = this.get("textAlign");
+                        font = this.get("textFont").toString();
+                        scale = parseInt(this.get("textScale"), 10);
+                        offsetX = parseInt(this.get("textOffsetX"), 10);
+                        offsetY = parseInt(this.get("textOffsetY"), 10);
+                        fillcolor = this.returnColor(this.get("textFillColor"));
+                        strokecolor = this.returnColor(this.get("textStrokeColor"));
+                        strokewidth = parseInt(this.get("textStrokeWidth"), 10);
+                    }
+                }
+
                 textStyle = new ol.style.Text({
                     text: text,
                     textAlign: textAlign,
