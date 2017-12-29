@@ -402,17 +402,6 @@ define([
 
                 return textStyle;
         },
-        // returnColor: function (textstring, dest) {
-        //     if (typeof textstring === "string") {
-        //         var pArray = [];
-
-        //         pArray = textstring.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
-        //         return [pArray[0], pArray[1], pArray[2], pArray[3]];
-        //     }
-        //     else {
-        //         return textstring;
-        //     }
-        // },
         returnColor: function (color, dest) {
             var src,
                 newColor,
