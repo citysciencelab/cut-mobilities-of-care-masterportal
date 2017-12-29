@@ -161,8 +161,7 @@
       "Layer": [
         {
           "id": "1711",
-          "styleId": "1711_CIRCLE",
-          "clusterDistance": 40,
+          "styleId": "1711",
           "visibility": true,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
@@ -170,8 +169,12 @@
         },
         {
           "id": "2060",
-          "styleId": "2060_CUSTOM",
-          "clusterDistance": 40,
+          "styleId": "2060",
+          "visibility": true
+        },
+        {
+          "id": "2003",
+          "styleId": "2003",
           "visibility": true
         }
       ]

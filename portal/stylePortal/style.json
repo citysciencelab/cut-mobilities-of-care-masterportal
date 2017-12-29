@@ -1,65 +1,52 @@
 [
   {
-    "layerId" : "1711_SIMPLE",
-    "class": "POINT",
-    "subClass" : "SIMPLE",
-    "imageName" : "krankenhaus.png",
-    "imageScale" : "0.7",
-    "imageOffsetX" : 0.50,
-    "imageOffsetY" : 0.50,
-    "clusterImageName" : "marker_red_small.png",
-    "clusterImageScale" : "0.7",
-    "clusterImageOffsetX" : 0.50,
-    "clusterImageOffsetY" : 0.50
+    "layerId": "2003",
+    "class": "POLYGON",
+    "polygonStrokeColor": [0, 0, 0, 1],
+    "polygonStrokeWidth": 1,
+    "polygonFillColor": [10, 200, 0, 0.2]
   },
   {
-    "layerId" : "1711_CIRCLE",
+    "layerId": "1711",
     "class": "POINT",
-    "subClass" : "CIRCLE",
-    "circleRadius": 20,
-    "circleFillColor": [255,0,0,0.5],
-    "circleStrokeColor": [0,0,255,0.5],
-    "clusterImageName" : "marker_red_small.png",
-    "clusterImageScale" : "0.7",
-    "clusterImageOffsetX" : 0.50,
-    "clusterImageOffsetY" : 0.50
+    "subClass": "SIMPLE",
+    "imageName": "krankenhaus.png",
+    "imageScale": "0.7",
+    "imageOffsetX": 0.50,
+    "imageOffsetY": 0.50
   },
   {
-    "layerId" : "2060_CUSTOM",
+    "layerId": "2060",
     "class": "POINT",
     "subClass": "CUSTOM",
-    "imageOffsetX" : 0.50,
-    "imageOffsetY" : 0.50,
-    "clusterImageName" : "marker_red_small.png",
-    "clusterImageScale" : "0.7",
-    "clusterImageOffsetX" : 0.50,
-    "clusterImageOffsetY" : 0.50,
+    "imageOffsetX": 0.50,
+    "imageOffsetY": 0.50,
     "styleField": "kategorie",
     "styleFieldValues": [
       {
         "styleFieldValue":"Brunnen",
-        "imageName" : "brunnen_10.png",
-        "imageScale" : "0.5"
+        "imageName": "brunnen_10.png",
+        "imageScale": "0.5"
       },
       {
         "styleFieldValue":"Wasserbauobjekt",
-        "imageName" : "wasserbauobjekt_10.png",
-        "imageScale" : "0.5"
+        "imageName": "wasserbauobjekt_10.png",
+        "imageScale": "0.5"
       },
       {
         "styleFieldValue":"Brack",
-        "imageName" : "brack_10.png",
-        "imageScale" : "0.5"
+        "imageName": "brack_10.png",
+        "imageScale": "0.5"
       },
       {
         "styleFieldValue":"See",
-        "imageName" : "see_10.png",
-        "imageScale" : "0.5"
+        "imageName": "see_10.png",
+        "imageScale": "0.5"
       },
       {
         "styleFieldValue":"Gewässer",
-        "imageName" : "gewaesser_10.png",
-        "imageScale" : "0.5"
+        "imageName": "gewaesser_10.png",
+        "imageScale": "0.5"
       }
     ]
   }

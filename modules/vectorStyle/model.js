@@ -51,24 +51,47 @@ define([
             clusterTextStrokeColor: [0, 0, 0, 1],
             clusterTextStrokeWidth: 3,
             // Für Polygon
-            fillColor: [255, 255, 255, 1]
+            polygonFillColor: [255, 255, 255, 1],
+            polygonStrokeColor: [0, 0, 0, 1],
+            polygonStrokeWidth: 2
         },
         initialize: function () {
             this.set("imagePath", Radio.request("Util", "getPath", Config.wfsImgPath))
         },
         createStyle: function (feature, isClustered) {
             var style,
-                styleClass = this.get("class").toUpperCase();
+                styleClass = this.get("class").toUpperCase(),
+                labelField = this.get("labelField");
 
             if (styleClass === "POINT") {
-                style = this.createPointStyle(feature, isClustered);
+                style = this.createPointStyle(feature, isClustered, labelField);
+            }
+            if (styleClass === "POLYGON") {
+                style = this.createPolygonStyle(feature, isClustered, labelField);
+                style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
             return style;
         },
-        createPointStyle: function (feature, isClustered) {
+        createPolygonStyle: function (feature, isClustered, labelField) {
+            var strokestyle = new ol.style.Stroke({
+                    color: this.returnColor(this.get("polygonStrokeColor")),
+                    width: this.returnColor(this.get("polygonStrokeWidth"))
+                }),
+                fill = new ol.style.Fill({
+                    color: this.returnColor(this.get("polygonFillColor"))
+                }),
+                style;
+
+                style = new ol.style.Style({
+                    stroke: strokestyle,
+                    fill: fill
+                });
+
+                return style;
+        },
+        createPointStyle: function (feature, isClustered, labelField) {
             var style,
-                styleSubClass = this.get("subClass").toUpperCase(),
-                labelField = this.get("labelField");
+                styleSubClass = this.get("subClass").toUpperCase();
 
             if (styleSubClass === "SIMPLE") {
                 style = this.createSimplePointStyle(feature, isClustered);
@@ -305,7 +328,7 @@ define([
                     }
                 }
                 else {
-                    if (labelField.length > 0) {
+                    if (labelField.length === 0) {
                         return;
                     }
                     else {
