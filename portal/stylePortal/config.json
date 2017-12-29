@@ -176,6 +176,11 @@
           "id": "2003",
           "styleId": "2003",
           "visibility": true
+        },
+        {
+          "id": "1545",
+          "styleId": "1545",
+          "visibility": true
         }
       ]
     }

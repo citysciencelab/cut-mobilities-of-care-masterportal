@@ -1,5 +1,12 @@
 [
   {
+    "layerId": "1545",
+    "class": "LINE",
+    "subClass": "SIMPLE",
+    "lineStrokeColor": [0, 0, 0, 1],
+    "lineStrokeWidth": 5
+  },
+  {
     "layerId": "2003",
     "class": "POLYGON",
     "subClass": "SIMPLE",

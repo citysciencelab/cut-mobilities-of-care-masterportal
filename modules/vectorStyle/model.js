@@ -53,7 +53,10 @@ define([
             // Für Polygon
             polygonFillColor: [255, 255, 255, 1],
             polygonStrokeColor: [0, 0, 0, 1],
-            polygonStrokeWidth: 2
+            polygonStrokeWidth: 2,
+            // Für Line
+            lineStrokeColor: [0, 0, 0, 1],
+            lineStrokeWidth: 2
         },
         initialize: function () {
             this.set("imagePath", Radio.request("Util", "getPath", Config.wfsImgPath))
@@ -70,6 +73,32 @@ define([
             if (styleClass === "POLYGON") {
                 style = this.createPolygonStyle(feature, styleSubClass, isClustered, labelField);
             }
+            if (styleClass === "LINE") {
+                style = this.createLineStyle(feature, styleSubClass, isClustered, labelField);
+            }
+            return style;
+        },
+        createLineStyle: function (feature, styleSubClass, isClustered, labelField) {
+            var style;
+            if (styleSubClass === "SIMPLE") {
+                style = this.createSimpleLineStyle(feature, isClustered, labelField);
+                style.setText(this.createTextStyle(feature, labelField, isClustered));
+            }
+            return style;
+        },
+        createSimpleLineStyle: function (feature, isClustered, labelField) {
+            var strokecolor = this.returnColor(this.get("lineStrokeColor")),
+                strokewidth = parseInt(this.get("lineStrokeWidth"), 10),
+                strokestyle = new ol.style.Stroke({
+                    color: strokecolor,
+                    width: strokewidth
+                }),
+                style;
+
+                style = style = new ol.style.Style({
+                    stroke: strokestyle
+                });
+
             return style;
         },
         createPolygonStyle: function (feature, styleSubClass, isClustered, labelField) {
