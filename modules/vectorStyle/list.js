@@ -8,6 +8,9 @@ define([
     var StyleList = Backbone.Collection.extend ({
         model: WFSStyle,
         url: function () {
+            if (!_.has(Config, "styleConf") || Config.styleConf === "") {
+                return "keine Style JSON";
+            }
             return Radio.request("Util", "getPath", Config.styleConf);
         },
         initialize: function () {
@@ -20,19 +23,20 @@ define([
                     return this.models;
                 }
             }, this);
-
-            this.fetch({
-                cache: false,
-                async: false,
-                error: function () {
-                    Radio.trigger("Alert", "alert", {
-                        text: "Fehler beim Laden von: " + Radio.request("Util", "getPath", Config.styleConf),
-                        kategorie: "alert-warning"
-                    });
-                },
-                success: function () {
-                }
-            });
+            if (this.url() !== "keine Style JSON") {
+                this.fetch({
+                    cache: false,
+                    async: false,
+                    error: function () {
+                        Radio.trigger("Alert", "alert", {
+                            text: "Fehler beim Laden von: " + Radio.request("Util", "getPath", Config.styleConf),
+                            kategorie: "alert-warning"
+                        });
+                    },
+                    success: function () {
+                    }
+                });
+            }
         },
         returnModelById: function (layerId) {
             return _.find(this.models, function (slmodel) {

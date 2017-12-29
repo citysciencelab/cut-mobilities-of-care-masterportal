@@ -161,7 +161,7 @@
       "Layer": [
         {
           "id": "1711",
-          "styleId": "1711_falsch",
+          "styleId": "1711",
           "visibility": true,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
