@@ -162,7 +162,7 @@
         {
           "id": "1711",
           "styleId": "1711",
-          "visibility": true,
+          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name"
@@ -170,17 +170,35 @@
         {
           "id": "2060",
           "styleId": "2060",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "2003",
           "styleId": "2003",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "1545",
           "styleId": "1545",
+          "visibility": false
+        },
+        {
+          "id": "1671",
+          "name": "Biotop_MultiPoint (langsam)",
+          "styleId": "1671",
           "visibility": true
+        },
+        {
+          "id": "1672",
+          "name": "Biotop_MultiLine (langsam)",
+          "styleId": "1672",
+          "visibility": false
+        },
+        {
+          "id": "1673",
+          "name": "Biotop_MultiPolygon (langsam)",
+          "styleId": "1673",
+          "visibility": false
         }
       ]
     }

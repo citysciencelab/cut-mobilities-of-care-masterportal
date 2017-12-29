@@ -1,5 +1,24 @@
 [
   {
+    "layerId": "1673",
+    "class": "POLYGON",
+    "subClass": "SIMPLE"
+  },
+  {
+    "layerId": "1672",
+    "class": "LINE",
+    "subClass": "SIMPLE"
+  },
+  {
+    "layerId": "1671",
+    "class": "POINT",
+    "subClass": "SIMPLE",
+    "imageName": "krankenhaus.png",
+    "imageScale": "0.7",
+    "imageOffsetX": 0.50,
+    "imageOffsetY": 0.50
+  },
+  {
     "layerId": "1545",
     "class": "LINE",
     "subClass": "SIMPLE",
