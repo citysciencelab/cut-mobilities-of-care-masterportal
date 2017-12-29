@@ -15,7 +15,6 @@ define([
 
             channel.reply({
                 "returnModelById": this.returnModelById,
-                "returnAllModelsById": this.returnAllModelsById,
                 "returnModelByValue": this.returnModelByValue,
                 "returnModels": function () {
                     return this.models;
@@ -32,13 +31,6 @@ define([
                     });
                 },
                 success: function () {
-                }
-            });
-        },
-        returnAllModelsById: function (layerId) {
-            return _.filter(this.models, function (slmodel) {
-                if (slmodel.attributes.layerId === layerId) {
-                    return slmodel;
                 }
             });
         },

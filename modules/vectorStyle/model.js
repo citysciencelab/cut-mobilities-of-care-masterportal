@@ -24,6 +24,7 @@ define([
             circleRadius: 10,
             circleFillColor: [0, 153, 255, 1],
             circleStrokeColor: [0, 0, 0, 1],
+            circleStrokeWidth: 2,
             // Für Label
             textAlign: "left",
             textFont: "Courier",
@@ -59,7 +60,7 @@ define([
             lineStrokeWidth: 2
         },
         initialize: function () {
-            this.set("imagePath", Radio.request("Util", "getPath", Config.wfsImgPath))
+            this.set("imagePath", Radio.request("Util", "getPath", Config.wfsImgPath));
         },
         createStyle: function (feature, isClustered) {
             var style,
@@ -87,7 +88,7 @@ define([
             return style;
         },
         createSimpleLineStyle: function (feature, isClustered, labelField) {
-            var strokecolor = this.returnColor(this.get("lineStrokeColor")),
+            var strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
                 strokewidth = parseInt(this.get("lineStrokeWidth"), 10),
                 strokestyle = new ol.style.Stroke({
                     color: strokecolor,
@@ -112,11 +113,11 @@ define([
         },
         createSimplePolygonStyle: function (feature, isClustered, labelField) {
             var strokestyle = new ol.style.Stroke({
-                    color: this.returnColor(this.get("polygonStrokeColor")),
-                    width: this.returnColor(this.get("polygonStrokeWidth"))
+                    color: this.returnColor(this.get("polygonStrokeColor"), "rgb"),
+                    width: this.returnColor(this.get("polygonStrokeWidth"), "rgb")
                 }),
                 fill = new ol.style.Fill({
-                    color: this.returnColor(this.get("polygonFillColor"))
+                    color: this.returnColor(this.get("polygonFillColor"), "rgb")
                 }),
                 style;
 
@@ -277,6 +278,7 @@ define([
             var radius,
                 fillcolor,
                 strokecolor,
+                strokewidth = parseInt(this.get("circleStrokeWidth"), 10),
                 circleStyle,
                 style;
 
@@ -302,15 +304,16 @@ define([
             }
             else {
                 radius = parseInt(this.get("circleRadius"), 10),
-                fillcolor = this.returnColor(this.get("circleFillColor")),
-                strokecolor = this.returnColor(this.get("circleStrokeColor")),
+                fillcolor = this.returnColor(this.get("circleFillColor"), "rgb"),
+                strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb"),
                 circleStyle = new ol.style.Circle({
                     radius: radius,
                     fill: new ol.style.Fill({
                         color: fillcolor
                     }),
                     stroke: new ol.style.Stroke({
-                        color: strokecolor
+                        color: strokecolor,
+                        width: strokewidth
                     })
                 }),
                 style = new ol.style.Style({
@@ -340,8 +343,8 @@ define([
                         scale = parseInt(this.get("textScale"), 10);
                         offsetX = parseInt(this.get("textOffsetX"), 10);
                         offsetY = parseInt(this.get("textOffsetY"), 10);
-                        fillcolor = this.returnColor(this.get("textFillColor"));
-                        strokecolor = this.returnColor(this.get("textStrokeColor"));
+                        fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
+                        strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
                         strokewidth = parseInt(this.get("textStrokeWidth"), 10);
                     }
                     else {
@@ -359,8 +362,8 @@ define([
                         scale = parseInt(this.get("clusterTextScale"), 10);
                         offsetX = parseInt(this.get("clusterTextOffsetX"), 10);
                         offsetY = parseInt(this.get("clusterTextOffsetY"), 10);
-                        fillcolor = this.returnColor(this.get("clusterTextFillColor"));
-                        strokecolor = this.returnColor(this.get("clusterTextStrokeColor"));
+                        fillcolor = this.returnColor(this.get("clusterTextFillColor"), "rgb");
+                        strokecolor = this.returnColor(this.get("clusterTextStrokeColor"), "rgb");
                         strokewidth = parseInt(this.get("clusterTextStrokeWidth"), 10);
                     }
                 }
@@ -375,8 +378,8 @@ define([
                         scale = parseInt(this.get("textScale"), 10);
                         offsetX = parseInt(this.get("textOffsetX"), 10);
                         offsetY = parseInt(this.get("textOffsetY"), 10);
-                        fillcolor = this.returnColor(this.get("textFillColor"));
-                        strokecolor = this.returnColor(this.get("textStrokeColor"));
+                        fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
+                        strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
                         strokewidth = parseInt(this.get("textStrokeWidth"), 10);
                     }
                 }
@@ -399,183 +402,66 @@ define([
 
                 return textStyle;
         },
-        returnColor: function (textstring) {
-            if (typeof textstring === "string") {
-                var pArray = [];
+        // returnColor: function (textstring, dest) {
+        //     if (typeof textstring === "string") {
+        //         var pArray = [];
 
-                pArray = textstring.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
-                return [pArray[0], pArray[1], pArray[2], pArray[3]];
-            }
-            else {
-                return textstring;
-            }
-        }
-        /*
-        * Fügt dem normalen Symbol ein Symbol für das Cluster hinzu und gibt evtl. den Cache zurück
-        */
-        // getClusterStyle: function (feature) {
-        //     var mycoll = new ol.Collection(feature.get("features")),
-        //         size = mycoll.getLength(),
-        //         style = this.get("styleCache")[size];
-        //     if (!style) {
-        //         if (size !== 1) {
-        //             style = this.getClusterSymbol(size);
-        //         }
-        //         else {
-        //             style = this.getSimpleStyle();
-        //         }
-        //         this.get("styleCache")[size] = style;
-        //     }
-        //     return style;
-        // },
-        // getClusterSymbol: function (anzahl) {
-        //     if (anzahl !== "") {
-        //         var font = this.get("clusterfont").toString(),
-        //             color = this.returnColor(this.get("clustercolor")),
-        //             scale = parseInt(this.get("clusterscale"), 10),
-        //             offsetX = parseInt(this.get("clusteroffsetx"), 10),
-        //             offsetY = parseInt(this.get("clusteroffsety"), 10),
-        //             fillcolor = this.returnColor(this.get("clusterfillcolor")),
-        //             strokecolor = this.returnColor(this.get("clusterstrokecolor")),
-        //             strokewidth = parseInt(this.get("clusterstrokewidth"), 10),
-        //             clusterText = new ol.style.Text({
-        //                 text: anzahl.toString(),
-        //                 offsetX: offsetX,
-        //                 offsetY: offsetY,
-        //                 font: font,
-        //                 color: color,
-        //                 scale: scale,
-        //                 fill: new ol.style.Fill({
-        //                     color: fillcolor
-        //                 }),
-        //                 stroke: new ol.style.Stroke({
-        //                     color: strokecolor,
-        //                     width: strokewidth
-        //                 })
-        //             }),
-        //             style = this.getSimpleStyle();
-
-        //         style.push(
-        //         new ol.style.Style({
-        //             text: clusterText,
-        //             zIndex: "Infinity"
-        //         }));
-        //         return style;
-        //     }
-        // },
-        // getCustomLabeledStyle: function (label) {
-        //     this.set("textlabel", label);
-        //     var style = this.getSimpleStyle();
-
-        //     return style;
-        // },
-        // getSimpleStyle: function () {
-        //     var imagestyle, symbolText, strokestyle, fill;
-
-        //     this.set("imagepath", Radio.request("Util", "getPath", Config.wfsImgPath))
-        //     if (this.get("subclass") === "Icon") {
-        //         var src = this.get("imagepath") + this.get("imagename"),
-        //             isSVG = src.indexOf(".svg") > -1 ? true : false,
-        //             width = this.get("imagewidth"),
-        //             height = this.get("imageheight"),
-        //             scale = parseFloat(this.get("imagescale")),
-        //             offset = [parseFloat(this.get("imageoffsetx")), parseFloat(this.get("imageoffsety"))];
-
-        //             imagestyle = new ol.style.Icon({
-        //                 src: src,
-        //                 width: width,
-        //                 height: height,
-        //                 scale: scale,
-        //                 anchor: offset,
-        //                 imgSize: isSVG ? [width, height] : ""
-        //             });
-        //     }
-        //     else if (this.get("subclass") === "IconWithText") {
-        //         var src = this.get("imagepath") + this.get("imagename"),
-        //             width = this.get("imagewidth"),
-        //             height = this.get("imageheight"),
-        //             scale = parseFloat(this.get("imagescale")),
-        //             font = this.get("textfont").toString(),
-        //             text = this.get("textlabel"),
-        //             color = this.returnColor(this.get("textcolor")),
-        //             scale = parseInt(this.get("textscale"), 10),
-        //             offsetX = parseInt(this.get("textoffsetx"), 10),
-        //             offsetY = parseInt(this.get("textoffsety"), 10),
-        //             fillcolor = this.returnColor(this.get("textfillcolor")),
-        //             strokecolor = this.returnColor(this.get("textstrokecolor")),
-        //             strokewidth = parseInt(this.get("textstrokewidth"), 10);
-
-        //             imagestyle = new ol.style.Icon({
-        //                 src: src,
-        //                 width: width,
-        //                 height: height,
-        //                 scale: scale
-        //             });
-        //             symbolText = new ol.style.Text({
-        //                 text: text,
-        //                 offsetX: offsetX,
-        //                 offsetY: offsetY,
-        //                 font: font,
-        //                 color: color,
-        //                 scale: scale,
-        //                 fill: new ol.style.Fill({
-        //                     color: fillcolor
-        //                 }),
-        //                 stroke: new ol.style.Stroke({
-        //                     color: strokecolor,
-        //                     width: strokewidth
-        //                 })
-        //             });
-        //     }
-        //     else if (this.get("subclass") === "Circle") {
-        //         var radius = parseInt(this.get("circleradius"), 10),
-        //             fillcolor = this.returnColor(this.get("circlefillcolor")),
-        //             strokecolor = this.returnColor(this.get("circlestrokecolor"));
-
-        //             imagestyle = new ol.style.Circle({
-        //                 radius: radius,
-        //                 fill: new ol.style.Fill({
-        //                     color: fillcolor
-        //                 }),
-        //                 stroke: new ol.style.Stroke({
-        //                     color: strokecolor
-        //                 })
-        //             });
-        //     }
-        //     else if (this.get("subclass") === "Stroke") {
-        //         var strokecolor = this.returnColor(this.get("strokecolor")),
-        //             strokewidth = parseInt(this.get("strokewidth"), 10);
-
-        //             strokestyle = new ol.style.Stroke({
-        //                 color: strokecolor,
-        //                 width: strokewidth
-        //             });
-        //     }
-        //     else if (this.get("subclass") === "Polygon") {
-        //         var strokestyle = new ol.style.Stroke({
-        //             color: this.returnColor(this.get("color")),
-        //             width: this.returnColor(this.get("strokewidth"))
-        //         });
-
-        //         fill = new ol.style.Fill({
-        //             color: this.returnColor(this.get("fillcolor"))
-        //         });
+        //         pArray = textstring.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
+        //         return [pArray[0], pArray[1], pArray[2], pArray[3]];
         //     }
         //     else {
-        //         return;
+        //         return textstring;
         //     }
-        //     var style = [
-        //         new ol.style.Style({
-        //             image: imagestyle,
-        //             text: symbolText,
-        //             zIndex: "Infinity",
-        //             stroke: strokestyle,
-        //             fill: fill
-        //         })
-        //     ];
+        // },
+        returnColor: function (color, dest) {
+            var src,
+                newColor,
+                pArray = [];
 
-        //     return style;
-        // }
+                if (_.isArray(color) && !_.isString(color)) {
+                    src = "rgb";
+                }
+                else if (_.isString(color) && color.indexOf("#") === 0) {
+                    src = "hex";
+                }
+                else if (_.isString(color) && color.indexOf("#") === -1) {
+                    src = "rgb";
+
+                    pArray = color.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
+                    color = [pArray[0], pArray[1], pArray[2], pArray[3]];
+                }
+
+            if (src === "hex" && dest === "rgb") {
+                newColor = this.hexToRgb(color);
+            }
+            else if (src === "rgb" && dest === "hex") {
+                newColor = this.rgbToHex(color[0], color[1], color[2]);
+            }
+            else {
+                newColor = color;
+            }
+
+            return newColor;
+        },
+        rgbToHex: function (r, g, b) {
+            return "#" + this.componentToHex(r) + this.componentToHex(g) + this.componentToHex(b);
+        },
+        componentToHex: function (c) {
+            var hex = c.toString(16);
+
+            return hex.length == 1 ? "0" + hex : hex;
+        },
+        hexToRgb: function (hex) {
+            // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+            return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
+        }
     });
 
     return WFSStyle;

@@ -43,6 +43,15 @@
     "imageOffsetY": 0.50
   },
   {
+    "layerId": "1711_CIRCLE",
+    "class": "POINT",
+    "subClass": "CIRCLE",
+    "circleRadius": 20,
+    "circleStrokeColor": [255,0,0,1],
+    "circleStrokeWidth": 5,
+    "circleFillColor": [0,0,255,1]
+  },
+  {
     "layerId": "2060",
     "class": "POINT",
     "subClass": "CUSTOM",

@@ -162,48 +162,135 @@ define([
 
         setLegendParamsFromWFS: function () {
             _.each(this.get("wfsLayerList"), function (layer) {
-                if (typeof layer.get("legendURL") === "string") {
-                    this.push("tempArray", {
-                        layername: layer.get("name"),
-                        img: layer.get("legendURL"),
-                        typ: "WFS",
-                        isVisibleInMap: layer.get("isVisibleInMap")
-                    });
-                }
-                else {
-                    var image = [],
-                        name = [],
-                        style = Radio.request("StyleList", "returnModelById", layer.getStyleId()),
-                        styleFieldValues = style.get("styleFieldValues");
-
-                    if (styleFieldValues.length > 1) {
-                        _.each(styleFieldValues, function (styleFieldValue) {
-                            image.push(style.get("imagePath") + styleFieldValue.imageName);
-                            if (style.has("legendValue")) {
-                                name.push(style.get("legendValue"));
-                            }
-                            else {
-                                name.push(styleFieldValue.styleFieldValue);
-                            }
+                if (layer.get("loadend") === "ready") {
+                    if (typeof layer.get("legendURL") === "string") {
+                        this.push("tempArray", {
+                            layername: layer.get("name"),
+                            img: layer.get("legendURL"),
+                            typ: "WFS",
+                            isVisibleInMap: layer.get("isVisibleInMap")
                         });
                     }
                     else {
-                        if (style.get("imageName") !== "blank.png") {
-                            image.push(style.get("imagePath") + style.get("imageName"));
+                        var image = [],
+                            name = [],
+                            style = Radio.request("StyleList", "returnModelById", layer.getStyleId()),
+                            styleClass = style.get("class"),
+                            styleSubClass = style.get("subClass"),
+                            styleFieldValues = style.get("styleFieldValues");
+
+                        if (styleClass === "POINT") {
+                            // Custom Point Styles
+                            if (styleSubClass === "CUSTOM") {
+                                _.each(styleFieldValues, function (styleFieldValue) {
+                                    image.push(style.get("imagePath") + styleFieldValue.imageName);
+                                    if (style.has("legendValue")) {
+                                        name.push(style.get("legendValue"));
+                                    }
+                                    else {
+                                        name.push(styleFieldValue.styleFieldValue);
+                                    }
+                                });
+                            }
+                            // Circle Point Style
+                            if (styleSubClass === "CIRCLE") {
+                                image.push(this.createCircleSVG(style));
+                                name.push(layer.get("name"));
+                            }
+                            else {
+                                if (style.get("imageName") !== "blank.png") {
+                                    image.push(style.get("imagePath") + style.get("imageName"));
+                                }
+                                name.push(layer.get("name"));
+                            }
                         }
-                        name.push(layer.get("name"));
+                        // Simple Line Style
+                        if (styleClass === "LINE") {
+                            image.push(this.createLineSVG(style));
+                            name.push(layer.get("name"));
+                        }
+                        // Simple Polygon Style
+                        if (styleClass === "POLYGON") {
+                            image.push(this.createPolygonSVG(style));
+                            name.push(layer.get("name"));
+                        }
+                        this.push("tempArray", {
+                            layername: layer.get("name"),
+                            legendname: name,
+                            img: image,
+                            typ: "WFS",
+                            isVisibleInMap: layer.get("isVisibleInMap")
+                        });
                     }
-                    this.push("tempArray", {
-                        layername: layer.get("name"),
-                        legendname: name,
-                        img: image,
-                        typ: "WFS",
-                        isVisibleInMap: layer.get("isVisibleInMap")
-                    });
                 }
             }, this);
         },
+        createCircleSVG: function (style) {
+            var svg = "",
+                circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
+                circleStrokeOpacity = style.get("circleStrokeColor")[3].toString() || 0,
+                circleStrokeWidth = style.get("circleStrokeWidth"),
+                circleFillColor = style.returnColor(style.get("circleFillColor"), "hex"),
+                circleFillOpacity = style.get("circleFillColor")[3].toString() || 0;
 
+            svg += "<svg height='35' width='35'>";
+            svg += "<circle cx='17.5' cy='17.5' r='15' stroke='";
+            svg += circleStrokeColor;
+            svg += "' stroke-opacity='";
+            svg += circleStrokeOpacity;
+            svg += "' stroke-width='";
+            svg += circleStrokeWidth;
+            svg += "' fill='";
+            svg += circleFillColor;
+            svg += "' fill-opacity='";
+            svg += circleFillOpacity;
+            svg += "'/>";
+            svg += "</svg>";
+
+            return svg;
+        },
+        createLineSVG: function (style) {
+            var svg = "",
+                strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
+                strokeWidth = parseInt(style.get("lineStrokeWidth"), 10),
+                strokeOpacity = style.get("lineStrokeColor")[3].toString() || 0;
+
+            svg += "<svg height='35' width='35'>";
+            svg += "<path d='M 05 30 L 30 05' stroke='";
+            svg += strokeColor;
+            svg += "' stroke-opacity='";
+            svg += strokeOpacity;
+            svg += "' stroke-width='";
+            svg += strokeWidth;
+            svg += "' fill='none'/>";
+            svg += "</svg>";
+
+            return svg;
+        },
+        createPolygonSVG: function (style) {
+            var svg = "",
+                fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
+                strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
+                strokeWidth = parseInt(style.get("polygonStrokeWidth"), 10),
+                fillOpacity = style.get("polygonFillColor")[3].toString() || 0,
+                strokeOpacity = style.get("polygonStrokeColor")[3].toString() || 0;
+
+            svg += "<svg height='35' width='35'>";
+            svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
+            svg += fillColor;
+            svg += ";fill-opacity:";
+            svg += fillOpacity;
+            svg += ";stroke:";
+            svg += strokeColor;
+            svg += ";stroke-opacity:";
+            svg += strokeOpacity;
+            svg += ";stroke-width:";
+            svg += strokeWidth;
+            svg += ";'/>";
+            svg += "</svg>";
+
+            return svg;
+        },
         /**
          * Übergibt GroupLayer in den tempArray. Für jeden GroupLayer wird der Typ "Group" gesetzt und als legendURL ein Array übergeben.
          */
