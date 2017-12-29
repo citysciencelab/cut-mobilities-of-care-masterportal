@@ -8,7 +8,7 @@ define([
     var WFSStyle = Backbone.Model.extend({
         defaults: {
             imagePath: "",
-            class: "POINT",
+            class: "",
             subClass: "SIMPLE",
             styleField: "",
             styleFieldValues: [],
@@ -61,18 +61,27 @@ define([
         createStyle: function (feature, isClustered) {
             var style,
                 styleClass = this.get("class").toUpperCase(),
+                styleSubClass = this.get("subClass").toUpperCase(),
                 labelField = this.get("labelField");
 
             if (styleClass === "POINT") {
-                style = this.createPointStyle(feature, isClustered, labelField);
+                style = this.createPointStyle(feature, styleSubClass, isClustered, labelField);
             }
             if (styleClass === "POLYGON") {
-                style = this.createPolygonStyle(feature, isClustered, labelField);
+                style = this.createPolygonStyle(feature, styleSubClass, isClustered, labelField);
+            }
+            return style;
+        },
+        createPolygonStyle: function (feature, styleSubClass, isClustered, labelField) {
+            var style;
+
+            if (styleSubClass === "SIMPLE") {
+                style = this.createSimplePolygonStyle(feature, isClustered, labelField);
                 style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
             return style;
         },
-        createPolygonStyle: function (feature, isClustered, labelField) {
+        createSimplePolygonStyle: function (feature, isClustered, labelField) {
             var strokestyle = new ol.style.Stroke({
                     color: this.returnColor(this.get("polygonStrokeColor")),
                     width: this.returnColor(this.get("polygonStrokeWidth"))
@@ -89,9 +98,8 @@ define([
 
                 return style;
         },
-        createPointStyle: function (feature, isClustered, labelField) {
-            var style,
-                styleSubClass = this.get("subClass").toUpperCase();
+        createPointStyle: function (feature, styleSubClass, isClustered, labelField) {
+            var style;
 
             if (styleSubClass === "SIMPLE") {
                 style = this.createSimplePointStyle(feature, isClustered);

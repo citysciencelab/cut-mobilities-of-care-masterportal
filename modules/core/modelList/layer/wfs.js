@@ -173,115 +173,6 @@ define(function (require) {
                 this.toggleEventAttribution(false);
             }
         },
-        // styling: function () {
-            // NOTE Hier werden die Styles zugeordnet
-            // if (this.get("styleField") && this.get("styleField") !== "") {
-            //     if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
-            //         if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-            //             this.setSimpleStyleForStyleFieldAndLabel();
-            //         }
-            //         else {
-            //             this.setSimpleStyleForStyleField();
-            //         }
-            //     }
-            //     else {
-            //         if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-            //             // TODO
-            //         }
-            //         else {
-            //             this.setClusterStyleForStyleField();
-            //         }
-            //     }
-            // }
-            // else {
-            //     if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
-            //         if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-            //             this.setSimpleCustomLabeledStyle();
-            //         }
-            //         else {
-            //             this.setSimpleStyle();
-            //         }
-            //     }
-            //     else {
-            //         if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-            //             this.getClusterStyle();
-            //         }
-            //         else {
-            //             this.setClusterStyle();
-            //         }
-            //     }
-            // }
-        // },
-        // setSimpleCustomLabeledStyle: function () {
-        //     var styleId = this.getStyleId(),
-        //         styleLabelField = this.get("styleLabelField");
-
-        //     this.set("style", function (feature) {
-        //         var stylelistmodel = Radio.request("StyleList", "returnModelById", styleId),
-        //             label = _.values(_.pick(feature.getProperties(), styleLabelField))[0].toString();
-
-        //         return stylelistmodel.getCustomLabeledStyle(label);
-        //     });
-        // },
-        // setSimpleStyleForStyleField: function () {
-        //     var styleId = this.getStyleId(),
-        //         styleField = this.get("styleField");
-
-        //     this.set("style", function (feature) {
-        //         var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
-        //             stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
-
-        //         return stylelistmodel.getSimpleStyle();
-        //     });
-        // },
-        // setSimpleStyleForStyleFieldAndLabel: function () {
-        //     var styleId = this.getStyleId(),
-        //         styleLabelField = this.get("styleLabelField"),
-        //         styleField = this.get("styleField");
-
-        //     this.set("style", function (feature) {
-        //         var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
-        //             label = _.values(_.pick(feature.getProperties(), styleLabelField))[0],
-        //             stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
-
-        //         return stylelistmodel.getCustomLabeledStyle(label);
-        //     });
-        // },
-        // setClusterStyleForStyleField: function () {
-        //     var styleId = this.getStyleId(),
-        //         styleField = this.get("styleField");
-
-        //     this.set("style", function (feature) {
-        //         var size = feature.get("features").length,
-        //             stylelistmodel;
-
-        //         if (size > 1) {
-        //             stylelistmodel = Radio.request("StyleList", "returnModelById", styleId + "_cluster");
-        //         }
-        //         if (!stylelistmodel) {
-        //             var styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), styleField))[0];
-
-        //             stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
-        //         }
-        //         return stylelistmodel.getClusterStyle(feature);
-        //     });
-        // },
-        // setSimpleStyle: function () {
-        //     var styleId = this.getStyleId(),
-        //         stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
-
-        //     this.set("style", function (feature) {
-        //         return stylelistmodel.createStyle()
-        //     });
-        // },
-        // setClusteredStyle: function () {
-        //     var styleId = this.getStyleId(),
-        //         stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
-
-        //     this.set("style", function (feature) {
-        //         return stylelistmodel.createStyle(feature);
-        //     });
-        // },
         setProjection: function (proj) {
             this.set("projection", proj);
         },
@@ -292,11 +183,11 @@ define(function (require) {
 
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
-            // if (!this.get("legendURL").length) {
-            //     var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+            if (!this.get("legendURL").length) {
+                var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
-            //     this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
-            // }
+                this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
+            }
         },
         /**
          * Versteckt alle Features mit dem Hidden-Style

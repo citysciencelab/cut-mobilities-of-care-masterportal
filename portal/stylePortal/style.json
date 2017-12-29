@@ -2,6 +2,7 @@
   {
     "layerId": "2003",
     "class": "POLYGON",
+    "subClass": "SIMPLE",
     "polygonStrokeColor": [0, 0, 0, 1],
     "polygonStrokeWidth": 1,
     "polygonFillColor": [10, 200, 0, 0.2]

@@ -161,47 +161,47 @@ define([
         },
 
         setLegendParamsFromWFS: function () {
-            // _.each(this.get("wfsLayerList"), function (layer) {
-            //     if (typeof layer.get("legendURL") === "string") {
-            //         this.push("tempArray", {
-            //             layername: layer.get("name"),
-            //             img: layer.get("legendURL"),
-            //             typ: "WFS",
-            //             isVisibleInMap: layer.get("isVisibleInMap")
-            //         });
-            //     }
-            //     else {
-            //         var image = [],
-            //             name = [],
-            //             styleList;
+            _.each(this.get("wfsLayerList"), function (layer) {
+                if (typeof layer.get("legendURL") === "string") {
+                    this.push("tempArray", {
+                        layername: layer.get("name"),
+                        img: layer.get("legendURL"),
+                        typ: "WFS",
+                        isVisibleInMap: layer.get("isVisibleInMap")
+                    });
+                }
+                else {
+                    var image = [],
+                        name = [],
+                        style = Radio.request("StyleList", "returnModelById", layer.getStyleId()),
+                        styleFieldValues = style.get("styleFieldValues");
 
-            //         styleList = Radio.request("StyleList", "returnAllModelsById", layer.getStyleId());
-            //         if (styleList.length > 1) {
-            //             _.each(styleList, function (style) {
-            //                 image.push(style.getSimpleStyle()[0].getImage().getSrc());
-            //                     if (style.has("legendValue")) {
-            //                         name.push(style.get("legendValue"));
-            //                     }
-            //                     else {
-            //                         name.push(style.get("styleFieldValue"));
-            //                     }
-            //                 });
-            //             }
-            //             else {
-            //                 if (styleList[0].getSimpleStyle()[0].getImage() != null) {
-            //                     image.push(styleList[0].getSimpleStyle()[0].getImage().getSrc());
-            //                 }
-            //                 name.push(layer.get("name"));
-            //             }
-            //             this.push("tempArray", {
-            //                 layername: layer.get("name"),
-            //                 legendname: name,
-            //                 img: image,
-            //                 typ: "WFS",
-            //                 isVisibleInMap: layer.get("isVisibleInMap")
-            //             });
-            //     }
-            // }, this);
+                    if (styleFieldValues.length > 1) {
+                        _.each(styleFieldValues, function (styleFieldValue) {
+                            image.push(style.get("imagePath") + styleFieldValue.imageName);
+                            if (style.has("legendValue")) {
+                                name.push(style.get("legendValue"));
+                            }
+                            else {
+                                name.push(styleFieldValue.styleFieldValue);
+                            }
+                        });
+                    }
+                    else {
+                        if (style.get("imageName") !== "blank.png") {
+                            image.push(style.get("imagePath") + style.get("imageName"));
+                        }
+                        name.push(layer.get("name"));
+                    }
+                    this.push("tempArray", {
+                        layername: layer.get("name"),
+                        legendname: name,
+                        img: image,
+                        typ: "WFS",
+                        isVisibleInMap: layer.get("isVisibleInMap")
+                    });
+                }
+            }, this);
         },
 
         /**
