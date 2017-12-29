@@ -43,7 +43,7 @@ define(function () {
         portalConf: "../../portal/master/",
         layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
-        styleConf: "../portal/stylePortal/style.json",
+        styleConf: "../portal/stylePortal/style_v2.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,

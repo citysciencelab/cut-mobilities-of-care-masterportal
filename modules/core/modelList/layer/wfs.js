@@ -111,10 +111,11 @@ define(function (require) {
         },
         styling: function (isClustered) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
-
-            this.setStyle(function(feature) {
-                return stylelistmodel.createStyle(feature, isClustered);
-            });
+            if (!_.isUndefined(stylelistmodel)) {
+                this.setStyle(function(feature) {
+                    return stylelistmodel.createStyle(feature, isClustered);
+                });
+            }
         },
         /*
         * Wenn MapView Option verändert werden: bei neuem Maßstab
@@ -186,7 +187,9 @@ define(function (require) {
             if (!this.get("legendURL").length) {
                 var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
-                this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
+                if (!_.isUndefined(style)) {
+                    this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
+                }
             }
         },
         /**
