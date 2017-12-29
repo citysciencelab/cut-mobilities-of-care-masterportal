@@ -5,7 +5,7 @@
 ### Allgemein
 * Alle Dokumente werden in utf-8 gespeichert
 * Jedes Dokument wird mit einer leeren Zeile beendet
-* [***EditorConfig***](http://editorconfig.org/), [***JSCS***](http://jscs.info/) und [***JSHint***](http://jshint.com/docs/options) werden eingesetzt, um die Konventionen leichter einhalten zu können
+* [***EditorConfig***](http://editorconfig.org/) und [***ESLint***](https://eslint.org/) werden eingesetzt, um die Konventionen leichter einhalten zu können
 
 ### Whitespace
 * Soft Intends (Spaces) statt Tabs
@@ -210,63 +210,6 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 ```
 
-### JSHintConfig
-```ini
-{
-    "asi": true,
-    "bitwise": true,
-    "boss": true,
-    "browser": true,
-    "curly": true,
-    "debug" : false,
-    "devel": true,
-    "eqeqeq": true,
-    "eqnull": true,
-    "es3": true,
-    "es5": false,
-    "esnext": true,
-    "evil": true,
-    "expr": true,
-    "forin": true,
-    "immed": true,
-    "indent": 4,
-    "iterator": true,
-    "jquery": true,
-    "lastsemic": true,
-    "latedef": true,
-    "laxbreak": true,
-    "laxcomma": true,
-    "loopfunc": true,
-    "maxerr": 80,
-    "multistr": true,
-    "newcap": true,
-    "noarg": true,
-    "noempty": true,
-    "nonstandard": true,
-    "onecase": true,
-    "proto": true,
-    "quotmark": "double",
-    "regexdash": true,
-    "regexp": true,
-    "scripturl": true,
-    "shadow": true,
-    "smarttabs": true,
-    "sub": true,
-    "supernew": true,
-    "trailing": true,
-    "undef": true,
-    "unused": true,
-    "validthis": true,
-    "white": true,
-    "withstmt": true,
-    "wsh": true,
-    "predef": [
-        "define",
-        "require"
-    ]
-}
-```
-
 ### CSS
 * CSS-Code gehört nur in CSS-Dateien und in keine HTML-Dokumente
 * Keine ID-Selektoren verwenden
@@ -288,5 +231,3 @@ insert_final_newline = true
     color: #333;
 }
 ```
-
-
