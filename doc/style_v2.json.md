@@ -34,8 +34,11 @@ Beim Stylen der WFS-Features gibt es verschiedene Klassen nach denen wir den Sty
 ## Spezielle Parameter ##
 Einige Parameter sind nur bei bestimmten Kombinationen von "class" und "subClass" notwendig.
 So gibt es folgende Kombinationen:
+
 [POINT SIMPLE](#markdown-header-point-simple)
+
 [POINT CUSTOM](#markdown-header-point-custom)
+
 [POINT CIRCLE](#markdown-header-point-circle)
 
 [LINE SIMPLE](#markdown-header-line-simple)
@@ -110,7 +113,7 @@ Bei "class"=== "POINT" und "subClass" === "CUSTOM" wird jedem Feature, abhänhig
   }
 ```
 
-### styleFieldValue ###
+#### styleFieldValue ####
 Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werden die optionalen Parameter nicht gesetzt, so werden die Parameter des [Style-Objekts](#markdown-header-point-custom) verwendet oder deren Defaults.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -123,7 +126,7 @@ Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werde
 |imageOffsetX|nein|String||Offset des Bildes in X-Richtung.|
 |imageOffsetY|nein|String||Offset des Bildes in Y-Richtung.|
 
-#### POINT CIRCLE ####
+### POINT CIRCLE ###
 Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle eines Images, ein Kreis gesetzt. Cluster-Attribute können gesetzt werden wie in [POINT SIMPLE](#markdown-header-point-simple) zu sehen. Label-Attribute können gesetzt werden wie in [Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter) zu sehen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -133,7 +136,7 @@ Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle 
 |circleStrokeWidth|nein|Integer|2|Breite des Kreisrandes.|
 |circleFillColor|nein|Array []|[0, 153, 255, 1]|Farbe der Kreisfüllung in rgba.|
 
-#### LINE SIMPLE ####
+### LINE SIMPLE ###
 Bei "class"=== "LINE" und "subClass" === "SIMPLE" wird ein linienhafter Style definiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -141,7 +144,7 @@ Bei "class"=== "LINE" und "subClass" === "SIMPLE" wird ein linienhafter Style de
 |lineStrokeColor|nein|Array []|[0, 0, 0, 1]|Farbe der Linie in rgba.|
 |lineStrokeWidth|nein|Integer|2|Breite der Linie.|
 
-#### POLYGON SIMPLE ####
+### POLYGON SIMPLE ###
 Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Style  definiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
