@@ -1,11 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function (Backbone, Radio, ol, Config) {
+define(function (require) {
 
-    var WFSStyle = Backbone.Model.extend({
+    var Config = require("config"),
+        WFSStyle;
+
+        WFSStyle = Backbone.Model.extend({
         defaults: {
             imagePath: "",
             class: "",

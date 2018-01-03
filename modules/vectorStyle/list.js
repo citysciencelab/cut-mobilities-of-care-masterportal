@@ -1,11 +1,10 @@
-define([
-    "backbone",
-    "modules/vectorStyle/model",
-    "config",
-    "backbone.radio"
-], function (Backbone, WFSStyle, Config, Radio) {
+define( function (require) {
 
-    var StyleList = Backbone.Collection.extend ({
+    var WFSStyle = require("modules/vectorStyle/model"),
+        Config = require("config"),
+        StyleList;
+
+        StyleList = Backbone.Collection.extend ({
         model: WFSStyle,
         url: function () {
             if (!_.has(Config, "styleConf") || Config.styleConf === "") {
