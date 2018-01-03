@@ -6,7 +6,7 @@ define(function (require) {
         WFSStyle = Backbone.Model.extend({
         defaults: {
             imagePath: "",
-            class: "",
+            class: "POINT",
             subClass: "SIMPLE",
             styleField: "",
             styleFieldValues: [],
@@ -69,10 +69,10 @@ define(function (require) {
             if (styleClass === "POINT") {
                 style = this.createPointStyle(feature, styleSubClass, isClustered, labelField);
             }
-            if (styleClass === "POLYGON") {
+            else if (styleClass === "POLYGON") {
                 style = this.createPolygonStyle(feature, styleSubClass, isClustered, labelField);
             }
-            if (styleClass === "LINE") {
+            else if (styleClass === "LINE") {
                 style = this.createLineStyle(feature, styleSubClass, isClustered, labelField);
             }
             return style;
