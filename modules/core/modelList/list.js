@@ -104,7 +104,7 @@ define([
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
                 }
-                else if (attrs.typ === "SensorThings") {
+                else if (attrs.typ === "Sensor") {
                     return new SensorThingsLayer(attrs, options);
                 }
             }
