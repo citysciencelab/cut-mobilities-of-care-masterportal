@@ -32,8 +32,13 @@ define(function (require) {
             textFillColor: [255, 255, 255, 1],
             textStrokeColor: [0, 0, 0, 1],
             textStrokeWidth: 3,
-            // Für Cluster Circle
+            // Für Cluster
             clusterClass: "",
+            // Für Cluster Circle
+            clusterCircleRadius: 10,
+            clusterCircleFillColor: [0, 153, 255, 1],
+            clusterCircleStrokeColor: [0, 0, 0, 1],
+            clusterCircleStrokeWidth: 2,
             // Für Cluster Image
             clusterImageName: "blank.png",
             clusterImageWidth: 1,
@@ -169,10 +174,10 @@ define(function (require) {
                         offset = [parseFloat(this.get("clusterImageOffsetX")), parseFloat(this.get("clusterImageOffsetY"))]
                     }
                     else if (this.get("clusterClass") === "CIRCLE") {
-                        fillcolor = this.returnColor(this.get("circleFillColor"), "rgb");
-                        strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb");
-                        strokewidth = parseInt(this.get("circleStrokeWidth"), 10);
-                        radius = this.get("circleRadius");
+                        fillcolor = this.returnColor(this.get("clusterCircleFillColor"), "rgb");
+                        strokecolor = this.returnColor(this.get("clusterCircleStrokeColor"), "rgb");
+                        strokewidth = parseInt(this.get("clusterCircleStrokeWidth"), 10);
+                        radius = parseInt(this.get("clusterCircleRadius"), 10)
                     }
                 }
                 else {
@@ -272,10 +277,10 @@ define(function (require) {
                             offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
                         }
                         else if (this.get("clusterClass") === "CIRCLE") {
-                            fillcolor = this.returnColor(this.get("circleFillColor"), "rgb");
-                            strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb");
-                            strokewidth = parseInt(this.get("circleStrokeWidth"), 10);
-                            radius = this.get("circleRadius");
+                            fillcolor = this.returnColor(this.get("clusterCircleFillColor"), "rgb");
+                            strokecolor = this.returnColor(this.get("clusterCircleStrokeColor"), "rgb");
+                            strokewidth = parseInt(this.get("clusterCircleStrokeWidth"), 10);
+                            radius = parseInt(this.get("clusterCircleRadius"), 10);
                         }
                     }
                 }
