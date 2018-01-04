@@ -101,6 +101,7 @@ define(function (require) {
                     this.getLayerSource().addFeatures(features);
                     this.set("loadend", "ready");
                     Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
+                    console.log(features[0]);
                     this.styling(isClustered);
                     this.getLayer().setStyle(this.getStyle());
                 },

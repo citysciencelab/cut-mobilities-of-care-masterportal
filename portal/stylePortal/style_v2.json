@@ -5,9 +5,7 @@
     "subClass" : "SIMPLE",
     "clusterImageName": "krankenhaus.png",
     "imageName" : "krankenhaus.png",
-    "imageScale" : "0.7",
-    "imageOffsetX" : 0.50,
-    "imageOffsetY" : 0.50
+    "imageScale" : "0.7"
   },
   {
     "layerId" : "4972",
@@ -24,7 +22,9 @@
     "clusterCircleRadius" : 15,
     "clusterCircleFillColor": [160, 100, 50, 1],
     "clusterTextFillColor" : [255, 255, 255, 1],
+    "clusterTextStrokeColor" : [0, 0, 0, 0],
     "clusterTextStrokeWidth" : 0,
+    "clusterTextAlign": "center",
     "styleField": "kategorie",
     "styleFieldValues":[
       {
@@ -43,6 +43,15 @@
     "layerId": "2056",
     "class": "POINT",
     "subClass": "CUSTOM",
+    "clusterClass": "CIRCLE",
+    "clusterCircleRadius" : 15,
+    "clusterCircleFillColor": [35, 125, 40, 1],
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 255, 255, 1],
+    "clusterTextStrokeColor" : [0, 0, 0, 0],
+    "clusterTextStrokeWidth" : "0",
+    "clusterTextAlign": "center",
     "styleField": "kategorie",
     "styleFieldValues": [
       {
@@ -71,6 +80,15 @@
     "layerId" : "2059",
     "class": "POINT",
     "subClass" : "CUSTOM",
+    "clusterClass": "CIRCLE",
+    "clusterCircleRadius" : 15,
+    "clusterCircleFillColor": [230, 230, 10, 1],
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 255, 255, 1],
+    "clusterTextStrokeColor" : [0, 0, 0, 0],
+    "clusterTextStrokeWidth" : "0",
+    "clusterTextAlign": "center",
     "styleField": "kategorie",
     "styleFieldValues": [
       {
@@ -84,6 +102,15 @@
     "layerId": "2057",
     "class": "POINT",
     "subClass": "CUSTOM",
+    "clusterClass": "CIRCLE",
+    "clusterCircleRadius" : 15,
+    "clusterCircleFillColor": [195, 0, 10, 1],
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 255, 255, 1],
+    "clusterTextStrokeColor" : [0, 0, 0, 0],
+    "clusterTextStrokeWidth" : "0",
+    "clusterTextAlign": "center",
     "styleField": "kategorie",
     "imageScale": "0.5",
     "styleFieldValues": [
@@ -122,6 +149,15 @@
     "layerId": "2060",
     "class": "POINT",
     "subClass": "CUSTOM",
+    "clusterClass": "CIRCLE",
+    "clusterCircleRadius" : 15,
+    "clusterCircleFillColor": [50, 150, 130, 1],
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 255, 255, 1],
+    "clusterTextStrokeColor" : [0, 0, 0, 0],
+    "clusterTextStrokeWidth" : "0",
+    "clusterTextAlign": "center",
     "styleField": "kategorie",
     "imageScale": "0.5",
     "styleFieldValues": [
@@ -151,6 +187,15 @@
     "layerId": "2054",
     "class": "POINT",
     "subClass": "CUSTOM",
+    "clusterClass": "CIRCLE",
+    "clusterCircleradius" : 15,
+    "clusterCircleFillColor": [180, 0, 180, 1],
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 255, 255, 1],
+    "clusterTextStrokeColor" : [0, 0, 0, 0],
+    "clusterTextStrokeWidth" : "0",
+    "clusterTextAlign": "center",
     "styleField": "kategorie",
     "styleFieldValues": [
       {
@@ -189,6 +234,15 @@
     "layerId": "2058",
     "class": "POINT",
     "subClass": "CUSTOM",
+    "clusterClass": "CIRCLE",
+    "clusterCircleradius" : 15,
+    "clusterCircleFillColor": [100, 110, 140, 1],
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 255, 255, 1],
+    "clusterTextStrokeColor" : [0, 0, 0, 0],
+    "clusterTextStrokeWidth" : "0",
+    "clusterTextAlign": "center",
     "imageScale": "0.5",
     "styleField": "kategorie",
     "styleFieldValues": [
@@ -210,6 +264,15 @@
     "layerId": "353",
     "class": "POINT",
     "subClass": "CUSTOM",
+    "clusterClass": "CIRCLE",
+    "clusterCircleRadius" : 15,
+    "clusterCircleFillColor": [255, 175, 70, 1],
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 255, 255, 1],
+    "clusterTextStrokeColor" : [0, 0, 0, 0],
+    "clusterTextStrokeWidth" : "0",
+    "clusterTextAlign": "center",
     "imageScale": "0.5",
     "styleField": "kategorie",
     "styleFieldValues": [
@@ -231,11 +294,369 @@
       }
     ]
   },
-
-
-
-
-
+  {
+    "layerId": "45",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "clusterClass": "SIMPLE",
+    "imageName" : "bikeandride.png",
+    "imageScale" : "0.7",
+    "clusterImageName": "bikeandride.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "10",
+    "clusterTextOffsetY" : "-8",
+    "clusterTextFillColor" : [69, 96, 166, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId": "46",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "clusterClass": "SIMPLE",
+    "imageName" : "grau_auto_simple.png",
+    "imageScale" : "0.7",
+    "clusterImageName": "grau_auto_simple.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "20",
+    "clusterTextOffsetY" : "-8",
+    "clusterTextFillColor" : [40, 95, 167, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId": "47",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "labelField": "id_kost",
+    "textScale" : 1,
+    "textOffsetX" : "0",
+    "textOffsetY" : "20",
+    "textFillColor" : [254, 254, 254, 1],
+    "textStrokeColor" : [240, 240, 240, 1],
+    "textStrokeWidth" : "0",
+    "textAlign": "center",
+    "imageScale": "1.1",
+    "styleField": "typ",
+    "styleFieldValues": [
+      {
+        "styleFieldValue" : "X",
+        "imageName": "baustelle_neu.png"
+      },
+      {
+        "styleFieldValue" : "F",
+        "imageName": "baustelle_gruen.png"
+      }
+    ]
+  },
+  {
+      "layerId" : "48",
+      "class": "POINT",
+      "subClass" : "SIMPLE",
+      "imageName" : "behindertenparken.png",
+      "imageScale" : "0.7",
+      "clusterClass": "SIMPLE",
+      "clusterImageName": "behindertenparken.png",
+      "clusterImageScale": "0.7",
+      "clusterTextScale" : "2",
+      "clusterTextOffsetX" : "10",
+      "clusterTextOffsetY" : "-10",
+      "clusterTextFillColor" : [69, 96, 166, 1],
+      "clusterTextStrokeColor" : [240, 240, 240, 1],
+      "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId" : "49",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "verkehrskam.png",
+    "imageScale" : "0.7",
+    "clusterClass": "SIMPLE",
+    "clusterImageName" : "verkehrskam.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "22",
+    "clusterTextOffsetY" : "-8",
+    "clusterTextFillColor" : [113, 35, 7, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId" : "50",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "motorradparken.png",
+    "imageScale" : "0.7",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "motorradparken.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "10",
+    "clusterTextOffsetY" : "-10",
+    "clusterTextFillColor" : [69, 96, 166, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId" : "51",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "pur.png",
+    "imageScale" : "0.7",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "pur.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "10",
+    "clusterTextOffsetY" : "-8",
+    "clusterTextFillColor" : [69, 96, 166, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId" : "53",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "bus_parken.png",
+    "imageScale" : "0.7",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "bus_parken.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "10",
+    "clusterTextOffsetY" : "-8",
+    "clusterTextFillColor" : [69, 96, 166, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId": "52",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "imageScale" : "0.7",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "parkhaus.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "10",
+    "clusterTextOffsetY" : "-8",
+    "clusterTextFillColor" : [69, 96, 166, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3",
+    "styleField": "situation",
+    "styleFieldValues": [
+      {
+        "styleFieldValue" : "frei",
+        "imageName" : "parkhaus_gruen.png"
+      },
+      {
+        "styleFieldValue" : "nahezu belegt",
+        "imageName" : "parkhaus_gelb.png"
+      },
+      {
+        "styleFieldValue" : "belegt",
+        "imageName" : "parkhaus_rot.png"
+      },
+      {
+        "styleFieldValue" : "geschlossen",
+        "imageName" : "parkhaus_grau.png"
+      },
+      {
+        "styleFieldValue" : "keine Auslastungsdaten",
+        "imageName" : "parkhaus.png"
+      }
+    ]
+  },
+  {
+    "layerId":"6154",
+    "class": "POINT",
+    "subClass":"SIMPLE",
+    "imageName":"fahrrad.png",
+    "imageOffsetY":"1",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "fahrrad.png",
+    "clusterTextScale":"2",
+    "clusterTextOffsetY":"2",
+    "clusterTextFillColor":[255, 0, 0, 1],
+    "clusterTextStrokeColor":[240, 240, 240, 0.8],
+    "clusterTextStrokeWidth":"3"
+  },
+  {
+    "layerId" : "2119",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "dira.png",
+    "imageScale" : "0.3"
+  },
+  {
+    "layerId" : "2128",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "kamera.png",
+    "imageScale" : "0.3"
+  },
+  {
+    "layerId" : "2132",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "dwista.png",
+    "imageScale" : "0.3"
+  },
+  {
+    "layerId": "2156",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "imageScale" : 0.4,
+    "styleField": "name",
+    "styleFieldValues": [
+      {
+        "styleFieldValue" : "Deckel Altona",
+        "imageName" : "Info-Altona-hellgrau.png",
+        "imageOffsetX" : 0.18,
+        "imageOffsetY" : 0.05
+      },
+      {
+        "styleFieldValue" : "Deckel Stellingen",
+        "imageName" : "Info-Stellingen-hellgrau.png",
+        "imageOffsetX" : 0.10,
+        "imageOffsetY" : 0.35
+      },
+      {
+        "styleFieldValue" : "Deckel Schnelsen",
+        "imageName" : "Info-Schnelsen-hellgrau.png",
+        "imageOffsetX" : 0.10,
+        "imageOffsetY" : 0.70
+      },
+      {
+        "styleFieldValue" : "Langenfelder Brücke",
+        "imageName" : "Hinweis-hellgrau.png",
+        "imageOffsetX" : 0.45,
+        "imageOffsetY" : 0.60
+      }
+    ]
+  },
+  {
+    "layerId": "1728",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "styleField": "eg_einstufung",
+    "styleFieldValues": [
+      {
+        "styleFieldValue" : "3",
+        "imageName" : "badegew03.png"
+      },
+      {
+        "styleFieldValue" : "2",
+        "imageName" : "badegew02.png"
+      },
+      {
+        "styleFieldValue" : "1",
+        "imageName" : "badegew01.png"
+      },
+      {
+        "styleFieldValue" : "0",
+        "imageName" : "badegew00.png"
+      },
+      {
+        "styleFieldValue" : "-1",
+        "imageName" : "badegewverbo.png"
+      }
+    ]
+  },
+  {
+    "layerId": "2003",
+    "class": "POLYGON",
+    "subClass": "SIMPLE",
+    "polygonStrokeColor": [0, 0, 0, 1],
+    "polygonStrokeWidth": 1,
+    "polygonFillColor": [10, 200, 0, 0.2]
+  },
+  {
+    "layerId": "4425",
+    "class": "POLYGON",
+    "subClass": "SIMPLE",
+    "polygonStrokeColor": [255, 140, 0, 1],
+    "polygonStrokeWidth": 1,
+    "polygonFillColor": [255, 165, 0, 0.5]
+  },
+  {
+    "layerId": "753",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "clusterClass_": "SIMPLE",
+    "clusterImageName": "krippe.gif",
+    "clusterImageScale": "0.6",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 0, 0, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3",
+    "imageScale": "0.6",
+    "styleField": "Leistungsarten",
+    "styleFieldValues": [
+      {
+        "styleFieldValue" : "K",
+        "imageName" : "krippe.gif",
+        "imageOffsetX" : 0.50,
+        "imageOffsetY" : 0.20
+      },
+      {
+        "styleFieldValue" : "KEing",
+        "imageName" : "krippe.gif",
+        "imageOffsetX" : 0.30,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue" : "KEEing",
+        "imageName" : "krippe_ele_eh.gif",
+        "imageOffsetX" : 0.50,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue" : "KEAEing",
+        "imageName" : "krippe_ele_eh.gif",
+        "imageOffsetX" : 0.50,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue" : "KE",
+        "imageName" : "krippe_ele.gif",
+        "imageOffsetX" : 0.30,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue" : "KEA",
+        "imageName" : "krippe_ele.gif",
+        "imageOffsetX" : 0.30,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue" : "E",
+        "imageName" : "ele.gif",
+        "imageOffsetX" : 0.30,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue" : "EEing",
+        "imageName" : "ele_eh.gif",
+        "imageOffsetX" : 0.30,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue" : "KEH",
+        "imageName" : "krippe_ele_hort.gif",
+        "imageOffsetX" : 0.30,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue" : "P",
+        "imageName" : "paemi.gif",
+        "imageOffsetX" : 0.30,
+        "imageOffsetY" : 0.50
+      }
+    ]
+  },
 
 
 
@@ -264,9 +685,7 @@
     "class": "POINT",
     "subClass": "SIMPLE",
     "imageName": "krankenhaus.png",
-    "imageScale": "0.7",
-    "imageOffsetX": 0.50,
-    "imageOffsetY": 0.50
+    "imageScale": "0.7"
   },
   {
     "layerId": "1545",
@@ -274,13 +693,6 @@
     "subClass": "SIMPLE",
     "lineStrokeColor": [0, 0, 0, 1],
     "lineStrokeWidth": 5
-  },
-  {
-    "layerId": "2003",
-    "class": "POLYGON",
-    "subClass": "SIMPLE",
-    "polygonStrokeColor": [0, 0, 0, 1],
-    "polygonStrokeWidth": 1,
-    "polygonFillColor": [10, 200, 0, 0.2]
   }
+
 ]

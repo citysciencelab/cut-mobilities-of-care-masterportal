@@ -16,8 +16,8 @@ define(function (require) {
             imageWidth: 1,
             imageHeight: 1,
             imageScale: 1,
-            imageOffsetX: 0,
-            imageOffsetY: 0,
+            imageOffsetX: 0.5,
+            imageOffsetY: 0.5,
             // für subclass CIRCLE
             circleRadius: 10,
             circleFillColor: [0, 153, 255, 1],
@@ -44,8 +44,8 @@ define(function (require) {
             clusterImageWidth: 1,
             clusterImageHeight: 1,
             clusterImageScale: 1,
-            clusterImageOffsetX: 0,
-            clusterImageOffsetY: 0,
+            clusterImageOffsetX: 0.5,
+            clusterImageOffsetY: 0.5,
             // Für Cluster Text
             clusterText: "COUNTER",
             clusterTextAlign: "left",
@@ -290,13 +290,13 @@ define(function (require) {
                     styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
                         return styleFieldValue.styleFieldValue === featureValue;
                     })[0],
-                    src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName"),
-                    isSVG = src.indexOf(".svg") > -1 ? true : false,
-                    width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth"),
-                    height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.get("imageHeight"),
-                    scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.get("imageScale")),
-                    imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX"),
-                    imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY"),
+                    src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
+                    isSVG = src.indexOf(".svg") > -1 ? true : false;
+                    width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth");
+                    height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.get("imageHeight");
+                    scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.get("imageScale"));
+                    imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX");
+                    imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY");
                     offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
                 }
                 if (this.get("clusterClass") === "CIRCLE" && feature.get("features").length > 1) {
