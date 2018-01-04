@@ -1,4 +1,254 @@
 [
+    {
+    "layerId" : "1711",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "clusterImageName": "krankenhaus.png",
+    "imageName" : "krankenhaus.png",
+    "imageScale" : "0.7",
+    "imageOffsetX" : 0.50,
+    "imageOffsetY" : 0.50
+  },
+  {
+    "layerId" : "4972",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "sporthalle.png",
+    "imageScale" : "0.5"
+  },
+  {
+    "layerId" : "356",
+    "class": "POINT",
+    "subClass" : "CUSTOM",
+    "clusterClass": "CIRCLE",
+    "circleRadius" : 15,
+    "circleFillColor": [160, 100, 50, 1],
+    "clusterTextFillColor" : [255, 255, 255, 1],
+    "clusterTextStrokeWidth" : 0,
+    "styleField": "kategorie",
+    "styleFieldValues":[
+      {
+        "styleFieldValue": "Bergwerk",
+        "imageName" : "bergwerk_10.png",
+        "imageScale" : "0.5"
+      },
+      {
+        "styleFieldValue": "Grube",
+        "imageName" : "grube_10.png",
+        "imageScale" : "0.5"
+      }
+    ]
+  },
+  {
+    "layerId": "2056",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "styleField": "kategorie",
+    "styleFieldValues": [
+      {
+        "styleFieldValue":"Oberflächenform",
+        "imageName" : "oberflaechenform_10.png",
+        "imageScale" : "0.5"
+      },
+      {
+        "styleFieldValue":"Moor",
+        "imageName" : "moor_10.png",
+        "imageScale" : "0.5"
+      },
+      {
+        "styleFieldValue":"Düne",
+        "imageName" : "duene_50px.png",
+        "imageScale" : "0.9"
+      },
+      {
+        "styleFieldValue":"Watt",
+        "imageName" : "watt_10.png",
+        "imageScale" : "0.5"
+      }
+    ]
+  },
+  {
+    "layerId" : "2059",
+    "class": "POINT",
+    "subClass" : "CUSTOM",
+    "styleField": "kategorie",
+    "styleFieldValues": [
+      {
+        "styleFieldValue":"Unsichtbares Objekt",
+        "imageName" : "unsichtbares-objekt_10.png",
+        "imageScale" : "0.5"
+      }
+    ]
+  },
+  {
+    "layerId": "2057",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "styleField": "kategorie",
+    "imageScale": "0.5",
+    "styleFieldValues": [
+      {
+        "styleFieldValue":"Geologisches Landesamt",
+        "imageName" : "geologisches_landesamt_10.png"
+      },
+      {
+        "styleFieldValue":"Botanischer Garten",
+        "imageName" : "botanischer_garten_6-5.png",
+        "imageScale" : "0.7"
+      },
+      {
+        "styleFieldValue":"Saurier",
+        "imageName" : "saurier_10.png"
+      },
+      {
+        "styleFieldValue":"Wrack",
+        "imageName" : "wrack_10.png"
+      },
+      {
+        "styleFieldValue":"Grotte",
+        "imageName" : "grotte_10.png"
+      },
+      {
+        "styleFieldValue":"Wurt",
+        "imageName" : "wurt_10.png"
+      },
+      {
+        "styleFieldValue":"Gebäude",
+        "imageName" : "gebaeude_10.png"
+      }
+    ]
+  },
+  {
+    "layerId": "2060",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "styleField": "kategorie",
+    "imageScale": "0.5",
+    "styleFieldValues": [
+      {
+        "styleFieldValue":"Brunnen",
+        "imageName" : "brunnen_10.png"
+      },
+      {
+        "styleFieldValue":"Wasserbauobjekt",
+        "imageName" : "wasserbauobjekt_10.png"
+      },
+      {
+        "styleFieldValue":"Brack",
+        "imageName" : "brack_10.png"
+      },
+      {
+        "styleFieldValue":"See",
+        "imageName" : "see_10.png"
+      },
+      {
+        "styleFieldValue":"Gewässer",
+        "imageName" : "gewaesser_10.png"
+      }
+    ]
+  },
+  {
+    "layerId": "2054",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "styleField": "kategorie",
+    "styleFieldValues": [
+      {
+        "styleFieldValue":"Besonderer Boden",
+        "imageName" : "besonderer_boden_6-5.png",
+        "imageScale": "0.7"
+      },
+      {
+        "styleFieldValue":"Austernbank",
+        "imageName" : "austernbank_10.png",
+        "imageScale": "1.1"
+      },
+      {
+        "styleFieldValue":"Erdfall",
+        "imageName" : "erdfall_10.png",
+        "imageScale": "0.5"
+      },
+      {
+        "styleFieldValue":"Endmoräne",
+        "imageName" : "endmoraene_10.png",
+        "imageScale": "0.5"
+      },
+      {
+        "styleFieldValue":"Grundmoräne",
+        "imageName" : "grundmoraene_10.png",
+        "imageScale": "0.5"
+      },
+      {
+        "styleFieldValue":"Findling",
+        "imageName" : "findling_10.png",
+        "imageScale": "0.5"
+      }
+    ]
+  },
+  {
+    "layerId": "2058",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "imageScale": "0.5",
+    "styleField": "kategorie",
+    "styleFieldValues": [
+      {
+        "styleFieldValue":"Strassenpflaster",
+        "imageName" : "strassenpflaster_10.png"
+      },
+      {
+        "styleFieldValue":"Steinwall",
+        "imageName" : "steinwall_10.png"
+      },
+      {
+        "styleFieldValue":"Felsen",
+        "imageName" : "felsen_10.png"
+      }
+    ]
+  },
+  {
+    "layerId": "353",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "imageScale": "0.5",
+    "styleField": "kategorie",
+    "styleFieldValues": [
+      {
+        "styleFieldValue":"Grenzstein",
+        "imageName" : "grenzstein_10.png"
+      },
+      {
+        "styleFieldValue":"Museum",
+        "imageName" : "museum_10.png"
+      },
+      {
+        "styleFieldValue":"Findlingskirche",
+        "imageName" : "findlingskirche_10.png"
+      },
+      {
+        "styleFieldValue":"Denkmal",
+        "imageName" : "denkmal_10.png"
+      }
+    ]
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     "layerId": "1673",
     "class": "POLYGON",
@@ -32,58 +282,5 @@
     "polygonStrokeColor": [0, 0, 0, 1],
     "polygonStrokeWidth": 1,
     "polygonFillColor": [10, 200, 0, 0.2]
-  },
-  {
-    "layerId": "1711",
-    "class": "POINT",
-    "subClass": "SIMPLE",
-    "imageName": "krankenhaus.png",
-    "imageScale": "0.7",
-    "imageOffsetX": 0.50,
-    "imageOffsetY": 0.50
-  },
-  {
-    "layerId": "1711_CIRCLE",
-    "class": "POINT",
-    "subClass": "CIRCLE",
-    "circleRadius": 20,
-    "circleStrokeColor": [255,0,0,1],
-    "circleStrokeWidth": 5,
-    "circleFillColor": [0,0,255,1]
-  },
-  {
-    "layerId": "2060",
-    "class": "POINT",
-    "subClass": "CUSTOM",
-    "imageOffsetX": 0.50,
-    "imageOffsetY": 0.50,
-    "styleField": "kategorie",
-    "styleFieldValues": [
-      {
-        "styleFieldValue":"Brunnen",
-        "imageName": "brunnen_10.png",
-        "imageScale": "0.5"
-      },
-      {
-        "styleFieldValue":"Wasserbauobjekt",
-        "imageName": "wasserbauobjekt_10.png",
-        "imageScale": "0.5"
-      },
-      {
-        "styleFieldValue":"Brack",
-        "imageName": "brack_10.png",
-        "imageScale": "0.5"
-      },
-      {
-        "styleFieldValue":"See",
-        "imageName": "see_10.png",
-        "imageScale": "0.5"
-      },
-      {
-        "styleFieldValue":"Gewässer",
-        "imageName": "gewaesser_10.png",
-        "imageScale": "0.5"
-      }
-    ]
   }
 ]

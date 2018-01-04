@@ -32,6 +32,8 @@ define(function (require) {
             textFillColor: [255, 255, 255, 1],
             textStrokeColor: [0, 0, 0, 1],
             textStrokeWidth: 3,
+            // Für Cluster Circle
+            clusterClass: "",
             // Für Cluster Image
             clusterImageName: "blank.png",
             clusterImageWidth: 1,
@@ -151,15 +153,37 @@ define(function (require) {
                 scale,
                 offset,
                 imagestyle,
+                fillcolor,
+                strokecolor,
+                strokewidth,
+                radius,
                 style;
 
                 if (isClustered && feature.get("features").length > 1) {
-                    src = this.get("imagePath") + this.get("clusterImageName"),
+                    if (this.get("clusterClass") === "SIMPLE") {
+                        src = this.get("imagePath") + this.get("clusterImageName"),
+                        isSVG = src.indexOf(".svg") > -1 ? true : false,
+                        width = this.get("clusterImageWidth"),
+                        height = this.get("clusterImageHeight"),
+                        scale = parseFloat(this.get("clusterImageScale")),
+                        offset = [parseFloat(this.get("clusterImageOffsetX")), parseFloat(this.get("clusterImageOffsetY"))]
+                    }
+                    else if (this.get("clusterClass") === "CIRCLE") {
+                        fillcolor = this.returnColor(this.get("circleFillColor"), "rgb");
+                        strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb");
+                        strokewidth = parseInt(this.get("circleStrokeWidth"), 10);
+                        radius = this.get("circleRadius");
+                    }
+                }
+                else {
+                    src = this.get("imagePath") + this.get("imageName"),
                     isSVG = src.indexOf(".svg") > -1 ? true : false,
-                    width = this.get("clusterImageWidth"),
-                    height = this.get("clusterImageHeight"),
-                    scale = parseFloat(this.get("clusterImageScale")),
-                    offset = [parseFloat(this.get("clusterImageOffsetX")), parseFloat(this.get("clusterImageOffsetY"))],
+                    width = this.get("imageWidth"),
+                    height = this.get("imageHeight"),
+                    scale = parseFloat(this.get("imageScale")),
+                    offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))]
+                }
+                if (this.get("clusterClass") === "SIMPLE" && feature.get("features").length > 1) {
                     imagestyle = new ol.style.Icon({
                         src: src,
                         width: width,
@@ -167,19 +191,22 @@ define(function (require) {
                         scale: scale,
                         anchor: offset,
                         imgSize: isSVG ? [width, height] : ""
-                    }),
-                    style = new ol.style.Style({
-                        image: imagestyle
+                    });
+                }
+                else if (this.get("clusterClass") === "CIRCLE"  && feature.get("features").length > 1) {
+                    imagestyle = new ol.style.Circle({
+                        radius: radius,
+                        fill: new ol.style.Fill({
+                            color: fillcolor
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: strokecolor,
+                            width: strokewidth
+                        })
                     });
                 }
                 else {
-                    src = this.get("imagePath") + this.get("imageName");
-                    isSVG = src.indexOf(".svg") > -1 ? true : false;
-                    width = this.get("imageWidth");
-                    height = this.get("imageHeight");
-                    scale = parseFloat(this.get("imageScale"));
-                    offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))];
-                    imagestyle = new ol.style.Icon({
+                     imagestyle = new ol.style.Icon({
                         src: src,
                         width: width,
                         height: height,
@@ -187,10 +214,10 @@ define(function (require) {
                         anchor: offset,
                         imgSize: isSVG ? [width, height] : ""
                     });
-                    style = new ol.style.Style({
-                        image: imagestyle
-                    });
                 }
+                style = new ol.style.Style({
+                    image: imagestyle
+                });
 
             return style;
 
@@ -208,6 +235,10 @@ define(function (require) {
                 imageoffsety,
                 offset,
                 imagestyle,
+                fillcolor,
+                strokecolor,
+                strokewidth,
+                radius,
                 style;
 
                 // clustered
@@ -219,7 +250,6 @@ define(function (require) {
                         styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
                             return styleFieldValue.styleFieldValue === featureValue;
                         })[0];
-
                         src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
                         isSVG = src.indexOf(".svg") > -1 ? true : false;
                         width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth");
@@ -231,16 +261,23 @@ define(function (require) {
                     }
                     // bei clusterstyle mit mehreren Features wird das Icon genommen, das im style unter imageName definiert ist
                     else {
-                        src = this.get("imagePath") + this.get("clusterImageName");
-                        isSVG = src.indexOf(".svg") > -1 ? true : false;
-                        width = this.get("clusterImageWidth");
-                        height = this.get("clusterImageHeight");
-                        scale = parseFloat(this.get("clusterImageScale"));
-                        imageoffsetx = this.get("clusterImageOffsetX");
-                        imageoffsety = this.get("clusterImageOffsetY");
-                        offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
+                        if (this.get("clusterClass") === "SIMPLE") {
+                            src = this.get("imagePath") + this.get("clusterImageName");
+                            isSVG = src.indexOf(".svg") > -1 ? true : false;
+                            width = this.get("clusterImageWidth");
+                            height = this.get("clusterImageHeight");
+                            scale = parseFloat(this.get("clusterImageScale"));
+                            imageoffsetx = this.get("clusterImageOffsetX");
+                            imageoffsety = this.get("clusterImageOffsetY");
+                            offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
+                        }
+                        else if (this.get("clusterClass") === "CIRCLE") {
+                            fillcolor = this.returnColor(this.get("circleFillColor"), "rgb");
+                            strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb");
+                            strokewidth = parseInt(this.get("circleStrokeWidth"), 10);
+                            radius = this.get("circleRadius");
+                        }
                     }
-
                 }
                 // Custom Style bei nicht geclustertem Feature
                 else {
@@ -257,15 +294,38 @@ define(function (require) {
                     imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY"),
                     offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
                 }
-
-                imagestyle = new ol.style.Icon({
-                    src: src,
-                    width: width,
-                    height: height,
-                    scale: scale,
-                    anchor: offset,
-                    imgSize: isSVG ? [width, height] : ""
-                });
+                if (this.get("clusterClass") === "CIRCLE" && feature.get("features").length > 1) {
+                    imagestyle = new ol.style.Circle({
+                        radius: radius,
+                        fill: new ol.style.Fill({
+                            color: fillcolor
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: strokecolor,
+                            width: strokewidth
+                        })
+                    });
+                }
+                else if (this.get("clusterClass") === "SIMPLE" && feature.get("features").length > 1){
+                    imagestyle = new ol.style.Icon({
+                        src: src,
+                        width: width,
+                        height: height,
+                        scale: scale,
+                        anchor: offset,
+                        imgSize: isSVG ? [width, height] : ""
+                    });
+                }
+                else {
+                    imagestyle = new ol.style.Icon({
+                        src: src,
+                        width: width,
+                        height: height,
+                        scale: scale,
+                        anchor: offset,
+                        imgSize: isSVG ? [width, height] : ""
+                    });
+                }
                 style = new ol.style.Style({
                     image: imagestyle
                 });
