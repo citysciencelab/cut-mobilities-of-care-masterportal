@@ -160,7 +160,7 @@
     {
       "Layer": [
         {
-          "id": "1711",
+          "id": "1711_",
           "styleId": "1711",
           "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
@@ -168,10 +168,10 @@
           "searchField": "name"
         },
         {
-          "id": "753",
-          "styleId": "753",
+          "id": "1132",
+          "styleId": "1132",
           "visibility": true,
-          "clusterDistance": 40
+          "clusterDistance_": 40
         }
       ]
     }

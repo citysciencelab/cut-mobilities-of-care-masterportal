@@ -585,7 +585,7 @@
     "layerId": "753",
     "class": "POINT",
     "subClass": "CUSTOM",
-    "clusterClass_": "SIMPLE",
+    "clusterClass": "SIMPLE",
     "clusterImageName": "krippe.gif",
     "clusterImageScale": "0.6",
     "clusterTextOffsetY" : "2",
@@ -657,6 +657,98 @@
       }
     ]
   },
+  {
+    "layerId": "1132",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "imageScale": "1.0",
+    "styleField": "icon_vi",
+    "styleFieldValues": [
+      {
+        "styleFieldValue" : "sehwqr",
+        "imageName" : "sehenswuerdigkeit_30.png",
+        "legendValue": "Sehenswürdigkeit",
+        "imageScale": "1.3"
+      },
+      {
+        "styleFieldValue" : "grillplatz",
+        "legendValue": "Grillzone",
+        "imageName" : "grillzone_30.png"
+      },
+      {
+        "styleFieldValue" : "wc",
+        "legendValue": "Öffentliche Toilette",
+        "imageName" : "wc_30.png"
+      },
+      {
+        "styleFieldValue" : "beachvolley",
+        "legendValue": "Beachvolleyballfeld",
+        "imageName" : "beachvolleyball_30.png"
+      },
+      {
+        "styleFieldValue" : "schach",
+        "legendValue": "Schachfeld",
+        "imageName" : "schach_30.png"
+      },
+      {
+        "styleFieldValue" : "bootsverleih",
+        "legendValue": "Bootsverleih",
+        "imageName" : "bootsverleih_30.png"
+      },
+      {
+        "styleFieldValue" : "parkplatz",
+        "legendValue": "Parkplatz",
+        "imageName" : "parkplatz_30.png"
+      },
+      {
+        "styleFieldValue" : "sportanlage",
+        "legendValue": "Sportanlage",
+        "imageName" : "sport_30.png"
+      },
+      {
+        "styleFieldValue" : "stadtrad",
+        "legendValue": "StadtRad-Station",
+        "imageName" : "stadtrad_30.png"
+      },
+      {
+        "styleFieldValue" : "hunde",
+        "legendValue": "Hundeauslaufzone",
+        "imageName" : "hund_30.png"
+      },
+      {
+        "styleFieldValue" : "essen",
+        "legendValue": "Restaurant, Biergarten & Café",
+        "imageName" : "restaurant_30.png"
+      },
+      {
+        "styleFieldValue" : "minigolf",
+        "legendValue": "Minigolfanlage",
+        "imageName" : "minigolf_30.png"
+      },
+      {
+        "styleFieldValue" : "spielplatz",
+        "legendValue": "Spielplatz",
+        "imageName" : "spielplatz_30.png"
+      },
+      {
+        "styleFieldValue" : "schwimmbad",
+        "legendValue": "Schwimmbad",
+        "imageName" : "schwimmbad_30.png"
+      },
+      {
+        "styleFieldValue" : "kunst",
+        "legendValue": "Kunstskulptur",
+        "imageName" : "skulptur_30.png"
+      },
+      {
+        "styleFieldValue" : "jogging",
+        "legendValue": "Laufstrecke",
+        "imageName" : "jogger_30.png"
+      }
+    ]
+  },
+
+
 
 
 

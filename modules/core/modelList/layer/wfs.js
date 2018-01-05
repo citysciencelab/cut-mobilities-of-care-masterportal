@@ -98,10 +98,14 @@ define(function (require) {
                         features = wfsReader.readFeatures(data),
                         isClustered = this.has("clusterDistance") ? true : false;
 
+                    // nur die Features verwenden die eine geometrie haben aufgefallen bei KITAs am 05.01.2018 (JW)
+                    features = _.filter(features, function (feature) {
+                        return !_.isUndefined(feature.getGeometry());
+                    });
                     this.getLayerSource().addFeatures(features);
+                    console.log(features[0]);
                     this.set("loadend", "ready");
                     Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
-                    console.log(features[0]);
                     this.styling(isClustered);
                     this.getLayer().setStyle(this.getStyle());
                 },
@@ -189,6 +193,9 @@ define(function (require) {
                 var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
                 if (!_.isUndefined(style)) {
+                    // if (style.get("subClass") === "CUSTOM") {
+                    //     console.log(123);
+                    // }
                     this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
                 }
             }

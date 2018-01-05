@@ -184,8 +184,8 @@ define([
                             if (styleSubClass === "CUSTOM") {
                                 _.each(styleFieldValues, function (styleFieldValue) {
                                     image.push(style.get("imagePath") + styleFieldValue.imageName);
-                                    if (style.has("legendValue")) {
-                                        name.push(style.get("legendValue"));
+                                    if (_.has(styleFieldValue, "legendValue")) {
+                                        name.push(styleFieldValue.legendValue);
                                     }
                                     else {
                                         name.push(styleFieldValue.styleFieldValue);
@@ -207,12 +207,22 @@ define([
                         // Simple Line Style
                         if (styleClass === "LINE") {
                             image.push(this.createLineSVG(style));
-                            name.push(layer.get("name"));
+                            if (style.has("legendValue")) {
+                                name.push(style.get("legendValue"));
+                            }
+                            else {
+                                name.push(layer.get("name"));
+                            }
                         }
                         // Simple Polygon Style
                         if (styleClass === "POLYGON") {
                             image.push(this.createPolygonSVG(style));
-                            name.push(layer.get("name"));
+                            if (style.has("legendValue")) {
+                                name.push(style.get("legendValue"));
+                            }
+                            else {
+                                name.push(layer.get("name"));
+                            }
                         }
                         this.push("tempArray", {
                             layername: layer.get("name"),
