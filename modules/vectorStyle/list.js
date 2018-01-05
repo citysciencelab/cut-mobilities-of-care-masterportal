@@ -17,7 +17,6 @@ define( function (require) {
 
             channel.reply({
                 "returnModelById": this.returnModelById,
-                "returnModelByValue": this.returnModelByValue,
                 "returnModels": function () {
                     return this.models;
                 }
@@ -40,13 +39,6 @@ define( function (require) {
         returnModelById: function (layerId) {
             return _.find(this.models, function (slmodel) {
                 if (slmodel.attributes.layerId === layerId) {
-                    return slmodel;
-                }
-            });
-        },
-        returnModelByValue: function (layerId, styleFieldValue) {
-            return _.find(this.models, function (slmodel) {
-                if (slmodel.attributes.layerId === layerId && slmodel.attributes.styleFieldValue === styleFieldValue) {
                     return slmodel;
                 }
             });
