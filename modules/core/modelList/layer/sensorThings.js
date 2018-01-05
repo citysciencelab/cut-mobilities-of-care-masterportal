@@ -33,7 +33,6 @@ define(function (require) {
             this.setLayerSource(new ol.source.Vector());
         },
 
-        // Was macht routable?
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
                 source: this.getLayerSource(),
@@ -64,12 +63,12 @@ define(function (require) {
                     sensorData = this.loadSensorThings();
                     epsg = "EPSG:4326";
                 }
-                // else if (this.get("subtyp") === "Geofox") {
-                //     sensorData = this.loadGeofoxData();
-                // }
             }
 
-            this.drawPoints(sensorData, epsg);
+            if (this.get("geometry") === "point") {
+                this.drawPoints(sensorData, epsg);
+            }
+
             Radio.trigger("Util", "hideLoader");
         },
 
@@ -146,12 +145,12 @@ define(function (require) {
         /**
          * draw points on the map
          * @param  {array} sensorData - sensor with location and properties
-         * @param  {[Sting]} epsg - from Sensortype
+         * @param  {Sting} epsg - from Sensortype
          */
         drawPoints: function (sensorData, epsg) {
-            var points = [];
-
-            this.getscalingAttributesAsObject();
+            var points = [],
+                scalingObject,
+                svgPath;
 
             _.each(sensorData, function (thisSensor) {
                 var xyTransfrom = ol.proj.transform(thisSensor.location, epsg, Config.view.epsg),
@@ -161,11 +160,17 @@ define(function (require) {
 
                 point.setProperties(thisSensor.properties);
 
-                // Fallunterscheidung, je nach skalierung
+                // check scaling
+                if (this.get("scaling") === "nominal") {
+                    scalingObject = this.fillScalingAttributes(point);
+                }
 
-                this.setNominalColor(point);
+                // check shape
+                if (this.get("scalingShape") === "circle") {
+                    svgPath = this.createCircleSegments(scalingObject);
+                }
 
-                this.setColor(point);
+                this.drawSvgAndIcon(point, svgPath);
                 points.push(point);
 
             }, this);
@@ -322,7 +327,11 @@ define(function (require) {
 // ***** style for things as points                        *****
 // *************************************************************
 
-        getscalingAttributesAsObject: function () {
+        /**
+         * convert scalingAttribute to object
+         * @return {object} scalingAttribute with value 0
+         */
+        getScalingAttributesAsObject: function () {
             var obj = {};
 
             _.each(this.get("scalingAttributes"), function (key, value) {
@@ -332,91 +341,53 @@ define(function (require) {
             return obj;
         },
 
-        setNominalColor: function (geometry) {
+        /**
+         * fills the object with values
+         * @param {ol.feature} geometry
+         */
+        fillScalingAttributes: function (geometry) {
             var states = geometry.values_.state.split(" | "),
-                scalingObject = this.getscalingAttributesAsObject();
-
-            _.each(this.get("scalingAttributes"), function (key, value) {
-                // console.log(key);
-                // console.log(value);
-            });
-
-            // object mit
+                scalingObject = this.getScalingAttributesAsObject();
 
             _.each(states, function (state) {
-                console.log(state);
-                // console.log(scalingObject[state]);
-                // scalingObject[state] = scalingObject[state] + 1;
+                if (state) {
+                    scalingObject[state] = scalingObject[state] + 1;
+                }
             });
-            // console.log(scalingObject);
+            return scalingObject;
         },
 
-        setColor: function (point) {
-            var states = point.values_.state.split(" | "),
-                availableCount = 0,
-                chargingCount = 0,
-                outoforderCount = 0,
-                svgAsString,
-                style;
-
-                var a = _.uniq(states);
-            _.each(states, function (state) {
-                if (state === "available") {
-                    availableCount++;
-                }
-                else if (state == "charging") {
-                    chargingCount++;
-                }
-                else {
-                    outoforderCount++;
-                }
-            });
-
-            svgAsString = this.drawNElements(availableCount, chargingCount, outoforderCount);
-
-            styleSVG = new ol.style.Style({
-                image: new ol.style.Icon({
-                    src: 'data:image/svg+xml;utf8,' + svgAsString
-                })
-            });
-
-            // add both styles (png, svg)
-            styleIcon = this.getStyleAsFunction(this.get("style"));
-            point.setStyle([styleIcon(point)[0], styleSVG]);
-        },
-
-        drawNElements: function (available, charging, outoforder) {
+        /**
+         * create a svg with colored circle segments
+         * @param  {object} scalingObject - contains state and value
+         * @return {String} svg with colored circle segments
+         */
+        createCircleSegments: function (scalingObject) {
             var svg = '<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
-                n = available + charging + outoforder,
+                n = _.reduce(_.values(scalingObject), function (memo, num) { return memo + num; }, 0),
                 degreeSegment = 360 / n,
                 startAngelDegree = 0,
                 endAngelDegree = degreeSegment,
                 strokeWidth = 4,
-                fill = "none",
-                stroke;
+                fill = "none";
 
             svg = svg + '<circle cx="60" cy="60" r="23" stroke="white" stroke-width="4" fill="none"/>';
 
-            for (var i = 0; i < n; i++) {
-                var d = this.calculateCircularSegment(startAngelDegree, endAngelDegree);
+            _.each(scalingObject, function (key, value) {
+                if (key) {
+                    var stroke = this.get("scalingAttributes")[value];
 
-                // set color by status
-                if (i < available) {
-                    stroke = "#00ff00";
-                }
-                else if (i < (available + charging)) {
-                    stroke = "#ff0000";
-                }
-                else {
-                    stroke = "#aaaaaa";
-                }
+                    for (var i = 0; i < key; i++) {
+                        var d = this.calculateCircleSegment(startAngelDegree, endAngelDegree);
 
-                svg = this.buildPathSVG(svg, fill, strokeWidth, stroke, d);
+                        svg = this.extendsSVG(svg, fill, strokeWidth, stroke, d);
 
-                // set degree for next circular segment
-                startAngelDegree = startAngelDegree + degreeSegment;
-                endAngelDegree = endAngelDegree + degreeSegment;
-            };
+                        // set degree for next circular segment
+                        startAngelDegree = startAngelDegree + degreeSegment;
+                        endAngelDegree = endAngelDegree + degreeSegment;
+                    };
+                }
+            }, this);
 
             svg = svg + '</svg>';
 
@@ -424,12 +395,12 @@ define(function (require) {
         },
 
         /**
-         * create circular segments bei gegebener Steckeranzahl
-         * @param  {[type]} startAngelDegree [description]
-         * @param  {[type]} endAngelDegree   [description]
-         * @return {[type]}                  [description]
+         * create circle segments
+         * @param  {number} startAngelDegree - start with circle segment
+         * @param  {number} endAngelDegree - finish with circle segment
+         * @return {String} all circle segments
          */
-        calculateCircularSegment: function (startAngelDegree, endAngelDegree) {
+        calculateCircleSegment: function (startAngelDegree, endAngelDegree) {
             var rad = Math.PI / 180,
                 radius = 23,
                 x = 60,
@@ -454,16 +425,32 @@ define(function (require) {
         },
 
         /**
-         * baut die SVG zusammen
-         *
-         * @param  {[type]} svg         [description]
-         * @param  {[type]} fill        [description]
-         * @param  {[type]} strokeWidth [description]
-         * @param  {[type]} stroke      [description]
-         * @param  {[type]} d           [description]
-         * @return {[type]}             [description]
+         * draw svg and and icon
+         * @param  {String} svgPath
+         * @return {[type]}     [description]
          */
-        buildPathSVG: function (svg, fill, strokeWidth, stroke, d) {
+        drawSvgAndIcon: function (point, svgPath) {
+            styleSVG = new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: 'data:image/svg+xml;utf8,' + svgPath
+                })
+            });
+
+            // add both styles (png, svg)
+            styleIcon = this.getStyleAsFunction(this.get("style"));
+            point.setStyle([styleIcon(point)[0], styleSVG]);
+        },
+
+        /**
+         * extends the svg with given tags
+         * @param  {String} svg
+         * @param  {String} fill
+         * @param  {String} strokeWidth
+         * @param  {String} stroke
+         * @param  {String} d
+         * @return {String} extended svg
+         */
+        extendsSVG: function (svg, fill, strokeWidth, stroke, d) {
             svg = svg + '<path ';
             svg = svg + 'fill="' + fill + '" ';
             svg = svg + 'stroke-width="' + strokeWidth + '" ';
@@ -529,7 +516,6 @@ define(function (require) {
          * @param  {array} things
          */
         updateFromWebSocket: function (things) {
-            console.log(things);
             var keys = Object.keys(things),
                 dataStreamId = keys[0],
                 result = things[dataStreamId].result,
@@ -539,7 +525,9 @@ define(function (require) {
                 thisFeature = thisFeatureArray[1],
                 // change state and phenomTime
                 datastreamStates = thisFeature.values_["state"],
-                datastreamPhenomTime = thisFeature.values_["phenomenonTime"];
+                datastreamPhenomTime = thisFeature.values_["phenomenonTime"],
+                scalingObject,
+                svgPath;
 
             if (_.contains(datastreamStates, "|")) {
                 datastreamStates = datastreamStates.split(" | ");
@@ -553,7 +541,21 @@ define(function (require) {
             thisFeature.values_.state = this.combinePropertiesAsString(datastreamStates);
             thisFeature.values_.phenomenonTime = this.combinePropertiesAsString(datastreamPhenomTime);
 
-            this.setColor(thisFeature);
+            // check geometry
+            if (this.get("geometry") === "point") {
+                // check scaling
+                if (this.get("scaling") === "nominal") {
+                    scalingObject = this.fillScalingAttributes(thisFeature);
+                }
+
+                // check shape
+                if (this.get("scalingShape") === "circle") {
+                    svgPath = this.createCircleSegments(scalingObject);
+                }
+            }
+
+            this.drawSvgAndIcon(thisFeature, svgPath);
+            console.log(thisFeature);
         },
 
         /**
@@ -579,7 +581,7 @@ define(function (require) {
                     }
                 });
             });
-            console.log(thisFeatureArray);
+
             return thisFeatureArray;
         },
 
