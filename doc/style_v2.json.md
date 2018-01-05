@@ -7,7 +7,7 @@ Die *style_v2.json* beinhaltet die Parameter für die WFS-Features. Die Verbindu
 
 ## Allgemeine Style Parameter ##
 Beim Stylen der WFS-Features gibt es verschiedene Klassen nach denen wir den Style in der *style_v2.json* unterscheiden.
-
+Wird in der [config.json](config.json.md) in der Layerconfiguration der Parameter "clusterDistance" gesetzt, so wird ein ClusterStyle erzeugt. Der ClusterStyle ist abhängig vom Parameter "clusterClass".
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |layerId|ja|String||ID des Styles, der in der [config.json](config.json.md) angegeben wird, um entsprechend zugeordnet zu werden. In der Regel gleiche ID, wie die des Layers.|
@@ -19,16 +19,27 @@ Beim Stylen der WFS-Features gibt es verschiedene Klassen nach denen wir den Sty
 |textScale|nein|Integer|1|Skalierung des Textes.|
 |textOffsetX|nein|Integer|0|Offset des Textes in X-Richtung.|
 |textOffsetY|nein|Integer|0|Offset des Textes in Y-Richtung.|
-|textFillColor|nein|Array []|[255, 255, 255, 1]|Füllfarbe des Textes in rgba.|
-|textStrokeColor|nein|Array []|[0, 0, 0, 1]|Randfarbe des Textes in rgba.|
+|textFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Textes in rgba.|
+|textStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Textes in rgba.|
 |textStrokeWidth|nein|Integer|3|Breite der Textstriche.|
+|clusterClass|nein|String|"CIRCLE"|Angabe der entsprechenden Cluster Klasse nach der ein ClusterStyle gesetzt werden soll. Mögliche Werte "SIMPLE", "CIRCLE".|
+|clusterCircleRadius|nein|Integer|10|Radius des Kreises als Clusterstyle.|
+|clusterCircleFillColor|nein|Array [Integer]|[0, 153, 255, 1]|Füllfarbe des Kreises als Clusterstyle.|
+|clusterCircleStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Kreises als Clusterstyle.|
+|clusterCircleStrokeWidth|nein|Integer|2|Randstärke des Kreises als Clusterstyle.|
+|clusterImageName|nein|String|"blank.png"|Name des Images als Clusterstyle.|
+|clusterImageWidth|nein|Integer|1|Breite des Images als Clusterstyle.|
+|clusterImageHeight|nein|Integer|1|Höhe des Images als Clusterstyle.|
+|clusterImageScale|nein|Integer|1|Skalierung des Images als Clusterstyle.|
+|clusterImageOffsetX|nein|Float|0.5|Offset des Images als Clusterstyle in X-Richtung.|
+|clusterImageOffsetY|nein|Float|0.5|Offset des Images als Clusterstyle in Y-Richtung.|
 |clusterTextAlign|nein|String|"left"|Ausrichtung des Textes am Feature. Mögliche Werte "left", "center", "right". Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextFont|nein|String|"Courier"|Font des Textes am Feature Bei geclusterten Features siehe [config.json](config.json.md).|
 |clusterTextScale|nein|Integer|1|Skalierung des Textes. Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextOffsetX|nein|Integer|0|Offset des Textes in X-Richtung. Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextOffsetY|nein|Integer|0|Offset des Textes in Y-Richtung. Bei geclusterten Features siehe [config.json](config.json.md)|
-|clusterTextFillColor|nein|Array []|[255, 255, 255, 1]|Füllfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
-|clusterTextStrokeColor|nein|Array []|[0, 0, 0, 1]|Randfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
+|clusterTextFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
+|clusterTextStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextStrokeWidth|nein|Integer|3|Breite der Textstriche. Bei geclusterten Features siehe [config.json](config.json.md)|
 
 ## Spezielle Parameter ##
@@ -50,18 +61,12 @@ Bei "class"=== "POINT" und "subClass" === "SIMPLE" wird nur ein Image für alle 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|imageName|ja|String||Name des Images.|
-|imageWidth|nein|String||Breite des Images.|
-|imageHeight|nein|String||Höhe des Images.|
-|imageScale|nein|String||Skalierung des Bildes.|
-|imageOffsetX|nein|String||Offset des Bildes in X-Richtung.|
-|imageOffsetY|nein|String||Offset des Bildes in Y-Richtung.|
-|clusterImageName|nein|String||Name des Images bei geclusterten Features siehe [config.json](config.json.md).|
-|clusterImageWidth|nein|String||Breite des Images bei geclusterten Features [config.json](config.json.md).|
-|clusterImageHeight|nein|String||Höhe des Images bei geclusterten Features [config.json](config.json.md).|
-|clusterImageScale|nein|String||Skalierung des Bildes bei geclusterten Features [config.json](config.json.md).|
-|clusterImageOffsetX|nein|String||Offset des Bildes in X-Richtung bei geclusterten Features [config.json](config.json.md).|
-|clusterImageOffsetY|nein|String||Offset des Bildes in Y-Richtung bei geclusterten Features [config.json](config.json.md).|
+|imageName|ja|String| "blank.png"|Name des Images.|
+|imageWidth|nein|String|1|Breite des Images.|
+|imageHeight|nein|String|1|Höhe des Images.|
+|imageScale|nein|String|1|Skalierung des Bildes.|
+|imageOffsetX|nein|Float|0.5|Offset des Bildes in X-Richtung.|
+|imageOffsetY|nein|Float|0.5|Offset des Bildes in Y-Richtung.|
 
 #### POINT CUSTOM ####
 Bei "class"=== "POINT" und "subClass" === "CUSTOM" wird jedem Feature, abhänhig von einem gegebenen Attributwert, das Image gesetzt. Es können alle Attribute aus [POINT SIMPLE](#markdown-header-point-simple) gesetzt werden. Diese dienen dann als defaults, falls styleFieldValues keine entsprechenden Parameter gegeben werden.
@@ -70,10 +75,6 @@ Bei "class"=== "POINT" und "subClass" === "CUSTOM" wird jedem Feature, abhänhig
 |----|-------------|---|-------|------------|
 |styleField|ja|String||Attribut des Features, nach dessen Wert das Icon gesetzt wird.|
 |styleFieldValues|ja|Array [[styleFieldValue](#markdown-header-styleFieldValue)]||Object für Attributwert, das den Custom Style setzt .|
-|imageName|ja|String||Name des Images.|
-|imageWidth|nein|String||Breite des Images.|
-|imageHeight|nein|String||Höhe des Images.|
-|imageScale|nein|String||Skalierung des Bildes.|
 
 ```json
 {
@@ -132,16 +133,16 @@ Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |circleRadius|nein|Integer|10|Radius des Kreises.|
-|circleStrokeColor|nein|Array []|[0, 0, 0, 1]|Farbe des Kreisrandes in rgba.|
+|circleStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Kreisrandes in rgba.|
 |circleStrokeWidth|nein|Integer|2|Breite des Kreisrandes.|
-|circleFillColor|nein|Array []|[0, 153, 255, 1]|Farbe der Kreisfüllung in rgba.|
+|circleFillColor|nein|Array [Integer]|[0, 153, 255, 1]|Farbe der Kreisfüllung in rgba.|
 
 ### LINE SIMPLE ###
 Bei "class"=== "LINE" und "subClass" === "SIMPLE" wird ein linienhafter Style definiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|lineStrokeColor|nein|Array []|[0, 0, 0, 1]|Farbe der Linie in rgba.|
+|lineStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe der Linie in rgba.|
 |lineStrokeWidth|nein|Integer|2|Breite der Linie.|
 
 ### POLYGON SIMPLE ###
@@ -149,8 +150,8 @@ Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Sty
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|polygonFillColor|nein|Array []|[255, 255, 255, 1]|Füllfarbe des Polygon.|
-|polygonStrokeColor|nein|Array []|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
+|polygonFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Polygon.|
+|polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
 |polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|
 
 >Zurück zur [Dokumentation Masterportal](doc.md).).
