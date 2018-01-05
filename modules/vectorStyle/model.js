@@ -188,7 +188,7 @@ define(function (require) {
                     scale = parseFloat(this.get("imageScale")),
                     offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))]
                 }
-                if (this.get("clusterClass") === "SIMPLE" && feature.get("features").length > 1) {
+                if (isClustered && this.get("clusterClass") === "SIMPLE" && feature.get("features").length > 1) {
                     imagestyle = new ol.style.Icon({
                         src: src,
                         width: width,
@@ -198,7 +198,7 @@ define(function (require) {
                         imgSize: isSVG ? [width, height] : ""
                     });
                 }
-                else if (this.get("clusterClass") === "CIRCLE"  && feature.get("features").length > 1) {
+                else if (isClustered && this.get("clusterClass") === "CIRCLE"  && feature.get("features").length > 1) {
                     imagestyle = new ol.style.Circle({
                         radius: radius,
                         fill: new ol.style.Fill({

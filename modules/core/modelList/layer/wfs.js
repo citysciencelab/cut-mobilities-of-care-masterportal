@@ -103,7 +103,6 @@ define(function (require) {
                         return !_.isUndefined(feature.getGeometry());
                     });
                     this.getLayerSource().addFeatures(features);
-                    console.log(features[0]);
                     this.set("loadend", "ready");
                     Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
                     this.styling(isClustered);
@@ -193,9 +192,6 @@ define(function (require) {
                 var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
                 if (!_.isUndefined(style)) {
-                    // if (style.get("subClass") === "CUSTOM") {
-                    //     console.log(123);
-                    // }
                     this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
                 }
             }

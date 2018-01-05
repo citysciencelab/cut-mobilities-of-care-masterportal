@@ -168,10 +168,10 @@
           "searchField": "name"
         },
         {
-          "id": "1132",
-          "styleId": "1132",
+          "id": "9793",
+          "styleId": "9793",
           "visibility": true,
-          "clusterDistance_": 40
+          "clusterDistance": 40
         }
       ]
     }

@@ -747,44 +747,332 @@
       }
     ]
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   {
-    "layerId": "1673",
-    "class": "POLYGON",
-    "subClass": "SIMPLE"
-  },
-  {
-    "layerId": "1672",
-    "class": "LINE",
-    "subClass": "SIMPLE"
-  },
-  {
-    "layerId": "1671",
+    "layerId" : "639",
     "class": "POINT",
-    "subClass": "SIMPLE",
-    "imageName": "krankenhaus.png",
-    "imageScale": "0.7"
+    "subClass" : "SIMPLE",
+    "imageName" : "parks_30.png"
   },
   {
-    "layerId": "1545",
-    "class": "LINE",
-    "subClass": "SIMPLE",
-    "lineStrokeColor": [0, 0, 0, 1],
-    "lineStrokeWidth": 5
+    "layerId" : "640",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "spielplatz_30.png"
+  },
+  {
+    "layerId" : "641",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "plaetze_30.png"
+  },
+  {
+    "layerId" : "1732",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "schule.gif",
+    "imageScale" : "0.5"
+  },
+  {
+    "layerId" : "mml",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "clusterClass": "SIMPLE",
+    "clusterImageWidth": 29,
+    "clusterImageHeight": 33,
+    "clusterImageName": "mml_marker_cluster.svg",
+    "clusterImageOffsetX": 0.5,
+    "clusterImageOffsetY": 1,
+    "clusterTextOffsetY" : "-30",
+    "clusterTextFillColor" : [96, 96, 96, 0],
+    "clusterTextStrokeColor" : [255, 255, 255, 0],
+    "clusterTextStrokeWidth" : "1",
+    "imageWidth": 23,
+    "imageHeight": 32,
+    "imageName" : "mml_marker.svg",
+    "imageOffsetX" : 0.50,
+    "imageOffsetY": 1.0
+  },
+  {
+    "layerId" : "mml_hover",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "clusterClass": "SIMPLE",
+    "clusterImageWidth": 29,
+    "clusterImageHeight": 33,
+    "clusterImageName" : "mml_marker_cluster.svg",
+    "clusterImageOffsetX" : 0.50,
+    "clusterImageOffsetY": 1.0,
+    "clusterTextOffsetY" : "-30",
+    "clusterTextFillColor" : [96, 96, 96, 0],
+    "clusterTextStrokeColor" : [255, 255, 255, 0],
+    "clusterTextStrokeWidth" : "1",
+    "opacity" : 0.5,
+    "imageWidth": 23,
+    "imageHeight": 32,
+    "imageName" : "mml_marker_sel.svg",
+    "imageOffsetX" : 0.50,
+    "imageOffsetY": 1.0,
+    "imageScale": 10
+  },
+  {
+    "layerId": "6093",
+    "class": "POINT",
+    "subClass": "CUSTOM",
+    "imageScale": "1.0",
+    "styleField": "kraftwerkstyp",
+    "styleFieldValues": [
+      {
+        "styleFieldValue" : "Heizkraftwerk",
+        "imageName" : "heizkraftwerk.png"
+      },
+      {
+        "styleFieldValue" : "Heizwerk",
+        "imageName" : "heizwerk.png"
+      },
+      {
+        "styleFieldValue" : "Kraftwerk",
+        "imageName" : "kraftwerk.png"
+      },
+      {
+        "styleFieldValue" : "Muellverbrennungsanlage",
+        "imageName" : "muellverbrennungsanlage.png"
+      }
+    ]
+  },
+  {
+    "layerId" : "4961",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "stoerfallbetrieb.png",
+    "imageScale" : "0.75"
+  },
+  {
+    "layerId" : "2403",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "pur.png",
+    "imageScale" : "0.7",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "pur.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "10",
+    "clusterTextOffsetY" : "-8",
+    "clusterTextFillColor" : [69, 96, 166, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId" : "2404",
+    "class": "POINT",
+    "subClass" : "CUSTOM",
+    "imageScale" : "0.7",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "bikeandride.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "10",
+    "clusterTextOffsetY" : "-8",
+    "clusterTextFillColor" : [69, 96, 166, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3",
+    "styleField": "symbol",
+    "styleFieldValues": [
+      {
+        "styleFieldValue": "BR",
+        "imageName" : "bikeandride.png"
+      },
+      {
+        "styleFieldValue": "schluessel",
+        "imageName" : "bur_schloss.png"
+      }
+    ]
+  },
+  {
+    "layerId" : "4516",
+    "class": "POINT",
+    "subClass" : "CUSTOM",
+    "imageScale" : "0.2",
+    "styleField": "kategorie",
+    "styleFieldValues": [
+      {
+        "styleFieldValue": "in der Luft",
+        "imageName" : "InderLuft.png"
+      },
+      {
+        "styleFieldValue": "zu Wasser",
+        "imageName" : "zuWasser.png"
+      },
+      {
+        "styleFieldValue": "zu Land",
+        "imageName" : "zuLand.png"
+      }
+    ]
+  },
+  {
+  "layerId" : "2306",
+  "class": "POLYGON",
+  "subClass" : "SIMPLE",
+  "polygonFillColor" : [10, 200, 0, 0.2],
+  "polygonStrokeColor" : [0, 0, 0, 1],
+  "polygonStrokeWidth" : 1
+  },
+  {
+    "layerId" : "8145",
+    "class": "POINT",
+    "subClass" : "CUSTOM",
+    "imageScale" : "0.8",
+    "styleField": "kategorie",
+    "styleFieldValues": [
+      {
+        "styleFieldValue": "Badeseen",
+        "imageName" : "Icon-Badeseen.png"
+      },
+      {
+        "styleFieldValue": "Schwimmbäder",
+        "imageName" : "Icon-Schwimmbaeder.png"
+      },
+      {
+        "styleFieldValue": "Spaß am Wasser",
+        "imageName" : "Icon-Spaß-am-Wasser.png"
+      }
+    ]
+  },
+  {
+    "layerId" : "8712",
+    "class": "POINT",
+    "subClass" : "CUSTOM",
+    "imageScale" : "0.6",
+    "imageWidth": 40,
+    "imageHeight": 40,
+    "styleField": "kapitelbezeichnung",
+    "styleFieldValues": [
+      {
+        "styleFieldValue": "Grundschulen",
+        "imageName" : "grundschulen.svg"
+      },
+      {
+        "styleFieldValue": "Gymnasien",
+        "imageName" : "gymnasien.svg"
+      },
+      {
+        "styleFieldValue": "Stadtteilschulen",
+        "imageName" : "stadtteilschulen.svg"
+      },
+      {
+        "styleFieldValue": "Sonderschulen",
+        "imageName" : "sonderschulen.svg"
+      },
+      {
+        "styleFieldValue": "Berufliche Schulen",
+        "imageName" : "berufliche_schulen.svg"
+      },
+      {
+        "styleFieldValue": "Langformschulen",
+        "imageName" : "langformschulen.svg"
+      }
+    ]
+  },
+  {
+    "layerId" : "7260",
+    "class": "POINT",
+    "subClass" : "CUSTOM",
+    "imageScale" : "0.5",
+    "imageWidth": 40,
+    "imageHeight": 40,
+    "styleField": "nutzung",
+    "styleFieldValues": [
+      {
+        "styleFieldValue": "Entwicklung, Nutzung",
+        "imageName" : "entwicklung.png",
+        "imageOffsetX" : 0.50,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue": "Entwicklung, Nachnutzung",
+        "imageName" : "entwicklung.png",
+        "imageOffsetX" : 0.50,
+        "imageOffsetY" : 0.50
+      },
+      {
+        "styleFieldValue": "Nachnutzung",
+        "imageName" : "nachnutzung.png",
+        "imageOffsetX" : 0.50,
+        "imageOffsetY" : 1.20
+      },
+      {
+        "styleFieldValue": "Nachnutzung, technische Anpassung",
+        "imageName" : "nachnutzung.png",
+        "imageOffsetX" : 0.10,
+        "imageOffsetY" : 0.10
+      },
+      {
+        "styleFieldValue": "Nachnutzung, Entwicklung für den Eigenbedarf",
+        "imageName" : "nachnutzung.png",
+        "imageOffsetX" : 0.10,
+        "imageOffsetY" : 0.10
+      }
+    ]
+  },
+  {
+    "layerId" : "9109",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "kehrwieder.png",
+    "imageScale" : "0.6",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "kehrwieder.png",
+    "clusterImageScale": "0.6",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "10",
+    "clusterTextOffsetY" : "-10",
+    "clusterTextFillColor" : [0, 0, 139, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId" : "9796",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "schulbauprojekte.png",
+    "imageScale" : "0.6",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "schulbauprojekte.png",
+    "clusterImageScale": "0.6",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 0, 0, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId" : "9792",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "objektmanager.png",
+    "imageScale" : "0.6",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "objektmanager.png",
+    "clusterImageScale": "0.6",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 0, 0, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+  {
+    "layerId" : "9793",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "imageName" : "hausmeister.png",
+    "imageScale" : "0.6",
+    "clusterClass": "SIMPLE",
+    "clusterImageName": "hausmeister.png",
+    "clusterImageScale": "0.6",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetY" : "2",
+    "clusterTextFillColor" : [255, 0, 0, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
   }
-
 ]
