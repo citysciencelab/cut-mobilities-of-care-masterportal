@@ -261,25 +261,29 @@ define(function (require) {
                 }
                 else {
                     featureValue = !_.isUndefined(feature.get("features")) ? feature.get("features")[0].get(styleField) : feature.get(styleField);
-                    styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
-                        return styleFieldValue.styleFieldValue === featureValue;
-                    })[0];
-                    src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
-                    isSVG = src.indexOf(".svg") > -1 ? true : false;
-                    width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth");
-                    height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.get("imageHeight");
-                    scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.get("imageScale"));
-                    imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX");
-                    imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY");
-                    offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
-                    imagestyle = new ol.style.Icon({
-                        src: src,
-                        width: width,
-                        height: height,
-                        scale: scale,
-                        anchor: offset,
-                        imgSize: isSVG ? [width, height] : ""
-                    });
+                    if (!_.isUndefined(featureValue)) {
+                        styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
+                            return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+                        })[0];
+                    }
+                    if (!_.isUndefined(styleFieldValueObj)) {
+                        src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
+                        isSVG = src.indexOf(".svg") > -1 ? true : false;
+                        width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth");
+                        height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.get("imageHeight");
+                        scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.get("imageScale"));
+                        imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX");
+                        imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY");
+                        offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
+                        imagestyle = new ol.style.Icon({
+                            src: src,
+                            width: width,
+                            height: height,
+                            scale: scale,
+                            anchor: offset,
+                            imgSize: isSVG ? [width, height] : ""
+                        });
+                    }
                 }
 
                 style = new ol.style.Style({

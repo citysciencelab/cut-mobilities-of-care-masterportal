@@ -12,7 +12,7 @@ require.config({
     util: "util",
     config: "testConfig",
     moment: "../../node_modules/moment/min/moment.min",
-    bootstrap: "../../node_modules/bootstrap/js",
+    bootstrap: "../../node_modules/bootstrap/js"
   },
   shim: {
         bootstrap: {
