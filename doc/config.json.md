@@ -689,6 +689,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |printID|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
 |title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
 |[gfiMarker](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
+|configYAML|nein|String|master|Der Name der YAML-Datei der MapFish-Webapp.|
 
 **Beispiel:**
 

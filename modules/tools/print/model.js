@@ -36,7 +36,8 @@ define([
                     fillColor: "#000000",
                     stroke: false
                 }
-            }
+            },
+            configYAML: "/master"
         },
 
         /*
@@ -48,7 +49,7 @@ define([
                 printurl;
 
             if (url) {
-                printurl = _.has(Config.print, "configYAML") === true ? url + "/" + Config.print.configYAML : url + "/master";
+                printurl = url + this.get("configYAML");
 
                 this.set("printurl", printurl);
                 return Config.proxyURL + "?url=" + printurl + "/info.json";
@@ -95,7 +96,16 @@ define([
             if (_.has(printAttrs, "gfiMarker") === true) {
                 this.setGfiMarker(printAttrs.gfiMarker);
             }
+            if (_.has(printAttrs, "configYAML") === true) {
+                this.setConfigYAML(printAttrs.configYAML);
+            }
         },
+
+        // Setzt die setConfigYAML-Datei für url Parameter
+        setConfigYAML: function (name) {
+            this.set("configYAML", "/" + name);
+        },
+
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
         setTitleFromForm: function () {
             if ($("#titleField").val()) {
