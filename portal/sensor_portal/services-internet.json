@@ -35,6 +35,36 @@
          "authmethod2" : "Authentifizierungsmethode 2"
       }
    },
+
+   {
+      "id" : "999998",
+      "name" : "Live - Temperatur",
+      "url" : "https://51.5.242.162/itsLGVhackathon",
+      "typ" : "Sensor",
+      "subtyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "filter" : "startswith(Datastreams/name,'Air')",
+         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
+      },
+
+      "geometry" : "point",
+      "scaling" : "nominal",
+      "scalingShape" : "circle",
+      "scalingAttributes" : {
+         "charging" : "#ff0000",
+         "available" : "#00ff00",
+         "outoforder" : "#aaaaaa"
+      },
+
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzer Ladezeitpunkt",
+         "state" : "Zustand",
+         "owner" : "Eigentümer"
+      }
+   },
+
    {
       "id" : "683",
       "name" : "Kindertagesstaetten Details",

@@ -164,6 +164,9 @@ define(function (require) {
                 if (this.get("scaling") === "nominal") {
                     scalingObject = this.fillScalingAttributes(point);
                 }
+                else if (this.get("scaling") === "interval") {
+                    // Aufruf für intervalskalierte Daten
+                }
 
                 // check shape
                 if (this.get("scalingShape") === "circle") {
@@ -238,25 +241,44 @@ define(function (require) {
             var mergeAllThings = [],
                 indices = [];
 
-            _.each(allThings, function(thing, index) {
+            _.each(allThings, function (thing, index) {
                 // if the thing was assigned already
-                if(!_.contains(indices, index)) {
-                    var xy = thing.Locations[0].location.geometry.coordinates,
-                    things = [];
+                if (!_.contains(indices, index)) {
+                    var things = [],
+                        xy = this.getCoordinates(thing);
 
-                _.each(allThings, function(thing2, index2) {
-                    var xy2 = thing2.Locations[0].location.geometry.coordinates;
+                _.each(allThings, function (thing2, index2) {
+                    var xy2 = this.getCoordinates(thing2);
+
                     if (_.isEqual(xy, xy2)) {
                         things.push(thing2);
                         indices.push(index2);
                     }
-                });
+                }, this);
 
                 mergeAllThings.push(things);
                 }
-            });
+            }, this);
 
             return mergeAllThings;
+        },
+
+        /**
+         * retrieves coordinates by different geometry types
+         * @param  {object} thing
+         * @return {array} coordinates
+         */
+        getCoordinates: function (thing) {
+            var xy;
+
+            if (thing.Locations[0].location.type === "Feature") {
+                xy = thing.Locations[0].location.geometry.coordinates;
+            }
+            else if (thing.Locations[0].location.type === "Point") {
+                xy = thing.Locations[0].location.coordinates;
+            }
+
+            return xy;
         },
 
         /**
@@ -280,7 +302,7 @@ define(function (require) {
 
                 // get newest observation if existing
                 if (thingsObservationsLength > 0) {
-                    thing.properties.state = thing.Datastreams[0].Observations[0].result;
+                    thing.properties.state = String(thing.Datastreams[0].Observations[0].result);
                     thing.properties.phenomenonTime = thing.Datastreams[0].Observations[0].phenomenonTime;
                 }
                 else {
@@ -301,7 +323,7 @@ define(function (require) {
             }, this);
 
             // add to Object
-            obj.location = thingsArray[0].Locations[0].location.geometry.coordinates;
+            obj.location = this.getCoordinates(thingsArray[0]);
             obj.properties = properties;
 
             return obj;
@@ -313,7 +335,8 @@ define(function (require) {
          * @return {String} properties as String
          */
         combinePropertiesAsString: function (properties) {
-            propString = properties[0];
+            var propString = properties[0];
+
             _.each(properties, function (prop, index) {
                 if (index > 0) {
                     propString = propString + " | " + prop;
@@ -343,11 +366,15 @@ define(function (require) {
 
         /**
          * fills the object with values
-         * @param {ol.feature} geometry
+         * @param {ol.feature} feature
          */
-        fillScalingAttributes: function (geometry) {
-            var states = geometry.values_.state.split(" | "),
-                scalingObject = this.getScalingAttributesAsObject();
+        fillScalingAttributes: function (feature) {
+            var scalingObject = this.getScalingAttributesAsObject(),
+                states = feature.get("state");
+
+            if (_.contains(states, "|")) {
+                states = states.split(" | ");
+            }
 
             _.each(states, function (state) {
                 if (state) {
@@ -364,7 +391,9 @@ define(function (require) {
          */
         createCircleSegments: function (scalingObject) {
             var svg = '<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
-                n = _.reduce(_.values(scalingObject), function (memo, num) { return memo + num; }, 0),
+                n = _.reduce(_.values(scalingObject), function (memo, num) {
+                        return memo + num;
+                    }, 0),
                 degreeSegment = 360 / n,
                 startAngelDegree = 0,
                 endAngelDegree = degreeSegment,
@@ -373,14 +402,14 @@ define(function (require) {
 
             svg = svg + '<circle cx="60" cy="60" r="23" stroke="white" stroke-width="4" fill="none"/>';
 
-            _.each(scalingObject, function (key, value) {
-                if (key) {
-                    var stroke = this.get("scalingAttributes")[value];
+            _.each(scalingObject, function (value, key) {
+                if (value) {
+                    var strokeColor = this.get("scalingAttributes")[key];
 
-                    for (var i = 0; i < key; i++) {
+                    for (var i = 0; i < value; i++) {
                         var d = this.calculateCircleSegment(startAngelDegree, endAngelDegree);
 
-                        svg = this.extendsSVG(svg, fill, strokeWidth, stroke, d);
+                        svg = this.extendsSVG(svg, fill, strokeWidth, strokeColor, d);
 
                         // set degree for next circular segment
                         startAngelDegree = startAngelDegree + degreeSegment;
@@ -518,44 +547,62 @@ define(function (require) {
         updateFromWebSocket: function (things) {
             var keys = Object.keys(things),
                 dataStreamId = keys[0],
+                features = this.getLayerSource().getFeatures(),
                 result = things[dataStreamId].result,
                 thisPhenomTime = things[dataStreamId].phenomenonTime,
-                thisFeatureArray = this.getFeatureById(dataStreamId, this.getLayerSource().getFeatures()),
-                thisPlugIndex = thisFeatureArray[0],
-                thisFeature = thisFeatureArray[1],
-                // change state and phenomTime
-                datastreamStates = thisFeature.values_["state"],
-                datastreamPhenomTime = thisFeature.values_["phenomenonTime"],
-                scalingObject,
-                svgPath;
+                thisFeatureArray = this.getFeatureById(dataStreamId, features);
 
-            if (_.contains(datastreamStates, "|")) {
-                datastreamStates = datastreamStates.split(" | ");
-                datastreamPhenomTime = datastreamPhenomTime.split(" | ");
-            };
+            // Change properties only in Layer witch contain the Datastream
+            if (!_.isEmpty(thisFeatureArray)) {
+                var thisPlugIndex = thisFeatureArray[0],
+                    thisFeature = thisFeatureArray[1],
+                    // change state and phenomTime
+                    datastreamStates = thisFeature.get("state"),
+                    datastreamPhenomTime = thisFeature.get("phenomenonTime"),
+                    scalingObject,
+                    svgPath;
 
-            datastreamStates[thisPlugIndex] = result;
-            datastreamPhenomTime[thisPlugIndex] = thisPhenomTime;
+                if (_.contains(datastreamStates, "|")) {
+                    datastreamStates = datastreamStates.split(" | ");
+                    datastreamPhenomTime = datastreamPhenomTime.split(" | ");
 
-            // update states in feature
-            thisFeature.values_.state = this.combinePropertiesAsString(datastreamStates);
-            thisFeature.values_.phenomenonTime = this.combinePropertiesAsString(datastreamPhenomTime);
-
-            // check geometry
-            if (this.get("geometry") === "point") {
-                // check scaling
-                if (this.get("scaling") === "nominal") {
-                    scalingObject = this.fillScalingAttributes(thisFeature);
+                    datastreamStates[thisPlugIndex] = String(result);
+                    datastreamPhenomTime[thisPlugIndex] = thisPhenomTime;
+                }
+                else {
+                    datastreamStates = String(result);
+                    datastreamPhenomTime = thisPhenomTime;
                 }
 
-                // check shape
-                if (this.get("scalingShape") === "circle") {
-                    svgPath = this.createCircleSegments(scalingObject);
+                // update states in feature
+                if (_.isArray(datastreamStates)) {
+                    thisFeature.set("state", this.combinePropertiesAsString(datastreamStates));
+                    thisFeature.set("phenomenonTime", this.combinePropertiesAsString(datastreamPhenomTime));
                 }
+                else {
+                    thisFeature.set("state", datastreamStates);
+                    thisFeature.set("phenomenonTime", datastreamPhenomTime);
+                }
+
+                // check geometry
+                if (this.get("geometry") === "point") {
+                    // check scaling
+                    if (this.get("scaling") === "nominal") {
+                        scalingObject = this.fillScalingAttributes(thisFeature);
+                    }
+                    else if (this.get("scaling") === "interval") {
+                        // Aufruf für intervalskalierte Daten
+                    }
+
+                    // check shape
+                    if (this.get("scalingShape") === "circle") {
+                        svgPath = this.createCircleSegments(scalingObject);
+                    }
+                }
+
+                console.log(thisFeature);
+                this.drawSvgAndIcon(thisFeature, svgPath);
             }
-
-            this.drawSvgAndIcon(thisFeature, svgPath);
-            console.log(thisFeature);
         },
 
         /**
@@ -568,18 +615,22 @@ define(function (require) {
             var thisFeatureArray = [];
 
             _.each(features, function (feature) {
-                var datastreamIds = feature.values_.dataStreamId;
+                var datastreamIds = feature.get("dataStreamId");
 
                 if (_.contains(datastreamIds, "|")) {
                     datastreamIds = datastreamIds.split(" | ");
-                };
 
-                _.each(datastreamIds, function (thisId, index) {
-                    if (id === thisId) {
-                        thisFeatureArray.push(index);
-                        thisFeatureArray.push(feature);
-                    }
-                });
+                    _.each(datastreamIds, function (thisId, index) {
+                        if (id === thisId) {
+                            thisFeatureArray.push(index);
+                            thisFeatureArray.push(feature);
+                        }
+                    });
+                }
+                else if (id === String(datastreamIds)) {
+                    thisFeatureArray.push(0);
+                    thisFeatureArray.push(feature);
+                }
             });
 
             return thisFeatureArray;
@@ -590,7 +641,7 @@ define(function (require) {
 // *************************************************************
         getMQTT: function () {
             var options = {
-                    port: 9001,
+                    port: 1883,
                     keepalive: 60,
                     encoding: "utf8",
                     protocol: "mqtt"
@@ -608,8 +659,8 @@ define(function (require) {
                     //             }
                 },
                 vartopicList = [],
-                client  = mqtt.connect("ws://localhost:9001/websocket", options);
-                // client  = mqtt.connect("http://51.5.242.162", options);
+                // client  = mqtt.connect("ws://localhost:9001/websocket", options);
+                client  = mqtt.connect("http://51.5.242.162", options);
                 // client  = mqtt.connect("ws://localhost:9001/websocket");
 
             // subscribe
