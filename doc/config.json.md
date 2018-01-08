@@ -690,6 +690,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
 |[gfiMarker](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
 |configYAML|nein|String|master|Der Name der YAML-Datei der MapFish-Webapp.|
+|outputFilename|nein|String|Ausdruck|Der Dateiname der PDF, den die MapFish-Webapp erstellt.|
 
 **Beispiel:**
 
