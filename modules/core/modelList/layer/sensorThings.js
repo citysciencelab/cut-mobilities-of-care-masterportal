@@ -159,27 +159,43 @@ define(function (require) {
                     });
 
                 point.setProperties(thisSensor.properties);
-
-                // check scaling
-                if (this.get("scaling") === "nominal") {
-                    scalingObject = this.fillScalingAttributes(point);
-                }
-                else if (this.get("scaling") === "interval") {
-                    // Aufruf für intervalskalierte Daten
-                }
-
-                // check shape
-                if (this.get("scalingShape") === "circle") {
-                    svgPath = this.createCircleSegments(scalingObject);
-                }
-
-                this.drawSvgAndIcon(point, svgPath);
+                point = this.drawByType(point);
                 points.push(point);
 
             }, this);
 
             // Add features to vectorlayer
             this.getLayerSource().addFeatures(points);
+        },
+
+        /**
+         * draw feature by given scaling- and shape-type
+         * @param  {ol.Feature} feature which to draw
+         * @return {ol.Feature} feature
+         */
+        drawByType: function (feature) {
+            var scalingObject,
+                svgPath;
+
+            // check scaling
+            if (this.get("scaling") === "nominal") {
+                scalingObject = this.fillScalingAttributes(feature);
+            }
+            else if (this.get("scaling") === "interval") {
+                scalingObject = this.convertScaling(feature);
+            }
+
+            // check shape
+            if (this.get("scalingShape") === "circle") {
+                svgPath = this.createNominalCircleSegments(scalingObject);
+                this.drawSvgAndIcon(feature, svgPath);
+            }
+            else if (this.get("scalingShape") === "line") {
+                svgPath = this.createIntervalLine(scalingObject);
+                this.drawSvg(feature, svgPath);
+            }
+
+            return feature;
         },
 
 // *************************************************************
@@ -385,11 +401,85 @@ define(function (require) {
         },
 
         /**
-         * create a svg with colored circle segments
+         * convert Scaling with given factor
+         * @param  {ol.Feature} feature
+         * @return {String} state with converted value
+         */
+        convertScaling: function (feature) {
+            var state = feature.get("state");
+
+            if (!_.isUndefined(this.get("conversionFactor"))) {
+                state = state * this.get("conversionFactor");
+            }
+
+            return state;
+        },
+
+        /**
+         * create a svg line by interval scaling
+         * @param  {object} scalingObject - contains state and value
+         * @return {String} svg with colored line
+         */
+        createIntervalLine: function (scalingObject) {
+            var factor = 200,
+                circleRadius = 6,
+                lineStroke = 5,
+                scalingFactor = 1,
+                scalingUnit = "",
+                scalingDecimal = 2,
+                fontSize = 0,
+                scalingColorPositiv = "#ff0000",
+                scalingColorNegativ = "#0000ff",
+                color,
+                svg;
+
+            if (!_.isUndefined(this.get("circleRadius"))) {
+                circleRadius = this.get("circleRadius");
+            }
+            if (!_.isUndefined(this.get("lineStroke"))) {
+                lineStroke = this.get("lineStroke");
+            }
+            if (!_.isUndefined(this.get("scalingFactor"))) {
+                scalingFactor = this.get("scalingFactor");
+            }
+            if (!_.isUndefined(this.get("scalingUnit"))) {
+                scalingUnit = this.get("scalingUnit");
+            }
+            if (!_.isUndefined(this.get("scalingDecimal"))) {
+                scalingDecimal = this.get("scalingDecimal");
+            }
+            if (!_.isUndefined(this.get("fontSize"))) {
+                fontSize = this.get("fontSize");
+            }
+            if (!_.isUndefined(this.get("scalingColorPositiv"))) {
+                scalingColorPositiv = this.get("scalingColorPositiv");
+            }
+            if (!_.isUndefined(this.get("scalingColorNegativ"))) {
+                scalingColorNegativ = this.get("scalingColorNegativ");
+            }
+
+            if (scalingObject >= 0) {
+                color = scalingColorPositiv;
+            }
+            else if (scalingObject < 0) {
+                color = scalingColorNegativ;
+            }
+
+            svg = '<svg width="' + factor + '" height="' + factor + '" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">';
+            svg = svg + '<line x1="' + (factor / 2) + '" y1="' + (factor / 2) + '" x2="' + (factor / 2) + '" y2="' + (factor / 2 - circleRadius - scalingObject * scalingFactor) + '" stroke="' + color + '" stroke-width="' + lineStroke + '" />';
+            svg = svg + '<circle cx="' + (factor / 2) + '" cy="' + (factor / 2) + '" r="' + circleRadius + '" fill="' + color + '" />';
+            svg = svg + '<text fill="black" font-family="Verdana" font-size="' + fontSize + '" x="' + (factor / 2 + 6 + 5) + '" y="' + (factor / 2 + 6) + '">' + scalingObject.toFixed(scalingDecimal) + scalingUnit + '</text>';
+            svg = svg + '</svg>';
+
+            return svg;
+        },
+
+        /**
+         * create a svg with colored circle segments by nominal scaling
          * @param  {object} scalingObject - contains state and value
          * @return {String} svg with colored circle segments
          */
-        createCircleSegments: function (scalingObject) {
+        createNominalCircleSegments: function (scalingObject) {
             var svg = '<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
                 n = _.reduce(_.values(scalingObject), function (memo, num) {
                         return memo + num;
@@ -455,8 +545,8 @@ define(function (require) {
 
         /**
          * draw svg and and icon
+         * @param  {ol.Feature} point
          * @param  {String} svgPath
-         * @return {[type]}     [description]
          */
         drawSvgAndIcon: function (point, svgPath) {
             styleSVG = new ol.style.Style({
@@ -468,6 +558,21 @@ define(function (require) {
             // add both styles (png, svg)
             styleIcon = this.getStyleAsFunction(this.get("style"));
             point.setStyle([styleIcon(point)[0], styleSVG]);
+        },
+
+        /**
+         * draw Svg
+         * @param  {ol.Feature} point
+         * @param  {String} svgPath
+         */
+        drawSvg: function (point, svgPath) {
+            styleSVG = new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: 'data:image/svg+xml;utf8,' + svgPath
+                })
+            });
+
+            point.setStyle(styleSVG);
         },
 
         /**
@@ -584,24 +689,9 @@ define(function (require) {
                     thisFeature.set("phenomenonTime", datastreamPhenomTime);
                 }
 
-                // check geometry
-                if (this.get("geometry") === "point") {
-                    // check scaling
-                    if (this.get("scaling") === "nominal") {
-                        scalingObject = this.fillScalingAttributes(thisFeature);
-                    }
-                    else if (this.get("scaling") === "interval") {
-                        // Aufruf für intervalskalierte Daten
-                    }
-
-                    // check shape
-                    if (this.get("scalingShape") === "circle") {
-                        svgPath = this.createCircleSegments(scalingObject);
-                    }
-                }
-
+                thisFeature = this.drawByType(thisFeature);
                 console.log(thisFeature);
-                this.drawSvgAndIcon(thisFeature, svgPath);
+
             }
         },
 
@@ -641,27 +731,19 @@ define(function (require) {
 // *************************************************************
         getMQTT: function () {
             var options = {
-                    port: 1883,
+                    // port: 1883,
+                    // port: 8883,
+                    port: 9001,
                     keepalive: 60,
                     encoding: "utf8",
                     protocol: "mqtt"
-                    // protocolId: "MQIsdp",
-                    // protocolVersion: 3
-                    // debug: true,
-                    // clientId: "bgtestnodejs",
-                    // ca: "MIICAzCCAWwCCQD04MY/0wjqfzANBgkqhkiG9w0BAQUFADBGMQswCQYDVQQGEwJBVTETMBEGA1UECBMKU29tZS1TdGF0ZTEQMA4GA1UEChMHR3J1bnRKUzEQMA4GA1UEAxMHMC4wLjAuMDAeFw0xNDAyMTkyMzE0NDZaFw0xNTAyMTkyMzE0NDZaMEYxCzAJBgNVBAYTAkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMRAwDgYDVQQKEwdHcnVudEpTMRAwDgYDVQQDEwcwLjAuMC4wMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAaENBF2WVZ2dqU5sS8OVA2ZdT9J8kbhgIjxtL5DLjFL7s4/uF3dYPBCMSOjfFj37UXZcRZ8DTiX6YmXvnmw/Sqn7hp8QRqtXPtmP+pT6gLNJLVrlqAezDQCvrH+1hHInAmHyrrbYS3ydXiElt4ymyA2HdeIKsgrle66Z26YgHmQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAHpxr4nK7HIeyx4MN7QNqPSHA0CnNyb6E7MQGKCufZyAM7dTa2Pdc+P5MPlskm6HuPQy7BCGdr6lujlXkH6zzpjytGuXHq45BxiLq49ld3lUIj6W1cMVi2u/iIGE/fqU4vHO8yBBvgr9Cdz/X16jbjYCjRUEZxnarlNuVKn5nMlm",
-                    // rejectUnuthorized: true,
-                    // wsOptions: {
-                    //                 port: 9001,
-                    //                 host: "ws://localhost:9001/websocket"
-                    // //                 server: "https.Server",
-                    // //                 protocol: "wss"
-                    //             }
+                    // protocol: "mqtts"
                 },
                 vartopicList = [],
-                // client  = mqtt.connect("ws://localhost:9001/websocket", options);
-                client  = mqtt.connect("http://51.5.242.162", options);
-                // client  = mqtt.connect("ws://localhost:9001/websocket");
+
+                // client  = mqtt.connect("http://51.5.242.162", options);
+                // client  = mqtt.connect("https://51.5.242.162", options);
+                client  = mqtt.connect("ws://localhost:9001/websocket", options);
 
             // subscribe
             client.on("connect", function () {
@@ -699,3 +781,29 @@ define(function (require) {
 
     return SensorThingsLayer;
 });
+
+
+
+ // var options = {
+ //                    port: 8883,
+ //                    keepalive: 60,
+ //                    encoding: "utf8",
+ //                    protocol: "mqtts"
+ //                    // protocolId: "MQIsdp",
+ //                    // protocolVersion: 3
+ //                    // debug: true,
+ //                    // clientId: "bgtestnodejs",
+ //                    // ca: "MIICAzCCAWwCCQD04MY/0wjqfzANBgkqhkiG9w0BAQUFADBGMQswCQYDVQQGEwJBVTETMBEGA1UECBMKU29tZS1TdGF0ZTEQMA4GA1UEChMHR3J1bnRKUzEQMA4GA1UEAxMHMC4wLjAuMDAeFw0xNDAyMTkyMzE0NDZaFw0xNTAyMTkyMzE0NDZaMEYxCzAJBgNVBAYTAkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMRAwDgYDVQQKEwdHcnVudEpTMRAwDgYDVQQDEwcwLjAuMC4wMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAaENBF2WVZ2dqU5sS8OVA2ZdT9J8kbhgIjxtL5DLjFL7s4/uF3dYPBCMSOjfFj37UXZcRZ8DTiX6YmXvnmw/Sqn7hp8QRqtXPtmP+pT6gLNJLVrlqAezDQCvrH+1hHInAmHyrrbYS3ydXiElt4ymyA2HdeIKsgrle66Z26YgHmQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAHpxr4nK7HIeyx4MN7QNqPSHA0CnNyb6E7MQGKCufZyAM7dTa2Pdc+P5MPlskm6HuPQy7BCGdr6lujlXkH6zzpjytGuXHq45BxiLq49ld3lUIj6W1cMVi2u/iIGE/fqU4vHO8yBBvgr9Cdz/X16jbjYCjRUEZxnarlNuVKn5nMlm",
+ //                    // rejectUnuthorized: true,
+ //                    // wsOptions: {
+ //                    //                 port: 9001,
+ //                    //                 host: "ws://localhost:9001/websocket"
+ //                    // //                 server: "https.Server",
+ //                    // //                 protocol: "wss"
+ //                    //             }
+ //                },
+ //                vartopicList = [],
+ //                // client  = mqtt.connect("wss://localhost:9001/websocket", options);
+ //                // client  = mqtt.connect("https://51.5.242.162", options);
+ //                client  = mqtt.connect("https://51.5.242.162");
+ //                // client  = mqtt.connect("ws://localhost:9001/websocket");

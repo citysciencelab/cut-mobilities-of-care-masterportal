@@ -172,13 +172,13 @@
         {
           "id": "999999",
           "styleId": "999999",
-          "visibility": true,
+          "visibility": false,
           "mouseHoverField": []
         },
         {
           "id": "999998",
           "styleId": "999998",
-          "visibility": false,
+          "visibility": true,
           "mouseHoverField": []
         },
         {

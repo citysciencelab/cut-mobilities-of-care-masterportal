@@ -37,7 +37,7 @@
     "deep-extend": "^0.3.2",
     "fs": "0.0.1-security",
     "glob": "4.2.1",
-    "grunt": "^0.4.5",
+    "grunt": "^1.0.1",
     "grunt-changelog": "^0.3.2",
     "grunt-connect-proxy": "^0.2.0",
     "grunt-contrib-clean": "^0.6.0",

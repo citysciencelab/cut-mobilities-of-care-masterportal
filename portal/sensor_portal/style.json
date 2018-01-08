@@ -7,11 +7,7 @@
         "imageoffsety" : 0.50
     },
     {
-        "layerId" : "999998",
-        "subclass" : "Icon",
-        "imagename" : "elektro_auto.png",
-        "imageoffsetx" : 0.50,
-        "imageoffsety" : 0.50
+        "layerId" : "999998"
     },
     {
         "layerId" : "1711",
