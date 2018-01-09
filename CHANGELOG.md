@@ -17,6 +17,12 @@ FIXES:
   - 3786af7 Scrollleiste in Themenbaum light
   - cf931a1 fix UrlParams zoomlevel und Center fix Canvas wird defaultmäßig nicht erzeugt fix UrlParam featureId über LayerIds Parameter StartupModul behalten
 
+# Changelog LGV Master-Portal 1.4.8
+
+FIXES:
+
+  - c54708ef sgvonline theme attr amtliche adresse immer nein
+
 # Changelog LGV Master-Portal 1.4.7
 
 FIXES:
