@@ -8,6 +8,7 @@ Die *style_v2.json* beinhaltet die Parameter für die WFS-Features. Die Verbindu
 ## Allgemeine Style Parameter ##
 Beim Stylen der WFS-Features gibt es verschiedene Klassen nach denen wir den Style in der *style_v2.json* unterscheiden.
 Wird in der [config.json](config.json.md) in der Layerconfiguration der Parameter "clusterDistance" gesetzt, so wird ein ClusterStyle erzeugt. Der ClusterStyle ist abhängig vom Parameter "clusterClass".
+
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |layerId|ja|String||ID des Styles, der in der [config.json](config.json.md) angegeben wird, um entsprechend zugeordnet zu werden. In der Regel gleiche ID, wie die des Layers.|
@@ -41,6 +42,7 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |clusterTextFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextStrokeWidth|nein|Integer|3|Breite der Textstriche. Bei geclusterten Features siehe [config.json](config.json.md)|
+
 
 ## Spezielle Parameter ##
 Einige Parameter sind nur bei bestimmten Kombinationen von "class" und "subClass" notwendig.
