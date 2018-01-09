@@ -67,32 +67,74 @@ define(function (require) {
         initialize: function () {
             this.set("imagePath", Radio.request("Util", "getPath", Config.wfsImgPath));
         },
+
+        /*
+        * in WFS.js this function ist set as style. for each feature, this function is called.
+        * Depending on the attribute "class" the respective style is created.
+        * allowed values for "class" are "POINT", "LINE", "POLYGON".
+        */
         createStyle: function (feature, isClustered) {
-            var style,
+            var style = this.getDefaultStyle(),
                 styleClass = this.get("class").toUpperCase(),
                 styleSubClass = this.get("subClass").toUpperCase(),
                 labelField = this.get("labelField");
 
             if (styleClass === "POINT") {
-                style = this.createPointStyle(feature, styleSubClass, isClustered, labelField);
-            }
-            else if (styleClass === "POLYGON") {
-                style = this.createPolygonStyle(feature, styleSubClass, isClustered, labelField);
+                style = this.createPointStyle(feature, styleSubClass, isClustered);
             }
             else if (styleClass === "LINE") {
-                style = this.createLineStyle(feature, styleSubClass, isClustered, labelField);
+                style = this.createLineStyle(feature, styleSubClass, isClustered);
             }
+            else if (styleClass === "POLYGON") {
+                style = this.createPolygonStyle(feature, styleSubClass, isClustered);
+            }
+            // after style is derived, createTextStyle
+            style.setText(this.createTextStyle(feature, labelField, isClustered));
+
             return style;
         },
-        createLineStyle: function (feature, styleSubClass, isClustered, labelField) {
+
+        /*
+        * create openLayers Default Style
+        */
+        getDefaultStyle: function () {
+            var fill = new ol.style.Fill({
+               color: "rgba(255,255,255,0.4)"
+             }),
+             stroke = new ol.style.Stroke({
+               color: "#3399CC",
+               width: 1.25
+             });
+
+             return new ol.style.Style({
+                 image: new ol.style.Circle({
+                   fill: fill,
+                   stroke: stroke,
+                   radius: 5
+                 }),
+                 fill: fill,
+                 stroke: stroke
+               });
+        },
+
+        /*
+        * creates lineStyle depending on the attribute "subClass".
+        * allowed values for "subClass" are "SIMPLE".
+        */
+        createLineStyle: function (feature, styleSubClass, isClustered) {
             var style;
+
             if (styleSubClass === "SIMPLE") {
-                style = this.createSimpleLineStyle(feature, isClustered, labelField);
-                style.setText(this.createTextStyle(feature, labelField, isClustered));
+                style = this.createSimpleLineStyle(feature, isClustered);
             }
             return style;
         },
-        createSimpleLineStyle: function (feature, isClustered, labelField) {
+
+        /*
+        * creates a simpleLineStyle.
+        * all features get the same style.
+        */
+        createSimpleLineStyle: function (feature, isClustered) {
             var strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
                 strokewidth = parseInt(this.get("lineStrokeWidth"), 10),
                 strokestyle = new ol.style.Stroke({
@@ -107,16 +149,26 @@ define(function (require) {
 
             return style;
         },
-        createPolygonStyle: function (feature, styleSubClass, isClustered, labelField) {
+
+        /*
+        * creates polygonStyle depending on the attribute "subClass".
+        * allowed values for "subClass" are "SIMPLE".
+        */
+        createPolygonStyle: function (feature, styleSubClass, isClustered) {
             var style;
 
             if (styleSubClass === "SIMPLE") {
-                style = this.createSimplePolygonStyle(feature, isClustered, labelField);
-                style.setText(this.createTextStyle(feature, labelField, isClustered));
+                style = this.createSimplePolygonStyle(feature, isClustered);
             }
+
             return style;
         },
-        createSimplePolygonStyle: function (feature, isClustered, labelField) {
+
+        /*
+        * creates a simplePolygonStyle.
+        * all features get the same style.
+        */
+        createSimplePolygonStyle: function (feature, isClustered) {
             var strokestyle = new ol.style.Stroke({
                     color: this.returnColor(this.get("polygonStrokeColor"), "rgb"),
                     width: this.returnColor(this.get("polygonStrokeWidth"), "rgb")
@@ -126,30 +178,38 @@ define(function (require) {
                 }),
                 style;
 
-                style = new ol.style.Style({
-                    stroke: strokestyle,
-                    fill: fill
-                });
+            style = new ol.style.Style({
+                stroke: strokestyle,
+                fill: fill
+            });
 
-                return style;
+            return style;
         },
-        createPointStyle: function (feature, styleSubClass, isClustered, labelField) {
+
+        /*
+        * creates pointStyle depending on the attribute "subClass".
+        * allowed values for "subClass" are "SIMPLE", "CUSTOM" and "CIRCLE.
+        */
+        createPointStyle: function (feature, styleSubClass, isClustered) {
             var style;
 
             if (styleSubClass === "SIMPLE") {
                 style = this.createSimplePointStyle(feature, isClustered);
-                style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
             else if (styleSubClass === "CUSTOM") {
                 style = this.createCustomPointStyle(feature, isClustered);
-                style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
             else if (styleSubClass === "CIRCLE") {
                 style = this.createCirclePointStyle(feature, isClustered);
-                style.setText(this.createTextStyle(feature, labelField, isClustered));
             }
+
             return style;
         },
+
+        /*
+        * creates clusterStyle depending on the attribute "clusterClass".
+        * allowed values for "clusterClass" are "SIMPLE" and "CIRCLE".
+        */
         createClusterStyle: function () {
             var clusterClass = this.get("clusterClass"),
                 clusterStyle;
@@ -162,6 +222,11 @@ define(function (require) {
             }
             return clusterStyle;
         },
+
+        /*
+        * creates simpleClusterStyle.
+        * all clustered features get same image.
+        */
         createSimpleClusterStyle: function () {
             var src = this.get("imagePath") + this.get("clusterImageName"),
                 isSVG = src.indexOf(".svg") > -1 ? true : false,
@@ -177,14 +242,20 @@ define(function (require) {
                     anchor: offset,
                     imgSize: isSVG ? [width, height] : ""
                 });
+
                 return clusterStyle;
         },
+
+        /*
+        * creates circleClusterStyle.
+        * all clustered features get same circle.
+        */
         createCircleClusterStyle: function () {
             var radius = parseInt(this.get("clusterCircleRadius"), 10),
                 fillcolor = this.returnColor(this.get("clusterCircleFillColor"), "rgb"),
                 strokecolor = this.returnColor(this.get("clusterCircleStrokeColor"), "rgb"),
                 strokewidth = parseInt(this.get("clusterCircleStrokeWidth"), 10),
-                clusterStyle = imagestyle = new ol.style.Circle({
+                clusterStyle = new ol.style.Circle({
                     radius: radius,
                     fill: new ol.style.Fill({
                         color: fillcolor
@@ -196,6 +267,11 @@ define(function (require) {
                 });
                 return clusterStyle;
         },
+
+        /*
+        * creates simplePointStyle.
+        * all features get same image.
+        */
         createSimplePointStyle: function (feature, isClustered) {
             var src,
                 isSVG,
@@ -204,10 +280,6 @@ define(function (require) {
                 scale,
                 offset,
                 imagestyle,
-                fillcolor,
-                strokecolor,
-                strokewidth,
-                radius,
                 style;
 
                 if (isClustered && feature.get("features").length > 1) {
@@ -237,6 +309,11 @@ define(function (require) {
             return style;
 
         },
+
+        /*
+        * creates customPointStyle.
+        * each features gets a different image, depending on their attribute which is stored in "styleField".
+        */
         createCustomPointStyle: function (feature, isClustered) {
             var styleField = this.get("styleField"),
                 featureValue,
@@ -250,10 +327,6 @@ define(function (require) {
                 imageoffsety,
                 offset,
                 imagestyle,
-                fillcolor,
-                strokecolor,
-                strokewidth,
-                radius,
                 style;
 
                 if (isClustered && feature.get("features").length > 1) {
@@ -292,6 +365,11 @@ define(function (require) {
 
             return style;
         },
+
+        /*
+        * creates circlePointStyle.
+        * all features get same circle.
+        */
         createCirclePointStyle: function (feature, isClustered) {
             var radius,
                 fillcolor,
@@ -300,25 +378,8 @@ define(function (require) {
                 circleStyle,
                 style;
 
-            if (isClustered && feature.get("features").length > 1) {
-                src = this.get("imagePath") + this.get("clusterImageName");
-                isSVG = src.indexOf(".svg") > -1 ? true : false;
-                width = this.get("clusterImageWidth");
-                height = this.get("clusterImageHeight");
-                scale = parseFloat(this.get("clusterImageScale"));
-                offset = [parseFloat(this.get("clusterImageOffsetX")), parseFloat(this.get("clusterImageOffsetY"))];
-                imagestyle = new ol.style.Icon({
-                    src: src,
-                    width: width,
-                    height: height,
-                    scale: scale,
-                    anchor: offset,
-                    imgSize: isSVG ? [width, height] : ""
-                });
-                style = new ol.style.Style({
-                    image: imagestyle
-                });
-
+            if (isClustered) {
+                circleStyle = this.createClusterStyle();
             }
             else {
                 radius = parseInt(this.get("circleRadius"), 10),
@@ -334,93 +395,105 @@ define(function (require) {
                         color: strokecolor,
                         width: strokewidth
                     })
-                }),
-                style = new ol.style.Style({
-                    image: circleStyle
                 });
             }
+            style = new ol.style.Style({
+                image: circleStyle
+            });
 
             return style;
         },
+
+        /*
+        * creates textStyle if feature is clustered OR "labelField" is set
+        */
         createTextStyle: function (feature, labelField, isClustered) {
-            var text,
-                textAlign,
-                font,
-                scale,
-                offsetX,
-                offsetY,
-                fillcolor,
-                strokecolor,
-                strokewidth,
-                textStyle;
+            var textStyle,
+                clusteredTextObj = {};
 
                 if (isClustered) {
-                    if (feature.get("features").length === 1) {
-                        text = feature.get("features")[0].get(labelField);
-                        textAlign = this.get("textAlign");
-                        font = this.get("textFont").toString();
-                        scale = parseInt(this.get("textScale"), 10);
-                        offsetX = parseInt(this.get("textOffsetX"), 10);
-                        offsetY = parseInt(this.get("textOffsetY"), 10);
-                        fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
-                        strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
-                        strokewidth = parseInt(this.get("textStrokeWidth"), 10);
-                    }
-                    else {
-                        if (this.get("clusterText") === "COUNTER") {
-                            text = feature.get("features").length.toString();
-                        }
-                        else if (this.get("clusterText") === "NONE") {
-                            return;
-                        }
-                        else {
-                            text = this.get("clusterText")
-                        }
-                        textAlign = this.get("clusterTextAlign");
-                        font = this.get("clusterTextFont").toString();
-                        scale = parseInt(this.get("clusterTextScale"), 10);
-                        offsetX = parseInt(this.get("clusterTextOffsetX"), 10);
-                        offsetY = parseInt(this.get("clusterTextOffsetY"), 10);
-                        fillcolor = this.returnColor(this.get("clusterTextFillColor"), "rgb");
-                        strokecolor = this.returnColor(this.get("clusterTextStrokeColor"), "rgb");
-                        strokewidth = parseInt(this.get("clusterTextStrokeWidth"), 10);
-                    }
+                    clusteredTextObj = this.createClusteredTextStyle(feature, labelField);
+                }
+                else if (labelField.length === 0) {
+                    return;
                 }
                 else {
-                    if (labelField.length === 0) {
-                        return;
-                    }
-                    else {
-                        text = feature.get(labelField);
-                        textAlign = this.get("textAlign");
-                        font = this.get("textFont").toString();
-                        scale = parseInt(this.get("textScale"), 10);
-                        offsetX = parseInt(this.get("textOffsetX"), 10);
-                        offsetY = parseInt(this.get("textOffsetY"), 10);
-                        fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
-                        strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
-                        strokewidth = parseInt(this.get("textStrokeWidth"), 10);
-                    }
+                    clusteredTextObj.text = feature.get(labelField);
+                    clusteredTextObj.textAlign = this.get("textAlign");
+                    clusteredTextObj.font = this.get("textFont").toString();
+                    clusteredTextObj.scale = parseInt(this.get("textScale"), 10);
+                    clusteredTextObj.offsetX = parseInt(this.get("textOffsetX"), 10);
+                    clusteredTextObj.offsetY = parseInt(this.get("textOffsetY"), 10);
+                    clusteredTextObj.fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
+                    clusteredTextObj.strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
+                    clusteredTextObj.strokewidth = parseInt(this.get("textStrokeWidth"), 10);
                 }
 
                 textStyle = new ol.style.Text({
-                    text: text,
-                    textAlign: textAlign,
-                    offsetX: offsetX,
-                    offsetY: offsetY,
-                    font: font,
-                    scale: scale,
+                    text: clusteredTextObj.text,
+                    textAlign: clusteredTextObj.textAlign,
+                    offsetX: clusteredTextObj.offsetX,
+                    offsetY: clusteredTextObj.offsetY,
+                    font: clusteredTextObj.font,
+                    scale: clusteredTextObj.scale,
                     fill: new ol.style.Fill({
-                        color: fillcolor
+                        color: clusteredTextObj.fillcolor
                     }),
                     stroke: new ol.style.Stroke({
-                        color: strokecolor,
-                        width: strokewidth
+                        color: clusteredTextObj.strokecolor,
+                        width: clusteredTextObj.strokewidth
                     })
                 });
 
                 return textStyle;
         },
+        /*
+        * creates clusteredTextStyle.
+        * if "clusterText" === "COUNTER" then the number if features are set
+        * if "clusterText" === "NONE" no Text is shown
+        * else all features get the text that is defined in "clusterText"
+        */
+        createClusteredTextStyle: function (feature, labelField) {
+            var clusterTextObj = {};
+
+            if (feature.get("features").length === 1) {
+                clusterTextObj.text = feature.get("features")[0].get(labelField);
+                clusterTextObj.textAlign = this.get("textAlign");
+                clusterTextObj.font = this.get("textFont").toString();
+                clusterTextObj.scale = parseInt(this.get("textScale"), 10);
+                clusterTextObj.offsetX = parseInt(this.get("textOffsetX"), 10);
+                clusterTextObj.offsetY = parseInt(this.get("textOffsetY"), 10);
+                clusterTextObj.fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
+                clusterTextObj.strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
+                clusterTextObj.strokewidth = parseInt(this.get("textStrokeWidth"), 10);
+            }
+            else {
+                if (this.get("clusterText") === "COUNTER") {
+                    clusterTextObj.text = feature.get("features").length.toString();
+                }
+                else if (this.get("clusterText") === "NONE") {
+                    return;
+                }
+                else {
+                    clusterTextObj.text = this.get("clusterText");
+                }
+                clusterTextObj.textAlign = this.get("clusterTextAlign");
+                clusterTextObj.font = this.get("clusterTextFont").toString();
+                clusterTextObj.scale = parseInt(this.get("clusterTextScale"), 10);
+                clusterTextObj.offsetX = parseInt(this.get("clusterTextOffsetX"), 10);
+                clusterTextObj.offsetY = parseInt(this.get("clusterTextOffsetY"), 10);
+                clusterTextObj.fillcolor = this.returnColor(this.get("clusterTextFillColor"), "rgb");
+                clusterTextObj.strokecolor = this.returnColor(this.get("clusterTextStrokeColor"), "rgb");
+                clusterTextObj.strokewidth = parseInt(this.get("clusterTextStrokeWidth"), 10);
+            }
+            return clusterTextObj;
+        },
+
+        /*
+        * returns input color to destinated color.
+        * possible values for dest are "rgb" and "hex".
+        * color has to come as hex (e.g. "#ffffff" || "#fff") or as array (e.g [255,255,255,0]) or as String ("[255,255,255,0]")
+        */
         returnColor: function (color, dest) {
             var src,
                 newColor,
@@ -457,12 +530,13 @@ define(function (require) {
         componentToHex: function (c) {
             var hex = c.toString(16);
 
-            return hex.length == 1 ? "0" + hex : hex;
+            return hex.length === 1 ? "0" + hex : hex;
         },
         hexToRgb: function (hex) {
             // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
             var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-            hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+
+            hex = hex.replace(shorthandRegex, function (m, r, g, b) {
                 return r + r + g + g + b + b;
             });
 
