@@ -22,7 +22,9 @@ define([
             searchCategoryString: "", // Treffer für die Vorschalgsuche der Baumgattung
             searchTypeString: "" // Treffer für die Vorschalgsuche der Baumart
         },
-        url: Util.getPath(Config.treeConf),
+        url: function () {
+            return Radio.request("Util", "getPath", Config.treeConf);
+        },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
