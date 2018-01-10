@@ -1,6 +1,7 @@
 define(function (require) {
 
     var Config = require("config"),
+        ol = require("openlayers"),
         WFSStyle;
 
         WFSStyle = Backbone.Model.extend({
