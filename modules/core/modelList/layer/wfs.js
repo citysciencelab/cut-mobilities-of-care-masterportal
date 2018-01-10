@@ -190,14 +190,10 @@ define(function (require) {
         createLegendURL: function () {
             if (!this.get("legendURL").length) {
                 var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
-<<<<<<< HEAD
-                this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
-=======
 
                 if (!_.isUndefined(style)) {
                     this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
                 }
->>>>>>> dev
             }
         },
         /**
