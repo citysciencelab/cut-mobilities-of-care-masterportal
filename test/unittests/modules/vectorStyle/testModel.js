@@ -193,7 +193,7 @@ define(function(require) {
                     expectedValues = {
                         imageName: "undefinedkrankenhaus.png",
                         imageScale: 2.5,
-                        imageSize: ""
+                        imageSize: "" //imageSize wird nur dann als array gesetzt, wenn der imageName mit .svg endet.
                     },
                     createdStyle,
                     createdStyleObj = {};
@@ -255,6 +255,67 @@ define(function(require) {
                     circleStyleObj.strokeColor = circleStyle.getImage().getStroke().getColor();
                     circleStyleObj.strokeWidth = circleStyle.getImage().getStroke().getWidth();
                      expect(circleStyleObj).to.deep.equal(expectedValues);
+                });
+            });
+            describe("TEXT SIMPLE", function () {
+                it("should return simple style with text", function () {
+                    var style = {
+                        class: "POINT",
+                        subClass : "SIMPLE",
+                        imageName: "krankenhaus.png",
+                        labelField: "name"
+                    },
+                    text;
+
+                    model = new Model(style);
+                    text = model.createStyle(features[0], false).getText().getText();
+                    expect(text).to.be.equal("Evangelisches Krankenhaus Alsterdorf");
+                });
+            });
+            describe("TEXT CLUSTERED", function () {
+                it("should return style with cluster text", function () {
+                    var style = {
+                        class: "POINT",
+                        subClass : "SIMPLE",
+                        imageName: "krankenhaus.png",
+                        labelField: "name"
+                    },
+                    text,
+                    clusterFeature = new ol.Feature({features: [features[0], features[1]]});
+
+                    model = new Model(style);
+                    text = model.createStyle(clusterFeature, true).getText().getText();
+                    expect(text).to.equal("2");
+                });
+                it("should return style with no text", function () {
+                    var style = {
+                        class: "POINT",
+                        subClass : "SIMPLE",
+                        imageName: "krankenhaus.png",
+                        labelField: "name",
+                        clusterText: "NONE"
+                    },
+                    text,
+                    clusterFeature = new ol.Feature({features: [features[0], features[1]]});
+
+                    model = new Model(style);
+                    text = model.createStyle(clusterFeature, true).getText();
+                    expect(text).to.be.undefined;
+                });
+                it("should return style with given text", function () {
+                    var style = {
+                        class: "POINT",
+                        subClass : "SIMPLE",
+                        imageName: "krankenhaus.png",
+                        labelField: "name",
+                        clusterText: "mehrere Features"
+                    },
+                    text,
+                    clusterFeature = new ol.Feature({features: [features[0], features[1]]});
+
+                    model = new Model(style);
+                    text = model.createStyle(clusterFeature, true).getText().getText();
+                    expect(text).to.be.equal("mehrere Features");
                 });
             });
         });

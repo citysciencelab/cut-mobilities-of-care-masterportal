@@ -414,39 +414,42 @@ define(function (require) {
         */
         createTextStyle: function (feature, labelField, isClustered) {
             var textStyle,
-                clusteredTextObj = {};
+                textObj = {};
 
                 if (isClustered) {
-                    clusteredTextObj = this.createClusteredTextStyle(feature, labelField);
+                    textObj = this.createClusteredTextStyle(feature, labelField);
+                    if (_.isUndefined(textObj)) {
+                        return;
+                    }
                 }
                 else if (labelField.length === 0) {
                     return;
                 }
                 else {
-                    clusteredTextObj.text = feature.get(labelField);
-                    clusteredTextObj.textAlign = this.get("textAlign");
-                    clusteredTextObj.font = this.get("textFont").toString();
-                    clusteredTextObj.scale = parseInt(this.get("textScale"), 10);
-                    clusteredTextObj.offsetX = parseInt(this.get("textOffsetX"), 10);
-                    clusteredTextObj.offsetY = parseInt(this.get("textOffsetY"), 10);
-                    clusteredTextObj.fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
-                    clusteredTextObj.strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
-                    clusteredTextObj.strokewidth = parseInt(this.get("textStrokeWidth"), 10);
+                    textObj.text = feature.get(labelField);
+                    textObj.textAlign = this.get("textAlign");
+                    textObj.font = this.get("textFont").toString();
+                    textObj.scale = parseInt(this.get("textScale"), 10);
+                    textObj.offsetX = parseInt(this.get("textOffsetX"), 10);
+                    textObj.offsetY = parseInt(this.get("textOffsetY"), 10);
+                    textObj.fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
+                    textObj.strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
+                    textObj.strokewidth = parseInt(this.get("textStrokeWidth"), 10);
                 }
 
                 textStyle = new ol.style.Text({
-                    text: clusteredTextObj.text,
-                    textAlign: clusteredTextObj.textAlign,
-                    offsetX: clusteredTextObj.offsetX,
-                    offsetY: clusteredTextObj.offsetY,
-                    font: clusteredTextObj.font,
-                    scale: clusteredTextObj.scale,
+                    text: textObj.text,
+                    textAlign: textObj.textAlign,
+                    offsetX: textObj.offsetX,
+                    offsetY: textObj.offsetY,
+                    font: textObj.font,
+                    scale: textObj.scale,
                     fill: new ol.style.Fill({
-                        color: clusteredTextObj.fillcolor
+                        color: textObj.fillcolor
                     }),
                     stroke: new ol.style.Stroke({
-                        color: clusteredTextObj.strokecolor,
-                        width: clusteredTextObj.strokewidth
+                        color: textObj.strokecolor,
+                        width: textObj.strokewidth
                     })
                 });
 
