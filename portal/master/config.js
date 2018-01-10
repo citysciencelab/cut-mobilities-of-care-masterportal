@@ -68,7 +68,8 @@ define(function () {
         portalConf: "../../portal/master/",
         layerConf: "../node_modules/lgv-config/services-internet.json",
         restConf: "../node_modules/lgv-config/rest-services-internet.json",
-        styleConf: "../node_modules/lgv-config/style.json",
+        styleConf: "../node_modules/lgv-config/style_v2.json",
+
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,

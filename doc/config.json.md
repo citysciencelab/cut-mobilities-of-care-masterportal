@@ -1241,9 +1241,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |mouseHoverField|nein|Array [String] oder String||Attributename, der beim MouseHover-Event als Tooltip angzeigt wird. Voraussetzung Control „Mousehover“ ist aktiviert (siehe [config.js](config.js.md)).|
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
 |searchField|nein|String||Attributname, über den die Suche die Featuers des Layers finden kann.|
-|styleField|nein|String||Zusätzliches Feld für die Style-Zuweisung aus der [style.json](style.json.md).|
-|styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md) zu.|
-|styleLabelField|nein|String||Zusätzliches Feld für die Style-Zuweisung aus der [style.json](style.json.md).|
+|styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md) oder [style_v2.json](style_v2.json.md) zu.|
 
 
 #### filterOptions ####

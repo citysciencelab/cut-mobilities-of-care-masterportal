@@ -43,7 +43,7 @@ define(function () {
         portalConf: "../../portal/master/",
         layerConf: "../portal/sensor_portal/services-internet.json",
         restConf: "../node_modules/lgv-config/rest-services-internet.json",
-        styleConf: "../portal/sensor_portal/style.json",
+        styleConf: "../portal/sensor_portal/style_v2.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,

@@ -8,15 +8,13 @@ define([
     "modules/core/modelList/layer/SensorThings",
     "modules/core/modelList/folder/model",
     "modules/core/modelList/tool/model",
-    "modules/core/modelList/staticlink/model",
-    "modules/layer/wfsStyle/list"
+    "modules/core/modelList/staticlink/model"
 ], function () {
 
     var Backbone = require("backbone"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
-        StyleList = require("modules/layer/wfsStyle/list"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         SensorThingsLayer = require("modules/core/modelList/layer/SensorThings"),
         Folder = require("modules/core/modelList/folder/model"),
@@ -30,7 +28,6 @@ define([
         initialize: function () {
             var channel = Radio.channel("ModelList");
 
-            new StyleList();
             channel.reply({
                 "getCollection": this,
                 "getModelsByAttributes": function (attributes) {
