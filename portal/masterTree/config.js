@@ -11,7 +11,7 @@ define(function () {
         ],
        layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
        restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
-       styleConf: "../node_modules/lgv-config/style.json",
+       styleConf: "../node_modules/lgv-config/style_v2.json",
        proxyURL: "/cgi-bin/proxy.cgi",
        mouseHover: {
             numFeaturesToShow: 2,
