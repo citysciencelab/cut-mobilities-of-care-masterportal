@@ -79,7 +79,10 @@ define(function (require) {
                 styleSubClass = this.get("subClass").toUpperCase(),
                 labelField = this.get("labelField");
 
-            if (styleClass === "POINT") {
+            if (_.isUndefined(feature)) {
+                return style;
+            }
+            else if (styleClass === "POINT") {
                 style = this.createPointStyle(feature, styleSubClass, isClustered);
             }
             else if (styleClass === "LINE") {
@@ -99,22 +102,22 @@ define(function (require) {
         */
         getDefaultStyle: function () {
             var fill = new ol.style.Fill({
-               color: "rgba(255,255,255,0.4)"
-             }),
-             stroke = new ol.style.Stroke({
-               color: "#3399CC",
-               width: 1.25
-             });
+                    color: "rgba(255,255,255,0.4)"
+                }),
+                stroke = new ol.style.Stroke({
+                    color: "#3399CC",
+                    width: 1.25
+                });
 
-             return new ol.style.Style({
-                 image: new ol.style.Circle({
-                   fill: fill,
-                   stroke: stroke,
-                   radius: 5
-                 }),
-                 fill: fill,
-                 stroke: stroke
-               });
+            return new ol.style.Style({
+                image: new ol.style.Circle({
+                    fill: fill,
+                    stroke: stroke,
+                    radius: 5
+                }),
+                fill: fill,
+                stroke: stroke
+            });
         },
 
         /*
@@ -122,7 +125,7 @@ define(function (require) {
         * allowed values for "subClass" are "SIMPLE".
         */
         createLineStyle: function (feature, styleSubClass, isClustered) {
-            var style;
+            var style = this.getDefaultStyle();
 
             if (styleSubClass === "SIMPLE") {
                 style = this.createSimpleLineStyle(feature, isClustered);
@@ -155,7 +158,7 @@ define(function (require) {
         * allowed values for "subClass" are "SIMPLE".
         */
         createPolygonStyle: function (feature, styleSubClass, isClustered) {
-            var style;
+            var style = this.getDefaultStyle();
 
             if (styleSubClass === "SIMPLE") {
                 style = this.createSimplePolygonStyle(feature, isClustered);
@@ -191,7 +194,7 @@ define(function (require) {
         * allowed values for "subClass" are "SIMPLE", "CUSTOM" and "CIRCLE.
         */
         createPointStyle: function (feature, styleSubClass, isClustered) {
-            var style;
+            var style = this.getDefaultStyle();
 
             if (styleSubClass === "SIMPLE") {
                 style = this.createSimplePointStyle(feature, isClustered);
@@ -327,7 +330,7 @@ define(function (require) {
                 imageoffsety,
                 offset,
                 imagestyle,
-                style;
+                style = this.getDefaultStyle();
 
                 if (isClustered && feature.get("features").length > 1) {
                     imagestyle = this.createClusterStyle();
@@ -339,24 +342,25 @@ define(function (require) {
                             return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
                         })[0];
                     }
-                    if (!_.isUndefined(styleFieldValueObj)) {
-                        src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
-                        isSVG = src.indexOf(".svg") > -1 ? true : false;
-                        width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth");
-                        height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.get("imageHeight");
-                        scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.get("imageScale"));
-                        imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX");
-                        imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY");
-                        offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
-                        imagestyle = new ol.style.Icon({
-                            src: src,
-                            width: width,
-                            height: height,
-                            scale: scale,
-                            anchor: offset,
-                            imgSize: isSVG ? [width, height] : ""
-                        });
+                    if (_.isUndefined(styleFieldValueObj)) {
+                        return style;
                     }
+                    src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
+                    isSVG = src.indexOf(".svg") > -1 ? true : false;
+                    width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth");
+                    height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.get("imageHeight");
+                    scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.get("imageScale"));
+                    imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX");
+                    imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY");
+                    offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
+                    imagestyle = new ol.style.Icon({
+                        src: src,
+                        width: width,
+                        height: height,
+                        scale: scale,
+                        anchor: offset,
+                        imgSize: isSVG ? [width, height] : ""
+                    });
                 }
 
                 style = new ol.style.Style({
