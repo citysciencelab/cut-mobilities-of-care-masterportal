@@ -49,7 +49,7 @@ define([
                 printurl;
 
             if (url) {
-                printurl = url + this.get("configYAML");
+                printurl = url + this.getConfigYAML();
 
                 this.set("printurl", printurl);
                 return Config.proxyURL + "?url=" + printurl + "/info.json";
@@ -104,6 +104,10 @@ define([
         // Setzt die setConfigYAML-Datei für url Parameter
         setConfigYAML: function (name) {
             this.set("configYAML", "/" + name);
+        },
+
+        getConfigYAML: function () {
+            return this.get("configYAML");
         },
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
