@@ -1,19 +1,10 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/core/modelList/layer/wms",
-    "modules/core/modelList/layer/wfs",
-    "modules/core/modelList/layer/geojson",
-    "modules/core/modelList/layer/group",
-    "modules/core/modelList/folder/model",
-    "modules/core/modelList/tool/model",
-    "modules/core/modelList/staticlink/model"
-], function () {
+define(function (require) {
 
     var Backbone = require("backbone"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
+        ElasticLayer = require("modules/core/modelList/layer/elastic"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
@@ -95,6 +86,9 @@ define([
                 }
                 else if (attrs.typ === "GeoJSON") {
                     return new GeoJSONLayer(attrs, options);
+                }
+                else if (attrs.typ === "Elastic") {
+                    return new ElasticLayer(attrs, options);
                 }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
