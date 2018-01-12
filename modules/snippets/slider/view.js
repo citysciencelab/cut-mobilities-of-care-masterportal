@@ -1,7 +1,7 @@
 define(function (require) {
     require("slider");
 
-    var Template = require("text!modules/Snippets/slider/template.html"),
+    var Template = require("text!modules/snippets/slider/template.html"),
         SliderView;
 
     SliderView = Backbone.View.extend({

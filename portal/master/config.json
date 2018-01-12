@@ -3,7 +3,7 @@
   {
     "portalTitle": {
       "title": "Master",
-      "logo": "/../lgv-config/img/hh-logo.png",
+      "logo": "../../node_modules/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -280,8 +280,7 @@
         },
         {
           "id":"2128",
-          "styleId":"2128",
-          "clusterDistance":0
+          "styleId":"2128"
         },
         {
           "id": "8730",
@@ -310,8 +309,7 @@
           "id": "2059",
           "visibility": false,
           "styleId": "2059",
-          "clusterDistance": 30,
-          "styleField": "kategorie"
+          "clusterDistance": 30
         },
         {
           "id": "5708",
@@ -329,9 +327,9 @@
           "mouseHoverField": "GEBIETSNAME"
         },
         {
-            "id": "2714",
-            "gfiTheme": "reisezeiten",
-            "styleId": "2119"
+          "id": "2714",
+          "gfiTheme": "reisezeiten",
+          "styleId": "2119"
         },
         {
           "id": "4905",
@@ -376,7 +374,6 @@
           "name": "Schulinfosystem",
           "visibility": false,
           "styleId": "8712",
-          "styleField": "kapitelbezeichnung",
           "searchField": "schulname",
           "mouseHoverField": ["schulname", "kapitelbezeichnung"],
           "gfiTheme": "schulinfo",
@@ -386,7 +383,6 @@
           "id": "753",
           "styleId": "753",
           "visibility": false,
-          "styleField": "Leistungsarten",
           "mouseHoverField": "Name",
           "extendedFilter": true,
           "filterOptions": [

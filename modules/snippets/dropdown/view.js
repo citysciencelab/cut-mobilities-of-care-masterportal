@@ -1,8 +1,8 @@
 define(function (require) {
     require("bootstrap-select");
 
-    var Template = require("text!modules/Snippets/dropdown/template.html"),
-        DropdownModel = require("modules/Snippets/dropdown/model"),
+    var Template = require("text!modules/snippets/dropdown/template.html"),
+        DropdownModel = require("modules/snippets/dropdown/model"),
         DropdownView;
 
     DropdownView = Backbone.View.extend({
