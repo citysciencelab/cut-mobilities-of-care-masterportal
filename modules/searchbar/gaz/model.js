@@ -155,7 +155,7 @@ define([
                     this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true);
                 }
             }
-            $("#searchInput").attr("value", searchString);
+            $("#searchInput").val(searchString);
 
             Radio.trigger("Searchbar", "createRecommendedList");
         },
