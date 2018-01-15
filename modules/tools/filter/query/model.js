@@ -90,13 +90,11 @@ define(function (require) {
         },
 
         /**
-         * Uses the WFS Features and Meta Data to build a Query consisting of one or more Snippets, where Snippets like DropDowns or Sliders
-         * @param  {XML} response
+         * Creates one or more Snippets, where Snippets like DropDowns or Sliders
+         * @param  {object[]} featureAttributes
          */
-        createSnippets: function (response) {
-            var featureAttributesMap = this.parseResponse(response);
-
-            featureAttributesMap = this.trimAttributes(featureAttributesMap);
+        createSnippets: function (featureAttributes) {
+            featureAttributesMap = this.trimAttributes(featureAttributes);
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
 
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);

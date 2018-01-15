@@ -1,6 +1,7 @@
 define(function (require) {
 
-    var QueryModel = require("modules/tools/filter/query/source/wfs"),
+    var WfsQueryModel = require("modules/tools/filter/query/source/wfs"),
+        ElasticQueryModel = require("modules/tools/filter/query/source/elastic"),
         Radio = require("backbone.radio"),
         FilterModel;
 
@@ -184,7 +185,8 @@ define(function (require) {
         },
 
         createQuery: function (model) {
-            var query = new QueryModel(model);
+            var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
+                query = layer.getTyp() === "WFS" ? new WfsQueryModel(model) : new ElasticQueryModel(model);
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));

@@ -1,9 +1,9 @@
 define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/model"),
-        WfsQueryModel;
+        ElasticQueryModel;
 
-    WfsQueryModel = QueryModel.extend({
+    ElasticQueryModel = QueryModel.extend({
         initialize: function () {
             this.superInitialize();
             this.prepareQuery();
@@ -76,44 +76,8 @@ define(function (require) {
                 url,
                 featureType,
                 version;
-
-            if (!_.isUndefined(layerObject)) {
-                url = Radio.request("Util", "getProxyURL", layerObject.get("url"));
-                featureType = layerObject.get("featureType");
-                version = layerObject.get("version");
-                this.requestMetadata(url, featureType, version, this.parseResponse);
-            }
-        },
-        /**
-         * Führt DescriptFeatureType Request aus
-         * @param  {[type]} url         [description]
-         * @param  {[type]} featureType [description]
-         * @param  {[type]} version     [description]
-         * @return {[type]}             [description]
-         */
-        requestMetadata: function (url, featureType, version, callback) {
-            $.ajax({
-                url: url,
-                context: this,
-                data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
-                // parent (QueryModel) function
-                success: callback
-            });
-        },
-        /**
-         * Extract Attribute names and types from DescribeFeatureType-Response
-         * @param  {XML} response
-         * @return {object} - Mapobject containing names and types
-         */
-        parseResponse: function (response) {
-            var elements = $("element", response),
-                featureAttributesMap = [];
-
-            _.each(elements, function (element) {
-                featureAttributesMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
-            });
-
-            this.createSnippets(featureAttributesMap);
+console.log(44);
+            this.createSnippets([{name: "bezirk_name", type: "string"}, {name: "flst_status", type: "string"}]);
         },
 
         collectAttributeValues: function (featureAttributesMap) {
@@ -371,5 +335,5 @@ define(function (require) {
         }
     });
 
-    return WfsQueryModel;
+    return ElasticQueryModel;
 });
