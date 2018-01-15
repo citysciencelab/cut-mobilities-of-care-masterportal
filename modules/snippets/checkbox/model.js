@@ -1,7 +1,7 @@
 define(function (require) {
 
 var SnippetModel = require("modules/snippets/model"),
-    ValueModel = require("modules/Snippets/value/model"),
+    ValueModel = require("modules/snippets/value/model"),
     CheckboxSnippet;
 
     CheckboxSnippet = SnippetModel.extend({
