@@ -171,47 +171,49 @@ define([
         */
         setConfig: function () {
             /*
-            *   Auslesen und Überschreiben durch Werte aus Config.json
+            *   Auslesen und Überschreiben durch Werte aus Config.json in spezifischer Reihenfolge
             */
-            _.each(Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}), function (setting) {
-                switch (setting.id) {
-                    case "backgroundImage": {
-                        this.set("backgroundImage", setting.attr);
+            var mapViewSettings = Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}),
+                mapViewOptions = _.find(mapViewSettings, {"id": "options"}),
+                mapViewEpsg = _.find(mapViewSettings, {"id": "epsg"}),
+                mapViewImage = _.find(mapViewSettings, {"id": "backgroundImage"}),
+                mapViewStartCenter = _.find(mapViewSettings, {"id": "startCenter"}),
+                mapViewExtent = _.find(mapViewSettings, {"id": "extent"}),
+                mapViewResolution = _.find(mapViewSettings, {"id": "resolution"}),
+                mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"});
 
-                        this.setBackground(setting.attr);
-                        break;
-                    }
-                    case "startCenter": {
-                        this.set("startCenter", setting.attr);
-                        break;
-                    }
-                    case "options": {
-                        this.set("options", []);
-                        _.each(setting.attr, function (opt) {
-                            this.pushHits("options", opt);
-                        }, this);
-                        break;
-                    }
-                    case "extent": {
-                        this.setExtent(setting.attr);
-                        break;
-                    }
-                    case "resolution": {
-                        this.setResolution(setting.attr);
-                        this.set("startResolution", this.get("resolution"));
-                        break;
-                    }
-                    case "zoomLevel": {
-                        this.setResolution(this.get("options")[setting.attr].resolution);
-                        this.set("startResolution", this.get("resolution"));
-                        break;
-                    }
-                    case "epsg": {
-                        this.setEpsg(setting.attr);
-                        break;
-                    }
-                }
-            }, this);
+            if (mapViewOptions) {
+                this.set("options", []);
+                _.each(mapViewOptions.attr, function (opt) {
+                    this.pushHits("options", opt);
+                }, this);
+            }
+
+            if (mapViewEpsg) {
+                this.setEpsg(mapViewEpsg.attr);
+            }
+
+            if (mapViewImage) {
+                this.set("backgroundImage", mapViewImage.attr);
+                this.setBackground(mapViewImage.attr);
+            }
+
+            if (mapViewStartCenter) {
+                this.set("startCenter", mapViewStartCenter.attr);
+            }
+
+            if (mapViewExtent) {
+                this.setExtent(mapViewExtent.attr);
+            }
+
+            if (mapViewResolution) {
+                this.setResolution(mapViewResolution.attr);
+                this.set("startResolution", this.get("resolution"));
+            }
+            else if (mapViewZoomLevel) {
+                this.setResolution(this.get("options")[mapViewZoomLevel.attr].resolution);
+                this.set("startResolution", this.get("resolution"));
+            }
         },
 
         setUrlParams: function () {
