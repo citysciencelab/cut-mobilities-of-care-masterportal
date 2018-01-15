@@ -77,7 +77,7 @@ define([
         directSearch: function (searchString) {
             if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.set("inUse", true);
-                $("#searchInput").attr("value", searchString);
+                $("#searchInput").val(searchString);
 
                 var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
 

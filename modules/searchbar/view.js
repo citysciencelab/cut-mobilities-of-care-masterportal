@@ -108,7 +108,7 @@ define([
             this.render();
 
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                $("#searchInput").attr("value", this.model.get("placeholder"));
+                $("#searchInput").val(this.model.get("placeholder"));
             }
             $("#searchInput").blur();
             // bedarfsweises Laden der Suchalgorythmen
@@ -204,7 +204,7 @@ define([
         * @param {string} searchstring - Der einzufügende Searchstring
         */
         setSearchbarString: function (searchstring) {
-            $("#searchInput").attr("value", searchstring);
+            $("#searchInput").val(searchstring);
         },
         /**
         * @description Verbirgt die Menubar
@@ -513,7 +513,7 @@ define([
             if (evt.type === "focusin") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
                     if ($("#searchInput").attr("value") === this.model.get("placeholder")) {
-                        $("#searchInput").attr("value", "");
+                        $("#searchInput").val("");
                     }
                 }
                 $(".btn-deleteSearch").css("border-color", "#66afe9");
@@ -521,7 +521,7 @@ define([
             else if (evt.type === "focusout") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
                     if ($("#searchInput").attr("value") === "") {
-                        $("#searchInput").attr("value", this.model.get("placeholder"));
+                        $("#searchInput").val(this.model.get("placeholder"));
                     }
                 }
                 $(".btn-deleteSearch").css("border-color", "#cccccc");
