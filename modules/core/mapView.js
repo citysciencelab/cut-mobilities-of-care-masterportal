@@ -161,8 +161,8 @@ define([
             }, this);
         },
         resetView: function () {
-            this.get("view").setCenter(this.get("startCenter"));
-            this.get("view").setResolution(this.get("startResolution"));
+            this.get("view").setCenter(this.getStartCenter());
+            this.get("view").setResolution(this.getStartResolution());
             Radio.trigger("MapMarker", "hideMarker");
         },
 
@@ -194,12 +194,12 @@ define([
             }
 
             if (mapViewImage) {
-                this.set("backgroundImage", mapViewImage.attr);
+                this.setBackgroundImage(mapViewImage.attr);
                 this.setBackground(mapViewImage.attr);
             }
 
             if (mapViewStartCenter) {
-                this.set("startCenter", mapViewStartCenter.attr);
+                this.setStartCenter(mapViewStartCenter.attr);
             }
 
             if (mapViewExtent) {
@@ -208,11 +208,13 @@ define([
 
             if (mapViewResolution) {
                 this.setResolution(mapViewResolution.attr);
-                this.set("startResolution", this.get("resolution"));
+                this.setStartResolution(mapViewResolution.attr);
             }
             else if (mapViewZoomLevel) {
-                this.setResolution(this.get("options")[mapViewZoomLevel.attr].resolution);
-                this.set("startResolution", this.get("resolution"));
+                var res = this.get("options")[mapViewZoomLevel.attr].resolution;
+
+                this.setResolution(res);
+                this.setStartResolution(res);
             }
         },
 
@@ -224,7 +226,7 @@ define([
                 zoomLevelFromParamUrl = Radio.request("ParametricURL", "getZoomLevel");
 
             if (!_.isUndefined(centerFromParamUrl)) {
-                this.set("startCenter", centerFromParamUrl);
+                this.setStartCenter(centerFromParamUrl);
             }
 
             if (!_.isUndefined(zoomLevelFromParamUrl)) {
@@ -246,8 +248,28 @@ define([
             this.set("background", value);
         },
 
+        setBackgroundImage: function (value) {
+            this.set("backgroundImage", value);
+        },
+
+        setStartCenter: function (value) {
+            this.set("startCenter", value);
+        },
+
+        setStartResolution: function (value) {
+            this.set("startResolution", value);
+        },
+
         getBackground: function () {
             return this.get("background");
+        },
+
+        getStartCenter: function () {
+            return this.get("startCenter");
+        },
+
+        getStartResolution: function () {
+            return this.get("startResolution");
         },
 
         toggleBackground: function () {
@@ -333,7 +355,7 @@ define([
         setView: function () {
             var view = new ol.View({
                 projection: this.get("projection"),
-                center: this.get("startCenter"),
+                center: this.getStartCenter(),
                 extent: this.getExtent(),
                 resolution: this.get("resolution"),
                 resolutions: this.get("resolutions")
