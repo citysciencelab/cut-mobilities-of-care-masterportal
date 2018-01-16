@@ -22,7 +22,7 @@ define(function (require) {
             this.createWebSocket();
 
             // start mqtt-connection
-            this.getMQTT();
+            // this.getMQTT();
 
         },
 
@@ -53,23 +53,25 @@ define(function (require) {
          */
         updateData: function () {
             var sensorData,
-                epsg;
-
-            this.setSimpleStyle();
+                epsg,
+                features,
+                subtyp = this.get("subtyp"),
+                geometry = this.get("geometry").toUpperCase(),
+                isClustered = this.has("clusterDistance") ? true : false;
 
             if (this.checkRequiredParameter()) {
                 // check for subtypes
-                if (this.get("subtyp") === "SensorThings") {
+                if (subtyp === "SensorThings") {
                     sensorData = this.loadSensorThings();
                     epsg = "EPSG:4326";
                 }
             }
 
-            if (this.get("geometry") === "point") {
-                this.drawPoints(sensorData, epsg);
+            if (geometry === "POINT") {
+                features = this.drawPoints(sensorData, epsg);
             }
 
-            Radio.trigger("Util", "hideLoader");
+            this.styling(isClustered, features);
         },
 
         /**
@@ -131,6 +133,7 @@ define(function (require) {
 
                 // handling response
                 success: function (resp) {
+                    Radio.trigger("Util", "hideLoader");
                     response = resp;
                 },
                 error: function (jqXHR, errorText, error) {
@@ -148,54 +151,42 @@ define(function (require) {
          * @param  {Sting} epsg - from Sensortype
          */
         drawPoints: function (sensorData, epsg) {
-            var points = [],
-                scalingObject,
-                svgPath;
+            var features = [];
 
-            _.each(sensorData, function (thisSensor) {
-                var xyTransfrom = ol.proj.transform(thisSensor.location, epsg, Config.view.epsg),
-                    point = new ol.Feature({
+            _.each(sensorData, function (thisSensorData) {
+                var xyTransfrom = ol.proj.transform(thisSensorData.location, epsg, Config.view.epsg),
+                    feature = new ol.Feature({
                         geometry: new ol.geom.Point(xyTransfrom)
                     });
 
-                point.setProperties(thisSensor.properties);
-                point = this.drawByType(point);
-                points.push(point);
-
+                feature.setProperties(thisSensorData.properties);
+                features.push(feature);
             }, this);
 
+            // only features with geometry
+            features = _.filter(features, function (feature) {
+                return !_.isUndefined(feature.getGeometry());
+            });
+
             // Add features to vectorlayer
-            this.getLayerSource().addFeatures(points);
+            this.getLayerSource().addFeatures(features);
+
+            return features;
         },
 
         /**
-         * draw feature by given scaling- and shape-type
-         * @param  {ol.Feature} feature which to draw
-         * @return {ol.Feature} feature
+         * [styling description]
+         * @param  {Boolean} isClustered [description]
+         * @return {[type]}              [description]
          */
-        drawByType: function (feature) {
-            var scalingObject,
-                svgPath;
+        styling: function (isClustered, features) {
+            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
-            // check scaling
-            if (this.get("scaling") === "nominal") {
-                scalingObject = this.fillScalingAttributes(feature);
+            if (!_.isUndefined(stylelistmodel)) {
+                _.each(features, function (feature) {
+                    feature.setStyle(stylelistmodel.createStyle(feature, isClustered));
+                }, this);
             }
-            else if (this.get("scaling") === "interval") {
-                scalingObject = this.convertScaling(feature);
-            }
-
-            // check shape
-            if (this.get("scalingShape") === "circle") {
-                svgPath = this.createNominalCircleSegments(scalingObject);
-                this.drawSvgAndIcon(feature, svgPath);
-            }
-            else if (this.get("scalingShape") === "line") {
-                svgPath = this.createIntervalLine(scalingObject);
-                this.drawSvg(feature, svgPath);
-            }
-
-            return feature;
         },
 
         /**
@@ -335,6 +326,8 @@ define(function (require) {
                     thing.properties.phenomenonTime = "undefined";
                 }
 
+                thing.properties.state = this.convertScaling(thing.properties.state);
+
                 thing.properties.dataStreamId = thing.Datastreams[0]["@iot.id"];
                 thingsProperties.push(thing.properties);
             }, this);
@@ -371,291 +364,27 @@ define(function (require) {
             return propString;
         },
 
-// *************************************************************
-// ***** style for things as points                        *****
-// *************************************************************
-
         /**
-         * convert scalingAttribute to object
-         * @return {object} scalingAttribute with value 0
-         */
-        getScalingAttributesAsObject: function () {
-            var obj = {};
-
-            _.each(this.get("scalingAttributes"), function (key, value) {
-                obj[value] = 0;
-            });
-
-            return obj;
-        },
-
-        /**
-         * fills the object with values
-         * @param {ol.feature} feature
-         */
-        fillScalingAttributes: function (feature) {
-            var scalingObject = this.getScalingAttributesAsObject(),
-                states = feature.get("state");
-
-            if (_.contains(states, "|")) {
-                states = states.split(" | ");
-            }
-
-            _.each(states, function (state) {
-                if (state) {
-                    scalingObject[state] = scalingObject[state] + 1;
-                }
-            });
-            return scalingObject;
-        },
-
-        /**
-         * convert Scaling with given factor
+         * convert Scaling with given factor and adds a unit
          * @param  {ol.Feature} feature
          * @return {String} state with converted value
          */
-        convertScaling: function (feature) {
-            var state = feature.get("state");
+        convertScaling: function (state) {
+            var conversionFactor = this.get("conversionFactor"),
+                scalingUnit = this.get("scalingUnit"),
+                scalingDecimal = this.get("scalingDecimal");
 
-            if (!_.isUndefined(this.get("conversionFactor"))) {
-                state = state * this.get("conversionFactor");
-                feature.set("state", state);
+            if (!_.isUndefined(conversionFactor)) {
+                state = state * conversionFactor;
             }
-            if (!_.isUndefined(this.get("scalingUnit"))) {
-                feature.set("state", state + " " + this.get("scalingUnit"));
+            if (!_.isUndefined(scalingDecimal)) {
+                state = state.toFixed(scalingDecimal);
+            }
+            if (!_.isUndefined(scalingUnit)) {
+                state = state + " " + scalingUnit;
             }
 
             return state;
-        },
-
-        /**
-         * create a svg line by interval scaling
-         * @param  {object} scalingObject - contains state and value
-         * @return {String} svg with colored line
-         */
-        createIntervalLine: function (scalingObject) {
-            var size = 200,
-                circleRadius = 6,
-                lineStroke = 5,
-                scalingFactor = 1,
-                scalingUnit = "",
-                scalingDecimal = 2,
-                fontSize = 0,
-                fontFamily = "Verdana",
-                fontColor = "#000000",
-                scalingColorPositiv = "#ff0000",
-                scalingColorNegativ = "#0000ff",
-                color,
-                svg;
-
-            if (!_.isUndefined(this.get("circleRadius"))) {
-                circleRadius = this.get("circleRadius");
-            }
-            if (!_.isUndefined(this.get("lineStroke"))) {
-                lineStroke = this.get("lineStroke");
-            }
-            if (!_.isUndefined(this.get("scalingFactor"))) {
-                scalingFactor = this.get("scalingFactor");
-            }
-            if (!_.isUndefined(this.get("scalingUnit"))) {
-                scalingUnit = this.get("scalingUnit");
-            }
-            if (!_.isUndefined(this.get("scalingDecimal"))) {
-                scalingDecimal = this.get("scalingDecimal");
-            }
-            if (!_.isUndefined(this.get("fontSize"))) {
-                fontSize = this.get("fontSize");
-                size = size * scalingDecimal;
-            }
-            if (!_.isUndefined(this.get("fontFamily"))) {
-                fontFamily = this.get("fontFamily");
-            }
-            if (!_.isUndefined(this.get("fontColor"))) {
-                fontColor = this.get("fontColor");
-            }
-            if (!_.isUndefined(this.get("scalingColorPositiv"))) {
-                scalingColorPositiv = this.get("scalingColorPositiv");
-            }
-            if (!_.isUndefined(this.get("scalingColorNegativ"))) {
-                scalingColorNegativ = this.get("scalingColorNegativ");
-            }
-
-            // set color
-            if (scalingObject >= 0) {
-                color = scalingColorPositiv;
-            }
-            else if (scalingObject < 0) {
-                color = scalingColorNegativ;
-            }
-
-            // calculate size
-            if (((scalingObject * scalingFactor) + lineStroke) >= size) {
-                size = size + ((scalingObject * scalingFactor) + lineStroke);
-            }
-
-            svg = "<svg width='" + size + "' height='" + size + "' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>";
-            svg = svg + "<line x1='" + (size / 2) + "' y1='" + (size / 2) + "' x2='" + (size / 2) + "' y2='" + (size / 2 - circleRadius - scalingObject * scalingFactor) + "' stroke='" + color + "' stroke-width='" + lineStroke + "' />";
-            svg = svg + "<circle cx='" + (size / 2) + "' cy='" + (size / 2) + "' r='" + circleRadius + "' fill='" + color + "' />";
-            svg = svg + "<text fill='" + fontColor + "' font-family='" + fontFamily + "' font-size='" + fontSize + "' x='" + (size / 2 + circleRadius + 5) + "' y='" + (size / 2 + 6) + "'>" + scalingObject.toFixed(scalingDecimal) + scalingUnit + "</text>";
-            svg = svg + "</svg>";
-
-            return svg;
-        },
-
-        /**
-         * create a svg with colored circle segments by nominal scaling
-         * @param  {object} scalingObject - contains state and value
-         * @return {String} svg with colored circle segments
-         */
-        createNominalCircleSegments: function (scalingObject) {
-            var size = 10,
-                circleRadius = 23,
-                circleStrokeWidth = 4,
-                circleBackgroundColor = "#ffffff",
-                n = _.reduce(_.values(scalingObject), function (memo, num) {
-                        return memo + num;
-                    }, 0),
-                degreeSegment = 360 / n,
-                startAngelDegree = 0,
-                endAngelDegree = degreeSegment,
-                svg;
-
-            if (!_.isUndefined(this.get("circleRadius"))) {
-                circleRadius = this.get("circleRadius");
-            }
-            if (!_.isUndefined(this.get("circleStrokeWidth"))) {
-                circleStrokeWidth = this.get("circleStrokeWidth");
-            }
-            if (!_.isUndefined(this.get("circleBackgroundColor"))) {
-                circleBackgroundColor = this.get("circleBackgroundColor");
-            }
-
-            // calculate size
-            if (((circleRadius + circleStrokeWidth) * 2) >= size) {
-                size = size + ((circleRadius + circleStrokeWidth) * 2);
-            }
-
-            // create svg
-            svg = "<svg width='" + size + "' height='" + size + "' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>",
-            svg = svg + "<circle cx='" + (size / 2) + "' cy='" + (size / 2) + "' r='" + circleRadius + "' stroke='" + circleBackgroundColor + "' stroke-width='" + circleStrokeWidth + "' fill='none'/>";
-
-            _.each(scalingObject, function (value, key) {
-                if (value) {
-                    var strokeColor = this.get("scalingAttributes")[key];
-
-                    for (var i = 0; i < value; i++) {
-                        var d = this.calculateCircleSegment(startAngelDegree, endAngelDegree, circleRadius, size);
-
-                        svg = this.extendsSVG(svg, circleStrokeWidth, strokeColor, d);
-
-                        // set degree for next circular segment
-                        startAngelDegree = startAngelDegree + degreeSegment;
-                        endAngelDegree = endAngelDegree + degreeSegment;
-                    };
-                }
-            }, this);
-
-            svg = svg + "</svg>";
-
-            return svg;
-        },
-
-        /**
-         * create circle segments
-         * @param  {number} startAngelDegree - start with circle segment
-         * @param  {number} endAngelDegree - finish with circle segment
-         * @param  {number} circleRadius
-         * @param  {number} size - size of the window to be draw
-         * @return {String} all circle segments
-         */
-        calculateCircleSegment: function (startAngelDegree, endAngelDegree, circleRadius, size) {
-            var rad = Math.PI / 180,
-                xy = size / 2;
-
-            // convert angle from degree to radiant
-            startAngleRad = startAngelDegree * rad;
-            endAngleRad = (endAngelDegree - 10) * rad;
-
-            xStart = xy + (Math.cos(startAngleRad) * circleRadius);
-            yStart = xy - (Math.sin(startAngleRad) * circleRadius);
-
-            xEnd = xy + (Math.cos(endAngleRad) * circleRadius);
-            yEnd = xy - (Math.sin(endAngleRad) * circleRadius);
-
-            var d = [
-                'M', xStart, yStart,
-                'A', circleRadius, circleRadius, 0, 0, 0, xEnd, yEnd
-            ].join(' ');
-
-            return d;
-        },
-
-        /**
-         * extends the svg with given tags
-         * @param  {String} svg - String with svg tags
-         * @param  {number} circleStrokeWidth
-         * @param  {String} strokeColor
-         * @param  {String} d - circle segment
-         * @return {String} extended svg
-         */
-        extendsSVG: function (svg, circleStrokeWidth, strokeColor, d) {
-            svg = svg + "<path ";
-            svg = svg + "fill='none' ";
-            svg = svg + "stroke-width='" + circleStrokeWidth + "' ";
-            svg = svg + "stroke='" + strokeColor + "' ";
-            svg = svg + "d='" + d + "'/>";
-
-            return svg;
-        },
-
-        /**
-         * draw svg and and icon
-         * @param  {ol.Feature} point
-         * @param  {String} svgPath
-         */
-        drawSvgAndIcon: function (point, svgPath) {
-            styleSVG = new ol.style.Style({
-                image: new ol.style.Icon({
-                    src: "data:image/svg+xml;utf8," + svgPath
-                })
-            });
-
-            // add both styles (png, svg)
-            styleIcon = this.getStyleAsFunction(this.get("style"));
-            point.setStyle([styleIcon(point)[0], styleSVG]);
-        },
-
-        /**
-         * draw Svg
-         * @param  {ol.Feature} point
-         * @param  {String} svgPath
-         */
-        drawSvg: function (point, svgPath) {
-            styleSVG = new ol.style.Style({
-                image: new ol.style.Icon({
-                    src: "data:image/svg+xml;utf8," + svgPath
-                })
-            });
-
-            point.setStyle(styleSVG);
-        },
-
-        setSimpleStyle: function () {
-            var styleId = this.get("styleId"),
-                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
-
-            this.set("style", stylelistmodel.getSimpleStyle());
-        },
-
-        getStyleAsFunction: function (style) {
-            if (_.isFunction(style)) {
-                return style;
-            }
-            else {
-                return function (feature) {
-                    return style;
-                };
-            }
         },
 
 // *************************************************************
@@ -701,32 +430,35 @@ define(function (require) {
                 features = this.getLayerSource().getFeatures(),
                 result = things[dataStreamId].result,
                 thisPhenomTime = things[dataStreamId].phenomenonTime,
-                thisFeatureArray = this.getFeatureById(dataStreamId, features);
+                thisFeatureArray = this.getFeatureById(dataStreamId, features),
+                isClustered = this.has("clusterDistance") ? true : false;
 
             // Change properties only in Layer witch contain the Datastream
             if (!_.isEmpty(thisFeatureArray)) {
                 var thisPlugIndex = thisFeatureArray[0],
                     thisFeature = thisFeatureArray[1],
-                    // change state and phenomTime
+                    // change state and phenomenonTime
                     datastreamStates = thisFeature.get("state"),
-                    datastreamPhenomTime = thisFeature.get("phenomenonTime"),
+                    datastreamPhenomenonTime = thisFeature.get("phenomenonTime"),
                     scalingObject,
                     svgPath;
 
                 // change time zone
-                thisPhenomTime = this.changeTimeZone(thisPhenomTime);
+                thisPhenomenonTime = this.changeTimeZone(thisPhenomTime);
 
                 if (_.contains(datastreamStates, "|")) {
                     datastreamStates = datastreamStates.split(" | ");
-                    datastreamPhenomTime = datastreamPhenomTime.split(" | ");
+                    datastreamPhenomTime = datastreamPhenomenonTime.split(" | ");
 
                     datastreamStates[thisPlugIndex] = String(result);
-                    datastreamPhenomTime[thisPlugIndex] = thisPhenomTime;
+                    datastreamPhenomTime[thisPlugIndex] = thisPhenomenonTime;
                 }
                 else {
                     datastreamStates = String(result);
-                    datastreamPhenomTime = thisPhenomTime;
+                    datastreamPhenomTime = thisPhenomenonTime;
                 }
+
+                datastreamStates = this.convertScaling(datastreamStates);
 
                 // update states in feature
                 if (_.isArray(datastreamStates)) {
@@ -738,7 +470,7 @@ define(function (require) {
                     thisFeature.set("phenomenonTime", datastreamPhenomTime);
                 }
 
-                thisFeature = this.drawByType(thisFeature);
+                this.styling(isClustered, [thisFeature]);
                 console.log(thisFeature);
             }
         },
@@ -779,12 +511,16 @@ define(function (require) {
 // *************************************************************
         getMQTT: function () {
             console.log(mqtt);
-            var client = mqtt.connect({ host: "localhost", port: 1234 });
-            // var client = mqtt.connect({ host: "http://51.5.242.162", port: 1883 });
-            // var client = mqtt.connect({ host: location.hostname, port: parseInt(location.port) });
+            // var client = mqtt.connect({ host: "localhost", port: 1234 });
+            // var client = mqtt.connect({host: "51.5.242.162", port : 1883, path : "/mqtt"});
+            var client = mqtt.connect({host: "51.5.242.162", port : 9876, path : "/mqtt", protocolId : "MQTT"});
+            // var client = mqtt.connect({host: "example.sensorup.com", port : 1883, path : "/mqtt"});
 
-            client.subscribe("presence");
-            // client.subscribe("v1.0/Datastreams(2)/Observations");
+            console.log(client);
+
+            // client.subscribe("presence");
+            client.subscribe("v1.0/Datastreams(2)/Observations");
+            // client.subscribe("v1.0/Datastreams(503254)/Observations");
 
             client.on("message", function (topic, payload) {
               console.log([topic, payload].join(": "));
@@ -792,58 +528,15 @@ define(function (require) {
             });
 
             client.publish("presence", "hello world!");
+        },
+
+        /**
+         * getter for StyleId
+         * @return {number} styleId
+         */
+        getStyleId: function () {
+            return this.get("styleId");
         }
-
-    //     getMQTT: function () {
-    //         var options = {
-    //                 port: 1883,
-    //                 // port: 8883,
-    //                 // port: 9001,
-    //                 keepalive: 60,
-    //                 encoding: "utf8",
-    //                 protocol: "mqtt"
-    //                 // protocol: "mqtts"
-    //             },
-    //             vartopicList = [],
-
-    //             client = mqtt.connect("http://51.5.242.162", options);
-    //             // client = mqtt.connect("https://51.5.242.162", options);
-    //             client = mqtt.connect("ws://localhost:9001/websocket", options);
-
-    //         // subscribe
-    //         client.on("connect", function () {
-    //             console.log("mqtt is connected");
-    //             for (var i = 2; i <= 758; i++) {
-    //                 var thisTopic = {};
-
-    //                 thisTopic.id = i;
-    //                 thisTopic.topic = "v1.0/Datastreams(" + i + ")/Observations";
-    //                 topicList.push(thisTopic);
-
-    //                 client.subscribe(thisTopic.topic);
-    //             }
-    //             console.log("subscribe finished");
-    //         });
-
-    //         client.on("message", function (topic, message) {
-    //             var datastreamNumber = _.findWhere(topicList, {topic: topic}).id;
-
-    //             console.log(datastreamNumber);
-    //             console.log(message.toString());
-    //         });
-
-    //         client.on("error", function (err) {
-    //             console.log(err);
-    //             client.end();
-    //         });
-
-    //         client.on("close", function () {
-    //             console.log("Client disconnected");
-    //             client.end();
-    //         });
-    //     }
-
-    // });
     });
 
     return SensorThingsLayer;

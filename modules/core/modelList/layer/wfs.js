@@ -89,9 +89,8 @@ define(function (require) {
                 async: true,
                 type: "GET",
                 context: this,
-                success: function (response) {
+                success: function (data) {
                     Radio.trigger("Util", "hideLoader");
-
                     var wfsReader = new ol.format.WFS({
                             featureNS: this.get("featureNS")
                         }),
@@ -115,8 +114,9 @@ define(function (require) {
         },
         styling: function (isClustered) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
             if (!_.isUndefined(stylelistmodel)) {
-                this.setStyle(function(feature) {
+                this.setStyle(function (feature) {
                     return stylelistmodel.createStyle(feature, isClustered);
                 });
             }

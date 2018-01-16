@@ -63,7 +63,10 @@ define(function (require) {
             polygonStrokeWidth: 2,
             // Für Line
             lineStrokeColor: [0, 0, 0, 1],
-            lineStrokeWidth: 2
+            lineStrokeWidth: 2,
+            // Für CIRCLESEGMENTS
+            circleBackgroundColor: [255, 255, 255, 1],
+            circleStrokeColor: [175, 175, 175, 1]
         },
         initialize: function () {
             this.set("imagePath", Radio.request("Util", "getPath", Config.wfsImgPath));
@@ -92,8 +95,16 @@ define(function (require) {
             else if (styleClass === "POLYGON") {
                 style = this.createPolygonStyle(feature, styleSubClass, isClustered);
             }
+
             // after style is derived, createTextStyle
-            style.setText(this.createTextStyle(feature, labelField, isClustered));
+            if(_.isArray(style)) {
+                _.each(style, function (s) {
+                    s.setText(this.createTextStyle(feature, labelField, isClustered));
+                }, this);
+            }
+            else {
+                style.setText(this.createTextStyle(feature, labelField, isClustered));
+            }
 
             return style;
         },
@@ -205,6 +216,9 @@ define(function (require) {
             }
             else if (styleSubClass === "CIRCLE") {
                 style = this.createCirclePointStyle(feature, isClustered);
+            }
+            else if (styleSubClass === "ADVANCED") {
+                style = this.createAdvancedPointStyle(feature, isClustered);
             }
 
             return style;
@@ -409,6 +423,145 @@ define(function (require) {
             return style;
         },
 
+        /**
+         * [createAdvancedPointStyle description]
+         * @param  {[type]}  feature     [description]
+         * @param  {Boolean} isClustered [description]
+         * @return {[type]}              [description]
+         */
+        createAdvancedPointStyle: function (feature, isClustered) {
+            var styleScaling = this.get("scaling").toUpperCase();
+
+            // check scaling
+            if (styleScaling === "NOMINAL") {
+                style = this.createNominalAdvancedPointStyle(feature, isClustered);
+            }
+            else if (styleScaling === "INTERVAL") {
+                style = this.createIntervalAdvancedPointStyle(feature, isClustered);
+            }
+
+            return style;
+        },
+
+        /**
+         * [createNominalAdvancedPointStyle description]
+         * @param  {[type]} feature [description]
+         * @return {[type]}         [description]
+         */
+        createNominalAdvancedPointStyle: function (feature, isClustered) {
+            var styleScalingShape = this.get("scalingShape").toUpperCase(),
+                imageName = this.get("imageName"),
+                imageNameDefault = this.defaults.imageName,
+                svgPath,
+                style;
+
+            if (styleScalingShape === "CIRCLESEGMENTS") {
+                svgPath = this.createNominalCircleSegments(feature);
+            }
+
+            style = this.createSVGStyle(svgPath);
+
+            // create style from svg and image
+            if (imageName !== imageNameDefault) {
+                imageStyle = this.createSimplePointStyle(feature, isClustered);
+                style = [style, imageStyle];
+            }
+
+            return style;
+        },
+
+        /**
+         * [createIntervalAdvancedPointStyle description]
+         * @param  {[type]}  feature     [description]
+         * @param  {Boolean} isClustered [description]
+         * @return {[type]}              [description]
+         */
+        createIntervalAdvancedPointStyle: function (feature, isClustered) {
+            var styleScalingShape = this.get("scalingShape").toUpperCase(),
+                svgPath;
+
+            if (styleScalingShape === "CIRCLE_BAR") {
+                svgPath = this.createIntervalCircleBar(feature);
+            }
+
+            style = this.createSVGStyle(svgPath);
+
+            return style;
+
+        },
+
+        /**
+         * create Interval Circle Bar
+         * @param  {ol.Feature} feature - contains features to draw
+         * @return {String} svg
+         */
+        createIntervalCircleBar: function (feature) {
+            var state = feature.get("state").split(" ")[0],
+                size = 200,
+                circleRadius = parseInt(this.get("circleRadius"), 10),
+                lineStroke = 5,
+                scalingFactor = 1,
+                scalingUnit = "",
+                scalingDecimal = 2,
+                fontSize = 0,
+                fontFamily = "Verdana",
+                fontColor = "#000000",
+                scalingColorPositiv = "#ff0000",
+                scalingColorNegativ = "#0000ff",
+                color = "#aa0000",
+                y2,
+                svg;
+
+            if (!_.isUndefined(this.get("lineStroke"))) {
+                lineStroke = this.get("lineStroke");
+            }
+            if (!_.isUndefined(this.get("scalingFactor"))) {
+                scalingFactor = this.get("scalingFactor");
+            }
+            if (!_.isUndefined(this.get("scalingUnit"))) {
+                scalingUnit = this.get("scalingUnit");
+            }
+            if (!_.isUndefined(this.get("scalingDecimal"))) {
+                scalingDecimal = this.get("scalingDecimal");
+            }
+            if (!_.isUndefined(this.get("fontSize"))) {
+                fontSize = this.get("fontSize");
+                size = size * scalingDecimal;
+            }
+            if (!_.isUndefined(this.get("fontFamily"))) {
+                fontFamily = this.get("fontFamily");
+            }
+            if (!_.isUndefined(this.get("fontColor"))) {
+                fontColor = this.get("fontColor");
+            }
+            if (!_.isUndefined(this.get("scalingColorPositiv"))) {
+                scalingColorPositiv = this.get("scalingColorPositiv");
+            }
+            if (!_.isUndefined(this.get("scalingColorNegativ"))) {
+                scalingColorNegativ = this.get("scalingColorNegativ");
+            }
+
+            if (state >= 0) {
+                y2 = (size / 2 - circleRadius - state * scalingFactor)
+            }
+            else if (state < 0) {
+                y2 = (size / 2 + circleRadius - state * scalingFactor)
+            }
+
+            // calculate size
+            if (((state * scalingFactor) + lineStroke) >= size) {
+                size = size + ((state * scalingFactor) + lineStroke);
+            }
+
+            svg = "<svg width='" + size + "' height='" + size + "' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>";
+            svg = svg + "<line x1='" + (size / 2) + "' y1='" + (size / 2) + "' x2='" + (size / 2) + "' y2='" + y2 + "' stroke='" + color + "' stroke-width='" + lineStroke + "' />";
+            svg = svg + "<circle cx='" + (size / 2) + "' cy='" + (size / 2) + "' r='" + circleRadius + "' fill='" + color + "' />";
+            svg = svg + "<text fill='" + fontColor + "' font-family='" + fontFamily + "' font-size='" + fontSize + "' x='" + (size / 2 + circleRadius + 5) + "' y='" + (size / 2 + 6) + "'>" + state + scalingUnit + "</text>";
+            svg = svg + "</svg>";
+
+            return svg;
+        },
+
         /*
         * creates textStyle if feature is clustered OR "labelField" is set
         */
@@ -551,7 +704,203 @@ define(function (require) {
             var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
             return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
+        },
+
+        /**
+         * fills the object with values
+         * @param {ol.feature} feature
+         */
+        fillScalingAttributes: function (feature) {
+            var scalingObject = this.getScalingAttributesAsObject(),
+                states = feature.get("state");
+
+            if (_.contains(states, "|")) {
+                states = states.split(" | ");
+            }
+            else {
+                states = [states];
+            }
+
+            _.each(states, function (state) {
+                if (state !== "undefined" && state && _.contains(_.keys(scalingObject), state)) {
+                    scalingObject[state] = scalingObject[state] + 1;
+                }
+                else {
+                    scalingObject["empty"] = scalingObject["empty"] + 1;
+                }
+            });
+
+            return scalingObject;
+        },
+
+        /**
+         * convert scalingAttribute to object
+         * @return {object} scalingAttribute with value 0
+         */
+        getScalingAttributesAsObject: function () {
+            var obj = {},
+                scalingAttributes = this.get("scalingAttributes");
+
+            if (!_.isUndefined(scalingAttributes)) {
+                _.each(scalingAttributes, function (key, value) {
+                    obj[value] = 0;
+                });
+            }
+
+            obj["empty"] = 0;
+
+            return obj;
+        },
+
+        /**
+         * create a svg with colored circle segments by nominal scaling
+         * @param  {object} scalingObject - contains state and value
+         * @return {String} svg with colored circle segments
+         */
+        createNominalCircleSegments: function (feature) {
+            var size = 10,
+                circleRadius = parseInt(this.get("circleRadius"), 10),
+                circleStrokeWidth = parseInt(this.get("circleStrokeWidth"), 10),
+                circleBackgroundColor = this.returnColor(this.get("circleBackgroundColor"), "hex"),
+                scalingAttributes = this.get("scalingAttributes"),
+                strokeColorDefault = this.returnColor(this.get("circleStrokeColor"), "hex"),
+                scalingObject = this.fillScalingAttributes(feature),
+                n = _.reduce(_.values(scalingObject), function (memo, num) {
+                        return memo + num;
+                    }, 0),
+                degreeSegment = 360 / n,
+                startAngelDegree = 0,
+                endAngelDegree = degreeSegment;
+
+            // calculate size
+            if (((circleRadius + circleStrokeWidth) * 2) >= size) {
+                size = size + ((circleRadius + circleStrokeWidth) * 2);
+            }
+
+            // create svg
+            var svg = "<svg width='" + size + "' height='" + size + "' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>",
+                svg = svg + "<circle cx='" + (size / 2) + "' cy='" + (size / 2) + "' r='" + circleRadius + "' stroke='" + circleBackgroundColor + "' stroke-width='" + circleStrokeWidth + "' fill='" + circleBackgroundColor + "'/>";
+
+            _.each(scalingObject, function (value, key) {
+                if (!_.isUndefined(scalingAttributes) && (key !== "empty")) {
+                    strokeColor = this.returnColor(scalingAttributes[key], "hex");
+                }
+                else {
+                    strokeColor = strokeColorDefault;
+                }
+
+                for (var i = 0; i < value; i++) {
+                    var d = this.calculateCircleSegment(startAngelDegree, endAngelDegree, circleRadius, size);
+
+                    svg = this.extendsSVG(svg, circleStrokeWidth, strokeColor, d);
+
+                    // set degree for next circular segment
+                    startAngelDegree = startAngelDegree + degreeSegment;
+                    endAngelDegree = endAngelDegree + degreeSegment;
+                };
+            }, this);
+
+            svg = svg + "</svg>";
+
+            return svg;
+        },
+
+        /**
+         * create circle segments
+         * @param  {number} startAngelDegree - start with circle segment
+         * @param  {number} endAngelDegree - finish with circle segment
+         * @param  {number} circleRadius
+         * @param  {number} size - size of the window to be draw
+         * @return {String} all circle segments
+         */
+        calculateCircleSegment: function (startAngelDegree, endAngelDegree, circleRadius, size) {
+            var rad = Math.PI / 180,
+                xy = size / 2,
+                steps = 10,
+                isCircle = (startAngelDegree === 0 && endAngelDegree === 360) ? true : false,
+                thisendAngelDegree = endAngelDegree;
+
+            if (isCircle) {
+                endAngelDegree = endAngelDegree / 2;
+                steps = 0;
+            }
+
+            // convert angle from degree to radiant
+            startAngleRad = startAngelDegree * rad;
+            endAngleRad = (endAngelDegree - steps) * rad;
+
+            xStart = xy + (Math.cos(startAngleRad) * circleRadius);
+            yStart = xy - (Math.sin(startAngleRad) * circleRadius);
+
+            xEnd = xy + (Math.cos(endAngleRad) * circleRadius);
+            yEnd = xy - (Math.sin(endAngleRad) * circleRadius);
+
+            if (isCircle) {
+                 var d = [
+                    'M', xStart, yStart,
+                    'A', circleRadius, circleRadius, 0, 0, 0, xEnd, yEnd,
+                    'A', circleRadius, circleRadius, 0, 0, 0, xStart, yStart
+                ].join(' ');
+            }
+            else {
+                var d = [
+                    'M', xStart, yStart,
+                    'A', circleRadius, circleRadius, 0, 0, 0, xEnd, yEnd
+                ].join(' ');
+            }
+
+            return d;
+        },
+
+        /**
+         * extends the svg with given tags
+         * @param  {String} svg - String with svg tags
+         * @param  {number} circleStrokeWidth
+         * @param  {String} strokeColor
+         * @param  {String} d - circle segment
+         * @return {String} extended svg
+         */
+        extendsSVG: function (svg, circleStrokeWidth, strokeColor, d) {
+            svg = svg + "<path ";
+            svg = svg + "fill='none' ";
+            svg = svg + "stroke-width='" + circleStrokeWidth + "' ";
+            svg = svg + "stroke='" + strokeColor + "' ";
+            svg = svg + "d='" + d + "'/>";
+
+            return svg;
+        },
+
+        /**
+         * create Style for SVG
+         * @param  {ol.Feature} point
+         * @param  {ol.style} style
+         */
+        createSVGStyle: function (svgPath) {
+            return new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: "data:image/svg+xml;utf8," + svgPath
+                })
+            });
         }
+
+        // /**
+        //  * convert Scaling with given factor
+        //  * @param  {ol.Feature} feature
+        //  * @return {String} state with converted value
+        //  */
+        // convertScaling: function (feature) {
+        //     var state = feature.get("state");
+
+        //     if (!_.isUndefined(this.get("conversionFactor"))) {
+        //         state = state * this.get("conversionFactor");
+        //         feature.set("state", state);
+        //     }
+        //     if (!_.isUndefined(this.get("scalingUnit"))) {
+        //         feature.set("state", state + " " + this.get("scalingUnit"));
+        //     }
+
+        //     return state;
+        // },
     });
 
     return WFSStyle;

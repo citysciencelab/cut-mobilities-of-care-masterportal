@@ -178,7 +178,7 @@
         {
           "id": "999998",
           "styleId": "999998",
-          "visibility": false,
+          "visibility": true,
           "mouseHoverField": []
         },
         {
@@ -187,7 +187,8 @@
           "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
-          "searchField": "name"
+          "searchField": "name",
+          "clusterDistance": 40
         },
         {
           "id" : "937",
