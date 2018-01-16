@@ -6,7 +6,10 @@ define(function (require) {
     ElasticQueryModel = QueryModel.extend({
         initialize: function () {
             this.superInitialize();
-            this.prepareQuery();
+            var that = this;
+            setTimeout(function(){
+                that.prepareQuery();
+            },1000, that);
         },
         /**
          * gathers Information for this Query including the wfs features and metadata
@@ -201,6 +204,11 @@ console.log(44);
          * @return {[type]} [description]
          */
         zoomToSelectedFeatures: function () {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
+
+            if (window != window.top) {
+                parent.postMessage({"featureIds": this.get("featureIds")}, "https://localhost:8080");
+            }
             Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
         },
         /**
