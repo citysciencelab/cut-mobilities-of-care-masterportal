@@ -5,7 +5,7 @@ define(function (require) {
         RemoteInterface;
 
     RemoteInterface = Backbone.Model.extend({
-        initialize: function () {
+        initialize: function () {console.log(55);
             var channel = Radio.channel("RemoteInterface");
 
             channel.reply({
@@ -25,9 +25,39 @@ define(function (require) {
                 "setModelAttributesById": this.setModelAttributesById
             }, this);
 
+            window.addEventListener("message", this.receiveMessage.bind(this));
             Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
             parent.Backbone.MasterRadio = Radio;
             parent.postMessage("ready", "*");
+
+        },
+        /**
+         * handles the postMessage events
+         * @param  {MessageEvent} event
+         */
+        receiveMessage: function (event) {console.log(event);
+            if (event.origin !== "https://localhost:8080") {
+                return;
+            }
+            if (event.data.hasOwnProperty("showPositionByFeatureId")) {
+                this.showPositionByFeatureId(event.data.showPositionByFeatureId, "55555");
+            }
+            else if (event.data === "hidePosition") {
+                Radio.trigger("MapMarker", "hideMarker");
+            }
+        },
+        /**
+         * gets the center coordinate of the feature geometry and triggers it to MapMarker module
+         * @param  {String} featureId
+         * @param  {String} layerId
+         */
+        showPositionByFeatureId: function (featureId, layerId) {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+                feature = model.getLayerSource().getFeatureById(featureId),
+                extent = feature.getGeometry().getExtent(),
+                center = ol.extent.getCenter(extent);
+
+            Radio.trigger("MapMarker", "showMarker", center);
         },
         addFeaturesFromGBM: function (hits, id, layerName) {
             Radio.trigger("AddGeoJSON", "addFeaturesFromGBM", hits, id, layerName);
