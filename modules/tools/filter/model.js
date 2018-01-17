@@ -176,6 +176,10 @@ define(function (require) {
             _.each(config, function (value, key) {
                 this.set(key, value);
             }, this);
+
+            if (Radio.request("ParametricURL", "getIsInitOpen") === "FILTER") {
+                this.set("isInitOpen", true);
+            }
         },
 
         createQueries: function (queries) {
