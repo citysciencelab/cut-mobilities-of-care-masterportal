@@ -5,8 +5,13 @@
     "subClass" : "ADVANCED",
     "scaling" : "INTERVAL",
     "scalingShape" : "CIRCLE_BAR",
-    "scalingFactor" : 10,
-    "circleRadius" : 6
+    "circleBarScalingFactor" : 10,
+    "circleBarRadius" : 6,
+    "circleBarLineStroke" : 6,
+    "circleBarColor" : [210, 0, 0, 1],
+    "circleBarFontSize" : 24,
+    "circleBarFontFamily" : "Comic Sans MS",
+    "circleBarFontColor" : [0, 0, 0, 1]
   },
   {
     "layerId" : "999999",
@@ -19,12 +24,13 @@
        "available" : [0, 220, 0, 1],
        "outoforder" : [175, 175, 175, 1]
     },
-    "circleRadius" : 23,
-    "circleStrokeWidth" : 4,
-    "circleBackgroundColor" : [255, 255, 255, 1],
-    "imageName" : "elektro_auto.png"
+    "circleSegmentsRadius" : 23,
+    "circleSegmentsStrokeWidth" : 5,
+    "circleSegmentsBackgroundColor" : [255, 255, 255, 1],
+    "imageName" : "elektro_auto.png",
+    "imageScale" : "1.0"
   },
-    {
+  {
     "layerId" : "1711",
     "class": "POINT",
     "subClass" : "SIMPLE",

@@ -1,5 +1,28 @@
 [
    {
+      "id" : "999998",
+      "name" : "Live - Temperatur",
+      "url" : "https://51.5.242.162/itsLGVhackathon",
+      "typ" : "Sensor",
+      "subtyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "filter" : "startswith(Datastreams/name,'Air')",
+         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
+      },
+      "geometry" : "POINT",
+      "utc" : "+1",
+      "conversionFactor" : 0.001,
+      "scalingDecimal" : 3,
+      "scalingUnit" : "°C",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzer Ladezeitpunkt",
+         "state" : "Zustand",
+         "owner" : "Eigentümer"
+      }
+   },
+   {
       "id" : "999999",
       "name" : "Live - Elektro Ladestandorte",
       "url" : "https://51.5.242.162/itsLGVhackathon",
@@ -11,6 +34,7 @@
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
       },
       "geometry" : "POINT",
+      "utc" : "+1",
       "gfiTheme" : "default",
       "gfiAttributes" : {
          "chargings_station_nr" : "StandortID",
@@ -26,41 +50,6 @@
          "authmethod2" : "Authentifizierungsmethode 2"
       }
    },
-
-   {
-      "id" : "999998",
-      "name" : "Live - Temperatur",
-      "url" : "https://51.5.242.162/itsLGVhackathon",
-      "typ" : "Sensor",
-      "subtyp" : "SensorThings",
-      "version" : "1.0",
-      "urlParameter" : {
-         "filter" : "startswith(Datastreams/name,'Air')",
-         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
-      },
-      "geometry" : "POINT",
-      "conversionFactor" : 0.001,
-      "scalingDecimal" : 3,
-      "scalingUnit" : "°C",
-
-
-
-      "fontSize" : 20,
-      "fontFamily" : "Arial Black",
-      "fontColor" : "#000000",
-      "lineStroke" : 6,
-      "scalingColorPositiv" : "#aa0000",
-      "scalingColorNegativ" : "#0000aa",
-
-
-      "gfiTheme" : "default",
-      "gfiAttributes" : {
-         "phenomenonTime" : "Letzer Ladezeitpunkt",
-         "state" : "Zustand",
-         "owner" : "Eigentümer"
-      }
-   },
-
    {
       "id" : "683",
       "name" : "Kindertagesstaetten Details",
