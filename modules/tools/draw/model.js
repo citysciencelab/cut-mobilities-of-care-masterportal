@@ -343,11 +343,18 @@ define([
         // Erstellt ein HTML-Element, legt dort das Glyphicon rein und klebt es an den Cursor
         setGlyphToCursor: function (glyphicon) {
             $("#map").after("<span id='cursorGlyph'></span>");
+
+            if (glyphicon.indexOf("trash") !== -1) {
+                $("#map").removeClass("no-cursor");
+                $("#map").addClass("cursor-crosshair");
+            } else {
+                $("#map").removeClass("cursor-crosshair");
+                $("#map").addClass("no-cursor");
+            }
+            $("#cursorGlyph").addClass(glyphicon);
+
             $("#map").mousemove(function (e) {
                 var cursorGlyph = $("#cursorGlyph");
-
-                $("#map").addClass("no-cursor");
-                $("#cursorGlyph").addClass(glyphicon);
                 cursorGlyph.css("left", e.offsetX + 5);
                 cursorGlyph.css("top", e.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
             });
