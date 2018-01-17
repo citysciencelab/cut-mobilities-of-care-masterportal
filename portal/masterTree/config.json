@@ -2,7 +2,10 @@
   "Portalconfig":
     {
       "portalTitle": {
-        "title": "GeoViewer"
+        "title": "GeoViewer",
+        "logo": "",
+        "link": "",
+        "tooltip": ""
       },
       "searchBar": {
         "minChars": 3,
@@ -50,6 +53,7 @@
           "name": "Werkzeuge",
           "glyphicon": "glyphicon-wrench",
           "children": {
+              
             "parcelSearch": {
               "name": "Flurstückssuche",
               "glyphicon": "glyphicon-search"
@@ -70,20 +74,21 @@
             "title": "Master-Portal",
             "gfi": false,
             "outputFilename": "DruckPDF",
-            "gfiMarker": {
-              "outerCircle": {
-                "fill": false,
-                "pointRadius": 8,
-                "stroke": true,
-                "strokeColor": "#ff0000",
-                "strokeWidth": 3
-              },
-              "point": {
-                "fill": true,
-                "pointRadius": 1,
-                  "fillColor": "#000000",
-                  "stroke": false
-                }
+                
+               "gfiMarker": {
+                  "outerCircle": {
+                    "fill": false,
+                    "pointRadius": 8,
+                    "stroke": true,
+                    "strokeColor": "#ff0000",
+                    "strokeWidth": 3
+                  },
+                  "point": {
+                    "fill": true,
+                    "pointRadius": 1,
+                      "fillColor": "#000000",
+                      "stroke": false
+                  }
             }
           },
             "coord": {
@@ -187,54 +192,43 @@
                       "Titel": "Überschwemmungsgebiete",
                       "Layer": [
                         {
-                          "id": "1103",
-                          "visibility": false
+                          "id": "1103"
                         },
                         {
-                          "id": "1104",
-                          "visibility": false
+                          "id": "1104"
                         }
                       ]
                     }
                   ],
                   "Layer": [
                     {
-                      "id": "684",
-                      "visibility": false
+                      "id": "684"
                     },
                     {
-                      "id": "685",
-                      "visibility": false
+                      "id": "685"
                     }
                   ]
                 }
               ],
               "Layer": [
                 {
-                  "id": "2427",
-                  "visibility": false
+                  "id": "2427"
                 },
                 {
-                  "id": "2426",
-                  "visibility": false
+                  "id": "2426"
                 },
                 {
-                  "id": "2425",
-                  "visibility": false
+                  "id": "2425"
                 },
                 {
-                  "id": "2423",
-                  "visibility": false
+                  "id": "2423"
                 },
                 {
-                  "id": "2428",
-                  "visibility": false
+                  "id": "2428"
                 },
                 {
                   "id": "936",
-                  "visibility": false,
-                  "name": "Hafengebiet (§ 2 HafenEG)",
-                  "metaName": "Hafengebiet (§ 2 HafenEG)"
+                  "name": "Hafengebiet (§ 2 HafenEG)"
                 }
               ]
             },
@@ -243,19 +237,17 @@
               "Layer": [
                 {
                   "id": "1200",
-                  "visibility": false
+                  "name": "Hoehenlinien 1,25m"
                 },
                 {
                   "id": "1199",
-                  "visibility": false
+                  "name": "Hoehenlinien 1,50m"
                 },
                 {
-                  "id": "1198",
-                  "visibility": false
+                  "id": "1198"
                 },
                 {
-                  "id": "1197",
-                  "visibility": false
+                  "id": "1197"
                 }
               ]
             },
@@ -264,45 +256,32 @@
               "Layer": [
                 {
                   "id": "1561",
-                  "visibility": false,
-                  "name": "Festgestellte Bebauungspläne (§ 10 BauGB)",
-                  "metaName": "Festgestellte Bebauungspläne (§ 10 BauGB)"
+                  "name": "Festgestellte Bebauungspläne (§ 10 BauGB)"
                 },
                 {
                   "id": "1562",
                   "visibility": true,
-                  "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
-                  "metaName": "Bebauungspläne im Verfahren (§ 2 BauGB)"
+                  "name": "Bebauungspläne im Verfahren (§ 2 BauGB)"
                 },
                 {
                   "id": "2438",
-                  "visibility": false,
-                  "name": "Umlegungsgebiete (§§ 45 ff BauGB)",
-                  "metaName": "Umlegungsgebiete (§§ 45 ff BauGB))"
+                  "name": "Umlegungsgebiete (§§ 45 ff BauGB)"
                 },
                 {
                   "id": "2437",
-                  "visibility": false,
-                  "name": "Sanierungsgebiete (§§ 136 ff BauGB)",
-                  "metaName": "Sanierungsgebiete (§§ 136 ff BauGB)"
+                  "name": "Sanierungsgebiete (§§ 136 ff BauGB)"
                 },
                 {
                   "id": "1205",
-                  "visibility": false,
-                  "name": "Städtebauliche Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 1 BauGB)",
-                  "metaName": "Städtebauliche Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 1 BauGB)"
+                  "name": "Städtebauliche Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 1 BauGB)"
                 },
                 {
                   "id": "4445",
-                  "visibility": false,
-                  "name": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Kraft",
-                  "metaName": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Kraft"
+                  "name": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Kraft"
                 },
                 {
                   "id": "4446",
-                  "visibility": false,
-                  "name": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Aufstellung",
-                  "metaName": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Aufstellung"
+                  "name": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Aufstellung"
                 }
               ]
             },
@@ -311,17 +290,14 @@
               "Layer": [
                 {
                   "id": "1757",
-                  "visibility": false,
                   "name": "Baudenkmäler (§§ 4, 6 DSchG)"
                 },
                 {
                   "id": "1755",
-                  "visibility": false,
                   "name": "Gartendenkmäler (§§ 4, 6 DSchG)"
                 },
                 {
                   "id": "1754",
-                  "visibility": false,
                   "name": "Ensemble (§§ 4, 6 DSchG)"
                 }
               ]
@@ -333,12 +309,10 @@
                   "Titel": "Biotopkataster gesetzlich geschützte Biotope (§ 30 BNatSchG, § 14 HmbBNatSchAG) - ab 1:5000 bis 1:500",
                   "Layer": [
                     {
-                      "id": "1689",
-                      "visibility": false
+                      "id": "1689"
                     },
                     {
-                      "id": "1688",
-                      "visibility": false
+                      "id": "1688"
                     }
                   ]
                 }
@@ -346,39 +320,27 @@
               "Layer": [
                 {
                   "id": "1453",
-                  "visibility": false,
-                  "name": "Ausgleichsfächen (§§ 13, 17 Absatz 6 BNatSchG)",
-                  "metaName": "Ausgleichsfächen (§§ 13, 17 Absatz 6 BNatSchG)"
+                  "name": "Ausgleichsfächen (§§ 13, 17 Absatz 6 BNatSchG)"
                 },
                 {
                   "id": "1992",
-                  "visibility": false,
-                  "name": "Naturschutzgebiete (§ 23 BNatSchG)",
-                  "metaName": "Naturschutzgebiete (§ 23 BNatSchG)"
+                  "name": "Naturschutzgebiete (§ 23 BNatSchG)"
                 },
                 {
                   "id": "1996",
-                  "visibility": false,
-                  "name": "Nationalpark (§ 24 BNatSchG)",
-                  "metaName": "Nationalpark (§ 24 BNatSchG)"
+                  "name": "Nationalpark (§ 24 BNatSchG)"
                 },
                 {
                   "id": "1997",
-                  "visibility": false,
-                  "name": "Biosphärenreservate (§ 25 BNatSchG)",
-                  "metaName": "Biosphärenreservate (§ 25 BNatSchG)"
+                  "name": "Biosphärenreservate (§ 25 BNatSchG)"
                 },
                 {
                   "id": "1998",
-                  "visibility": false,
-                  "name": "Landschaftsschutzgebiete (§ 26 BNatSchG)",
-                  "metaName": "Landschaftsschutzgebiete (§ 26 BNatSchG)"
+                  "name": "Landschaftsschutzgebiete (§ 26 BNatSchG)"
                 },
                 {
                   "id": "1999",
-                  "visibility": false,
-                  "name": "Naturdenkmäler (§ 28 BNatSchG)",
-                  "metaName": "Naturdenkmäler (§ 28 BNatSchG)"
+                  "name": "Naturdenkmäler (§ 28 BNatSchG)"
                 }
               ]
             },
@@ -390,15 +352,11 @@
                   "Layer": [
                     {
                       "id": "2432",
-                      "visibility": false,
-                      "name": "Festgesetzte ÜSG (§ 76 WHG, § 54 HWaG)",
-                      "metaName": "Festgesetzte ÜSG (§ 76 WHG, § 54 HWaG)"
+                      "name": "Festgesetzte ÜSG (§ 76 WHG, § 54 HWaG)"
                     },
                     {
                       "id": "2433",
-                      "visibility": false,
-                      "name": "Vorläufig gesicherte ÜSG (§ 76 WHG)",
-                      "metaName": "Vorläufig gesicherte ÜSG (§ 76 WHG)"
+                      "name": "Vorläufig gesicherte ÜSG (§ 76 WHG)"
                     }
                   ]
                 }
@@ -406,9 +364,7 @@
               "Layer": [
                 {
                   "id": "685",
-                  "visibility": false,
-                  "name": "Hamburger Wasserschutzgebiete (§§ 51 ff WHG)",
-                  "metaName": "Wasserschutzgebiete (§§ 51 ff WHG)"
+                  "name": "Hamburger Wasserschutzgebiete (§§ 51 ff WHG)"
                 }
               ]
             },
@@ -417,9 +373,7 @@
               "Layer": [
                 {
                   "id": ["412","413","414","415","416","417","418","419","420","421","423","424","425","426","427","428","429","430","431"],
-                  "visibility": false,
                   "name": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
-                  "metaName": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
                   "legendURL": "http:/geofos/legenden/bauschutz_flughafen_legende.png"
                 }
               ]
@@ -432,16 +386,13 @@
                   "Titel": "Lärmschutzbereiche Flughafen Hamburg (FluLärmHmbV)",
                   "Layer": [
                     {
-                      "id": "2431",
-                      "visibility": false
+                      "id": "2431"
                     },
                     {
-                      "id": "2430",
-                      "visibility": false
+                      "id": "2430"
                     },
                     {
-                      "id": "2429",
-                      "visibility": false
+                      "id": "2429"
                     }
                   ]
                 }
@@ -477,7 +428,6 @@
                     },
                     {
                       "id": "1933",
-                      "visibility": false,
                       "styles": [
                         "geofox_stations"
                       ],
@@ -491,40 +441,35 @@
                   ]
                 }
               ],
-              "Layer": [
+               "Layer": [
                 {
-                  "id": "2182",
-                  "visibility": false
+                  "id": "2182"
                 },
                 {
-                  "id": "2181",
-                  "visibility": false
+                  "id": "2181"
                 },
                 {
-                  "id": "2180",
-                  "visibility": false
+                  "id": "2180"
                 },
                 {
-                  "id": "2179",
-                  "visibility": false
+                  "id": "2179"
                 },
                 {
-                  "id": "2178",
-                  "visibility": false
+                  "id": "2178"
                 }
               ]
             },
             {
               "Titel": "Gruppenlayer",
               "Layer": [
-                {
-                  "id": [
+                    {
+                    "id": [
                     {
                     "id": "682"
                     },
                     {
                     "id": "1731"
-                      }
+                    }
                   ],
                   "visibility": true,
                   "name": "Kita und Krankenhäuser"

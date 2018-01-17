@@ -62,6 +62,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
+            
           "filter": {
             "name": "Filter",
             "glyphicon": "glyphicon-filter",
@@ -70,55 +71,55 @@
             "isInitOpen": false,
             "allowMultipleQueriesPerLayer": true,
             "predefinedQueries": [
-              {
-                "layerId": "8712",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Grundschulen",
-                "predefinedRules": [
                   {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Grundschulen", "Langformschulen"]
-                  }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
-              },
-              {
-                "layerId": "8712",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Stadtteilschulen",
-                "predefinedRules": [
+                    "layerId": "8712",
+                    "isActive": false,
+                    "isSelected": false,
+                    "name": "Grundschulen",
+                    "predefinedRules": [
+                      {
+                        "attrName": "kapitelbezeichnung",
+                        "values": ["Grundschulen", "Langformschulen"]
+                      }
+                    ],
+                    "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+                  },
                   {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Stadtteilschulen", "Langformschulen"]
-                  }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
-              },
-              {
-                "layerId": "8712",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Gymnasien",
-                "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
-                "predefinedRules": [
+                    "layerId": "8712",
+                    "isActive": false,
+                    "isSelected": false,
+                    "name": "Stadtteilschulen",
+                    "predefinedRules": [
+                      {
+                        "attrName": "kapitelbezeichnung",
+                        "values": ["Stadtteilschulen", "Langformschulen"]
+                      }
+                    ],
+                    "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+                  },
                   {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Gymnasien"]
+                    "layerId": "8712",
+                    "isActive": false,
+                    "isSelected": false,
+                    "name": "Gymnasien",
+                    "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+                    "predefinedRules": [
+                      {
+                        "attrName": "kapitelbezeichnung",
+                        "values": ["Gymnasien"]
+                      }
+                    ],
+                    "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse",  "schulische_ausrichtung"]
+                  },
+                  {
+                    "layerId": "1711",
+                    "isActive": true,
+                    "isSelected": true,
+                    "name": "Krankenhäuser",
+                    "predefinedRules": [
+                    ],
+                    "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
                   }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse",  "schulische_ausrichtung"]
-              },
-              {
-                "layerId": "1711",
-                "isActive": true,
-                "isSelected": true,
-                "name": "Krankenhäuser",
-                "predefinedRules": [
-                ],
-                "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
-              }
             ]
           },
           "parcelSearch": {
@@ -149,20 +150,21 @@
             "title": "Master",
             "gfi": true,
             "outputFilename": "DruckPDF",
-            "gfiMarker": {
-              "outerCircle": {
-                "fill": false,
-                "pointRadius": 8,
-                "stroke": true,
-                "strokeColor": "#ff0000",
-                "strokeWidth": 3
-              },
-              "point": {
-                "fill": true,
-                "pointRadius": 1,
-                  "fillColor": "#000000",
-                  "stroke": false
-                }
+              
+               "gfiMarker": {
+                  "outerCircle": {
+                    "fill": false,
+                    "pointRadius": 8,
+                    "stroke": true,
+                    "strokeColor": "#ff0000",
+                    "strokeWidth": 3
+                  },
+                  "point": {
+                    "fill": true,
+                    "pointRadius": 1,
+                      "fillColor": "#000000",
+                      "stroke": false
+                  }
             }
           },
           "searchByCoord": {
@@ -275,8 +277,7 @@
     {
       "Layer": [
         {
-          "id": "8194",
-          "visibility": false
+          "id": "8194"
         },
         {
           "id":"2128",
@@ -284,38 +285,31 @@
           "clusterDistance":0
         },
         {
-          "id": "8730",
-          "visibility": false
+          "id": "8730"
         },
         {
-          "id": "2426",
-          "visibility": false
+          "id": "2426"
         },
         {
-          "id": "4561",
-          "visibility": false
+          "id": "4561"
         },
         {
           "id": "1562",
-          "visibility": false,
           "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
         },
         {
           "id": "3302",
           "gfiTheme": "trinkwasser",
-          "visibility": false,
           "featureCount": 5
         },
         {
           "id": "2059",
-          "visibility": false,
           "styleId": "2059",
           "clusterDistance": 30,
           "styleField": "kategorie"
         },
         {
           "id": "5708",
-          "visibility": false,
           "styleable": true,
           "geomType": "Polygon",
           "attributesToStyle":[
@@ -324,7 +318,6 @@
         },
         {
           "id": "2003",
-          "visibility": false,
           "styleId": "2003",
           "mouseHoverField": "GEBIETSNAME"
         },
@@ -335,32 +328,27 @@
         },
         {
           "id": "4905",
-          "visibility": false,
           "gfiTheme": "table",
           "featureCount": 20
         },
         {
            "id": "2404",
-           "visibility": false,
            "styleId": "45",
            "clusterDistance": 40,
            "routable": true
         },
         {
-           "id": "4479",
-           "visibility": false
+           "id": "4479"
         },
         {
           "id": ["4537", "4538"],
           "name": "Eignungsflächen",
-          "visibility": false,
           "legendURL": ["http://www.geoportal-hamburg.de/legende/legende_solar.png"],
           "gfiTheme": "solaratlas",
           "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
         },
         {
           "id": "2407",
-          "visibility": false,
           "infoFormat": "text/html"
         },
         {
@@ -374,7 +362,6 @@
         {
           "id": "8712",
           "name": "Schulinfosystem",
-          "visibility": false,
           "styleId": "8712",
           "styleField": "kapitelbezeichnung",
           "searchField": "schulname",
@@ -385,7 +372,6 @@
         {
           "id": "753",
           "styleId": "753",
-          "visibility": false,
           "styleField": "Leistungsarten",
           "mouseHoverField": "Name",
           "extendedFilter": true,
@@ -399,28 +385,31 @@
           ]
         },
         {
-          "id":[{"id": "946"
-            },
-            {
-              "id": "947"
-            }
-          ],
+          "id":[
+                {
+                "id": "946"
+                },
+                {
+                "id": "947"
+                }
+            ],
           "name": "Verkehrslage auf Autobahnen",
           "layerAttribution": {
             "text": "",
             "channel": "Verkehrsfunctions",
             "eventname": "aktualisiereverkehrsnetz",
             "timeout": 60000
-          },
-          "visibility": false
+            }
         },
         {
-          "id": [{
-            "id": "682"
-          },{
-            "id": "1731"
-          }],
-          "visibility": false,
+          "id": [
+                {
+                "id": "682"
+                },
+                {
+                "id": "1731"
+                }
+            ],
           "name": "Kita und KH"
         }
       ]
