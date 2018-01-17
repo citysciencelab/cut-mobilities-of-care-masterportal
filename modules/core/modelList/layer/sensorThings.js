@@ -175,9 +175,8 @@ define(function (require) {
         },
 
         /**
-         * [styling description]
-         * @param  {Boolean} isClustered [description]
-         * @return {[type]}              [description]
+         * create style, function triggers to style_v2.json
+         * @param  {boolean} isClustered
          */
         styling: function (isClustered, features) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
@@ -190,12 +189,37 @@ define(function (require) {
         },
 
         /**
-         * change time zone
+         * getter for StyleId
+         * @return {number} styleId
+         */
+        getStyleId: function () {
+            return this.get("styleId");
+        },
+
+        /**
+         * change time zone by given UTC-time
          * @param  {String} phenomenonTime
-         * @return {String} phenomenonTime in UTC+1
+         * @return {String} phenomenonTime converted with UTC
          */
         changeTimeZone: function (phenomenonTime) {
-            return moment(phenomenonTime).utcOffset("+0100").format("DD MMMM YYYY, HH:mm:ss");
+            var time = phenomenonTime;
+
+            if (!_.isUndefined(this.get("utc"))) {
+                var utc = this.get("utc"),
+                    utcAlgebraicSign = utc.substring(0, 1),
+                    utcNumber;
+
+                if (utc.length === 2) {
+                    utcNumber = "0" + utc.substring(1, 2) + "00";
+                }
+                else if (utc.length > 2) {
+                    utcNumber = utc.substring(1, 3) + "00";
+                }
+
+                time = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("DD MMMM YYYY, HH:mm:ss");
+            }
+
+            return time;
         },
 
 // *************************************************************
@@ -528,14 +552,6 @@ define(function (require) {
             });
 
             client.publish("presence", "hello world!");
-        },
-
-        /**
-         * getter for StyleId
-         * @return {number} styleId
-         */
-        getStyleId: function () {
-            return this.get("styleId");
         }
     });
 
