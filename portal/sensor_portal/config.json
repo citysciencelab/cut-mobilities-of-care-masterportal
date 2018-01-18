@@ -172,9 +172,10 @@
         {
           "id": "999999",
           "styleId": "999999",
-          "visibility": true,
+          "visibility": false,
           "mouseHoverField": ["chargings_station_nr", "location_name", "state"],
-          "searchField": "name"
+          "searchField": "name",
+          "clusterDistance": 50
         },
         {
           "id": "999998",
@@ -187,6 +188,7 @@
           "id": "1711",
           "styleId": "1711",
           "visibility": false,
+          "layerAttribution": "<span>Attributierung für Fachlayer</span>",
           "mouseHoverField": ["name", "strasse"],
           "searchField": "name",
           "clusterDistance": 40

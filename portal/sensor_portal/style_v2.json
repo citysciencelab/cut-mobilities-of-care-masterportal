@@ -28,7 +28,9 @@
     "circleSegmentsStrokeWidth" : 5,
     "circleSegmentsBackgroundColor" : [255, 255, 255, 1],
     "imageName" : "elektro_auto.png",
-    "imageScale" : "1.0"
+    "imageScale" : "1.0",
+    "clusterCircleRadius" : 15,
+    "clusterCircleFillColor": [0, 0, 210, 1]
   },
   {
     "layerId" : "1711",

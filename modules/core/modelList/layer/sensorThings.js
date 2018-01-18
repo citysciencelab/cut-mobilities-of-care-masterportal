@@ -12,18 +12,18 @@ define(function (require) {
 
         initialize: function () {
             this.superInitialize();
-            var channel = Radio.channel("sensorThings");
+            var channel = Radio.channel("SensorThingsLayer");
 
             channel.on({
-                "updateFromWebSocket": this.updateFromWebSocket
+                "updateFromWebSocket": this.updateFromWebSocket,
+                "updateFromMqtt": this.updateFromMqtt
             }, this);
 
             // start socket-connection
-            this.createWebSocket();
+            // this.createWebSocket();
 
             // start mqtt-connection
-            // this.getMQTT();
-
+            this.createMqttConnection();
         },
 
         /**
@@ -36,6 +36,7 @@ define(function (require) {
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
                 source: this.getLayerSource(),
+                source: this.has("clusterDistance") ? this.getClusterLayerSource() : this.getLayerSource(),
                 name: this.get("name"),
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
@@ -48,6 +49,16 @@ define(function (require) {
         },
 
         /**
+         * create ClusterLayerSource
+         */
+        createClusterLayerSource: function () {
+            this.setClusterLayerSource(new ol.source.Cluster({
+                source: this.getLayerSource(),
+                distance: this.get("clusterDistance")
+            }));
+        },
+
+        /**
          * initial loading of sensor data function
          * differences by subtypes
          */
@@ -55,7 +66,7 @@ define(function (require) {
             var sensorData,
                 epsg,
                 features,
-                subtyp = this.get("subtyp"),
+                subtyp = this.get("subTyp"),
                 geometry = this.get("geometry").toUpperCase(),
                 isClustered = this.has("clusterDistance") ? true : false;
 
@@ -71,7 +82,12 @@ define(function (require) {
                 features = this.drawPoints(sensorData, epsg);
             }
 
+
+            this.set("loadend", "ready");
+            Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), features);
+            // this.styling(isClustered);
             this.styling(isClustered, features);
+            this.getLayer().setStyle(this.getStyle());
         },
 
         /**
@@ -97,9 +113,9 @@ define(function (require) {
                 boolean = false;
                 console.log("typ is undefined");
             }
-            if (_.isUndefined(this.get("subtyp"))) {
+            if (_.isUndefined(this.get("subTyp"))) {
                 boolean = false;
-                console.log("subtyp is undefined");
+                console.log("subTyp is undefined");
             }
             if (_.isUndefined(this.get("version"))) {
                 boolean = false;
@@ -182,9 +198,12 @@ define(function (require) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
             if (!_.isUndefined(stylelistmodel)) {
-                _.each(features, function (feature) {
-                    feature.setStyle(stylelistmodel.createStyle(feature, isClustered));
-                }, this);
+                // _.each(features, function (feature) {
+                //     feature.setStyle(stylelistmodel.createStyle(feature, isClustered));
+                // }, this);
+                this.setStyle(function (feature) {
+                    return stylelistmodel.createStyle(feature, isClustered);
+                });
             }
         },
 
@@ -435,7 +454,7 @@ define(function (require) {
             connection.onmessage = function (ev) {
                 console.log("Server: " + ev.data);
                 jsonData = JSON.parse(ev.data);
-                Radio.trigger("sensorThings", "updateFromWebSocket", jsonData);
+                Radio.trigger("SensorThingsLayer", "updateFromWebSocket", jsonData);
             };
 
             // The connection is terminated
@@ -500,13 +519,13 @@ define(function (require) {
         },
 
         /**
-         * [getFeatureById description]
-         * @param  {number} id       [description]
-         * @param  {array} features -
-         * @return {array}          [description]
+         * get feature by a given id
+         * @param  {number} id
+         * @param  {array} features
+         * @return {array} featureArray
          */
         getFeatureById: function (id, features) {
-            var thisFeatureArray = [];
+            var featureArray = [];
 
             _.each(features, function (feature) {
                 var datastreamIds = feature.get("dataStreamId");
@@ -515,44 +534,149 @@ define(function (require) {
                     datastreamIds = datastreamIds.split(" | ");
 
                     _.each(datastreamIds, function (thisId, index) {
-                        if (id === thisId) {
-                            thisFeatureArray.push(index);
-                            thisFeatureArray.push(feature);
+                        // console.log(thisId);
+                        if (parseInt(id, 10) === parseInt(thisId, 10)) {
+                            featureArray.push(index);
+                            featureArray.push(feature);
                         }
                     });
                 }
-                else if (id === String(datastreamIds)) {
-                    thisFeatureArray.push(0);
-                    thisFeatureArray.push(feature);
+                else if (parseInt(id, 10) === parseInt(datastreamIds, 10)) {
+                    featureArray.push(0);
+                    featureArray.push(feature);
                 }
             });
 
-            return thisFeatureArray;
+            return featureArray;
         },
 
 // *************************************************************
 // ***** update via MQTT                                   *****
 // *************************************************************
-        getMQTT: function () {
-            console.log(mqtt);
-            // var client = mqtt.connect({ host: "localhost", port: 1234 });
-            // var client = mqtt.connect({host: "51.5.242.162", port : 1883, path : "/mqtt"});
-            var client = mqtt.connect({host: "51.5.242.162", port : 9876, path : "/mqtt", protocolId : "MQTT"});
-            // var client = mqtt.connect({host: "example.sensorup.com", port : 1883, path : "/mqtt"});
+        createMqttConnection: function () {
+            var urlAdress = this.get("url"),
+                sensorIP = urlAdress.split("/")[2],
+                client = mqtt.connect({host: sensorIP, port : 9876, path : "/mqtt"}),
+                dataStreamIds = this.getDataStreamIds();
 
-            console.log(client);
-
-            // client.subscribe("presence");
-            client.subscribe("v1.0/Datastreams(2)/Observations");
-            // client.subscribe("v1.0/Datastreams(503254)/Observations");
-
-            client.on("message", function (topic, payload) {
-              console.log([topic, payload].join(": "));
-              client.end();
+            _.each(dataStreamIds, function(id) {
+                 client.subscribe("v1.0/Datastreams(" + id + ")/Observations");
             });
 
-            client.publish("presence", "hello world!");
-        }
+            client.on("message", function (topic, payload) {
+                jsonData = JSON.parse(payload);
+                jsonData.dataStreamId = topic.split("(")[1].split(")")[0];
+                console.log(jsonData);
+                Radio.trigger("SensorThingsLayer", "updateFromMqtt", jsonData);
+                client.end();
+            });
+        },
+
+        /**
+         * get DataStreamIds
+         * @return {Array} dataStreamIdsArray
+         */
+        getDataStreamIds: function() {
+            var dataStreamIdsArray = [],
+                features = this.getLayerSource().getFeatures();
+
+            _.each(features, function (feature) {
+                var dataStreamIds = feature.get("dataStreamId");
+
+                if (_.contains(dataStreamIds, "|")) {
+                    dataStreamIds = dataStreamIds.split(" | ");
+
+                    _.each(dataStreamIds, function (id) {
+                        dataStreamIdsArray.push(id);
+                    });
+                }
+                else {
+                    dataStreamIdsArray.push(String(dataStreamIds));
+                }
+            });
+
+            return dataStreamIdsArray;
+        },
+
+        /**
+         * updates by event from Websocket
+         * @param  {array} things
+         */
+        updateFromMqtt: function (thing) {
+            var dataStreamId = thing.dataStreamId,
+                features = this.getLayerSource().getFeatures(),
+                result = thing.result,
+                thisPhenomTime = thing.phenomenonTime,
+                thisFeatureArray = this.getFeatureById(dataStreamId, features),
+                isClustered = this.has("clusterDistance") ? true : false;
+
+            // Change properties only in Layer witch contain the Datastream
+            if (!_.isEmpty(thisFeatureArray)) {
+                var thisPlugIndex = thisFeatureArray[0],
+                    thisFeature = thisFeatureArray[1],
+                    // change state and phenomenonTime
+                    datastreamStates = thisFeature.get("state"),
+                    datastreamPhenomenonTime = thisFeature.get("phenomenonTime"),
+                    scalingObject,
+                    svgPath;
+
+                // change time zone
+                thisPhenomenonTime = this.changeTimeZone(thisPhenomTime);
+
+                if (_.contains(datastreamStates, "|")) {
+                    datastreamStates = datastreamStates.split(" | ");
+                    datastreamPhenomTime = datastreamPhenomenonTime.split(" | ");
+
+                    datastreamStates[thisPlugIndex] = String(result);
+                    datastreamPhenomTime[thisPlugIndex] = thisPhenomenonTime;
+                }
+                else {
+                    datastreamStates = String(result);
+                    datastreamPhenomTime = thisPhenomenonTime;
+                }
+
+                datastreamStates = this.convertScaling(datastreamStates);
+
+                // update states in feature
+                if (_.isArray(datastreamStates)) {
+                    thisFeature.set("state", this.combinePropertiesAsString(datastreamStates));
+                    thisFeature.set("phenomenonTime", this.combinePropertiesAsString(datastreamPhenomTime));
+                }
+                else {
+                    thisFeature.set("state", datastreamStates);
+                    thisFeature.set("phenomenonTime", datastreamPhenomTime);
+                }
+
+                this.styling(isClustered, [thisFeature]);
+                console.log(thisFeature);
+            }
+        },
+
+        // getter for style
+        getStyle: function () {
+            return this.get("style");
+        },
+
+        // setter for style
+        setStyle: function (value) {
+            this.set("style", value);
+        },
+
+        /**
+         * [setClusterLayerSource description]
+         * @param {[type]} value [description]
+         */
+        setClusterLayerSource: function (value) {
+            this.set("clusterLayerSource", value);
+        },
+
+        /**
+         * [getClusterLayerSource description]
+         * @return {[type]}       [description]
+         */
+        getClusterLayerSource: function () {
+            return this.get("clusterLayerSource");
+        },
     });
 
     return SensorThingsLayer;

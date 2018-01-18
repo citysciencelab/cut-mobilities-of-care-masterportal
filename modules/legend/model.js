@@ -27,7 +27,7 @@ define([
             this.listenTo(Radio.channel("StyleWMS"), {
                 "updateParamsStyleWMS": this.updateParamsStyleWMSArray
             });
-
+            // console.log("Test");
             this.listenTo(this, {
                 "change:wmsLayerList": this.setLegendParamsFromWMS,
                 "change:wfsLayerList": this.setLegendParamsFromWFS,

@@ -4,14 +4,13 @@
       "name" : "Live - Temperatur",
       "url" : "https://51.5.242.162/itsLGVhackathon",
       "typ" : "Sensor",
-      "subtyp" : "SensorThings",
+      "subTyp" : "SensorThings",
       "version" : "1.0",
       "urlParameter" : {
          "filter" : "startswith(Datastreams/name,'Air')",
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
       },
       "geometry" : "POINT",
-      "utc" : "+1",
       "conversionFactor" : 0.001,
       "scalingDecimal" : 3,
       "scalingUnit" : "°C",
@@ -27,7 +26,7 @@
       "name" : "Live - Elektro Ladestandorte",
       "url" : "https://51.5.242.162/itsLGVhackathon",
       "typ" : "Sensor",
-      "subtyp" : "SensorThings",
+      "subTyp" : "SensorThings",
       "version" : "1.0",
       "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",

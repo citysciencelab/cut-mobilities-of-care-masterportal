@@ -442,14 +442,29 @@ define(function (require) {
          * @return {ol.Style} style
          */
         createAdvancedPointStyle: function (feature, isClustered) {
-            var styleScaling = this.get("scaling").toUpperCase();
+            var styleScaling = this.get("scaling").toUpperCase(),
+                style;
 
-            // check scaling
-            if (styleScaling === "NOMINAL") {
-                style = this.createNominalAdvancedPointStyle(feature, isClustered);
+            if (isClustered && feature.get("features").length > 1) {
+                var imagestyle = this.createClusterStyle();
+                style = new ol.style.Style({
+                    image: imagestyle
+                });
             }
-            else if (styleScaling === "INTERVAL") {
-                style = this.createIntervalAdvancedPointStyle(feature, isClustered);
+            else {
+
+                // parse from array
+                if(_.isArray(feature.get("features"))) {
+                    feature = feature.get("features")[0];
+                }
+
+                // check scaling
+                if (styleScaling === "NOMINAL") {
+                    style = this.createNominalAdvancedPointStyle(feature);
+                }
+                else if (styleScaling === "INTERVAL") {
+                    style = this.createIntervalAdvancedPointStyle(feature);
+                }
             }
 
             return style;
@@ -458,10 +473,9 @@ define(function (require) {
         /**
          * create nominal scaled advanced style for pointFeatures
          * @param  {ol.Feature} feature
-         * @param  {boolean} isClustered
          * @return {ol.Style} style
          */
-        createNominalAdvancedPointStyle: function (feature, isClustered) {
+        createNominalAdvancedPointStyle: function (feature) {
             var styleScalingShape = this.get("scalingShape").toUpperCase(),
                 imageName = this.get("imageName"),
                 imageNameDefault = this.defaults.imageName,
@@ -476,7 +490,7 @@ define(function (require) {
 
             // create style from svg and image
             if (imageName !== imageNameDefault) {
-                imageStyle = this.createSimplePointStyle(feature, isClustered);
+                imageStyle = this.createSimplePointStyle(feature, false);
                 style = [style, imageStyle];
             }
 
@@ -486,10 +500,9 @@ define(function (require) {
         /**
          * create interval scaled advanced style for pointFeatures
          * @param  {ol.Feature} feature
-         * @param  {boolean} isClustered
          * @return {ol.Style} style
          */
-        createIntervalAdvancedPointStyle: function (feature, isClustered) {
+        createIntervalAdvancedPointStyle: function (feature) {
             var styleScalingShape = this.get("scalingShape").toUpperCase(),
                 svgPath;
 
