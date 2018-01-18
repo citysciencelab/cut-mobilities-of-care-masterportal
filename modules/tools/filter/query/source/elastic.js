@@ -10,6 +10,10 @@ define(function (require) {
             setTimeout(function(){
                 that.prepareQuery();
             },1000, that);
+
+            if (this.get("searchInMapExtent") === true) {
+                Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive, this);
+            }
         },
         /**
          * gathers Information for this Query including the wfs features and metadata
@@ -79,7 +83,10 @@ define(function (require) {
                 url,
                 featureType,
                 version;
-console.log(44);
+
+            if (this.get("searchInMapExtent") === true) {
+                this.addSearchInMapExtentSnippet();
+            }
             this.createSnippets([{name: "bezirk_name", type: "string"}, {name: "flst_status", type: "string"}]);
         },
 
@@ -295,6 +302,14 @@ console.log(44);
             }
             return isMatch;
         },
+
+        isFeatureInExtent: function (feature) {
+            var isMatch = false,
+                mapExtent = Radio.request("MapView", "getCurrentExtent");
+
+            return ol.extent.containsExtent(mapExtent, feature.getGeometry().getExtent());
+        },
+
         /**
          * checks if feature matches the filter
          * @param  {ol.Feature}  feature    [description]
@@ -307,6 +322,9 @@ console.log(44);
             isMatch = _.every(filterAttr, function (attribute) {
                 if (attribute.type === "integer") {
                     return this.isIntegerInRange(feature, attribute);
+                }
+                else if (attribute.type === "searchInMapExtent") {
+                    return this.isFeatureInExtent(feature);
                 }
                 else {
                     return this.isValueMatch(feature, attribute);

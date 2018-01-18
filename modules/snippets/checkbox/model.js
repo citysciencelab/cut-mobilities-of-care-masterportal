@@ -20,6 +20,7 @@ var SnippetModel = require("modules/snippets/model"),
             this.listenTo(this.get("valuesCollection"), {
                 "change:isSelected": function () {
                     this.trigger("valuesChanged");
+                    this.renderView();
                 }
             });
         },
@@ -40,6 +41,13 @@ var SnippetModel = require("modules/snippets/model"),
         },
         getIsSelected: function () {
             return this.get("valuesCollection").models[0].get("isSelected");
+        },
+        getSelectedValues: function () {
+            return {
+                attrName: this.get("name"),
+                type: this.get("type"),
+                values: this.get("valuesCollection").pluck("isSelected")
+            };
         }
     });
     return CheckboxSnippet;

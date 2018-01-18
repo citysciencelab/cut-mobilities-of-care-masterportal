@@ -10,7 +10,9 @@ define(function (require) {
         defaults: {
             featureIds: [],
             isLayerVisible: false,
-            activateOnSelection: false
+            activateOnSelection: false,
+            // flag for the search in the current map extent
+            searchInMapExtent: false
         },
 
         /**
@@ -34,7 +36,17 @@ define(function (require) {
                     }
                 }
             }, this);
+
         },
+
+        isSearchInMapExtentActive: function () {
+            var model = this.get("snippetCollection").findWhere({type: "searchInMapExtent"});
+
+            if (!_.isUndefined(model) && model.getIsSelected() === true) {
+                this.runFilter();
+            }
+        },
+
         checkLayerVisibility: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
@@ -87,6 +99,18 @@ define(function (require) {
                 featureAttribute = _.extend(featureAttribute, {"snippetType": "slider"});
                 this.get("snippetCollection").add(new SnippetSliderModel(featureAttribute));
             }
+        },
+
+        /**
+         * adds a snippet for the map extent search
+         * @return {[type]} [description]
+         */
+        addSearchInMapExtentSnippet: function () {
+            this.get("snippetCollection").add(new SnippetCheckboxModel({
+                type: "searchInMapExtent",
+                isSelected: false,
+                label: "Suche im aktuellen Kartenausschnitt"
+            }));
         },
 
         /**
