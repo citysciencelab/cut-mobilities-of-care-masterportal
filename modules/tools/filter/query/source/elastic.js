@@ -214,9 +214,22 @@ define(function (require) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
             if (window != window.top) {
-                parent.postMessage({"featureIds": this.get("featureIds")}, "https://localhost:8080");
+                var features = [],
+                    feature,
+                    geometry,
+                    featuerProperties;
+
+                _.each(this.get("featureIds"), function (id) {
+                    feature = model.getLayerSource().getFeatureById(id);
+                    featureProperties = model.getLayerSource().getFeatureById(id).getProperties();
+                    featureProperties.extent = feature.getGeometry().getExtent();
+                    features.push(_.omit(featureProperties, ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                });
+                parent.postMessage({"features": JSON.stringify(features)}, "https://localhost:8080");
             }
-            Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+            else {
+                Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+            }
         },
         /**
          * determines the attributes and their values that are still selectable

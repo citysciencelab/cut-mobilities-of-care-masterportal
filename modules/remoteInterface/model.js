@@ -5,7 +5,7 @@ define(function (require) {
         RemoteInterface;
 
     RemoteInterface = Backbone.Model.extend({
-        initialize: function () {console.log(55);
+        initialize: function () {
             var channel = Radio.channel("RemoteInterface");
 
             channel.reply({
@@ -35,7 +35,7 @@ define(function (require) {
          * handles the postMessage events
          * @param  {MessageEvent} event
          */
-        receiveMessage: function (event) {console.log(event);
+        receiveMessage: function (event) {
             if (event.origin !== "https://localhost:8080") {
                 return;
             }
