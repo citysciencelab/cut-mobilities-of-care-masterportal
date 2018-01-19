@@ -32,7 +32,9 @@ define([
             if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.set("inUse", true);
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"), // Erst join dann als regulärer Ausdruck
-                    layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
+                    wfsLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
+                    elasticLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "Elastic"}),
+                    layers = _.union(wfsLayers, elasticLayers),
                     featureLayers = _.filter(layers, function (layer) {
                         return layer.get("layer").getSource().getFeatures().length > 0;
                     }),
@@ -74,25 +76,33 @@ define([
                         var layerStyle = layer.get("layer").getStyle(feature),
                             style,
                             imageSrc,
+                            coordinate,
                             additionalInfo = undefined;
 
-                            // layerStyle returns style
-                            if (typeof layerStyle === "object") {
-                                imageSrc = layerStyle[0].getImage().getSrc();
-                            }
-                            // layerStyle returns stylefunction
-                            else {
-                                style = layerStyle(feature);
-                                imageSrc = style[0].getImage().getSrc();
-                            }
+                        // layerStyle returns style
+                        if (typeof layerStyle === "object") {
+                            imageSrc = layerStyle[0].getImage().getSrc();
+                        }
+                        // layerStyle returns stylefunction
+                        else {
+                            style = layerStyle(feature);
+                            imageSrc = (layer.getTyp() === "WFS") ? style[0].getImage().getSrc() : "";
+                        }
 
-                            if (!_.isUndefined(layer.get("additionalInfoField"))) {
-                                additionalInfo = feature.getProperties()[layer.get("additionalInfoField")];
-                            }
+                        if (feature.getGeometry().getType() === "MultiPolygon") {
+                            coordinate = _.flatten(feature.getGeometry().getInteriorPoints().getCoordinates());
+                        }
+                        else {
+                            coordinate = feature.getGeometry().getCoordinates();
+                        }
+                        if (!_.isUndefined(layer.get("additionalInfoField"))) {
+                            additionalInfo = feature.getProperties()[layer.get("additionalInfoField")];
+                        }
+
                         featureArray.push({
                             name: feature.get(layer.attributes.searchField),
                             type: layer.get("name"),
-                            coordinate: feature.getGeometry().getCoordinates(),
+                            coordinate: coordinate,
                             imageSrc: imageSrc,
                             id: _.uniqueId(layer.get("name")),
                             additionalInfo: additionalInfo
