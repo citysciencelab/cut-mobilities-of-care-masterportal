@@ -19,20 +19,22 @@ define(function (require) {
                 "updateFromMqtt": this.updateFromMqtt
             }, this);
 
-            // start socket-connection
-            // this.createWebSocket();
-
-            // start mqtt-connection
+            // start liveUpdate
             this.createMqttConnection();
+            // this.createWebSocketConnection();
         },
 
         /**
-         * create ol.source.Vector as LayerSource
+         * creates ol.source.Vector as LayerSource
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
         },
 
+        /**
+         * creates the layer and trigger to updateData
+         * @return {[type]} [description]
+         */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
                 source: this.getLayerSource(),
@@ -81,7 +83,6 @@ define(function (require) {
             if (geometry === "POINT") {
                 features = this.drawPoints(sensorData, epsg);
             }
-
 
             this.set("loadend", "ready");
             Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), features);
@@ -133,7 +134,7 @@ define(function (require) {
         },
 
          /**
-         * get response from a given url
+         * get response from a given URL
          * @param  {String} requestURL - to request sensordata
          * @return {objects} response with sensorObjects
          */
@@ -159,7 +160,6 @@ define(function (require) {
 
             return response;
         },
-
 
         /**
          * draw points on the map
@@ -237,7 +237,6 @@ define(function (require) {
 
                 time = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("DD MMMM YYYY, HH:mm:ss");
             }
-
             return time;
         },
 
@@ -378,7 +377,7 @@ define(function (require) {
             // combine properties
             _.each(keys, function (key) {
                 var propList = _.pluck(thingsProperties, key),
-                    propString = this.combinePropertiesAsString(propList);
+                    propString = propList.join(" | ");
 
                 properties[key] = propString;
             }, this);
@@ -388,23 +387,6 @@ define(function (require) {
             obj.properties = properties;
 
             return obj;
-        },
-
-        /**
-         * combine properties with equal key, seperate by "|"
-         * @param  {array} properties - from things with same location
-         * @return {String} properties as String
-         */
-        combinePropertiesAsString: function (properties) {
-            var propString = properties[0];
-
-            _.each(properties, function (prop, index) {
-                if (index > 0) {
-                    propString = propString + " | " + prop;
-                }
-            });
-
-            return propString;
         },
 
         /**
@@ -431,13 +413,55 @@ define(function (require) {
         },
 
 // *************************************************************
-// ***** update via websockets                             *****
+// ***** live update via MQTT or websocket                 *****
 // *************************************************************
+        createMqttConnection: function () {
+            var dataStreamIds = this.getDataStreamIds(),
+                client = mqtt.connect({
+                    host: this.get("url").split("/")[2],
+                    port: 9876,
+                    path: "/mqtt",
+                    clientId: this.get("urlParameter").filter
+                });
+
+            _.each(dataStreamIds, function (id) {
+                 client.subscribe("v1.0/Datastreams(" + id + ")/Observations");
+            });
+
+            // Log messages from the server
+            client.on("message", function (topic, payload) {
+                var jsonData = JSON.parse(payload);
+
+                jsonData.dataStreamId = topic.split("(")[1].split(")")[0];
+                console.log(jsonData);
+                Radio.trigger("SensorThingsLayer", "updateFromMqtt", jsonData);
+            });
+        },
+
+        /**
+         * update the phenomenontime and states of the Feature
+         * this function is triggerd from MQTT
+         * @param  {json} thing
+         */
+        updateFromMqtt: function (thing) {
+            var dataStreamId = thing.dataStreamId,
+                features = this.getLayerSource().getFeatures(),
+                featureArray = this.getFeatureById(dataStreamId, features);
+
+            // Change properties only in Layer witch contain the Datastream
+            if (!_.isEmpty(featureArray)) {
+                var thingResult = String(this.convertScaling(thing.result)),
+                    thingPhenomenonTime = this.changeTimeZone(thing.phenomenonTime);
+
+                this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
+            }
+        },
+
         /**
          * create a connection to a websocketserver,
          * which fire new observation using MQTT
          */
-        createWebSocket: function () {
+        createWebSocketConnection: function () {
             var connection = new WebSocket("ws://127.0.0.1:8767");
 
             // The connection ist open
@@ -452,8 +476,9 @@ define(function (require) {
 
             // Log messages from the server
             connection.onmessage = function (ev) {
-                console.log("Server: " + ev.data);
-                jsonData = JSON.parse(ev.data);
+                console.log(ev.data);
+                var jsonData = JSON.parse(ev.data);
+
                 Radio.trigger("SensorThingsLayer", "updateFromWebSocket", jsonData);
             };
 
@@ -464,58 +489,80 @@ define(function (require) {
         },
 
         /**
-         * updates by event from Websocket
-         * @param  {array} things
+         * update the phenomenontime and states of the Feature
+         * this function is triggerd from Websocket
+         * @param  {json} thing
          */
-        updateFromWebSocket: function (things) {
-            var keys = Object.keys(things),
-                dataStreamId = keys[0],
+        updateFromWebSocket: function (thing) {
+            var dataStreamId = Object.keys(thing)[0],
                 features = this.getLayerSource().getFeatures(),
-                result = things[dataStreamId].result,
-                thisPhenomTime = things[dataStreamId].phenomenonTime,
-                thisFeatureArray = this.getFeatureById(dataStreamId, features),
-                isClustered = this.has("clusterDistance") ? true : false;
+                featureArray = this.getFeatureById(dataStreamId, features);
 
             // Change properties only in Layer witch contain the Datastream
-            if (!_.isEmpty(thisFeatureArray)) {
-                var thisPlugIndex = thisFeatureArray[0],
-                    thisFeature = thisFeatureArray[1],
-                    // change state and phenomenonTime
-                    datastreamStates = thisFeature.get("state"),
-                    datastreamPhenomenonTime = thisFeature.get("phenomenonTime"),
-                    scalingObject,
-                    svgPath;
+            if (!_.isEmpty(featureArray)) {
+                var thingResult = String(this.convertScaling(thing[dataStreamId].result)),
+                    thingPhenomenonTime = this.changeTimeZone(thing[dataStreamId].phenomenonTime);
 
-                // change time zone
-                thisPhenomenonTime = this.changeTimeZone(thisPhenomTime);
-
-                if (_.contains(datastreamStates, "|")) {
-                    datastreamStates = datastreamStates.split(" | ");
-                    datastreamPhenomTime = datastreamPhenomenonTime.split(" | ");
-
-                    datastreamStates[thisPlugIndex] = String(result);
-                    datastreamPhenomTime[thisPlugIndex] = thisPhenomenonTime;
-                }
-                else {
-                    datastreamStates = String(result);
-                    datastreamPhenomTime = thisPhenomenonTime;
-                }
-
-                datastreamStates = this.convertScaling(datastreamStates);
-
-                // update states in feature
-                if (_.isArray(datastreamStates)) {
-                    thisFeature.set("state", this.combinePropertiesAsString(datastreamStates));
-                    thisFeature.set("phenomenonTime", this.combinePropertiesAsString(datastreamPhenomTime));
-                }
-                else {
-                    thisFeature.set("state", datastreamStates);
-                    thisFeature.set("phenomenonTime", datastreamPhenomTime);
-                }
-
-                this.styling(isClustered, [thisFeature]);
-                console.log(thisFeature);
+                this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
             }
+        },
+
+        /**
+         * performs the live update
+         * @param  {Array} featureArray
+         * @param  {String} thingResult
+         * @param  {String} thingPhenomenonTime
+         */
+        liveUpdate: function (featureArray, thingResult, thingPhenomenonTime) {
+            var itemNumber = featureArray[0],
+                feature = featureArray[1],
+                datastreamStates = feature.get("state"),
+                datastreamPhenomenonTime = feature.get("phenomenonTime"),
+                isClustered = this.has("clusterDistance") ? true : false;
+
+            if (_.contains(datastreamStates, "|")) {
+                datastreamStates = datastreamStates.split(" | ");
+                datastreamPhenomenonTime = datastreamPhenomenonTime.split(" | ");
+
+                datastreamStates[itemNumber] = thingResult;
+                datastreamPhenomenonTime[itemNumber] = thingPhenomenonTime;
+
+                feature.set("state", datastreamStates.join(" | "));
+                feature.set("phenomenonTime", datastreamPhenomenonTime.join(" | "));
+            }
+            else {
+                feature.set("state", thingResult);
+                feature.set("phenomenonTime", thingPhenomenonTime);
+            }
+
+            this.styling(isClustered, [feature]);
+            console.log(feature);
+        },
+
+        /**
+         * get DataStreamIds
+         * @return {Array} dataStreamIdsArray - contains all ids from this layer
+         */
+        getDataStreamIds: function () {
+            var dataStreamIdsArray = [],
+                features = this.getLayerSource().getFeatures();
+
+            _.each(features, function (feature) {
+                var dataStreamIds = feature.get("dataStreamId");
+
+                if (_.contains(dataStreamIds, "|")) {
+                    dataStreamIds = dataStreamIds.split(" | ");
+
+                    _.each(dataStreamIds, function (id) {
+                        dataStreamIdsArray.push(id);
+                    });
+                }
+                else {
+                    dataStreamIdsArray.push(String(dataStreamIds));
+                }
+            });
+
+            return dataStreamIdsArray;
         },
 
         /**
@@ -550,133 +597,37 @@ define(function (require) {
             return featureArray;
         },
 
-// *************************************************************
-// ***** update via MQTT                                   *****
-// *************************************************************
-        createMqttConnection: function () {
-            var urlAdress = this.get("url"),
-                sensorIP = urlAdress.split("/")[2],
-                client = mqtt.connect({host: sensorIP, port : 9876, path : "/mqtt"}),
-                dataStreamIds = this.getDataStreamIds();
-
-            _.each(dataStreamIds, function(id) {
-                 client.subscribe("v1.0/Datastreams(" + id + ")/Observations");
-            });
-
-            client.on("message", function (topic, payload) {
-                jsonData = JSON.parse(payload);
-                jsonData.dataStreamId = topic.split("(")[1].split(")")[0];
-                console.log(jsonData);
-                Radio.trigger("SensorThingsLayer", "updateFromMqtt", jsonData);
-                client.end();
-            });
-        },
-
         /**
-         * get DataStreamIds
-         * @return {Array} dataStreamIdsArray
+         * getter for style
+         * @return {}
          */
-        getDataStreamIds: function() {
-            var dataStreamIdsArray = [],
-                features = this.getLayerSource().getFeatures();
-
-            _.each(features, function (feature) {
-                var dataStreamIds = feature.get("dataStreamId");
-
-                if (_.contains(dataStreamIds, "|")) {
-                    dataStreamIds = dataStreamIds.split(" | ");
-
-                    _.each(dataStreamIds, function (id) {
-                        dataStreamIdsArray.push(id);
-                    });
-                }
-                else {
-                    dataStreamIdsArray.push(String(dataStreamIds));
-                }
-            });
-
-            return dataStreamIdsArray;
-        },
-
-        /**
-         * updates by event from Websocket
-         * @param  {array} things
-         */
-        updateFromMqtt: function (thing) {
-            var dataStreamId = thing.dataStreamId,
-                features = this.getLayerSource().getFeatures(),
-                result = thing.result,
-                thisPhenomTime = thing.phenomenonTime,
-                thisFeatureArray = this.getFeatureById(dataStreamId, features),
-                isClustered = this.has("clusterDistance") ? true : false;
-
-            // Change properties only in Layer witch contain the Datastream
-            if (!_.isEmpty(thisFeatureArray)) {
-                var thisPlugIndex = thisFeatureArray[0],
-                    thisFeature = thisFeatureArray[1],
-                    // change state and phenomenonTime
-                    datastreamStates = thisFeature.get("state"),
-                    datastreamPhenomenonTime = thisFeature.get("phenomenonTime"),
-                    scalingObject,
-                    svgPath;
-
-                // change time zone
-                thisPhenomenonTime = this.changeTimeZone(thisPhenomTime);
-
-                if (_.contains(datastreamStates, "|")) {
-                    datastreamStates = datastreamStates.split(" | ");
-                    datastreamPhenomTime = datastreamPhenomenonTime.split(" | ");
-
-                    datastreamStates[thisPlugIndex] = String(result);
-                    datastreamPhenomTime[thisPlugIndex] = thisPhenomenonTime;
-                }
-                else {
-                    datastreamStates = String(result);
-                    datastreamPhenomTime = thisPhenomenonTime;
-                }
-
-                datastreamStates = this.convertScaling(datastreamStates);
-
-                // update states in feature
-                if (_.isArray(datastreamStates)) {
-                    thisFeature.set("state", this.combinePropertiesAsString(datastreamStates));
-                    thisFeature.set("phenomenonTime", this.combinePropertiesAsString(datastreamPhenomTime));
-                }
-                else {
-                    thisFeature.set("state", datastreamStates);
-                    thisFeature.set("phenomenonTime", datastreamPhenomTime);
-                }
-
-                this.styling(isClustered, [thisFeature]);
-                console.log(thisFeature);
-            }
-        },
-
-        // getter for style
         getStyle: function () {
             return this.get("style");
         },
 
-        // setter for style
+        /**
+         * setter for style
+         * @param {[type]} value
+         */
         setStyle: function (value) {
             this.set("style", value);
         },
 
         /**
-         * [setClusterLayerSource description]
-         * @param {[type]} value [description]
+         * setClusterLayerSource
+         * @param {ol.source.Cluster} value
          */
         setClusterLayerSource: function (value) {
             this.set("clusterLayerSource", value);
         },
 
         /**
-         * [getClusterLayerSource description]
-         * @return {[type]}       [description]
+         * getClusterLayerSource
+         * @return {ol.source.Cluster}
          */
         getClusterLayerSource: function () {
             return this.get("clusterLayerSource");
-        },
+        }
     });
 
     return SensorThingsLayer;

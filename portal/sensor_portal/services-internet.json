@@ -11,6 +11,7 @@
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
       },
       "geometry" : "POINT",
+      "utc" : "+1",
       "conversionFactor" : 0.001,
       "scalingDecimal" : 3,
       "scalingUnit" : "°C",
