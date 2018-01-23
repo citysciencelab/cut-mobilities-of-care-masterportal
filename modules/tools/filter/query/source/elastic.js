@@ -225,7 +225,7 @@ define(function (require) {
                     featureProperties.extent = feature.getGeometry().getExtent();
                     features.push(_.omit(featureProperties, ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
                 });
-                parent.postMessage({"features": JSON.stringify(features)}, "https://localhost:8080");
+                parent.postMessage({"features": JSON.stringify(features)}, "http://localhost:8080");
             }
             else {
                 Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));

@@ -36,7 +36,7 @@ define(function (require) {
          * @param  {MessageEvent} event
          */
         receiveMessage: function (event) {
-            if (event.origin !== "https://localhost:8080") {
+            if (event.origin !== "http://localhost:8080") {
                 return;
             }
             if (event.data.hasOwnProperty("showPositionByFeatureId")) {
