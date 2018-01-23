@@ -67,7 +67,7 @@ define(function (require) {
 
             if (this.model.get("isLayerVisible")) {
                 _.each(this.model.get("snippetCollection").models, function (snippet) {
-                    if (snippet.get("type") === "string") {
+                    if (snippet.get("type") === "string" || snippet.get("type") === "text") {
                         view = new SnippetDropdownView({model: snippet});
                     }
                     else if (snippet.get("type") === "boolean") {

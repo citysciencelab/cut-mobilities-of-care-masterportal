@@ -87,7 +87,7 @@ define(function (require) {
 
         addSnippet: function (featureAttribute) {
             featureAttribute.values.sort();
-            if (featureAttribute.type === "string") {
+            if (featureAttribute.type === "string" || featureAttribute.type === "text") {
                 featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
