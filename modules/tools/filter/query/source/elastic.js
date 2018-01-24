@@ -14,14 +14,14 @@ define(function (require) {
         buildQueryDatastructure: function () {
             var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
                 url,
-                mappingName;
+                typeName;
 
             if (this.get("searchInMapExtent") === true) {
                 this.addSearchInMapExtentSnippet();
             }
             if (!_.isUndefined(layerObject)) {
-                mappingName = layerObject.get("mappingName");
-                url = Radio.request("Util", "getProxyURL", layerObject.get("indexUrl")) + "_mapping/" + mappingName;
+                typeName = layerObject.get("typeName");
+                url = Radio.request("Util", "getProxyURL", layerObject.get("indexUrl")) + "_mapping/" + typeName;
                 this.requestMetadata(url, this.parseResponse);
             }
         },
@@ -44,8 +44,8 @@ define(function (require) {
          */
         parseResponse: function (response) {
             var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
-                mappingName = layerObject.get("mappingName");
-                elements = response.itgbm_new.mappings[mappingName].properties,
+                typeName = layerObject.get("typeName");
+                elements = response.itgbm_new.mappings[typeName].properties,
                 featureAttributesMap = [];
 
             _.each(elements, function (value, key) {
