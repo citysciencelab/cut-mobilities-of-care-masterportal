@@ -112,6 +112,17 @@ define(function (require) {
             }, this);
         },
 
+        showAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures(),
+                style;
+
+            collection.forEach(function (feature) {
+                style = this.getStyleAsFunction(this.get("style"));
+
+                feature.setStyle(style(feature));
+            }, this);
+        },
+
         getStyleAsFunction: function (style) {
             if (_.isFunction(style)) {
                 return style;

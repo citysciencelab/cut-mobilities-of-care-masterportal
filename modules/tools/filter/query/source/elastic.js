@@ -43,7 +43,9 @@ define(function (require) {
          * @param  {JSON} response
          */
         parseResponse: function (response) {
-            var elements = response.itgbm_new.mappings.erhebung_2016_2017_fs.properties,
+            var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
+                mappingName = layerObject.get("mappingName");
+                elements = response.itgbm_new.mappings[mappingName].properties,
                 featureAttributesMap = [];
 
             _.each(elements, function (value, key) {
