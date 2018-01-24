@@ -244,7 +244,26 @@ define(function (require) {
          * @return {[type]} [description]
          */
         zoomToSelectedFeatures: function () {
-            Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
+
+            // iframe
+            if (window != window.top) {
+                var features = [],
+                    feature,
+                    geometry,
+                    featuerProperties;
+
+                _.each(this.get("featureIds"), function (id) {
+                    feature = model.getLayerSource().getFeatureById(id);
+                    featureProperties = model.getLayerSource().getFeatureById(id).getProperties();
+                    featureProperties.extent = feature.getGeometry().getExtent();
+                    features.push(_.omit(featureProperties, ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                });
+                parent.postMessage({"features": JSON.stringify(features)}, "http://localhost:8080");
+            }
+            else {
+                Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+            }
         },
         /**
          * determines the attributes and their values that are still selectable
