@@ -1,15 +1,13 @@
-define([
-    "backbone",
-    "backbone.radio"
-    ], function (Backbone, Radio) {
-    "use strict";
-    return Backbone.Model.extend({
+define(function (require) {
+    var Radio = require("backbone.radio"),
+        VisibleWFSModel;
+
+    VisibleWFSModel = Backbone.Model.extend({
         /**
         *
         */
         defaults: {
             inUse: false,
-            features: [],
             minChars: 3
         },
         /**
@@ -32,18 +30,14 @@ define([
             if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.set("inUse", true);
                 var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"), // Erst join dann als regulärer Ausdruck
-                    wfsLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
-                    elasticLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "Elastic"}),
-                    layers = _.union(wfsLayers, elasticLayers),
-                    featureLayers = _.filter(layers, function (layer) {
-                        return layer.get("layer").getSource().getFeatures().length > 0;
+                    wfsModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
+                    elasticModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "Elastic"}),
+                    filteredModels = _.filter(_.union(wfsModels, elasticModels), function (model) {
+                        return model.has("searchField") === true && model.get("searchField") != "";
                     }),
-                    filterLayers = _.filter(featureLayers, function (layer) {
-                        return layer.get("searchField") && layer.get("searchField") !== "" && layer.get("searchField") !== undefined;
-                    });
+                    features = this.getFeaturesForSearch(filteredModels);
 
-                this.setFeaturesForSearch(filterLayers);
-                this.searchInFeatures(searchStringRegExp);
+                this.searchInFeatures(searchStringRegExp, features);
                 Radio.trigger("Searchbar", "createRecommendedList");
                 this.set("inUse", false);
             }
@@ -51,8 +45,8 @@ define([
         /**
         *
         */
-        searchInFeatures: function (searchStringRegExp) {
-            _.each(this.get("features"), function (feature) {
+        searchInFeatures: function (searchStringRegExp, features) {
+            _.each(features, function (feature) {
                 var featureName = feature.name.replace(/ /g, "");
 
                 // Prüft ob der Suchstring ein Teilstring vom Feature ist
@@ -61,56 +55,97 @@ define([
                 }
             }, this);
         },
+
         /**
-        *
-        */
-        setFeaturesForSearch: function (layermodels) {
-            this.set("features", []);
+         * gets an array of feature objects for the search
+         * @param  {Backbone.Models[]} models
+         * @return {object[]} featureArray
+         */
+        getFeaturesForSearch: function (models) {
             var featureArray = [];
 
-            _.each(layermodels, function (layer) {
-                if (_.has(layer.attributes, "searchField") === true && layer.get("searchField") !== "" && layer.get("searchField") !== undefined) {
-                    var features = layer.get("layer").getSource().getFeatures();
+            _.each(models, function (model) {
+                var features = model.get("layer").getSource().getFeatures();
 
-                    _.each(features, function (feature) {
-                        var layerStyle = layer.get("layer").getStyle(feature),
-                            style,
-                            imageSrc,
-                            coordinate,
-                            additionalInfo = undefined;
+                _.each(features, function (feature) {
+                    if (_.isArray(model.get("searchField"))) {
+                        _.each(model.get("searchField"), function (field) {
+                            featureArray.push(this.getFeatureObject(field, feature, model));
+                        }, this)
+                    }
+                    else {
+                        featureArray.push(this.getFeatureObject(model.get("searchField"), feature, model));
+                    }
+                }, this);
+            }, this);
 
-                        // layerStyle returns style
-                        if (typeof layerStyle === "object") {
-                            imageSrc = layerStyle[0].getImage().getSrc();
-                        }
-                        // layerStyle returns stylefunction
-                        else {
-                            style = layerStyle(feature);
-                            imageSrc = (layer.getTyp() === "WFS") ? style[0].getImage().getSrc() : "";
-                        }
+            return featureArray;
+        },
 
-                        if (feature.getGeometry().getType() === "MultiPolygon") {
-                            coordinate = _.flatten(feature.getGeometry().getInteriorPoints().getCoordinates());
-                        }
-                        else {
-                            coordinate = feature.getGeometry().getCoordinates();
-                        }
-                        if (!_.isUndefined(layer.get("additionalInfoField"))) {
-                            additionalInfo = feature.getProperties()[layer.get("additionalInfoField")];
-                        }
+        /**
+         * gets a new feature object
+         * @param  {string} searchField
+         * @param  {ol.Feature} feature
+         * @param  {Backbone.Model} model
+         * @return {object}
+         */
+        getFeatureObject: function (searchField, feature, model) {
+            return {
+                name: feature.get(searchField),
+                type: model.get("name"),
+                coordinate: this.getCentroidPoint(feature.getGeometry()),
+                imageSrc: this.getImageSource(feature, model),
+                id: _.uniqueId(model.get("name")),
+                additionalInfo: this.getAdditionalInfo(model, feature)
+            }
+        },
 
-                        featureArray.push({
-                            name: feature.get(layer.attributes.searchField),
-                            type: layer.get("name"),
-                            coordinate: coordinate,
-                            imageSrc: imageSrc,
-                            id: _.uniqueId(layer.get("name")),
-                            additionalInfo: additionalInfo
-                        });
-                    });
-                }
-            });
-            this.set("features", featureArray);
+        /**
+         * gets centroid point for a openlayers geometry
+         * @param  {ol.geom.Geometry} geometry
+         * @return {ol.Coordinate}
+         */
+        getCentroidPoint: function (geometry) {
+            if (geometry.getType() === "MultiPolygon") {
+                return _.flatten(geometry.getInteriorPoints().getCoordinates());
+            }
+            else {
+                return geometry.getCoordinates();
+            }
+        },
+
+        /**
+         * returns an image source of a feature style
+         * @param  {ol.Feature} feature
+         * @param  {Backbone.Model} model
+         * @return {string}
+         */
+        getImageSource: function (feature, model) {
+            var layerStyle = model.get("layer").getStyle(feature),
+                layerTyp = model.getTyp();
+
+            // layerStyle returns style
+            if (typeof layerStyle === "object") {
+                return layerStyle[0].getImage().getSrc();
+            }
+            // layerStyle returns stylefunction
+            else {
+                var style = layerStyle(feature);
+
+                return (layerTyp === "WFS") ? style.getImage().getSrc() : "";
+            }
+        },
+
+        getAdditionalInfo: function (model, feature) {
+            var additionalInfo = undefined;
+
+            if (!_.isUndefined(model.get("additionalInfoField"))) {
+                additionalInfo = feature.getProperties()[model.get("additionalInfoField")];
+            }
+
+            return additionalInfo
         }
     });
+
+    return VisibleWFSModel;
 });
