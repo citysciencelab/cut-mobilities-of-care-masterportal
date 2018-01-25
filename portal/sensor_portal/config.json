@@ -173,16 +173,37 @@
           "id": "999999",
           "styleId": "999999",
           "visibility": false,
-          "mouseHoverField": ["chargings_station_nr", "location_name", "state"],
-          "searchField": "name",
-          "clusterDistance": 50
+          "clusterDistance": 60
+        },
+        {
+          "id": "999993",
+          "styleId": "999999",
+          "visibility": false
         },
         {
           "id": "999998",
           "styleId": "999998",
-          "visibility": false,
-          "mouseHoverField": ["state"],
-          "searchField": "name"
+          "visibility": false
+        },
+        {
+          "id": "999997",
+          "styleId": "999997",
+          "visibility": false
+        },
+        {
+          "id": "999996",
+          "styleId": "999996",
+          "visibility": false
+        },
+        {
+          "id": "999995",
+          "styleId": "999995",
+          "visibility": false
+        },
+        {
+          "id": "999994",
+          "styleId": "999997",
+          "visibility": false
         },
         {
           "id": "1711",

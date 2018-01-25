@@ -1,5 +1,84 @@
 [
    {
+      "id" : "999994",
+      "name" : "Live - SenseBox: Beleuchtungsstärke",
+      "url" : "https://geodienste.hamburg.de/SensorThingsService",
+      "typ" : "Sensor",
+      "subTyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "expand" : ["Locations", "Datastreams($filter=startswith(Datastreams/name,'Beleuchtungsstärkemessung'))", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
+      },
+      "epsg": "EPSG:25832",
+      "utc" : "+1",
+      "scalingUnit" : "lx",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzer Ladezeitpunkt",
+         "state" : "Zustand"
+      }
+   },
+   {
+      "id" : "999995",
+      "name" : "Live - SenseBox: Lautstärke",
+      "url" : "https://geodienste.hamburg.de/SensorThingsService",
+      "typ" : "Sensor",
+      "subTyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "expand" : ["Locations", "Datastreams($filter=startswith(Datastreams/name,'Lautstärkemessung'))", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
+      },
+      "epsg": "EPSG:25832",
+      "utc" : "+1",
+      "scalingDecimal" : 2,
+      "scalingUnit" : "db",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzer Ladezeitpunkt",
+         "state" : "Zustand"
+      }
+   },
+   {
+      "id" : "999996",
+      "name" : "Live - SenseBox: Temperatur",
+      "url" : "https://geodienste.hamburg.de/SensorThingsService",
+      "typ" : "Sensor",
+      "subTyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "expand" : ["Locations", "Datastreams($filter=startswith(Datastreams/name,'Temperaturmessung'))", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
+      },
+      "epsg": "EPSG:25832",
+      "utc" : "+1",
+      "scalingDecimal" : 2,
+      "scalingUnit" : "°C",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzer Ladezeitpunkt",
+         "state" : "Zustand"
+      }
+   },
+   {
+      "id" : "999997",
+      "name" : "Live - SenseBox: Luftfeuchte",
+      "url" : "https://geodienste.hamburg.de/SensorThingsService",
+      "typ" : "Sensor",
+      "subTyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "expand" : ["Locations", "Datastreams($filter=startswith(Datastreams/name,'Luftfeuchtemessung'))", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
+      },
+      "epsg": "EPSG:25832",
+      "utc" : "+1",
+      "scalingDecimal" : 2,
+      "scalingUnit" : "%",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzer Ladezeitpunkt",
+         "state" : "Zustand"
+      }
+   },
+   {
       "id" : "999998",
       "name" : "Live - Temperatur",
       "url" : "https://51.5.242.162/itsLGVhackathon",
@@ -10,10 +89,9 @@
          "filter" : "startswith(Datastreams/name,'Air')",
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
       },
-      "geometry" : "POINT",
       "utc" : "+1",
-      "conversionFactor" : 0.001,
-      "scalingDecimal" : 3,
+      "conversionFactor" : 0.01,
+      "scalingDecimal" : 2,
       "scalingUnit" : "°C",
       "gfiTheme" : "default",
       "gfiAttributes" : {
@@ -33,7 +111,35 @@
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
       },
-      "geometry" : "POINT",
+      "epsg": "EPSG:4326",
+      "utc" : "+1",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "chargings_station_nr" : "StandortID",
+         "sms_no_charging_station" : "Ladepunkt",
+         "phenomenonTime" : "Letzer Ladezeitpunkt",
+         "location_name" : "Adresse",
+         "postal_code" : "PLZ",
+         "type" : "Typ",
+         "plug" : "Stecker",
+         "status" : "Status",
+         "state" : "Zustand",
+         "authmethod1" : "Authentifizierungsmethode 1",
+         "authmethod2" : "Authentifizierungsmethode 2"
+      }
+   },
+   {
+      "id" : "999993",
+      "name" : "Live - Elektro Ladestandorte (Ohne Cluster)",
+      "url" : "https://51.5.242.162/itsLGVhackathon",
+      "typ" : "Sensor",
+      "subTyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "filter" : "startswith(Things/name,'Charging')",
+         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
+      },
+      "epsg": "EPSG:4326",
       "utc" : "+1",
       "gfiTheme" : "default",
       "gfiAttributes" : {

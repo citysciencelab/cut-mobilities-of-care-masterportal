@@ -15,11 +15,10 @@ define(function (require) {
             var channel = Radio.channel("SensorThingsLayer");
 
             channel.on({
-                "updateFromWebSocket": this.updateFromWebSocket,
-                "updateFromMqtt": this.updateFromMqtt
+                "updateFromWebSocket": this.updateFromWebSocket
             }, this);
 
-            // start liveUpdate
+            // start connection to liveUpdate
             this.createMqttConnection();
             // this.createWebSocketConnection();
         },
@@ -42,7 +41,6 @@ define(function (require) {
                 name: this.get("name"),
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
-                routable: this.get("routable"),
                 gfiTheme: this.get("gfiTheme"),
                 id: this.getId()
             }));
@@ -66,28 +64,27 @@ define(function (require) {
          */
         updateData: function () {
             var sensorData,
-                epsg,
+                epsg = this.get("epsg"),
                 features,
                 subtyp = this.get("subTyp"),
-                geometry = this.get("geometry").toUpperCase(),
                 isClustered = this.has("clusterDistance") ? true : false;
+
+            if (_.isUndefined(epsg)) {
+                epsg = "EPSG:4326";
+            }
 
             if (this.checkRequiredParameter()) {
                 // check for subtypes
                 if (subtyp === "SensorThings") {
                     sensorData = this.loadSensorThings();
-                    epsg = "EPSG:4326";
                 }
             }
 
-            if (geometry === "POINT") {
-                features = this.drawPoints(sensorData, epsg);
-            }
+            features = this.drawPoints(sensorData, epsg);
 
             this.set("loadend", "ready");
             Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), features);
-            // this.styling(isClustered);
-            this.styling(isClustered, features);
+            this.styling(isClustered);
             this.getLayer().setStyle(this.getStyle());
         },
 
@@ -194,13 +191,10 @@ define(function (require) {
          * create style, function triggers to style_v2.json
          * @param  {boolean} isClustered
          */
-        styling: function (isClustered, features) {
+        styling: function (isClustered) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
             if (!_.isUndefined(stylelistmodel)) {
-                // _.each(features, function (feature) {
-                //     feature.setStyle(stylelistmodel.createStyle(feature, isClustered));
-                // }, this);
                 this.setStyle(function (feature) {
                     return stylelistmodel.createStyle(feature, isClustered);
                 });
@@ -358,6 +352,9 @@ define(function (require) {
             _.each(thingsArray, function (thing) {
                 var thingsObservationsLength = thing.Datastreams[0].Observations.length;
 
+                if (!_.has(thing, "properties")) {
+                    thing.properties = {};
+                }
                 // get newest observation if existing
                 if (thingsObservationsLength > 0) {
                     thing.properties.state = String(thing.Datastreams[0].Observations[0].result);
@@ -403,6 +400,7 @@ define(function (require) {
                 state = state * conversionFactor;
             }
             if (!_.isUndefined(scalingDecimal)) {
+                state = parseFloat(state);
                 state = state.toFixed(scalingDecimal);
             }
             if (!_.isUndefined(scalingUnit)) {
@@ -415,17 +413,29 @@ define(function (require) {
 // *************************************************************
 // ***** live update via MQTT or websocket                 *****
 // *************************************************************
+    /**
+     * create connection to a given MQTT-Broker
+     * this must be passes this as a context to call the updateFromMqtt function
+     */
         createMqttConnection: function () {
+            //****************************************
+            if (this.get("url").split("/")[2] == "geodienste.hamburg.de") {
+                return;
+            }
+            //****************************************
+
             var dataStreamIds = this.getDataStreamIds(),
                 client = mqtt.connect({
                     host: this.get("url").split("/")[2],
                     port: 9876,
                     path: "/mqtt",
-                    clientId: this.get("urlParameter").filter
+                    context: this
                 });
 
-            _.each(dataStreamIds, function (id) {
-                 client.subscribe("v1.0/Datastreams(" + id + ")/Observations");
+            client.on("connect", function () {
+                _.each(dataStreamIds, function (id) {
+                     client.subscribe("v1.0/Datastreams(" + id + ")/Observations");
+                });
             });
 
             // Log messages from the server
@@ -434,7 +444,7 @@ define(function (require) {
 
                 jsonData.dataStreamId = topic.split("(")[1].split(")")[0];
                 console.log(jsonData);
-                Radio.trigger("SensorThingsLayer", "updateFromMqtt", jsonData);
+                this.options.context.updateFromMqtt(jsonData);
             });
         },
 
@@ -446,15 +456,11 @@ define(function (require) {
         updateFromMqtt: function (thing) {
             var dataStreamId = thing.dataStreamId,
                 features = this.getLayerSource().getFeatures(),
-                featureArray = this.getFeatureById(dataStreamId, features);
+                featureArray = this.getFeatureById(dataStreamId, features),
+                thingResult = String(this.convertScaling(thing.result)),
+                thingPhenomenonTime = this.changeTimeZone(thing.phenomenonTime);
 
-            // Change properties only in Layer witch contain the Datastream
-            if (!_.isEmpty(featureArray)) {
-                var thingResult = String(this.convertScaling(thing.result)),
-                    thingPhenomenonTime = this.changeTimeZone(thing.phenomenonTime);
-
-                this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
-            }
+            this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
         },
 
         /**
@@ -462,7 +468,8 @@ define(function (require) {
          * which fire new observation using MQTT
          */
         createWebSocketConnection: function () {
-            var connection = new WebSocket("ws://127.0.0.1:8767");
+            // var connection = new WebSocket("ws://127.0.0.1:8767");
+            var connection = new WebSocket("wss://service32.eggits.net:6143/arcgis/ws/services/iss-Location-Broadcast/StreamServer/subscribe");
 
             // The connection ist open
             connection.onopen = function () {
@@ -535,7 +542,7 @@ define(function (require) {
                 feature.set("phenomenonTime", thingPhenomenonTime);
             }
 
-            this.styling(isClustered, [feature]);
+            // this.styling(isClustered);
             console.log(feature);
         },
 
@@ -581,7 +588,6 @@ define(function (require) {
                     datastreamIds = datastreamIds.split(" | ");
 
                     _.each(datastreamIds, function (thisId, index) {
-                        // console.log(thisId);
                         if (parseInt(id, 10) === parseInt(thisId, 10)) {
                             featureArray.push(index);
                             featureArray.push(feature);

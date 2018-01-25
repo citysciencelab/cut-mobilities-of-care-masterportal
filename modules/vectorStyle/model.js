@@ -68,16 +68,17 @@ define(function (require) {
             // Für scalingShape CIRCLESEGMENTS
             circleSegmentsRadius: 10,
             circleSegmentsStrokeWidth: 4,
-            circleSegmentsBackgroundColor: [255, 255, 255, 1],
-            circleSegmentsStrokeColor: [175, 175, 175, 1],
+            circleSegmentsBackgroundColor: [255, 255, 255, 0],
+            scalingValueDefaultColor: [0, 0, 0, 1],
+            circleSegmentsGap: 10,
             // Für scalingShape CIRCLE_BAR
             circleBarScalingFactor: 1,
             circleBarRadius: 6,
             circleBarLineStroke: 5,
-            circleBarColor: [0, 0, 0, 1],
-            circleBarFontSize: 0,
-            circleBarFontFamily: "Arial Black",
-            circleBarFontColor: [0, 0, 0, 1]
+            circleBarCircleFillColor: [0, 0, 0, 1],
+            circleBarCircleStrokeColor: [0, 0, 0, 1],
+            circleBarCircleStrokeWidth: 1,
+            circleBarLineStrokeColor: [0, 0, 0, 1]
         },
         initialize: function () {
             this.set("imagePath", Radio.request("Util", "getPath", Config.wfsImgPath));
@@ -109,9 +110,7 @@ define(function (require) {
 
             // after style is derived, createTextStyle
             if (_.isArray(style)) {
-                _.each(style, function (s) {
-                    s.setText(this.createTextStyle(feature, labelField, isClustered));
-                }, this);
+                style[0].setText(this.createTextStyle(feature, labelField, isClustered));
             }
             else {
                 style.setText(this.createTextStyle(feature, labelField, isClustered));
@@ -249,6 +248,9 @@ define(function (require) {
             else if (clusterClass === "CIRCLE") {
                 clusterStyle = this.createCircleClusterStyle();
             }
+            else if (clusterClass === "ADVANCED") {
+                clusterStyle = this.createAdvancedClusterStyle();
+            }
             return clusterStyle;
         },
 
@@ -296,6 +298,19 @@ define(function (require) {
                 });
 
                 return clusterStyle;
+        },
+
+        createAdvancedClusterStyle: function () {
+            var clusterSubClass = this.get("clusterSubClass"),
+                clusterStyle;
+
+            if (clusterSubClass === "NOMINAL") {
+                clusterStyle = this.createAdvancedNominalClusterStyle();
+            }
+        },
+
+        createAdvancedNominalClusterStyle: function () {
+
         },
 
         /*
@@ -447,6 +462,7 @@ define(function (require) {
 
             if (isClustered && feature.get("features").length > 1) {
                 var imagestyle = this.createClusterStyle();
+
                 style = new ol.style.Style({
                     image: imagestyle
                 });
@@ -454,7 +470,7 @@ define(function (require) {
             else {
 
                 // parse from array
-                if(_.isArray(feature.get("features"))) {
+                if (_.isArray(feature.get("features"))) {
                     feature = feature.get("features")[0];
                 }
 
@@ -682,14 +698,15 @@ define(function (require) {
             var size = 10,
                 circleSegmentsRadius = parseInt(this.get("circleSegmentsRadius"), 10),
                 circleSegmentsStrokeWidth = parseInt(this.get("circleSegmentsStrokeWidth"), 10),
+                circleSegmentsFillOpacity = _.last(this.get("circleSegmentsBackgroundColor")),
                 circleSegmentsBackgroundColor = this.returnColor(this.get("circleSegmentsBackgroundColor"), "hex"),
-                circleSegmentsStrokeColor = this.returnColor(this.get("circleSegmentsStrokeColor"), "hex"),
-                scalingAttributes = this.get("scalingAttributes"),
+                scalingValueDefaultColor = this.returnColor(this.get("scalingValueDefaultColor"), "hex"),
+                scalingValues = this.get("scalingValues"),
                 scalingObject = this.fillScalingAttributes(feature),
-                n = _.reduce(_.values(scalingObject), function (memo, num) {
+                totalSegments = _.reduce(_.values(scalingObject), function (memo, num) {
                         return memo + num;
                     }, 0),
-                degreeSegment = 360 / n,
+                degreeSegment = 360 / totalSegments,
                 startAngelDegree = 0,
                 endAngelDegree = degreeSegment,
                 svg;
@@ -699,14 +716,15 @@ define(function (require) {
                 size = size + ((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2);
             }
 
-            svg = this.createSvgNominalCircleSegments(size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth);
+            svg = this.createSvgNominalCircleSegments(size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity);
 
             _.each(scalingObject, function (value, key) {
-                if (!_.isUndefined(scalingAttributes) && (key !== "empty")) {
-                    strokeColor = this.returnColor(scalingAttributes[key], "hex");
+
+                if (!_.isUndefined(scalingValues) && (key !== "empty")) {
+                    strokeColor = this.returnColor(scalingValues[key], "hex");
                 }
                 else {
-                    strokeColor = circleSegmentsStrokeColor;
+                    strokeColor = scalingValueDefaultColor;
                 }
 
                 for (var i = 0; i < value; i++) {
@@ -732,7 +750,7 @@ define(function (require) {
          */
         fillScalingAttributes: function (feature) {
             var scalingObject = this.getScalingAttributesAsObject(),
-                states = feature.get("state");
+                states = feature.get(this.get("scalingAttribute"));
 
             if (_.contains(states, "|")) {
                 states = states.split(" | ");
@@ -742,7 +760,7 @@ define(function (require) {
             }
 
             _.each(states, function (state) {
-                if (state !== "undefined" && state && _.contains(_.keys(scalingObject), state)) {
+                if (_.contains(_.keys(scalingObject), state)) {
                     scalingObject[state] = scalingObject[state] + 1;
                 }
                 else {
@@ -755,14 +773,15 @@ define(function (require) {
 
         /**
          * convert scalingAttributes to object
+         * to fo object
          * @return {object} scalingAttribute with value 0
          */
         getScalingAttributesAsObject: function () {
             var obj = {},
-                scalingAttributes = this.get("scalingAttributes");
+                scalingValues = this.get("scalingValues");
 
-            if (!_.isUndefined(scalingAttributes)) {
-                _.each(scalingAttributes, function (key, value) {
+            if (!_.isUndefined(scalingValues)) {
+                _.each(scalingValues, function (key, value) {
                     obj[value] = 0;
                 });
             }
@@ -778,9 +797,10 @@ define(function (require) {
          * @param  {number} circleSegmentsRadius
          * @param  {String} circleSegmentsBackgroundColor
          * @param  {number} circleSegmentsStrokeWidth
+         * @param  {String} circleSegmentsFillOpacity
          * @return {String} svg
          */
-        createSvgNominalCircleSegments: function (size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth) {
+        createSvgNominalCircleSegments: function (size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity) {
             var svg = "<svg width='" + size + "'" +
                     " height='" + size + "'" +
                     " xmlns='http://www.w3.org/2000/svg'" +
@@ -790,7 +810,8 @@ define(function (require) {
                     " r='" + circleSegmentsRadius + "'" +
                     " stroke='" + circleSegmentsBackgroundColor + "'" +
                     " stroke-width='" + circleSegmentsStrokeWidth + "'" +
-                    " fill='" + circleSegmentsBackgroundColor + "'/>";
+                    " fill='" + circleSegmentsBackgroundColor + "'" +
+                    " fill-opacity='" + circleSegmentsFillOpacity + "'/>";
 
             return svg;
         },
@@ -824,17 +845,17 @@ define(function (require) {
         calculateCircleSegment: function (startAngelDegree, endAngelDegree, circleRadius, size) {
             var rad = Math.PI / 180,
                 xy = size / 2,
-                steps = 10,
+                gap = this.get("circleSegmentsGap"),
                 isCircle = (startAngelDegree === 0 && endAngelDegree === 360) ? true : false;
 
             if (isCircle) {
                 endAngelDegree = endAngelDegree / 2;
-                steps = 0;
+                gap = 0;
             }
 
             // convert angle from degree to radiant
-            startAngleRad = startAngelDegree * rad;
-            endAngleRad = (endAngelDegree - steps) * rad;
+            startAngleRad = (startAngelDegree + gap / 2) * rad;
+            endAngleRad = (endAngelDegree - gap / 2) * rad;
 
             xStart = xy + (Math.cos(startAngleRad) * circleRadius);
             yStart = xy - (Math.sin(startAngleRad) * circleRadius);
@@ -870,18 +891,16 @@ define(function (require) {
                 circleBarScalingFactor = parseInt(this.get("circleBarScalingFactor"), 10),
                 circleBarRadius = parseInt(this.get("circleBarRadius"), 10),
                 circleBarLineStroke = parseInt(this.get("circleBarLineStroke"), 10),
-                circleBarColor = this.returnColor(this.get("circleBarColor"), "hex"),
-                circleBarFontSize = parseInt(this.get("circleBarFontSize"), 10),
-                circleBarFontFamily = this.get("circleBarFontFamily"),
-                circleBarFontColor = this.returnColor(this.get("circleBarFontColor"), "hex"),
-                size = this.calculateSizeIntervalCircleBar(size, stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarFontSize),
+                circleBarCircleFillColor = this.returnColor(this.get("circleBarCircleFillColor"), "hex"),
+                circleBarCircleStrokeColor = this.returnColor(this.get("circleBarCircleStrokeColor"), "hex"),
+                circleBarCircleStrokeWidth = this.get("circleBarCircleStrokeWidth"),
+                circleBarLineStrokeColor = this.returnColor(this.get("circleBarLineStrokeColor"), "hex"),
+                size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke),
                 barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor),
                 svg;
 
             // create svg
-            svg = this.createSvgIntervalCircleBar(size, barLength, circleBarColor, circleBarLineStroke, circleBarRadius);
-            svg = this.createTextSvgIntervalCircleBar(svg, size, circleBarRadius, state, circleBarFontSize, circleBarFontFamily, circleBarFontColor);
-            svg = svg + "</svg>";
+            svg = this.createSvgIntervalCircleBar(size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius);
 
             return svg;
         },
@@ -891,17 +910,13 @@ define(function (require) {
          * @param  {number} stateValue
          * @param  {number} circleBarScalingFactor
          * @param  {number} circleBarLineStroke
-         * @param  {number} circleBarFontSize
          * @return {number} size - size of the section to be drawn
          */
-        calculateSizeIntervalCircleBar: function (stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarFontSize) {
+        calculateSizeIntervalCircleBar: function (stateValue, circleBarScalingFactor, circleBarLineStroke) {
             var size = 200;
 
             if (((stateValue * circleBarScalingFactor) + circleBarLineStroke) >= size) {
                 size = size + ((stateValue * circleBarScalingFactor) + circleBarLineStroke);
-            }
-            if (circleBarFontSize > 0) {
-                size = size + circleBarFontSize * 5;
             }
 
             return size;
@@ -932,53 +947,38 @@ define(function (require) {
          * create SVG for intervalscaled circle bars
          * @param  {number} size - size of the section to be drawn
          * @param  {number} barLength
-         * @param  {String} circleBarColor
+         * @param  {String} circleBarCircleFillColor
+         * @param  {String} circleBarCircleStrokeColor
+         * @param  {number} circleBarCircleStrokeWidth
+         * @param  {String} circleBarLineStrokeColor
          * @param  {number} circleBarLineStroke
          * @param  {number} circleBarRadius
          * @return {String} svg
          */
-        createSvgIntervalCircleBar: function (size, barLength, circleBarColor, circleBarLineStroke, circleBarRadius) {
+        createSvgIntervalCircleBar: function (size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius) {
             var svg = "<svg width='" + size + "'" +
                     " height='" + size + "'" +
                     " xmlns='http://www.w3.org/2000/svg'" +
                     " xmlns:xlink='http://www.w3.org/1999/xlink'>",
+                // draw bar
                 svg = svg + "<line x1='" + (size / 2) + "'" +
                     " y1='" + (size / 2) + "'" +
                     " x2='" + (size / 2) + "'" +
                     " y2='" + barLength + "'" +
-                    " stroke='" + circleBarColor + "'" +
+                    " stroke='" + circleBarLineStrokeColor + "'" +
                     " stroke-width='" + circleBarLineStroke + "' />",
+                // draw circle
                 svg = svg + "<circle cx='" + (size / 2) + "'" +
                     " cy='" + (size / 2) + "'" +
                     " r='" + circleBarRadius + "'" +
-                    " fill='" + circleBarColor + "' />";
-
-            return svg;
-        },
-
-        /**
-         * create text SVG-tag for intervalscaled circle bars
-         * @param  {String} svg
-         * @param  {number} size
-         * @param  {number} circleBarRadius
-         * @param  {String} state
-         * @param  {number} circleBarFontSize
-         * @param  {String} circleBarFontFamily
-         * @param  {String} circleBarFontColor
-         * @return {String} SVG
-         */
-        createTextSvgIntervalCircleBar: function (svg, size, circleBarRadius, state, circleBarFontSize, circleBarFontFamily, circleBarFontColor) {
-            if (circleBarFontSize > 0) {
-                svg = svg + "<text fill='" + circleBarFontColor + "'" +
-                " font-family='" + circleBarFontFamily + "'" +
-                " font-size='" + circleBarFontSize + "'" +
-                " x='" + (size / 2 + circleBarRadius + 5) + "'" +
-                " y='" + (size / 2 + 6) + "'>" +
-                state + "</text>";
-            }
+                    " stroke='" + circleBarCircleStrokeColor + "'" +
+                    " stroke-width='" + circleBarCircleStrokeWidth + "'" +
+                    " fill='" + circleBarCircleFillColor + "' />",
+                svg = svg + "</svg>";
 
             return svg;
         }
+
     });
 
     return WFSStyle;
