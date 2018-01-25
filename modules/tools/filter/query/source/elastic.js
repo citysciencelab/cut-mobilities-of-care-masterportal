@@ -11,20 +11,18 @@ define(function (require) {
          * @param  {string} featureType - WFS FeatureType
          * @param  {string} version - WFS Version
          */
-        buildQueryDatastructure: function () {
-            var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
-                url,
-                mappingName;
+         buildQueryDatastructure: function () {
+             var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
+                 url;
 
-            if (this.get("searchInMapExtent") === true) {
-                this.addSearchInMapExtentSnippet();
-            }
-            if (!_.isUndefined(layerObject)) {
-                mappingName = layerObject.get("mappingName");
-                url = Radio.request("Util", "getProxyURL", layerObject.get("indexUrl")) + "_mapping/" + mappingName;
-                this.requestMetadata(url, this.parseResponse);
-            }
-        },
+             if (this.get("searchInMapExtent") === true) {
+                 this.addSearchInMapExtentSnippet();
+             }
+             if (!_.isUndefined(layerObject)) {
+                 url = Radio.request("Util", "getProxyURL", layerObject.get("url")) + "_mapping/" + layerObject.get("typeName");
+                 this.requestMetadata(url, this.parseResponse);
+             }
+         },
         /**
          * Führt Mapping Request aus
          * @param  {[type]} url         [description]
@@ -44,8 +42,8 @@ define(function (require) {
          */
         parseResponse: function (response) {
             var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
-                mappingName = layerObject.get("mappingName");
-                elements = response.itgbm_new.mappings[mappingName].properties,
+                typeName = layerObject.get("typeName");
+                elements = response.itgbm_new.mappings[typeName].properties,
                 featureAttributesMap = [];
 
             _.each(elements, function (value, key) {
