@@ -40,7 +40,7 @@ define(function (require) {
                 return;
             }
             if (event.data.hasOwnProperty("showPositionByFeatureId")) {
-                this.showPositionByFeatureId(event.data.showPositionByFeatureId, "55555");
+                this.showPositionByFeatureId(event.data.showPositionByFeatureId, event.data.layerId);
             }
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
