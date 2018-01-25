@@ -15,13 +15,14 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            $("body").append(this.$el.html(this.template(attr)));
+            $("#map").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
-                containment: ".lgv-container",
+                containment: "#map",
                 handle: ".gfi-header",
                 stop: function (evt, ui) {
                     // helper, so that "left" is never 0. needed for gfi/themes/view.js adjustGfiWindow()
                     $(".gfi").css("left", (ui.position.left + 1) + "px");
+                    // $(".gfi").css("top", (ui.position.top - 50) + "px");
                 }
             });
         },
