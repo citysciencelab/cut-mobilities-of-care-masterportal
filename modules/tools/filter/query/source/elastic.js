@@ -13,15 +13,13 @@ define(function (require) {
          */
         buildQueryDatastructure: function () {
             var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
-                url,
-                typeName;
+                url;
 
             if (this.get("searchInMapExtent") === true) {
                 this.addSearchInMapExtentSnippet();
             }
             if (!_.isUndefined(layerObject)) {
-                typeName = layerObject.get("typeName");
-                url = Radio.request("Util", "getProxyURL", layerObject.get("indexUrl")) + "_mapping/" + typeName;
+                url = Radio.request("Util", "getProxyURL", layerObject.get("url")) + "_mapping/" + layerObject.get("typeName");
                 this.requestMetadata(url, this.parseResponse);
             }
         },
