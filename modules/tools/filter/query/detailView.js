@@ -73,7 +73,7 @@ define(function (require) {
                     else if (snippet.get("type") === "boolean") {
                         view = new SnippetDropdownView({model: snippet});
                     }
-                    else if (snippet.get("type") === "interger") {
+                    else if (snippet.get("type") === "integer") {
                         view = new SnippetSliderView({model: snippet});
                     }
                     else {
