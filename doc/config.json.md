@@ -399,6 +399,7 @@ Im Objekt *tools* werden die Werkzeuge, deren Reihenfolge und das Erscheinungsbi
 |[children](#markdown-header-portalconfigmenutoolschildren)|nein|Object||Objekte, die die Tools konfigurieren.|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Reiters unter dem der Baum in der Menüleiste erscheint.|
+|isVisibleInMenu|nein|Boolean|true|Soll das Tool in der Menüleiste erscheinen.|
 
 ******
 
