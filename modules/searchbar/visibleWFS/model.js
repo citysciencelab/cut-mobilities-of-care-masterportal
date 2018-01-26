@@ -132,7 +132,7 @@ define(function (require) {
             else {
                 var style = layerStyle(feature);
 
-                return (layerTyp === "WFS") ? style.getImage().getSrc() : "";
+                return (layerTyp === "WFS") ? style.getImage().getSrc() : undefined;
             }
         },
 
