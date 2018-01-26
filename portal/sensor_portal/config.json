@@ -172,50 +172,19 @@
         {
           "id": "999999",
           "styleId": "999999",
-          "visibility": false,
+          "name" : "Elektro Ladestandort (Live)",
+          "visibility": true,
           "clusterDistance": 60
-        },
-        {
-          "id": "999993",
-          "styleId": "999999",
-          "visibility": false
         },
         {
           "id": "999998",
           "styleId": "999998",
+          "name" : "Temperatur (Live)",
           "visibility": false
-        },
-        {
-          "id": "999997",
-          "styleId": "999997",
-          "visibility": false
-        },
-        {
-          "id": "999996",
-          "styleId": "999996",
-          "visibility": false
-        },
-        {
-          "id": "999995",
-          "styleId": "999995",
-          "visibility": false
-        },
-        {
-          "id": "999994",
-          "styleId": "999997",
-          "visibility": false
-        },
-        {
-          "id": "1711",
-          "styleId": "1711",
-          "visibility": false,
-          "layerAttribution": "<span>Attributierung für Fachlayer</span>",
-          "mouseHoverField": ["name", "strasse"],
-          "searchField": "name",
-          "clusterDistance": 40
         },
         {
           "id" : "937",
+          "name" : "Elektro Ladestandort (WMS)",
           "styleId": "937",
           "visibility": false
         }

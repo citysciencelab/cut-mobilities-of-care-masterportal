@@ -10,6 +10,11 @@ define(function (require) {
 
     SensorThingsLayer = Layer.extend({
 
+        defaults: _.extend({}, Layer.prototype.defaults,
+            {
+                webSocketPortSTS: 9876
+            }
+        ),
         initialize: function () {
             this.superInitialize();
             var channel = Radio.channel("SensorThingsLayer");
@@ -97,35 +102,38 @@ define(function (require) {
 
             if (_.isUndefined(this.get("id"))) {
                 boolean = false;
-                console.log("id is undefined");
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parameter: id fehlt in der Konfiguration!</strong>",
+                    kategorie: "alert-danger"
+                });
             }
             if (_.isUndefined(this.get("name"))) {
                 boolean = false;
-                console.log("name is undefined");
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parameter: name fehlt in der Konfiguration!</strong>",
+                    kategorie: "alert-danger"
+                });
             }
             if (_.isUndefined(this.get("url"))) {
                 boolean = false;
-                console.log("url is undefined");
-            }
-            if (_.isUndefined(this.get("typ"))) {
-                boolean = false;
-                console.log("typ is undefined");
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parameter: url fehlt in der Konfiguration!</strong>",
+                    kategorie: "alert-danger"
+                });
             }
             if (_.isUndefined(this.get("subTyp"))) {
                 boolean = false;
-                console.log("subTyp is undefined");
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parameter: subTyp fehlt in der Konfiguration!</strong>",
+                    kategorie: "alert-danger"
+                });
             }
             if (_.isUndefined(this.get("version"))) {
                 boolean = false;
-                console.log("version is undefined");
-            }
-            if (_.isUndefined(this.get("gfiTheme"))) {
-                boolean = false;
-                console.log("gfiTheme is undefined");
-            }
-            if (_.isUndefined(this.get("gfiAttributes"))) {
-                boolean = false;
-                console.log("gfiAttributes is undefined");
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parameter: version fehlt in der Konfiguration!</strong>",
+                    kategorie: "alert-danger"
+                });
             }
             return boolean;
         },
@@ -427,7 +435,7 @@ define(function (require) {
             var dataStreamIds = this.getDataStreamIds(),
                 client = mqtt.connect({
                     host: this.get("url").split("/")[2],
-                    port: 9876,
+                    port: this.get("webSocketPortSTS"),
                     path: "/mqtt",
                     context: this
                 });
@@ -443,7 +451,6 @@ define(function (require) {
                 var jsonData = JSON.parse(payload);
 
                 jsonData.dataStreamId = topic.split("(")[1].split(")")[0];
-                console.log(jsonData);
                 this.options.context.updateFromMqtt(jsonData);
             });
         },
@@ -468,30 +475,22 @@ define(function (require) {
          * which fire new observation using MQTT
          */
         createWebSocketConnection: function () {
-            // var connection = new WebSocket("ws://127.0.0.1:8767");
-            var connection = new WebSocket("wss://service32.eggits.net:6143/arcgis/ws/services/iss-Location-Broadcast/StreamServer/subscribe");
-
-            // The connection ist open
-            connection.onopen = function () {
-                console.log("Websocket is open");
-            };
+            var connection = new WebSocket("ws://127.0.0.1:8767");
+            // var connection = new WebSocket("wss://00service32.eggits.net:6143/arcgis/ws/services/iss-Location-Broadcast/StreamServer/subscribe");
 
             // Log errors
             connection.onerror = function (error) {
-                console.log("Websocket Error: " + error);
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Ein Fehler bei der WebSocket Verbindung ist aufgetreten!</strong>",
+                    kategorie: "alert-danger"
+                });
             };
 
             // Log messages from the server
             connection.onmessage = function (ev) {
-                console.log(ev.data);
                 var jsonData = JSON.parse(ev.data);
 
                 Radio.trigger("SensorThingsLayer", "updateFromWebSocket", jsonData);
-            };
-
-            // The connection is terminated
-            connection.onclose = function () {
-                console.log("Websocket is finished");
             };
         },
 
@@ -541,9 +540,6 @@ define(function (require) {
                 feature.set("state", thingResult);
                 feature.set("phenomenonTime", thingPhenomenonTime);
             }
-
-            // this.styling(isClustered);
-            console.log(feature);
         },
 
         /**

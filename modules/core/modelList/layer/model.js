@@ -21,6 +21,10 @@ define(function (require) {
             maxScale: "1000000"
         },
         superInitialize: function () {
+            // if (!this.checkRequiredParamsByType()) {
+            //     return;
+            // }
+
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
@@ -100,6 +104,42 @@ define(function (require) {
             this.checkForScale(Radio.request("MapView", "getOptions"));
             this.setAttributes();
             this.createLegendURL();
+        },
+
+        checkRequiredParamsByType: function () {
+            var typ = this.get("typ"),
+                isParameterMissing;
+
+            if (typ === "WMS") {
+                isParameterMissing = this.checkRequiredParams(["id", "name", "version"]);
+            }
+            else if (typ === "WFS") {
+                isParameterMissing = this.checkRequiredParams(["id", "name", "version"]);
+            }
+            else if (typ === "Sensor") {
+                isParameterMissing = this.checkRequiredParams(["id", "name", "version", "subTyp"]);
+            }
+            else {
+                isParameterMissing = false;
+            }
+
+            return isParameterMissing;
+        },
+
+        checkRequiredParams: function (params) {
+            var isParameterMissing = true;
+
+            _.each(params, function (param) {
+                if (_.isUndefined(this.get(param))) {
+                    isParameterMissing = false;
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Der Parameter: " + param + " fehlt in der Konfiguration!</strong>",
+                        kategorie: "alert-danger"
+                    });
+                }
+            }, this);
+
+            return isParameterMissing;
         },
 
         getLayerInfoChecked: function () {

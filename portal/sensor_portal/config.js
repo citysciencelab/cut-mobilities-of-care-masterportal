@@ -41,7 +41,7 @@ define(function () {
         },
         quickHelp: true,
         portalConf: "../../portal/master/",
-        layerConf: "../portal/sensor_portal/services-internet.json",
+        layerConf: "../portal/sensor_portal/services-sensor.json",
         restConf: "../node_modules/lgv-config/rest-services-internet.json",
         styleConf: "../portal/sensor_portal/style_v2.json",
         proxyURL: "/cgi-bin/proxy.cgi",
