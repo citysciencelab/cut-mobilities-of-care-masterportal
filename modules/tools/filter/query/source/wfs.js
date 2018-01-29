@@ -165,7 +165,7 @@ define(function (require) {
         parseValuesFromString: function (feature, attrName) {
             var values = [];
 
-            if (!_.isUndefined(feature.get(attrName))) {
+            if (!_.isUndefined(feature.get(attrName)) && _.isString(feature.get(attrName))) {
                 if (feature.get(attrName).indexOf("|") !== -1) {
                     var featureValues = feature.get(attrName).split("|");
 
@@ -350,6 +350,21 @@ define(function (require) {
             return isMatch;
         },
 
+        isDoubleInRange: function (feature, attribute) {
+            var isMatch = false,
+                valueList = _.extend([], attribute.values);
+// console.log(valueList);
+            if (_.isUndefined(feature.get(attribute.attrName)) === false) {
+                // console.log(typeof feature.get(attribute.attrName));
+                var featureValue = feature.get(attribute.attrName);
+// console.log(featureValue);
+                valueList.push(featureValue);
+                valueList = _.sortBy(valueList);
+                isMatch = valueList[1] === featureValue;
+            }
+            return isMatch;
+        },
+
         isFeatureInExtent: function (feature) {
             var isMatch = false,
                 mapExtent = Radio.request("MapView", "getCurrentExtent");
@@ -373,6 +388,9 @@ define(function (require) {
                 else if (attribute.type === "searchInMapExtent") {
                     return this.isFeatureInExtent(feature);
                 }
+                else if (attribute.type === "double") {
+                    return this.isDoubleInRange(feature, attribute);
+                }
                 else {
                     return this.isValueMatch(feature, attribute);
                 }
@@ -390,20 +408,32 @@ define(function (require) {
             var values = [];
 
             if (!_.isUndefined(feature.get(featureAttribute.name))) {
-                if (feature.get(featureAttribute.name).indexOf("|") !== -1) {
-                    var featureValues = feature.get(featureAttribute.name).split("|");
+                // if (_.isObject(feature.get(featureAttribute.name))) {
+                //     console.log(feature.get(featureAttribute.name));
+                //
+                // }
+                if (_.isString(feature.get(featureAttribute.name))) {
+                    if (feature.get(featureAttribute.name).indexOf("|") !== -1) {
+                        var featureValues = feature.get(featureAttribute.name).split("|");
 
-                    _.each(featureValues, function (value) {
-                        values.push(value);
-                    });
+                        _.each(featureValues, function (value) {
+                            values.push(value);
+                        });
+                    }
+                    else {
+                        values.push(feature.get(featureAttribute.name));
+                    }
                 }
                 else {
                     if (_.isArray(feature.get(featureAttribute.name))) {
                         _.each(feature.get(featureAttribute.name), function (value) {
+
                             values.push(value)
                         });
                     }
-                    values.push(feature.get(featureAttribute.name));
+                    else {
+                        values.push(feature.get(featureAttribute.name));
+                    }
                 }
             }
             return values;

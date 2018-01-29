@@ -95,7 +95,7 @@ define(function (require) {
                 featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
-            else if (featureAttribute.type === "integer") {
+            else if (featureAttribute.type === "integer" || featureAttribute.type === "double") {
                 featureAttribute = _.extend(featureAttribute, {"snippetType": "slider"});
                 this.get("snippetCollection").add(new SnippetSliderModel(featureAttribute));
             }
@@ -120,8 +120,8 @@ define(function (require) {
         createSnippets: function (featureAttributes) {
             featureAttributesMap = this.trimAttributes(featureAttributes);
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
-
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
+            console.log(featureAttributesMap);
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
             if (this.get("isSelected") === true) {
