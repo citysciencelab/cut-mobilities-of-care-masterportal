@@ -11,18 +11,18 @@ define(function (require) {
          * @param  {string} featureType - WFS FeatureType
          * @param  {string} version - WFS Version
          */
-         buildQueryDatastructure: function () {
-             var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
-                 url;
+        buildQueryDatastructure: function () {
+            var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
+                url;
 
-             if (this.get("searchInMapExtent") === true) {
-                 this.addSearchInMapExtentSnippet();
-             }
-             if (!_.isUndefined(layerObject)) {
-                 url = Radio.request("Util", "getProxyURL", layerObject.get("url")) + "_mapping/" + layerObject.get("typeName");
-                 this.requestMetadata(url, this.parseResponse);
-             }
-         },
+            if (this.get("searchInMapExtent") === true) {
+                this.addSearchInMapExtentSnippet();
+            }
+            if (!_.isUndefined(layerObject)) {
+                url = Radio.request("Util", "getProxyURL", layerObject.get("url")) + "_mapping/" + layerObject.get("typeName");
+                this.requestMetadata(url, this.parseResponse);
+            }
+        },
         /**
          * Führt Mapping Request aus
          * @param  {[type]} url         [description]
