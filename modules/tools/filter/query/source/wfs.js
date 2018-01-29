@@ -398,6 +398,11 @@ define(function (require) {
                     });
                 }
                 else {
+                    if (_.isArray(feature.get(featureAttribute.name))) {
+                        _.each(feature.get(featureAttribute.name), function (value) {
+                            values.push(value)
+                        });
+                    }
                     values.push(feature.get(featureAttribute.name));
                 }
             }
