@@ -217,6 +217,9 @@ define(function (require) {
             else if (_.isArray(value)) {
                 return true;
             }
+            else if (_.isNumber(value)) {
+                return true;
+            }
             return false;
         },
 
@@ -243,7 +246,7 @@ define(function (require) {
                             if (_.isArray(value)) {
                                 value = value.toString();
                             }
-                            preGfi[key] = value.trim();
+                            preGfi[key] = _.isString(value) ? value.trim() : value;
                         }
                     }
                 }, this);
