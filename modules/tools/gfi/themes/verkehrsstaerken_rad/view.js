@@ -12,6 +12,7 @@ define(function (require) {
             "click .tab-toggle": "toggleTab"
         },
         changeKat: function (evt) {
+            console.log(evt);
             $(".graph svg").remove();
             this.model.setAttrToShow([evt.currentTarget.id]);
             $(".btn-group").children("button").each(function () {
@@ -32,6 +33,7 @@ define(function (require) {
             this.model.createD3Document();
         },
         toggleTab: function (evt) {
+            console.log(evt);
             var contentId = $(evt.currentTarget).attr("value");
 
             // deactivate all tabs and their contents

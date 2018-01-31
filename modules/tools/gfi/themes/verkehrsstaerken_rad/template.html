@@ -3,9 +3,15 @@
     <strong><%= name %></strong>
 </div>
 <ul class="nav nav-pills">
-  <li value= "tag" class="tab-toggle active"><a data-toggle="tab">Tag</a></li>
-  <li value= "woche" class="tab-toggle"><a data-toggle="tab">Woche</a></li>
-  <li value= "jahr" class="tab-toggle"><a data-toggle="tab">Jahr</a></li>
+  <% if (tageslinieDataset.length > 0) { %>
+    <li value= "tag" class="tab-toggle active"><a data-toggle="tab">Tag</a></li>
+  <% } %>
+  <% if (wochenlinieDataset.length > 0) { %>
+    <li value= "woche" class="tab-toggle"><a data-toggle="tab">Woche</a></li>
+  <% } %>
+  <% if (jahreslinieDataset.length > 0) { %>
+    <li value= "jahr" class="tab-toggle"><a data-toggle="tab">Jahr</a></li>
+  <% } %>
 </ul>
 <div id="diagramm" class="tab-pane fade">
     <div id="d3-div" class="graph">
