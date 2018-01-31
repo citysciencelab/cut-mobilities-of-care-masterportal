@@ -182,35 +182,35 @@ define([
                 mapViewResolution = _.find(mapViewSettings, {"id": "resolution"}),
                 mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"});
 
-            if (mapViewOptions) {
+            if (_.isUndefined(mapViewOptions)) {
                 this.set("options", []);
                 _.each(mapViewOptions.attr, function (opt) {
                     this.pushHits("options", opt);
                 }, this);
             }
 
-            if (mapViewEpsg) {
+            if (_.isUndefined(mapViewEpsg)) {
                 this.setEpsg(mapViewEpsg.attr);
             }
 
-            if (mapViewImage) {
+            if (_.isUndefined(mapViewImage)) {
                 this.setBackgroundImage(mapViewImage.attr);
                 this.setBackground(mapViewImage.attr);
             }
 
-            if (mapViewStartCenter) {
+            if (_.isUndefined(mapViewStartCenter)) {
                 this.setStartCenter(mapViewStartCenter.attr);
             }
 
-            if (mapViewExtent) {
+            if (_.isUndefined(mapViewExtent)) {
                 this.setExtent(mapViewExtent.attr);
             }
 
-            if (mapViewResolution) {
+            if (_.isUndefined(mapViewResolution)) {
                 this.setResolution(mapViewResolution.attr);
                 this.setStartResolution(mapViewResolution.attr);
             }
-            else if (mapViewZoomLevel) {
+            else if (_.isUndefined(mapViewZoomLevel)) {
                 var res = this.get("options")[mapViewZoomLevel.attr].resolution;
 
                 this.setResolution(res);
