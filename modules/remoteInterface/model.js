@@ -58,6 +58,7 @@ define(function (require) {
                 center = ol.extent.getCenter(extent);
 
             Radio.trigger("MapMarker", "showMarker", center);
+            Radio.trigger("MapView", "setCenter", center);
         },
         addFeaturesFromGBM: function (hits, id, layerName) {
             Radio.trigger("AddGeoJSON", "addFeaturesFromGBM", hits, id, layerName);
