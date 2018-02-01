@@ -78,7 +78,9 @@ define(function (require) {
 
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
-
+            if (!_.isUndefined(Radio.request("ParametricURL", "getZoomToExtent"))) {
+                this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
+            }
             this.stopMouseMoveEvent();
         },
 
