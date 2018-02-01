@@ -2,9 +2,13 @@ define(function (require) {
     var Radio = require("backbone.radio"),
         Backbone = require("backbone"),
         ol = require("openlayers"),
+        Config = require("config"),
         RemoteInterface;
 
     RemoteInterface = Backbone.Model.extend({
+        defaults: {
+            postMessageUrl: "http://localhost:8080"
+        },
         initialize: function () {
             var channel = Radio.channel("RemoteInterface");
 
@@ -24,19 +28,24 @@ define(function (require) {
                 "zoomToFeature": this.zoomToFeature,
                 "setModelAttributesById": this.setModelAttributesById
             }, this);
-
+            this.setParams(Config);
             window.addEventListener("message", this.receiveMessage.bind(this));
             Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
             parent.Backbone.MasterRadio = Radio;
             parent.postMessage("ready", "*");
-
         },
+        setParams: function (config) {
+            if (_.has(config, "postMessageUrl") && config.postMessageUrl.length > 0) {
+                this.setPostMessageUrl(config.postMessageUrl);
+            }
+        },
+
         /**
          * handles the postMessage events
          * @param  {MessageEvent} event
          */
         receiveMessage: function (event) {
-            if (event.origin !== "http://localhost:8080") {
+            if (event.origin !== this.get("postMessageUrl")) {
                 return;
             }
             if (event.data.hasOwnProperty("showPositionByFeatureId")) {
@@ -124,6 +133,9 @@ define(function (require) {
         },
         getWGS84MapSizeBBOX: function () {
             return Radio.request("Map", "getWGS84MapSizeBBOX");
+        },
+        setPostMessageUrl: function (value) {
+            this.set("postMessageUrl", value);
         }
     });
 

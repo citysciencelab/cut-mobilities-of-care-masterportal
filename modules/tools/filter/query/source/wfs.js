@@ -1,9 +1,13 @@
 define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/model"),
+        Config = require ("config"),
         WfsQueryModel;
 
     WfsQueryModel = QueryModel.extend({
+        defaults: _.extend({},QueryModel.prototype.defaults,
+            {postMessageUrl: "http://localhost:8080"}
+        ),
         initialize: function () {
             this.superInitialize();
             var that = this;
@@ -14,6 +18,15 @@ define(function (require) {
             if (this.get("searchInMapExtent") === true) {
                 Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive, this);
             }
+            this.setParams(Config);
+        },
+        setParams: function (config) {
+            if (_.has(config, "postMessageUrl") && config.postMessageUrl.length > 0) {
+                this.setPostMessageUrl(config.postMessageUrl);
+            }
+        },
+        setPostMessageUrl: function (value) {
+            this.set("postMessageUrl", value);
         },
         /**
          * gathers Information for this Query including the wfs features and metadata
