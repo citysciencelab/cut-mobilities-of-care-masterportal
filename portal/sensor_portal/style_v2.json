@@ -1,5 +1,14 @@
 [
   {
+    "layerId" : "999993",
+    "class": "POINT",
+    "subClass" : "CIRCLE",
+    "circleRadius" : 10,
+    "circleFillColor" : [210, 0, 0, 0.5],
+    "circleStrokeColor" : [210, 0, 0, 1],
+    "circleStrokeWidth": 2
+  },
+  {
     "layerId" : "999998",
     "class": "POINT",
     "subClass" : "ADVANCED",
@@ -39,8 +48,6 @@
     "circleSegmentsBackgroundColor" : [255, 255, 255, 1],
     "imageName" : "elektro_auto.png",
     "imageScale" : "1.0",
-    "clusterClass_": "ADVANCED",
-    "clusterSubClass_": "NOMINAL",
     "clusterCircleRadius" : 15,
     "clusterCircleFillColor" : [0, 0, 50, 0.5],
     "clusterTextAlign" : "center"

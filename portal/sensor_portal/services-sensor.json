@@ -1,5 +1,20 @@
 [
    {
+      "id" : "999993",
+      "name" : "Live - Position der International Space Station",
+      "url" : "wss://service32.eggits.net:6143/arcgis/ws/services/iss-Location-Broadcast/StreamServer/subscribe",
+      "typ" : "Sensor",
+      "subTyp" : "StreamLayer",
+      "epsg": "EPSG:4326",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "id" : "ID",
+         "name" : "Name",
+         "timestamp" : "Zeitpunkt",
+         "visibility" : "Sichtbarkeit"
+      }
+   },
+   {
       "id" : "999994",
       "name" : "Live - SenseBox: Beleuchtungsstärke",
       "url" : "https://geodienste.hamburg.de/SensorThingsService",
@@ -103,10 +118,10 @@
    {
       "id" : "999999",
       "name" : "Live - Elektro Ladestandorte",
-      "url" : "https://51.5.242.162/itsLGVhackathon",
       "typ" : "Sensor",
       "subTyp" : "SensorThings",
       "version" : "1.0",
+      "url" : "https://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]

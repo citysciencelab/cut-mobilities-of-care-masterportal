@@ -300,18 +300,18 @@ define(function (require) {
                 return clusterStyle;
         },
 
-        createAdvancedClusterStyle: function () {
-            var clusterSubClass = this.get("clusterSubClass"),
-                clusterStyle;
+        // createAdvancedClusterStyle: function () {
+        //     var clusterSubClass = this.get("clusterSubClass"),
+        //         clusterStyle;
 
-            if (clusterSubClass === "NOMINAL") {
-                clusterStyle = this.createAdvancedNominalClusterStyle();
-            }
-        },
+        //     if (clusterSubClass === "NOMINAL") {
+        //         clusterStyle = this.createAdvancedNominalClusterStyle();
+        //     }
+        // },
 
-        createAdvancedNominalClusterStyle: function () {
+        // createAdvancedNominalClusterStyle: function () {
 
-        },
+        // },
 
         /*
         * creates simplePointStyle.

@@ -12,20 +12,28 @@ define(function (require) {
 
         defaults: _.extend({}, Layer.prototype.defaults,
             {
-                webSocketPortSTS: 9876
+                webSocketPortSTS: 9876,
+                epsg: "EPSG:4326"
             }
         ),
         initialize: function () {
             this.superInitialize();
-            var channel = Radio.channel("SensorThingsLayer");
+            var channel = Radio.channel("SensorThingsLayer"),
+                subtyp = this.get("subTyp").toUpperCase();
 
             channel.on({
-                "updateFromWebSocket": this.updateFromWebSocket
+                "updateFromWebSocket": this.updateFromWebSocket,
+                "updateFromWebSocketStreamLayer": this.updateFromWebSocketStreamLayer
             }, this);
 
             // start connection to liveUpdate
-            this.createMqttConnection();
-            // this.createWebSocketConnection();
+            if (subtyp === "SENSORTHINGS") {
+                this.createMqttConnection();
+                // this.createWebSocketConnection();
+            }
+            else if (subtyp === "STREAMLAYER") {
+            this.createWebSocketConnectionToStreamLayer();
+            }
         },
 
         /**
@@ -68,29 +76,36 @@ define(function (require) {
          * differences by subtypes
          */
         updateData: function () {
+            if (this.get("subTyp") === "StreamLayer") {
+                return;
+            }
+
             var sensorData,
+                // todo: bei ESRI StreamLayer kann der epsg-code ausgelesen werden
                 epsg = this.get("epsg"),
                 features,
-                subtyp = this.get("subTyp"),
+                subtyp = this.get("subTyp").toUpperCase(),
                 isClustered = this.has("clusterDistance") ? true : false;
-
-            if (_.isUndefined(epsg)) {
-                epsg = "EPSG:4326";
-            }
 
             if (this.checkRequiredParameter()) {
                 // check for subtypes
-                if (subtyp === "SensorThings") {
+                if (subtyp === "SENSORTHINGS") {
                     sensorData = this.loadSensorThings();
+                    features = this.drawPoints(sensorData, epsg);
+                }
+                else if (subtyp === "STREAMLAYER") {
+                    features = this.drawESRIGeoJson();
                 }
             }
-
-            features = this.drawPoints(sensorData, epsg);
 
             this.set("loadend", "ready");
             Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), features);
             this.styling(isClustered);
             this.getLayer().setStyle(this.getStyle());
+        },
+
+        drawESRIGeoJson: function () {
+
         },
 
         /**
@@ -128,13 +143,13 @@ define(function (require) {
                     kategorie: "alert-danger"
                 });
             }
-            if (_.isUndefined(this.get("version"))) {
-                boolean = false;
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parameter: version fehlt in der Konfiguration!</strong>",
-                    kategorie: "alert-danger"
-                });
-            }
+            // if (_.isUndefined(this.get("version"))) {
+            //     boolean = false;
+            //     Radio.trigger("Alert", "alert", {
+            //         text: "<strong>Der Parameter: version fehlt in der Konfiguration!</strong>",
+            //         kategorie: "alert-danger"
+            //     });
+            // }
             return boolean;
         },
 
@@ -253,8 +268,9 @@ define(function (require) {
             var allThings = [],
                 thingsMerge = [],
                 requestURL = this.buildSensorThingsURL(),
-                things = this.getResponseFromRequestURL(requestURL),
-                thingsCount = things["@iot.count"], // count of all things
+                things = this.getResponseFromRequestURL(requestURL);
+
+                var thingsCount = things["@iot.count"], // count of all things
                 thingsbyOneRequest = things.value.length; // count of things on one request
 
             allThings.push(things.value);
@@ -446,7 +462,7 @@ define(function (require) {
                 });
             });
 
-            // Log messages from the server
+            // messages from the server
             client.on("message", function (topic, payload) {
                 var jsonData = JSON.parse(payload);
 
@@ -463,7 +479,7 @@ define(function (require) {
         updateFromMqtt: function (thing) {
             var dataStreamId = thing.dataStreamId,
                 features = this.getLayerSource().getFeatures(),
-                featureArray = this.getFeatureById(dataStreamId, features),
+                featureArray = this.getFeatureByDataStreamId(dataStreamId, features),
                 thingResult = String(this.convertScaling(thing.result)),
                 thingPhenomenonTime = this.changeTimeZone(thing.phenomenonTime);
 
@@ -476,9 +492,8 @@ define(function (require) {
          */
         createWebSocketConnection: function () {
             var connection = new WebSocket("ws://127.0.0.1:8767");
-            // var connection = new WebSocket("wss://00service32.eggits.net:6143/arcgis/ws/services/iss-Location-Broadcast/StreamServer/subscribe");
 
-            // Log errors
+            // errors
             connection.onerror = function (error) {
                 Radio.trigger("Alert", "alert", {
                     text: "<strong>Ein Fehler bei der WebSocket Verbindung ist aufgetreten!</strong>",
@@ -486,10 +501,10 @@ define(function (require) {
                 });
             };
 
-            // Log messages from the server
+            // messages from the server
             connection.onmessage = function (ev) {
                 var jsonData = JSON.parse(ev.data);
-
+                console.log(jsonData);
                 Radio.trigger("SensorThingsLayer", "updateFromWebSocket", jsonData);
             };
         },
@@ -502,7 +517,7 @@ define(function (require) {
         updateFromWebSocket: function (thing) {
             var dataStreamId = Object.keys(thing)[0],
                 features = this.getLayerSource().getFeatures(),
-                featureArray = this.getFeatureById(dataStreamId, features);
+                featureArray = this.getFeatureByDataStreamId(dataStreamId, features);
 
             // Change properties only in Layer witch contain the Datastream
             if (!_.isEmpty(featureArray)) {
@@ -574,7 +589,7 @@ define(function (require) {
          * @param  {array} features
          * @return {array} featureArray
          */
-        getFeatureById: function (id, features) {
+        getFeatureByDataStreamId: function (id, features) {
             var featureArray = [];
 
             _.each(features, function (feature) {
@@ -629,6 +644,80 @@ define(function (require) {
          */
         getClusterLayerSource: function () {
             return this.get("clusterLayerSource");
+        },
+
+
+// *************************************************************
+// ***** Stream Layer                                      *****
+// *************************************************************
+
+        /**
+         * create a connection to a websocketserver,
+         * which fire new observation using MQTT
+         */
+        createWebSocketConnectionToStreamLayer: function () {
+            // todo die URL entsprechend zusammenfügen
+            var connection = new WebSocket(this.get("url"));
+
+            // errors
+            connection.onerror = function (error) {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Ein Fehler bei der WebSocket Verbindung ist aufgetreten!</strong>",
+                    kategorie: "alert-danger"
+                });
+            };
+
+            // messages from the server
+            connection.onmessage = function (ev) {
+                var jsonData = JSON.parse(ev.data);
+
+                Radio.trigger("SensorThingsLayer", "updateFromWebSocketStreamLayer", jsonData);
+            };
+        },
+
+        updateFromWebSocketStreamLayer: function (esriJson) {
+            // esriJson.geometry.x = 9.93864 + Math.random() * 0.01;
+            // esriJson.geometry.y = 53.5521 + Math.random() * 0.01;
+
+            var id = esriJson.attributes.id,
+                features = this.getLayerSource().getFeatures(),
+                epsg = "EPSG:" + esriJson.geometry.spatialReference["wkid"],
+                location = [esriJson.geometry.x, esriJson.geometry.y],
+                xyTransfrom = ol.proj.transform(location, epsg, Config.view.epsg),
+                removeFeature = this.getFeatureById(features, id),
+                drawFeature,
+                isClustered = isClustered = this.has("clusterDistance") ? true : false;
+
+            esriJson.geometry.x = xyTransfrom[0];
+            esriJson.geometry.y = xyTransfrom[1];
+
+            if(!_.isUndefined(removeFeature)) {
+                this.getLayerSource().removeFeature(removeFeature);
+            }
+
+            drawFeature = new ol.format.EsriJSON().readFeatures(esriJson);
+            // set ID and add features to vectorlayer
+            drawFeature[0].setId(id);
+            this.getLayerSource().addFeatures(drawFeature);
+
+            this.set("loadend", "ready");
+            Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), drawFeature);
+            this.styling(isClustered);
+            this.getLayer().setStyle(this.getStyle());
+        },
+
+        getFeatureById: function (features, id) {
+            var feature = undefined;
+
+            _.each(features, function (feat) {
+                var featureId = feat.getId();
+
+                if (featureId === id) {
+                    feature = feat;
+                }
+            });
+
+            return feature;
         }
     });
 
