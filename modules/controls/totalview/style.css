@@ -1,0 +1,23 @@
+/***** TotalView *****/
+.total-view-button {
+    margin-top: 30px;
+}
+
+.total-view-button > .glyphicon {
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 5px 4px 2px;
+  top: 0;
+}
+
+.total-view-button > .glyphicon-record {
+    font-size: 22px;
+    padding: 7px 6px 6px 7px;
+    margin-top: 20px;
+}
+
+@media (max-width: 767px) {
+    .total-view-button {
+        display: none;
+    }
+}
