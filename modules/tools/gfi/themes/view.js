@@ -48,8 +48,18 @@ define(function (require) {
                 if (this.gfiWindow === "detached" && !isViewMobile) {
                     this.adjustGfiWindow(currentView, oldGfiWidth, oldLeft);
                 }
+                this.triggerIsRendered(model);
+
             }
             this.delegateEvents();
+        },
+
+        /**
+         * Triggert die Fertigstellung des DOM.
+         * @param  {object} obj Das Model, das getriggert werden soll
+         */
+        triggerIsRendered: function (obj) {
+            obj.trigger("ThemeViewRendered");
         },
         adjustGfiWindow: function (currentView, oldGfiWidth, oldLeft) {
             var newGfiWidth,

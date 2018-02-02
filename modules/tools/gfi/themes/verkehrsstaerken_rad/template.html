@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<div class= "panel text-align-center pegelHeader">
+<div class= "panel text-align-center radPegelHeader">
     <strong><%= name %></strong>
 </div>
 <ul class="nav nav-pills">
-  <% if (tageslinieDataset.length > 0) { %>
-    <li value= "tag" class="tab-toggle active"><a data-toggle="tab">Tag</a></li>
+  <% if (!_.isNull(tageslinieDataset)) { %>
+    <li value= "tag" class="tab-toggle <% if (activeTab === 'tag') {print ('active');} %>"><a data-toggle="tab">Tag</a></li>
   <% } %>
-  <% if (wochenlinieDataset.length > 0) { %>
-    <li value= "woche" class="tab-toggle"><a data-toggle="tab">Woche</a></li>
+  <% if (!_.isNull(wochenlinieDataset)) { %>
+    <li value= "woche" class="tab-toggle <% if (activeTab === 'woche') {print ('active');} %>"><a data-toggle="tab">Woche</a></li>
   <% } %>
-  <% if (jahreslinieDataset.length > 0) { %>
-    <li value= "jahr" class="tab-toggle"><a data-toggle="tab">Jahr</a></li>
+  <% if (!_.isNull(jahreslinieDataset)) { %>
+    <li value= "jahr" class="tab-toggle <% if (activeTab === 'jahr') {print ('active');} %>"><a data-toggle="tab">Jahr</a></li>
   <% } %>
 </ul>
-<div id="diagramm" class="tab-pane fade">
+<div id="diagramm">
     <div id="d3-div" class="graph">
         <div class="graph-tooltip-div"></div>
     </div>

@@ -5,35 +5,17 @@ define(function (require) {
 
     VerkehrsStaerkenThemeRadView = ThemeView.extend({
         tagName: "div",
-        className: "verkehrsstaerken",
+        className: "verkehrsstaerken_rad",
         template: _.template(VerkehrsStaerkenThemeRadTemplate),
         events: {
-            "click .kat": "changeKat",
             "click .tab-toggle": "toggleTab"
         },
-        changeKat: function (evt) {
-            console.log(evt);
+        loadDiagramm: function (attr) {
             $(".graph svg").remove();
-            this.model.setAttrToShow([evt.currentTarget.id]);
-            $(".btn-group").children("button").each(function () {
-                if ($(this)[0].id === evt.currentTarget.id) {
-                    $(this).addClass("active");
-                }
-                else {
-                    $(this).removeClass("active");
-                }
-            });
-            this.model.createD3Document();
-        },
-        loadDiagramm: function () {
-            var attr = $("#diagramm").find(".active")[0].value;
-
-            $(".graph svg").remove();
-            this.model.setAttrToShow([attr]);
+            this.model.setActiveTab(attr);
             this.model.createD3Document();
         },
         toggleTab: function (evt) {
-            console.log(evt);
             var contentId = $(evt.currentTarget).attr("value");
 
             // deactivate all tabs and their contents
@@ -48,9 +30,7 @@ define(function (require) {
             $(evt.currentTarget).addClass("active");
             $("#" + contentId).addClass("active");
             $("#" + contentId).addClass("in");
-            if (contentId === "diagramm") {
-                this.loadDiagramm();
-            }
+            this.loadDiagramm(contentId);
         }
     });
 

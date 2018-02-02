@@ -3,18 +3,21 @@ define(function (require) {
     var Theme = require("modules/tools/gfi/themes/model"),
         Radio = require("backbone.radio"),
         d3 = require("d3"),
+        Moment = require("moment"),
         VerkehrsStaerkenRadTheme;
 
     VerkehrsStaerkenRadTheme = Theme.extend({
         defaults: {
             name: "",
-            tageslinieDataset: [],
-            wochenlinieDataset: [],
-            jahreslinieDataset: []
+            tageslinieDataset: null,
+            wochenlinieDataset: null,
+            jahreslinieDataset: null,
+            activeTab: ""
         },
         initialize: function () {
             this.listenTo(this, {
-                "change:isReady": this.parseGfiContent
+                "change:isReady": this.parseGfiContent,
+                "ThemeViewRendered": this.createD3Document
             });
         },
         /**
@@ -47,6 +50,22 @@ define(function (require) {
 
                     this.setJahreslinieDataset(obj);
                 }
+                this.setInitialActiveTab();
+            }
+        },
+
+        /**
+         * Prüft die verfügbaren Werte des Features und setzt eine Variable, die im Template ausgewertet wird.
+         */
+        setInitialActiveTab: function () {
+            if (!_.isNull(this.getTageslinieDataset())) {
+                this.setActiveTab("tag");
+            }
+            else if (this.getWochenlinieDataset().length > 0) {
+                this.setActiveTab("woche");
+            }
+            else if (this.getJahreslinieDataset().length > 0) {
+                this.setActiveTab("jahr");
             }
         },
 
@@ -82,13 +101,33 @@ define(function (require) {
             return tempArr;
         },
 
+        // getter for activeTab
+        getActiveTab: function () {
+            return this.get("activeTab");
+        },
+        // setter for activeTab
+        setActiveTab: function (value) {
+            this.set("activeTab", value);
+        },
+
         // getter for tageslinieDataset
         getTageslinieDataset: function () {
             return this.get("tageslinieDataset");
         },
         // setter for tageslinieDataset
-        setTageslinieDataset: function (value) {
-            this.set("tageslinieDataset", value);
+        setTageslinieDataset: function (data) {
+            var datum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
+                showData = this.getDataAttributes(data[0]),
+                newData = _.map(data, function (val) {
+                    val.timestamp = Moment(val.timestamp).format("HH:mm") + " Uhr";
+                    return val;
+                });
+
+            this.set("tageslinieDataset", {
+                data: newData,
+                xLabel: "Uhrzeit am " + datum,
+                showData: showData
+            });
         },
 
         // getter for wochenlinieDataset
@@ -96,8 +135,20 @@ define(function (require) {
             return this.get("wochenlinieDataset");
         },
         // setter for WochenlinieDataset
-        setWochenlinieDataset: function (value) {
-            this.set("wochenlinieDataset", value);
+        setWochenlinieDataset: function (data) {
+            var startDatum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
+                endeDatum = Moment(_.last(data).timestamp).format("DD.MM.YYYY"),
+                showData = this.getDataAttributes(data[0]),
+                newData = _.map(data, function (val) {
+                    val.timestamp = Moment(val.timestamp).format("DD.MM.YYYY");
+                    return val;
+                });
+
+            this.set("wochenlinieDataset", {
+                data: newData,
+                xLabel: "Woche vom " + startDatum + " bis " + endeDatum,
+                showData: showData
+            });
         },
 
         // getter for jahreslinieDataset
@@ -105,59 +156,94 @@ define(function (require) {
             return this.get("jahreslinieDataset");
         },
         // setter for JahrgangslinieDataset
-        setJahreslinieDataset: function (value) {
-            this.set("jahreslinieDataset", value);
+        setJahreslinieDataset: function (data) {
+            var year = Moment(data[0].timestamp).format("YYYY"),
+                showData = this.getDataAttributes(data[0]),
+                newData = _.map(data, function (val) {
+                    val.timestamp = Moment(val.timestamp).format("MMMM");
+                    return val;
+                });
+
+            this.set("jahreslinieDataset", {
+                data: newData,
+                xLabel: "Jahr " + year,
+                showData: showData
+            });
         },
 
-        combineYearsData: function (dataPerYear, years) {
-            var dataset = [];
-
-            _.each(years, function (year) {
-                var attrDataArray = _.where(dataPerYear, {year: year}),
-                    yearObject = {year: year};
-
-                _.each(attrDataArray, function (attrData) {
-                    yearObject[attrData.attrName] = attrData.value;
-                }, this);
-                dataset.push(yearObject);
-            }, this);
-            dataset = this.parseData(dataset);
-            this.setDataset(dataset);
-        },
-        // setter for rowNames
-        setRowNames: function (value) {
-            this.set("rowNames", value);
-        },
-        // setter for years
-        setYears: function (value) {
-            this.set("years", value);
-        },
-        // setter for art
-        setArt: function (value) {
-            this.set("art", value);
-        },
-        // setter for bezeichnung
-        setBezeichnung: function (value) {
-            this.set("bezeichnung", value);
-        },
         // setter for name
         setName: function (value) {
             this.set("name", value);
         },
-        setDataset: function (value) {
-            this.set("dataset", value);
-        },
+
+        /**
+         * Gibt das Dataset-Objekt passend zum aktiven Tab zurück
+         * @return {object} Dataset-Objekt
+         */
         getDataset: function () {
-            return this.get("dataset");
+            var activeTab = this.getActiveTab();
+
+            if (activeTab === "tag") {
+                return this.getTageslinieDataset();
+            }
+            else if (activeTab === "woche") {
+                return this.getWochenlinieDataset();
+            }
+            else if (activeTab === "jahr") {
+                return this.getJahreslinieDataset();
+            }
         },
-        // getter for attrToShow
-        getAttrToShow: function () {
-            return this.get("attrToShow");
+
+        /**
+         * Untersucht welche Daten geliefert worden sind
+         * @param  {object} inspectData Dataset-Objekt
+         * @return {array}              Array mit Schlüsselwörtern
+         */
+        getDataAttributes: function (inspectData) {
+            var showData = ["total"];
+
+            if (!_.isNull(inspectData.r_in)) {
+                showData.push("r_in");
+            }
+            if (!_.isNull(inspectData.r_out)) {
+                showData.push("r_out");
+            }
+
+            return showData;
         },
-        // setter for attrToShow
-        setAttrToShow: function (value) {
-            this.set("attrToShow", value);
+
+        createAndGetLegendText: function() {
+            return "bvhbbv";
         },
+
+        createD3Document: function () {
+            var dataset = this.getDataset(),
+                data = dataset.data,
+                xLabel = dataset.xLabel,
+                showData = dataset.showData,
+                heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
+                heightPegelHeader = $(".radPegelHeader").css("height").slice(0, -2),
+                heightNavbar = $(".verkehrsstaerken_rad .nav").css("height").slice(0, -2),
+                height = heightGfiContent - heightPegelHeader - heightNavbar,
+                width = $(".gfi-content").css("width").slice(0, -2),
+                graphConfig = {
+                graphType: "Linegraph",
+                selector: ".graph",
+                width: width,
+                height: height,
+                selectorTooltip: ".graph-tooltip-div",
+                scaleTypeX: "ordinal",
+                scaleTypeY: "linear",
+                data: data,
+                xAttr: "timestamp",
+                xAxisLabel: xLabel,
+                yAxisLabel: "Anzahl Fahrräder",
+                attrToShowArray: showData
+            };
+
+            Radio.trigger("Graph", "createGraph", graphConfig);
+        },
+
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
          */
@@ -176,162 +262,6 @@ define(function (require) {
                     element.remove();
                 }
             }, this);
-        },
-         /*
-        * noData comes as "-" from WMS. turn noData into ""
-        * try to parse data to float
-        */
-        parseData: function (dataArray) {
-            var parsedDataArray = [];
-
-            _.each(dataArray, function (dataObj) {
-                var parsedDataObj = {};
-
-                _.each(dataObj, function (dataVal, dataAttr) {
-                    var dataVal = this.parseDataValue(dataVal),
-                        parseFloatVal = parseFloat(dataVal);
-
-                    if (isNaN(parseFloatVal)) {
-                        parsedDataObj[dataAttr] = dataVal;
-                    }
-                    else {
-                        parsedDataObj[dataAttr] = parseFloatVal;
-                    }
-                }, this);
-                parsedDataArray.push(parsedDataObj);
-            }, this);
-
-            return parsedDataArray;
-        },
-        parseDataValue: function (value) {
-            if (value === "*") {
-                value = "Ja";
-            }
-            return value;
-        },
-        createD3Document: function () {
-            var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
-                heightPegelHeader = $(".pegelHeader").css("height").slice(0, -2),
-                heightNavbar = $(".verkehrsstaerken .nav").css("height").slice(0, -2),
-                heightBtnGroup = $(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2),
-                height = heightGfiContent - heightPegelHeader - heightNavbar - heightBtnGroup,
-                width = $(".gfi-content").css("width").slice(0, -2),
-                graphConfig = {
-                graphType: "Linegraph",
-                selector: ".graph",
-                width: width,
-                height: height,
-                selectorTooltip: ".graph-tooltip-div",
-                scaleTypeX: "ordinal",
-                scaleTypeY: "linear",
-                data: this.getDataset(),
-                xAttr: "year",
-                xAxisLabel: "Jahr",
-                attrToShowArray: this.getAttrToShow()
-            };
-
-            Radio.trigger("Graph", "createGraph", graphConfig);
-            this.manipulateSVG();
-        },
-        manipulateSVG: function () {
-            var graphParams = Radio.request ("Graph", "getGraphParams"),
-                data = this.getDataset(),
-                svg = d3.select(".graph-svg"),
-                scaleX = graphParams.scaleX,
-                scaleY = graphParams.scaleY,
-                tooltipDiv = graphParams.tooltipDiv,
-                margin = graphParams.margin,
-                offset = graphParams.offset,
-                size = 10,
-                attrToShowArray = this.getAttrToShow();
-
-            data = _.filter(data, function (obj) {
-                return obj[attrToShowArray[0]] !== "-";
-            });
-            svg.selectAll("dot")
-                .data(data)
-                .enter().append("g")
-                .append("rect")
-                .attr("x", function (d) {
-                    return scaleX(d.year) + margin.left - (size / 2) + (offset + scaleX.bandwidth() / 2);
-                })
-                .attr("y", function (d) {
-                    return scaleY(d[attrToShowArray[0]]) + (size / 2) + offset + margin.top;
-                })
-                .attr("width", size)
-                .attr("height", size)
-                .attr("class", function (d) {
-                    var returnVal = "";
-
-                    if (_.has(d, "Baustelleneinfluss") && d[attrToShowArray] !== "-") {
-                        returnVal = "dot_visible";
-                    }
-                    else {
-                        returnVal = "dot_invisible";
-                    }
-                    return returnVal;
-                })
-                .on("mouseover", function (d) {
-                    tooltipDiv.transition()
-                        .duration(200)
-                        .style("opacity", 0.9);
-                    tooltipDiv.html(d[attrToShowArray[0]])
-                        .attr("style", "background: gray")
-                        .style("left", (d3.event.offsetX + 5) + "px")
-                        .style("top", (d3.event.offsetY - 5) + "px");
-
-                    })
-                .on("mouseout", function () {
-                    tooltipDiv.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                })
-                .on("click", function (d) {
-                    tooltipDiv.transition()
-                        .duration(200)
-                        .style("opacity", 0.9);
-                    tooltipDiv.html(d[attrToShowArray[0]])
-                        .attr("style", "background: gray")
-                        .style("left", (d3.event.offsetX + 5) + "px")
-                        .style("top", (d3.event.offsetY - 5) + "px");
-                    });
-            var legendBBox = svg.selectAll(".graph-legend").node().getBBox(),
-                width = legendBBox.width,
-                height = legendBBox.height,
-                x = legendBBox.x,
-                y = legendBBox.y;
-
-            svg.selectAll(".graph-legend").append("g")
-                .append("rect")
-                .attr("width", 10)
-                .attr("height", 10)
-                .attr("class", "dot_visible")
-                .attr("transform", "translate(" + (x + width + 10) + "," + (y + 2.5) + ")");
-
-            legendBBox = svg.selectAll(".graph-legend").node().getBBox();
-                width = legendBBox.width;
-                height = legendBBox.height;
-                x = legendBBox.x;
-                y = legendBBox.y;
-
-            svg.selectAll(".graph-legend").append("g")
-                .append("text")
-                .attr("x", 10)
-                .attr("y", 10)
-                .attr("transform", "translate(" + (x + width) + "," + (y + 2.5) + ")")
-                .text(this.createAndGetLegendText(attrToShowArray[0]));
-        },
-
-        createAndGetLegendText: function (value) {
-            if (value === "DTV") {
-                return "DTV (Kfz/24h) mit Baustelleneinfluss";
-            }
-            else if (value === "DTVw") {
-                return "DTVw (Kfz/24h) mit Baustelleneinfluss";
-            }
-            else {
-                return "SV-Anteil am DTVw (%) mit Baustelleneinfluss";
-            }
         }
     });
 
