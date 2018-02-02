@@ -2,6 +2,7 @@ define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/model"),
         Config = require ("config"),
+        ol = require("openlayers"),
         WfsQueryModel;
 
     WfsQueryModel = QueryModel.extend({
