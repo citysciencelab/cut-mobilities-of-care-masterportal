@@ -19,8 +19,8 @@ define(function (require) {
                 this.addSearchInMapExtentSnippet();
             }
             if (!_.isUndefined(layerObject)) {
-                url = layerObject.get("url") + "_mapping/" + layerObject.get("typeName");
-                // url = Radio.request("Util", "getProxyURL", layerObject.get("url")) + "_mapping/" + layerObject.get("typeName");
+                // url = layerObject.get("url") + "_mapping/" + layerObject.get("typeName");
+                url = Radio.request("Util", "getProxyURL", layerObject.get("url")) + "_mapping/" + layerObject.get("typeName");
                 this.requestMetadata(url, this.parseResponse);
             }
         },
