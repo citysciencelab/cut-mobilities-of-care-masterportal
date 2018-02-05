@@ -21,17 +21,12 @@ define(function (require) {
             var channel = Radio.channel("SensorThingsLayer"),
                 subtyp = this.get("subTyp").toUpperCase();
 
-            channel.on({
-                "updateFromWebSocket": this.updateFromWebSocket,
-                "updateFromWebSocketStreamLayer": this.updateFromWebSocketStreamLayer
-            }, this);
-
             // start connection to liveUpdate
             if (subtyp === "SENSORTHINGS") {
                 this.createMqttConnection();
                 // this.createWebSocketConnection();
             }
-            else if (subtyp === "STREAMLAYER") {
+            else if (subtyp === "ESRISTREAMLAYER") {
             this.createWebSocketConnectionToStreamLayer();
             }
         },
@@ -93,7 +88,7 @@ define(function (require) {
                     sensorData = this.loadSensorThings();
                     features = this.drawPoints(sensorData, epsg);
                 }
-                else if (subtyp === "STREAMLAYER") {
+                else if (subtyp === "ESRISTREAMLAYER") {
                     features = this.drawESRIGeoJson();
                 }
             }
@@ -442,12 +437,6 @@ define(function (require) {
      * this must be passes this as a context to call the updateFromMqtt function
      */
         createMqttConnection: function () {
-            //****************************************
-            if (this.get("url").split("/")[2] == "geodienste.hamburg.de") {
-                return;
-            }
-            //****************************************
-
             var dataStreamIds = this.getDataStreamIds(),
                 client = mqtt.connect({
                     host: this.get("url").split("/")[2],
@@ -491,7 +480,8 @@ define(function (require) {
          * which fire new observation using MQTT
          */
         createWebSocketConnection: function () {
-            var connection = new WebSocket("ws://127.0.0.1:8767");
+            var thisSensor = this,
+                connection = new WebSocket("ws://127.0.0.1:8767");
 
             // errors
             connection.onerror = function (error) {
@@ -504,8 +494,8 @@ define(function (require) {
             // messages from the server
             connection.onmessage = function (ev) {
                 var jsonData = JSON.parse(ev.data);
-                console.log(jsonData);
-                Radio.trigger("SensorThingsLayer", "updateFromWebSocket", jsonData);
+
+                thisSensor.updateFromWebSocket(jsonData);
             };
         },
 
@@ -648,7 +638,7 @@ define(function (require) {
 
 
 // *************************************************************
-// ***** Stream Layer                                      *****
+// ***** Live update with ESRI-StreamLayer                 *****
 // *************************************************************
 
         /**
@@ -656,8 +646,10 @@ define(function (require) {
          * which fire new observation using MQTT
          */
         createWebSocketConnectionToStreamLayer: function () {
+            // console.log(window.location.protocol);
+            var thisSensor = this,
             // todo die URL entsprechend zusammenfügen
-            var connection = new WebSocket(this.get("url"));
+            connection = new WebSocket(this.get("url"));
 
             // errors
             connection.onerror = function (error) {
@@ -671,13 +663,15 @@ define(function (require) {
             connection.onmessage = function (ev) {
                 var jsonData = JSON.parse(ev.data);
 
-                Radio.trigger("SensorThingsLayer", "updateFromWebSocketStreamLayer", jsonData);
+                thisSensor.updateFromWebSocketStreamLayer(jsonData);
             };
         },
 
         updateFromWebSocketStreamLayer: function (esriJson) {
-            // esriJson.geometry.x = 9.93864 + Math.random() * 0.01;
-            // esriJson.geometry.y = 53.5521 + Math.random() * 0.01;
+            // console.log(esriJson);
+
+            esriJson.geometry.x = 9.95 + Math.random() * 0.1;
+            esriJson.geometry.y = 53.53 + Math.random() * 0.1;
 
             var id = esriJson.attributes.id,
                 features = this.getLayerSource().getFeatures(),
@@ -691,14 +685,21 @@ define(function (require) {
             esriJson.geometry.x = xyTransfrom[0];
             esriJson.geometry.y = xyTransfrom[1];
 
-            if(!_.isUndefined(removeFeature)) {
+            if (!_.isUndefined(removeFeature)) {
                 this.getLayerSource().removeFeature(removeFeature);
             }
+// console.log(features);
+            esriFormat = new ol.format.EsriJSON();
+            // console.log(esriFormat);
+            // esriFormat.readProjection(epsg);
+            // console.log(esriFormat);
+            drawFeature = esriFormat.readFeatures(esriJson);
 
-            drawFeature = new ol.format.EsriJSON().readFeatures(esriJson);
             // set ID and add features to vectorlayer
             drawFeature[0].setId(id);
             this.getLayerSource().addFeatures(drawFeature);
+
+// console.log(drawFeature);
 
             this.set("loadend", "ready");
             Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), drawFeature);

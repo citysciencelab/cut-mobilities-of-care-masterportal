@@ -538,9 +538,12 @@ define(function (require) {
          * @return {ol.Style} style
          */
         createSVGStyle: function (svgPath) {
+            var size = this.getSize();
+
             return new ol.style.Style({
                 image: new ol.style.Icon({
-                    src: "data:image/svg+xml;utf8," + svgPath
+                    src: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgPath),
+                    imgSize: [size, size]
                 })
             });
         },
@@ -715,6 +718,8 @@ define(function (require) {
             if (((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2) >= size) {
                 size = size + ((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2);
             }
+
+            this.setSize(size);
 
             svg = this.createSvgNominalCircleSegments(size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity);
 
@@ -899,6 +904,8 @@ define(function (require) {
                 barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor),
                 svg;
 
+            this.setSize(size);
+
             // create svg
             svg = this.createSvgIntervalCircleBar(size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius);
 
@@ -977,6 +984,14 @@ define(function (require) {
                 svg = svg + "</svg>";
 
             return svg;
+        },
+
+        setSize: function (size) {
+            this.set("size", size);
+        },
+
+        getSize: function () {
+            return this.get("size");
         }
 
     });

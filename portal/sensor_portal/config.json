@@ -185,8 +185,8 @@
         {
           "id": "999993",
           "styleId": "999993",
-          "name" : "Position der ISS (Live)",
-          "visibility": true
+          "name" : "FAKE Position der ISS (Live)",
+          "visibility": false
         },
         {
           "id" : "937",

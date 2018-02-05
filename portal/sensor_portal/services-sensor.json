@@ -4,7 +4,7 @@
       "name" : "Live - Position der International Space Station",
       "url" : "wss://service32.eggits.net:6143/arcgis/ws/services/iss-Location-Broadcast/StreamServer/subscribe",
       "typ" : "Sensor",
-      "subTyp" : "StreamLayer",
+      "subTyp" : "ESRIStreamLayer",
       "epsg": "EPSG:4326",
       "gfiTheme" : "default",
       "gfiAttributes" : {
@@ -96,7 +96,7 @@
    {
       "id" : "999998",
       "name" : "Live - Temperatur",
-      "url" : "https://51.5.242.162/itsLGVhackathon",
+      "url" : "http://51.5.242.162/itsLGVhackathon",
       "typ" : "Sensor",
       "subTyp" : "SensorThings",
       "version" : "1.0",
@@ -121,7 +121,7 @@
       "typ" : "Sensor",
       "subTyp" : "SensorThings",
       "version" : "1.0",
-      "url" : "https://51.5.242.162/itsLGVhackathon",
+      "url" : "http://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
@@ -130,6 +130,7 @@
       "utc" : "+1",
       "gfiTheme" : "default",
       "gfiAttributes" : {
+         "dataStreamId" : "DataStreamID",
          "chargings_station_nr" : "StandortID",
          "sms_no_charging_station" : "Ladepunkt",
          "phenomenonTime" : "Letzer Ladezeitpunkt",

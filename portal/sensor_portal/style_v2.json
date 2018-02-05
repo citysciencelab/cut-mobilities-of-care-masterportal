@@ -2,11 +2,9 @@
   {
     "layerId" : "999993",
     "class": "POINT",
-    "subClass" : "CIRCLE",
-    "circleRadius" : 10,
-    "circleFillColor" : [210, 0, 0, 0.5],
-    "circleStrokeColor" : [210, 0, 0, 1],
-    "circleStrokeWidth": 2
+    "subClass" : "SIMPLE",
+    "imageName" : "iss.png",
+    "imagescale" : "1.0"
   },
   {
     "layerId" : "999998",
