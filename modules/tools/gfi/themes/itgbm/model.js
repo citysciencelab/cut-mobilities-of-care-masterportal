@@ -28,8 +28,7 @@ define(function (require) {
          */
         postMessageToItGbm: function () {
             var featureProperties = _.omit(this.get("feature").getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]);
-
-            parent.postMessage({"featureToDetail": JSON.stringify(featureProperties)}, "http://localhost:8080");
+            Radio.trigger("RemoteInterface", "postMessage", {"featureToDetail": JSON.stringify(featureProperties)});
         }
     });
 

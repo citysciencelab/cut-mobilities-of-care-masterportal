@@ -2,9 +2,13 @@ define(function (require) {
     var Radio = require("backbone.radio"),
         Backbone = require("backbone"),
         ol = require("openlayers"),
+        Config = require("config"),
         RemoteInterface;
 
     RemoteInterface = Backbone.Model.extend({
+        defaults: {
+            remotehost: Config.remoteHost || "https://localhost:8080"
+        },
         initialize: function () {
             var channel = Radio.channel("RemoteInterface");
 
@@ -22,21 +26,19 @@ define(function (require) {
                 "zoomToFeatures": this.zoomToFeatures,
                 "resetView": this.resetView,
                 "zoomToFeature": this.zoomToFeature,
-                "setModelAttributesById": this.setModelAttributesById
+                "setModelAttributesById": this.setModelAttributesById,
+                "postMessage": this.postMessage
             }, this);
 
             window.addEventListener("message", this.receiveMessage.bind(this));
             Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
-            parent.Backbone.MasterRadio = Radio;
-            parent.postMessage("ready", "*");
-
         },
         /**
          * handles the postMessage events
          * @param  {MessageEvent} event
          */
         receiveMessage: function (event) {
-            if (event.origin !== "http://localhost:8080") {
+            if (event.origin !== this.get("remotehost")) {
                 return;
             }
             if (event.data.hasOwnProperty("showPositionByFeatureId")) {
@@ -45,6 +47,15 @@ define(function (require) {
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
             }
+        },
+        /**
+         * sends Message to remotehost via postMessage Api
+         *
+         * @param  {Object} content the Data to be sent
+         */
+        postMessage: function (content) {
+            console.log("postMessage");
+            parent.postMessage(content, this.get("remotehost"));
         },
         /**
          * gets the center coordinate of the feature geometry and triggers it to MapMarker module
@@ -79,7 +90,6 @@ define(function (require) {
             var feature = this.getFeatureFromHit(hit),
                 extent = feature.getGeometry().getExtent(),
                 center = ol.extent.getCenter(extent);
-//                Radio.trigger("MapView", "setCenter", center);
                 Radio.trigger("MapMarker", "showMarker", center);
         },
         zoomToFeature: function (hit) {
