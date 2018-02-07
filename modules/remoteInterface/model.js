@@ -7,7 +7,7 @@ define(function (require) {
 
     RemoteInterface = Backbone.Model.extend({
         defaults: {
-            remotehost: Config.remoteHost || "https://localhost:8080"
+            postMessageUrl: "https://localhost:8080"
         },
         initialize: function () {
             var channel = Radio.channel("RemoteInterface");
@@ -29,16 +29,24 @@ define(function (require) {
                 "setModelAttributesById": this.setModelAttributesById,
                 "postMessage": this.postMessage
             }, this);
-
             window.addEventListener("message", this.receiveMessage.bind(this));
             Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
         },
+        getPostMessageHost: function (config) {
+            if (_.has(config, "postMessageUrl") && config.postMessageUrl.length > 0) {
+                return this.setPostMessageUrl(config.postMessageUrl);
+            }
+            else {
+                return this.get("postMessageUrl");
+            }
+        },
+
         /**
          * handles the postMessage events
          * @param  {MessageEvent} event
          */
         receiveMessage: function (event) {
-            if (event.origin !== this.get("remotehost")) {
+            if (event.origin !== this.getPostMessageHost()) {
                 return;
             }
             if (event.data.hasOwnProperty("showPositionByFeatureId")) {
@@ -54,8 +62,7 @@ define(function (require) {
          * @param  {Object} content the Data to be sent
          */
         postMessage: function (content) {
-            console.log("postMessage");
-            parent.postMessage(content, this.get("remotehost"));
+            parent.postMessage(content, this.getPostMessageHost());
         },
         /**
          * gets the center coordinate of the feature geometry and triggers it to MapMarker module
@@ -69,6 +76,7 @@ define(function (require) {
                 center = ol.extent.getCenter(extent);
 
             Radio.trigger("MapMarker", "showMarker", center);
+            Radio.trigger("MapView", "setCenter", center);
         },
         addFeaturesFromGBM: function (hits, id, layerName) {
             Radio.trigger("AddGeoJSON", "addFeaturesFromGBM", hits, id, layerName);
@@ -133,6 +141,9 @@ define(function (require) {
         },
         getWGS84MapSizeBBOX: function () {
             return Radio.request("Map", "getWGS84MapSizeBBOX");
+        },
+        setPostMessageUrl: function (value) {
+            this.set("postMessageUrl", value);
         }
     });
 

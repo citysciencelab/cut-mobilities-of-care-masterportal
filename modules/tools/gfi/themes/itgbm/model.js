@@ -1,20 +1,15 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        Radio = require("backbone.radio"),
-        ImgView = require("modules/tools/gfi/objects/image/view"),
-        VideoView = require("modules/tools/gfi/objects/video/view"),
-        RoutableView = require("modules/tools/gfi/objects/routingButton/view"),
+        Config = require("config"),
         ItGbmTheme;
 
     ItGbmTheme = Theme.extend({
-
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
             });
         },
-
         /**
          * sets title and gfiContent attributes
          */
@@ -28,7 +23,8 @@ define(function (require) {
          */
         postMessageToItGbm: function () {
             var featureProperties = _.omit(this.get("feature").getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]);
-            Radio.trigger("RemoteInterface", "postMessage", {"featureToDetail": JSON.stringify(featureProperties)});
+            featureProperties.extent = this.get("feature").getGeometry().getExtent();
+            Radio.trigger("RemoteInterface", "postMessage", {"featureToDetail": JSON.stringify(featureProperties),  "layerId": this.get("id")});
         }
     });
 

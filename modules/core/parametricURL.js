@@ -21,7 +21,8 @@ define([
                 "getInitString": this.getInitString,
                 "getCenter": this.getCenter,
                 "getZoomLevel": this.getZoomLevel,
-                "getZoomToGeometry": this.getZoomToGeometry
+                "getZoomToGeometry": this.getZoomToGeometry,
+                "getZoomToExtent": this.getZoomToExtent
             }, this);
 
             this.parseURL();
@@ -152,6 +153,12 @@ define([
             this.set("center", values);
 
         },
+
+        parseZOOMTOEXTENT: function (result) {
+            var values = _.values(_.pick(result, "ZOOMTOEXTENT"))[0].split(",");
+
+            this.set("zoomToExtent", [parseFloat(values[0]), parseFloat(values[1]), parseFloat(values[2]), parseFloat(values[3])]);
+        },
         parseBezirk: function (result) {
             var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
                 bezirke = [
@@ -265,6 +272,10 @@ define([
                 this.parseCenter(result);
             }
 
+            if (_.has(result, "ZOOMTOEXTENT")) {
+                this.parseZOOMTOEXTENT(result);
+            }
+
             if (_.has(result, "BEZIRK")) {
                 this.parseBezirk(result);
             }
@@ -334,6 +345,10 @@ define([
         // setter for zoomLevel
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
+        },
+
+        getZoomToExtent: function () {
+            return this.get("zoomToExtent");
         }
     });
 

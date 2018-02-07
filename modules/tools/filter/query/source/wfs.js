@@ -1,6 +1,8 @@
 define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/model"),
+        Config = require ("config"),
+        ol = require("openlayers"),
         WfsQueryModel;
 
     WfsQueryModel = QueryModel.extend({
@@ -139,8 +141,9 @@ define(function (require) {
                 featureAttribute.values = [];
 
                 _.each(features, function (feature) {
-                    featureAttribute.values = _.union(featureAttribute.values, this.parseValuesFromString(feature, featureAttribute.name));
+                    featureAttribute.values.push(this.parseValuesFromString(feature, featureAttribute.name));
                 }, this);
+                featureAttribute.values = _.unique(_.flatten(featureAttribute.values));
             }, this);
             return featureAttributesMap;
         },
