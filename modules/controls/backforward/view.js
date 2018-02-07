@@ -1,41 +1,63 @@
-define(function (require) {
+define([
+    "backbone",
+    "backbone.radio",
+    "modules/controls/backforward/model",
+    "text!modules/controls/backforward/template.html"
+], function(Backbone, Radio, BackForwardModel, BackForwardTemplate) {
+    BackForwardView = Backbone.View.extend({
+        model: BackForwardModel,
+        template: _.template(BackForwardTemplate),
+        id: "backforwardview",
+        events: {
+            "click .glyphicon-chevron-right": "setNextView",
+            "click .glyphicon-chevron-left": "setLastView"
+        },
+        initialize: function() {
+            var channel = Radio.channel("BackForwardView");
+            channel.on({
+                "setUpdate": this.setUpdate
+            }, this);
+            channel.reply({
+                "isUpdate": this.isUpdate
+            }, this);
 
-  var BackForwardModel = require("modules/controls/backforward/model"),
-      Radio = require("backbone.radio"),
-      Backbone  = require("backbone"),
-      BackForwardView;
+            Radio.trigger("Map", "registerListener", "moveend", this.updatePermalink);
+            window.addEventListener('popstate', function(ev) {
+                if (ev.state === null) {
+                    return;
+                }
+                Radio.trigger("MapView", "setCenter", ev.state.center, event.state.zoom);
+                Radio.trigger("BackForwardView", "setUpdate", false);
+                //set new view
+            });
 
-  BackForwardView = Backbone.View.extend({
-      template: _.template("<div class='backForwardButtons'><span class='glyphicon glyphicon-chevron-right' title='Vor springen'></span><br><span class='glyphicon glyphicon-chevron-left' title='Zurück springen'></span><div>"),
-      id: "backforwardview",
-      events: {
-          "click .glyphicon-chevron-right": "setNextView",
-          "click .glyphicon-chevron-left": "setLastView"
-      },
-      initialize: function () {
-          console.log('#######jo');
-          var channel = Radio.channel("BackForwardView");
-
-          this.model = new BackForwardModel();
-          this.render();
-      },
-      render: function () {
-          this.$el.html(this.template());
-      },
-      setNextView: function () {
-          console.log('Funktion setNextView');
-          //Angaben (mapView.startCenter, mapView.extent, mapView.zoomLevel) aus config.json auslesen
-          //var center = Radio.request("Parser", "getPortalConfig").mapView.startCenter;
-          //var zoomlevel = Radio.request("Parser", "getPortalConfig").mapView.zoomLevel;
-          //console.log(center);
-          //console.log(zoomlevel);
-          //Radio.trigger("MapView", "setCenter", center, zoomlevel);
-      },
-      setLastView: function () {
-          console.log('Funktion setLastView');
-      } 
-	  
-  });
+            this.model = new BackForwardModel();
+            this.render();
+        },
+        setUpdate: function(bool) {
+            this.model.setUpdate(bool);
+        },
+        isUpdate: function() {
+            return this.model.isUpdate();
+        },
+        updatePermalink: function(evt) {
+            if (!Radio.request("BackForwardView", "isUpdate")) {
+                // do not update the URL when the view was changed in the 'popstate' handler
+                Radio.trigger("BackForwardView", "setUpdate", true);
+                return;
+            }
+            this.model.pushState(evt.map.getView());
+        },
+        render: function() {
+            this.$el.html(this.template());
+        },
+        setNextView: function() {
+            window.history.forward();
+        },
+        setLastView: function() {
+            window.history.back();
+        }
+    });
 
     return BackForwardView;
 });
