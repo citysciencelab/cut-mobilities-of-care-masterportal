@@ -16,6 +16,7 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             $("#map").append(this.$el.html(this.template(attr)));
+            this.$el.css("maxWidth", $("#map").width() / 2.2);
             this.$el.draggable({
                 containment: "#map",
                 handle: ".gfi-header",
