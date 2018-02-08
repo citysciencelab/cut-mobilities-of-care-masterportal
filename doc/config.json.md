@@ -548,6 +548,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isVisible|nein|Boolean|||
 |searchInMapExtent|nein|Boolean|false|Suche im aktuellen Kartenausschnitt|
 |allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
+liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |name|nein|String||Name des Filters
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
 |predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
