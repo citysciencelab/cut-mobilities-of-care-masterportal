@@ -377,7 +377,7 @@ define(function (require) {
             var isMatch = false,
                 mapExtent = Radio.request("MapView", "getCurrentExtent");
 
-            return ol.extent.containsExtent(mapExtent, feature.getGeometry().getExtent());
+            return ol.extent.intersects(mapExtent, feature.getGeometry().getExtent());
         },
 
         /**
