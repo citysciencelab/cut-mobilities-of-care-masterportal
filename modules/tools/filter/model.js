@@ -10,6 +10,7 @@ define(function (require) {
             isGeneric: false,
             isInitOpen: false,
             isVisible: false,
+            isVisibleInMenu: true,
             id: "filter",
             queryCollection: {},
             isActive: false,
