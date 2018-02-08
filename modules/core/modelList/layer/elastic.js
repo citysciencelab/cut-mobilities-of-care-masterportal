@@ -41,7 +41,7 @@ define(function (require) {
             Radio.trigger("Util", "showLoader");
 
             $.ajax({
-                url: Radio.request("Util", "getProxyURL", this.get("url") + "/" + this.get("typeName") + "/_search?size=10000"),
+                url: Radio.request("Util", "getProxyURL", this.get("url") + this.get("typeName") + "/_search?size=10000"),
                 // url: this.get("url") + this.get("typeName") + "/_search?size=10000",
                 type: "GET",
                 context: this,
