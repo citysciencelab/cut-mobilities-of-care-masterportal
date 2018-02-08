@@ -31,7 +31,6 @@ define(function (require) {
             return features;
         },
         processFeatures: function (features) {
-            console.log('process');
             this.setFeatures(features);
             this.setFeatureIds(this.collectAllFeatureIds(features));
             this.buildQueryDatastructure();

@@ -244,7 +244,7 @@ define(function (require) {
                     else {
                         if (this.isValidKey(key) && this.isValidValue(value)) {
                             if (_.isArray(value)) {
-                                value = value.toString();
+                                value = value.toString().replace(/,/g, ", ");
                             }
                             preGfi[key] = _.isString(value) ? value.trim() : value;
                         }
