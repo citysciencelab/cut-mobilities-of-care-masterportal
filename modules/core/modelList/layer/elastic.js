@@ -68,6 +68,7 @@ define(function (require) {
             }, this);
 
             this.getLayerSource().addFeatures(features);
+            Radio.trigger("ElasticLayer", "featuresLoaded", this.getId(), features);
             Radio.trigger("Util", "hideLoader");
         },
 

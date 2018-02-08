@@ -11,10 +11,7 @@ define(function (require) {
         ),
         initialize: function () {
             this.superInitialize();
-            var that = this;
-            setTimeout(function(){
-                that.prepareQuery();
-            },1000, that);
+            this.prepareQuery()
 
             if (this.get("searchInMapExtent") === true) {
                 Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive, this);
@@ -46,6 +43,7 @@ define(function (require) {
             return features;
         },
         processFeatures: function (features) {
+            console.log('process');
             this.setFeatures(features);
             this.setFeatureIds(this.collectAllFeatureIds(features));
             this.buildQueryDatastructure();
@@ -63,6 +61,13 @@ define(function (require) {
          * @return {[type]} [description]
          */
         listenToFeaturesLoaded: function () {
+            this.listenTo(Radio.channel("ElasticLayer"), {
+                "featuresLoaded": function (layerId, features) {
+                    if (layerId === this.get("layerId")) {
+                        this.processFeatures(features);
+                    }
+                }
+            });
             this.listenTo(Radio.channel("WFSLayer"), {
                 "featuresLoaded": function (layerId, features) {
                     if (layerId === this.get("layerId")) {
