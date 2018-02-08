@@ -30,9 +30,9 @@ define(function (require) {
                     this.deactivateOtherModels(model);
                 },
                 "deselectAllModels": this.deselectAllModels,
-                "featureIdsChanged": function (featureIds) {
+                "featureIdsChanged": function (featureIds, layerId) {
                     this.updateMap();
-                    this.updateGFI(featureIds);
+                    this.updateGFI(featureIds, layerId);
                 },
                 "closeFilter": function () {
                     this.setIsActive(false);
@@ -104,14 +104,14 @@ define(function (require) {
             }
         },
 
-        updateGFI: function (featureIds) {
+        updateGFI: function (featureIds, layerId) {
             var getVisibleTheme = Radio.request("GFI", "getVisibleTheme");
 
-            if (getVisibleTheme) {
+            if (getVisibleTheme && getVisibleTheme.get("id") === layerId) {
                 var featureId = getVisibleTheme.get("feature").getId();
 
                 if (!_.contains(featureIds, featureId)) {
-                    Radio.trigger("GFI", "hideGFI");
+                    Radio.trigger("GFI", "setIsVisible", false);
                 }
             }
         },
@@ -218,7 +218,7 @@ define(function (require) {
             }
         },
         closeGFI: function () {
-            Radio.trigger("GFI", "hideGFI");
+            Radio.trigger("GFI", "setIsVisible", false);
             Radio.trigger("MapMarker", "hideMarker");
         },
         collapseOpenSnippet: function () {
