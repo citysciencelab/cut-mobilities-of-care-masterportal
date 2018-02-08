@@ -117,16 +117,19 @@ define(function (require) {
         // setter for tageslinieDataset
         setTageslinieDataset: function (data) {
             var datum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
-                showData = this.getDataAttributes(data[0]),
-                newData = _.map(data, function (val) {
+                graphArray = this.getDataAttributes(data[0]),
+                newData = _.map(data, function (val, count) {
                     val.timestamp = Moment(val.timestamp).format("HH:mm") + " Uhr";
                     return val;
-                });
+                }),
+                legendArray = this.getLegendAttributes(data[0]);
 
             this.set("tageslinieDataset", {
                 data: newData,
-                xLabel: "Uhrzeit am " + datum,
-                showData: showData
+                xLabel: "Tagesverlauf am " + datum,
+                graphArray: graphArray,
+                xThinning: 16,
+                legendArray: legendArray
             });
         },
 
@@ -195,7 +198,7 @@ define(function (require) {
         },
 
         /**
-         * Untersucht welche Daten geliefert worden sind
+         * Untersucht welche Graphen vorliegen
          * @param  {object} inspectData Dataset-Objekt
          * @return {array}              Array mit Schlüsselwörtern
          */
@@ -212,15 +215,37 @@ define(function (require) {
             return showData;
         },
 
-        createAndGetLegendText: function() {
-            return "bvhbbv";
+        /**
+         * Untersucht welche Legendeneinträge benötigt werden
+         * @param  {object} inspectData Dataset-Objekt
+         * @return {array}             Array of Objects
+         */
+        getLegendAttributes: function(inspectData) {
+            var legendData = [{
+                key: "total",
+                value: "Fahrräder insgesamt"
+            }];
+
+            if (!_.isNull(inspectData.r_in)) {
+                legendData.push({
+                    key: "r_in",
+                    value: "Fahrräder stadteinwärts"
+                });
+            }
+
+            if (!_.isNull(inspectData.r_out)) {
+                legendData.push({
+                    key: "r_out",
+                    value: "Fahrräder stadtauswärts"
+                });
+            }
+
+            return legendData;
         },
 
         createD3Document: function () {
             var dataset = this.getDataset(),
                 data = dataset.data,
-                xLabel = dataset.xLabel,
-                showData = dataset.showData,
                 heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
                 heightPegelHeader = $(".radPegelHeader").css("height").slice(0, -2),
                 heightNavbar = $(".verkehrsstaerken_rad .nav").css("height").slice(0, -2),
@@ -236,9 +261,11 @@ define(function (require) {
                 scaleTypeY: "linear",
                 data: data,
                 xAttr: "timestamp",
-                xAxisLabel: xLabel,
+                xThinning: dataset.xThinning,
+                xAxisLabel: dataset.xLabel,
                 yAxisLabel: "Anzahl Fahrräder",
-                attrToShowArray: showData
+                attrToShowArray: dataset.graphArray,
+                legendArray: dataset.legendArray
             };
 
             Radio.trigger("Graph", "createGraph", graphConfig);

@@ -196,7 +196,17 @@ define(function (require) {
                 data: this.getDataset(),
                 xAttr: "year",
                 xAxisLabel: "Jahr",
-                attrToShowArray: this.getAttrToShow()
+                attrToShowArray: this.getAttrToShow(),
+                legendArray: [{
+                    key: "DTV",
+                    value: "DTV (Kfz/24h)"
+                }, {
+                    key: "DTVw",
+                    value: "DTVw (Kfz/24h)"
+                }, {
+                    key: "Schwerverkehrsanteil am DTVw",
+                    value: "SV-Anteil am DTVw (%)"
+                }]
             };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
