@@ -10,7 +10,9 @@ define(function (require) {
         defaults: {
             featureIds: [],
             isLayerVisible: false,
-            activateOnSelection: false
+            activateOnSelection: false,
+            // flag for the search in the current map extent
+            searchInMapExtent: false
         },
 
         /**
@@ -34,7 +36,17 @@ define(function (require) {
                     }
                 }
             }, this);
+
         },
+
+        isSearchInMapExtentActive: function () {
+            var model = this.get("snippetCollection").findWhere({type: "searchInMapExtent"});
+
+            if (!_.isUndefined(model) && model.getIsSelected() === true) {
+                this.runFilter();
+            }
+        },
+
         checkLayerVisibility: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
@@ -75,7 +87,7 @@ define(function (require) {
 
         addSnippet: function (featureAttribute) {
             featureAttribute.values.sort();
-            if (featureAttribute.type === "string") {
+            if (featureAttribute.type === "string" || featureAttribute.type === "text") {
                 featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
@@ -83,22 +95,31 @@ define(function (require) {
                 featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
-            else if (featureAttribute.type === "integer") {
+            else if (featureAttribute.type === "integer" || featureAttribute.type === "double") {
                 featureAttribute = _.extend(featureAttribute, {"snippetType": "slider"});
                 this.get("snippetCollection").add(new SnippetSliderModel(featureAttribute));
             }
         },
 
         /**
-         * Uses the WFS Features and Meta Data to build a Query consisting of one or more Snippets, where Snippets like DropDowns or Sliders
-         * @param  {XML} response
+         * adds a snippet for the map extent search
+         * @return {[type]} [description]
          */
-        createSnippets: function (response) {
-            var featureAttributesMap = this.parseResponse(response);
+        addSearchInMapExtentSnippet: function () {
+            this.get("snippetCollection").add(new SnippetCheckboxModel({
+                type: "searchInMapExtent",
+                isSelected: false,
+                label: "Suche im aktuellen Kartenausschnitt"
+            }));
+        },
 
-            featureAttributesMap = this.trimAttributes(featureAttributesMap);
+        /**
+         * Creates one or more Snippets, where Snippets like DropDowns or Sliders
+         * @param  {object[]} featureAttributes
+         */
+        createSnippets: function (featureAttributes) {
+            featureAttributesMap = this.trimAttributes(featureAttributes);
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
-
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);

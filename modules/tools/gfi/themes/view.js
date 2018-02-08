@@ -56,7 +56,7 @@ define(function (require) {
                 newLeft;
 
             newGfiWidth = currentView.$el.width();
-            newLeft = $(".lgv-container").width() - newGfiWidth - 40;
+            newLeft = $("#map").width() - newGfiWidth - 40;
 
             // initial left of gfi. can never be 0 after drag, due to render-function in desktop/detached/view
             if (oldLeft === 0) {

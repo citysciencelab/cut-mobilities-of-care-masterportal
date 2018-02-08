@@ -41,7 +41,7 @@ define(function (require) {
             Radio.trigger("Util", "showLoader");
 
             $.ajax({
-                url: Radio.request("Util", "getProxyURL", this.get("url")),
+                url: Radio.request("Util", "getProxyURL", this.get("url") + this.get("typeName") + "/_search?size=10000"),
                 type: "GET",
                 context: this,
                 success: callback,
@@ -62,7 +62,7 @@ define(function (require) {
                     geometry: this.readAndGetGeometry(hit._source.geometry_EPSG_25832)
                 });
                 feature.setProperties(_.omit(hit._source, "geometry_UTM_EPSG_25832"));
-                feature.setId(hit.id);
+                feature.setId(hit._id);
                 features.push(feature);
             }, this);
 
@@ -79,6 +79,71 @@ define(function (require) {
             var geojsonReader = new ol.format.GeoJSON();
             return geojsonReader.readGeometry(geometry, {
                 dataProjection: "EPSG:25832"
+            });
+        },
+
+        /**
+         * Zeigt nur die Features an, deren Id übergeben wird
+         * @param  {string[]} featureIdList
+         */
+        showFeaturesByIds: function (featureIdList) {
+            this.hideAllFeatures();
+            _.each(featureIdList, function (id) {
+                var feature = this.getLayerSource().getFeatureById(id),
+                    style = [];
+
+                style = this.getStyleAsFunction(this.get("style"));
+
+                feature.setStyle(style(feature));
+            }, this);
+        },
+
+        /**
+         * Versteckt alle Features mit dem Hidden-Style
+         */
+        hideAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures(),
+                that = this;
+
+            collection.forEach(function (feature) {
+                feature.setStyle(function () {
+                    return that.getHiddenStyle();
+                });
+            }, this);
+        },
+
+        showAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures(),
+                style;
+
+            collection.forEach(function (feature) {
+                style = this.getStyleAsFunction(this.get("style"));
+
+                feature.setStyle(style(feature));
+            }, this);
+        },
+
+        getStyleAsFunction: function (style) {
+            if (_.isFunction(style)) {
+                return style;
+            }
+            else {
+                return function (feature) {
+                    return style;
+                }
+            }
+        },
+
+        getHiddenStyle: function () {
+            return new ol.style.Style({
+                image: new ol.style.Circle({
+                    fill: new ol.style.Fill({
+                        color: "rgba(0, 0, 0, 0)"
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: "rgba(0, 0, 0, 0)"
+                    })
+                })
             });
         }
     });

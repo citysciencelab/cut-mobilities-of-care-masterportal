@@ -399,6 +399,7 @@ Im Objekt *tools* werden die Werkzeuge, deren Reihenfolge und das Erscheinungsbi
 |[children](#markdown-header-portalconfigmenutoolschildren)|nein|Object||Objekte, die die Tools konfigurieren.|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Reiters unter dem der Baum in der Menüleiste erscheint.|
+|isVisibleInMenu|nein|Boolean|true|Soll das Tool in der Menüleiste erscheinen.|
 
 ******
 
@@ -545,6 +546,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isActive|nein|Boolean||Wird der Filter initial ausgeführt|
 |isSelected|nein|Boolean||Ist der Filter initial ausgewählt|
 |isVisible|nein|Boolean|||
+|searchInMapExtent|nein|Boolean|false|Suche im aktuellen Kartenausschnitt|
 |allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
 |name|nein|String||Name des Filters
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
@@ -1242,7 +1244,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |[filterOptions](#markdown-header-filteroptions)|nein|Object||Filtereinstellungen für diesen Layer, wird vom Tool  [wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter) ausgewertet|
 |mouseHoverField|nein|Array [String] oder String||Attributename, der beim MouseHover-Event als Tooltip angzeigt wird. Voraussetzung Control „Mousehover“ ist aktiviert (siehe [config.js](config.js.md)).|
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
-|searchField|nein|String||Attributname, über den die Suche die Featuers des Layers finden kann.|
+|searchField|nein|String || Attray [String]||Attributname[n], über den die Suche die Featuers des Layers finden kann.|
 |styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md) oder [style_v2.json](style_v2.json.md) zu.|
 
 

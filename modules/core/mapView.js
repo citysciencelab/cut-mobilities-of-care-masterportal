@@ -104,7 +104,8 @@ define([
                     return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
                 },
                 "getResoByScale": this.getResoByScale,
-                "getScales": this.getScales
+                "getScales": this.getScales,
+                "getCurrentExtent": this.getCurrentExtent
             }, this);
 
             channel.on({
@@ -448,6 +449,16 @@ define([
          */
         getZoom: function () {
             return this.get("view").getZoom();
+        },
+
+        /**
+         * calculate the extent for the current view state and the passed size
+         * @return {ol.extent}
+         */
+        getCurrentExtent: function () {
+            var mapSize = Radio.request("Map", "getSize");
+
+            return this.get("view").calculateExtent(mapSize);
         },
 
         pushHits: function (attribute, value) {
