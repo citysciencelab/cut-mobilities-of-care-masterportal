@@ -7,7 +7,7 @@ define(function (require) {
 
     RemoteInterface = Backbone.Model.extend({
         defaults: {
-            postMessageUrl: "http://localhost:8080"
+            postMessageUrl: "https://localhost:8080"
         },
         initialize: function () {
             var channel = Radio.channel("RemoteInterface");
@@ -26,17 +26,18 @@ define(function (require) {
                 "zoomToFeatures": this.zoomToFeatures,
                 "resetView": this.resetView,
                 "zoomToFeature": this.zoomToFeature,
-                "setModelAttributesById": this.setModelAttributesById
+                "setModelAttributesById": this.setModelAttributesById,
+                "postMessage": this.postMessage
             }, this);
-            this.setParams(Config);
             window.addEventListener("message", this.receiveMessage.bind(this));
             Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
-            parent.Backbone.MasterRadio = Radio;
-            parent.postMessage("ready", "*");
         },
-        setParams: function (config) {
+        getPostMessageHost: function (config) {
             if (_.has(config, "postMessageUrl") && config.postMessageUrl.length > 0) {
-                this.setPostMessageUrl(config.postMessageUrl);
+                return this.setPostMessageUrl(config.postMessageUrl);
+            }
+            else {
+                return this.get("postMessageUrl");
             }
         },
 
@@ -45,7 +46,7 @@ define(function (require) {
          * @param  {MessageEvent} event
          */
         receiveMessage: function (event) {
-            if (event.origin !== this.get("postMessageUrl")) {
+            if (event.origin !== this.getPostMessageHost()) {
                 return;
             }
             if (event.data.hasOwnProperty("showPositionByFeatureId")) {
@@ -54,6 +55,14 @@ define(function (require) {
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
             }
+        },
+        /**
+         * sends Message to remotehost via postMessage Api
+         *
+         * @param  {Object} content the Data to be sent
+         */
+        postMessage: function (content) {
+            parent.postMessage(content, this.getPostMessageHost());
         },
         /**
          * gets the center coordinate of the feature geometry and triggers it to MapMarker module
@@ -89,7 +98,6 @@ define(function (require) {
             var feature = this.getFeatureFromHit(hit),
                 extent = feature.getGeometry().getExtent(),
                 center = ol.extent.getCenter(extent);
-//                Radio.trigger("MapView", "setCenter", center);
                 Radio.trigger("MapMarker", "showMarker", center);
         },
         zoomToFeature: function (hit) {
