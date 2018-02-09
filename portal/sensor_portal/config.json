@@ -183,9 +183,25 @@
           "visibility": false
         },
         {
+          "id": "888888",
+          "dataLayerId" : "999999",
+          "visibility": false
+        },
+        {
+          "id": "888889",
+          "dataLayerId" : "999999",
+          "visibility": false
+        },
+        {
           "id": "999993",
           "styleId": "999993",
           "name" : "FAKE Position der ISS (Live)",
+          "visibility": false
+        },
+        {
+          "id": "999992",
+          "styleId": "999992",
+          "name" : "FAKE LA-Bus (Live)",
           "visibility": false
         },
         {

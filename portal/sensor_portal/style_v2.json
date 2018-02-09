@@ -1,10 +1,50 @@
 [
   {
+    "layerId" : "999992",
+    "class": "POINT",
+    "subClass" : "ADVANCED",
+    "scaling" : "NOMINAL",
+    "scalingShape" : "CIRCLESEGMENTS",
+    "scalingAttribute" : "seconds_since_report",
+    "scalingValues" : {
+       "1" : [0, 210, 0, 1],
+       "2" : [0, 210, 0, 1],
+       "3" : [0, 210, 0, 1],
+       "4" : [0, 210, 0, 1],
+       "5" : [0, 210, 0, 1],
+       "6" : [0, 210, 0, 1],
+       "7" : [0, 210, 0, 1],
+       "8" : [0, 210, 0, 1],
+       "9" : [0, 210, 0, 1],
+       "10" : [0, 210, 0, 1],
+       "11" : [0, 210, 0, 1],
+       "12" : [0, 210, 0, 1],
+       "13" : [0, 210, 0, 1],
+       "14" : [0, 210, 0, 1],
+       "15" : [0, 210, 0, 1]
+    },
+    "scalingValueDefaultColor" : [210, 0, 0, 1],
+    "circleSegmentsRadius" : 10,
+    "circleSegmentsStrokeWidth" : 5,
+    "circleSegmentsBackgroundColor" : [255, 255, 255, 0.3]
+  },
+  {
     "layerId" : "999993",
     "class": "POINT",
-    "subClass" : "SIMPLE",
+    "subClass" : "ADVANCED",
+    "scaling" : "NOMINAL",
+    "scalingShape" : "CIRCLESEGMENTS",
+    "scalingAttribute" : "visibility",
+    "scalingValues" : {
+       "daylight" : [255, 215, 0, 1],
+       "eclipsed" : [0, 0, 210, 1]
+    },
+    "scalingValueDefaultColor" : [0, 0, 0, 1],
+    "circleSegmentsRadius" : 33,
+    "circleSegmentsStrokeWidth" : 7,
+    "circleSegmentsBackgroundColor" : [255, 255, 255, 0.1],
     "imageName" : "iss.png",
-    "imagescale" : "1.0"
+    "imageScale" : "0.7"
   },
   {
     "layerId" : "999998",
@@ -12,6 +52,7 @@
     "subClass" : "ADVANCED",
     "scaling" : "INTERVAL",
     "scalingShape" : "CIRCLE_BAR",
+    "scalingAttribute" : "state",
     "circleBarScalingFactor" : 2,
     "circleBarRadius" : 6,
     "circleBarLineStroke" : 6,

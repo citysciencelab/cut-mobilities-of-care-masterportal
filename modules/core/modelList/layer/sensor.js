@@ -6,9 +6,9 @@ define(function (require) {
         Config = require("config"),
         mqtt = require("mqtt"),
         moment = require("moment"),
-        SensorThingsLayer;
+        SensorLayer;
 
-    SensorThingsLayer = Layer.extend({
+    SensorLayer = Layer.extend({
 
         defaults: _.extend({}, Layer.prototype.defaults,
             {
@@ -18,17 +18,7 @@ define(function (require) {
         ),
         initialize: function () {
             this.superInitialize();
-            var channel = Radio.channel("SensorThingsLayer"),
-                subtyp = this.get("subTyp").toUpperCase();
-
-            // start connection to liveUpdate
-            if (subtyp === "SENSORTHINGS") {
-                this.createMqttConnection();
-                // this.createWebSocketConnection();
-            }
-            else if (subtyp === "ESRISTREAMLAYER") {
-            this.createWebSocketConnectionToStreamLayer();
-            }
+            var channel = Radio.channel("SensorLayer");
         },
 
         /**
@@ -40,11 +30,9 @@ define(function (require) {
 
         /**
          * creates the layer and trigger to updateData
-         * @return {[type]} [description]
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
-                source: this.getLayerSource(),
                 source: this.has("clusterDistance") ? this.getClusterLayerSource() : this.getLayerSource(),
                 name: this.get("name"),
                 typ: this.get("typ"),
@@ -54,6 +42,8 @@ define(function (require) {
             }));
 
             this.updateData();
+
+            Radio.trigger("HeatmapLayer", "checkDataLayerId", this.getId(), this.getLayerSource().getFeatures());
         },
 
         /**
@@ -76,31 +66,29 @@ define(function (require) {
             }
 
             var sensorData,
-                // todo: bei ESRI StreamLayer kann der epsg-code ausgelesen werden
                 epsg = this.get("epsg"),
                 features,
                 subtyp = this.get("subTyp").toUpperCase(),
                 isClustered = this.has("clusterDistance") ? true : false;
 
-            if (this.checkRequiredParameter()) {
+            // if (this.checkRequiredParameter()) {
                 // check for subtypes
                 if (subtyp === "SENSORTHINGS") {
                     sensorData = this.loadSensorThings();
                     features = this.drawPoints(sensorData, epsg);
+                    this.createMqttConnectionToSensorThings();
+                    // this.createWebSocketConnection();
                 }
                 else if (subtyp === "ESRISTREAMLAYER") {
-                    features = this.drawESRIGeoJson();
+                    // features = this.drawESRIGeoJson();
+                    this.createWebSocketConnectionToStreamLayer();
                 }
-            }
+            // }
 
             this.set("loadend", "ready");
-            Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), features);
+            Radio.trigger("SensorLayer", "featuresLoaded", this.getId(), features);
             this.styling(isClustered);
             this.getLayer().setStyle(this.getStyle());
-        },
-
-        drawESRIGeoJson: function () {
-
         },
 
         /**
@@ -138,13 +126,7 @@ define(function (require) {
                     kategorie: "alert-danger"
                 });
             }
-            // if (_.isUndefined(this.get("version"))) {
-            //     boolean = false;
-            //     Radio.trigger("Alert", "alert", {
-            //         text: "<strong>Der Parameter: version fehlt in der Konfiguration!</strong>",
-            //         kategorie: "alert-danger"
-            //     });
-            // }
+
             return boolean;
         },
 
@@ -155,6 +137,7 @@ define(function (require) {
          */
         getResponseFromRequestURL: function (requestURL) {
             var response;
+            var startTime = new Date().getTime();
 
             Radio.trigger("Util", "showLoader");
             $.ajax({
@@ -172,6 +155,10 @@ define(function (require) {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
+
+            var endTime = new Date().getTime();
+            console.log(this.attributes.name + ":");
+            console.log("Parsen: " + (endTime - startTime) / 1000 + " Sekunden");
 
             return response;
         },
@@ -263,9 +250,8 @@ define(function (require) {
             var allThings = [],
                 thingsMerge = [],
                 requestURL = this.buildSensorThingsURL(),
-                things = this.getResponseFromRequestURL(requestURL);
-
-                var thingsCount = things["@iot.count"], // count of all things
+                things = this.getResponseFromRequestURL(requestURL),
+                thingsCount = things["@iot.count"], // count of all things
                 thingsbyOneRequest = things.value.length; // count of things on one request
 
             allThings.push(things.value);
@@ -436,7 +422,9 @@ define(function (require) {
      * create connection to a given MQTT-Broker
      * this must be passes this as a context to call the updateFromMqtt function
      */
-        createMqttConnection: function () {
+        createMqttConnectionToSensorThings: function () {
+            var startTime = new Date().getTime();
+
             var dataStreamIds = this.getDataStreamIds(),
                 client = mqtt.connect({
                     host: this.get("url").split("/")[2],
@@ -458,6 +446,10 @@ define(function (require) {
                 jsonData.dataStreamId = topic.split("(")[1].split(")")[0];
                 this.options.context.updateFromMqtt(jsonData);
             });
+
+            var endTime = new Date().getTime();
+            console.log("Websocket: " + (endTime - startTime) / 1000 + " Sekunden");
+            console.log("-----------------------");
         },
 
         /**
@@ -473,6 +465,8 @@ define(function (require) {
                 thingPhenomenonTime = this.changeTimeZone(thing.phenomenonTime);
 
             this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
+
+            Radio.trigger("HeatmapLayer", "checkDataLayerId", this.getId(), features);
         },
 
         /**
@@ -604,9 +598,114 @@ define(function (require) {
             return featureArray;
         },
 
+// *************************************************************
+// ***** Live update with ESRI-StreamLayer                 *****
+// *************************************************************
+        /**
+         * create a connection to a websocketserver,
+         * which fire new observation using MQTT
+         */
+        createWebSocketConnectionToStreamLayer: function () {
+            var thisSensor = this,
+                protocol = window.location.protocol,
+                websocketURL,
+                connection;
+
+            // check protocol from portal an get appropriate websocketURL
+            if (protocol === "https:") {
+                websocketURL = this.get("wssUrl") + "/subscribe"
+            }
+            else {
+                websocketURL = this.get("wsUrl") + "/subscribe"
+            }
+
+            connection = new WebSocket(websocketURL),
+
+            // errors
+            connection.onerror = function (error) {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Ein Fehler bei der WebSocket Verbindung ist aufgetreten!</strong>",
+                    kategorie: "alert-danger"
+                });
+            };
+
+            // messages from the server
+            connection.onmessage = function (ev) {
+                var jsonData = JSON.parse(ev.data);
+
+                thisSensor.updateFromWebSocketStreamLayer(jsonData);
+            };
+        },
+
+        /**
+         * function updates the features when an event comes from ESRI-StreamLayer
+         * it comes only one feature with one stream
+         * @param  {JSON} esriJson
+         */
+        updateFromWebSocketStreamLayer: function (esriJson) {
+
+// ******** Fake coordinates for testing ********************************
+            esriJson.geometry.x = 9.75 + Math.random() * 0.55;
+            esriJson.geometry.y = 53.42 + Math.random() * 0.32;
+// **********************************************************************
+
+            var id = esriJson.attributes.id,
+                features = this.getLayerSource().getFeatures(),
+                existingFeature = this.getFeatureById(features, id),
+                epsgCode = "EPSG:" + esriJson.geometry.spatialReference.wkid;
+
+            // if the feature does not exist, then draw it otherwise update it
+            if (_.isUndefined(existingFeature)) {
+                var esriFormat = new ol.format.EsriJSON(),
+                    olFeatures = esriFormat.readFeatures(esriJson, {
+                        dataProjection: epsgCode,
+                        featureProjection: Config.view.epsg
+                    }),
+                    isClustered = isClustered = this.has("clusterDistance") ? true : false;
+
+                olFeatures[0].setId(id);
+                this.getLayerSource().addFeatures(olFeatures);
+
+                this.set("loadend", "ready");
+                Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), olFeatures);
+                this.styling(isClustered);
+                this.getLayer().setStyle(this.getStyle());
+            }
+            else {
+                var location = [esriJson.geometry.x, esriJson.geometry.y],
+                    xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg);
+
+                existingFeature.setProperties(esriJson.attributes);
+                existingFeature.getGeometry().setCoordinates(xyTransform);
+            }
+        },
+
+        /**
+         * returns a feature for a given id, if it exists
+         * @param  {[ol.Feature]} features - features from map
+         * @param  {String} id - id from Stream-Feature
+         * @return {ol.Feature} feature - feature from map with the same id as Stream-Feature
+         */
+        getFeatureById: function (features, id) {
+            var feature = undefined;
+
+            _.each(features, function (feat) {
+                var featureId = feat.getId();
+
+                if (featureId === id) {
+                    feature = feat;
+                }
+            });
+
+            return feature;
+        },
+
+// *************************************************************
+// ***** Getter- and Setter-Methods                        *****
+// *************************************************************
         /**
          * getter for style
-         * @return {}
+         * @return {function}
          */
         getStyle: function () {
             return this.get("style");
@@ -634,93 +733,8 @@ define(function (require) {
          */
         getClusterLayerSource: function () {
             return this.get("clusterLayerSource");
-        },
-
-
-// *************************************************************
-// ***** Live update with ESRI-StreamLayer                 *****
-// *************************************************************
-
-        /**
-         * create a connection to a websocketserver,
-         * which fire new observation using MQTT
-         */
-        createWebSocketConnectionToStreamLayer: function () {
-            // console.log(window.location.protocol);
-            var thisSensor = this,
-            // todo die URL entsprechend zusammenfügen
-            connection = new WebSocket(this.get("url"));
-
-            // errors
-            connection.onerror = function (error) {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Ein Fehler bei der WebSocket Verbindung ist aufgetreten!</strong>",
-                    kategorie: "alert-danger"
-                });
-            };
-
-            // messages from the server
-            connection.onmessage = function (ev) {
-                var jsonData = JSON.parse(ev.data);
-
-                thisSensor.updateFromWebSocketStreamLayer(jsonData);
-            };
-        },
-
-        updateFromWebSocketStreamLayer: function (esriJson) {
-            // console.log(esriJson);
-
-            esriJson.geometry.x = 9.95 + Math.random() * 0.1;
-            esriJson.geometry.y = 53.53 + Math.random() * 0.1;
-
-            var id = esriJson.attributes.id,
-                features = this.getLayerSource().getFeatures(),
-                epsg = "EPSG:" + esriJson.geometry.spatialReference["wkid"],
-                location = [esriJson.geometry.x, esriJson.geometry.y],
-                xyTransfrom = ol.proj.transform(location, epsg, Config.view.epsg),
-                removeFeature = this.getFeatureById(features, id),
-                drawFeature,
-                isClustered = isClustered = this.has("clusterDistance") ? true : false;
-
-            esriJson.geometry.x = xyTransfrom[0];
-            esriJson.geometry.y = xyTransfrom[1];
-
-            if (!_.isUndefined(removeFeature)) {
-                this.getLayerSource().removeFeature(removeFeature);
-            }
-// console.log(features);
-            esriFormat = new ol.format.EsriJSON();
-            // console.log(esriFormat);
-            // esriFormat.readProjection(epsg);
-            // console.log(esriFormat);
-            drawFeature = esriFormat.readFeatures(esriJson);
-
-            // set ID and add features to vectorlayer
-            drawFeature[0].setId(id);
-            this.getLayerSource().addFeatures(drawFeature);
-
-// console.log(drawFeature);
-
-            this.set("loadend", "ready");
-            Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), drawFeature);
-            this.styling(isClustered);
-            this.getLayer().setStyle(this.getStyle());
-        },
-
-        getFeatureById: function (features, id) {
-            var feature = undefined;
-
-            _.each(features, function (feat) {
-                var featureId = feat.getId();
-
-                if (featureId === id) {
-                    feature = feat;
-                }
-            });
-
-            return feature;
         }
     });
 
-    return SensorThingsLayer;
+    return SensorLayer;
 });

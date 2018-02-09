@@ -19,6 +19,8 @@ define(function (require) {
         VerkehrsStaerkenThemeView = require("modules/tools/gfi/themes/verkehrsstaerken/view"),
         SchulInfoTheme = require("modules/tools/gfi/themes/schulinfo/model"),
         SchulInfoThemeView = require("modules/tools/gfi/themes/schulinfo/view"),
+        ElektroladesaeulenThemeView = require("modules/tools/gfi/themes/elektroladesaeulen/view"),
+        ElektroladesaeulenTheme = require("modules/tools/gfi/themes/elektroladesaeulen/model"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -46,6 +48,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "schulinfo") {
                 return new SchulInfoTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "elektroladesaeulen") {
+                return new ElektroladesaeulenTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -106,6 +111,10 @@ define(function (require) {
                 }
                 case "schulinfo": {
                     new SchulInfoThemeView({model: model});
+                    break;
+                }
+                case "elektroladesaeulen": {
+                    new ElektroladesaeulenThemeView({model: model});
                     break;
                 }
                 default: {

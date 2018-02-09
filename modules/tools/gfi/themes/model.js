@@ -203,8 +203,11 @@ define(function (require) {
             return true;
         },
         /** helper function: check, if str has a valid value */
-        isValidValue: function (str) {
-            if (str && _.isString(str) && str !== "" && str.toUpperCase() !== "NULL") {
+        isValidValue: function (val) {
+            if (val && _.isString(val) && val !== "" && val.toUpperCase() !== "NULL") {
+                return true;
+            }
+            else if (_.isNumber(val)) {
                 return true;
             }
             return false;
@@ -230,7 +233,7 @@ define(function (require) {
                     }
                     else {
                         if (this.isValidKey(key) && this.isValidValue(value)) {
-                            preGfi[key] = value.trim();
+                            preGfi[key] = value.toString().trim();
                         }
                     }
                 }, this);

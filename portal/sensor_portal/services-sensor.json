@@ -1,11 +1,55 @@
 [
    {
-      "id" : "999993",
-      "name" : "Live - Position der International Space Station",
-      "url" : "wss://service32.eggits.net:6143/arcgis/ws/services/iss-Location-Broadcast/StreamServer/subscribe",
+      "id" : "888888",
+      "name" : "Heatmap der belegten Elektro Ladestandorte (Live)",
+      "typ" : "Heatmap",
+      "heatmap": {
+         "attribute" : "state",
+         "value" : "charging",
+         "radius" : 22,
+         "blur" : 40,
+         "gradient" : ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
+      },
+      "gfiAttributes" : "ignore"
+   },
+   {
+      "id" : "888889",
+      "name" : "Heatmap der belegten Elektro Ladestandorte (Live)",
+      "typ" : "Heatmap",
+      "heatmap": {
+         "attribute" : "state",
+         "value" : "available",
+         "radius" : 22,
+         "blur" : 40,
+         "gradient" : ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
+      },
+      "gfiAttributes" : "ignore"
+   },
+   {
+      "id" : "999992",
+      "name" : "Test ESRI-StreamLayer",
+      "url" : "https://geoeventsample1.esri.com:6443/arcgis/rest/services/LABus/StreamServer",
+      "wssUrl" : "wss://geoeventsample1.esri.com:6143/arcgis/ws/services/LABus/StreamServer",
+      "wsUrl" : "ws://geoeventsample1.esri.com:6180/arcgis/ws/services/LABus/StreamServer",
       "typ" : "Sensor",
       "subTyp" : "ESRIStreamLayer",
-      "epsg": "EPSG:4326",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "id" : "ID",
+         "seconds_since_report" : "Sekunden seit der Meldung",
+         "received_time" : "Empfangszeit",
+         "predictable" : "Vorhersagbar",
+         "route_id" : "Routen ID"
+      }
+   },
+   {
+      "id" : "999993",
+      "name" : "Live - Position der International Space Station",
+      "url" : "https://portal03.eggits.net/geoevent/rest/services/iss-Location-Broadcast/StreamServer",
+      "wssUrl" : "wss://service32.eggits.net:6143/arcgis/ws/services/iss-Location-Broadcast/StreamServer",
+      "wsUrl" : "ws://service32.eggits.net:6180/arcgis/ws/services/iss-Location-Broadcast/StreamServer",
+      "typ" : "Sensor",
+      "subTyp" : "ESRIStreamLayer",
       "gfiTheme" : "default",
       "gfiAttributes" : {
          "id" : "ID",
@@ -102,8 +146,9 @@
       "version" : "1.0",
       "urlParameter" : {
          "filter" : "startswith(Datastreams/name,'Air')",
-         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
+         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"]
       },
+      "epsg": "EPSG:4326",
       "utc" : "+1",
       "conversionFactor" : 0.01,
       "scalingDecimal" : 2,
@@ -124,11 +169,12 @@
       "url" : "http://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",
-         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc)"]
+         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"]
       },
       "epsg": "EPSG:4326",
       "utc" : "+1",
-      "gfiTheme" : "default",
+      "gfiTheme_" : "default",
+      "gfiTheme" : "elektroladesaeulen",
       "gfiAttributes" : {
          "dataStreamId" : "DataStreamID",
          "chargings_station_nr" : "StandortID",

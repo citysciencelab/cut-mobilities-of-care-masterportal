@@ -55,7 +55,7 @@ define(function (require) {
                                 copyright = element[index]["copyright"];
                                 element[index]["copyright"] = "#";
                             }
-                            
+
                             var imgView = new ImgView(val, copyright);
 
                             element[index][key] = "#";

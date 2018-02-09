@@ -38,6 +38,7 @@ define(function (require) {
                         this.createClusterLayerSource();
                     }
                     this.createLayer();
+
                 },
                 "change:layer": function () {
                     this.updateLayerTransparency();
@@ -106,25 +107,25 @@ define(function (require) {
             this.createLegendURL();
         },
 
-        checkRequiredParamsByType: function () {
-            var typ = this.get("typ"),
-                isParameterMissing;
+        // checkRequiredParamsByType: function () {
+        //     var typ = this.get("typ"),
+        //         isParameterMissing;
 
-            if (typ === "WMS") {
-                isParameterMissing = this.checkRequiredParams(["id", "name", "version"]);
-            }
-            else if (typ === "WFS") {
-                isParameterMissing = this.checkRequiredParams(["id", "name", "version"]);
-            }
-            else if (typ === "Sensor") {
-                isParameterMissing = this.checkRequiredParams(["id", "name", "version", "subTyp"]);
-            }
-            else {
-                isParameterMissing = false;
-            }
+        //     if (typ === "WMS") {
+        //         isParameterMissing = this.checkRequiredParams(["id", "name", "version"]);
+        //     }
+        //     else if (typ === "WFS") {
+        //         isParameterMissing = this.checkRequiredParams(["id", "name", "version"]);
+        //     }
+        //     else if (typ === "Sensor") {
+        //         isParameterMissing = this.checkRequiredParams(["id", "name", "version", "subTyp"]);
+        //     }
+        //     else {
+        //         isParameterMissing = false;
+        //     }
 
-            return isParameterMissing;
-        },
+        //     return isParameterMissing;
+        // },
 
         checkRequiredParams: function (params) {
             var isParameterMissing = true;

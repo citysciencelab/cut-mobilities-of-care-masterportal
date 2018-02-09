@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<div>
+    <table class="table">
+         <thead>
+            <tr class="row">
+                <th>Eigenschaften</th>
+                <% _.each(headArray, function (element) { %>
+                    <th><%=element%></th>
+                <% }); %>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(attributesObj, function (value, key) { %>
+                <tr class="row">
+                    <th><%=key%></th>
+                    <% _.each(value, function (val) { %>
+                        <td><%=val%></td>
+                    <% }); %>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>

@@ -765,7 +765,7 @@ define(function (require) {
             }
 
             _.each(states, function (state) {
-                if (_.contains(_.keys(scalingObject), state)) {
+                if (_.contains(_.keys(scalingObject), String(state))) {
                     scalingObject[state] = scalingObject[state] + 1;
                 }
                 else {
@@ -891,8 +891,7 @@ define(function (require) {
          * @return {String} svg
          */
         createIntervalCircleBar: function (feature) {
-            var state = feature.get("state"),
-                stateValue = state.split(" ")[0],
+            var stateValue = feature.get(this.get("scalingAttribute")),
                 circleBarScalingFactor = parseInt(this.get("circleBarScalingFactor"), 10),
                 circleBarRadius = parseInt(this.get("circleBarRadius"), 10),
                 circleBarLineStroke = parseInt(this.get("circleBarLineStroke"), 10),
@@ -900,9 +899,16 @@ define(function (require) {
                 circleBarCircleStrokeColor = this.returnColor(this.get("circleBarCircleStrokeColor"), "hex"),
                 circleBarCircleStrokeWidth = this.get("circleBarCircleStrokeWidth"),
                 circleBarLineStrokeColor = this.returnColor(this.get("circleBarLineStrokeColor"), "hex"),
-                size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke),
-                barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor),
+                size,
+                barLength,
                 svg;
+
+            if (_.contains(stateValue, " ")) {
+                stateValue = stateValue.split(" ")[0];
+            }
+
+            size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke);
+            barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor);
 
             this.setSize(size);
 

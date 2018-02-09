@@ -5,7 +5,8 @@ define([
     "modules/core/modelList/layer/wfs",
     "modules/core/modelList/layer/geojson",
     "modules/core/modelList/layer/group",
-    "modules/core/modelList/layer/SensorThings",
+    "modules/core/modelList/layer/sensor",
+    "modules/core/modelList/layer/heatmap",
     "modules/core/modelList/folder/model",
     "modules/core/modelList/tool/model",
     "modules/core/modelList/staticlink/model"
@@ -16,7 +17,8 @@ define([
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
-        SensorThingsLayer = require("modules/core/modelList/layer/SensorThings"),
+        SensorLayer = require("modules/core/modelList/layer/sensor"),
+        HeatmapLayer = require("modules/core/modelList/layer/heatmap"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
@@ -102,7 +104,10 @@ define([
                     return new GROUPLayer(attrs, options);
                 }
                 else if (attrs.typ === "Sensor") {
-                    return new SensorThingsLayer(attrs, options);
+                    return new SensorLayer(attrs, options);
+                }
+                else if (attrs.typ === "Heatmap") {
+                    return new HeatmapLayer(attrs, options);
                 }
             }
             else if (attrs.type === "folder") {

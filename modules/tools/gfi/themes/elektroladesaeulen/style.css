@@ -1,0 +1,11 @@
+.ladesaeulen .table {
+    border-collapse: collapse;
+    width: 100%;
+    color: black;
+}
+
+.ladesaeulen .row:nth-child(even){
+    background-color: #E0EEEE;
+    width: 100%;
+}
+
