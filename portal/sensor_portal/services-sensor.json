@@ -1,33 +1,44 @@
 [
    {
+      "id" : "888887",
+      "name" : "Heatmap der LA-Busse (Live)",
+      "typ" : "Heatmap",
+      "heatmap": {
+         "radius" : 20,
+         "blur" : 50,
+         "gradient" : ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
+      },
+      "gfiAttributes" : "ignore"
+   },
+   {
       "id" : "888888",
       "name" : "Heatmap der belegten Elektro Ladestandorte (Live)",
       "typ" : "Heatmap",
       "heatmap": {
          "attribute" : "state",
          "value" : "charging",
-         "radius" : 22,
-         "blur" : 40,
+         "radius" : 20,
+         "blur" : 50,
          "gradient" : ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
       },
       "gfiAttributes" : "ignore"
    },
    {
       "id" : "888889",
-      "name" : "Heatmap der belegten Elektro Ladestandorte (Live)",
+      "name" : "Heatmap der freien Elektro Ladestandorte (Live)",
       "typ" : "Heatmap",
       "heatmap": {
          "attribute" : "state",
          "value" : "available",
-         "radius" : 22,
-         "blur" : 40,
+         "radius" : 20,
+         "blur" : 50,
          "gradient" : ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
       },
       "gfiAttributes" : "ignore"
    },
    {
       "id" : "999992",
-      "name" : "Test ESRI-StreamLayer",
+      "name" : "LA-Bus",
       "url" : "https://geoeventsample1.esri.com:6443/arcgis/rest/services/LABus/StreamServer",
       "wssUrl" : "wss://geoeventsample1.esri.com:6143/arcgis/ws/services/LABus/StreamServer",
       "wsUrl" : "ws://geoeventsample1.esri.com:6180/arcgis/ws/services/LABus/StreamServer",
@@ -144,9 +155,14 @@
       "typ" : "Sensor",
       "subTyp" : "SensorThings",
       "version" : "1.0",
-      "urlParameter" : {
+      "urlParameter_" : {
          "filter" : "startswith(Datastreams/name,'Air')",
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"]
+      },
+      "urlParameter" : {
+         "select" : "properties",
+         "filter" : "startswith(Datastreams/name,'Air')",
+         "expand" : "Locations($select=location),Datastreams($select=@iot.id;$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc;$top=1))"
       },
       "epsg": "EPSG:4326",
       "utc" : "+1",
@@ -167,9 +183,14 @@
       "subTyp" : "SensorThings",
       "version" : "1.0",
       "url" : "http://51.5.242.162/itsLGVhackathon",
-      "urlParameter" : {
+      "urlParameter_" : {
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"]
+      },
+      "urlParameter" : {
+         "select" : "properties",
+         "filter" : "startswith(Things/name,'Charging')",
+         "expand" : "Locations($select=location),Datastreams($select=@iot.id;$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc;$top=1))"
       },
       "epsg": "EPSG:4326",
       "utc" : "+1",

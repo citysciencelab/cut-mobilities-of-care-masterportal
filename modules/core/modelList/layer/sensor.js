@@ -136,8 +136,8 @@ define(function (require) {
          * @return {objects} response with sensorObjects
          */
         getResponseFromRequestURL: function (requestURL) {
-            var response;
-            var startTime = new Date().getTime();
+            var response,
+                startTime = new Date().getTime();
 
             Radio.trigger("Util", "showLoader");
             $.ajax({
@@ -278,10 +278,11 @@ define(function (require) {
          */
         buildSensorThingsURL: function () {
             var requestURL = this.get("url") + "/v" + this.get("version") + "/Things?",
-                and = "$";
+                and = "$",
+                urlParams = this.get("urlParameter");
 
-            if (!_.isUndefined(this.get("urlParameter"))) {
-                _.each(this.get("urlParameter"), function (value, key) {
+            if (!_.isUndefined(urlParams)) {
+                _.each(urlParams, function (value, key) {
                     requestURL = requestURL + and + key + "=" + value;
                     and = "&$";
                 });
@@ -667,7 +668,7 @@ define(function (require) {
                 this.getLayerSource().addFeatures(olFeatures);
 
                 this.set("loadend", "ready");
-                Radio.trigger("SensorThingsLayer", "featuresLoaded", this.getId(), olFeatures);
+                Radio.trigger("SensorLayer", "featuresLoaded", this.getId(), olFeatures);
                 this.styling(isClustered);
                 this.getLayer().setStyle(this.getStyle());
             }
@@ -678,6 +679,8 @@ define(function (require) {
                 existingFeature.setProperties(esriJson.attributes);
                 existingFeature.getGeometry().setCoordinates(xyTransform);
             }
+
+            Radio.trigger("HeatmapLayer", "checkDataLayerId", this.getId(), this.getLayerSource().getFeatures());
         },
 
         /**

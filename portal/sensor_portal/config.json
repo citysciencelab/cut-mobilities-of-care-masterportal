@@ -173,7 +173,7 @@
           "id": "999999",
           "styleId": "999999",
           "name" : "Elektro Ladestandort (Live)",
-          "visibility": false,
+          "visibility": true,
           "clusterDistance": 60
         },
         {
@@ -202,6 +202,12 @@
           "id": "999992",
           "styleId": "999992",
           "name" : "FAKE LA-Bus (Live)",
+          "visibility": false
+        },
+        {
+          "id": "888887",
+          "dataLayerId" : "999992",
+          "name" : "Heatmap der FAKE LA-Busse (Live)",
           "visibility": false
         },
         {

@@ -41,10 +41,6 @@ define(function (require) {
                 typ: this.get("typ"),
                 id: this.getId(),
                 gfiAttributes: this.get("gfiAttributes"),
-                weight: "weightForHeatmap",
-                // weight: function (feature){
-                //     return feature.get("weightForHeatmap");
-                // },
                 blur: this.get("heatmap").blur,
                 radius: this.get("heatmap").radius,
                 gradient: this.get("gradient")
@@ -65,14 +61,15 @@ define(function (require) {
 
         /**
          * updates the heatmap with given features
-         * and set features to layerSource
+         * generates a copy of the feature for each valid value of a feature,
+         * thereby weighting each feature
          * @param  {[ol.feature]} features
          */
         updateHeatmap: function (features) {
             var heatmapAttribute = this.get("heatmap").attribute,
                 heatmapValue = this.get("heatmap").value,
                 heatmapLayerSource = this.getLayerSource(),
-                featuresWithValue,
+                weightFeatures = [],
                 normalizeFeatures;
 
             heatmapLayerSource.clear();
@@ -92,34 +89,24 @@ define(function (require) {
                         states = [state];
                     }
 
+                    // ******** Nochmal überarbeiten *******************
                     count = $.grep(states, function (state) {
                         return state === heatmapValue;
                     }).length;
 
-                    feature.set("weightForHeatmap", count);
+                    if (count > 0) {
+                        for (var i = 0; i < count; i++) {
+                            weightFeatures.push(feature.clone());
+                        }
+                    }
+                    // *************************************************
                 });
 
-                features = this.normalizeWeight(features);
+                heatmapLayerSource.addFeatures(weightFeatures);
             }
-
-            heatmapLayerSource.addFeatures(features);
-        },
-
-        /**
-         * normalizes the values to a scale from 0 to 1
-         * @param  {[ol.Feature]} featuresWithValue
-         * @return {[ol.Feature]} featuresWithValue
-         */
-        normalizeWeight: function (featuresWithValue) {
-            var max = _.max(featuresWithValue, function (feature) {
-                    return feature.get("weightForHeatmap");
-                }).get("weightForHeatmap");
-
-                _.each(featuresWithValue, function(feature) {
-                    feature.set("weightForHeatmap", (feature.get("weightForHeatmap") / max));
-                });
-
-                return featuresWithValue;
+            else {
+                heatmapLayerSource.addFeatures(features);
+            }
         },
 
         /**
