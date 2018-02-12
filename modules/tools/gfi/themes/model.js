@@ -203,8 +203,21 @@ define(function (require) {
             return true;
         },
         /** helper function: check, if str has a valid value */
-        isValidValue: function (str) {
-            if (str && _.isString(str) && str !== "" && str.toUpperCase() !== "NULL") {
+
+        /**
+         * checks if the value is a string or array and if it is a string,
+         * whether the value is unequal to NULL or an empty string
+         * @param  {String || Array} value
+         * @return {Boolean}
+         */
+        isValidValue: function (value) {
+            if (value && _.isString(value) && value !== "" && value.toUpperCase() !== "NULL") {
+                return true;
+            }
+            else if (_.isArray(value)) {
+                return true;
+            }
+            else if (_.isNumber(value)) {
                 return true;
             }
             return false;
@@ -230,7 +243,10 @@ define(function (require) {
                     }
                     else {
                         if (this.isValidKey(key) && this.isValidValue(value)) {
-                            preGfi[key] = value.trim();
+                            if (_.isArray(value)) {
+                                value = value.toString();
+                            }
+                            preGfi[key] = _.isString(value) ? value.trim() : value;
                         }
                     }
                 }, this);

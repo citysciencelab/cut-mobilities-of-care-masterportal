@@ -6,8 +6,8 @@ define(function (require) {
 
     Tool = Item.extend({
         defaults: {
-            // true wenn die Node sichtbar
-            isVisible: false,
+            // true wenn das Tool in der Menüleiste sichtbar ist
+            isVisibleInMenu: true,
             // true wenn die Node zur ersten Ebene gehört
             isRoot: false,
             // welcher Node-Type - folder/layer/item
@@ -23,8 +23,7 @@ define(function (require) {
             // true wenn das Tool aktiviert ist
             isActive: false,
             // deaktiviert GFI, wenn dieses tool geöffnet wird
-            deaktivateGFI: true,
-            isVisibleInMenu: true
+            deaktivateGFI: true
         },
 
         initialize: function () {

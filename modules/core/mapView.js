@@ -104,7 +104,8 @@ define([
                     return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
                 },
                 "getResoByScale": this.getResoByScale,
-                "getScales": this.getScales
+                "getScales": this.getScales,
+                "getCurrentExtent": this.getCurrentExtent
             }, this);
 
             channel.on({
@@ -161,8 +162,8 @@ define([
             }, this);
         },
         resetView: function () {
-            this.get("view").setCenter(this.get("startCenter"));
-            this.get("view").setResolution(this.get("startResolution"));
+            this.get("view").setCenter(this.getStartCenter());
+            this.get("view").setResolution(this.getStartResolution());
             Radio.trigger("MapMarker", "hideMarker");
         },
 
@@ -171,47 +172,51 @@ define([
         */
         setConfig: function () {
             /*
-            *   Auslesen und Überschreiben durch Werte aus Config.json
+            *   Auslesen und Überschreiben durch Werte aus Config.json in spezifischer Reihenfolge
             */
-            _.each(Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}), function (setting) {
-                switch (setting.id) {
-                    case "backgroundImage": {
-                        this.set("backgroundImage", setting.attr);
+            var mapViewSettings = Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}),
+                mapViewOptions = _.find(mapViewSettings, {"id": "options"}),
+                mapViewEpsg = _.find(mapViewSettings, {"id": "epsg"}),
+                mapViewImage = _.find(mapViewSettings, {"id": "backgroundImage"}),
+                mapViewStartCenter = _.find(mapViewSettings, {"id": "startCenter"}),
+                mapViewExtent = _.find(mapViewSettings, {"id": "extent"}),
+                mapViewResolution = _.find(mapViewSettings, {"id": "resolution"}),
+                mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"});
 
-                        this.setBackground(setting.attr);
-                        break;
-                    }
-                    case "startCenter": {
-                        this.set("startCenter", setting.attr);
-                        break;
-                    }
-                    case "options": {
-                        this.set("options", []);
-                        _.each(setting.attr, function (opt) {
-                            this.pushHits("options", opt);
-                        }, this);
-                        break;
-                    }
-                    case "extent": {
-                        this.setExtent(setting.attr);
-                        break;
-                    }
-                    case "resolution": {
-                        this.setResolution(setting.attr);
-                        this.set("startResolution", this.get("resolution"));
-                        break;
-                    }
-                    case "zoomLevel": {
-                        this.setResolution(this.get("options")[setting.attr].resolution);
-                        this.set("startResolution", this.get("resolution"));
-                        break;
-                    }
-                    case "epsg": {
-                        this.setEpsg(setting.attr);
-                        break;
-                    }
-                }
-            }, this);
+            if (_.isUndefined(mapViewOptions) === false) {
+                this.set("options", []);
+                _.each(mapViewOptions.attr, function (opt) {
+                    this.pushHits("options", opt);
+                }, this);
+            }
+
+            if (_.isUndefined(mapViewEpsg) === false) {
+                this.setEpsg(mapViewEpsg.attr);
+            }
+
+            if (_.isUndefined(mapViewImage) === false) {
+                this.setBackgroundImage(mapViewImage.attr);
+                this.setBackground(mapViewImage.attr);
+            }
+
+            if (_.isUndefined(mapViewStartCenter) === false) {
+                this.setStartCenter(mapViewStartCenter.attr);
+            }
+
+            if (_.isUndefined(mapViewExtent) === false) {
+                this.setExtent(mapViewExtent.attr);
+            }
+
+            if (_.isUndefined(mapViewResolution) === false) {
+                this.setResolution(mapViewResolution.attr);
+                this.setStartResolution(mapViewResolution.attr);
+            }
+            else if (_.isUndefined(mapViewZoomLevel) === false) {
+                var res = this.get("options")[mapViewZoomLevel.attr].resolution;
+
+                this.setResolution(res);
+                this.setStartResolution(res);
+            }
         },
 
         setUrlParams: function () {
@@ -222,7 +227,7 @@ define([
                 zoomLevelFromParamUrl = Radio.request("ParametricURL", "getZoomLevel");
 
             if (!_.isUndefined(centerFromParamUrl)) {
-                this.set("startCenter", centerFromParamUrl);
+                this.setStartCenter(centerFromParamUrl);
             }
 
             if (!_.isUndefined(zoomLevelFromParamUrl)) {
@@ -244,8 +249,28 @@ define([
             this.set("background", value);
         },
 
+        setBackgroundImage: function (value) {
+            this.set("backgroundImage", value);
+        },
+
+        setStartCenter: function (value) {
+            this.set("startCenter", value);
+        },
+
+        setStartResolution: function (value) {
+            this.set("startResolution", value);
+        },
+
         getBackground: function () {
             return this.get("background");
+        },
+
+        getStartCenter: function () {
+            return this.get("startCenter");
+        },
+
+        getStartResolution: function () {
+            return this.get("startResolution");
         },
 
         toggleBackground: function () {
@@ -331,7 +356,7 @@ define([
         setView: function () {
             var view = new ol.View({
                 projection: this.get("projection"),
-                center: this.get("startCenter"),
+                center: this.getStartCenter(),
                 extent: this.getExtent(),
                 resolution: this.get("resolution"),
                 resolutions: this.get("resolutions")
@@ -424,6 +449,16 @@ define([
          */
         getZoom: function () {
             return this.get("view").getZoom();
+        },
+
+        /**
+         * calculate the extent for the current view state and the passed size
+         * @return {ol.extent}
+         */
+        getCurrentExtent: function () {
+            var mapSize = Radio.request("Map", "getSize");
+
+            return this.get("view").calculateExtent(mapSize);
         },
 
         pushHits: function (attribute, value) {

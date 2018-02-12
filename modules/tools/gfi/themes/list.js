@@ -21,6 +21,8 @@ define(function (require) {
         SchulInfoThemeView = require("modules/tools/gfi/themes/schulinfo/view"),
         VerkehrsStaerkenRadTheme = require("modules/tools/gfi/themes/verkehrsstaerken_rad/model"),
         VerkehrsStaerkenRadThemeView = require("modules/tools/gfi/themes/verkehrsstaerken_rad/view"),
+        ItGbmTheme = require("modules/tools/gfi/themes/itgbm/model"),
+        ItGbmThemeView = require("modules/tools/gfi/themes/itgbm/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -51,6 +53,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "verkehrsstaerken_rad") {
                 return new VerkehrsStaerkenRadTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "itgbm") {
+                return new ItGbmTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -115,6 +120,9 @@ define(function (require) {
                 }
                 case "verkehrsstaerken_rad": {
                     new VerkehrsStaerkenRadThemeView({model: model});
+                }
+                case "itgbm": {
+                    new ItGbmThemeView({model: model});
                     break;
                 }
                 default: {

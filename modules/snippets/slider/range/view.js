@@ -17,6 +17,7 @@ define(function (require) {
                 min: valueModels[0].get("initValue"),
                 max: valueModels[1].get("initValue"),
                 step: 1,
+                precision: 3,
                 value: [valueModels[0].get("value"), valueModels[1].get("value")]
             });
         },
