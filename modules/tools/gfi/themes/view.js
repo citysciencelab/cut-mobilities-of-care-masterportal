@@ -49,8 +49,7 @@ define(function (require) {
                     this.adjustGfiWindow(currentView, oldGfiWidth, oldLeft);
                 }
                 // triggert ein afterRender-Event. Wird im Fahrrad-Theme benutzt.
-                this.trigger("afterRender");
-
+                this.trigger("appended");
             }
             this.delegateEvents();
         },

@@ -12,19 +12,33 @@ define(function (require) {
         },
         /**
          * Überschreibt die Render-Funktion des Parent, da hier ein afterRender-Event wegen d3 genutzt werden muss.
-         * Schaltet das GFI früher sichtbar, weil sonst die DIV-Größe nicht ermittelt werden kann.
          */
         render: function () {
             this.listenTo(this, {
-                "afterRender": this.getActiveDiagram
+                "appended": this.appended
             });
 
             if (_.isUndefined(this.model.get("gfiContent")) === false) {
-                var attr = this.model.toJSON();
+                var attr = this.model.toJSON(),
+                    isViewMobile = Radio.request("Util", "isViewMobile");
 
                 this.$el.html(this.template(attr));
-                $(".gfi").show();
             }
+        },
+        /**
+         * Schaltet das GFI früher sichtbar, weil sonst die DIV-Größe nicht ermittelt werden kann.
+         */
+        appended: function () {
+            var isViewMobile = Radio.request("Util", "isViewMobile");
+
+            if (isViewMobile) {
+                this.$el.closest(".gfi-mobile").modal();
+            }
+            else {
+                this.$el.closest(".gfi").show(); // wenn ein GFI erneut geöffnet wird, ist .gfi hidden
+            }
+
+            this.getActiveDiagram();
         },
         getActiveDiagram: function () {
             var active = this.$el.find("li.active"),
