@@ -107,7 +107,7 @@ define(function (require) {
          */
         getCentroidPoint: function (geometry) {
             if (geometry.getType() === "MultiPolygon") {
-                return _.flatten(geometry.getInteriorPoints().getCoordinates());
+                return geometry.getExtent();
             }
             else {
                 return geometry.getCoordinates();

@@ -169,6 +169,10 @@ define([
                     Radio.trigger("MapView", "setCenter", hit.coordinate, 6);
                     break;
                 }
+                case "Gewerbliche Standorte": {
+                    Radio.trigger("Map", "zoomToExtent", hit.coordinate);
+                    break;
+                }
                 default: {
                     this.showMarker(hit.coordinate);
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
