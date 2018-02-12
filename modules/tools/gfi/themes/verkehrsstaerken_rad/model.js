@@ -12,14 +12,16 @@ define(function (require) {
             tageslinieDataset: null,
             wochenlinieDataset: null,
             jahreslinieDataset: null,
-            activeTab: ""
+            activeTab: "",
+            width: 0,
+            height: 0
         },
         initialize: function () {
             this.listenTo(this, {
-                "change:isReady": this.parseGfiContent,
-                "ThemeViewRendered": this.createD3Document
+                "change:isReady": this.parseGfiContent
             });
         },
+
         /**
          * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
          */
@@ -34,19 +36,19 @@ define(function (require) {
                 this.setName(name);
 
                 if (tageslinie) {
-                    var obj = this.splitData(tageslinie);
+                    var obj = this.splitTageslinieDataset(tageslinie);
 
                     this.setTageslinieDataset(obj);
                 }
 
                 if (wochenlinie) {
-                    var obj = this.splitData(wochenlinie);
+                    var obj = this.splitWochenlinieDataset(wochenlinie);
 
                     this.setWochenlinieDataset(obj);
                 }
 
                 if (jahrgangslinie) {
-                    var obj = this.splitData(jahrgangslinie);
+                    var obj = this.splitJahrgangslinieDataset(jahrgangslinie);
 
                     this.setJahreslinieDataset(obj);
                 }
@@ -61,21 +63,21 @@ define(function (require) {
             if (!_.isNull(this.getTageslinieDataset())) {
                 this.setActiveTab("tag");
             }
-            else if (this.getWochenlinieDataset().length > 0) {
+            else if (!_.isNull(this.getWochenlinieDataset())) {
                 this.setActiveTab("woche");
             }
-            else if (this.getJahreslinieDataset().length > 0) {
+            else if (!_.isNull(this.getJahreslinieDataset())) {
                 this.setActiveTab("jahr");
             }
         },
 
         /**
          * Nimmt den gfiContent, parst den Inhalt und gibt ihn als stukturtiertes JSON zurück
-         * @param  {string} featureData gfiContent
+         * @param  {string} tageslinie gfiContent
          * @return {Object} Object mit timeDate-Object und Value
          */
-        splitData: function (featureData) {
-            var dataSplit = featureData.split("|"),
+        splitTageslinieDataset: function (tageslinie) {
+            var dataSplit = tageslinie.split("|"),
                 tempArr = [];
 
             _.each(dataSplit, function (data) {
@@ -99,6 +101,100 @@ define(function (require) {
             });
 
             return tempArr;
+        },
+
+        /**
+         * Nimmt den gfiContent, parst den Inhalt und gibt ihn als stukturtiertes JSON zurück
+         * @param  {string} wochenlinie gfiContent
+         * @return {Object} Object mit timeDate-Object und Value
+         */
+        splitWochenlinieDataset: function (wochenlinie) {
+            // var dataSplit = wochenlinie.split("|"),
+            //     tempArr = [];
+
+            // _.each(dataSplit, function (data) {
+            //     var splitted = data.split(","),
+            //         day = splitted[0].split(".")[0],
+            //         month = splitted[0].split(".")[1],
+            //         year = splitted[0].split(".")[2],
+            //         hours = splitted[1].split(":")[0],
+            //         minutes = splitted[1].split(":")[1],
+            //         seconds = splitted[1].split(":")[2],
+            //         total = parseFloat(splitted[2]),
+            //         r_in = splitted[3] ? parseFloat(splitted[3]) : null,
+            //         r_out = splitted[4] ? parseFloat(splitted[4]) : null;
+
+            //     tempArr.push({
+            //         timestamp: new Date (year, month, day, hours, minutes, seconds, 0),
+            //         total: total,
+            //         r_in: r_in,
+            //         r_out: r_out
+            //     });
+            // });
+
+            // return tempArr;
+        },
+
+        /**
+         * Nimmt den gfiContent, parst den Inhalt und gibt ihn als stukturtiertes JSON zurück
+         * @param  {string} jahrgangslinie gfiContent
+         * @return {Object} Object mit timeDate-Object und Value
+         */
+        splitJahrgangslinieDataset: function (jahrgangslinie) {
+            var dataSplit = jahrgangslinie.split("|"),
+                tempArr = [];
+
+            _.each(dataSplit, function (data) {
+                var splitted = data.split(","),
+                    weeknumber = splitted[1],
+                    year = splitted[0],
+                    total = parseFloat(splitted[2]),
+                    r_in = splitted[3] ? parseFloat(splitted[3]) : null,
+                    r_out = splitted[4] ? parseFloat(splitted[4]) : null;
+
+                tempArr.push({
+                    timestamp: Moment().day("Monday").year(year).week(weeknumber).toDate(),
+                    total: total,
+                    r_in: r_in,
+                    r_out: r_out
+                });
+            });
+
+            return tempArr;
+        },
+
+        /**
+         * Ermittelt die Größe des gfiContent und speichert die Werte
+         */
+        setSize: function () {
+            var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
+                heightPegelHeader = $(".radPegelHeader").css("height").slice(0, -2),
+                heightNavbar = $(".verkehrsstaerken_rad .nav").css("height").slice(0, -2),
+                height = heightGfiContent - heightPegelHeader - heightNavbar,
+                width = parseFloat($(".gfi-content").css("width").slice(0, -2));
+
+            this.setHeight(height);
+            this.setWidth(width);
+
+            this.createD3Document();
+        },
+
+        // getter for width
+        getWidth: function () {
+            return this.get("width");
+        },
+        // setter for width
+        setWidth: function (value) {
+            this.set("width", value);
+        },
+
+        // getter for height
+        getHeight: function () {
+            return this.get("height");
+        },
+        // setter for height
+        setHeight: function (value) {
+            this.set("height", value);
         },
 
         // getter for activeTab
@@ -141,16 +237,19 @@ define(function (require) {
         setWochenlinieDataset: function (data) {
             var startDatum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
                 endeDatum = Moment(_.last(data).timestamp).format("DD.MM.YYYY"),
-                showData = this.getDataAttributes(data[0]),
+                graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
                     val.timestamp = Moment(val.timestamp).format("DD.MM.YYYY");
                     return val;
-                });
+                }),
+                legendArray = this.getLegendAttributes(data[0]);
 
             this.set("wochenlinieDataset", {
                 data: newData,
                 xLabel: "Woche vom " + startDatum + " bis " + endeDatum,
-                showData: showData
+                graphArray: graphArray,
+                xThinning: 1,
+                legendArray: legendArray
             });
         },
 
@@ -161,16 +260,19 @@ define(function (require) {
         // setter for JahrgangslinieDataset
         setJahreslinieDataset: function (data) {
             var year = Moment(data[0].timestamp).format("YYYY"),
-                showData = this.getDataAttributes(data[0]),
+                graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
-                    val.timestamp = Moment(val.timestamp).format("MMMM");
+                    val.timestamp = Moment(val.timestamp).format("w");
                     return val;
-                });
+                }),
+                legendArray = this.getLegendAttributes(data[0]);
 
             this.set("jahreslinieDataset", {
                 data: newData,
-                xLabel: "Jahr " + year,
-                showData: showData
+                xLabel: "KW im Jahr " + year,
+                graphArray: graphArray,
+                xThinning: 1,
+                legendArray: legendArray
             });
         },
 
@@ -246,27 +348,22 @@ define(function (require) {
         createD3Document: function () {
             var dataset = this.getDataset(),
                 data = dataset.data,
-                heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
-                heightPegelHeader = $(".radPegelHeader").css("height").slice(0, -2),
-                heightNavbar = $(".verkehrsstaerken_rad .nav").css("height").slice(0, -2),
-                height = heightGfiContent - heightPegelHeader - heightNavbar,
-                width = $(".gfi-content").css("width").slice(0, -2),
                 graphConfig = {
-                graphType: "Linegraph",
-                selector: ".graph",
-                width: width,
-                height: height,
-                selectorTooltip: ".graph-tooltip-div",
-                scaleTypeX: "ordinal",
-                scaleTypeY: "linear",
-                data: data,
-                xAttr: "timestamp",
-                xThinning: dataset.xThinning,
-                xAxisLabel: dataset.xLabel,
-                yAxisLabel: "Anzahl Fahrräder",
-                attrToShowArray: dataset.graphArray,
-                legendArray: dataset.legendArray
-            };
+                    graphType: "Linegraph",
+                    selector: ".graph",
+                    width: this.getWidth(),
+                    height: this.getHeight(),
+                    selectorTooltip: ".graph-tooltip-div",
+                    scaleTypeX: "ordinal",
+                    scaleTypeY: "linear",
+                    data: data,
+                    xAttr: "timestamp",
+                    xThinning: dataset.xThinning,
+                    xAxisLabel: dataset.xLabel,
+                    yAxisLabel: "Anzahl Fahrräder",
+                    attrToShowArray: dataset.graphArray,
+                    legendArray: dataset.legendArray
+                };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
         },

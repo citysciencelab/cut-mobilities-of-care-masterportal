@@ -10,10 +10,34 @@ define(function (require) {
         events: {
             "click .tab-toggle": "toggleTab"
         },
+        /**
+         * Überschreibt die Render-Funktion des Parent, da hier ein afterRender-Event wegen d3 genutzt werden muss.
+         * Schaltet das GFI früher sichtbar, weil sonst die DIV-Größe nicht ermittelt werden kann.
+         */
+        render: function () {
+            this.listenTo(this, {
+                "afterRender": this.getActiveDiagram
+            });
+
+            if (_.isUndefined(this.model.get("gfiContent")) === false) {
+                var attr = this.model.toJSON();
+
+                this.$el.html(this.template(attr));
+                $(".gfi").show();
+            }
+        },
+        getActiveDiagram: function () {
+            var active = this.$el.find("li.active"),
+                activeTab = active.length === 1 ? $(active[0]).attr("value") : null;
+
+            if (activeTab) {
+                this.loadDiagramm(activeTab);
+            }
+        },
         loadDiagramm: function (attr) {
             $(".graph svg").remove();
             this.model.setActiveTab(attr);
-            this.model.createD3Document();
+            this.model.setSize();
         },
         toggleTab: function (evt) {
             var contentId = $(evt.currentTarget).attr("value");
@@ -30,7 +54,7 @@ define(function (require) {
             $(evt.currentTarget).addClass("active");
             $("#" + contentId).addClass("active");
             $("#" + contentId).addClass("in");
-            this.loadDiagramm(contentId);
+            this.getActiveDiagram();
         }
     });
 
