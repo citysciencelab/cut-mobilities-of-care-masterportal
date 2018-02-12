@@ -43,7 +43,7 @@ define(function (require) {
 
             this.updateData();
 
-            Radio.trigger("HeatmapLayer", "checkDataLayerId", this.getId(), this.getLayerSource().getFeatures());
+            Radio.trigger("HeatmapLayer", "loadInitialData", this.getId(), this.getLayerSource().getFeatures());
         },
 
         /**
@@ -171,12 +171,13 @@ define(function (require) {
         drawPoints: function (sensorData, epsg) {
             var features = [];
 
-            _.each(sensorData, function (thisSensorData) {
+            _.each(sensorData, function (thisSensorData, index) {
                 var xyTransfrom = ol.proj.transform(thisSensorData.location, epsg, Config.view.epsg),
                     feature = new ol.Feature({
                         geometry: new ol.geom.Point(xyTransfrom)
                     });
 
+                feature.setId(index);
                 feature.setProperties(thisSensorData.properties);
                 features.push(feature);
             }, this);
@@ -466,8 +467,6 @@ define(function (require) {
                 thingPhenomenonTime = this.changeTimeZone(thing.phenomenonTime);
 
             this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
-
-            Radio.trigger("HeatmapLayer", "checkDataLayerId", this.getId(), features);
         },
 
         /**
@@ -540,6 +539,8 @@ define(function (require) {
                 feature.set("state", thingResult);
                 feature.set("phenomenonTime", thingPhenomenonTime);
             }
+
+            Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), feature);
         },
 
         /**
@@ -671,6 +672,8 @@ define(function (require) {
                 Radio.trigger("SensorLayer", "featuresLoaded", this.getId(), olFeatures);
                 this.styling(isClustered);
                 this.getLayer().setStyle(this.getStyle());
+
+                Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), olFeatures[0]);
             }
             else {
                 var location = [esriJson.geometry.x, esriJson.geometry.y],
@@ -678,9 +681,8 @@ define(function (require) {
 
                 existingFeature.setProperties(esriJson.attributes);
                 existingFeature.getGeometry().setCoordinates(xyTransform);
+                Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), existingFeature);
             }
-
-            Radio.trigger("HeatmapLayer", "checkDataLayerId", this.getId(), this.getLayerSource().getFeatures());
         },
 
         /**

@@ -173,7 +173,7 @@
           "id": "999999",
           "styleId": "999999",
           "name" : "Elektro Ladestandort (Live)",
-          "visibility": true,
+          "visibility": false,
           "clusterDistance": 60
         },
         {
@@ -190,7 +190,7 @@
         {
           "id": "888889",
           "dataLayerId" : "999999",
-          "visibility": false
+          "visibility": true
         },
         {
           "id": "999993",

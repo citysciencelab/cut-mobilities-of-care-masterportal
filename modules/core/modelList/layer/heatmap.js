@@ -15,13 +15,27 @@ define(function (require) {
                 gradient: ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
             }
         ),
+
         initialize: function () {
             this.superInitialize();
             var channel = Radio.channel("HeatmapLayer");
 
             this.listenTo(channel, {
-                "checkDataLayerId": this.checkDataLayerId
+                "loadInitialData": this.loadInitialData,
+                "loadupdateHeatmap": this.loadupdateHeatmap
             });
+        },
+
+        loadInitialData: function (layerId, features) {
+            if (this.checkDataLayerId(layerId)) {
+                this.initializeHeatmap(features);
+            }
+        },
+
+        loadupdateHeatmap: function (layerId, feature) {
+            if (this.checkDataLayerId(layerId)) {
+                this.updateHeatmap(feature);
+            }
         },
 
         /**
@@ -40,74 +54,192 @@ define(function (require) {
                 name: this.get("name"),
                 typ: this.get("typ"),
                 id: this.getId(),
+                weight: function (feature) {
+                    return feature.get("normalizeWeightForHeatmap");
+                },
                 gfiAttributes: this.get("gfiAttributes"),
-                blur: this.get("heatmap").blur,
-                radius: this.get("heatmap").radius,
+                blur: this.get("blur"),
+                radius: this.get("radius"),
                 gradient: this.get("gradient")
             }));
         },
 
-        /**
+       /**
          * check the triggered id with given the layerid
-         * and start updateHeatmap
          * @param  {String} layerId
-         * @param  {[ol.feature]} features
          */
-        checkDataLayerId: function (layerId, features) {
-            if (this.get("dataLayerId") === layerId) {
-                this.updateHeatmap(features);
+        checkDataLayerId: function (layerId) {
+            return this.get("dataLayerId") === layerId;
+        },
+
+        /**
+         * draw heatmap with initialize features
+         * @param  {[ol.Feature]} feature
+         */
+        initializeHeatmap: function (features) {
+            var attribute = this.get("attribute"),
+                value = this.get("value"),
+                layerSource = this.getLayerSource(),
+                cloneFeatures = [];
+
+            _.each(features, function (feature) {
+                var cloneFeature = feature.clone();
+
+                if (!_.isUndefined(attribute || value)) {
+                     var count = this.countStates(feature, attribute, value);
+
+                    cloneFeature.setId(feature.getId());
+                    cloneFeature.set("weightForHeatmap", count);
+                }
+
+                cloneFeatures.push(cloneFeature);
+            }, this);
+
+            layerSource.addFeatures(cloneFeatures);
+
+            // normalize weighting
+            if (!_.isUndefined(attribute || value)) {
+                this.normalizeWeight(layerSource.getFeatures());
             }
         },
 
         /**
-         * updates the heatmap with given features
-         * generates a copy of the feature for each valid value of a feature,
-         * thereby weighting each feature
-         * @param  {[ol.feature]} features
+         * update the heatmap with given feature
+         * @param  {ol.Feature} feature
+         * @return {[type]}
          */
-        updateHeatmap: function (features) {
-            var heatmapAttribute = this.get("heatmap").attribute,
-                heatmapValue = this.get("heatmap").value,
-                heatmapLayerSource = this.getLayerSource(),
-                weightFeatures = [],
-                normalizeFeatures;
+        updateHeatmap: function (feature) {
+            var attribute = this.get("attribute"),
+                value = this.get("value"),
+                layerSource = this.getLayerSource(),
+                featureId = feature.getId(),
+                cloneFeature = feature.clone(),
+                heatmapFeature;
 
-            heatmapLayerSource.clear();
+            cloneFeature.setId(featureId);
 
-            // count features with multiple heatmapAttributes
-            if (!_.isUndefined(heatmapAttribute && heatmapValue)) {
-                _.each(features, function (feature) {
-                    var state = String(feature.get(heatmapAttribute)),
-                        states,
-                        count;
+            // check is feature exist
+            _.each(layerSource.getFeatures(), function (feature) {
+                if (feature.getId() === featureId) {
+                    heatmapFeature = feature;
+                }
+            });
 
-                    // split features with multiple values
-                    if (state.indexOf("|") !== -1) {
-                        states = state.split(" | ");
-                    }
-                    else {
-                        states = [state];
-                    }
+            // insert weighting
+            if (!_.isUndefined(attribute || value)) {
+                var count = this.countStates(feature, attribute, value);
 
-                    // ******** Nochmal überarbeiten *******************
-                    count = $.grep(states, function (state) {
-                        return state === heatmapValue;
-                    }).length;
+                cloneFeature.set("weightForHeatmap", count);
+            }
 
-                    if (count > 0) {
-                        for (var i = 0; i < count; i++) {
-                            weightFeatures.push(feature.clone());
-                        }
-                    }
-                    // *************************************************
-                });
-
-                heatmapLayerSource.addFeatures(weightFeatures);
+            // if the feature is new, then pushes otherwise change it
+            if (_.isUndefined(heatmapFeature)) {
+                layerSource.addFeature(cloneFeature);
             }
             else {
-                heatmapLayerSource.addFeatures(features);
+                layerSource.removeFeature(layerSource.getFeatureById(cloneFeature.getId()));
+                layerSource.addFeature(cloneFeature);
+            }
+
+            // normalize weighting
+            if (!_.isUndefined(attribute || value)) {
+                this.normalizeWeight(layerSource.getFeatures());
             }
         },
+
+        /**
+         * normalizes the values to a scale from 0 to 1
+         * @param  {[ol.Feature]} featuresWithValue
+         * @return {[ol.Feature]} featuresWithValue
+         */
+        normalizeWeight: function (featuresWithValue) {
+            var max = _.max(featuresWithValue, function (feature) {
+                    return feature.get("weightForHeatmap");
+                }).get("weightForHeatmap");
+
+                _.each(featuresWithValue, function (feature) {
+                    feature.set("normalizeWeightForHeatmap", (feature.get("weightForHeatmap") / max));
+                });
+        },
+
+        /**
+         * count given states of a feature
+         * @param  {String} state
+         * @return {[String]}
+         */
+        countStates: function (feature, heatmapAttribute, heatmapValue) {
+            var state = String(feature.get(heatmapAttribute)),
+                states,
+                count;
+
+            // split features with multiple values
+            if (state.indexOf("|") !== -1) {
+                states = state.split(" | ");
+            }
+            else {
+                states = [state];
+            }
+
+            count = $.grep(states, function (state) {
+                return state === heatmapValue;
+            }).length;
+
+            return count;
+        },
+
+  // /**
+        //  * updates the heatmap with given features
+        //  * generates a copy of the feature for each valid value of a feature,
+        //  * thereby weighting each feature
+        //  * @param  {[ol.feature]} features
+        //  */
+        // updateHeatmap: function (features) {
+        //     var startTime = new Date().getTime();
+        //     var heatmapAttribute = this.get("heatmap").attribute,
+        //         heatmapValue = this.get("heatmap").value,
+        //         heatmapLayerSource = this.getLayerSource(),
+        //         weightFeatures = [],
+        //         normalizeFeatures;
+
+        //     heatmapLayerSource.clear();
+
+        //     // count features with multiple heatmapAttributes
+        //     if (!_.isUndefined(heatmapAttribute && heatmapValue)) {
+        //         _.each(features, function (feature) {
+        //             var state = String(feature.get(heatmapAttribute)),
+        //                 states,
+        //                 count;
+
+        //             // split features with multiple values
+        //             if (state.indexOf("|") !== -1) {
+        //                 states = state.split(" | ");
+        //             }
+        //             else {
+        //                 states = [state];
+        //             }
+
+        //             // ******** Nochmal überarbeiten *******************
+        //             count = $.grep(states, function (state) {
+        //                 return state === heatmapValue;
+        //             }).length;
+
+        //             if (count > 0) {
+        //                 for (var i = 0; i < count; i++) {
+        //                     weightFeatures.push(feature.clone());
+        //                 }
+        //             }
+        //             // *************************************************
+        //         });
+
+        //         heatmapLayerSource.addFeatures(weightFeatures);
+        //     }
+        //     else {
+        //         heatmapLayerSource.addFeatures(features);
+        //     }
+        //     var endTime = new Date().getTime();
+        //     console.log("Layer: " + (endTime - startTime) + " Millisekunden");
+        //     console.log("-----------------------");
+        // },
 
         /**
          * Setter for attribute "layer"

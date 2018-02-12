@@ -3,37 +3,30 @@
       "id" : "888887",
       "name" : "Heatmap der LA-Busse (Live)",
       "typ" : "Heatmap",
-      "heatmap": {
-         "radius" : 20,
-         "blur" : 50,
-         "gradient" : ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
-      },
+      "radius" : 20,
+      "blur" : 50,
+      "gradient" : ["#00f", "#0ff", "#0f0", "#ff0", "#f00"],
       "gfiAttributes" : "ignore"
    },
    {
       "id" : "888888",
       "name" : "Heatmap der belegten Elektro Ladestandorte (Live)",
       "typ" : "Heatmap",
-      "heatmap": {
-         "attribute" : "state",
-         "value" : "charging",
-         "radius" : 20,
-         "blur" : 50,
-         "gradient" : ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
-      },
+      "attribute" : "state",
+      "value" : "charging",
+      "radius" : 20,
+      "blur" : 30,
+      "gradient" : ["#ffffb2", "#fd8d3c", "#fd8d3c", "#f03b20", "#bd0026"],
       "gfiAttributes" : "ignore"
    },
    {
       "id" : "888889",
       "name" : "Heatmap der freien Elektro Ladestandorte (Live)",
       "typ" : "Heatmap",
-      "heatmap": {
-         "attribute" : "state",
-         "value" : "available",
-         "radius" : 20,
-         "blur" : 50,
-         "gradient" : ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
-      },
+      "attribute" : "state",
+      "value" : "available",
+      "radius" : 20,
+      "blur" : 17,
       "gfiAttributes" : "ignore"
    },
    {
