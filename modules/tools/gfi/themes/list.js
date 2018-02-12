@@ -120,6 +120,7 @@ define(function (require) {
                 }
                 case "verkehrsstaerken_rad": {
                     new VerkehrsStaerkenRadThemeView({model: model});
+                    break;
                 }
                 case "itgbm": {
                     new ItGbmThemeView({model: model});
