@@ -14,7 +14,8 @@ define(function (require) {
             id: "filter",
             queryCollection: {},
             isActive: false,
-            allowMultipleQueriesPerLayer: true
+            allowMultipleQueriesPerLayer: true,
+            liveZoomToFeatures: false
         },
         initialize: function () {
             var channel = Radio.channel("Filter");
@@ -195,6 +196,10 @@ define(function (require) {
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+            }
+
+            if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
+                query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
             }
 
             if (query.get("isSelected")) {
