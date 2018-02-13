@@ -18,7 +18,6 @@ define(function (require) {
         initialize: function () {
             this.listenTo(this.model, {
                 "rerenderSnippets": this.rerenderSnippets,
-                "renderSnippets": this.renderSnippets,
                 "change:isSelected": this.removeView,
                 "change:featureIds": this.updateFeatureCount,
                 "change:isLayerVisible": this.render
