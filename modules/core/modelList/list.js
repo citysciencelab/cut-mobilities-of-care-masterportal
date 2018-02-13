@@ -364,6 +364,9 @@ define([
                         lightModel.isSelected = hit.visibility;
                         lightModel.transparency = hit.transparency;
                     }
+                    else {
+                        lightModel.isSelected = false;
+                    }
                 });
                 this.add(lightModels);
             }
