@@ -29,10 +29,11 @@ define(function (require) {
             this.listenTo(this.model.get("queryCollection"), {
                 "change:isSelected": function (model, value) {
                     if (value === true) {
-                        this.renderDetailView(model);
+                        this.renderDetailView();
                     }
                     this.model.closeGFI();
-                }
+                },
+                "renderDetailView": this.renderDetailView
              });
             if (this.model.get("isInitOpen")) {
                 Radio.trigger("Sidebar", "toggle", true);
@@ -46,11 +47,11 @@ define(function (require) {
             // Target wird in der app.js übergeben
             this.domTarget.append(this.$el.html(this.template(attr)));
             this.renderSimpleViews();
-            this.renderDetailView(this.model.get("queryCollection").findWhere({isSelected: true}));
             this.delegateEvents();
         },
 
-        renderDetailView: function (selectedModel) {
+        renderDetailView: function () {
+            var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true});
             if (_.isUndefined(selectedModel) === false) {
                 var view = new QueryDetailView({model: selectedModel});
 

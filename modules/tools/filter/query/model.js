@@ -129,7 +129,7 @@ define(function (require) {
             this.addSnippets(featureAttributesMap);
             if (this.get("isSelected") === true) {
                 this.runFilter();
-                this.trigger("renderSnippets");
+                this.trigger("renderDetailView");
             }
         },
 
