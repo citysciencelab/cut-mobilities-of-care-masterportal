@@ -15,8 +15,7 @@ define(function (require) {
                 // wird in den Subclasses aufgerufen
                 "change:isVisible": this.toggle,
                 // wird in gfi/desktop/detached/view.js aufgerufen
-                "change:coordinate": this.setMarker,
-                "hideGFI": this.hideGFI
+                "change:coordinate": this.setMarker
             });
 
             // Die attached View braucht für ol.Overlay noch ein Dom-Element

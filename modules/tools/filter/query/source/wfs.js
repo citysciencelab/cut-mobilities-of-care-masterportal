@@ -250,7 +250,7 @@ define(function (require) {
 
             this.updateSnippets(features, selectedAttributes);
             this.setFeatureIds(featureIds);
-            this.trigger("featureIdsChanged", featureIds);
+            this.trigger("featureIdsChanged", featureIds, this.get("layerId"));
         },
         /**
          * triggers map to zoom to given features of given layer
@@ -365,7 +365,7 @@ define(function (require) {
             var isMatch = false,
                 mapExtent = Radio.request("MapView", "getCurrentExtent");
 
-            return ol.extent.containsExtent(mapExtent, feature.getGeometry().getExtent());
+            return ol.extent.intersects(mapExtent, feature.getGeometry().getExtent());
         },
 
         /**
