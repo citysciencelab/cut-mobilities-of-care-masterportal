@@ -14,9 +14,11 @@ define(function (require) {
          * Überschreibt die Render-Funktion des Parent, da hier ein afterRender-Event wegen d3 genutzt werden muss.
          */
         render: function () {
-            this.listenTo(this, {
-                "appended": this.appended
-            });
+            var channel = Radio.channel("GFI");
+
+            this.listenTo(channel, {
+                "afterRender": this.appended
+            }, this);
 
             if (_.isUndefined(this.model.get("gfiContent")) === false) {
                 var attr = this.model.toJSON(),

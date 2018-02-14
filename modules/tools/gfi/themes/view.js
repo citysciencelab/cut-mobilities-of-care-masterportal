@@ -48,8 +48,6 @@ define(function (require) {
                 if (this.gfiWindow === "detached" && !isViewMobile) {
                     this.adjustGfiWindow(currentView, oldGfiWidth, oldLeft);
                 }
-                // triggert ein afterRender-Event. Wird im Fahrrad-Theme benutzt.
-                this.trigger("appended");
             }
             this.delegateEvents();
         },
