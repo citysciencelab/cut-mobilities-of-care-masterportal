@@ -24,19 +24,31 @@
                             %>
                                 <table>
                                 <%
-                                _.each(element.img, function (image, index2) {
-                                %>
-                                    <tr>
-                                       <td class="tdLegend">
-                                           <img src="<%= image %>">
-                                       </td>
-                                       <td class="tdLegend">
-                                           <span><%= element.legendname[index2] %></span>
-                                       </td>
-                                   </tr>
-                                <%
-                                });
-                                %>
+                                if (typeof element.img === "string") {
+                                    if (element.img.search(".pdf") !== -1) { %>
+                                        <a href=<%= element.img %> target="_blank">weitere Informationen</a>
+                                    <% }
+                                    else { %>
+                                        <p>
+                                            <img src=<%= element.img %>>
+                                        </p>
+                                    <% }
+                                }
+                                else {
+                                    _.each(element.img, function (image, index2) {
+                                    %>
+                                        <tr>
+                                           <td class="tdLegend">
+                                               <img src="<%= image %>">
+                                           </td>
+                                           <td class="tdLegend">
+                                               <span><%= element.legendname[index2] %></span>
+                                           </td>
+                                       </tr>
+                                    <%
+                                    });
+                                }
+                                    %>
                                 </table>
                             <%
                             }
