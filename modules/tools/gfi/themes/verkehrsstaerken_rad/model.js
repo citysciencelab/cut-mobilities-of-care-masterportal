@@ -100,7 +100,7 @@ define(function (require) {
                 });
             });
 
-            return tempArr;
+            return _.sortBy(tempArr, "timestamp");
         },
 
         /**
@@ -109,30 +109,28 @@ define(function (require) {
          * @return {Object} Object mit timeDate-Object und Value
          */
         splitWochenlinieDataset: function (wochenlinie) {
-            // var dataSplit = wochenlinie.split("|"),
-            //     tempArr = [];
+            var dataSplit = wochenlinie.split("|"),
+                tempArr = [];
 
-            // _.each(dataSplit, function (data) {
-            //     var splitted = data.split(","),
-            //         day = splitted[0].split(".")[0],
-            //         month = splitted[0].split(".")[1],
-            //         year = splitted[0].split(".")[2],
-            //         hours = splitted[1].split(":")[0],
-            //         minutes = splitted[1].split(":")[1],
-            //         seconds = splitted[1].split(":")[2],
-            //         total = parseFloat(splitted[2]),
-            //         r_in = splitted[3] ? parseFloat(splitted[3]) : null,
-            //         r_out = splitted[4] ? parseFloat(splitted[4]) : null;
+            _.each(dataSplit, function (data) {
+                var splitted = data.split(","),
+                    weeknumber = splitted[0],
+                    day = splitted[1].split(".")[0],
+                    month = splitted[1].split(".")[1],
+                    year = splitted[1].split(".")[2],
+                    total = parseFloat(splitted[2]),
+                    r_in = splitted[3] ? parseFloat(splitted[3]) : null,
+                    r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
-            //     tempArr.push({
-            //         timestamp: new Date (year, month, day, hours, minutes, seconds, 0),
-            //         total: total,
-            //         r_in: r_in,
-            //         r_out: r_out
-            //     });
-            // });
+                tempArr.push({
+                    timestamp: new Date (year, month, day, 0, 0, 0, 0),
+                    total: total,
+                    r_in: r_in,
+                    r_out: r_out
+                });
+            });
 
-            // return tempArr;
+            return _.sortBy(tempArr, "timestamp");
         },
 
         /**
@@ -160,7 +158,7 @@ define(function (require) {
                 });
             });
 
-            return tempArr;
+            return _.sortBy(tempArr, "timestamp");
         },
 
         /**
