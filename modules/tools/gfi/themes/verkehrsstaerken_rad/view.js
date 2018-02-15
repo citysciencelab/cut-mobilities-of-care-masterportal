@@ -17,30 +17,14 @@ define(function (require) {
             var channel = Radio.channel("GFI");
 
             this.listenTo(channel, {
-                "afterRender": this.appended
+                "afterRender": this.getActiveDiagram
             }, this);
 
             if (_.isUndefined(this.model.get("gfiContent")) === false) {
-                var attr = this.model.toJSON(),
-                    isViewMobile = Radio.request("Util", "isViewMobile");
+                var attr = this.model.toJSON();
 
                 this.$el.html(this.template(attr));
             }
-        },
-        /**
-         * Schaltet das GFI früher sichtbar, weil sonst die DIV-Größe nicht ermittelt werden kann.
-         */
-        appended: function () {
-            var isViewMobile = Radio.request("Util", "isViewMobile");
-
-            if (isViewMobile) {
-                this.$el.closest(".gfi-mobile").modal();
-            }
-            else {
-                this.$el.closest(".gfi").show(); // wenn ein GFI erneut geöffnet wird, ist .gfi hidden
-            }
-
-            this.getActiveDiagram();
         },
         getActiveDiagram: function () {
             var active = this.$el.find("li.active"),

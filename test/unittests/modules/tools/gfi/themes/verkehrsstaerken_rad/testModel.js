@@ -1,6 +1,5 @@
 define(function(require) {
     var expect = require("chai").expect,
-        Radio = require("backbone.radio"),
         Model = require("../../../../../../../modules/tools/gfi/themes/verkehrsstaerken_rad/model.js"),
         model;
 

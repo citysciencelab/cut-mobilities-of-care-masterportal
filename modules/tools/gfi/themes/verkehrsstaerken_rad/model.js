@@ -2,7 +2,6 @@ define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
         Radio = require("backbone.radio"),
-        d3 = require("d3"),
         Moment = require("moment"),
         VerkehrsStaerkenRadTheme;
 
@@ -114,7 +113,7 @@ define(function (require) {
 
             _.each(dataSplit, function (data) {
                 var splitted = data.split(","),
-                    weeknumber = splitted[0],
+                    // weeknumber = splitted[0],
                     day = splitted[1].split(".")[0],
                     month = splitted[1].split(".")[1],
                     year = splitted[1].split(".")[2],
@@ -212,7 +211,7 @@ define(function (require) {
         setTageslinieDataset: function (data) {
             var datum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
                 graphArray = this.getDataAttributes(data[0]),
-                newData = _.map(data, function (val, count) {
+                newData = _.map(data, function (val) {
                     val.timestamp = Moment(val.timestamp).format("HH:mm") + " Uhr";
                     return val;
                 }),
@@ -320,7 +319,7 @@ define(function (require) {
          * @param  {object} inspectData Dataset-Objekt
          * @return {array}             Array of Objects
          */
-        getLegendAttributes: function(inspectData) {
+        getLegendAttributes: function (inspectData) {
             var legendData = [{
                 key: "total",
                 value: "Fahrräder insgesamt"
