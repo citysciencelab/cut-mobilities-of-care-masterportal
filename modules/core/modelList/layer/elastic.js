@@ -7,11 +7,14 @@ define(function (require) {
     ElasticLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
+
+            if (this.has("styleId")) {
+                this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
+            }
         },
 
         /**
          * [createLayerSource description]
-         * @return {[type]} [description]
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
@@ -19,7 +22,6 @@ define(function (require) {
 
         /**
          * [createLayer description]
-         * @return {[type]} [description]
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
@@ -57,12 +59,14 @@ define(function (require) {
          */
         parseData: function (data) {
             var features = [];
+
             _.each(data.hits.hits, function (hit) {
                 var feature = new ol.Feature({
                     geometry: this.readAndGetGeometry(hit._source.geometry_EPSG_25832)
                 });
                 feature.setProperties(_.omit(hit._source, "geometry_UTM_EPSG_25832"));
                 feature.setId(hit._id);
+                feature.setStyle(this.get("styleFunction"));
                 features.push(feature);
             }, this);
 
@@ -90,61 +94,43 @@ define(function (require) {
         showFeaturesByIds: function (featureIdList) {
             this.hideAllFeatures();
             _.each(featureIdList, function (id) {
-                var feature = this.getLayerSource().getFeatureById(id),
-                    style = [];
+                var feature = this.getLayerSource().getFeatureById(id);
 
-                style = this.getStyleAsFunction(this.get("style"));
-
-                feature.setStyle(style(feature));
+                feature.setStyle(this.get("styleFunction"));
             }, this);
         },
 
         /**
-         * Versteckt alle Features mit dem Hidden-Style
+         * sets null style (=no style) for all features
          */
         hideAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures(),
-                that = this;
+            var collection = this.getLayerSource().getFeatures();
 
             collection.forEach(function (feature) {
                 feature.setStyle(function () {
-                    return that.getHiddenStyle();
+                    return null;
                 });
             }, this);
         },
 
+        /**
+         * sets style for all features
+         */
         showAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures(),
-                style;
+            var collection = this.getLayerSource().getFeatures();
 
             collection.forEach(function (feature) {
-                style = this.getStyleAsFunction(this.get("style"));
-
-                feature.setStyle(style(feature));
+                feature.setStyle(this.get("styleFunction"));
             }, this);
         },
 
-        getStyleAsFunction: function (style) {
-            if (_.isFunction(style)) {
-                return style;
-            }
-            else {
-                return function (feature) {
-                    return style;
-                }
-            }
-        },
-
-        getHiddenStyle: function () {
-            return new ol.style.Style({
-                image: new ol.style.Circle({
-                    fill: new ol.style.Fill({
-                        color: "rgba(0, 0, 0, 0)"
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: "rgba(0, 0, 0, 0)"
-                    })
-                })
+        /**
+         * sets style function for features or layer
+         * @param  {Backbone.Model} stylelistmodel
+         */
+        setStyleFunction: function (stylelistmodel) {
+            this.set("styleFunction", function (feature) {
+                return stylelistmodel.createStyle(feature);
             });
         }
     });
