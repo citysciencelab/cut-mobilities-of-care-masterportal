@@ -91,7 +91,7 @@ define(function (require) {
         // create bottomAxis.
         createAxisBottom: function (scale, xThinningFactor) {
             return d3.axisBottom(scale)
-                    .tickValues(scale.domain().filter(function(d, i) {
+                    .tickValues(scale.domain().filter(function (d, i) {
                         return !(i % xThinningFactor);
                     }))
                     .tickFormat(function (d) {
@@ -240,18 +240,6 @@ define(function (require) {
                 .text(function (d) {
                     return d;
                 });
-        },
-
-        createAndGetLegendText: function (value) {
-            if (value === "DTV") {
-                return "DTV (Kfz/24h)";
-            }
-            else if (value === "DTVw") {
-                return "DTVw (Kfz/24h)";
-            }
-            else if (value === "Schwerverkehrsanteil am DTVw") {
-                return "SV-Anteil am DTVw (%)";
-            }
         },
 
         getLegendTextArray: function (attrArray, legendArray) {

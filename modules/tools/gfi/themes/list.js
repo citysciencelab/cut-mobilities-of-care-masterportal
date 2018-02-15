@@ -75,6 +75,7 @@ define(function (require) {
                         var removeModels = this.filter(function (model) {
                             return model.get("gfiContent") === undefined;
                         });
+
                         this.remove(removeModels);
                         this.forEach(this.addView, this);
                         // listener in modules/tools/gfi/model.js
