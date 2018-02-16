@@ -20,8 +20,8 @@
 ## Pushen
 * Die Commits werden mit thematisch umschließenden Pushes ins Repository geschrieben, wobei es nicht Ziel ist, ganze Features in einem Push zu umschließen, sondern Tätigkeiten. Mit der lokalen Entwicklungsumgebung ist eine tägliche Sicherung ins Repository empfehlenswert um Datenverlust zu verhindern.
 
-## Pull Requests / Definition Of Done
-* Die in Branches abgelegten Commits werden vor dem Mergen als Pull Request dem restlichen Team zum Review angeboten. Der Entwickler prüft vor dem Stellen des Pull Requests diese Punkte:
+## Definition Of Done
+* Der Author prüft vor dem Stellen eines Pull Request diese Punkte:
     - der Ziel-Branch wurde unmittelbar vor dem Stellen des Pull Requests in den Feature-Branch gemerged
     - der Code ist OK
         - Es gibt keine Linter-Meldungen
@@ -36,6 +36,12 @@
         - gemäß der Beschreibung im Ticket
         - Cross-Browser (Chrome, IE 11, FF) - mobiles Verhalten im Browser emuliert
 
-* Im Review durch mind. 1 Team-Mitglied werden diese Punkte ebenfalls geprüft. Fehler oder Kommentare können dann direkt im Code oder im Pull Request hinterlegt werden. Ist der Pull Request OK, wird er approved und in den Ziel-Branch gemerged.
+## Forks
+* **Externe Entwickler** sind keine Team-Mitglieder und haben daher keine Schreibberechtigungen im Repository. Sie erstellen bitte einen Fork](https://bitbucket.org/lgv-g12/lgv/fork) ausgehend vom **dev-Branch**.
+* In diesem werden die Commits vorgenommen und aus diesem können Pull Requests auch in den **dev-Branch** gestellt werden.
 
-* **externe Entwickler** ohne Schreibzugriff auf dieses Repository erstellen über Bitbucket einen [Fork](https://bitbucket.org/lgv-g12/lgv/fork) ausgehend vom dev-Branch. Pull Requests an dieses Repository können von dort ebenso gestellt werden.
+## Pull Requests
+* Die in Branches abgelegten Commits gelangen nur über Pull Requests im **dev- oder stable Branch**. 
+* **Externe Entwickler** stellen als Reviewer bitte den User **geowerkstatt** ein. Dieser Systemuser unterrichtet dann ein Teammitglied.
+* Die Review erfolgt durch mind. 1 Team-Mitglied. Der Reviewer prüft den Pull Request anhand der Definition of Done. Fehler oder Kommentare können dann direkt im Code oder im Pull Request hinterlegt werden. 
+* Ist der Pull Request OK, wird approved. Der Author kann dann in den Ziel-Branch mergen.
