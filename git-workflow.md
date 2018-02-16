@@ -42,6 +42,6 @@
 
 ## Pull Requests
 * Die in Branches abgelegten Commits gelangen nur über Pull Requests im **dev- oder stable Branch**. 
-* **Externe Entwickler** stellen als Reviewer bitte den User **geowerkstatt** ein. Dieser Systemuser unterrichtet dann ein Teammitglied.
+* **Externe Entwickler** stellen als Reviewer bitte den User [geowerkstatt](https://bitbucket.org/geowerkstatt) ein. Dieser Systemuser unterrichtet dann ein Teammitglied.
 * Die Review erfolgt durch mind. 1 Team-Mitglied. Der Reviewer prüft den Pull Request anhand der Definition of Done. Fehler oder Kommentare können dann direkt im Code oder im Pull Request hinterlegt werden. 
-* Ist der Pull Request OK, wird approved. Der Author kann dann in den Ziel-Branch mergen.
+* Ist der Pull Request OK, wird approved. Für **externe Entwickler** übernimmt das approvende Teammitglied das mergen.
