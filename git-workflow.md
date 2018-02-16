@@ -37,7 +37,7 @@
         - Cross-Browser (Chrome, IE 11, FF) - mobiles Verhalten im Browser emuliert
 
 ## Forks
-* **Externe Entwickler** sind keine Team-Mitglieder und haben daher keine Schreibberechtigungen im Repository. Sie erstellen bitte einen Fork](https://bitbucket.org/lgv-g12/lgv/fork) ausgehend vom **dev-Branch**.
+* **Externe Entwickler** sind keine Team-Mitglieder und haben daher keine Schreibberechtigungen im Repository. Sie erstellen bitte einen [Fork](https://bitbucket.org/lgv-g12/lgv/fork) ausgehend vom **dev-Branch**.
 * In diesem werden die Commits vorgenommen und aus diesem können Pull Requests auch in den **dev-Branch** gestellt werden.
 
 ## Pull Requests
