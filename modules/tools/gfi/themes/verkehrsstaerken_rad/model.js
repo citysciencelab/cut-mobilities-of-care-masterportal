@@ -163,7 +163,7 @@ define(function (require) {
             var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
                 heightPegelHeader = $(".radPegelHeader").css("height").slice(0, -2),
                 heightNavbar = $(".verkehrsstaerken_rad .nav").css("height").slice(0, -2),
-                height = heightGfiContent - heightPegelHeader - heightNavbar,
+                height = heightGfiContent - heightPegelHeader - heightNavbar - 5,
                 width = parseFloat($(".gfi-content").css("width").slice(0, -2));
 
             this.setHeight(height);
