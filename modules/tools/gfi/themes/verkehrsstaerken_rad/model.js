@@ -25,31 +25,27 @@ define(function (require) {
          * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
          */
         parseGfiContent: function () {
-            if (_.isUndefined(this.get("gfiContent")) === false) {
-                var gfiContent = this.getGfiContent()[0],
-                    name = _.has(gfiContent, "Name") ? gfiContent.Name : "unbekannt",
-                    tageslinie = _.has(gfiContent, "Tageslinie") ? gfiContent.Tageslinie : null,
-                    wochenlinie = _.has(gfiContent, "Wochenlinie") ? gfiContent.Wochenlinie : null,
-                    jahrgangslinie = _.has(gfiContent, "Jahrgangslinie") ? gfiContent.Jahrgangslinie : null;
+            var gfiContent, name, tageslinie, wochenlinie, jahrgangslinie;
+
+            if (!_.isUndefined(this.getGfiContent())) {
+                gfiContent = this.getGfiContent()[0];
+                name = _.has(gfiContent, "Name") ? gfiContent.Name : "unbekannt";
+                tageslinie = _.has(gfiContent, "Tageslinie") ? gfiContent.Tageslinie : null;
+                wochenlinie = _.has(gfiContent, "Wochenlinie") ? gfiContent.Wochenlinie : null;
+                jahrgangslinie = _.has(gfiContent, "Jahrgangslinie") ? gfiContent.Jahrgangslinie : null;
 
                 this.setName(name);
 
                 if (tageslinie) {
-                    var obj = this.splitTageslinieDataset(tageslinie);
-
-                    this.setTageslinieDataset(obj);
+                    this.setTageslinieDataset(this.splitTageslinieDataset(tageslinie));
                 }
 
                 if (wochenlinie) {
-                    var obj = this.splitWochenlinieDataset(wochenlinie);
-
-                    this.setWochenlinieDataset(obj);
+                    this.setWochenlinieDataset(this.splitWochenlinieDataset(wochenlinie));
                 }
 
                 if (jahrgangslinie) {
-                    var obj = this.splitJahrgangslinieDataset(jahrgangslinie);
-
-                    this.setJahreslinieDataset(obj);
+                    this.setJahreslinieDataset(this.splitJahrgangslinieDataset(jahrgangslinie));
                 }
                 this.setInitialActiveTab();
             }
