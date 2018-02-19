@@ -30,7 +30,7 @@ define(function (require) {
             var active = this.$el.find("li.active"),
                 activeTab = active.length === 1 ? $(active[0]).attr("value") : null;
 
-            if (activeTab) {
+            if (this.model.get("isVisible") === true && activeTab) {
                 this.loadDiagramm(activeTab);
             }
         },
