@@ -46,6 +46,7 @@ define(function(require) {
     "modules/snippets/slider/testModel.js",
     "modules/tools/gfi/themes/schulinfo/testModel.js",
     "modules/core/testMap.js",
+    "modules/core/modelList/layer/testElastic.js",
     "modules/vectorStyle/testModel.js"
     ], function (require) {
         Radio = Backbone.Radio;
