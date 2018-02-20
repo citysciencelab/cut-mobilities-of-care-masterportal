@@ -8,9 +8,7 @@ define(function (require) {
         initialize: function () {
             this.superInitialize();
 
-            if (this.has("styleId")) {
-                this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
-            }
+            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         },
 
         /**
@@ -129,9 +127,14 @@ define(function (require) {
          * @param  {Backbone.Model} stylelistmodel
          */
         setStyleFunction: function (stylelistmodel) {
-            this.set("styleFunction", function (feature) {
-                return stylelistmodel.createStyle(feature);
-            });
+            if (_.isUndefined(stylelistmodel)) {
+                this.set("styleFunction", undefined);
+            }
+            else {
+                this.set("styleFunction", function (feature) {
+                    return stylelistmodel.createStyle(feature);
+                });
+            }
         }
     });
 
