@@ -1,16 +1,27 @@
 <!DOCTYPE html>
-<div>
+<div class= "text-align-center ladesaeulenHeader">
+    <% _.each(headTitleObject, function (value, key) { %>
+        <strong><%=key%>: <%=value%></strong>
+        <br>
+    <% }); %>
+</div>
+<ul class="nav nav-pills">
+  <li value= "daten" class="tab-toggle active"><a data-toggle="tab" href="#tabelle">Daten</a></li>
+  <li value= "diagramm" class="tab-toggle"><a data-toggle="tab" href="#diagramm">Diagramm</a></li>
+</ul>
+<div class="tab-content">
+<div id= "daten" class="tab-pane fade in active">
     <table class="table">
          <thead>
             <tr class="row">
                 <th>Eigenschaften</th>
-                <% _.each(headArray, function (element) { %>
+                <% _.each(tableheadArray, function (element) { %>
                     <th><%=element%></th>
                 <% }); %>
             </tr>
         </thead>
         <tbody>
-            <% _.each(attributesObj, function (value, key) { %>
+            <% _.each(gfiProperties, function (value, key) { %>
                 <tr class="row">
                     <th><%=key%></th>
                     <% _.each(value, function (val) { %>
@@ -20,4 +31,9 @@
             <% }); %>
         </tbody>
     </table>
+</div>
+<div id= "diagramm" class="tab-pane fade">
+    <div id="d3-div" class="ladesaeulen-graph">
+        <div class="ladesaeulen-graph-tooltip-div"></div>
+    </div>
 </div>

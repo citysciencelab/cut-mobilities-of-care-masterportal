@@ -1,11 +1,22 @@
 .ladesaeulen .table {
+    overflow: auto;
     border-collapse: collapse;
+    background-color: #FFF;
+    color: #333;
     width: 100%;
-    color: black;
 }
 
 .ladesaeulen .row:nth-child(even){
-    background-color: #E0EEEE;
     width: 100%;
+    background: #FFF;
+}
+
+.gfi-header {
+    background: #FFF;
+    margin-bottom: 8x;
+}
+
+.text-align-center {
+    text-align: center;
 }
 
