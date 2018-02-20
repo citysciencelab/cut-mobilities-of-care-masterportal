@@ -3,7 +3,7 @@
   {
     "portalTitle": {
       "title": "Master",
-      "logo": "/../lgv-config/img/hh-logo.png",
+      "logo": "../../node_modules/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -62,7 +62,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-            
+
           "filter": {
             "name": "Filter",
             "glyphicon": "glyphicon-filter",
@@ -150,7 +150,7 @@
             "title": "Master",
             "gfi": true,
             "outputFilename": "DruckPDF",
-              
+
                "gfiMarker": {
                   "outerCircle": {
                     "fill": false,
@@ -281,8 +281,7 @@
         },
         {
           "id":"2128",
-          "styleId":"2128",
-          "clusterDistance":0
+          "styleId":"2128"
         },
         {
           "id": "8730"
@@ -305,8 +304,7 @@
         {
           "id": "2059",
           "styleId": "2059",
-          "clusterDistance": 30,
-          "styleField": "kategorie"
+          "clusterDistance": 30
         },
         {
           "id": "5708",
@@ -322,9 +320,9 @@
           "mouseHoverField": "GEBIETSNAME"
         },
         {
-            "id": "2714",
-            "gfiTheme": "reisezeiten",
-            "styleId": "2119"
+          "id": "2714",
+          "gfiTheme": "reisezeiten",
+          "styleId": "2119"
         },
         {
           "id": "4905",
@@ -363,7 +361,6 @@
           "id": "8712",
           "name": "Schulinfosystem",
           "styleId": "8712",
-          "styleField": "kapitelbezeichnung",
           "searchField": "schulname",
           "mouseHoverField": ["schulname", "kapitelbezeichnung"],
           "gfiTheme": "schulinfo",
@@ -372,7 +369,7 @@
         {
           "id": "753",
           "styleId": "753",
-          "styleField": "Leistungsarten",
+          "visibility": false,
           "mouseHoverField": "Name",
           "extendedFilter": true,
           "filterOptions": [

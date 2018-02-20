@@ -45,12 +45,21 @@
                         _.each(legendURL.img, function (image, index2) {
                         %>
                             <tr>
+                               <% if (image.indexOf(".png") === -1 && image.indexOf(".svg") === -1){%>
+                            <td class="tdLegend">
+                               <div class="tdLegend-no-image"><%= image %></div>
+                            </td>
+                            <td class="tdLegend">
+                               <span><%= legendURL.legendname[index2] %></span>
+                            </td>
+                            <%} else {%>
                                <td class="tdLegend">
                                    <img src="<%= image %>">
                                </td>
                                <td class="tdLegend">
                                    <span><%= legendURL.legendname[index2] %></span>
                                </td>
+                            <%}%>
                            </tr>
                         <%
                         });

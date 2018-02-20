@@ -239,12 +239,21 @@ define(function (require) {
             }
 
             if (mouseHoverObj.values.length > 0) {
-                var maxNum = this.get("numFeaturesToShow");
+                var maxNum = this.get("numFeaturesToShow"),
+                    valuesWithBr = [];
 
                 if (mouseHoverObj.values.length > maxNum) {
                     mouseHoverObj.values = _.sample(mouseHoverObj.values, maxNum);
                     mouseHoverObj.values.push("<span class='info'>" + this.get("infoText") + "</span>");
                 }
+                // add <br> betweeen every element in values
+                _.each(mouseHoverObj.values, function (value, index) {
+                    valuesWithBr.push(value);
+                    if (index !== mouseHoverObj.values.length - 1) {
+                        valuesWithBr.push("<br>");
+                    }
+                });
+                mouseHoverObj.values = valuesWithBr;
                 this.get("mhpOverlay").setPosition(mouseHoverObj.coord);
                 // this.get("mhpOverlay").setOffset([10, -15]);
                 this.set("mhpcoordinates", mouseHoverObj.coord);

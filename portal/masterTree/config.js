@@ -1,7 +1,7 @@
 define(function () {
 
     var config = {
-       wfsImgPath: "..node_modules/lgv-config/img",
+       wfsImgPath: "../node_modules/lgv-config/img",
        allowParametricURL: true,
         namedProjections: [
             // ETRS89 UTM
@@ -11,7 +11,7 @@ define(function () {
         ],
        layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
        restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
-       styleConf: "../node_modules/lgv-config/style.json",
+       styleConf: "../node_modules/lgv-config/style_v2.json",
        proxyURL: "/cgi-bin/proxy.cgi",
        mouseHover: {
             numFeaturesToShow: 2,

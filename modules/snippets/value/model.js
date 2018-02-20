@@ -3,8 +3,6 @@ define(function () {
 var Model = Backbone.Model.extend({
         defaults: {
             value: "",
-            attribute: "",
-            displayString: "",
             type: ""
         },
         // setter for value
@@ -18,11 +16,13 @@ var Model = Backbone.Model.extend({
         getDisplayString: function () {
             var displayString = "";
 
-            this.get("isMin");
             switch (this.get("type")) {
                 case "boolean": {
                     displayString = this.get("attr");
                     break;
+                }
+                case "searchInMapExtent": {
+                    displayString = "Kartenausschnitt";
                 }
                 default: {
                     displayString += this.get("value");

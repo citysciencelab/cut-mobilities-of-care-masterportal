@@ -89,9 +89,9 @@ Ein Portal vor Veröffentlichung optimieren/bauen.
 
 ### grunt buildExamples
 ```
-# grunt buildExamples --env=internet
+# grunt buildExamples
 ```
-- erzeugt einen Ordner examples, in dem zwei lauffähige Portal-Instanzen (zurzeit simple und simpleTree) enthalten sind inkl. dem Ordner lgv-config und doc (wenn dieser zuvor erstellt wurde)
+- erzeugt einen Ordner examples, in dem zwei lauffähige Portal-Instanzen (zurzeit master und masterTree) enthalten sind inkl. dem Ordner lgv-config und doc (wenn dieser zuvor erstellt wurde)
 - erzeugt zusätzlich examples.zip
 
 ### grunt copyExamples

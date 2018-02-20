@@ -104,7 +104,8 @@ define([
                     return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
                 },
                 "getResoByScale": this.getResoByScale,
-                "getScales": this.getScales
+                "getScales": this.getScales,
+                "getCurrentExtent": this.getCurrentExtent
             }, this);
 
             channel.on({
@@ -182,35 +183,35 @@ define([
                 mapViewResolution = _.find(mapViewSettings, {"id": "resolution"}),
                 mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"});
 
-            if (mapViewOptions) {
+            if (_.isUndefined(mapViewOptions) === false) {
                 this.set("options", []);
                 _.each(mapViewOptions.attr, function (opt) {
                     this.pushHits("options", opt);
                 }, this);
             }
 
-            if (mapViewEpsg) {
+            if (_.isUndefined(mapViewEpsg) === false) {
                 this.setEpsg(mapViewEpsg.attr);
             }
 
-            if (mapViewImage) {
+            if (_.isUndefined(mapViewImage) === false) {
                 this.setBackgroundImage(mapViewImage.attr);
                 this.setBackground(mapViewImage.attr);
             }
 
-            if (mapViewStartCenter) {
+            if (_.isUndefined(mapViewStartCenter) === false) {
                 this.setStartCenter(mapViewStartCenter.attr);
             }
 
-            if (mapViewExtent) {
+            if (_.isUndefined(mapViewExtent) === false) {
                 this.setExtent(mapViewExtent.attr);
             }
 
-            if (mapViewResolution) {
+            if (_.isUndefined(mapViewResolution) === false) {
                 this.setResolution(mapViewResolution.attr);
                 this.setStartResolution(mapViewResolution.attr);
             }
-            else if (mapViewZoomLevel) {
+            else if (_.isUndefined(mapViewZoomLevel) === false) {
                 var res = this.get("options")[mapViewZoomLevel.attr].resolution;
 
                 this.setResolution(res);
@@ -448,6 +449,16 @@ define([
          */
         getZoom: function () {
             return this.get("view").getZoom();
+        },
+
+        /**
+         * calculate the extent for the current view state and the passed size
+         * @return {ol.extent}
+         */
+        getCurrentExtent: function () {
+            var mapSize = Radio.request("Map", "getSize");
+
+            return this.get("view").calculateExtent(mapSize);
         },
 
         pushHits: function (attribute, value) {

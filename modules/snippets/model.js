@@ -1,6 +1,6 @@
 define(function (require) {
 
-var ValueModel = require("modules/Snippets/value/model"),
+var ValueModel = require("modules/snippets/value/model"),
     Snippet = Backbone.Model.extend({
     defaults: {
         // snippet info text

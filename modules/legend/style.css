@@ -112,6 +112,10 @@
 .tdLegend > img {
     max-height: 35px;
 }
+.tdLegend-no-image {
+    width: 35px;
+    height: 35px;
+}
 
 .panel-legend {
     overflow-x: auto;
