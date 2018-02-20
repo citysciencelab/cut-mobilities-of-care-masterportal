@@ -31,13 +31,9 @@ define(function (require) {
             }, this);
             window.addEventListener("message", this.receiveMessage.bind(this));
             Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
-        },
-        getPostMessageHost: function (config) {
-            if (_.has(config, "postMessageUrl") && config.postMessageUrl.length > 0) {
-                return this.setPostMessageUrl(config.postMessageUrl);
-            }
-            else {
-                return this.get("postMessageUrl");
+
+            if (_.has(Config, "postMessageUrl")) {
+                this.setPostMessageUrl(Config.postMessageUrl);
             }
         },
 
@@ -46,7 +42,7 @@ define(function (require) {
          * @param  {MessageEvent} event
          */
         receiveMessage: function (event) {
-            if (event.origin !== this.getPostMessageHost()) {
+            if (event.origin !== this.get("postMessageUrl")) {
                 return;
             }
             if (event.data.hasOwnProperty("showPositionByFeatureId")) {
@@ -62,7 +58,7 @@ define(function (require) {
          * @param  {Object} content the Data to be sent
          */
         postMessage: function (content) {
-            parent.postMessage(content, this.getPostMessageHost());
+            parent.postMessage(content, this.get("postMessageUrl"));
         },
         /**
          * gets the center coordinate of the feature geometry and triggers it to MapMarker module
