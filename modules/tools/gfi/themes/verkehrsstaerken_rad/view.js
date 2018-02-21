@@ -14,14 +14,15 @@ define(function (require) {
          * Überschreibt die Render-Funktion des Parent, da hier ein afterRender-Event wegen d3 genutzt werden muss.
          */
         render: function () {
-            var channel = Radio.channel("GFI");
+            var channel = Radio.channel("GFI"),
+                attr;
 
             this.listenTo(channel, {
                 "afterRender": this.getActiveDiagram
             }, this);
 
             if (_.isUndefined(this.model.get("gfiContent")) === false) {
-                var attr = this.model.toJSON();
+                attr = this.model.toJSON();
 
                 this.$el.html(this.template(attr));
             }
