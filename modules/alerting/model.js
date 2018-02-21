@@ -1,5 +1,4 @@
 define(function (require) {
-
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         AlertingModel;
@@ -33,10 +32,17 @@ define(function (require) {
          */
         setParams: function (val) {
             if (_.isString(val)) {
+                this.setId(_.uniqueId());
                 this.setMessage(val);
             }
             else if (_.isObject(val)) {
                 this.setMessage(val.text);
+                if (_.has(val, "id") === true) {
+                    this.setId(val.id);
+                }
+                else {
+                    this.setId(_.uniqueId());
+                }
                 if (_.has(val, "kategorie") === true) {
                     this.setCategory(val.kategorie);
                 }
@@ -48,6 +54,10 @@ define(function (require) {
                 }
             }
             this.trigger("render");
+        },
+
+        setId: function (value) {
+            this.set("id", value.toString());
         },
 
         setCategory: function (value) {
