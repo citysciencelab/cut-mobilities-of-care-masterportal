@@ -92,7 +92,9 @@ define(function (require) {
         createAxisBottom: function (scale, xThinningFactor) {
             return d3.axisBottom(scale)
                     .tickValues(scale.domain().filter(function (d, i) {
-                        return !(i % xThinningFactor);
+                        var val = i % xThinningFactor;
+
+                        return (!val);
                     }))
                     .tickFormat(function (d) {
                         d = d.toString();
