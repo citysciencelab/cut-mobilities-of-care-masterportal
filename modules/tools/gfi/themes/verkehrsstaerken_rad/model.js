@@ -6,15 +6,17 @@ define(function (require) {
         VerkehrsStaerkenRadTheme;
 
     VerkehrsStaerkenRadTheme = Theme.extend({
-        defaults: {
-            name: "",
-            tageslinieDataset: null,
-            wochenlinieDataset: null,
-            jahreslinieDataset: null,
-            activeTab: "",
-            width: 0,
-            height: 0
-        },
+        defaults: _.extend({}, Theme.prototype.defaults,
+            {
+                name: "",
+                tageslinieDataset: null,
+                wochenlinieDataset: null,
+                jahreslinieDataset: null,
+                activeTab: "",
+                width: 0,
+                height: 0
+            }
+        ),
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
