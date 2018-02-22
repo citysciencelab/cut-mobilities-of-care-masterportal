@@ -81,15 +81,18 @@
        "outoforder" : [175, 175, 175, 1]
     },
     "scalingValueDefaultColor" : [0, 0, 0, 1],
-    "circleSegmentsRadius" : 23,
-    "circleSegmentsStrokeWidth" : 5,
+    "circleSegmentsRadius" : 21,
+    "circleSegmentsStrokeWidth" : 3,
     "circleSegmentsGap" : 10,
     "circleSegmentsBackgroundColor" : [255, 255, 255, 1],
     "imageName" : "elektro_auto.png",
-    "imageScale" : "1.0",
+    "imageScale" : "0.9",
     "clusterCircleRadius" : 15,
-    "clusterCircleFillColor" : [0, 0, 50, 0.5],
-    "clusterTextAlign" : "center"
+    "clusterCircleFillColor" : [45, 92, 164, 1],
+    "clusterTextAlign" : "center",
+    "clusterTextScale" : 1.7,
+    "clusterTextStrokeColor" : [0, 0, 0, 0],
+    "clusterCircleStrokeColor" : [255, 255, 255, 1]
   },
   {
     "layerId" : "1711",
