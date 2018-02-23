@@ -399,11 +399,12 @@
         "mouseHoverField": "Name",
         "extendedFilter": true,
         "filterOptions": [
+        {
           "fieldName": "Bezirk",
           "filterType": "combo",
           "filterName": "Bezirk",
           "filterString": ["*", "Altona"]
-        ]
+        }]
       },
       {
         "id": "8145",
