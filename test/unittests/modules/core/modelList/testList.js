@@ -1,9 +1,11 @@
 define(function(require) {
     var expect = require("chai").expect,
-        Model = require("../../../../../modules/core/modelList/list.js");
+        Model = require("../../../../../modules/core/modelList/list.js"),
+        Util = require("../../../../../modules/core/util");
 
     describe("core/modelList/list", function () {
         var model,
+            util,
             testLightModels = [
                 {
                     id: "713",
@@ -37,10 +39,11 @@ define(function(require) {
             ];
 
         before(function () {
+            util = new Util();
             model = new Model();
         });
 
-        describe("mergeParamsToLightModels (Damit diese Tests funktionieren müssen in der lsit.js alles für new StyleList auskomentiert werden bis zum neuen Stable!", function () {
+        describe("mergeParamsToLightModels (Für dev müssen die Test angepasst werden!!)", function () {
             it("should return lightModels array reversed", function () {
                 expect(model.mergeParamsToLightModels(testLightModels, undefined)[2]).to.include({
                     id: "713",
