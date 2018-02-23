@@ -21,7 +21,7 @@ Radio.trigger("Alert", "alert", {
 |id|nein|String|random|Setzt spezielle ID ans div.||
 |category|nein|String|"alert-info"|Bestimmt das Layout des Bootstrap-Alerts.|Siehe [Bootstrap](https://getbootstrap.com/docs/3.3/components/#alerts)|
 |isDismissable|nein|Boolean|true|Legt fest, ob der Alarm weggeklickt werden kann.|[true | false]|
-|position|nein|String|"top-center"|Positioniert der Alerts über css-Klassen.|[top-center | center-center]|
+|position|nein|String|"top-center"|Positioniert die Alerts über css-Klassen.|[top-center | center-center]|
 
 #### Schließen eines speziellen Alerts
 Einzelne Alerts, die mit
