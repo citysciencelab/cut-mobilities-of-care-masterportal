@@ -46,7 +46,8 @@ define(function(require) {
     "modules/snippets/slider/testModel.js",
     "modules/tools/gfi/themes/schulinfo/testModel.js",
     "modules/core/testMap.js",
-    "modules/vectorStyle/testModel.js"
+    "modules/vectorStyle/testModel.js",
+    "modules/alerting/testModel.js"
     ], function (require) {
         Radio = Backbone.Radio;
         mocha.run();
