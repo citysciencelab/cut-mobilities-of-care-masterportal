@@ -27,7 +27,7 @@
         <div class="col-md-9 col-sm-9">
             <select class="form-control input-sm" id="scaleField">
                 <% _.each(scales, function(element, index) { %>
-                    <% if (element.value == scale.value) { %>
+                    <% if (element.value == scale.valueInt) { %>
                         <option value=<%= element.value %> SELECTED><%= element.name %></option>
                     <% } else { %>
                         <option value=<%= element.value %>><%= element.name %></option>

@@ -28,6 +28,7 @@ define(function (require) {
         toggle: function () {
             if (this.model.getIsVisible() === true) {
                 this.$el.modal("show");
+                Radio.trigger("GFI", "afterRender");
             }
             else {
                 this.$el.modal("hide");

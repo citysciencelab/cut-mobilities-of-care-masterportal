@@ -21,8 +21,10 @@ define(function (require) {
         },
 
         render: function () {
+            var attr;
+
             if (_.isUndefined(this.model.get("gfiContent")) === false) {
-                var attr = this.model.toJSON();
+                attr = this.model.toJSON();
 
                 this.$el.html(this.template(attr));
             }
@@ -51,12 +53,13 @@ define(function (require) {
             }
             this.delegateEvents();
         },
+
         adjustGfiWindow: function (currentView, oldGfiWidth, oldLeft) {
             var newGfiWidth,
                 newLeft;
 
             newGfiWidth = currentView.$el.width();
-            newLeft = $(".lgv-container").width() - newGfiWidth - 40;
+            newLeft = $("#map").width() - newGfiWidth - 40;
 
             // initial left of gfi. can never be 0 after drag, due to render-function in desktop/detached/view
             if (oldLeft === 0) {
@@ -98,8 +101,10 @@ define(function (require) {
          * Fügt den Button dem gfiContent hinzu
          */
         appendRoutableButton: function () {
+            var rb;
+
             if (this.model.get("routable") !== undefined) {
-                var rb = this.model.get("routable");
+                rb = this.model.get("routable");
 
                 this.$el.after(rb.$el);
             }

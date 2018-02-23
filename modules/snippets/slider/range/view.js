@@ -1,7 +1,7 @@
 define(function (require) {
 
-    var Template = require("text!modules/Snippets/slider/range/template.html"),
-        SliderView = require("modules/Snippets/slider/view"),
+    var Template = require("text!modules/snippets/slider/range/template.html"),
+        SliderView = require("modules/snippets/slider/view"),
         SliderRangeView;
 
     SliderRangeView = SliderView.extend({
@@ -17,6 +17,7 @@ define(function (require) {
                 min: valueModels[0].get("initValue"),
                 max: valueModels[1].get("initValue"),
                 step: 1,
+                precision: 3,
                 value: [valueModels[0].get("value"), valueModels[1].get("value")]
             });
         },

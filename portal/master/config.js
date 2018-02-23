@@ -30,6 +30,7 @@ define(function () {
             layerid: "4561",
             WFSid: "4560"
         },
+        postMessageUrl: "http://localhost:8080",
         namedProjections: [
             // GK DHDN
             ["EPSG:31461", "+proj=tmerc +lat_0=0 +lon_0=3 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -68,7 +69,7 @@ define(function () {
         portalConf: "../../portal/master/",
         layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
-        styleConf: "../node_modules/lgv-config/style.json",
+        styleConf: "../node_modules/lgv-config/style_v2.json",
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,
