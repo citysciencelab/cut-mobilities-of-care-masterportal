@@ -41,11 +41,14 @@
         "require",
         "_",
         "JSON",
-        "Radio",
         "Backbone",
         "before",
         "beforeEach",
         "describe",
-        "it"
-    ]
+        "it",
+        "mocha"
+    ],
+    "globals": {
+        "Radio": true
+    }
 }

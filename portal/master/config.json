@@ -62,7 +62,7 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-            
+
           "filter": {
             "name": "Filter",
             "glyphicon": "glyphicon-filter",
@@ -150,7 +150,7 @@
             "title": "Master",
             "gfi": true,
             "outputFilename": "DruckPDF",
-              
+
                "gfiMarker": {
                   "outerCircle": {
                     "fill": false,
@@ -205,6 +205,10 @@
           "animation": {
             "name": "Pendler Animation",
             "glyphicon": "glyphicon-play-circle"
+          },
+          "saveSelection": {
+            "name": "Auswahl speichern",
+            "glyphicon": "glyphicon-share"
           }
         }
       },

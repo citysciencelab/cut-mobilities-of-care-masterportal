@@ -12,7 +12,7 @@ require.config({
     util: "util",
     config: "testConfig",
     moment: "../../node_modules/moment/min/moment.min",
-    bootstrap: "../../node_modules/bootstrap/js",
+    bootstrap: "../../node_modules/bootstrap/js"
   },
   shim: {
         bootstrap: {
@@ -27,7 +27,7 @@ require.config({
     }
 });
 
-define(function(require) {
+define(function (require) {
     require("mocha");
     require("jquery");
 
@@ -45,8 +45,9 @@ define(function(require) {
     "modules/tools/filter/testFilter.js",
     "modules/snippets/slider/testModel.js",
     "modules/tools/gfi/themes/schulinfo/testModel.js",
-    "modules/core/testMap.js"
-    ], function (require) {
+    "modules/core/testMap.js",
+    "modules/core/modelList/testList.js"
+    ], function () {
         Radio = Backbone.Radio;
         mocha.run();
     });

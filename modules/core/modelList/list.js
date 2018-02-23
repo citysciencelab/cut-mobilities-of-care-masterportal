@@ -347,14 +347,48 @@ define([
             // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
             // wie sie hinzugefügt werden
             var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
-                treeType = Radio.request("Parser", "getTreeType");
+                treeType = Radio.request("Parser", "getTreeType"),
+                lightModels,
+                itemIsVisibleInMap,
+                lightModel;
 
             if (treeType === "light") {
-                var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
+                lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 
-                lightModels.reverse();
+                lightModels = this.mergeParamsToLightModels(lightModels, paramLayers);
+                this.add(lightModels);
+            }
+            else if (paramLayers.length > 0) {
+                itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
+                _.each(itemIsVisibleInMap, function (layer) {
+                    layer.isVisibleInMap = false;
+                    layer.isSelected = false;
+                }, this);
 
-                // Merge die parametrisierten Einstellungen an die geparsten Models
+                 _.each(paramLayers, function (paramLayer) {
+                    lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
+
+                    if (_.isUndefined(lightModel) === false) {
+                        this.add(lightModel);
+                        this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
+                        // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
+                        if (paramLayer.visibility === false && _.isUndefined(this.get(paramLayer.id)) === false) {
+                            this.get(paramLayer.id).setIsVisibleInMap(false);
+                        }
+                    }
+                }, this);
+
+            }
+            else {
+                this.addModelsByAttributes({type: "layer", isSelected: true});
+            }
+
+        },
+
+        mergeParamsToLightModels: function (lightModels, paramLayers) {
+            lightModels.reverse();
+            // Merge die parametrisierten Einstellungen an die geparsten Models
+            if (_.isUndefined(paramLayers) === false && paramLayers.length !== 0) {
                 _.each(lightModels, function (lightModel) {
                     var hit = _.find(paramLayers, function (paramLayer) {
                         return paramLayer.id === lightModel.id;
@@ -364,37 +398,12 @@ define([
                         lightModel.isSelected = hit.visibility;
                         lightModel.transparency = hit.transparency;
                     }
-                });
-                this.add(lightModels);
-            }
-            // Parametrisierter Aufruf
-            else if (paramLayers.length > 0) {
-                _.each(Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true}), function (layer) {
-                    layer.isVisibleInMap = false;
-                    layer.isSelected = false;
-                });
-                _.each(paramLayers, function (paramLayer) {
-                    var lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
-
-                    if (_.isUndefined(lightModel) === false) {
-                        this.add(lightModel);
-                        if (paramLayer.visibility === true) {
-                            this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
-                        }
-                        else {
-                            this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
-                            // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
-                            if (_.isUndefined(this.get(paramLayer.id)) === false) {
-                                this.get(paramLayer.id).setIsVisibleInMap(false);
-                            }
-                        }
+                    else {
+                        lightModel.isSelected = false;
                     }
-                }, this);
+                });
             }
-            // Only Add models in selection
-            else {
-                this.addModelsByAttributes({type: "layer", isSelected: true});
-            }
+            return lightModels;
         },
 
         setModelAttributesById: function (id, attrs) {
@@ -407,6 +416,7 @@ define([
 
         addModelsByAttributes: function (attrs) {
             var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
+
             this.add(lightModels);
         },
 
