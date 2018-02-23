@@ -9,6 +9,7 @@ define([
             getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
             legendParams: [],
             wmsLayerList: [],
+            wfsLayerList: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
             visible: false
@@ -23,6 +24,9 @@ define([
 
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
+            });
+            this.listenTo(Radio.channel("WFS"), {
+                "featuresLoaded": this.setLayerList
             });
             this.listenTo(Radio.channel("StyleWMS"), {
                 "updateParamsStyleWMS": this.updateParamsStyleWMSArray
@@ -162,76 +166,74 @@ define([
 
         setLegendParamsFromWFS: function () {
             _.each(this.get("wfsLayerList"), function (layer) {
-                if (layer.get("loadend") === "ready") {
-                    if (typeof layer.get("legendURL") === "string") {
-                        this.push("tempArray", {
-                            layername: layer.get("name"),
-                            img: layer.get("legendURL"),
-                            typ: "WFS",
-                            isVisibleInMap: layer.get("isVisibleInMap")
-                        });
-                    }
-                    else {
-                        var image = [],
-                            name = [],
-                            style = Radio.request("StyleList", "returnModelById", layer.getStyleId()),
-                            styleClass = style.get("class"),
-                            styleSubClass = style.get("subClass"),
-                            styleFieldValues = style.get("styleFieldValues");
+                if (typeof layer.get("legendURL") === "string") {
+                    this.push("tempArray", {
+                        layername: layer.get("name"),
+                        img: layer.get("legendURL"),
+                        typ: "WFS",
+                        isVisibleInMap: layer.get("isVisibleInMap")
+                    });
+                }
+                else {
+                    var image = [],
+                        name = [],
+                        style = Radio.request("StyleList", "returnModelById", layer.getStyleId()),
+                        styleClass = style.get("class"),
+                        styleSubClass = style.get("subClass"),
+                        styleFieldValues = style.get("styleFieldValues");
 
-                        if (styleClass === "POINT") {
-                            // Custom Point Styles
-                            if (styleSubClass === "CUSTOM") {
-                                _.each(styleFieldValues, function (styleFieldValue) {
-                                    image.push(style.get("imagePath") + styleFieldValue.imageName);
-                                    if (_.has(styleFieldValue, "legendValue")) {
-                                        name.push(styleFieldValue.legendValue);
-                                    }
-                                    else {
-                                        name.push(styleFieldValue.styleFieldValue);
-                                    }
-                                });
-                            }
-                            // Circle Point Style
-                            if (styleSubClass === "CIRCLE") {
-                                image.push(this.createCircleSVG(style));
-                                name.push(layer.get("name"));
-                            }
-                            else {
-                                if (style.get("imageName") !== "blank.png") {
-                                    image.push(style.get("imagePath") + style.get("imageName"));
+                    if (styleClass === "POINT") {
+                        // Custom Point Styles
+                        if (styleSubClass === "CUSTOM") {
+                            _.each(styleFieldValues, function (styleFieldValue) {
+                                image.push(style.get("imagePath") + styleFieldValue.imageName);
+                                if (_.has(styleFieldValue, "legendValue")) {
+                                    name.push(styleFieldValue.legendValue);
                                 }
-                                name.push(layer.get("name"));
-                            }
+                                else {
+                                    name.push(styleFieldValue.styleFieldValue);
+                                }
+                            });
                         }
-                        // Simple Line Style
-                        if (styleClass === "LINE") {
-                            image.push(this.createLineSVG(style));
-                            if (style.has("legendValue")) {
-                                name.push(style.get("legendValue"));
-                            }
-                            else {
-                                name.push(layer.get("name"));
-                            }
+                        // Circle Point Style
+                        if (styleSubClass === "CIRCLE") {
+                            image.push(this.createCircleSVG(style));
+                            name.push(layer.get("name"));
                         }
-                        // Simple Polygon Style
-                        if (styleClass === "POLYGON") {
-                            image.push(this.createPolygonSVG(style));
-                            if (style.has("legendValue")) {
-                                name.push(style.get("legendValue"));
+                        else {
+                            if (style.get("imageName") !== "blank.png") {
+                                image.push(style.get("imagePath") + style.get("imageName"));
                             }
-                            else {
-                                name.push(layer.get("name"));
-                            }
+                            name.push(layer.get("name"));
                         }
-                        this.push("tempArray", {
-                            layername: layer.get("name"),
-                            legendname: name,
-                            img: image,
-                            typ: "WFS",
-                            isVisibleInMap: layer.get("isVisibleInMap")
-                        });
                     }
+                    // Simple Line Style
+                    if (styleClass === "LINE") {
+                        image.push(this.createLineSVG(style));
+                        if (style.has("legendValue")) {
+                            name.push(style.get("legendValue"));
+                        }
+                        else {
+                            name.push(layer.get("name"));
+                        }
+                    }
+                    // Simple Polygon Style
+                    if (styleClass === "POLYGON") {
+                        image.push(this.createPolygonSVG(style));
+                        if (style.has("legendValue")) {
+                            name.push(style.get("legendValue"));
+                        }
+                        else {
+                            name.push(layer.get("name"));
+                        }
+                    }console.log(image);
+                    this.push("tempArray", {
+                        layername: layer.get("name"),
+                        legendname: name,
+                        img: image,
+                        typ: "WFS",
+                        isVisibleInMap: layer.get("isVisibleInMap")
+                    });
                 }
             }, this);
         },
