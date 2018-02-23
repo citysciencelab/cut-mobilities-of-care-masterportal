@@ -65,7 +65,7 @@ define(function (require) {
         },
 
         setIsDismissalbe: function (value) {
-            this.set("dismissable", value);
+            this.set("isDismissable", value);
         },
 
         setMessage: function (value) {
