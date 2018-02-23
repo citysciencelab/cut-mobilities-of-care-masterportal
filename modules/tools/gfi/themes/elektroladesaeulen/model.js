@@ -83,54 +83,44 @@ define(function (require) {
             return tableheadArray;
         },
 
-        createD3Document: function () {
+        createD3Document: function (state, graphTag) {
+            console.log($(".gfi-content"));
+            console.log($(".gfi-content")[0].clientWidth);
+            console.log($(".gfi-content")[0].clientHeight);
+
             var height = this.calculateHeight(),
+                // width = $(".gfi-content").css("width").slice(0, -2),
                 width = $(".gfi-content").css("width").slice(0, -2),
-                targetResult = "available",
+                targetResult = state,
                 historicalData = this.getHistoricalData(),
                 historicalDataThisTimeZone = this.changeTimeZone(historicalData),
                 historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone),
                 dataByWeekday = this.getDataByWeekday(historicalDataWithIndex),
-                dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday, targetResult);
-                dataByArithmeticMean = this.calculateArithmeticMean(dataPerHour);
+                dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday, targetResult),
+                processedData = this.calculateArithmeticMean(dataPerHour),
+                graphConfig = {
+                    graphType: "BarGraph",
+                    selector: graphTag,
+                    width: width,
+                    height: 400,
+                    svgClass: "BarGraph-svg",
+                    data: processedData,
+                    xAxisLabel: this.createXAxisLabel(targetResult)
+                };
 
-                console.log(historicalData);
-                console.log(historicalDataThisTimeZone);
-                console.log(historicalDataWithIndex);
-                console.log(dataByWeekday);
-                console.log(dataPerHour);
-                console.log(dataByArithmeticMean);
+                console.log(graphTag);
 
-            // var graphConfig = {
-            //     graphType: "Linegraph",
-            //     selector: ".ladesaeulen-graph",
-            //     width: width,
-            //     height: height,
-            //     selectorTooltip: ".ladesaeulen-graph-tooltip-div",
-            //     scaleTypeX: "ordinal",
-            //     scaleTypeY: "linear",
-            //     data: processedData,
-            //     xAttr: "data",
-            //     xAxisLabel: "Zeitpunkt",
-            //     attrToShowArray: ["erg"]
-            // };
+                // *** eine andere Methode wäre die Zeitreihenanalyse ***
+                // processedData = this.calculateWithAnotherFunction(dataPerHour);
 
-            //     // console.log(processedData);
+            console.log(historicalData);
+            console.log(historicalDataThisTimeZone);
+            console.log(historicalDataWithIndex);
+            console.log(dataByWeekday);
+            console.log(dataPerHour);
+            console.log(processedData);
 
-            //     //********************
-            //     var margin = margin = {top: 20, right: 20, bottom: 70, left: 70},
-            //         selector = ".graph";
-
-            //     width = width - margin.left - margin.right;
-            //     height = height - margin.top - margin.bottom;
-
-            //     var svg = this.createSvg(selector, margin, width, height),
-            //         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            //     this.createGraph(processedData, width, height, g);
-                //*************
-
-                // Radio.trigger("Graph", "createGraph", graphConfig);
+            Radio.trigger("Graph", "createGraph", graphConfig);
         },
 
         /**
@@ -318,17 +308,10 @@ define(function (require) {
                 var loadingPointArray = [];
 
                 _.each(loadingPointData, function (dayData) {
-                    var dayObj = this.createInitialDayPerHour();
+                    var dayObj = this.createInitialDayPerHour(),
+                        dayDataReverse = dayData.reverse();
 
-                    if (dayData.length === 1) {
-                        dayObj = this.addValueToWholeDay(dayObj, dayData, targetResult);
-                    }
-                    else {
-                        var dayDataReverse = dayData.reverse();
-
-                        dayObj = this.calculateWorkloadforOneDay(dayObj, dayDataReverse, targetResult);
-                    }
-
+                    dayObj = this.calculateWorkloadforOneDay(dayObj, dayDataReverse, targetResult);
                     loadingPointArray.push(dayObj);
                 }, this);
 
@@ -390,7 +373,7 @@ define(function (require) {
 
                 // if the requested period is in the future
                 if (moment(nextTimeStep).toDate().getTime() > moment().toDate().getTime()) {
-                    dayObj[i] = "";
+                    dayObj[i] = undefined
                 }
                 else if (_.isEmpty(dataByActualTimeStep)) {
                     dayObj[i] = actualStateAsNumber;
@@ -467,98 +450,70 @@ define(function (require) {
          */
         calculateArithmeticMean: function (dataPerHour) {
             var allData = _.flatten(dataPerHour),
-                dayObjSum = this.createInitialDayPerHour(),
-                dayObjMean = this.createInitialDayPerHour(),
-                numberOfObjects = allData.length;
-                numberOfObjectsWithoutFuture = allData.length - dataPerHour.length,
-                dayIndex = 24;
+                dayLength = 24,
+                dayMeanArray = [];
 
-            _.each(allData, function (obj) {
-                for (var i = 0; i < 24; i++) {
-                    if (obj[i] === "") {
-                        dayIndex = i;
-                        break;
-                    }
-                    dayObjSum[i] = dayObjSum[i] + obj[i];
-                }
-            })
+                var array = [];
+            for (var i = 0; i < dayLength; i++) {
+                var arrayPerHour = [],
+                    mean,
+                    obj = {};
 
-            _.each(dayObjSum, function (value, key) {
-                if (key < dayIndex) {
-                    dayObjMean[key] = Math.round(value / numberOfObjects * 1000) / 1000;
-                }
-                else {
-                    dayObjMean[key] = Math.round(value / numberOfObjectsWithoutFuture * 1000) / 1000;
-                }
-            })
+                // returns an array which contains values at hour i
+                _.each(allData, function (day) {
+                    arrayPerHour.push(_.pick(day, String(i))[i]);
+                });
 
-            return dayObjMean;
-        },
+                // remove all undefined data
+                arrayPerHour = _.filter(arrayPerHour, function (value) {
+                    return !_.isUndefined(value);
+                });
 
+                // calculate mean of the array with values for one hour
+                mean = _.reduce(arrayPerHour, function (memo, value) {
+                    return memo + value;
+                }) / arrayPerHour.length;
 
+                // push mean to dayMeanArrayn as object
+                dayMeanArray.push({
+                    hour: i,
+                    value: Math.round(mean * 1000) / 1000
+                });
+            }
 
-
-        createGraph: function (processedData, width, height, g) {
-            var x = d3.scaleTime()
-                    .rangeRound([0, width]),
-                y = d3.scaleLinear()
-                    .rangeRound([height, 0]),
-                line = d3.line()
-                    .x(function (d) {
-                        return x(d.date);
-                    })
-                    .y(function (d) {
-                        return y(d.value);
-                    });
-
-            x.domain(d3.extent(processedData, function (d) {
-                return d.date;
-            }));
-            y.domain(d3.extent(processedData, function (d) {
-                return d.value;
-            }));
-
-            g.append("g")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x))
-            .select(".domain")
-                .remove();
-
-            g.append("g")
-                .call(d3.axisLeft(y))
-                .append("text")
-                    .attr("fill", "#000")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", 6)
-                    .attr("dy", "0.71em")
-                    .attr("text-anchor", "end")
-                    .text("Price ($)");
-
-            g.append("path")
-                .datum(processedData)
-                .attr("fill", "none")
-                .attr("stroke", "steelblue")
-                .attr("stroke-linejoin", "round")
-                .attr("stroke-linecap", "round")
-                .attr("stroke-width", 1.5)
-                .attr("d", line);
-        },
-
-        createSvg: function (selector, marginObj, width, height) {
-             return d3.select(selector).append("svg")
-                .attr("width", width + marginObj.left + marginObj.right)
-                .attr("height", height + marginObj.top + marginObj.bottom)
-                .attr("class", "graph-svg")
-                .append("g")
-                .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
+            return dayMeanArray;
         },
 
         calculateHeight: function () {
+console.log($(".gfi-content").css("height"));
+
             var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
                 heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
                 heightNavbar = $(".ladesaeulen .nav").css("height").slice(0, -2);
 
+console.log(heightGfiContent);
+console.log(heightladesaeulenHeader);
+console.log(heightNavbar);
+
+console.log(heightGfiContent - heightladesaeulenHeader - heightNavbar);
             return heightGfiContent - heightladesaeulenHeader - heightNavbar;
+        },
+
+        createXAxisLabel: function (state) {
+            var today = moment().format("dddd"),
+                stateLabel;
+
+            if (state === "available") {
+                stateLabel = "Durchschnittliche Verfügbarkeit ";
+            }
+            else if (state === "charging") {
+                stateLabel = "Durchschnittliche Auslastung ";
+            }
+            else if (state === "outoforder") {
+                stateLabel = "Durchschnittlich außer Betrieb ";
+            }
+
+            return stateLabel + "an einem " + today;
         }
     });
 

@@ -22,6 +22,9 @@ define(function (require) {
             if (graphConfig.graphType === "Linegraph") {
                 this.createLineGraph(graphConfig);
             }
+            else if (graphConfig.graphType === "BarGraph") {
+                this.createBarGraph(graphConfig);
+            }
         },
         createMaxValue: function (data, attrToShowArray) {
             var value;
@@ -90,6 +93,7 @@ define(function (require) {
         },
         // create bottomAxis.
         createAxisBottom: function (scale) {
+            console.log(scale);
             return d3.axisBottom(scale)
                     .tickFormat(function (d) {
                         d = d.toString();
@@ -205,11 +209,11 @@ define(function (require) {
                         .style("top", (d3.event.offsetY - 5) + "px");
                     });
         },
-        createSvg: function (selector, marginObj, width, height) {
+        createSvg: function (selector, marginObj, width, height, svgClass) {
             return d3.select(selector).append("svg")
                     .attr("width", width + marginObj.left + marginObj.right)
                     .attr("height", height + marginObj.top + marginObj.bottom)
-                    .attr("class", "graph-svg")
+                    .attr("class", svgClass)
                     .append("g")
                     .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
         },
@@ -269,7 +273,7 @@ define(function (require) {
                 tooltipDiv = d3.select(graphConfig.selectorTooltip),
                 xAxis = this.createAxisBottom(scaleX),
                 yAxis = this.createAxisLeft(scaleY),
-                svg = this.createSvg(selector, margin, width, height),
+                svg = this.createSvg(selector, margin, width, height, "graph-svg"),
                 offset = 10;
 
             this.appendLegend(svg, attrToShowArray);
@@ -291,6 +295,76 @@ define(function (require) {
                 margin: margin,
                 offset: offset
             });
+        },
+
+        createBarGraph: function (graphConfig) {
+            var selector = graphConfig.selector,
+                margin = {top: 20, right: 20, bottom: 70, left: 70},
+                width = graphConfig.width - margin.left - margin.right,
+                height = graphConfig.height - margin.top - margin.bottom,
+                svgClass = graphConfig.svgClass,
+                data = graphConfig.data,
+                xAxisLabel = graphConfig.xAxisLabel,
+                svg = this.createSvg(selector, margin, width, height, svgClass),
+                x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+                y = d3.scaleLinear().rangeRound([height, 0]),
+                offset = 10;
+
+                this.createXAxis(x, height, width, data, svg, xAxisLabel);
+                this.createYAxis(y, data, svg);
+                this.drawBars(svg, data, x, y, height, selector);
+        },
+
+        createXAxis: function (x, height, width, data, svg, xAxisLabel) {
+            x.domain(data.map(function (d) {
+                return d.hour;
+            }));
+
+            svg.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x))
+            .append("text")
+                .attr("x", (width / 2))
+                .attr("y", 45)
+                .style("text-anchor", "middle")
+                .style("fill", "#000")
+                .style("font-size", "14")
+                .text(xAxisLabel);
+        },
+
+        createYAxis: function (y, data, svg) {
+            y.domain([0, d3.max(data, function (d) {
+                return d.value;
+            })]);
+
+            svg.append("g")
+                .attr("class", "axis axis--y")
+                .call(d3.axisLeft(y).ticks(10, "%"))
+            .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", "0.71em")
+                .attr("text-anchor", "end")
+                .text("Frequency");
+        },
+
+        drawBars: function (svg, data, x, y, height, selector) {
+            svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+                .attr("class", "bar" + selector.split(".")[1])
+                // .attr("class", "bar")
+                .attr("x", function (d) {
+                    return x(d.hour);
+                })
+                .attr("y", function (d) {
+                    return y(d.value);
+                })
+                .attr("width", x.bandwidth())
+                .attr("height", function (d) {
+                    return height - y(d.value);
+                });
         },
 
         // getter for graphParams

@@ -13,6 +13,10 @@ define(function (require) {
         },
 
         toggleTab: function (evt) {
+            // delete all graphs
+            $(".ladesaeulenVerfuegbar-graph svg").remove();
+            $(".ladesaeulenBelegt-graph svg").remove();
+
             var contentId = $(evt.currentTarget).attr("value");
 
             // deactivate all tabs and their contents
@@ -29,13 +33,16 @@ define(function (require) {
             $("#" + contentId).addClass("active");
             $("#" + contentId).addClass("in");
 
-            if (contentId === "diagramm") {
-                this.loadDiagramm();
+            if (contentId === "diagrammVerfuegbar") {
+                this.loadDiagramm("available", ".ladesaeulenVerfuegbar-graph");
+            }
+            else if (contentId === "diagrammBelegt") {
+                this.loadDiagramm("charging", ".ladesaeulenBelegt-graph");
             }
         },
 
-        loadDiagramm: function () {
-            this.model.createD3Document();
+        loadDiagramm: function (state, graphTag) {
+            this.model.createD3Document(state, graphTag);
         }
     });
 

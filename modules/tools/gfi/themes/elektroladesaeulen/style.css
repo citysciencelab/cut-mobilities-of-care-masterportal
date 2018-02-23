@@ -4,11 +4,17 @@
     background-color: #FFF;
     color: #333;
     width: 100%;
+    height: 100%;
 }
 
 .ladesaeulen .row:nth-child(even){
     width: 100%;
+    height: 100%;
     background: #FFF;
+}
+
+.ladesaeulen .nav-pills {
+    padding: 6px;
 }
 
 .gfi-header {
@@ -20,3 +26,18 @@
     text-align: center;
 }
 
+.ladesaeulen .barladesaeulenBelegt-graph{
+    fill: #DC0000;
+}
+
+.ladesaeulen .barladesaeulenBelegt-graph:hover {
+  fill: #999999;
+}
+
+.ladesaeulen .barladesaeulenVerfuegbar-graph{
+    fill: #00DC00;
+}
+
+.ladesaeulen .barladesaeulenVerfuegbar-graph:hover {
+  fill: #999999;
+}

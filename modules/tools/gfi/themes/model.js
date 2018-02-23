@@ -169,7 +169,10 @@ define(function (require) {
 
             gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent);
-            this.setGfiContent(gfiContent);
+            // this.setGfiContent(gfiContent);
+            this.setGfiContent(_.extend(gfiContent, {
+                allProperties: this.get("feature").getProperties()
+            }));
             this.setIsReady(true);
         },
         // Setter
