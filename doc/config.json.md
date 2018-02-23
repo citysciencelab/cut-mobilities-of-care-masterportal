@@ -232,7 +232,7 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
 |name|ja|String||Name, wie der Link im Menu angezeigt werden soll.|
 |glyphicon|ja|String||Glyphicon des Linkes für den Menueintrag.|
 |url|nein|String||URL zur externen Webseite. |
-|onClickTrigger|nein|Object: {"channel": String ,"event": String, "data": String || Enthält den Channel namen, das Event, welches getriggert wird und die daten die mitgeschickt werden.|
+|onClickTrigger|nein|Array|| Ein Array von Objekten mit den jeweiligen Channel Namen, das Event, welches getriggert wird und die Daten die mitgeschickt werden.|
 
 
 **Beispiel staticlinks:**
@@ -269,11 +269,11 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
         {
             "name": "Altona",
             "glyphicon": "glyphicon-globe",
-            "onClickTrigger": {
+            "onClickTrigger": [{
                 "channel": "ZoomToGeometry",
                 "event": "zoomToGeometry",
                 "data": "Altona"
-            }
+            }]
         }]
     }
 }
