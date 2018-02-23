@@ -1,68 +1,79 @@
 {
   "Portalconfig":
   {
-    "portalTitle": {
+    "portalTitle":
+    {
       "title": "Master",
       "logo": "../../node_modules/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
-    "searchBar": {
-        "gazetteer": {
-            "minChars": 3,
-            "serviceId": "6",
-            "searchStreets": true,
-            "searchHouseNumbers": true,
-            "searchDistricts": true,
-            "searchParcels": true,
-            "searchStreetKey": true
+    "searchBar":
+    {
+      "gazetteer":
+      {
+        "minChars": 3,
+        "serviceId": "6",
+        "searchStreets": true,
+        "searchHouseNumbers": true,
+        "searchDistricts": true,
+        "searchParcels": true,
+        "searchStreetKey": true
+      },
+      "bkg":
+      {
+        "minChars": 3,
+        "suggestServiceId": "4",
+        "geosearchServiceId": "5",
+        "extent": [454591, 5809000, 700000, 6075769],
+        "suggestCount": 10,
+        "epsg": "EPSG:25832",
+        "filter": "filter=(typ:*)",
+        "score": 0.6
+      },
+      "specialWFS":
+      {
+        "minChar": 3,
+        "definitions": [
+        {
+          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+          "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
+          "name": "bplan"
         },
-        "bkg": {
-            "minChars": 3,
-            "suggestServiceId": "4",
-            "geosearchServiceId": "5",
-            "extent": [454591, 5809000, 700000, 6075769],
-            "suggestCount": 10,
-            "epsg": "EPSG:25832",
-            "filter": "filter=(typ:*)",
-            "score": 0.6
-        },
-        "specialWFS": {
-            "minChar": 3,
-            "definitions": [
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
-                    "name": "bplan"
-                },
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
-                    "name": "bplan"
-                }
-            ]
-        },
-        "visibleWFS": {
-            "minChars": 3
-        },
-        "zoomLevel": 9,
-        "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
+        {
+          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+          "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
+          "name": "bplan"
+        }]
+      },
+      "visibleWFS":
+      {
+        "minChars": 3
+      },
+      "zoomLevel": 9,
+      "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
     },
-    "mapView": {
-        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
-        "startCenter": [561210, 5932600]
+    "mapView":
+    {
+      "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+      "startCenter": [561210, 5932600]
     },
-    "menu": {
-      "tree": {
+    "menu":
+    {
+      "tree":
+      {
         "name": "Themen",
         "glyphicon": "glyphicon-list",
         "isInitOpen": false
       },
-      "tools": {
+      "tools":
+      {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
-        "children": {
-          "filter": {
+        "children":
+        {
+          "filter":
+          {
             "name": "Filter",
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false,
@@ -70,58 +81,54 @@
             "isInitOpen": false,
             "allowMultipleQueriesPerLayer": true,
             "predefinedQueries": [
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Grundschulen",
+              "predefinedRules": [
               {
-                "layerId": "8712",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Grundschulen",
-                "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Grundschulen", "Langformschulen"]
-                  }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
-              },
+                "attrName": "kapitelbezeichnung",
+                "values": ["Grundschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Stadtteilschulen",
+              "predefinedRules": [
               {
-                "layerId": "8712",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Stadtteilschulen",
-                "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Stadtteilschulen", "Langformschulen"]
-                  }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
-              },
+                "attrName": "kapitelbezeichnung",
+                "values": ["Stadtteilschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Gymnasien",
+              "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+              "predefinedRules": [
               {
-                "layerId": "8712",
-                "isActive": false,
-                "isSelected": false,
-                "name": "Gymnasien",
-                "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
-                "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Gymnasien"]
-                  }
-                ],
-                "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse",  "schulische_ausrichtung"]
-              },
-              {
-                "layerId": "1711",
-                "isActive": true,
-                "isSelected": true,
-                "name": "Krankenhäuser",
-                "predefinedRules": [
-                ],
-                "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
-              }
-            ]
+                "attrName": "kapitelbezeichnung",
+                "values": ["Gymnasien"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "1711",
+              "isActive": true,
+              "isSelected": true,
+              "name": "Krankenhäuser",
+              "predefinedRules": [],
+              "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
+            }]
           },
-          "parcelSearch": {
+          "parcelSearch":
+          {
             "name": "Flurstückssuche",
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
@@ -129,61 +136,73 @@
             "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
-          "measure": {
+          "measure":
+          {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
           },
-          "coord": {
+          "coord":
+          {
             "name": "Koordinaten abfragen",
             "glyphicon": "glyphicon-screenshot"
           },
-          "gfi": {
+          "gfi":
+          {
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
           },
-          "print": {
+          "print":
+          {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
             "printID": "99999",
             "title": "Master",
             "gfi": true,
             "outputFilename": "DruckPDF",
-            "gfiMarker": {
-              "outerCircle": {
+            "gfiMarker":
+            {
+              "outerCircle":
+              {
                 "fill": false,
                 "pointRadius": 8,
                 "stroke": true,
                 "strokeColor": "#ff0000",
                 "strokeWidth": 3
               },
-              "point": {
+              "point":
+              {
                 "fill": true,
                 "pointRadius": 1,
-                  "fillColor": "#000000",
-                  "stroke": false
-                }
+                "fillColor": "#000000",
+                "stroke": false
+              }
             }
           },
-          "searchByCoord": {
+          "searchByCoord":
+          {
             "name": "Koordinatensuche",
             "glyphicon": "glyphicon-record"
           },
-          "kmlimport": {
+          "kmlimport":
+          {
             "name": "KML Import",
             "glyphicon": "glyphicon-import"
           },
-          "wfsFeatureFilter": {
+          "wfsFeatureFilter":
+          {
             "name": "Filter",
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false
           },
-          "extendedFilter": {
+          "extendedFilter":
+          {
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false
           },
-          "routing": {
+          "routing":
+          {
             "name": "Routenplaner",
             "glyphicon": "glyphicon-road",
             "viomRoutingID": "7",
@@ -191,60 +210,69 @@
             "bkgGeosearchID": "5",
             "isInitOpen": false
           },
-          "draw": {
+          "draw":
+          {
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
           },
-          "featureLister": {
-              "name": "Liste",
-              "glyphicon": "glyphicon-menu-hamburger",
-              "lister": 10
+          "featureLister":
+          {
+            "name": "Liste",
+            "glyphicon": "glyphicon-menu-hamburger",
+            "lister": 10
           },
-          "animation": {
+          "animation":
+          {
             "name": "Pendler Animation",
             "glyphicon": "glyphicon-play-circle"
           }
         }
       },
-      "legend": {
+      "legend":
+      {
         "name": "Legende",
         "glyphicon": "glyphicon-book"
       },
-      "contact": {
-          "name": "Kontakt",
-          "glyphicon": "glyphicon-envelope",
-          "serviceID": "80001",
-          "includeSystemInfo": true
+      "contact":
+      {
+        "name": "Kontakt",
+        "glyphicon": "glyphicon-envelope",
+        "serviceID": "80001",
+        "includeSystemInfo": true
       },
-      "info":{
-          "name": "Informationen",
-          "glyphicon": "glyphicon-info-sign",
-          "children": {
-            "staticlinks": [
-              {
-                "name": "Haftungsausschluss",
-                "glyphicon": "glyphicon-globe",
-                "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
-              },
-              {
-                "name": "Hamburg",
-                "glyphicon": "glyphicon-globe",
-                "url": "http://www.hamburg.de"
-              }
-            ]
-          }
+      "info":
+      {
+        "name": "Informationen",
+        "glyphicon": "glyphicon-info-sign",
+        "children":
+        {
+          "staticlinks": [
+          {
+            "name": "Haftungsausschluss",
+            "glyphicon": "glyphicon-globe",
+            "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+          },
+          {
+            "name": "Hamburg",
+            "glyphicon": "glyphicon-globe",
+            "url": "http://www.hamburg.de"
+          }]
+        }
       }
     },
-    "controls": {
+    "controls":
+    {
       "fullScreen": true,
       "zoom": true,
       "orientation": "once",
       "poi": true,
-      "attributions": {
+      "attributions":
+      {
         "isInitOpenDesktop": true,
         "isInitOpenMobile": false
       },
-      "overviewmap": {
+      "overviewmap":
+      {
         "resolution": 611.4974492763076,
         "baselayer": "452"
       },
@@ -258,174 +286,158 @@
     "Hintergrundkarten":
     {
       "Layer": [
-        {
-          "id": "453",
-          "visibility": true
-        },
-        {
-          "id": "452"
-        },
-        {
-          "id": ["713", "714", "715", "716"],
-          "name": "Geobasiskarten (schwarz-weiß)"
-        }
-      ]
+      {
+        "id": "453",
+        "visibility": true
+      },
+      {
+        "id": "452"
+      },
+      {
+        "id": ["713", "714", "715", "716"],
+        "name": "Geobasiskarten (schwarz-weiß)"
+      }]
     },
     "Fachdaten":
     {
       "Layer": [
+      {
+        "id": "8194"
+      },
+      {
+        "id": "2128",
+        "styleId": "2128"
+      },
+      {
+        "id": "8730"
+      },
+      {
+        "id": "2426"
+      },
+      {
+        "id": "4561"
+      },
+      {
+        "id": "1562",
+        "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
+      },
+      {
+        "id": "3302",
+        "gfiTheme": "trinkwasser",
+        "featureCount": 5
+      },
+      {
+        "id": "2059",
+        "styleId": "2059",
+        "clusterDistance": 30
+      },
+      {
+        "id": "5708",
+        "styleable": true,
+        "geomType": "Polygon",
+        "attributesToStyle": [
+          "Pkw_AP30"
+        ]
+      },
+      {
+        "id": "2003",
+        "styleId": "2003",
+        "mouseHoverField": "GEBIETSNAME"
+      },
+      {
+        "id": "2714",
+        "gfiTheme": "reisezeiten",
+        "styleId": "2119"
+      },
+      {
+        "id": "4905",
+        "gfiTheme": "table",
+        "featureCount": 20
+      },
+      {
+        "id": "2404",
+        "styleId": "45",
+        "clusterDistance": 40,
+        "routable": true
+      },
+      {
+        "id": "4479"
+      },
+      {
+        "id": ["4537", "4538"],
+        "name": "Eignungsflächen",
+        "legendURL": ["http://www.geoportal-hamburg.de/legende/legende_solar.png"],
+        "gfiTheme": "solaratlas",
+        "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
+      },
+      {
+        "id": "2407",
+        "infoFormat": "text/html"
+      },
+      {
+        "id": "1711",
+        "styleId": "1711",
+        "visibility": true,
+        "layerAttribution": "<span>Attributierung für Fachlayer</span>",
+        "mouseHoverField": ["name", "strasse"],
+        "searchField": "name",
+        "legendURL": "http:/geofos/legenden/bauschutz_flughafen_legende.png"
+      },
+      {
+        "id": "8712",
+        "name": "Schulinfosystem",
+        "styleId": "8712",
+        "searchField": "schulname",
+        "mouseHoverField": ["schulname", "kapitelbezeichnung"],
+        "gfiTheme": "schulinfo",
+        "additionalInfoField": "adresse_strasse_hausnr"
+      },
+      {
+        "id": "753",
+        "styleId": "753",
+        "visibility": false,
+        "mouseHoverField": "Name",
+        "extendedFilter": true,
+        "filterOptions": [
+          "fieldName": "Bezirk",
+          "filterType": "combo",
+          "filterName": "Bezirk",
+          "filterString": ["*", "Altona"]
+        ]
+      },
+      {
+        "id": "8145",
+        "visibility": true,
+        "styleId": "2059",
+        "clusterDistance": 30
+      },
+      {
+        "id": [
         {
-          "id": "8145",
-          "visibility": true,
-          "styleId": "2059",
-          "clusterDistance": 30
+          "id": "946"
         },
         {
-          "id": "8194",
-          "visibility": false
-        },
+          "id": "947"
+        }],
+        "name": "Verkehrslage auf Autobahnen",
+        "layerAttribution":
         {
-          "id":"2128",
-          "styleId":"2128"
-        },
-        {
-          "id": "8730",
-          "visibility": false
-        },
-        {
-          "id": "2426",
-          "visibility": false
-        },
-        {
-          "id": "4561",
-          "visibility": false
-        },
-        {
-          "id": "1562",
-          "visibility": false,
-          "layerAttribution": "<span>Attributierung für Fachlayer Test Test Test Test Test Test Test Test</span>"
-        },
-        {
-          "id": "3302",
-          "gfiTheme": "trinkwasser",
-          "visibility": false,
-          "featureCount": 5
-        },
-        {
-          "id": "2059",
-          "visibility": false,
-          "styleId": "2059",
-          "clusterDistance": 30
-        },
-        {
-          "id": "5708",
-          "visibility": false,
-          "styleable": true,
-          "geomType": "Polygon",
-          "attributesToStyle":[
-            "Pkw_AP30"
-          ]
-        },
-        {
-          "id": "2003",
-          "visibility": false,
-          "styleId": "2003",
-          "mouseHoverField": "GEBIETSNAME"
-        },
-        {
-          "id": "2714",
-          "gfiTheme": "reisezeiten",
-          "styleId": "2119"
-        },
-        {
-          "id": "4905",
-          "visibility": false,
-          "gfiTheme": "table",
-          "featureCount": 20
-        },
-        {
-           "id": "2404",
-           "visibility": false,
-           "styleId": "45",
-           "clusterDistance": 40,
-           "routable": true
-        },
-        {
-           "id": "4479",
-           "visibility": false
-        },
-        {
-          "id": ["4537", "4538"],
-          "name": "Eignungsflächen",
-          "visibility": false,
-          "legendURL": ["http://www.geoportal-hamburg.de/legende/legende_solar.png"],
-          "gfiTheme": "solaratlas",
-          "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
-        },
-        {
-          "id": "2407",
-          "visibility": false,
-          "infoFormat": "text/html"
-        },
-        {
-          "id": "1711",
-          "styleId": "1711",
-          "visibility": true,
-          "layerAttribution": "<span>Attributierung für Fachlayer</span>",
-          "mouseHoverField": ["name", "strasse"],
-          "searchField": "name"
-        },
-        {
-          "id": "8712",
-          "name": "Schulinfosystem",
-          "visibility": false,
-          "styleId": "8712",
-          "searchField": "schulname",
-          "mouseHoverField": ["schulname", "kapitelbezeichnung"],
-          "gfiTheme": "schulinfo",
-          "additionalInfoField": "adresse_strasse_hausnr"
-        },
-        {
-          "id": "753",
-          "styleId": "753",
-          "visibility": false,
-          "mouseHoverField": "Name",
-          "extendedFilter": true,
-          "filterOptions": [
-            {
-              "fieldName": "Bezirk",
-              "filterType": "combo",
-              "filterName": "Bezirk",
-              "filterString": ["*", "Altona"]
-            }
-          ]
-        },
-        {
-          "id":[{"id": "946"
-            },
-            {
-              "id": "947"
-            }
-          ],
-          "name": "Verkehrslage auf Autobahnen",
-          "layerAttribution": {
-            "text": "",
-            "channel": "Verkehrsfunctions",
-            "eventname": "aktualisiereverkehrsnetz",
-            "timeout": 60000
-          },
-          "visibility": false
-        },
-        {
-          "id": [{
-            "id": "682"
-          },{
-            "id": "1731"
-          }],
-          "visibility": false,
-          "name": "Kita und KH"
+          "text": "",
+          "channel": "Verkehrsfunctions",
+          "eventname": "aktualisiereverkehrsnetz",
+          "timeout": 60000
         }
-      ]
+      },
+      {
+        "id": [
+        {
+          "id": "682"
+        },
+        {
+          "id": "1731"
+        }],
+        "name": "Kita und KH"
+      }]
     }
   }
 }
