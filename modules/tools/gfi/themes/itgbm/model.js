@@ -23,17 +23,33 @@ define(function (require) {
         */
         addUnits: function (gfiContent, attrArray) {
             _.each(gfiContent, function (value, key) {
+                value = this.punctuate(value);
                 // Gewerbliche Standorte
                 if (this.get("id") === "10319" && _.contains(attrArray, key)) {
-                    gfiContent[key] = String(value) + " ha";
+                    gfiContent[key] = value + " ha";
                 }
                 // Flurstücke
                 if (this.get("id") === "10320" && _.contains(attrArray, key)) {
-                    gfiContent[key] = String(value) + " m²";
+                    gfiContent[key] = value + " m²";
                 }
             }, this);
 
             return gfiContent;
+        },
+        /**
+         * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
+         * @param  {[type]} value - feature attribute values
+         * @return {[type]} newValue - feature attribute values as string with new punctuation
+         */
+        punctuate: function(value) {
+            var pattern = /(-?\d+)(\d{3})/,
+                newValue = value.toString();
+
+            newValue = newValue.replace(".", ",");
+            while (pattern.test(newValue)) {
+                newValue = newValue.replace(pattern, "$1.$2");
+            }
+            return newValue;
         },
         /**
          * triggers feature properties via postMessage
