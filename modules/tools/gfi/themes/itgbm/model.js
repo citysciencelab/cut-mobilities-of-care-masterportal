@@ -1,7 +1,6 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        Config = require("config"),
         ItGbmTheme;
 
     ItGbmTheme = Theme.extend({
@@ -41,7 +40,7 @@ define(function (require) {
          * @param  {[type]} value - feature attribute values
          * @return {[type]} newValue - feature attribute values as string with new punctuation
          */
-        punctuate: function(value) {
+        punctuate: function (value) {
             var pattern = /(-?\d+)(\d{3})/,
                 newValue = value.toString();
 
