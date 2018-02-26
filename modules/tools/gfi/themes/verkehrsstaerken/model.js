@@ -6,16 +6,18 @@ define(function (require) {
         VerkehrsStaerkenTheme;
 
     VerkehrsStaerkenTheme = Theme.extend({
-        defaults: {
-            ansicht: "Diagrammansicht",
-            link: "http://daten-hamburg.de/transport_verkehr/verkehrsstaerken/DTV_DTVw_Download.xlsx",
-            zaehlstelle: "",
-            bezeichnung: "",
-            art: "",
-            years: [],
-            rowNames: [],
-            dataset: []
-        },
+        defaults: _.extend({}, Theme.prototype.defaults,
+            {
+                ansicht: "Diagrammansicht",
+                link: "http://daten-hamburg.de/transport_verkehr/verkehrsstaerken/DTV_DTVw_Download.xlsx",
+                zaehlstelle: "",
+                bezeichnung: "",
+                art: "",
+                years: [],
+                rowNames: [],
+                dataset: []
+            }
+        ),
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
