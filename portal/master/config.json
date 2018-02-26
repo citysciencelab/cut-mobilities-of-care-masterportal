@@ -225,6 +225,10 @@
           {
             "name": "Pendler Animation",
             "glyphicon": "glyphicon-play-circle"
+          },
+          "saveSelection": {
+            "name": "Auswahl speichern",
+            "glyphicon": "glyphicon-share"
           }
         }
       },
