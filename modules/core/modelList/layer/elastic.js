@@ -64,7 +64,6 @@ define(function (require) {
 
                 feature.setProperties(_.omit(hit._source, "geometry_UTM_EPSG_25832"));
                 feature.setId(hit._id);
-                // feature.setStyle(this.get("styleFunction"));
                 features.push(feature);
             }, this);
 
