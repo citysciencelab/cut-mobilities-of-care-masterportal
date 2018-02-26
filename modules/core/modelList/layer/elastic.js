@@ -7,7 +7,6 @@ define(function (require) {
     ElasticLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
-
             this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         },
 
@@ -62,13 +61,15 @@ define(function (require) {
                 var feature = new ol.Feature({
                     geometry: this.readAndGetGeometry(hit._source.geometry_EPSG_25832)
                 });
+
                 feature.setProperties(_.omit(hit._source, "geometry_UTM_EPSG_25832"));
                 feature.setId(hit._id);
-                feature.setStyle(this.get("styleFunction"));
+                // feature.setStyle(this.get("styleFunction"));
                 features.push(feature);
             }, this);
 
             this.getLayerSource().addFeatures(features);
+            this.getLayer().setStyle(this.get("styleFunction"));
             Radio.trigger("ElasticLayer", "featuresLoaded", this.getId(), features);
             Radio.trigger("Util", "hideLoader");
         },
@@ -80,6 +81,7 @@ define(function (require) {
          */
         readAndGetGeometry: function (geometry) {
             var geojsonReader = new ol.format.GeoJSON();
+
             return geojsonReader.readGeometry(geometry, {
                 dataProjection: "EPSG:25832"
             });
@@ -94,7 +96,7 @@ define(function (require) {
             _.each(featureIdList, function (id) {
                 var feature = this.getLayerSource().getFeatureById(id);
 
-                feature.setStyle(this.get("styleFunction"));
+                feature.setStyle(undefined);
             }, this);
         },
 
@@ -118,7 +120,7 @@ define(function (require) {
             var collection = this.getLayerSource().getFeatures();
 
             collection.forEach(function (feature) {
-                feature.setStyle(this.get("styleFunction"));
+                feature.setStyle(undefined);
             }, this);
         },
 
