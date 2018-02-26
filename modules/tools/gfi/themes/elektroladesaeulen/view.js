@@ -13,9 +13,20 @@ define(function (require) {
         },
 
         toggleTab: function (evt) {
+            var gfiSize = {
+                width: $(".gfi-content").css("width").slice(0, -2),
+                // height: $(".gfi-content")[0].clintWidth,
+                // height: $(".gfi-content")[0].clientHeight
+                height: $(".gfi-content").css("height").slice(0, -2)
+            };
+
             // delete all graphs
             $(".ladesaeulenVerfuegbar-graph svg").remove();
             $(".ladesaeulenBelegt-graph svg").remove();
+            $(".ladesaeulenAusserBetrieb-graph svg").remove();
+            $(".ladesaeulenVerfuegbar-graph p").remove();
+            $(".ladesaeulenBelegt-graph p").remove();
+            $(".ladesaeulenAusserBetrieb-graph p").remove();
 
             var contentId = $(evt.currentTarget).attr("value");
 
@@ -34,15 +45,18 @@ define(function (require) {
             $("#" + contentId).addClass("in");
 
             if (contentId === "diagrammVerfuegbar") {
-                this.loadDiagramm("available", ".ladesaeulenVerfuegbar-graph");
+                this.loadDiagramm("available", ".ladesaeulenVerfuegbar-graph", gfiSize);
             }
             else if (contentId === "diagrammBelegt") {
-                this.loadDiagramm("charging", ".ladesaeulenBelegt-graph");
+                this.loadDiagramm("charging", ".ladesaeulenBelegt-graph", gfiSize);
+            }
+            else if (contentId === "diagrammAusserBetrieb") {
+                this.loadDiagramm("outoforder", ".ladesaeulenAusserBetrieb-graph", gfiSize);
             }
         },
 
-        loadDiagramm: function (state, graphTag) {
-            this.model.createD3Document(state, graphTag);
+        loadDiagramm: function (state, graphTag, gfiSize) {
+            this.model.createD3Document(state, graphTag, gfiSize);
         }
     });
 

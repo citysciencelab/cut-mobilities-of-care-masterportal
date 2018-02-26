@@ -83,44 +83,77 @@ define(function (require) {
             return tableheadArray;
         },
 
-        createD3Document: function (state, graphTag) {
-            console.log($(".gfi-content"));
-            console.log($(".gfi-content")[0].clientWidth);
-            console.log($(".gfi-content")[0].clientHeight);
+        createD3Document: function (targetResult, graphTag, gfiSize) {
+            this.checkGfiSize(gfiSize);
 
-            var height = this.calculateHeight(),
-                // width = $(".gfi-content").css("width").slice(0, -2),
-                width = $(".gfi-content").css("width").slice(0, -2),
-                targetResult = state,
-                historicalData = this.getHistoricalData(),
-                historicalDataThisTimeZone = this.changeTimeZone(historicalData),
-                historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone),
-                dataByWeekday = this.getDataByWeekday(historicalDataWithIndex),
-                dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday, targetResult),
-                processedData = this.calculateArithmeticMean(dataPerHour),
-                graphConfig = {
-                    graphType: "BarGraph",
-                    selector: graphTag,
-                    width: width,
-                    height: 400,
-                    svgClass: "BarGraph-svg",
-                    data: processedData,
-                    xAxisLabel: this.createXAxisLabel(targetResult)
-                };
+            var startTime = new Date().getTime();
 
-                console.log(graphTag);
+            var historicalData = this.getHistoricalData(),
+                checkValue = this.checkValue(historicalData, targetResult),
+                width = this.get("gfiWidth"),
+                height = this.get("gfiHeight"),
+                historicalDataThisTimeZone,
+                historicalDataWithIndex,
+                dataByWeekday,
+                dataPerHour,
+                processedData,
+                graphConfig;
 
-                // *** eine andere Methode wäre die Zeitreihenanalyse ***
-                // processedData = this.calculateWithAnotherFunction(dataPerHour);
+            // set a message if no data is found and exit
+            if (_.isUndefined(checkValue)) {
+                this.drawErrorMessage(graphTag, width, height);
+                return;
+            }
 
-            console.log(historicalData);
-            console.log(historicalDataThisTimeZone);
-            console.log(historicalDataWithIndex);
-            console.log(dataByWeekday);
-            console.log(dataPerHour);
-            console.log(processedData);
+            var time1 = new Date().getTime();
+            console.log(time1 - startTime);
+            historicalDataThisTimeZone = this.changeTimeZone(historicalData);
+            var time2 = new Date().getTime();
+            console.log(time2 - time1);
+            historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
+            var time3 = new Date().getTime();
+            console.log(time3 - time2);
+            dataByWeekday = this.getDataByWeekday(historicalDataWithIndex);
+            var time4 = new Date().getTime();
+            console.log(time4 - time3);
+            dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday, targetResult);
+            var time5 = new Date().getTime();
+            console.log(time5 - time4);
+            processedData = this.calculateArithmeticMean(dataPerHour);
+            var time6 = new Date().getTime();
+            console.log(time6 - time5);
+
+            console.log("-----------");
+
+            graphConfig = {
+                graphType: "BarGraph",
+                selector: graphTag,
+                width: width,
+                height: height - 5,
+                svgClass: "BarGraph-svg",
+                data: processedData,
+                yAxisTicks: {
+                    start: 0,
+                    end: 1,
+                    ticks: 10
+                },
+                xAxisLabel: this.createXAxisLabel(targetResult),
+            };
+
+            // *** eine andere Methode wäre die Zeitreihenanalyse ***
+            // processedData = this.calculateWithAnotherFunction(dataPerHour);
 
             Radio.trigger("Graph", "createGraph", graphConfig);
+        },
+
+        checkGfiSize: function (gfiSize){
+            var width = this.get("gfiWidth"),
+                height = this.get("gfiHeight");
+
+            if (_.isUndefined(width) || _.isUndefined(height)) {
+                this.set("gfiHeight", this.calculateHeight(gfiSize.height));
+                this.set("gfiWidth", gfiSize.width);
+            }
         },
 
         /**
@@ -174,6 +207,22 @@ define(function (require) {
                 ")?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc)";
         },
 
+        checkValue: function (historicalData, targetResult) {
+            var result = undefined;
+
+            _.each(historicalData, function (data) {
+                if (!_.isUndefined(result)) {
+                    return;
+                }
+
+                result = _.find(data.Observations, function (obs) {
+                    return obs.result === targetResult;
+                });
+            });
+
+            return result;
+        },
+
         /**
          * chnage the timzone for the historicalData
          * @param  {[object]} historicalData
@@ -217,7 +266,11 @@ define(function (require) {
                     lastDay = moment(observations[(observations).length - 1].phenomenonTime).format("YYYY-MM-DD"),
                     boolean = true,
                     count = 0,
-                    loadingPointDataArray = [];
+                    loadingPointDataArray = [],
+                    obsStart = 0,
+                    obsEnd = observations.length;
+
+                // this.set("searchIndex", obsStart);
 
                 // loop about all days of the week that correspond to today's
                 while (boolean) {
@@ -236,10 +289,12 @@ define(function (require) {
                         }
                     });
 
-                    dataArray.push(this.createOfInitialTimeStepForOneDay(dataArray, observations, intervalDay));
+                    initialWeekdayObj = this.createOfInitialTimeStepForOneDay(dataArray, observations, intervalDay, obsStart, obsEnd)
+                    dataArray.push(initialWeekdayObj);
 
                     loadingPointDataArray.push(dataArray);
                     count += 7;
+                    obsStart = initialWeekdayObj.index;
                 }
                 processedArray.push(loadingPointDataArray);
             }, this);
@@ -249,44 +304,49 @@ define(function (require) {
 
         /**
          * creates an initial entry at 0 o'clock for one day
+         * this searches for the last object of the previous day
          * @param  {array} dataArray - array with the entries of the day
          * @param  {[object]} observations - all observations from historicalData
          * @param  {String} intervalDay - current day
+         * @param  {number} obsStart - restriction to search for the next record
+         * @param  {number} obsEnd - length from dataArray
          * @return {Obj} with entrys of the day plus initial value
          */
-        createOfInitialTimeStepForOneDay: function (dataArray, observations, intervalDay) {
-            var initialTime = moment(intervalDay).format("YYYY-MM-DDTHH:mm:ss");
+        createOfInitialTimeStepForOneDay: function (dataArray, observations, intervalDay, obsStart, obsEnd) {
+            var initialTime = moment(intervalDay).format("YYYY-MM-DDTHH:mm:ss"),
+                initialWeekdayObj;
 
+            // find last data by index
             if (dataArray.length > 0) {
                 var i = dataArray[dataArray.length - 1].index,
-                    dayBevorWeekdayObj = _.findWhere(observations, {index: i + 1}),
-                    initialWeekdayObj;
+                    dayBevorWeekdayObj = _.findWhere(observations, {index: i + 1});
 
                     if (_.isUndefined(dayBevorWeekdayObj)) {
                         var dayObj = _.findWhere(observations, {index: i});
 
-                        initialWeekdayObj = _.clone(dayObj);
+                        initialWeekdayObj = dayObj;
                         initialWeekdayObj.result = undefined;
                         initialWeekdayObj.index = i + 1;
                     }
                     else {
-                        initialWeekdayObj = _.clone(dayBevorWeekdayObj);
+                        initialWeekdayObj = dayBevorWeekdayObj;
                     }
             }
             else {
                 var reduceIntervalDay = moment(intervalDay).subtract(1, "days").format("YYYY-MM-DD"),
-                    nextDataObj = [],
+                    nextDataObj = undefined,
                     initialWeekdayObj;
 
                 // search for next event, date by date
-                while (_.isEmpty(nextDataObj)) {
-                    nextDataObj = _.filter(observations, function (data) {
+                while (_.isUndefined(nextDataObj)) {
+                    nextDataObj = _.find(observations.slice(obsStart, obsEnd), function (data) {
                         return moment(data.phenomenonTime).format("YYYY-MM-DD") === reduceIntervalDay;
                     });
 
                     reduceIntervalDay = moment(reduceIntervalDay).subtract(1, "days").format("YYYY-MM-DD");
                 }
-                initialWeekdayObj = _.clone(nextDataObj[0]);
+
+                initialWeekdayObj = nextDataObj;
             }
 
             initialWeekdayObj.phenomenonTime = initialTime;
@@ -484,21 +544,23 @@ define(function (require) {
             return dayMeanArray;
         },
 
-        calculateHeight: function () {
-console.log($(".gfi-content").css("height"));
-
-            var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
-                heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
+        /**
+         * calculates the available height for the graph
+         * @param  {number} gfiHeight - height of the already drwan gfi
+         * @return {String}
+         */
+        calculateHeight: function (gfiHeight) {
+            var heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
                 heightNavbar = $(".ladesaeulen .nav").css("height").slice(0, -2);
 
-console.log(heightGfiContent);
-console.log(heightladesaeulenHeader);
-console.log(heightNavbar);
-
-console.log(heightGfiContent - heightladesaeulenHeader - heightNavbar);
-            return heightGfiContent - heightladesaeulenHeader - heightNavbar;
+            return gfiHeight - heightladesaeulenHeader - heightNavbar;
         },
 
+        /**
+         * creates the caption for the graph
+         * @param  {String} state
+         * @return {String}
+         */
         createXAxisLabel: function (state) {
             var today = moment().format("dddd"),
                 stateLabel;
@@ -513,7 +575,13 @@ console.log(heightGfiContent - heightladesaeulenHeader - heightNavbar);
                 stateLabel = "Durchschnittlich außer Betrieb ";
             }
 
-            return stateLabel + "an einem " + today;
+            return stateLabel + today + "s";
+        },
+
+        drawErrorMessage: function (graphTag, width, height) {
+            $("<p class='noData' style='height: " + height + "px; width: " + width + "px;'>")
+                    .appendTo("div" + graphTag)
+                    .text("Zur Zeit keine Informationen!");
         }
     });
 

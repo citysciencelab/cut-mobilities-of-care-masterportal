@@ -41,3 +41,17 @@
 .ladesaeulen .barladesaeulenVerfuegbar-graph:hover {
   fill: #999999;
 }
+
+.ladesaeulen .barladesaeulenAusserBetrieb-graph{
+    fill: #AFAFAF;
+}
+
+.ladesaeulen .barladesaeulenAusserBetrieb-graph:hover {
+  fill: #FF9933;
+}
+
+.ladesaeulen .noData {
+  font-size: 14px;
+  text-align: center;
+  text-anchor: middle;
+}
