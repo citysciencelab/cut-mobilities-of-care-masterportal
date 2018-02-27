@@ -13,7 +13,7 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |----|-------------|---|-------|------------|
 |layerId|ja|String||ID des Styles, der in der [config.json](config.json.md) angegeben wird, um entsprechend zugeordnet zu werden. In der Regel gleiche ID, wie die des Layers.|
 |class|ja|String|"POINT"|Angabe der entsprechenden Klasse, entspricht dem Geometrietyp. Mögliche Werte: "POINT", "LINE",  "POLYGON".|
-|subClass|ja|String|"SIMPLE"|Angabe der entsprechenden SubKlasse, nach der die Style-Information verwendet werden soll. Mögliche Werte bei "POINT": "SIMPLE", "CUSTOM", "CIRCLE". Mögliche Werte bei "LINE": "SIMPLE". Mögliche Werte bei "POLYGON": "SIMPLE"|
+|subClass|ja|String|"SIMPLE"|Angabe der entsprechenden SubKlasse, nach der die Style-Information verwendet werden soll. Mögliche Werte bei "POINT": "SIMPLE", "CUSTOM", "CIRCLE". Mögliche Werte bei "LINE": "SIMPLE". Mögliche Werte bei "POLYGON": "SIMPLE", "CUSTOM"|
 |labelField|nein|String||Attribut des Features, nach dessen Wert das Label angezeigt werden soll.|
 |textAlign|nein|String|"left"|Ausrichtung des Textes am Feature. Mögliche Werte "left", "center", "right"|
 |textFont|nein|String|"Courier"|Font des Textes am Feature.|
@@ -57,6 +57,8 @@ So gibt es folgende Kombinationen:
 [LINE SIMPLE](#markdown-header-line-simple)
 
 [POLYGON SIMPLE](#markdown-header-polygon-simple)
+
+[POLYGON CUSTOM](#markdown-header-polygon-custom)
 
 #### POINT SIMPLE ####
 Bei "class"=== "POINT" und "subClass" === "SIMPLE" wird nur ein Image für alle Features gesetzt.
@@ -148,7 +150,7 @@ Bei "class"=== "LINE" und "subClass" === "SIMPLE" wird ein linienhafter Style de
 |lineStrokeWidth|nein|Integer|2|Breite der Linie.|
 
 ### POLYGON SIMPLE ###
-Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Style  definiert.
+Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Style definiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -156,4 +158,49 @@ Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Sty
 |polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
 |polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|
 
+### POLYGON CUSTOM ###
+Bei "class"=== "POLYGON" und "subClass" === "CUSTOM" wird ein flächenhafter Style definiert. Die Darstellung ist dabei anhängig von einem Attribut des Features
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|polygonFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Polygon.|
+|polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
+|polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|
+|styleField|ja|String||Attribut, nach dem das Polygon eingefärbt wird.|
+|styleFieldValues|ja|Array[[polygonStyleFieldValue](#markdown-header-polygonStyleFieldValue)]||Zuordnung der Farbe zum Attributwert des Features.|
+
+### polygonStyleFieldValue ###
+Darstellung eines Attributwertes auf die Auswirkungen des Polygons. Werden hier keine Füllfarben oder Strichstärken gesetzt, so werden die Werte des Layerobjektes (wenn angegeben) oder die Defaultwerte verwendet. Dadurch dann bspw. die Strichstärke bei allen styleFieldValues gleich gesetzt werden (siehe Beispiel).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|styleFieldValue|ja|String||Attributwert.|
+|polygonFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Polygon. |
+|polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
+|polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|
+
+```json
+{
+    "layerId" : "123456",
+    "class": "POLYGON",
+    "subClass" : "CUSTOM",
+    "polygonStrokeColor" : [0, 0, 0, 1],
+    "polygonStrokeWidth" : 1,
+    "styleField": "nutzung",
+    "styleFieldValues": [
+      {
+        "styleFieldValue": "1",
+        "polygonFillColor" : [78, 78, 78, 0.6]
+      },
+      {
+        "styleFieldValue": "2",
+        "polygonFillColor" : [178, 178, 178, 0.6]
+      },
+      {
+        "styleFieldValue": "3",
+        "polygonFillColor" : [225, 225, 225, 0.6]
+      }
+    ]
+  }
+```
 >Zurück zur [Dokumentation Masterportal](doc.md).).
