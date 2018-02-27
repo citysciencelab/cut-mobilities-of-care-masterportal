@@ -359,8 +359,7 @@ define(function (require) {
                         width: width,
                         height: height,
                         scale: scale,
-                        anchor: offset,
-                        imgSize: isSVG ? [width, height] : ""
+                        anchor: offset
                     });
                 }
 
