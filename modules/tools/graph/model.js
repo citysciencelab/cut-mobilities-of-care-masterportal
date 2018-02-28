@@ -1,7 +1,6 @@
 define(function (require) {
 
     var d3 = require("d3"),
-        d3_tip = require("d3-tip"),
         Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         GraphModel;
@@ -385,13 +384,14 @@ define(function (require) {
                 .attr("width", barWidth - 1)
                 .attr("height", function (d) {
                     return height - y(d.value);
-                });
-
-                // .on("mouseover", tip.show);
-        },
-
-        mouseover: function (d) {
-            console.log("Test");
+                })
+            .on("mouseover", function (d) {
+                d3.select(this);
+            })
+            .append("title")
+                .text(function (d) {
+                    return Math.round(d.value * 1000) / 10 + " %";
+            });
         },
 
         // getter for graphParams

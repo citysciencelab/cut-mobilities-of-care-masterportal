@@ -5,7 +5,6 @@ require.config({
     paths: {
         "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.min",
         openlayers: "../node_modules/openlayers/dist/ol-debug",
-        // mqtt: "../node_modules/mqtt/dist/mqtt.min",
         mqtt: "../node_modules/mqtt/browserMqtt",
         jquery: "../node_modules/jquery/dist/jquery.min",
         jqueryui: "../node_modules/jquery-ui/ui",
@@ -20,7 +19,6 @@ require.config({
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         proj4: "../node_modules/proj4/dist/proj4",
         videojs: "../node_modules/video.js/dist/video-js/video",
-        // moment: "../node_modules/moment/min/moment.min",
         moment: "../node_modules/moment/min/moment-with-locales.min",
         geoapi: "GeoAPI",
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",

@@ -60,6 +60,11 @@
   cursor: wait;
 }
 
+
+.lgv-container.busy {
+  cursor: wait;
+}
+
 .gfi-content.busy {
   cursor: wait;
 }

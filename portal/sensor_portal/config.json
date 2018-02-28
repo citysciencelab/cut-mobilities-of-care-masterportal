@@ -2,7 +2,7 @@
   "Portalconfig":
   {
     "portalTitle": {
-      "title": "Master",
+      "title": "Geoportal-Sensor",
       "logo": "/../node_modules/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
@@ -27,6 +27,9 @@
             "filter": "filter=(typ:*)",
             "score": 0.6
         },
+         "tree": {
+           "minChars": 3
+         },
         "visibleWFS": {
             "minChars": 3
         },
@@ -35,7 +38,7 @@
     },
     "mapView": {
         "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
-        "startCenter": [561210, 5932600]
+        "startCenter": [565430, 5933970]
     },
     "menu": {
       "tree": {
@@ -95,6 +98,13 @@
             "name": "Koordinatensuche",
             "glyphicon": "glyphicon-record"
           },
+          "routing": {
+            "name": "Routenplaner",
+            "glyphicon": "glyphicon-road",
+            "viomRoutingID": "7",
+            "bkgSuggestID": "4",
+            "bkgGeosearchID": "5"
+          },
           "draw": {
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
@@ -139,10 +149,6 @@
         "isInitOpenDesktop": true,
         "isInitOpenMobile": false
       },
-      "overviewmap": {
-        "resolution": 611.4974492763076,
-        "baselayer": "452"
-      },
       "mousePosition": true
     },
     "scaleLine": true,
@@ -154,15 +160,15 @@
     {
       "Layer": [
         {
-          "id": "453",
-          "visibility": true
+          "id": "453"
         },
         {
           "id": "452"
         },
         {
-          "id": ["713", "714", "715", "716"],
-          "name": "Geobasiskarten (schwarz-weiß)"
+          "id": ["4736", "4745", "4739", "4742"],
+          "name": "Geobasiskarten (schwarz-grau)",
+          "visibility": true
         }
       ]
     },
@@ -173,7 +179,7 @@
           "id": "999999",
           "styleId": "999999",
           "name" : "Elektro Ladestandort (Live)",
-          "visibility": false,
+          "visibility": true,
           "clusterDistance": 60
         },
         {
@@ -190,7 +196,7 @@
         {
           "id": "888889",
           "dataLayerId" : "999999",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "999993",
@@ -202,6 +208,12 @@
           "id": "999992",
           "styleId": "999992",
           "name" : "FAKE LA-Bus (Live)",
+          "visibility": false
+        },
+        {
+          "id": "999991",
+          "name" : "Position der Weltsatelliten (Live)",
+          "styleId": "999992",
           "visibility": false
         },
         {

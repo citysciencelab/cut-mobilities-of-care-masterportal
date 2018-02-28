@@ -19,6 +19,10 @@ define(function (require) {
          */
         loadData: function () {
             if (this.get("isVisible") === true) {
+                // set cursor to wait
+                $(".tab-content").addClass("busy");
+                $(".lgv-container").addClass("busy");
+
                 var gfiContent = this.get("gfiContent"),
                     allProperties = this.splitProperties(gfiContent.allProperties),
                     dataStreamIds = allProperties.dataStreamId;
@@ -41,21 +45,49 @@ define(function (require) {
             // allProperties = this.splitProperties(this.collection.models[0].attributes.feature.getProperties()),
 
             // set Properties
-            this.set("gfiProperties", gfiProperties);
             this.set("requestURL", requestURL);
             this.set("versionURL", versionURL);
             this.set("dataStreamIds", dataStreamIds);
 
+            gfiProperties = this.addChargingIndicator(gfiProperties, dataStreamIds);
+            gfiProperties = this.changeStateToGerman(gfiProperties);
+
+            this.set("gfiProperties", gfiProperties);
+            this.createHeading(allProperties);
+        },
+
+        addChargingIndicator: function (gfiProperties, dataStreamIds) {
             indicatorDataArray = this.createChargingIndicator(false, dataStreamIds);
 
-            // indiocator anhängen an gfiProperties
+            // add indiocator to gfiProperties
             _.each(indicatorDataArray, function (indicator) {
                 gfiProperties["Anzahl der Ladungen im Jahr " + indicator.year] = indicator.loadingCount;
             });
 
             _.invoke(gfiProperties);
 
-            this.createHeading(allProperties);
+            return gfiProperties;
+
+        },
+
+        changeStateToGerman: function (gfiProperties) {
+            var translateObj = {
+                available: "Frei",
+                charging: "Belegt",
+                outoforder: "Außer Betrieb"
+            };
+
+            _.each(gfiProperties.Zustand, function (state, index) {
+                if (_.contains(_.keys(translateObj), state)) {
+                    gfiProperties.Zustand[index] = translateObj[state];
+                }
+                else {
+                    gfiProperties.Zustand[index] = "";
+                }
+
+            });
+
+            return gfiProperties;
         },
 
         splitProperties: function (properties) {
@@ -115,12 +147,11 @@ define(function (require) {
                 processedData = this.get(targetResult + "ProcessedData"),
                 graphTag;
 
-            // wait for data
-
-            while (_.isUndefined(processedData)) {
+            // if no data then break
+            if (_.isUndefined(processedData)) {
+                return;
             }
 
-            // $(".ladesaeulen").removeClass("busy");
             processedData = this.get(targetResult + "ProcessedData");
 
             // set error message if data to targetresult does not exist
@@ -228,7 +259,6 @@ define(function (require) {
         createHistoricalData: function (async, dataStreamIds) {
             var historicalData = [],
                 query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc)";
-                // dataStreamIds = this.get("dataStreamIds");
 
             query = query + "&$filter=";
             _.each(dataStreamIds, function (id, index) {
@@ -321,7 +351,10 @@ define(function (require) {
                     this.createD3Document("available", historicalData);
                     this.createD3Document("charging", historicalData);
                     this.createD3Document("outoforder", historicalData);
-                    $(".tab-pane").removeClass("busy");
+
+                    // finish cursor wait
+                    $(".tab-content").removeClass("busy");
+                    $(".lgv-container").removeClass("busy");
                 },
                 error: function (jqXHR, errorText, error) {
                     Radio.trigger("Alert", "alert", {
