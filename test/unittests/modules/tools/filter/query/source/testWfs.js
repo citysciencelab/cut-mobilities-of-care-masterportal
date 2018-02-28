@@ -108,22 +108,5 @@ define(function(require) {
             });
 
         });
-        describe("isIntegerInRange", function () {
-            it("should match if feature value is within a range", function () {
-                var attribute = {attrName: "anzahl_planbetten", values: ["120", "300"]};
-
-                expect(model.isIntegerInRange(testFeatures[0], attribute)).to.be.true;
-            });
-            it("should not match if feature value is not within a range", function () {
-                var attribute = {attrName: "anzahl_planbetten", values: ["120", "200"]};
-
-                expect(model.isIntegerInRange(testFeatures[0], attribute)).to.be.false;
-            });
-            it("should not match if attribute values is empty", function () {
-                var attribute = {attrName: "anzahl_planbetten", values: []};
-
-                expect(model.isIntegerInRange(testFeatures[0], attribute)).to.be.false;
-            });
-        });
     });
 });

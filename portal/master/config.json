@@ -225,6 +225,10 @@
           {
             "name": "Pendler Animation",
             "glyphicon": "glyphicon-play-circle"
+          },
+          "saveSelection": {
+            "name": "Auswahl speichern",
+            "glyphicon": "glyphicon-share"
           }
         }
       },
@@ -405,6 +409,11 @@
           "filterName": "Bezirk",
           "filterString": ["*", "Altona"]
         }]
+      },
+      {
+        "id": "8145",
+        "visibility": true,
+        "styleId": "8145"
       },
       {
         "id": [
