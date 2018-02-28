@@ -199,8 +199,11 @@ define(function (require) {
         pickCoord: function (featureGeometry) {
             var coord;
 
-            if (featureGeometry.getType() === "MultiPolygon" || featureGeometry.getType() === "Polygon") {
+            if (featureGeometry.getType() === "MultiPolygon") {
                 coord = _.flatten(featureGeometry.getInteriorPoints().getCoordinates());
+            }
+            else if (featureGeometry.getType() === "Polygon") {
+                coord = _.flatten(featureGeometry.getInteriorPoint().getCoordinates());
             }
             else {
                 coord = _.flatten(featureGeometry.getCoordinates());
