@@ -1,6 +1,7 @@
 define(function (require) {
 
     var d3 = require("d3"),
+        d3_tip = require("d3-tip"),
         Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         GraphModel;
@@ -26,6 +27,7 @@ define(function (require) {
                 this.createBarGraph(graphConfig);
             }
         },
+
         createMaxValue: function (data, attrToShowArray) {
             var value;
 
@@ -36,7 +38,23 @@ define(function (require) {
             });
             return value[attrToShowArray[0]];
         },
-        createScaleX: function (data, size, scaletype, attr) {
+
+        createValues: function (data, attrToShowArray, axisTicks) {
+            var valueObj = {};
+
+            if (_.isUndefined(axisTicks.start) || _.isUndefined(axisTicks.end)) {
+                valueObj.minValue = 0;
+                valueObj.maxValue = this.createMaxValue(data, attrToShowArray);
+            }
+            else {
+               valueObj.minValue = axisTicks.start;
+               valueObj.maxValue = axisTicks.end;
+            }
+
+            return valueObj;
+        },
+
+        createScaleX: function (data, size, scaletype, attr, xAxisTicks) {
             var rangeArray = [0, size],
                 scale,
                 maxValue;
@@ -45,25 +63,26 @@ define(function (require) {
                 scale = this.createOrdinalScale(data, rangeArray, [attr]);
             }
             else if (scaletype === "linear") {
-                maxValue = this.createMaxValue(data, [attr]);
-                scale = this.createLinearScale(0, maxValue, rangeArray);
+                valueObj = this.createValues(data, [attr], xAxisTicks);
+                scale = this.createLinearScale(valueObj.minValue, valueObj.maxValue, rangeArray);
             }
             else {
                 alert("Scaletype not found");
             }
             return scale;
         },
-        createScaleY: function (data, size, scaletype, attrToShowArray) {
+
+        createScaleY: function (data, size, scaletype, attrToShowArray, yAxisTicks) {
             var rangeArray = [size, 0],
                 scale,
-                maxValue;
+                valueObj;
 
             if (scaletype === "ordinal") {
                 scale = this.createOrdinalScale(data, rangeArray, attrToShowArray);
             }
             else if (scaletype === "linear") {
-                maxValue = this.createMaxValue(data, attrToShowArray);
-                scale = this.createLinearScale(0, maxValue, rangeArray);
+                valueObj = this.createValues(data, attrToShowArray, yAxisTicks);
+                scale = this.createLinearScale(valueObj.minValue, valueObj.maxValue, rangeArray);
             }
             else {
                 alert("Scaletype not found");
@@ -92,22 +111,38 @@ define(function (require) {
                     .nice();
         },
         // create bottomAxis.
-        createAxisBottom: function (scale) {
-            console.log(scale);
-            return d3.axisBottom(scale)
+        createAxisBottom: function (scale, xAxisTicks) {
+            if (_.isUndefined(xAxisTicks.ticks)) {
+                return d3.axisBottom(scale)
+                        .tickFormat(function (d) {
+                            d = d.toString();
+                            return d;
+                        });
+            }
+            else {
+                var unit = _.isUndefined(xAxisTicks.unit) ? "" : (" " + xAxisTicks.unit);
+
+                return d3.axisBottom(scale)
+                    .ticks(xAxisTicks.ticks, xAxisTicks.factor)
                     .tickFormat(function (d) {
-                        d = d.toString();
-                        return d;
+                        return d + unit;
                     });
+            }
         },
+
         // create leftAxis. if separator === true (for yAxis), then set thousands-separator "."
-        createAxisLeft: function (scale) {
-            return d3.axisLeft(scale)
-                    .tickFormat(function (d) {
-                        return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                    });
-                    // .tickFormat(d3.format("d"));
+        createAxisLeft: function (scale, yAxisTicks) {
+            if (_.isUndefined(yAxisTicks.ticks)) {
+                return d3.axisLeft(scale)
+                        .tickFormat(function (d) {
+                            return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        });
+            }
+            else {
+                return d3.axisLeft(scale).ticks(yAxisTicks.ticks, yAxisTicks.factor);
+            }
         },
+
         createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow, offset) {
             return d3.line()
                     .x(function (d) {
@@ -131,34 +166,41 @@ define(function (require) {
                 .attr("transform", "translate(0, 20)")
                 .attr("d", object);
         },
-        appendXAxisToSvg: function (svg, xAxis, xAxisLabel, offset, marginTop) {
+        appendXAxisToSvg: function (svg, xAxis, xAxisLabel, AxisOffset, marginTop, height) {
             var svgBBox = svg.node().getBBox(),
-                xAxis = svg.append("g")
-                    // .attr("transform", "translate(" + offset + "," + svgBBox.height + ")")
-                    .attr("transform", "translate(" + offset + "," + (svgBBox.height - marginTop) + ")")
-                    .attr("class", "xAxis")
-                    .call(xAxis),
-                xAxisBBox = svg.selectAll(".xAxis").node().getBBox();
+                textOffset = _.isUndefined(xAxisLabel.offset) ? 0 : xAxisLabel.offset,
+                textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
+                fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
+                fontSize = _.isUndefined(xAxisLabel.fontSize) ? 10 : xAxisLabel.fontSize,
+                height = _.isUndefined(height) ? (svgBBox.height - marginTop) : height;
+
+            xAxis = svg.append("g")
+                .attr("transform", "translate(" + AxisOffset + "," + height + ")")
+                .attr("class", "xAxis")
+                .call(xAxis),
+            xAxisBBox = svg.selectAll(".xAxis").node().getBBox();
 
             // text for xAxis
             xAxis.append("text")
                 .attr("x", (xAxisBBox.width / 2))
-                .attr("y", (xAxisBBox.height + offset + 10))
-                .style("text-anchor", "middle")
-                .style("fill", "#000")
-                .text(xAxisLabel);
+                .attr("y", (xAxisBBox.height + textOffset + 10))
+                .style("text-anchor", textAnchor)
+                .style("fill", fill)
+                .style("font-size", fontSize)
+                .text(xAxisLabel.label);
         },
-        appendYAxisToSvg: function (svg, yAxis, yAxisLabel, offset) {
+        appendYAxisToSvg: function (svg, yAxis, yAxisLabel, textOffset, AxisOffset) {
             var yAxis = svg.append("g")
-                .attr("transform", "translate(0, 20)")
+                .attr("transform", "translate(0, " + AxisOffset + ")")
                 .attr("class", "yAxis")
                 .call(yAxis),
                 yAxisBBox = svg.selectAll(".yAxis").node().getBBox();
+
             // text for yAxis
             yAxis.append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("x", (0 - (yAxisBBox.height / 2)))
-                .attr("y", (0 - yAxisBBox.width - (2 * offset)))
+                .attr("y", (0 - yAxisBBox.width - (2 * textOffset)))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .style("fill", "#000")
@@ -261,7 +303,10 @@ define(function (require) {
                 scaleTypeY = graphConfig.scaleTypeY,
                 data = graphConfig.data,
                 xAttr = graphConfig.xAttr,
-                xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : graphConfig.xAttr,
+                xAxisLabel = {
+                    label: graphConfig.xAxisLabel ? graphConfig.xAxisLabel : graphConfig.xAttr,
+                    offset: 10
+                },
                 yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : this.createAndGetLegendText(graphConfig.attrToShowArray[0]),
                 attrToShowArray = graphConfig.attrToShowArray,
                 margin = {top: 20, right: 20, bottom: 70, left: 70},
@@ -285,7 +330,7 @@ define(function (require) {
                 this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset);
             }, this);
             // Add the Axis
-            this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset);
+            this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset, 20);
             this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset, margin.top);
 
             this.setGraphParams({
@@ -298,73 +343,55 @@ define(function (require) {
         },
 
         createBarGraph: function (graphConfig) {
+            // debugger;
             var selector = graphConfig.selector,
-                margin = {top: 20, right: 20, bottom: 70, left: 70},
+                margin = {top: 20, right: 20, bottom: 50, left: 50},
                 width = graphConfig.width - margin.left - margin.right,
                 height = graphConfig.height - margin.top - margin.bottom,
+                scaleTypeX = graphConfig.scaleTypeX,
+                scaleTypeY = graphConfig.scaleTypeY,
                 svgClass = graphConfig.svgClass,
                 data = graphConfig.data,
-                xAxisLabel = graphConfig.xAxisLabel,
+                xAttr = graphConfig.xAttr,
+                attrToShowArray = graphConfig.attrToShowArray,
+                xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : undefined,
+                yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : undefined,
+                xAxisTicks = graphConfig.xAxisTicks,
+                yAxisTicks = graphConfig.yAxisTicks,
                 svg = this.createSvg(selector, margin, width, height, svgClass),
-                x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
-                y = d3.scaleLinear().rangeRound([height, 0]),
-                offset = 10;
+                barWidth = width / data.length,
+                scaleX = this.createScaleX(data, width, scaleTypeX, xAttr, xAxisTicks),
+                scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray, yAxisTicks),
+                xAxis = this.createAxisBottom(scaleX, xAxisTicks),
+                yAxis = this.createAxisLeft(scaleY, yAxisTicks),
+                offset = 0;
 
-                this.createXAxis(x, height, width, data, svg, xAxisLabel);
-                this.createYAxis(y, data, svg);
-                this.drawBars(svg, data, x, y, height, selector);
+                this.drawBars(svg, data, scaleX, scaleY, height, selector, barWidth);
+                this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset, 0);
+                this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset, 0, height);
         },
 
-        createXAxis: function (x, height, width, data, svg, xAxisLabel) {
-            x.domain(data.map(function (d) {
-                return d.hour;
-            }));
-
-            svg.append("g")
-                .attr("class", "axis axis--x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x))
-            .append("text")
-                .attr("x", (width / 2))
-                .attr("y", 45)
-                .style("text-anchor", "middle")
-                .style("fill", "#000")
-                .style("font-size", "14")
-                .text(xAxisLabel);
-        },
-
-        createYAxis: function (y, data, svg) {
-            y.domain([0, d3.max(data, function (d) {
-                return d.value;
-            })]);
-
-            svg.append("g")
-                .attr("class", "axis axis--y")
-                .call(d3.axisLeft(y).ticks(10, "%"))
-            .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 6)
-                .attr("dy", "0.71em")
-                .attr("text-anchor", "end")
-                .text("Frequency");
-        },
-
-        drawBars: function (svg, data, x, y, height, selector) {
+        drawBars: function (svg, data, x, y, height, selector, barWidth) {
             svg.selectAll(".bar")
             .data(data)
             .enter().append("rect")
                 .attr("class", "bar" + selector.split(".")[1])
-                // .attr("class", "bar")
                 .attr("x", function (d) {
                     return x(d.hour);
                 })
                 .attr("y", function (d) {
                     return y(d.value);
                 })
-                .attr("width", x.bandwidth())
+                .attr("width", barWidth - 1)
                 .attr("height", function (d) {
                     return height - y(d.value);
                 });
+
+                // .on("mouseover", tip.show);
+        },
+
+        mouseover: function (d) {
+            console.log("Test");
         },
 
         // getter for graphParams

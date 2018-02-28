@@ -9,8 +9,22 @@ define(function (require) {
 
         initialize: function () {
             this.listenTo(this, {
-                "change:isReady": this.parseProperties
+                "change:isReady": this.parseProperties,
+                "change:isVisible": this.loadData
             });
+        },
+
+        /**
+         * get historical for visible gfi data asynchronously
+         */
+        loadData: function () {
+            if (this.get("isVisible") === true) {
+                var gfiContent = this.get("gfiContent"),
+                    allProperties = this.splitProperties(gfiContent.allProperties),
+                    dataStreamIds = allProperties.dataStreamId;
+
+                this.createHistoricalData(true, dataStreamIds);
+            }
         },
 
         parseProperties: function () {
@@ -19,7 +33,8 @@ define(function (require) {
                 allProperties = this.splitProperties(gfiContent.allProperties),
                 dataStreamIds = allProperties.dataStreamId,
                 requestURL = allProperties.requestURL,
-                versionURL = allProperties.versionURL;
+                versionURL = allProperties.versionURL,
+                indicatorDataArray;
 
             // Alle Properties lassen sich auch so holen
             // this.attributes.feature.getProperties();
@@ -27,9 +42,18 @@ define(function (require) {
 
             // set Properties
             this.set("gfiProperties", gfiProperties);
-            this.set("dataStreamIds", dataStreamIds);
             this.set("requestURL", requestURL);
             this.set("versionURL", versionURL);
+            this.set("dataStreamIds", dataStreamIds);
+
+            indicatorDataArray = this.createChargingIndicator(false, dataStreamIds);
+
+            // indiocator anhängen an gfiProperties
+            _.each(indicatorDataArray, function (indicator) {
+                gfiProperties["Anzahl der Ladungen im Jahr " + indicator.year] = indicator.loadingCount;
+            });
+
+            _.invoke(gfiProperties);
 
             this.createHeading(allProperties);
         },
@@ -83,15 +107,72 @@ define(function (require) {
             return tableheadArray;
         },
 
-        createD3Document: function (targetResult, graphTag, gfiSize) {
-            this.checkGfiSize(gfiSize);
+        triggerToBarGraph: function (targetResult, graphTag, gfiSize) {
+            this.adjustGfiSize(gfiSize);
 
+            var width = this.get("gfiWidth"),
+                height = this.get("gfiHeight"),
+                processedData = this.get(targetResult + "ProcessedData"),
+                graphTag;
+
+            // wait for data
+
+            while (_.isUndefined(processedData)) {
+            }
+
+            // $(".ladesaeulen").removeClass("busy");
+            processedData = this.get(targetResult + "ProcessedData");
+
+            // set error message if data to targetresult does not exist
+            if (_.isNull(processedData)) {
+                this.drawErrorMessage(graphTag, width, height);
+                return;
+            }
+
+            // *** eine andere Methode wäre die Zeitreihenanalyse ***
+            // processedData = this.calculateWithAnotherFunction(dataPerHour);
+
+            // config for style the graph
+            graphConfig = {
+                graphType: "BarGraph",
+                selector: graphTag,
+                width: width,
+                height: height - 5,
+                svgClass: "BarGraph-svg",
+                data: processedData,
+                scaleTypeX: "linear",
+                scaleTypeY: "linear",
+                yAxisTicks: {
+                    start: 0,
+                    end: 1,
+                    ticks: 10,
+                    factor: "%"
+                },
+                xAxisTicks: {
+                    start: 0,
+                    end: 24,
+                    ticks: 12,
+                    unit: "Uhr"
+                },
+                xAxisLabel: {
+                    label: this.createXAxisLabel(targetResult),
+                    offset: 10,
+                    textAnchor: "middle",
+                    fill: "#000",
+                    fontSize: 12
+                },
+                xAttr: "hour",
+                attrToShowArray: ["value"]
+            };
+
+            Radio.trigger("Graph", "createGraph", graphConfig);;
+        },
+
+        // createD3Document: function (targetResult, graphTag, gfiSize) {
+        createD3Document: function (targetResult, historicalData) {
             var startTime = new Date().getTime();
 
-            var historicalData = this.getHistoricalData(),
-                checkValue = this.checkValue(historicalData, targetResult),
-                width = this.get("gfiWidth"),
-                height = this.get("gfiHeight"),
+            var checkValue = this.checkValue(historicalData, targetResult),
                 historicalDataThisTimeZone,
                 historicalDataWithIndex,
                 dataByWeekday,
@@ -101,52 +182,34 @@ define(function (require) {
 
             // set a message if no data is found and exit
             if (_.isUndefined(checkValue)) {
-                this.drawErrorMessage(graphTag, width, height);
+                this.set(targetResult + "ProcessedData", null);
                 return;
             }
 
-            var time1 = new Date().getTime();
-            console.log(time1 - startTime);
             historicalDataThisTimeZone = this.changeTimeZone(historicalData);
             var time2 = new Date().getTime();
-            console.log(time2 - time1);
+            // console.log(time2 - startTime);
             historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
             var time3 = new Date().getTime();
-            console.log(time3 - time2);
+            // console.log(time3 - time2);
             dataByWeekday = this.getDataByWeekday(historicalDataWithIndex);
             var time4 = new Date().getTime();
-            console.log(time4 - time3);
+            // console.log(time4 - time3);
             dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday, targetResult);
             var time5 = new Date().getTime();
-            console.log(time5 - time4);
+            // console.log(time5 - time4);
             processedData = this.calculateArithmeticMean(dataPerHour);
             var time6 = new Date().getTime();
-            console.log(time6 - time5);
+            // console.log(time6 - time5);
 
-            console.log("-----------");
-
-            graphConfig = {
-                graphType: "BarGraph",
-                selector: graphTag,
-                width: width,
-                height: height - 5,
-                svgClass: "BarGraph-svg",
-                data: processedData,
-                yAxisTicks: {
-                    start: 0,
-                    end: 1,
-                    ticks: 10
-                },
-                xAxisLabel: this.createXAxisLabel(targetResult),
-            };
-
-            // *** eine andere Methode wäre die Zeitreihenanalyse ***
-            // processedData = this.calculateWithAnotherFunction(dataPerHour);
-
-            Radio.trigger("Graph", "createGraph", graphConfig);
+            this.set(targetResult + "ProcessedData", processedData);
+            var endTime = new Date().getTime();
+            // console.log("Total:");
+            // console.log(endTime - startTime);
+            // console.log("-----------");
         },
 
-        checkGfiSize: function (gfiSize){
+        adjustGfiSize: function (gfiSize) {
             var width = this.get("gfiWidth"),
                 height = this.get("gfiHeight");
 
@@ -157,40 +220,116 @@ define(function (require) {
         },
 
         /**
-         * returns the historicalData by Ajax-Request
+         * builds the request and collect the historical data for each datastream
          * one object with results and phenomenonTimes for every chargingpoint
-         * @return {[object]}
+         * @param  {boolean} async - mode for ajax
+         * @return {[Object]}
          */
-        getHistoricalData: function () {
-            var response = [],
-                requestURL = this.get("requestURL"),
-                versionURL = this.get("versionURL"),
-                dataStreamIds = this.get("dataStreamIds");
+        createHistoricalData: function (async, dataStreamIds) {
+            var historicalData = [],
+                query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc)";
+                // dataStreamIds = this.get("dataStreamIds");
 
-            _.each(dataStreamIds, function (id) {
-                var requestURLHistoricaldata = this.buildRequestForHistoricalData(requestURL, versionURL, id);
+            query = query + "&$filter=";
+            _.each(dataStreamIds, function (id, index) {
+                query = query + "@iot.id eq'" + id + "'";
 
-                $.ajax({
-                    url: requestURLHistoricaldata,
-                    async: false,
-                    type: "GET",
-                    context: this,
+                if (index !== (dataStreamIds.length - 1)) {
+                    query = query + "or ";
+                }
+            });
 
-                    // handling response
-                    success: function (resp) {
-                        response.push(resp);
-                    },
-                    error: function (jqXHR, errorText, error) {
-                        Radio.trigger("Alert", "alert", {
-                            text: "<strong>Es ist ein unerwarteter Fehler beim Anfordern der historischen Daten aufgetreten!</strong>",
-                            kategorie: "alert-danger"
-                        });
-                        return false;
-                    }
-                });
-            }, this);
+            this.sendRequestForHistoricalData(this.buildRequestForHistoricalData(query), async);
+        },
+
+        createChargingIndicator: function (async, dataStreamIds) {
+            var historicalData = [],
+                minYear = 2017,
+                maxYear = moment().format("YYYY"),
+                dataArray = [];
+
+                for (var i = minYear; i <= maxYear; i++) {
+                    var array = [],
+                        data,
+                        dataObj = {},
+                        query = "?$expand=Observations($filter=result%20eq%27charging%27and%20year(phenomenonTime)%20eq%20" + i + ";$top=1)&$filter=";
+
+                    _.each(dataStreamIds, function (id, index) {
+                        query = query + "@iot.id eq'" + id + "'";
+
+                        if (index !== (dataStreamIds.length - 1)) {
+                            query = query + "or ";
+                        }
+                    });
+
+                    data = this.sendRequestForIndicator(this.buildRequestForHistoricalData(query), async);
+
+                    _.each(data.value, function (loadingPoint) {
+                        array.push(loadingPoint["Observations@iot.count"]);
+                    });
+
+                    dataObj.year = i;
+                    dataObj.loadingCount = array;
+
+                    dataArray.push(dataObj);
+                }
+
+            return dataArray;
+        },
+
+        sendRequestForIndicator: function (requestURLHistoricaldata, async) {
+            var response;
+
+            $.ajax({
+                url: requestURLHistoricaldata,
+                async: async,
+                type: "GET",
+                context: this,
+
+                // handling response
+                success: function (resp) {
+                    response = resp;
+                },
+                error: function (jqXHR, errorText, error) {
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Es ist ein unerwarteter Fehler beim Anfordern der Daten für die Indikatoren aufgetreten!</strong>",
+                        kategorie: "alert-danger"
+                    });
+                }
+            });
 
             return response;
+        },
+
+        /**
+         * returns the historicalData by Ajax-Request
+         * @param  {String} requestURLHistoricaldata - url with query
+         * @param  {boolean} async
+         * @return {[Object]} historicalData
+         */
+        sendRequestForHistoricalData: function (requestURLHistoricaldata, async) {
+           $.ajax({
+                url: requestURLHistoricaldata,
+                async: async,
+                type: "GET",
+                context: this,
+
+                // handling response
+                success: function (resp) {
+                    var historicalData = resp.value;
+
+                    this.createD3Document("available", historicalData);
+                    this.createD3Document("charging", historicalData);
+                    this.createD3Document("outoforder", historicalData);
+                    $(".tab-pane").removeClass("busy");
+                },
+                error: function (jqXHR, errorText, error) {
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Es ist ein unerwarteter Fehler beim Anfordern der historischen Daten aufgetreten!</strong>",
+                        kategorie: "alert-danger"
+                    });
+                }
+            });
         },
 
         /**
@@ -200,13 +339,21 @@ define(function (require) {
          * @param  {[type]} id - of the dataStream
          * @return {String} complete url
          */
-        buildRequestForHistoricalData: function (requestURL, versionURL, id) {
+        buildRequestForHistoricalData: function (query) {
+            var requestURL = this.get("requestURL"),
+                versionURL = this.get("versionURL");
+
             return historicalDataURL = requestURL + "/" +
                 "v" + versionURL + "/" +
-                "Datastreams(" + id +
-                ")?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc)";
+                "Datastreams" + query;
         },
 
+        /**
+         * check if the requested value is existing in the historical data
+         * @param  {[Object]} historicalData
+         * @param  {String} targetResult
+         * @return {Object}
+         */
         checkValue: function (historicalData, targetResult) {
             var result = undefined;
 
@@ -513,8 +660,7 @@ define(function (require) {
                 dayLength = 24,
                 dayMeanArray = [];
 
-                var array = [];
-            for (var i = 0; i < dayLength; i++) {
+            for (var i = 0; i <= dayLength; i++) {
                 var arrayPerHour = [],
                     mean,
                     obj = {};
@@ -533,6 +679,10 @@ define(function (require) {
                 mean = _.reduce(arrayPerHour, function (memo, value) {
                     return memo + value;
                 }) / arrayPerHour.length;
+
+                if (_.isNaN(mean)) {
+                    mean = 0;
+                }
 
                 // push mean to dayMeanArrayn as object
                 dayMeanArray.push({

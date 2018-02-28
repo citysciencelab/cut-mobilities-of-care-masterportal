@@ -248,9 +248,9 @@ define(function (require) {
             else if (clusterClass === "CIRCLE") {
                 clusterStyle = this.createCircleClusterStyle();
             }
-            else if (clusterClass === "ADVANCED") {
-                clusterStyle = this.createAdvancedClusterStyle();
-            }
+            // else if (clusterClass === "ADVANCED") {
+            //     clusterStyle = this.createAdvancedClusterStyle();
+            // }
             return clusterStyle;
         },
 
@@ -626,12 +626,12 @@ define(function (require) {
                 }
                 clusterTextObj.textAlign = this.get("clusterTextAlign");
                 clusterTextObj.font = this.get("clusterTextFont").toString();
-                clusterTextObj.scale = parseInt(this.get("clusterTextScale"), 10);
-                clusterTextObj.offsetX = parseInt(this.get("clusterTextOffsetX"), 10);
-                clusterTextObj.offsetY = parseInt(this.get("clusterTextOffsetY"), 10);
+                clusterTextObj.scale = parseFloat(this.get("clusterTextScale"), 10);
+                clusterTextObj.offsetX = parseFloat(this.get("clusterTextOffsetX"), 10);
+                clusterTextObj.offsetY = parseFloat(this.get("clusterTextOffsetY"), 10);
                 clusterTextObj.fillcolor = this.returnColor(this.get("clusterTextFillColor"), "rgb");
                 clusterTextObj.strokecolor = this.returnColor(this.get("clusterTextStrokeColor"), "rgb");
-                clusterTextObj.strokewidth = parseInt(this.get("clusterTextStrokeWidth"), 10);
+                clusterTextObj.strokewidth = parseFloat(this.get("clusterTextStrokeWidth"), 10);
             }
             return clusterTextObj;
         },
