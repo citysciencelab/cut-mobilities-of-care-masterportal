@@ -201,7 +201,8 @@ define(function (require) {
 
             if (featureGeometry.getType() === "MultiPolygon") {
                 coord = _.flatten(featureGeometry.getInteriorPoints().getCoordinates());
-            } else if (featureGeometry.getType() === "Polygon") {
+            }
+            else if (featureGeometry.getType() === "Polygon") {
                 coord = _.flatten(featureGeometry.getInteriorPoint().getCoordinates());
             }
             else {
