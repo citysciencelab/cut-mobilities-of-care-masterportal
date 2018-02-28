@@ -106,7 +106,6 @@ define(function(require) {
                     .to.deep.include(_.omit(featureAttributesMap[1], "type"))
                     .to.deep.include(_.omit(featureAttributesMap[2], "type"));
             });
-
         });
     });
 });
