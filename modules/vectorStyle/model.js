@@ -6,64 +6,64 @@ define(function (require) {
 
         WFSStyle = Backbone.Model.extend({
         defaults: {
-            imagePath: "",
-            class: "POINT",
-            subClass: "SIMPLE",
-            styleField: "",
-            styleFieldValues: [],
-            labelField: "",
+            "imagePath": "",
+            "class": "POINT",
+            "subClass": "SIMPLE",
+            "styleField": "",
+            "styleFieldValues": [],
+            "labelField": "",
             // für subclass SIMPLE
-            imageName: "blank.png",
-            imageWidth: 1,
-            imageHeight: 1,
-            imageScale: 1,
-            imageOffsetX: 0.5,
-            imageOffsetY: 0.5,
+            "imageName": "blank.png",
+            "imageWidth": 1,
+            "imageHeight": 1,
+            "imageScale": 1,
+            "imageOffsetX": 0.5,
+            "imageOffsetY": 0.5,
             // für subclass CIRCLE
-            circleRadius: 10,
-            circleFillColor: [0, 153, 255, 1],
-            circleStrokeColor: [0, 0, 0, 1],
-            circleStrokeWidth: 2,
+            "circleRadius": 10,
+            "circleFillColor": [0, 153, 255, 1],
+            "circleStrokeColor": [0, 0, 0, 1],
+            "circleStrokeWidth": 2,
             // Für Label
-            textAlign: "left",
-            textFont: "Courier",
-            textScale: 1,
-            textOffsetX: 0,
-            textOffsetY: 0,
-            textFillColor: [255, 255, 255, 1],
-            textStrokeColor: [0, 0, 0, 1],
-            textStrokeWidth: 3,
+            "textAlign": "left",
+            "textFont": "Courier",
+            "textScale": 1,
+            "textOffsetX": 0,
+            "textOffsetY": 0,
+            "textFillColor": [255, 255, 255, 1],
+            "textStrokeColor": [0, 0, 0, 1],
+            "textStrokeWidth": 3,
             // Für Cluster
-            clusterClass: "CIRCLE",
+            "clusterClass": "CIRCLE",
             // Für Cluster Class CIRCLE
-            clusterCircleRadius: 10,
-            clusterCircleFillColor: [0, 153, 255, 1],
-            clusterCircleStrokeColor: [0, 0, 0, 1],
-            clusterCircleStrokeWidth: 2,
+            "clusterCircleRadius": 10,
+            "clusterCircleFillColor": [0, 153, 255, 1],
+            "clusterCircleStrokeColor": [0, 0, 0, 1],
+            "clusterCircleStrokeWidth": 2,
             // Für Cluster Class SIMPLE
-            clusterImageName: "blank.png",
-            clusterImageWidth: 1,
-            clusterImageHeight: 1,
-            clusterImageScale: 1,
-            clusterImageOffsetX: 0.5,
-            clusterImageOffsetY: 0.5,
+            "clusterImageName": "blank.png",
+            "clusterImageWidth": 1,
+            "clusterImageHeight": 1,
+            "clusterImageScale": 1,
+            "clusterImageOffsetX": 0.5,
+            "clusterImageOffsetY": 0.5,
             // Für Cluster Text
-            clusterText: "COUNTER",
-            clusterTextAlign: "left",
-            clusterTextFont: "Courier",
-            clusterTextScale: 1,
-            clusterTextOffsetX: 0,
-            clusterTextOffsetY: 0,
-            clusterTextFillColor: [255, 255, 255, 1],
-            clusterTextStrokeColor: [0, 0, 0, 1],
-            clusterTextStrokeWidth: 3,
+            "clusterText": "COUNTER",
+            "clusterTextAlign": "left",
+            "clusterTextFont": "Courier",
+            "clusterTextScale": 1,
+            "clusterTextOffsetX": 0,
+            "clusterTextOffsetY": 0,
+            "clusterTextFillColor": [255, 255, 255, 1],
+            "clusterTextStrokeColor": [0, 0, 0, 1],
+            "clusterTextStrokeWidth": 3,
             // Für Polygon
-            polygonFillColor: [255, 255, 255, 1],
-            polygonStrokeColor: [0, 0, 0, 1],
-            polygonStrokeWidth: 2,
+            "polygonFillColor": [255, 255, 255, 1],
+            "polygonStrokeColor": [0, 0, 0, 1],
+            "polygonStrokeWidth": 2,
             // Für Line
-            lineStrokeColor: [0, 0, 0, 1],
-            lineStrokeWidth: 2
+            "lineStrokeColor": [0, 0, 0, 1],
+            "lineStrokeWidth": 2
         },
         initialize: function () {
             this.set("imagePath", Radio.request("Util", "getPath", Config.wfsImgPath));
@@ -138,7 +138,7 @@ define(function (require) {
         * creates a simpleLineStyle.
         * all features get the same style.
         */
-        createSimpleLineStyle: function (feature, isClustered) {
+        createSimpleLineStyle: function () {
             var strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
                 strokewidth = parseInt(this.get("lineStrokeWidth"), 10),
                 strokestyle = new ol.style.Stroke({
@@ -172,7 +172,7 @@ define(function (require) {
         * creates a simplePolygonStyle.
         * all features get the same style.
         */
-        createSimplePolygonStyle: function (feature, isClustered) {
+        createSimplePolygonStyle: function () {
             var strokestyle = new ol.style.Stroke({
                     color: this.returnColor(this.get("polygonStrokeColor"), "rgb"),
                     width: this.returnColor(this.get("polygonStrokeWidth"), "rgb")
@@ -247,7 +247,7 @@ define(function (require) {
                     imgSize: isSVG ? [width, height] : ""
                 });
 
-                return clusterStyle;
+            return clusterStyle;
         },
 
         /*
@@ -269,7 +269,8 @@ define(function (require) {
                         width: strokewidth
                     })
                 });
-                return clusterStyle;
+
+            return clusterStyle;
         },
 
         /*
@@ -286,29 +287,29 @@ define(function (require) {
                 imagestyle,
                 style;
 
-                if (isClustered && feature.get("features").length > 1) {
-                    imagestyle = this.createClusterStyle();
-                }
-                else {
-                    src = this.get("imagePath") + this.get("imageName");
-                    isSVG = src.indexOf(".svg") > -1 ? true : false;
-                    width = this.get("imageWidth");
-                    height = this.get("imageHeight");
-                    scale = parseFloat(this.get("imageScale"));
-                    offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))];
-                    imagestyle = new ol.style.Icon({
-                        src: src,
-                        width: width,
-                        height: height,
-                        scale: scale,
-                        anchor: offset,
-                        imgSize: isSVG ? [width, height] : ""
-                    });
-                }
-
-                style = new ol.style.Style({
-                    image: imagestyle
+            if (isClustered && feature.get("features").length > 1) {
+                imagestyle = this.createClusterStyle();
+            }
+            else {
+                src = this.get("imagePath") + this.get("imageName");
+                isSVG = src.indexOf(".svg") > -1 ? true : false;
+                width = this.get("imageWidth");
+                height = this.get("imageHeight");
+                scale = parseFloat(this.get("imageScale"));
+                offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))];
+                imagestyle = new ol.style.Icon({
+                    src: src,
+                    width: width,
+                    height: height,
+                    scale: scale,
+                    anchor: offset,
+                    imgSize: isSVG ? [width, height] : ""
                 });
+            }
+
+            style = new ol.style.Style({
+                image: imagestyle
+            });
 
             return style;
 
@@ -333,39 +334,40 @@ define(function (require) {
                 imagestyle,
                 style = this.getDefaultStyle();
 
-                if (isClustered && feature.get("features").length > 1) {
-                    imagestyle = this.createClusterStyle();
+            if (isClustered && feature.get("features").length > 1) {
+                imagestyle = this.createClusterStyle();
+            }
+            else {
+                featureValue = !_.isUndefined(feature.get("features")) ? feature.get("features")[0].get(styleField) : feature.get(styleField);
+                if (!_.isUndefined(featureValue)) {
+                    styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
+                        return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+                    })[0];
                 }
-                else {
-                    featureValue = !_.isUndefined(feature.get("features")) ? feature.get("features")[0].get(styleField) : feature.get(styleField);
-                    if (!_.isUndefined(featureValue)) {
-                        styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
-                            return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
-                        })[0];
-                    }
-                    if (_.isUndefined(styleFieldValueObj)) {
-                        return style;
-                    }
-                    src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
-                    isSVG = src.indexOf(".svg") > -1 ? true : false;
-                    width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth");
-                    height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.get("imageHeight");
-                    scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.get("imageScale"));
-                    imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX");
-                    imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY");
-                    offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
-                    imagestyle = new ol.style.Icon({
-                        src: src,
-                        width: width,
-                        height: height,
-                        scale: scale,
-                        anchor: offset
-                    });
+                if (_.isUndefined(styleFieldValueObj)) {
+                    return style;
                 }
-
-                style = new ol.style.Style({
-                    image: imagestyle
+                src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
+                isSVG = src.indexOf(".svg") > -1 ? true : false;
+                width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth");
+                height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.get("imageHeight");
+                scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.get("imageScale"));
+                imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX");
+                imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY");
+                offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
+                imagestyle = new ol.style.Icon({
+                    src: src,
+                    width: width,
+                    height: height,
+                    scale: scale,
+                    anchor: offset,
+                    imgSize: isSVG ? [width, height] : ""
                 });
+            }
+
+            style = new ol.style.Style({
+                image: imagestyle
+            });
 
             return style;
         },
@@ -415,44 +417,44 @@ define(function (require) {
             var textStyle,
                 textObj = {};
 
-                if (isClustered) {
-                    textObj = this.createClusteredTextStyle(feature, labelField);
-                    if (_.isUndefined(textObj)) {
-                        return;
-                    }
-                }
-                else if (labelField.length === 0) {
+            if (isClustered) {
+                textObj = this.createClusteredTextStyle(feature, labelField);
+                if (_.isUndefined(textObj)) {
                     return;
                 }
-                else {
-                    textObj.text = feature.get(labelField);
-                    textObj.textAlign = this.get("textAlign");
-                    textObj.font = this.get("textFont").toString();
-                    textObj.scale = parseInt(this.get("textScale"), 10);
-                    textObj.offsetX = parseInt(this.get("textOffsetX"), 10);
-                    textObj.offsetY = parseInt(this.get("textOffsetY"), 10);
-                    textObj.fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
-                    textObj.strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
-                    textObj.strokewidth = parseInt(this.get("textStrokeWidth"), 10);
-                }
+            }
+            else if (labelField.length === 0) {
+                return;
+            }
+            else {
+                textObj.text = feature.get(labelField);
+                textObj.textAlign = this.get("textAlign");
+                textObj.font = this.get("textFont").toString();
+                textObj.scale = parseInt(this.get("textScale"), 10);
+                textObj.offsetX = parseInt(this.get("textOffsetX"), 10);
+                textObj.offsetY = parseInt(this.get("textOffsetY"), 10);
+                textObj.fillcolor = this.returnColor(this.get("textFillColor"), "rgb");
+                textObj.strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
+                textObj.strokewidth = parseInt(this.get("textStrokeWidth"), 10);
+            }
 
-                textStyle = new ol.style.Text({
-                    text: textObj.text,
-                    textAlign: textObj.textAlign,
-                    offsetX: textObj.offsetX,
-                    offsetY: textObj.offsetY,
-                    font: textObj.font,
-                    scale: textObj.scale,
-                    fill: new ol.style.Fill({
-                        color: textObj.fillcolor
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: textObj.strokecolor,
-                        width: textObj.strokewidth
-                    })
-                });
+            textStyle = new ol.style.Text({
+                text: textObj.text,
+                textAlign: textObj.textAlign,
+                offsetX: textObj.offsetX,
+                offsetY: textObj.offsetY,
+                font: textObj.font,
+                scale: textObj.scale,
+                fill: new ol.style.Fill({
+                    color: textObj.fillcolor
+                }),
+                stroke: new ol.style.Stroke({
+                    color: textObj.strokecolor,
+                    width: textObj.strokewidth
+                })
+            });
 
-                return textStyle;
+            return textStyle;
         },
         /*
         * creates clusteredTextStyle.
@@ -506,18 +508,18 @@ define(function (require) {
                 newColor,
                 pArray = [];
 
-                if (_.isArray(color) && !_.isString(color)) {
-                    src = "rgb";
-                }
-                else if (_.isString(color) && color.indexOf("#") === 0) {
-                    src = "hex";
-                }
-                else if (_.isString(color) && color.indexOf("#") === -1) {
-                    src = "rgb";
+            if (_.isArray(color) && !_.isString(color)) {
+                src = "rgb";
+            }
+            else if (_.isString(color) && color.indexOf("#") === 0) {
+                src = "hex";
+            }
+            else if (_.isString(color) && color.indexOf("#") === -1) {
+                src = "rgb";
 
-                    pArray = color.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
-                    color = [pArray[0], pArray[1], pArray[2], pArray[3]];
-                }
+                pArray = color.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
+                color = [pArray[0], pArray[1], pArray[2], pArray[3]];
+            }
 
             if (src === "hex" && dest === "rgb") {
                 newColor = this.hexToRgb(color);

@@ -29,8 +29,8 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |clusterCircleStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Kreises als Clusterstyle.|
 |clusterCircleStrokeWidth|nein|Integer|2|Randstärke des Kreises als Clusterstyle.|
 |clusterImageName|nein|String|"blank.png"|Name des Images als Clusterstyle.|
-|clusterImageWidth|nein|Integer|1|Breite des Images als Clusterstyle.|
-|clusterImageHeight|nein|Integer|1|Höhe des Images als Clusterstyle.|
+|clusterImageWidth|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer|1|Breite des Images als Clusterstyle.|
+|clusterImageHeight|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer|Integer|1|Höhe des Images als Clusterstyle.|
 |clusterImageScale|nein|Integer|1|Skalierung des Images als Clusterstyle.|
 |clusterImageOffsetX|nein|Float|0.5|Offset des Images als Clusterstyle in X-Richtung.|
 |clusterImageOffsetY|nein|Float|0.5|Offset des Images als Clusterstyle in Y-Richtung.|
@@ -42,7 +42,6 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |clusterTextFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextStrokeWidth|nein|Integer|3|Breite der Textstriche. Bei geclusterten Features siehe [config.json](config.json.md)|
-
 
 ## Spezielle Parameter ##
 Einige Parameter sind nur bei bestimmten Kombinationen von "class" und "subClass" notwendig.
@@ -64,8 +63,8 @@ Bei "class"=== "POINT" und "subClass" === "SIMPLE" wird nur ein Image für alle 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |imageName|ja|String| "blank.png"|Name des Images.|
-|imageWidth|nein|String|1|Breite des Images.|
-|imageHeight|nein|String|1|Höhe des Images.|
+|imageWidth|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer|1|Breite des Images.|
+|imageHeight|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer|1|Höhe des Images.|
 |imageScale|nein|String|1|Skalierung des Bildes.|
 |imageOffsetX|nein|Float|0.5|Offset des Bildes in X-Richtung.|
 |imageOffsetY|nein|Float|0.5|Offset des Bildes in Y-Richtung.|
@@ -123,11 +122,17 @@ Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werde
 |----|-------------|---|-------|------------|
 |styleFieldValue|ja|String||Attributwert.|
 |imageName|ja|String||Name des Images.|
-|imageWidth|nein|String||Breite des Images.|
-|imageHeight|nein|String||Höhe des Images.|
+|imageWidth|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer||Breite des Images.|
+|imageHeight|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer||Höhe des Images.|
 |imageScale|nein|String||Skalierung des Bildes.|
 |imageOffsetX|nein|String||Offset des Bildes in X-Richtung.|
 |imageOffsetY|nein|String||Offset des Bildes in Y-Richtung.|
+
+### IMAGEWIDTH UND IMAGEHEIGHT ###
+Die Angaben *imageWidth* / *imageHeight* bzw. *clusterImagewidth* / *clusterImageHeight* in der Styledefinition sind verpflichtend beim Einsatz von *SVG-Dateien* und optional bei Rasterdaten.
+
+- Bei SVG-Dateien wird die Angabe *imgSize* des *ol.style.Icon* mit diesen Werten gesetzt. Der Wert muss pixelgenau der Größenangabe in der SVG entsprechen. Die Größe kann über den Parameter imageScale bzw. clusterImageScale variiert werden.
+- Bei Rasterdaten kann hierüber die Pixelgröße des Icons festgelegt werden.
 
 ### POINT CIRCLE ###
 Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle eines Images, ein Kreis gesetzt. Cluster-Attribute können gesetzt werden wie in [POINT SIMPLE](#markdown-header-point-simple) zu sehen. Label-Attribute können gesetzt werden wie in [Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter) zu sehen.
