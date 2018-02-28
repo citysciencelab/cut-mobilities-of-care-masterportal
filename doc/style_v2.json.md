@@ -29,8 +29,8 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |clusterCircleStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Kreises als Clusterstyle.|
 |clusterCircleStrokeWidth|nein|Integer|2|Randstärke des Kreises als Clusterstyle.|
 |clusterImageName|nein|String|"blank.png"|Name des Images als Clusterstyle.|
-|clusterImageWidth|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer|1|Breite des Images als Clusterstyle.|
-|clusterImageHeight|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer|Integer|1|Höhe des Images als Clusterstyle.|
+|clusterImageWidth|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|1|Breite des Images als Clusterstyle.|
+|clusterImageHeight|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|Integer|1|Höhe des Images als Clusterstyle.|
 |clusterImageScale|nein|Integer|1|Skalierung des Images als Clusterstyle.|
 |clusterImageOffsetX|nein|Float|0.5|Offset des Images als Clusterstyle in X-Richtung.|
 |clusterImageOffsetY|nein|Float|0.5|Offset des Images als Clusterstyle in Y-Richtung.|
@@ -63,8 +63,8 @@ Bei "class"=== "POINT" und "subClass" === "SIMPLE" wird nur ein Image für alle 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |imageName|ja|String| "blank.png"|Name des Images.|
-|imageWidth|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer|1|Breite des Images.|
-|imageHeight|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer|1|Höhe des Images.|
+|imageWidth|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|1|Breite des Images.|
+|imageHeight|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|1|Höhe des Images.|
 |imageScale|nein|String|1|Skalierung des Bildes.|
 |imageOffsetX|nein|Float|0.5|Offset des Bildes in X-Richtung.|
 |imageOffsetY|nein|Float|0.5|Offset des Bildes in Y-Richtung.|
@@ -122,8 +122,8 @@ Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werde
 |----|-------------|---|-------|------------|
 |styleFieldValue|ja|String||Attributwert.|
 |imageName|ja|String||Name des Images.|
-|imageWidth|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer||Breite des Images.|
-|imageHeight|[POINT SIMPLE](#markdown-header-imagewidth-und-imageheight)|Integer||Höhe des Images.|
+|imageWidth|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer||Breite des Images.|
+|imageHeight|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer||Höhe des Images.|
 |imageScale|nein|String||Skalierung des Bildes.|
 |imageOffsetX|nein|String||Offset des Bildes in X-Richtung.|
 |imageOffsetY|nein|String||Offset des Bildes in Y-Richtung.|
