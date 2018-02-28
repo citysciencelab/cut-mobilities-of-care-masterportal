@@ -30,7 +30,7 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |clusterCircleStrokeWidth|nein|Integer|2|Randstärke des Kreises als Clusterstyle.|
 |clusterImageName|nein|String|"blank.png"|Name des Images als Clusterstyle.|
 |clusterImageWidth|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|1|Breite des Images als Clusterstyle.|
-|clusterImageHeight|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|Integer|1|Höhe des Images als Clusterstyle.|
+|clusterImageHeight|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|1|Höhe des Images als Clusterstyle.|
 |clusterImageScale|nein|Integer|1|Skalierung des Images als Clusterstyle.|
 |clusterImageOffsetX|nein|Float|0.5|Offset des Images als Clusterstyle in X-Richtung.|
 |clusterImageOffsetY|nein|Float|0.5|Offset des Images als Clusterstyle in Y-Richtung.|
