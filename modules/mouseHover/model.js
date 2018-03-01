@@ -118,17 +118,10 @@ define(function (require) {
         },
 
         /**
-        * forEachFeatureAtPixel greift nur bei sichtbaren Features.
-        * wenn 2. Parameter (layer) == null, dann kein Layer
-        * Wertet an der aktuell getriggerten Position alle Features der
-        * Map aus, die über subfunction function(layer) zurückgegeben werden.
-        * pFeatureArray wird so mit allen darzustellenden Features gepusht.
-        * Nachdem die Selektion erstellt wurde, wird diese für initiale
-        * if-Bedingung gespeichert und abschließend wird das Aufbereiten dieser
-        * Selektion angestpßen.
-        */
+         * Prüft, welche Features an MousePosition vorhanden sind und fragt deren Texte ab
+         * @param  {evt} evt PointerMoveEvent
+         */
         checkForFeaturesAtPixel: function (evt) {
-
             var pFeaturesArray = [],
                 pFeatureArray = [],
                 featuresAtPixel = this.getFeaturesAtPixel(evt),
@@ -151,7 +144,7 @@ define(function (require) {
                 }
             }
             else {
-                this.removeMouseHoverFeatureIfSet();
+                this.destroyPopup();
             }
         },
 
@@ -172,12 +165,10 @@ define(function (require) {
 
         setMouseHoverFeature: function (textArray, textPosition) {
             this.get("mhpOverlay").setPosition(textPosition);
-            // this.get("mhpOverlay").setOffset([10, -15]);
-            this.set("mhpcoordinates", textPosition);
             this.set("mhpresult", textArray);
         },
 
-        getTextPosition: function (featureGeometry) {
+        getTextPosition: function (featureGeometry, evt) {
             var coord;
 
             if (featureGeometry.getType() === "MultiPolygon") {
@@ -196,15 +187,6 @@ define(function (require) {
             return coord;
         },
 
-        /**
-        * Diese Funktion prüft ob mhpresult = "" und falls nicht
-        * wird MouseHover destroyt
-        */
-        removeMouseHoverFeatureIfSet: function () {
-            if (this.get("mhpresult") && this.get("mhpresult") !== "") {
-                this.destroyPopup();
-            }
-        },
         getLayerInfosFromWfsList: function (element) {
             return _.find(this.get("wfsList"), function (ele) {
                 return ele.layerId === element.layerId;
