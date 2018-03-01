@@ -245,13 +245,16 @@ define("app",
     // controls
     require(["modules/controls/view"], function (ControlsView) {
         var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
-            controlsView = new ControlsView();
+            controlsView = new ControlsView(),
+            isSimpleMap = Radio.request("ParametricURL", "getStyle") === "SIMPLE" ? true : false;
 
         _.each(controls, function (control) {
+            var showMobile = _.has(control.attr, "showMobile") ? control.attr.showMobile : false;
+
             switch (control.id) {
                 case "zoom": {
-                    if (control.attr === true) {
-                        var el = controlsView.addRowTR(control.id);
+                    if ((!isSimpleMap && control.attr === true) || (!isSimpleMap && _.isObject(control.attr)) || (isSimpleMap && control.attr.showInSimpleMap === true)) {
+                        var el = controlsView.addRowTR(control.id, showMobile);
 
                         require(["modules/controls/zoom/view"], function (ZoomControlView) {
                             new ZoomControlView({el: el});
@@ -260,15 +263,17 @@ define("app",
                     break;
                 }
                 case "orientation": {
-                    var el = controlsView.addRowTR(control.id);
+                    if (!isSimpleMap) {
+                        var el = controlsView.addRowTR(control.id);
 
-                    require(["modules/controls/orientation/view"], function (OrientationView) {
-                        new OrientationView({el: el});
-                    });
+                        require(["modules/controls/orientation/view"], function (OrientationView) {
+                            new OrientationView({el: el});
+                        });
+                    }
                     break;
                 }
                 case "mousePosition": {
-                    if (control.attr === true) {
+                    if (control.attr === true && !isSimpleMap) {
                         var el = controlsView.addRowBL(control.id);
 
                         require(["modules/controls/mousePosition/view"], function (MousePositionView) {
@@ -278,7 +283,7 @@ define("app",
                     break;
                 }
                 case "fullScreen": {
-                    if (control.attr === true) {
+                    if (control.attr === true && !isSimpleMap) {
                         var el = controlsView.addRowTR(control.id);
 
                         require(["modules/controls/fullScreen/view"], function (FullScreenView) {
@@ -288,7 +293,7 @@ define("app",
                     break;
                 }
                 case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if ((control.attr === true && !isSimpleMap) || (typeof control.attr === "object" && !isSimpleMap)) {
                         var el = controlsView.addRowBR(control.id);
 
                         require(["modules/controls/attributions/view"], function (AttributionsView) {
@@ -298,7 +303,7 @@ define("app",
                     break;
                 }
                 case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if ((control.attr === true && !isSimpleMap) || (typeof control.attr === "object" && !isSimpleMap)) {
                         var el = controlsView.addRowBR(control.id);
 
                         require(["modules/controls/overviewmap/view"], function (OverviewmapView) {

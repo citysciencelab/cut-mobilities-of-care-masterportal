@@ -56,12 +56,6 @@
     padding: 5px 7px 6px 5px;
 }
 
-@media (max-width: 767px) {
-    .zoomButtons {
-        display: none;
-    }
-}
-
 /***** FullScreen *****/
 .full-screen-button {
     margin-top: 20px;
