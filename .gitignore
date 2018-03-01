@@ -3,7 +3,6 @@
 
 .DS_Store
 *.sass-cache
-*.iml
 
 coverage
 test/coverage
@@ -13,7 +12,6 @@ dist
 temp
 lgv-config
 examples*
-.idea
 
 /nbproject/private/
 /img/*.db
