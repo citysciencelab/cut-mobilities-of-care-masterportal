@@ -23,7 +23,7 @@ define(function (require) {
                 "hide": this.destroyPopup
             });
 
-            Radio.trigger("Map", "registerListener", "pointermove", this.checkForEachFeatureAtPixel, this);
+            Radio.trigger("Map", "registerListener", "pointermove", this.checkDragging, this);
 
             $("#map").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
 
@@ -105,6 +105,18 @@ define(function (require) {
             }
             return pFeatureArray;
         },
+
+        /**
+         * Prüft auf Drag-Modus
+         * @param  {evt} evt Event-Object
+         * @listens "Map:pointermove"
+         */
+        checkDragging: function (evt) {
+            if (!evt.dragging) {
+                this.checkForFeaturesAtPixel(evt);
+            }
+        },
+
         /**
         * forEachFeatureAtPixel greift nur bei sichtbaren Features.
         * wenn 2. Parameter (layer) == null, dann kein Layer
@@ -115,13 +127,13 @@ define(function (require) {
         * if-Bedingung gespeichert und abschließend wird das Aufbereiten dieser
         * Selektion angestpßen.
         */
-        checkForEachFeatureAtPixel: function (evt) {
-            if (evt.dragging) {
-                return;
-            }
+        checkForFeaturesAtPixel: function (evt) {
+
             var pFeaturesArray = [],
                 pFeatureArray = [],
-                featuresAtPixel = this.getFeaturesAtPixel(evt);
+                featuresAtPixel = this.getFeaturesAtPixel(evt),
+                textArray,
+                textPosition;
 
             if (featuresAtPixel.length > 0) {
                 _.each(featuresAtPixel, function (featureAtPixel) {
@@ -129,17 +141,13 @@ define(function (require) {
                     pFeaturesArray = _.union(pFeaturesArray, pFeatureArray);
                 }, this);
                 if (pFeaturesArray.length > 0) {
-                    if (this.get("oldSelection").length === 0) {
-                        this.set("oldSelection", pFeaturesArray);
-                        this.prepMouseHoverFeature(pFeaturesArray);
+                    if (this.get("oldSelection").length > 0 && this.compareArrayOfObjects(pFeaturesArray, this.get("oldSelection")) === false) {
+                        this.destroyPopup(pFeaturesArray);
                     }
-                    else {
-                        if (this.compareArrayOfObjects(pFeaturesArray, this.get("oldSelection")) === false) {
-                            this.destroyPopup(pFeaturesArray);
-                            this.set("oldSelection", pFeaturesArray);
-                            this.prepMouseHoverFeature(pFeaturesArray);
-                        }
-                    }
+                    this.set("oldSelection", pFeaturesArray);
+                    textArray = this.getTextArray(pFeaturesArray);
+                    textPosition = this.getTextPosition(pFeaturesArray[0].feature.getGeometry());
+                    this.setMouseHoverFeature(textArray, textPosition);
                 }
             }
             else {
@@ -160,6 +168,32 @@ define(function (require) {
                 }
             }
             return true;
+        },
+
+        setMouseHoverFeature: function (textArray, textPosition) {
+            this.get("mhpOverlay").setPosition(textPosition);
+            // this.get("mhpOverlay").setOffset([10, -15]);
+            this.set("mhpcoordinates", textPosition);
+            this.set("mhpresult", textArray);
+        },
+
+        getTextPosition: function (featureGeometry) {
+            var coord;
+
+            if (featureGeometry.getType() === "MultiPolygon") {
+                coord = _.flatten(featureGeometry.getInteriorPoints().getCoordinates());
+            }
+            else if (featureGeometry.getType() === "Polygon") {
+                coord = _.flatten(featureGeometry.getInteriorPoint().getCoordinates());
+            }
+            else if (featureGeometry.getType() === "MultiLineString") {
+                coord = _.flatten(featureGeometry.getCoordinates());
+            }
+            else {
+                coord = _.flatten(featureGeometry.getCoordinates());
+            }
+
+            return coord;
         },
 
         /**
@@ -196,72 +230,69 @@ define(function (require) {
             }
             return value;
         },
-        pickCoord: function (featureGeometry) {
-            var coord;
 
-            if (featureGeometry.getType() === "MultiPolygon") {
-                coord = _.flatten(featureGeometry.getInteriorPoints().getCoordinates());
-            }
-            else if (featureGeometry.getType() === "Polygon") {
-                coord = _.flatten(featureGeometry.getInteriorPoint().getCoordinates());
+        /**
+         * Dies Funktion durchsucht das übergebene pFeatureArray und extrahiert den anzuzeigenden Text
+         * @param  {Array} pFeaturesArray Features at MousePosition
+         * @return {Array}                Texte fürs Mousehover
+         */
+        getTextArray: function (featureArray) {
+            var textArray = [],
+                textArrayCheckedLength,
+                textArrayBreaked;
+
+            // für jedes gehoverte Feature...
+            _.each(featureArray, function (element) {
+                var featureProperties = element.feature.getProperties(),
+                    // featureGeometry = element.feature.getGeometry(),
+                    layerInfos = this.getLayerInfosFromWfsList(element);
+
+                if (!_.isUndefined(layerInfos)) {
+                    textArray.push(this.pickValue(layerInfos.fieldname, featureProperties));
+                }
+            }, this);
+            textArrayCheckedLength = this.checkMaxFeaturesToShow(textArray);
+            textArrayBreaked = this.addBreak(textArrayCheckedLength);
+
+            return textArrayBreaked;
+        },
+
+        /**
+         * Passt die Anzahl der darzustellenden Texte an "numFeaturesToShow" über _.sample an.
+         * @param  {Array} textArray Array mit allen Texten
+         * @return {Array}           Array mit korrekter Anzahl an Texten
+         */
+        checkMaxFeaturesToShow: function (textArray) {
+            var maxNum = this.get("numFeaturesToShow"),
+                textArrayCorrected = [];
+
+            if (textArray.length > maxNum) {
+                textArrayCorrected = _.sample(textArray, maxNum);
+                textArrayCorrected.push("<span class='info'>" + this.get("infoText") + "</span>");
             }
             else {
-                coord = _.flatten(featureGeometry.getCoordinates());
+                textArrayCorrected = textArray;
             }
-            return coord;
+
+            return textArrayCorrected;
         },
+
         /**
-        * Dies Funktion durchsucht das übergebene pFeatureArray und extrahiert den
-        * anzuzeigenden Text sowie die Popup-Koordinate und setzt
-        * mhpresult. Auf mhpresult lauscht die View, die daraufhin rendert
-        */
-        prepMouseHoverFeature: function (pFeaturesArray) {
-            var mouseHoverObj = {values: []},
-                value = "",
-                coord;
+         * add <br> betweeen every element in values
+         * @param  {Array} textArray Array ohne <br>
+         * @return {Array}           Array mit <br>
+         */
+        addBreak: function (textArray) {
+            var textArrayBreaked = [];
 
-            if (pFeaturesArray.length > 0) {
-                // für jedes gehoverte Feature...
-                _.each(pFeaturesArray, function (element) {
-                    var featureProperties = element.feature.getProperties(),
-                        featureGeometry = element.feature.getGeometry(),
-                        layerInfos = this.getLayerInfosFromWfsList(element);
-
-                    if (!_.isUndefined(layerInfos)) {
-                        var mouseHoverField = layerInfos.fieldname;
-
-                        value = this.pickValue(mouseHoverField, featureProperties);
-                        // if multiple features in mouseHover. The first feature coordinate is used
-                        if (_.isUndefined(coord)) {
-                            coord = this.pickCoord(featureGeometry);
-                        }
-                        mouseHoverObj.coord = coord;
-                        mouseHoverObj.values.push(value);
-                    }
-                }, this);
-            }
-
-            if (mouseHoverObj.values.length > 0) {
-                var maxNum = this.get("numFeaturesToShow"),
-                    valuesWithBr = [];
-
-                if (mouseHoverObj.values.length > maxNum) {
-                    mouseHoverObj.values = _.sample(mouseHoverObj.values, maxNum);
-                    mouseHoverObj.values.push("<span class='info'>" + this.get("infoText") + "</span>");
+            _.each(textArray, function (value, index) {
+                textArrayBreaked.push(value);
+                if (index !== textArray.length - 1) {
+                    textArrayBreaked.push("<br>");
                 }
-                // add <br> betweeen every element in values
-                _.each(mouseHoverObj.values, function (value, index) {
-                    valuesWithBr.push(value);
-                    if (index !== mouseHoverObj.values.length - 1) {
-                        valuesWithBr.push("<br>");
-                    }
-                });
-                mouseHoverObj.values = valuesWithBr;
-                this.get("mhpOverlay").setPosition(mouseHoverObj.coord);
-                // this.get("mhpOverlay").setOffset([10, -15]);
-                this.set("mhpcoordinates", mouseHoverObj.coord);
-                this.set("mhpresult", mouseHoverObj.values);
-            }
+            });
+
+            return textArrayBreaked;
         }
     });
 
