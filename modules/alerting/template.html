@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <% if (isDismissable === true) { %>
-    <div class="alert <%= category %> alert-dismissable" role="alert">
+    <div id="<%= id %>" class="alert <%= category %> alert-dismissable" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 <% } else { %>
-    <div class="alert <%= category %>" role="alert">
+    <div id="<%= id %>" class="alert <%= category %>" role="alert">
 <% } %>
     <p>
         <%= message %>
