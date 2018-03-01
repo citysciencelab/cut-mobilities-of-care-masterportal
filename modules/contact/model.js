@@ -94,7 +94,9 @@ define([
             }
         },
         send: function () {
-            var cc = this.get("cc");
+            var cc = this.getCc(),
+                text,
+                dataToSend;
 
             if (this.get("ccToUser") === true) {
                 cc.push({
@@ -103,15 +105,15 @@ define([
                 });
             }
 
-            var text = "Name: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo"),
-                dataToSend = {
-                    from: this.get("from"),
-                    to: this.get("to"),
-                    cc: cc,
-                    bcc: this.get("bcc"),
-                    subject: this.get("ticketID") + ": " + this.get("subject"),
-                    text: text
-                };
+            text = "Name: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo"),
+            dataToSend = {
+                from: this.get("from"),
+                to: this.get("to"),
+                cc: cc,
+                bcc: this.get("bcc"),
+                subject: this.get("ticketID") + ": " + this.get("subject"),
+                text: text
+            };
 
             Radio.trigger("Util", "showLoader");
             $.ajax({
@@ -137,6 +139,16 @@ define([
                     }
                 }
             });
+            this.setCc([]);
+        },
+
+        // getter for cc
+        getCc: function () {
+            return this.get("cc");
+        },
+        // setter for cc
+        setCc: function (value) {
+            this.set("cc", value);
         }
     });
 
