@@ -136,6 +136,18 @@ define(function (require) {
                     return stylelistmodel.createStyle(feature);
                 });
             }
+        },
+        createLegendURL: function () {
+            if (!this.get("legendURL").length) {
+                var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
+                if (!_.isUndefined(style)) {
+                    this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
+                }
+            }
+        },
+        getStyleId: function () {
+            return this.get("styleId");
         }
     });
 
