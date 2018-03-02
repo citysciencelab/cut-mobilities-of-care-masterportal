@@ -1,3 +1,15 @@
+# Changelog LGV Master-Portal 1.5.1
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - c39c1122 falsche reihenfolge des mapView Parameters zoomlevel führte zu Laufzeitfehler
+  - 1815d4f9 nach Auswahl einer Adresse wird name nicht in searchbar übernommen
+  - 615635b7 configYAML
+
 # Changelog LGV Master-Portal 1.5.0
 
 NEU:

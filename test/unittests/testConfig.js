@@ -6,7 +6,7 @@ define(function () {
             numFeaturesToShow: 2,
             infoText: "(weitere Objekte. Bitte zoomen.)"
         },
-        styleConf: "../../node_modules/lgv-config/style_v2.json",
+        styleConf: "../../node_modules/lgv-config/style_v2.json"
     };
 
     return config;
