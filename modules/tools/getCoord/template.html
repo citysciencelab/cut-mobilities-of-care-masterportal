@@ -1,24 +1,33 @@
 <!DOCTYPE html>
-<div class="header">
-    <p class="buttons pull-right">
-        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
-    </p>
-    <p class="title">
-        <span>Position</span>
-    </p>
-</div>
-
-<div class="content">
-    <h5 class="subtitle">UTM-Koordinate (ETRS 89)</h5>
-    <p>
-        <span>Rechtswert:</span>
-        <br>
-        <span>Hochwert:</span>
-    </p>
-    <h5 class="subtitle">Geografische-Koordinate (WGS 84)</h5>
-    <p>
-        <span>Breite:</span>
-        <br>
-        <span>L&auml;nge:</span>
-    </p>
-</div>
+<form class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <label for="coordSystemField" class="col-md-5 col-sm-5 control-label">Koordinatensystem</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm pull-left" id="coordSystemField">
+                <% _.each(this.model.get("coordSystems"), function(value, key) {
+                    if (value === this.model.get("coordSystem")) {%>
+                        <option value=<%= value %> SELECTED><%= value%></option>
+                    <%} else { %>
+                        <option value=<%= value %>><%= value%></option>
+                <% }}, this); %>
+            </select>
+        </div>
+    </div>
+        <div class="form-group form-group-sm">
+            <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">Rechtswert</label>
+            <div class="col-md-7 col-sm-7">
+                <input type="text" class="form-control" id="coordinatesEastingField" placeholder="Bsp: 564459.13">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">Hochwert</label>
+            <div class="col-md-7 col-sm-7">
+                <input type="text" class="form-control" id="coordinatesNorthingField"  placeholder="Bsp: 5935103.67">
+            </div>
+        </div>
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-panel-submit col-md-12 col-sm-12">Suchen</button>
+        </div>
+    </div>
+</form>

@@ -1,14 +1,13 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/tools/getCoord/model",
-    "text!modules/tools/getCoord/template.html"
-], function (Backbone, Radio, CoordPopup, CoordPopupTemplate) {
+define(function (require) {
 
-    var CoordPopupView = Backbone.View.extend({
-        model: new CoordPopup(),
-        id: "coord-popup",
-        template: _.template(CoordPopupTemplate),
+    var GetCoordTemplate = require("text!modules/tools/getCoord/template.html"),
+        GetCoordModel = require("modules/tools/getCoord/model"),
+        GetCoord;
+
+    SearchByCoordView = Backbone.View.extend({
+        model: new GetCoordModel(),
+        className: "win-body",
+        template: _.template(GetCoordTemplate),
         events: {
             "click .glyphicon-remove": "destroy"
         },
@@ -29,17 +28,8 @@ define([
             else {
                 this.undelegateEvents();
             }
-        }/*,
-        destroy: function () {
-            var coordModel = Radio.request("ModelList", "getModelByAttributes", {id: "coord"});
-
-            if (coordModel) {
-                coordModel.setIsActive(false);
-            }
-            this.model.destroyPopup();
-            Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
-        }*/
+        }
     });
 
-    return CoordPopupView;
+    return SearchByCoordView;
 });
