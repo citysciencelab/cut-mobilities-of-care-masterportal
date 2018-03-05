@@ -27,7 +27,7 @@ define(function (require) {
             this.removeAllData();
 
             var contentId = $(evt.currentTarget).attr("value"),
-                index = 3;
+                index = 0;
 
             // deactivate all tabs and their contents
             $(evt.currentTarget).parent().find("li").each(function (index, li) {

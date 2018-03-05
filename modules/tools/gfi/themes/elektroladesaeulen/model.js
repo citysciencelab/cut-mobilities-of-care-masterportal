@@ -170,15 +170,15 @@ define(function (require) {
                 dataPerHour,
                 processedData;
 
-            // set error message if data to targetresult does not exist
-            if (_.isNull(dataByWeekday)) {
-                this.drawErrorMessage(graphTag, width, height);
-                return;
-            }
-
             // process data for day with given index (0 = today)
             dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday[index], targetResult);
             processedData = this.calculateArithmeticMean(dataPerHour);
+
+            // set an error message if the values of processedData are all 0
+            if (_.isUndefined(this.checkValue(processedData))) {
+                this.drawErrorMessage(graphTag, width, height);
+                return;
+            }
 
             // config for style the graph
             graphConfig = {
@@ -217,19 +217,12 @@ define(function (require) {
         },
 
         processDataForAllWeekdays: function (targetResult, historicalData) {
-            var checkValue = this.checkValue(historicalData, targetResult),
-                historicalDataThisTimeZone,
+            var historicalDataThisTimeZone,
                 historicalDataWithIndex,
                 dataByWeekday,
                 dataPerHour,
                 processedData,
                 graphConfig;
-
-            // set a message if no data is found and exit
-            if (_.isUndefined(checkValue)) {
-                this.set("weekday" + targetResult, null);
-                return;
-            }
 
             historicalDataThisTimeZone = this.changeTimeZone(historicalData);
             historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
@@ -415,28 +408,6 @@ define(function (require) {
             return historicalDataURL = requestURL + "/" +
                 "v" + versionURL + "/" +
                 "Datastreams" + query;
-        },
-
-        /**
-         * check if the requested value is existing in the historical data
-         * @param  {[Object]} historicalData
-         * @param  {String} targetResult
-         * @return {Object}
-         */
-        checkValue: function (historicalData, targetResult) {
-            var result = undefined;
-
-            _.each(historicalData, function (data) {
-                if (!_.isUndefined(result)) {
-                    return;
-                }
-
-                result = _.find(data.Observations, function (obs) {
-                    return obs.result === targetResult;
-                });
-            });
-
-            return result;
         },
 
         /**
@@ -679,6 +650,12 @@ define(function (require) {
             }
 
             return dayMeanArray;
+        },
+
+        checkValue: function (processedData) {
+            return _.find(processedData, function (data) {
+                return data.value > 0;
+            });
         },
 
         /**
