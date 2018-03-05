@@ -15,14 +15,29 @@ define([
             coordinateGeo: {}
         },
         initialize: function () {
-            this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": this.checkTool
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
             });
 
-            this.setCoordOverlay(new ol.Overlay({
-                element: this.getElement()[0]
-            }));
-            Radio.trigger("Map", "addOverlay", this.getCoordOverlay());
+            // this.listenTo(Radio.channel("Tool"), {
+            //     "activatedTool": this.checkTool
+            // });
+
+            // this.setCoordOverlay(new ol.Overlay({
+            //     element: this.getElement()[0]
+            // }));
+            // Radio.trigger("Map", "addOverlay", this.getCoordOverlay());
+        },
+        setStatus: function (args) { // Fenstermanagement
+            if (args[2].getId() === "coord") {
+                this.set("isCollapsed", args[1]);
+                this.set("isCurrentWin", args[0]);
+            }
+            else {
+                this.set("isCurrentWin", false);
+                this.data = {};
+                this.formats = {};
+            }
         },
         checkTool: function (name) {
             if (name === "coord") {

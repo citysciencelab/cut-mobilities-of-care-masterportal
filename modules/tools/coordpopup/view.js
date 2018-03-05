@@ -13,26 +13,23 @@ define([
             "click .glyphicon-remove": "destroy"
         },
         initialize: function () {
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin change:url": this.render
+            });
             this.listenTo(this.model, "change:coordinateGeo", this.render);
         },
         render: function () {
-            var attr = this.model.toJSON();
+            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+                var attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
-            this.model.getElement().popover({
-                placement: function () {
-                    if (this.getPosition().top > window.innerWidth / 2) {
-                        return "top";
-                    }
-                    else {
-                        return "bottom";
-                    }
-                },
-                html: true,
-                content: this.$el
-            });
-            this.model.showPopup();
-        },
+                this.$el.html("");
+                $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.delegateEvents();
+            }
+            else {
+                this.undelegateEvents();
+            }
+        }/*,
         destroy: function () {
             var coordModel = Radio.request("ModelList", "getModelByAttributes", {id: "coord"});
 
@@ -41,7 +38,7 @@ define([
             }
             this.model.destroyPopup();
             Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
-        }
+        }*/
     });
 
     return CoordPopupView;
