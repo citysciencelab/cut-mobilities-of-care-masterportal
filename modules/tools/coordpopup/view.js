@@ -1,8 +1,8 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/coordpopup/model",
-    "text!modules/coordpopup/template.html"
+    "modules/tools/coordpopup/model",
+    "text!modules/tools/coordpopup/template.html"
 ], function (Backbone, Radio, CoordPopup, CoordPopupTemplate) {
 
     var CoordPopupView = Backbone.View.extend({

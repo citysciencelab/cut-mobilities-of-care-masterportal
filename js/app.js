@@ -132,7 +132,7 @@ define("app",
                     break;
                 }
                 case "coord": {
-                    require(["modules/coordpopup/view"], function (CoordPopupView) {
+                    require(["modules/tools/coordpopup/view"], function (CoordPopupView) {
                         new CoordPopupView();
                     });
                     break;
