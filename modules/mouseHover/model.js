@@ -22,23 +22,21 @@ define(function (require) {
             });
 
             Radio.trigger("Map", "registerListener", "pointermove", this.checkDragging, this);
-            this.filterWFSList();
+            this.getMouseHoverInfosFromConfig();
         },
 
-        filterWFSList: function () {
-            var wfsList = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),
-                wfsListFiltered = [];
+        getMouseHoverInfosFromConfig: function () {
+            var wfsLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),
+                geoJsonLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "GeoJSON"}),
+                vectorLayers = _.union(wfsLayers, geoJsonLayers),
+                mouseHoverLayers = _.filter(vectorLayers, function (layer) {
+                    return _.has(layer, "mouseHoverField") && layer.mouseHoverField !== "";
+                }),
+                mouseHoverInfos = _.map(mouseHoverLayers, function (layer) {
+                    return _.pick(layer, "id", "mouseHoverField");
+                });
 
-            _.each(wfsList, function (element) {
-                if (_.has(element, "mouseHoverField")) {
-                    wfsListFiltered.push({
-                        layerId: element.id,
-                        fieldname: element.mouseHoverField
-                    });
-                }
-            });
-
-            this.setWfsList(wfsListFiltered);
+            this.setMouseHoverInfos(mouseHoverInfos);
         },
 
         /**
@@ -191,12 +189,6 @@ define(function (require) {
             }
         },
 
-        getLayerInfosFromWfsList: function (element) {
-            return _.find(this.getWfsList(), function (ele) {
-                return ele.layerId === element.layerId;
-            });
-        },
-
         pickValue: function (mouseHoverField, featureProperties) {
             var value = "";
 
@@ -223,17 +215,20 @@ define(function (require) {
          * @param  {Array} pFeaturesArray Features at MousePosition
          */
         checkTextArray: function (featureArray) {
-            var textArray = [],
+            var mouseHoverInfos = this.getMouseHoverInfos(),
+                textArray = [],
                 textArrayCheckedLength,
                 textArrayBreaked;
 
             // für jedes gehoverte Feature...
             _.each(featureArray, function (element) {
                 var featureProperties = element.feature.getProperties(),
-                    layerInfos = this.getLayerInfosFromWfsList(element);
+                    layerInfos = _.find(mouseHoverInfos, function (mouseHoverInfo) {
+                        return mouseHoverInfo.id === element.layerId;
+                    });
 
                 if (!_.isUndefined(layerInfos)) {
-                    textArray.push(this.pickValue(layerInfos.fieldname, featureProperties));
+                    textArray.push(this.pickValue(layerInfos.mouseHoverField, featureProperties));
                 }
             }, this);
             textArrayCheckedLength = this.checkMaxFeaturesToShow(textArray);
@@ -280,15 +275,6 @@ define(function (require) {
             return textArrayBreaked;
         },
 
-        // getter for wfsList
-        getWfsList: function () {
-            return this.get("wfsList");
-        },
-        // setter for wfsList
-        setWfsList: function (value) {
-            this.set("wfsList", value);
-        },
-
         // getter for minShift
         getMinShift: function () {
             return this.get("minShift");
@@ -325,6 +311,15 @@ define(function (require) {
         setMhpOverlay: function (value) {
             this.set("mhpOverlay", value);
             Radio.trigger("Map", "addOverlay", value);
+        },
+
+        // getter for mouseHoverInfos
+        getMouseHoverInfos: function () {
+            return this.get("mouseHoverInfos");
+        },
+        // setter for mouseHoverInfos
+        setMouseHoverInfos: function (value) {
+            this.set("mouseHoverInfos", value);
         }
     });
 
