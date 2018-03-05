@@ -210,6 +210,12 @@
       "epsg": "EPSG:4326",
       "utc" : "+1",
       "gfiTheme" : "elektroladesaeulen",
+      "gfiParams" : {
+        "startDate_" : "25.01.2018",
+        "endDate_" : "28.02.2018",
+        "periodTime" : 12,
+        "periodUnit" : "Wochen"
+      },
       "gfiAttributes" : {
          "phenomenonTime" : "Letze Zustandsänderung",
          "state" : "Zustand",

@@ -13,15 +13,21 @@ define(function (require) {
         },
 
         toggleTab: function (evt) {
-            var gfiSize = {
-                width: $(".gfi-content").css("width").slice(0, -2),
-                height: $(".gfi-content").css("height").slice(0, -2)
-            };
+            if (_.isUndefined(this.model.get("gfiHeight")) || _.isUndefined(this.model.get("gfiWidth"))) {
+                var gfiSize = {
+                    width: $(".gfi-content").css("width").slice(0, -2),
+                    height: $(".gfi-content").css("height").slice(0, -2)
+                };
+
+                this.model.set("gfiHeight", this.model.calculateHeight(gfiSize.height));
+                this.model.set("gfiWidth", gfiSize.width);
+            }
 
             // delete all graphs
             this.removeAllData();
 
-            var contentId = $(evt.currentTarget).attr("value");
+            var contentId = $(evt.currentTarget).attr("value"),
+                index = 3;
 
             // deactivate all tabs and their contents
             $(evt.currentTarget).parent().find("li").each(function (index, li) {
@@ -38,23 +44,24 @@ define(function (require) {
             $("#" + contentId).addClass("in");
 
             if (contentId === "diagrammVerfuegbar") {
-                this.loadDiagramm("available", ".ladesaeulenVerfuegbar-graph", gfiSize);
+                this.loadDiagramm("available", ".ladesaeulenVerfuegbar-graph", index);
             }
             else if (contentId === "diagrammBelegt") {
-                this.loadDiagramm("charging", ".ladesaeulenBelegt-graph", gfiSize);
+                this.loadDiagramm("charging", ".ladesaeulenBelegt-graph", index);
             }
             else if (contentId === "diagrammAusserBetrieb") {
-                this.loadDiagramm("outoforder", ".ladesaeulenAusserBetrieb-graph", gfiSize);
+                this.loadDiagramm("outoforder", ".ladesaeulenAusserBetrieb-graph", index);
+            }
+            else if (contentId === "indikatoren") {
+                this.drawIndicator(".tabIndikator");
             }
         },
 
-        loadDiagramm: function (state, graphTag, gfiSize) {
-            // this.model.createD3Document(state, graphTag, gfiSize);
-            this.model.triggerToBarGraph(state, graphTag, gfiSize);
+        loadDiagramm: function (state, graphTag, index) {
+            this.model.triggerToBarGraph(state, graphTag, index);
         },
 
-
-        removeAllData: function() {
+        removeAllData: function () {
             $(".ladesaeulenVerfuegbar-graph svg").remove();
             $(".ladesaeulenBelegt-graph svg").remove();
             $(".ladesaeulenAusserBetrieb-graph svg").remove();
@@ -62,6 +69,12 @@ define(function (require) {
             $(".ladesaeulenBelegt-graph p").remove();
             $(".ladesaeulenAusserBetrieb-graph p").remove();
         },
+
+        drawIndicator: function (tag) {
+            console.log("test");
+            // $(tag).append("<table class=table>")
+            // $(tag).append("<thead>")
+        }
     });
 
     return ElektroladesaeulenThemeView;

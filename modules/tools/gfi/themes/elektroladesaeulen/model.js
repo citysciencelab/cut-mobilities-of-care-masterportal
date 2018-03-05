@@ -14,20 +14,19 @@ define(function (require) {
             });
         },
 
-        /**
-         * get historical for visible gfi data asynchronously
-         */
         loadData: function () {
             if (this.get("isVisible") === true) {
-                // set cursor to wait
-                $(".tab-content").addClass("busy");
-                $(".lgv-container").addClass("busy");
-
                 var gfiContent = this.get("gfiContent"),
                     allProperties = this.splitProperties(gfiContent.allProperties),
-                    dataStreamIds = allProperties.dataStreamId;
+                    dataStreamIds = allProperties.dataStreamId,
+                    historicalData = this.createHistoricalData(false, dataStreamIds);
 
-                this.createHistoricalData(true, dataStreamIds);
+                this.processChargingIndicator(dataStreamIds);
+
+                // start processing data
+                this.processDataForAllWeekdays("available", historicalData);
+                this.processDataForAllWeekdays("charging", historicalData);
+                this.processDataForAllWeekdays("outoforder", historicalData);
             }
         },
 
@@ -38,26 +37,50 @@ define(function (require) {
                 dataStreamIds = allProperties.dataStreamId,
                 requestURL = allProperties.requestURL,
                 versionURL = allProperties.versionURL,
+                gfiParams = this.get("feature").get("gfiParams"),
                 indicatorDataArray;
-
-            // Alle Properties lassen sich auch so holen
-            // this.attributes.feature.getProperties();
-            // allProperties = this.splitProperties(this.collection.models[0].attributes.feature.getProperties()),
 
             // set Properties
             this.set("requestURL", requestURL);
             this.set("versionURL", versionURL);
             this.set("dataStreamIds", dataStreamIds);
+            this.set("gfiParams", gfiParams);
+
+            this.createHeading(allProperties);
 
             gfiProperties = this.addChargingIndicator(gfiProperties, dataStreamIds);
             gfiProperties = this.changeStateToGerman(gfiProperties);
 
             this.set("gfiProperties", gfiProperties);
-            this.createHeading(allProperties);
+        },
+
+        processChargingIndicator: function (dataStreamIds) {
+            var indicatorDataArray = this.createChargingIndicator(false, dataStreamIds),
+                indicatorPropertiesArray = [],
+                indicatorPropertiesObj = {},
+                tableheadIndicatorArray = [];
+
+            // add indiocator to gfiProperties
+            _.each(indicatorDataArray, function (indicator) {
+                var erg = 0;
+
+                tableheadIndicatorArray.push(indicator.year);
+                _.each(indicator.loadingCount, function (value) {
+                    erg = erg + value;
+                });
+
+                indicatorPropertiesArray.push(erg);
+            });
+
+            indicatorPropertiesObj["Anzahl der Ladungen"] = indicatorPropertiesArray;
+
+            this.set("tableheadIndicatorArray", tableheadIndicatorArray);
+            this.set("indicatorPropertiesObj", indicatorPropertiesObj);
+
         },
 
         addChargingIndicator: function (gfiProperties, dataStreamIds) {
-            indicatorDataArray = this.createChargingIndicator(false, dataStreamIds);
+            var indicatorDataArray = this.createChargingIndicator(false, dataStreamIds);
 
             // add indiocator to gfiProperties
             _.each(indicatorDataArray, function (indicator) {
@@ -114,7 +137,7 @@ define(function (require) {
 
             if (this.attributes.name.indexOf("Elektro") !== -1) {
                 this.createHeadingChargingStation(allProperties, headTitleObject);
-                this.createTableHeadingChargingStation(allProperties, tableheadArray);
+                tableheadArray = this.createTableHeadingChargingStation(allProperties, tableheadArray);
             }
 
             this.set("tableheadArray", tableheadArray);
@@ -139,29 +162,23 @@ define(function (require) {
             return tableheadArray;
         },
 
-        triggerToBarGraph: function (targetResult, graphTag, gfiSize) {
-            this.adjustGfiSize(gfiSize);
-
+        triggerToBarGraph: function (targetResult, graphTag, index) {
             var width = this.get("gfiWidth"),
                 height = this.get("gfiHeight"),
-                processedData = this.get(targetResult + "ProcessedData"),
-                graphTag;
-
-            // if no data then break
-            if (_.isUndefined(processedData)) {
-                return;
-            }
-
-            processedData = this.get(targetResult + "ProcessedData");
+                graphTag,
+                dataByWeekday = this.get("weekday" + targetResult),
+                dataPerHour,
+                processedData;
 
             // set error message if data to targetresult does not exist
-            if (_.isNull(processedData)) {
+            if (_.isNull(dataByWeekday)) {
                 this.drawErrorMessage(graphTag, width, height);
                 return;
             }
 
-            // *** eine andere Methode wäre die Zeitreihenanalyse ***
-            // processedData = this.calculateWithAnotherFunction(dataPerHour);
+            // process data for day with given index (0 = today)
+            dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday[index], targetResult);
+            processedData = this.calculateArithmeticMean(dataPerHour);
 
             // config for style the graph
             graphConfig = {
@@ -186,7 +203,7 @@ define(function (require) {
                     unit: "Uhr"
                 },
                 xAxisLabel: {
-                    label: this.createXAxisLabel(targetResult),
+                    label: this.createXAxisLabel(index, targetResult),
                     offset: 10,
                     textAnchor: "middle",
                     fill: "#000",
@@ -199,10 +216,7 @@ define(function (require) {
             Radio.trigger("Graph", "createGraph", graphConfig);;
         },
 
-        // createD3Document: function (targetResult, graphTag, gfiSize) {
-        createD3Document: function (targetResult, historicalData) {
-            var startTime = new Date().getTime();
-
+        processDataForAllWeekdays: function (targetResult, historicalData) {
             var checkValue = this.checkValue(historicalData, targetResult),
                 historicalDataThisTimeZone,
                 historicalDataWithIndex,
@@ -213,41 +227,15 @@ define(function (require) {
 
             // set a message if no data is found and exit
             if (_.isUndefined(checkValue)) {
-                this.set(targetResult + "ProcessedData", null);
+                this.set("weekday" + targetResult, null);
                 return;
             }
 
             historicalDataThisTimeZone = this.changeTimeZone(historicalData);
-            var time2 = new Date().getTime();
-            // console.log(time2 - startTime);
             historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
-            var time3 = new Date().getTime();
-            // console.log(time3 - time2);
-            dataByWeekday = this.getDataByWeekday(historicalDataWithIndex);
-            var time4 = new Date().getTime();
-            // console.log(time4 - time3);
-            dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday, targetResult);
-            var time5 = new Date().getTime();
-            // console.log(time5 - time4);
-            processedData = this.calculateArithmeticMean(dataPerHour);
-            var time6 = new Date().getTime();
-            // console.log(time6 - time5);
+            dataByWeekday = this.divideDataByWeekday(historicalDataWithIndex);
 
-            this.set(targetResult + "ProcessedData", processedData);
-            var endTime = new Date().getTime();
-            // console.log("Total:");
-            // console.log(endTime - startTime);
-            // console.log("-----------");
-        },
-
-        adjustGfiSize: function (gfiSize) {
-            var width = this.get("gfiWidth"),
-                height = this.get("gfiHeight");
-
-            if (_.isUndefined(width) || _.isUndefined(height)) {
-                this.set("gfiHeight", this.calculateHeight(gfiSize.height));
-                this.set("gfiWidth", gfiSize.width);
-            }
+            this.set("weekday" + targetResult, dataByWeekday);
         },
 
         /**
@@ -258,9 +246,17 @@ define(function (require) {
          */
         createHistoricalData: function (async, dataStreamIds) {
             var historicalData = [],
-                query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc)";
+                gfiParams = this.get("gfiParams"),
+                query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc",
+                historicalData,
+                requestURL;
 
-            query = query + "&$filter=";
+            // add gfiParams
+            if (!_.isUndefined(gfiParams)) {
+                query = this.addGfiParams(query, gfiParams);
+            }
+
+            query = query + ")&$filter=";
             _.each(dataStreamIds, function (id, index) {
                 query = query + "@iot.id eq'" + id + "'";
 
@@ -269,7 +265,105 @@ define(function (require) {
                 }
             });
 
-            this.sendRequestForHistoricalData(this.buildRequestForHistoricalData(query), async);
+            requestURL = this.buildRequestForHistoricalData(query);
+            historicalData = this.sendRequest(requestURL, async);
+
+            // if with a request not all data can be fetched
+            _.each(historicalData, function (data) {
+                var observationsID = data["@iot.id"],
+                    observationsCount = data["Observations@iot.count"],
+                    observationsLength = data.Observations.length;
+
+                if (observationsCount > observationsLength) {
+                    for (var i = observationsLength; i < observationsCount; i += observationsLength) {
+                        var skipRequestURL = requestURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
+                            skipHistoricalData = this.sendRequest(skipRequestURL, async);
+
+                        data.Observations.push.apply(data.Observations, skipHistoricalData[0].Observations);
+                    }
+                }
+
+            }, this);
+
+            return historicalData;
+        },
+
+        /**
+         * adds time params to query by given gfiParams
+         * @param {String} query
+         * @param {[Object]} gfiParams
+         * @return {String} extended query
+         */
+        addGfiParams: function (query, gfiParams) {
+            var startDate = gfiParams.startDate,
+                endDate = gfiParams.endDate,
+                periodTime = gfiParams.periodTime,
+                periodUnit = gfiParams.periodUnit;
+
+            // handle Dates
+            if (!_.isUndefined(startDate)) {
+                // 7 days before to find the last state
+                startDate = moment(startDate, "DD.MM.YYYY").subtract(7, "days").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
+
+                query = query + ";$filter=phenomenonTime gt " + startDate;
+
+                if (!_.isUndefined(endDate)) {
+                    endDate = moment(endDate, "DD.MM.YYYY").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
+
+                    query = query + " and phenomenonTime lt " + endDate;
+                }
+            }
+            // handle period
+            else if (!_.isUndefined(periodTime) && !_.isUndefined(periodUnit)) {
+                var translate = {
+                    Jahr: "years",
+                    Monat: "months",
+                    Woche: "weeks",
+                    Tag: "days",
+                    Jahre: "years",
+                    Monate: "months",
+                    Wochen: "weeks",
+                    Tage: "days"
+                    },
+                    unit = translate[periodUnit],
+                    // 7 days before to find the last state
+                    time = moment().subtract(periodTime, unit).subtract(7, "days").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
+
+                query = query + ";$filter=phenomenonTime gt " + time;
+
+            }
+
+            return query;
+        },
+
+         /**
+         * returns the historicalData by Ajax-Request
+         * @param  {String} requestURLHistoricaldata - url with query
+         * @param  {boolean} async
+         * @return {[Object]} historicalData
+         */
+        sendRequest: function (requestURLHistoricaldata, async) {
+           var response;
+
+           $.ajax({
+                url: requestURLHistoricaldata,
+                async: async,
+                type: "GET",
+                context: this,
+
+                // handling response
+                success: function (resp) {
+                    response = resp.value;
+                },
+                error: function (jqXHR, errorText, error) {
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Es ist ein unerwarteter Fehler beim Anfordern der historischen Daten aufgetreten!</strong>",
+                        kategorie: "alert-danger"
+                    });
+                }
+            });
+
+           return response;
         },
 
         createChargingIndicator: function (async, dataStreamIds) {
@@ -292,9 +386,9 @@ define(function (require) {
                         }
                     });
 
-                    data = this.sendRequestForIndicator(this.buildRequestForHistoricalData(query), async);
+                    data = this.sendRequest(this.buildRequestForHistoricalData(query), async);
 
-                    _.each(data.value, function (loadingPoint) {
+                    _.each(data, function (loadingPoint) {
                         array.push(loadingPoint["Observations@iot.count"]);
                     });
 
@@ -305,64 +399,6 @@ define(function (require) {
                 }
 
             return dataArray;
-        },
-
-        sendRequestForIndicator: function (requestURLHistoricaldata, async) {
-            var response;
-
-            $.ajax({
-                url: requestURLHistoricaldata,
-                async: async,
-                type: "GET",
-                context: this,
-
-                // handling response
-                success: function (resp) {
-                    response = resp;
-                },
-                error: function (jqXHR, errorText, error) {
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Es ist ein unerwarteter Fehler beim Anfordern der Daten für die Indikatoren aufgetreten!</strong>",
-                        kategorie: "alert-danger"
-                    });
-                }
-            });
-
-            return response;
-        },
-
-        /**
-         * returns the historicalData by Ajax-Request
-         * @param  {String} requestURLHistoricaldata - url with query
-         * @param  {boolean} async
-         * @return {[Object]} historicalData
-         */
-        sendRequestForHistoricalData: function (requestURLHistoricaldata, async) {
-           $.ajax({
-                url: requestURLHistoricaldata,
-                async: async,
-                type: "GET",
-                context: this,
-
-                // handling response
-                success: function (resp) {
-                    var historicalData = resp.value;
-
-                    this.createD3Document("available", historicalData);
-                    this.createD3Document("charging", historicalData);
-                    this.createD3Document("outoforder", historicalData);
-
-                    // finish cursor wait
-                    $(".tab-content").removeClass("busy");
-                    $(".lgv-container").removeClass("busy");
-                },
-                error: function (jqXHR, errorText, error) {
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Es ist ein unerwarteter Fehler beim Anfordern der historischen Daten aufgetreten!</strong>",
-                        kategorie: "alert-danger"
-                    });
-                }
-            });
         },
 
         /**
@@ -432,106 +468,47 @@ define(function (require) {
             return historicalData;
         },
 
-        /**
-         * filters the objects of the same day of the week as today
-         * comparisons are made with the date
-         * @param  {[object]} historicalData
-         * @return {[object]}
-         */
-        getDataByWeekday: function (historicalData) {
-            var processedArray = [];
+        divideDataByWeekday: function (historicalDataWithIndex) {
+            var weekArray = [[], [], [], [], [], [], []];
 
-            _.each(historicalData, function (loadingPointData) {
-                var observations = loadingPointData.Observations,
+            _.each(historicalDataWithIndex, function (historicalData) {
+                var observations = historicalData.Observations,
+                    actualDay = moment().format("YYYY-MM-DD"),
                     lastDay = moment(observations[(observations).length - 1].phenomenonTime).format("YYYY-MM-DD"),
-                    boolean = true,
-                    count = 0,
-                    loadingPointDataArray = [],
-                    obsStart = 0,
-                    obsEnd = observations.length;
+                    arrayIndex = 0;
 
-                // this.set("searchIndex", obsStart);
+                weekArray[arrayIndex].push([]);
 
-                // loop about all days of the week that correspond to today's
-                while (boolean) {
-                    var intervalDay = moment().subtract(count, "days").format("YYYY-MM-DD"),
-                        dataArray = [];
+                _.each(observations, function (data, index) {
+                    var phenomenonDay = moment(data.phenomenonTime).format("YYYY-MM-DD"),
+                        zeroTime,
+                        zeroResult,
+                        weekArrayIndexLength;
 
-                    if (moment(intervalDay).diff(moment(lastDay)) < 0) {
-                        boolean = false;
-                        continue;
-                    }
-                    _.each(observations, function (data) {
-                        var day = moment(data.phenomenonTime).format("YYYY-MM-DD");
-
-                        if (day === intervalDay) {
-                            dataArray.push(data);
+                    // solange bis data verarbeitet wurde
+                    while (true) {
+                        weekArrayIndexLength = weekArray[arrayIndex].length - 1;
+                        // wenn Observationstag = aktueller Tag, dann hinzufügen
+                        if (phenomenonDay === actualDay) {
+                            weekArray[arrayIndex][weekArrayIndexLength].push(data);
+                            break; // data wurde verarbeitet
                         }
-                    });
+                        // object mit 0 Uhr und dem status des aktuellen Tages hinzufügen
+                        else {
+                            zeroTime = moment(actualDay).format("YYYY-MM-DDTHH:mm:ss");
+                            zeroResult = data.result;
+                            weekArray[arrayIndex][weekArrayIndexLength].push({phenomenonTime: zeroTime, result: zeroResult});
 
-                    initialWeekdayObj = this.createOfInitialTimeStepForOneDay(dataArray, observations, intervalDay, obsStart, obsEnd)
-                    dataArray.push(initialWeekdayObj);
-
-                    loadingPointDataArray.push(dataArray);
-                    count += 7;
-                    obsStart = initialWeekdayObj.index;
-                }
-                processedArray.push(loadingPointDataArray);
-            }, this);
-
-            return processedArray;
-        },
-
-        /**
-         * creates an initial entry at 0 o'clock for one day
-         * this searches for the last object of the previous day
-         * @param  {array} dataArray - array with the entries of the day
-         * @param  {[object]} observations - all observations from historicalData
-         * @param  {String} intervalDay - current day
-         * @param  {number} obsStart - restriction to search for the next record
-         * @param  {number} obsEnd - length from dataArray
-         * @return {Obj} with entrys of the day plus initial value
-         */
-        createOfInitialTimeStepForOneDay: function (dataArray, observations, intervalDay, obsStart, obsEnd) {
-            var initialTime = moment(intervalDay).format("YYYY-MM-DDTHH:mm:ss"),
-                initialWeekdayObj;
-
-            // find last data by index
-            if (dataArray.length > 0) {
-                var i = dataArray[dataArray.length - 1].index,
-                    dayBevorWeekdayObj = _.findWhere(observations, {index: i + 1});
-
-                    if (_.isUndefined(dayBevorWeekdayObj)) {
-                        var dayObj = _.findWhere(observations, {index: i});
-
-                        initialWeekdayObj = dayObj;
-                        initialWeekdayObj.result = undefined;
-                        initialWeekdayObj.index = i + 1;
+                            // Danach aktuellen Tag auf vorherigen Tag und ArrayIndex auf nächstes Array setzen
+                            actualDay = moment(actualDay).subtract(1, "days").format("YYYY-MM-DD");
+                            (arrayIndex >= 6) ? arrayIndex = 0 : arrayIndex++;
+                            weekArray[arrayIndex].push([]);
+                        }
                     }
-                    else {
-                        initialWeekdayObj = dayBevorWeekdayObj;
-                    }
-            }
-            else {
-                var reduceIntervalDay = moment(intervalDay).subtract(1, "days").format("YYYY-MM-DD"),
-                    nextDataObj = undefined,
-                    initialWeekdayObj;
+                });
+            });
 
-                // search for next event, date by date
-                while (_.isUndefined(nextDataObj)) {
-                    nextDataObj = _.find(observations.slice(obsStart, obsEnd), function (data) {
-                        return moment(data.phenomenonTime).format("YYYY-MM-DD") === reduceIntervalDay;
-                    });
-
-                    reduceIntervalDay = moment(reduceIntervalDay).subtract(1, "days").format("YYYY-MM-DD");
-                }
-
-                initialWeekdayObj = nextDataObj;
-            }
-
-            initialWeekdayObj.phenomenonTime = initialTime;
-
-            return initialWeekdayObj;
+            return weekArray;
         },
 
         /**
@@ -544,19 +521,13 @@ define(function (require) {
        calculateWorkloadPerDayPerHour: function (dataByWeekday, targetResult) {
             var allDataArray = [];
 
-            _.each(dataByWeekday, function (loadingPointData) {
-                var loadingPointArray = [];
-
-                _.each(loadingPointData, function (dayData) {
+            _.each(dataByWeekday, function (dayData) {
                     var dayObj = this.createInitialDayPerHour(),
                         dayDataReverse = dayData.reverse();
 
                     dayObj = this.calculateWorkloadforOneDay(dayObj, dayDataReverse, targetResult);
-                    loadingPointArray.push(dayObj);
+                    allDataArray.push(dayObj);
                 }, this);
-
-                allDataArray.push(loadingPointArray);
-            }, this);
 
             return allDataArray;
         },
@@ -572,23 +543,6 @@ define(function (require) {
             for (var i = 0; i < 24; i++) {
                 dayObj[i] = 0;
             }
-
-            return dayObj;
-        },
-
-        /**
-         * if a day has only one event, then set values for whole day with result from this
-         * @param {object} dayObj
-         * @param {array} dayData
-         * @param {String} targetResult
-         */
-        addValueToWholeDay: function (dayObj, dayData, targetResult) {
-            var result = dayData[0].result,
-                erg = (targetResult === result) ? 1 : 0;
-
-            dayObj = _.object(_.map(dayObj, function (value, key) {
-                return [key, erg];
-            }));
 
             return dayObj;
         },
@@ -613,7 +567,7 @@ define(function (require) {
 
                 // if the requested period is in the future
                 if (moment(nextTimeStep).toDate().getTime() > moment().toDate().getTime()) {
-                    dayObj[i] = undefined
+                    dayObj[i] = undefined;
                 }
                 else if (_.isEmpty(dataByActualTimeStep)) {
                     dayObj[i] = actualStateAsNumber;
@@ -638,6 +592,7 @@ define(function (require) {
         filterDataByActualTimeStep: function (dayData, actualTimeStep, nextTimeStep) {
             return _.filter(dayData, function (data) {
                 var dataToCheck = moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss");
+
                 return ((dataToCheck >= actualTimeStep) && (dataToCheck < nextTimeStep));
             });
         },
@@ -689,8 +644,7 @@ define(function (require) {
          * @return {object}
          */
         calculateArithmeticMean: function (dataPerHour) {
-            var allData = _.flatten(dataPerHour),
-                dayLength = 24,
+            var dayLength = 24,
                 dayMeanArray = [];
 
             for (var i = 0; i <= dayLength; i++) {
@@ -699,7 +653,7 @@ define(function (require) {
                     obj = {};
 
                 // returns an array which contains values at hour i
-                _.each(allData, function (day) {
+                _.each(dataPerHour, function (day) {
                     arrayPerHour.push(_.pick(day, String(i))[i]);
                 });
 
@@ -744,8 +698,8 @@ define(function (require) {
          * @param  {String} state
          * @return {String}
          */
-        createXAxisLabel: function (state) {
-            var today = moment().format("dddd"),
+        createXAxisLabel: function (index, state) {
+            var today = moment().subtract(index, "days").format("dddd"),
                 stateLabel;
 
             if (state === "available") {

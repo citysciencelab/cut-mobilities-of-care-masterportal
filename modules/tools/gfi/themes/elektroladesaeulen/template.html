@@ -7,11 +7,12 @@
 </div>
 <ul class="nav nav-pills" >
     <li value= "daten" class="tab-toggle active"><a data-toggle="tab" href="#tabelle">Daten</a></li>
+    <li value= "indikatoren" class="tab-toggle"><a data-toggle="tab" href="#indikatoren">Indikatoren</a></li>
     <li value= "diagrammVerfuegbar" class="tab-toggle"><a data-toggle="tab" href="#diagrammVerfuegbar">Verfügbarkeit</a></li>
     <li value= "diagrammBelegt" class="tab-toggle"><a data-toggle="tab" href="#diagrammBelegt">Auslastung</a></li>
     <li value= "diagrammAusserBetrieb" class="tab-toggle"><a data-toggle="tab" href="#diagrammAusserBetrieb">Außer Betrieb</a></li>
 </ul>
-<div class="tab-content busy">
+<div class="tab-content">
 <div id= "daten" class="tab-pane fade in active">
     <table class="table">
          <thead>
@@ -33,6 +34,10 @@
             <% }); %>
         </tbody>
     </table>
+</div>
+<div id= "indikatoren" class="tabIndikator-content">
+    <div class="tabIndikator-pane fade">
+    </div>
 </div>
 <div id= "diagrammVerfuegbar" class="tabVerfuegbar-pane fade">
     <div id="d3-div" class="ladesaeulenVerfuegbar-graph">
