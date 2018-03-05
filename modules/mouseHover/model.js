@@ -196,6 +196,7 @@ define(function (require) {
                 return ele.layerId === element.layerId;
             });
         },
+
         pickValue: function (mouseHoverField, featureProperties) {
             var value = "";
 
