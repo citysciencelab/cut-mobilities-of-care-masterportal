@@ -129,28 +129,7 @@ define(function (require) {
             this.createSnippets(featureAttributesMap);
         },
 
-        collectAttributeValues: function (featureAttributesMap) {
-            return this.getRemainingAttributeValues(featureAttributesMap);
-        },
 
-        /**
-         * [description]
-         * @param  {[type]} typeMap [description]
-         * @return {[type]}         [description]
-         */
-        getRemainingAttributeValues: function (featureAttributesMap, features) {
-            var features = features || this.get("features");
-
-            _.each(featureAttributesMap, function (featureAttribute) {
-                featureAttribute.values = [];
-
-                _.each(features, function (feature) {
-                    featureAttribute.values.push(this.parseValuesFromString(feature, featureAttribute.name));
-                }, this);
-                featureAttribute.values = _.unique(_.flatten(featureAttribute.values));
-            }, this);
-            return featureAttributesMap;
-        },
         /**
          * [getValuesFromFeature description]
          * @param  {ol.feature} feature
@@ -286,29 +265,49 @@ define(function (require) {
          * @return {object[]}                    array of attributes and their values that are still selectable
          */
         collectSelectableOptions: function (features, selectedAttributes, allAttributes) {
-            var selectableOptions = [];
+            var selectableOptions = [],
+                selectableValues = [];
 
-            if (_.isUndefined(allAttributes) === false && allAttributes.length === 0) {
-                selectableOptions = this.getRemainingAttributeValues(allAttributes, features);
-            }
-            else {
-                _.each(allAttributes, function (attribute) {
-                    var selectableValues = {name: attribute.name, values: []};
+            _.each(allAttributes, function (attribute) {
+                selectableValues = {name: attribute.name, displayName: undefined, type: attribute.type, values: []};
 
-                    _.each(features, function (feature) {
-                        var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
-                            return attr.attrName !== attribute.name;
-                        }));
-
-                        if (isMatch) {
-                            selectableValues.values.push(this.getValuesFromFeature(feature, attribute.name, attribute.type));
-                        }
-                    }, this);
-                    selectableValues.values = _.unique(_.flatten(selectableValues.values));
-                    selectableOptions.push(selectableValues);
+                _.each(features, function (feature) {
+                    var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
+                        return attr.attrName !== attribute.name;
+                    }));
+                    if (isMatch) {
+                        selectableValues.values.push(this.parseValuesFromString(feature, attribute.name));
+                    }
                 }, this);
-            }
+                selectableValues.values = _.unique(_.flatten(selectableValues.values));
+
+                selectableOptions.push(selectableValues);
+            }, this);
+
             return selectableOptions;
+        },
+        collectAttributeValues: function (allAttributes) {
+            //this.getRemainingAttributeValues(allAttributes);
+
+            return this.collectSelectableOptions(this.get("features"), [], allAttributes);
+        },
+        /**
+         * [description]
+         * @param  {[type]} typeMap [description]
+         * @return {[type]}         [description]
+         */
+        getRemainingAttributeValues: function (featureAttributesMap, features) {
+            var features = features || this.get("features");
+
+            _.each(featureAttributesMap, function (featureAttribute) {
+                featureAttribute.values = [];
+
+                _.each(features, function (feature) {
+                    featureAttribute.values.push(this.parseValuesFromString(feature, featureAttribute.name));
+                }, this);
+                featureAttribute.values = _.unique(_.flatten(featureAttribute.values));
+            }, this);
+            return featureAttributesMap;
         },
         /**
          * after every filtering the snippets get updated with selectable values
