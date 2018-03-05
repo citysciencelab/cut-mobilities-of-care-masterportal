@@ -11,6 +11,7 @@ define(function (require) {
             $("#map").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
 
             this.model.setMhpOverlay (new ol.Overlay({
+                id: "mousehoveroverlay",
                 element: $("#mousehoverpopup")[0]
             }));
 
@@ -30,22 +31,17 @@ define(function (require) {
             var overlay = this.model.getMhpOverlay(),
                 element = overlay.getElement();
 
+            this.destroy();
+
             $(element).tooltip({
                 html: true,
                 title: text,
-                placement: function () {
-                    if (this.getPosition().top > $("#map").height() / 2) {
-                        return "top";
-                    }
-                    else {
-                        return "bottom";
-                    }
-                },
                 template: "<div class='tooltip' role='tooltip'><div class='tooltip-inner mouseHover'></div></div>",
+                placement: "auto",
                 animation: true,
                 trigger: "manual",
                 viewport: "#map"
-            });
+            }, this);
 
             overlay.setPosition(position);
             $(element).tooltip("show");

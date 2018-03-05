@@ -148,7 +148,6 @@ define(function (require) {
                     this.movePopup();
                 }
                 else {
-                    this.destroyPopup();
                     this.setTextArray(textArray);
                     this.showPopup();
                 }
