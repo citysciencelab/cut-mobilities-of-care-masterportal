@@ -25,7 +25,7 @@ define([
 
             channel.reply({
                 "getProjection": this.getProjection,
-                "getNamedProjections": this.getNamedProjections,
+                "getProjections": this.getProjections,
                 "transformToMapProjection": this.transformToMapProjection,
                 "transformFromMapProjection": this.transformFromMapProjection,
                 "transform": this.transform
@@ -52,6 +52,22 @@ define([
 
         getProjection: function (name) {
             return Proj4.defs(name);
+        },
+
+        getProjections: function () {
+            var namedProjections = this.getNamedProjections(),
+                projections = [];
+
+            _.each(namedProjections, function (namedProjection) {
+                var projection = Proj4.defs(namedProjection[0]);
+
+                _.extend(projection, {
+                    name: namedProjection[0]
+                });
+                projections.push(projection);
+            });
+
+            return projections;
         },
 
         transformToMapProjection: function (sourceProjection, point) {
