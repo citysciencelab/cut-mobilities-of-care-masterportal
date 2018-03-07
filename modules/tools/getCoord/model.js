@@ -59,6 +59,7 @@ define([
         },
 
         positionClicked: function (position) {
+            this.setPositionMapProjection(position);
             this.setUpdatePosition(!this.getUpdatePosition());
         },
 
