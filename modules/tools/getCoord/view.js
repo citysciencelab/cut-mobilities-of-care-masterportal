@@ -17,8 +17,7 @@ define(function (require) {
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin change:url": this.render,
-                "change:positionMapProjection": this.changedPosition,
-                "change:updatePosition": this.updateClickInfo
+                "change:positionMapProjection": this.changedPosition
             });
         },
 
@@ -96,17 +95,6 @@ define(function (require) {
             }
             catch (e) {
                 console.warn("Unable to copy text to clipboard.");
-            }
-        },
-
-        updateClickInfo: function () {
-            var updatePosition = this.model.getUpdatePosition();
-
-            if (updatePosition === true) {
-                $("#clickInfo").text("Klicken, um Anzeige einzufrieren.");
-            }
-            else {
-                $("#clickInfo").text("Klicken, um Koordinaten abzufragen.");
             }
         }
     });
