@@ -32,6 +32,7 @@ define(function (require) {
                 this.delegateEvents();
             }
             else {
+                this.model.setUpdatePosition(true);
                 this.model.removeInteraction();
                 this.undelegateEvents();
             }
@@ -66,7 +67,6 @@ define(function (require) {
 
             $("#coordinatesEastingField").val(easting);
             $("#coordinatesNorthingField").val(northing);
-            $("#hiddenCoordinates").val(position);
         },
 
         adjustWindow: function (targetProjection) {
