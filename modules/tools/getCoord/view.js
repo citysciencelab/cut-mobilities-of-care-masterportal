@@ -9,12 +9,16 @@ define(function (require) {
         className: "win-body",
         template: _.template(GetCoordTemplate),
         events: {
-            "click .glyphicon-remove": "destroy"
+            "click .glyphicon-remove": "destroy",
+            "change #coordSystemField": "changedPosition",
+            "click #coordinatesEastingField": "copyToClipboard",
+            "click #coordinatesNorthingField": "copyToClipboard"
         },
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin change:url": this.render,
-                "change:positionMapProjection": this.changedPosition
+                "change:positionMapProjection": this.changedPosition,
+                "change:updatePosition": this.updateClickInfo
             });
         },
 
@@ -56,13 +60,13 @@ define(function (require) {
             // kartesische Koordinaten
             else {
                 coord = this.model.getXY(position);
-                easting = coord.split(",")[0];
-                northing = coord.split(",")[1];
+                easting = coord.split(",")[0].trim();
+                northing = coord.split(",")[1].trim();
             }
 
             $("#coordinatesEastingField").val(easting);
             $("#coordinatesNorthingField").val(northing);
-
+            $("#hiddenCoordinates").val(position);
         },
 
         adjustWindow: function (targetProjection) {
@@ -75,6 +79,34 @@ define(function (require) {
             else {
                 $("#coordinatesEastingLabel").text("Rechtswert");
                 $("#coordinatesNorthingLabel").text("Hochwert");
+            }
+        },
+
+        /**
+         * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
+         * @param  {evt} evt Evt-Button
+         */
+        copyToClipboard: function (evt) {
+            var textField = evt.currentTarget;
+
+            $(textField).select();
+
+            try {
+                document.execCommand("copy");
+            }
+            catch (e) {
+                console.warn("Unable to copy text to clipboard.");
+            }
+        },
+
+        updateClickInfo: function () {
+            var updatePosition = this.model.getUpdatePosition();
+
+            if (updatePosition === true) {
+                $("#clickInfo").text("Klicken, um Anzeige einzufrieren.");
+            }
+            else {
+                $("#clickInfo").text("Klicken, um Koordinaten abzufragen.");
             }
         }
     });
