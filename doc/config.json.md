@@ -478,6 +478,7 @@ Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten,
 ******
 
 ###### Portalconfig.menu.tools.children.coord ######
+Ermöglicht die Ermittlung von Koordinaten in allen definierten Koordinatensystemen (siehe [namedProjections](config.js.md)). Der Titel wird dem "+title"-Attribut entnommen. Alternativ wird der Name (z.B. "EPSG:25832") verwendet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
