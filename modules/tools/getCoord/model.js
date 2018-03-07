@@ -8,7 +8,7 @@ define([
     var CoordPopup = Backbone.Model.extend({
          defaults: {
             selectPointerMove: null,
-            namedProjections: null,
+            projections: [],
             mapProjection: null,
             positionMapProjection: [],
             updatePosition: true
@@ -18,7 +18,7 @@ define([
                 "winParams": this.setStatus
             });
 
-            this.setNamedProjections(Radio.request("CRS", "getNamedProjections"));
+            this.setProjections(Radio.request("CRS", "getProjections"));
             this.setMapProjection(Radio.request("MapView", "getProjection"));
         },
 
@@ -37,7 +37,6 @@ define([
         createInteraction: function () {
             this.setSelectPointerMove(new ol.interaction.Pointer({
                 handleMoveEvent: function (evt) {
-                    console.log(evt);
                     this.checkPosition(evt.coordinate);
                 }.bind(this),
                 handleDownEvent: function (evt) {
@@ -63,11 +62,27 @@ define([
             this.setUpdatePosition(!this.getUpdatePosition());
         },
 
-        transformPosition: function (targetProjection) {
+        returnTransformedPosition: function (targetProjection) {
             var positionMapProjection = this.getPositionMapProjection(),
                 positionTargetProjection = Radio.request("CRS", "transformFromMapProjection", targetProjection, positionMapProjection);
 
             return positionTargetProjection;
+        },
+
+        returnProjectionByName: function (name) {
+            var projections = this.getProjections();
+
+            return _.find(projections, function (projection) {
+                return projection.name === name;
+            });
+        },
+
+        getCartesian: function (coord) {
+            return ol.coordinate.toStringHDMS(coord)
+        },
+
+        getXY: function (coord) {
+            return ol.coordinate.toStringXY(coord, 2);
         },
 
         // getter for selectPointerMove
@@ -88,13 +103,13 @@ define([
             this.set("mapProjection", value);
         },
 
-        // getter for namedProjections
-        getNamedProjections: function () {
-            return this.get("namedProjections");
+        // getter for projections
+        getProjections: function () {
+            return this.get("projections");
         },
-        // setter for namedProjections
-        setNamedProjections: function (value) {
-            this.set("namedProjections", value);
+        // setter for projections
+        setProjections: function (value) {
+            this.set("projections", value);
         },
 
         // getter for positionMapProjection

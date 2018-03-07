@@ -4,7 +4,7 @@ define(function (require) {
         GetCoordModel = require("modules/tools/getCoord/model"),
         GetCoord;
 
-    SearchByCoordView = Backbone.View.extend({
+    GetCoord = Backbone.View.extend({
         model: new GetCoordModel(),
         className: "win-body",
         template: _.template(GetCoordTemplate),
@@ -16,7 +16,6 @@ define(function (require) {
                 "change:isCollapsed change:isCurrentWin change:url": this.render,
                 "change:positionMapProjection": this.changedPosition
             });
-            this.listenTo(this.model, "change:coordinateGeo", this.render);
         },
 
         render: function () {
@@ -35,17 +34,50 @@ define(function (require) {
         },
 
         changedPosition: function () {
-            var targetProjection = $("#coordSystemField option:selected").text(),
-                position = this.model.transformPosition(targetProjection),
-                easting = (Math.round(position[0] * 100) / 100).toFixed(2);
-                northing = (Math.round(position[1] * 100) / 100).toFixed(2);
+            var targetProjectionName = $("#coordSystemField option:selected").val(),
+                position = this.model.returnTransformedPosition(targetProjectionName),
+                targetProjection = this.model.returnProjectionByName(targetProjectionName);
 
             if (position) {
-                $("#coordinatesEastingField").val(easting);
-                $("#coordinatesNorthingField").val(northing);
+                this.adjustPosition(position, targetProjection)
+                this.adjustWindow(targetProjection);
+            }
+        },
+
+        adjustPosition: function (position, targetProjection) {
+            var coord, easting, northing;
+
+            // geographische Koordinaten
+            if (targetProjection.projName === "longlat") {
+                coord = this.model.getCartesian(position);
+                easting = coord.substr(0,13);
+                northing = coord.substr(14);
+            }
+            // kartesische Koordinaten
+            else {
+                coord = this.model.getXY(position);
+                easting = coord.split(",")[0];
+                northing = coord.split(",")[1];
+            }
+
+            $("#coordinatesEastingField").val(easting);
+            $("#coordinatesNorthingField").val(northing);
+
+        },
+
+        adjustWindow: function (targetProjection) {
+            // geographische Koordinaten
+            if (targetProjection.projName === "longlat") {
+                $("#coordinatesEastingLabel").text("Breite");
+                $("#coordinatesNorthingLabel").text("Länge");
+            }
+            // kartesische Koordinaten
+            else {
+                $("#coordinatesEastingLabel").text("Rechtswert");
+                $("#coordinatesNorthingLabel").text("Hochwert");
             }
         }
     });
 
-    return SearchByCoordView;
+    return GetCoord;
 });
