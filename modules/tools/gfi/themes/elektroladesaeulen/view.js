@@ -2,6 +2,7 @@ define(function (require) {
 
     var ThemeView = require("modules/tools/gfi/themes/view"),
         ElektroladesaeulenThemeTemplate = require("text!modules/tools/gfi/themes/elektroladesaeulen/template.html"),
+        Config = require("config"),
         ElektroladesaeulenThemeView;
 
     ElektroladesaeulenThemeView = ThemeView.extend({
@@ -9,10 +10,31 @@ define(function (require) {
         className: "ladesaeulen",
         template: _.template(ElektroladesaeulenThemeTemplate),
         events: {
-            "click .tab-toggle": "toggleTab"
+            "click .tab-toggle": "toggleTab",
+            "click .kat": "changeGraph"
         },
 
+       changeGraph: function (evt) {
+            var actualIndex = this.model.get("dayIndex"),
+                buttonId = evt.currentTarget.id,
+                graphTyp = evt.currentTarget.parentElement.id;
+
+            this.removeAllData();
+
+            if (buttonId === "left") {
+                (actualIndex === 6) ? actualIndex = 0 : actualIndex++;
+            }
+            else if (buttonId === "right") {
+                (actualIndex === 0) ? actualIndex = 6 : actualIndex--;
+            }
+
+            this.setDiagrammParams(graphTyp, actualIndex);
+       },
+
         toggleTab: function (evt) {
+            var contentId = $(evt.currentTarget).attr("value"),
+                index = 0;
+
             if (_.isUndefined(this.model.get("gfiHeight")) || _.isUndefined(this.model.get("gfiWidth"))) {
                 var gfiSize = {
                     width: $(".gfi-content").css("width").slice(0, -2),
@@ -25,9 +47,6 @@ define(function (require) {
 
             // delete all graphs
             this.removeAllData();
-
-            var contentId = $(evt.currentTarget).attr("value"),
-                index = 0;
 
             // deactivate all tabs and their contents
             $(evt.currentTarget).parent().find("li").each(function (index, li) {
@@ -43,14 +62,24 @@ define(function (require) {
             $("#" + contentId).addClass("active");
             $("#" + contentId).addClass("in");
 
+            this.setDiagrammParams(contentId, index);
+        },
+
+        setDiagrammParams: function (contentId, index) {
+            // hide all buttons with arrows
+            $(".ladesaeulen .kat").hide();
+
             if (contentId === "diagrammVerfuegbar") {
                 this.loadDiagramm("available", ".ladesaeulenVerfuegbar-graph", index);
+                $(".ladesaeulen .verfuegbarButton").show();
             }
             else if (contentId === "diagrammBelegt") {
                 this.loadDiagramm("charging", ".ladesaeulenBelegt-graph", index);
+                $(".ladesaeulen .belegtButton").show();
             }
             else if (contentId === "diagrammAusserBetrieb") {
                 this.loadDiagramm("outoforder", ".ladesaeulenAusserBetrieb-graph", index);
+                $(".ladesaeulen .ausserBetriebButton").show();
             }
             else if (contentId === "indikatoren") {
                 this.drawIndicator(".tabIndikator");
@@ -65,15 +94,35 @@ define(function (require) {
             $(".ladesaeulenVerfuegbar-graph svg").remove();
             $(".ladesaeulenBelegt-graph svg").remove();
             $(".ladesaeulenAusserBetrieb-graph svg").remove();
-            $(".ladesaeulenVerfuegbar-graph p").remove();
-            $(".ladesaeulenBelegt-graph p").remove();
-            $(".ladesaeulenAusserBetrieb-graph p").remove();
+            $(".ladesaeulenVerfuegbar-graph .noData").remove();
+            $(".ladesaeulenBelegt-graph .noData").remove();
+            $(".ladesaeulenAusserBetrieb-graph .noData").remove();
+            $(".ladesaeulen .indicatorTable").remove();
         },
 
         drawIndicator: function (tag) {
-            console.log("test");
-            // $(tag).append("<table class=table>")
-            // $(tag).append("<thead>")
+            var tableHead = this.model.get("tableheadIndicatorArray"),
+                properties = this.model.get("indicatorPropertiesObj"),
+                height = this.model.get("gfiHeight"),
+                width = this.model.get("gfiWidth"),
+                content = "<table width='" + width + "' height='" + height + "' class='table indicatorTable'><thead><tr class='row'><th>Indikator</th>";
+
+            _.each(tableHead, function (head) {
+                content += "<th>" + head + "</th>";
+            });
+
+            content +=  "</tr></thead><tbody>";
+
+            _.each(properties, function (value, key) {
+                content += "<tr class='row'><th>" + key + "</th>";
+                _.each(value, function (val) {
+                    content += "<td>" + val + "</td>";
+                });
+                content += "</tr>";
+            });
+
+            content += "</tbody></table>";
+            $(".ladesaeulen .tabIndikator-pane").append(content);
         }
     });
 

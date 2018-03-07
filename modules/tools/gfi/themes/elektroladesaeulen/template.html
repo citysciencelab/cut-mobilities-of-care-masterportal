@@ -35,23 +35,21 @@
         </tbody>
     </table>
 </div>
-<div id= "indikatoren" class="tabIndikator-content">
-    <div class="tabIndikator-pane fade">
-    </div>
+<div class="tabIndikator-content">
+    <div id= "indikatoren" class="tabIndikator-pane fade"></div>
 </div>
 <div id= "diagrammVerfuegbar" class="tabVerfuegbar-pane fade">
-    <div id="d3-div" class="ladesaeulenVerfuegbar-graph">
-        <div class="group1-Wrapper">
-            <a onclick="imageSlider.previous()" class="group1-Prev"></a>
-            <a onclick="imageSlider.next()" class="group1-Next"></a>
-        </div>
-    </div>
+    <button id= "left" value="left" type="button" class="leftButton kat verfuegbarButton" title="Vorheriger Wochentag"></button>
+    <div id="d3-div" class="ladesaeulenVerfuegbar-graph"></div>
+    <button id= "right" value="right" type="button" class="rightButton kat verfuegbarButton" title="Nächster Wochentag"></button>
 </div>
 <div id= "diagrammBelegt" class="tabBesetzt-pane fade">
-    <div id="d3-div" class="ladesaeulenBelegt-graph">
-    </div>
+    <button id= "left" value="left" type="button" class="leftButton kat belegtButton" title="Vorheriger Wochentag"></button>
+    <div id="d3-div" class="ladesaeulenBelegt-graph"></div>
+    <button id= "right" value="right" type="button" class="rightButton kat belegtButton" title="Nächster Wochentag"></button>
 </div>
 <div id= "diagrammAusserBetrieb" class="tabBesetzt-pane fade">
-    <div id="d3-div" class="ladesaeulenAusserBetrieb-graph">
-    </div>
+    <button id= "left" value="left" type="button" class="leftButton kat ausserBetriebButton" title="Vorheriger Wochentag"></button>
+    <div id="d3-div" class="ladesaeulenAusserBetrieb-graph"></div>
+    <button id= "right" value="right" type="button" class="rightButton kat ausserBetriebButton" title="Nächster Wochentag"></button>
 </div>

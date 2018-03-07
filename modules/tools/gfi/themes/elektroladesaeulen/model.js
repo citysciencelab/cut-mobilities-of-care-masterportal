@@ -48,7 +48,7 @@ define(function (require) {
 
             this.createHeading(allProperties);
 
-            gfiProperties = this.addChargingIndicator(gfiProperties, dataStreamIds);
+            // gfiProperties = this.addChargingIndicator(gfiProperties, dataStreamIds);
             gfiProperties = this.changeStateToGerman(gfiProperties);
 
             this.set("gfiProperties", gfiProperties);
@@ -165,10 +165,18 @@ define(function (require) {
         triggerToBarGraph: function (targetResult, graphTag, index) {
             var width = this.get("gfiWidth"),
                 height = this.get("gfiHeight"),
-                graphTag,
                 dataByWeekday = this.get("weekday" + targetResult),
                 dataPerHour,
                 processedData;
+
+            // set an error message if the values of processedData are all 0
+            if (_.isEmpty(dataByWeekday)) {
+                this.drawErrorMessage(graphTag, width, height);
+                return;
+            }
+
+            // need to toggle weekdays
+            this.set("dayIndex", index);
 
             // process data for day with given index (0 = today)
             dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday[index], targetResult);
@@ -213,7 +221,11 @@ define(function (require) {
                 attrToShowArray: ["value"]
             };
 
-            Radio.trigger("Graph", "createGraph", graphConfig);;
+            Radio.trigger("Graph", "createGraph", graphConfig);
+
+            // add slide Buttons
+            var $simpleSlider = jQuery( '#slider' );
+
         },
 
         processDataForAllWeekdays: function (targetResult, historicalData) {
@@ -224,11 +236,26 @@ define(function (require) {
                 processedData,
                 graphConfig;
 
-            historicalDataThisTimeZone = this.changeTimeZone(historicalData);
-            historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
-            dataByWeekday = this.divideDataByWeekday(historicalDataWithIndex);
+            if (!this.checkObservationsEmpty(historicalData)) {
+                historicalDataThisTimeZone = this.changeTimeZone(historicalData);
+                historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
+                dataByWeekday = this.divideDataByWeekday(historicalDataWithIndex);
+            }
+            else {
+                dataByWeekday = [];
+            }
 
             this.set("weekday" + targetResult, dataByWeekday);
+        },
+
+        checkObservationsEmpty: function (historicalData) {
+            var boolean = false;
+
+            _.each(historicalData, function (data) {
+                (_.isEmpty(data.Observations)) ? boolean = true : boolean = false;
+            });
+
+            return boolean;
         },
 
         /**
@@ -261,7 +288,7 @@ define(function (require) {
             requestURL = this.buildRequestForHistoricalData(query);
             historicalData = this.sendRequest(requestURL, async);
 
-            // if with a request not all data can be fetched
+            // if with one request not all data can be fetched
             _.each(historicalData, function (data) {
                 var observationsID = data["@iot.id"],
                     observationsCount = data["Observations@iot.count"],
@@ -281,6 +308,7 @@ define(function (require) {
             return historicalData;
         },
 
+
         /**
          * adds time params to query by given gfiParams
          * @param {String} query
@@ -291,14 +319,16 @@ define(function (require) {
             var startDate = gfiParams.startDate,
                 endDate = gfiParams.endDate,
                 periodTime = gfiParams.periodTime,
-                periodUnit = gfiParams.periodUnit;
+                periodUnit = gfiParams.periodUnit,
+                lastDate = moment(startDate, "DD.MM.YYYY"),
+                time;
 
             // handle Dates
             if (!_.isUndefined(startDate)) {
                 // 7 days before to find the last state
-                startDate = moment(startDate, "DD.MM.YYYY").subtract(7, "days").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
+                time = moment(startDate, "DD.MM.YYYY").subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
 
-                query = query + ";$filter=phenomenonTime gt " + startDate;
+                query = query + ";$filter=phenomenonTime gt " + time;
 
                 if (!_.isUndefined(endDate)) {
                     endDate = moment(endDate, "DD.MM.YYYY").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
@@ -320,13 +350,31 @@ define(function (require) {
                     },
                     unit = translate[periodUnit],
                     // 7 days before to find the last state
-                    time = moment().subtract(periodTime, unit).subtract(7, "days").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
+                    time = moment().subtract(periodTime, unit).subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
 
                 query = query + ";$filter=phenomenonTime gt " + time;
-
             }
 
+            // necessary for processing
+            this.set("lastDate", lastDate);
+
             return query;
+        },
+
+        /**
+         * create the request for the historicaldata for one Datastream
+         * @param  {String} requestURL
+         * @param  {String} versionURL - version of the service
+         * @param  {[type]} id - of the dataStream
+         * @return {String} complete url
+         */
+        buildRequestForHistoricalData: function (query) {
+            var requestURL = this.get("requestURL"),
+                versionURL = this.get("versionURL");
+
+            return historicalDataURL = requestURL + "/" +
+                "v" + versionURL + "/" +
+                "Datastreams" + query;
         },
 
          /**
@@ -395,22 +443,6 @@ define(function (require) {
         },
 
         /**
-         * create the request for the historicaldata for one Datastream
-         * @param  {String} requestURL
-         * @param  {String} versionURL - version of the service
-         * @param  {[type]} id - of the dataStream
-         * @return {String} complete url
-         */
-        buildRequestForHistoricalData: function (query) {
-            var requestURL = this.get("requestURL"),
-                versionURL = this.get("versionURL");
-
-            return historicalDataURL = requestURL + "/" +
-                "v" + versionURL + "/" +
-                "Datastreams" + query;
-        },
-
-        /**
          * chnage the timzone for the historicalData
          * @param  {[object]} historicalData
          * @return {[object]}
@@ -440,13 +472,15 @@ define(function (require) {
         },
 
         divideDataByWeekday: function (historicalDataWithIndex) {
-            var weekArray = [[], [], [], [], [], [], []];
+            var weekArray = [[], [], [], [], [], [], []],
+                lastDay = moment(this.get("lastDate")).format("YYYY-MM-DD");
 
             _.each(historicalDataWithIndex, function (historicalData) {
                 var observations = historicalData.Observations,
                     actualDay = moment().format("YYYY-MM-DD"),
-                    lastDay = moment(observations[(observations).length - 1].phenomenonTime).format("YYYY-MM-DD"),
-                    arrayIndex = 0;
+                    // lastDay = moment(observations[(observations).length - 1].phenomenonTime).format("YYYY-MM-DD"),
+                    arrayIndex = 0,
+                    booleanLoop = true;
 
                 weekArray[arrayIndex].push([]);
 
@@ -457,10 +491,17 @@ define(function (require) {
                         weekArrayIndexLength;
 
                     // solange bis data verarbeitet wurde
-                    while (true) {
+                    while (booleanLoop) {
                         weekArrayIndexLength = weekArray[arrayIndex].length - 1;
+
+                        // wenn das letzte Datum erreicht ist, dann wird die Schleife nicht mehr benötigt
+                         if (moment(actualDay) < moment(lastDay)) {
+                            booleanLoop = false;
+                            weekArray[arrayIndex].pop();
+                            break;
+                        }
                         // wenn Observationstag = aktueller Tag, dann hinzufügen
-                        if (phenomenonDay === actualDay) {
+                        else if (phenomenonDay === actualDay) {
                             weekArray[arrayIndex][weekArrayIndexLength].push(data);
                             break; // data wurde verarbeitet
                         }
@@ -666,6 +707,7 @@ define(function (require) {
         calculateHeight: function (gfiHeight) {
             var heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
                 heightNavbar = $(".ladesaeulen .nav").css("height").slice(0, -2);
+                // heightButton = $(".ladesaeulen .rightButton").css("height").slice(0, -2);
 
             return gfiHeight - heightladesaeulenHeader - heightNavbar;
         },
@@ -693,7 +735,7 @@ define(function (require) {
         },
 
         drawErrorMessage: function (graphTag, width, height) {
-            $("<p class='noData' style='height: " + height + "px; width: " + width + "px;'>")
+            $("<div class='noData' style='height: " + height + "px; width: " + width + "px;'>")
                     .appendTo("div" + graphTag)
                     .text("Zur Zeit keine Informationen!");
         }

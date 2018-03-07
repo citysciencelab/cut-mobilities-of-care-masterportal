@@ -3,14 +3,6 @@
     border-collapse: collapse;
     background-color: #FFF;
     color: #333;
-    width: 100%;
-    height: 100%;
-}
-
-.ladesaeulen .row:nth-child(even){
-    width: 100%;
-    height: 100%;
-    background: #FFF;
 }
 
 .ladesaeulen .nav-pills {
@@ -56,24 +48,34 @@
   text-anchor: middle;
 }
 
-.ladesaeulen .busy {
-  cursor: wait;
+
+.ladesaeulen .leftButton {
+    background-image: url(../../../../../node_modules/lgv-config/img/arrowButton_left_gray.png);
+    left: 4px;
 }
 
-
-.lgv-container.busy {
-  cursor: wait;
+.ladesaeulen .rightButton {
+    background-image: url(../../../../../node_modules/lgv-config/img/arrowButton_right_gray.png);
+    right: 4px;
 }
 
-.gfi-content.busy {
-  cursor: wait;
+.ladesaeulen .leftButton,
+.ladesaeulen .rightButton {
+    background-color: #FFFFFF;
+    border: none;
+    text-decoration: none;
+    position: absolute;
+    top: 65%;
+    padding: 10px 6px;
+    background-size: 12px 18px;
+    cursor: pointer;
+    background-repeat: no-repeat;
 }
 
-.d3-tip {
-  line-height: 1;
-  font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  border-radius: 2px;
+.ladesaeulen .leftButton:hover {
+    background-image: url(../../../../../node_modules/lgv-config/img/arrowButton_left_black.png);
+}
+
+.ladesaeulen .rightButton:hover {
+    background-image: url(../../../../../node_modules/lgv-config/img/arrowButton_right_black.png);
 }
