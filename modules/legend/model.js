@@ -226,7 +226,7 @@ define([
                         else {
                             name.push(layer.get("name"));
                         }
-                    }console.log(image);
+                    }
                     this.push("tempArray", {
                         layername: layer.get("name"),
                         legendname: name,
