@@ -53,13 +53,13 @@ define(function (require) {
 
             // geographische Koordinaten
             if (targetProjection.projName === "longlat") {
-                coord = this.model.getCartesian(position);
+                coord = this.model.getHDMS(position);
                 easting = coord.substr(0,13);
                 northing = coord.substr(14);
             }
             // kartesische Koordinaten
             else {
-                coord = this.model.getXY(position);
+                coord = this.model.getCartesian(position);
                 easting = coord.split(",")[0].trim();
                 northing = coord.split(",")[1].trim();
             }

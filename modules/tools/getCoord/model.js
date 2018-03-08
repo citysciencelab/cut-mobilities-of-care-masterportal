@@ -78,11 +78,11 @@ define([
             });
         },
 
-        getCartesian: function (coord) {
+        getHDMS: function (coord) {
             return ol.coordinate.toStringHDMS(coord)
         },
 
-        getXY: function (coord) {
+        getCartesian: function (coord) {
             return ol.coordinate.toStringXY(coord, 2);
         },
 
