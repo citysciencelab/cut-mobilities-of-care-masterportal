@@ -157,19 +157,28 @@ define(function (require) {
                     var attributeValues = attributeValue.split("|");
 
                     _.each(attributeValues, function (value) {
-                        values.push(value);
-                    });
+                        if(this.isValid(value)) {
+                            values.push(value);
+                        }
+                    }, this);
                 }
                 else if (_.isArray(attributeValue)) {
                     _.each(attributeValue, function (value) {
-                        values.push(value)
-                    });
+                        if(this.isValid(value)) {
+                            values.push(value);
+                        }
+                    }, this);
                 }
                 else {
-                    values.push(attributeValue);
+                    if(this.isValid(attributeValue)) {
+                        values.push(attributeValue);
+                    }
                 }
             }
             return _.unique(values);
+        },
+        isValid: function (value) {
+            return value !== null && !_.isUndefined(value);
         },
 
         /**
@@ -269,7 +278,7 @@ define(function (require) {
                 selectableValues = [];
 
             _.each(allAttributes, function (attribute) {
-                selectableValues = {name: attribute.name, displayName: undefined, type: attribute.type, values: []};
+                selectableValues = {name: attribute.name, displayName: attribute.displayName, type: attribute.type, values: []};
 
                 _.each(features, function (feature) {
                     var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
@@ -285,29 +294,6 @@ define(function (require) {
             }, this);
 
             return selectableOptions;
-        },
-        collectAttributeValues: function (allAttributes) {
-            //this.getRemainingAttributeValues(allAttributes);
-
-            return this.collectSelectableOptions(this.get("features"), [], allAttributes);
-        },
-        /**
-         * [description]
-         * @param  {[type]} typeMap [description]
-         * @return {[type]}         [description]
-         */
-        getRemainingAttributeValues: function (featureAttributesMap, features) {
-            var features = features || this.get("features");
-
-            _.each(featureAttributesMap, function (featureAttribute) {
-                featureAttribute.values = [];
-
-                _.each(features, function (feature) {
-                    featureAttribute.values.push(this.parseValuesFromString(feature, featureAttribute.name));
-                }, this);
-                featureAttribute.values = _.unique(_.flatten(featureAttribute.values));
-            }, this);
-            return featureAttributesMap;
         },
         /**
          * after every filtering the snippets get updated with selectable values
@@ -336,8 +322,9 @@ define(function (require) {
 
             isMatch = _.find(attribute.values, function (value) {
                     if (_.isUndefined(feature.get(attribute.attrName)) === false) {
-                        return feature.get(attribute.attrName).indexOf(value) !== -1;
+                            return feature.get(attribute.attrName).indexOf(value) !== -1;
                     }
+                    return false;
                 });
             return !_.isUndefined(isMatch);
         },
@@ -377,7 +364,10 @@ define(function (require) {
             var isMatch = false;
 
             isMatch = _.every(filterAttr, function (attribute) {
-                if (attribute.type === "integer" || attribute.type === "double") {
+                if(feature.get(attribute.attrName) === null) {
+                    return false;
+                }
+                else if (attribute.type === "integer" || attribute.type === "double") {
                     return this.isNumberInRange(feature, attribute.attrName, attribute.values);
                 }
                 else if (attribute.type === "searchInMapExtent") {
