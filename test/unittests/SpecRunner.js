@@ -49,7 +49,8 @@ define(function (require) {
     "modules/tools/gfi/themes/verkehrsstaerken_rad/testModel.js",
     "modules/core/testMap.js",
     "modules/vectorStyle/testModel.js",
-    "modules/core/modelList/testList.js"
+    "modules/core/modelList/testList.js",
+    "modules/legend/testModel.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();
