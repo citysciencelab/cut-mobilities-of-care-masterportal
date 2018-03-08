@@ -40,28 +40,53 @@ define([
         },
         setAttributes: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
-                isPortalTitleUndefined = _.isUndefined(Radio.request("Parser", "getPortalConfig").PortalTitle),
-                portaltitle = isPortalTitleUndefined === false ? Radio.request("Parser", "getPortalConfig").PortalTitle : document.title,
+                portalConfig = Radio.request("Parser", "getPortalConfig"),
+                portaltitle = _.isUndefined(portalConfig) === false ? portalConfig.PortalTitle : document.title,
                 hrefString = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portaltitle + "</a>",
                 platformString = "<br>Platform: " + navigator.platform + "<br>",
                 cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
                 userAgentString = "UserAgent: " + navigator.userAgent,
                 systemInfo = hrefString + platformString + cookiesString + userAgentString,
-                isSubjectUndefined = _.isUndefined(toolModel.get("subject")),
+                isSubjectUndefined = _.isUndefined(toolModel) === false ? _.isUndefined(toolModel.get("subject")) : true,
                 subject = isSubjectUndefined === true ? "Supportanfrage zum Portal " + portaltitle : toolModel.get("subject"),
                 date = new Date(),
                 day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
                 month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
                 ticketID = month + day + "-" + _.random(1000, 9999),
-                resp = Radio.request("RestReader", "getServiceById", toolModel.get("serviceID"));
+                resp = _.isUndefined(toolModel) === false ? Radio.request("RestReader", "getServiceById", toolModel.get("serviceID")) : undefined;
 
-            this.set(toolModel.attributes);
-            if (resp && resp.get("url")) {
+            if (_.isUndefined(toolModel) === false) {
+                this.set(toolModel.attributes);
+            }
+            if (_.isUndefined(resp) === false && resp.get("url")) {
                 this.set("url", resp.get("url"));
                 this.set("ticketID", ticketID);
                 this.set("systemInfo", this.get("includeSystemInfo") === true ? systemInfo : "");
-                this.set("subject", subject);
+                this.set("subject", subject, {validate: true});
             }
+        },
+
+        setUserAttributes: function (evt) {
+
+            switch (evt.target.id) {
+                case "contactEmail": {
+                    this.set("userEmail", evt.target.value);
+                    break;
+                }
+                case "contactName": {
+                    this.set("userName", evt.target.value);
+                    break;
+                }
+                case "contactTel": {
+                    this.set("userTel", evt.target.value);
+                    break;
+                }
+                case "contactText": {
+                    this.set("text", evt.target.value);
+                    break;
+                }
+            }
+            this.isValid();
         },
 
         setStatus: function (args) {
@@ -74,12 +99,13 @@ define([
                 this.set("isCurrentWin", false);
             }
         },
+
         validate: function (attributes) {
-            var userNameValid = attributes.userName.length >= 3,
-                userEmailValid1 = attributes.userEmail.length >= 1,
-                userEmailValid2 = attributes.userEmail.match(/^[A-Z0-9\.\_\%\+\-]+@{1}[A-Z0-9\.\-]+\.{1}[A-Z]{2,4}$/igm) === null ? false : true,
-                userTelValid = attributes.userTel.match(/^[0-9]{1}[0-9\-\+\(\)]*[0-9]$/ig) === null ? false : true,
-                textValid = attributes.text.length >= 10;
+            var userNameValid = _.isUndefined(attributes.userName) === false ? attributes.userName.length >= 3 : false,
+                userEmailValid1 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.length >= 1 : false,
+                userEmailValid2 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.match(/^[A-Z0-9\.\_\%\+\-]+@{1}[A-Z0-9\.\-]+\.{1}[A-Z]{2,4}$/igm) === null ? false : true : false,
+                userTelValid = _.isUndefined(attributes.userTel) === false ? attributes.userTel.match(/^[0-9]{1}[0-9\-\+\(\)]*[0-9]$/ig) === null ? false : true : false,
+                textValid = _.isUndefined(attributes.text) === false ? attributes.text.length >= 10 : false;
 
             if (userNameValid === false || userEmailValid1 === false || userEmailValid2 === false || userTelValid === false || textValid === false) {
                 return {
@@ -93,6 +119,7 @@ define([
                 return true;
             }
         },
+
         send: function () {
             var cc = this.getCc(),
                 text,
@@ -115,31 +142,31 @@ define([
                 text: text
             };
 
-            Radio.trigger("Util", "showLoader");
-            $.ajax({
-                url: this.get("url"),
-                data: dataToSend,
-                async: true,
-                type: "POST",
-                cache: false,
-                dataType: "json",
-                context: this,
-                complete: function (jqXHR) {
-                    Radio.trigger("Util", "hideLoader");
-                    if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                        Radio.trigger("Alert", "alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
-                    }
-                },
-                success: function (data) {
-                    if (data.success === false) {
-                        Radio.trigger("Alert", "alert", {text: data.message, kategorie: "alert-warning"});
-                    }
-                    else {
-                        Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketID") + "</strong>.", kategorie: "alert-success"});
-                    }
-                }
-            });
-            this.setCc([]);
+            // Radio.trigger("Util", "showLoader");
+            // $.ajax({
+            //     url: this.get("url"),
+            //     data: dataToSend,
+            //     async: true,
+            //     type: "POST",
+            //     cache: false,
+            //     dataType: "json",
+            //     context: this,
+            //     complete: function (jqXHR) {
+            //         Radio.trigger("Util", "hideLoader");
+            //         if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
+            //             Radio.trigger("Alert", "alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
+            //         }
+            //     },
+            //     success: function (data) {
+            //         if (data.success === false) {
+            //             Radio.trigger("Alert", "alert", {text: data.message, kategorie: "alert-warning"});
+            //         }
+            //         else {
+            //             Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketID") + "</strong>.", kategorie: "alert-success"});
+            //         }
+            //     }
+            // });
+            // this.setCc([]);
         },
 
         // getter for cc
