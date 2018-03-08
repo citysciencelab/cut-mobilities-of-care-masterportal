@@ -51,7 +51,8 @@ define(function (require) {
     "modules/vectorStyle/testModel.js",
     "modules/alerting/testModel.js",
     "modules/core/modelList/testList.js",
-    "modules/tools/getCoord/testModel.js"
+    "modules/tools/getCoord/testModel.js",
+    "modules/core/testCRS.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();
