@@ -36,6 +36,7 @@ define(function (require) {
                 this.$el.show();
                 Radio.trigger("MapMarker", "showMarker", this.model.getCoordinate());
                 Radio.trigger("MapView", "setCenter", this.model.getCoordinate());
+                Radio.trigger("GFI", "afterRender");
             }
             else {
                 this.$el.hide();

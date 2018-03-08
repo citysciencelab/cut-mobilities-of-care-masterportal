@@ -6,16 +6,18 @@ define(function (require) {
         VerkehrsStaerkenTheme;
 
     VerkehrsStaerkenTheme = Theme.extend({
-        defaults: {
-            ansicht: "Diagrammansicht",
-            link: "http://daten-hamburg.de/transport_verkehr/verkehrsstaerken/DTV_DTVw_Download.xlsx",
-            zaehlstelle: "",
-            bezeichnung: "",
-            art: "",
-            years: [],
-            rowNames: [],
-            dataset: []
-        },
+        defaults: _.extend({}, Theme.prototype.defaults,
+            {
+                ansicht: "Diagrammansicht",
+                link: "http://daten-hamburg.de/transport_verkehr/verkehrsstaerken/DTV_DTVw_Download.xlsx",
+                zaehlstelle: "",
+                bezeichnung: "",
+                art: "",
+                years: [],
+                rowNames: [],
+                dataset: []
+            }
+        ),
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
@@ -35,6 +37,8 @@ define(function (require) {
                     years = [];
 
                 _.each(rowNames, function (rowName) {
+                    var newRowName, index, yearDigits, charBeforeYear;
+
                     year = parseInt(rowName.slice(-4), 10);
 
                     if (rowName === "Zählstelle") {
@@ -48,10 +52,10 @@ define(function (require) {
                     }
                     // jahresDatensätze parsen
                     else if (!_.isNaN(year)) {
-                        var newRowName = "",
-                            index = rowName.indexOf(String(year)) - 1,
-                            yearDigits = rowName.slice(-4).length,
-                            charBeforeYear = rowName.slice(index, -yearDigits);
+                        newRowName = "";
+                        index = rowName.indexOf(String(year)) - 1;
+                        yearDigits = rowName.slice(-4).length;
+                        charBeforeYear = rowName.slice(index, -yearDigits);
 
                         // vorzeichen vor year prüfen
                         if (charBeforeYear === "_") {
@@ -132,8 +136,10 @@ define(function (require) {
          */
         destroy: function () {
             _.each(this.get("gfiContent"), function (element) {
+                var children;
+
                 if (_.has(element, "children")) {
-                    var children = _.values(_.pick(element, "children"))[0];
+                    children = _.values(_.pick(element, "children"))[0];
 
                     _.each(children, function (child) {
                         child.val.remove();
@@ -196,7 +202,17 @@ define(function (require) {
                 data: this.getDataset(),
                 xAttr: "year",
                 xAxisLabel: "Jahr",
-                attrToShowArray: this.getAttrToShow()
+                attrToShowArray: this.getAttrToShow(),
+                legendArray: [{
+                    key: "DTV",
+                    value: "DTV (Kfz/24h)"
+                }, {
+                    key: "DTVw",
+                    value: "DTVw (Kfz/24h)"
+                }, {
+                    key: "Schwerverkehrsanteil am DTVw",
+                    value: "SV-Anteil am DTVw (%)"
+                }]
             };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
@@ -212,7 +228,12 @@ define(function (require) {
                 margin = graphParams.margin,
                 offset = graphParams.offset,
                 size = 10,
-                attrToShowArray = this.getAttrToShow();
+                attrToShowArray = this.getAttrToShow(),
+                width,
+                height,
+                x,
+                y,
+                legendBBox;
 
             data = _.filter(data, function (obj) {
                 return obj[attrToShowArray[0]] !== "-";
@@ -264,7 +285,7 @@ define(function (require) {
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
                     });
-            var legendBBox = svg.selectAll(".graph-legend").node().getBBox(),
+            legendBBox = svg.selectAll(".graph-legend").node().getBBox(),
                 width = legendBBox.width,
                 height = legendBBox.height,
                 x = legendBBox.x,

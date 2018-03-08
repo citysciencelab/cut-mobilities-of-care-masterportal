@@ -9,7 +9,8 @@ define([
         defaults: {
             layerParams: [],
             isInitOpen: "",
-            zoomToGeometry: ""
+            zoomToGeometry: "",
+            style: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -22,7 +23,8 @@ define([
                 "getCenter": this.getCenter,
                 "getZoomLevel": this.getZoomLevel,
                 "getZoomToGeometry": this.getZoomToGeometry,
-                "getZoomToExtent": this.getZoomToExtent
+                "getZoomToExtent": this.getZoomToExtent,
+                "getStyle": this.getStyle
             }, this);
 
             this.parseURL();
@@ -239,6 +241,7 @@ define([
             if (value === "SIMPLE") {
                 $("#main-nav").hide();
                 $("#map").css("height", "100%");
+                this.setStyle(value);
             }
         },
         parseURL: function (result) {
@@ -246,11 +249,17 @@ define([
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {};
 
-            query.split("&").forEach(function (keyValue) {
-                var item = keyValue.split("=");
+            if (query.length > 0) {
+                query.split("&").forEach(function (keyValue) {
+                    var item = keyValue.split("=");
 
-                result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
-            });
+                    result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
+                });
+
+            }
+            else {
+                result = undefined;
+            }
 
             this.setResult(result);
             /**
@@ -349,6 +358,15 @@ define([
 
         getZoomToExtent: function () {
             return this.get("zoomToExtent");
+        },
+
+        // getter for style
+        getStyle: function () {
+            return this.get("style");
+        },
+        // setter for style
+        setStyle: function (value) {
+            this.set("style", value);
         }
     });
 

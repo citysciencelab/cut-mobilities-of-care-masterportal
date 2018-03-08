@@ -24,7 +24,7 @@ define(function (require) {
             }],
             inSubMenue: false
         },
-        triggerRadioEvent: function (trigger) {
+        triggerRadioEvent: function () {
             _.each(this.getOnClickTrigger(), function (trigger) {
                 this.triggerEvent(trigger);
             }, this);
@@ -35,7 +35,20 @@ define(function (require) {
             if (triggerParams.event === "" || triggerParams.channel === "") {
                 return;
             }
-            Radio.trigger(triggerParams.channel, triggerParams.event, data);
+            // ITGBM
+            else if (triggerParams.data === "allFeatures") {
+                var model = Radio.request("ModelList", "getModelByAttributes", {id: "10320"}),
+                    featureList = [];
+
+                var features = model.getLayerSource().getFeatures();
+                _.each(features, function (feature) {
+                    featureList.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                });
+                Radio.trigger("RemoteInterface", "postMessage", {"featuresToAnalysis": JSON.stringify(featureList)});
+            }
+            else {
+                Radio.trigger(triggerParams.channel, triggerParams.event, data);
+            }
         },
         // getter for onClickTrigger
         getOnClickTrigger: function () {

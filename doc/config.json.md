@@ -43,7 +43,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
 |orientation|nein|String|"none"|Orientation ist eine Funktion zur Standortbestimmung des Nutzers. Mögliche Werte sind none (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
 |poi|nein|Boolean|false|Zeigt eine Liste von Features in der Umgebung an. Funktioniert nur wenn die Standortbestimmung (orientation) aktiviert ist. |
-|zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
+|[zoom](#markdown-header-portalconfigcontrolszoom)|nein|Boolean/Object|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
 |[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
 
 **Beispiel controls:**
@@ -97,7 +97,13 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 
 ```
+******
+### Portalconfig.controls.zoom ###
 
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|showInSimpleMap|nein|Boolean||Gibt an ob die Zoom-Buttons auch in der simple Map (URL-Parameter "?style=simple" gezeichnet werden sollen.|
+|showMobile|nein|Boolean|false|Gibt an ob die Zoom-Buttons auch in der mobilen Ansicht gezeichnet werden sollen.|
 ### Portalconfig.mapView ###
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -232,7 +238,7 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
 |name|ja|String||Name, wie der Link im Menu angezeigt werden soll.|
 |glyphicon|ja|String||Glyphicon des Linkes für den Menueintrag.|
 |url|nein|String||URL zur externen Webseite. |
-|onClickTrigger|nein|Object: {"channel": String ,"event": String, "data": String || Enthält den Channel namen, das Event, welches getriggert wird und die daten die mitgeschickt werden.|
+|onClickTrigger|nein|Array|| Ein Array von Objekten mit den jeweiligen Channel Namen, das Event, welches getriggert wird und die Daten die mitgeschickt werden.|
 
 
 **Beispiel staticlinks:**
@@ -269,11 +275,11 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
         {
             "name": "Altona",
             "glyphicon": "glyphicon-globe",
-            "onClickTrigger": {
+            "onClickTrigger": [{
                 "channel": "ZoomToGeometry",
                 "event": "zoomToGeometry",
                 "data": "Altona"
-            }
+            }]
         }]
     }
 }
@@ -548,6 +554,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isVisible|nein|Boolean|||
 |searchInMapExtent|nein|Boolean|false|Suche im aktuellen Kartenausschnitt|
 |allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
+liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |name|nein|String||Name des Filters
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
 |predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
