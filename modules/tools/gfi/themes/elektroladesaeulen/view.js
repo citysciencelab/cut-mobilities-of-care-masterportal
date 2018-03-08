@@ -41,7 +41,7 @@ define(function (require) {
                     height: $(".gfi-content").css("height").slice(0, -2)
                 };
 
-                this.model.set("gfiHeight", this.model.calculateHeight(gfiSize.height));
+                this.model.set("gfiHeight", this.calculateHeight(gfiSize.height));
                 this.model.set("gfiWidth", gfiSize.width);
             }
 
@@ -63,6 +63,18 @@ define(function (require) {
             $("#" + contentId).addClass("in");
 
             this.setDiagrammParams(contentId, index);
+        },
+
+        /**
+         * calculates the available height for the graph
+         * @param  {number} gfiHeight - height of the already drwan gfi
+         * @return {String}
+         */
+        calculateHeight: function (gfiHeight) {
+            var heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
+                heightNavbar = $(".ladesaeulen .nav").css("height").slice(0, -2);
+
+            return gfiHeight - heightladesaeulenHeader - heightNavbar;
         },
 
         setDiagrammParams: function (contentId, index) {
