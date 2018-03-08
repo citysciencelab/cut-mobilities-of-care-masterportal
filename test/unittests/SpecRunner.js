@@ -50,7 +50,8 @@ define(function (require) {
     "modules/core/testMap.js",
     "modules/vectorStyle/testModel.js",
     "modules/alerting/testModel.js",
-    "modules/core/modelList/testList.js"
+    "modules/core/modelList/testList.js",
+    "modules/tools/getCoord/testModel.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();
