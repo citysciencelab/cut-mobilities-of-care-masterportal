@@ -3,16 +3,13 @@ define(function(require) {
 
 
     var expect = require("chai").expect,
-        Radio = require("backbone.radio"),
         Model = require("../../../../../modules/tools/getCoord/model.js"),
-        ModelCRS = require("../../../../../modules/core/crs.js"),
         position1 = [564337.37,5935980.05],
         position2 = [586519.54,5935688.88],
         model;
 
     before(function () {
         model = new Model();
-        modelCRS = new ModelCRS();
     });
 
     describe("getCoordModel", function () {
