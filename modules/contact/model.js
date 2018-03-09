@@ -59,10 +59,10 @@ define([
                 this.set(toolModel.attributes);
             }
             if (_.isUndefined(resp) === false && resp.get("url")) {
-                this.set("url", resp.get("url"));
-                this.set("ticketID", ticketID);
-                this.set("systemInfo", this.get("includeSystemInfo") === true ? systemInfo : "");
-                this.set("subject", subject, {validate: true});
+                this.setUrl(resp.get("url"));
+                this.setTicketID(ticketID);
+                this.setSystemInfo(this.getIncludeSystemInfo() === true ? systemInfo : "");
+                this.setSubject(subject, {validate: true});
             }
         },
 
@@ -70,19 +70,19 @@ define([
 
             switch (evt.target.id) {
                 case "contactEmail": {
-                    this.set("userEmail", evt.target.value);
+                    this.setUserEmail(evt.target.value);
                     break;
                 }
                 case "contactName": {
-                    this.set("userName", evt.target.value);
+                    this.setUserName(evt.target.value);
                     break;
                 }
                 case "contactTel": {
-                    this.set("userTel", evt.target.value);
+                    this.setUserTel(evt.target.value);
                     break;
                 }
                 case "contactText": {
-                    this.set("text", evt.target.value);
+                    this.setText(evt.target.value);
                     break;
                 }
             }
@@ -92,11 +92,11 @@ define([
         setStatus: function (args) {
             // Fenstermanagement
             if (args[2].getId() === "contact") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
+                this.setIsCollapsed(args[1]);
+                this.setIsCurrentWin(args[0]);
             }
             else {
-                this.set("isCurrentWin", false);
+                this.setIsCurrentWin(false);
             }
         },
 
@@ -125,58 +125,207 @@ define([
                 text,
                 dataToSend;
 
-            if (this.get("ccToUser") === true) {
+            if (this.getCcToUser() === true) {
                 cc.push({
-                    email: this.get("userEmail"),
-                    name: this.get("userName")
+                    email: this.getUserEmail(),
+                    name: this.getUserName()
                 });
             }
-
-            text = "Name: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo"),
+            text = "Name: " + this.getUserName() + "<br>Email: " + this.getUserEmail() + "<br>Tel: " + this.getUserTel() + "<br>==================<br>" + this.getText() + this.getSystemInfo();
             dataToSend = {
-                from: this.get("from"),
-                to: this.get("to"),
+                from: this.getFrom(),
+                to: this.getTo(),
                 cc: cc,
-                bcc: this.get("bcc"),
-                subject: this.get("ticketID") + ": " + this.get("subject"),
+                bcc: this.getBcc(),
+                subject: this.getTicketID() + ": " + this.getSubject(),
                 text: text
             };
 
-            // Radio.trigger("Util", "showLoader");
-            // $.ajax({
-            //     url: this.get("url"),
-            //     data: dataToSend,
-            //     async: true,
-            //     type: "POST",
-            //     cache: false,
-            //     dataType: "json",
-            //     context: this,
-            //     complete: function (jqXHR) {
-            //         Radio.trigger("Util", "hideLoader");
-            //         if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-            //             Radio.trigger("Alert", "alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
-            //         }
-            //     },
-            //     success: function (data) {
-            //         if (data.success === false) {
-            //             Radio.trigger("Alert", "alert", {text: data.message, kategorie: "alert-warning"});
-            //         }
-            //         else {
-            //             Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketID") + "</strong>.", kategorie: "alert-success"});
-            //         }
-            //     }
-            // });
-            // this.setCc([]);
+            Radio.trigger("Util", "showLoader");
+            $.ajax({
+                url: this.getUrl(),
+                data: dataToSend,
+                async: true,
+                type: "POST",
+                cache: false,
+                dataType: "json",
+                context: this,
+                complete: function (jqXHR) {
+                    Radio.trigger("Util", "hideLoader");
+                    if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
+                        Radio.trigger("Alert", "alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
+                    }
+                },
+                success: function (data) {
+                    if (data.success === false) {
+                        Radio.trigger("Alert", "alert", {text: data.message, kategorie: "alert-warning"});
+                    }
+                    else {
+                        Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketID") + "</strong>.", kategorie: "alert-success"});
+                    }
+                }
+            });
+            this.getCc().pop();
+        },
+
+        // getter for url
+        getUrl: function () {
+            return this.get("url");
+        },
+
+        // setter for url
+        setUrl: function (value) {
+            this.set("url", value);
+        },
+
+        // getter for ticketID
+        getTicketID: function () {
+            return this.get("ticketID");
+        },
+
+        // setter for ticketID
+        setTicketID: function (value) {
+            this.set("ticketID", value);
+         },
+
+         // getter for systemInfo
+         getSystemInfo: function () {
+            return this.get("systemInfo");
+        },
+
+         // setter for systemInfo
+         setSystemInfo: function (value) {
+            this.set("systemInfo", value);
+        },
+
+        // getter for includeSystemInfo
+        getIncludeSystemInfo: function () {
+            return this.get("includeSystemInfo");
+        },
+        // setter for includeSystemInfo
+        setIncludeSystemInfo: function (value) {
+            this.set("includeSystemInfo", value);
+        },
+
+        // getter for subject
+        getSubject: function () {
+            return this.get("subject");
+        },
+
+        // setter for subject
+        setSubject: function (value) {
+            this.set("subject", value);
+        },
+
+        // getter for isCollapsed
+        getIsCollapsed: function () {
+            return this.get("isCollapsed");
+        },
+
+        // setter for isCollapsed
+        setIsCollapsed: function (value) {
+            this.set("isCollapsed", value);
+        },
+
+        // getter for isCurrentWin
+        getIsCurrentWin: function () {
+            return this.get("isCurrentWin");
+        },
+
+        // setter for isCurrentWin
+        setIsCurrentWin: function (value) {
+            this.set("isCurrentWin", value);
+        },
+
+        // getter for userName
+        getUserName: function () {
+            return this.get("userName");
+        },
+
+        // setter for userName
+        setUserName: function (value) {
+            this.set("userName", value);
+        },
+
+        // getter for userEmail
+        getUserEmail: function () {
+            return this.get("userEmail");
+        },
+
+        // setter for userEmail
+        setUserEmail: function (value) {
+            this.set("userEmail", value);
+        },
+
+        // getter for userTel
+        getUserTel: function () {
+            return this.get("userTel");
+        },
+
+        // setter for userTel
+        setUserTel: function (value) {
+            this.set("userTel", value);
+        },
+
+        // getter for text
+        getText: function () {
+            return this.get("text");
+        },
+
+        // setter for text
+        setText: function (value) {
+            this.set("text", value);
         },
 
         // getter for cc
         getCc: function () {
             return this.get("cc");
         },
+
         // setter for cc
         setCc: function (value) {
             this.set("cc", value);
+        },
+
+        // getter for ccToUser
+        getCcToUser: function () {
+            return this.get("ccToUser");
+        },
+
+        // setter for ccToUser
+        setCcToUser: function (value) {
+            this.set("ccToUser", value);
+        },
+
+        // getter for from
+        getFrom: function () {
+            return this.get("from");
+        },
+        // setter for from
+        setFrom: function (value) {
+            this.set("from", value);
+        },
+
+        // getter for to
+        getTo: function () {
+            return this.get("to");
+        },
+
+        // setter for to
+        setTo: function (value) {
+            this.set("to", value);
+        },
+
+        // getter for bcc
+        getBcc: function () {
+            return this.get("bcc");
+        },
+
+        // setter for bcc
+        setBcc: function (value) {
+            this.set("bcc", value);
         }
+
     });
 
     return ContactModel;
