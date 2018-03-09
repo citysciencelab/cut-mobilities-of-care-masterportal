@@ -1,5 +1,13 @@
 [
   {
+    "layerId" : "999991",
+    "class": "POINT",
+    "subClass" : "CIRCLE",
+    "circleRadius" : 10,
+    "circleFillColor": [0, 80, 255, 0.6],
+    "circleStrokeColor": [0, 80, 255, 1]
+  },
+  {
     "layerId" : "999992",
     "class": "POINT",
     "subClass" : "ADVANCED",

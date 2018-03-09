@@ -19,6 +19,9 @@ define(function (require) {
         initialize: function () {
             this.superInitialize();
             var channel = Radio.channel("SensorLayer");
+
+            // change language from moment.js to german
+            moment.locale("de");
         },
 
         /**
@@ -38,6 +41,7 @@ define(function (require) {
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
                 gfiTheme: this.get("gfiTheme"),
+                routable: this.get("routable"),
                 id: this.getId()
             }));
 
@@ -61,73 +65,105 @@ define(function (require) {
          * differences by subtypes
          */
         updateData: function () {
-            if (this.get("subTyp") === "StreamLayer") {
-                return;
-            }
-
             var sensorData,
-                epsg = this.get("epsg"),
                 features,
                 subtyp = this.get("subTyp").toUpperCase(),
-                isClustered = this.has("clusterDistance") ? true : false;
+                isClustered = this.has("clusterDistance") ? true : false,
+                startTime = new Date().getTime(),
+                endTime;
 
-            // if (this.checkRequiredParameter()) {
-                // check for subtypes
-                if (subtyp === "SENSORTHINGS") {
-                    sensorData = this.loadSensorThings();
-                    features = this.drawPoints(sensorData, epsg);
-                    this.createMqttConnectionToSensorThings();
-                    // this.createWebSocketConnection();
+            // check for subtypes
+            if (subtyp === "SENSORTHINGS") {
+                sensorData = this.loadSensorThings();
+                features = this.drawPoints(sensorData);
+                this.createMqttConnectionToSensorThings();
+                // this.createWebSocketConnection();
+            }
+            else if (subtyp === "ESRISTREAMLAYER") {
+                sensorData = this.loadStreamLayer();
+                if (!_.isUndefined(sensorData)) {
+                    features = this.drawESRIGeoJson(sensorData);
                 }
-                else if (subtyp === "ESRISTREAMLAYER") {
-                    // features = this.drawESRIGeoJson();
-                    this.createWebSocketConnectionToStreamLayer();
-                }
-            // }
+                this.createWebSocketConnectionToStreamLayer();
+            }
 
             this.set("loadend", "ready");
             Radio.trigger("SensorLayer", "featuresLoaded", this.getId(), features);
             this.styling(isClustered);
             this.getLayer().setStyle(this.getStyle());
+
+            endTime = new Date().getTime();
+            console.log(this.attributes.name + ":");
+            console.log("Parsen: " + (endTime - startTime) / 1000 + " Sekunden");
+            console.log("-----------------------");
         },
 
         /**
-         * check required parameter from services-internet.json
-         * @return {boolean} true if all required parameters set
+         * parses the required elements from the specified url
+         * and returns the sensordata as esriJSON
+         * @return {esriJSON} sensorData
          */
-        checkRequiredParameter: function () {
-            var boolean = true;
+        loadStreamLayer: function () {
+            var layerUrl = this.get("url") + "?f=pjson",
+                streamData = this.getResponseFromRequestURL(layerUrl, false),
+                streamDataJSON = JSON.parse(streamData),
+                streamId = streamDataJSON.displayField,
+                epsg = streamDataJSON.spatialReference.wkid,
+                wssUrl = streamDataJSON.streamUrls[0].urls[0],
+                featuresUrl,
+                featuresUrlWithQuery,
+                response,
+                responseJSON,
+                sensorData;
 
-            if (_.isUndefined(this.get("id"))) {
-                boolean = false;
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parameter: id fehlt in der Konfiguration!</strong>",
-                    kategorie: "alert-danger"
-                });
+            // only if there is a URL
+            if (!_.isUndefined(streamDataJSON.keepLatestArchive)) {
+                featuresUrl = (_.isUndefined(streamDataJSON.keepLatestArchive.featuresUrl)) ? undefined : streamDataJSON.keepLatestArchive.featuresUrl;
+                featuresUrlWithQuery = featuresUrl + "/query?f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=" + epsg,
+                response = this.getResponseFromRequestURL(featuresUrlWithQuery, false),
+                responseJSON = JSON.parse(response),
+                sensorData = responseJSON.features;
             }
-            if (_.isUndefined(this.get("name"))) {
-                boolean = false;
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parameter: name fehlt in der Konfiguration!</strong>",
-                    kategorie: "alert-danger"
-                });
-            }
-            if (_.isUndefined(this.get("url"))) {
-                boolean = false;
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parameter: url fehlt in der Konfiguration!</strong>",
-                    kategorie: "alert-danger"
-                });
-            }
-            if (_.isUndefined(this.get("subTyp"))) {
-                boolean = false;
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parameter: subTyp fehlt in der Konfiguration!</strong>",
-                    kategorie: "alert-danger"
-                });
+            else {
+                sensorData = undefined;
             }
 
-            return boolean;
+            this.setWssUrl(wssUrl);
+            this.setStreamId(streamId);
+            this.setEpsg("EPSG:" + epsg);
+
+            return sensorData;
+        },
+
+        /**
+         * draw features from esriJSON
+         * @param  {esriJSON} sensorData
+         * @return {[ol.Feature]}
+         */
+        drawESRIGeoJson: function (sensorData) {
+            var streamId = this.get("streamId"),
+                epsgCode = this.get("epsg"),
+                esriFormat = new ol.format.EsriJSON(),
+                olFeaturesArray = [];
+
+            _.each(sensorData, function (data) {
+                if (this.get("fake")) {
+                    data.geometry.x = 9.65 + Math.random() * 0.65;
+                    data.geometry.y = 53.32 + Math.random() * 0.42;
+                }
+                var olFeature = esriFormat.readFeature(data, {
+                        dataProjection: epsgCode,
+                        featureProjection: Config.view.epsg
+                    }),
+                    id = data.attributes[streamId];
+
+                olFeature.setId(id);
+                olFeaturesArray.push(olFeature);
+            }, this);
+
+            this.getLayerSource().addFeatures(olFeaturesArray);
+
+            return olFeaturesArray;
         },
 
          /**
@@ -135,14 +171,13 @@ define(function (require) {
          * @param  {String} requestURL - to request sensordata
          * @return {objects} response with sensorObjects
          */
-        getResponseFromRequestURL: function (requestURL) {
-            var response,
-                startTime = new Date().getTime();
+        getResponseFromRequestURL: function (requestURL, asynchronous) {
+            var response;
 
             Radio.trigger("Util", "showLoader");
             $.ajax({
                 url: requestURL,
-                async: false,
+                async: asynchronous,
                 type: "GET",
                 context: this,
 
@@ -153,12 +188,12 @@ define(function (require) {
                 },
                 error: function (jqXHR, errorText, error) {
                     Radio.trigger("Util", "hideLoader");
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten aufgetreten</strong>",
+                        kategorie: "alert-danger"
+                    });
                 }
             });
-
-            var endTime = new Date().getTime();
-            console.log(this.attributes.name + ":");
-            console.log("Parsen: " + (endTime - startTime) / 1000 + " Sekunden");
 
             return response;
         },
@@ -168,8 +203,9 @@ define(function (require) {
          * @param  {array} sensorData - sensor with location and properties
          * @param  {Sting} epsg - from Sensortype
          */
-        drawPoints: function (sensorData, epsg) {
-            var features = [];
+        drawPoints: function (sensorData) {
+            var features = [],
+            epsg = epsg = this.get("epsg");
 
             _.each(sensorData, function (thisSensorData, index) {
                 var xyTransfrom = ol.proj.transform(thisSensorData.location, epsg, Config.view.epsg),
@@ -179,6 +215,8 @@ define(function (require) {
 
                 feature.setId(index);
                 feature.setProperties(thisSensorData.properties);
+                // for a special theme
+                feature.set("gfiParams", this.get("gfiParams"));
                 features.push(feature);
             }, this);
 
@@ -240,9 +278,6 @@ define(function (require) {
             return time;
         },
 
-// *************************************************************
-// ***** SensorThings                                      *****
-// *************************************************************
         /**
          * load SensorThings by
          * @return {array} all things with attributes and location
@@ -251,7 +286,7 @@ define(function (require) {
             var allThings = [],
                 thingsMerge = [],
                 requestURL = this.buildSensorThingsURL(),
-                things = this.getResponseFromRequestURL(requestURL),
+                things = this.getResponseFromRequestURL(requestURL, false),
                 thingsCount = things["@iot.count"], // count of all things
                 thingsbyOneRequest = things.value.length; // count of things on one request
 
@@ -259,7 +294,7 @@ define(function (require) {
             for (var i = thingsbyOneRequest; i < thingsCount; i += thingsbyOneRequest) {
                 var thisRequestURL = requestURL + "&$skip=" + i;
 
-                things = this.getResponseFromRequestURL(thisRequestURL);
+                things = this.getResponseFromRequestURL(thisRequestURL, false);
                 allThings.push(things.value);
             };
 
@@ -386,6 +421,10 @@ define(function (require) {
                 properties[key] = propString;
             }, this);
 
+            // set URL and version to properties, to build on custom theme with analytics
+            properties.requestURL = this.get("url");
+            properties.versionURL = this.get("version");
+
             // add to Object
             obj.location = this.getCoordinates(thingsArray[0]);
             obj.properties = properties;
@@ -425,8 +464,6 @@ define(function (require) {
      * this must be passes this as a context to call the updateFromMqtt function
      */
         createMqttConnectionToSensorThings: function () {
-            var startTime = new Date().getTime();
-
             var dataStreamIds = this.getDataStreamIds(),
                 client = mqtt.connect({
                     host: this.get("url").split("/")[2],
@@ -448,10 +485,6 @@ define(function (require) {
                 jsonData.dataStreamId = topic.split("(")[1].split(")")[0];
                 this.options.context.updateFromMqtt(jsonData);
             });
-
-            var endTime = new Date().getTime();
-            console.log("Websocket: " + (endTime - startTime) / 1000 + " Sekunden");
-            console.log("-----------------------");
         },
 
         /**
@@ -501,15 +534,11 @@ define(function (require) {
         updateFromWebSocket: function (thing) {
             var dataStreamId = Object.keys(thing)[0],
                 features = this.getLayerSource().getFeatures(),
-                featureArray = this.getFeatureByDataStreamId(dataStreamId, features);
-
-            // Change properties only in Layer witch contain the Datastream
-            if (!_.isEmpty(featureArray)) {
-                var thingResult = String(this.convertScaling(thing[dataStreamId].result)),
-                    thingPhenomenonTime = this.changeTimeZone(thing[dataStreamId].phenomenonTime);
+                featureArray = this.getFeatureByDataStreamId(dataStreamId, features),
+                thingResult = String(this.convertScaling(thing[dataStreamId].result)),
+                thingPhenomenonTime = this.changeTimeZone(thing[dataStreamId].phenomenonTime);
 
                 this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
-            }
         },
 
         /**
@@ -609,19 +638,9 @@ define(function (require) {
          */
         createWebSocketConnectionToStreamLayer: function () {
             var thisSensor = this,
-                protocol = window.location.protocol,
-                websocketURL,
-                connection;
-
-            // check protocol from portal an get appropriate websocketURL
-            if (protocol === "https:") {
-                websocketURL = this.get("wssUrl") + "/subscribe"
-            }
-            else {
-                websocketURL = this.get("wsUrl") + "/subscribe"
-            }
-
-            connection = new WebSocket(websocketURL),
+                websocketURL = this.getWebSocketURLByWindowProtocol(),
+                // connection = new WebSocket(websocketURL);
+                connection = new WebSocket(this.get("wssUrl") + "/subscribe");
 
             // errors
             connection.onerror = function (error) {
@@ -640,43 +659,68 @@ define(function (require) {
         },
 
         /**
+         * check protocol from portal an get appropriate websocketURL
+         * @return {String} websocketURL
+         */
+        getWebSocketURLByWindowProtocol: function () {
+            var protocol = window.location.protocol,
+                wssUrl = this.get("wssUrl"),
+                wsUrl = this.get("wsUrl");
+
+            if (protocol === "https:" && !_.isUndefined(wssUrl)) {
+                return wssUrl + "/subscribe";
+            }
+            else if (protocol === "http:" && !_.isUndefined(wsUrl)) {
+                return wsUrl + "/subscribe";
+            }
+            else {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Ein Fehler bei der WebSocket Verbindung ist aufgetreten! Bitte die Parameter überprüfen!</strong>",
+                    kategorie: "alert-danger"
+                });
+                return undefined;
+            }
+        },
+
+        /**
          * function updates the features when an event comes from ESRI-StreamLayer
-         * it comes only one feature with one stream
+         * one stream deliver only one feature
          * @param  {JSON} esriJson
          */
         updateFromWebSocketStreamLayer: function (esriJson) {
-
 // ******** Fake coordinates for testing ********************************
-            esriJson.geometry.x = 9.75 + Math.random() * 0.55;
-            esriJson.geometry.y = 53.42 + Math.random() * 0.32;
+            if (this.get("fake")) {
+                esriJson.geometry.x = 9.65 + Math.random() * 0.65;
+                esriJson.geometry.y = 53.32 + Math.random() * 0.42;
+            }
 // **********************************************************************
-
-            var id = esriJson.attributes.id,
+            var streamId = this.get("streamId"),
+                id = esriJson.attributes[streamId],
                 features = this.getLayerSource().getFeatures(),
                 existingFeature = this.getFeatureById(features, id),
-                epsgCode = "EPSG:" + esriJson.geometry.spatialReference.wkid;
+                epsgCode = this.get("epsg");
 
             // if the feature does not exist, then draw it otherwise update it
             if (_.isUndefined(existingFeature)) {
                 var esriFormat = new ol.format.EsriJSON(),
-                    olFeatures = esriFormat.readFeatures(esriJson, {
+                    olFeature = esriFormat.readFeature(esriJson, {
                         dataProjection: epsgCode,
                         featureProjection: Config.view.epsg
                     }),
                     isClustered = isClustered = this.has("clusterDistance") ? true : false;
 
-                olFeatures[0].setId(id);
-                this.getLayerSource().addFeatures(olFeatures);
+                olFeature.setId(id);
+                this.getLayerSource().addFeature(olFeature);
 
                 this.set("loadend", "ready");
-                Radio.trigger("SensorLayer", "featuresLoaded", this.getId(), olFeatures);
+                Radio.trigger("SensorLayer", "featuresLoaded", this.getId(), [olFeature]);
                 this.styling(isClustered);
                 this.getLayer().setStyle(this.getStyle());
 
-                Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), olFeatures[0]);
+                Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), olFeature);
             }
             else {
-                var location = [esriJson.geometry.x, esriJson.geometry.y],
+                var location = [Math.round(esriJson.geometry.x * 1000) / 1000, Math.round(esriJson.geometry.y * 1000) / 1000],
                     xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg);
 
                 existingFeature.setProperties(esriJson.attributes);
@@ -738,7 +782,20 @@ define(function (require) {
          */
         getClusterLayerSource: function () {
             return this.get("clusterLayerSource");
+        },
+
+        setWssUrl: function (value) {
+            this.set("wssUrl", value);
+        },
+
+        setStreamId: function (value) {
+            this.set("streamId", value);
+        },
+
+        setEpsg: function (value) {
+            this.set("epsg", value);
         }
+
     });
 
     return SensorLayer;

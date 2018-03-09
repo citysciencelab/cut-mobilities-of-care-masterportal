@@ -117,7 +117,7 @@ define(function (require) {
                 properties = this.model.get("indicatorPropertiesObj"),
                 height = this.model.get("gfiHeight"),
                 width = this.model.get("gfiWidth"),
-                content = "<table width='" + width + "' height='" + height + "' class='table indicatorTable'><thead><tr class='row'><th>Indikator</th>";
+                content = "<table width='" + width + "' height='" + height + "' class='table indicatorTable'><thead><tr class='row' height='1'><th>Indikator</th>";
 
             _.each(tableHead, function (head) {
                 content += "<th>" + head + "</th>";

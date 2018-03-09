@@ -88,10 +88,10 @@ define(function (require) {
                 if (!_.isUndefined(attribute || value)) {
                      var count = this.countStates(feature, attribute, value);
 
-                    cloneFeature.setId(feature.getId());
                     cloneFeature.set("weightForHeatmap", count);
                 }
 
+                cloneFeature.setId(feature.getId());
                 cloneFeatures.push(cloneFeature);
             }, this);
 
@@ -186,60 +186,6 @@ define(function (require) {
 
             return count;
         },
-
-  // /**
-        //  * updates the heatmap with given features
-        //  * generates a copy of the feature for each valid value of a feature,
-        //  * thereby weighting each feature
-        //  * @param  {[ol.feature]} features
-        //  */
-        // updateHeatmap: function (features) {
-        //     var startTime = new Date().getTime();
-        //     var heatmapAttribute = this.get("heatmap").attribute,
-        //         heatmapValue = this.get("heatmap").value,
-        //         heatmapLayerSource = this.getLayerSource(),
-        //         weightFeatures = [],
-        //         normalizeFeatures;
-
-        //     heatmapLayerSource.clear();
-
-        //     // count features with multiple heatmapAttributes
-        //     if (!_.isUndefined(heatmapAttribute && heatmapValue)) {
-        //         _.each(features, function (feature) {
-        //             var state = String(feature.get(heatmapAttribute)),
-        //                 states,
-        //                 count;
-
-        //             // split features with multiple values
-        //             if (state.indexOf("|") !== -1) {
-        //                 states = state.split(" | ");
-        //             }
-        //             else {
-        //                 states = [state];
-        //             }
-
-        //             // ******** Nochmal überarbeiten *******************
-        //             count = $.grep(states, function (state) {
-        //                 return state === heatmapValue;
-        //             }).length;
-
-        //             if (count > 0) {
-        //                 for (var i = 0; i < count; i++) {
-        //                     weightFeatures.push(feature.clone());
-        //                 }
-        //             }
-        //             // *************************************************
-        //         });
-
-        //         heatmapLayerSource.addFeatures(weightFeatures);
-        //     }
-        //     else {
-        //         heatmapLayerSource.addFeatures(features);
-        //     }
-        //     var endTime = new Date().getTime();
-        //     console.log("Layer: " + (endTime - startTime) + " Millisekunden");
-        //     console.log("-----------------------");
-        // },
 
         /**
          * Setter for attribute "layer"
