@@ -1,0 +1,40 @@
+[
+   {
+      "id" : "6830",
+      "name" : "Kindertagesstaetten Details",
+      "url" : "https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung",
+      "typ" : "WMS",
+      "layers" : "KitaEinrichtungen_Details",
+      "format" : "image/png",
+      "version" : "1.3.0",
+      "singleTile" : false,
+      "transparent" : true,
+      "transparency" : 0,
+      "tilesize" : "512",
+      "gutter" : "20",
+      "minScale" : "0",
+      "maxScale" : "2500000",
+      "gfiAttributes" : "showAll",
+      "gfiTheme" : "default",
+      "gfiComplex" : true,
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "",
+      "cache" : false,
+      "featureCount" : "1",
+      "datasets" : [
+         {
+            "md_id" : "C1AC42B2-C104-45B8-91F9-DA14C3C88A1F",
+            "rs_id" : "HMDK/6fdc7be8-520c-44ee-8e9a-855bac1b6a6b",
+            "md_name" : "Kita Einrichtungen Hamburg",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Sonstiges"
+            ],
+            "kategorie_inspire" : [
+               "Versorgungswirtschaft und staatliche Dienste"
+            ],
+            "kategorie_organisation" : "Behörde für Arbeit, Soziales, Familie und Integration"
+         }
+      ]
+   }
+]
