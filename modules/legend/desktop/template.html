@@ -43,14 +43,18 @@
                         else {
                             _.each(element.img, function (image, index2) {
                             %>
-                                <tr>
-                                   <td class="tdLegend">
-                                       <img src="<%= image %>">
-                                   </td>
-                                   <td class="tdLegend">
-                                       <span><%= element.legendname[index2] %></span>
-                                   </td>
-                               </tr>
+                            <tr>
+                                <td class="tdLegend">
+                                <% if (image.indexOf("<svg") !== -1){%>
+                                   <div class="tdLegend-no-image"><%= image %></div>
+                                <%} else {%>
+                            <img src="<%= image %>">
+                            <%}%>
+                                </td>
+                                <td class="tdLegend">
+                                   <span><%= element.legendname[index2] %></span>
+                                </td>
+                           </tr>
                             <%
                             });
                         }

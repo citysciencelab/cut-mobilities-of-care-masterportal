@@ -1,11 +1,9 @@
 define(function (require) {
     var expect = require("chai").expect,
-        Model = require("../../../../../modules/core/modelList/list.js"),
-        Util = require("../../../../../modules/core/util");
+        Model = require("../../../../../modules/core/modelList/list.js");
 
     describe("core/modelList/list", function () {
         var model,
-            util,
             testLightModels = [
                 {
                     id: "713",
@@ -39,7 +37,6 @@ define(function (require) {
             ];
 
         before(function () {
-            util = new Util();
             model = new Model();
         });
 

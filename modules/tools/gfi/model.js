@@ -213,7 +213,7 @@ define(function (require) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")});
 
             if (_.isUndefined(model) === false) {
-                var modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
+                var modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id");
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
                     modelAttributes.feature = featureAtPixel;

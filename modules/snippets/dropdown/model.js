@@ -1,7 +1,7 @@
 define(function (require) {
 
-    var SnippetModel = require("modules/Snippets/model"),
-        ValueModel = require("modules/Snippets/value/model"),
+    var SnippetModel = require("modules/snippets/model"),
+        ValueModel = require("modules/snippets/value/model"),
         DropdownModel;
 
     DropdownModel = SnippetModel.extend({
