@@ -12,6 +12,7 @@ require.config({
     util: "util",
     config: "testConfig",
     moment: "../../node_modules/moment/min/moment.min",
+    services: "resources/testServices.json",
     bootstrap: "../../node_modules/bootstrap/js"
   },
   shim: {
@@ -47,7 +48,8 @@ define(function (require) {
     "modules/tools/gfi/themes/schulinfo/testModel.js",
     "modules/core/testMap.js",
     "modules/core/modelList/testList.js",
-    "modules/contact/testModel.js"
+    "modules/contact/testModel.js",
+    "modules/core/testRawLayerList.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();
