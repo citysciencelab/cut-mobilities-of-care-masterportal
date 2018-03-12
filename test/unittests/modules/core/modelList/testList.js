@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         Model = require("../../../../../modules/core/modelList/list.js"),
         Util = require("../../../../../modules/core/util");
