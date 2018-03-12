@@ -80,14 +80,16 @@ define(function (require) {
             return isClusterFeature;
         },
         fillFeatureArray: function (featureAtPixel) {
-            var pFeatureArray = [];
+            var pFeatureArray = [],
+                selFeature,
+                list;
 
             // featuresAtPixel.layer !== null --> kleiner schneller Hack da sonst beim zeichnen die ganze Zeit versucht wird ein Popup zu zeigen?? SD 01.09.2015
             if (!_.isUndefined(featureAtPixel) && featureAtPixel.layer !== null) {
-                var selFeature = featureAtPixel.feature;
+                selFeature = featureAtPixel.feature;
 
                 if (this.isClusterFeature(selFeature)) {
-                    var list = selFeature.getProperties().features;
+                    list = selFeature.getProperties().features;
 
                     _.each(list, function (element) {
                         pFeatureArray.push({

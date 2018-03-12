@@ -23,10 +23,8 @@ define(function (require) {
 
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
-
                 this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+                $(".win-heading").after(this.$el.html(this.template(this.model.toJSON())));
                 this.model.createInteraction();
                 this.delegateEvents();
             }
@@ -43,7 +41,7 @@ define(function (require) {
                 targetProjection = this.model.returnProjectionByName(targetProjectionName);
 
             if (position) {
-                this.adjustPosition(position, targetProjection)
+                this.adjustPosition(position, targetProjection);
                 this.adjustWindow(targetProjection);
             }
         },
@@ -54,7 +52,7 @@ define(function (require) {
             // geographische Koordinaten
             if (targetProjection.projName === "longlat") {
                 coord = this.model.getHDMS(position);
-                easting = coord.substr(0,13);
+                easting = coord.substr(0, 13);
                 northing = coord.substr(14);
             }
             // kartesische Koordinaten

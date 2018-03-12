@@ -3,7 +3,7 @@ define([
     "backbone.radio",
     "openlayers",
     "config"
-], function (Backbone, Radio, ol, Config) {
+], function (Backbone, Radio, ol) {
 
     var CoordPopup = Backbone.Model.extend({
          defaults: {

@@ -47,7 +47,7 @@ define([
                 var projection = ol.proj.get(namedProjection[0]);
 
                 ol.proj.addProjection(projection);
-            })
+            });
         },
 
         getProjection: function (name) {
