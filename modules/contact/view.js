@@ -37,7 +37,7 @@ define([
             $(".win-body").css("max-height", height);
             $(".win-body").css("max-width", 400);
         },
-        setUserAttributes: function (evt) {console.log();
+        setUserAttributes: function (evt) {
             this.model.setUserAttributes(evt);
         },
         send: function () {
