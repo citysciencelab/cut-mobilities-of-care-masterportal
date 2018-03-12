@@ -121,7 +121,7 @@ define([
         },
 
         send: function () {
-            var cc = this.getCc(),
+            var cc =  _.map(this.getCc(), _.clone), // deep copy instead of passing object by reference
                 text,
                 dataToSend;
 
@@ -165,7 +165,6 @@ define([
                     }
                 }
             });
-            this.getCc().pop();
         },
 
         // getter for url
