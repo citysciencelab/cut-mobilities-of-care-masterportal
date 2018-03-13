@@ -48,6 +48,10 @@ define(function (require) {
             if (event.data.hasOwnProperty("showPositionByFeatureId")) {
                 this.showPositionByFeatureId(event.data.showPositionByFeatureId, event.data.layerId);
             }
+            else if (event.data.hasOwnProperty("transactFeatureById")) {
+                // Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.featureId, event.data.mode, event.data.attributes);
+                // Radio.trigger("wfsTransaction", "transact", "10691", "APP_ITGBM_ERHEBUNG_8734", "update", {gemarkung: "4444"});
+            }
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
             }
