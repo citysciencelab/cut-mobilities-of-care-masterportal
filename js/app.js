@@ -14,7 +14,6 @@ define("app",
     "modules/alerting/view"
     ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
 
-
     // Core laden
     new Autostarter();
     new Util();
@@ -30,6 +29,10 @@ define("app",
     });
 
     // Module laden
+    require(["modules/wfsTransaction/model"], function (WFSTransactionModel) {
+        new WFSTransactionModel();
+    });
+
     require(["modules/menu/menuLoader"], function (MenuLoader) {
         new MenuLoader();
     });
