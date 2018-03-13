@@ -34,7 +34,8 @@ define(function (require) {
             channel.on({
                 "setIsVisible": this.setIsVisible,
                 "setGfiParams": this.setGfiParamsFromCustomModule,
-                "hideGFI": this.hideGFI
+                "hideGFI": this.hideGFI,
+                "changeFeature": this.changeFeature
             }, this);
 
             channel.reply({
@@ -106,6 +107,24 @@ define(function (require) {
                 this.toggleGFI(tool.id);
             }
             this.initView();
+        },
+
+        /**
+         * if the displayed feature changes, the model is recreated and the gfi adjusted
+         * @param  {ol.Feature} feature - the feature which has been changed
+         */
+        changeFeature: function (feature) {
+            if (this.get("isVisible")) {
+                var gfiFeature = this.attributes.themeList.models[0].attributes.feature,
+                    gfiTheme;
+
+                if (gfiFeature === feature) {
+                    gfiTheme = this.attributes.themeList.models[0].attributes.gfiTheme;
+
+                    Radio.trigger("gfiList", "redraw");
+                    Radio.trigger(gfiTheme + "Theme", "changeGfi");
+                }
+            }
         },
 
         hideGFI: function () {

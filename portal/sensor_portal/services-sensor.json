@@ -36,7 +36,7 @@
       "name" : "Weltsatelliten",
       "fake" : false,
       "url" : "http://portal03.eggits.net/geoevent/rest/services/WorldSatellites/StreamServer",
-      "wsUrl" : "ws://service32.eggits.net:6180/arcgis/ws/services/WorldSatellites/StreamServer",
+      "wsUrl_" : "ws://service32.eggits.net:6180/arcgis/ws/services/WorldSatellites/StreamServer",
       "typ" : "Sensor",
       "subTyp" : "ESRIStreamLayer",
       "gfiTheme" : "default",
@@ -56,7 +56,7 @@
       "name" : "LA-Busse",
       "fake" : true,
       "url" : "https://geoeventsample1.esri.com:6443/arcgis/rest/services/LABus/StreamServer",
-      "wsUrl" : "ws://geoeventsample1.esri.com:6180/arcgis/ws/services/LABus/StreamServer",
+      "wsUrl_" : "ws://geoeventsample1.esri.com:6180/arcgis/ws/services/LABus/StreamServer",
       "typ" : "Sensor",
       "subTyp" : "ESRIStreamLayer",
       "gfiTheme" : "default",
@@ -73,7 +73,7 @@
       "name" : "Live - Position der International Space Station",
       "fake" : false,
       "url" : "http://portal03.eggits.net/geoevent/rest/services/iss-Location-Broadcast/StreamServer",
-      "wsUrl" : "ws://service32.eggits.net:6180/arcgis/ws/services/iss-Location-Broadcast/StreamServer",
+      "wsUrl_" : "ws://service32.eggits.net:6180/arcgis/ws/services/iss-Location-Broadcast/StreamServer",
       "typ" : "Sensor",
       "subTyp" : "ESRIStreamLayer",
       "gfiTheme" : "default",
@@ -134,10 +134,10 @@
       "utc" : "+1",
       "gfiTheme" : "elektroladesaeulen",
       "gfiParams" : {
-        "startDate" : "05.12.2017",
+        "startDate_" : "05.12.2017",
         "endDate_" : "28.02.2018",
-        "periodTime_" : 12,
-        "periodUnit_" : "Wochen"
+        "periodTime" : 3,
+        "periodUnit" : "Monate"
       },
       "gfiAttributes" : {
          "phenomenonTime" : "Letze Zustandsänderung",
@@ -146,56 +146,6 @@
          "type" : "Typ",
          "dataStreamId" : "DataStreamID"
       }
-   },
-   {
-      "id" : "937",
-      "name" : "Elektro Ladestandorte",
-      "url" : "https://geodienste.hamburg.de/HH_WMS_EMobility",
-      "typ" : "WMS",
-      "layers" : "stromnetz_emobility",
-      "format" : "image/png",
-      "version" : "1.3.0",
-      "singleTile" : false,
-      "transparent" : true,
-      "transparency" : 0,
-      "tilesize" : "512",
-      "gutter" : "30",
-      "minScale" : "0",
-      "maxScale" : "1000000",
-      "gfiAttributes" : {
-         "standort" : "Standort",
-         "adresse" : "Adresse",
-         "koordinaten" : "Koordinaten",
-         "anzahl_ladepunkte" : "Anzahl Ladepunkte",
-         "ladepunkt" : "Ladepunkt",
-         "typ" : "Typ",
-         "stecker" : "Stecker",
-         "stromstaerke_garantiert" : "garantierte Stromstärke",
-         "stromspannung" : "Stromspannung",
-         "status" : "Status",
-         "authmethod_1" : "Authentifizierungsmethode 1",
-         "authmethod_2" : "Authentifizierungsmethode 2"
-      },
-      "gfiTheme" : "default",
-      "layerAttribution" : "nicht vorhanden",
-      "legendURL" : "",
-      "cache" : false,
-      "featureCount" : "10",
-      "datasets" : [
-         {
-            "md_id" : "07302A1A-3250-4F0F-9F6E-96C508288D03",
-            "rs_id" : "HMDK/84b8b24e-300d-48d3-a711-aadc472f886d",
-            "md_name" : "Elektro Ladestandorte Hamburg",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "Transport und Verkehr"
-            ],
-            "kategorie_inspire" : [
-               "Verkehrsnetze"
-            ],
-            "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
-         }
-      ]
    },
    {
       "id" : "452",

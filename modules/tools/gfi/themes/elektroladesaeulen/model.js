@@ -8,9 +8,15 @@ define(function (require) {
     ElektroladesaeulenTheme = Theme.extend({
 
         initialize: function () {
+            var channel = Radio.channel("elektroladesaeulenTheme");
+
             this.listenTo(this, {
                 "change:isReady": this.parseProperties,
                 "change:isVisible": this.loadData
+            });
+
+            this.listenTo(channel, {
+                "changeGfi": this.changeData
             });
         },
 
@@ -32,13 +38,13 @@ define(function (require) {
             gfiProperties = this.changeStateToGerman(gfiProperties);
 
             // set Properties
-            this.set("requestURL", requestURL);
-            this.set("versionURL", versionURL);
-            this.set("dataStreamIds", dataStreamIds);
-            this.set("gfiParams", gfiParams);
-            this.set("headTitleObject", headTitleObject);
-            this.set("tableheadArray", tableheadArray);
-            this.set("gfiProperties", gfiProperties);
+            this.setRequestURL(requestURL);
+            this.setVersionURL(versionURL);
+            this.setDataStreamIds(dataStreamIds);
+            this.setGfiParams(gfiParams);
+            this.setHeadTitleObject(headTitleObject);
+            this.setTableheadArray(tableheadArray);
+            this.setGfiProperties(gfiProperties);
         },
 
         /**
@@ -50,26 +56,56 @@ define(function (require) {
                     allProperties = this.splitProperties(gfiContent.allProperties),
                     dataStreamIds = allProperties.dataStreamId,
                     gfiParams = this.get("gfiParams"),
+                    //historicalData
                     historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams),
                     historicalDataClean = this.dataCleaning(historicalData),
-                    indicatorChargingData = this.createIndicatorCharging(false, dataStreamIds),
-                    indicatorChargingDataClean = this.dataCleaningChargingIndicator(indicatorChargingData),
-                    processedIndicatorCharging = this.processIndicatorCharging(indicatorChargingDataClean),
-                    tableheadIndicatorArray = this.createIndicatorHead(processedIndicatorCharging),
-                    indicatorPropertiesObj = this.processChargingIndicator(processedIndicatorCharging),
-                    targetResults = ["available", "charging", "outoforder"];
+                    lastDay = moment(this.get("lastDate")).format("YYYY-MM-DD"),
+                    dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay),
+                    // Indicator CountCharging
+                    indicatorChargingCounterData = this.createIndicatorCharging(false, dataStreamIds),
+                    indicatorChargingCounterDataClean = this.dataCleaningChargingIndicator(indicatorChargingCounterData),
+                    processedIndicatorChargingCounter = this.processIndicatorCharging(indicatorChargingCounterDataClean),
+                    tableheadIndicatorArray = this.createIndicatorHead(processedIndicatorChargingCounter),
+
+                    indicatorPropertiesObj = this.processChargingIndicator(processedIndicatorChargingCounter);
 
                 // set indicators
-                this.set("tableheadIndicatorArray", tableheadIndicatorArray);
-                this.set("indicatorPropertiesObj", indicatorPropertiesObj);
-
-                // start processing historicalData
-                _.each(targetResults, function (targetResult) {
-                    var dataByWeekday = this.processDataForAllWeekdays(targetResult, historicalDataClean);
-
-                    this.set("weekday" + targetResult, dataByWeekday);
-                }, this);
+                this.setDataStreamIds(dataStreamIds);
+                this.setTableheadIndicatorArray(tableheadIndicatorArray);
+                this.setIndicatorPropertiesObj(indicatorPropertiesObj);
+                this.setWeekday(dataByWeekday);
             }
+        },
+
+        /**
+         * change gfi, if the tab-toogle "daten" ist active
+         */
+        changeData: function () {
+            var value,
+            index = this.get("dayIndex");
+
+            this.parseProperties();
+            this.loadData();
+
+            $("li").each(function () {
+                if ($(this).hasClass("active")) {
+                    value = $(this).attr("value");
+                }
+            });
+
+            if (value === "daten") {
+                Radio.trigger("gfiView", "render");
+            }
+        },
+
+        loadIndicatorData: function () {
+            var dataStreamIds = this.get("dataStreamIds"),
+                indicatorPropertiesObj = this.get("indicatorPropertiesObj"),
+                indicatorChargingHourData = this.createIndicatorChargingHour(false, dataStreamIds);
+
+            indicatorPropertiesObj["Gesamte Dauer der Ladungen"] = indicatorChargingHourData;
+
+            this.setIndicatorPropertiesObj(indicatorPropertiesObj);
         },
 
         /**
@@ -163,9 +199,8 @@ define(function (require) {
          * @return {[Object]}
          */
         createHistoricalData: function (async, dataStreamIds, gfiParams) {
-            var historicalData = [],
+            var historicalData,
                 query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc",
-                historicalData,
                 requestURL;
 
             // add gfiParams to query
@@ -250,7 +285,7 @@ define(function (require) {
             }
 
             // necessary for processing historical data
-            this.set("lastDate", lastDate);
+            this.setLastDate(lastDate);
 
             return query;
         },
@@ -451,15 +486,121 @@ define(function (require) {
                 indicatorPropertiesArray.push(erg);
             });
 
-            indicatorPropertiesObj["Anzahl der Ladungen"] = indicatorPropertiesArray;
+            indicatorPropertiesObj["Gesamtanzahl der Ladungen"] = indicatorPropertiesArray;
 
             return indicatorPropertiesObj;
+        },
+
+        createIndicatorChargingHour: function (async, dataStreamIds) {
+            var indicatorChargingHourData = this.createDataIndicatorChargingHour(false, dataStreamIds),
+                indicatorChargingHourDataClean = this.dataCleaning(indicatorChargingHourData),
+                indicatorChargingHourDataByWeekday = this.processDataForAllWeekdays(indicatorChargingHourDataClean),
+                minYear = 2017,
+                maxYear = moment().format("YYYY"),
+                allData = [];
+
+            for (var i = minYear; i <= maxYear; i++) {
+                var dataByYear = this.splitIndicatorDataByYear(indicatorChargingHourDataByWeekday, i),
+                    allWeekdaysByYear = this.getWeekDayIndicatorData(dataByYear),
+                    sumByYear = this.calculateSumIndicatorData(allWeekdaysByYear);
+
+                allData.push(sumByYear + " Std.");
+            }
+
+            return allData;
+        },
+
+        createDataIndicatorChargingHour: function (async, dataStreamIds) {
+            var chargingData,
+                query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc)&$filter=",
+                requestURL;
+
+            _.each(dataStreamIds, function (id, index) {
+                query = query + "@iot.id eq'" + id + "'";
+
+                if (index !== (dataStreamIds.length - 1)) {
+                    query = query + "or ";
+                }
+            });
+
+            requestURL = this.buildRequestFromQuery(query);
+            chargingData = this.sendRequest(requestURL, async);
+
+            // if with one request not all data can be fetched
+            _.each(chargingData, function (data) {
+                var observationsID = data["@iot.id"],
+                    observationsCount = data["Observations@iot.count"],
+                    observationsLength = data.Observations.length;
+
+                if (observationsCount > observationsLength) {
+                    for (var i = observationsLength; i < observationsCount; i += observationsLength) {
+                        var skipRequestURL = requestURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
+                            skipChargingData = this.sendRequest(skipRequestURL, async);
+
+                        data.Observations.push.apply(data.Observations, skipChargingData[0].Observations);
+                    }
+                }
+
+            }, this);
+
+            return chargingData;
+        },
+
+        splitIndicatorDataByYear: function (indicatorChargingHourDataByWeekday, year) {
+            var dataByYear = [];
+
+            _.each(indicatorChargingHourDataByWeekday, function (weekday) {
+                var wekdayData = [];
+
+                _.each(weekday, function (hour) {
+                    var hourData = [];
+
+                    _.each(hour, function (data) {
+
+                        if (data.phenomenonTime.substring(0, 4) === String(year)) {
+                            hourData.push(data);
+                        }
+                    });
+                    if (!_.isEmpty(hourData)) {
+                        wekdayData.push(hourData);
+                    }
+                });
+                if (!_.isEmpty(wekdayData)) {
+                    dataByYear.push(wekdayData);
+                }
+            });
+            return dataByYear;
+        },
+
+        getWeekDayIndicatorData: function (dataByYear) {
+            var allData = [];
+
+            for (var i = 0; i < 7; i++) {
+                var dataPerHour = this.calculateWorkloadPerDayPerHour(dataByYear[i], "charging"),
+                    processedData = this.calculateSumAndArithmeticMean(dataPerHour);
+
+                    allData.push(processedData);
+            }
+
+            return allData;
+        },
+
+        calculateSumIndicatorData: function (allWeekdaysByYear) {
+            var sum = 0;
+
+            _.each(allWeekdaysByYear, function (weekday) {
+                _.each(weekday, function (hourData) {
+                    sum += hourData.sum;
+                });
+            });
+
+            return Math.round(sum);
         },
 
 // *************************************************************
 // ***** Processing data                                   *****
 // *************************************************************
-        processDataForAllWeekdays: function (targetResult, historicalData) {
+        processDataForAllWeekdays: function (historicalData, lastDay) {
             var historicalDataThisTimeZone,
                 historicalDataWithIndex,
                 dataByWeekday,
@@ -470,7 +611,7 @@ define(function (require) {
             if (!this.checkObservationsEmpty(historicalData)) {
                 historicalDataThisTimeZone = this.changeTimeZone(historicalData);
                 historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
-                dataByWeekday = this.divideDataByWeekday(historicalDataWithIndex);
+                dataByWeekday = this.divideDataByWeekday(historicalDataWithIndex, lastDay);
             }
             else {
                 dataByWeekday = [];
@@ -524,14 +665,13 @@ define(function (require) {
             return historicalData;
         },
 
-        divideDataByWeekday: function (historicalDataWithIndex) {
-            var weekArray = [[], [], [], [], [], [], []],
-                lastDay = moment(this.get("lastDate")).format("YYYY-MM-DD");
+        divideDataByWeekday: function (historicalDataWithIndex, lastDay) {
+            var weekArray = [[], [], [], [], [], [], []];
 
             _.each(historicalDataWithIndex, function (historicalData) {
                 var observations = historicalData.Observations,
                     actualDay = moment().format("YYYY-MM-DD"),
-                    // lastDay = moment(observations[(observations).length - 1].phenomenonTime).format("YYYY-MM-DD"),
+                    lastDay = (_.isUndefined(lastDay)) ? moment(observations[(observations).length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay,
                     arrayIndex = 0,
                     booleanLoop = true;
 
@@ -579,26 +719,25 @@ define(function (require) {
         triggerToBarGraph: function (targetResult, graphTag, index) {
             var width = this.get("gfiWidth"),
                 height = this.get("gfiHeight"),
-                dataByWeekday = this.get("weekday" + targetResult),
+                dataByWeekday = this.get("weekday"),
                 dataPerHour,
                 processedData;
 
+            // need to toggle weekdays
+            this.setDayIndex(index);
+
             // set an error message if the values of processedData are all 0
             if (_.isEmpty(dataByWeekday)) {
-                this.drawErrorMessage(graphTag, width, height);
+                this.drawErrorMessage(graphTag, width, height, index);
                 return;
             }
-
-            // need to toggle weekdays
-            this.set("dayIndex", index);
-
             // process data for day with given index (0 = today)
             dataPerHour = this.calculateWorkloadPerDayPerHour(dataByWeekday[index], targetResult);
-            processedData = this.calculateArithmeticMean(dataPerHour);
+            processedData = this.calculateSumAndArithmeticMean(dataPerHour);
 
             // set an error message if the values of processedData are all 0
-            if (_.isUndefined(this.checkValue(processedData))) {
-                this.drawErrorMessage(graphTag, width, height);
+            if (_.isUndefined(this.checkValue(processedData, "mean"))) {
+                this.drawErrorMessage(graphTag, width, height, index);
                 return;
             }
 
@@ -632,7 +771,7 @@ define(function (require) {
                     fontSize: 12
                 },
                 xAttr: "hour",
-                attrToShowArray: ["value"]
+                attrToShowArray: ["mean"]
             };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
@@ -644,10 +783,12 @@ define(function (require) {
          * @param  {number} width
          * @param  {number} height
          */
-        drawErrorMessage: function (graphTag, width, height) {
+        drawErrorMessage: function (graphTag, width, height, index) {
+            var today = moment().subtract(index, "days").format("dddd");
+
             $("<div class='noData' style='height: " + height + "px; width: " + width + "px;'>")
                     .appendTo("div" + graphTag)
-                    .text("Zur Zeit keine Informationen!");
+                    .text("Zur Zeit keine Informationen für " + today + "e!");
         },
 
         /**
@@ -661,12 +802,17 @@ define(function (require) {
             var allDataArray = [];
 
             _.each(dataByWeekday, function (dayData) {
-                    var dayObj = this.createInitialDayPerHour(),
-                        dayDataReverse = dayData.reverse();
+                var zeroTime = moment(moment(dayData[0].phenomenonTime).format("YYYY-MM-DD")).format("YYYY-MM-DDTHH:mm:ss"),
+                    firstTimeDayData = moment(dayData[0].phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
+                    dayObj = this.createInitialDayPerHour();
 
-                    dayObj = this.calculateWorkloadforOneDay(dayObj, dayDataReverse, targetResult);
-                    allDataArray.push(dayObj);
-                }, this);
+                if (firstTimeDayData !== zeroTime) {
+                    dayData.reverse();
+                }
+
+                dayObj = this.calculateWorkloadforOneDay(dayObj, dayData, targetResult);
+                allDataArray.push(dayObj);
+            }, this);
 
             return allDataArray;
         },
@@ -782,12 +928,13 @@ define(function (require) {
          * @param  {[[Object]]} dataPerHour
          * @return {Object}
          */
-        calculateArithmeticMean: function (dataPerHour) {
+        calculateSumAndArithmeticMean: function (dataPerHour) {
             var dayLength = 24,
                 dayMeanArray = [];
 
             for (var i = 0; i <= dayLength; i++) {
                 var arrayPerHour = [],
+                    sum,
                     mean,
                     obj = {};
 
@@ -801,19 +948,24 @@ define(function (require) {
                     return !_.isUndefined(value);
                 });
 
-                // calculate mean of the array with values for one hour
-                mean = _.reduce(arrayPerHour, function (memo, value) {
+                // calculate sum of the array with values for one hour
+                sum = _.reduce(arrayPerHour, function (memo, value) {
                     return memo + value;
-                }) / arrayPerHour.length;
+                });
+
+                // calculate mean of the array with values for one hour
+                mean = sum / arrayPerHour.length;
 
                 if (_.isNaN(mean)) {
                     mean = 0;
+                    sum = 0;
                 }
 
                 // push mean to dayMeanArrayn as object
                 dayMeanArray.push({
                     hour: i,
-                    value: Math.round(mean * 1000) / 1000
+                    sum: Math.round(sum * 1000) / 1000,
+                    mean: Math.round(mean * 1000) / 1000
                 });
             }
 
@@ -825,9 +977,9 @@ define(function (require) {
          * @param  {[type]} processedData [description]
          * @return {[type]}               [description]
          */
-        checkValue: function (processedData) {
+        checkValue: function (processedData, value) {
             return _.find(processedData, function (data) {
-                return data.value > 0;
+                return data[value] > 0;
             });
         },
 
@@ -851,6 +1003,63 @@ define(function (require) {
             }
 
             return stateLabel + today + "s";
+        },
+
+        // setter-functions
+        setRequestURL: function (value) {
+            this.set("requestURL", value);
+        },
+
+        setVersionURL: function (value) {
+            this.set("versionURL", value);
+        },
+
+        setDataStreamIds: function (value) {
+            this.set("dataStreamIds", value);
+        },
+
+        setGfiParams: function (value) {
+            this.set("gfiParams", value);
+        },
+
+        setHeadTitleObject: function (value) {
+            this.set("headTitleObject", value);
+        },
+
+        setTableheadArray: function (value) {
+            this.set("tableheadArray", value);
+        },
+
+        setGfiProperties: function (value) {
+            this.set("gfiProperties", value);
+        },
+
+        setGfiHeight: function (value) {
+            this.set("gfiHeight", value);
+        },
+
+        setGfiWidth: function (value) {
+            this.set("gfiWidth", value);
+        },
+
+        setTableheadIndicatorArray: function (value) {
+            this.set("tableheadIndicatorArray", value);
+        },
+
+        setIndicatorPropertiesObj: function (value) {
+            this.set("indicatorPropertiesObj", value);
+        },
+
+        setWeekday: function (value) {
+            this.set("weekday", value);
+        },
+
+        setLastDate: function (value) {
+            this.set("lastDate", value);
+        },
+
+        setDayIndex: function (value) {
+            this.set("dayIndex", value);
         }
     });
 

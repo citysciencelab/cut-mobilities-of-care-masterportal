@@ -57,6 +57,17 @@ define(function (require) {
             }
         },
         initialize: function () {
+            var channel = Radio.channel("gfiList");
+
+            // get new feature data
+            this.listenTo(channel, {
+                redraw: function () {
+                    this.forEach(function (model) {
+                        model.requestFeatureInfos();
+                    });
+                }
+            }),
+
             this.listenTo(this, {
                 "reset": function () {
                     this.forEach(function (model) {

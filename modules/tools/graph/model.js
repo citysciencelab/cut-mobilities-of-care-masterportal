@@ -365,32 +365,32 @@ define(function (require) {
                 yAxis = this.createAxisLeft(scaleY, yAxisTicks),
                 offset = 0;
 
-                this.drawBars(svg, data, scaleX, scaleY, height, selector, barWidth);
+                this.drawBars(svg, data, scaleX, scaleY, height, selector, barWidth, xAttr, attrToShowArray);
                 this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset, 0);
                 this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset, 0, height);
         },
 
-        drawBars: function (svg, data, x, y, height, selector, barWidth) {
+        drawBars: function (svg, data, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
             svg.selectAll(".bar")
             .data(data)
             .enter().append("rect")
                 .attr("class", "bar" + selector.split(".")[1])
                 .attr("x", function (d) {
-                    return x(d.hour);
+                    return x(d[xAttr]);
                 })
                 .attr("y", function (d) {
-                    return y(d.value);
+                    return y(d[attrToShowArray[0]]);
                 })
                 .attr("width", barWidth - 1)
                 .attr("height", function (d) {
-                    return height - y(d.value);
+                    return height - y(d[attrToShowArray[0]]);
                 })
             .on("mouseover", function (d) {
                 d3.select(this);
             })
             .append("title")
                 .text(function (d) {
-                    return Math.round(d.value * 1000) / 10 + " %";
+                    return Math.round(d[attrToShowArray[0]] * 1000) / 10 + " %";
             });
         },
 

@@ -296,12 +296,6 @@
           "dataLayerId" : "999992",
           "name" : "Heatmap der FAKE LA-Busse (Live)",
           "visibility": false
-        },
-        {
-          "id" : "937",
-          "name" : "Elektro Ladestandort (WMS)",
-          "styleId": "937",
-          "visibility": false
         }
       ]
     }

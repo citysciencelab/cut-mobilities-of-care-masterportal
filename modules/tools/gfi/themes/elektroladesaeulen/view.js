@@ -33,7 +33,8 @@ define(function (require) {
 
         toggleTab: function (evt) {
             var contentId = $(evt.currentTarget).attr("value"),
-                index = 0;
+                modelDayIndex = this.model.get("dayIndex"),
+                index = _.isUndefined(modelDayIndex) ? 0 : modelDayIndex;
 
             if (_.isUndefined(this.model.get("gfiHeight")) || _.isUndefined(this.model.get("gfiWidth"))) {
                 var gfiSize = {
@@ -41,8 +42,8 @@ define(function (require) {
                     height: $(".gfi-content").css("height").slice(0, -2)
                 };
 
-                this.model.set("gfiHeight", this.calculateHeight(gfiSize.height));
-                this.model.set("gfiWidth", gfiSize.width);
+                this.model.setGfiHeight(this.calculateHeight(gfiSize.height));
+                this.model.setGfiWidth(gfiSize.width);
             }
 
             // delete all graphs
@@ -81,7 +82,10 @@ define(function (require) {
             // hide all buttons with arrows
             $(".ladesaeulen .kat").hide();
 
-            if (contentId === "diagrammVerfuegbar") {
+            if (contentId === "daten") {
+                Radio.trigger("gfiView", "render");
+            }
+            else if (contentId === "diagrammVerfuegbar") {
                 this.loadDiagramm("available", ".ladesaeulenVerfuegbar-graph", index);
                 $(".ladesaeulen .verfuegbarButton").show();
             }
@@ -94,8 +98,10 @@ define(function (require) {
                 $(".ladesaeulen .ausserBetriebButton").show();
             }
             else if (contentId === "indikatoren") {
+                this.model.loadIndicatorData();
                 this.drawIndicator(".tabIndikator");
             }
+
         },
 
         loadDiagramm: function (state, graphTag, index) {
@@ -123,10 +129,10 @@ define(function (require) {
                 content += "<th>" + head + "</th>";
             });
 
-            content +=  "</tr></thead><tbody>";
+            content += "</tr></thead><tbody>";
 
             _.each(properties, function (value, key) {
-                content += "<tr class='row'><th>" + key + "</th>";
+                content += "<tr class='row'><th height='1'>" + key + "</th>";
                 _.each(value, function (val) {
                     content += "<td>" + val + "</td>";
                 });

@@ -66,20 +66,20 @@ define(function (require) {
          */
         updateData: function () {
             var sensorData,
-                features,
-                subtyp = this.get("subTyp").toUpperCase(),
+                features = undefined,
+                subTyp = this.get("subTyp").toUpperCase(),
                 isClustered = this.has("clusterDistance") ? true : false,
                 startTime = new Date().getTime(),
                 endTime;
 
             // check for subtypes
-            if (subtyp === "SENSORTHINGS") {
+            if (subTyp === "SENSORTHINGS") {
                 sensorData = this.loadSensorThings();
                 features = this.drawPoints(sensorData);
                 this.createMqttConnectionToSensorThings();
                 // this.createWebSocketConnection();
             }
-            else if (subtyp === "ESRISTREAMLAYER") {
+            else if (subTyp === "ESRISTREAMLAYER") {
                 sensorData = this.loadStreamLayer();
                 if (!_.isUndefined(sensorData)) {
                     features = this.drawESRIGeoJson(sensorData);
@@ -87,83 +87,17 @@ define(function (require) {
                 this.createWebSocketConnectionToStreamLayer();
             }
 
-            this.set("loadend", "ready");
-            Radio.trigger("SensorLayer", "featuresLoaded", this.getId(), features);
-            this.styling(isClustered);
-            this.getLayer().setStyle(this.getStyle());
+            if (!_.isUndefined(features)) {
+                this.styling(isClustered);
+                this.getLayer().setStyle(this.getStyle());
 
-            endTime = new Date().getTime();
-            console.log(this.attributes.name + ":");
-            console.log("Parsen: " + (endTime - startTime) / 1000 + " Sekunden");
-            console.log("-----------------------");
-        },
-
-        /**
-         * parses the required elements from the specified url
-         * and returns the sensordata as esriJSON
-         * @return {esriJSON} sensorData
-         */
-        loadStreamLayer: function () {
-            var layerUrl = this.get("url") + "?f=pjson",
-                streamData = this.getResponseFromRequestURL(layerUrl, false),
-                streamDataJSON = JSON.parse(streamData),
-                streamId = streamDataJSON.displayField,
-                epsg = streamDataJSON.spatialReference.wkid,
-                wssUrl = streamDataJSON.streamUrls[0].urls[0],
-                featuresUrl,
-                featuresUrlWithQuery,
-                response,
-                responseJSON,
-                sensorData;
-
-            // only if there is a URL
-            if (!_.isUndefined(streamDataJSON.keepLatestArchive)) {
-                featuresUrl = (_.isUndefined(streamDataJSON.keepLatestArchive.featuresUrl)) ? undefined : streamDataJSON.keepLatestArchive.featuresUrl;
-                featuresUrlWithQuery = featuresUrl + "/query?f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=" + epsg,
-                response = this.getResponseFromRequestURL(featuresUrlWithQuery, false),
-                responseJSON = JSON.parse(response),
-                sensorData = responseJSON.features;
+                endTime = new Date().getTime();
+                console.log(subTyp);
+                console.log(this.attributes.name + ":");
+                console.log("Parsen: " + (endTime - startTime) / 1000 + " Sekunden");
+                console.log("Anzahl der Features: " + features.length);
+                console.log("-----------------------");
             }
-            else {
-                sensorData = undefined;
-            }
-
-            this.setWssUrl(wssUrl);
-            this.setStreamId(streamId);
-            this.setEpsg("EPSG:" + epsg);
-
-            return sensorData;
-        },
-
-        /**
-         * draw features from esriJSON
-         * @param  {esriJSON} sensorData
-         * @return {[ol.Feature]}
-         */
-        drawESRIGeoJson: function (sensorData) {
-            var streamId = this.get("streamId"),
-                epsgCode = this.get("epsg"),
-                esriFormat = new ol.format.EsriJSON(),
-                olFeaturesArray = [];
-
-            _.each(sensorData, function (data) {
-                if (this.get("fake")) {
-                    data.geometry.x = 9.65 + Math.random() * 0.65;
-                    data.geometry.y = 53.32 + Math.random() * 0.42;
-                }
-                var olFeature = esriFormat.readFeature(data, {
-                        dataProjection: epsgCode,
-                        featureProjection: Config.view.epsg
-                    }),
-                    id = data.attributes[streamId];
-
-                olFeature.setId(id);
-                olFeaturesArray.push(olFeature);
-            }, this);
-
-            this.getLayerSource().addFeatures(olFeaturesArray);
-
-            return olFeaturesArray;
         },
 
          /**
@@ -243,14 +177,6 @@ define(function (require) {
                     return stylelistmodel.createStyle(feature, isClustered);
                 });
             }
-        },
-
-        /**
-         * getter for StyleId
-         * @return {number} styleId
-         */
-        getStyleId: function () {
-            return this.get("styleId");
         },
 
         /**
@@ -456,6 +382,74 @@ define(function (require) {
             return state;
         },
 
+        /**
+         * parses the required elements from the specified url
+         * and returns the sensordata as esriJSON
+         * @return {esriJSON} sensorData
+         */
+        loadStreamLayer: function () {
+            var layerUrl = this.get("url") + "?f=pjson",
+                streamData = this.getResponseFromRequestURL(layerUrl, false),
+                streamDataJSON = JSON.parse(streamData),
+                streamId = streamDataJSON.displayField,
+                epsg = streamDataJSON.spatialReference.wkid,
+                wssUrl = streamDataJSON.streamUrls[0].urls[0],
+                featuresUrl,
+                featuresUrlWithQuery,
+                response,
+                responseJSON,
+                sensorData;
+
+            // only if there is a URL
+            if (!_.isUndefined(streamDataJSON.keepLatestArchive)) {
+                featuresUrl = (_.isUndefined(streamDataJSON.keepLatestArchive.featuresUrl)) ? undefined : streamDataJSON.keepLatestArchive.featuresUrl;
+                featuresUrlWithQuery = featuresUrl + "/query?f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=" + epsg,
+                response = this.getResponseFromRequestURL(featuresUrlWithQuery, false),
+                responseJSON = JSON.parse(response),
+                sensorData = responseJSON.features;
+            }
+            else {
+                sensorData = undefined;
+            }
+
+            this.setWssUrl(wssUrl);
+            this.setStreamId(streamId);
+            this.setEpsg("EPSG:" + epsg);
+
+            return sensorData;
+        },
+
+        /**
+         * draw features from esriJSON
+         * @param  {esriJSON} sensorData
+         * @return {[ol.Feature]}
+         */
+        drawESRIGeoJson: function (sensorData) {
+            var streamId = this.get("streamId"),
+                epsgCode = this.get("epsg"),
+                esriFormat = new ol.format.EsriJSON(),
+                olFeaturesArray = [];
+
+            _.each(sensorData, function (data) {
+                if (this.get("fake")) {
+                    data.geometry.x = 9.65 + Math.random() * 0.65;
+                    data.geometry.y = 53.32 + Math.random() * 0.42;
+                }
+                var olFeature = esriFormat.readFeature(data, {
+                        dataProjection: epsgCode,
+                        featureProjection: Config.view.epsg
+                    }),
+                    id = data.attributes[streamId];
+
+                olFeature.setId(id);
+                olFeaturesArray.push(olFeature);
+            }, this);
+
+            this.getLayerSource().addFeatures(olFeaturesArray);
+
+            return olFeaturesArray;
+        },
+
 // *************************************************************
 // ***** live update via MQTT or websocket                 *****
 // *************************************************************
@@ -569,7 +563,9 @@ define(function (require) {
                 feature.set("phenomenonTime", thingPhenomenonTime);
             }
 
+            // trigger the heatmap and gfi to update them
             Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), feature);
+            Radio.trigger("GFI", "changeFeature", feature);
         },
 
         /**
@@ -638,9 +634,9 @@ define(function (require) {
          */
         createWebSocketConnectionToStreamLayer: function () {
             var thisSensor = this,
-                websocketURL = this.getWebSocketURLByWindowProtocol(),
-                // connection = new WebSocket(websocketURL);
-                connection = new WebSocket(this.get("wssUrl") + "/subscribe");
+                // websocketURL = this.getWebSocketURLByWindowProtocol(),
+                websocketURL = this.get("wssUrl") + "/subscribe",
+                connection = new WebSocket(websocketURL);
 
             // errors
             connection.onerror = function (error) {
@@ -711,9 +707,6 @@ define(function (require) {
 
                 olFeature.setId(id);
                 this.getLayerSource().addFeature(olFeature);
-
-                this.set("loadend", "ready");
-                Radio.trigger("SensorLayer", "featuresLoaded", this.getId(), [olFeature]);
                 this.styling(isClustered);
                 this.getLayer().setStyle(this.getStyle());
 
@@ -721,11 +714,25 @@ define(function (require) {
             }
             else {
                 var location = [Math.round(esriJson.geometry.x * 1000) / 1000, Math.round(esriJson.geometry.y * 1000) / 1000],
-                    xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg);
+                    xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg),
+                    oldFeature = existingFeature.clone();
 
-                existingFeature.setProperties(esriJson.attributes);
-                existingFeature.getGeometry().setCoordinates(xyTransform);
-                Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), existingFeature);
+                try {
+                    existingFeature.setProperties(esriJson.attributes);
+                    existingFeature.getGeometry().setCoordinates(xyTransform);
+
+                    // trigger the heatmap and gfi to update them
+                    Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), existingFeature);
+                    Radio.trigger("GFI", "changeFeature", existingFeature);
+                }
+                catch (err) {
+                    console.log(err);
+                    console.log(err.message);
+                    console.log("Neue Koordinaten: " + xyTransform);
+                    console.log("Neue Geometrie: " + existingFeature);
+                    console.log("Alte Geometrie: " + oldFeature);
+                    existingFeature = oldFeature;
+                }
             }
         },
 
@@ -752,36 +759,24 @@ define(function (require) {
 // *************************************************************
 // ***** Getter- and Setter-Methods                        *****
 // *************************************************************
-        /**
-         * getter for style
-         * @return {function}
-         */
         getStyle: function () {
             return this.get("style");
         },
 
-        /**
-         * setter for style
-         * @param {[type]} value
-         */
+        getClusterLayerSource: function () {
+            return this.get("clusterLayerSource");
+        },
+
+        getStyleId: function () {
+            return this.get("styleId");
+        },
+
         setStyle: function (value) {
             this.set("style", value);
         },
 
-        /**
-         * setClusterLayerSource
-         * @param {ol.source.Cluster} value
-         */
         setClusterLayerSource: function (value) {
             this.set("clusterLayerSource", value);
-        },
-
-        /**
-         * getClusterLayerSource
-         * @return {ol.source.Cluster}
-         */
-        getClusterLayerSource: function () {
-            return this.get("clusterLayerSource");
         },
 
         setWssUrl: function (value) {
