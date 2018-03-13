@@ -58,7 +58,7 @@ Das Template muss in die View eingebunden werden. Hierzu wird in einer neuen Var
 define(function (require) {
  var ...,
    _ = require("underscore"),
-   ScaleTemplate = "text!modules/scale/template.html",
+   ScaleTemplate = require("text!modules/scale/template.html"),
    View;
 
   View = Backbone.View.extend({

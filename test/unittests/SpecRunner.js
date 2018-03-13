@@ -5,6 +5,7 @@ require.config({
     backbone: "../../node_modules/backbone/backbone",
     openlayers: "../../node_modules/openlayers/dist/ol-debug",
     proj4: "../../node_modules/proj4/dist/proj4",
+    d3: "../../node_modules/d3/build/d3.min",
     "backbone.radio": "../../node_modules/backbone.radio/build/backbone.radio.min",
     mocha: "../../node_modules/mocha/mocha",
     chai: "../../node_modules/chai/chai",
@@ -46,9 +47,12 @@ define(function (require) {
     "modules/tools/filter/testFilter.js",
     "modules/snippets/slider/testModel.js",
     "modules/tools/gfi/themes/schulinfo/testModel.js",
+    "modules/tools/gfi/themes/verkehrsstaerken_rad/testModel.js",
     "modules/core/testMap.js",
     "modules/core/modelList/testList.js",
-    "modules/core/testRawLayerList.js"
+    "modules/vectorStyle/testModel.js",
+    "modules/core/testRawLayerList.js",
+    "modules/alerting/testModel.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();

@@ -125,7 +125,7 @@ define([
                 complete: function (jqXHR) {
                     Radio.trigger("Util", "hideLoader");
                     if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                        Radio.trigger("Alert", "alert", {text: "<strong>Emailversandt fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
+                        Radio.trigger("Alert", "alert", {text: "<strong>Emailversand fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
                     }
                 },
                 success: function (data) {
