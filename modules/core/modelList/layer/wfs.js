@@ -180,7 +180,7 @@ define(function (require) {
                 return style;
             }
             else {
-                return function (feature) {
+                return function () {
                     return style;
                 };
             }
