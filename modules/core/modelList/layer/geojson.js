@@ -42,10 +42,9 @@ define(function (require) {
             var params = {
                 request: "GetFeature",
                 service: "WFS",
-                // SRSNAME: Radio.request("MapView", "getProjection").getCode(),
                 typeName: this.get("featureType"),
                 outputFormat: "application/geo+json",
-                maxFeatures: 300,
+                maxFeatures: 100,
                 version: this.getVersion()
             };
 
@@ -64,18 +63,20 @@ define(function (require) {
             });
         },
         handleData: function (data) {
-            console.log(data);
             Radio.trigger("Util", "hideLoader");
             var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
                 mapCrs = Radio.request("MapView", "getProjection").getCode(),
                 geojsonReader = new ol.format.GeoJSON(),
                 features = geojsonReader.readFeatures(data);
+
             if (jsonCrs !== mapCrs) {
                 features = this.transformFeatures(features, jsonCrs, mapCrs);
             }
+            features.forEach(function (feature) {
+                feature.setId(feature.get("id"));
+            });
             this.getLayerSource().addFeatures(features);
             this.set("loadend", "ready");
-
             this.getLayer().setStyle(this.get("style"));
         },
         transformFeatures: function (features, crs, mapCrs) {
