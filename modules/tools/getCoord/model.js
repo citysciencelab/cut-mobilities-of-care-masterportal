@@ -79,7 +79,7 @@ define([
         },
 
         getHDMS: function (coord) {
-            return ol.coordinate.toStringHDMS(coord)
+            return ol.coordinate.toStringHDMS(coord);
         },
 
         getCartesian: function (coord) {
