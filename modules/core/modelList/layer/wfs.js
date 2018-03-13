@@ -9,7 +9,6 @@ define(function (require) {
 
         initialize: function () {
             this.superInitialize();
-            var channel = Radio.channel("WFSLayer");
         },
 
         /**
@@ -108,15 +107,16 @@ define(function (require) {
                     this.styling(isClustered);
                     this.getLayer().setStyle(this.getStyle());
                 },
-                error: function (jqXHR, errorText, error) {
+                error: function () {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
         },
         styling: function (isClustered) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
             if (!_.isUndefined(stylelistmodel)) {
-                this.setStyle(function(feature) {
+                this.setStyle(function (feature) {
                     return stylelistmodel.createStyle(feature, isClustered);
                 });
             }
@@ -182,7 +182,7 @@ define(function (require) {
             else {
                 return function (feature) {
                     return style;
-                }
+                };
             }
         },
         getHiddenStyle: function () {
