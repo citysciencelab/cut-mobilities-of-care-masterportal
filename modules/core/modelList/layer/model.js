@@ -113,7 +113,7 @@ define(function (require) {
         * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
         **/
         checkForScale: function (options) {
-            if (parseInt(options.scale, 10) <= this.get("maxScale") && parseInt(options.scale, 10) >= this.get("minScale")) {
+            if (parseFloat(options.scale, 10) <= this.getMaxScale() && parseFloat(options.scale, 10) >= this.getMinScale()) {
                 this.setIsOutOfRange(false);
             }
             else {
@@ -260,11 +260,11 @@ define(function (require) {
         },
 
         getMaxScale: function () {
-            return this.get("maxScale");
+            return parseFloat(this.get("maxScale"));
         },
 
         getMinScale: function () {
-            return this.get("minScale");
+            return parseFloat(this.get("minScale"));
         },
 
         getTyp: function () {
