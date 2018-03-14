@@ -71,7 +71,7 @@
    {
       "id" : "999993",
       "name" : "Live - Position der International Space Station",
-      "fake" : true,
+      "fake" : false,
       "url" : "http://portal03.eggits.net/geoevent/rest/services/iss-Location-Broadcast/StreamServer",
       "wsUrl_" : "ws://service32.eggits.net:6180/arcgis/ws/services/iss-Location-Broadcast/StreamServer",
       "typ" : "Sensor",

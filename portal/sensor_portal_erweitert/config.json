@@ -38,7 +38,77 @@
     },
     "mapView": {
         "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
-        "startCenter": [565430, 5933970]
+        "startCenter": [565430, 5933970],
+        "options": [
+        {
+          "resolution": 5000,
+          "scale": 5311167,
+          "zoomLevel": 0
+        },
+        {
+          "resolution": 305.7487246381551,
+          "scale": 2155583,
+          "zoomLevel": 1
+        },
+        {
+          "resolution": 152.87436231907702,
+          "scale": 577791,
+          "zoomLevel": 2
+        },
+        {
+          "resolution": 76.43718115953851,
+          "scale": 288896,
+          "zoomLevel": 3
+        },
+        {
+          "resolution": 38.21859057976939,
+          "scale": 144448,
+          "zoomLevel": 4
+        },
+        {
+          "resolution": 19.109295289884642,
+          "scale": 72223,
+          "zoomLevel": 5
+        },
+        {
+          "resolution": 10.583327618336419,
+          "scale": 40000,
+          "zoomLevel": 6
+        },
+        {
+          "resolution": 5.2916638091682096,
+          "scale": 20000,
+          "zoomLevel": 7
+        },
+        {
+          "resolution": 2.6458319045841048,
+          "scale": 10000,
+          "zoomLevel": 8
+        },
+        {
+          "resolution": 1.3229159522920524,
+          "scale": 5000,
+          "zoomLevel": 9
+        },
+        {
+          "resolution": 0.6614579761460262,
+          "scale": 2500,
+          "zoomLevel": 10
+        },
+        {
+          "resolution": 0.2645831904584105,
+          "scale": 1000,
+          "zoomLevel": 11
+        },
+        {
+          "resolution": 0.13229159522920521,
+          "scale": 500,
+          "zoomLevel": 12
+        }],
+        "extent_": [-1000000.0, 3000000.0, 700000.0, 6000000.0],
+        "extent": [510000.0, 4850000.0, 625000.4, 6000000.0],
+        "resolution": 15.874991427504629,
+        "zoomLevel": 6
     },
     "menu": {
       "tree": {
@@ -169,6 +239,11 @@
           "id": ["4736", "4745", "4739", "4742"],
           "name": "Geobasiskarten (schwarz-grau)",
           "visibility": true
+        },
+        {
+          "id": "777777",
+          "name": "Weltkarte OSM",
+          "visibility": true
         }
       ]
     },
@@ -201,8 +276,14 @@
         {
           "id": "999993",
           "styleId": "999993",
-          "name" : "Fake Position der ISS (Live)",
-          "visibility": false
+          "name" : "Position der ISS (Live)",
+          "visibility": true
+        },
+        {
+          "id": "999991",
+          "name" : "Positionen der Weltsatelliten (Live)",
+          "styleId": "999991",
+          "visibility": true
         },
         {
           "id": "999992",
