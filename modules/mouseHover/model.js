@@ -1,21 +1,19 @@
 define(function (require) {
-    require("bootstrap/popover");
     var Config = require("config"),
         Backbone = require("backbone"),
         Radio = require ("backbone.radio"),
-        ol = require("openlayers"),
         MouseHoverPopup;
 
     MouseHoverPopup = Backbone.Model.extend({
         defaults: {
+            textPosition: null,
+            textArray: null,
             wfsList: [],
-            mhpresult: "",
-            mhpcoordinates: [],
-            oldSelection: [],
-            GFIPopupVisibility: false,
+            minShift: Config.mouseHover.minShift ? Config.mouseHover.minShift : 5,
             numFeaturesToShow: Config.mouseHover.numFeaturesToShow ? Config.mouseHover.numFeaturesToShow : 2,
             infoText: Config.mouseHover.infoText ? Config.mouseHover.infoText : "(weitere Objekte. Bitte zoomen.)"
         },
+
         initialize: function () {
             var channel = Radio.channel("MouseHover");
 
@@ -23,41 +21,39 @@ define(function (require) {
                 "hide": this.destroyPopup
             });
 
-            Radio.trigger("Map", "registerListener", "pointermove", this.checkForEachFeatureAtPixel, this);
-
-            $("#map").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
-
-            this.set("mhpOverlay", new ol.Overlay({
-                element: $("#mousehoverpopup")[0]
-            }));
-
-            this.filterWFSList();
-            this.set("element", this.get("mhpOverlay").getElement());
-            Radio.trigger("Map", "addOverlay", this.get("mhpOverlay"));
+            Radio.trigger("Map", "registerListener", "pointermove", this.checkDragging, this);
+            this.getMouseHoverInfosFromConfig();
         },
-        filterWFSList: function () {
-            var wfsList = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),
-                wfsListFiltered = [];
 
-            _.each(wfsList, function (element) {
-                if (_.has(element, "mouseHoverField")) {
-                    wfsListFiltered.push({
-                        layerId: element.id,
-                        fieldname: element.mouseHoverField
-                    });
-                }
-            });
+        getMouseHoverInfosFromConfig: function () {
+            var wfsLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),
+                geoJsonLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "GeoJSON"}),
+                vectorLayers = _.union(wfsLayers, geoJsonLayers),
+                mouseHoverLayers = _.filter(vectorLayers, function (layer) {
+                    return _.has(layer, "mouseHoverField") && layer.mouseHoverField !== "";
+                }),
+                mouseHoverInfos = _.map(mouseHoverLayers, function (layer) {
+                    return _.pick(layer, "id", "mouseHoverField");
+                });
 
-            this.set("wfsList", wfsListFiltered);
+            this.setMouseHoverInfos(mouseHoverInfos);
         },
 
         /**
          * Vernichtet das Popup.
          */
         destroyPopup: function () {
-            this.set("oldSelection", "");
-            this.unset("mhpresult", {silent: true});
-            $(this.get("element")).tooltip("destroy");
+            this.setTextArray(null);
+            this.setTextPosition(null);
+            this.trigger("destroy");
+        },
+
+        showPopup: function () {
+            this.trigger("render", this.getTextArray(), this.getTextPosition());
+        },
+
+        movePopup: function () {
+            this.trigger("move", this.getTextPosition());
         },
 
         getFeaturesAtPixel: function (evt) {
@@ -71,6 +67,7 @@ define(function (require) {
             });
             return features;
         },
+
         isClusterFeature: function (feature) {
             var isClusterFeature = false;
 
@@ -79,6 +76,7 @@ define(function (require) {
             }
             return isClusterFeature;
         },
+
         fillFeatureArray: function (featureAtPixel) {
             var pFeatureArray = [],
                 selFeature,
@@ -107,77 +105,92 @@ define(function (require) {
             }
             return pFeatureArray;
         },
+
         /**
-        * forEachFeatureAtPixel greift nur bei sichtbaren Features.
-        * wenn 2. Parameter (layer) == null, dann kein Layer
-        * Wertet an der aktuell getriggerten Position alle Features der
-        * Map aus, die über subfunction function(layer) zurückgegeben werden.
-        * pFeatureArray wird so mit allen darzustellenden Features gepusht.
-        * Nachdem die Selektion erstellt wurde, wird diese für initiale
-        * if-Bedingung gespeichert und abschließend wird das Aufbereiten dieser
-        * Selektion angestpßen.
-        */
-        checkForEachFeatureAtPixel: function (evt) {
-            if (evt.dragging) {
-                return;
+         * Prüft auf Drag-Modus
+         * @param  {evt} evt Event-Object
+         * @listens "Map:pointermove"
+         */
+        checkDragging: function (evt) {
+            if (!evt.dragging) {
+                this.checkTextPosition(evt);
             }
-            var pFeaturesArray = [],
-                pFeatureArray = [],
+        },
+
+        /**
+         * Prüft, welche Features an MousePosition vorhanden sind
+         * @param  {evt} evt PointerMoveEvent
+         */
+        checkForFeaturesAtPixel: function (evt) {
+            var featuresArray = [],
+                featureArray = [],
                 featuresAtPixel = this.getFeaturesAtPixel(evt);
 
-            if (featuresAtPixel.length > 0) {
-                _.each(featuresAtPixel, function (featureAtPixel) {
-                    pFeatureArray = this.fillFeatureArray(featureAtPixel);
-                    pFeaturesArray = _.union(pFeaturesArray, pFeatureArray);
-                }, this);
-                if (pFeaturesArray.length > 0) {
-                    if (this.get("oldSelection").length === 0) {
-                        this.set("oldSelection", pFeaturesArray);
-                        this.prepMouseHoverFeature(pFeaturesArray);
-                    }
-                    else {
-                        if (this.compareArrayOfObjects(pFeaturesArray, this.get("oldSelection")) === false) {
-                            this.destroyPopup(pFeaturesArray);
-                            this.set("oldSelection", pFeaturesArray);
-                            this.prepMouseHoverFeature(pFeaturesArray);
-                        }
-                    }
+            _.each(featuresAtPixel, function (featureAtPixel) {
+                featureArray = this.fillFeatureArray(featureAtPixel);
+                featuresArray = _.union(featuresArray, featureArray);
+            }, this);
+
+            this.checkAction(featuresArray);
+        },
+
+        /**
+         * Prüft anhand der neu darzustellenden Features welche Aktion mit dem MouseHover geschehen soll
+         * @param  {Array} featuresArray Array der darzustellenden Features
+         */
+        checkAction: function (featuresArray) {
+            var textArray;
+
+            if (featuresArray.length > 0) {
+                textArray = this.checkTextArray(featuresArray);
+
+                if (this.isTextEqual(textArray, this.getTextArray())) {
+                    this.movePopup();
+                }
+                else {
+                    this.setTextArray(textArray);
+                    this.showPopup();
                 }
             }
             else {
-                this.removeMouseHoverFeatureIfSet();
-            }
-        },
-
-        compareArrayOfObjects: function (arr1, arr2) {
-            if (arr1.length !== arr2.length) {
-                return false;
-            }
-            for (var i = 0; i < arr1.length; i++) {
-                var obj1 = arr1[i],
-                    obj2 = arr2[i];
-
-                if (_.isEqual(obj1, obj2) === false) {
-                    return false;
-                }
-            }
-            return true;
-        },
-
-        /**
-        * Diese Funktion prüft ob mhpresult = "" und falls nicht
-        * wird MouseHover destroyt
-        */
-        removeMouseHoverFeatureIfSet: function () {
-            if (this.get("mhpresult") && this.get("mhpresult") !== "") {
                 this.destroyPopup();
             }
         },
-        getLayerInfosFromWfsList: function (element) {
-            return _.find(this.get("wfsList"), function (ele) {
-                return ele.layerId === element.layerId;
-            });
+
+        /**
+         * Prüft ob die beiden Arrays identisch sind
+         * @param  {Array}  array1 neue Texte
+         * @param  {Array}  array2 alte Texte
+         * @return {Boolean}        Ergebnis der Prüfung
+         */
+        isTextEqual: function (array1, array2) {
+            var diff1 = _.difference(array1, array2),
+                diff2 = _.difference(array2, array1);
+
+            if (diff1.length > 0 || diff2.length > 0) {
+                return false;
+            }
+            else {
+                return true;
+            }
         },
+
+        /**
+         * Prüft ob sich MousePosition signifikant entsprechend Config verschoben hat
+         * @param  {evt} evt MouseHove
+         */
+        checkTextPosition: function (evt) {
+            var lastPosition = this.getTextPosition(),
+                lastPixel = lastPosition ? Radio.request("Map", "getPixelFromCoordinate", lastPosition) : null,
+                newPixel = evt.pixel,
+                minShift = this.getMinShift();
+
+            if (!lastPixel || newPixel[0] < (lastPixel[0] - minShift) || newPixel[0] > (lastPixel[0] + minShift) || newPixel[1] < (lastPixel[1] - minShift) || newPixel[1] > (lastPixel[1] + minShift)) {
+                this.setTextPosition(evt.coordinate);
+                this.checkForFeaturesAtPixel(evt);
+            }
+        },
+
         pickValue: function (mouseHoverField, featureProperties) {
             var value = "";
 
@@ -198,72 +211,117 @@ define(function (require) {
             }
             return value;
         },
-        pickCoord: function (featureGeometry) {
-            var coord;
 
-            if (featureGeometry.getType() === "MultiPolygon") {
-                coord = _.flatten(featureGeometry.getInteriorPoints().getCoordinates());
-            }
-            else if (featureGeometry.getType() === "Polygon") {
-                coord = _.flatten(featureGeometry.getInteriorPoint().getCoordinates());
+        /**
+         * Dies Funktion durchsucht das übergebene pFeatureArray und extrahiert den anzuzeigenden Text
+         * @param  {Array} pFeaturesArray Features at MousePosition
+         */
+        checkTextArray: function (featureArray) {
+            var mouseHoverInfos = this.getMouseHoverInfos(),
+                textArray = [],
+                textArrayCheckedLength,
+                textArrayBreaked;
+
+            // für jedes gehoverte Feature...
+            _.each(featureArray, function (element) {
+                var featureProperties = element.feature.getProperties(),
+                    layerInfos = _.find(mouseHoverInfos, function (mouseHoverInfo) {
+                        return mouseHoverInfo.id === element.layerId;
+                    });
+
+                if (!_.isUndefined(layerInfos)) {
+                    textArray.push(this.pickValue(layerInfos.mouseHoverField, featureProperties));
+                }
+            }, this);
+            textArrayCheckedLength = this.checkMaxFeaturesToShow(textArray);
+            textArrayBreaked = this.addBreak(textArrayCheckedLength);
+
+            return textArrayBreaked;
+        },
+
+        /**
+         * Passt die Anzahl der darzustellenden Texte an "numFeaturesToShow" über _.sample an.
+         * @param  {Array} textArray Array mit allen Texten
+         * @return {Array}           Array mit korrekter Anzahl an Texten
+         */
+        checkMaxFeaturesToShow: function (textArray) {
+            var maxNum = this.get("numFeaturesToShow"),
+                textArrayCorrected = [];
+
+            if (textArray.length > maxNum) {
+                textArrayCorrected = _.sample(textArray, maxNum);
+                textArrayCorrected.push("<span class='info'>" + this.get("infoText") + "</span>");
             }
             else {
-                coord = _.flatten(featureGeometry.getCoordinates());
+                textArrayCorrected = textArray;
             }
-            return coord;
+
+            return textArrayCorrected;
         },
+
         /**
-        * Dies Funktion durchsucht das übergebene pFeatureArray und extrahiert den
-        * anzuzeigenden Text sowie die Popup-Koordinate und setzt
-        * mhpresult. Auf mhpresult lauscht die View, die daraufhin rendert
-        */
-        prepMouseHoverFeature: function (pFeaturesArray) {
-            var mouseHoverObj = {values: []},
-                value = "",
-                coord;
+         * add <br> betweeen every element in values
+         * @param  {Array} textArray Array ohne <br>
+         * @return {Array}           Array mit <br>
+         */
+        addBreak: function (textArray) {
+            var textArrayBreaked = [];
 
-            if (pFeaturesArray.length > 0) {
-                // für jedes gehoverte Feature...
-                _.each(pFeaturesArray, function (element) {
-                    var featureProperties = element.feature.getProperties(),
-                        featureGeometry = element.feature.getGeometry(),
-                        layerInfos = this.getLayerInfosFromWfsList(element);
-
-                    if (!_.isUndefined(layerInfos)) {
-                        var mouseHoverField = layerInfos.fieldname;
-
-                        value = this.pickValue(mouseHoverField, featureProperties);
-                        // if multiple features in mouseHover. The first feature coordinate is used
-                        if (_.isUndefined(coord)) {
-                            coord = this.pickCoord(featureGeometry);
-                        }
-                        mouseHoverObj.coord = coord;
-                        mouseHoverObj.values.push(value);
-                    }
-                }, this);
-            }
-
-            if (mouseHoverObj.values.length > 0) {
-                var maxNum = this.get("numFeaturesToShow"),
-                    valuesWithBr = [];
-
-                if (mouseHoverObj.values.length > maxNum) {
-                    mouseHoverObj.values = _.sample(mouseHoverObj.values, maxNum);
-                    mouseHoverObj.values.push("<span class='info'>" + this.get("infoText") + "</span>");
+            _.each(textArray, function (value, index) {
+                textArrayBreaked.push(value);
+                if (index !== textArray.length - 1) {
+                    textArrayBreaked.push("<br>");
                 }
-                // add <br> betweeen every element in values
-                _.each(mouseHoverObj.values, function (value, index) {
-                    valuesWithBr.push(value);
-                    if (index !== mouseHoverObj.values.length - 1) {
-                        valuesWithBr.push("<br>");
-                    }
-                });
-                mouseHoverObj.values = valuesWithBr;
-                this.get("mhpOverlay").setPosition(mouseHoverObj.coord);
-                // this.get("mhpOverlay").setOffset([10, -15]);
-                this.set("mhpcoordinates", mouseHoverObj.coord);
-                this.set("mhpresult", mouseHoverObj.values);
-            }
+            });
+
+            return textArrayBreaked;
+        },
+
+        // getter for minShift
+        getMinShift: function () {
+            return this.get("minShift");
+        },
+        // setter for minShift
+        setMinShift: function (value) {
+            this.set("minShift", value);
+        },
+
+        // getter for textPosition
+        getTextPosition: function () {
+            return this.get("textPosition");
+        },
+        // setter for textPosition
+        setTextPosition: function (value) {
+            this.set("textPosition", value);
+        },
+
+        // getter for textArray
+        getTextArray: function () {
+            return this.get("textArray");
+        },
+        // setter for textArray
+        setTextArray: function (value) {
+            this.set("textArray", value);
+        },
+
+        // getter for mhpOverlay
+        getMhpOverlay: function () {
+            return this.get("mhpOverlay");
+        },
+
+        // setter for mhpOverlay
+        setMhpOverlay: function (value) {
+            this.set("mhpOverlay", value);
+            Radio.trigger("Map", "addOverlay", value);
+        },
+
+        // getter for mouseHoverInfos
+        getMouseHoverInfos: function () {
+            return this.get("mouseHoverInfos");
+        },
+        // setter for mouseHoverInfos
+        setMouseHoverInfos: function (value) {
+            this.set("mouseHoverInfos", value);
         }
     });
 
