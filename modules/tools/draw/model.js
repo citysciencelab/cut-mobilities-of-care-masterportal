@@ -270,7 +270,7 @@ define([
                     color: color
                 }),
                 stroke: new ol.style.Stroke({
-                    color: color.substr(0, color.length - 6) + ", 1)",
+                    color: color,
                     width: this.get("selectedStrokeWidth")
                 }),
                 image: new ol.style.Circle({
