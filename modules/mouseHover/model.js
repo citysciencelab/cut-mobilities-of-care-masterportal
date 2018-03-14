@@ -80,7 +80,7 @@ define(function (require) {
         fillFeatureArray: function (featureAtPixel) {
             var pFeatureArray = [],
                 selFeature,
-                list
+                list;
 
             // featuresAtPixel.layer !== null --> kleiner schneller Hack da sonst beim zeichnen die ganze Zeit versucht wird ein Popup zu zeigen?? SD 01.09.2015
             if (!_.isUndefined(featureAtPixel) && featureAtPixel.layer !== null) {
