@@ -38,7 +38,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |numFeaturesToShow|nein|Integer|2|maximale Anzahl an MouseHovers, bevor ein InfoText dem MosueHover zugefügt wird.|
 |infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
 ******
-## animation
+## animation ##
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -155,6 +155,52 @@ footer: {
                     "url": "http://www.hamburg.de/bsu/timonline",
                     "alias": "Kartenunstimmigkeit"
                 }
+            ]
+        }
+```
+
+*********
+
+## tree ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|orderBy|nein|String|OpenData|Gibt die Kategorie an nach der initial der Themenbaum sortiert wird.|
+|layerIDsToIgnore|nein|Array|| Array mit LayerIDs aus der services.json die nicht im Themenbaum dargestellt werden.|
+|[layerIDsToStyle](#markdown-header-layerIDsToStyle)|nein|Array[Object]||Speziell für HVV Dienst. Enthält Objekte um verschiedene Styles zu einer layerId abzufragen.|
+|metaIDsToMerge|nein|Array||Fasst alle unter dieser metaID gefundenen Layer aus der services.json zu einem LAyer im Themenbaum zusammen.|
+|metaIDsToIgnore|nein|Array||Alle Layer der Service.json mit entsprechender metaID werden ignoriert im Themenbaum.|
+
+******
+### tree.layerIDsToStyle ###
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|id|nein|Sring||Entsprechend der LayerId aus der service.json.|
+|styles|nein|String oder Array||Enthält einen zu verwendenden Style als String oder bei verschiedenen Styles ein Array aus Strings.|
+|name|nein|String oder Array||Enthält einen zu verwendenden Namen als String oder bei verschiedenen Namen ein Array aus Strings.|
+|legendUrl|nein|String oder Array||Enthält eine zu verwendenden Legende als String oder bei verschiedenen Legenden ein Array aus Strings.|
+
+
+**Beispiel:**
+
+```
+#!json
+
+tree: {
+            orderBy: "opendata",
+            layerIDsToIgnore: ["1912", "1913"],
+            layerIDsToStyle: [
+                {
+                    "id": "1935",
+                    "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
+                    "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
+                    "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
+                }
+            ],
+            metaIDsToMerge: [
+                "FE4DAF57-2AF6-434D-85E3-220A20B8C0F1"
+            ],
+            metaIDsToIgnore: [
+                "09DE39AB-A965-45F4-B8F9-0C339A45B154"
             ]
         }
 ```
