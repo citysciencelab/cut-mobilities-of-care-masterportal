@@ -16,7 +16,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |gfiWindow|nein|String|"detached"|Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
 |ignoredKeys|nein|Array[String]||Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|
 |layerConf|ja|String||Pfad zur [services.json](services.json.md), die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-fhhnet-ALL.json"`|
-|[mouseHover](#markdown-header-mouseHover)|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in [config.json](config.json.md) (*Themenconfig.Fachdaten.Layer*).|`true`|
+|[mouseHover](#markdown-header-mouseHover)|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS und GeoJSON) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in [config.json](config.json.md) (*Themenconfig.Fachdaten.Layer*).|`true`|
 |namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme ([siehe Syntax](http://proj4js.org/#named-projections)).|`[["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
 |proxyUrl|ja|String||Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe [print](#markdown-header-print)).|`"/cgi-bin/proxy.cgi"`|
 |quickHelp|nein|Boolean|false|Aktiviert das QuickHelp-Modul. Dieses zeigt kontextsensitive Hilfe für die verfügbaren Funktionen an (bisher verfügbar für: Themenbaum und Suche).|`true`|
@@ -35,7 +35,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 ## mouseHover ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|numFeaturesToShow|nein|Integer|2|maximale Anzahl an MouseHovers, bevor ein InfoText dem MosueHover zugefügt wird.|
+|minShift|nein|Integer|5|Gibt an, wieviele Pixel sich die Position gegenüber vorher verändert haben muss, um ein neues Tooltip zu rendern.|
+|numFeaturesToShow|nein|Integer|2|Maximale Anzahl an Elementinformationen im Tooltip, bevor ein InfoText die Anzahl limitiert.|
 |infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
 ******
 ## animation ##

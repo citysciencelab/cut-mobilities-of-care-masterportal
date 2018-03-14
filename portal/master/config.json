@@ -413,7 +413,8 @@
       {
         "id": "8145",
         "visibility": true,
-        "styleId": "8145"
+        "styleId": "8145",
+        "mouseHoverField": "kategorie"
       },
       {
         "id": [
