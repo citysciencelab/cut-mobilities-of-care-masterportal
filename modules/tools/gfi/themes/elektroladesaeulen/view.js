@@ -17,7 +17,14 @@ define(function (require) {
        changeGraph: function (evt) {
             var actualIndex = this.model.get("dayIndex"),
                 buttonId = evt.currentTarget.id,
-                graphTyp = evt.currentTarget.parentElement.id;
+                graphTyp;
+
+            // search for atcivated data/graph
+            $("li").each(function () {
+                if ($(this).hasClass("active")) {
+                    graphTyp = $(this).attr("value");
+                }
+            });
 
             this.removeAllData();
 
@@ -44,6 +51,7 @@ define(function (require) {
 
                 this.model.setGfiHeight(this.calculateHeight(gfiSize.height));
                 this.model.setGfiWidth(gfiSize.width);
+                this.model.setIndicatorGfiHeight(this.calculateIndicatorHeight(gfiSize.height));
             }
 
             // delete all graphs
@@ -73,33 +81,40 @@ define(function (require) {
          */
         calculateHeight: function (gfiHeight) {
             var heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
+                heightNavbar = $(".ladesaeulen .nav").css("height").slice(0, -2),
+                heightbutton = $(".ladesaeulen .buttonDiv").css("height").slice(0, -2);
+
+            return gfiHeight - heightladesaeulenHeader - heightNavbar - heightbutton;
+        },
+
+        calculateIndicatorHeight: function (gfiHeight) {
+            var heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
                 heightNavbar = $(".ladesaeulen .nav").css("height").slice(0, -2);
 
             return gfiHeight - heightladesaeulenHeader - heightNavbar;
         },
 
         setDiagrammParams: function (contentId, index) {
-            // hide all buttons with arrows
-            $(".ladesaeulen .kat").hide();
-
             if (contentId === "daten") {
                 Radio.trigger("gfiView", "render");
+                $(".ladesaeulen .buttonDiv").hide();
             }
             else if (contentId === "diagrammVerfuegbar") {
                 this.loadDiagramm("available", ".ladesaeulenVerfuegbar-graph", index);
-                $(".ladesaeulen .verfuegbarButton").show();
+                $(".ladesaeulen .buttonDiv").show();
             }
             else if (contentId === "diagrammBelegt") {
                 this.loadDiagramm("charging", ".ladesaeulenBelegt-graph", index);
-                $(".ladesaeulen .belegtButton").show();
+                $(".ladesaeulen .buttonDiv").show();
             }
             else if (contentId === "diagrammAusserBetrieb") {
                 this.loadDiagramm("outoforder", ".ladesaeulenAusserBetrieb-graph", index);
-                $(".ladesaeulen .ausserBetriebButton").show();
+                $(".ladesaeulen .buttonDiv").show();
             }
             else if (contentId === "indikatoren") {
                 this.model.loadIndicatorData();
                 this.drawIndicator(".tabIndikator");
+                $(".ladesaeulen .buttonDiv").hide();
             }
 
         },
@@ -121,7 +136,7 @@ define(function (require) {
         drawIndicator: function (tag) {
             var tableHead = this.model.get("tableheadIndicatorArray"),
                 properties = this.model.get("indicatorPropertiesObj"),
-                height = this.model.get("gfiHeight"),
+                height = this.model.get("indicatorGfiHeight"),
                 width = this.model.get("gfiWidth"),
                 content = "<table width='" + width + "' height='" + height + "' class='table indicatorTable'><thead><tr class='row' height='1'><th>Indikator</th>";
 

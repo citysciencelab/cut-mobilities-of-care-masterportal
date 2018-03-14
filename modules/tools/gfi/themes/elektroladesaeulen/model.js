@@ -66,8 +66,9 @@ define(function (require) {
                     indicatorChargingCounterDataClean = this.dataCleaningChargingIndicator(indicatorChargingCounterData),
                     processedIndicatorChargingCounter = this.processIndicatorCharging(indicatorChargingCounterDataClean),
                     tableheadIndicatorArray = this.createIndicatorHead(processedIndicatorChargingCounter),
-
                     indicatorPropertiesObj = this.processChargingIndicator(processedIndicatorChargingCounter);
+
+                // this.createIndicators(false, dataStreamIds);
 
                 // set indicators
                 this.setDataStreamIds(dataStreamIds);
@@ -96,16 +97,6 @@ define(function (require) {
             if (value === "daten") {
                 Radio.trigger("gfiView", "render");
             }
-        },
-
-        loadIndicatorData: function () {
-            var dataStreamIds = this.get("dataStreamIds"),
-                indicatorPropertiesObj = this.get("indicatorPropertiesObj"),
-                indicatorChargingHourData = this.createIndicatorChargingHour(false, dataStreamIds);
-
-            indicatorPropertiesObj["Gesamte Dauer der Ladungen"] = indicatorChargingHourData;
-
-            this.setIndicatorPropertiesObj(indicatorPropertiesObj);
         },
 
         /**
@@ -336,6 +327,49 @@ define(function (require) {
            return response;
         },
 
+// *******************************************************************************
+        createIndicators: function (async, dataStreamIds) {
+            var indicatorChargingCount = this.createIndicatorChargingCount(async, dataStreamIds),
+                indicatorChargingTime = this.createIndicatorChargingTime(async, dataStreamIds),
+                tableheadIndicatorArray = this.createIndicatorHead(processedIndicatorChargingCounter),
+                indicatorPropertiesObj = this.processChargingIndicator(processedIndicatorChargingCounter);
+
+            // combine data
+            indicatorPropertiesObj["Gesamtanzahl der Ladungen"] = indicatorPropertiesArray;
+            indicatorPropertiesObj["Gesamte Dauer der Ladungen"] = indicatorChargingHourData;
+
+            return data;
+
+        },
+
+        createIndicatorChargingCount: function (async, dataStreamIds) {
+            var indicatorChargingCounterData = this.createIndicatorCharging(async, dataStreamIds),
+                indicatorChargingCounterDataClean = this.dataCleaningChargingIndicator(indicatorChargingCounterData),
+                processedIndicatorChargingCounter = this.processIndicatorCharging(indicatorChargingCounterDataClean);
+
+            console.log(indicatorChargingCounterData);
+            console.log(indicatorChargingCounterDataClean);
+            console.log(processedIndicatorChargingCounter);
+
+            return processedIndicatorChargingCounter
+        },
+
+        createIndicatorChargingTime: function () {
+            var indicatorChargingTime = this.loadIndicatorData();
+
+            return indicatorChargingTime;
+        },
+
+        loadIndicatorData: function () {
+            var dataStreamIds = this.get("dataStreamIds"),
+                indicatorPropertiesObj = this.get("indicatorPropertiesObj"),
+                indicatorChargingHourData = this.createIndicatorChargingHour(false, dataStreamIds);
+
+            indicatorPropertiesObj["Gesamte Dauer der Ladungen"] = indicatorChargingHourData;
+
+            this.setIndicatorPropertiesObj(indicatorPropertiesObj);
+        },
+
         /**
          * gets the data for the indicator charging
          * @param  {boolean} async
@@ -398,6 +432,11 @@ define(function (require) {
             return dataArray;
         },
 
+        /**
+         * removes
+         * @param  {[type]} dataArray [description]
+         * @return {[type]}           [description]
+         */
         dataCleaning: function (dataArray) {
             _.each(dataArray, function (loadingPoint) {
                 var observations = loadingPoint.Observations,
@@ -786,9 +825,10 @@ define(function (require) {
         drawErrorMessage: function (graphTag, width, height, index) {
             var today = moment().subtract(index, "days").format("dddd");
 
+            $(".ladesaeulen .day").text(today).css("font-weight", "bold");
             $("<div class='noData' style='height: " + height + "px; width: " + width + "px;'>")
                     .appendTo("div" + graphTag)
-                    .text("Zur Zeit keine Informationen für " + today + "e!");
+                    .text("Zur Zeit keine Informationen!");
         },
 
         /**
@@ -1002,6 +1042,8 @@ define(function (require) {
                 stateLabel = "Durchschnittlich außer Betrieb ";
             }
 
+            $(".ladesaeulen .day").text(today).css("font-weight", "bold");
+
             return stateLabel + today + "s";
         },
 
@@ -1060,6 +1102,10 @@ define(function (require) {
 
         setDayIndex: function (value) {
             this.set("dayIndex", value);
+        },
+
+        setIndicatorGfiHeight: function (value) {
+            this.set("indicatorGfiHeight", value);
         }
     });
 

@@ -228,7 +228,11 @@ define(function (require) {
             allThings = this.mergeByCoordinates(allThings);
 
             _.each(allThings, function (things, index) {
-                thingsMerge.push(this.aggreateArrays(things));
+                aggreateArrays = this.aggreateArrays(things);
+                if (!_.isUndefined(aggreateArrays.location)) {
+                    thingsMerge.push(this.aggreateArrays(things));
+                }
+
             }, this);
 
             return thingsMerge;
@@ -291,7 +295,10 @@ define(function (require) {
         getCoordinates: function (thing) {
             var xy;
 
-            if (thing.Locations[0].location.type === "Feature") {
+            if (_.isEmpty(thing.Locations)) {
+                xy = undefined;
+            }
+            else if (thing.Locations[0].location.type === "Feature") {
                 xy = thing.Locations[0].location.geometry.coordinates;
             }
             else if (thing.Locations[0].location.type === "Point") {
@@ -726,12 +733,18 @@ define(function (require) {
                     Radio.trigger("GFI", "changeFeature", existingFeature);
                 }
                 catch (err) {
-                    console.log(err);
-                    console.log(err.message);
-                    console.log("Neue Koordinaten: " + xyTransform);
-                    console.log("Neue Geometrie: " + existingFeature);
-                    console.log("Alte Geometrie: " + oldFeature);
-                    existingFeature = oldFeature;
+                    // console.log(err);
+                    // console.log(err.message);
+                    // console.log("Neue Koordinaten: " + xyTransform);
+                    // console.log(existingFeature);
+                    // console.log(oldFeature);
+
+                    this.getLayerSource().clear();
+                    sensorData = this.loadStreamLayer();
+                    if (!_.isUndefined(sensorData)) {
+                       this.drawESRIGeoJson(sensorData);
+                    }
+                    Radio.trigger("HeatmapLayer", "loadInitialData", this.getId(), this.getLayerSource().getFeatures());
                 }
             }
         },
