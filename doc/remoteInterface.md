@@ -111,10 +111,10 @@ Zoomt die View der Map auf den Ausgangsmaßstab und -ausschnitt und entfernt den
 Radio.request("RemoteInterface", "resetView");
 ```
 
-## Übernimmt Attribute an einen LAyer
+## Übernimmt Attribute an einen Layer
 *(setModelAttributesById)*
 
-Zeigt alle Vektorfeatures des genannten Layers an.
+Übernimmt das attributes-Object an speziellen Layer.
 
 **Parameter**
 
