@@ -125,6 +125,9 @@ define(function (require) {
             featureAttributesMap = this.trimAttributes(featureAttributes);
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
+            if (!_.isUndefined(Radio.request("ParametricURL", "getFilter"))) {
+                featureAttributesMap = this.mapUrlParam(featureAttributesMap, Radio.request("ParametricURL", "getFilter"), this.get("name"));
+            }
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
             if (this.get("isSelected") === true) {
@@ -172,6 +175,25 @@ define(function (require) {
             return featureAttributesMap;
         },
 
+        /**
+         * adds values that should be initially selected to the map object
+         * @param  {object} featureAttributesMap - Mapobject
+         * @param  {object} filterJson - contains values to be added
+         * @param  {string} queryName
+         * @return {object} featureAttributesMap
+         */
+        mapUrlParam: function (featureAttributesMap, filterJson, queryName) {
+            var filterObject = _.findWhere(filterJson, {name: queryName});
+
+            if (!_.isUndefined(filterObject)) {
+                _.each(filterObject.snippets, function (snippet) {
+                    var attrMap = _.findWhere(featureAttributesMap, {name: snippet.attrName});
+
+                    attrMap["initSelectedValues"] = snippet.values;
+                });
+            }
+            return featureAttributesMap;
+        },
 
         /**
          * iterates over the snippet collection and
