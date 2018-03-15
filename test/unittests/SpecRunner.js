@@ -53,6 +53,8 @@ define(function (require) {
     "modules/contact/testModel.js",
     "modules/core/testRawLayerList.js",
     "modules/vectorStyle/testModel.js",
+    "modules/tools/getCoord/testModel.js",
+    "modules/core/testCRS.js",
     "modules/alerting/testModel.js"
     ], function () {
         Radio = Backbone.Radio;
