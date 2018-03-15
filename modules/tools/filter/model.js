@@ -35,6 +35,7 @@ define(function (require) {
                 "featureIdsChanged": function (featureIds, layerId) {
                     this.updateMap();
                     this.updateGFI(featureIds, layerId);
+                    this.updateFilterObject();
                 },
                 "closeFilter": function () {
                     this.setIsActive(false);
@@ -44,6 +45,7 @@ define(function (require) {
 
             this.createQueries(this.getConfiguredQueries());
         },
+
         resetFilter: function () {
             this.deselectAllModels();
             this.deactivateAllModels();
@@ -116,6 +118,28 @@ define(function (require) {
                     Radio.trigger("GFI", "setIsVisible", false);
                 }
             }
+        },
+
+        /**
+         * builds an array of object that reflects the current filter
+         * @return {void}
+         */
+        updateFilterObject: function () {
+            var activeQueryList = this.get("queryCollection").where({isActive: true}),
+                filterObjects = [];
+
+            _.each(activeQueryList, function (query) {
+                var snippetList = [];
+
+                query.get("snippetCollection").forEach(function (snippet) {
+                    // searchInMapExtent is ignored
+                    if (snippet.getSelectedValues().values.length > 0 && snippet.get("type") !== "searchInMapExtent") {
+                        snippetList.push(_.omit(snippet.getSelectedValues(), "type"));
+                    }
+                });
+                filterObjects.push({name: query.get("name"), snippets: snippetList});
+            });
+            Radio.trigger("ParametricURL", "updateQueryStringParam", "filter", JSON.stringify(filterObjects));
         },
 
         /**
