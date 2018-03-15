@@ -3,7 +3,7 @@ define([
     "backbone.radio",
     "underscore.string",
     "modules/core/util"
-], function (Backbone, Radio, _String, Util) {
+], function (Backbone, Radio, _String) {
 
     var ParcelSearch = Backbone.Model.extend({
         defaults: {
@@ -76,8 +76,12 @@ define([
                     Radio.trigger("Alert", "alert", {text: "<strong>Konfiguration der Flurstückssuche konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
                     Radio.trigger("Window", "closeWin");
                 },
-                complete: Util.hideLoader,
-                beforeSend: Util.showLoader
+                complete: function () {
+                    Radio.trigger("Util", "hideLoader");
+                },
+                beforeSend: function () {
+                    Radio.trigger("Util", "showLoader");
+                }
             });
         },
         /*
@@ -131,8 +135,12 @@ define([
                 error: function () {
                     Radio.trigger("Alert", "alert", {text: "<strong>Flurstücksabfrage derzeit nicht möglich!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
                 },
-                complete: Util.hideLoader,
-                beforeSend: Util.showLoader
+                complete: function () {
+                    Radio.trigger("Util", "hideLoader");
+                },
+                beforeSend: function () {
+                    Radio.trigger("Util", "showLoader");
+                }
             });
         },
         getParcel: function (data) {
