@@ -17,13 +17,15 @@ define(function (require) {
         initialize: function () {
             this.superInitialize();
             this.addValueModels(this.get("values"));
+            if (this.has("initSelectedValues")) {
+                this.updateSelectedValues(this.get("initSelectedValues"));
+            }
             this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
             this.listenTo(this.get("valuesCollection"), {
-            "change:isSelected": function (model, value) {
-                this.triggerValuesChanged();
-            }
-        });
-
+                "change:isSelected": function (model, value) {
+                    this.triggerValuesChanged();
+                }
+            });
         },
 
         /**

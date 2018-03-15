@@ -12,7 +12,9 @@ define(function (require) {
             parsedValues = this.parseValues(attributes.values);
 
             this.addValueModels(_.min(parsedValues), _.max(parsedValues));
-
+            if (this.has("initSelectedValues")) {
+                this.updateValues(this.get("initSelectedValues"));
+            }
             this.listenTo(this.get("valuesCollection"), {
                 "change:value": function (model, value) {
                     this.triggerValuesChanged(model, value);
