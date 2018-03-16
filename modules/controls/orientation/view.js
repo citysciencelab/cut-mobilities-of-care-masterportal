@@ -15,7 +15,9 @@ define([
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
-            var showGeolocation = this.model.getIsGeoLocationPossible();
+            var showGeolocation = this.model.getIsGeoLocationPossible(),
+                showPoi = this.model.getShowPoi(),
+                poiDistances = this.model.getPoiDistances();
 
             if (showGeolocation) {// Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
 
@@ -37,9 +39,9 @@ define([
                 this.render();
                 // erst nach render kann auf document.getElementById zugegriffen werden
                 this.model.get("marker").setElement(document.getElementById("geolocation_marker"));
-                if (this.model.get("isPoiOn")) {
+                if (showPoi === true) {
                     require(["modules/controls/orientation/poi/view"], function (POIView) {
-                        new POIView();
+                        new POIView(poiDistances);
                     });
                 }
 

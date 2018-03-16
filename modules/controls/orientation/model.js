@@ -15,7 +15,8 @@ define([
                 positioning: "center-center",
                 stopEvent: false
             }),
-            isPoiOn: false,
+            showPoi: false,
+            poiDistances: [500, 1000, 2000],
             tracking: false, // Flag, ob derzeit getrackt wird.
             geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
             position: "",
@@ -60,8 +61,15 @@ define([
             if (config.zoomMode) {
                 this.setZoomMode(config.zoomMode);
             }
-            if (config.poiDistances && (config.poiDistances.length > 0 || config.poiDistances === true)) {
-                this.setIsPoiOn(true);
+
+            if (config.poiDistances) {
+                if (_.isArray(config.poiDistances) && config.poiDistances.length > 0) {
+                    this.setPoiDistances(config.poiDistances);
+                    this.setShowPoi(true);
+                }
+                else if (config.poiDistances === true) {
+                    this.setShowPoi(true);
+                }
             }
         },
 
@@ -229,12 +237,13 @@ define([
             this.set("zoomMode", value);
         },
 
-        /**
-         * Setter Methode für das Attribut isPoiOn
-         * @param {bool} value
-         */
-        setIsPoiOn: function (value) {
-            this.set("isPoiOn", value);
+        // setter für showPoi
+        setShowPoi: function (value) {
+            this.set("showPoi", value);
+        },
+        // getter für showPoi
+        getShowPoi: function () {
+            return this.get("showPoi");
         },
 
         setIsGeolocationDenied: function (value) {
@@ -250,6 +259,15 @@ define([
         },
         setIsGeoLocationPossible: function () {
             this.set("isGeoLocationPossible", window.location.protocol === "https:" || _.contains(["localhost","127.0.0.1"], window.location.hostname));
+        },
+
+        // getter for poiDistances
+        getPoiDistances: function () {
+            return this.get("poiDistances");
+        },
+        // setter for poiDistances
+        setPoiDistances: function (value) {
+            this.set("poiDistances", value);
         }
     });
 
