@@ -37,8 +37,7 @@ define([
                 }, this);
 
                 this.render();
-                // erst nach render kann auf document.getElementById zugegriffen werden
-                this.model.get("marker").setElement(document.getElementById("geolocation_marker"));
+
                 if (showPoi === true) {
                     require(["modules/controls/orientation/poi/view"], function (POIView) {
                         new POIView(poiDistances);
@@ -54,6 +53,8 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            // fügt dem ol.Overlay das Element hinzu, welches erst nach render existiert.
+            this.model.addElement();
         },
 
         /**
