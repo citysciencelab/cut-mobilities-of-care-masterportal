@@ -268,8 +268,10 @@
     {
       "fullScreen": true,
       "zoom": true,
-      "orientation": "once",
-      "poi": true,
+      "orientation": {
+        "zoomMode": "once",
+        "poiDistances": [500, 1000, 2000]
+      },
       "attributions":
       {
         "isInitOpenDesktop": true,

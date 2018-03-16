@@ -23,14 +23,6 @@ define([
             isGeoLocationPossible: false
         },
         initialize: function () {
-            this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
-            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "poi"})) === false) {
-                this.setIsPoiOn(Radio.request("Parser", "getItemByAttributes", {id: "poi"}).attr);
-            }
-            this.listenTo(Radio.channel("ModelList"), {
-                "updateVisibleInMapList": this.checkWFS
-            });
-
             var channel = Radio.channel("geolocation");
 
             channel.on({
@@ -51,8 +43,28 @@ define([
                 }
             }, this);
 
+            this.listenTo(Radio.channel("ModelList"), {
+                "updateVisibleInMapList": this.checkWFS
+            });
+
+            this.setConfig();
             this.setIsGeoLocationPossible();
         },
+
+        /**
+         * Übernimmt die Einträge der config.json
+         */
+        setConfig: function () {
+            var config = Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr;
+
+            if (config.zoomMode) {
+                this.setZoomMode(config.zoomMode);
+            }
+            if (config.poiDistances && (config.poiDistances.length > 0 || config.poiDistances === true)) {
+                this.setIsPoiOn(true);
+            }
+        },
+
         /*
         * Triggert die Standpunktkoordinate auf Radio
         */
@@ -81,9 +93,9 @@ define([
             this.removeOverlay();
         },
         track: function () {
-            if (this.getIsGeolocationDenied() === false) {
-                var geolocation;
+            var geolocation;
 
+            if (this.getIsGeolocationDenied() === false) {
                 Radio.trigger("Map", "addOverlay", this.get("marker"));
                 if (this.get("geolocation") === null) {
                     geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
@@ -181,13 +193,15 @@ define([
         getPOI: function (distance) {
             var geolocation = this.get("geolocation"),
                 position = geolocation.getPosition(),
-                centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position);
+                centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position),
+                circle,
+                circleExtent;
 
             this.positionMarker(centerPosition);
             this.set("distance", distance);
             this.set("newCenter", centerPosition);
-            var circle = new ol.geom.Circle(centerPosition, this.get("distance")),
-                circleExtent = circle.getExtent();
+            circle = new ol.geom.Circle(centerPosition, this.get("distance"));
+            circleExtent = circle.getExtent();
 
             this.set("circleExtent", circleExtent);
             this.getPOIParams();
