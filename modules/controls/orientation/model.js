@@ -53,6 +53,13 @@ define([
         },
 
         /**
+         * Fügt das Element der ol.Overview hinzu. Erst nach render kann auf document.getElementById zugegriffen werden.
+         */
+        addElement: function () {
+            this.getMarker().setElement(document.getElementById("geolocation_marker"));
+        },
+
+        /**
          * Übernimmt die Einträge der config.json
          */
         setConfig: function () {
@@ -89,7 +96,7 @@ define([
             }
         },
         removeOverlay: function () {
-            Radio.trigger("Map", "removeOverlay", this.get("marker"));
+            Radio.trigger("Map", "removeOverlay", this.getMarker());
         },
         untrack: function () {
             var geolocation = this.get("geolocation");
@@ -104,7 +111,7 @@ define([
             var geolocation;
 
             if (this.getIsGeolocationDenied() === false) {
-                Radio.trigger("Map", "addOverlay", this.get("marker"));
+                Radio.trigger("Map", "addOverlay", this.getMarker());
                 if (this.get("geolocation") === null) {
                     geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                     this.set("geolocation", geolocation);
@@ -123,7 +130,7 @@ define([
         },
         positionMarker: function (position) {
             try {
-                this.get("marker").setPosition(position);
+                this.getMarker().setPosition(position);
             }
             catch (e) {
             }
@@ -176,7 +183,7 @@ define([
         trackPOI: function () {
             var geolocation;
 
-            Radio.trigger("Map", "addOverlay", this.get("marker"));
+            Radio.trigger("Map", "addOverlay", this.getMarker());
             if (this.get("geolocation") === null) {
                 geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                 this.set("geolocation", geolocation);
@@ -268,6 +275,15 @@ define([
         // setter for poiDistances
         setPoiDistances: function (value) {
             this.set("poiDistances", value);
+        },
+
+        // getter for marker
+        getMarker: function () {
+            return this.get("marker");
+        },
+        // setter for marker
+        setMarker: function (value) {
+            this.set("marker", value);
         }
     });
 
