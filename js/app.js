@@ -287,6 +287,17 @@ define("app",
                     }
                     break;
                 }
+                //Gesamt Ansicht
+                case "totalview": {
+                    if (control.attr === true) {
+                        var el = controlsView.addRowTR(control.id);
+
+                        require(["modules/controls/totalview/view"], function (TotalView) {
+                            new TotalView({el: el});
+                        });
+                    }
+                    break;
+                }
                 case "attributions": {
                     if (control.attr === true || typeof control.attr === "object") {
                         var el = controlsView.addRowBR(control.id);
