@@ -6,7 +6,6 @@ define(function (require) {
     POIModel = Backbone.Model.extend({
         defaults: {
             poiDistances: Radio.request("geolocation", "getPoiDistances"),
-            styleModels: Radio.request("StyleList", "returnModels"),
             poiFeatures: [],
             activeCategory: ""
         },
@@ -91,17 +90,38 @@ define(function (require) {
          * @return {string}      imgPath
          */
         getImgPath: function (feat) {
-            var styleModels = this.getStyleModels(),
-                style = _.find(styleModels, function (num) {
-                    return num.get("layerId") === feat.styleId;
-                });
+            var style = Radio.request("StyleList", "returnModelById", feat.styleId),
+                styleField = style.get("styleField") && style.get("styleField") !== "" ? style.get("styleField") : null,
+                styleFieldValues = style.get("styleFieldValues") && style.get("styleFieldValues").length > 0 ? style.get("styleFieldValues") : null,
+                imageName = style.get("imageName") && style.get("imageName") !== "" ? style.get("imageName") : null,
+                imagePath = style.get("imagePath") && style.get("imagePath") !== "" ? style.get("imagePath") : null;
 
-            if (style && style.get("imagePath") && style.get("imageName")) {
-                return style.get("imagePath") + style.get("imageName");
+            if (styleField && styleFieldValues && imagePath) {
+                return imagePath + this.getStyleFieldImageName(feat, styleField, styleFieldValues);
+            }
+            else if (imageName && imagePath) {
+                return imagePath + imageName;
             }
             else {
-                return null;
+                return "";
             }
+        },
+
+        /**
+         * Sucht nach dem ImageName bei styleField-Angaben im Style
+         * @param  {ol.feature} feature      Feature mit allen Angaben
+         * @param  {string} styleField       Name des StyleFields
+         * @param  {[Object]} StyleFields    Array aus Objekten mit styleFieldValues
+         * @return {string}                  Name des Bildes
+         */
+        getStyleFieldImageName: function (feature, styleField, styleFields) {
+            var value = feature.get(styleField),
+                image = _.find(styleFields, function (style) {
+                    return style.styleFieldValue === value;
+                }),
+                value = image.imageName;
+
+                return value;
         },
 
         zoomFeature: function (id) {
@@ -146,15 +166,6 @@ define(function (require) {
         // setter for activeCategory
         setActiveCategory: function (value) {
             this.set("activeCategory", value);
-        },
-
-        // getter for styleModels
-        getStyleModels: function () {
-            return this.get("styleModels");
-        },
-        // setter for styleModels
-        setStyleModels: function (value) {
-            this.set("styleModels", value);
         }
     });
 
