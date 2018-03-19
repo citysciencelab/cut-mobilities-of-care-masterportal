@@ -9,7 +9,7 @@ define(function (require) {
 
     POIView = Backbone.View.extend({
         model: POIModel,
-        id: "base-modal",
+        id: "surrounding_vectorfeatures",
         className: "modal fade in poi",
         template: _.template(Template),
         events: {
