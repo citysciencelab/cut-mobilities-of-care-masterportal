@@ -1,3 +1,16 @@
+# Changelog LGV Master-Portal 1.5.2
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 798923ae betrieb 647 contact cc array mehrmaliges Absenden ließ array volllaufen
+  - 5b6d8e01 betrieb 238 metaIdToMerge fehlerunanfälliger
+  - 70e08d3e light tree auswahl speichern
+  - 03317d46 wfs legendURL Parameter aus json in Legende nutzbar
+
 # Changelog LGV Master-Portal 1.5.1
 
 NEU:
