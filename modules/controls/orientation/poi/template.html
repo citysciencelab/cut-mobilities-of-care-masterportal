@@ -23,9 +23,15 @@
                             <table class="table table-striped table-hover">
                                 <% _.each (feature.features, function (feat) { %>
                                 <tr id="<%= feat.getId() %>">
+                                    <% if (feat.imgPath.indexOf("</svg>") !== -1) { %>
+                                    <td>
+                                        <div><%= feat.imgPath %></div>
+                                    </td>
+                                    <% } else if (feat.imgPath.length > 0) { %>
                                     <td>
                                         <img src="<%= feat.imgPath %>">
                                     </td>
+                                    <% } %>
                                     <td>
                                         <strong><%= feat.name %></strong >
                                         <p><%= feat.dist2Pos %> Meter</p>
