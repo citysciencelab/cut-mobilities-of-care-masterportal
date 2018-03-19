@@ -7,15 +7,11 @@
         </div>
         <div>
           <ul class="nav nav-pills" role="tablist">
-            <%  _.each(poiFeatures, function (feature) {
-                    if (feature.category === activeCategory) {
-                        print ("<li role='presentation' class='active'><a href='#" + feature.category + "' aria-controls='" + feature.category + "' role='pill' data-toggle='pill'>" + feature.category + "m <span class='badge'>" + feature.features.length + "</span></a></li>");
-                    }
-                    else {
-                        print ("<li role='presentation'><a href='#" + feature.category + "' aria-controls='" + feature.category + "' role='pill' data-toggle='pill'>" + feature.category + "m <span class='badge'>" + feature.features.length + "</span></a></li>");
-                    }
-                });
-            %>
+            <%  _.each(poiFeatures, function (feature) { %>
+                <li role="presentation" <% if (feature.category === activeCategory) {print ("class='active'");} %>>
+                    <a href="#<%= feature.category %>" aria-controls="<%= feature.category %>" role="pill" data-toggle="pill"><% print (feature.category + "m"); %><span class="badge"><%= feature.features.length %></span></a>
+                </li>
+            <% }); %>
           </ul>
           <div class="tab-content">
             <%  _.each(poiFeatures, function (feature) {
