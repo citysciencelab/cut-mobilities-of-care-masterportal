@@ -14,7 +14,8 @@ define([
         template: _.template(Template),
         events: {
             "click .win-close": "hide",
-            "click tr": "zoomFeature"
+            "click tr": "zoomFeature",
+            "click li": "changedCategory"
         },
         initialize: function (poiDistances) {
             var channel = Radio.channel("POI");
@@ -54,6 +55,13 @@ define([
         zoomFeature: function (evt) {
             this.model.zoomFeature(evt.currentTarget.id);
             this.hide();
+        },
+
+        changedCategory: function (evt) {
+            var a = $(evt.currentTarget).children("a")[0],
+                cat = $(a).attr("aria-controls");
+
+            this.model.setActiveCategory(parseFloat(cat));
         }
     });
 
