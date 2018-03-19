@@ -1,13 +1,13 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/controls/orientation/poi/template.html",
-    "modules/controls/orientation/poi/model",
-    "bootstrap/tab",
-    "bootstrap/modal"
-], function (Backbone, Radio, Template, POIModel) {
+define(function (require) {
+    require("bootstrap/tab");
+    require("bootstrap/modal");
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Template = "text!modules/controls/orientation/poi/template.html",
+        POIModel = "modules/controls/orientation/poi/model",
+        POIView;
 
-    var PointOfInterestListView = Backbone.View.extend({
+    POIView = Backbone.View.extend({
         model: POIModel,
         id: "base-modal",
         className: "modal fade in",
@@ -17,7 +17,7 @@ define([
             "click tr": "zoomFeature",
             "click li": "changedCategory"
         },
-        initialize: function (poiDistances) {
+        initialize: function () {
             var channel = Radio.channel("POI");
 
             channel.on({
@@ -65,5 +65,5 @@ define([
         }
     });
 
-    return PointOfInterestListView;
+    return POIView;
 });
