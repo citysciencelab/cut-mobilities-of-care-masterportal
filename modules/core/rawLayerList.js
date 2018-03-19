@@ -14,8 +14,12 @@ define([
         url: function () {
             return Radio.request("Util", "getPath", Config.layerConf);
         },
-        initialize: function () {
+        initialize: function (urlForTest) {
             var channel = Radio.channel("RawLayerList");
+
+            if (urlForTest) {
+                this.url = urlForTest;
+            }
 
             channel.reply({
                 "getLayerWhere": this.getLayerWhere,
