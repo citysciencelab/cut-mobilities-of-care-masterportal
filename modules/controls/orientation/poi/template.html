@@ -1,9 +1,8 @@
 <div id="poiList" class="modal-dialog">
     <div class="modal-content">
-        <div class="modal-header navbar">
-
-            <span class="glyphicon glyphicon-remove win-close" style="color:#777;font-size:14px;" aria-hidden="true" data-dismiss="modal"></span>
-            <span class="win-title" style="color:#777;">In meiner Nähe</span>
+        <div class="modal-header">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" data-dismiss="modal"></span>
+            <h4 class="modal-title">In meiner Nähe</h4>
         </div>
         <div>
           <ul class="nav nav-pills" role="tablist">
@@ -25,9 +24,9 @@
                                 <% _.each (feature.features, function (feat) { %>
                                 <tr id="<%= feat.getId() %>">
                                     <td>
-                                        <img src="<%= feat.imgPath %>" width="50" height="50">
+                                        <img src="<%= feat.imgPath %>">
                                     </td>
-                                    <td style="vertical-align:middle;">
+                                    <td>
                                         <strong><%= feat.name %></strong >
                                         <p><%= feat.dist2Pos %> Meter</p>
                                     </td>

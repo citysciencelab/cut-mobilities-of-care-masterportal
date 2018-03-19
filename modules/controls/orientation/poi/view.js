@@ -3,17 +3,17 @@ define(function (require) {
     require("bootstrap/modal");
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        Template = "text!modules/controls/orientation/poi/template.html",
-        POIModel = "modules/controls/orientation/poi/model",
+        Template = require("text!modules/controls/orientation/poi/template.html"),
+        POIModel = require("modules/controls/orientation/poi/model"),
         POIView;
 
     POIView = Backbone.View.extend({
         model: POIModel,
         id: "base-modal",
-        className: "modal fade in",
+        className: "modal fade in poi",
         template: _.template(Template),
         events: {
-            "click .win-close": "hide",
+            "click .glyphicon-remove": "hide",
             "click tr": "zoomFeature",
             "click li": "changedCategory"
         },
