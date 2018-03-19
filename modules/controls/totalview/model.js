@@ -10,9 +10,7 @@ define(function (require) {
         baselayer: "",
         newOvmView: ""
       },
-      // wird aufgerufen wenn das Model erstellt wird
       initialize: function () {
-         console.log('++++++++++++++++++++++++++++');
       }
     });
 
