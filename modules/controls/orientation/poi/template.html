@@ -5,16 +5,39 @@
             <span class="glyphicon glyphicon-remove win-close" style="color:#777;font-size:14px;" aria-hidden="true" data-dismiss="modal"></span>
             <span class="win-title" style="color:#777;">In meiner Nähe</span>
         </div>
-        <div class="modal-tabs">
-          <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" id="500m"><a href="#500Meter" role="tab" data-toggle="tab">500m</a></li>
-              <li role="presentation" id="1000m"><a href="#1000Meter" role="tab" data-toggle="tab">1000m</a></li>
-              <li role="presentation" id="2000m"><a href="#2000Meter" role="tab" data-toggle="tab">2000m</a></li>
+        <div>
+          <ul class="nav nav-pills" role="tablist">
+            <%  _.each(poiFeatures, function (feature) {
+                    if (feature.category === activeCategory) {
+                        print ("<li role='presentation' class='active'><a href='#" + feature.category + "' aria-controls='" + feature.category + "' role='pill' data-toggle='pill'>" + feature.category + "m <span class='badge'>" + feature.features.length + "</span></a></li>");
+                    }
+                    else {
+                        print ("<li role='presentation'><a href='#" + feature.category + "' aria-controls='" + feature.category + "' role='pill' data-toggle='pill'>" + feature.category + "m <span class='badge'>" + feature.features.length + "</span></a></li>");
+                    }
+                });
+            %>
           </ul>
-        </div>
-        <div id="poibody" class="modal-body">
-            <table id="tablePOI">
-            </table>
+          <div class="tab-content">
+            <%  _.each(poiFeatures, function (feature) {
+                if (feature.category === activeCategory) { %>
+                    <div role="tabpanel" class="tab-pane fade in active" id="<%= feature.category %>">
+                <% } else { %>
+                    <div role="tabpanel" class="tab-pane fade" id="<%= feature.category %>">
+                <% }
+                _.each (feature.features, function (feat) { %>
+                        <td>
+                            <p>
+                                <img src="<%= feat.imgPath %>" width="50" height="50">
+                            </p>
+                        </td>
+                        <td style="padding-left: 5px; vertical-align:middle;">
+                            <strong><%= feat.name %></strong >
+                            <p><%= feat.dist2Pos %> Meter</p>
+                        </td>
+                <% }); %>
+                    </div>
+            <% }); %>
+          </div>
         </div>
     </div>
 </div>

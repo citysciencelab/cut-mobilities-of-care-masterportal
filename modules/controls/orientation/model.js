@@ -35,7 +35,11 @@ define([
             channel.reply({
                 "isGeoLocationPossible": function () {
                     return this.getIsGeoLocationPossible();
-                }
+                },
+                "getPoiDistances": function () {
+                    return this.getPoiDistances();
+                },
+                "getFeaturesInCircle": this.getVectorFeaturesInCircle
             }, this);
 
             this.listenTo(this, {
@@ -202,38 +206,51 @@ define([
             geolocation.un ("error", this.onPOIError, this);
         },
         callGetPOI: function () {
-            this.getPOI(0);
-            this.untrackPOI();
+            Radio.trigger("POI", "showPOIModal");
         },
-        getPOI: function (distance) {
+
+        /**
+         * Ermittelt die Features aus Vektprlayern in einem Umkreis zur Position. Funktioniert auch mit Clusterlayern.
+         * @param  {integer} distance Umkreis
+         * @return {Array}          Array of ol.features
+         */
+        getVectorFeaturesInCircle: function (distance) {
             var geolocation = this.get("geolocation"),
                 position = geolocation.getPosition(),
                 centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position),
-                circle,
-                circleExtent;
+                circle = new ol.geom.Circle(centerPosition, distance),
+                circleExtent = circle.getExtent(),
+                visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
+                featuresAll = [],
+                features = [];
 
-            this.positionMarker(centerPosition);
-            this.set("distance", distance);
-            this.set("newCenter", centerPosition);
-            circle = new ol.geom.Circle(centerPosition, this.get("distance"));
-            circleExtent = circle.getExtent();
+            _.each(visibleWFSLayers, function (layer) {
+                if (layer.has("layerSource") === true) {
+                    features = layer.get("layerSource").getFeaturesInExtent(circleExtent);
+                    _.each(features, function (feat) {
+                        feat = _.extend(feat, {
+                            styleId: layer.get("styleId"),
+                            dist2Pos: this.getDistance(feat, centerPosition)
+                        });
+                    }, this);
+                    featuresAll = _.union(features, layer.get("layerSource").getFeaturesInExtent(circleExtent));
+                }
+            }, this);
 
-            this.set("circleExtent", circleExtent);
-            this.getPOIParams();
+            return featuresAll
         },
-        getPOIParams: function (visibleWFSLayers) {
-            var visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
 
-            if (this.get("circleExtent") && visibleWFSLayers) {
-                _.each(visibleWFSLayers, function (layer) {
-                    if (layer.has("layerSource") === true) {
-                        layer.get("layer").getSource().forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
-                            Radio.trigger("Orientation", "setModel", feature, this.get("distance"), this.get("newCenter"), layer);
-                        }, this);
-                    }
-                }, this);
-                Radio.trigger("poi", "showPOIModal");
-            }
+        /**
+         * Ermittelt die Entfernung des Features zur Geolocation auf Metergenauigkeit
+         * @param  {ol.feature} feat Feature
+         * @return {float}      Entfernung
+         */
+        getDistance: function (feat, centerPosition) {
+            var closestPoint = feat.getGeometry().getClosestPoint(centerPosition),
+                line = new ol.geom.LineString([closestPoint, centerPosition]),
+                dist = Math.round(line.getLength() * 1) / 1;
+
+            return dist;
         },
 
         /**
@@ -261,6 +278,7 @@ define([
         getIsGeolocationDenied: function () {
             return this.get("isGeolocationDenied");
         },
+
         getIsGeoLocationPossible: function () {
             return this.get("isGeoLocationPossible");
         },
