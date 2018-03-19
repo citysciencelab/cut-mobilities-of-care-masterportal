@@ -12,6 +12,14 @@ define(function (require) {
         },
 
         /**
+         * Leert die Attribute
+         */
+        reset: function () {
+            this.setPoiFeatures([]);
+            this.setActiveCategory("");
+        },
+
+        /**
          * Ermittelt die Informationen, die fürs Fenster notwendig sind und speichert sie in diesem Model
          */
         calcInfos: function () {
@@ -94,6 +102,23 @@ define(function (require) {
             else {
                 return null;
             }
+        },
+
+        zoomFeature: function (id) {
+            var poiFeatures = this.getPoiFeatures(),
+                activeCategory = this.getActiveCategory(),
+                selectedPoiFeatures = _.find(poiFeatures, function (poi) {
+                    return poi.category === activeCategory;
+                }),
+                feature = _.find(selectedPoiFeatures.features, function (feature) {
+                    return feature.getId() === id;
+                }),
+                extent = feature.getGeometry().getExtent();
+
+            Radio.trigger("MapMarker", "zoomTo", {
+                type: "POI",
+                coordinate: extent
+            });
         },
 
         // getter for poiDistances

@@ -13,8 +13,8 @@ define([
         className: "modal fade in",
         template: _.template(Template),
         events: {
-            "click .close,button,table": "removeAllModels",
-            "click #tablePOI": "destroy"
+            "click .win-close": "hide",
+            "click tr": "zoomFeature"
         },
         initialize: function (poiDistances) {
             var channel = Radio.channel("POI");
@@ -44,11 +44,16 @@ define([
                 Radio.trigger("Util", "hideLoader");
             });
         },
+
         hide: function () {
             this.$el.modal("hide");
-        },
-        destroy: function () {
+            this.model.reset();
             Radio.trigger("geolocation", "removeOverlay");
+        },
+
+        zoomFeature: function (evt) {
+            this.model.zoomFeature(evt.currentTarget.id);
+            this.hide();
         }
     });
 
