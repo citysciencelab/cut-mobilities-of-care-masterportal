@@ -169,6 +169,10 @@ define([
                     Radio.trigger("MapView", "setCenter", hit.coordinate, 6);
                     break;
                 }
+                case "POI": {
+                    Radio.trigger("Map", "zoomToExtent", hit.coordinate, {maxZoom: index});
+                    break;
+                }
                 default: {
                     this.showMarker(hit.coordinate);
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
