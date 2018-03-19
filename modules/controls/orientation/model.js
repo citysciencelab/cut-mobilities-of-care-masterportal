@@ -230,6 +230,7 @@ define([
                     _.each(features, function (feat) {
                         feat = _.extend(feat, {
                             styleId: layer.get("styleId"),
+                            layerName: layer.get("name"),
                             dist2Pos: this.getDistance(feat, centerPosition)
                         });
                     }, this);

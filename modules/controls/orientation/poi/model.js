@@ -71,13 +71,16 @@ define(function (require) {
         },
 
         /**
-         * Ermittelt den Titel, der im Fesnter für das Feature angezeigt werden soll.
+         * Ermittelt den Titel, der im Fenster für das Feature angezeigt werden soll.
          * @param  {ol.feature} feature Feature, für das der Titel ermittelt werden soll
          * @return {string}         Name
          */
         getFeatureTitle: function (feature) {
             if (feature.get("name")) {
                 return feature.get("name");
+            }
+            else if (feature.layerName) {
+                return feature.layerName;
             }
             else {
                 return feature.getId();
