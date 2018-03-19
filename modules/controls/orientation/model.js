@@ -233,7 +233,7 @@ define([
                             dist2Pos: this.getDistance(feat, centerPosition)
                         });
                     }, this);
-                    featuresAll = _.union(features, layer.get("layerSource").getFeaturesInExtent(circleExtent));
+                    featuresAll = _.union(features, featuresAll);
                 }
             }, this);
 
