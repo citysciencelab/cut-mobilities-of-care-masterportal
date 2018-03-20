@@ -85,7 +85,7 @@
                               }
                               else {
                                 if (typeof legendURL.img === "string") {
-                                    if (legendURL.img.endsWith(".pdf") === true) {
+                                    if (new RegExp(/(\.pdf)$/g).test(legendURL.img) === true) {
                                    %>
                                         <a href=<%= legendURL.img %> target="_blank">weitere Informationen</a>
                                     <%

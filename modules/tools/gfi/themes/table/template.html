@@ -14,12 +14,12 @@
                     <% _.each(obj, function (value) { %>
                         <% if (value !== "") { %>
                             <td>
-                                <% if (value.endsWith(".pdf") === true && value.substr(0, 4) === "http") { %>
+                                <% if (new RegExp(/(\.pdf)$/g).test(value) === true && value.substr(0, 4) === "http") { %>
                                     <!-- Hack für Flüchtlingsportal -->
                                     <% _.each(value.split("$"), function (val, index) { %>
                                         <a href="<%= val %>" target="_blank">Anhang <%= index + 1 %></a><br>
                                     <% }); %>
-                                <% } else if (value.endsWith(".html") === true || value.substr(0, 4) === "http") { %>
+                                <% } else if (new RegExp(/(\.html)$/g).test(value) === true || value.substr(0, 4) === "http") { %>
                                     <a href="<%= value %>" target="_blank">Link</a>
                                 <% } else if (value.substr(0, 4) === "040 " || value.substr(0, 4) === "040-" || value.substr(0, 3) === "+49" ||
                                         value.substr(0, 5) === "0800 " || value.substr(0, 5) === "0800-") { %>
@@ -53,12 +53,12 @@
                     <% _.each(obj, function (value) { %>
                         <% if (value !== "") { %>
                             <td>
-                                <% if (value.endsWith(".pdf") === true && value.substr(0, 4) === "http") { %>
+                                <% if (new RegExp(/(\.pdf)$/g).test(value) === true && value.substr(0, 4) === "http") { %>
                                     <!-- Hack für Flüchtlingsportal -->
                                     <% _.each(value.split("$"), function (val, index) { %>
                                         <a href="<%= val %>" target="_blank">Anhang <%= index + 1 %></a><br>
                                     <% }); %>
-                                <% } else if (value.endsWith(".html") === true || value.substr(0, 4) === "http") { %>
+                                <% } else if (new RegExp(/(\.html)$/g).test(value) === true || value.substr(0, 4) === "http") { %>
                                     <a href="<%= value %>" target="_blank">Link</a>
                                 <% } else if (value.substr(0, 4) === "040 " || value.substr(0, 4) === "040-" || value.substr(0, 3) === "+49" ||
                                         value.substr(0, 5) === "0800 " || value.substr(0, 5) === "0800-") { %>
