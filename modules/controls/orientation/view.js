@@ -17,11 +17,11 @@ define([
         initialize: function () {
             var showGeolocation = this.model.getIsGeoLocationPossible(),
                 showPoi = this.model.getShowPoi(),
-                poiDistances = this.model.getPoiDistances();
+                poiDistances = this.model.getPoiDistances(),
+                channel;
 
             if (showGeolocation) {// Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
-
-                var channel = Radio.channel("orientation");
+                channel = Radio.channel("orientation");
 
                 channel.on({
                     "untrack": this.toggleLocateRemoveClass

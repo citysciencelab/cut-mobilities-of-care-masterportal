@@ -238,7 +238,7 @@ define([
                 }
             }, this);
 
-            return featuresAll
+            return featuresAll;
         },
 
         /**
