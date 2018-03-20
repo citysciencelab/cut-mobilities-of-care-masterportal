@@ -42,7 +42,6 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |fullScreen|nein|Boolean|false|Ermöglicht dem User die Darstellung im Vollbildmodus (ohne Tabs und Adressleiste) per Klick auf den Button. Ein erneuter Klick auf den Button wechselt wieder in den normalen Modus.|
 |mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
 |[orientation](#markdown-header-portalconfigcontrolsorientation)|nein|Object||Orientation nutzt die geolocation des Browsers zur Standortbestimmung des Nutzers. Siehe [orientation](#markdown-header-portalconfigcontrolsorientation).|
-|poi|nein|Boolean|false|Zeigt eine Liste von Features in der Umgebung an. Funktioniert nur wenn die Standortbestimmung (orientation) aktiviert ist. |
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
 |[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
 
@@ -58,7 +57,6 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
           "zoomMode": "once",
           "poiDistances": [500, 1000, 2000]
         },
-        "poi": true,
         "fullScreen": true,
         "mousePosition": true,
         "attributions": {
@@ -85,7 +83,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |zoomMode|nein|String|"once"|*none* (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
-|poiDistances|nein|Boolean / [integer]|"true": [500,1000,2000] / "Array": []|Legt fest, ob "In meiner Nähe" geladen wird. Bei Anbgabe eines Array werden zusätzlich die Abstände definiert, die dort angeboten werden.|
+|poiDistances|nein|Boolean / [integer]|"true": [500,1000,2000] / "Array": []|Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Anbgabe eines Array werden die darin definierten Abstände angeboten. Bei Angabe von true der default.|
 
 ******
 ### Portalconfig.controls.overviewmap ###
