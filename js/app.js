@@ -287,7 +287,6 @@ define("app",
                     }
                     break;
                 }
-                //Gesamt Ansicht
                 case "totalview": {
                     if (control.attr === true) {
                         var el = controlsView.addRowTR(control.id);
