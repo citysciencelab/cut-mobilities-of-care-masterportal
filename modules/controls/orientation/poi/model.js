@@ -32,7 +32,7 @@ define(function (require) {
         getFeatures: function () {
             var poiDistances = this.getPoiDistances(),
                 poiFeatures = [],
-                featInCircle = [];
+                featInCircle = [],
                 sortedFeatures = [];
 
             _.each(poiDistances, function (distance) {
