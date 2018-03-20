@@ -96,8 +96,7 @@ define(function (require) {
             var imagePath = "",
                 style = Radio.request("StyleList", "returnModelById", feat.styleId),
                 styleClass = style.get("class"),
-                styleSubClass = style.get("subClass"),
-                styleFieldValues = style.get("styleFieldValues");
+                styleSubClass = style.get("subClass");
 
             if (styleClass === "POINT") {
                 // Custom Point Styles
