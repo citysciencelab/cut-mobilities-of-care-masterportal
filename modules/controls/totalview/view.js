@@ -1,7 +1,6 @@
 define(function (require) {
 
-  var TotalviewModel = require("modules/controls/totalview/model"),
-      Radio = require("backbone.radio"),
+  var Radio = require("backbone.radio"),
       Backbone  = require("backbone"),
       TotalView;
 
@@ -12,7 +11,6 @@ define(function (require) {
           "click .glyphicon-record": "setTotalView"
       },
       initialize: function () {
-          this.model = new TotalviewModel();
           this.render();
       },
       render: function () {
