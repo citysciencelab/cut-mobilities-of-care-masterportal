@@ -2,6 +2,7 @@ define(function (require) {
 
     var Config = require("config"),
         ol = require("openlayers"),
+        Radio = require("backbone.radio"),
         WFSStyle;
 
         WFSStyle = Backbone.Model.extend({
