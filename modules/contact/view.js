@@ -15,10 +15,10 @@ define([
             });
         },
         events: {
-            "keyup #contactName": "setAttributes",
-            "keyup #contactEmail": "setAttributes",
-            "keyup #contactTel": "setAttributes",
-            "keyup #contactText": "setAttributes",
+            "keyup #contactName": "setUserAttributes",
+            "keyup #contactEmail": "setUserAttributes",
+            "keyup #contactTel": "setUserAttributes",
+            "keyup #contactText": "setUserAttributes",
             "click .contactButton": "send"
         },
         render: function () {
@@ -37,26 +37,8 @@ define([
             $(".win-body").css("max-height", height);
             $(".win-body").css("max-width", 400);
         },
-        setAttributes: function (evt) {
-            switch (evt.target.id) {
-                case "contactEmail": {
-                    this.model.set("userEmail", evt.target.value);
-                    break;
-                }
-                case "contactName": {
-                    this.model.set("userName", evt.target.value);
-                    break;
-                }
-                case "contactTel": {
-                    this.model.set("userTel", evt.target.value);
-                    break;
-                }
-                case "contactText": {
-                    this.model.set("text", evt.target.value);
-                    break;
-                }
-            }
-            this.model.isValid();
+        setUserAttributes: function (evt) {
+            this.model.setUserAttributes(evt);
         },
         send: function () {
             this.model.send();
