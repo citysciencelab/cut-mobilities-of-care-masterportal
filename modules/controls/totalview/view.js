@@ -5,10 +5,10 @@ define(function (require) {
       TotalView;
 
   TotalView = Backbone.View.extend({
-      template: _.template("<div class='total-view-button'><span class='glyphicon glyphicon-unchecked' title='Gesamtansicht anzeigen'></span></div>"),
+      template: _.template("<div class='total-view-button'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
       id: "totalview",
       events: {
-          "click .glyphicon-unchecked": "setTotalView"
+          "click .glyphicon-fast-backward": "setTotalView"
       },
       initialize: function () {
           this.render();
