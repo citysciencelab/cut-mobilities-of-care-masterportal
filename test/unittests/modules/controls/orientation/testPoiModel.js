@@ -1,5 +1,6 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
+        ol = require("openlayers"),
         Model = require("../../../../modules/controls/orientation/poi/model"),
         Style = require("../../../../modules/vectorStyle/model");
 
@@ -31,7 +32,7 @@ define(function(require) {
             });
         });
 
-        describe("SVG Functions", function() {
+        describe("SVG Functions", function () {
             var style = new Style();
 
             it("createPolygonSVG should return an SVG", function () {
