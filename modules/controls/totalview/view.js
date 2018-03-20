@@ -12,8 +12,6 @@ define(function (require) {
           "click .glyphicon-record": "setTotalView"
       },
       initialize: function () {
-          var channel = Radio.channel("TotalView");
-
           this.model = new TotalviewModel();
           this.render();
       },
