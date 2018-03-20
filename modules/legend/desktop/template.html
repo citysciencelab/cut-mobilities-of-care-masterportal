@@ -31,7 +31,7 @@
                         <table>
                         <%
                         if (typeof element.img === "string") {
-                            if (element.img.search(".pdf") !== -1) { %>
+                            if (element.img.endsWith(".pdf") === true) { %>
                                 <a href=<%= element.img %> target="_blank">weitere Informationen</a>
                             <% }
                             else { %>
@@ -79,7 +79,7 @@
                     }
                     else {
                         if (typeof element.img === "string") {
-                            if (element.img.search(".pdf") !== -1) { %>
+                            if (element.img.endsWith(".pdf") === true) { %>
                                 <a href=<%= element.img %> target="_blank">weitere Informationen</a>
                             <% }
                             else { %>
