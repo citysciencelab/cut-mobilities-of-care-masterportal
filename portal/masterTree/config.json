@@ -166,7 +166,8 @@
       "orientation": "once",
       "poi": true,
       "fullScreen": true,
-      "mousePosition": true
+      "mousePosition": true,
+      "totalview": true
     },
     "scaleLine": true,
     "Baumtyp": "custom"

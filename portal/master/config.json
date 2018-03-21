@@ -272,6 +272,7 @@
         "zoomMode": "once",
         "poiDistances": [500, 1000, 2000]
       },
+      "totalview": true,
       "attributions":
       {
         "isInitOpenDesktop": true,
