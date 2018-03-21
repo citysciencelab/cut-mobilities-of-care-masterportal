@@ -1,79 +1,69 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/controls/orientation/poi/template.html",
-    "modules/controls/orientation/poi/collection",
-    "modules/controls/orientation/poi/feature/view",
-    "bootstrap/tab",
-    "bootstrap/modal"
-], function (Backbone, Radio, PointOfInterestListTemplate, PointOfInterestList, PointOfInterestView) {
+define(function (require) {
+    require("bootstrap/tab");
+    require("bootstrap/modal");
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Template = require("text!modules/controls/orientation/poi/template.html"),
+        POIModel = require("modules/controls/orientation/poi/model"),
+        POIView;
 
-    var PointOfInterestListView = Backbone.View.extend({
-        collection: PointOfInterestList,
-        id: "base-modal",
-        className: "modal fade in",
-        template: _.template(PointOfInterestListTemplate),
+    POIView = Backbone.View.extend({
+        model: POIModel,
+        id: "surrounding_vectorfeatures",
+        className: "modal fade in poi",
+        template: _.template(Template),
         events: {
-            "click .close, button,table,#500m,#1000m,#2000m": "removeAllModels",
-            "click #500m": "onClick500m",
-            "click #1000m": "onClick1000m",
-            "click #2000m": "onClick2000m",
-            "click #tablePOI": "destroy"
+            "click .glyphicon-remove": "hide",
+            "click tr": "zoomFeature",
+            "click li": "changedCategory"
         },
         initialize: function () {
-            var channel = Radio.channel("poi");
+            var channel = Radio.channel("POI");
 
             channel.on({
                 "showPOIModal": this.show,
                 "hidePOIModal": this.hide
             }, this);
-
-            this.listenTo(this.collection, "sort", this.addPOIS);
-            this.render();
         },
+
         render: function () {
-            this.$el.html(this.template());
-        },
-        addPOIS: function (collection) {
-            this.$("table").html("");
-            _.each(collection.models, function (model) {
-                var poiView = new PointOfInterestView({model: model});
+            var attr = this.model.toJSON();
 
-                this.$("table").append(poiView.render().el);
-            }, this);
+            this.$el.html(this.template(attr));
         },
-        removeAllModels: function () {
-            this.collection.removeAllModels();
-            this.render();
-        },
+
         show: function () {
+            Radio.trigger("Util", "showLoader");
+            this.model.calcInfos();
+            this.render();
+
             this.$el.modal({
                 backdrop: true,
                 show: true
             });
             $(function () {
-                $("#loader").hide();
+                Radio.trigger("Util", "hideLoader");
             });
         },
+
         hide: function () {
             this.$el.modal("hide");
-        },
-        onClick500m: function () {
-            Radio.trigger("geolocation", "getPOI", 500);
-            $("#500m a[href='#500Meter']").tab("show");
-        },
-        onClick1000m: function () {
-            Radio.trigger("geolocation", "getPOI", 1000);
-            $("#1000m a[href='#1000Meter']").tab("show");
-        },
-        onClick2000m: function () {
-            Radio.trigger("geolocation", "getPOI", 2000);
-            $("#2000m a[href='#2000Meter']").tab("show");
-        },
-        destroy: function () {
+            this.model.reset();
             Radio.trigger("geolocation", "removeOverlay");
+        },
+
+        zoomFeature: function (evt) {
+            this.model.zoomFeature(evt.currentTarget.id);
+            this.hide();
+        },
+
+        changedCategory: function (evt) {
+            var a = $(evt.currentTarget).children("a")[0],
+                cat = $(a).attr("aria-controls");
+
+            this.model.setActiveCategory(parseFloat(cat));
         }
     });
 
-    return PointOfInterestListView;
+    return POIView;
 });

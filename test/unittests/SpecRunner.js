@@ -52,6 +52,7 @@ define(function (require) {
     "modules/core/modelList/testList.js",
     "modules/contact/testModel.js",
     "modules/core/testRawLayerList.js",
+    "modules/controls/orientation/testPoiModel.js",
     "modules/vectorStyle/testModel.js",
     "modules/tools/getCoord/testModel.js",
     "modules/core/testCRS.js",

@@ -169,6 +169,10 @@ define([
                     Radio.trigger("MapView", "setCenter", hit.coordinate, 6);
                     break;
                 }
+                case "POI": {
+                    Radio.trigger("Map", "zoomToExtent", hit.coordinate, {maxZoom: index});
+                    break;
+                }
                 default: {
                     this.showMarker(hit.coordinate);
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
@@ -196,12 +200,14 @@ define([
         * @param {string} data - Die Data-Object des request.
         */
         zoomToBKGSearchResult: function (data) {
+            var coordinates;
+
             if (data.features[0].properties.bbox.type === "Point") {
                 Radio.trigger("MapView", "setCenter", data.features[0].properties.bbox.coordinates, this.model.get("zoomLevel"));
                 this.showMarker(data.features[0].properties.bbox.coordinates);
             }
             else if (data.features[0].properties.bbox.type === "Polygon") {
-                var coordinates = "";
+                coordinates = "";
 
                 _.each(data.features[0].properties.bbox.coordinates[0], function (point) {
                     coordinates += point[0] + " " + point[1] + " ";
