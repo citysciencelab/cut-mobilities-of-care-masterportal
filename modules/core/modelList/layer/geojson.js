@@ -32,41 +32,60 @@ define(function (require) {
                 id: this.getId()
             }));
             if (_.isUndefined(this.get("geojson"))) {
-                this.updateData(this.handleData);
+                this.updateData();
             }
             else {
-                this.handleData(this.get("geojson"));
+                this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
             }
         },
-        updateData: function (callback) {
+        updateData: function () {
+            var params = {
+                request: "GetFeature",
+                service: "WFS",
+                typeName: this.get("featureType"),
+                outputFormat: "application/geo+json",
+                maxFeatures: 100,
+                version: this.getVersion()
+            };
+
             Radio.trigger("Util", "showLoader");
 
             $.ajax({
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
+                data: params,
                 async: false,
                 type: "GET",
                 context: this,
-                success: callback,
+                success: function (data) {
+                    this.handleData(data, Radio.request("MapView", "getProjection").getCode());
+                },
                 error: function () {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
         },
-        handleData: function (data) {
+        handleData: function (data, mapCrs) {
             Radio.trigger("Util", "hideLoader");
             var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
-                mapCrs = Radio.request("MapView", "getProjection").getCode(),
-                geojsonReader = new ol.format.GeoJSON(),
-                features = geojsonReader.readFeatures(data);
+                features = this.parseDataToFeatures(data);
 
             if (jsonCrs !== mapCrs) {
                 features = this.transformFeatures(features, jsonCrs, mapCrs);
             }
+            features.forEach(function (feature) {
+                feature.setId(feature.get("id"));
+            });
             this.getLayerSource().addFeatures(features);
             this.set("loadend", "ready");
-
             this.getLayer().setStyle(this.get("style"));
         },
+
+        parseDataToFeatures: function (data) {
+            var geojsonReader = new ol.format.GeoJSON();
+
+            return geojsonReader.readFeatures(data);
+        },
+
         transformFeatures: function (features, crs, mapCrs) {
             _.each(features, function (feature) {
                 var geometry = feature.getGeometry();
