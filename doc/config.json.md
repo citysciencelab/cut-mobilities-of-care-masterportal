@@ -45,6 +45,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |poi|nein|Boolean|false|Zeigt eine Liste von Features in der Umgebung an. Funktioniert nur wenn die Standortbestimmung (orientation) aktiviert ist. |
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
 |[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
+|[totalview](#markdown-header-portalconfigcontrolstotalview)|nein|Boolean|false|Zeigt einen Button für die Startansicht an.|
 
 **Beispiel controls:**
 
@@ -97,6 +98,11 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 
 ```
+
+******
+### Portalconfig.controls.totalview ###
+
+Es werden die initialen Parameter zoomLevel und startCenter aus [mapView](#markdown-header-portalconfigmapview) verwendet.
 
 ### Portalconfig.mapView ###
 
