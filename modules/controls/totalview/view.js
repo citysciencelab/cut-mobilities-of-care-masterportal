@@ -18,6 +18,7 @@ define(function (require) {
       },
       setTotalView: function () {
           var center, zoomlevel;
+
           center = Radio.request("Parser", "getPortalConfig").mapView.startCenter;
           zoomlevel = Radio.request("Parser", "getPortalConfig").mapView.zoomLevel;
           Radio.trigger("MapView", "setCenter", center, zoomlevel);
