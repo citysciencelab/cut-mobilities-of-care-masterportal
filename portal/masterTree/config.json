@@ -21,7 +21,17 @@
         "searchParcels": true,
         "searchStreetKey": true
       },
-
+      "bkg":
+      {
+        "minChars": 3,
+        "suggestServiceId": "4",
+        "geosearchServiceId": "5",
+        "extent": [454591, 5809000, 700000, 6075769],
+        "suggestCount": 10,
+        "epsg": "EPSG:25832",
+        "filter": "filter=(typ:*)",
+        "score": 0.6
+      },
       "specialWFS":
       {
         "minChar": 3,
@@ -61,17 +71,82 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children":
-        {
 
+        {
+          "filter":
+          {
+            "name": "Filter",
+            "glyphicon": "glyphicon-filter",
+            "deaktivateGFI": false,
+            "isGeneric": false,
+            "isInitOpen": false,
+            "allowMultipleQueriesPerLayer": true,
+            "predefinedQueries": [
+                {
+                  "layerId": "8712",
+                  "isActive": false,
+                  "isSelected": false,
+                  "name": "Grundschulen",
+                  "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Grundschulen", "Langformschulen"]
+                  }],
+                  "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+                },
+                {
+                  "layerId": "8712",
+                  "isActive": false,
+                  "isSelected": false,
+                  "name": "Stadtteilschulen",
+                  "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Stadtteilschulen", "Langformschulen"]
+                  }],
+                  "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+                },
+                {
+                  "layerId": "8712",
+                  "isActive": false,
+                  "isSelected": false,
+                  "name": "Gymnasien",
+                  "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+                  "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Gymnasien"]
+                  }],
+                  "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+                },
+                {
+                  "layerId": "1711",
+                  "isActive": true,
+                  "isSelected": true,
+                  "name": "Krankenhäuser",
+                  "predefinedRules": [],
+                  "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
+                }
+              ]
+          },
           "parcelSearch":
           {
             "name": "Flurstückssuche",
-            "glyphicon": "glyphicon-search"
+            "glyphicon": "glyphicon-search",
+            "serviceId": "6",
+            "StoredQueryID": "Flurstueck",
+            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
+            "parcelDenominator": false
           },
           "measure":
           {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"
+          },
+          "coord":
+          {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
           },
           "gfi":
           {
@@ -106,11 +181,6 @@
                   }
                 }
           },
-          "coord":
-          {
-            "name": "Koordinaten abfragen",
-            "glyphicon": "glyphicon-screenshot"
-          },
           "searchByCoord":
           {
             "name": "Koordinatensuche",
@@ -121,10 +191,41 @@
             "name": "KML Import",
             "glyphicon": "glyphicon-import"
           },
+          "wfsFeatureFilter":
+          {
+            "name": "Filter",
+            "glyphicon": "glyphicon-filter",
+            "deaktivateGFI": false
+          },
+          "extendedFilter":
+          {
+            "name": "Erweiterter Filter",
+            "glyphicon": "glyphicon-filter",
+            "deaktivateGFI": false
+          },
+          "routing":
+          {
+            "name": "Routenplaner",
+            "glyphicon": "glyphicon-road",
+            "viomRoutingID": "7",
+            "bkgSuggestID": "4",
+            "bkgGeosearchID": "5"
+          },
           "draw":
           {
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
+          },
+          "featureLister":
+          {
+            "name": "Liste",
+            "glyphicon": "glyphicon-menu-hamburger",
+            "lister": 10
+          },
+          "animation":
+          {
+            "name": "Pendler Animation",
+            "glyphicon": "glyphicon-play-circle"
           },
           "saveSelection":
           {
@@ -135,14 +236,6 @@
           {
             "name": "WMS hinzufügen",
             "glyphicon": "glyphicon-plus"
-          },
-          "routing":
-          {
-            "name": "Routenplaner",
-            "glyphicon": "glyphicon-road",
-            "viomRoutingID": "7",
-            "bkgSuggestID": "4",
-            "bkgGeosearchID": "5"
           }
         }
       },
@@ -157,22 +250,47 @@
         "glyphicon": "glyphicon-envelope",
         "serviceID": "80001",
         "includeSystemInfo": true
+      },
+      "info":
+      {
+        "name": "Informationen",
+        "glyphicon": "glyphicon-info-sign",
+        "children":
+        {
+          "staticlinks": [
+          {
+            "name": "Haftungsausschluss",
+            "glyphicon": "glyphicon-globe",
+            "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+          },
+          {
+            "name": "Hamburg",
+            "glyphicon": "glyphicon-globe",
+            "url": "http://www.hamburg.de"
+          }]
+        }
       }
     },
     "controls":
     {
-      "zoom": true,
-      "orientation": "once",
-      "poi": true,
       "fullScreen": true,
-      "mousePosition": true,
+      "zoom": true,
+      "orientation": {
+        "zoomMode": "once",
+        "poiDistances": [500, 1000, 2000]
+      },
+      "totalview": true,
+      "attributions":
+      {
+        "isInitOpenDesktop": true,
+        "isInitOpenMobile": false
+      },
       "overviewmap":
-        {
+      {
         "resolution": 611.4974492763076,
         "baselayer": "452"
-        },
-      "totalview": true
-
+      },
+      "mousePosition": true
     },
     "scaleLine": true,
     "Baumtyp": "custom"
