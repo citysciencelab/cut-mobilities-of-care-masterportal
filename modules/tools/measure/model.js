@@ -45,8 +45,7 @@ define([
             });
 
             this.listenTo(Radio.channel("Map"), {
-                "activateMap3d": this.createInteraction,
-                "deactivateMap3d": this.createInteraction,
+                "change": this.changeMap,
             });
 
             this.listenTo(this, {
@@ -65,6 +64,18 @@ define([
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                 this.set("quickHelp", true);
             }
+        },
+
+        changeMap: function(map) {
+            this.deleteFeatures();
+            if(map === "3D") {
+                this.set("isMap3d", true);
+                this.set("type", "3d");
+            } else {
+                this.set("isMap3d", false);
+                this.set("type", "LineString");
+            }
+            this.createInteraction();
         },
         setStatus: function (args) {
             if (args[2].getId() === "measure" && args[0] === true) {
@@ -168,16 +179,11 @@ define([
             }
             Radio.trigger("Map", "removeInteraction", this.get("draw"));
             this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
+            Radio.trigger("Map", "unregisterListener", "pointermove", this.placeMeasureTooltip, this);
             if (Radio.request("Map", "isMap3d")) {
                 this.listenTo(Radio.channel("Map"), "clickedWindowPosition", this.handle3DClicked.bind(this));
-                this.set("isMap3d", true);
-                this.set("type", "3d");
                 this.set("hits3d", []);
             } else {
-                if (this.get("isMap3d")) {
-                    this.set("isMap3d", false);
-                    this.set("type", "LineString");
-                }
                 this.set("draw", new ol.interaction.Draw({
                     source: this.get("source"),
                     type: this.get("type"),
