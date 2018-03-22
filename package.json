@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/lgv-g12/lgv-config.git"
+    "url": "https://bitbucket.org/lgv-g12/lgv.git"
   },
   "scripts": {
     "test": "mocha test/end2end/TestRunner.js"
