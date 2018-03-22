@@ -81,51 +81,52 @@
             "isInitOpen": false,
             "allowMultipleQueriesPerLayer": true,
             "predefinedQueries": [
-            {
-              "layerId": "8712",
-              "isActive": false,
-              "isSelected": false,
-              "name": "Grundschulen",
-              "predefinedRules": [
-              {
-                "attrName": "kapitelbezeichnung",
-                "values": ["Grundschulen", "Langformschulen"]
-              }],
-              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
-            },
-            {
-              "layerId": "8712",
-              "isActive": false,
-              "isSelected": false,
-              "name": "Stadtteilschulen",
-              "predefinedRules": [
-              {
-                "attrName": "kapitelbezeichnung",
-                "values": ["Stadtteilschulen", "Langformschulen"]
-              }],
-              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
-            },
-            {
-              "layerId": "8712",
-              "isActive": false,
-              "isSelected": false,
-              "name": "Gymnasien",
-              "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
-              "predefinedRules": [
-              {
-                "attrName": "kapitelbezeichnung",
-                "values": ["Gymnasien"]
-              }],
-              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
-            },
-            {
-              "layerId": "1711",
-              "isActive": true,
-              "isSelected": true,
-              "name": "Krankenhäuser",
-              "predefinedRules": [],
-              "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
-            }]
+                {
+                  "layerId": "8712",
+                  "isActive": false,
+                  "isSelected": false,
+                  "name": "Grundschulen",
+                  "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Grundschulen", "Langformschulen"]
+                  }],
+                  "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+                },
+                {
+                  "layerId": "8712",
+                  "isActive": false,
+                  "isSelected": false,
+                  "name": "Stadtteilschulen",
+                  "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Stadtteilschulen", "Langformschulen"]
+                  }],
+                  "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+                },
+                {
+                  "layerId": "8712",
+                  "isActive": false,
+                  "isSelected": false,
+                  "name": "Gymnasien",
+                  "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+                  "predefinedRules": [
+                  {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Gymnasien"]
+                  }],
+                  "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+                },
+                {
+                  "layerId": "1711",
+                  "isActive": true,
+                  "isSelected": true,
+                  "name": "Krankenhäuser",
+                  "predefinedRules": [],
+                  "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
+                }
+              ]
           },
           "parcelSearch":
           {
@@ -161,23 +162,23 @@
             "gfi": true,
             "outputFilename": "DruckPDF",
             "gfiMarker":
-            {
-              "outerCircle":
-              {
-                "fill": false,
-                "pointRadius": 8,
-                "stroke": true,
-                "strokeColor": "#ff0000",
-                "strokeWidth": 3
-              },
-              "point":
-              {
-                "fill": true,
-                "pointRadius": 1,
-                "fillColor": "#000000",
-                "stroke": false
-              }
-            }
+                {
+                  "outerCircle":
+                  {
+                    "fill": false,
+                    "pointRadius": 8,
+                    "stroke": true,
+                    "strokeColor": "#ff0000",
+                    "strokeWidth": 3
+                  },
+                  "point":
+                  {
+                    "fill": true,
+                    "pointRadius": 1,
+                    "fillColor": "#000000",
+                    "stroke": false
+                  }
+                }
           },
           "searchByCoord":
           {
@@ -214,6 +215,11 @@
           {
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
+          },
+          "addWMS":
+          {
+            "name": "WMS hinzufügen",
+            "glyphicon": "glyphicon-plus"
           },
           "featureLister":
           {

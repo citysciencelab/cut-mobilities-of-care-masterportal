@@ -87,25 +87,24 @@
             "title": "Master-Portal",
             "gfi": false,
             "outputFilename": "DruckPDF",
-
             "gfiMarker":
-            {
-              "outerCircle":
-              {
-                "fill": false,
-                "pointRadius": 8,
-                "stroke": true,
-                "strokeColor": "#ff0000",
-                "strokeWidth": 3
-              },
-              "point":
-              {
-                "fill": true,
-                "pointRadius": 1,
-                "fillColor": "#000000",
-                "stroke": false
-              }
-            }
+                {
+                  "outerCircle":
+                  {
+                    "fill": false,
+                    "pointRadius": 8,
+                    "stroke": true,
+                    "strokeColor": "#ff0000",
+                    "strokeWidth": 3
+                  },
+                  "point":
+                  {
+                    "fill": true,
+                    "pointRadius": 1,
+                    "fillColor": "#000000",
+                    "stroke": false
+                  }
+                }
           },
           "coord":
           {
@@ -167,7 +166,13 @@
       "poi": true,
       "fullScreen": true,
       "mousePosition": true,
+      "overviewmap":
+        {
+        "resolution": 611.4974492763076,
+        "baselayer": "452"
+        },
       "totalview": true
+
     },
     "scaleLine": true,
     "Baumtyp": "custom"
