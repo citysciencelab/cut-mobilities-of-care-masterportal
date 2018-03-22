@@ -53,8 +53,8 @@ define([
 
             var distance = camera.positionCartographic.height / 2;
             var angle = 0.15;
-            var up = camera.pitch < 0 ? angle : null;
-            var down = camera.pitch > Math.PI / -2 ? angle : null;
+            var down = camera.pitch + angle > 0 ? 0 : angle;
+            var up = camera.pitch - angle < Math.PI / -2 ? 0 : angle;
             var directions = {
                 'compass_north': camera.moveUp.bind(camera, distance),
                 'compass_south': camera.moveDown.bind(camera, distance),
