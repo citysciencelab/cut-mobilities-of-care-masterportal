@@ -2,11 +2,11 @@
 
 [TOC]
 
-# style_v2.json #
-Die *style_v2.json* beinhaltet die Parameter für die WFS-Features. Die Verbindung zwischen den Layern und der *style_v2.json* erfolgt über die Angabe der *Layer-ID* in der *style_v2.json* und entsprechendem Verweis in der [config.json](config.json.md) im Bereich *Themenconfig --> Fachdaten*. Sollten in der *style_v2.json* nicht alle notwendigen Parameter angegeben sein, wird auf die Default-Werte zurückgegriffen. Bei Farbwerten muss der Parameter entsprechend der Vorgabe von *OpenLayers* für *ol.style* aussehen.
+# style.json #
+Die *style.json* beinhaltet die Parameter für die WFS-Features. Die Verbindung zwischen den Layern und der *style.json* erfolgt über die Angabe der *Layer-ID* in der *style.json* und entsprechendem Verweis in der [config.json](config.json.md) im Bereich *Themenconfig --> Fachdaten*. Sollten in der *style.json* nicht alle notwendigen Parameter angegeben sein, wird auf die Default-Werte zurückgegriffen. Bei Farbwerten muss der Parameter entsprechend der Vorgabe von *OpenLayers* für *ol.style* aussehen.
 
 ## Allgemeine Style Parameter ##
-Beim Stylen der WFS-Features gibt es verschiedene Klassen nach denen wir den Style in der *style_v2.json* unterscheiden.
+Beim Stylen der WFS-Features gibt es verschiedene Klassen nach denen wir den Style in der *style.json* unterscheiden.
 Wird in der [config.json](config.json.md) in der Layerconfiguration der Parameter "clusterDistance" gesetzt, so wird ein ClusterStyle erzeugt. Der ClusterStyle ist abhängig vom Parameter "clusterClass".
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
