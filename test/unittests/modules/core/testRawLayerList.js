@@ -1,12 +1,10 @@
 define(function (require) {
     var expect = require("chai").expect,
         Model = require("../../../../modules/core/rawLayerList.js"),
-        Util = require("../../../../modules/core/util"),
         Config = require("testConfig.js");
 
     describe("core/rawLayerList", function () {
         var model,
-            utilModel,
             testServices = [
                 {
                     id: "683",
@@ -153,8 +151,9 @@ define(function (require) {
             ];
 
         before(function () {
-            utilModel = new Util();
-            model = new Model();
+            model = new Model({"url": function () {
+                return "../../resources/testServices.json";
+            }});
         });
         describe("parse", function () {
             it("should return an array", function () {

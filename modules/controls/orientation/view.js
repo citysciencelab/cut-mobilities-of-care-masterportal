@@ -15,11 +15,13 @@ define([
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
-            var showGeolocation = this.model.getIsGeoLocationPossible();
+            var showGeolocation = this.model.getIsGeoLocationPossible(),
+                showPoi = this.model.getShowPoi(),
+                poiDistances = this.model.getPoiDistances(),
+                channel;
 
             if (showGeolocation) {// Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
-
-                var channel = Radio.channel("orientation");
+                channel = Radio.channel("orientation");
 
                 channel.on({
                     "untrack": this.toggleLocateRemoveClass
@@ -35,11 +37,10 @@ define([
                 }, this);
 
                 this.render();
-                // erst nach render kann auf document.getElementById zugegriffen werden
-                this.model.get("marker").setElement(document.getElementById("geolocation_marker"));
-                if (this.model.get("isPoiOn")) {
+
+                if (showPoi === true) {
                     require(["modules/controls/orientation/poi/view"], function (POIView) {
-                        new POIView();
+                        new POIView(poiDistances);
                     });
                 }
 
@@ -52,6 +53,8 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            // fügt dem ol.Overlay das Element hinzu, welches erst nach render existiert.
+            this.model.addElement();
         },
 
         /**

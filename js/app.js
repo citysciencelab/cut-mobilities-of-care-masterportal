@@ -3,6 +3,7 @@ define("app",
     "jquery",
     "config",
     "modules/core/util",
+    "modules/vectorStyle/list",
     "modules/core/rawLayerList",
     "modules/restReader/collection",
     "modules/core/configLoader/preparser",
@@ -11,12 +12,13 @@ define("app",
     "modules/core/crs",
     "modules/core/autostarter",
     "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
+    ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
 
 
     // Core laden
     new Autostarter();
     new Util();
+    new StyleList();
     new RawLayerList();
     new Preparser();
     new ParametricURL();
@@ -62,7 +64,7 @@ define("app",
     }
 
 
-    require(["modules/Snippets/slider/view", "modules/Snippets/slider/range/view", "modules/Snippets/dropdown/view"], function (SliderView, SliderRangeView, DropdownView) {
+    require(["modules/snippets/slider/view", "modules/snippets/slider/range/view", "modules/snippets/dropdown/view"], function (SliderView, SliderRangeView, DropdownView) {
         // new SliderView();
         // new SliderRangeView();
         new DropdownView();
@@ -130,7 +132,7 @@ define("app",
                     break;
                 }
                 case "coord": {
-                    require(["modules/coordpopup/view"], function (CoordPopupView) {
+                    require(["modules/tools/getCoord/view"], function (CoordPopupView) {
                         new CoordPopupView();
                     });
                     break;
@@ -281,6 +283,16 @@ define("app",
 
                         require(["modules/controls/fullScreen/view"], function (FullScreenView) {
                             new FullScreenView({el: el});
+                        });
+                    }
+                    break;
+                }
+                case "totalview": {
+                    if (control.attr === true) {
+                        var el = controlsView.addRowTR(control.id);
+
+                        require(["modules/controls/totalview/view"], function (TotalView) {
+                            new TotalView({el: el});
                         });
                     }
                     break;

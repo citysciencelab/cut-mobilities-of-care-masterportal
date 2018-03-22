@@ -19,6 +19,10 @@ define(function (require) {
         VerkehrsStaerkenThemeView = require("modules/tools/gfi/themes/verkehrsstaerken/view"),
         SchulInfoTheme = require("modules/tools/gfi/themes/schulinfo/model"),
         SchulInfoThemeView = require("modules/tools/gfi/themes/schulinfo/view"),
+        VerkehrsStaerkenRadTheme = require("modules/tools/gfi/themes/verkehrsstaerken_rad/model"),
+        VerkehrsStaerkenRadThemeView = require("modules/tools/gfi/themes/verkehrsstaerken_rad/view"),
+        ItGbmTheme = require("modules/tools/gfi/themes/itgbm/model"),
+        ItGbmThemeView = require("modules/tools/gfi/themes/itgbm/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -47,6 +51,12 @@ define(function (require) {
             else if (attrs.gfiTheme === "schulinfo") {
                 return new SchulInfoTheme(attrs, options);
             }
+            else if (attrs.gfiTheme === "verkehrsstaerken_rad") {
+                return new VerkehrsStaerkenRadTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "itgbm") {
+                return new ItGbmTheme(attrs, options);
+            }
             else {
                 return new DefaultTheme(attrs, options);
             }
@@ -65,6 +75,7 @@ define(function (require) {
                         var removeModels = this.filter(function (model) {
                             return model.get("gfiContent") === undefined;
                         });
+
                         this.remove(removeModels);
                         this.forEach(this.addView, this);
                         // listener in modules/tools/gfi/model.js
@@ -106,6 +117,14 @@ define(function (require) {
                 }
                 case "schulinfo": {
                     new SchulInfoThemeView({model: model});
+                    break;
+                }
+                case "verkehrsstaerken_rad": {
+                    new VerkehrsStaerkenRadThemeView({model: model});
+                    break;
+                }
+                case "itgbm": {
+                    new ItGbmThemeView({model: model});
                     break;
                 }
                 default: {
