@@ -27,7 +27,8 @@ define(function (require) {
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
                 source: this.getLayerSource(),
-                style: this.getDefaultStyle()
+                style: this.getDefaultStyle(),
+                altitudeMode : "clampToGround"
             }));
         },
 

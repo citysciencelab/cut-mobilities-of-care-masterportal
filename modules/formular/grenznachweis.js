@@ -52,7 +52,8 @@ define([
                 // Erzeuge OL-Layer für Geometrie
                 this.set("layer", new ol.layer.Vector({
                     source: this.get("source"),
-                    name: "grenznachweisDraw"
+                    name: "grenznachweisDraw",
+                    altitudeMode : "clampToGround"
                 }));
                 Radio.trigger("Map", "addLayer", this.get("layer"));
                 // Cookie lesen

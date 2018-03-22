@@ -110,7 +110,8 @@ define(function (require) {
             var layer = new ol.layer.Vector({
                 source: new ol.source.Vector({useSpatialIndex: false}),
                 alwaysOnTop: true,
-                name: layerName
+                name: layerName,
+                altitudeMode : "clampToGround"
             });
 
             this.setVectorLayer(layer);
@@ -156,6 +157,7 @@ define(function (require) {
             if(!this.getMap3d()) {
                 this.setMap3d(new olcs.OLCesium({
                     map: this.getMap(),
+                    stopOpenLayersEventsPropagation : true,
                     createSynchronizers: function(map, scene){
                         return [
                             new olcs.WMSRasterSynchronizer(map, scene),
@@ -534,7 +536,8 @@ define(function (require) {
                     layer = new ol.layer.Vector({
                     name: name,
                     source: source,
-                    alwaysOnTop: true
+                    alwaysOnTop: true,
+                    altitudeMode : "clampToGround"
                 });
 
                 resultLayer = layer;

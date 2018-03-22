@@ -188,7 +188,8 @@ define([
                                     color: "blue",
                                     width: 5
                                 })
-                            })
+                            }),
+                            altitudeMode : "clampToGround",
                         });
 
                     vectorlayer.id = "routenplanerroute";
