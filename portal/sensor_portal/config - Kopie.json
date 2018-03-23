@@ -205,9 +205,19 @@
           "visibility": false
         },
         {
+          "id": "999990",
+          "name" : "AIS-Ostsee (Live)",
+          "visibility": false
+        },
+        {
           "id": "999992",
           "styleId": "999992",
           "name" : "FAKE LA-Busse (Live)",
+          "visibility": false
+        },
+        {
+          "id": "888886",
+          "dataLayerId" : "999990",
           "visibility": false
         },
         {

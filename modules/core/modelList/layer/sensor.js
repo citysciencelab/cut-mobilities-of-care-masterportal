@@ -84,7 +84,9 @@ define(function (require) {
                 if (!_.isUndefined(sensorData)) {
                     features = this.drawESRIGeoJson(sensorData);
                 }
-                this.createWebSocketConnectionToStreamLayer();
+                if (!_.isUndefined(this.get("wssUrl"))) {
+                    this.createWebSocketConnectionToStreamLayer();
+                }
             }
 
             if (!_.isUndefined(features)) {
@@ -106,7 +108,7 @@ define(function (require) {
          * @return {objects} response with sensorObjects
          */
         getResponseFromRequestURL: function (requestURL, asynchronous) {
-            var response;
+            var response = undefined;
 
             Radio.trigger("Util", "showLoader");
             $.ajax({
@@ -123,7 +125,8 @@ define(function (require) {
                 error: function (jqXHR, errorText, error) {
                     Radio.trigger("Util", "hideLoader");
                     Radio.trigger("Alert", "alert", {
-                        text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten aufgetreten</strong>",
+                        text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers " +
+                            this.get("name") + " aufgetreten</strong>",
                         kategorie: "alert-danger"
                     });
                 }
@@ -163,20 +166,6 @@ define(function (require) {
             this.getLayerSource().addFeatures(features);
 
             return features;
-        },
-
-        /**
-         * create style, function triggers to style_v2.json
-         * @param  {boolean} isClustered
-         */
-        styling: function (isClustered) {
-            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
-
-            if (!_.isUndefined(stylelistmodel)) {
-                this.setStyle(function (feature) {
-                    return stylelistmodel.createStyle(feature, isClustered);
-                });
-            }
         },
 
         /**
@@ -397,15 +386,25 @@ define(function (require) {
         loadStreamLayer: function () {
             var layerUrl = this.get("url") + "?f=pjson",
                 streamData = this.getResponseFromRequestURL(layerUrl, false),
-                streamDataJSON = JSON.parse(streamData),
-                streamId = streamDataJSON.displayField,
-                epsg = streamDataJSON.spatialReference.wkid,
-                wssUrl = streamDataJSON.streamUrls[0].urls[0],
+                streamDataJSON,
+                streamId,
+                epsg,
+                wssUrl,
                 featuresUrl,
                 featuresUrlWithQuery,
                 response,
                 responseJSON,
                 sensorData;
+
+            if (_.isUndefined(streamData)) {
+                return streamData;
+            }
+
+            streamDataJSON = JSON.parse(streamData),
+            streamId = streamDataJSON.displayField,
+            // streamId = streamDataJSON.timeInfo.trackIdField,
+            epsg = streamDataJSON.spatialReference.wkid,
+            wssUrl = streamDataJSON.streamUrls[0].urls[0];
 
             // only if there is a URL
             if (!_.isUndefined(streamDataJSON.keepLatestArchive)) {
@@ -442,6 +441,9 @@ define(function (require) {
                     data.geometry.x = 9.65 + Math.random() * 0.65;
                     data.geometry.y = 53.32 + Math.random() * 0.42;
                 }
+
+                data = this.changeValueToString(data);
+
                 var olFeature = esriFormat.readFeature(data, {
                         dataProjection: epsgCode,
                         featureProjection: Config.view.epsg
@@ -455,6 +457,40 @@ define(function (require) {
             this.getLayerSource().addFeatures(olFeaturesArray);
 
             return olFeaturesArray;
+        },
+
+        /**
+         * change all numbers from features from StreamLayer to String
+         * this is necessary to draw the gfi
+         * @param  {Object} data
+         * @return {Object}
+         */
+        changeValueToString: function (data) {
+            var attributes = data.attributes,
+                values = _.values(attributes),
+                keys = _.keys(attributes);
+
+            _.each(keys, function (key, index) {
+                if (_.isNumber(values[index])) {
+                    attributes[key] = String(values[index]);
+                }
+            });
+
+            return data;
+        },
+
+        /**
+         * create style, function triggers to style_v2.json
+         * @param  {boolean} isClustered
+         */
+        styling: function (isClustered) {
+            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
+            if (!_.isUndefined(stylelistmodel)) {
+                this.setStyle(function (feature) {
+                    return stylelistmodel.createStyle(feature, isClustered);
+                });
+            }
         },
 
 // *************************************************************
@@ -720,31 +756,19 @@ define(function (require) {
                 Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), olFeature);
             }
             else {
-                var location = [Math.round(esriJson.geometry.x * 1000) / 1000, Math.round(esriJson.geometry.y * 1000) / 1000],
-                    xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg),
-                    oldFeature = existingFeature.clone();
+                var location = [esriJson.geometry.x, esriJson.geometry.y],
+                    xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg);
 
-                try {
+                if (xyTransform[0] < 0 || xyTransform[1] < 0 || xyTransform[0] === Infinity || xyTransform[1] === Infinity) {
+                    return;
+                }
+                else {
                     existingFeature.setProperties(esriJson.attributes);
                     existingFeature.getGeometry().setCoordinates(xyTransform);
 
                     // trigger the heatmap and gfi to update them
                     Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), existingFeature);
                     Radio.trigger("GFI", "changeFeature", existingFeature);
-                }
-                catch (err) {
-                    // console.log(err);
-                    // console.log(err.message);
-                    // console.log("Neue Koordinaten: " + xyTransform);
-                    // console.log(existingFeature);
-                    // console.log(oldFeature);
-
-                    this.getLayerSource().clear();
-                    sensorData = this.loadStreamLayer();
-                    if (!_.isUndefined(sensorData)) {
-                       this.drawESRIGeoJson(sensorData);
-                    }
-                    Radio.trigger("HeatmapLayer", "loadInitialData", this.getId(), this.getLayerSource().getFeatures());
                 }
             }
         },

@@ -724,7 +724,6 @@ define(function (require) {
             svg = this.createSvgNominalCircleSegments(size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity);
 
             _.each(scalingObject, function (value, key) {
-
                 if (!_.isUndefined(scalingValues) && (key !== "empty")) {
                     strokeColor = this.returnColor(scalingValues[key], "hex");
                 }
@@ -732,6 +731,7 @@ define(function (require) {
                     strokeColor = scalingValueDefaultColor;
                 }
 
+                // create segments
                 for (var i = 0; i < value; i++) {
                     var d = this.calculateCircleSegment(startAngelDegree, endAngelDegree, circleSegmentsRadius, size);
 

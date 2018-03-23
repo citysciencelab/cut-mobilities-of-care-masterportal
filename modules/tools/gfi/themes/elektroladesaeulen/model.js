@@ -56,24 +56,12 @@ define(function (require) {
                     allProperties = this.splitProperties(gfiContent.allProperties),
                     dataStreamIds = allProperties.dataStreamId,
                     gfiParams = this.get("gfiParams"),
-                    //historicalData
                     historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams),
                     historicalDataClean = this.dataCleaning(historicalData),
                     lastDay = moment(this.get("lastDate")).format("YYYY-MM-DD"),
-                    dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay),
-                    // Indicator CountCharging
-                    indicatorChargingCounterData = this.createIndicatorCharging(false, dataStreamIds),
-                    indicatorChargingCounterDataClean = this.dataCleaningChargingIndicator(indicatorChargingCounterData),
-                    processedIndicatorChargingCounter = this.processIndicatorCharging(indicatorChargingCounterDataClean),
-                    tableheadIndicatorArray = this.createIndicatorHead(processedIndicatorChargingCounter),
-                    indicatorPropertiesObj = this.processChargingIndicator(processedIndicatorChargingCounter);
+                    dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay);
 
-                // this.createIndicators(false, dataStreamIds);
-
-                // set indicators
                 this.setDataStreamIds(dataStreamIds);
-                this.setTableheadIndicatorArray(tableheadIndicatorArray);
-                this.setIndicatorPropertiesObj(indicatorPropertiesObj);
                 this.setWeekday(dataByWeekday);
             }
         },
@@ -242,11 +230,12 @@ define(function (require) {
                 endDate = gfiParams.endDate,
                 periodTime = gfiParams.periodTime,
                 periodUnit = gfiParams.periodUnit,
-                lastDate = moment(startDate, "DD.MM.YYYY"),
+                lastDate,
                 time;
 
             // handle Dates
             if (!_.isUndefined(startDate)) {
+                lastDate = moment(startDate, "DD.MM.YYYY");
                 // request 3 more weeks to find the latest status
                 time = moment(startDate, "DD.MM.YYYY").subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
                 query = query + ";$filter=phenomenonTime gt " + time;
@@ -272,6 +261,7 @@ define(function (require) {
                     // request 3 more weeks to find the latest status
                     time = moment().subtract(periodTime, unit).subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
 
+                lastDate = moment().subtract(periodTime, unit);
                 query = query + ";$filter=phenomenonTime gt " + time;
             }
 
@@ -327,47 +317,42 @@ define(function (require) {
            return response;
         },
 
-// *******************************************************************************
-        createIndicators: function (async, dataStreamIds) {
-            var indicatorChargingCount = this.createIndicatorChargingCount(async, dataStreamIds),
+// *************************************************************
+// ***** create Indicators                                 *****
+// *************************************************************
+        /**
+         * create various indicators
+         * @param  {boolean} async
+         */
+        createIndicators: function (async) {
+            var dataStreamIds = this.get("dataStreamIds"),
+                indicatorChargingCount = this.createIndicatorChargingCount(async, dataStreamIds),
                 indicatorChargingTime = this.createIndicatorChargingTime(async, dataStreamIds),
-                tableheadIndicatorArray = this.createIndicatorHead(processedIndicatorChargingCounter),
-                indicatorPropertiesObj = this.processChargingIndicator(processedIndicatorChargingCounter);
+                indicatorTableHead = this.createIndicatorHead(indicatorChargingCount),
+                indicatorChargingCountArray = this.processChargingIndicator(indicatorChargingCount),
+                indicatordata = {};
 
             // combine data
-            indicatorPropertiesObj["Gesamtanzahl der Ladungen"] = indicatorPropertiesArray;
-            indicatorPropertiesObj["Gesamte Dauer der Ladungen"] = indicatorChargingHourData;
+            indicatordata["Gesamtanzahl der Ladungen"] = indicatorChargingCountArray;
+            indicatordata["Gesamte Dauer der Ladungen"] = indicatorChargingTime;
 
-            return data;
-
+            // set indicators
+            this.setTableheadIndicatorArray(indicatorTableHead);
+            this.setIndicatorPropertiesObj(indicatordata);
         },
 
+        /**
+         * creates indicator for total number of chargings per year
+         * @param  {boolean} async
+         * @param  {Array} dataStreamIds
+         * @return {Array}
+         */
         createIndicatorChargingCount: function (async, dataStreamIds) {
-            var indicatorChargingCounterData = this.createIndicatorCharging(async, dataStreamIds),
+            var indicatorChargingCounterData = this.createIndicatorChargingCountData(async, dataStreamIds),
                 indicatorChargingCounterDataClean = this.dataCleaningChargingIndicator(indicatorChargingCounterData),
                 processedIndicatorChargingCounter = this.processIndicatorCharging(indicatorChargingCounterDataClean);
 
-            console.log(indicatorChargingCounterData);
-            console.log(indicatorChargingCounterDataClean);
-            console.log(processedIndicatorChargingCounter);
-
-            return processedIndicatorChargingCounter
-        },
-
-        createIndicatorChargingTime: function () {
-            var indicatorChargingTime = this.loadIndicatorData();
-
-            return indicatorChargingTime;
-        },
-
-        loadIndicatorData: function () {
-            var dataStreamIds = this.get("dataStreamIds"),
-                indicatorPropertiesObj = this.get("indicatorPropertiesObj"),
-                indicatorChargingHourData = this.createIndicatorChargingHour(false, dataStreamIds);
-
-            indicatorPropertiesObj["Gesamte Dauer der Ladungen"] = indicatorChargingHourData;
-
-            this.setIndicatorPropertiesObj(indicatorPropertiesObj);
+            return processedIndicatorChargingCounter;
         },
 
         /**
@@ -376,7 +361,7 @@ define(function (require) {
          * @param  {Array} dataStreamIds
          * @return {[Object]}
          */
-        createIndicatorCharging: function (async, dataStreamIds) {
+        createIndicatorChargingCountData: function (async, dataStreamIds) {
             var historicalData = [],
                 minYear = 2017,
                 maxYear = moment().format("YYYY"),
@@ -424,6 +409,11 @@ define(function (require) {
             return dataArray;
         },
 
+        /**
+         * starts cleaning data for every loadingpoint
+         * @param  {Array} dataArray
+         * @return {Array}
+         */
         dataCleaningChargingIndicator: function (dataArray) {
             _.each(dataArray, function (data) {
                 data = this.dataCleaning(data);
@@ -433,9 +423,10 @@ define(function (require) {
         },
 
         /**
-         * removes
-         * @param  {[type]} dataArray [description]
-         * @return {[type]}           [description]
+         * removes doublicates
+         * duplicates are records whose phenomenontime is less than 1000 milliseconds
+         * @param  {Array} dataArray
+         * @return {Array}
          */
         dataCleaning: function (dataArray) {
             _.each(dataArray, function (loadingPoint) {
@@ -470,6 +461,12 @@ define(function (require) {
             return dataArray;
         },
 
+        /**
+         * Counts the number of observations
+         * these only include the status: charging
+         * @param  {Array} dataArray
+         * @return {Array} processedDataArray - contains the total number per loadingpoint
+         */
         processIndicatorCharging: function (dataArray) {
             var processedDataArray = [];
 
@@ -525,12 +522,16 @@ define(function (require) {
                 indicatorPropertiesArray.push(erg);
             });
 
-            indicatorPropertiesObj["Gesamtanzahl der Ladungen"] = indicatorPropertiesArray;
-
-            return indicatorPropertiesObj;
+            return indicatorPropertiesArray;
         },
 
-        createIndicatorChargingHour: function (async, dataStreamIds) {
+        /**
+         * creates indicator for total operating time of chargings per year
+         * @param  {boolean} async
+         * @param  {Array} dataStreamIds
+         * @return {Array} indicatorChargingTime - contains the times
+         */
+        createIndicatorChargingTime: function (async, dataStreamIds) {
             var indicatorChargingHourData = this.createDataIndicatorChargingHour(false, dataStreamIds),
                 indicatorChargingHourDataClean = this.dataCleaning(indicatorChargingHourData),
                 indicatorChargingHourDataByWeekday = this.processDataForAllWeekdays(indicatorChargingHourDataClean),
@@ -549,6 +550,12 @@ define(function (require) {
             return allData;
         },
 
+        /**
+         * gets all data for the charging stations
+         * @param  {boolean} async
+         * @param  {Array} dataStreamIds
+         * @return {Array} chargingData - per loadingpoint
+         */
         createDataIndicatorChargingHour: function (async, dataStreamIds) {
             var chargingData,
                 query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc)&$filter=",
@@ -585,6 +592,12 @@ define(function (require) {
             return chargingData;
         },
 
+        /**
+         * filters the data for the given year
+         * @param  {Array} indicatorChargingHourDataByWeekday
+         * @param  {number} year
+         * @return {Array} dataByYear - data only with the given year
+         */
         splitIndicatorDataByYear: function (indicatorChargingHourDataByWeekday, year) {
             var dataByYear = [];
 
@@ -611,6 +624,12 @@ define(function (require) {
             return dataByYear;
         },
 
+        /**
+         * determines the data for each day of the week
+         * mean and sum
+         * @param  {Array} dataByYear
+         * @return {Array}
+         */
         getWeekDayIndicatorData: function (dataByYear) {
             var allData = [];
 
@@ -624,6 +643,11 @@ define(function (require) {
             return allData;
         },
 
+        /**
+         * sums the data of the individual days of the week together
+         * @param  {Array} allWeekdaysByYear
+         * @return {number}
+         */
         calculateSumIndicatorData: function (allWeekdaysByYear) {
             var sum = 0;
 
@@ -639,6 +663,12 @@ define(function (require) {
 // *************************************************************
 // ***** Processing data                                   *****
 // *************************************************************
+        /**
+         *generates a record for each day of the week
+         * @param  {Array} historicalData [description]
+         * @param  {Date} lastDay - until this date the data will be evaluated
+         * @return {Array}
+         */
         processDataForAllWeekdays: function (historicalData, lastDay) {
             var historicalDataThisTimeZone,
                 historicalDataWithIndex,
@@ -647,6 +677,7 @@ define(function (require) {
                 processedData,
                 graphConfig;
 
+            // Check if data is available
             if (!this.checkObservationsEmpty(historicalData)) {
                 historicalDataThisTimeZone = this.changeTimeZone(historicalData);
                 historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
@@ -704,13 +735,20 @@ define(function (require) {
             return historicalData;
         },
 
+        /**
+         * divides the day into 7 days of the week
+         * and generate an observation for every day at 0 o'clock
+         * @param  {Array} historicalDataWithIndex
+         * @param  {Date} lastDay - the day on which the evaluation of the data should end
+         * @return {}
+         */
         divideDataByWeekday: function (historicalDataWithIndex, lastDay) {
             var weekArray = [[], [], [], [], [], [], []];
 
             _.each(historicalDataWithIndex, function (historicalData) {
                 var observations = historicalData.Observations,
                     actualDay = moment().format("YYYY-MM-DD"),
-                    lastDay = (_.isUndefined(lastDay)) ? moment(observations[(observations).length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay,
+                    thisLastDay = (_.isUndefined(lastDay)) ? moment(observations[(observations).length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay,
                     arrayIndex = 0,
                     booleanLoop = true;
 
@@ -722,22 +760,21 @@ define(function (require) {
                         zeroResult,
                         weekArrayIndexLength;
 
-                    // solange bis data verarbeitet wurde
+                    // until data has been processed
                     while (booleanLoop) {
                         weekArrayIndexLength = weekArray[arrayIndex].length - 1;
 
-                        // wenn das letzte Datum erreicht ist, dann wird die Schleife nicht mehr benötigt
-                         if (moment(actualDay) < moment(lastDay)) {
+                        // when the last date is reached, the loop is no longer needed
+                         if (moment(actualDay) < moment(thisLastDay)) {
                             booleanLoop = false;
                             weekArray[arrayIndex].pop();
                             break;
                         }
-                        // wenn Observationstag = aktueller Tag, dann hinzufügen
                         else if (phenomenonDay === actualDay) {
                             weekArray[arrayIndex][weekArrayIndexLength].push(data);
-                            break; // data wurde verarbeitet
+                            break; // data was processed
                         }
-                        // object mit 0 Uhr und dem status des aktuellen Tages hinzufügen
+                        // dd object with 0 o'clock and the status of the current day
                         else {
                             zeroTime = moment(actualDay).format("YYYY-MM-DDTHH:mm:ss");
                             zeroResult = data.result;
@@ -755,6 +792,12 @@ define(function (require) {
             return weekArray;
         },
 
+        /**
+         * create the config to draw graph
+         * @param  {String} targetResult
+         * @param  {String} graphTag
+         * @param  {number} index
+         */
         triggerToBarGraph: function (targetResult, graphTag, index) {
             var width = this.get("gfiWidth"),
                 height = this.get("gfiHeight"),
@@ -764,7 +807,6 @@ define(function (require) {
 
             // need to toggle weekdays
             this.setDayIndex(index);
-
             // set an error message if the values of processedData are all 0
             if (_.isEmpty(dataByWeekday)) {
                 this.drawErrorMessage(graphTag, width, height, index);
@@ -1107,6 +1149,7 @@ define(function (require) {
         setIndicatorGfiHeight: function (value) {
             this.set("indicatorGfiHeight", value);
         }
+
     });
 
     return ElektroladesaeulenTheme;

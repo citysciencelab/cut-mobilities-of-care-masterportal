@@ -14,7 +14,11 @@ define(function (require) {
             "click .kat": "changeGraph"
         },
 
-       changeGraph: function (evt) {
+        /**
+         * changeGraph by click on arrowButton
+         * @param  {event} evt
+         */
+        changeGraph: function (evt) {
             var actualIndex = this.model.get("dayIndex"),
                 buttonId = evt.currentTarget.id,
                 graphTyp;
@@ -26,8 +30,11 @@ define(function (require) {
                 }
             });
 
+            // clean window
             this.removeAllData();
 
+            // check wich button is clicked
+            // actualIndex: today = 0, yesterday = 1, tomorrow = 6, etc.
             if (buttonId === "left") {
                 (actualIndex === 6) ? actualIndex = 0 : actualIndex++;
             }
@@ -38,11 +45,16 @@ define(function (require) {
             this.setDiagrammParams(graphTyp, actualIndex);
        },
 
+        /**
+         * changes dataset, which draw in gfi
+         * @param  {event} evt
+         */
         toggleTab: function (evt) {
             var contentId = $(evt.currentTarget).attr("value"),
                 modelDayIndex = this.model.get("dayIndex"),
                 index = _.isUndefined(modelDayIndex) ? 0 : modelDayIndex;
 
+            // sets the window size so that it is always the same
             if (_.isUndefined(this.model.get("gfiHeight")) || _.isUndefined(this.model.get("gfiWidth"))) {
                 var gfiSize = {
                     width: $(".gfi-content").css("width").slice(0, -2),
@@ -54,7 +66,7 @@ define(function (require) {
                 this.model.setIndicatorGfiHeight(this.calculateIndicatorHeight(gfiSize.height));
             }
 
-            // delete all graphs
+            // delete all graphs an data
             this.removeAllData();
 
             // deactivate all tabs and their contents
@@ -87,6 +99,11 @@ define(function (require) {
             return gfiHeight - heightladesaeulenHeader - heightNavbar - heightbutton;
         },
 
+        /**
+         * Reduce height by the size of the button
+         * @param  {number} gfiHeight
+         * @return {number} gfiHeight - without height from arrow buttons
+         */
         calculateIndicatorHeight: function (gfiHeight) {
             var heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
                 heightNavbar = $(".ladesaeulen .nav").css("height").slice(0, -2);
@@ -94,6 +111,11 @@ define(function (require) {
             return gfiHeight - heightladesaeulenHeader - heightNavbar;
         },
 
+        /**
+         * sets the diagrams or data and hides the arrow buttons if necessary
+         * @param {String} contentId
+         * @param {number} index - represents the weekday, today = 0
+         */
         setDiagrammParams: function (contentId, index) {
             if (contentId === "daten") {
                 Radio.trigger("gfiView", "render");
@@ -112,17 +134,26 @@ define(function (require) {
                 $(".ladesaeulen .buttonDiv").show();
             }
             else if (contentId === "indikatoren") {
-                this.model.loadIndicatorData();
-                this.drawIndicator(".tabIndikator");
+                // starts calculate indicators
+                this.model.createIndicators(false);
+                this.drawIndicator(".tabIndikator-pane");
                 $(".ladesaeulen .buttonDiv").hide();
             }
-
         },
 
+        /**
+         * starts drawing the graphs in model
+         * @param  {String} state - category from data
+         * @param  {String} graphTag - container for special graph in html
+         * @param  {number} index - weekday
+         */
         loadDiagramm: function (state, graphTag, index) {
             this.model.triggerToBarGraph(state, graphTag, index);
         },
 
+        /**
+         * clean gfi-window to create space for new data
+         */
         removeAllData: function () {
             $(".ladesaeulenVerfuegbar-graph svg").remove();
             $(".ladesaeulenBelegt-graph svg").remove();
@@ -133,7 +164,12 @@ define(function (require) {
             $(".ladesaeulen .indicatorTable").remove();
         },
 
-        drawIndicator: function (tag) {
+        /**
+         * draws different indicators such as the total number of chargings
+         * data is calculated in the model
+         * @param  {String} dataTag - container to draw data
+         */
+        drawIndicator: function (dataTag) {
             var tableHead = this.model.get("tableheadIndicatorArray"),
                 properties = this.model.get("indicatorPropertiesObj"),
                 height = this.model.get("indicatorGfiHeight"),
@@ -155,7 +191,7 @@ define(function (require) {
             });
 
             content += "</tbody></table>";
-            $(".ladesaeulen .tabIndikator-pane").append(content);
+            $(".ladesaeulen " + dataTag).append(content);
         }
     });
 
