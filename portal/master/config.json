@@ -408,7 +408,8 @@
             "filterName": "Not- und Unfallversorgung",
             "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
           }
-        ]
+        ],
+        "extendedFilter": true
       },
       {
         "id": "8712",
@@ -437,7 +438,8 @@
         "id": "8145",
         "visibility": true,
         "styleId": "8145",
-        "mouseHoverField": "kategorie"
+        "mouseHoverField": "kategorie",
+        "extendedFilter": true
       },
       {
         "id": [
