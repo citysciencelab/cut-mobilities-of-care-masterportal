@@ -216,7 +216,7 @@ define(function (require) {
         * allowed values for "clusterClass" are "SIMPLE" and "CIRCLE".
         */
         createClusterStyle: function () {
-            var clusterClass = this.geClusterClass(),
+            var clusterClass = this.getClusterClass(),
                 clusterStyle;
 
             if (clusterClass === "SIMPLE") {
