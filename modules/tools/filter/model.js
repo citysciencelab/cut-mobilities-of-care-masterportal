@@ -66,7 +66,7 @@ define(function (require) {
                 model.deselectAllValueModels();
             }, this);
         },
-        deselectAllModels: function (selectedModel) {
+        deselectAllModels: function () {
             _.each(this.get("queryCollection").models, function (model) {
                 model.setIsSelected(false);
             }, this);

@@ -358,14 +358,14 @@ define([
          * @return {void}
          */
         updateQueryStringParam: function (key, value) {
-            var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
+            var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
                 urlQueryString = document.location.search,
-                newParam = key + '=' + value,
-                params = '?' + newParam;
+                newParam = key + "=" + value,
+                params = "?" + newParam;
 
             // If the "search" string exists, then build params from it
             if (urlQueryString) {
-                var keyRegex = new RegExp('([\?&])' + key + '[^&]*');
+                var keyRegex = new RegExp("([\?&])" + key + "[^&]*");
 
                 // If param exists already, update it
                 if (urlQueryString.match(keyRegex) !== null) {
@@ -373,10 +373,17 @@ define([
                 }
                  // Otherwise, add it to end of query string
                 else {
-                    params = urlQueryString + '&' + newParam;
+                    params = urlQueryString + "&" + newParam;
                 }
             }
-            window.history.replaceState({}, "", baseUrl + params);
+            // iframe
+            if (window !== window.top) {
+                console.log(params);
+                // Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.getId(), "layerName": model.getName()});
+            }
+            else {
+                window.history.replaceState({}, "", baseUrl + params);
+            }
         },
 
         // getter for zoomToGeometry

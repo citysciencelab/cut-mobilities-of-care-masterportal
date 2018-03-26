@@ -27,7 +27,7 @@ define(function (require) {
                     this.setIsActive(true);
                     this.get("btnIsActive").setIsSelected(true);
                     this.runFilter();
-                    if(this.get("liveZoomToFeatures")) {
+                    if (this.get("liveZoomToFeatures")) {
                         Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
                     }
                 }
@@ -122,7 +122,8 @@ define(function (require) {
          * @param  {object[]} featureAttributes
          */
         createSnippets: function (featureAttributes) {
-            featureAttributesMap = this.trimAttributes(featureAttributes);
+            var featureAttributesMap = this.trimAttributes(featureAttributes);
+
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
             if (!_.isUndefined(Radio.request("ParametricURL", "getFilter"))) {
@@ -189,7 +190,7 @@ define(function (require) {
                 _.each(filterObject.snippets, function (snippet) {
                     var attrMap = _.findWhere(featureAttributesMap, {name: snippet.attrName});
 
-                    attrMap["initSelectedValues"] = snippet.values;
+                    attrMap.initSelectedValues = snippet.values;
                 });
             }
             return featureAttributesMap;
