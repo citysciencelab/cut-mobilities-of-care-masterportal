@@ -125,19 +125,18 @@ define(function (require) {
          * @return {void}
          */
         updateFilterObject: function () {
-            var activeQueryList = this.get("queryCollection").where({isActive: true}),
-                filterObjects = [];
+            var filterObjects = [];
 
-            _.each(activeQueryList, function (query) {
-                var snippetList = [];
+            this.get("queryCollection").forEach(function (query) {
+                var ruleList = [];
 
                 query.get("snippetCollection").forEach(function (snippet) {
                     // searchInMapExtent is ignored
                     if (snippet.getSelectedValues().values.length > 0 && snippet.get("type") !== "searchInMapExtent") {
-                        snippetList.push(_.omit(snippet.getSelectedValues(), "type"));
+                        ruleList.push(_.omit(snippet.getSelectedValues(), "type"));
                     }
                 });
-                filterObjects.push({name: query.get("name"), snippets: snippetList});
+                filterObjects.push({name: query.get("name"), isSelected: query.get("isSelected"), rules: ruleList});
             });
             Radio.trigger("ParametricURL", "updateQueryStringParam", "filter", JSON.stringify(filterObjects));
         },
@@ -209,7 +208,14 @@ define(function (require) {
         },
 
         createQueries: function (queries) {
+            var queryObjects = Radio.request("ParametricURL", "getFilter");
+
             _.each(queries, function (query) {
+                if (!_.isUndefined(queryObjects)) {
+                    var queryObject = _.findWhere(queryObjects, {name: query.name});
+
+                    query = _.extend(query, queryObject);
+                }
                 this.createQuery(query);
             }, this);
         },

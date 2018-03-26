@@ -126,13 +126,14 @@ define(function (require) {
 
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
             featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
-            if (!_.isUndefined(Radio.request("ParametricURL", "getFilter"))) {
-                featureAttributesMap = this.mapUrlParam(featureAttributesMap, Radio.request("ParametricURL", "getFilter"), this.get("name"));
-            }
+            featureAttributesMap = this.mapRules(featureAttributesMap, this.get("rules"));
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
             if (this.get("isSelected") === true) {
                 this.runFilter();
+                if (this.get("liveZoomToFeatures")) {
+                    Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+                }
                 this.trigger("renderDetailView");
             }
         },
@@ -177,22 +178,18 @@ define(function (require) {
         },
 
         /**
-         * adds values that should be initially selected to the map object
+         * adds values that should be initially selected (rules) to the map object
          * @param  {object} featureAttributesMap - Mapobject
-         * @param  {object} filterJson - contains values to be added
-         * @param  {string} queryName
+         * @param  {object} rules - contains values to be added
          * @return {object} featureAttributesMap
          */
-        mapUrlParam: function (featureAttributesMap, filterJson, queryName) {
-            var filterObject = _.findWhere(filterJson, {name: queryName});
+        mapRules: function (featureAttributesMap, rules) {
+            _.each(rules, function (rule) {
+                var attrMap = _.findWhere(featureAttributesMap, {name: rule.attrName});
 
-            if (!_.isUndefined(filterObject)) {
-                _.each(filterObject.snippets, function (snippet) {
-                    var attrMap = _.findWhere(featureAttributesMap, {name: snippet.attrName});
+                attrMap.initSelectedValues = rule.values;
+            });
 
-                    attrMap.initSelectedValues = snippet.values;
-                });
-            }
             return featureAttributesMap;
         },
 
