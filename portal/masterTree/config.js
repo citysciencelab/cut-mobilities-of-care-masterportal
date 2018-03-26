@@ -1,7 +1,6 @@
 define(function () {
 
     var config = {
-        allowParametricURL: true,
         animation: {
             steps: 30,
             url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
@@ -21,7 +20,6 @@ define(function () {
             zoomlevel: 1,
             colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
         },
-        attributions: true,
         clickCounter: {},
         footer: {
             visibility: true,
@@ -34,11 +32,8 @@ define(function () {
                 }
             ]
         },
-        gemarkungen: "../node_modules/lgv-config/gemarkung.json",
-        geoAPI: false,
         gfiWindow: "attached",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
-        isMenubarVisible: true,
         layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         mouseHover: {
             numFeaturesToShow: 2,
