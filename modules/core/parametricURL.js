@@ -378,8 +378,7 @@ define([
             }
             // iframe
             if (window !== window.top) {
-                console.log(params);
-                // Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.getId(), "layerName": model.getName()});
+                Radio.trigger("RemoteInterface", "postMessage", {"urlParams": params});
             }
             else {
                 window.history.replaceState({}, "", baseUrl + params);
