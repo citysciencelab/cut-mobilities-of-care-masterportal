@@ -15,8 +15,8 @@ define(function (require) {
             headers: [], // Liste der Überschriften in Liste
             featureid: "", // ID des Features, das angezeigt werden soll.
             featureProps: {}, // Properties des Features mit gesuchter featureid
-            prevFeatureId: -1,
-            prevStyleScale: 1
+            highlightedFeature: null,
+            highlightedFeatureStyle: null
         },
         initialize: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "featureLister"});
@@ -29,12 +29,7 @@ define(function (require) {
             this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
             this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
         },
-        setPrevFeatureId: function (value) {
-            this.set("prevFeatureId", value);
-        },
-        setPrevStyleScale: function (value) {
-            this.set("prevStyleScale", value);
-        },
+
         /*
         * Wird ein GFI geöffnet, wird versucht das entsprechende Feature in der Liste zu finden und zu selektieren
         */
@@ -62,10 +57,11 @@ define(function (require) {
                 features = this.get("layer").features,
                 feature = _.find(features, function (feat) {
                     return feat.id.toString() === featureid;
-                });
+                }),
+                geometry;
 
             if (feature) {
-                var geometry = feature.geometry,
+                geometry = feature.geometry,
                     properties = feature.properties;
 
                 // Zoom auf Extent
@@ -85,45 +81,41 @@ define(function (require) {
                 this.set("featureProps", {});
             }
         },
+
         /*
         * Skaliert den Style des selektierten Features um das 1.5-fache
         */
-        scaleFeature: function (id) {
+        highlightFeature: function (id) {
+            // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
             var layer = this.get("layer"),
                 features = layer.features,
                 feature = _.find(features, function (feat) {
                     return feat.id.toString() === id;
-                }),
-            // layerstyle clonen, sonst wird die Änderung auf den ganzen
-            // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
-            style = this.get("layer").style[0].clone(),
-            image = style.getImage();
+                }).feature,
+                style = feature.getStyle() ? feature.getStyle() : layer.style(),
+                clonedStyle = style.clone(),
+                image = clonedStyle.getImage();
 
-            this.set("prevStyleScale", image.getScale());
-            this.set("prevFeatureId", id);
-            image.setScale(image.getScale() * 1.5);
-            feature.feature.setStyle(style);
+            if (image) {
+                this.setHighlightedFeature(feature);
+                this.setHighlightedFeatureStyle(feature.getStyle());
+
+                image.setScale(image.getScale() * 1.5);
+                feature.setStyle(clonedStyle);
+            }
         },
+
         /*
         * Skaliert den Style des zuvor selektierten Features auf den Ursprungswert
         */
-        unscaleFeature: function () {
-            var prevfeatureid = this.get("prevFeatureId"),
-                prevStyleScale = this.get("prevStyleScale");
+        downlightFeature: function () {
+            var highlightedFeature = this.getHighlightedFeature(),
+                highlightedFeatureStyle = this.getHighlightedFeatureStyle();
 
-            if (prevfeatureid !== -1) {
-                var layer = this.get("layer"),
-                    features = layer.features,
-                    feature = _.find(features, function (feat) {
-                        return feat.id.toString() === prevfeatureid;
-                    }),
-                // layerstyle clonen, sonst wird die Änderung auf den ganzen
-                // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
-                style = this.get("layer").style[0].clone(),
-                image = style.getImage();
-
-                image.setScale(prevStyleScale);
-                feature.feature.setStyle(style);
+            if (highlightedFeature) {
+                highlightedFeature.setStyle(highlightedFeatureStyle);
+                this.setHighlightedFeature(null);
+                this.setHighlightedFeatureStyle(null);
             }
         },
         /*
@@ -203,10 +195,12 @@ define(function (require) {
 
             // Es muss sichergetellt werden, dass auch Features ohne Geometrie verarbeitet werden können. Z.B. KitaEinrichtunen
             _.each(features, function (feature, index) {
+                var props, geom;
+
                 if (feature.get("features")) {
                     _.each(feature.get("features"), function (feat, index) {
-                        var props = Requestor.translateGFI([feat.getProperties()], gfiAttributes)[0],
-                            geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
+                        props = Requestor.translateGFI([feat.getProperties()], gfiAttributes)[0];
+                        geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
                         ll.push({
                             id: index,
@@ -217,8 +211,8 @@ define(function (require) {
                     });
                 }
                 else {
-                    var props = Requestor.translateGFI([feature.getProperties()], gfiAttributes)[0],
-                        geom = feature.getGeometry() ? feature.getGeometry().getExtent() : null;
+                    props = Requestor.translateGFI([feature.getProperties()], gfiAttributes)[0];
+                    geom = feature.getGeometry() ? feature.getGeometry().getExtent() : null;
 
                     ll.push({
                         id: index,
@@ -240,11 +234,29 @@ define(function (require) {
             layerlist.push({
                 id: layer.id,
                 name: layer.get("name"),
-                style: layer.get("style")
+                style: layer.getStyle()
             });
             this.unset("layerlist", {silent: true});
             this.set("layerlist", layerlist);
             this.trigger("switchTabToTheme"); // bei zusätzlichen Layern soll sich gleich der Tab öffnen.
+        },
+
+        // getter for highlightedFeature
+        getHighlightedFeature: function () {
+            return this.get("highlightedFeature");
+        },
+        // setter for highlightedFeature
+        setHighlightedFeature: function (value) {
+            this.set("highlightedFeature", value);
+        },
+
+        // getter for highlightedFeatureStyle
+        getHighlightedFeatureStyle: function () {
+            return this.get("highlightedFeatureStyle");
+        },
+        // setter for highlightedFeatureStyle
+        setHighlightedFeatureStyle: function (value) {
+            this.set("highlightedFeatureStyle", value);
         }
     });
 
