@@ -58,11 +58,12 @@ define(function (require) {
                 feature = _.find(features, function (feat) {
                     return feat.id.toString() === featureid;
                 }),
-                geometry;
+                geometry,
+                properties;
 
             if (feature) {
-                geometry = feature.geometry,
-                    properties = feature.properties;
+                geometry = feature.geometry;
+                properties = feature.properties;
 
                 // Zoom auf Extent
                 if (geometry) {
