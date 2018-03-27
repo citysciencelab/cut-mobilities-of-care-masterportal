@@ -66,7 +66,7 @@ define(function (require) {
                     // createFeatureObject for each feature
                     _.each(filteredFeatures, function  (feature) {
                         featureArray.push(this.getFeatureObject(model.get("searchField"), feature, model));
-                    });
+                    }, this);
                 }
             }, this);
 
