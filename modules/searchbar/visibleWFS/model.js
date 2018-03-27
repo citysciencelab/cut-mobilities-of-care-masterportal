@@ -34,52 +34,45 @@ define(function (require) {
                     elasticModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "Elastic"}),
                     filteredModels = _.filter(_.union(wfsModels, elasticModels), function (model) {
                         return model.has("searchField") === true && model.get("searchField") != "";
-                    }),
-                    features = this.getFeaturesForSearch(filteredModels);
+                    });
 
-                this.searchInFeatures(searchStringRegExp, features);
+                this.findMatchingFeatures(filteredModels, searchStringRegExp);
                 Radio.trigger("Searchbar", "createRecommendedList");
                 this.set("inUse", false);
             }
         },
-        /**
-        *
-        */
-        searchInFeatures: function (searchStringRegExp, features) {
-            _.each(features, function (feature) {
-                var featureName = feature.name.replace(/ /g, "");
 
-                // Prüft ob der Suchstring ein Teilstring vom Feature ist
-                if (featureName.search(searchStringRegExp) !== -1) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", feature);
-                }
-            }, this);
-        },
-
-        /**
-         * gets an array of feature objects for the search
-         * @param  {Backbone.Models[]} models
-         * @return {object[]} featureArray
-         */
-        getFeaturesForSearch: function (models) {
+        findMatchingFeatures: function (models, searchStringRegExp) {
             var featureArray = [];
 
             _.each(models, function (model) {
                 var features = model.get("layer").getSource().getFeatures();
 
-                _.each(features, function (feature) {
-                    if (_.isArray(model.get("searchField"))) {
-                        _.each(model.get("searchField"), function (field) {
+                if (_.isArray(model.get("searchField"))) {
+                    _.each(model.get("searchField"), function (field) {
+                        var filteredFeatures = _.filter(features, function (feature) {
+                            return feature.get(field).search(searchStringRegExp) !== -1;
+                        });
+                        // createFeatureObject for each feature
+                        _.each(filteredFeatures, function (feature) {
                             featureArray.push(this.getFeatureObject(field, feature, model));
-                        }, this)
-                    }
-                    else {
+                        }, this);
+                    }, this)
+                }
+                else {
+                    var filteredFeatures = _.filter(features, function (feature) {
+                        return feature.get(model.get("searchField")).search(searchStringRegExp) !== -1
+                    });
+                    // createFeatureObject for each feature
+                    _.each(filteredFeatures, function  (feature) {
                         featureArray.push(this.getFeatureObject(model.get("searchField"), feature, model));
-                    }
-                }, this);
+                    });
+                }
             }, this);
 
-            return featureArray;
+            _.each(featureArray, function (feature) {
+                Radio.trigger("Searchbar", "pushHits", "hitList", feature);
+            });
         },
 
         /**
@@ -97,7 +90,7 @@ define(function (require) {
                 imageSrc: this.getImageSource(feature, model),
                 id: _.uniqueId(model.get("name")),
                 additionalInfo: this.getAdditionalInfo(model, feature)
-            }
+            };
         },
 
         /**
