@@ -115,28 +115,28 @@ define([
         },
 
         placeMeasureTooltip: function (evt) {
+            var output, geom, coord;
+
             if (evt.dragging) {
                 return;
             }
+
             if (this.get("measureTooltips").length > 0) {
                 this.setScale(Radio.request("MapView", "getOptions"));
 
-                var tooltipCoord = evt.coordinate;
-
                 if (this.get("sketch")) {
-                    var output,
-                        geom = this.get("sketch").getGeometry();
+                    geom = this.get("sketch").getGeometry();
 
                     if (geom instanceof ol.geom.Polygon) {
                         output = this.formatArea(geom);
-                        tooltipCoord = geom.getLastCoordinate();
+                        coord = geom.getCoordinates()[0][geom.getCoordinates()[0].length - 2];
                     }
                     else if (geom instanceof ol.geom.LineString) {
                         output = this.formatLength(geom);
-                        tooltipCoord = geom.getLastCoordinate();
+                        coord = geom.getLastCoordinate();
                     }
                     this.get("measureTooltipElement").innerHTML = output;
-                    this.get("measureTooltip").setPosition(tooltipCoord);
+                    this.get("measureTooltip").setPosition(coord);
                 }
             }
         },
