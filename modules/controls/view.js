@@ -15,10 +15,7 @@ define([
             });
         },
         render: function () {
-            var result = Radio.request("ParametricURL", "getResult");
-            if (!_.has(result, "STYLE") || _.values(_.pick(result, "STYLE"))[0].toUpperCase() !== "SIMPLE") {
-                $("#map .ol-overlaycontainer-stopevent").append(this.$el);
-            }
+            $("#map .ol-overlaycontainer-stopevent").append(this.$el);
             this.renderSubViews();
         },
 
