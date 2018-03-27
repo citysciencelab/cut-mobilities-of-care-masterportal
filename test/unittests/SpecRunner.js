@@ -2,6 +2,7 @@ require.config({
   paths: {
     jquery: "../../node_modules/jquery/dist/jquery.min",
     underscore: "../../node_modules/underscore/underscore-min",
+    "underscore.string": "../../node_modules/underscore.string/dist/underscore.string.min",
     backbone: "../../node_modules/backbone/backbone",
     openlayers: "../../node_modules/openlayers/dist/ol-debug",
     proj4: "../../node_modules/proj4/dist/proj4",
@@ -35,6 +36,7 @@ define(function (require) {
     require("openlayers");
     require("backbone");
     require("backbone.radio");
+    require("underscore.string");
 
     mocha.setup("bdd");
     require([
@@ -49,6 +51,7 @@ define(function (require) {
     "modules/tools/gfi/themes/schulinfo/testModel.js",
     "modules/tools/gfi/themes/verkehrsstaerken_rad/testModel.js",
     "modules/core/testMap.js",
+    "modules/core/testParametricUrl.js",
     "modules/core/modelList/layer/testElastic.js",
     "modules/core/modelList/layer/testGeoJson.js",
     "modules/vectorStyle/testModel.js",
