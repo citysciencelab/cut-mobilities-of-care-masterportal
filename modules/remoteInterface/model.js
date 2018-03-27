@@ -48,6 +48,9 @@ define(function (require) {
             if (event.data.hasOwnProperty("showPositionByFeatureId")) {
                 this.showPositionByFeatureId(event.data.showPositionByFeatureId, event.data.layerId);
             }
+            else if (event.data.hasOwnProperty("transactFeatureById")) {
+                Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.featureId, event.data.mode, event.data.attributes);
+            }
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
             }

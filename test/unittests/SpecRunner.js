@@ -50,6 +50,7 @@ define(function (require) {
     "modules/tools/gfi/themes/verkehrsstaerken_rad/testModel.js",
     "modules/core/testMap.js",
     "modules/core/modelList/layer/testElastic.js",
+    "modules/core/modelList/layer/testGeoJson.js",
     "modules/vectorStyle/testModel.js",
     "modules/alerting/testModel.js",
     "modules/core/modelList/testList.js"

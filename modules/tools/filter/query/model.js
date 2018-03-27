@@ -125,7 +125,7 @@ define(function (require) {
             var featureAttributesMap = this.trimAttributes(featureAttributes);
 
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
-            featureAttributesMap = this.collectAttributeValues(featureAttributesMap);
+            featureAttributesMap = this.collectSelectableOptions(this.get("features"), [], featureAttributesMap);
             featureAttributesMap = this.mapRules(featureAttributesMap, this.get("rules"));
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
