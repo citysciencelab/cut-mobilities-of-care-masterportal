@@ -43,6 +43,7 @@ define(function (require) {
     "modules/mouseHover/testModel.js",
     "modules/searchbar/testModel.js",
     "modules/tools/filter/query/source/testWfs.js",
+    "modules/tools/filter/query/testModel.js",
     "modules/tools/filter/testFilter.js",
     "modules/snippets/slider/testModel.js",
     "modules/tools/gfi/themes/schulinfo/testModel.js",
