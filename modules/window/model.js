@@ -8,7 +8,7 @@ define([
                 isCollapsed: false,
                 isVisible: false,
                 maxPosLeft: "",
-                maxPosTop: "10px"
+                maxPosTop: "50px"
             },
             initialize: function () {
                 var channel = Radio.channel("Window");
