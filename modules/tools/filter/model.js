@@ -35,6 +35,7 @@ define(function (require) {
                 "featureIdsChanged": function (featureIds, layerId) {
                     this.updateMap();
                     this.updateGFI(featureIds, layerId);
+                    this.updateFilterObject();
                 },
                 "closeFilter": function () {
                     this.setIsActive(false);
@@ -44,6 +45,7 @@ define(function (require) {
 
             this.createQueries(this.getConfiguredQueries());
         },
+
         resetFilter: function () {
             this.deselectAllModels();
             this.deactivateAllModels();
@@ -64,7 +66,7 @@ define(function (require) {
                 model.deselectAllValueModels();
             }, this);
         },
-        deselectAllModels: function (selectedModel) {
+        deselectAllModels: function () {
             _.each(this.get("queryCollection").models, function (model) {
                 model.setIsSelected(false);
             }, this);
@@ -116,6 +118,27 @@ define(function (require) {
                     Radio.trigger("GFI", "setIsVisible", false);
                 }
             }
+        },
+
+        /**
+         * builds an array of object that reflects the current filter
+         * @return {void}
+         */
+        updateFilterObject: function () {
+            var filterObjects = [];
+
+            this.get("queryCollection").forEach(function (query) {
+                var ruleList = [];
+
+                query.get("snippetCollection").forEach(function (snippet) {
+                    // searchInMapExtent is ignored
+                    if (snippet.getSelectedValues().values.length > 0 && snippet.get("type") !== "searchInMapExtent") {
+                        ruleList.push(_.omit(snippet.getSelectedValues(), "type"));
+                    }
+                });
+                filterObjects.push({name: query.get("name"), isSelected: query.get("isSelected"), rules: ruleList});
+            });
+            Radio.trigger("ParametricURL", "updateQueryStringParam", "filter", JSON.stringify(filterObjects));
         },
 
         /**
@@ -185,7 +208,14 @@ define(function (require) {
         },
 
         createQueries: function (queries) {
+            var queryObjects = Radio.request("ParametricURL", "getFilter");
+
             _.each(queries, function (query) {
+                if (!_.isUndefined(queryObjects)) {
+                    var queryObject = _.findWhere(queryObjects, {name: query.name});
+
+                    query = _.extend(query, queryObject);
+                }
                 this.createQuery(query);
             }, this);
         },

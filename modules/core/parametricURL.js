@@ -24,7 +24,12 @@ define([
                 "getZoomLevel": this.getZoomLevel,
                 "getZoomToGeometry": this.getZoomToGeometry,
                 "getZoomToExtent": this.getZoomToExtent,
-                "getStyle": this.getStyle
+                "getStyle": this.getStyle,
+                "getFilter": this.getFilter
+            }, this);
+
+            channel.on({
+                "updateQueryStringParam": this.updateQueryStringParam
             }, this);
 
             this.parseURL();
@@ -338,7 +343,48 @@ define([
             if (_.has(result, "STYLE")) {
                 this.parseStyle(result);
             }
+
+            if (_.has(result, "FILTER")) {
+                var value = _.values(_.pick(result, "FILTER"))[0];
+
+                this.set("filter", JSON.parse(value));
+            }
         },
+
+        /**
+         * https://gist.github.com/excalq/2961415
+         * @param  {string} key
+         * @param  {string} value
+         * @return {void}
+         */
+        updateQueryStringParam: function (key, value) {
+            var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
+                urlQueryString = document.location.search,
+                newParam = key + "=" + value,
+                params = "?" + newParam;
+
+            // If the "search" string exists, then build params from it
+            if (urlQueryString) {
+                var keyRegex = new RegExp("([\?&])" + key + "[^&]*");
+
+                // If param exists already, update it
+                if (urlQueryString.match(keyRegex) !== null) {
+                    params = urlQueryString.replace(keyRegex, "$1" + newParam);
+                }
+                 // Otherwise, add it to end of query string
+                else {
+                    params = urlQueryString + "&" + newParam;
+                }
+            }
+            // iframe
+            if (window !== window.top) {
+                Radio.trigger("RemoteInterface", "postMessage", {"urlParams": params});
+            }
+            else {
+                window.history.replaceState({}, "", baseUrl + params);
+            }
+        },
+
         // getter for zoomToGeometry
         getZoomToGeometry: function () {
             return this.get("zoomToGeometry");
@@ -367,6 +413,9 @@ define([
         // setter for style
         setStyle: function (value) {
             this.set("style", value);
+        },
+        getFilter: function () {
+            return this.get("filter");
         }
     });
 
