@@ -414,6 +414,16 @@ define(function (require) {
         },
 
         /**
+         * Triggert die Darstellung einer Fehlermeldung
+         * @param {object} err Fehlerobjekt aus Ajax-Request
+         */
+        showError: function (err) {
+            var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+
+            Radio.trigger("Alert", "alert", "Gazetteer-URL nicht erreichbar. " + detail);
+        },
+
+        /**
          * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
          * @param {string} type Bezeichnung des Typs
          */
