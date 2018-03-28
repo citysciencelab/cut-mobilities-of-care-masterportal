@@ -50,7 +50,6 @@ define([
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
-                console.log($("#cursorGlyph"));
                 if ($("#cursorGlyph").attr("class") !== "glyphicon glyphicon-pencil") {
                     this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
                 }
