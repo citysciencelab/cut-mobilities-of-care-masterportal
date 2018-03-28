@@ -43,15 +43,20 @@ define([
         },
 
         render: function () {
+            var attr;
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
+                attr = this.model.toJSON();
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
-                this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
+                console.log($("#cursorGlyph"));
+                if ($("#cursorGlyph").attr("class") !== "glyphicon glyphicon-pencil") {
+                    this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
+                }
                 this.delegateEvents();
             }
-            else {
+            else if (this.model.get("isCurrentWin") === false) {
                 $("#map").removeClass("no-cursor");
                 $("#map").removeClass("cursor-crosshair");
                 $("#cursorGlyph").remove();

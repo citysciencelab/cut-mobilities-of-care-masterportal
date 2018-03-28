@@ -83,7 +83,9 @@ define([
         },
 
         initialize: function () {
-            var channel = Radio.channel("Draw");
+            var channel = Radio.channel("Draw"),
+                drawLayer,
+                feature;
 
             channel.reply({
                 "getLayer": function () {
@@ -104,7 +106,7 @@ define([
             });
 
             this.get("selectClick").on("select", function (evt) {
-                var feature = evt.target.getFeatures().getArray()[0];
+                feature = evt.target.getFeatures().getArray()[0];
 
                 if (_.isUndefined(feature) === false) {
                     // Feature aus der Source entfernen
@@ -114,7 +116,8 @@ define([
                     evt.target.getFeatures().clear();
                 }
             }, this);
-            var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+            drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+
             this.set("layer", drawLayer);
             this.set("source", drawLayer.getSource());
             this.get("selectClick").setActive(false);
@@ -342,19 +345,23 @@ define([
         },
         // Erstellt ein HTML-Element, legt dort das Glyphicon rein und klebt es an den Cursor
         setGlyphToCursor: function (glyphicon) {
+            var cursorGlyph;
+
             $("#map").after("<span id='cursorGlyph'></span>");
 
             if (glyphicon.indexOf("trash") !== -1) {
                 $("#map").removeClass("no-cursor");
                 $("#map").addClass("cursor-crosshair");
-            } else {
+            }
+            else {
                 $("#map").removeClass("cursor-crosshair");
                 $("#map").addClass("no-cursor");
             }
             $("#cursorGlyph").addClass(glyphicon);
 
             $("#map").mousemove(function (e) {
-                var cursorGlyph = $("#cursorGlyph");
+                cursorGlyph = $("#cursorGlyph");
+
                 cursorGlyph.css("left", e.offsetX + 5);
                 cursorGlyph.css("top", e.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
             });
@@ -420,14 +427,17 @@ define([
             this.get("circleTooltips").push(circleTooltip);
         },
         placecircleTooltip: function (evt) {
+            var tooltipCoord,
+                geom;
+
             if (evt.dragging) {
                 return;
             }
             if (this.get("circleTooltips").length > 0) {
-                var tooltipCoord = evt.coordinate;
+                tooltipCoord = evt.coordinate;
 
                 if (this.get("sketch")) {
-                    var geom = this.get("sketch").getGeometry();
+                    geom = this.get("sketch").getGeometry();
 
                     tooltipCoord = geom.getLastCoordinate();
                     this.get("circleTooltipElement").innerHTML = "Radius: " + Math.round(geom.getRadius()) + "m";
