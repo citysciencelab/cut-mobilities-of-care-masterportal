@@ -52,13 +52,12 @@ define([
                 this.delegateEvents();
             }
             else {
-                this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
+                $("#map").removeClass("no-cursor");
+                $("#map").removeClass("cursor-crosshair");
+                $("#cursorGlyph").remove();
+                $("#map").off("mousemove");
                 this.undelegateEvents();
             }
-            $("#map").removeClass("no-cursor");
-            $("#map").removeClass("cursor-crosshair");
-            $("#cursorGlyph").remove();
-            $("#map").off("mousemove");
             this.renderForm();
         },
 
