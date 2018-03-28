@@ -31,6 +31,8 @@ define(function (require) {
          * @param {integer} [config.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
          */
         initialize: function (config) {
+            var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
+
             this.listenTo(Radio.channel("Searchbar"), {
                 "search": this.search,
                 "setPastedHouseNumber": this.setPastedHouseNumber
@@ -39,8 +41,6 @@ define(function (require) {
             this.listenTo(Radio.channel("Gaz"), {
                 "adressSearch": this.adressSearch
             });
-
-            var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
 
             if (gazService && gazService.get("url")) {
                 this.set("gazetteerURL", gazService.get("url"));

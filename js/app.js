@@ -12,7 +12,7 @@ define("app",
     "modules/core/crs",
     "modules/core/autostarter",
     "modules/alerting/view"
-    ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
+    ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter) {
 
 
     // Core laden
@@ -62,7 +62,6 @@ define("app",
         require(["geoapi"], function () {
         });
     }
-
 
     require(["modules/snippets/slider/view", "modules/snippets/slider/range/view", "modules/snippets/dropdown/view"], function (SliderView, SliderRangeView, DropdownView) {
         // new SliderView();
