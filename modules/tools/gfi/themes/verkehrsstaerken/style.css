@@ -12,6 +12,8 @@
 
 .verkehrsstaerken .tab-content {
     overflow: auto;
+    width: 550px;
+    height: 250px;
 }
 
 .text-align-center {
