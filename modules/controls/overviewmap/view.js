@@ -1,8 +1,6 @@
 define(function (require) {
-
     var OverviewmapModel = require("modules/controls/overviewmap/model"),
         template = require("text!modules/controls/overviewmap/template.html"),
-        Radio = require("backbone.radio"),
         OverviewmapView;
 
     OverviewmapView = Backbone.View.extend({
@@ -12,8 +10,6 @@ define(function (require) {
         },
 
         initialize: function () {
-            var channel = Radio.channel("Overviewmap");
-
             this.model = new OverviewmapModel();
             this.render();
         },
@@ -35,12 +31,10 @@ define(function (require) {
             if ($(".overviewmap > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden") {
                 $(".ol-custom-overviewmap").hide();
                 $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte einblenden");
-                Radio.trigger("Overviewmap", "hide");
             }
             else {
                 $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte ausblenden");
                 $(".ol-custom-overviewmap").show();
-                Radio.trigger("Overviewmap", "show");
             }
         }
     });
