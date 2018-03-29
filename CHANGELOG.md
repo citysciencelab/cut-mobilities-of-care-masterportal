@@ -1,8 +1,31 @@
-# Changelog LGV Master-Portal 1.5.2
+# Changelog LGV Master-Portal 2.0.0
 
 NEU:
 
-  (none)
+  - f4f34f02e Totalview Button (switch auf default-Ansicht)
+  - 63679a50a fehlende dokus ergänzt
+  - dd56e0885 multipoint Layer
+  - a338b9339 GFI-Theme für radverkehr mit Diagram
+
+FIXES:
+
+  - 31b061f5e attributions glyph passt sich an wenn ovm versteckt
+  - 2cd457956 diverse Bugs, die beim Testen mit FF aufgefallen sind
+  - 3b32ea5ed overviewmap in mastertree wirft console Fehler
+  - 1bf49caca diverse Bugs, die beim Testen mit IE aufgefallen sind
+  - 2714554c3 search durch regexp ersetzt für Überprüfung auf Dateiendungen
+  - d6627f8f1 jumping Window unter Firefox und IE behoben
+  - c3320fbb0 max- und minScale werteten keine scientificNotation aus
+  - ad6b53dfb 183 diverse Bugfixes
+  - 190e0f7f7 Themes mit default extenden Parameter nicht von superclass
+  - 4581bf54b auswahl speichern light tree
+  - b20699dae falsches Theme in list ausgewählt
+  - ea8ecb2c2 nach Auswahl einer Adresse wird name nicht in searchbar übernommen
+  - 4ed4fcdbe nach Auswahl einer Adresse wird name nicht in searchbar übernommen
+  - d7706e58c configYAML wurde nicht aus config.json ausgelesen
+  - da18c6567 Util.getPath Error
+
+# Changelog LGV Master-Portal 1.5.2
 
 FIXES:
 
@@ -12,10 +35,6 @@ FIXES:
   - 03317d46 wfs legendURL Parameter aus json in Legende nutzbar
 
 # Changelog LGV Master-Portal 1.5.1
-
-NEU:
-
-  (none)
 
 FIXES:
 
