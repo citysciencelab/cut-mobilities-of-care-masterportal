@@ -31,10 +31,12 @@ define(function (require) {
             if ($(".overviewmap > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden") {
                 $(".ol-custom-overviewmap").hide();
                 $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte einblenden");
+                Radio.trigger("AttributionsView", "ovmHide");
             }
             else {
                 $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte ausblenden");
                 $(".ol-custom-overviewmap").show();
+                Radio.trigger("AttributionsView", "ovmShow");
             }
         }
     });
