@@ -34,15 +34,14 @@ define([
                 "change:isVisibleInMap": this.toggleIsVisibleInMap
             });
 
-            this.listenTo(Radio.channel("Overviewmap"), {
-                "show": this.ovmShow,
-                "hide": this.ovmHide
+            channel.on({
+                "ovmShow": this.ovmShow, // Icon auf Karte wird angepast wenn Overviewmap sichtbar
+                "ovmHide": this.ovmHide // Icon auf Karte wird angepast wenn Overviewmap versteckt
             });
 
             this.listenTo(Radio.channel("Util"), {
                 "isViewMobileChanged": this.isViewMobileChanged
             });
-
 
             this.render();
 
@@ -90,7 +89,7 @@ define([
                 $(".attributions-div").removeClass("attributions-div");
             }
             else {
-                $(".attributions-div").addClass("attributions-div")
+                $(".attributions-div").addClass("attributions-div");
             }
         },
 
@@ -125,14 +124,14 @@ define([
          * Wird benutzt bei vorhandener Overviewmap
          */
         addWithOverviewmapClass: function () {
-            this.$el.addClass("attributions-view-withOverviewmap")
+            this.$el.addClass("attributions-view-withOverviewmap");
         },
 
         /**
          * Entfernt die Klasse für das positionieren mit Overviewmap
          */
         removeWithOverviewmapClass: function () {
-            this.$el.removeClass("attributions-view-withOverviewmap")
+            this.$el.removeClass("attributions-view-withOverviewmap");
         },
 
         /**
