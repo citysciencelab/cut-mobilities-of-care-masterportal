@@ -72,7 +72,6 @@ define(function (require) {
 
                         checkboxModel.renderView();
                         this.setIsActive(isActive);
-                        this.runFilter();
                     }
                 }, this);
             }
