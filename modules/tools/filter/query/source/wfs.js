@@ -62,6 +62,13 @@ define(function (require) {
                     }
                 }
             });
+            this.listenTo(Radio.channel("GeoJSONLayer"), {
+                "featuresLoaded": function (layerId, features) {
+                    if (layerId === this.get("layerId")) {
+                        this.processFeatures(features);
+                    }
+                }
+            });
         },
         /**
          * request the features for this query from the modellist

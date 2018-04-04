@@ -67,19 +67,36 @@ define(function (require) {
         handleData: function (data, mapCrs) {
             Radio.trigger("Util", "hideLoader");
             var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
-                features = this.parseDataToFeatures(data);
+                features = this.parseDataToFeatures(data),
+                isClustered;
 
             if (jsonCrs !== mapCrs) {
                 features = this.transformFeatures(features, jsonCrs, mapCrs);
             }
-            features.forEach(function (feature) {
-                feature.setId(feature.get("id"));
-            });
-            this.getLayerSource().addFeatures(features);
-            this.set("loadend", "ready");
-            this.getLayer().setStyle(this.get("style"));
-        },
 
+            features.forEach(function (feature, index) {
+                var id = feature.get("id") || _.uniqueId();
+
+                feature.setId(id);
+            });
+            isClustered = this.has("clusterDistance") ? true : false;
+
+            this.getLayerSource().addFeatures(features);
+            this.getLayer().setStyle(this.get("styleFunction"));
+            Radio.trigger("GeoJSONLayer", "featuresLoaded", this.getId(), features);
+            this.styling(isClustered);
+            this.getLayer().setStyle(this.getStyle());
+            this.set("loadend", "ready");
+        },
+        styling: function (isClustered) {
+            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
+            if (!_.isUndefined(stylelistmodel)) {
+                this.setStyle(function(feature) {
+                    return stylelistmodel.createStyle(feature, isClustered);
+                });
+            }
+        },
         parseDataToFeatures: function (data) {
             var geojsonReader = new ol.format.GeoJSON();
 
@@ -134,27 +151,63 @@ define(function (require) {
             return this.get("features");
         },
 
-        getDefaultStyle: function () {
-            return new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(49, 159, 211, 0.8)"
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(50, 50, 50, 1)",
-                    width: 1
-                })
-            });
+
+        // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
+        createLegendURL: function () {
+            if (!this.get("legendURL").length) {
+                var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
+                if (!_.isUndefined(style)) {
+                    this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
+                }
+            }
+        },
+        /**
+         * Zeigt nur die Features an, deren Id übergeben wird
+         * @param  {string[]} featureIdList
+         */
+        showFeaturesByIds: function (featureIdList) {
+            this.hideAllFeatures();
+            _.each(featureIdList, function (id) {
+                var feature = this.getLayerSource().getFeatureById(id);
+
+                feature.setStyle(undefined);
+            }, this);
         },
 
-        getHiddenStyle: function () {
-            return new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(255, 255, 255, 0)"
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(49, 159, 211, 0)"
-                })
-            });
+        /**
+         * sets null style (=no style) for all features
+         */
+        hideAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures();
+
+            collection.forEach(function (feature) {
+                feature.setStyle(function () {
+                    return null;
+                });
+            }, this);
+        },
+
+        /**
+         * sets style for all features
+         */
+        showAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures();
+
+            collection.forEach(function (feature) {
+                feature.setStyle(undefined);
+            }, this);
+        },
+        getStyleId: function () {
+            return this.get("styleId");
+        },
+        // getter for style
+        getStyle: function () {
+            return this.get("style");
+        },
+        // setter for style
+        setStyle: function (value) {
+            this.set("style", value);
         }
     });
 
