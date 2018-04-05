@@ -6,6 +6,7 @@ define(function (require) {
 
     GeoJSONLayer = Layer.extend({
         initialize: function () {
+            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
             this.superInitialize();
         },
 
@@ -65,8 +66,7 @@ define(function (require) {
             });
         },
         handleData: function (data, mapCrs) {
-            Radio.trigger("Util", "hideLoader");
-            var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
+             var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
                 features = this.parseDataToFeatures(data),
                 isClustered;
 
@@ -80,23 +80,12 @@ define(function (require) {
                 feature.setId(id);
             });
             isClustered = this.has("clusterDistance") ? true : false;
-
             this.getLayerSource().addFeatures(features);
             this.getLayer().setStyle(this.get("styleFunction"));
             Radio.trigger("GeoJSONLayer", "featuresLoaded", this.getId(), features);
-            this.styling(isClustered);
-            this.getLayer().setStyle(this.getStyle());
-            this.set("loadend", "ready");
+            Radio.trigger("Util", "hideLoader");
         },
-        styling: function (isClustered) {
-            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
-            if (!_.isUndefined(stylelistmodel)) {
-                this.setStyle(function(feature) {
-                    return stylelistmodel.createStyle(feature, isClustered);
-                });
-            }
-        },
         parseDataToFeatures: function (data) {
             var geojsonReader = new ol.format.GeoJSON();
 
@@ -111,39 +100,20 @@ define(function (require) {
             });
             return features;
         },
-        /**
-         * Zeigt alle Features mit dem Default-Style an
-         */
-        showAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures();
-
-            collection.forEach(function (feature) {
-                feature.setStyle(this.getDefaultStyle());
-            }, this);
-        },
 
         /**
-         * Versteckt alle Features mit dem Hidden-Style
+         * sets style function for features or layer
+         * @param  {Backbone.Model} stylelistmodel
          */
-        hideAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures();
-
-            collection.forEach(function (feature) {
-                feature.setStyle(this.getHiddenStyle());
-            }, this);
-        },
-
-        /**
-         * Zeigt nur die Features an, deren Id übergeben wird
-         * @param  {string[]} featureIdList
-         */
-        showFeaturesByIds: function (featureIdList) {
-            this.hideAllFeatures();
-            _.each(featureIdList, function (id) {
-                var feature = this.getLayerSource().getFeatureById(id);
-
-                feature.setStyle(this.getDefaultStyle());
-            }, this);
+        setStyleFunction: function (stylelistmodel) {
+             if (_.isUndefined(stylelistmodel)) {
+                this.set("styleFunction", undefined);
+            }
+            else {
+                this.set("styleFunction", function (feature) {
+                    return stylelistmodel.createStyle(feature);
+                });
+            }
         },
 
         // Getter
