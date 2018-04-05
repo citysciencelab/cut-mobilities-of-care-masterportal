@@ -98,7 +98,7 @@ define(function (require) {
                 featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
                 this.get("snippetCollection").add(new SnippetDropdownModel(featureAttribute));
             }
-            else if (featureAttribute.type === "integer" || featureAttribute.type === "double") {
+            else if (featureAttribute.type === "integer" || featureAttribute.type === "decimal") {
                 featureAttribute = _.extend(featureAttribute, {"snippetType": "slider"});
                 this.get("snippetCollection").add(new SnippetSliderModel(featureAttribute));
             }
