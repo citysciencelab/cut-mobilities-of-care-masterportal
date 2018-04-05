@@ -258,7 +258,6 @@ define(function (require) {
                 graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
                     val.timestamp = Moment(val.timestamp).format("w");
-                    val.timestamp = val.timestamp.length === 1 ? "0" + val.timestamp : val.timestamp;
                     return val;
                 }),
                 legendArray = this.getLegendAttributes(data[0]);
