@@ -1,3 +1,10 @@
+# Changelog LGV Master-Portal 2.0.1
+
+FIXES:
+
+  - b8bae19dd Theme Radverkehrsstellen falsche Sortierung bei Wochenansicht
+  - d7ff9768d Theme Radverkehrsstellen falsche Sortierung bei Tagesansicht
+
 # Changelog LGV Master-Portal 2.0.0
 
 NEU:
