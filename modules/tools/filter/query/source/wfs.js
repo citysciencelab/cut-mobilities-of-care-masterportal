@@ -62,6 +62,13 @@ define(function (require) {
                     }
                 }
             });
+            this.listenTo(Radio.channel("GeoJSONLayer"), {
+                "featuresLoaded": function (layerId, features) {
+                    if (layerId === this.get("layerId")) {
+                        this.processFeatures(features);
+                    }
+                }
+            });
         },
         /**
          * request the features for this query from the modellist
@@ -90,6 +97,9 @@ define(function (require) {
                 featureType,
                 version;
 
+            if (this.get("searchInMapExtent") === true) {
+                this.addSearchInMapExtentSnippet();
+            }
             if (!_.isUndefined(layerObject)) {
                 url = Radio.request("Util", "getProxyURL", layerObject.get("url"));
                 featureType = layerObject.get("featureType");
@@ -367,7 +377,7 @@ define(function (require) {
                 if(feature.get(attribute.attrName) === null) {
                     return false;
                 }
-                else if (attribute.type === "integer" || attribute.type === "double") {
+                else if (attribute.type === "integer" || attribute.type === "decimal") {
                     return this.isNumberInRange(feature, attribute.attrName, attribute.values);
                 }
                 else if (attribute.type === "searchInMapExtent") {

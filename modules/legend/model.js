@@ -11,6 +11,7 @@ define([
             wmsLayerList: [],
             wfsLayerList: [],
             elasticLayerList: [],
+            geojsonLayerList: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
             visible: false
@@ -26,9 +27,15 @@ define([
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
             });
-            this.listenTo(Radio.channel("WFS"), {
-                "featuresLoaded": this.setLayerList
-            });
+            // this.listenTo(Radio.channel("WFSLayer"), {
+            //     "featuresLoaded": this.setLayerList
+            // });
+            // this.listenTo(Radio.channel("GeoJSONLayer"), {
+            //     "featuresLoaded": this.setLayerList
+            // });
+            // this.listenTo(Radio.channel("ElasticLayer"), {
+            //     "featuresLoaded": this.setLayerList
+            // });
             this.listenTo(Radio.channel("StyleWMS"), {
                 "updateParamsStyleWMS": this.updateParamsStyleWMSArray
             });
@@ -37,6 +44,7 @@ define([
                 "change:wmsLayerList": this.setLegendParamsFromWMS,
                 "change:wfsLayerList": this.setLegendParamsFromVector,
                 "change:elasticLayerList": this.setLegendParamsFromVector,
+                "change:geojsonLayerList": this.setLegendParamsFromVector,
                 "change:groupLayerList": this.setLegendParamsFromGROUP,
                 "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
             });
@@ -124,6 +132,9 @@ define([
             if (_.has(groupedLayers, "Elastic")) {
                 this.set("elasticLayerList", groupedLayers.Elastic);
             }
+            if (_.has(groupedLayers, "GeoJSON")) {
+                this.set("geojsonLayerList", groupedLayers.GeoJSON);
+            }
             if (_.has(groupedLayers, "GROUP")) {
                 this.set("groupLayerList", groupedLayers.GROUP);
             }
@@ -134,6 +145,7 @@ define([
             this.set("wfsLayerList", "");
             this.set("wmsLayerList", "");
             this.set("elasticLayerList", "");
+            this.set("geojsonLayerList", "");
             this.set("groupLayerList", "");
             this.set("tempArray", []);
         },
@@ -169,80 +181,6 @@ define([
                 }
             }, this);
         },
-
-        // setLegendParamsFromWFS: function () {
-        //     _.each(this.get("wfsLayerList"), function (layer) {
-        //         if (typeof layer.get("legendURL") === "string") {
-        //             this.push("tempArray", {
-        //                 layername: layer.get("name"),
-        //                 img: layer.get("legendURL"),
-        //                 typ: "WFS",
-        //                 isVisibleInMap: layer.get("isVisibleInMap")
-        //             });
-        //         }
-        //         else {
-        //             var image = [],
-        //                 name = [],
-        //                 style = Radio.request("StyleList", "returnModelById", layer.getStyleId()),
-        //                 styleClass = style.get("class"),
-        //                 styleSubClass = style.get("subClass"),
-        //                 styleFieldValues = style.get("styleFieldValues");
-
-        //             if (styleClass === "POINT") {
-        //                 // Custom Point Styles
-        //                 if (styleSubClass === "CUSTOM") {
-        //                     _.each(styleFieldValues, function (styleFieldValue) {
-        //                         image.push(style.get("imagePath") + styleFieldValue.imageName);
-        //                         if (_.has(styleFieldValue, "legendValue")) {
-        //                             name.push(styleFieldValue.legendValue);
-        //                         }
-        //                         else {
-        //                             name.push(styleFieldValue.styleFieldValue);
-        //                         }
-        //                     });
-        //                 }
-        //                 // Circle Point Style
-        //                 if (styleSubClass === "CIRCLE") {
-        //                     image.push(this.createCircleSVG(style));
-        //                     name.push(layer.get("name"));
-        //                 }
-        //                 else {
-        //                     if (style.get("imageName") !== "blank.png") {
-        //                         image.push(style.get("imagePath") + style.get("imageName"));
-        //                     }
-        //                     name.push(layer.get("name"));
-        //                 }
-        //             }
-        //             // Simple Line Style
-        //             if (styleClass === "LINE") {
-        //                 image.push(this.createLineSVG(style));
-        //                 if (style.has("legendValue")) {
-        //                     name.push(style.get("legendValue"));
-        //                 }
-        //                 else {
-        //                     name.push(layer.get("name"));
-        //                 }
-        //             }
-        //             // Simple Polygon Style
-        //             if (styleClass === "POLYGON") {
-        //                 image.push(this.createPolygonSVG(style));
-        //                 if (style.has("legendValue")) {
-        //                     name.push(style.get("legendValue"));
-        //                 }
-        //                 else {
-        //                     name.push(layer.get("name"));
-        //                 }
-        //             }console.log(image);
-        //             this.push("tempArray", {
-        //                 layername: layer.get("name"),
-        //                 legendname: name,
-        //                 img: image,
-        //                 typ: "WFS",
-        //                 isVisibleInMap: layer.get("isVisibleInMap")
-        //             });
-        //         }
-        //     }, this);
-        // },
         setLegendParamsFromVector: function (model, layerList) {
             _.each(layerList, function (layer) {
                 if (typeof layer.get("legendURL") === "string") {
