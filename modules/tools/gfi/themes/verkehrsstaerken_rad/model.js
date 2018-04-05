@@ -80,7 +80,7 @@ define(function (require) {
             _.each(dataSplit, function (data) {
                 var splitted = data.split(","),
                     day = splitted[0].split(".")[0],
-                    month = splitted[0].split(".")[1],
+                    month = splitted[0].split(".")[1] - 1,
                     year = splitted[0].split(".")[2],
                     hours = splitted[1].split(":")[0],
                     minutes = splitted[1].split(":")[1],
@@ -113,7 +113,7 @@ define(function (require) {
                 var splitted = data.split(","),
                     // weeknumber = splitted[0],
                     day = splitted[1].split(".")[0],
-                    month = splitted[1].split(".")[1],
+                    month = splitted[1].split(".")[1] - 1,
                     year = splitted[1].split(".")[2],
                     total = parseFloat(splitted[2]),
                     r_in = splitted[3] ? parseFloat(splitted[3]) : null,
@@ -258,6 +258,7 @@ define(function (require) {
                 graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
                     val.timestamp = Moment(val.timestamp).format("w");
+                    val.timestamp = val.timestamp.length === 1 ? "0" + val.timestamp : val.timestamp;
                     return val;
                 }),
                 legendArray = this.getLegendAttributes(data[0]);
