@@ -109,7 +109,7 @@
       "scalingUnit" : "°C",
       "gfiTheme" : "default",
       "gfiAttributes" : {
-         "phenomenonTime" : "Letzer Ladezeitpunkt",
+         "phenomenonTime" : "Letzer Messwert",
          "state" : "Zustand",
          "owner" : "Eigentümer"
       }

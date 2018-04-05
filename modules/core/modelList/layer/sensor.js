@@ -174,17 +174,23 @@ define(function (require) {
          * @return {String} phenomenonTime converted with UTC
          */
         changeTimeZone: function (phenomenonTime) {
-            var time = phenomenonTime;
+            var time = phenomenonTime,
+                utc = this.get("utc");
 
-            if (!_.isUndefined(this.get("utc"))) {
-                var utc = this.get("utc"),
-                    utcAlgebraicSign = utc.substring(0, 1),
-                    utcNumber;
+            if (!_.isUndefined(utc)) {
+                var utcAlgebraicSign = utc.substring(0, 1),
+                    utcNumber,
+                    utcSub;
 
                 if (utc.length === 2) {
-                    utcNumber = "0" + utc.substring(1, 2) + "00";
+                    // check for winter- and summertime
+                    utcSub = parseInt(utc.substring(1, 2), 10);
+                    utcSub = (moment(phenomenonTime).isDST()) ? utcSub + 1 : utcSub;
+                    utcNumber = "0" + utcSub + "00";
                 }
                 else if (utc.length > 2) {
+                    utcSub = parseInt(utc.substring(1, 3), 10);
+                    utcSub = (moment(phenomenonTime).isDST()) ? utcSub + 1 : utcSub;
                     utcNumber = utc.substring(1, 3) + "00";
                 }
 
@@ -260,6 +266,11 @@ define(function (require) {
                     var things = [],
                         xy = this.getCoordinates(thing);
 
+                    // if no datastream exists
+                    if (_.isEmpty(thing.Datastreams)) {
+                        return;
+                    }
+
                 _.each(allThings, function (thing2, index2) {
                     var xy2 = this.getCoordinates(thing2);
 
@@ -314,6 +325,11 @@ define(function (require) {
 
             // add more properties
             _.each(thingsArray, function (thing) {
+                // if no datastream exists
+                if (_.isEmpty(thing.Datastreams)) {
+                    return;
+                }
+
                 var thingsObservationsLength = thing.Datastreams[0].Observations.length;
 
                 if (!_.has(thing, "properties")) {

@@ -3,7 +3,7 @@
   {
     "portalTitle": {
       "title": "Geoportal-Sensor",
-      "logo": "/../node_modules/lgv-config/img/hh-logo.png",
+      "logo": "/node_modules/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -186,6 +186,30 @@
           "id": "999998",
           "styleId": "999998",
           "name" : "Temperatur (Live)",
+          "visibility": false
+        },
+        {
+          "id": "999994",
+          "styleId": "999998",
+          "name" : "MONICA - Temperatur",
+          "visibility": false
+        },
+        {
+          "id": "999995",
+          "styleId": "999995",
+          "name" : "MONICA - Luftdruck",
+          "visibility": false
+        },
+        {
+          "id": "999996",
+          "styleId": "999998",
+          "name" : "MONICA - Luftfeuchtigkeit",
+          "visibility": false
+        },
+        {
+          "id": "999997",
+          "styleId": "999998",
+          "name" : "MONICA - Windgeschwindigkeit",
           "visibility": false
         },
         {

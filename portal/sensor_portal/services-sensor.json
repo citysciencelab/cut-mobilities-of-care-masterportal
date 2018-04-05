@@ -94,20 +94,104 @@
       "maxScale":"50000000"
    },
    {
+      "id" : "999994",
+      "name" : "MONICA -Temperatur",
+      "url" : "http://51.5.242.162/itsLGVhackathon",
+      "typ" : "Sensor",
+      "subTyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "filter" : "properties/topic%20eq%20%27MONICA%20Project%20pilot%20deployment%20in%20Hamburg%27",
+         "expand" : ["Locations", "Datastreams($expand=Observations($orderby=phenomenonTime%20desc;%20$top=1);$filter=startswith(name,%27Thermometer%27))"]
+      },
+      "epsg": "EPSG:4326",
+      "utc" : "+1",
+      "scalingDecimal" : 2,
+      "scalingUnit" : "°C",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzter Messwert",
+         "state" : "Messwert",
+         "owner" : "Eigentümer"
+      }
+   },
+   {
+      "id" : "999995",
+      "name" : "MONICA - Air pressure",
+      "url" : "http://51.5.242.162/itsLGVhackathon",
+      "typ" : "Sensor",
+      "subTyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "filter" : "properties/topic%20eq%20%27MONICA%20Project%20pilot%20deployment%20in%20Hamburg%27",
+         "expand" : ["Locations", "Datastreams($expand=Observations($orderby=phenomenonTime%20desc;%20$top=1);$filter=startswith(name,%27Air%20pressure%27))"]
+      },
+      "epsg": "EPSG:4326",
+      "utc" : "+1",
+      "scalingDecimal" : 2,
+      "scalingUnit" : "hPa",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzter Messwert",
+         "state" : "Messwert",
+         "owner" : "Eigentümer"
+      }
+   },
+   {
+      "id" : "999996",
+      "name" : "MONICA - Air Humidity",
+      "url" : "http://51.5.242.162/itsLGVhackathon",
+      "typ" : "Sensor",
+      "subTyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "filter" : "properties/topic%20eq%20%27MONICA%20Project%20pilot%20deployment%20in%20Hamburg%27",
+         "expand" : ["Locations", "Datastreams($expand=Observations($orderby=phenomenonTime%20desc;%20$top=1);$filter=startswith(name,%27Air%20Humidity%27))"]
+
+      },
+      "epsg": "EPSG:4326",
+      "utc" : "+1",
+      "scalingDecimal" : 2,
+      "scalingUnit" : "%",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzter Messwert",
+         "state" : "Messwert",
+         "owner" : "Eigentümer"
+      }
+   },
+   {
+      "id" : "999997",
+      "name" : "MONICA - Wind speed",
+      "url" : "http://51.5.242.162/itsLGVhackathon",
+      "typ" : "Sensor",
+      "subTyp" : "SensorThings",
+      "version" : "1.0",
+      "urlParameter" : {
+         "filter" : "properties/topic%20eq%20%27MONICA%20Project%20pilot%20deployment%20in%20Hamburg%27",
+         "expand" : ["Locations", "Datastreams($expand=Observations($orderby=phenomenonTime%20desc;%20$top=1);$filter=startswith(name,%27Wind%20speed%27))"]
+      },
+      "epsg": "EPSG:4326",
+      "utc" : "+1",
+      "scalingDecimal" : 2,
+      "scalingUnit" : "m/s",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letzter Messwert",
+         "state" : "Messwert",
+         "owner" : "Eigentümer"
+      }
+   },
+   {
       "id" : "999998",
       "name" : "Live - Temperatur",
       "url" : "http://51.5.242.162/itsLGVhackathon",
       "typ" : "Sensor",
       "subTyp" : "SensorThings",
       "version" : "1.0",
-      "urlParameter_" : {
-         "filter" : "startswith(Datastreams/name,'Air')",
-         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"]
-      },
       "urlParameter" : {
-         "select" : "properties",
-         "filter" : "startswith(Datastreams/name,'Air')",
-         "expand" : "Locations($select=location),Datastreams($select=@iot.id;$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc;$top=1))"
+         "filter" : "properties/device eq 'Phytec phyNODE'",
+         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"]
       },
       "epsg": "EPSG:4326",
       "utc" : "+1",
@@ -116,7 +200,7 @@
       "scalingUnit" : "°C",
       "gfiTheme" : "default",
       "gfiAttributes" : {
-         "phenomenonTime" : "Letzer Ladezeitpunkt",
+         "phenomenonTime" : "Letzter Messwert",
          "state" : "Zustand",
          "owner" : "Eigentümer"
       }
@@ -128,14 +212,9 @@
       "subTyp" : "SensorThings",
       "version" : "1.0",
       "url" : "http://51.5.242.162/itsLGVhackathon",
-      "urlParameter_" : {
+      "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"]
-      },
-      "urlParameter" : {
-         "select" : "properties",
-         "filter" : "startswith(Things/name,'Charging')",
-         "expand" : "Locations($select=location),Datastreams($select=@iot.id;$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc;$top=1))"
       },
       "epsg": "EPSG:4326",
       "utc" : "+1",

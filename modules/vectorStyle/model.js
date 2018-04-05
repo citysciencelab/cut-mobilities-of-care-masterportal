@@ -719,6 +719,8 @@ define(function (require) {
                 size = size + ((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2);
             }
 
+            // is required for the display in the Internet Explorer,
+            // because in addition to the SVG and the size must be specified
             this.setSize(size);
 
             svg = this.createSvgNominalCircleSegments(size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity);
@@ -892,7 +894,7 @@ define(function (require) {
          */
         createIntervalCircleBar: function (feature) {
             var stateValue = feature.get(this.get("scalingAttribute")),
-                circleBarScalingFactor = parseInt(this.get("circleBarScalingFactor"), 10),
+                circleBarScalingFactor = parseFloat(this.get("circleBarScalingFactor")),
                 circleBarRadius = parseInt(this.get("circleBarRadius"), 10),
                 circleBarLineStroke = parseInt(this.get("circleBarLineStroke"), 10),
                 circleBarCircleFillColor = this.returnColor(this.get("circleBarCircleFillColor"), "hex"),
@@ -907,7 +909,7 @@ define(function (require) {
                 stateValue = stateValue.split(" ")[0];
             }
 
-            size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke);
+            size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius);
             barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor);
 
             this.setSize(size);
@@ -925,8 +927,8 @@ define(function (require) {
          * @param  {number} circleBarLineStroke
          * @return {number} size - size of the section to be drawn
          */
-        calculateSizeIntervalCircleBar: function (stateValue, circleBarScalingFactor, circleBarLineStroke) {
-            var size = 200;
+        calculateSizeIntervalCircleBar: function (stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius) {
+            var size = circleBarRadius * 2;
 
             if (((stateValue * circleBarScalingFactor) + circleBarLineStroke) >= size) {
                 size = size + ((stateValue * circleBarScalingFactor) + circleBarLineStroke);
@@ -951,6 +953,9 @@ define(function (require) {
             }
             else if (stateValue < 0) {
                 barLength = (size / 2 + circleBarRadius - stateValue * circleBarScalingFactor);
+            }
+            else if (_.isNaN(stateValue) || stateValue === "NaN") {
+                barLength = 0;
             }
 
             return barLength;
