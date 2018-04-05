@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Masterportal</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <script type="text/javascript" data-main="../../js/main" src="../../node_modules/requirejs/require.js"></script>
+
+</head>
+<body>
+    <div class="lgv-container">
+        <div id='loader'><img src='../../img/ajax-loader.gif'></div>
+        <!-- Hack um die Bildschirmauflösung zu bekommen -->
+        <div id='dpidiv' style='height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;'></div>
+        <div id="popup"></div>
+        <nav id="main-nav" class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div id="navbarRow" class="row">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Navigation ein-/ausblenden</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav-menu" id="root">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div id="map"></div>
+    </div>
+</body>
+</html>
