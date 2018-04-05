@@ -394,7 +394,21 @@
         "layerAttribution": "<span>Attributierung für Fachlayer</span>",
         "mouseHoverField": ["name", "strasse"],
         "searchField": "name",
-        "legendURL": "http:/geofos/legenden/bauschutz_flughafen_legende.png"
+        "filterOptions": [
+          {
+            "fieldName": "teilnahme_geburtsklinik",
+            "filterType": "combo",
+            "filterName": "Geburtshilfe",
+            "filterString": ["*", "Ja", "Nein"]
+          },
+          {
+            "fieldName": "teilnahme_notversorgung",
+            "filterType": "combo",
+            "filterName": "Not- und Unfallversorgung",
+            "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+          }
+        ],
+        "extendedFilter": true
       },
       {
         "id": "8712",
@@ -423,7 +437,8 @@
         "id": "8145",
         "visibility": true,
         "styleId": "8145",
-        "mouseHoverField": "kategorie"
+        "mouseHoverField": "kategorie",
+        "extendedFilter": true
       },
       {
         "id": [

@@ -2,10 +2,12 @@ define(function (require) {
 
   var Radio = require("backbone.radio"),
       Backbone = require("backbone"),
+      Model = require("modules/controls/totalview/model"),
       TotalView;
 
   TotalView = Backbone.View.extend({
       template: _.template("<div class='total-view-button'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
+      model: new Model(),
       id: "totalview",
       events: {
           "click .glyphicon-fast-backward": "setTotalView"
@@ -17,11 +19,10 @@ define(function (require) {
           this.$el.html(this.template());
       },
       setTotalView: function () {
-          var center, zoomlevel;
+        var center = this.model.getStartCenter(),
+            zoomlevel = this.model.getZoomLevel();
 
-          center = Radio.request("Parser", "getPortalConfig").mapView.startCenter;
-          zoomlevel = Radio.request("Parser", "getPortalConfig").mapView.zoomLevel;
-          Radio.trigger("MapView", "setCenter", center, zoomlevel);
+        Radio.trigger("MapView", "setCenter", center, zoomlevel);
       }
   });
 

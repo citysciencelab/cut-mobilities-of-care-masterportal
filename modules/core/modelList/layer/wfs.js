@@ -116,7 +116,15 @@ define(function (require) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
             if (!_.isUndefined(stylelistmodel)) {
-                this.setStyle(function (feature) {
+                /**
+                 * function that takes a feature and resolution and returns an array of styles
+                 * Erfordert beide Parameter, sonst Laufzeitfehler (in ol <= 4.6.5)
+                 * @param  {[ol.feature]} feature
+                 * @param  {number} resolution
+                 * @return {[ol.style.Style]}
+                 * @tutorial https://openlayers.org/en/latest/apidoc/ol.html#.StyleFunction
+                 */
+                this.setStyle(function (feature, resolution) {
                     return stylelistmodel.createStyle(feature, isClustered);
                 });
             }

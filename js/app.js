@@ -12,7 +12,7 @@ define("app",
     "modules/core/crs",
     "modules/core/autostarter",
     "modules/alerting/view"
-    ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
+    ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter) {
 
 
     // Core laden
@@ -62,7 +62,6 @@ define("app",
         require(["geoapi"], function () {
         });
     }
-
 
     require(["modules/snippets/slider/view", "modules/snippets/slider/range/view", "modules/snippets/dropdown/view"], function (SliderView, SliderRangeView, DropdownView) {
         // new SliderView();
@@ -243,83 +242,87 @@ define("app",
         });
     });
     // controls
-    require(["modules/controls/view"], function (ControlsView) {
-        var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
-            controlsView = new ControlsView();
+    var style = Radio.request("ParametricURL", "getStyle");
 
-        _.each(controls, function (control) {
-            switch (control.id) {
-                case "zoom": {
-                    if (control.attr === true) {
+    if (!style || style !== "SIMPLE") {
+        require(["modules/controls/view"], function (ControlsView) {
+            var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
+                controlsView = new ControlsView();
+
+            _.each(controls, function (control) {
+                switch (control.id) {
+                    case "zoom": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
+
+                            require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                                new ZoomControlView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "orientation": {
                         var el = controlsView.addRowTR(control.id);
 
-                        require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                            new ZoomControlView({el: el});
+                        require(["modules/controls/orientation/view"], function (OrientationView) {
+                            new OrientationView({el: el});
                         });
+                        break;
                     }
-                    break;
-                }
-                case "orientation": {
-                    var el = controlsView.addRowTR(control.id);
+                    case "mousePosition": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowBL(control.id);
 
-                    require(["modules/controls/orientation/view"], function (OrientationView) {
-                        new OrientationView({el: el});
-                    });
-                    break;
-                }
-                case "mousePosition": {
-                    if (control.attr === true) {
-                        var el = controlsView.addRowBL(control.id);
-
-                        require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                            new MousePositionView({el: el});
-                        });
+                            require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                                new MousePositionView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
-                }
-                case "fullScreen": {
-                    if (control.attr === true) {
-                        var el = controlsView.addRowTR(control.id);
+                    case "fullScreen": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
 
-                        require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                            new FullScreenView({el: el});
-                        });
+                            require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                                new FullScreenView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
-                }
-                case "totalview": {
-                    if (control.attr === true) {
-                        var el = controlsView.addRowTR(control.id);
+                    case "totalview": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
 
-                        require(["modules/controls/totalview/view"], function (TotalView) {
-                            new TotalView({el: el});
-                        });
+                            require(["modules/controls/totalview/view"], function (TotalView) {
+                                new TotalView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
-                }
-                case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        var el = controlsView.addRowBR(control.id);
+                    case "attributions": {
+                        if (control.attr === true || typeof control.attr === "object") {
+                            var el = controlsView.addRowBR(control.id);
 
-                        require(["modules/controls/attributions/view"], function (AttributionsView) {
-                            new AttributionsView({el: el});
-                        });
+                            require(["modules/controls/attributions/view"], function (AttributionsView) {
+                                new AttributionsView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
-                }
-                case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        var el = controlsView.addRowBR(control.id);
+                    case "overviewmap": {
+                        if (control.attr === true || typeof control.attr === "object") {
+                            var el = controlsView.addRowBR(control.id);
 
-                        require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
-                            new OverviewmapView({el: el});
-                        });
+                            require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
+                                new OverviewmapView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
                 }
-            }
+            });
         });
-    });
+    }
 
     require(["modules/mapMarker/view"], function (MapMarkerView) {
         new MapMarkerView();
