@@ -267,6 +267,7 @@ define(function (require) {
                 _.each(this.get("featureIds"), function (id) {
                     feature = model.getLayerSource().getFeatureById(id);
                     featureProperties = model.getLayerSource().getFeatureById(id).getProperties();
+                    featureProperties.id = id;
                     featureProperties.extent = feature.getGeometry().getExtent();
                     features.push(_.omit(featureProperties, ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
                 });

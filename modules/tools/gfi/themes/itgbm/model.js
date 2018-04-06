@@ -57,6 +57,7 @@ define(function (require) {
             var featureProperties = _.omit(this.get("feature").getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]);
 
             featureProperties.extent = this.get("feature").getGeometry().getExtent();
+            featureProperties.id = this.get("feature").getId();
             Radio.trigger("RemoteInterface", "postMessage", {"featureToDetail": JSON.stringify(featureProperties), "layerId": this.get("id"), "layerName": this.get("name")});
         }
     });

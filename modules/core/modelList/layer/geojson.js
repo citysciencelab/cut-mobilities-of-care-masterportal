@@ -75,7 +75,7 @@ define(function (require) {
             }
 
             features.forEach(function (feature, index) {
-                var id = feature.get("id") || _.uniqueId();
+                var id = feature.get("id") || feature.get("gest_id") || feature.get("paul_id") || feature.get("gefl_id") || feature.get("flurst_kennz") || _.uniqueId();
 
                 feature.setId(id);
             });

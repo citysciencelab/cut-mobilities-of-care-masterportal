@@ -49,7 +49,7 @@ define(function (require) {
                 this.showPositionByFeatureId(event.data.showPositionByFeatureId, event.data.layerId);
             }
             else if (event.data.hasOwnProperty("transactFeatureById")) {
-                Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.featureId, event.data.mode, event.data.attributes);
+                 Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
             }
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
