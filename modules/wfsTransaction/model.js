@@ -90,8 +90,39 @@ define(function (require) {
                 service: "WFS",
                 processData: false,
                 contentType: "text/xml",
-                data: data
-            });
+                data: data,
+                context: this,
+                success: function (xmlData) {
+                    var xmlString = this.parseXMLData(xmlData);
+
+                    Radio.trigger("RemoteInterface", "postMessage", {
+                        "transactFeatureById": "function identifier",
+                        "success": true,
+                        "response": xmlString
+                    });
+                },
+                error: function (xmlData) {
+                    var xmlString = this.parseXMLData(xmlData);
+
+                    Radio.trigger("RemoteInterface", "postMessage", {
+                        "transactFeatureById": "function identifier",
+                        "success": false,
+                        "response": xmlString
+                    });
+                }
+            },);
+        },
+        parseXMLData: function (xmlData) {
+            var xmlString;
+            //IE
+            if (window.ActiveXObject){
+                xmlString = xmlData.xml;
+            }
+            // code for Mozilla, Firefox, Opera, etc.
+            else {
+                xmlString = (new XMLSerializer()).serializeToString(xmlData);
+            }
+            return xmlString;
         }
     });
 
