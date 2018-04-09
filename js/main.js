@@ -17,7 +17,12 @@ require.config({
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         proj4: "../node_modules/proj4/dist/proj4",
-        videojs: "../node_modules/video.js/dist/video",
+        video: "../node_modules/video.js/dist/video",
+        "videojs-flash": "../node_modules/videojs-flash/dist/videojs-flash",
+        // "videojs-contrib-dash": "../node_modules/videojs-contrib-dash/dist/videojs-dash.min",
+        // "videojs-contrib-hls": "../node_modules/videojs-controib-hls/dist/videojs-contrib-hls.min",
+        // "videojs-contrib-media-sources": "../node_modules/videojs-contrib-media-sources/dist/videojs-contrib-media-sources.min",
+        // dashjs: "../node_modules/dashjs/dist/dash.all.min",
         moment: "../node_modules/moment/min/moment.min",
         geoapi: "GeoAPI",
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
@@ -37,7 +42,8 @@ require.config({
             exports: "ol"
         }
     },
-    urlArgs: "bust=" + (new Date()).getTime()
+    urlArgs: "bust=" + (new Date()).getTime(),
+    nodeIdCompat: true
 });
 
 // Überschreibt das Errorhandling von Require so,

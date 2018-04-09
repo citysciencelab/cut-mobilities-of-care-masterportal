@@ -1,50 +1,50 @@
-define([
-    "backbone",
-    "config",
-    "videojs"
-], function (Backbone, Config, VideoJS) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        VideoJS = require("video"),
+        VideoModel;
 
-    var VideoModel = Backbone.Model.extend({
-        /**
-         *
-         */
+    // require("dashjs");
+    require('videojs-flash');
+    // require("videojs-contrib-dash");
+
+    VideoModel = Backbone.Model.extend({
         defaults: {
             id: "",
-            url: "",
-            video: "",
-            reloadVersuch: 0
+            url: ""
         },
-        /**
-         *
-         */
-        initialize: function () {
-            this.set("id", _.uniqueId("video"));
-            this.starteStreamingCounter();
+
+        initialize: function (url) {
+            console.log(url);
+            this.setId(_.uniqueId("video"));
+            this.setUrl(url);
         },
+
         destroy: function () {
             this.unbind();
             this.clear({silent: true});
         },
-        /**
-         *
-         */
-        starteStreamingCounter: function () {
-            this.set("checkInterval", setInterval(function () {
-                if (this.get("reloadVersuch") < 10) {
-                    if (document.getElementById(this.get("id"))) {
-                        /**
-                         * Diese Funktion startet das Video unter der id
-                         */
-                        VideoJS(document.getElementById(this.get("id")), {"autoplay": true, "preload": "auto", "children": {"controlBar": false}}, function () {
-                        });
-                        window.clearInterval(this.get("checkInterval"));
-                    }
-                }
-                else {
-                    window.clearInterval(this.get("checkInterval"));
-                }
-                this.set("reloadVersuch", this.get("reloadVersuch") + 1);
-            }.bind(this), 500));
+
+        startStreaming: function (callback) {
+            var a = VideoJS(this.getId(), {"techorder": ["flash"], "autoplay": true, "preload": "auto", "children": {"controlBar": false}}, callback);
+            console.log(a);
+        },
+
+        // getter for id
+        getId: function () {
+            return this.get("id");
+        },
+        // setter for id
+        setId: function (value) {
+            this.set("id", value);
+        },
+
+        // getter for url
+        getUrl: function () {
+            return this.get("url");
+        },
+        // setter for url
+        setUrl: function (value) {
+            this.set("url", value);
         }
     });
     return VideoModel;

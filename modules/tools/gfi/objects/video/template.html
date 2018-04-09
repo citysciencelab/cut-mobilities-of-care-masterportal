@@ -1,9 +1,3 @@
-<% if (url.search(".m3u8") !== -1) { %>
-    <video width="300" height="300" controls>
-        <source src="<%=url%>" type="application/x-mpegURL">
-    </video>
-<% } else { %>
-    <video id="<%=id%>" class="video-js vjs-default-skin" width="300" height="300" style="margin-left:auto; margin-right:auto;">
-        <source src="<%=url%>"/>
-    </video>
-<% } %>
+<video id="<%=id%>" class="video-js vjs-styles-defaults" width="300" height="300" style="margin-left:auto; margin-right:auto;">
+    <source src="rtmp://141.91.184.27:1935/live/&mp4:Willy-Brandt-Str.sdp_240p50" type="rtmp/mp4"/>
+</video>
