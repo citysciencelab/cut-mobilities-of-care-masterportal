@@ -119,6 +119,19 @@
                   "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
                 },
                 {
+                  "layerId": "8712",
+                  "isActive": false,
+                  "isSelected": false,
+                  "name": "Sonderschulen",
+                  "predefinedRules": [
+                    {
+                      "attrName": "kapitelbezeichnung",
+                      "values": ["Sonderschulen"]
+                    }
+                  ],
+                  "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
+                },
+                {
                   "layerId": "1711",
                   "isActive": true,
                   "isSelected": true,
