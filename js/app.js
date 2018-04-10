@@ -3,6 +3,7 @@ define("app",
     "jquery",
     "config",
     "modules/core/util",
+    "modules/remoteInterface/model",
     "modules/vectorStyle/list",
     "modules/core/rawLayerList",
     "modules/restReader/collection",
@@ -12,9 +13,10 @@ define("app",
     "modules/core/crs",
     "modules/core/autostarter",
     "modules/alerting/view"
-    ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
+    ], function ($, Config, Util, Remoteinterface, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
 
     // Core laden
+    new Remoteinterface();
     new Autostarter();
     new Util();
     new StyleList();
@@ -38,9 +40,7 @@ define("app",
     });
     new RestReaderList();
 
-    require(["modules/remoteInterface/model"], function (Remoteinterface) {
-        new Remoteinterface();
-    });
+
 
     require(["modules/zoomToGeometry/model"], function (ZoomToGeometry) {
         new ZoomToGeometry();
