@@ -95,20 +95,18 @@ define(function (require) {
                 success: function (xmlData) {
                     var xmlString = this.parseXMLData(xmlData);
 
-                    Radio.trigger("RemoteInterface", "postMessage", {
-                        "transactFeatureById": "function identifier",
-                        "success": true,
-                        "response": xmlString
-                    });
+                    if (xmlString.indexOf("Exception") === -1) {
+                        this.triggerRemoteInterface(true, xmlString);
+                    }
+                    // successful ajax but wfst service answers with exception
+                    else {
+                        this.triggerRemoteInterface(false, xmlString);
+                    }
                 },
                 error: function (xmlData) {
                     var xmlString = this.parseXMLData(xmlData);
 
-                    Radio.trigger("RemoteInterface", "postMessage", {
-                        "transactFeatureById": "function identifier",
-                        "success": false,
-                        "response": xmlString
-                    });
+                    this.triggerRemoteInterface(false, xmlString);
                 }
             },);
         },
@@ -123,6 +121,13 @@ define(function (require) {
                 xmlString = (new XMLSerializer()).serializeToString(xmlData);
             }
             return xmlString;
+        },
+        triggerRemoteInterface: function (success, msg) {
+            Radio.trigger("RemoteInterface", "postMessage", {
+                "transactFeatureById": "function identifier",
+                "success": success,
+                "response": msg
+            });
         }
     });
 
