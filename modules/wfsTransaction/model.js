@@ -90,7 +90,43 @@ define(function (require) {
                 service: "WFS",
                 processData: false,
                 contentType: "text/xml",
-                data: data
+                data: data,
+                context: this,
+                success: function (xmlData) {
+                    var xmlString = this.parseXMLData(xmlData);
+
+                    if (xmlString.indexOf("Exception") === -1) {
+                        this.triggerRemoteInterface(true, xmlString);
+                    }
+                    // successful ajax but wfst service answers with exception
+                    else {
+                        this.triggerRemoteInterface(false, xmlString);
+                    }
+                },
+                error: function (xmlData) {
+                    var xmlString = this.parseXMLData(xmlData);
+
+                    this.triggerRemoteInterface(false, xmlString);
+                }
+            },);
+        },
+        parseXMLData: function (xmlData) {
+            var xmlString;
+            //IE
+            if (window.ActiveXObject){
+                xmlString = xmlData.xml;
+            }
+            // code for Mozilla, Firefox, Opera, etc.
+            else {
+                xmlString = (new XMLSerializer()).serializeToString(xmlData);
+            }
+            return xmlString;
+        },
+        triggerRemoteInterface: function (success, msg) {
+            Radio.trigger("RemoteInterface", "postMessage", {
+                "transactFeatureById": "function identifier",
+                "success": success,
+                "response": msg
             });
         }
     });
