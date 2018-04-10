@@ -45,7 +45,6 @@ define(function (require) {
                 service: "WFS",
                 typeName: this.get("featureType"),
                 outputFormat: "application/geo+json",
-                maxFeatures: 100,
                 version: this.getVersion()
             };
 
@@ -75,14 +74,24 @@ define(function (require) {
             }
 
             features.forEach(function (feature, index) {
-                var id = feature.get("id") || feature.get("gest_id") || feature.get("paul_id") || feature.get("gefl_id") || feature.get("flurst_kennz") || _.uniqueId();
+                var id = feature.get("id") || _.uniqueId();
 
                 feature.setId(id);
             });
             isClustered = this.has("clusterDistance") ? true : false;
             this.getLayerSource().addFeatures(features);
             this.getLayer().setStyle(this.get("styleFunction"));
-            Radio.trigger("GeoJSONLayer", "featuresLoaded", this.getId(), features);
+
+            // wenn iframe - z.b. it-gbm --> besser über config steuern - isIframe?
+            if (window != window.top) {
+                 var newFeatures = [];
+
+                features.forEach(function (feature) {
+                    feature.set("extent", feature.getGeometry().getExtent());
+                    newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                });
+                Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
+            }
             Radio.trigger("Util", "hideLoader");
         },
 
