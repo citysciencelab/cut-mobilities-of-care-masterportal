@@ -20,6 +20,7 @@ define(function (require) {
             channel.on({
                 "showAllFeatures": this.showAllFeatures,
                 "showFeaturesById": this.showFeaturesById,
+                "showPositionByExtent": this.showPositionByExtent,
                 "addFeaturesFromGBM": this.addFeaturesFromGBM,
                 "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
                 "moveMarkerToHit": this.moveMarkerToHit,
@@ -45,8 +46,8 @@ define(function (require) {
             if (event.origin !== this.get("postMessageUrl")) {
                 return;
             }
-            if (event.data.hasOwnProperty("showPositionByFeatureId")) {
-                this.showPositionByFeatureId(event.data.showPositionByFeatureId, event.data.layerId);
+            if (event.data.hasOwnProperty("showPositionByExtent")) {
+                this.showPositionByExtent(event.data.showPositionByExtent);
             }
             else if (event.data.hasOwnProperty("transactFeatureById")) {
                  Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
@@ -74,6 +75,11 @@ define(function (require) {
                 extent = feature.getGeometry().getExtent(),
                 center = ol.extent.getCenter(extent);
 
+            Radio.trigger("MapMarker", "showMarker", center);
+            Radio.trigger("MapView", "setCenter", center);
+        },
+        showPositionByExtent: function (extent) {
+            var center = ol.extent.getCenter(extent);
             Radio.trigger("MapMarker", "showMarker", center);
             Radio.trigger("MapView", "setCenter", center);
         },
