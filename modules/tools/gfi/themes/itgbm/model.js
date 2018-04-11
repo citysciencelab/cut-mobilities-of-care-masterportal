@@ -13,8 +13,8 @@ define(function (require) {
          * sets title and gfiContent attributes
          */
         parseGfiContent: function () {
-            this.set("title", this.get("gfiContent")[0].Name);
-            this.set("gfiContent", _.omit(this.get("gfiContent")[0], "Name"));
+            this.set("title", this.get("gfiContent")[0].Belegenheit);
+            this.set("gfiContent", _.omit(this.get("gfiContent")[0], "Belegenheit"));
             this.set("gfiContent", this.addUnits(this.get("gfiContent"), ["Größe"]));
         },
         /**
