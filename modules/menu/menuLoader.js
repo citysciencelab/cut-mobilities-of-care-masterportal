@@ -16,9 +16,9 @@ define([
         this.loadMenu = function (caller) {
             var isMobile = Radio.request("Util", "isViewMobile"),
                 style = Radio.request("ParametricURL", "getStyle"),
-                isTable = Config.uiMode;
+                uiMode = Config.uiMode;
 
-            if (isTable) {
+            if (uiMode && uiMode === "table") {
                 alert("is table!");
             }
             else if (!style || style !== "SIMPLE") {
