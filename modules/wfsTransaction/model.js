@@ -29,6 +29,7 @@ define(function (require) {
             if (!_.isUndefined(model)) {
                 feature = model.getLayer().getSource().getFeatureById(featureId);
                 feature.setProperties(attributes);
+                feature.unset("extent");
                 dom = this.writeTransaction(mode, [feature], this.getWriteOptions(model));
                 xmlString = new XMLSerializer().serializeToString(dom);
                 xmlString = xmlString.replace(/<Name>/g, "<Name>app:");
