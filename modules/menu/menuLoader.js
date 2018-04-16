@@ -13,15 +13,28 @@ define([
 
         this.treeType = Radio.request("Parser", "getTreeType");
 
-        this.loadMenu = function (caller) {
-            var isMobile = Radio.request("Util", "isViewMobile"),
-                style = Radio.request("ParametricURL", "getStyle"),
-                uiMode = Config.uiMode;
+        this.setMenuStyle = function () {
+            var styleFromUrl = Radio.request("ParametricURL", "getStyle"),
+                styleFromConf = Config.uiStyle ? Config.uiStyle.toUpperCase() : "",
+                menuStyle = "DEFAULT";
 
-            if (uiMode && uiMode === "table") {
+            if (styleFromUrl && (styleFromUrl === "TABLE" || styleFromUrl === "SIMPLE")) {
+                    menuStyle = styleFromUrl;
+            }
+            else if (styleFromConf === "TABLE" || styleFromConf === "SIMPLE") {
+                menuStyle = styleFromConf;
+            }
+            return menuStyle;
+        };
+
+        this.loadMenu = function (caller) {
+            var menuStyle = this.setMenuStyle(),
+                isMobile = Radio.request("Util", "isViewMobile");
+
+            if (menuStyle === "TABLE") {
                 alert("is table!");
             }
-            else if (!style || style !== "SIMPLE") {
+            else if (menuStyle === "DEFAULT") {
                     $("#map").css("height", "calc(100% - 50px)");
                     $("#main-nav").show();
 
