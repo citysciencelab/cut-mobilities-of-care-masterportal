@@ -48,21 +48,7 @@ define(function (require) {
          * @return {[type]} [description]
          */
         listenToFeaturesLoaded: function () {
-            this.listenTo(Radio.channel("ElasticLayer"), {
-                "featuresLoaded": function (layerId, features) {
-                    if (layerId === this.get("layerId")) {
-                        this.processFeatures(features);
-                    }
-                }
-            });
-            this.listenTo(Radio.channel("WFSLayer"), {
-                "featuresLoaded": function (layerId, features) {
-                    if (layerId === this.get("layerId")) {
-                        this.processFeatures(features);
-                    }
-                }
-            });
-            this.listenTo(Radio.channel("GeoJSONLayer"), {
+            this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
                     if (layerId === this.get("layerId")) {
                         this.processFeatures(features);

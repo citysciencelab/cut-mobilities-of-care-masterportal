@@ -21,6 +21,7 @@ define(function (require) {
             maxScale: "1000000"
         },
         superInitialize: function () {
+            var channel = Radio.Channel("Layer");
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
@@ -40,7 +41,7 @@ define(function (require) {
                     this.getResolutions();
                 }
             });
-            this.listenTo(Radio.channel("Layer"), {
+            this.listenTo(channel, {
                   "updateLayerInfo": function (name) {
                       if (this.get("name") === name && this.getLayerInfoChecked() === true) {
                           this.showLayerInformation();
@@ -102,6 +103,9 @@ define(function (require) {
             this.createLegendURL();
         },
 
+        featuresLoaded: function (features) {
+            Radio.trigger("Layer", "featuresLoaded", this.getId(), features);
+        },
         getLayerInfoChecked: function () {
             return this.get("layerInfoChecked");
         },

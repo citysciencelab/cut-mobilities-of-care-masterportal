@@ -91,7 +91,6 @@ define(function (require) {
                 context: this,
                 success: function (data) {
                     Radio.trigger("Util", "hideLoader");
-
                     var wfsReader = new ol.format.WFS({
                             featureNS: this.get("featureNS")
                         }),
@@ -107,6 +106,7 @@ define(function (require) {
                     Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
                     this.styling(isClustered);
                     this.getLayer().setStyle(this.getStyle());
+                    this.featuresLoaded(features);
                 },
                 error: function (jqXHR, errorText, error) {
                     Radio.trigger("Util", "hideLoader");

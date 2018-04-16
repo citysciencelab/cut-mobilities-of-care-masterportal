@@ -53,7 +53,7 @@ define(function (require) {
             $.ajax({
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
                 data: params,
-                async: false,
+                async: true,
                 type: "GET",
                 context: this,
                 success: function (data) {
@@ -92,6 +92,7 @@ define(function (require) {
                 });
                 Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
             }
+            this.featuresLoaded(features);
             Radio.trigger("Util", "hideLoader");
         },
 
