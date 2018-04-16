@@ -41,8 +41,7 @@ define([
         setAttributes: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
                 portalConfig = Radio.request("Parser", "getPortalConfig"),
-                portalTitleObj = _.isUndefined(portalConfig.portalTitle) === false ? portalConfig.portalTitle : "",
-                portalTitle = _.isUndefined(portalTitleObj.title) === false ? portalTitleObj.title : document.title,
+                portalTitle = _.has(portalConfig.portalTitle, "title") ? portalConfig.portalTitle.title : _.isString(portalConfig.PortalTitle) ? portalConfig.PortalTitle : document.title,
                 hrefString = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
                 platformString = "<br>Platform: " + navigator.platform + "<br>",
                 cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
@@ -55,7 +54,7 @@ define([
                 month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
                 ticketID = month + day + "-" + _.random(1000, 9999),
                 resp = _.isUndefined(toolModel) === false ? Radio.request("RestReader", "getServiceById", toolModel.get("serviceID")) : undefined;
-
+console.log(portalTitle);
             if (_.isUndefined(toolModel) === false) {
                 this.set(toolModel.attributes);
             }
