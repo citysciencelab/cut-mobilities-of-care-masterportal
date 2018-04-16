@@ -28,19 +28,21 @@ define([
             userTel: "",
             isCurrentWin: false,
             includeSystemInfo: false,
-            contactInfo: ""
+            contactInfo: "",
+            portalConfig: {}
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
 
+            this.setPortalConfig(Radio.request("Parser", "getPortalConfig"));
             this.setAttributes();
             Radio.trigger("Autostart", "initializedModul", "contact");
         },
         setAttributes: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
-                portalConfig = Radio.request("Parser", "getPortalConfig"),
+                portalConfig = _.has(this.getPortalConfig(), "portalTitle") ? this.getPortalConfig() : "",
                 portalTitle = _.has(portalConfig.portalTitle, "title") ? portalConfig.portalTitle.title : _.isString(portalConfig.PortalTitle) ? portalConfig.PortalTitle : document.title,
                 hrefString = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
                 platformString = "<br>Platform: " + navigator.platform + "<br>",
@@ -323,6 +325,16 @@ define([
         // setter for bcc
         setBcc: function (value) {
             this.set("bcc", value);
+        },
+
+        // getter for portalConfig
+        getPortalConfig: function () {
+            return this.get("portalConfig");
+        },
+
+        // setter for portalConfig
+        setPortalConfig: function (value) {
+            this.set("portalConfig", value);
         }
 
     });
