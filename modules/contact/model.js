@@ -41,14 +41,14 @@ define([
         setAttributes: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
                 portalConfig = Radio.request("Parser", "getPortalConfig"),
-                portaltitle = _.isUndefined(portalConfig) === false ? portalConfig.PortalTitle : document.title,
-                hrefString = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portaltitle + "</a>",
+                portalTitle = _.has(portalConfig.portalTitle, "title") ? portalConfig.portalTitle.title : _.isString(portalConfig.PortalTitle) ? portalConfig.PortalTitle : document.title,
+                hrefString = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
                 platformString = "<br>Platform: " + navigator.platform + "<br>",
                 cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
                 userAgentString = "UserAgent: " + navigator.userAgent,
                 systemInfo = hrefString + platformString + cookiesString + userAgentString,
                 isSubjectUndefined = _.isUndefined(toolModel) === false ? _.isUndefined(toolModel.get("subject")) : true,
-                subject = isSubjectUndefined === true ? "Supportanfrage zum Portal " + portaltitle : toolModel.get("subject"),
+                subject = isSubjectUndefined === true ? "Supportanfrage zum Portal " + portalTitle : toolModel.get("subject"),
                 date = new Date(),
                 day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
                 month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
@@ -121,7 +121,7 @@ define([
         },
 
         send: function () {
-            var cc =  _.map(this.getCc(), _.clone), // deep copy instead of passing object by reference
+            var cc = _.map(this.getCc(), _.clone), // deep copy instead of passing object by reference
                 text,
                 dataToSend;
 
