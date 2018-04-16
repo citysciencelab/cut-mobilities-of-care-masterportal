@@ -55,7 +55,7 @@ define(function (require) {
             if (_.isUndefined(selectedModel) === false) {
                 var view = new QueryDetailView({model: selectedModel});
 
-                this.$el.append(view.render());
+                this.$el.find(".detail-view-container").html(view.render());
             }
         },
 
