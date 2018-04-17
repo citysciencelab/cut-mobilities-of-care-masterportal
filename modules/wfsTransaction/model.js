@@ -32,6 +32,7 @@ define(function (require) {
                 feature.unset("extent");
                 dom = this.writeTransaction(mode, [feature], this.getWriteOptions(model));
                 xmlString = new XMLSerializer().serializeToString(dom);
+                xmlString = xmlString.replace('<Update typeName="app:' + model.get('featureType') + '">', '<Update typeName="app:' + model.get('featureType') + '" xmlns:app="' + model.get('featureNS') + '">');
                 xmlString = xmlString.replace(/<Name>/g, "<Name>app:");
                 this.sendRequest(model.get("url"), xmlString);
             }
@@ -109,7 +110,7 @@ define(function (require) {
 
                     this.triggerRemoteInterface(false, xmlString);
                 }
-            },);
+            });
         },
         parseXMLData: function (xmlData) {
             var xmlString;
