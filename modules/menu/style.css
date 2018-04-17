@@ -12,6 +12,7 @@
     border: 0;
     position: relative;
     margin-bottom: 0;
+    display: none;
 }
 
 .dropdown-menu {

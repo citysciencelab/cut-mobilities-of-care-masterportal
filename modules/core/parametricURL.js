@@ -237,10 +237,6 @@ define([
         parseStyle: function (result) {
             var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
 
-            if (value === "SIMPLE") {
-                $("#main-nav").hide();
-                $("#map").css("height", "100%");
-            }
             this.setStyle(value);
         },
         parseURL: function (result) {
