@@ -6,9 +6,6 @@ define([
     "use strict";
     var VideoView = Backbone.View.extend({
         template: _.template(VideoTemplate),
-        events: {
-            "remove": "destroy"
-        },
         initialize: function (url) {
             this.model = new VideoModel(url);
             this.render();
@@ -18,21 +15,23 @@ define([
                 attr;
 
             this.listenTo(channel, {
-                "afterRender": this.startStreaming
+                "afterRender": this.startStreaming,
+                "isVisible": this.changedGFI
             }, this);
 
             attr = this.model.toJSON();
             this.$el.html(this.template(attr));
         },
+        changedGFI: function (value) {
+            if (value === false) {
+                this.remove();
+            }
+        },
         startStreaming: function () {
-            this.model.startStreaming(this.test);
+            this.model.startStreaming();
         },
-        destroy: function () {
-            this.unbind();
+        remove: function () {
             this.model.destroy();
-        },
-        test:function () {
-            console.log(this);
         }
     });
 

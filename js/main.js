@@ -17,7 +17,7 @@ require.config({
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         proj4: "../node_modules/proj4/dist/proj4",
-        videojs: "../node_modules/video.js/dist/video",
+        "videojs": "../node_modules/video.js/dist/video",
         videojsflash: "../node_modules/videojs-flash/dist/videojs-flash",
         // "videojs-contrib-dash": "../node_modules/videojs-contrib-dash/dist/videojs-dash.min",
         // "videojs-contrib-hls": "../node_modules/videojs-controib-hls/dist/videojs-contrib-hls.min",
@@ -40,9 +40,11 @@ require.config({
         },
         openlayers: {
             exports: "ol"
-        },
-        videojs: {
-            exports: "video.js"
+        }
+    },
+    map: {
+        "videojsflash": {
+            "video.js": "videojs"
         }
     },
     urlArgs: "bust=" + (new Date()).getTime()
