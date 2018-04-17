@@ -55,7 +55,6 @@ define(function (require) {
         startStreaming: function (callback) {
             var videoEle = document.getElementById(this.getId());
 
-            VideoJS.options.flash.swf = "../../node_modules/videojs-swf/dist/video-js.swf";
             VideoJS(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
         },
 
