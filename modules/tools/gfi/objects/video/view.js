@@ -8,30 +8,16 @@ define([
         template: _.template(VideoTemplate),
         initialize: function (url) {
             this.model = new VideoModel(url);
+            this.listenTo(this.model, {
+                "removeView": this.remove
+            })
             this.render();
         },
+
         render: function () {
-            var channel = Radio.channel("GFI"),
-                attr;
+            var attr = this.model.toJSON();
 
-            this.listenTo(channel, {
-                "afterRender": this.startStreaming,
-                "isVisible": this.changedGFI
-            }, this);
-
-            attr = this.model.toJSON();
             this.$el.html(this.template(attr));
-        },
-        changedGFI: function (value) {
-            if (value === false) {
-                this.remove();
-            }
-        },
-        startStreaming: function () {
-            this.model.startStreaming();
-        },
-        remove: function () {
-            this.model.destroy();
         }
     });
 
