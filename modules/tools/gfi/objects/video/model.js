@@ -1,11 +1,9 @@
 define(function (require) {
     var Backbone = require("backbone"),
-        VideoJS = require("video"),
+        VideoJS = require("videojs"),
         VideoModel;
 
-    // require("dashjs");
-    require('videojs-flash');
-    // require("videojs-contrib-dash");
+    define("videojsflash", [VideoJS]);
 
     VideoModel = Backbone.Model.extend({
         defaults: {
@@ -25,8 +23,12 @@ define(function (require) {
         },
 
         startStreaming: function (callback) {
-            var a = VideoJS(this.getId(), {"techorder": ["flash"], "autoplay": true, "preload": "auto", "children": {"controlBar": false}}, callback);
+            var videoEle = document.getElementById(this.getId());
+debugger;
+            VideoJS.options.flash.swf = "VideoJS.swf";
+            var a = VideoJS(videoEle, {}, callback);
             console.log(a);
+            a.play();
         },
 
         // getter for id
