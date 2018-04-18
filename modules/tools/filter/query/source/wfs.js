@@ -236,32 +236,19 @@ define(function (require) {
             this.setFeatureIds(featureIds);
             this.trigger("featureIdsChanged", featureIds, this.get("layerId"));
         },
-        /**
-         * triggers map to zoom to given features of given layer
-         * @return {[type]} [description]
-         */
-        zoomToSelectedFeatures: function () {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
-            // iframe
-            if (window != window.top) {
-                var features = [],
-                    feature,
-                    geometry,
-                    featuerProperties;
+        sendFeaturesToRemote: function () {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+                features = [],
+                feature;
 
-                _.each(this.get("featureIds"), function (id) {
-                    feature = model.getLayerSource().getFeatureById(id);
-                    featureProperties = model.getLayerSource().getFeatureById(id).getProperties();
-                    featureProperties.id = id;
-                    featureProperties.extent = feature.getGeometry().getExtent();
-                    features.push(_.omit(featureProperties, ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
-                });
-                Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.getId(), "layerName": model.getName()});
-            }
-            else {
-                Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
-            }
+            _.each(this.get("featureIds"), function (id) {
+                feature = model.getLayerSource().getFeatureById(id);
+                feature.set("extent", feature.getGeometry().getExtent());
+                features.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+            });
+
+            Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.getId(), "layerName": model.getName()});
         },
         /**
          * determines the attributes and their values that are still selectable
