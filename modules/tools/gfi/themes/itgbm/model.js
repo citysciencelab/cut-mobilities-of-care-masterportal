@@ -13,6 +13,15 @@ define(function (require) {
          * sets title and gfiContent attributes
          */
         parseGfiContent: function () {
+
+            this.get("gfiContent")[0] = _.mapObject(this.get("gfiContent")[0], function (val, key) {
+                if (typeof val ===  "string" && val.indexOf("|") !== -1) {
+                    return val.replace(/\|/g, ", ");
+                }
+                else {
+                    return val;
+                }
+            });
             this.set("title", this.get("gfiContent")[0].Belegenheit);
             this.set("gfiContent", _.omit(this.get("gfiContent")[0], "Belegenheit"));
             this.set("gfiContent", this.addUnits(this.get("gfiContent"), ["Größe"]));
