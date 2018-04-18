@@ -12,7 +12,7 @@ define([
 
     Preparser = Backbone.Model.extend({
         url: function () {
-            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json";
+            var path = _.has(Config, "portalConf") === true ? Config.portalConf : configPath + "config.json";
 
             if (path.slice(-5) !== ".json") {
                 var addPath = Radio.request("Util", "getConfig"),
@@ -28,7 +28,7 @@ define([
                     path = path + "/" + addPath;
                 }
                 else {
-                    path = "config.json";
+                    path = configPath + "config.json";
                 }
             }
             return path;

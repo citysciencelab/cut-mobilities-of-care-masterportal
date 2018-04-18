@@ -1,4 +1,13 @@
-var Radio;
+var scriptTags = document.getElementsByTagName("script"),
+    scriptTagsArray = Array.prototype.slice.call(scriptTags),
+    configPath = window.location.href,
+    Radio;
+
+scriptTagsArray.forEach(function (scriptTag) {
+    if (scriptTag.getAttribute("data-lgv-config") !== null) {
+        configPath = scriptTag.getAttribute("data-lgv-config");
+    }
+}, this);
 
 require.config({
     waitSeconds: 60,
@@ -20,7 +29,7 @@ require.config({
         videojs: "../node_modules/video.js/dist/video-js/video",
         moment: "../node_modules/moment/min/moment.min",
         geoapi: "GeoAPI",
-        config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
+        config: configPath + "config",
         app: "app",
         templates: "../templates",
         modules: "../modules",
