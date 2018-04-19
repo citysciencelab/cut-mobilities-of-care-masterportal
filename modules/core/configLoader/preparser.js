@@ -12,12 +12,16 @@ define([
 
     Preparser = Backbone.Model.extend({
         url: function () {
-            var path = _.has(Config, "portalConf") === true ? Config.portalConf : configPath + "config.json";
-
-            if (path.slice(-5) !== ".json") {
+            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json";
+            
+            if(path.slice(-6) === "?noext") {
+                path = Config.portalConf;
+            }
+            else if (path.slice(-5) !== ".json") {
                 var addPath = Radio.request("Util", "getConfig"),
                     isAddPathValid = addPath.length > 1 ? true : false;
                 // removes trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
+
                 if (isAddPathValid) {
                     if (path.slice(-1) === "/") {
                         path = path.slice(0, -1);
@@ -28,9 +32,10 @@ define([
                     path = path + "/" + addPath;
                 }
                 else {
-                    path = configPath + "config.json";
+                    path = "config.json";
                 }
             }
+
             return path;
         },
         initialize: function () {

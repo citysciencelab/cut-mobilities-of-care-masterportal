@@ -1,11 +1,12 @@
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
-    configPath = window.location.href,
+    configPath = window.location.href + "config",
     Radio;
 
 scriptTagsArray.forEach(function (scriptTag) {
     if (scriptTag.getAttribute("data-lgv-config") !== null) {
-        configPath = scriptTag.getAttribute("data-lgv-config");
+        // ?noext notwendig, damit nicht automatisch von Require ein .js an den Pfad angehängt wird!
+        configPath = scriptTag.getAttribute("data-lgv-config") + "?noext";
     }
 }, this);
 
@@ -29,11 +30,11 @@ require.config({
         videojs: "../node_modules/video.js/dist/video-js/video",
         moment: "../node_modules/moment/min/moment.min",
         geoapi: "GeoAPI",
-        config: configPath + "config",
+        config: configPath,
         app: "app",
         templates: "../templates",
         modules: "../modules",
-        d3: "../node_modules/d3/build/d3.min"
+        d3: "../node_modules/d3/build/d3.min",
     },
     shim: {
         bootstrap: {
