@@ -234,9 +234,6 @@ define("app",
                     require(["modules/legend/legendLoader"], function (LegendLoader) {
                         new LegendLoader();
                     });
-                    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
-                        new AddGeoJSON();
-                    });
                     break;
                 }
                 default: {
@@ -244,6 +241,9 @@ define("app",
                 }
             }
         });
+    });
+    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
+        new AddGeoJSON();
     });
     // controls
     require(["modules/controls/view"], function (ControlsView) {
@@ -338,6 +338,10 @@ define("app",
 
     require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
         new StyleWMSView();
+    });
+
+    require(["modules/highlightFeature/model"], function (HighlightFeature) {
+        new HighlightFeature();
     });
 
     Radio.trigger("Util", "hideLoader");

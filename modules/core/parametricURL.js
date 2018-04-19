@@ -25,7 +25,8 @@ define([
                 "getZoomToGeometry": this.getZoomToGeometry,
                 "getZoomToExtent": this.getZoomToExtent,
                 "getStyle": this.getStyle,
-                "getFilter": this.getFilter
+                "getFilter": this.getFilter,
+                "getHighlightFeature": this.getHighlightFeature
             }, this);
 
             channel.on({
@@ -349,6 +350,11 @@ define([
 
                 this.set("filter", JSON.parse(value));
             }
+
+            if(_.has(result, "HIGHLIGHTFEATURE")) {
+                var values = _.values(_.pick(result, "HIGHLIGHTFEATURE"))[0];
+                this.set("highlightfeature", values);
+            }
         },
 
         /**
@@ -416,6 +422,9 @@ define([
         },
         getFilter: function () {
             return this.get("filter");
+        },
+        getHighlightFeature: function () {
+            return this.get("highlightfeature");
         }
     });
 
