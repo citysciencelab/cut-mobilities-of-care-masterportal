@@ -67,6 +67,7 @@ define(function (require) {
         handleData: function (data, mapCrs) {
              var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
                 features = this.parseDataToFeatures(data),
+                newFeatures = [],
                 isClustered;
 
             if (jsonCrs !== mapCrs) {
@@ -82,16 +83,13 @@ define(function (require) {
             this.getLayerSource().addFeatures(features);
             this.getLayer().setStyle(this.get("styleFunction"));
 
-            // wenn iframe - z.b. it-gbm --> besser über config steuern - isIframe?
-            if (window != window.top) {
-                 var newFeatures = [];
+            // für it-gbm
+            features.forEach(function (feature) {
+                feature.set("extent", feature.getGeometry().getExtent());
+                newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+            });
+            Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
 
-                features.forEach(function (feature) {
-                    feature.set("extent", feature.getGeometry().getExtent());
-                    newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
-                });
-                Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
-            }
             this.featuresLoaded(features);
             Radio.trigger("Util", "hideLoader");
         },

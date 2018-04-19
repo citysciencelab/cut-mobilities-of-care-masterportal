@@ -60,7 +60,7 @@ define(function (require) {
         },
 
         zoomToSelectedFeatures: function () {
-            this.model.zoomToSelectedFeatures();
+            this.model.sendFeaturesToRemote();
             if (Radio.request("Util", "isViewMobile") === true) {
                 this.model.trigger("closeFilter");
             }

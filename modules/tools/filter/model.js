@@ -15,7 +15,8 @@ define(function (require) {
             queryCollection: {},
             isActive: false,
             allowMultipleQueriesPerLayer: true,
-            liveZoomToFeatures: false
+            liveZoomToFeatures: false,
+            sendToRemote: false
         },
         initialize: function () {
             var channel = Radio.channel("Filter");
@@ -230,6 +231,10 @@ define(function (require) {
 
             if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
                 query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
+            }
+
+            if (!_.isUndefined(this.get("sendToRemote"))) {
+                query.set("sendToRemote", this.get("sendToRemote"));
             }
 
             if (query.get("isSelected")) {
