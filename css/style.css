@@ -43,6 +43,7 @@
 @import "../modules/core/style.css";
 @import "../modules/menu/mobile/breadCrumb/style.css";
 @import "../modules/menu/mobile/style.css";
+@import "../modules/menu/table/style.css";
 @import "../modules/tools/extendedFilter/style.css";
 @import "../modules/tools/animation/style.css";
 @import "../modules/tools/gfi/desktop/style.css";

@@ -1,0 +1,17 @@
+#table-nav {
+    bottom: 30px;
+    position: absolute;
+    width: 100%;
+}
+
+.table-nav {
+    border-radius: 12px !important;
+}
+
+.table-nav-main {
+    background-color: #F2F2F2;
+    margin: auto;
+    width: 480px;
+    height: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+}

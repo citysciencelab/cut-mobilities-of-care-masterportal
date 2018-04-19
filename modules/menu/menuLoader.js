@@ -3,7 +3,8 @@ define([
     "backbone.radio",
     "modules/menu/desktop/listViewLight",
     "modules/menu/desktop/listView",
-    "modules/menu/mobile/listView"
+    "modules/menu/mobile/listView",
+    "modules/menu/table/view"
 ], function (Config) {
     var Radio = require("backbone.radio"),
         MenuLoader;
@@ -28,13 +29,19 @@ define([
         };
 
         this.loadMenu = function (caller) {
-            var menuStyle = this.setMenuStyle(),
-                isMobile = Radio.request("Util", "isViewMobile");
+            var isMobile = Radio.request("Util", "isViewMobile");
 
-            if (menuStyle === "TABLE") {
-                alert("is table!");
+            if (!this.menuStyle) {
+                this.menuStyle = this.setMenuStyle();
             }
-            else if (menuStyle === "DEFAULT") {
+
+            if (this.menuStyle === "TABLE") {
+                require(["modules/menu/table/view"], function (Menu) {
+                    caller.currentMenu = new Menu();
+                    channel.trigger("ready");
+                });
+            }
+            else if (this.menuStyle === "DEFAULT") {
                     $("#map").css("height", "calc(100% - 50px)");
                     $("#main-nav").show();
 
@@ -63,9 +70,10 @@ define([
         this.currentMenu = this.loadMenu(this);
         Radio.on("Util", {
             "isViewMobileChanged": function () {
-                this.currentMenu.removeView();
-
-                this.currentMenu = this.loadMenu(this);
+                if (this.menuStyle === "DEFAULT") {
+                    this.currentMenu.removeView();
+                    this.currentMenu = this.loadMenu(this);
+                }
             }
         }, this);
     };
