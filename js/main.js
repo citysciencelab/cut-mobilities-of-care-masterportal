@@ -34,7 +34,7 @@ require.config({
         app: "app",
         templates: "../templates",
         modules: "../modules",
-        d3: "../node_modules/d3/build/d3.min",
+        d3: "../node_modules/d3/build/d3.min"
     },
     shim: {
         bootstrap: {

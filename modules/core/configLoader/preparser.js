@@ -13,8 +13,8 @@ define([
     Preparser = Backbone.Model.extend({
         url: function () {
             var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json";
-            
-            if(path.slice(-6) === "?noext") {
+
+            if (path.slice(-6) === "?noext") {
                 path = Config.portalConf;
             }
             else if (path.slice(-5) !== ".json") {
