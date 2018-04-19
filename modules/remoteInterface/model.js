@@ -49,6 +49,9 @@ define(function (require) {
             if (event.data.hasOwnProperty("showPositionByExtent")) {
                 this.showPositionByExtent(event.data.showPositionByExtent);
             }
+            else if(event.data.hasOwnProperty("showPositionByExtentNoScroll")) {
+                this.showPositionByExtentNoScroll(event.data.showPositionByExtentNoScroll);
+            }
             else if (event.data.hasOwnProperty("transactFeatureById")) {
                  Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
             }
@@ -82,6 +85,10 @@ define(function (require) {
             var center = ol.extent.getCenter(extent);
             Radio.trigger("MapMarker", "showMarker", center);
             Radio.trigger("MapView", "setCenter", center);
+        },
+        showPositionByExtentNoScroll: function (extent) {
+            var center = ol.extent.getCenter(extent);
+            Radio.trigger("MapMarker", "showMarker", center);
         },
         addFeaturesFromGBM: function (hits, id, layerName) {
             Radio.trigger("AddGeoJSON", "addFeaturesFromGBM", hits, id, layerName);
