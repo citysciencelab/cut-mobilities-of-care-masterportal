@@ -99,6 +99,7 @@ define(function (require) {
 
                     if (xmlString.indexOf("Exception") === -1) {
                         this.triggerRemoteInterface(true, xmlString);
+                        Radio.trigger("Map", "render");
                     }
                     // successful ajax but wfst service answers with exception
                     else {
