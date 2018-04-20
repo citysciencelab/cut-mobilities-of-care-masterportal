@@ -9,9 +9,25 @@
 }
 
 .table-nav-main {
-    background-color: #F2F2F2;
+    background-color: #CCC;
     margin: auto;
     width: 480px;
     height: 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    padding: 5px;
+}
+
+#table-nav-burger {
+	background-color: #ffffff;
+	height: 40px;
+	width: 40px;
+	position: absolute;
+}
+
+#table-nav-burger svg {
+	height: 64px;
+	width: 64px;
+	top: -12.5px;
+	left: -12.5px;
+	position: absolute;
 }
