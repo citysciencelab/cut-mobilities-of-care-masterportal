@@ -1,3 +1,15 @@
+# Changelog LGV Master-Portal 2.0.2
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 8ddf9ebd contact tests wenn keine portalconfig geladen wird
+  - f774a5c1 contact an neues object in config.json angepasst
+  - 85083af4 filter dropdown css overflow-y hinzugefügt
+
 # Changelog LGV Master-Portal 2.0.1
 
 FIXES:
