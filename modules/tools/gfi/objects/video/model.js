@@ -16,14 +16,13 @@ define(function (require) {
         defaults: {
             id: "",
             url: "",
-            poster: "",
-            channel: Radio.channel("GFI")
+            poster: ""
         },
 
         initialize: function (url) {
             var portalConfig = Radio.request("Parser", "getPortalConfig");
 
-            this.listenTo(this.getChannel(), {
+            this.listenTo(Radio.channel("GFI"), {
                 "afterRender": this.startStreaming,
                 "isVisible": this.changedGFI
             }, this);
@@ -33,19 +32,6 @@ define(function (require) {
             }
             this.setId(_.uniqueId("video"));
             this.setUrl(url);
-        },
-
-        /**
-         * Zerstört das Model, das Radio und triggert remove der View
-         */
-        destroy: function () {
-            var videoEle = document.getElementById(this.getId()),
-                channel = this.getChannel();
-
-            VideoJS(videoEle).dispose();
-            channel.off();
-            this.clear({silent: true});
-            this.trigger("removeView");
         },
 
         /**
@@ -66,6 +52,24 @@ define(function (require) {
             if (value === false) {
                 this.destroy();
             }
+        },
+
+        /**
+         * Zerstört das Modul vollständig
+         * stop VideoJS
+         * remove Radio-Listener
+         * remove Backbone-Listener
+         * clear Attributes
+         * remove View
+         */
+        destroy: function () {
+            var videoEle = document.getElementById(this.getId());
+
+            VideoJS(videoEle).dispose();
+            this.stopListening();
+            this.off();
+            this.clear();
+            this.trigger("removeView");
         },
 
         // getter for id
@@ -93,15 +97,6 @@ define(function (require) {
         // setter for poster
         setPoster: function (value) {
             this.set("poster", value);
-        },
-
-        // getter for channel
-        getChannel: function () {
-            return this.get("channel");
-        },
-        // setter for channel
-        setChannel: function (value) {
-            this.set("channel", value);
         }
     });
     return VideoModel;
