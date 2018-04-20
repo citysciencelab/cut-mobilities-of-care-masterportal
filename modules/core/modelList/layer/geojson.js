@@ -6,8 +6,9 @@ define(function (require) {
 
     GeoJSONLayer = Layer.extend({
         initialize: function () {
-            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
             this.superInitialize();
+            this.set("styleId", this.getStyleId() || this.getId());
+            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         },
 
         /**

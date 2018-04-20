@@ -82,10 +82,12 @@ define(function (require) {
                     return new WMSLayer(attrs, options);
                 }
                 else if (attrs.typ === "WFS") {
-                    return new WFSLayer(attrs, options);
-                }
-                else if (attrs.typ === "GeoJSON") {
-                    return new GeoJSONLayer(attrs, options);
+                    if (attrs.outputFormat === "GeoJSON") {
+                        return new GeoJSONLayer(attrs, options);
+                    }
+                    else {
+                        return new WFSLayer(attrs, options);
+                    }
                 }
                 else if (attrs.typ === "Elastic") {
                     return new ElasticLayer(attrs, options);
@@ -102,6 +104,9 @@ define(function (require) {
             }
             else if (attrs.type === "staticlink") {
                 return new StaticLink(attrs, options);
+            }
+            else {
+                Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + "attrs.type");
             }
         },
         /**
