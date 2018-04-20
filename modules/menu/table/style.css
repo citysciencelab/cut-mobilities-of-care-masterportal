@@ -15,3 +15,22 @@
     height: 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
 }
+
+#table-tool {
+    position: relative;
+    top: -45px;
+    left: 324px;
+}
+
+.table-tool {
+    background-color: #F2F2F2;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.table-tool > p {
+    font-size: 26px;
+}

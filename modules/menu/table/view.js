@@ -3,6 +3,7 @@ define(function (require) {
         _ = require("underscore"),
         MainTemplate = require("text!modules/menu/table/main/template.html"),
         $ = require("jquery"),
+        ToolView = require("modules/menu/table/tool/view"),
         Menu;
 
   Menu = Backbone.View.extend({
@@ -12,11 +13,15 @@ define(function (require) {
       template: _.template(MainTemplate),
       initialize: function () {
           this.render();
+          this.renderTool();
       },
       render: function () {
           $(this.el).html(this.template());
           $(".lgv-container").append(this.$el);
-      }
+      },
+      renderTool: function() {
+          new ToolView();
+      },
   });
   return Menu;
 });
