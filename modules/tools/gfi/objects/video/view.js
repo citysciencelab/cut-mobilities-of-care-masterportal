@@ -1,16 +1,17 @@
-define([
-    "backbone",
-    "text!modules/tools/gfi/objects/video/template.html",
-    "modules/tools/gfi/objects/video/model"
-], function (Backbone, VideoTemplate, VideoModel) {
-    "use strict";
-    var VideoView = Backbone.View.extend({
+define(function (require) {
+
+    var Backbone = require("backbone"),
+        VideoTemplate = require("text!modules/tools/gfi/objects/video/template.html"),
+        VideoModel = require("modules/tools/gfi/objects/video/model"),
+        VideoView;
+
+    VideoView = Backbone.View.extend({
         template: _.template(VideoTemplate),
         initialize: function (url) {
             this.model = new VideoModel(url);
             this.listenTo(this.model, {
                 "removeView": this.remove
-            })
+            });
             this.render();
         },
 
