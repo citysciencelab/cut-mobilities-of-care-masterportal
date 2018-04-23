@@ -90,7 +90,6 @@ define(function (require) {
         sendRequest: function (url, data) {
             $.ajax(Radio.request("Util", "getProxyURL", url), {
                 type: "POST",
-                dataType: "xml",
                 service: "WFS",
                 processData: false,
                 contentType: "text/xml",
