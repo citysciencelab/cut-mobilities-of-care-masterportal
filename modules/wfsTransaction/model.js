@@ -1,6 +1,8 @@
 define(function (require) {
+    var WFSTransaction,
+        ol = require("openlayers");
 
-    var WFSTransaction = Backbone.Model.extend({
+    WFSTransaction = Backbone.Model.extend({
 
         /**
          * inits the radio channel for this model and registers the events
