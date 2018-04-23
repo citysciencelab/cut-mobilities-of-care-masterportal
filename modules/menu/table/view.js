@@ -20,7 +20,7 @@ define(function (require) {
           $(".lgv-container").append(this.$el);
       },
       renderTool: function() {
-          new ToolView();
+          this.$el.append(new ToolView().render());
       },
   });
   return Menu;

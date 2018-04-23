@@ -2,21 +2,21 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         _ = require("underscore"),
-        ItemTemplate = require("text!modules/menu/table/tool/template.html"),
+        ToolTemplate = require("text!modules/menu/table/tool/template.html"),
         $ = require("jquery"),
-        ItemView;
+        ToolView;
 
-    ItemView = Backbone.View.extend({
+    ToolView = Backbone.View.extend({
         id : "table-tool",
         className: "table-tool table-nav",
-        template: _.template(ItemTemplate),
+        template: _.template(ToolTemplate),
         initialize: function () {
             this.render();
         },
         render: function () {
-            $('#table-nav').append(this.$el.html(this.template()));
+            return this.$el.html(this.template());
         }
     });
 
-    return ItemView;
+    return ToolView;
 });
