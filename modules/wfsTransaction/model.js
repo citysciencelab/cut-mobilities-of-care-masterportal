@@ -115,7 +115,7 @@ define(function (require) {
             });
         },
         parseXMLData: function (xmlData) {
-            var xmlString;
+            var xmlString = "";
             //IE
             if (window.ActiveXObject){
                 xmlString = xmlData.xml;
