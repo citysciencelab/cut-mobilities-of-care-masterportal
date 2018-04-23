@@ -19,7 +19,7 @@ define(function (require) {
           $(this.el).html(this.template());
           $(".lgv-container").append(this.$el);
       },
-            renderLayer: function() {
+            renderLayer: function () {
           this.$el.append(new LayerView().render());
       }
   });

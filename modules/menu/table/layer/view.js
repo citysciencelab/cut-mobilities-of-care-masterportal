@@ -7,7 +7,7 @@ define(function (require) {
         LayerView;
 
     LayerView = Backbone.View.extend({
-        id : "table-layer",
+        id: "table-layer",
         className: "table-layer table-nav",
         template: _.template(LayerTemplate),
         initialize: function () {
