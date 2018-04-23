@@ -8,7 +8,7 @@ define([
                 isCollapsed: false,
                 isVisible: false,
                 maxPosLeft: "",
-                maxPosTop: "10px"
+                maxPosTop: "50px"
             },
             initialize: function () {
                 var channel = Radio.channel("Window");
@@ -37,7 +37,7 @@ define([
                 this.set("title", value.getName());
                 this.set("icon", value.getGlyphicon());
                 this.set("winType", value.getId());
-                if (value.getId() === "coord" || value.getId() === "gfi") {
+                if (value.getId() === "gfi") {
                     this.set("isVisible", false);
                 }
                 else {

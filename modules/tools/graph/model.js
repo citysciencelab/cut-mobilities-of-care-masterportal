@@ -77,7 +77,7 @@ define(function (require) {
                 });
             });
             values = _.uniq(values);
-            values.sort();
+            // values.sort(); Sortierung nach String funktioniert nicht für timestamp, daher auskommentiert und Daten vorsortiert
             return d3.scaleBand()
                     .range(rangeArray)
                     .domain(values);
