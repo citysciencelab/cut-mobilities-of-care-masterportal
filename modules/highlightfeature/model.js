@@ -1,6 +1,6 @@
 define(function (require) {
-
-var HighlightFeature;
+var HighlightFeature,
+    ol = require("openlayers");
 
 HighlightFeature = Backbone.Model.extend({
         initialize: function () {
