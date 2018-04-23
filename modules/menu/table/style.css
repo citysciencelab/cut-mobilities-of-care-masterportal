@@ -17,13 +17,20 @@
     padding: 5px;
 }
 
-#table-nav-burger-div {
-	background-color: #ffffff;
-	height: 40px;
-	width: 40px;
-	position: absolute;
+#table-layer {
+    position: relative;
+    top: -45px;
+    left: -200px;
 }
 
-#table-nav-main-burger-icon{
-    font-size: 2em;
+.table-layer {
+    background-color: #F2F2F2;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.table-layer > p {
+    font-size: 27.5px;
 }
