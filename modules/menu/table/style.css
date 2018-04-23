@@ -17,17 +17,13 @@
     padding: 5px;
 }
 
-#table-nav-burger {
+#table-nav-burger-div {
 	background-color: #ffffff;
 	height: 40px;
 	width: 40px;
 	position: absolute;
 }
 
-#table-nav-burger svg {
-	height: 64px;
-	width: 64px;
-	top: -12.5px;
-	left: -12.5px;
-	position: absolute;
+#table-nav-main-burger-icon{
+    font-size: 2em;
 }
