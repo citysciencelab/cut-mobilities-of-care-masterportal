@@ -91,13 +91,13 @@ define(function (require) {
             $.ajax(Radio.request("Util", "getProxyURL", url), {
                 type: "POST",
                 service: "WFS",
-                processData: false,
-                contentType: "text/xml",
+                dataType: "html", // receive type html because of IE
+                contentType: "text/xml", // send type
                 data: data,
                 context: this,
-                success: function (xmlData) {
-                    var xmlString = this.parseXMLData(xmlData);
-
+                success: function (xmlString) {
+                    alert("success");
+                    alert(xmlString);
                     if (xmlString.indexOf("Exception") === -1) {
                         this.triggerRemoteInterface(true, xmlString);
                         Radio.trigger("Map", "render");
@@ -107,24 +107,10 @@ define(function (require) {
                         this.triggerRemoteInterface(false, xmlString);
                     }
                 },
-                error: function (xmlData) {
-                    var xmlString = this.parseXMLData(xmlData);
-
-                    this.triggerRemoteInterface(false, xmlString);
+                error: function (xmlString) {
+                   this.triggerRemoteInterface(false, xmlString);
                 }
             });
-        },
-        parseXMLData: function (xmlData) {
-            var xmlString = "";
-            //IE
-            if (window.ActiveXObject){
-                xmlString = xmlData.xml;
-            }
-            // code for Mozilla, Firefox, Opera, etc.
-            else {
-                xmlString = (new XMLSerializer()).serializeToString(xmlData);
-            }
-            return xmlString;
         },
         triggerRemoteInterface: function (success, msg) {
             Radio.trigger("RemoteInterface", "postMessage", {
