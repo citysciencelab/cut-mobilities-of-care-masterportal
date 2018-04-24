@@ -19,9 +19,9 @@ define(function (require) {
           $(this.el).html(this.template());
           $(".lgv-container").append(this.$el);
       },
-      renderTool: function() {
+      renderTool: function () {
           this.$el.append(new ToolView().render());
-      },
+      }
   });
   return Menu;
 });

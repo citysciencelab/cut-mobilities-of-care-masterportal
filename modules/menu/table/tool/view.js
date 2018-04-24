@@ -7,7 +7,7 @@ define(function (require) {
         ToolView;
 
     ToolView = Backbone.View.extend({
-        id : "table-tool",
+        id: "table-tool",
         className: "table-tool table-nav",
         template: _.template(ToolTemplate),
         initialize: function () {
