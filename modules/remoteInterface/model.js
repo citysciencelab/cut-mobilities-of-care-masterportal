@@ -55,6 +55,9 @@ define(function (require) {
             else if (event.data.hasOwnProperty("transactFeatureById")) {
                  Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
             }
+            else if (event.data.hasOwnProperty("zoomToExtent")) {
+                Radio.trigger("Map", "zoomToExtent", event.data.zoomToExtent);
+            }
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
             }
@@ -112,6 +115,7 @@ define(function (require) {
                 center = ol.extent.getCenter(extent);
                 Radio.trigger("MapMarker", "showMarker", center);
         },
+
         zoomToFeature: function (hit) {
              var feature = this.getFeatureFromHit(hit),
                 extent = feature.getGeometry().getExtent();
