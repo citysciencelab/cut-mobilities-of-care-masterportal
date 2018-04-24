@@ -96,8 +96,6 @@ define(function (require) {
                 data: data,
                 context: this,
                 success: function (xmlString) {
-                    alert("success");
-                    alert(xmlString);
                     if (xmlString.indexOf("Exception") === -1) {
                         this.triggerRemoteInterface(true, xmlString);
                         Radio.trigger("Map", "render");
