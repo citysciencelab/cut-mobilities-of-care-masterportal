@@ -14,6 +14,24 @@
     width: 480px;
     height: 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    padding: 5px;
+}
+
+#table-layer {
+    position: relative;
+    left: -200px;
+}
+
+.table-layer {
+    background-color: #FFFFFF;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.table-layer > p {
+    font-size: 27.5px;
 }
 
 #table-tool {
