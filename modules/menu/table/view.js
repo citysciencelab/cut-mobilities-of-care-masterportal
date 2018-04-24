@@ -22,8 +22,7 @@ define(function (require) {
             $(".lgv-container").append(this.$el);
         },
         renderLayer: function () {
-            //this.$el.append(new LayerView().render());
-            this.$el.find('#table-nav-main').append(new LayerView().render());
+            this.$el.find("#table-nav-main").append(new LayerView().render());
         },
         renderTool: function () {
             this.$el.append(new ToolView().render());
