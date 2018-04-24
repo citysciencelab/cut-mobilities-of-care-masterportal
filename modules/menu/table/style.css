@@ -19,7 +19,6 @@
 
 #table-layer {
     position: relative;
-    top: -45px;
     left: -200px;
 }
 
@@ -33,4 +32,23 @@
 
 .table-layer > p {
     font-size: 27.5px;
+}
+
+#table-tool {
+    position: relative;
+    top: -45px;
+    left: 324px;
+}
+
+.table-tool {
+    background-color: #F2F2F2;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.table-tool > p {
+    font-size: 26px;
 }
