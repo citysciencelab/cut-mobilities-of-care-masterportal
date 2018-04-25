@@ -90,9 +90,8 @@ define(function (require) {
         sendRequest: function (url, data) {
             $.ajax(Radio.request("Util", "getProxyURL", url), {
                 type: "POST",
-                service: "WFS",
-                dataType: "html", // receive type html because of IE
-                contentType: "text/xml", // send type
+                dataType: "text", // receive type
+                contentType: "text", // send type
                 data: data,
                 context: this,
                 success: function (xmlString) {
@@ -106,7 +105,7 @@ define(function (require) {
                     }
                 },
                 error: function (xmlString) {
-                   this.triggerRemoteInterface(false, xmlString);
+                    this.triggerRemoteInterface(false, xmlString);
                 }
             });
         },
