@@ -27,7 +27,6 @@
     margin: auto;
     width: 40px;
     height: 40px;
-    cursor: pointer;
 }
 
 .table-layer > p {
@@ -51,4 +50,27 @@
 
 .table-tool > p {
     font-size: 26px;
+}
+
+#toggler{
+    margin: auto;
+    width: 40px;
+    height: 40px;
+}
+.panel {
+    background-color: #F2F2F2;
+    border-width: 0px;
+}
+.panel-group {
+  position: absolute;
+margin-top: -88px;
+  width: 430px;
+  bottom: 28px;
+}
+
+.header-cool {
+  background: salmon;
+  padding: 0;
+  position: relative;
+  height: 500px;
 }
