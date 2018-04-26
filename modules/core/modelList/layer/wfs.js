@@ -9,7 +9,6 @@ define(function (require) {
 
         initialize: function () {
             this.superInitialize();
-            var channel = Radio.channel("WFSLayer");
         },
 
         /**
@@ -108,76 +107,29 @@ define(function (require) {
                     this.getLayer().setStyle(this.getStyle());
                     this.featuresLoaded(features);
                 },
-                error: function (jqXHR, errorText, error) {
+                error: function () {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
         },
         styling: function (isClustered) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
             if (!_.isUndefined(stylelistmodel)) {
-                this.setStyle(function(feature) {
+                /**
+                 * function that takes a feature and resolution and returns an array of styles
+                 * Erfordert beide Parameter, sonst Laufzeitfehler (in ol <= 4.6.5)
+                 * @param  {[ol.feature]} feature
+                 * @param  {number} resolution
+                 * @return {[ol.style.Style]}
+                 * @tutorial https://openlayers.org/en/latest/apidoc/ol.html#.StyleFunction
+                 */
+                this.setStyle(function (feature, resolution) {
                     return stylelistmodel.createStyle(feature, isClustered);
                 });
             }
         },
-        /*
-        * Wenn MapView Option verändert werden: bei neuem Maßstab
-        */
-        optionsChanged: function () {
-            var isResolutionInRange = this.isResolutionInRange(),
-                visibility = this.get("visibility");
 
-            if (visibility === true && isResolutionInRange === true) {
-                this.get("layer").setVisible(true);
-            }
-            else {
-                this.get("layer").setVisible(false);
-            }
-            this.set("isResolutionInRange", isResolutionInRange);
-        },
-        /*
-        * Prüft, ob dieser Layer aktuell im sichtbaren Maßstabsbereich liegt und gibt true/false zurück
-        */
-        isResolutionInRange: function () {
-            var layerMaxScale = parseFloat(this.get("maxScale")),
-                layerMinScale = parseFloat(this.get("minScale")),
-                mapOptions = Radio.request("MapView", "getOptions"),
-                mapScale = parseFloat(mapOptions.scale);
-
-            if (layerMaxScale && mapScale) {
-                if (mapScale > layerMaxScale) {
-                    return false;
-                }
-            }
-            if (layerMinScale && mapScale) {
-                if (mapScale < layerMinScale) {
-                    return false;
-                }
-            }
-            return true;
-        },
-        setVisibility: function () {
-            var visibility = this.get("visibility"),
-                isResolutionInRange = this.isResolutionInRange();
-
-            this.set("isResolutionInRange", isResolutionInRange);
-            if (visibility === true && isResolutionInRange === true) {
-                if (this.get("layer").getSource().getFeatures().length === 0) {
-                    this.updateData();
-                    this.set("visibility", false, {silent: true});
-                }
-                else {
-                    this.get("layer").setVisible(true);
-                }
-                this.toggleEventAttribution(true);
-            }
-            else {
-                this.get("layer").setVisible(false);
-                this.set("visibility", false, {silent: true});
-                this.toggleEventAttribution(false);
-            }
-        },
         setProjection: function (proj) {
             this.set("projection", proj);
         },
@@ -236,9 +188,9 @@ define(function (require) {
                 return style;
             }
             else {
-                return function (feature) {
+                return function () {
                     return style;
-                }
+                };
             }
         },
         getHiddenStyle: function () {

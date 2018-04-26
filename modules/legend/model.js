@@ -257,7 +257,6 @@ define([
                             }
                         }
                     }
-
                     this.push("tempArray", {
                         layername: layer.get("name"),
                         legendname: name,

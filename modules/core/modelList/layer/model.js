@@ -72,16 +72,7 @@ define(function (require) {
 
             // Default min/max Resolutions für WFS setzen
             if (this.get("typ") === "WFS") {
-                var resolutions = Radio.request("MapView", "getScales");
-
-                if (!_.isUndefined(resolutions) && resolutions.length > 0) {
-                    if (_.isUndefined(this.attributes.minScale)) {
-                        this.attributes.minScale = resolutions[resolutions.length - 1];
-                    }
-                    if (_.isUndefined(this.attributes.maxScale)) {
-                        this.attributes.maxScale = resolutions[0];
-                    }
-                }
+                this.setDefaultResolutions();
             }
 
             //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
@@ -106,6 +97,20 @@ define(function (require) {
         featuresLoaded: function (features) {
             Radio.trigger("Layer", "featuresLoaded", this.getId(), features);
         },
+
+        setDefaultResolutions: function () {
+            var resolutions = Radio.request("MapView", "getScales");
+
+            if (!_.isUndefined(resolutions) && resolutions.length > 0) {
+                if (_.isUndefined(this.attributes.minScale)) {
+                    this.attributes.minScale = resolutions[resolutions.length - 1];
+                }
+                if (_.isUndefined(this.attributes.maxScale)) {
+                    this.attributes.maxScale = resolutions[0];
+                }
+            }
+        },
+
         getLayerInfoChecked: function () {
             return this.get("layerInfoChecked");
         },
@@ -117,7 +122,7 @@ define(function (require) {
         * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
         **/
         checkForScale: function (options) {
-            if (parseInt(options.scale, 10) <= this.get("maxScale") && parseInt(options.scale, 10) >= this.get("minScale")) {
+            if (parseFloat(options.scale, 10) <= this.getMaxScale() && parseFloat(options.scale, 10) >= this.getMinScale()) {
                 this.setIsOutOfRange(false);
             }
             else {
@@ -264,11 +269,11 @@ define(function (require) {
         },
 
         getMaxScale: function () {
-            return this.get("maxScale");
+            return parseFloat(this.get("maxScale"));
         },
 
         getMinScale: function () {
-            return this.get("minScale");
+            return parseFloat(this.get("minScale"));
         },
 
         getTyp: function () {
@@ -351,10 +356,12 @@ define(function (require) {
          * Wird für die Verkehrslage auf den Autobahnen genutzt
          */
         toggleAttributionsInterval: function () {
+            var channelName, eventName, timeout;
+
             if (this.has("layerAttribution") && _.isObject(this.getAttributions())) {
-                var channelName = this.getAttributions().channel,
-                    eventName = this.getAttributions().eventname,
-                    timeout = this.getAttributions().timeout;
+                channelName = this.getAttributions().channel;
+                eventName = this.getAttributions().eventname;
+                timeout = this.getAttributions().timeout;
 
                 if (this.getIsVisibleInMap() === true) {
                     Radio.trigger(channelName, eventName, this);
@@ -433,10 +440,10 @@ define(function (require) {
          */
         getmetaName: function () {
             if (this.get("datasets")[0]) {
-             return this.get("datasets")[0].md_name;
+                return this.get("datasets")[0].md_name;
             }
             else {
-                    return undefined;
+                return undefined;
             }
         },
 

@@ -14,7 +14,6 @@ define("app",
     "modules/core/autostarter",
     "modules/alerting/view"
     ], function ($, Config, Util, Remoteinterface, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
-
     // Core laden
     new Remoteinterface();
     new Autostarter();
@@ -65,7 +64,6 @@ define("app",
         require(["geoapi"], function () {
         });
     }
-
 
     require(["modules/snippets/slider/view", "modules/snippets/slider/range/view", "modules/snippets/dropdown/view"], function (SliderView, SliderRangeView, DropdownView) {
         // new SliderView();
@@ -135,7 +133,7 @@ define("app",
                     break;
                 }
                 case "coord": {
-                    require(["modules/coordpopup/view"], function (CoordPopupView) {
+                    require(["modules/tools/getCoord/view"], function (CoordPopupView) {
                         new CoordPopupView();
                     });
                     break;
@@ -246,78 +244,87 @@ define("app",
         new AddGeoJSON();
     });
     // controls
-    require(["modules/controls/view"], function (ControlsView) {
-        var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
-            controlsView = new ControlsView(),
-            isSimpleMap = Radio.request("ParametricURL", "getStyle") === "SIMPLE" ? true : false;
+    var style = Radio.request("ParametricURL", "getStyle");
 
-        _.each(controls, function (control) {
-            var showMobile = _.has(control.attr, "showMobile") ? control.attr.showMobile : false;
+    if (!style || style !== "SIMPLE") {
+        require(["modules/controls/view"], function (ControlsView) {
+            var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
+                controlsView = new ControlsView();
 
-            switch (control.id) {
-                case "zoom": {
-                    if ((!isSimpleMap && control.attr === true) || (!isSimpleMap && _.isObject(control.attr)) || (isSimpleMap && control.attr.showInSimpleMap === true)) {
-                        var el = controlsView.addRowTR(control.id, showMobile);
+            _.each(controls, function (control) {
+                switch (control.id) {
+                    case "zoom": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
 
-                        require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                            new ZoomControlView({el: el});
-                        });
+                            require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                                new ZoomControlView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
-                }
-                case "orientation": {
-                    if (!isSimpleMap) {
+                    case "orientation": {
                         var el = controlsView.addRowTR(control.id);
 
                         require(["modules/controls/orientation/view"], function (OrientationView) {
                             new OrientationView({el: el});
                         });
+                        break;
                     }
-                    break;
-                }
-                case "mousePosition": {
-                    if (control.attr === true && !isSimpleMap) {
-                        var el = controlsView.addRowBL(control.id);
+                    case "mousePosition": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowBL(control.id);
 
-                        require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                            new MousePositionView({el: el});
-                        });
+                            require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                                new MousePositionView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
-                }
-                case "fullScreen": {
-                    if (control.attr === true && !isSimpleMap) {
-                        var el = controlsView.addRowTR(control.id);
+                    case "fullScreen": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
 
-                        require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                            new FullScreenView({el: el});
-                        });
+                            require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                                new FullScreenView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
-                }
-                case "attributions": {
-                    if ((control.attr === true && !isSimpleMap) || (typeof control.attr === "object" && !isSimpleMap)) {
-                        var el = controlsView.addRowBR(control.id);
+                    case "totalview": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
 
-                        require(["modules/controls/attributions/view"], function (AttributionsView) {
-                            new AttributionsView({el: el});
-                        });
+                            require(["modules/controls/totalview/view"], function (TotalView) {
+                                new TotalView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
-                }
-                case "overviewmap": {
-                    if ((control.attr === true && !isSimpleMap) || (typeof control.attr === "object" && !isSimpleMap)) {
-                        var el = controlsView.addRowBR(control.id);
+                    case "attributions": {
+                        if (control.attr === true || typeof control.attr === "object") {
+                            var el = controlsView.addRowBR(control.id);
 
-                        require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
-                            new OverviewmapView({el: el});
-                        });
+                            require(["modules/controls/attributions/view"], function (AttributionsView) {
+                                new AttributionsView({el: el});
+                            });
+                        }
+                        break;
                     }
-                    break;
+                    case "overviewmap": {
+                        if (control.attr === true || typeof control.attr === "object") {
+                            var el = controlsView.addRowBR(control.id);
+
+                            require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
+                                new OverviewmapView({el: el});
+                            });
+                        }
+                        break;
+                    }
                 }
-            }
+            });
         });
-    });
+    }
 
     require(["modules/mapMarker/view"], function (MapMarkerView) {
         new MapMarkerView();

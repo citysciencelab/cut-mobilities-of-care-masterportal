@@ -1,12 +1,12 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/searchbar/model"
-], function (Backbone, Radio) {
-    "use strict";
-    return Backbone.Model.extend({
+define(function (require) {
+
+    require("modules/searchbar/model");
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        GazetteerModel;
+
+    GazetteerModel = Backbone.Model.extend({
         defaults: {
-            inUse: 0,
             minChars: 3,
             gazetteerURL: "",
             searchStreets: false,
@@ -16,7 +16,9 @@ define([
             searchStreetKey: false,
             onlyOneStreetName: "",
             searchStringRegExp: "",
-            houseNumbers: []
+            houseNumbers: [],
+            ajaxRequests: {},
+            typeOfRequest: ""
         },
         /**
          * @description Initialisierung der Gazetteer Suche
@@ -29,6 +31,8 @@ define([
          * @param {integer} [config.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
          */
         initialize: function (config) {
+            var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
+
             this.listenTo(Radio.channel("Searchbar"), {
                 "search": this.search,
                 "setPastedHouseNumber": this.setPastedHouseNumber
@@ -37,8 +41,6 @@ define([
             this.listenTo(Radio.channel("Gaz"), {
                 "adressSearch": this.adressSearch
             });
-
-            var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
 
             if (gazService && gazService.get("url")) {
                 this.set("gazetteerURL", gazService.get("url"));
@@ -75,36 +77,41 @@ define([
         *
         */
         search: function (searchString) {
+            var gemarkung, flurstuecksnummer;
+
             this.set("searchString", searchString);
-            if (searchString.length >= this.get("minChars") && this.get("inUse") === 0) {
+            if (searchString.length >= this.get("minChars")) {
                 if (this.get("searchStreets") === true) {
                     searchString = searchString.replace(/[()]/g, "\\$&");
                     this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                     this.set("onlyOneStreetName", "");
-                    this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
+                    this.setTypeOfRequest("searchStreets");
+                    this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true, this.getTypeOfRequest());
                 }
                 if (this.get("searchDistricts") === true) {
                     if (!_.isNull(searchString.match(/^[a-z\-]+$/i))) {
-                        this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, true);
+                        this.setTypeOfRequest("searchDistricts");
+                        this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, true, this.getTypeOfRequest());
                     }
                 }
                 if (this.get("searchParcels") === true) {
-                    var gemarkung, flurstuecksnummer;
-
                     if (!_.isNull(searchString.match(/^[0-9]{4}[\s|\/][0-9]*$/))) {
                         gemarkung = searchString.split(/[\s|\/]/)[0];
                         flurstuecksnummer = searchString.split(/[\s|\/]/)[1];
-                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
+                        this.setTypeOfRequest("searchParcels1");
+                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true, this.getTypeOfRequest());
                     }
                     else if (!_.isNull(searchString.match(/^[0-9]{5,}$/))) {
                         gemarkung = searchString.slice(0, 4);
                         flurstuecksnummer = searchString.slice(4);
-                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true);
+                        this.setTypeOfRequest("searchParcels2");
+                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true, this.getTypeOfRequest());
                     }
                 }
                 if (this.get("searchStreetKey") === true) {
                     if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
-                        this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true);
+                        this.setTypeOfRequest("searchStreetKey");
+                        this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true, this.getTypeOfRequest());
                     }
                 }
             }
@@ -117,17 +124,13 @@ define([
         * @param {string} [adress.affix] - Zusatz zur Hausnummer
         */
         adressSearch: function (adress) {
-            var searchString = "";
-
             if (adress.affix && adress.affix !== "") {
-                searchString = (adress.streetname + "&hausnummer=" + adress.housenumber + "&zusatz=" + adress.affix).replace(/[()]/g, "\\$&");
-
-                this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber) + "&zusatz=" + encodeURIComponent(adress.affix), this.getAdress, false);
+                this.setTypeOfRequest("adress1");
+                this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber) + "&zusatz=" + encodeURIComponent(adress.affix), this.getAdress, false, this.getTypeOfRequest());
             }
             else {
-                searchString = (adress.streetname + "&hausnummer=" + adress.housenumber).replace(/[()]/g, "\\$&");
-
-                this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.getAdress, false);
+                this.setTypeOfRequest("adress2");
+                this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.getAdress, false, this.getTypeOfRequest());
             }
         },
         /**
@@ -135,24 +138,27 @@ define([
         * @param {string} searchString - Suchstring
         */
         directSearch: function (searchString) {
+            var splitInitString;
+
             this.set("searchString", searchString);
             if (searchString.search(",") !== -1) {
-                var splitInitString = searchString.split(",");
-
+                splitInitString = searchString.split(",");
                 this.set("onlyOneStreetName", splitInitString[0]);
                 searchString = searchString.replace(/\ /g, "");
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/\,/g, ""), "i")); // Erst join dann als regulärer Ausdruck
-                this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, false);
-                this.searchInHouseNumbers();
+                this.setTypeOfRequest("onlyOneStreetName1");
+                this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, false, this.getTypeOfRequest());
             }
             else {
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.set("onlyOneStreetName", "");
-                this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true);
+                this.setTypeOfRequest("onlyOneStreetName2");
+                this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true, this.getTypeOfRequest());
             }
             if (this.get("searchStreetKey") === true) {
                 if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
-                    this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true);
+                    this.setTypeOfRequest("searchStreetKey2");
+                    this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true, this.getTypeOfRequest());
                 }
             }
             $("#searchInput").val(searchString);
@@ -189,10 +195,12 @@ define([
                     id: hitName.replace(/ /g, "") + "Straße"
                 });
             }, this);
+
             if (this.get("searchHouseNumbers") === true) {
                 if (hits.length === 1) {
                     this.set("onlyOneStreetName", hitName);
-                    this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, false);
+                    this.setTypeOfRequest("searchHouseNumbers1");
+                    this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, false, this.getTypeOfRequest());
                     this.searchInHouseNumbers();
                 }
                 else if (hits.length === 0) {
@@ -202,7 +210,8 @@ define([
                     _.each(hitNames, function (hitName) {
                         if (hitName.toLowerCase() === this.get("searchString").toLowerCase()) {
                             this.set("onlyOneStreetName", hitName);
-                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, false);
+                            this.setTypeOfRequest("searchHouseNumbers2");
+                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, false, this.getTypeOfRequest());
                             this.searchInHouseNumbers();
                         }
                     }, this);
@@ -241,14 +250,13 @@ define([
             Radio.trigger("Searchbar", "createRecommendedList");
         },
         searchInHouseNumbers: function () {
-            var address;
+            var address, number;
 
             // Adressuche über Copy/Paste
             if (this.get("pastedHouseNumber") !== undefined) {
                 _.each(this.get("houseNumbers"), function (houseNumber) {
                     address = houseNumber.name.replace(/ /g, "");
-                    var number = houseNumber.adress.housenumber + houseNumber.adress.affix;
-
+                    number = houseNumber.adress.housenumber + houseNumber.adress.affix;
                     if (number === this.get("pastedHouseNumber")) {
                         Radio.trigger("Searchbar", "pushHits", "hitList", houseNumber);
                     }
@@ -276,7 +284,8 @@ define([
                 coordinate,
                 position,
                 name,
-                adress = {};
+                adress = {},
+                obj = {};
 
             this.set("houseNumbers", []);
             _.each(hits, function (hit) {
@@ -301,7 +310,7 @@ define([
                     };
                 }
                 // "Hitlist-Objekte"
-                var obj = {
+                obj = {
                     name: name,
                     type: "Adresse",
                     coordinate: coordinate,
@@ -370,26 +379,75 @@ define([
          * @param {String} data - Data to be sent to the server
          * @param {function} successFunction - A function to be called if the request succeeds
          * @param {boolean} asyncBool - asynchroner oder synchroner Request
+         * @param {String} type - Typ des Requests
          */
-        sendRequest: function (data, successFunction, asyncBool) {
-            this.set("inUse", this.get("inUse") + 1);
-            $.ajax({
+        sendRequest: function (data, successFunction, asyncBool, type) {
+            var ajax = this.get("ajaxRequests");
+
+            if (ajax[type] !== null && !_.isUndefined(ajax[type])) {
+                ajax[type].abort();
+                this.polishAjax(type);
+            }
+            this.ajaxSend(data, successFunction, asyncBool, type);
+        },
+
+        ajaxSend: function (data, successFunction, asyncBool, typeRequest) {
+            this.get("ajaxRequests")[typeRequest] = ($.ajax({
                 url: this.get("gazetteerURL"),
                 data: data,
+                dataType: "xml",
                 context: this,
                 async: asyncBool,
                 type: "GET",
                 success: successFunction,
                 timeout: 6000,
+                typeRequest: typeRequest,
                 error: function (err) {
-                    var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
-
-                    Radio.trigger("Alet", "alert", "Gazetteer-URL nicht erreichbar. " + detail);
+                    if (err.status !== 0) { // Bei abort keine Fehlermeldung
+                        this.showError(err);
+                    }
                 },
                 complete: function () {
-                    this.set("inUse", this.get("inUse") - 1);
+                    this.polishAjax(typeRequest);
                 }
-            });
+            }, this));
+        },
+
+        /**
+         * Triggert die Darstellung einer Fehlermeldung
+         * @param {object} err Fehlerobjekt aus Ajax-Request
+         */
+        showError: function (err) {
+            var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+
+            Radio.trigger("Alert", "alert", "Gazetteer-URL nicht erreichbar. " + detail);
+        },
+
+        /**
+         * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
+         * @param {string} type Bezeichnung des Typs
+         */
+        polishAjax: function (type) {
+            var ajax = this.get("ajaxRequests"),
+                cleanedAjax = _.omit(ajax, type);
+
+            this.set("ajaxRequests", cleanedAjax);
+        },
+
+        /**
+        * Holt den jeweiligen Typ der gesendet wird
+        */
+        getTypeOfRequest: function () {
+            return this.get("typeOfRequest");
+        },
+
+        /**
+        * Setzt den jeweiligen Typ der gesendet wird
+        */
+        setTypeOfRequest: function (value) {
+            this.set("typeOfRequest", value);
         }
     });
+
+    return GazetteerModel;
 });

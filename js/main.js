@@ -17,7 +17,8 @@ require.config({
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         proj4: "../node_modules/proj4/dist/proj4",
-        videojs: "../node_modules/video.js/dist/video-js/video",
+        "videojs": "../node_modules/video.js/dist/video.min",
+        videojsflash: "../node_modules/videojs-flash/dist/videojs-flash.min",
         moment: "../node_modules/moment/min/moment.min",
         geoapi: "GeoAPI",
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
@@ -35,6 +36,11 @@ require.config({
         },
         openlayers: {
             exports: "ol"
+        }
+    },
+    map: {
+        "videojsflash": {
+            "video.js": "videojs"
         }
     },
     urlArgs: "bust=" + (new Date()).getTime()

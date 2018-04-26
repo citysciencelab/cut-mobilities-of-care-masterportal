@@ -17,6 +17,7 @@
 }
 .dropdown-container .dropdown-menu {
     right: 0;
+    overflow-y: auto;
     /*left: auto;*/
 }
 

@@ -10,6 +10,9 @@ define([
         className: "win-body",
         template: _.template(SaveSelectionTemplate),
         templateSimpleMap: _.template(SaveSelectionSimpleMapTemplate),
+        events: {
+            "click input": "copyToClipboard"
+        },
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin change:url": this.render
@@ -30,6 +33,27 @@ define([
             }
             else {
                 this.undelegateEvents();
+            }
+        },
+
+        /**
+         * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
+         * @param  {evt} evt Evt-Button
+         */
+        copyToClipboard: function (evt) {
+            var textField = evt.currentTarget;
+
+            try {
+                $(textField).select();
+                document.execCommand("copy");
+                Radio.trigger("Alert", "alert", {
+                    text: "Die Url wurde in die Zwischenablage kopiert.",
+                    kategorie: "alert-info",
+                    position: "top-center"
+                });
+            }
+            catch (e) {
+                console.warn("Unable to copy text to clipboard.");
             }
         }
     });
