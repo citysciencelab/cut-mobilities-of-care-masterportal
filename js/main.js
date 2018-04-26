@@ -4,6 +4,7 @@ require.config({
         openlayers: "../lib/olcesium",
         cesium: "../lib/Cesium/Cesium",
         jquery: "../components/jquery/dist/jquery.min",
+        mouseeventPolyfill: "../lib/mouseevent",
         jqueryui: "../components/jquery-ui/ui",
         underscore: "../components/underscore/underscore-min",
         "underscore.string": "../components/underscore.string/dist/underscore.string.min",

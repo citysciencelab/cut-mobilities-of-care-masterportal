@@ -2,6 +2,7 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
+        mouseeventPolyfill = require("mouseeventPolyfill"),
         ol = require("openlayers"),
         Cesium = require("cesium"),
         MapView = require("modules/core/mapView"),
