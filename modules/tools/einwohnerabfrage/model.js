@@ -2,23 +2,17 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        Config = require("config"),
         Einwohnerabfrage;
 
     Einwohnerabfrage = Backbone.Model.extend({
         defaults: {
             isCollapsed: undefined,
-            isCurrentWin: undefined
+            isCurrentWin: undefined,
+            einwohnerabfrageLayer: undefined
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
-                "winParams": function (args) {
-                    this.setStatus(args);
-                    if (args[0] === false) {
-                        this.hideMapContent();
-                        this.resetAnimationWindow();
-                    }
-                }
+                "winParams": this.setStatus
             });
         },
         setStatus: function (args) {
