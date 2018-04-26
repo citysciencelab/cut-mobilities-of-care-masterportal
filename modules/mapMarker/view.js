@@ -169,16 +169,18 @@ define([
                     Radio.trigger("MapView", "setCenter", hit.coordinate, 6);
                     break;
                 }
-                case "Gewerbliche Standorte": {
-                    Radio.trigger("Map", "zoomToExtent", hit.coordinate);
-                }
                 case "POI": {
                     Radio.trigger("Map", "zoomToExtent", hit.coordinate, {maxZoom: index});
                     break;
                 }
                 default: {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    if (hit.coordinate.length === 4) {
+                        Radio.trigger("Map", "zoomToExtent", hit.coordinate);
+                    }
+                    else {
+                        Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                        this.showMarker(hit.coordinate);
+                    }
                     break;
                 }
             }
