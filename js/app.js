@@ -112,6 +112,12 @@ define("app",
 
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
+                case "einwohnerabfrage": {
+                    require(["modules/tools/einwohnerabfrage/view"], function (EinwohnerabfrageView) {
+                        new EinwohnerabfrageView();
+                    });
+                    break;
+                }
                 case "animation": {
                     require(["modules/tools/animation/view"], function (AnimationView) {
                         new AnimationView();
