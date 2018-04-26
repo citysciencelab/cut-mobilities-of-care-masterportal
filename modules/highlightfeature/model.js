@@ -4,13 +4,22 @@ var HighlightFeature,
 
 HighlightFeature = Backbone.Model.extend({
         initialize: function () {
-            var featureToAdd = Radio.request("ParametricURL", "getHighlightFeature");
+            var featureToAdd = Radio.request("ParametricURL", "getHighlightFeature"),
+                channel = Radio.channel("Highlightfeature");
+            channel.on({
+                "highlightfeature": this.highlightFeature
+            }, this);    
             if(featureToAdd) {
                 var temp = featureToAdd.split(",");
                 this.getAndAddFeature(temp[0], temp[1]);
             }
         },
+        highlightFeature: function (featureToAdd) {
+            var temp = featureToAdd.split(",");
+            this.getAndAddFeature(temp[0], temp[1]);
+        },
         getAndAddFeature: function (layerId, featureId) {
+            
             var layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
                 feature = {};
             if (layer && layer.getLayerSource()) {
@@ -52,3 +61,4 @@ HighlightFeature = Backbone.Model.extend({
     });
     return HighlightFeature;
 });
+

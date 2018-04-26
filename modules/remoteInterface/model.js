@@ -58,6 +58,9 @@ define(function (require) {
             else if (event.data.hasOwnProperty("zoomToExtent")) {
                 Radio.trigger("Map", "zoomToExtent", event.data.zoomToExtent);
             }
+            else if (event.data.hasOwnProperty("highlightfeature")) {
+                Radio.trigger("Highlightfeature", "highlightfeature", event.data.highlightfeature);
+            }
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
             }
