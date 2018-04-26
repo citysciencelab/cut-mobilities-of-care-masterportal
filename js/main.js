@@ -3,6 +3,13 @@ var scriptTags = document.getElementsByTagName("script"),
     configPath = window.location.href + "config",
     Radio;
 
+if (window.location.search !== "") {
+    var index = window.location.href.indexOf("?"),
+        strippedLocation = window.location.href.slice(0, index);
+
+    configPath = strippedLocation + "config";
+}
+
 scriptTagsArray.forEach(function (scriptTag) {
     if (scriptTag.getAttribute("data-lgv-config") !== null) {
         // ?noext notwendig, damit nicht automatisch von Require ein .js an den Pfad angehängt wird!
