@@ -2,6 +2,7 @@ define("app", function (require) {
 
 var $ = require("jquery"),
     Config = require("config"),
+    Alert = require("modules/alerting/view"),
     RestReaderList = require("modules/restReader/collection"),
     Autostarter = require("modules/core/autostarter"),
     Util = require("modules/core/util"),
@@ -15,6 +16,7 @@ var $ = require("jquery"),
     AddGeoJSON = require("modules/tools/addGeoJSON/model");
 
     // Core laden
+    new Alert();
     new Autostarter();
     new Util();
     new StyleList();
