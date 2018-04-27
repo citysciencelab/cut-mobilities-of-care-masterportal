@@ -7,6 +7,17 @@ define(function (require) {
     GeoJSONLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
+            this.timeout = 10000;
+            
+            if (this.getIsVisibleInMap() === true) {
+         /*       this.interval = setInterval (function (my) {
+                    console.log("Update Data");
+                    my.updateData(my.handleData);                
+                }, this.timeout, this);*/
+            }
+            else {
+                clearInterval(this.interval);
+            }
         },
 
         /**
@@ -48,6 +59,7 @@ define(function (require) {
                 context: this,
                 success: callback,
                 error: function () {
+                   console.log("Error");
                     Radio.trigger("Util", "hideLoader");
                 }
             });
@@ -62,6 +74,7 @@ define(function (require) {
             if (jsonCrs !== mapCrs) {
                 features = this.transformFeatures(features, jsonCrs, mapCrs);
             }
+            this.getLayerSource().clear(true);
             this.getLayerSource().addFeatures(features);
             this.set("loadend", "ready");
 
