@@ -1,14 +1,13 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/tools/parcelSearch/template.html",
-    "modules/tools/parcelSearch/model"
-], function (Backbone, Radio, parcelSearchTemplate, ParcelSearch) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        ParcelSearchTemplate = require("text!modules/tools/parcelSearch/template.html"),
+        ParcelSearch = require("modules/tools/parcelSearch/model"),
+        ParcelSearchView;
 
-    var ParcelSearchView = Backbone.View.extend({
+    ParcelSearchView = Backbone.View.extend({
         model: new ParcelSearch(),
         className: "win-body",
-        template: _.template(parcelSearchTemplate),
+        template: _.template(ParcelSearchTemplate),
         events: {
             "change #districtField": "districtFieldChanged",
             "change #cadastralDistrictField": "cadastralDistrictFieldChanged",
@@ -109,7 +108,7 @@ define([
                     $("#parcelField").attr("disabled", true);
                     $("#parcelFieldDenominator").attr("disabled", true);
                     $("#parcelField").val("").trigger("change");
-                    $("#parcelFieldDenominator").val("").trigger("change");
+                    $("#parcelFieldDenominator").val("0").trigger("change");
                 }
                 else {
                     $("#parcelField").attr("disabled", false);
