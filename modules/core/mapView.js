@@ -79,7 +79,8 @@ define([
         },
 
         /**
-         *
+         * Die initiale Größe der #map beträgt 100%.
+         * Der MenuLoader wird zu einem späteren Zeitpunkt required und verkleinert ggf. die Menüleiste.
          */
         initialize: function () {
             var channel = Radio.channel("MapView");
