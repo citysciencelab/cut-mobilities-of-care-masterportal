@@ -60,6 +60,7 @@
 .panel {
     background-color: #F2F2F2;
     border-width: 0px;
+    border-radius: 5px !important;
 }
 .panel-group {
   position: absolute;
@@ -83,7 +84,12 @@ margin-top: -88px;
 
 .list-group-item {
     background-color: transparent;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-radius: 5px !important;
+    border: none;
 }
+
 
 /**************** Themenbaum ****************/
 ul#tree {
@@ -246,21 +252,12 @@ ul#tree .SelectedLayer .layer-selection-save {
     cursor: pointer;
 }
 
-.list-group-item {
-    position: relative;
-    padding: 10px 15px;
-    margin-bottom: 3px;
-    background-color: #e9e9e9;
-    /* border: 1px solid #ddd; */
-    border-bottom: 2px solid #ddd;
-}
 
 ul#tree .layer-settings {
     clear: both;
     margin-top: 32px;
     margin-left: 21px;
-    border-top: 1px dashed #ddd;
+     border-top: 1px dashed #ddd;
     padding-top: 8px;
     font-size: 14px;
-    color: ;
 }
