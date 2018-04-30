@@ -7,17 +7,14 @@ define(function (require) {
     GeoJSONLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
-            this.timeout = 10000;
             
-            if (this.getIsVisibleInMap() === true) {
-         /*       this.interval = setInterval (function (my) {
-                    console.log("Update Data");
-                    my.updateData(my.handleData);                
-                }, this.timeout, this);*/
-            }
-            else {
-                clearInterval(this.interval);
-            }
+            this.toggleAutoReload();
+            
+            this.listenTo(this, {
+                "change:isVisibleInMap": function () {
+                    this.toggleAutoReload();
+                }
+            });
         },
 
         /**
@@ -149,6 +146,21 @@ define(function (require) {
                     color: "rgba(49, 159, 211, 0)"
                 })
             });
+        },
+        
+        toggleAutoReload: function () {
+            //if (!_.isUndefined(this.attributes.autoRefresh) && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 0 ) {
+            if(this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 0 ) {
+                if (this.getIsVisibleInMap() === true) {
+                    this.interval = setInterval (function (my) {
+                        console.log("Update Data mit: " + my.attributes.autoRefresh);
+                        my.updateData(my.handleData);                
+                    }, this.attributes.autoRefresh, this);
+                }
+                else {
+                    clearInterval(this.interval);
+                }
+            }
         }
     });
 
