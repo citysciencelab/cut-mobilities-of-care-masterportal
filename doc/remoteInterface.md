@@ -61,11 +61,88 @@ Sendet eine Nachricht an das parent-Object über postMessage-API.
 
 **Beispiel-Aufruf**
 ```
-#!js
 Radio.request("RemoteInterface", "postMessage", {...});
 ```
+Das Portal kann auch per PostMessage Funktionsaufrufe und Daten entgegen nehmen und entsprechend reagieren.
+Dabei ist es wichtig, dass im mitgesendeten JSON ein Key so heißt wie die Funktion die ausgeführt werden soll.
 
----
+### Mögliche Funktionen sind:
+### showPositionByExtent
+Wird diese Funktion angetriggered, so wird ein Marker an die Zentrumskoordinate des übergebenen Extents gesetzt und die Karte auf diese Koordinate zentriert.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage({"showPositionByExtent": [xMin, yMin, xMax, yMax]}, domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|showPositionByExtent|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
+
+### showPositionByExtentNoScroll
+Wird diese Funktion angetriggered, so wird ein Marker an die Zentrumskoordinate des übergebenen Extents gesetzt. Allerdings wird die Karte **nicht** auf diese Koordinate zentriert.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage({"showPositionByExtentNoScroll": [xMin, yMin, xMax, yMax]}, domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|showPositionByExtentNoScroll|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
+### transactFeatureById
+Wird diese Funktion angetriggered, so wird ein Feature eines gegebenen WFST-Layers modifiziert.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage({"transactFeatureById": "id", "layerId": layerId, "attributes": attrs, "mode": "update"}, domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|transactFeaturesById|String|Id des Features.|
+|layerId|String|Id des Layers.|
+|attributes|String|JSON mit den Attributes des Features.|
+|mode|String|auszuführende Operation. Momentan nur "update" implementiert.|
+### zoomToExtent
+Wird diese Funktion angetriggered, so wird die Karte auf den übergebenen Extent gezoomt.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage({"zoomToExtent": [xmin, ymin, xmax, ymax]}, domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|zoomToExtent|Array|Extent.|
+### highlightfeature
+Wird diese Funktion angetriggered, so wird ein Vektor-Feature in der Karte gehighlightet.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage({"highlightfeature": "layerid,featureId"}, domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|highlightfeature|String|LayerId und FeatureId in einem String per Komma separiert|
+### hidePosition
+Wird diese Funktion angetriggered, so wird der Marker versteckt.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage("hidePosition", domain);
+```
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|hidePosition|String|"hidePosition". Dadurch wird der Marker versteckt.|
+
 # **Karte**
 
 Über die hier genannten Aufrufe können bestimmte Kartenzustände gesetzt oder abgefragt werden und die Sichtbarkeit von Layern verändert werden.
@@ -170,4 +247,22 @@ Zeigt alle Vektorfeatures des genannten Layers an.
 ```
 #!js
 Radio.trigger("RemoteInterface", "showFeaturesById", "Anliegen", ["1", "2"]);
+```
+
+## Zeige Marker im gegebenen Extent
+*(showPositionByExtent)*
+
+Positioniert einen Marker auf der Karte im Zentrum des übergebenen Extents.
+
+**Parameter**
+
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|extent|Array|Extent|
+
+
+**Beispiel-Aufruf**
+```
+#!js
+Radio.trigger("RemoteInterface", "showPositionByExtent", [minX, minY, maxX, maxY]);
 ```

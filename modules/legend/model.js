@@ -27,15 +27,6 @@ define([
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
             });
-            // this.listenTo(Radio.channel("WFSLayer"), {
-            //     "featuresLoaded": this.setLayerList
-            // });
-            // this.listenTo(Radio.channel("GeoJSONLayer"), {
-            //     "featuresLoaded": this.setLayerList
-            // });
-            // this.listenTo(Radio.channel("ElasticLayer"), {
-            //     "featuresLoaded": this.setLayerList
-            // });
             this.listenTo(Radio.channel("StyleWMS"), {
                 "updateParamsStyleWMS": this.updateParamsStyleWMSArray
             });

@@ -28,7 +28,7 @@ define(function (require) {
             }, this);
         },
         render: function () {
-            if(!this.model.get("features")) {
+            if (!this.model.get("features")) {
                 this.$el.html("<div id='filter-loader'><img src='../../img/ajax-loader.gif'></div>");
                 return this.$el;
             }

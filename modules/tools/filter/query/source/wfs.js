@@ -1,14 +1,13 @@
 define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/model"),
-        Config = require ("config"),
         ol = require("openlayers"),
         WfsQueryModel;
 
     WfsQueryModel = QueryModel.extend({
         initialize: function () {
             this.superInitialize();
-            this.prepareQuery()
+            this.prepareQuery();
 
             if (this.get("searchInMapExtent") === true) {
                 Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive, this);
@@ -153,20 +152,20 @@ define(function (require) {
                     var attributeValues = attributeValue.split("|");
 
                     _.each(attributeValues, function (value) {
-                        if(this.isValid(value)) {
+                        if (this.isValid(value)) {
                             values.push(value);
                         }
                     }, this);
                 }
                 else if (_.isArray(attributeValue)) {
                     _.each(attributeValue, function (value) {
-                        if(this.isValid(value)) {
+                        if (this.isValid(value)) {
                             values.push(value);
                         }
                     }, this);
                 }
                 else {
-                    if(this.isValid(attributeValue)) {
+                    if (this.isValid(attributeValue)) {
                         values.push(attributeValue);
                     }
                 }
@@ -268,6 +267,7 @@ define(function (require) {
                     var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
                         return attr.attrName !== attribute.name;
                     }));
+
                     if (isMatch) {
                         selectableValues.values.push(this.parseValuesFromString(feature, attribute.name));
                     }
@@ -322,7 +322,8 @@ define(function (require) {
          */
         isNumberInRange: function (feature, attributeName, values) {
             var valueList = _.extend([], values),
-                featureValue = feature.get(attributeName);
+                featureValue = feature.get(attributeName),
+                isMatch;
 
             valueList.push(featureValue);
             valueList = _.sortBy(valueList);
@@ -332,8 +333,7 @@ define(function (require) {
         },
 
         isFeatureInExtent: function (feature) {
-            var isMatch = false,
-                mapExtent = Radio.request("MapView", "getCurrentExtent");
+            var mapExtent = Radio.request("MapView", "getCurrentExtent");
 
             return ol.extent.intersects(mapExtent, feature.getGeometry().getExtent());
         },
@@ -348,7 +348,7 @@ define(function (require) {
             var isMatch = false;
 
             isMatch = _.every(filterAttr, function (attribute) {
-                if(feature.get(attribute.attrName) === null) {
+                if (feature.get(attribute.attrName) === null) {
                     return false;
                 }
                 else if (attribute.type === "integer" || attribute.type === "decimal") {

@@ -113,7 +113,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|showInSimpleMap|nein|Boolean||Gibt an ob die Zoom-Buttons auch in der simple Map (URL-Parameter "?style=simple" gezeichnet werden sollen.|
+|showInSimpleMap|nein|Boolean||Gibt an ob die Zoom-Buttons auch in der simple Map ([URL-Parameter](URL_Parameter.md) "?style=simple" gezeichnet werden sollen.|
 |showMobile|nein|Boolean|false|Gibt an ob die Zoom-Buttons auch in der mobilen Ansicht gezeichnet werden sollen.|
 ******
 ### Portalconfig.controls.totalview ###

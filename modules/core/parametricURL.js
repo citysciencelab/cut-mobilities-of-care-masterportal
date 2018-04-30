@@ -351,8 +351,9 @@ define([
                 this.set("filter", JSON.parse(value));
             }
 
-            if(_.has(result, "HIGHLIGHTFEATURE")) {
+            if (_.has(result, "HIGHLIGHTFEATURE")) {
                 var values = _.values(_.pick(result, "HIGHLIGHTFEATURE"))[0];
+
                 this.set("highlightfeature", values);
             }
         },
