@@ -15,6 +15,8 @@ define(function (require) {
             isVisible: false,
             // mobile Ansicht true | false
             isMobile: Radio.request("Util", "isViewMobile"),
+            // uiStyle DEFAULT | TABLE | SIMPLE
+            uiStyle: Radio.request("Util", "getUiStyle"),
             // ol.Overlay für attached
             overlay: new ol.Overlay({element: undefined}),
             // desktop/attached/view.js | desktop/detached/view.js | mobile/view.js
@@ -140,7 +142,10 @@ define(function (require) {
                 this.getCurrentView().removeView();
             }
 
-            if (this.getIsMobile()) {
+            if (this.getUiStyle() === "TABLE") {
+                CurrentView = require("modules/tools/gfi/table/view");
+            }
+            else if (this.getIsMobile()) {
                 CurrentView = require("modules/tools/gfi/mobile/view");
             }
             else {
@@ -278,6 +283,10 @@ define(function (require) {
 
         getIsMobile: function () {
             return this.get("isMobile");
+        },
+
+        getUiStyle: function () {
+            return this.get("uiStyle");
         },
 
         getIsVisible: function () {
