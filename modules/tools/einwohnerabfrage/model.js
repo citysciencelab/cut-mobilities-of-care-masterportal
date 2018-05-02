@@ -38,11 +38,18 @@ define(function (require) {
             }
         },
 
+        /**
+         * creates a draw interaction and adds it to the map.
+         * @param {string} value - drawing type (Box | Circle | Polygon)
+         */
         createDrawInteraction: function (value) {
             var layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
                 drawInteraction = new ol.interaction.Draw({
+                    // destination for drawn features
                     source: layer.getSource(),
+                    // drawing type
                     type: value === "Box" ? "Circle" : value,
+                    // is called when a geometry's coordinates are updated
                     geometryFunction: value === "Box" ? ol.interaction.Draw.createBox() : undefined
                 });
 
@@ -52,11 +59,16 @@ define(function (require) {
             Radio.trigger("Map", "addInteraction", drawInteraction);
         },
 
+        /**
+         * sets listeners for draw interaction events
+         * @param {ol.interaction.Draw} interaction
+         * @param {ol.layer.Vector} layer
+         */
         setDrawInteractionListener: function (interaction, layer) {
             interaction.on("drawstart", function (evt) {
                 layer.getSource().clear();
-                if (evt.feature.getGeometry() === "Circle") {
-                    this.showOverlayOnSketch(evt.feature.getGeometry());
+                if (evt.feature.getGeometry().getType() === "Circle") {
+                    this.showOverlayOnSketch(evt.feature.getGeometry(), this.get("circleOverlay"));
                 }
             }, this);
 
@@ -72,12 +84,17 @@ define(function (require) {
             });
         },
 
-        showOverlayOnSketch: function (geometry) {
+        /**
+         * calculates the circle radius and places the circle overlay on geometry change
+         * @param {ol.Geometry} geometry - circle geometry
+         * @param {ol.Overlay} circleOverlay
+         */
+        showOverlayOnSketch: function (geometry, circleOverlay) {
             geometry.on("change", function (evt) {
                 var radius = this.roundRadius(evt.target.getRadius());
 
-                this.get("circleOverlay").getElement().innerHTML = radius;
-                this.get("circleOverlay").setPosition(evt.target.getLastCoordinate());
+                circleOverlay.getElement().innerHTML = radius;
+                circleOverlay.setPosition(evt.target.getLastCoordinate());
             }, this);
         },
 
