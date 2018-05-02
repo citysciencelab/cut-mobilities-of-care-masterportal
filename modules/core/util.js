@@ -24,8 +24,8 @@ define([
                 "isChrome": this.isChrome,
                 "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny,
-                "getConfig" : this.getConfig,
-                "getIgnoredKeys" : this.getIgnoredKeys
+                "getConfig": this.getConfig,
+                "getIgnoredKeys": this.getIgnoredKeys
             }, this);
 
             channel.on({
@@ -43,14 +43,8 @@ define([
             });
 
             $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
-            $(window).on("resize", _.bind(this.updateMapHeight, this));
 
             this.parseConfigFromURL();
-        },
-        updateMapHeight: function () {
-            var mapHeight = $(".lgv-container").height() - $("#main-nav").height();
-
-            $("#map").css("height", mapHeight + "px");
         },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);
