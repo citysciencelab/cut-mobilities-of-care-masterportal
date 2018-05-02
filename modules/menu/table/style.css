@@ -68,13 +68,13 @@
 .icon-checkbox2:before {
     content: "\e918";
     color: #808080;
-    margin-top: 8px;
+    margin-top: 9px;
 }
 
 .icon-checkbox:before {
     content: "\e917";
     color: #808080;
-    margin-top: 8px;
+    margin-top: 9px;
 }
 
 .icon-info:before {
@@ -83,7 +83,7 @@
 
 .pull-left {
     float: left !important;
-    margin-left: 8px;
+    margin-left: 5px;
 }
 
 .panel-body {
@@ -110,6 +110,7 @@
     background-image:
     radial-gradient(circle at 0 100%, transparent 10px, #F2F2F2 10px);
     margin-left: 17px;
+    border-top-width: 1px #f2f2f2 solid;
 }
 
 #middle-funnel {
@@ -143,7 +144,7 @@
 
 .list-group-item {
     background-color: transparent;
-    margin-bottom: 10px;
+    margin-bottom: 9px;
     padding-bottom: 8px;
     border-radius: 5px !important;
     border: none;
@@ -160,6 +161,9 @@ ul#tree-table {
     padding: 0px 0;
     min-width:  410px;
     overflow: auto;
+    margin-left: -9px;
+    margin-top: -17px;
+    margin-bottom: -6px;
 }
 
 ul#tree-table .glyphicon {
