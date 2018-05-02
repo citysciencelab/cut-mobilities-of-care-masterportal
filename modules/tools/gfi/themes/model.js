@@ -273,14 +273,6 @@ define(function (require) {
                      }
                 }
                 else {
-                    // map object keys to gfiAttributes from layer model
-
-//                    _.each(preGfi, function (value, key) {
-//                        key = gfiAttributes[key];
-//                        if (key) {
-//                            gfi[key] = value;
-//                        }
-//                    });
                     _.each(gfiAttributes, function (value, key) {
                         key = preGfi[key];
 

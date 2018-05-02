@@ -34,7 +34,7 @@ define(function (require) {
                 feature.unset("extent");
                 dom = this.writeTransaction(mode, [feature], this.getWriteOptions(model));
                 xmlString = new XMLSerializer().serializeToString(dom);
-                xmlString = xmlString.replace('<Update typeName="app:' + model.get('featureType') + '">', '<Update typeName="app:' + model.get('featureType') + '" xmlns:app="' + model.get('featureNS') + '">');
+                xmlString = xmlString.replace("<Update typeName='app:" + model.get("featureType") + "'>", "<Update typeName='app:" + model.get("featureType") + "' xmlns:app='" + model.get("featureNS") + "'>");
                 xmlString = xmlString.replace(/<Name>/g, "<Name>app:");
                 this.sendRequest(model.get("url"), xmlString);
             }
@@ -51,7 +51,7 @@ define(function (require) {
             var formatWFS = new ol.format.WFS(),
                 dom;
 
-            switch(mode) {
+            switch (mode) {
                 case "insert": {
                     dom = formatWFS.writeTransaction(features, null, null, writeOptions);
                     break;
@@ -79,7 +79,7 @@ define(function (require) {
                 featureType: model.get("featureType"),
                 featurePrefix: "app",
                 srsName: "EPSG:25832"
-            }
+            };
         },
 
         /**

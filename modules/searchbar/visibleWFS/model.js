@@ -17,7 +17,7 @@ define(function (require) {
          */
         initialize: function (config) {
             if (config.minChars) {
-                this.set("minChars", config.minChars);
+                this.setMinChars(config.minChars);
             }
             this.listenTo(Radio.channel("Searchbar"), {
                 "search": this.prepSearch
@@ -27,23 +27,24 @@ define(function (require) {
         *
         */
         prepSearch: function (searchString) {
-            if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
-                this.set("inUse", true);
+            if (this.getInUse() === false && searchString.length >= this.getMinChars()) {
+                this.setInUse(true);
                 var searchString = searchString.replace(" ", ""),
                     wfsModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
                     elasticModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "Elastic"}),
                     filteredModels = _.filter(_.union(wfsModels, elasticModels), function (model) {
-                        return model.has("searchField") === true && model.get("searchField") != "";
+                        return model.has("searchField") === true && model.get("searchField") !== "";
                     });
 
                 this.findMatchingFeatures(filteredModels, searchString);
                 Radio.trigger("Searchbar", "createRecommendedList");
-                this.set("inUse", false);
+                this.setInUse(false);
             }
         },
 
         findMatchingFeatures: function (models, searchString) {
             var featureArray = [];
+
             _.each(models, function (model) {
                 var features = model.get("layer").getSource().getFeatures();
 
@@ -59,7 +60,7 @@ define(function (require) {
                 }
                 else {
                     var filteredFeatures = _.filter(features, function (feature) {
-                        return feature.get(model.get("searchField")).indexOf(searchString) !== -1
+                        return feature.get(model.get("searchField")).indexOf(searchString) !== -1;
                     });
                     // createFeatureObject for each feature
                     featureArray.push(this.getFeatureObject(model.get("searchField"), filteredFeatures, model));
@@ -81,7 +82,7 @@ define(function (require) {
         getFeatureObject: function (searchField, filteredFeatures, model) {
             var featureArray = [];
 
-            _.each(filteredFeatures, function(feature) {
+            _.each(filteredFeatures, function (feature) {
                 featureArray.push({
                     name: feature.get(searchField),
                     type: model.get("name"),
@@ -136,13 +137,31 @@ define(function (require) {
         },
 
         getAdditionalInfo: function (model, feature) {
-            var additionalInfo = undefined;
+            var additionalInfo;
 
             if (!_.isUndefined(model.get("additionalInfoField"))) {
                 additionalInfo = feature.getProperties()[model.get("additionalInfoField")];
             }
 
-            return additionalInfo
+            return additionalInfo;
+        },
+
+        // getter for minChars
+        getMinChars: function () {
+            return this.getMinChars();
+        },
+        // setter for minChars
+        setMinChars: function (value) {
+            this.set("minChars", value);
+        },
+
+        // getter for inUse
+        getInUse: function () {
+            return this.getInUse();
+        },
+        // setter for inUse
+        setInUse: function (value) {
+            this.set("inUse", value);
         }
     });
 

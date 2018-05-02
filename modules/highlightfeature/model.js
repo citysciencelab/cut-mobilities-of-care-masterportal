@@ -1,29 +1,32 @@
 define(function (require) {
-var HighlightFeature,
-    ol = require("openlayers");
+    var HighlightFeature,
+        ol = require("openlayers");
 
-HighlightFeature = Backbone.Model.extend({
+    HighlightFeature = Backbone.Model.extend({
         initialize: function () {
             var featureToAdd = Radio.request("ParametricURL", "getHighlightFeature"),
                 channel = Radio.channel("Highlightfeature");
+
             channel.on({
                 "highlightfeature": this.highlightFeature
-            }, this);    
-            if(featureToAdd) {
+            }, this);
+            if (featureToAdd) {
                 var temp = featureToAdd.split(",");
+
                 this.getAndAddFeature(temp[0], temp[1]);
             }
         },
         highlightFeature: function (featureToAdd) {
             var temp = featureToAdd.split(",");
+
             this.getAndAddFeature(temp[0], temp[1]);
         },
         getAndAddFeature: function (layerId, featureId) {
-            
-            var layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-                feature = {};
+            var layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+
             if (layer && layer.getLayerSource()) {
                 var features = layer.getLayerSource().getFeatures();
+
                 if (features.length > 1) {
                     this.addFeature(layer.getLayerSource().getFeatureById(featureId));
                 }
@@ -39,22 +42,23 @@ HighlightFeature = Backbone.Model.extend({
             }
         },
         addFeature: function (feature) {
-            if(feature) {
-                var highlightLayer = Radio.request("Map", "createLayerIfNotExists", "highlightLayer");
+            if (feature) {
+                var highlightLayer = Radio.request("Map", "createLayerIfNotExists", "highlightLayer"),
+                    source;
 
                 source = highlightLayer.getSource();
                 source.addFeatures([feature]);
-                feature.setStyle(this.createStyle(feature));
+                feature.setStyle(this.createStyle());
             }
         },
-        createStyle: function(feature) {
+        createStyle: function () {
            return new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: "#ed8804",
                     width: 4
                 }),
                 fill: new ol.style.Fill({
-                    color: 'rgba(237, 136, 4, 0.1)'
+                    color: "rgba(237, 136, 4, 0.1)"
                 })
             });
         }

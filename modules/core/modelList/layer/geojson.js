@@ -7,8 +7,8 @@ define(function (require) {
     GeoJSONLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
-            this.set("styleId", this.getStyleId() || this.getId());
-            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
+            this.setStyleId(this.getStyleId() || this.getId());
+            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.getStyleId()));
         },
 
         /**
@@ -26,11 +26,11 @@ define(function (require) {
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
                 source: this.getLayerSource(),
-                name: this.get("name"),
-                typ: this.get("typ"),
-                gfiAttributes: this.get("gfiAttributes"),
-                routable: this.get("routable"),
-                gfiTheme: this.get("gfiTheme"),
+                name: this.getName(),
+                typ: this.getTyp(),
+                gfiAttributes: this.getGfiAttributes(),
+                routable: this.getRoutable(),
+                gfiTheme: this.getGfiTheme(),
                 id: this.getId()
             }));
             if (_.isUndefined(this.get("geojson"))) {
@@ -75,7 +75,7 @@ define(function (require) {
                 features = this.transformFeatures(features, jsonCrs, mapCrs);
             }
 
-            features.forEach(function (feature, index) {
+            features.forEach(function (feature) {
                 var id = feature.get("id") || _.uniqueId();
 
                 feature.setId(id);
@@ -130,7 +130,6 @@ define(function (require) {
             return this.get("features");
         },
 
-
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
             if (!this.get("legendURL").length) {
@@ -179,6 +178,9 @@ define(function (require) {
         },
         getStyleId: function () {
             return this.get("styleId");
+        },
+        setStyleId: function (value) {
+            this.set("styleId", value);
         },
         // getter for style
         getStyle: function () {

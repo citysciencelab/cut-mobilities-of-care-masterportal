@@ -69,18 +69,13 @@ define(function(require) {
             });
             it("should return all selectable Values for the String Attributes in AttributesMap for given Features", function () {
                 expect(model.collectSelectableOptions(testFeatures, selectedAttributes, featureAttributesMap)[0])
-                    //.to.be.an("array")
-                    .to.deep.equal({name: "strasse", displayName: undefined, type: "string", values: ["Süntelstraße 11a"]})
-                    //.to.deep.include({name: "name", displayName: undefined, type: "string", values: ["Albertinen-Krankenhaus"]})
-                    //.to.deep.include({name: "teilnahme_notversorgung", displayName: undefined, type: "boolean",values: ["false", "true"]});
+                    .to.deep.equal({name: "strasse", displayName: undefined, type: "string", values: ["Süntelstraße 11a"]});
             });
             it("should return all values for all Attributes defined in featureAttributesMap if selectedAttributes is empty", function () {
-                console.log(model.collectSelectableOptions(testFeatures, [], featureAttributesMap)[2]);
-
                 expect(model.collectSelectableOptions(testFeatures, [], featureAttributesMap)[0])
                     .to.deep.equal({name: "strasse", displayName: undefined, type: "string", values: ["Kayhuder Straße 65", "Süntelstraße 11a"]});
                 expect(model.collectSelectableOptions(testFeatures, [], featureAttributesMap)[1])
-                    .to.deep.equal({name: "name", displayName: undefined, type: "string", values: ["Heinrich Sengelmann Krankenhaus", "Albertinen-Krankenhaus"]})
+                    .to.deep.equal({name: "name", displayName: undefined, type: "string", values: ["Heinrich Sengelmann Krankenhaus", "Albertinen-Krankenhaus"]});
                 expect(model.collectSelectableOptions(testFeatures, [], featureAttributesMap)[2])
                     .to.deep.equal({name: "teilnahme_notversorgung", displayName: undefined, type: "boolean", values: ["false", "true"]});
             });

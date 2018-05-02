@@ -52,6 +52,7 @@ define(function (require) {
 
         renderDetailView: function () {
             var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true});
+
             if (_.isUndefined(selectedModel) === false) {
                 var view = new QueryDetailView({model: selectedModel});
 

@@ -7,7 +7,7 @@ define(function (require) {
     ElasticLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
-            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
+            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.getStyleId()));
         },
 
         /**
@@ -23,10 +23,10 @@ define(function (require) {
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
                 source: this.getLayerSource(),
-                name: this.get("name"),
-                typ: this.get("typ"),
-                gfiAttributes: this.get("gfiAttributes"),
-                gfiTheme: this.get("gfiTheme"),
+                name: this.getName(),
+                typ: this.getTyp(),
+                gfiAttributes: this.getGfiAttributes(),
+                gfiTheme: this.getGfiTheme(),
                 id: this.getId()
             }));
             this.requestData(this.parseData);
@@ -40,7 +40,7 @@ define(function (require) {
             Radio.trigger("Util", "showLoader");
 
             $.ajax({
-                url: Radio.request("Util", "getProxyURL", this.get("url") + this.get("typeName") + "/_search?size=10000"),
+                url: Radio.request("Util", "getProxyURL", this.getUrl() + this.getTypeName() + "/_search?size=10000"),
                 type: "GET",
                 context: this,
                 success: callback,
@@ -68,7 +68,7 @@ define(function (require) {
             }, this);
 
             this.getLayerSource().addFeatures(features);
-            this.getLayer().setStyle(this.get("styleFunction"));
+            this.getLayer().setStyle(this.getStyleFunction());
             Radio.trigger("ElasticLayer", "featuresLoaded", this.getId(), features);
             Radio.trigger("Util", "hideLoader");
         },
@@ -137,6 +137,9 @@ define(function (require) {
                 });
             }
         },
+        getStyleFunction: function () {
+            return this.get("styleFunction");
+        },
         createLegendURL: function () {
             if (!this.get("legendURL").length) {
                 var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
@@ -148,6 +151,11 @@ define(function (require) {
         },
         getStyleId: function () {
             return this.get("styleId");
+        },
+
+        // getter for typeName
+        getTypeName: function () {
+            return this.get("typeName");
         }
     });
 

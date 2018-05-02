@@ -30,7 +30,7 @@ define(function (require) {
             }, this);
         },
         triggerEvent: function (triggerParams) {
-            data = triggerParams.data;
+            var data = triggerParams.data;
 
             if (triggerParams.event === "" || triggerParams.channel === "") {
                 return;
@@ -38,9 +38,9 @@ define(function (require) {
             // ITGBM
             else if (triggerParams.data === "allFeatures") {
                 var model = Radio.request("ModelList", "getModelByAttributes", {id: "10320"}),
-                    featureList = [];
+                    featureList = [],
+                    features = model.getLayerSource().getFeatures();
 
-                var features = model.getLayerSource().getFeatures();
                 _.each(features, function (feature) {
                     featureList.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
                 });

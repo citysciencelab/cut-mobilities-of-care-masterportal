@@ -49,7 +49,7 @@ define(function (require) {
             if (event.data.hasOwnProperty("showPositionByExtent")) {
                 this.showPositionByExtent(event.data.showPositionByExtent);
             }
-            else if(event.data.hasOwnProperty("showPositionByExtentNoScroll")) {
+            else if (event.data.hasOwnProperty("showPositionByExtentNoScroll")) {
                 this.showPositionByExtentNoScroll(event.data.showPositionByExtentNoScroll);
             }
             else if (event.data.hasOwnProperty("transactFeatureById")) {
@@ -89,11 +89,13 @@ define(function (require) {
         },
         showPositionByExtent: function (extent) {
             var center = ol.extent.getCenter(extent);
+
             Radio.trigger("MapMarker", "showMarker", center);
             Radio.trigger("MapView", "setCenter", center);
         },
         showPositionByExtentNoScroll: function (extent) {
             var center = ol.extent.getCenter(extent);
+
             Radio.trigger("MapMarker", "showMarker", center);
         },
         addFeaturesFromGBM: function (hits, id, layerName) {
@@ -116,6 +118,7 @@ define(function (require) {
             var feature = this.getFeatureFromHit(hit),
                 extent = feature.getGeometry().getExtent(),
                 center = ol.extent.getCenter(extent);
+
                 Radio.trigger("MapMarker", "showMarker", center);
         },
 
@@ -151,6 +154,7 @@ define(function (require) {
                     geometry: geom,
                     type: hit.typ
                 });
+
                 feature.setProperties(_.omit(hit, "geometry_UTM_EPSG_25832"));
                 feature.setId(hit.id);
                 return feature;
