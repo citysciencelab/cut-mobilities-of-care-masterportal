@@ -6,8 +6,8 @@ define([
 ], function () {
 
     var Backbone = require("backbone"),
-        TemplateSettings = require("text!modules/menu/desktop/layer/templateSettings.html"),
-        Template = require("text!modules/menu/desktop/layer/templateLight.html"),
+        TemplateSettings = require("text!modules/menu/table/layer/templateSettings.html"),
+        Template = require("text!modules/menu/table/layer/templateLight.html"),
         Radio = require("backbone.radio"),
         LayerView;
 
@@ -17,8 +17,8 @@ define([
         template: _.template(Template),
         templateSettings: _.template(TemplateSettings),
         events: {
-            "click .glyphicon-unchecked, .glyphicon-check, .title": "toggleIsSelected",
-            "click .glyphicon-info-sign": "showLayerInformation",
+            "click .icon-checkbox, .icon-checkbox2, .title": "toggleIsSelected",
+            "click .icon-info": "showLayerInformation",
             "click .glyphicon-cog": "toggleIsSettingVisible",
             "click .arrows > .glyphicon-arrow-up": "moveModelUp",
             "click .arrows > .glyphicon-arrow-down": "moveModelDown",
@@ -47,7 +47,7 @@ define([
 
         render: function () {
             var attr = this.model.toJSON(),
-                selector = $("#" + this.model.getParentId());
+                selector = $("#" + this.model.getParentId() + "-table");
 
             selector.prepend(this.$el.html(this.template(attr)));
             if (this.model.getIsSettingVisible() === true) {

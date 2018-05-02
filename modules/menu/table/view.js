@@ -21,6 +21,7 @@ define(function (require) {
         },
         render: function () {
             $(this.el).html(this.template());
+           // $("#tree").remove();
             $(".lgv-container").append(this.$el);
         },
         renderLayer: function () {

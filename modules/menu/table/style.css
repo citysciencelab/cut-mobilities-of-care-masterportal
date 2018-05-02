@@ -57,17 +57,76 @@
     width: 40px;
     height: 40px;
 }
+
 .panel {
-    background-color: #F2F2F2;
+    background: transparent;
     border-width: 0px;
-    border-radius: 5px !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.icon-checkbox2:before {
+    content: "\e918";
+    color: #808080;
+    margin-top: 8px;
+}
+
+.icon-checkbox:before {
+    content: "\e917";
+    color: #808080;
+    margin-top: 8px;
+}
+
+.icon-info:before {
+    padding-top: -12px !important;
+}
+
+.pull-left {
+    float: left !important;
+    margin-left: 8px;
+}
+
+.panel-body {
+    background-color: #F2F2F2;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+
 }
 .panel-group {
   position: absolute;
-margin-top: -88px;
-  width: 440px;
-  bottom: 28px;
+  margin-top: -88px;
+  margin-left: -20px;
+  width: 480px;
+  bottom: 25px;
 }
+
+#funnel {
+    display: flex;
+}
+
+#left-funnel-corner {
+    width: 10px;
+    height: 10px;
+    background-image:
+    radial-gradient(circle at 0 100%, transparent 10px, #F2F2F2 10px);
+    margin-left: 17px;
+}
+
+#middle-funnel {
+    display: block;
+    width: 28px;
+    height: 10px;
+    background-color: #F2F2F2;
+}
+
+#right-funnel-corner {
+    width: 10px;
+    height: 10px;
+    background-image:
+        radial-gradient(circle at 100% 100%, transparent 10px, #F2F2F2 10px);
+}
+
+
 
 .header-cool {
   background: salmon;
@@ -84,17 +143,17 @@ margin-top: -88px;
 
 .list-group-item {
     background-color: transparent;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
     border-radius: 5px !important;
     border: none;
 }
 
 
 /**************** Themenbaum ****************/
-ul#tree {
+ul#tree-table {
     border: none;
-    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    font-family: UniversNextW01-Regular, sans-serif;
     font-size: 15px;
     font-weight: 400;
     color: #555;
@@ -103,19 +162,19 @@ ul#tree {
     overflow: auto;
 }
 
-ul#tree .glyphicon {
+ul#tree-table .glyphicon {
     cursor: pointer;
     font-size: 15px;
     padding-right: 5px;
     top: 3px;
 }
 
-ul#tree .glyphicon-cog {
+ul#tree-table .glyphicon-cog {
     font-size: 18px;
     padding: 0;
 }
 
-ul#tree .glyphicon-info-sign {
+ul#tree-table .glyphicon-info-sign {
     font-size: 18px;
     padding-right: 6px;
 }
@@ -125,13 +184,13 @@ ul#tree .glyphicon-info-sign {
 }
 
 /* ----------------------Themenbaum light -----------------------------*/
-ul#tree.light {
+ul#tree-table.light {
     font-size: 12px;
     color: rgb(85, 85, 85);
     overflow-y:auto;
 }
 
-ul#tree.light li {
+ul#tree-table.light li {
     /*border-bottom: 1px solid #ddd;*/
     border-left: 0;
     border-right: 0;
@@ -141,87 +200,87 @@ ul#tree.light li {
     font-weight: normal;
 }
 
-ul#tree.light li span.title {
+ul#tree-table.light li span.title {
     vertical-align: sub;
     cursor:pointer;
 }
 
 /*Haupt Themenliste */
 
-ul#tree .closed:not(.SelectedLayer ){
+ul#tree-table .closed:not(.SelectedLayer ){
     border-bottom: 1px solid #ddd;
 }
 
 /*Unterlisten*/
-ul#tree ul {
+ul#tree-table ul {
     list-style: none;
     padding: 0 0 0 0px;
     -webkit-padding-start: 0px;
 }
 
-ul#tree .catalog_buttons .glyphicon {
+ul#tree-table .catalog_buttons .glyphicon {
     padding: 0px 0;
     cursor: pointer;
 }
 
-ul#tree .catalog_buttons .glyphicon-adjust {
+ul#tree-table .catalog_buttons .glyphicon-adjust {
     font-size: 14px
 }
 
-ul#tree ul .title {
-    font-family: UniversNextW01-Regular,"Arial Narrow",Arial,sans-serif;
+ul#tree-table ul .title {
+    font-family: HamburgSans-Bold;
     font-size: 12px;
     cursor: pointer;
 }
 
-ul#tree ul li {
+ul#tree-table ul li {
     border-bottom: 1px solid #ddd;
     padding: 5px 15px;
 }
-ul#tree .layer-catalog > .header {
+ul#tree-table .layer-catalog > .header {
     padding: 8px 5px 7px 5px;
     background-color: rgb(85, 85, 85);
     color: rgb(255, 255, 255);
     font-size: 13px;
 }
 
-ul#tree .catalog-selection {
+ul#tree-table .catalog-selection {
     font-size: 11px;
     font-weight: 400;
 }
 
-ul#tree .catalog-selection > select {
+ul#tree-table .catalog-selection > select {
     height: 20px;
     padding: 0;
     font-size: 11px;
 }
 
-ul#tree .themen-folder {
+ul#tree-table .themen-folder {
     font-weight: 400;
 }
 
-ul#tree .rotate-adjust {
+ul#tree-table .rotate-adjust {
     transform: rotate(180deg);
     transition: .5s;
     font-size: 15px;
     cursor: pointer;
 }
 
-ul#tree .rotate-adjust-back {
+ul#tree-table .rotate-adjust-back {
     transform: rotate(0deg);
     transition: .5s;
     font-size: 15px;
     cursor: pointer;
 }
 
-ul#tree .rotate-pin {
+ul#tree-table .rotate-pin {
     transform: rotate(270deg);
     transition: .5s;
     font-size: 14px;
     cursor: pointer;
 }
 
-ul#tree .rotate-pin-back {
+ul#tree-table .rotate-pin-back {
     transform: rotate(360deg);
     transition: .5s;
     font-size: 14px;
@@ -230,34 +289,39 @@ ul#tree .rotate-pin-back {
 ul#Overlayer .glyphicon-check, ul#Overlayer .glyphicon-check + .title {
     color: rgb(255, 127, 0);
 }
-ul#tree ul#SelectedLayer .glyphicon-check, ul#tree ul#SelectedLayer .glyphicon-check + .title {
+ul#tree-table ul#SelectedLayer .glyphicon-check, ul#tree-table ul#SelectedLayer .glyphicon-check + .title {
     /*color: rgb(85, 85, 85);*/
 }
 
 /*-------------------Selection/Settings----------------------*/
-ul#tree ul{
+ul#tree-table ul{
    overflow-y: auto;
    overflow-x: auto;
     max-width:  500px;
 }
 
-ul#tree #SelectedLayer li {
+ul#tree-table #SelectedLayer li {
     overflow: auto;
     padding: 8px 6px;
 }
 
-ul#tree .SelectedLayer .layer-selection-save {
+ul#tree-table .SelectedLayer .layer-selection-save {
     font-size: 11px;
     font-weight: 400;
     cursor: pointer;
 }
 
 
-ul#tree .layer-settings {
+ul#tree-table-table .layer-settings {
     clear: both;
     margin-top: 32px;
     margin-left: 21px;
      border-top: 1px dashed #ddd;
     padding-top: 8px;
     font-size: 14px;
+}
+
+.pull-right{
+    position: absolute;
+    right: 30px;
 }

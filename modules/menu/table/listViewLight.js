@@ -1,7 +1,7 @@
 define(function (require) {
 
     var listView = require("modules/menu/desktop/listViewMain"),
-        DesktopLayerViewLight = require("modules/menu/desktop/layer/viewLight"),
+        DesktopLayerViewLight = require("modules/menu/table/layer/viewLight"),
         Radio = require("backbone.radio"),
         Menu;
 
@@ -16,10 +16,10 @@ define(function (require) {
             });
             this.renderMain();
             this.render();
-            Radio.trigger("Autostart", "initializedModul", "tree");
+            Radio.trigger("Autostart", "initializedModul", "tree-table");
         },
         render: function () {
-            $("#" + "tree").html("");
+            $("#" + "tree-table").html("");
             var models = this.collection.where({type: "layer"});
 
             models = _.sortBy(models, function (model) {
@@ -28,7 +28,7 @@ define(function (require) {
 
             this.addViews(models);
             Radio.trigger("Title", "setSize");
-            $("ul#tree.light").css("max-height", $("#map").height() - 160);
+            $("ul#tree-table.light").css("max-height", $("#map").height() - 160);
         },
         addViews: function (models) {
             _.each(models, function (model) {
