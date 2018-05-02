@@ -237,6 +237,10 @@ define([
         parseStyle: function (result) {
             var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
 
+            if (value && (value === "TABLE" || value === "SIMPLE")) {
+                    Radio.trigger("Util", "setUiStyle", value);
+            }
+
             this.setStyle(value);
         },
         parseURL: function (result) {

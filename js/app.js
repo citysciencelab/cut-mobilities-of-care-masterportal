@@ -14,7 +14,6 @@ define("app",
     "modules/alerting/view"
     ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter) {
 
-
     // Core laden
     new Autostarter();
     new Util();
@@ -242,7 +241,7 @@ define("app",
         });
     });
     // controls
-    var style = Radio.request("ParametricURL", "getStyle");
+    var style = Radio.request("Util", "getUiStyle");
 
     if (!style || style !== "SIMPLE") {
         require(["modules/controls/view"], function (ControlsView) {
