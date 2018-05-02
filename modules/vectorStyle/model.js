@@ -95,10 +95,6 @@ define(function (require) {
             }
             // after style is derived, createTextStyle
             style.setText(this.createTextStyle(feature, labelField, isClustered));
-
-            // if (style && style.getImage()) {
-                // console.log(style.getImage().getSrc());
-            // }
             return style;
         },
 
