@@ -6,7 +6,6 @@ define(function () {
             numFeaturesToShow: 2,
             infoText: "(weitere Objekte. Bitte zoomen.)"
         },
-        styleConf: "../../node_modules/lgv-config/style_v2.json",
         namedProjections: [
             ["EPSG:31461", "+title=Gauß 3° Bessel +proj=tmerc +lat_0=0 +lon_0=3 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
             ["EPSG:31462", "+title=Gauß 6° Bessel +proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"]
@@ -33,7 +32,7 @@ define(function () {
             ]
         },
         layerConf: "resources/testServices.json",
-        styleConf: "../node_modules/lgv-config/style.json"
+        styleConf: "../../node_modules/lgv-config/style_v2.json"
     };
 
     return config;

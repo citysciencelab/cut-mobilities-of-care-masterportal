@@ -32,7 +32,6 @@ define(function(require) {
                 var features = geojsonLayer.parseDataToFeatures(geojson);
 
                 features = geojsonLayer.transformFeatures(features, "EPSG:4326", "EPSG:25832");
-                console.log(features[0].getGeometry());
             });
         });
     });

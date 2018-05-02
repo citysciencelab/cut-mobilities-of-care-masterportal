@@ -115,7 +115,7 @@ define(function (require) {
          * @param  {Backbone.Model} stylelistmodel
          */
         setStyleFunction: function (stylelistmodel) {
-             if (_.isUndefined(stylelistmodel)) {
+            if (_.isUndefined(stylelistmodel)) {
                 this.set("styleFunction", undefined);
             }
             else {
@@ -132,10 +132,10 @@ define(function (require) {
 
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
-            if (!this.get("legendURL").length) {
+            if (_.isUndefined(this.getLegendURL()) === false && this.getLegendURL().length !== 0) {
                 var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
-                if (!_.isUndefined(style)) {
+                if (_.isUndefined(style) === false) {
                     this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
                 }
             }
