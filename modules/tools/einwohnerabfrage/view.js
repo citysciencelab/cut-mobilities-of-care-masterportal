@@ -11,6 +11,7 @@ define(function (require) {
         className: "win-body",
         template: _.template(EinwohnerabfrageTemplate),
         events: {
+            "change select": "createDrawInteraction"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -29,6 +30,11 @@ define(function (require) {
             else {
                 this.undelegateEvents();
             }
+        },
+
+        createDrawInteraction: function (evt) {
+            this.model.get("drawInteraction").setActive(false);
+            this.model.createDrawInteraction(evt.target.value);
         }
     });
 
