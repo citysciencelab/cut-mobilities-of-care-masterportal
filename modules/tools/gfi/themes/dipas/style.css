@@ -3,7 +3,14 @@
     font-family: "HamburgSans";
 }
 
-.dipas-gfi-title {
+.dipas-gfi-thema {
+    font-family: "HamburgSans";
+    font-size: 14px;
+    color: #808080;
+    text-transform: uppercase;
+}
+
+.dipas-gfi-name {
     font-family: "HamburgSans-bold";
     font-size: 18px;
     color: #003063;

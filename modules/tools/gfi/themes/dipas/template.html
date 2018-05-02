@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <div class = "dipas-gfi-content">
     <% _.each(gfiContent[0], function(value, key) { %>
-        <% if (key === "Geltendes Planrecht") { %>
-        <div class = "dipas-gfi-title"><%= value %></div>
-        <% } else if (key === "Feststellungsdatum") { %>
+        <% if (key === "thema") { %>
+        <div class = "dipas-gfi-thema"><%= value %></div>
+        <% } else if (key === "name") { %>
+        <div class = "dipas-gfi-name"><%= value %></div>
+        <% } else if (key === "description") { %>
         <div class = "dipas-gfi-description"><%= value %></div>
         <% }%>
     <% });%>
