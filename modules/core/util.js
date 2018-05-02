@@ -48,7 +48,8 @@ define([
             this.parseConfigFromURL();
         },
         updateMapHeight: function () {
-            var mapHeight = $(".lgv-container").height() - $("#main-nav").height();
+            var navHeight = $("#main-nav").is(":visible") ? $("#main-nav").height() : 0,
+                mapHeight = $(".lgv-container").height() - navHeight;
 
             $("#map").css("height", mapHeight + "px");
         },
