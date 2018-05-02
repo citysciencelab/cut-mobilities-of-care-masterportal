@@ -1,0 +1,8 @@
+.gfi-detached-table {
+    border-radius: 12px !important;
+    background-color: #F2F2F2;
+}
+
+.gfi-detached-table > .gfi-header {
+    border-bottom: 1px solid #808080;
+}
