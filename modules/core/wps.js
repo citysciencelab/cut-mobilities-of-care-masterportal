@@ -73,6 +73,7 @@ define(function (require) {
             else {
                 Radio.trigger("Alert", "alert", "WPS Antwort konnte nicht verarbeitet werden!");
             }
+
             Radio.trigger("WPS", "response", requestID, obj);
         },
         /**
@@ -83,6 +84,7 @@ define(function (require) {
             var xml = $.parseXML(dataString),
                 data = $(xml).find("wps\\:Data"),
                 obj = this.buildObj(data, {});
+
                 return obj;
         },
         /**
@@ -113,8 +115,9 @@ define(function (require) {
             var dataString = this.setXMLElement(xmlTemplate, "</ows:Identifier>", identifier);
 
             _.each(data, function (val, key) {
-                var attributeString = "";
-                val = JSON.stringify(val);
+                var attributeString = "",
+                    val = JSON.stringify(val);
+
                 attributeString = this.setXMLElement(dataInputXmlTemplate, "</ows:Identifier>", key);
                 attributeString = this.setXMLElement(attributeString, "</wps:LiteralData>", val);
                 dataString = this.setXMLElement(dataString, "</wps:DataInputs>", attributeString);
@@ -137,6 +140,7 @@ define(function (require) {
          */
         buildUrl: function (identifier, restModel) {
             var url = "";
+
             if (identifier && restModel && restModel.get("url") && restModel.get("version")) {
                 url = restModel.get("url") + "?service=WPS&version=" + restModel.get("version") + "&request=execute&identifier=" + identifier;
             }
