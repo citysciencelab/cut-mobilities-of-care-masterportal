@@ -7,6 +7,12 @@ define(function (require) {
     GeoJSONLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
+            this.toggleAutoReload();
+            this.listenTo(this, {
+                "change:isVisibleInMap": function () {
+                    this.toggleAutoReload();
+                }
+            });
         },
 
         /**
@@ -62,6 +68,7 @@ define(function (require) {
             if (jsonCrs !== mapCrs) {
                 features = this.transformFeatures(features, jsonCrs, mapCrs);
             }
+            this.getLayerSource().clear(true);
             this.getLayerSource().addFeatures(features);
             this.set("loadend", "ready");
 
@@ -136,6 +143,19 @@ define(function (require) {
                     color: "rgba(49, 159, 211, 0)"
                 })
             });
+        },
+
+        toggleAutoReload: function () {
+            if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 500) {
+                if (this.getIsVisibleInMap() === true) {
+                    this.interval = setInterval (function (my) {
+                        my.updateData(my.handleData);
+                    }, this.attributes.autoRefresh, this);
+                }
+                else {
+                    clearInterval(this.interval);
+                }
+            }
         }
     });
 
