@@ -5,7 +5,7 @@ define(function (require) {
         $ = require("jquery"),
         LayerView = require("modules/menu/table/layer/view"),
         ToolView = require("modules/menu/table/tool/view"),
-        ListView = require("modules/menu/table/listViewLight"),
+        ListView = require("modules/menu/table/layerList"),
         Menu;
 
     Menu = Backbone.View.extend({
