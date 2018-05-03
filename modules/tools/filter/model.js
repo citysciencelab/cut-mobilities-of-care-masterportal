@@ -1,7 +1,6 @@
 define(function (require) {
 
     var WfsQueryModel = require("modules/tools/filter/query/source/wfs"),
-        ElasticQueryModel = require("modules/tools/filter/query/source/elastic"),
         Radio = require("backbone.radio"),
         FilterModel;
 
@@ -95,8 +94,10 @@ define(function (require) {
          */
         updateMap: function () {
             // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
+            var allFeatureIds;
+
             if (_.contains(this.get("queryCollection").pluck("isSelected"), true)) {
-                var allFeatureIds = this.groupFeatureIdsByLayer(this.get("queryCollection"));
+                allFeatureIds = this.groupFeatureIdsByLayer(this.get("queryCollection"));
 
                 _.each(allFeatureIds, function (layerFeatures) {
                     Radio.trigger("ModelList", "showFeaturesById", layerFeatures.layer, layerFeatures.ids);
@@ -110,10 +111,11 @@ define(function (require) {
         },
 
         updateGFI: function (featureIds, layerId) {
-            var getVisibleTheme = Radio.request("GFI", "getVisibleTheme");
+            var getVisibleTheme = Radio.request("GFI", "getVisibleTheme"),
+                featureId;
 
             if (getVisibleTheme && getVisibleTheme.get("id") === layerId) {
-                var featureId = getVisibleTheme.get("feature").getId();
+                featureId = getVisibleTheme.get("feature").getId();
 
                 if (!_.contains(featureIds, featureId)) {
                     Radio.trigger("GFI", "setIsVisible", false);
@@ -212,8 +214,10 @@ define(function (require) {
             var queryObjects = Radio.request("ParametricURL", "getFilter");
 
             _.each(queries, function (query) {
+                var queryObject;
+
                 if (!_.isUndefined(queryObjects)) {
-                    var queryObject = _.findWhere(queryObjects, {name: query.name});
+                    queryObject = _.findWhere(queryObjects, {name: query.name});
 
                     query = _.extend(query, queryObject);
                 }
@@ -223,7 +227,7 @@ define(function (require) {
 
         createQuery: function (model) {
             var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
-                query = (layer.getTyp() === "WFS" || layer.getTyp() === "GeoJSON") ? new WfsQueryModel(model) : new ElasticQueryModel(model);
+                query = (layer.getTyp() === "WFS" || layer.getTyp() === "GeoJSON") ? new WfsQueryModel(model): undefined;
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
@@ -250,9 +254,11 @@ define(function (require) {
         },
 
         setIsActive: function (value) {
+            var model;
+
             this.set("isActive", value);
             if (!value) {
-                var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
+                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
 
                 model.setIsActive(false);
                 Radio.trigger("Sidebar", "toggle", false);
