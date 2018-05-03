@@ -55,7 +55,6 @@ define(function (require) {
                 context: this,
                 success: callback,
                 error: function () {
-                   console.log("Error");
                     Radio.trigger("Util", "hideLoader");
                 }
             });
