@@ -15,8 +15,6 @@ define(function (require) {
                 offset: [15, 0],
                 positioning: "center-left"
             }),
-            // hmdk csw GetRecordById summary request url
-            // cswUrl: Radio.request("RestReader", "getServiceById", "1").get("url"),
             // mrh meta data id
             mrhId: "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
             // fhh meta data id
@@ -26,14 +24,10 @@ define(function (require) {
         },
 
         initialize: function () {
-            var cswUrl = Radio.request("RestReader", "getServiceById", "1").get("url");
-
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-
-            this.sendRequest(cswUrl, {id: this.get("fhhId")}, this.setFhhDate);
-            this.sendRequest(cswUrl, {id: this.get("mrhId")}, this.setMrhDate);
+            this.on("change:isCurrentWin", this.handleCswRequests);
             this.createDomOverlay(this.get("circleOverlay"));
         },
 
@@ -47,6 +41,21 @@ define(function (require) {
                 this.set("isCurrentWin", false);
                 this.get("drawInteraction").setActive(false);
                 Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
+            }
+        },
+
+        /**
+         * runs the csw requests once and removes this callback from the change:isCurrentWin event
+         * because both requests only need to be executed once
+         * @param {boolean} value - is tool active
+         */
+        handleCswRequests: function (value) {
+            if (value) {
+                var cswUrl = Radio.request("RestReader", "getServiceById", "1").get("url");
+
+                this.sendRequest(cswUrl, {id: this.get("fhhId")}, this.setFhhDate);
+                this.sendRequest(cswUrl, {id: this.get("mrhId")}, this.setMrhDate);
+                this.off("change:isCurrentWin", this.handleCswRequests);
             }
         },
 
@@ -90,7 +99,7 @@ define(function (require) {
          * @return {string} date
          */
         parseDate: function (response) {
-            var citation = $("gmd\\:citation,citation", response),
+             var citation = $("gmd\\:citation,citation", response),
                 dates = $("gmd\\:CI_Date,CI_Date", citation),
                 datetype, dateTime;
 
