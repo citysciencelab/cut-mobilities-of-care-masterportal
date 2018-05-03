@@ -47,7 +47,7 @@ require.config({
             exports: "ol"
         }
     },
-    //urlArgs: "bust=" + (new Date()).getTime()
+    urlArgs: "bust=" + (new Date()).getTime()
 });
 
 // Überschreibt das Errorhandling von Require so,

@@ -7,7 +7,6 @@ define(function (require) {
     GeoJSONLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
-            
             this.toggleAutoReload();
             
             this.listenTo(this, {
@@ -149,11 +148,9 @@ define(function (require) {
         },
         
         toggleAutoReload: function () {
-            //if (!_.isUndefined(this.attributes.autoRefresh) && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 0 ) {
             if(this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 0 ) {
                 if (this.getIsVisibleInMap() === true) {
                     this.interval = setInterval (function (my) {
-                        console.log("Update Data mit: " + my.attributes.autoRefresh);
                         my.updateData(my.handleData);                
                     }, this.attributes.autoRefresh, this);
                 }
