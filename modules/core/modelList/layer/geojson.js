@@ -8,7 +8,6 @@ define(function (require) {
         initialize: function () {
             this.superInitialize();
             this.toggleAutoReload();
-            
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
                     this.toggleAutoReload();
@@ -145,12 +144,12 @@ define(function (require) {
                 })
             });
         },
-        
+
         toggleAutoReload: function () {
-            if(this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 0 ) {
+            if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 0) {
                 if (this.getIsVisibleInMap() === true) {
                     this.interval = setInterval (function (my) {
-                        my.updateData(my.handleData);                
+                        my.updateData(my.handleData);
                     }, this.attributes.autoRefresh, this);
                 }
                 else {
