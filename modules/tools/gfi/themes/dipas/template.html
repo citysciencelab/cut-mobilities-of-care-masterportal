@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <div class = "dipas-gfi-content">
     <% _.each(gfiContent[0], function(value, key) { %>
-        <% if (key === "thema") { %>
+        <% if (key === "Thema") { %>
         <div class = "dipas-gfi-thema"><%= value %></div>
-        <% } else if (key === "name") { %>
+        <% }%>
+    <% });%>
+    <% _.each(gfiContent[0], function(value, key) { %>
+        <% if (key === "Name") { %>
         <div class = "dipas-gfi-name"><%= value %></div>
-        <% } else if (key === "description") { %>
+        <% }%>
+    <% });%>
+    <% _.each(gfiContent[0], function(value, key) { %>
+        <% if (key === "Description") { %>
         <div class = "dipas-gfi-description"><%= value %></div>
         <% }%>
     <% });%>
