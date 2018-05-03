@@ -209,12 +209,11 @@ li.results:hover {
 #table-searchForm button.btn.btn-default.btn-table-search {
     border-radius: 12px !important;
     padding: 6px 12px 1px 5px;
-    margin: 6px 5px 5px 5px;
+    margin: 3px 5px 5px 5px;
 }
 
 #table-searchForm .btn-table-search > .icon-search {
     font-size: 22px;
-    margin: 0px;
     padding: 9px;
 }
 
@@ -240,7 +239,7 @@ li.results:hover {
 }
 
 #table-searchForm #searchInput {
-    margin: 7px 0px 7px 83px;
+    margin: 4px 0px 7px 78px;
     border-radius: 10px !important;
 }
 
