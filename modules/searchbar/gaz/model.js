@@ -39,7 +39,8 @@ define(function (require) {
             });
 
             this.listenTo(Radio.channel("Gaz"), {
-                "adressSearch": this.adressSearch
+                "adressSearch": this.adressSearch,
+                "streetsSearch": this.streetsSearch
             });
 
             if (gazService && gazService.get("url")) {
@@ -133,6 +134,15 @@ define(function (require) {
                 this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.getAdress, false, this.getTypeOfRequest());
             }
         },
+        streetsSearch: function (adress) {
+            console.log(adress);
+            // this.setTypeOfRequest("searchStreets");
+            // this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(adress.name), this.getStreets, true, this.getTypeOfRequest());
+            this.setTypeOfRequest("searchHouseNumbers1");
+            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(adress.name), this.getHouseNumbers, false, this.getTypeOfRequest());
+            console.log(this.getHouseNumbers());
+            // this.searchInHouseNumbers();
+        },
         /**
         * @description Veränderte Suchabfolge bei initialer Suche, z.B. über Config.initialQuery
         * @param {string} searchString - Suchstring
@@ -181,7 +191,7 @@ define(function (require) {
                 coordinates,
                 hitNames = [],
                 hitName;
-
+console.log(hits);
             _.each(hits, function (hit) {
                 coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
                 hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
