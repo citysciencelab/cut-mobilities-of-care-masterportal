@@ -12,7 +12,6 @@ define(function (require) {
                     if (value) {
                         this.model.setIsActive(value);
                         this.model.get("btnIsActive").setIsSelected(value);
-                        this.model.runFilter();
                     }
                 }
             });

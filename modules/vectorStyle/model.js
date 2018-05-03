@@ -88,14 +88,13 @@ define(function (require) {
                 style = this.createPointStyle(feature, styleSubClass, isClustered);
             }
             else if (styleClass === "LINE") {
-                style = this.createLineStyle(feature, styleSubClass, isClustered);
+                style = this.createLineStyle(feature, styleSubClass);
             }
             else if (styleClass === "POLYGON") {
-                style = this.createPolygonStyle(feature, styleSubClass, isClustered);
+                style = this.createPolygonStyle(feature, styleSubClass);
             }
             // after style is derived, createTextStyle
             style.setText(this.createTextStyle(feature, labelField, isClustered));
-
             return style;
         },
 
@@ -126,11 +125,11 @@ define(function (require) {
         * creates lineStyle depending on the attribute "subClass".
         * allowed values for "subClass" are "SIMPLE".
         */
-        createLineStyle: function (feature, styleSubClass, isClustered) {
+        createLineStyle: function (feature, styleSubClass) {
             var style = this.getDefaultStyle();
 
             if (styleSubClass === "SIMPLE") {
-                style = this.createSimpleLineStyle(feature, isClustered);
+                style = this.createSimpleLineStyle();
             }
             return style;
         },
@@ -141,7 +140,7 @@ define(function (require) {
         */
         createSimpleLineStyle: function () {
             var strokecolor = this.returnColor(this.getLineStrokeColor(), "rgb"),
-                strokewidth = parseInt(this.getLineStrokeWidth(), 10),
+                strokewidth = parseFloat(this.getLineStrokeWidth(), 10),
                 strokestyle = new ol.style.Stroke({
                     color: strokecolor,
                     width: strokewidth
@@ -159,11 +158,14 @@ define(function (require) {
         * creates polygonStyle depending on the attribute "subClass".
         * allowed values for "subClass" are "SIMPLE".
         */
-        createPolygonStyle: function (feature, styleSubClass, isClustered) {
+        createPolygonStyle: function (feature, styleSubClass) {
             var style = this.getDefaultStyle();
 
             if (styleSubClass === "SIMPLE") {
-                style = this.createSimplePolygonStyle(feature, isClustered);
+                style = this.createSimplePolygonStyle();
+            }
+            if (styleSubClass === "CUSTOM") {
+                style = this.createCustomPolygonStyle(feature);
             }
 
             return style;
@@ -176,7 +178,7 @@ define(function (require) {
         createSimplePolygonStyle: function () {
             var strokestyle = new ol.style.Stroke({
                     color: this.returnColor(this.getPolygonStrokeColor(), "rgb"),
-                    width: this.returnColor(this.getPolygonStrokeWidth(), "rgb")
+                    width: parseFloat(this.getPolygonStrokeWidth())
                 }),
                 fill = new ol.style.Fill({
                     color: this.returnColor(this.getPolygonFillColor(), "rgb")
@@ -188,6 +190,45 @@ define(function (require) {
                 fill: fill
             });
 
+            return style;
+        },
+        createCustomPolygonStyle: function (feature) {
+            var styleField = this.get("styleField"),
+                featureValue,
+                styleFieldValueObj,
+                polygonFillColor,
+                polygonStrokeColor,
+                polygonStrokeWidth,
+                strokestyle,
+                fillstyle,
+                style = this.getDefaultStyle();
+
+            featureValue = feature.get(styleField);
+            if (!_.isUndefined(featureValue)) {
+                styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
+                return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+                })[0];
+            }
+
+            if (_.isUndefined(styleFieldValueObj)) {
+                return style;
+            }
+            polygonFillColor = styleFieldValueObj.polygonFillColor ? styleFieldValueObj.polygonFillColor : this.get("polygonFillColor");
+            polygonStrokeColor = styleFieldValueObj.polygonStrokeColor ? styleFieldValueObj.polygonStrokeColor : this.get("polygonStrokeColor");
+            polygonStrokeWidth = styleFieldValueObj.polygonStrokeWidth ? styleFieldValueObj.polygonStrokeWidth : this.get("polygonStrokeWidth");
+
+            strokestyle = new ol.style.Stroke({
+                color: this.returnColor(polygonStrokeColor, "rgb"),
+                width: parseFloat(polygonStrokeWidth)
+            }),
+            fillstyle = new ol.style.Fill({
+                color: this.returnColor(polygonFillColor, "rgb")
+            });
+
+            style = new ol.style.Style({
+                stroke: strokestyle,
+                fill: fillstyle
+            });
             return style;
         },
 
@@ -256,10 +297,10 @@ define(function (require) {
         * all clustered features get same circle.
         */
         createCircleClusterStyle: function () {
-            var radius = parseInt(this.getClusterCircleRadius(), 10),
+            var radius = parseFloat(this.getClusterCircleRadius(), 10),
                 fillcolor = this.returnColor(this.getClusterCircleFillColor(), "rgb"),
                 strokecolor = this.returnColor(this.getClusterCircleStrokeColor(), "rgb"),
-                strokewidth = parseInt(this.getClusterCircleStrokeWidth(), 10),
+                strokewidth = parseFloat(this.getClusterCircleStrokeWidth(), 10),
                 clusterStyle = new ol.style.Circle({
                     radius: radius,
                     fill: new ol.style.Fill({
@@ -389,10 +430,10 @@ define(function (require) {
                 circleStyle = this.createClusterStyle();
             }
             else {
-                radius = parseInt(this.getCircleRadius(), 10),
+                radius = parseFloat(this.getCircleRadius(), 10),
                 fillcolor = this.returnColor(this.getCircleFillColor(), "rgb"),
                 strokecolor = this.returnColor(this.getCircleStrokeColor(), "rgb"),
-                strokewidth = parseInt(this.getCircleStrokeWidth(), 10),
+                strokewidth = parseFloat(this.getCircleStrokeWidth(), 10),
                 circleStyle = new ol.style.Circle({
                     radius: radius,
                     fill: new ol.style.Fill({
@@ -431,12 +472,12 @@ define(function (require) {
                 textObj.text = feature.get(labelField);
                 textObj.textAlign = this.getTextAlign();
                 textObj.font = this.getTextFont().toString();
-                textObj.scale = parseInt(this.getTextScale(), 10);
-                textObj.offsetX = parseInt(this.getTextOffsetX(), 10);
-                textObj.offsetY = parseInt(this.getTextOffsetY(), 10);
+                textObj.scale = parseFloat(this.getTextScale(), 10);
+                textObj.offsetX = parseFloat(this.getTextOffsetX(), 10);
+                textObj.offsetY = parseFloat(this.getTextOffsetY(), 10);
                 textObj.fillcolor = this.returnColor(this.getTextFillColor(), "rgb");
                 textObj.strokecolor = this.returnColor(this.getTextStrokeColor(), "rgb");
-                textObj.strokewidth = parseInt(this.getTextStrokeWidth(), 10);
+                textObj.strokewidth = parseFloat(this.getTextStrokeWidth(), 10);
             }
 
             textStyle = new ol.style.Text({
@@ -470,12 +511,12 @@ define(function (require) {
                 clusterTextObj.text = feature.get("features")[0].get(labelField);
                 clusterTextObj.textAlign = this.getTextAlign();
                 clusterTextObj.font = this.getTextFont().toString();
-                clusterTextObj.scale = parseInt(this.getTextScale(), 10);
-                clusterTextObj.offsetX = parseInt(this.getTextOffsetX(), 10);
-                clusterTextObj.offsetY = parseInt(this.getTextOffsetY(), 10);
+                clusterTextObj.scale = parseFloat(this.getTextScale(), 10);
+                clusterTextObj.offsetX = parseFloat(this.getTextOffsetX(), 10);
+                clusterTextObj.offsetY = parseFloat(this.getTextOffsetY(), 10);
                 clusterTextObj.fillcolor = this.returnColor(this.getTextFillColor(), "rgb");
                 clusterTextObj.strokecolor = this.returnColor(this.getTextStrokeColor(), "rgb");
-                clusterTextObj.strokewidth = parseInt(this.getTextStrokeWidth(), 10);
+                clusterTextObj.strokewidth = parseFloat(this.getTextStrokeWidth(), 10);
             }
             else {
                 if (this.getClusterText() === "COUNTER") {
@@ -489,12 +530,12 @@ define(function (require) {
                 }
                 clusterTextObj.textAlign = this.getClusterTextAlign();
                 clusterTextObj.font = this.getClusterTextFont().toString();
-                clusterTextObj.scale = parseInt(this.getClusterTextScale(), 10);
-                clusterTextObj.offsetX = parseInt(this.getClusterTextOffsetX(), 10);
-                clusterTextObj.offsetY = parseInt(this.getClusterTextOffsetY(), 10);
+                clusterTextObj.scale = parseFloat(this.getClusterTextScale(), 10);
+                clusterTextObj.offsetX = parseFloat(this.getClusterTextOffsetX(), 10);
+                clusterTextObj.offsetY = parseFloat(this.getClusterTextOffsetY(), 10);
                 clusterTextObj.fillcolor = this.returnColor(this.getClusterTextFillColor(), "rgb");
                 clusterTextObj.strokecolor = this.returnColor(this.getClusterTextStrokeColor(), "rgb");
-                clusterTextObj.strokewidth = parseInt(this.getClusterTextStrokeWidth(), 10);
+                clusterTextObj.strokewidth = parseFloat(this.getClusterTextStrokeWidth(), 10);
             }
             return clusterTextObj;
         },
@@ -552,7 +593,7 @@ define(function (require) {
 
             var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
-            return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
+            return result ? [parseFloat(result[1], 16), parseFloat(result[2], 16), parseFloat(result[3], 16)] : null;
         },
 
         // getter for imagePath

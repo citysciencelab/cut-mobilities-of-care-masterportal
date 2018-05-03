@@ -17,7 +17,7 @@ define(function (require) {
          */
         initialize: function (config) {
             if (config.minChars) {
-                this.set("minChars", config.minChars);
+                this.setMinChars(config.minChars);
             }
             this.listenTo(Radio.channel("Searchbar"), {
                 "search": this.prepSearch
@@ -27,60 +27,54 @@ define(function (require) {
         *
         */
         prepSearch: function (searchString) {
-            if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
-                this.set("inUse", true);
-                var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"), // Erst join dann als regulärer Ausdruck
-                    wfsModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
-                    elasticModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "Elastic"}),
-                    filteredModels = _.filter(_.union(wfsModels, elasticModels), function (model) {
-                        return model.has("searchField") === true && model.get("searchField") != "";
-                    }),
-                    features = this.getFeaturesForSearch(filteredModels);
+            var searchString,
+                wfsModels,
+                filteredModels;
 
-                this.searchInFeatures(searchStringRegExp, features);
+            if (this.getInUse() === false && searchString.length >= this.getMinChars()) {
+                this.setInUse(true);
+                searchString = searchString.replace(" ", "");
+                wfsModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+                filteredModels = _.filter(_.union(wfsModels), function (model) {
+                    return model.has("searchField") === true && model.get("searchField") !== "";
+                });
+
+                this.findMatchingFeatures(filteredModels, searchString);
                 Radio.trigger("Searchbar", "createRecommendedList");
-                this.set("inUse", false);
+                this.setInUse(false);
             }
         },
-        /**
-        *
-        */
-        searchInFeatures: function (searchStringRegExp, features) {
-            _.each(features, function (feature) {
-                var featureName = feature.name.replace(/ /g, "");
 
-                // Prüft ob der Suchstring ein Teilstring vom Feature ist
-                if (featureName.search(searchStringRegExp) !== -1) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", feature);
-                }
-            }, this);
-        },
-
-        /**
-         * gets an array of feature objects for the search
-         * @param  {Backbone.Models[]} models
-         * @return {object[]} featureArray
-         */
-        getFeaturesForSearch: function (models) {
+        findMatchingFeatures: function (models, searchString) {
             var featureArray = [];
 
             _.each(models, function (model) {
-                var features = model.get("layer").getSource().getFeatures();
+                var features = model.get("layer").getSource().getFeatures(),
+                    filteredFeatures;
 
-                _.each(features, function (feature) {
-                    if (_.isArray(model.get("searchField"))) {
-                        _.each(model.get("searchField"), function (field) {
-                            featureArray.push(this.getFeatureObject(field, feature, model));
-                        }, this)
-                    }
-                    else {
-                        featureArray.push(this.getFeatureObject(model.get("searchField"), feature, model));
-                    }
-                }, this);
+                if (_.isArray(model.get("searchField"))) {
+                    _.each(model.get("searchField"), function (field) {
+                        filteredFeatures = _.filter(features, function (feature) {
+
+                            return feature.get(field).indexOf(searchString) !== -1;
+                        });
+                        // createFeatureObject for each feature
+                        featureArray.push(this.getFeatureObject(field, filteredFeatures, model));
+                    }, this);
+                }
+                else {
+                    filteredFeatures = _.filter(features, function (feature) {
+                        return feature.get(model.get("searchField")).indexOf(searchString) !== -1;
+                    });
+                    // createFeatureObject for each feature
+                    featureArray.push(this.getFeatureObject(model.get("searchField"), filteredFeatures, model));
+                }
             }, this);
 
-            return featureArray;
+            Radio.trigger("Searchbar", "pushHits", "hitList", featureArray);
         },
+
+
 
         /**
          * gets a new feature object
@@ -89,15 +83,20 @@ define(function (require) {
          * @param  {Backbone.Model} model
          * @return {object}
          */
-        getFeatureObject: function (searchField, feature, model) {
-            return {
-                name: feature.get(searchField),
-                type: model.get("name"),
-                coordinate: this.getCentroidPoint(feature.getGeometry()),
-                imageSrc: this.getImageSource(feature, model),
-                id: _.uniqueId(model.get("name")),
-                additionalInfo: this.getAdditionalInfo(model, feature)
-            }
+        getFeatureObject: function (searchField, filteredFeatures, model) {
+            var featureArray = [];
+
+            _.each(filteredFeatures, function (feature) {
+                featureArray.push({
+                    name: feature.get(searchField),
+                    type: model.get("name"),
+                    coordinate: this.getCentroidPoint(feature.getGeometry()),
+                    imageSrc: this.getImageSource(feature, model),
+                    id: _.uniqueId(model.get("name")),
+                    additionalInfo: this.getAdditionalInfo(model, feature)
+                });
+            }, this);
+            return featureArray;
         },
 
         /**
@@ -107,7 +106,7 @@ define(function (require) {
          */
         getCentroidPoint: function (geometry) {
             if (geometry.getType() === "MultiPolygon") {
-                return _.flatten(geometry.getInteriorPoints().getCoordinates());
+                return geometry.getExtent();
             }
             else {
                 return geometry.getCoordinates();
@@ -121,29 +120,56 @@ define(function (require) {
          * @return {string}
          */
         getImageSource: function (feature, model) {
-            var layerStyle = model.get("layer").getStyle(feature),
+            var layerStyle,
+                layerTyp,
+                style;
+
+            if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
+                layerStyle = model.get("layer").getStyle(feature);
                 layerTyp = model.getTyp();
 
-            // layerStyle returns style
-            if (typeof layerStyle === "object") {
-                return layerStyle[0].getImage().getSrc();
-            }
-            // layerStyle returns stylefunction
-            else {
-                var style = layerStyle(feature);
+                // layerStyle returns style
+                if (typeof layerStyle === "object") {
+                    return layerStyle[0].getImage().getSrc();
+                }
+                // layerStyle returns stylefunction
+                else {
+                    style = layerStyle(feature);
 
-                return (layerTyp === "WFS") ? style.getImage().getSrc() : undefined;
+                    return (layerTyp === "WFS") ? style.getImage().getSrc() : undefined;
+                }
+            }
+            else {
+                return undefined;
             }
         },
 
         getAdditionalInfo: function (model, feature) {
-            var additionalInfo = undefined;
+            var additionalInfo;
 
             if (!_.isUndefined(model.get("additionalInfoField"))) {
                 additionalInfo = feature.getProperties()[model.get("additionalInfoField")];
             }
 
-            return additionalInfo
+            return additionalInfo;
+        },
+
+        // getter for minChars
+        getMinChars: function () {
+            return this.getMinChars();
+        },
+        // setter for minChars
+        setMinChars: function (value) {
+            this.set("minChars", value);
+        },
+
+        // getter for inUse
+        getInUse: function () {
+            return this.getInUse();
+        },
+        // setter for inUse
+        setInUse: function (value) {
+            this.set("inUse", value);
         }
     });
 

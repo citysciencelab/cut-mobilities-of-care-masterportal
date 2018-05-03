@@ -24,8 +24,13 @@ define([
             this.$el.append("<div class='control-view-bottom-left'></div>");
         },
 
-        addRowTR: function (id) {
-            this.$el.find(".control-view-top-right").append("<div class='row controls-row-right' id='" + id + "'></div>");
+        addRowTR: function (id, showMobile) {
+            if (showMobile === true) {
+                this.$el.find(".control-view-top-right").append("<div class='row controls-row-right' id='" + id + "'></div>");
+            }
+            else {
+                this.$el.find(".control-view-top-right").append("<div class='row controls-row-right hidden-xs' id='" + id + "'></div>");
+            }
             return this.$el.find(".control-view-top-right").children().last();
         },
 
