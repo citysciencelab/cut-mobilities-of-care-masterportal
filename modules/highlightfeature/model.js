@@ -5,13 +5,14 @@ define(function (require) {
     HighlightFeature = Backbone.Model.extend({
         initialize: function () {
             var featureToAdd = Radio.request("ParametricURL", "getHighlightFeature"),
-                channel = Radio.channel("Highlightfeature");
+                channel = Radio.channel("Highlightfeature"),
+                temp;
 
             channel.on({
                 "highlightfeature": this.highlightFeature
             }, this);
             if (featureToAdd) {
-                var temp = featureToAdd.split(",");
+                temp = featureToAdd.split(",");
 
                 this.getAndAddFeature(temp[0], temp[1]);
             }
@@ -22,10 +23,11 @@ define(function (require) {
             this.getAndAddFeature(temp[0], temp[1]);
         },
         getAndAddFeature: function (layerId, featureId) {
-            var layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+            var layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+                features;
 
             if (layer && layer.getLayerSource()) {
-                var features = layer.getLayerSource().getFeatures();
+                features = layer.getLayerSource().getFeatures();
 
                 if (features.length > 1) {
                     this.addFeature(layer.getLayerSource().getFeatureById(featureId));
@@ -42,10 +44,11 @@ define(function (require) {
             }
         },
         addFeature: function (feature) {
-            if (feature) {
-                var highlightLayer = Radio.request("Map", "createLayerIfNotExists", "highlightLayer"),
-                    source;
+            var highlightLayer,
+                source;
 
+            if (feature) {
+                highlightLayer = Radio.request("Map", "createLayerIfNotExists", "highlightLayer");
                 source = highlightLayer.getSource();
                 source.addFeatures([feature]);
                 feature.setStyle(this.createStyle());

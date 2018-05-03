@@ -132,11 +132,13 @@ define(function (require) {
 
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
+            var style;
+
             if (_.isUndefined(this.getLegendURL()) === false && this.getLegendURL().length !== 0) {
-                var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+                style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
                 if (_.isUndefined(style) === false) {
-                    this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
+                    this.set("legendURL", [style.getImagePath() + style.getImageName()]);
                 }
             }
         },

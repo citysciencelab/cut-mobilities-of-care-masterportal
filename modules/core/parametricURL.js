@@ -109,20 +109,20 @@ define([
             }
 
             _.each(layerIdList, function (val, index) {
-                 var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                 layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
-                 treeType = Radio.request("Parser", "getTreeType");
+                var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
+                    layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
+                    treeType = Radio.request("Parser", "getTreeType"),
+                    layerToPush;
 
-                 layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
+                layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
 
-                 if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
-                     var layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
-
-                     Radio.trigger("Parser", "addItemAtTop", layerToPush);
-                 }
-                 else if (_.isUndefined(layerConfigured)) {
-                     Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning" });
-                 }
+                if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
+                    layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
+                    Radio.trigger("Parser", "addItemAtTop", layerToPush);
+                }
+                else if (_.isUndefined(layerConfigured)) {
+                    Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning" });
+                }
             }, this);
 
             this.setLayerParams(layerParams);
@@ -214,13 +214,14 @@ define([
         },
         parseQuery: function (result) {
             var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
-                    initString = "";
+                initString = "",
+                split;
 
             // Bei " " oder "-" im Suchstring
             if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
 
                 // nach " " splitten
-                var split = value.split(" ");
+                split = value.split(" ");
 
                 _.each (split, function (splitpart) {
                     initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
@@ -253,7 +254,8 @@ define([
         parseURL: function (result) {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
-                result = {};
+                result = {},
+                value;
 
             if (query.length > 0) {
                 query.split("&").forEach(function (keyValue) {
@@ -346,15 +348,15 @@ define([
             }
 
             if (_.has(result, "FILTER")) {
-                var value = _.values(_.pick(result, "FILTER"))[0];
+                value = _.values(_.pick(result, "FILTER"))[0];
 
                 this.set("filter", JSON.parse(value));
             }
 
             if (_.has(result, "HIGHLIGHTFEATURE")) {
-                var values = _.values(_.pick(result, "HIGHLIGHTFEATURE"))[0];
+                value = _.values(_.pick(result, "HIGHLIGHTFEATURE"))[0];
 
-                this.set("highlightfeature", values);
+                this.set("highlightfeature", value);
             }
         },
 
@@ -368,11 +370,12 @@ define([
             var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
                 urlQueryString = document.location.search,
                 newParam = key + "=" + value,
-                params = "?" + newParam;
+                params = "?" + newParam,
+                keyRegex;
 
             // If the "search" string exists, then build params from it
             if (urlQueryString) {
-                var keyRegex = new RegExp("([\?&])" + key + "[^&]*");
+                keyRegex = new RegExp("([\?&])" + key + "[^&]*");
 
                 // If param exists already, update it
                 if (urlQueryString.match(keyRegex) !== null) {

@@ -10,7 +10,6 @@ define([
             legendParams: [],
             wmsLayerList: [],
             wfsLayerList: [],
-            elasticLayerList: [],
             geojsonLayerList: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
@@ -34,7 +33,6 @@ define([
             this.listenTo(this, {
                 "change:wmsLayerList": this.setLegendParamsFromWMS,
                 "change:wfsLayerList": this.setLegendParamsFromVector,
-                "change:elasticLayerList": this.setLegendParamsFromVector,
                 "change:geojsonLayerList": this.setLegendParamsFromVector,
                 "change:groupLayerList": this.setLegendParamsFromGROUP,
                 "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
@@ -120,9 +118,6 @@ define([
             if (_.has(groupedLayers, "WFS")) {
                 this.set("wfsLayerList", groupedLayers.WFS);
             }
-            if (_.has(groupedLayers, "Elastic")) {
-                this.set("elasticLayerList", groupedLayers.Elastic);
-            }
             if (_.has(groupedLayers, "GeoJSON")) {
                 this.set("geojsonLayerList", groupedLayers.GeoJSON);
             }
@@ -135,7 +130,6 @@ define([
         unsetLegendParams: function () {
             this.set("wfsLayerList", "");
             this.set("wmsLayerList", "");
-            this.set("elasticLayerList", "");
             this.set("geojsonLayerList", "");
             this.set("groupLayerList", "");
             this.set("tempArray", []);
@@ -252,7 +246,7 @@ define([
                         layername: layer.get("name"),
                         legendname: name,
                         img: image,
-                        typ: "Elastic",
+                        typ: layer.get("typ"),
                         isVisibleInMap: layer.get("isVisibleInMap")
                     });
                 }

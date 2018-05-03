@@ -35,17 +35,6 @@ define(function (require) {
             if (triggerParams.event === "" || triggerParams.channel === "") {
                 return;
             }
-            // ITGBM
-            else if (triggerParams.data === "allFeatures") {
-                var model = Radio.request("ModelList", "getModelByAttributes", {id: "10320"}),
-                    featureList = [],
-                    features = model.getLayerSource().getFeatures();
-
-                _.each(features, function (feature) {
-                    featureList.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
-                });
-                Radio.trigger("RemoteInterface", "postMessage", {"featuresToAnalysis": JSON.stringify(featureList)});
-            }
             else {
                 Radio.trigger(triggerParams.channel, triggerParams.event, data);
             }
@@ -61,7 +50,7 @@ define(function (require) {
         getViewElementClasses: function () {
             var classes = "dropdown";
 
-             if (this.get("parentId") === "root") {
+            if (this.get("parentId") === "root") {
                 classes += " menu-style hidden-sm";
             }
             else {
