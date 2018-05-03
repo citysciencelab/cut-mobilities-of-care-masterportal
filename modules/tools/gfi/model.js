@@ -122,7 +122,7 @@ define(function (require) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
-            else if (deaktivateGFI == true) {
+            else if (deaktivateGFI === true) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
             else if (_.isUndefined(deaktivateGFI)) {
@@ -142,15 +142,15 @@ define(function (require) {
                 this.getCurrentView().removeView();
             }
 
-            if (this.getUiStyle() === "TABLE") {
-                CurrentView = require("modules/tools/gfi/table/view");
-            }
-            else if (this.getIsMobile()) {
+            if (this.getIsMobile()) {
                 CurrentView = require("modules/tools/gfi/mobile/view");
             }
             else {
                 if (this.getDesktopViewType() === "attached") {
                     CurrentView = require("modules/tools/gfi/desktop/attached/view");
+                }
+                else if (this.getUiStyle() === "TABLE") {
+                    CurrentView = require("modules/tools/gfi/table/view");
                 }
                 else {
                     CurrentView = require("modules/tools/gfi/desktop/detached/view");
