@@ -1264,6 +1264,12 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |searchField|nein|String || Attray [String]||Attributname[n], über den die Suche die Featuers des Layers finden kann.|
 |styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md).|
 
+**Folgende Layerkonfigurationen gelten nur für GeoJSON:**
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|autoRefresh|nein|Number|0|Automatischer Reload des Layers zum Aktualisieren der Inhalte.|
+
 
 #### filterOptions ####
 |Name|Verpflichtend|Typ|Default|Beschreibung|
