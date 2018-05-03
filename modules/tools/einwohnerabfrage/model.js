@@ -14,14 +14,27 @@ define(function (require) {
             circleOverlay: new ol.Overlay({
                 offset: [15, 0],
                 positioning: "center-left"
-            })
+            }),
+            cswId: "1"
+        },
+
+        /**
+         * Gibt die Url aus der rest-services.json passend zu "cswId" zurück
+         * @return {String} - CSW GetRecordById Request-String
+         */
+        url: function () {
+            var cswService = Radio.request("RestReader", "getServiceById", this.get("cswId"));
+
+            if (_.isUndefined(cswService) === false) {
+                return Radio.request("Util", "getProxyURL", cswService.get("url"));
+            }
         },
 
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-
+            this.fetch();
             this.createDomOverlay(this.get("circleOverlay"));
         },
 
