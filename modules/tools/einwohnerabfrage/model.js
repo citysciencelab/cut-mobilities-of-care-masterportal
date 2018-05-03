@@ -1,8 +1,8 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         ol = require("openlayers"),
+        Moment = require("moment"),
         Einwohnerabfrage;
 
     Einwohnerabfrage = Backbone.Model.extend({
@@ -15,26 +15,25 @@ define(function (require) {
                 offset: [15, 0],
                 positioning: "center-left"
             }),
-            cswId: "1"
-        },
-
-        /**
-         * Gibt die Url aus der rest-services.json passend zu "cswId" zurück
-         * @return {String} - CSW GetRecordById Request-String
-         */
-        url: function () {
-            var cswService = Radio.request("RestReader", "getServiceById", this.get("cswId"));
-
-            if (_.isUndefined(cswService) === false) {
-                return Radio.request("Util", "getProxyURL", cswService.get("url"));
-            }
+            // hmdk csw GetRecordById summary request url
+            // cswUrl: Radio.request("RestReader", "getServiceById", "1").get("url"),
+            // mrh meta data id
+            mrhId: "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+            // fhh meta data id
+            fhhId: "D3DDBBA3-7329-475C-BB07-14D539ED6B1E"
+            // hmdk/metaver link
+            // metaDataLink: Radio.request("RestReader", "getServiceById", "2").get("url")
         },
 
         initialize: function () {
+            var cswUrl = Radio.request("RestReader", "getServiceById", "1").get("url");
+
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-            this.fetch();
+
+            this.sendRequest(cswUrl, {id: this.get("fhhId")}, this.setFhhDate);
+            this.sendRequest(cswUrl, {id: this.get("mrhId")}, this.setMrhDate);
             this.createDomOverlay(this.get("circleOverlay"));
         },
 
@@ -49,6 +48,65 @@ define(function (require) {
                 this.get("drawInteraction").setActive(false);
                 Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
             }
+        },
+
+        /**
+         * runs an async http ajax get request
+         * @param {string} url - the url for the request
+         * @param {object} data - data to be sent
+         * @param {function} callback - success function
+         */
+        sendRequest: function (url, data, callback) {
+            $.ajax({
+                url: Radio.request("Util", "getProxyURL", url),
+                data: data,
+                context: this,
+                success: callback,
+                error: function () {
+                    Radio.trigger("Alert", "alert", "CSW Request Fehlgeschlagen");
+                }
+            });
+        },
+
+        /**
+         * sets the attribute fhhDate
+         * @param {xml} response
+         */
+        setFhhDate: function (response) {
+            this.set("fhhDate", this.parseDate(response));
+        },
+
+        /**
+         * ets the attribute mrhDate
+         * @param {xml} response
+         */
+        setMrhDate: function (response) {
+            this.set("mrhDate", this.parseDate(response));
+        },
+
+        /**
+         * parse and returns the date of the GetRecordById response
+         * @param {xml} response
+         * @return {string} date
+         */
+        parseDate: function (response) {
+            var citation = $("gmd\\:citation,citation", response),
+                dates = $("gmd\\:CI_Date,CI_Date", citation),
+                datetype, dateTime;
+
+            dates.each(function (index, element) {
+                datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
+                if ($(datetype).attr("codeListValue") === "revision") {
+                    dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                }
+                else if ($(datetype).attr("codeListValue") === "publication") {
+                    dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                }
+                else {
+                    dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                }
+            });
+            return Moment(dateTime).format("DD.MM.YYYY");
         },
 
         /**
