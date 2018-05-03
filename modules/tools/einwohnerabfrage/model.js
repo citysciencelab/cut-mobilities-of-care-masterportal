@@ -40,8 +40,7 @@ define(function (require) {
             if (_.contains(this.get("requests"), requestId)) {
                 this.removeId(this.get("requests"), requestId);
                 this.setRequesting(false);
-                if (response["wps:ErrorOccured"] === "yes") {
-                    console.log(123);
+                if (response["wps:erroroccured"] === "yes") {
                     console.log(response["wps:ergebnis"]);
 
                     Radio.trigger("Alert", "alert", response["wps:ergebnis"]);
@@ -49,18 +48,12 @@ define(function (require) {
                 else {
                     console.log(response);
                     this.setDataReceived(true);
-
-                    this.setData(response);
-                    this.setData(
-                    {
-                        "json_featuretype": "einwohner",
-                        "einwohner_gesamt": 1043,
-                        "einwohner_fhh": 1043,
-                        "einwohner_mrh": "",
-                        "quelle_mrh": "",
-                        "quelle_fhh": "nein",
-                        "suchflaeche": 2284267.15799019
-                    });
+                    try {
+                        response = JSON.parse(response["wps:ergebnis"]);
+                        this.setData(response);
+                    } catch (error) {
+                        Radio.trigger("Alert", "alert", "Konnte WPS Antwort nicht verarbeiten. Antwort: " + JSON.stringify(response));
+                    }
                 }
             }
             this.trigger("render");
@@ -142,8 +135,8 @@ define(function (require) {
         },
         prepareData: function (geoJson) {
             var prepared = {};
-            prepared["type"] = geoJson.getType();
-            prepared["coordinates"] = geoJson.geometry
+            prepared.type = geoJson.getType();
+            prepared.coordinates = geoJson.geometry;
         },
         /**
          * calculates the circle radius and places the circle overlay on geometry change
