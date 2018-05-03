@@ -10,4 +10,32 @@
         </div>
     </div>
 </form>
-<hr>
+
+<% if (dataReceived) { %>
+<div class="heading additional-text">Folgende ungefähre Werte wurden berechnet:</div>
+<table class="table">
+    <% if (data.einwohner_gesamt > 0) { %>
+        <tr><th>Einwohnerzahl gesamt:</th><th><%=data.einwohner_gesamt%></th></tr>
+    <% } %>
+    <% if (data.quelle_fhh === true) { %>
+        <tr><th>Einwohnerzahl in Hamburg:</th><th><%=data.einwohner_fhh%></th></tr>
+    <% } %>
+    <% if (data.quelle_mrh === true) { %>
+        <tr><th>Einwohnerzahl außerhalb Hamburgs:</th><th><%=data.einwohner_mrh%></th></tr>
+    <% } %>
+        <tr><th>Größe der abgefragten Fläche:</th><th><%=Math.floor(data.suchflaeche)%> m²</th></tr>
+</table>
+<% if (data.einwohner_fhh > 0) { %>
+    <div><a> Quelle FHH</a></div>
+<% } %>
+<% if (data.einwohner_mrh > 0) { %>
+    <div><a> Quelle MRH</a></div>
+<% } %>
+<div class="hinweis additional-text">Hinweis: Aus Datenschutzgründen wird bei
+Einwohnerzahlen kleiner 3 die Zahl drei oder null verwendet.
+</div>
+<% } else { %>
+    <% if (requesting) { %>
+        <div id='einwohner-loader'><img src='../../img/ajax-loader.gif'></div>
+    <% } %>
+<%}%>

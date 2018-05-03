@@ -16,7 +16,8 @@ define(function (require) {
         initialize: function () {
             this.listenTo(this.model, {
                 // ändert sich der Fensterstatus wird neu gezeichnet
-                "change:isCollapsed change:isCurrentWin": this.render
+                "change:isCollapsed change:isCurrentWin": this.render,
+                "render": this.render
             });
         },
         render: function () {
@@ -28,6 +29,7 @@ define(function (require) {
                 this.delegateEvents();
             }
             else {
+                this.model.reset();
                 this.undelegateEvents();
             }
         },

@@ -4,3 +4,14 @@
     color: white;
     padding: 4px 8px;
 }
+
+.form-horizontal {
+    margin-bottom: 20px;
+}
+.additional-text {
+    margin: 10px 0;
+}
+#einwohner-loader img {
+    position: relative;
+    left: 40%;
+}

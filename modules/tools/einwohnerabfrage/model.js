@@ -14,17 +14,63 @@ define(function (require) {
             circleOverlay: new ol.Overlay({
                 offset: [15, 0],
                 positioning: "center-left"
-            })
+            }),
+            requests: [],
+            data: {},
+            receivedData: false,
+            requesting: false
         },
 
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
+            this.listenTo(Radio.channel("WPS"), {
+                "response": this.handleResponse
+            });
 
             this.createDomOverlay(this.get("circleOverlay"));
         },
+        reset: function () {
+            this.setData({});
+            this.setDataReceived(false);
+            this.setRequesting(false);
+        },
+        handleResponse: function (requestId, response) {
+            if (_.contains(this.get("requests"), requestId)) {
+                this.removeId(this.get("requests"), requestId);
+                this.setRequesting(false);
+                if (response["wps:ErrorOccured"] === "yes") {
+                    console.log(123);
+                    console.log(response["wps:ergebnis"]);
 
+                    Radio.trigger("Alert", "alert", response["wps:ergebnis"]);
+                }
+                else {
+                    console.log(response);
+                    this.setDataReceived(true);
+
+                    this.setData(response);
+                    this.setData(
+                    {
+                        "json_featuretype": "einwohner",
+                        "einwohner_gesamt": 1043,
+                        "einwohner_fhh": 1043,
+                        "einwohner_mrh": "",
+                        "quelle_mrh": "",
+                        "quelle_fhh": "nein",
+                        "suchflaeche": 2284267.15799019
+                    });
+                }
+            }
+            this.trigger("render");
+        },
+        removeId: function (requests, requestId) {
+            var index = requests.indexOf(requestId);
+            if (index > -1) {
+                requests.splice(index, 1);
+            }
+        },
         setStatus: function (args) {
             if (args[2].getId() === "einwohnerabfrage" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
@@ -58,7 +104,6 @@ define(function (require) {
             this.set("drawInteraction", drawInteraction);
             Radio.trigger("Map", "addInteraction", drawInteraction);
         },
-
         /**
          * sets listeners for draw interaction events
          * @param {ol.interaction.Draw} interaction
@@ -73,7 +118,8 @@ define(function (require) {
             }, this);
 
             interaction.on("drawend", function (evt) {
-                this.featureToGeoJson(evt.feature);
+                var geoJson = this.featureToGeoJson(evt.feature);
+                this.makeRequest(geoJson);
             }, this);
 
             interaction.on("change:active", function (evt) {
@@ -83,7 +129,22 @@ define(function (require) {
                 }
             });
         },
+        makeRequest: function (geoJson) {
+            this.setDataReceived(false);
+            this.setRequesting(true);
+            this.trigger("render");
+            var requestId = _.uniqueId("wps");
 
+            this.get("requests").push(requestId);
+            Radio.trigger("WPS", "request", "1001", requestId, "einwohner_ermitteln.fmw", {
+                "such_flaeche": geoJson
+            });
+        },
+        prepareData: function (geoJson) {
+            var prepared = {};
+            prepared["type"] = geoJson.getType();
+            prepared["coordinates"] = geoJson.geometry
+        },
         /**
          * calculates the circle radius and places the circle overlay on geometry change
          * @param {ol.Geometry} geometry - circle geometry
@@ -105,14 +166,12 @@ define(function (require) {
          */
         featureToGeoJson: function (feature) {
             var reader = new ol.format.GeoJSON(),
-                geometry = feature.getGeometry(),
-                geoJsonFeature;
+                geometry = feature.getGeometry();
 
             if (geometry.getType() === "Circle") {
                 feature.setGeometry(ol.geom.Polygon.fromCircle(geometry));
             }
-            geoJsonFeature = reader.writeFeatureObject(feature);
-            // trigger geoJsonFeature
+            return reader.writeGeometryObject(feature.getGeometry());
         },
 
         /**
@@ -151,6 +210,15 @@ define(function (require) {
 
             element.setAttribute("id", "circle-overlay");
             circleOverlay.setElement(element);
+        },
+        setData: function (value) {
+            this.set("data", value);
+        },
+        setDataReceived: function (value) {
+            this.set("dataReceived", value);
+        },
+        setRequesting: function (value) {
+            this.set("requesting", value);
         }
     });
 
