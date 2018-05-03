@@ -96,8 +96,8 @@ define(function (require) {
             var that = this,
                 children = $(xml).children();
 
-            if (children && children.length === 0) {
-                obj[$(xml)[0].nodeName] = xml.innerHTML;
+            if (_.isUndefined(xml) === false && _.isUndefined(children) === false && children.length === 0) {
+                obj[$(xml)[0].nodeName.toLowerCase()] = xml.innerHTML;
             }
             children.each(function (index, val) {
                 that.buildObj(val, obj);
@@ -131,7 +131,12 @@ define(function (require) {
          * @param value Object the Value to be set, JSON.Stringify is used to obtain string
          */
         setXMLElement: function (dataString, closingTagName, value) {
-            return dataString.replace(closingTagName, value + closingTagName);
+            var newDataString = "";
+
+            if (_.isUndefined(dataString) === false && _.isUndefined(closingTagName) === false && _.isUndefined(value) === false) {
+                newDataString = dataString.toString().replace(closingTagName.toString(), value.toString() + closingTagName.toString());
+            }
+            return newDataString;
         },
         /**
          * @desc creates URL using model from rest-service
@@ -139,10 +144,11 @@ define(function (require) {
          * @param restModel Object Model retrieved from rest-services.json
          */
         buildUrl: function (identifier, restModel) {
-            var url = "";
+            var url = "",
+                version = (_.isUndefined(restModel) === false && _.isUndefined(restModel.get("version")) === false) ? restModel.get("version") : "1.1.0";
 
-            if (identifier && restModel && restModel.get("url") && restModel.get("version")) {
-                url = restModel.get("url") + "?service=WPS&version=" + restModel.get("version") + "&request=execute&identifier=" + identifier;
+            if (identifier && restModel && restModel.get("url")) {
+                url = restModel.get("url") + "?service=WPS&version=" + version + "&request=execute&identifier=" + identifier;
             }
             return url;
         }
