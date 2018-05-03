@@ -1,7 +1,8 @@
-#table-nav{
+#table-nav {
     bottom: 30px;
     left: 35%;
     position: absolute;
+    width: 100%;
 }
 
 .table-nav {
@@ -10,6 +11,88 @@
 
 .table-nav-main {
     background-color: #F2F2F2;
+    margin: auto;
     width: 480px;
     height: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    padding: 5px;
+}
+
+#table-layer {
+    position: relative;
+    left: -200px;
+}
+
+.table-layer {
+    background-color: #FFFFFF;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.table-layer > p {
+    font-size: 27.5px;
+}
+
+#table-tools {
+    position: relative;
+    top: -45px;
+    left: 324px;
+}
+
+.table-tools {
+    background-color: #F2F2F2;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.table-tools-menu {
+    background-color: #F2F2F2;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    width: 300px;
+    height: 200px;
+    display: none;
+    position: relative;
+    bottom: 210px;
+    left: -52px;
+}
+
+.table-tools-menu:after, .table-tools-menu:before {
+	top: 100%;
+    left: 72px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+}
+
+.table-tools-menu:after {
+	border-color: rgba(0, 0, 0, 0);
+	border-top-color: #F2F2F2;
+	border-width: 10px;
+	margin-left: -10px;
+}
+.table-tools-menu:before {
+	border-color: rgba(0, 0, 0, 0);
+	border-top-color: #F2F2F2;
+	border-width: 10px;
+	margin-left: -10px;
+}
+
+.table-tools-active {
+    background-color: #808080;
+}
+
+.table-tools-active .icon-tools:before {
+    color: #F2F2F2;
+}
+
+
+.table-tools > p {
+    font-size: 26px;
 }

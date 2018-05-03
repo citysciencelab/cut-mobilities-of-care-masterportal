@@ -48,6 +48,7 @@
 @import "../modules/tools/animation/style.css";
 @import "../modules/tools/gfi/desktop/style.css";
 @import "../modules/tools/gfi/mobile/style.css";
+@import "../modules/tools/gfi/table/style.css";
 @import "../modules/tools/gfi/themes/table/style.css";
 @import "../modules/tools/gfi/themes/reisezeiten/style.css";
 @import "../modules/tools/gfi/themes/sgvonline/style.css";
@@ -55,6 +56,7 @@
 @import "../modules/tools/gfi/themes/verkehrsstaerken_rad/style.css";
 @import "../modules/tools/gfi/themes/schulinfo/style.css";
 @import "../modules/tools/gfi/themes/itgbm/style.css";
+@import "../modules/tools/gfi/themes/dipas/style.css";
 @import "../modules/snippets/slider/style.css";
 @import "../modules/snippets/dropdown/style.css";
 @import "../modules/snippets/checkbox/style.css";

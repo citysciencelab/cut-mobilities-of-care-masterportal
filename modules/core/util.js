@@ -1,8 +1,9 @@
 define([
     "backbone",
     "backbone.radio",
+    "config",
     "require"
-], function (Backbone, Radio, Require) {
+], function (Backbone, Radio, Config, Require) {
 
     var Util = Backbone.Model.extend({
         defaults: {
@@ -11,7 +12,8 @@ define([
             ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"]
         },
         initialize: function () {
-            var channel = Radio.channel("Util");
+            var channel = Radio.channel("Util"),
+                uiStyle = Config.uiStyle ? Config.uiStyle.toUpperCase() : "DEFAULT";
 
             channel.reply({
                 "isViewMobile": this.getIsViewMobile,
@@ -24,13 +26,15 @@ define([
                 "isChrome": this.isChrome,
                 "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny,
-                "getConfig" : this.getConfig,
-                "getIgnoredKeys" : this.getIgnoredKeys
+                "getConfig": this.getConfig,
+                "getUiStyle": this.getUiStyle,
+                "getIgnoredKeys": this.getIgnoredKeys
             }, this);
 
             channel.on({
                 "hideLoader": this.hideLoader,
-                "showLoader": this.showLoader
+                "showLoader": this.showLoader,
+                "setUiStyle": this.setUiStyle
             }, this);
 
             // initial isMobileView setzen
@@ -43,14 +47,9 @@ define([
             });
 
             $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
-            $(window).on("resize", _.bind(this.updateMapHeight, this));
 
+            this.setUiStyle(uiStyle);
             this.parseConfigFromURL();
-        },
-        updateMapHeight: function () {
-            var mapHeight = $(".lgv-container").height() - $("#main-nav").height();
-
-            $("#map").css("height", mapHeight + "px");
         },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);
@@ -204,6 +203,16 @@ define([
         // setter for config
         setConfig: function (value) {
             this.set("config", value);
+        },
+
+        // getter for UiStyle
+        getUiStyle: function () {
+            return this.get("uiStyle");
+        },
+
+        // setter for UiStyle
+        setUiStyle: function (value) {
+            this.set("uiStyle", value);
         },
 
         getIgnoredKeys: function () {
