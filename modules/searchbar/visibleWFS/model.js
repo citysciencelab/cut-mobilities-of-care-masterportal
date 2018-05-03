@@ -27,14 +27,17 @@ define(function (require) {
         *
         */
         prepSearch: function (searchString) {
+            var searchString,
+                wfsModels,
+                filteredModels;
+
             if (this.getInUse() === false && searchString.length >= this.getMinChars()) {
                 this.setInUse(true);
-                var searchString = searchString.replace(" ", ""),
-                    wfsModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
-                    elasticModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "Elastic"}),
-                    filteredModels = _.filter(_.union(wfsModels, elasticModels), function (model) {
-                        return model.has("searchField") === true && model.get("searchField") !== "";
-                    });
+                searchString = searchString.replace(" ", "");
+                wfsModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+                filteredModels = _.filter(_.union(wfsModels), function (model) {
+                    return model.has("searchField") === true && model.get("searchField") !== "";
+                });
 
                 this.findMatchingFeatures(filteredModels, searchString);
                 Radio.trigger("Searchbar", "createRecommendedList");
@@ -46,11 +49,12 @@ define(function (require) {
             var featureArray = [];
 
             _.each(models, function (model) {
-                var features = model.get("layer").getSource().getFeatures();
+                var features = model.get("layer").getSource().getFeatures(),
+                    filteredFeatures;
 
                 if (_.isArray(model.get("searchField"))) {
                     _.each(model.get("searchField"), function (field) {
-                        var filteredFeatures = _.filter(features, function (feature) {
+                        filteredFeatures = _.filter(features, function (feature) {
 
                             return feature.get(field).indexOf(searchString) !== -1;
                         });
@@ -59,7 +63,7 @@ define(function (require) {
                     }, this);
                 }
                 else {
-                    var filteredFeatures = _.filter(features, function (feature) {
+                    filteredFeatures = _.filter(features, function (feature) {
                         return feature.get(model.get("searchField")).indexOf(searchString) !== -1;
                     });
                     // createFeatureObject for each feature
@@ -116,9 +120,13 @@ define(function (require) {
          * @return {string}
          */
         getImageSource: function (feature, model) {
+            var layerStyle,
+                layerTyp,
+                style;
+
             if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
-                var layerStyle = model.get("layer").getStyle(feature),
-                    layerTyp = model.getTyp();
+                layerStyle = model.get("layer").getStyle(feature);
+                layerTyp = model.getTyp();
 
                 // layerStyle returns style
                 if (typeof layerStyle === "object") {
@@ -126,7 +134,7 @@ define(function (require) {
                 }
                 // layerStyle returns stylefunction
                 else {
-                    var style = layerStyle(feature);
+                    style = layerStyle(feature);
 
                     return (layerTyp === "WFS") ? style.getImage().getSrc() : undefined;
                 }
