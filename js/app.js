@@ -1,21 +1,25 @@
-define("app",
-    [
-    "jquery",
-    "config",
-    "modules/core/util",
-    "modules/vectorStyle/list",
-    "modules/core/rawLayerList",
-    "modules/restReader/collection",
-    "modules/core/configLoader/preparser",
-    "modules/core/map",
-    "modules/core/parametricURL",
-    "modules/core/crs",
-    "modules/core/autostarter",
-    "modules/alerting/view"
-    ], function ($, Config, Util, StyleList, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter) {
+define("app", function (require) {
 
+var $ = require("jquery"),
+    Config = require("config"),
+    Alert = require("modules/alerting/view"),
+    RestReaderList = require("modules/restReader/collection"),
+    Autostarter = require("modules/core/autostarter"),
+    Util = require("modules/core/util"),
+    StyleList = require("modules/vectorStyle/list"),
+    RawLayerList = require("modules/core/rawLayerList"),
+    Preparser = require("modules/core/configLoader/preparser"),
+    ParametricURL = require("modules/core/parametricURL"),
+    CRS = require("modules/core/crs"),
+    Map = require("modules/core/map"),
+    WPS = require("modules/core/wps"),
+    AddGeoJSON = require("modules/tools/addGeoJSON/model"),
+    RemoteInterface = require("modules/remoteInterface/model");
 
     // Core laden
+    new Alert();
+    new RemoteInterface();
+    new Alert();
     new Autostarter();
     new Util();
     new StyleList();
@@ -24,20 +28,24 @@ define("app",
     new ParametricURL();
     new CRS();
     new Map();
+    new RestReaderList();
+    new WPS();
+    new AddGeoJSON();
+
     // Graph laden
     require(["modules/tools/graph/model"], function (GraphModel) {
         new GraphModel();
     });
-
     // Module laden
+    require(["modules/wfsTransaction/model"], function (WFSTransactionModel) {
+        new WFSTransactionModel();
+    });
+
     require(["modules/menu/menuLoader"], function (MenuLoader) {
         new MenuLoader();
     });
-    new RestReaderList();
 
-    require(["modules/remoteInterface/model"], function (Remoteinterface) {
-        new Remoteinterface();
-    });
+
 
     require(["modules/zoomToGeometry/model"], function (ZoomToGeometry) {
         new ZoomToGeometry();
@@ -236,9 +244,6 @@ define("app",
                     require(["modules/legend/legendLoader"], function (LegendLoader) {
                         new LegendLoader();
                     });
-                    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
-                        new AddGeoJSON();
-                    });
                     break;
                 }
                 default: {
@@ -246,6 +251,9 @@ define("app",
                 }
             }
         });
+    });
+    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
+        new AddGeoJSON();
     });
     // controls
     var style = Radio.request("ParametricURL", "getStyle");
@@ -349,6 +357,10 @@ define("app",
 
     require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
         new StyleWMSView();
+    });
+
+    require(["modules/highlightFeature/model"], function (HighlightFeature) {
+        new HighlightFeature();
     });
 
     Radio.trigger("Util", "hideLoader");

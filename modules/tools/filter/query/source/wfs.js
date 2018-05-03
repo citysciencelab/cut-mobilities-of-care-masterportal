@@ -1,17 +1,13 @@
 define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/model"),
-        Config = require ("config"),
         ol = require("openlayers"),
         WfsQueryModel;
 
     WfsQueryModel = QueryModel.extend({
         initialize: function () {
             this.superInitialize();
-            var that = this;
-            setTimeout(function(){
-                that.prepareQuery();
-            },1000, that);
+            this.prepareQuery();
 
             if (this.get("searchInMapExtent") === true) {
                 Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive, this);
@@ -51,7 +47,7 @@ define(function (require) {
          * @return {[type]} [description]
          */
         listenToFeaturesLoaded: function () {
-            this.listenTo(Radio.channel("WFSLayer"), {
+            this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
                     if (layerId === this.get("layerId")) {
                         this.processFeatures(features);
@@ -86,6 +82,9 @@ define(function (require) {
                 featureType,
                 version;
 
+            if (this.get("searchInMapExtent") === true) {
+                this.addSearchInMapExtentSnippet();
+            }
             if (!_.isUndefined(layerObject)) {
                 url = Radio.request("Util", "getProxyURL", layerObject.get("url"));
                 featureType = layerObject.get("featureType");
@@ -125,28 +124,7 @@ define(function (require) {
             this.createSnippets(featureAttributesMap);
         },
 
-        collectAttributeValues: function (featureAttributesMap) {
-            return this.getRemainingAttributeValues(featureAttributesMap);
-        },
 
-        /**
-         * [description]
-         * @param  {[type]} typeMap [description]
-         * @return {[type]}         [description]
-         */
-        getRemainingAttributeValues: function (featureAttributesMap, features) {
-            var features = features || this.get("features");
-
-            _.each(featureAttributesMap, function (featureAttribute) {
-                featureAttribute.values = [];
-
-                _.each(features, function (feature) {
-                    featureAttribute.values.push(this.parseValuesFromString(feature, featureAttribute.name));
-                }, this);
-                featureAttribute.values = _.unique(_.flatten(featureAttribute.values));
-            }, this);
-            return featureAttributesMap;
-        },
         /**
          * [getValuesFromFeature description]
          * @param  {ol.feature} feature
@@ -174,19 +152,28 @@ define(function (require) {
                     var attributeValues = attributeValue.split("|");
 
                     _.each(attributeValues, function (value) {
-                        values.push(value);
-                    });
+                        if (this.isValid(value)) {
+                            values.push(value);
+                        }
+                    }, this);
                 }
                 else if (_.isArray(attributeValue)) {
                     _.each(attributeValue, function (value) {
-                        values.push(value)
-                    });
+                        if (this.isValid(value)) {
+                            values.push(value);
+                        }
+                    }, this);
                 }
                 else {
-                    values.push(attributeValue);
+                    if (this.isValid(attributeValue)) {
+                        values.push(attributeValue);
+                    }
                 }
             }
             return _.unique(values);
+        },
+        isValid: function (value) {
+            return value !== null && !_.isUndefined(value);
         },
 
         /**
@@ -246,33 +233,21 @@ define(function (require) {
 
             this.updateSnippets(features, selectedAttributes);
             this.setFeatureIds(featureIds);
-            this.trigger("featureIdsChanged", featureIds);
+            this.trigger("featureIdsChanged", featureIds, this.get("layerId"));
         },
-        /**
-         * triggers map to zoom to given features of given layer
-         * @return {[type]} [description]
-         */
-        zoomToSelectedFeatures: function () {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
-            // iframe
-            if (window != window.top) {
-                var features = [],
-                    feature,
-                    geometry,
-                    featuerProperties;
+        sendFeaturesToRemote: function () {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+                features = [],
+                feature;
 
-                _.each(this.get("featureIds"), function (id) {
-                    feature = model.getLayerSource().getFeatureById(id);
-                    featureProperties = model.getLayerSource().getFeatureById(id).getProperties();
-                    featureProperties.extent = feature.getGeometry().getExtent();
-                    features.push(_.omit(featureProperties, ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
-                });
-                Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.getId()});
-            }
-            else {
-                Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
-            }
+            _.each(this.get("featureIds"), function (id) {
+                feature = model.getLayerSource().getFeatureById(id);
+                feature.set("extent", feature.getGeometry().getExtent());
+                features.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+            });
+
+            Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.getId(), "layerName": model.getName()});
         },
         /**
          * determines the attributes and their values that are still selectable
@@ -282,28 +257,26 @@ define(function (require) {
          * @return {object[]}                    array of attributes and their values that are still selectable
          */
         collectSelectableOptions: function (features, selectedAttributes, allAttributes) {
-            var selectableOptions = [];
+            var selectableOptions = [],
+                selectableValues = [];
 
-            if (_.isUndefined(allAttributes) === false && allAttributes.length === 0) {
-                selectableOptions = this.getRemainingAttributeValues(allAttributes, features);
-            }
-            else {
-                _.each(allAttributes, function (attribute) {
-                    var selectableValues = {name: attribute.name, values: []};
+            _.each(allAttributes, function (attribute) {
+                selectableValues = {name: attribute.name, displayName: attribute.displayName, type: attribute.type, values: []};
 
-                    _.each(features, function (feature) {
-                        var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
-                            return attr.attrName !== attribute.name;
-                        }));
+                _.each(features, function (feature) {
+                    var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
+                        return attr.attrName !== attribute.name;
+                    }));
 
-                        if (isMatch) {
-                            selectableValues.values.push(this.getValuesFromFeature(feature, attribute.name, attribute.type));
-                        }
-                    }, this);
-                    selectableValues.values = _.unique(_.flatten(selectableValues.values));
-                    selectableOptions.push(selectableValues);
+                    if (isMatch) {
+                        selectableValues.values.push(this.parseValuesFromString(feature, attribute.name));
+                    }
                 }, this);
-            }
+                selectableValues.values = _.unique(_.flatten(selectableValues.values));
+
+                selectableOptions.push(selectableValues);
+            }, this);
+
             return selectableOptions;
         },
         /**
@@ -333,8 +306,9 @@ define(function (require) {
 
             isMatch = _.find(attribute.values, function (value) {
                     if (_.isUndefined(feature.get(attribute.attrName)) === false) {
-                        return feature.get(attribute.attrName).indexOf(value) !== -1;
+                            return feature.get(attribute.attrName).indexOf(value) !== -1;
                     }
+                    return false;
                 });
             return !_.isUndefined(isMatch);
         },
@@ -348,7 +322,8 @@ define(function (require) {
          */
         isNumberInRange: function (feature, attributeName, values) {
             var valueList = _.extend([], values),
-                featureValue = feature.get(attributeName);
+                featureValue = feature.get(attributeName),
+                isMatch;
 
             valueList.push(featureValue);
             valueList = _.sortBy(valueList);
@@ -358,10 +333,9 @@ define(function (require) {
         },
 
         isFeatureInExtent: function (feature) {
-            var isMatch = false,
-                mapExtent = Radio.request("MapView", "getCurrentExtent");
+            var mapExtent = Radio.request("MapView", "getCurrentExtent");
 
-            return ol.extent.containsExtent(mapExtent, feature.getGeometry().getExtent());
+            return ol.extent.intersects(mapExtent, feature.getGeometry().getExtent());
         },
 
         /**
@@ -374,7 +348,10 @@ define(function (require) {
             var isMatch = false;
 
             isMatch = _.every(filterAttr, function (attribute) {
-                if (attribute.type === "integer" || attribute.type === "double") {
+                if (feature.get(attribute.attrName) === null) {
+                    return false;
+                }
+                else if (attribute.type === "integer" || attribute.type === "decimal") {
                     return this.isNumberInRange(feature, attribute.attrName, attribute.values);
                 }
                 else if (attribute.type === "searchInMapExtent") {

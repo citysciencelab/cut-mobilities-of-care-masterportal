@@ -42,7 +42,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |fullScreen|nein|Boolean|false|Ermöglicht dem User die Darstellung im Vollbildmodus (ohne Tabs und Adressleiste) per Klick auf den Button. Ein erneuter Klick auf den Button wechselt wieder in den normalen Modus.|
 |mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
 |[orientation](#markdown-header-portalconfigcontrolsorientation)|nein|Object||Orientation nutzt die geolocation des Browsers zur Standortbestimmung des Nutzers. Siehe [orientation](#markdown-header-portalconfigcontrolsorientation).|
-|zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
+|zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen.|
 |[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
 |[totalview](#markdown-header-portalconfigcontrolstotalview)|nein|Boolean|false|Zeigt einen Button für die Startansicht an.|
 
@@ -107,7 +107,14 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 
 ```
+******
+### Portalconfig.controls.zoom ###
 
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|showInSimpleMap|nein|Boolean||Gibt an ob die Zoom-Buttons auch in der simple Map ([URL-Parameter](URL_Parameter.md) "?style=simple" gezeichnet werden sollen.|
+|showMobile|nein|Boolean|false|Gibt an ob die Zoom-Buttons auch in der mobilen Ansicht gezeichnet werden sollen.|
 ******
 ### Portalconfig.controls.totalview ###
 
@@ -247,7 +254,7 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
 |name|ja|String||Name, wie der Link im Menu angezeigt werden soll.|
 |glyphicon|ja|String||Glyphicon des Linkes für den Menueintrag.|
 |url|nein|String||URL zur externen Webseite. |
-|onClickTrigger|nein|Object: {"channel": String ,"event": String, "data": String || Enthält den Channel namen, das Event, welches getriggert wird und die daten die mitgeschickt werden.|
+|onClickTrigger|nein|Array|| Ein Array von Objekten mit den jeweiligen Channel Namen, das Event, welches getriggert wird und die Daten die mitgeschickt werden.|
 
 
 **Beispiel staticlinks:**
@@ -284,11 +291,11 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
         {
             "name": "Altona",
             "glyphicon": "glyphicon-globe",
-            "onClickTrigger": {
+            "onClickTrigger": [{
                 "channel": "ZoomToGeometry",
                 "event": "zoomToGeometry",
                 "data": "Altona"
-            }
+            }]
         }]
     }
 }

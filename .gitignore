@@ -21,3 +21,4 @@ bowerupdate.log
 portalconfigs
 package-lock.json
 test/end2end/Screenshots/ScreenshotsTest
+npm-debug.log

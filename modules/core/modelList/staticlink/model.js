@@ -24,18 +24,20 @@ define(function (require) {
             }],
             inSubMenue: false
         },
-        triggerRadioEvent: function (trigger) {
+        triggerRadioEvent: function () {
             _.each(this.getOnClickTrigger(), function (trigger) {
                 this.triggerEvent(trigger);
             }, this);
         },
         triggerEvent: function (triggerParams) {
-            data = triggerParams.data;
+            var data = triggerParams.data;
 
             if (triggerParams.event === "" || triggerParams.channel === "") {
                 return;
             }
-            Radio.trigger(triggerParams.channel, triggerParams.event, data);
+            else {
+                Radio.trigger(triggerParams.channel, triggerParams.event, data);
+            }
         },
         // getter for onClickTrigger
         getOnClickTrigger: function () {
@@ -48,7 +50,7 @@ define(function (require) {
         getViewElementClasses: function () {
             var classes = "dropdown";
 
-             if (this.get("parentId") === "root") {
+            if (this.get("parentId") === "root") {
                 classes += " menu-style hidden-sm";
             }
             else {
