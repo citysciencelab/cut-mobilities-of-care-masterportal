@@ -73,7 +73,7 @@ define(function (require) {
             }, this);
 
             interaction.on("drawend", function (evt) {
-                this.featureToGeoJson(evt.feature)
+                this.featureToGeoJson(evt.feature);
             }, this);
 
             interaction.on("change:active", function (evt) {
@@ -147,7 +147,7 @@ define(function (require) {
          * @param {ol.Overlay} circleOverlay
          */
         createDomOverlay: function (circleOverlay) {
-            var element = document.createElement('div');
+            var element = document.createElement("div");
 
             element.setAttribute("id", "circle-overlay");
             circleOverlay.setElement(element);
