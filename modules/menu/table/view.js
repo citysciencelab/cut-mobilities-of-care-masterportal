@@ -27,9 +27,11 @@ define(function (require) {
         renderLayer: function () {
             this.$el.find("#table-nav-main").append(new LayerView().render());
         },
+
          renderList: function () {
             new ListView().render();
         },
+
         renderTool: function () {
             this.$el.append(new ToolView().render());
         }
