@@ -237,7 +237,9 @@ define([
         parseStyle: function (result) {
             var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
 
-            this.setStyle(value);
+            if (value && (value === "TABLE" || value === "SIMPLE")) {
+                    Radio.trigger("Util", "setUiStyle", value);
+            }
         },
         parseURL: function (result) {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
@@ -347,15 +349,6 @@ define([
 
         getZoomToExtent: function () {
             return this.get("zoomToExtent");
-        },
-
-        // getter for style
-        getStyle: function () {
-            return this.get("style");
-        },
-        // setter for style
-        setStyle: function (value) {
-            this.set("style", value);
         }
     });
 
