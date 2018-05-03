@@ -28,11 +28,13 @@ define(function (require) {
             }, this);
         },
         render: function () {
+            var attr;
+
             if (!this.model.get("features")) {
                 this.$el.html("<div id='filter-loader'><img src='../../img/ajax-loader.gif'></div>");
                 return this.$el;
             }
-            var attr = this.model.toJSON();
+            attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
             this.renderSnippets();
@@ -99,10 +101,11 @@ define(function (require) {
             _.each(this.model.get("snippetCollection").models, function (snippet) {
                 _.each(snippet.get("valuesCollection").models, function (valueModel) {
                     valueModel.trigger("removeView");
+                    var view;
 
                     if (valueModel.get("isSelected")) {
                         countSelectedValues++;
-                        var view = new ValueView({model: valueModel});
+                        view = new ValueView({model: valueModel});
 
                         this.$el.find(".value-views-container .text:nth-child(1)").after(view.render());
                     }
@@ -114,8 +117,10 @@ define(function (require) {
         },
         renderSnippetCheckBoxView: function () {
             // this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
+            var view;
+
             if (!this.model.get("activateOnSelection")) {
-                var view = new SnippetCheckBoxView({model: this.model.get("btnIsActive")});
+                view = new SnippetCheckBoxView({model: this.model.get("btnIsActive")});
 
                 this.$el.find(".detailview-head").after(view.render());
             }
