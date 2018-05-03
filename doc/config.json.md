@@ -1268,7 +1268,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden).|
+|autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
 
 
 #### filterOptions ####

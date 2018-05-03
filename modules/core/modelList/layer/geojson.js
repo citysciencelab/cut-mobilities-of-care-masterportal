@@ -146,7 +146,7 @@ define(function (require) {
         },
 
         toggleAutoReload: function () {
-            if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 0) {
+            if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 500) {
                 if (this.getIsVisibleInMap() === true) {
                     this.interval = setInterval (function (my) {
                         my.updateData(my.handleData);
