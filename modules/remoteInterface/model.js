@@ -130,10 +130,12 @@ define(function (require) {
 
         },
         zoomToFeatures: function (hits) {
+            var extent;
+
             _.each(hits, function (hit, index) {
                 hits[index] = this.getFeatureFromHit(hit);
             }, this);
-            var extent = hits[0].getGeometry().getExtent().slice(0);
+            extent = hits[0].getGeometry().getExtent().slice(0);
 
             hits.forEach(function (feature) {
                 ol.extent.extend(extent, feature.getGeometry().getExtent());
