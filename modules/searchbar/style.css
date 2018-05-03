@@ -203,3 +203,79 @@ li.results:hover {
 #searchInputUL .selected #searchInputLi {
     color: #fff;
 }
+
+/*----------------------------------Table Template------------------------------------------------------------*/
+
+#table-searchForm button.btn.btn-default.btn-table-search {
+    border-radius: 12px !important;
+    padding: 6px 12px 1px 5px;
+    margin: 6px 5px 5px 5px;
+}
+
+#table-searchForm .btn-table-search > .icon-search {
+    font-size: 22px;
+    margin: 0px;
+    padding: 9px;
+}
+
+#table-searchForm > .input-group {
+    width: 100%;
+    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+}
+
+#table-searchForm .dropdown-menu-search {
+    background-clip: padding-box;
+    background-color: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    float: left;
+    font-size: 13px;
+    list-style: outside none none;
+    margin: 2px 0 0;
+    min-width: 200px;
+    position: absolute;
+    bottom: 100%;
+    z-index: 1001;
+    padding: 0;
+    top: unset;
+}
+
+#table-searchForm #searchInput {
+    margin: 7px 0px 7px 83px;
+    border-radius: 10px !important;
+}
+
+#table-searchForm .dropdown-menu-search .glyphicon {
+    color: #cdcdcd;
+    padding-right: 12px;
+    padding-left: 3px;
+    font-size: 12px;
+}
+
+#table-searchForm .dropdown-menu-search img {
+    width: 30px;
+    padding-right: 10px;
+    margin-bottom: 4px;
+}
+
+#table-searchForm .dropdown-menu-search small {
+    color: #cdcdcd;
+    padding-left: 10px;
+}
+
+#table-searchForm .dropdown-menu-search li.type {
+    background: #e7e7e7;
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
+#table-searchForm .dropdown-menu-search li:hover {
+    cursor: pointer;
+    background-color: #efefef;
+}
+
+#table-searchForm .btn-table-search:hover {
+    background-color: rgb(169,169,169);
+}

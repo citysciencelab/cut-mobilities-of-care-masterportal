@@ -51,7 +51,8 @@
         "minChars": 3
       },
       "zoomLevel": 9,
-      "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
+      "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan",
+      "renderToDOM": "#table-nav-main"
     },
     "mapView":
     {

@@ -1,11 +1,12 @@
 define([
     "backbone",
     "text!modules/searchbar/template.html",
+    "text!modules/searchbar/templateTable.html",
     "text!modules/searchbar/templateRecommendedList.html",
     "text!modules/searchbar/templateHitList.html",
     "modules/searchbar/model",
     "backbone.radio"
-], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, Radio) {
+], function (Backbone, SearchbarTemplate, TemplateTable, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, Radio) {
     "use strict";
     return Backbone.View.extend({
         model: new Searchbar(),
@@ -13,6 +14,7 @@ define([
         className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
         searchbarKeyNavSelector: "#searchInputUL",
         template: _.template(SearchbarTemplate),
+        templateTable: _.template(TemplateTable),
         /**
         * @memberof config
         * @type {Object}
@@ -92,7 +94,9 @@ define([
                 "setFocus": this.setFocus
             });
             this.listenTo(Radio.channel("MenuLoader"), {
-                "ready": function () {
+                "ready": function (parentElementId) {
+                    this.setElement(config.renderToDOM);
+                    this.renderToDOM(parentElementId);
                     if (window.innerWidth >= 768) {
                         $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
                     }
@@ -105,7 +109,7 @@ define([
                 }
             });
 
-            this.render();
+                this.render(config);
 
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
                 $("#searchInput").val(this.model.get("placeholder"));
@@ -160,6 +164,7 @@ define([
             "focusout input": "toggleStyleForRemoveIcon",
             "click .form-control-feedback": "deleteSearchString",
             "click .btn-search": "renderHitList",
+            "click .btn-table-search": "renderHitList",
             "click .list-group-item.hit": "hitSelected",
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
@@ -192,12 +197,18 @@ define([
             else {
                 $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
             }
-            this.focusOnEnd($("#searchInput"));
             if (this.model.get("searchString").length !== 0) {
                 $("#searchInput:focus").css("border-right-width", "0");
             }
             this.delegateEvents(this.events);
             Radio.trigger("Title", "setSize");
+        },
+
+        renderToDOM: function (parentElementId) {
+            var attr = this.model.toJSON();
+
+            this.$el.html(this.templateTable(attr));
+            $("#" + parentElementId).append(this.$el);
         },
         /**
         * @description Methode, um den Searchstring über den Radio zu steuern ohne Event auszulösen
