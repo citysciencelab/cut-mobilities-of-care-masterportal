@@ -23,7 +23,7 @@
 }
 
 .table-layer {
-    background-color: #FFFFFF;
+    background-color: #FFF;
     margin: auto;
     width: 40px;
     height: 40px;
@@ -73,8 +73,42 @@
 
 .icon-checkbox:before {
     content: "\e917";
-    color: #808080;
+    color: #003063;
     margin-top: 8px;
+    font-weight: 900;
+}
+
+.icon-burgermenu_alt.collapsed:before {
+    content: "\e903";
+    color: #003063;
+}
+
+.icon-burgermenu_alt:before {
+    content: "\e903";
+    color: #f2f2f2;
+}
+
+.burgermenu-layer-list {
+    background-color: transparent;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-radius: 5px !important;
+    border: none;
+}
+
+
+div#isActivated {
+    color: #003063;
+    font-weight: 900;
+    font-family: "HamburgSans", sans-serif;
+}
+
+.tablefont {
+    font-family: "HamburgSans", sans-serif;
+}
+
+.burgerMenuIsActive {
+    background-color: #aaa;
 }
 
 .icon-info:before {
@@ -86,10 +120,12 @@
     margin-left: 8px;
 }
 
-.panel-body {
+.panel-body-table {
     background-color: #F2F2F2;
     border-radius: 12px !important;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    padding-left: 7px;
+    margin-bottom: -10px;
 
 }
 .panel-group {
@@ -126,8 +162,6 @@
         radial-gradient(circle at 100% 100%, transparent 10px, #F2F2F2 10px);
 }
 
-
-
 .header-cool {
   background: salmon;
   padding: 0;
@@ -141,14 +175,6 @@
     border-bottom: 1px solid rgb(229, 229, 229);
 }
 
-.list-group-item {
-    background-color: transparent;
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-radius: 5px !important;
-    border: none;
-}
-
 
 /**************** Themenbaum ****************/
 ul#tree-table {
@@ -160,23 +186,6 @@ ul#tree-table {
     padding: 0px 0;
     min-width:  410px;
     overflow: auto;
-}
-
-ul#tree-table .glyphicon {
-    cursor: pointer;
-    font-size: 15px;
-    padding-right: 5px;
-    top: 3px;
-}
-
-ul#tree-table .glyphicon-cog {
-    font-size: 18px;
-    padding: 0;
-}
-
-ul#tree-table .glyphicon-info-sign {
-    font-size: 18px;
-    padding-right: 6px;
 }
 
 .LayerListMaxHeight {
@@ -259,58 +268,12 @@ ul#tree-table .themen-folder {
     font-weight: 400;
 }
 
-ul#tree-table .rotate-adjust {
-    transform: rotate(180deg);
-    transition: .5s;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-ul#tree-table .rotate-adjust-back {
-    transform: rotate(0deg);
-    transition: .5s;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-ul#tree-table .rotate-pin {
-    transform: rotate(270deg);
-    transition: .5s;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-ul#tree-table .rotate-pin-back {
-    transform: rotate(360deg);
-    transition: .5s;
-    font-size: 14px;
-    cursor: pointer;
-}
-ul#Overlayer .glyphicon-check, ul#Overlayer .glyphicon-check + .title {
-    color: rgb(255, 127, 0);
-}
-ul#tree-table ul#SelectedLayer .glyphicon-check, ul#tree-table ul#SelectedLayer .glyphicon-check + .title {
-    /*color: rgb(85, 85, 85);*/
-}
-
 /*-------------------Selection/Settings----------------------*/
 ul#tree-table ul{
    overflow-y: auto;
    overflow-x: auto;
     max-width:  500px;
 }
-
-ul#tree-table #SelectedLayer li {
-    overflow: auto;
-    padding: 8px 6px;
-}
-
-ul#tree-table .SelectedLayer .layer-selection-save {
-    font-size: 11px;
-    font-weight: 400;
-    cursor: pointer;
-}
-
 
 ul#tree-table-table .layer-settings {
     clear: both;
@@ -324,4 +287,8 @@ ul#tree-table-table .layer-settings {
 .pull-right{
     position: absolute;
     right: 30px;
+}
+
+ul#tree-table {
+    padding-bottom: 7px;
 }

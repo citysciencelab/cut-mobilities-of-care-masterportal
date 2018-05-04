@@ -10,8 +10,14 @@ define(function (require) {
         id: "table-layer",
         className: "table-layer table-nav",
         template: _.template(LayerTemplate),
+        events: {
+            "click .icon-burgermenu_alt": "burgerMenuIsActive"
+        },
         initialize: function () {
             this.render();
+        },
+        burgerMenuIsActive: function (event) {
+            $(event.currentTarget.parentElement).toggleClass("burgerMenuIsActive");
         },
         render: function () {
             return this.$el.html(this.template());

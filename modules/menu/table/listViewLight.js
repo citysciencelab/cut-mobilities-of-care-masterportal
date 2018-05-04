@@ -1,22 +1,15 @@
 define(function (require) {
 
-    var listView = require("modules/menu/desktop/listViewMain"),
-        DesktopLayerViewLight = require("modules/menu/table/layer/viewLight"),
+    var TableLayerViewLight = require("modules/menu/table/layer/viewLight"),
+        TableLayerView = require("modules/menu/table/layer/view"),
         Radio = require("backbone.radio"),
+        Backbone = require("backbone"),
         Menu;
 
-    Menu = listView.extend({
+Menu = Backbone.View.extend({
         initialize: function () {
             this.collection = Radio.request("ModelList", "getCollection");
-            Radio.on("Autostart", "startModul", this.startModul, this);
-            this.listenTo(this.collection, {
-                "updateLightTree": function () {
-                    this.render();
-                }
-            });
-            this.renderMain();
             this.render();
-            Radio.trigger("Autostart", "initializedModul", "tree-table");
         },
         render: function () {
             $("#" + "tree-table").html("");
@@ -25,25 +18,20 @@ define(function (require) {
             models = _.sortBy(models, function (model) {
                 return model.getSelectionIDX();
             });
-
             this.addViews(models);
-            Radio.trigger("Title", "setSize");
-            $("ul#tree-table.light").css("max-height", $("#map").height() - 160);
+        },
+        renderMain: function () {
+                _.each(function (model) {
+                     this.addTableLayerView(model);
+                }, this);
+            },
+        addTableLayerView: function (model) {
+                new TableLayerView({model: model});
         },
         addViews: function (models) {
             _.each(models, function (model) {
-                 new DesktopLayerViewLight({model: model});
+                 new TableLayerViewLight({model: model});
             }, this);
-        },
-        startModul: function (modulId) {
-            var modul = _.findWhere(this.collection.models, {id: modulId});
-
-            if (modul.attributes.type === "tool") {
-                modul.setIsActive(true);
-            }
-            else {
-                $("#" + modulId).parent().addClass("open");
-            }
         }
     });
     return Menu;

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <span class="layer-item pull-left">
-    <span class="pull-left">
+    <span class="tablefont pull-left">
         <% if (isVisibleInMap === true) { %>
-            <span class="icon-checkbox pull-left" title="Layer ausschalten"></span>
+        <div id="isActivated">
+            <span class="icon-checkbox pull-left" title="Layer ausschalten"></span><span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span></span></div>
         <% } else { %>
-            <span class="icon-checkbox2 pull-left" title="Layer einschalten"></span>
+            <span class="icon-checkbox2 pull-left" title="Layer einschalten"></span><span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span></span>
         <% } %>
-        <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
+
     </span>
 </span>
 <span class="pull-right">
