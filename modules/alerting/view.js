@@ -60,5 +60,5 @@ define(function (require) {
         }
     });
 
-    return new AlertingView();
+    return AlertingView;
 });

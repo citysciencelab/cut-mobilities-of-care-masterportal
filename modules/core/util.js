@@ -51,6 +51,12 @@ define([
             this.setUiStyle(uiStyle);
             this.parseConfigFromURL();
         },
+        updateMapHeight: function () {
+            var navHeight = $("#main-nav").is(":visible") ? $("#main-nav").height() : 0,
+                mapHeight = $(".lgv-container").height() - navHeight;
+
+            $("#map").css("height", mapHeight + "px");
+        },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);
         },

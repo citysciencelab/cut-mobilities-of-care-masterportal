@@ -1,50 +1,102 @@
-define([
-    "backbone",
-    "config",
-    "videojs"
-], function (Backbone, Config, VideoJS) {
+define(function (require) {
 
-    var VideoModel = Backbone.Model.extend({
-        /**
-         *
-         */
+    /**
+     * Disable Google Analytics that tracks a random percentage (currently 1%) of players loaded from the CDN.
+     * @link https://videojs.com/getting-started/
+     */
+    window.HELP_IMPROVE_VIDEOJS = false;
+
+    var Backbone = require("backbone"),
+        VideoJS = require("videojs"),
+        VideoModel;
+
+    require("videojsflash");
+
+    VideoModel = Backbone.Model.extend({
         defaults: {
             id: "",
             url: "",
-            video: "",
-            reloadVersuch: 0
+            poster: ""
         },
+
+        initialize: function (url) {
+            var portalConfig = Radio.request("Parser", "getPortalConfig");
+
+            this.listenTo(Radio.channel("GFI"), {
+                "afterRender": this.startStreaming,
+                "isVisible": this.changedGFI
+            }, this);
+
+            if (_.has(portalConfig, "portalTitle") && _.has(portalConfig.portalTitle, "logo")) {
+                this.setPoster(portalConfig.portalTitle.logo);
+            }
+            this.setId(_.uniqueId("video"));
+            this.setUrl(url);
+        },
+
         /**
-         *
+         * Startet das Streaming
+         * @param  {Function} callback Callback-Funktion wird gerufen, nachdem das Video gestaret ist
          */
-        initialize: function () {
-            this.set("id", _.uniqueId("video"));
-            this.starteStreamingCounter();
+        startStreaming: function (callback) {
+            var videoEle = document.getElementById(this.getId());
+
+            VideoJS(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
         },
+
+        /**
+         * Prüft, ob das GFI ausgeschaltet wurde
+         * @param  {boolean} value Visibility des GFI
+         */
+        changedGFI: function (value) {
+            if (value === false) {
+                this.destroy();
+            }
+        },
+
+        /**
+         * Zerstört das Modul vollständig
+         * stop VideoJS
+         * remove Radio-Listener
+         * remove Backbone-Listener
+         * clear Attributes
+         * remove View
+         */
         destroy: function () {
-            this.unbind();
-            this.clear({silent: true});
+            var videoEle = document.getElementById(this.getId());
+
+            VideoJS(videoEle).dispose();
+            this.stopListening();
+            this.off();
+            this.clear();
+            this.trigger("removeView");
         },
-        /**
-         *
-         */
-        starteStreamingCounter: function () {
-            this.set("checkInterval", setInterval(function () {
-                if (this.get("reloadVersuch") < 10) {
-                    if (document.getElementById(this.get("id"))) {
-                        /**
-                         * Diese Funktion startet das Video unter der id
-                         */
-                        VideoJS(document.getElementById(this.get("id")), {"autoplay": true, "preload": "auto", "children": {"controlBar": false}}, function () {
-                        });
-                        window.clearInterval(this.get("checkInterval"));
-                    }
-                }
-                else {
-                    window.clearInterval(this.get("checkInterval"));
-                }
-                this.set("reloadVersuch", this.get("reloadVersuch") + 1);
-            }.bind(this), 500));
+
+        // getter for id
+        getId: function () {
+            return this.get("id");
+        },
+        // setter for id
+        setId: function (value) {
+            this.set("id", value);
+        },
+
+        // getter for url
+        getUrl: function () {
+            return this.get("url");
+        },
+        // setter for url
+        setUrl: function (value) {
+            this.set("url", value);
+        },
+
+        // getter for poster
+        getPoster: function () {
+            return this.get("poster");
+        },
+        // setter for poster
+        setPoster: function (value) {
+            this.set("poster", value);
         }
     });
     return VideoModel;
