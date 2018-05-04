@@ -41,7 +41,9 @@ define(function (require) {
             }
             else {
                 this.setIsCurrentWin(false);
-                this.getDrawInteraction().setActive(false);
+                if (!_.isUndefined(this.getDrawInteraction())) {
+                    this.getDrawInteraction().setActive(false);
+                }
                 Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
             }
         },
