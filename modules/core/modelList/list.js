@@ -88,6 +88,9 @@ define(function (require) {
                         return new WFSLayer(attrs, options);
                     }
                 }
+                else if (attrs.typ === "GeoJSON") {
+                    return new GeoJSONLayer(attrs, options);
+                }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
                 }

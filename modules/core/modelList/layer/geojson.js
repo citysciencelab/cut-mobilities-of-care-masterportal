@@ -46,7 +46,7 @@ define(function (require) {
                 this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
             }
         },
-        updateData: function () {
+        updateData: function (showLoader) {
             var params = {
                 request: "GetFeature",
                 service: "WFS",
@@ -55,7 +55,9 @@ define(function (require) {
                 version: this.getVersion()
             };
 
-            Radio.trigger("Util", "showLoader");
+            if (!_.isUndefined(showLoader) && showLoader === true) {
+                Radio.trigger("Util", "showLoader");
+            }
 
             $.ajax({
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
@@ -64,6 +66,7 @@ define(function (require) {
                 type: "GET",
                 context: this,
                 success: function (data) {
+                    Radio.trigger("Util", "hideLoader");
                     this.handleData(data, Radio.request("MapView", "getProjection").getCode());
                 },
                 error: function () {
@@ -92,11 +95,13 @@ define(function (require) {
             this.getLayer().setStyle(this.get("styleFunction"));
 
             // für it-gbm
-            features.forEach(function (feature) {
-                feature.set("extent", feature.getGeometry().getExtent());
-                newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
-            });
-            Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
+            if(!this.has("autoRefresh")){
+                features.forEach(function (feature) {
+                    feature.set("extent", feature.getGeometry().getExtent());
+                    newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                });
+                Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
+            }
 
             this.featuresLoaded(features);
             Radio.trigger("Util", "hideLoader");
@@ -179,7 +184,7 @@ define(function (require) {
             if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 500) {
                 if (this.getIsVisibleInMap() === true) {
                     this.interval = setInterval (function (my) {
-                        my.updateData(my.handleData);
+                       my.updateData(false);
                     }, this.attributes.autoRefresh, this);
                 }
                 else {
