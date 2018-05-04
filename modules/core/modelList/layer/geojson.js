@@ -175,18 +175,6 @@ define(function (require) {
             }, this);
         },
 
-<<<<<<< HEAD
-        getHiddenStyle: function () {
-            return new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(255, 255, 255, 0)"
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(49, 159, 211, 0)"
-                })
-            });
-        },
-
         toggleAutoReload: function () {
             if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 500) {
                 if (this.getIsVisibleInMap() === true) {
@@ -198,7 +186,8 @@ define(function (require) {
                     clearInterval(this.interval);
                 }
             }
-=======
+        },
+
         /**
          * sets style for all features
          */
@@ -222,7 +211,7 @@ define(function (require) {
         // setter for style
         setStyle: function (value) {
             this.set("style", value);
->>>>>>> dev
+
         }
     });
 

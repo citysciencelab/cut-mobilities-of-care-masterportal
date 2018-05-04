@@ -415,10 +415,7 @@ define([
 
         getZoomToExtent: function () {
             return this.get("zoomToExtent");
-<<<<<<< HEAD
-=======
         },
-
         // getter for style
         getStyle: function () {
             return this.get("style");
@@ -432,7 +429,6 @@ define([
         },
         getHighlightFeature: function () {
             return this.get("highlightfeature");
->>>>>>> dev
         }
     });
 
