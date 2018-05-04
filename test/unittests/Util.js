@@ -44,6 +44,18 @@ define(function (require) {
                 }
             });
             return geojson;
+        },
+        getCswResponse: function () {
+            var xml;
+
+            $.ajax({
+                url: "resources/testCswResponse.xml",
+                async: false,
+                success: function (data) {
+                    xml = data;
+                }
+            });
+            return xml;
         }
     });
 
