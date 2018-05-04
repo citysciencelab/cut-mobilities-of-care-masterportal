@@ -3,10 +3,16 @@ define(function (require) {
     var $ = require("jquery"),
         ol = require("openlayers"),
         Moment = require("moment"),
+        SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         Einwohnerabfrage;
 
     Einwohnerabfrage = Backbone.Model.extend({
         defaults: {
+            // checkbox snippet for raster layer
+            checkBox: new SnippetCheckboxModel({
+                isSelected: false,
+                label: "Raster Layer anzeigen"
+            }),
             drawInteraction: undefined,
             isCollapsed: undefined,
             isCurrentWin: undefined,
@@ -28,6 +34,9 @@ define(function (require) {
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
+            });
+            this.listenTo(this.getCheckbox(), {
+                "valuesChanged": this.toggleRasterLayer
             });
             this.on("change:isCurrentWin", this.handleCswRequests);
             this.createDomOverlay(this.get("circleOverlay"));
@@ -221,6 +230,17 @@ define(function (require) {
             circleOverlay.setElement(element);
         },
 
+        /**
+         * show or hide the raster layer
+         * @param {boolean} value
+         */
+        toggleRasterLayer: function (value) {
+            Radio.trigger("ModelList", "setModelAttributesById", "8712", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+        },
+
          /**
          * sets the attribute fhhDate
          * @param {xml} response
@@ -283,6 +303,14 @@ define(function (require) {
          */
         getIsCurrentWin: function () {
             return this.get("isCurrentWin");
+        },
+
+        /**
+         * gets the attribute checkBox
+         * @returns {Backbone.Model}
+         */
+        getCheckbox: function () {
+            return this.get("checkBox");
         }
     });
 

@@ -3,6 +3,7 @@ define(function (require) {
     var Backbone = require("backbone"),
         Einwohnerabfrage = require("modules/tools/einwohnerabfrage/model"),
         EinwohnerabfrageTemplate = require("text!modules/tools/einwohnerabfrage/template.html"),
+        SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         EinwohnerabfrageView;
 
     EinwohnerabfrageView = Backbone.View.extend({
@@ -10,6 +11,7 @@ define(function (require) {
         id: "einwohnerabfrage-tool",
         className: "win-body",
         template: _.template(EinwohnerabfrageTemplate),
+        checkBox: {},
         events: {
             "change select": "createDrawInteraction"
         },
@@ -18,6 +20,7 @@ define(function (require) {
                 // ändert sich der Fensterstatus wird neu gezeichnet
                 "change:isCollapsed change:isCurrentWin": this.render
             });
+            this.checkBox = new SnippetCheckBoxView({model: this.model.getCheckbox()});
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -25,6 +28,7 @@ define(function (require) {
             if (this.model.getIsCurrentWin() === true && this.model.getIsCollapsed() === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.$el.append(this.checkBox.render());
                 this.delegateEvents();
             }
             else {
