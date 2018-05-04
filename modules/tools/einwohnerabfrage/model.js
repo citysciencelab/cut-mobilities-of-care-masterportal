@@ -17,8 +17,10 @@ define(function (require) {
             }),
             // mrh meta data id
             mrhId: "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+            mrhDate: undefined,
             // fhh meta data id
-            fhhId: "D3DDBBA3-7329-475C-BB07-14D539ED6B1E"
+            fhhId: "D3DDBBA3-7329-475C-BB07-14D539ED6B1E",
+            fhhDate: undefined
             // hmdk/metaver link
             // metaDataLink: Radio.request("RestReader", "getServiceById", "2").get("url")
         },
@@ -33,13 +35,13 @@ define(function (require) {
 
         setStatus: function (args) {
             if (args[2].getId() === "einwohnerabfrage" && args[0] === true) {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
+                this.setIsCollapsed(args[1]);
+                this.setIsCurrentWin(args[0]);
                 this.createDrawInteraction("Box");
             }
             else {
-                this.set("isCurrentWin", false);
-                this.get("drawInteraction").setActive(false);
+                this.setIsCurrentWin(false);
+                this.getDrawInteraction().setActive(false);
                 Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
             }
         },
@@ -75,22 +77,6 @@ define(function (require) {
                     Radio.trigger("Alert", "alert", "CSW Request Fehlgeschlagen");
                 }
             });
-        },
-
-        /**
-         * sets the attribute fhhDate
-         * @param {xml} response
-         */
-        setFhhDate: function (response) {
-            this.set("fhhDate", this.parseDate(response));
-        },
-
-        /**
-         * ets the attribute mrhDate
-         * @param {xml} response
-         */
-        setMrhDate: function (response) {
-            this.set("mrhDate", this.parseDate(response));
         },
 
         /**
@@ -135,7 +121,7 @@ define(function (require) {
 
             this.toggleOverlay(value, this.get("circleOverlay"));
             this.setDrawInteractionListener(drawInteraction, layer);
-            this.set("drawInteraction", drawInteraction);
+            this.setDrawInteraction(drawInteraction);
             Radio.trigger("Map", "addInteraction", drawInteraction);
         },
 
@@ -231,6 +217,70 @@ define(function (require) {
 
             element.setAttribute("id", "circle-overlay");
             circleOverlay.setElement(element);
+        },
+
+         /**
+         * sets the attribute fhhDate
+         * @param {xml} response
+         */
+        setFhhDate: function (response) {
+            this.set("fhhDate", this.parseDate(response));
+        },
+
+        /**
+         * sets the attribute mrhDate
+         * @param {xml} response
+         */
+        setMrhDate: function (response) {
+            this.set("mrhDate", this.parseDate(response));
+        },
+
+        /**
+         * sets the attribute drawInteraction
+         * @param {ol.interaction.Draw}
+         */
+        setDrawInteraction: function (value) {
+            this.set("drawInteraction", value);
+        },
+
+        /**
+         * gets the attribute drawInteraction
+         * @return {ol.interaction.Draw}
+         */
+        getDrawInteraction: function () {
+            return this.get("drawInteraction");
+        },
+
+        /**
+         * sets the attribute isCollapsed
+         * @param {boolean} value
+         */
+        setIsCollapsed: function (value) {
+            this.set("isCollapsed", value);
+        },
+
+        /**
+         * gets the attribute isCollapsed
+         * @return {boolean}
+         */
+        getIsCollapsed: function () {
+            return this.get("isCollapsed");
+        },
+
+        /**
+         * sets the attribute isCurrentWin
+         * @param {boolean} value
+         */
+        setIsCurrentWin: function (value) {
+            this.set("isCurrentWin", value);
+        },
+
+        /**
+         * gets the attribute isCurrentWin
+         * @return {boolean}
+         */
+        getIsCurrentWin: function () {
+            return this.get("isCurrentWin");
         }
     });
 

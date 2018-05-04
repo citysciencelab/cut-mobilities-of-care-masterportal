@@ -22,7 +22,7 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+            if (this.model.getIsCurrentWin() === true && this.model.getIsCollapsed() === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
@@ -33,7 +33,7 @@ define(function (require) {
         },
 
         createDrawInteraction: function (evt) {
-            this.model.get("drawInteraction").setActive(false);
+            this.model.getDrawInteraction().setActive(false);
             this.model.createDrawInteraction(evt.target.value);
         }
     });
