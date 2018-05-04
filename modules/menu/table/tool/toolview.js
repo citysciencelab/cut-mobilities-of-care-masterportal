@@ -10,6 +10,9 @@ define(function (require) {
         id: "table-tool",
         className: "table-tool",
         template: _.template(ToolTemplate),
+        events: {
+            "click": "checkItem"
+        },
         initialize: function () {
             this.render();
         },
@@ -17,6 +20,14 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             $("#table-tools-menu").append(this.$el.html(this.template(attr)));
+        },
+        checkItem: function () {
+            if (this.model.getName() === "legend") {
+                Radio.trigger("Legend", "toggleLegendWin");
+            }
+            else {
+                this.model.setIsActive(true);
+            }
         }
     });
 
