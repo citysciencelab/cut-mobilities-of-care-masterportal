@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<form class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <label for="layoutField" class="col-md-5 col-sm-5 control-label">Geometrie</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm" id="geomField">
+                <option value="LineString" <% if (type === "LineString") { print ("SELECTED")} %>>Strecke</option>
+                <option value="Polygon" <% if (type === "Polygon") { print ("SELECTED")} %>>Fläche</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="unitField" class="col-md-5 col-sm-5 control-label">Einheit</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm" id="unitField">
+                <% if (type === "LineString") { %>
+                    <option value="m">m</option>
+                    <option value="km">km</option>
+                <% }
+                else { %>
+                    <option value="m<sup>2</sup>">m²</option>
+                    <option value="km<sup>2</sup>">km²</option>
+                <% } %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+         <div class="col-md-12 col-sm-12">
+             Bitte beachten Sie: <br>
+             Die angezeigten Werte unterliegen Ungenauigkeiten.<br>
+            <% if(quickHelp=== true){ %>
+                 Weitere Informationen finden Sie hier:
+                <span class="glyphicon glyphicon-question-sign"</span>
+            <% } %>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12">
+            <button type="button" class="btn btn-panel-submit col-md-12 col-sm-12">Geometrien löschen</button>
+        </div>
+    </div>
+</form>
