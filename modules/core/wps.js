@@ -47,15 +47,16 @@ define(function (require) {
         sendRequest: function (url, xmlString, requestID) {
             var xhr = new XMLHttpRequest(),
                 context = this;
-
+            xhr.timeout = 10000;
             xhr.open("POST", url);
             xhr.onload = function (event) {
-                if (xhr.status === 200) {
-                    context.handleResponse(event.currentTarget.responseText, requestID);
-                }
-                else if (xhr.status !== 200) {
-                    Radio.trigger("Alert", "alert", "WPS Request Fehlgeschlagen");
-                }
+                context.handleResponse(event.currentTarget.responseText, requestID, xhr.status);
+            };
+            xhr.ontimeout = function () {
+                context.handleResponse({}, requestID, "timeout");
+            };
+            xhr.onabort = function () {
+                context.handleResponse({}, requestID, "abort");
             };
             xhr.send(xmlString);
         },
@@ -64,17 +65,16 @@ define(function (require) {
          * @param responseText String XML to be sent as String
          * @param requestId  String unique Identifier for this request
          */
-        handleResponse: function (responseText, requestID) {
+        handleResponse: function (responseText, requestID, status) {
             var obj;
 
-            if (responseText) {
+            if (status === 200) {
                 obj = this.parseDataString(responseText);
             }
             else {
-                Radio.trigger("Alert", "alert", "WPS Antwort konnte nicht verarbeitet werden!");
+                Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + status);
             }
-
-            Radio.trigger("WPS", "response", requestID, obj);
+            Radio.trigger("WPS", "response", requestID, obj, status);
         },
         /**
          * Parse xml from string

@@ -3,6 +3,7 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
+        SnippetDropdownModel = require("modules/snippets/dropdown/model"),
         Einwohnerabfrage;
 
     Einwohnerabfrage = Backbone.Model.extend({
@@ -18,7 +19,13 @@ define(function (require) {
             requests: [],
             data: {},
             receivedData: false,
-            requesting: false
+            requesting: false,
+            snippetDropdownModel: {},
+            values: {
+                "Rechteck": "Box",
+                "Kreis": "Circle",
+                "Polygon": "Polygon"
+            }
         },
 
         initialize: function () {
@@ -28,47 +35,118 @@ define(function (require) {
             this.listenTo(Radio.channel("WPS"), {
                 "response": this.handleResponse
             });
+            this.listenTo(this.snippetDropdownModel, {
+                "valuesChanged": this.createDrawInteraction
+            });
 
             this.createDomOverlay(this.get("circleOverlay"));
+            this.setDropDownSnippet(new SnippetDropdownModel({
+                name: "Geometrie",
+                type: "string",
+                displayName: "Geometrie auswählen",
+                values: _.allKeys(this.getValues()),
+                snippetType: "dropdown",
+                isMultiple: false,
+                preselectedValue: _.allKeys(this.getValues())[0]
+            }));
         },
+        /**
+         * Reset State when tool becomes active/inactive
+         */
         reset: function () {
             this.setData({});
             this.setDataReceived(false);
             this.setRequesting(false);
         },
-        handleResponse: function (requestId, response) {
-            if (_.contains(this.get("requests"), requestId)) {
+        /**
+         * Called when the wps modules returns a request
+         * @param  {string} requestId uniqueId used to identfy if request was sent by this model
+         * @param  {string} response the response xml of the wps
+         * @param  {} status the HTTPStatusCode
+         */
+        handleResponse: function (requestId, response, status) {
+            this.setRequesting(false);
+            if (this.isEinwohnerRequest(this.get("requests"), requestId)) {
                 this.removeId(this.get("requests"), requestId);
-                this.setRequesting(false);
-                if (response["wps:erroroccured"] === "yes") {
-                    console.log(response["wps:ergebnis"]);
-
-                    Radio.trigger("Alert", "alert", response["wps:ergebnis"]);
-                }
-                else {
-                    console.log(response);
-                    this.setDataReceived(true);
-                    try {
-                        response = JSON.parse(response["wps:ergebnis"]);
-                        this.setData(response);
-                    } catch (error) {
-                        Radio.trigger("Alert", "alert", "Konnte WPS Antwort nicht verarbeiten. Antwort: " + JSON.stringify(response));
+                if (status === 200) {
+                    if (response["wps:erroroccured"] === "yes") {
+                        this.handleWPSError(response);
+                    }
+                    else {
+                        this.handleSuccess(response);
                     }
                 }
+                else {
+                    this.resetView();
+                }
             }
-            this.trigger("render");
+            this.trigger("renderResult");
         },
+        /**
+         * Check if this request id is known by this model
+         * @param  {[String]} ownRequests contains all ids of requests triggered by this module
+         * @param  {} requestId the id returned by the wps
+         */
+        isEinwohnerRequest: function (ownRequests, requestId) {
+            return _.contains(ownRequests, requestId);
+        },
+        /**
+         * Displays Errortext if the WPS returns an Error
+         * @param  {String} response received by wps
+         */
+        handleWPSError: function (response) {
+            Radio.trigger("Alert", "alert", JSON.stringify(response["wps:ergebnis"]));
+            this.resetView();
+        },
+        /**
+         * Used when statuscode is 200 and wps did not return an error
+         * @param  {String} response received by wps
+         */
+        handleSuccess: function (response) {
+            try {
+                response = JSON.parse(response["wps:ergebnis"]);
+                this.setData(response);
+                this.setDataReceived(true);
+            }
+            catch (error) {
+                Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + JSON.stringify(response));
+            }
+            finally {
+                return;
+            }
+        },
+        /**
+         * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
+         */
+        resetView: function () {
+            var layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer");
+            if (layer) {
+                layer.getSource().clear();
+                Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
+            }
+        },
+        /**
+         * Removes an ID from an array of ID
+         * @param  {} requests All IDs
+         * @param  {} requestId Id to remove
+         */
         removeId: function (requests, requestId) {
             var index = requests.indexOf(requestId);
             if (index > -1) {
                 requests.splice(index, 1);
             }
         },
+        /**
+         * Handles (de-)activation of this Tool
+         * @param  {} args
+         */
         setStatus: function (args) {
             if (args[2].getId() === "einwohnerabfrage" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
-                this.createDrawInteraction("Box");
+                var selectedValues = this.getDropDownSnippet().getSelectedValues();
+
+                this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.getValues())[0]);
             }
             else {
                 this.set("isCurrentWin", false);
@@ -82,11 +160,13 @@ define(function (require) {
          * @param {string} value - drawing type (Box | Circle | Polygon)
          */
         createDrawInteraction: function (value) {
+            value = this.getValues()[value];
             var layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
                 drawInteraction = new ol.interaction.Draw({
                     // destination for drawn features
                     source: layer.getSource(),
                     // drawing type
+                    // a circle with for points is internnaly used as Box, since type "Box" does not exist
                     type: value === "Box" ? "Circle" : value,
                     // is called when a geometry's coordinates are updated
                     geometryFunction: value === "Box" ? ol.interaction.Draw.createBox() : undefined
@@ -122,10 +202,14 @@ define(function (require) {
                 }
             });
         },
+        /**
+         *
+         * @param  {} geoJson
+         */
         makeRequest: function (geoJson) {
             this.setDataReceived(false);
             this.setRequesting(true);
-            this.trigger("render");
+            this.trigger("renderResult");
             var requestId = _.uniqueId("wps");
 
             this.get("requests").push(requestId);
@@ -212,6 +296,15 @@ define(function (require) {
         },
         setRequesting: function (value) {
             this.set("requesting", value);
+        },
+        setDropDownSnippet: function (value) {
+            this.set("snippetDropdownModel", value);
+        },
+        getDropDownSnippet: function () {
+            return this.get("snippetDropdownModel");
+        },
+        getValues: function () {
+            return this.get("values");
         }
     });
 

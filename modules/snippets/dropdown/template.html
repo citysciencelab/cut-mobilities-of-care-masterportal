@@ -1,4 +1,4 @@
-<select class="selectpicker" title="<%= displayName %>" multiple>
+<select class="selectpicker" title="<%= displayName %>" <%isMultiple? print("multiple") : print("")%>>
     <% _.each(valueModelsToShow, function (model) { %>
         <option value="<%= model.get('value') %>"><%= model.get('displayName') %></option>
     <% }); %>

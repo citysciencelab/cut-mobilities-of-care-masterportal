@@ -4,14 +4,16 @@
     color: white;
     padding: 4px 8px;
 }
-
-.form-horizontal {
+#einwohnerabfrage-tool{
+    min-height: 150px;
+}
+#einwohnerabfrage-tool .form-horizontal {
     margin-bottom: 20px;
 }
-.additional-text {
+#einwohnerabfrage-tool .additional-text {
     margin: 10px 0;
 }
-#einwohner-loader img {
+#einwohnerabfrage-tool #einwohner-loader img {
     position: relative;
     left: 40%;
 }
