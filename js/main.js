@@ -28,7 +28,7 @@ require.config({
         "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.min",
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
         templates: "../templates",
-        config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
+        config: configPath,
         d3: "../node_modules/d3/build/d3.min",
         geoapi: "GeoAPI",
         jquery: "../node_modules/jquery/dist/jquery.min",
