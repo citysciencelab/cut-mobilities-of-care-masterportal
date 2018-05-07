@@ -41,6 +41,9 @@ define(function (require) {
             this.listenTo(Radio.channel("Gaz"), {
                 "adressSearch": this.adressSearch
             });
+            Radio.channel("Gaz").reply({
+                "streetsSearch": this.streetsSearch
+            }, this);
 
             if (gazService && gazService.get("url")) {
                 this.set("gazetteerURL", gazService.get("url"));
@@ -132,6 +135,11 @@ define(function (require) {
                 this.setTypeOfRequest("adress2");
                 this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.getAdress, false, this.getTypeOfRequest());
             }
+        },
+        streetsSearch: function (adress) {
+            this.setTypeOfRequest("searchHouseNumbers1");
+            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(adress.name), this.getHouseNumbers, false, this.getTypeOfRequest());
+            return this.get("houseNumbers");
         },
         /**
         * @description Veränderte Suchabfolge bei initialer Suche, z.B. über Config.initialQuery

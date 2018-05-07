@@ -18,8 +18,8 @@ var SnippetModel = require("modules/snippets/model"),
             this.superInitialize();
             this.addValueModel(this.get("isSelected"));
             this.listenTo(this.get("valuesCollection"), {
-                "change:isSelected": function () {
-                    this.trigger("valuesChanged");
+                "change:isSelected": function (model) {
+                    this.trigger("valuesChanged", model.get("isSelected"));
                     this.renderView();
                 }
             });

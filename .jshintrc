@@ -42,6 +42,7 @@
         "_",
         "JSON",
         "Backbone",
+        "after",
         "before",
         "beforeEach",
         "describe",

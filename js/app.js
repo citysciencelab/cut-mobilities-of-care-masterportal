@@ -13,9 +13,12 @@ var $ = require("jquery"),
     CRS = require("modules/core/crs"),
     Map = require("modules/core/map"),
     WPS = require("modules/core/wps"),
-    AddGeoJSON = require("modules/tools/addGeoJSON/model");
+    AddGeoJSON = require("modules/tools/addGeoJSON/model"),
+    RemoteInterface = require("modules/remoteInterface/model");
 
     // Core laden
+    new Alert();
+    new RemoteInterface();
     new Alert();
     new Autostarter();
     new Util();
@@ -34,13 +37,15 @@ var $ = require("jquery"),
         new GraphModel();
     });
     // Module laden
+    require(["modules/wfsTransaction/model"], function (WFSTransactionModel) {
+        new WFSTransactionModel();
+    });
+
     require(["modules/menu/menuLoader"], function (MenuLoader) {
         new MenuLoader();
     });
 
-    require(["modules/remoteInterface/model"], function (Remoteinterface) {
-        new Remoteinterface();
-    });
+
 
     require(["modules/zoomToGeometry/model"], function (ZoomToGeometry) {
         new ZoomToGeometry();
@@ -247,6 +252,9 @@ var $ = require("jquery"),
             }
         });
     });
+    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
+        new AddGeoJSON();
+    });
     // controls
     var style = Radio.request("ParametricURL", "getStyle");
 
@@ -349,6 +357,10 @@ var $ = require("jquery"),
 
     require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
         new StyleWMSView();
+    });
+
+    require(["modules/highlightFeature/model"], function (HighlightFeature) {
+        new HighlightFeature();
     });
 
     Radio.trigger("Util", "hideLoader");

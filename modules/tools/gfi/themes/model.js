@@ -244,7 +244,7 @@ define(function (require) {
                     else {
                         if (this.isValidKey(key) && this.isValidValue(value)) {
                             if (_.isArray(value)) {
-                                value = value.toString();
+                                value = value.toString().replace(/,/g, ", ");
                             }
                             preGfi[key] = _.isString(value) ? value.trim() : value;
                         }
@@ -273,14 +273,6 @@ define(function (require) {
                      }
                 }
                 else {
-                    // map object keys to gfiAttributes from layer model
-
-//                    _.each(preGfi, function (value, key) {
-//                        key = gfiAttributes[key];
-//                        if (key) {
-//                            gfi[key] = value;
-//                        }
-//                    });
                     _.each(gfiAttributes, function (value, key) {
                         key = preGfi[key];
 

@@ -12,8 +12,10 @@ define(function (require) {
             parsedValues = this.parseValues(attributes.values);
 
             this.addValueModels(_.min(parsedValues), _.max(parsedValues));
-
-            this.listenTo(this.get("valuesCollection"), {
+            if (this.has("PreselectedValues")) {
+                this.updateValues(this.getPreselectedValues());
+            }
+            this.listenTo(this.getValuesCollection(), {
                 "change:value": function (model, value) {
                     this.triggerValuesChanged(model, value);
                     if (model.get("initValue") === value) {
@@ -27,19 +29,19 @@ define(function (require) {
          * add minValueModel and maxValueModel to valuesCollection
          */
         addValueModels: function (min, max) {
-            this.get("valuesCollection").add([
+            this.getValuesCollection().add([
                 new ValueModel({
-                    attr: this.get("name"),
-                    displayName: this.get("displayName") + " ab",
+                    attr: this.getName(),
+                    displayName: this.getDisplayName + " ab",
                     value: min,
-                    type: this.get("type"),
+                    type: this.getType(),
                     isMin: true
                 }),
                 new ValueModel({
-                    attr: this.get("name"),
-                    displayName: this.get("displayName") + " bis",
+                    attr: this.getName(),
+                    displayName: this.getDisplayName + " bis",
                     value: max,
-                    type: this.get("type"),
+                    type: this.getType(),
                     isMin: false
                 })
             ]);
@@ -53,12 +55,12 @@ define(function (require) {
         updateValues: function (snippetValues) {
             // range slider
             if (_.isArray(snippetValues) === true) {
-                this.get("valuesCollection").at(0).setValue(snippetValues[0]);
-                this.get("valuesCollection").at(1).setValue(snippetValues[1]);
+                this.getValuesCollection().at(0).setValue(snippetValues[0]);
+                this.getValuesCollection().at(1).setValue(snippetValues[1]);
             }
             // slider
             else {
-                this.get("valuesCollection").at(0).set("value", snippetValues);
+                this.getValuesCollection().at(0).set("value", snippetValues);
             }
         },
 
@@ -68,9 +70,9 @@ define(function (require) {
          */
         getSelectedValues: function () {
             return {
-                attrName: this.get("name"),
-                type: this.get("type"),
-                values: this.get("valuesCollection").pluck("value")
+                attrName: this.getName(),
+                type: this.getType(),
+                values: this.getValuesCollection().pluck("value")
             };
         },
 

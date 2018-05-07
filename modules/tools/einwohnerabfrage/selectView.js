@@ -1,16 +1,17 @@
 define(function (require) {
 
     var Backbone = require("backbone"),
-        Einwohnerabfrage = require("modules/tools/einwohnerabfrage/model"),
+        EinwohnerabfrageModel = require("modules/tools/einwohnerabfrage/model"),
         SnippetDropdownView = require("modules/snippets/dropdown/view"),
         ResultView = require("modules/tools/einwohnerabfrage/resultView"),
         Template = require("text!modules/tools/einwohnerabfrage/selectTemplate.html"),
+        SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SelectView;
 
         SelectView = Backbone.View.extend({
         id: "einwohnerabfrage-tool",
+        model: new EinwohnerabfrageModel(),
         className: "win-body",
-        model: new Einwohnerabfrage(),
         template: _.template(Template),
         snippetDropdownView: {},
         events: {
@@ -23,12 +24,15 @@ define(function (require) {
                 "renderResult": this.renderResult
             });
             this.snippetDropdownView = new SnippetDropdownView({model: this.model.getDropDownSnippet()});
+            this.checkBox = new SnippetCheckBoxView({model: this.model.getCheckbox()});
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template));
                 this.$el.find(".dropdown").append(this.snippetDropdownView.render());
+                this.$el.find(".checkbox").append(this.checkBox.render());
+
                 this.delegateEvents();
             }
             else {
@@ -41,7 +45,7 @@ define(function (require) {
             this.$el.find(".result").append(new ResultView({ model: this.model}).render());
         },
         createDrawInteraction: function (evt) {
-            this.model.get("drawInteraction").setActive(false);
+            this.model.getDrawInteraction().setActive(false);
             this.model.createDrawInteraction(evt.target.value);
         }
     });
