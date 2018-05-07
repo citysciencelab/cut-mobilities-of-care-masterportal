@@ -278,3 +278,9 @@ li.results:hover {
 #table-searchForm .btn-table-search:hover {
     background-color: rgb(169,169,169);
 }
+
+#table-nav #searchbar {
+    position: absolute;
+    left: -11px;
+    top: -4px;
+}

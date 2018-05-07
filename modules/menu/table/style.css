@@ -1,7 +1,8 @@
 #table-nav {
     bottom: 30px;
+    left: 35%;
     position: absolute;
-    width: 100%;
+    width: 450px;
 }
 
 .table-nav {

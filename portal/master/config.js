@@ -79,8 +79,7 @@ define(function () {
         },
         isMenubarVisible: true,
         geoAPI: false,
-        clickCounter: {},
-        uiStyle:"table"
+        clickCounter: {}
     };
 
     return config;

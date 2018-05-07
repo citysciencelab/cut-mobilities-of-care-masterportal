@@ -5,8 +5,9 @@ define([
     "text!modules/searchbar/templateRecommendedList.html",
     "text!modules/searchbar/templateHitList.html",
     "modules/searchbar/model",
-    "backbone.radio"
-], function (Backbone, SearchbarTemplate, TemplateTable, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, Radio) {
+    "backbone.radio",
+    "config"
+], function (Backbone, SearchbarTemplate, TemplateTable, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, Radio, Config) {
     "use strict";
     return Backbone.View.extend({
         model: new Searchbar(),
@@ -95,8 +96,7 @@ define([
             });
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function (parentElementId) {
-                    this.setElement(config.renderToDOM);
-                    this.renderToDOM(parentElementId);
+                        this.render(parentElementId);
                     if (window.innerWidth >= 768) {
                         $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
                     }
@@ -109,7 +109,7 @@ define([
                 }
             });
 
-                this.render(config);
+            this.render();
 
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
                 $("#searchInput").val(this.model.get("placeholder"));
@@ -187,29 +187,30 @@ define([
         /**
         *
         */
-        render: function () {
+        render: function (parentElementId) {
             var attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
-            if (window.innerWidth < 768) {
-                $(".navbar-toggle").before(this.$el); // vor dem toggleButton
+            if (parentElementId !== "table-nav") {
+                this.$el.html(this.template(attr));
+                if (window.innerWidth < 768) {
+                    $(".navbar-toggle").before(this.$el); // vor dem toggleButton
+                }
+                else {
+                    $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
+                }
+                this.focusOnEnd($("#searchInput"));
+                if (this.model.get("searchString").length !== 0) {
+                    $("#searchInput:focus").css("border-right-width", "0");
+                }
+                this.delegateEvents(this.events);
+                Radio.trigger("Title", "setSize");
             }
             else {
-                $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
+                this.$el.html(this.templateTable(attr));
+                $("#" + parentElementId).append(this.$el);
             }
-            if (this.model.get("searchString").length !== 0) {
-                $("#searchInput:focus").css("border-right-width", "0");
-            }
-            this.delegateEvents(this.events);
-            Radio.trigger("Title", "setSize");
         },
 
-        renderToDOM: function (parentElementId) {
-            var attr = this.model.toJSON();
-
-            this.$el.html(this.templateTable(attr));
-            $("#" + parentElementId).append(this.$el);
-        },
         /**
         * @description Methode, um den Searchstring über den Radio zu steuern ohne Event auszulösen
         * @param {string} searchstring - Der einzufügende Searchstring
