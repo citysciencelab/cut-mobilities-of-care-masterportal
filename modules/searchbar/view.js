@@ -207,7 +207,7 @@ define([
             }
             else {
                 this.$el.html(this.templateTable(attr));
-                $("#" + parentElementId).append(this.$el);
+                $("#table-nav-main").append(this.$el);
             }
         },
 

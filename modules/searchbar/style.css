@@ -280,7 +280,7 @@ li.results:hover {
 }
 
 #table-nav #searchbar {
-    position: absolute;
-    left: -11px;
-    top: -4px;
+    position: relative;
+    top:-48px;
 }
+
