@@ -1,11 +1,11 @@
 define([
     "backbone",
-    "text!modules/menu/table/layer/templateLayer.html",
+    "text!modules/menu/table/layer/templates/templateSingleLayer.html",
     "backbone.radio"
 ], function () {
 
     var Backbone = require("backbone"),
-        Template = require("text!modules/menu/table/layer/templateLayer.html"),
+        Template = require("text!modules/menu/table/layer/templates/templateSingleLayer.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -22,29 +22,21 @@ define([
                     e.stopPropagation();
                 }
             });
-            this.render();
         },
 
         render: function () {
-            var attr = this.model.toJSON(),
-                selector = $("#" + this.model.getParentId() + "-table");
-
-            selector.prepend(this.$el.html(this.template(attr)));
-        },
-
-        rerender: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            return this.$el;
         },
+
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
-            this.rerender();
+            this.render();
         },
         showLayerInformation: function () {
             this.model.showLayerInformation();
-            // Navigation wird geschlossen
-            //$("div.collapse.navbar-collapse").removeClass("in");
         }
     });
 

@@ -17,20 +17,11 @@
     padding: 5px;
 }
 
-#table-layer {
+#table-layer-list {
     position: relative;
-    left: -200px;
-}
-
-.table-layer {
-    background-color: #FFF;
-    margin: auto;
+    margin-left: 23px;
     width: 40px;
-    height: 40px;
-}
-
-.table-layer > p {
-    font-size: 27.5px;
+    background-color: #fff;
 }
 
 #table-tool {
@@ -53,16 +44,29 @@
 }
 
 #toggler{
-    margin: auto;
     width: 40px;
     height: 40px;
 }
-
 .panel {
     background: transparent;
     border-width: 0px;
     -webkit-box-shadow: none;
     box-shadow: none;
+    background-color: #F2F2F2;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    padding-left: 7px;
+    margin-bottom: 75px;
+    position: absolute;
+    margin-top: -88px;
+    margin-left: -28px;
+    width: 480px;
+    bottom: -20px;
+}
+
+.layers {
+padding-left: 0px;
+padding-bottom: 12px;
 }
 
 .icon-checkbox2:before {
@@ -96,7 +100,6 @@
     border: none;
 }
 
-
 div#isActivated {
     color: #003063;
     font-family: "HamburgSans-Bold", sans-serif;
@@ -104,40 +107,33 @@ div#isActivated {
 
 .tablefont {
     font-family: "HamburgSans", sans-serif;
+    font-size: 17px;
 }
 
 .burgerMenuIsActive {
-    background-color: #aaa;
+    background-color: #aaa !important;
+    height: 40px;
+    width: 40px;
+
 }
 
 .icon-info:before {
     padding-top: -12px !important;
 }
 
-.pull-left {
-    float: left !important;
-    margin-left: 8px;
+.checkboxicon-left {
+    margin-left: 15px;
     cursor: pointer;
 }
 
-.panel-body-table {
-    background-color: #F2F2F2;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
-    padding-left: 7px;
-    margin-bottom: -10px;
-
-}
 .panel-group {
-  position: absolute;
-  margin-top: -88px;
-  margin-left: -20px;
-  width: 480px;
-  bottom: 25px;
+
 }
 
 #funnel {
+    position: absolute;
     display: flex;
+    margin-bottom:-10px;
 }
 
 #left-funnel-corner {
@@ -162,7 +158,7 @@ div#isActivated {
         radial-gradient(circle at 100% 100%, transparent 10px, #F2F2F2 10px);
 }
 
-ul#tree-table {
+ul#layers {
     border: none;
     font-size: 15px;
     padding: 0px 0;
@@ -170,22 +166,22 @@ ul#tree-table {
     overflow: auto;
 }
 
-ul#tree-table ul {
+ul#layers ul {
     list-style: none;
     padding: 0 0 0 0px;
     -webkit-padding-start: 0px;
 }
 
-ul#tree-table ul li {
+ul#layers ul li {
     border-bottom: 1px solid #ddd;
     padding: 5px 15px;
 }
 
-.pull-right{
+.info-icon{
     position: absolute;
     right: 30px;
 }
 
-ul#tree-table {
+ul#layers {
     padding-bottom: 7px;
 }
