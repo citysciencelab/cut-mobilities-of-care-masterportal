@@ -47,8 +47,8 @@ define(function (require) {
         sendRequest: function (url, xmlString, requestID) {
             var xhr = new XMLHttpRequest(),
                 context = this;
-            xhr.timeout = 10000;
-            xhr.open("POST", url);
+                xhr.open("POST", url);
+                xhr.timeout = 10000;
             xhr.onload = function (event) {
                 context.handleResponse(event.currentTarget.responseText, requestID, xhr.status);
             };
@@ -66,6 +66,7 @@ define(function (require) {
          * @param requestId  String unique Identifier for this request
          */
         handleResponse: function (responseText, requestID, status) {
+            debugger;
             var obj;
 
             if (status === 200) {
@@ -97,7 +98,7 @@ define(function (require) {
                 children = $(xml).children();
 
             if (_.isUndefined(xml) === false && _.isUndefined(children) === false && children.length === 0) {
-                obj[$(xml)[0].nodeName.toLowerCase()] = xml.innerHTML;
+                obj[$(xml)[0].nodeName.toLowerCase()] = xml.textContent;
             }
             children.each(function (index, val) {
                 that.buildObj(val, obj);
