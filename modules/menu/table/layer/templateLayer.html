@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<span class="layer-item pull-left">
-    <span class="tablefont pull-left">
+<span class="layer-item pull-left tablefont">
         <% if (isVisibleInMap === true) { %>
         <div id="isActivated">
             <span class="icon-checkbox pull-left" title="Layer ausschalten"></span><span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span></span></div>
@@ -8,7 +7,6 @@
             <span class="icon-checkbox2 pull-left" title="Layer einschalten"></span><span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span></span>
         <% } %>
 
-    </span>
 </span>
 <span class="pull-right">
     <span class="icon-info" data-toggle="tooltip" data-placement="bottom" title="Informationen und Legende"></span>

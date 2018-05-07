@@ -15,19 +15,15 @@ define(function (require) {
         template: _.template(MainTemplate),
         initialize: function () {
             this.render();
-            this.renderLayer();
             this.renderList();
             this.renderTool();
         },
         render: function () {
             $(this.el).html(this.template());
-            $("#tree").remove();
             $(".lgv-container").append(this.$el);
         },
-        renderLayer: function () {
-            this.$el.find("#table-nav-main").append(new LayerView().render());
-        },
          renderList: function () {
+            this.$el.find("#table-nav-main").append(new LayerView().render());
             new ListView().render();
         },
         renderTool: function () {

@@ -2,7 +2,7 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         _ = require("underscore"),
-        LayerTemplate = require("text!modules/menu/table/layer/template.html"),
+        LayerTemplate = require("text!modules/menu/table/layer/templateLayerList.html"),
         $ = require("jquery"),
         LayerView;
 

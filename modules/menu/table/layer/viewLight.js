@@ -1,11 +1,11 @@
 define([
     "backbone",
-    "text!modules/menu/table/layer/templateLight.html",
+    "text!modules/menu/table/layer/templateLayer.html",
     "backbone.radio"
 ], function () {
 
     var Backbone = require("backbone"),
-        Template = require("text!modules/menu/table/layer/templateLight.html"),
+        Template = require("text!modules/menu/table/layer/templateLayer.html"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -44,7 +44,7 @@ define([
         showLayerInformation: function () {
             this.model.showLayerInformation();
             // Navigation wird geschlossen
-            $("div.collapse.navbar-collapse").removeClass("in");
+            //$("div.collapse.navbar-collapse").removeClass("in");
         }
     });
 

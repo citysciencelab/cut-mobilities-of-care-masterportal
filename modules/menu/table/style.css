@@ -99,8 +99,7 @@
 
 div#isActivated {
     color: #003063;
-    font-weight: 900;
-    font-family: "HamburgSans", sans-serif;
+    font-family: "HamburgSans-Bold", sans-serif;
 }
 
 .tablefont {
@@ -162,126 +161,23 @@ div#isActivated {
         radial-gradient(circle at 100% 100%, transparent 10px, #F2F2F2 10px);
 }
 
-.header-cool {
-  background: salmon;
-  padding: 0;
-  position: relative;
-  height: 500px;
-}
-
-/**************** Menu ***********************/
-.submenu-style {
-    padding: 5px 0;
-    border-bottom: 1px solid rgb(229, 229, 229);
-}
-
-
-/**************** Themenbaum ****************/
 ul#tree-table {
     border: none;
-    font-family: UniversNextW01-Regular, sans-serif;
     font-size: 15px;
-    font-weight: 400;
-    color: #555;
     padding: 0px 0;
     min-width:  410px;
     overflow: auto;
 }
 
-.LayerListMaxHeight {
-    max-height: calc(100vH - 177px);
-}
-
-/* ----------------------Themenbaum light -----------------------------*/
-ul#tree-table.light {
-    font-size: 12px;
-    color: rgb(85, 85, 85);
-    overflow-y:auto;
-}
-
-ul#tree-table.light li {
-    /*border-bottom: 1px solid #ddd;*/
-    border-left: 0;
-    border-right: 0;
-    padding: 8px 6px;
-    max-width: 500px;
-    overflow: auto;
-    font-weight: normal;
-}
-
-ul#tree-table.light li span.title {
-    vertical-align: sub;
-    cursor:pointer;
-}
-
-/*Haupt Themenliste */
-
-ul#tree-table .closed:not(.SelectedLayer ){
-    border-bottom: 1px solid #ddd;
-}
-
-/*Unterlisten*/
 ul#tree-table ul {
     list-style: none;
     padding: 0 0 0 0px;
     -webkit-padding-start: 0px;
 }
 
-ul#tree-table .catalog_buttons .glyphicon {
-    padding: 0px 0;
-    cursor: pointer;
-}
-
-ul#tree-table .catalog_buttons .glyphicon-adjust {
-    font-size: 14px
-}
-
-ul#tree-table ul .title {
-    font-family: HamburgSans-Bold;
-    font-size: 12px;
-    cursor: pointer;
-}
-
 ul#tree-table ul li {
     border-bottom: 1px solid #ddd;
     padding: 5px 15px;
-}
-ul#tree-table .layer-catalog > .header {
-    padding: 8px 5px 7px 5px;
-    background-color: rgb(85, 85, 85);
-    color: rgb(255, 255, 255);
-    font-size: 13px;
-}
-
-ul#tree-table .catalog-selection {
-    font-size: 11px;
-    font-weight: 400;
-}
-
-ul#tree-table .catalog-selection > select {
-    height: 20px;
-    padding: 0;
-    font-size: 11px;
-}
-
-ul#tree-table .themen-folder {
-    font-weight: 400;
-}
-
-/*-------------------Selection/Settings----------------------*/
-ul#tree-table ul{
-   overflow-y: auto;
-   overflow-x: auto;
-    max-width:  500px;
-}
-
-ul#tree-table-table .layer-settings {
-    clear: both;
-    margin-top: 32px;
-    margin-left: 21px;
-     border-top: 1px dashed #ddd;
-    padding-top: 8px;
-    font-size: 14px;
 }
 
 .pull-right{
