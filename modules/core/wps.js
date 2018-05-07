@@ -66,7 +66,6 @@ define(function (require) {
          * @param requestId  String unique Identifier for this request
          */
         handleResponse: function (responseText, requestID, status) {
-            debugger;
             var obj;
 
             if (status === 200) {
