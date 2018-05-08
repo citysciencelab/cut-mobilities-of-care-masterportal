@@ -24,7 +24,7 @@ define([
             if (this.menuStyle === "TABLE") {
                 require(["modules/menu/table/view"], function (Menu) {
                     caller.currentMenu = new Menu();
-                    channel.trigger("ready");
+                    channel.trigger("ready", caller.currentMenu.id);
                 });
             }
             else if (this.menuStyle === "DEFAULT") {
