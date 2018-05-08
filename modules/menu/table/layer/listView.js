@@ -40,7 +40,7 @@ define(function (require) {
 
             _.each(models, function (model) {
                 childElement = new SingleLayerView({model: model}).render();
-                this.$el.find("ul.layers").append(childElement);
+                this.$el.find("ul.layers").prepend(childElement);
 
             }, this);
         }

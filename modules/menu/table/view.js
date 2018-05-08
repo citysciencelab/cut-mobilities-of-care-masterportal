@@ -14,14 +14,14 @@ define(function (require) {
         template: _.template(MainTemplate),
         initialize: function () {
             this.render();
-            this.renderLayer();
+            this.renderLayerList();
             this.renderTool();
         },
         render: function () {
             $(this.el).html(this.template());
             $(".lgv-container").append(this.$el);
         },
-         renderLayer: function () {
+        renderLayerList: function () {
             this.$el.find("#table-nav-main").append(new LayerListView().render());
         },
         renderTool: function () {
