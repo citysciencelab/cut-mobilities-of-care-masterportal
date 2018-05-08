@@ -15,6 +15,8 @@ define(function (require) {
             isVisible: false,
             // mobile Ansicht true | false
             isMobile: Radio.request("Util", "isViewMobile"),
+            // uiStyle DEFAULT | TABLE | SIMPLE
+            uiStyle: Radio.request("Util", "getUiStyle"),
             // ol.Overlay für attached
             overlay: new ol.Overlay({element: undefined}),
             // desktop/attached/view.js | desktop/detached/view.js | mobile/view.js
@@ -120,7 +122,7 @@ define(function (require) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
-            else if (deaktivateGFI == true) {
+            else if (deaktivateGFI === true) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
             else if (_.isUndefined(deaktivateGFI)) {
@@ -146,6 +148,9 @@ define(function (require) {
             else {
                 if (this.getDesktopViewType() === "attached") {
                     CurrentView = require("modules/tools/gfi/desktop/attached/view");
+                }
+                else if (this.getUiStyle() === "TABLE") {
+                    CurrentView = require("modules/tools/gfi/table/view");
                 }
                 else {
                     CurrentView = require("modules/tools/gfi/desktop/detached/view");
@@ -278,6 +283,10 @@ define(function (require) {
 
         getIsMobile: function () {
             return this.get("isMobile");
+        },
+
+        getUiStyle: function () {
+            return this.get("uiStyle");
         },
 
         getIsVisible: function () {

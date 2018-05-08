@@ -23,6 +23,7 @@ define(function (require) {
         VerkehrsStaerkenRadThemeView = require("modules/tools/gfi/themes/verkehrsstaerken_rad/view"),
         ItGbmTheme = require("modules/tools/gfi/themes/itgbm/model"),
         ItGbmThemeView = require("modules/tools/gfi/themes/itgbm/view"),
+        DipasThemeView = require("modules/tools/gfi/themes/dipas/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -125,6 +126,10 @@ define(function (require) {
                 }
                 case "itgbm": {
                     new ItGbmThemeView({model: model});
+                    break;
+                }
+                case "dipas": {
+                    new DipasThemeView({model: model});
                     break;
                 }
                 default: {

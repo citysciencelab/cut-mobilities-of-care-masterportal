@@ -7,14 +7,27 @@ define(function (require) {
         ToolView;
 
     ToolView = Backbone.View.extend({
-        id: "table-tool",
-        className: "table-tool table-nav",
+        id: "table-tools",
+        className: "table-nav table-tools",
         template: _.template(ToolTemplate),
+        events: {
+            "click": "toggleToolMenu"
+        },
         initialize: function () {
             this.render();
         },
         render: function () {
             return this.$el.html(this.template());
+        },
+        toggleToolMenu: function () {
+            $("div.table-tools-menu").toggle();
+            if ($("div.table-tools").hasClass("table-tools-active")) {
+                $("div.table-tools").removeClass("table-tools-active");
+            }
+            else {
+                $("div.table-tools").addClass("table-tools-active");
+            }
+
         }
     });
 

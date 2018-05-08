@@ -24,13 +24,13 @@
     background-color: #fff;
 }
 
-#table-tool {
+#table-tools {
     position: relative;
     top: -45px;
     left: 324px;
 }
 
-.table-tool {
+.table-tools {
     background-color: #F2F2F2;
     margin: auto;
     width: 40px;
@@ -39,7 +39,50 @@
     cursor: pointer;
 }
 
-.table-tool > p {
+.table-tools-menu {
+    background-color: #F2F2F2;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    width: 300px;
+    height: 200px;
+    display: none;
+    position: relative;
+    bottom: 210px;
+    left: -52px;
+}
+
+.table-tools-menu:after, .table-tools-menu:before {
+	top: 100%;
+    left: 72px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+}
+
+.table-tools-menu:after {
+	border-color: rgba(0, 0, 0, 0);
+	border-top-color: #F2F2F2;
+	border-width: 10px;
+	margin-left: -10px;
+}
+.table-tools-menu:before {
+	border-color: rgba(0, 0, 0, 0);
+	border-top-color: #F2F2F2;
+	border-width: 10px;
+	margin-left: -10px;
+}
+
+.table-tools-active {
+    background-color: #808080;
+}
+
+.table-tools-active .icon-tools:before {
+    color: #F2F2F2;
+}
+
+
+.table-tools > p {
     font-size: 26px;
 }
 
