@@ -292,6 +292,7 @@ li.results:hover {
 
 #table-nav #searchbar {
     position: relative;
-    top:-48px;
+    top: -9px;
+    left: 12px;
 }
 
