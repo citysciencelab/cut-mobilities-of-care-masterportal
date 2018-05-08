@@ -19,7 +19,6 @@ define("app", function (require) {
     // Core laden
     new Alert();
     new RemoteInterface();
-    new Alert();
     new Autostarter();
     new Util();
     new StyleList();

@@ -105,7 +105,7 @@ define(function (require) {
                 return new StaticLink(attrs, options);
             }
             else {
-                Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + "attrs.type");
+                Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + attrs.type + ". Bitte wenden Sie sich an einen Administrator!");
             }
         },
         /**

@@ -9,8 +9,7 @@ define([
         defaults: {
             layerParams: [],
             isInitOpen: "",
-            zoomToGeometry: "",
-            style: ""
+            zoomToGeometry: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -247,9 +246,6 @@ define([
 
             if (value && (value === "TABLE" || value === "SIMPLE")) {
                 Radio.trigger("Util", "setUiStyle", value);
-                $("#main-nav").hide();
-                $("#map").css("height", "100%");
-                this.setStyle(value);
             }
         },
         parseURL: function (result) {
@@ -264,7 +260,6 @@ define([
 
                     result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
                 });
-
             }
             else {
                 result = undefined;
@@ -415,14 +410,6 @@ define([
 
         getZoomToExtent: function () {
             return this.get("zoomToExtent");
-        },
-        // getter for style
-        getStyle: function () {
-            return this.get("style");
-        },
-        // setter for style
-        setStyle: function (value) {
-            this.set("style", value);
         },
         getFilter: function () {
             return this.get("filter");
