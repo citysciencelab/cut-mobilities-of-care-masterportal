@@ -108,7 +108,6 @@ define(function (require) {
         search: function (searchString) {
             if (searchString.length >= this.get("minChars")) {
                 this.suggestByBKG(searchString);
-                Radio.trigger("Searchbar", "createRecommendedList");
             }
         },
         /**
