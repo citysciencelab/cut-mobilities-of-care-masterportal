@@ -34,7 +34,6 @@ define(function (require) {
 
             if (_.isString(renderToDOM)) {
                 this.setElement(renderToDOM);
-                // this.model.readConfig(psconfig);
                 this.listenTo(this.model, {
                     "change:fetched": function () {
                         this.render2DOM();
