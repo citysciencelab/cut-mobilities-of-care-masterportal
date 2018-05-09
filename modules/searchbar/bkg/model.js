@@ -136,6 +136,7 @@ define(function (require) {
                     });
                 }
             }, this);
+            Radio.trigger("Searchbar", "createRecommendedList");
         },
         /**
          * [bkgSearch description]
