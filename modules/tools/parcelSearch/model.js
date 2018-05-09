@@ -142,7 +142,10 @@ define(function (require) {
 
                 url += key + "=" + String(val) + andSymbol;
             });
-            url = url.slice(0, -1);
+            // if params is empty object
+            if (url.charAt(url.length - 1) !== "?") {
+                url = url.slice(0, -1);
+            }
             return url;
 
         },
