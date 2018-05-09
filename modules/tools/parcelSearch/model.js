@@ -245,18 +245,10 @@ define(function (require) {
         getParcelDenominatorField: function () {
             return this.get("parcelDenominatorField");
         },
-        // setter for parcelDenominatorField
-        setParcelDenominatorField: function (value) {
-            this.set("parcelDenominatorField", value);
-        },
 
         // getter for storedQueryID
         getStoredQueryID: function () {
             return this.get("storedQueryID");
-        },
-        // setter for storedQueryID
-        setStoredQueryID: function (value) {
-            this.set("storedQueryID", value);
         },
 
         // getter for serviceURL
@@ -267,15 +259,7 @@ define(function (require) {
         setServiceURL: function (value) {
             this.set("serviceURL", value);
         },
-        // setter for createReport
-        setCreateReport: function (value) {
-            this.set("createReport", value);
-        },
 
-        // getter for districts
-        getDistricts: function () {
-            return this.get("districts");
-        },
         // setter for districts
         setDistricts: function (value) {
             this.set("districts", value);
@@ -290,19 +274,6 @@ define(function (require) {
             this.set("cadastralDistricts", value);
         },
 
-        // getter for cadastralDistrictsField
-        getCadastralDistrictsField: function () {
-            return this.get("cadastralDistrictsField");
-        },
-        // setter for cadastralDistrictsField
-        setCadastralDistrictsField: function (value) {
-            this.set("cadastralDistrictsField", value);
-        },
-
-        // getter for fetched
-        getFetched: function () {
-            return this.get("fetched");
-        },
         // setter for fetched
         setFetched: function (value) {
             this.set("fetched", value);
@@ -348,25 +319,13 @@ define(function (require) {
         getReportServiceId: function () {
             return this.get("reportServiceId");
         },
-        // setter for reportServiceId
-        setReportServiceId: function (value) {
-            this.set("reportServiceId", value);
-        },
         // getter for serviceId
         getServiceId: function () {
             return this.get("serviceId");
         },
-        // setter for serviceId
-        setServiceId: function (value) {
-            this.set("serviceId", value);
-        },
         // getter for configJSON
         getConfigJSON: function () {
             return this.get("configJSON");
-        },
-        // setter for configJSON
-        setConfigJSON: function (value) {
-            this.set("configJSON", value);
         }
     });
 

@@ -20,5 +20,14 @@ define(function(require) {
                 expect(model.buildUrl("www.url.de?", {test: false})).to.have.string("www.url.de?test=false");
             });
         });
+        describe("createFlurstKennz", function () {
+            it("should create Flurstückskennzeichen from countryNumber, districtNumber and parcelNumber", function () {
+                model.set("countryNumber", "03");
+                model.setDistrictNumber("0123");
+                model.setParcelNumber(123);
+                expect(model.createFlurstKennz()).to.have.string("030123___00123______");
+            });
+
+        });
     });
 });
