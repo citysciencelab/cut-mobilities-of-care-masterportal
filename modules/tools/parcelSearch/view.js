@@ -15,7 +15,8 @@ define(function (require) {
             "change #parcelFieldDenominator": "setParcelDenominatorNumber",
             "keyup #parcelField": "setParcelNumber",
             "keyup #parcelFieldDenominator": "setParcelDenominatorNumber",
-            "click #submitbutton": "submitClicked"
+            "click #submitbutton": "submitClicked",
+            "click #reportbutton": "reportClicked"
         },
         /*
          * In init wird configuration nach "renderToDOM" untersucht.
@@ -33,7 +34,7 @@ define(function (require) {
 
             if (_.isString(renderToDOM)) {
                 this.setElement(renderToDOM);
-                this.model.readConfig(psconfig);
+                // this.model.readConfig(psconfig);
                 this.listenTo(this.model, {
                     "change:fetched": function () {
                         this.render2DOM();
@@ -42,12 +43,7 @@ define(function (require) {
             }
             else {
                 this.listenTo(this.model, {
-                    "change:isCollapsed change:isCurrentWin": this.render2Window,
-                    "change:fetched": function () {
-                        this.model.set("isCollapsed", false, {silent: true});
-                        this.model.set("isCurrentWin", true, {silent: true});
-                        this.render2Window();
-                    }
+                    "change:isCollapsed change:isCurrentWin": this.render2Window
                 });
             }
         },
@@ -57,7 +53,7 @@ define(function (require) {
         render2Window: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+            if (this.model.getIsCurrentWin() === true && this.model.getIsCollapsed() === false) {
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
             }
@@ -74,15 +70,17 @@ define(function (require) {
             this.$el.html(this.template(attr));
         },
         checkInput: function () {
-            if (this.model.get("districtNumber") !== "0" &&
-                (this.model.get("cadastralDistrictField") === false || this.model.get("cadastralDistrictNumber") !== "0") &&
-                this.model.get("parcelNumber") !== "" &&
-                _.isNumber(parseInt(this.model.get("parcelNumber"), 10)) &&
-                (this.model.get("parcelDenominatorField") === false || this.model.get("parcelDenominatorNumber") !== "")) {
+            if (this.model.getDistrictNumber() !== "0" &&
+                (this.model.getCadastralDistrictField() === false || this.model.getCadastralDistrictNumber() !== "0") &&
+                this.model.getParcelNumber() !== "" &&
+                _.isNumber(parseInt(this.model.getParcelNumber(), 10)) &&
+                (this.model.getParcelDenominatorField() === false || this.model.getParcelDenominatorNumber() !== "")) {
                 $("#submitbutton").attr("disabled", false);
+                $("#reportbutton").attr("disabled", false);
             }
             else {
                 $("#submitbutton").attr("disabled", true);
+                $("#reportbutton").attr("disabled", true);
             }
         },
         cadastralDistrictFieldChanged: function () {
@@ -102,7 +100,7 @@ define(function (require) {
             var value = $("#districtField").val();
 
             if (value !== "0") {
-                if (this.model.get("cadastralDistrictField") === true) {
+                if (this.model.getCadastralDistrictField() === true) {
                     this.insertCadastralDistricts($("#districtField").val());
                     $("#cadastralDistrictFieldSet").attr("disabled", false);
                     $("#parcelField").attr("disabled", true);
@@ -126,7 +124,7 @@ define(function (require) {
          * Setzt die gültigen Fluren für die ausgewählte Gemarkung in select.
          */
         insertCadastralDistricts: function (districtNumber) {
-            var cadastralDistricts = this.model.get("cadastralDistricts");
+            var cadastralDistricts = this.model.getCadastralDistricts();
 
             this.model.setCadastralDistrictNumber("0");
             $("#cadastralDistrictField").empty();
@@ -151,6 +149,9 @@ define(function (require) {
         },
         submitClicked: function () {
             this.model.sendRequest();
+        },
+        reportClicked: function () {
+            this.model.createReport();
         }
     });
 
