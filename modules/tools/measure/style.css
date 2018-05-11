@@ -32,3 +32,11 @@
 .tooltip-static:before {
     border-top-color: rgba(255, 127, 0, 1.0);
 }
+
+.tooltip-static .measure-hint {
+    display: none;
+}
+
+.tooltip-measure .measure-hint {
+    font-size: 10px;
+}
