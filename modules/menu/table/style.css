@@ -48,6 +48,7 @@
     position: relative;
     bottom: 210px;
     left: -52px;
+    padding: 12px;
 }
 
 .table-tools-menu:after, .table-tools-menu:before {
@@ -84,6 +85,16 @@
 
 .table-tools > p {
     font-size: 26px;
+}
+
+.table-tool {
+    margin-bottom: 6px;
+    font-family: "HamburgSans",sans-serif;
+    font-size: 14px;
+}
+
+.table-tool > a {
+    color: #808080;
 }
 
 #toggler{

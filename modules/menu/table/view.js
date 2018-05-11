@@ -15,7 +15,7 @@ define(function (require) {
         initialize: function () {
             this.render();
             this.renderLayerList();
-            this.renderTool();
+            this.renderTools();
         },
         render: function () {
             $(this.el).html(this.template());
@@ -24,8 +24,8 @@ define(function (require) {
         renderLayerList: function () {
             this.$el.find("#table-nav-main").append(new LayerListView().render());
         },
-        renderTool: function () {
-            this.$el.append(new ToolView().render());
+        renderTools: function () {
+            new ToolView();
         }
     });
         return Menu;

@@ -1,55 +1,24 @@
 define([
-    "backbone",
     "backbone.radio",
-    "text!modules/tools/measure/template.html",
-    "modules/tools/measure/model"
-], function (Backbone, Radio, MeasureTemplate, Measure) {
+    "modules/tools/measure/default/view",
+    "modules/tools/measure/table/view"
+], function () {
+    var Radio = require("backbone.radio"),
+        MeasureView;
 
-    var MeasureView = Backbone.View.extend({
-        model: new Measure(),
-        className: "win-body",
-        template: _.template(MeasureTemplate),
-        events: {
-            "change select#geomField": "setGeometryType",
-            "change select#unitField": "setUnit",
-            "click button": "deleteFeatures",
-            "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
-                Radio.trigger("Quickhelp", "showWindowHelp", "measure");
-            }
-        },
+    MeasureView = function () {
+            var menuStyle = Radio.request("Util", "getUiStyle");
 
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:type": this.render
-            });
-        },
-
-        render: function () {
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
-
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
-                this.delegateEvents();
+            if (menuStyle === "TABLE") {
+                require(["modules/tools/measure/table/view"], function (MeasureView) {
+                    new MeasureView();
+                });
             }
             else {
-                this.undelegateEvents();
+                require(["modules/tools/measure/default/view"], function (MeasureView) {
+                    new MeasureView();
+                });
             }
-        },
-
-        setGeometryType: function (evt) {
-            this.model.setGeometryType(evt.target.value);
-            Radio.trigger("Map", "activateClick", "measure");
-        },
-
-        setUnit: function (evt) {
-            this.model.setUnit(evt.target.value);
-        },
-
-        deleteFeatures: function () {
-            this.model.deleteFeatures();
-        }
-    });
-
+    };
     return MeasureView;
 });
