@@ -12,10 +12,7 @@ define([
         events: {
             "change select#geomField": "setGeometryType",
             "change select#unitField": "setUnit",
-            "click button": "deleteFeatures",
-            "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
-                Radio.trigger("Quickhelp", "showWindowHelp", "measure");
-            }
+            "click button": "deleteFeatures"
         },
 
         initialize: function () {
