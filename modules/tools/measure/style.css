@@ -40,3 +40,7 @@
 .tooltip-measure .measure-hint {
     font-size: 10px;
 }
+
+.table-tool-measure-delete {
+    background-color: #DDDDDD;
+}
