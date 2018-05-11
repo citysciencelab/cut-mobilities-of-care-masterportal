@@ -29,6 +29,13 @@ define([
                 Radio.trigger("Alert", "alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
                 return;
             }
+            _.each(features.data, function (feature) {
+                if (feature.getGeometry() instanceof ol.geom.Circle) {
+                    // creates a regular polygon from a circle with 32(default) sides
+                    feature.setGeometry(ol.geom.Polygon.fromCircle(feature.getGeometry()));
+                }
+            });
+
             this.model.setData(features.data);
             this.model.setFormats(features.formats);
             this.model.setCaller(features.caller);
