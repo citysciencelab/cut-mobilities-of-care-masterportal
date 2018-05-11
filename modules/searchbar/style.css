@@ -285,3 +285,7 @@ li.results:hover {
     left: 12px;
 }
 
+#table-searchForm #searchInput {
+    font-family: "HamburgSans", sans-serif;
+    font-size: 1.3em;
+}
