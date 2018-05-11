@@ -8,9 +8,12 @@
     <label class="col-md-5 col-sm-5 control-label">Schriftgröße</label>
     <div class="col-md-7 col-sm-7">
         <select class="form-control input-sm fontSize">
-            <% _.each(fontSizes, function (fontSize) { %>
-                <option value="<%= fontSize.value %>" <% if (selectedFontSize === fontSize.value) { print ("SELECTED")} %>><%= fontSize.name %></option>
-            <% }); %>
+            <option value="10">10 px</option>
+            <option value="12">12 px</option>
+            <option value="16">16 px</option>
+            <option value="20">20 px</option>
+            <option value="24">24 px</option>
+            <option value="32">32 px</option>
         </select>
     </div>
 </div>
@@ -18,19 +21,9 @@
     <label class="col-md-5 col-sm-5 control-label">Schriftart</label>
     <div class="col-md-7 col-sm-7">
         <select class="form-control input-sm drawFont">
-            <% _.each(fonts, function (font) { %>
-                <option value="<%= font %>"><%= font %></option>
-            <% }); %>
-        </select>
-    </div>
-</div>
-<div class="form-group form-group-sm">
-    <label class="col-md-5 col-sm-5 control-label">Schriftfarbe</label>
-    <div class="col-md-7 col-sm-7">
-        <select class="form-control input-sm drawColor">
-            <% _.each(colors, function (element) { %>
-                <option value="<%= element.name %>" <% if (selectedColor.name === element.name) { print ("SELECTED")} %>><%= element.name %></option>
-            <% }); %>
+            <option value="Arial">Arial</option>
+            <option value="Calibri">Calibri</option>
+            <option value="Times New Roman">Times New Roman</option>
         </select>
     </div>
 </div>
