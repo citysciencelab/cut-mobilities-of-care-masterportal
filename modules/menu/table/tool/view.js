@@ -42,7 +42,9 @@ define(function (require) {
             $("#table-nav").append(this.$el.html(this.template()));
         },
         addToolView: function (model) {
-             new ToolsView({model: model});
+            if (model.get("isVisibleInMenu")) {
+                new ToolsView({model: model});
+            }
         },
         toggleToolMenu: function () {
             $("div.table-tools-menu").toggle();
