@@ -113,7 +113,6 @@ define(function (require) {
          */
         handleWPSError: function (response) {
             Radio.trigger("Alert", "alert", JSON.stringify(response["wps:ergebnis"]));
-            this.resetView();
         },
         /**
          * Used when statuscode is 200 and wps did not return an error
@@ -338,6 +337,7 @@ define(function (require) {
          * @param {ol.Overlay} circleOverlay
          */
         toggleOverlay: function (type, circleOverlay) {
+            console.log(444);
             if (type === "Circle") {
                 Radio.trigger("Map", "addOverlay", circleOverlay);
             }
