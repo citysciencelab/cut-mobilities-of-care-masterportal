@@ -17,7 +17,7 @@ define([
         setAttributes: function () {
             var gfiParams = [];
 
-            _.each(this.get("layerdefinitions"), function (layerdef) {
+            _.each(this.getLayerdefinitions(), function (layerdef) {
                 if (layerdef.gfiAttributes !== "ignore") {
                     gfiParams.push({
                         featureCount: layerdef.featureCount ? layerdef.featureCount : 1,
@@ -33,7 +33,7 @@ define([
             this.setGfiParams(gfiParams);
         },
         groupLayerObjectsByUrl: function () {
-            var groupByUrl = _.groupBy(this.get("layerdefinitions"), "url"),
+            var groupByUrl = _.groupBy(this.getLayerdefinitions(), "url"),
                 newLayerDefs = [];
 
             _.each(groupByUrl, function (layerGroup) {
@@ -51,7 +51,7 @@ define([
                 });
                 newLayerDefs.push(newLayerObj);
             });
-            this.set("layerdefinitions", newLayerDefs);
+            this.setLayerdefinitions(newLayerDefs);
         },
 
         /**
@@ -59,8 +59,8 @@ define([
          */
         createLayerSource: function () {
             // TODO noch keine Typ unterscheidung -> nur WMS
-            this.createChildLayerSources(this.get("layerdefinitions"));
-            this.createChildLayers(this.get("layerdefinitions"));
+            this.createChildLayerSources(this.getLayerdefinitions());
+            this.createChildLayers(this.getLayerdefinitions());
             this.setMaxScale(this.get("id"));
             this.setMinScale(this.get("id"));
             this.createLayer();
@@ -123,7 +123,7 @@ define([
         createLegendURL: function () {
             var legendURL = [];
 
-            _.each(this.get("layerdefinitions"), function (layer) {
+            _.each(this.getLayerdefinitions(), function (layer) {
                 if (layer.legendURL === "" || layer.legendURL === undefined) {
                     var layerNames = layer.layers.split(",");
 
@@ -152,7 +152,7 @@ define([
                 name = this.get("name"),
                 legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null;
 
-            _.each(this.get("layerdefinitions"), function (layer) {
+            _.each(this.getLayerdefinitions(), function (layer) {
                 var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
 
                 if (layerMetaId) {
@@ -240,6 +240,14 @@ define([
                 childLayer = this.getChildLayers().item(index);
 
             return childLayer.getSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: gfiParams.infoFormat, FEATURE_COUNT: gfiParams.featureCount});
+        },
+        // getter for layerdefinitions
+        getLayerdefinitions: function () {
+            return this.get("layerdefinitions");
+        },
+        // setter for layerdefinitions
+        setLayerdefinitions: function (value) {
+            this.set("layerdefinitions", value);
         }
 
     });
