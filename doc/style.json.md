@@ -13,7 +13,7 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |----|-------------|---|-------|------------|
 |layerId|ja|String||ID des Styles, der in der [config.json](config.json.md) angegeben wird, um entsprechend zugeordnet zu werden. In der Regel gleiche ID, wie die des Layers.|
 |class|ja|String|"POINT"|Angabe der entsprechenden Klasse, entspricht dem Geometrietyp. Mögliche Werte: "POINT", "LINE",  "POLYGON".|
-|subClass|ja|String|"SIMPLE"|Angabe der entsprechenden SubKlasse, nach der die Style-Information verwendet werden soll. Mögliche Werte bei "POINT": "SIMPLE", "CUSTOM", "CIRCLE". Mögliche Werte bei "LINE": "SIMPLE". Mögliche Werte bei "POLYGON": "SIMPLE"|
+|subClass|ja|String|"SIMPLE"|Angabe der entsprechenden SubKlasse, nach der die Style-Information verwendet werden soll. Mögliche Werte bei "POINT": "SIMPLE", "CUSTOM", "CIRCLE". Mögliche Werte bei "LINE": "SIMPLE". Mögliche Werte bei "POLYGON": "SIMPLE", "CUSTOM"|
 |labelField|nein|String||Attribut des Features, nach dessen Wert das Label angezeigt werden soll.|
 |textAlign|nein|String|"left"|Ausrichtung des Textes am Feature. Mögliche Werte "left", "center", "right"|
 |textFont|nein|String|"Courier"|Font des Textes am Feature.|
@@ -29,8 +29,8 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |clusterCircleStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Kreises als Clusterstyle.|
 |clusterCircleStrokeWidth|nein|Integer|2|Randstärke des Kreises als Clusterstyle.|
 |clusterImageName|nein|String|"blank.png"|Name des Images als Clusterstyle.|
-|clusterImageWidth|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|1|Breite des Images als Clusterstyle.|
-|clusterImageHeight|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|1|Höhe des Images als Clusterstyle.|
+|clusterImageWidth|nein|Integer|1|Breite des Images als Clusterstyle.|
+|clusterImageHeight|nein|Integer|1|Höhe des Images als Clusterstyle.|
 |clusterImageScale|nein|Integer|1|Skalierung des Images als Clusterstyle.|
 |clusterImageOffsetX|nein|Float|0.5|Offset des Images als Clusterstyle in X-Richtung.|
 |clusterImageOffsetY|nein|Float|0.5|Offset des Images als Clusterstyle in Y-Richtung.|
@@ -42,6 +42,7 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |clusterTextFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
 |clusterTextStrokeWidth|nein|Integer|3|Breite der Textstriche. Bei geclusterten Features siehe [config.json](config.json.md)|
+
 
 ## Spezielle Parameter ##
 Einige Parameter sind nur bei bestimmten Kombinationen von "class" und "subClass" notwendig.
@@ -57,14 +58,16 @@ So gibt es folgende Kombinationen:
 
 [POLYGON SIMPLE](#markdown-header-polygon-simple)
 
+[POLYGON CUSTOM](#markdown-header-polygon-custom)
+
 #### POINT SIMPLE ####
 Bei "class"=== "POINT" und "subClass" === "SIMPLE" wird nur ein Image für alle Features gesetzt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |imageName|ja|String| "blank.png"|Name des Images.|
-|imageWidth|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|1|Breite des Images.|
-|imageHeight|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer|1|Höhe des Images.|
+|imageWidth|nein|String|1|Breite des Images.|
+|imageHeight|nein|String|1|Höhe des Images.|
 |imageScale|nein|String|1|Skalierung des Bildes.|
 |imageOffsetX|nein|Float|0.5|Offset des Bildes in X-Richtung.|
 |imageOffsetY|nein|Float|0.5|Offset des Bildes in Y-Richtung.|
@@ -122,17 +125,11 @@ Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werde
 |----|-------------|---|-------|------------|
 |styleFieldValue|ja|String||Attributwert.|
 |imageName|ja|String||Name des Images.|
-|imageWidth|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer||Breite des Images.|
-|imageHeight|[ja / nein](#markdown-header-imagewidth-und-imageheight)|Integer||Höhe des Images.|
+|imageWidth|nein|String||Breite des Images.|
+|imageHeight|nein|String||Höhe des Images.|
 |imageScale|nein|String||Skalierung des Bildes.|
 |imageOffsetX|nein|String||Offset des Bildes in X-Richtung.|
 |imageOffsetY|nein|String||Offset des Bildes in Y-Richtung.|
-
-### IMAGEWIDTH UND IMAGEHEIGHT ###
-Die Angaben *imageWidth* / *imageHeight* bzw. *clusterImagewidth* / *clusterImageHeight* in der Styledefinition sind verpflichtend beim Einsatz von *SVG-Dateien* und optional bei Rasterdaten.
-
-- Bei SVG-Dateien wird die Angabe *imgSize* des *ol.style.Icon* mit diesen Werten gesetzt. Der Wert muss pixelgenau der Größenangabe in der SVG entsprechen. Die Größe kann über den Parameter imageScale bzw. clusterImageScale variiert werden.
-- Bei Rasterdaten kann hierüber die Pixelgröße des Icons festgelegt werden.
 
 ### POINT CIRCLE ###
 Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle eines Images, ein Kreis gesetzt. Cluster-Attribute können gesetzt werden wie in [POINT SIMPLE](#markdown-header-point-simple) zu sehen. Label-Attribute können gesetzt werden wie in [Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter) zu sehen.
@@ -153,7 +150,7 @@ Bei "class"=== "LINE" und "subClass" === "SIMPLE" wird ein linienhafter Style de
 |lineStrokeWidth|nein|Integer|2|Breite der Linie.|
 
 ### POLYGON SIMPLE ###
-Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Style  definiert.
+Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Style definiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -161,4 +158,49 @@ Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Sty
 |polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
 |polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|
 
+### POLYGON CUSTOM ###
+Bei "class"=== "POLYGON" und "subClass" === "CUSTOM" wird ein flächenhafter Style definiert. Die Darstellung ist dabei anhängig von einem Attribut des Features
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|polygonFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Polygon.|
+|polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
+|polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|
+|styleField|ja|String||Attribut, nach dem das Polygon eingefärbt wird.|
+|styleFieldValues|ja|Array[[polygonStyleFieldValue](#markdown-header-polygonStyleFieldValue)]||Zuordnung der Farbe zum Attributwert des Features.|
+
+### polygonStyleFieldValue ###
+Darstellung eines Attributwertes auf die Auswirkungen des Polygons. Werden hier keine Füllfarben oder Strichstärken gesetzt, so werden die Werte des Layerobjektes (wenn angegeben) oder die Defaultwerte verwendet. Dadurch dann bspw. die Strichstärke bei allen styleFieldValues gleich gesetzt werden (siehe Beispiel).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|styleFieldValue|ja|String||Attributwert.|
+|polygonFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Polygon. |
+|polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
+|polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|
+
+```json
+{
+    "layerId" : "123456",
+    "class": "POLYGON",
+    "subClass" : "CUSTOM",
+    "polygonStrokeColor" : [0, 0, 0, 1],
+    "polygonStrokeWidth" : 1,
+    "styleField": "nutzung",
+    "styleFieldValues": [
+      {
+        "styleFieldValue": "1",
+        "polygonFillColor" : [78, 78, 78, 0.6]
+      },
+      {
+        "styleFieldValue": "2",
+        "polygonFillColor" : [178, 178, 178, 0.6]
+      },
+      {
+        "styleFieldValue": "3",
+        "polygonFillColor" : [225, 225, 225, 0.6]
+      }
+    ]
+  }
+```
 >Zurück zur [Dokumentation Masterportal](doc.md).).

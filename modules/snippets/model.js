@@ -54,6 +54,42 @@ var ValueModel = require("modules/snippets/value/model"),
     removeView: function () {
         this.trigger("removeView");
     },
+
+    // getter for initSelectedValues
+    getInitSelectedValues: function () {
+        return this.get("initSelectedValues");
+    },
+    // setter for initSelectedValues
+    setInitSelectedValues: function (value) {
+        this.set("initSelectedValues", value);
+    },
+
+    // getter for type
+    getType: function () {
+        return this.get("type");
+    },
+    // setter for type
+    setType: function (value) {
+        this.set("type", value);
+    },
+
+    // getter for displayName
+    getDisplayName: function () {
+        return this.get("displayName");
+    },
+    // setter for displayName
+    setDisplayName: function (value) {
+        this.set("displayName", value);
+    },
+
+    // getter for valuesCollection
+    getValuesCollection: function () {
+        return this.get("valuesCollection");
+    },
+    // setter for valuesCollection
+    setValuesCollection: function (value) {
+        this.set("valuesCollection", value);
+    },
     /**
      * returns true if any of the value models is selected
      * @return {boolean}
@@ -62,6 +98,15 @@ var ValueModel = require("modules/snippets/value/model"),
         return this.get("valuesCollection").some(function (model) {
             return model.get("isSelected") === true;
         });
+    },
+
+    // getter for values
+    getValues: function () {
+        return this.get("values");
+    },
+    // setter for values
+    setValues: function (value) {
+        this.set("values", value);
     },
 
     /**

@@ -9,7 +9,7 @@ define(function(require) {
             features;
 
         before(function () {
-            utilModel = new Util();
+           utilModel = new Util();
             features = utilModel.createTestFeatures();
         });
 

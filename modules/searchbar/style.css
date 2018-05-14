@@ -1,3 +1,14 @@
+#searchInput::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 14px;
+    opacity: 1; /* Firefox */
+}
+
+#searchInput:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 14px;
+}
+
 @media (max-width: 767px) {
     #searchbar {
         margin-top: 8px;
