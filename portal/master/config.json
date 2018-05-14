@@ -73,7 +73,7 @@
         "children":
         {
           "einwohnerabfrage": {
-            "name": "Einwohner abfragen",
+            "name": "Einwohneranzahl abfragen",
             "glyphicon": "glyphicon-wrench"
           },
           "filter":
