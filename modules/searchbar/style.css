@@ -208,13 +208,15 @@ li.results:hover {
 
 #table-searchForm button.btn.btn-default.btn-table-search {
     border-radius: 12px !important;
+    border-color: white;
+    height: 40px;
+    width: 40px;
     padding: 6px 12px 1px 5px;
-    margin: 3px 5px 5px 5px;
+    margin: 0px 5px 5px 5px;
 }
 
 #table-searchForm .btn-table-search > .icon-search {
-    font-size: 22px;
-    padding: 9px;
+    font-size: 24px;
 }
 
 #table-searchForm > .input-group {
@@ -239,8 +241,9 @@ li.results:hover {
 }
 
 #table-searchForm #searchInput {
-    margin: 4px 0px 7px 78px;
-    border-radius: 10px !important;
+    margin: 1px 0px 7px 78px;
+    height: 40px;
+    border-radius: 12px !important;
 }
 
 #table-searchForm .dropdown-menu-search .glyphicon {
@@ -284,4 +287,3 @@ li.results:hover {
     top: -9px;
     left: 12px;
 }
-
