@@ -8,6 +8,7 @@ define([
     var GroupLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
+            this.groupLayerObjectsByUrl();
         },
 
         /**
@@ -30,6 +31,27 @@ define([
             }, this);
 
             this.setGfiParams(gfiParams);
+        },
+        groupLayerObjectsByUrl: function () {
+            var groupByUrl = _.groupBy(this.get("layerdefinitions"), "url"),
+                newLayerDefs = [];
+
+            _.each(groupByUrl, function (layerGroup) {
+                var newLayerObj = _.clone(layerGroup[0]);
+
+                // get all layers for service
+                newLayerObj.layers = _.pluck(layerGroup, "layers").toString();
+                // calculate maxScale from all Layers
+                newLayerObj.maxScale = _.max(_.pluck(layerGroup, "maxScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+                // calculate minScale from all Layers
+                newLayerObj.minScale = _.min(_.pluck(layerGroup, "minScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+                newLayerDefs.push(newLayerObj);
+            });
+            this.set("layerdefinitions", newLayerDefs);
         },
 
         /**
