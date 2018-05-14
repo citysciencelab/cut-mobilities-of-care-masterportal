@@ -368,16 +368,18 @@ define(function (require) {
                 hitName;
 
             _.each(hits, function (hit) {
-                coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
-                hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
-                // "Hitlist-Objekte"
-                Radio.trigger("Searchbar", "pushHits", "hitList", {
-                    name: hitName,
-                    type: "Straße",
-                    coordinate: coordinates,
-                    glyphicon: "glyphicon-road",
-                    id: hitName.replace(/ /g, "") + "Straße"
-                });
+                if ($(hit).find("gml\\:posList,posList").length > 0 && $(hit).find("dog\\:strassenname, strassenname").length > 0){
+                    coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
+                    hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
+                    // "Hitlist-Objekte"
+                    Radio.trigger("Searchbar", "pushHits", "hitList", {
+                        name: hitName,
+                        type: "Straße",
+                        coordinate: coordinates,
+                        glyphicon: "glyphicon-road",
+                        id: hitName.replace(/ /g, "") + "Straße"
+                    });
+                }
             }, this);
             Radio.trigger("Searchbar", "createRecommendedList");
         },
