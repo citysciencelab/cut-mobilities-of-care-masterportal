@@ -113,7 +113,6 @@ define(function (require) {
          */
         handleWPSError: function (response) {
             Radio.trigger("Alert", "alert", JSON.stringify(response["wps:ergebnis"]));
-            this.resetView();
         },
         /**
          * Used when statuscode is 200 and wps did not return an error
