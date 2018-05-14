@@ -23,6 +23,8 @@ define(function (require) {
         VerkehrsStaerkenRadThemeView = require("modules/tools/gfi/themes/verkehrsstaerken_rad/view"),
         ItGbmTheme = require("modules/tools/gfi/themes/itgbm/model"),
         ItGbmThemeView = require("modules/tools/gfi/themes/itgbm/view"),
+        FlaecheninfoTheme = require("modules/tools/gfi/themes/flaecheninfo/model"),
+        FlaecheninfoThemeView = require("modules/tools/gfi/themes/flaecheninfo/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -56,6 +58,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "itgbm") {
                 return new ItGbmTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "flaecheninfo") {
+                return new FlaecheninfoTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -125,6 +130,10 @@ define(function (require) {
                 }
                 case "itgbm": {
                     new ItGbmThemeView({model: model});
+                    break;
+                }
+                case "flaecheninfo": {
+                    new FlaecheninfoThemeView({model: model});
                     break;
                 }
                 default: {
