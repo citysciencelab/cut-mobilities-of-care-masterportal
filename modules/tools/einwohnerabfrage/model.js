@@ -337,7 +337,6 @@ define(function (require) {
          * @param {ol.Overlay} circleOverlay
          */
         toggleOverlay: function (type, circleOverlay) {
-            console.log(444);
             if (type === "Circle") {
                 Radio.trigger("Map", "addOverlay", circleOverlay);
             }

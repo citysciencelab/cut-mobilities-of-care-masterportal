@@ -17,7 +17,6 @@ var $ = require("jquery"),
     RemoteInterface = require("modules/remoteInterface/model");
 
     // Core laden
-    new Alert();
     new RemoteInterface();
     new Alert();
     new Autostarter();
