@@ -9,7 +9,7 @@ define(function (require) {
         template: _.template(ResultTemplate),
         render: function () {
             var attr = this.model.toJSON();
-
+console.log(attr);
             this.$el.html(this.template(attr));
             return this.$el;
         }

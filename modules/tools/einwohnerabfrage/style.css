@@ -7,12 +7,22 @@
 #einwohnerabfrage-tool{
     min-height: 150px;
 }
+#einwohnerabfrage-tool table {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 14px;
+}
 #einwohnerabfrage-tool .form-horizontal {
     margin-bottom: 20px;
 }
 #einwohnerabfrage-tool .additional-text {
     margin: 10px 0;
 }
+
+#einwohnerabfrage-tool .additional-text span{
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 13px;
+}
+
 #einwohnerabfrage-tool #einwohner-loader img {
     position: relative;
     left: 40%;
