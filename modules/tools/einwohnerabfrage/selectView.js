@@ -24,14 +24,16 @@ define(function (require) {
                 "renderResult": this.renderResult
             });
             this.snippetDropdownView = new SnippetDropdownView({model: this.model.getDropDownSnippet()});
-            this.checkBox = new SnippetCheckBoxView({model: this.model.getCheckbox()});
+            this.checkBoxRaster = new SnippetCheckBoxView({model: this.model.getCheckboxRaster()});
+            this.checkBoxAddress = new SnippetCheckBoxView({model: this.model.getCheckboxAddress()});
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template));
                 this.$el.find(".dropdown").append(this.snippetDropdownView.render());
-                this.$el.find(".checkbox").append(this.checkBox.render());
+                this.$el.find(".checkbox").append(this.checkBoxRaster.render());
+                this.$el.find(".checkbox").append(this.checkBoxAddress.render());
 
                 this.delegateEvents();
             }

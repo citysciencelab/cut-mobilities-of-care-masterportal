@@ -9,8 +9,13 @@ define(function (require) {
 
     Einwohnerabfrage = Backbone.Model.extend({
         defaults: {
-            // checkbox snippet for raster layer
-            checkBox: new SnippetCheckboxModel({
+            // checkbox snippet for alkis adressen layer
+            checkBoxAddress: new SnippetCheckboxModel({
+                isSelected: false,
+                label: "ALKIS Adressen anzeigen (ab 1: 20000 bis 1: 2500)"
+            }),
+            // checkbox snippet for zensus raster layer
+            checkBoxRaster: new SnippetCheckboxModel({
                 isSelected: false,
                 label: "Raster Layer anzeigen"
             }),
@@ -52,8 +57,11 @@ define(function (require) {
             this.listenTo(this.snippetDropdownModel, {
                 "valuesChanged": this.createDrawInteraction
             });
-            this.listenTo(this.getCheckbox(), {
+            this.listenTo(this.getCheckboxRaster(), {
                 "valuesChanged": this.toggleRasterLayer
+            });
+            this.listenTo(this.getCheckboxAddress(), {
+                "valuesChanged": this.toggleAlkisAddressLayer
             });
             this.on("change:isCurrentWin", this.handleCswRequests);
             this.createDomOverlay(this.get("circleOverlay"));
@@ -368,6 +376,29 @@ define(function (require) {
             element.setAttribute("id", "circle-overlay");
             circleOverlay.setElement(element);
         },
+
+        /**
+         * show or hide the zensus raster layer
+         * @param {boolean} value
+         */
+        toggleRasterLayer: function (value) {
+            Radio.trigger("ModelList", "setModelAttributesById", "8712", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+        },
+
+         /**
+         * show or hide the alkis adressen layer
+         * @param {boolean} value
+         */
+        toggleAlkisAddressLayer: function (value) {
+            Radio.trigger("ModelList", "setModelAttributesById", "441", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+        },
+
         setData: function (value) {
             this.set("data", value);
         },
@@ -385,16 +416,6 @@ define(function (require) {
         },
         getValues: function () {
             return this.get("values");
-        },
-        /**
-         * show or hide the raster layer
-         * @param {boolean} value
-         */
-        toggleRasterLayer: function (value) {
-            Radio.trigger("ModelList", "setModelAttributesById", "8712", {
-                isSelected: value,
-                isVisibleInMap: value
-            });
         },
 
          /**
@@ -465,8 +486,16 @@ define(function (require) {
          * gets the attribute checkBox
          * @returns {Backbone.Model}
          */
-        getCheckbox: function () {
-            return this.get("checkBox");
+        getCheckboxRaster: function () {
+            return this.get("checkBoxRaster");
+        },
+
+         /**
+         * gets the attribute checkBox
+         * @returns {Backbone.Model}
+         */
+        getCheckboxAddress: function () {
+            return this.get("checkBoxAddress");
         }
     });
 
