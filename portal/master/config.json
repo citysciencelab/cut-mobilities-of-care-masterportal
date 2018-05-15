@@ -72,6 +72,10 @@
         "glyphicon": "glyphicon-wrench",
         "children":
         {
+          "einwohnerabfrage": {
+            "name": "Einwohner abfragen",
+            "glyphicon": "glyphicon-wrench"
+          },
           "filter":
           {
             "name": "Filter",

@@ -21,6 +21,8 @@ define(function (require) {
             maxScale: "1000000"
         },
         superInitialize: function () {
+            var channel = Radio.Channel("Layer");
+
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
@@ -40,9 +42,9 @@ define(function (require) {
                     this.getResolutions();
                 }
             });
-            this.listenTo(Radio.channel("Layer"), {
+            this.listenTo(channel, {
                   "updateLayerInfo": function (name) {
-                      if (this.get("name") === name && this.getLayerInfoChecked() === true) {
+                      if (this.getName() === name && this.getLayerInfoChecked() === true) {
                           this.showLayerInformation();
                       }
                   },
@@ -70,7 +72,7 @@ define(function (require) {
             });
 
             // Default min/max Resolutions für WFS setzen
-            if (this.get("typ") === "WFS") {
+            if (this.getTyp() === "WFS") {
                 this.setDefaultResolutions();
             }
 
@@ -91,6 +93,10 @@ define(function (require) {
             this.checkForScale(Radio.request("MapView", "getOptions"));
             this.setAttributes();
             this.createLegendURL();
+        },
+
+        featuresLoaded: function (features) {
+            Radio.trigger("Layer", "featuresLoaded", this.getId(), features);
         },
 
         setDefaultResolutions: function () {
@@ -190,6 +196,9 @@ define(function (require) {
         setTransparency: function (value) {
             this.set("transparency", value);
         },
+        getTransparency: function () {
+            return this.get("transparency");
+        },
 
         setIsOutOfRange: function (value) {
             this.set("isOutOfRange", value);
@@ -244,14 +253,6 @@ define(function (require) {
         },
 
         /**
-         * Getter für Attribut "transparency"
-         * @return {number}
-         */
-        getTransparency: function () {
-            return this.get("transparency");
-        },
-
-        /**
          * Getter für Attribut "attributions"
          * @return {String|Object}
          */
@@ -279,14 +280,18 @@ define(function (require) {
             return this.get("gfiAttributes");
         },
 
+        getGfiTheme: function () {
+            return this.get("gfiTheme");
+        },
+
         incTransparency: function () {
             if (this.getTransparency() <= 90) {
-                this.setTransparency(this.get("transparency") + 10);
+                this.setTransparency(this.getTransparency() + 10);
             }
         },
         decTransparency: function () {
              if (this.getTransparency() >= 10) {
-                this.setTransparency(this.get("transparency") - 10);
+                this.setTransparency(this.getTransparency() - 10);
             }
         },
         getVersion: function () {
@@ -374,7 +379,7 @@ define(function (require) {
          *
          */
         updateLayerTransparency: function () {
-            var opacity = (100 - this.get("transparency")) / 100;
+            var opacity = (100 - this.getTransparency()) / 100;
             // Auch wenn die Layer im simple Tree noch nicht selected wurde können
             // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
             if (!_.isUndefined(this.getLayer())) {
@@ -388,7 +393,7 @@ define(function (require) {
         showLayerInformation: function () {
             var metaID = [],
                 legendParams = Radio.request("Legend", "getLegendParams"),
-                name = this.get("name"),
+                name = this.getName(),
                 legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null,
                 layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
@@ -435,15 +440,38 @@ define(function (require) {
          */
         getmetaName: function () {
             if (this.get("datasets")[0]) {
-             return this.get("datasets")[0].md_name;
+                return this.get("datasets")[0].md_name;
             }
             else {
-                    return undefined;
+                return undefined;
             }
         },
 
         getUrl: function () {
             return this.get("url");
+        },
+
+        // getter for name
+        getName: function () {
+            return this.get("name");
+        },
+        // setter for name
+        setName: function (value) {
+            this.set("name", value);
+        },
+
+        // getter for routable
+        getRoutable: function () {
+            return this.get("routable");
+        },
+
+        // getter for legendURL
+        getLegendURL: function () {
+            return this.get("legendURL");
+        },
+        // setter for legendURL
+        setLegendURL: function (value) {
+            this.set("legendURL", value);
         }
     });
 

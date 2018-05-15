@@ -1,6 +1,6 @@
 define( function (require) {
 
-    var WFSStyle = require("modules/vectorStyle/model"),
+    var WFSStyle = require("../vectorStyle/model"),
         Config = require("config"),
         StyleList;
 
@@ -21,6 +21,7 @@ define( function (require) {
                     return this.models;
                 }
             }, this);
+
             if (this.url() !== "keine Style JSON") {
                 this.fetch({
                     cache: false,

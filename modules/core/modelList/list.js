@@ -4,7 +4,6 @@ define(function (require) {
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
-        ElasticLayer = require("modules/core/modelList/layer/elastic"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
@@ -82,13 +81,15 @@ define(function (require) {
                     return new WMSLayer(attrs, options);
                 }
                 else if (attrs.typ === "WFS") {
-                    return new WFSLayer(attrs, options);
+                    if (attrs.outputFormat === "GeoJSON") {
+                        return new GeoJSONLayer(attrs, options);
+                    }
+                    else {
+                        return new WFSLayer(attrs, options);
+                    }
                 }
                 else if (attrs.typ === "GeoJSON") {
                     return new GeoJSONLayer(attrs, options);
-                }
-                else if (attrs.typ === "Elastic") {
-                    return new ElasticLayer(attrs, options);
                 }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
@@ -102,6 +103,9 @@ define(function (require) {
             }
             else if (attrs.type === "staticlink") {
                 return new StaticLink(attrs, options);
+            }
+            else {
+                Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + attrs.type + ". Bitte wenden Sie sich an einen Administrator!");
             }
         },
         /**
