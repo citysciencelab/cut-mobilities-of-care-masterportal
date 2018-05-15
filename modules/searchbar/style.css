@@ -246,7 +246,7 @@ li.results:hover {
     bottom: 100%;
     z-index: 1001;
     padding: 0;
-    top: unset;
+    top: auto;
 }
 
 #table-searchForm #searchInput {
