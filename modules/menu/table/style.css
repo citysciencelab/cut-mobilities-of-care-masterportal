@@ -108,19 +108,19 @@
 
 }
 
-a:link {
+.table-layer-list a:link {
     text-decoration: none;
 }
 
-a:visited {
+.table-layer-list a:visited {
     text-decoration: none;
 }
 
-a:hover {
+.table-layer-list a:hover {
     text-decoration: none;
 }
 
-a:active {
+.table-layer-list a:active {
     text-decoration: none;
 }
 
