@@ -1,11 +1,3 @@
-//history.replaceState(null, document.title, location.pathname + location.search);
-//um Link ohne hash aufzurufen
-if(window.history.pushState) {
-        window.history.pushState('', '/', window.location.pathname)
-    } else {
-        window.location.hash = '';
-    }
-
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
     configPath = window.location.href + "config",
@@ -16,6 +8,14 @@ if (window.location.search !== "") {
         strippedLocation = window.location.href.slice(0, index);
 
     configPath = strippedLocation + "config";
+}
+
+//um der Link auch mit hash aufrufen zu können
+if (window.location.search !== "#"){
+    var h = window.location.href.indexOf("#"),
+        hashLocation = window.location.href.slice(0, h);
+
+    configPath = hashLocation + "config";
 }
 
 scriptTagsArray.forEach(function (scriptTag) {
