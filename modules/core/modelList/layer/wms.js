@@ -1,13 +1,13 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Radio = require("backbone.radio"),
         ol = require("openlayers"),
         WMSLayer;
 
     WMSLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
+            this.setAttributes();
         },
         setAttributes: function () {
             if (_.isUndefined(this.getInfoFormat()) === true) {

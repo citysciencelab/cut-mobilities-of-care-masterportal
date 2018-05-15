@@ -1,11 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "modules/core/modelList/layer/model"
-], function (Backbone, Radio, ol, Layer) {
+define(function (require) {
 
-    var GroupLayer = Layer.extend({
+    var Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        Layer = require("modules/core/modelList/layer/model"),
+        GroupLayer;
+
+        GroupLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
             this.setLayerdefinitions(this.groupLayerObjectsByUrl(this.getLayerdefinitions()));
@@ -46,14 +46,13 @@ define([
         groupLayerObjectsByUrl: function (layerDefinitions) {
             var groupByUrl = _.groupBy(layerDefinitions, "url"),
                 newLayerDefs = [],
-                gfiAttributes = this.get("gfiAttributes");
+                gfiAttributes = this.getGfiAttributes();
 
             _.each(groupByUrl, function (layerGroup) {
                 var newLayerObj = _.clone(layerGroup[0]),
                     isGroupable = false;
 
-                gfiAttributes = _.isUndefined(gfiAttributes) === false ? gfiAttributes : _.pluck(layerGroup, "gfiAttributes"),
-                gfiAttributes = _.isArray(gfiAttributes) === false ? gfiAttributes : _.uniq(gfiAttributes).toString();
+                gfiAttributes = this.groupGfiAttributes(gfiAttributes, layerGroup);
                 isGroupable = gfiAttributes.indexOf(",") === -1 ? true : false;
 
                 if (isGroupable) {
@@ -74,10 +73,19 @@ define([
                         newLayerDefs.push(layer);
                     });
                 }
-            });
+            }, this);
             return newLayerDefs;
         },
 
+        groupGfiAttributes: function (gfiAttributes, layerGroup) {
+            if (_.isUndefined(gfiAttributes)) {
+                gfiAttributes = _.pluck(layerGroup, "gfiAttributes");
+            }
+            if (_.isArray(gfiAttributes)) {
+                gfiAttributes = _.uniq(gfiAttributes).toString();
+            }
+            return gfiAttributes;
+        },
         /**
          *
          */
@@ -152,11 +160,11 @@ define([
                     var layerNames = layer.layers.split(",");
 
                     if (layerNames.length === 1) {
-                        legendURL.push(layer.url + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layer.layers);
+                        legendURL.push(layer.url + "?VERSION=" + layer.version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layer.layers);
                     }
                     else if (layerNames.length > 1) {
                         _.each(layerNames, function (layerName) {
-                            legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
+                            legendURL.push(this.get("url") + "?VERSION=" + layer.version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
                         }, this);
                     }
                 }
