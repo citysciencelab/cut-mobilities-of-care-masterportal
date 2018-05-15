@@ -8,7 +8,8 @@
         "mocha": true
     },
     "globals": {
-        "_": true
+        "_": true,
+        "Radio": true
     },
     "rules": {
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
@@ -82,7 +83,7 @@
         "no-labels": "error",
         "no-lone-blocks": "error",
         "no-loop-func": "error",
-        "no-magic-numbers": "error",
+        "no-magic-numbers": "off",
         "no-multi-spaces": "error",
         "no-multi-str": "error",
         "no-new": "off",
@@ -145,7 +146,7 @@
         "no-restricted-modules": "off",
         "no-sync": "error",
         // Stylistic Issues - These rules relate to style guidelines, and are therefore quite subjective
-        "array-bracket-newline": ["error", { "minItems": 3 }],
+        "array-bracket-newline": ["error", { "minItems": 4 }],
         "array-bracket-spacing": "error",
         "array-element-newline": "off",
         "block-spacing": "error",
@@ -167,7 +168,7 @@
         "id-length": "off",
         "id-match": "off",
         "implicit-arrow-linebreak": "error",
-        "indent": "error",
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "jsx-quotes": "error",
         "key-spacing": "error",
         "keyword-spacing": "error",
