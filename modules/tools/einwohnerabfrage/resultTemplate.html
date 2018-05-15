@@ -3,12 +3,10 @@
 <% if (dataReceived) { %>
     <div class="heading additional-text">Unter Berücksichtigung der Geheimhaltung wurde folgender Wert berechnet:</div>
     <table class="table">
-        <% if (data.einwohner_gesamt > 0) { %>
-            <tr>
-                <td>Einwohnerzahl gesamt:</td>
-                <td><%=data.einwohner_gesamt%></td>
-            </tr>
-        <% } %>
+        <tr>
+            <td>Einwohnerzahl gesamt:</td>
+            <td><%=data.einwohner_gesamt%></td>
+        </tr>
         <% if (data.quelle_fhh === "tlw" && data.quelle_mrh === "tlw") { %>
             <tr>
                 <td>Einwohnerzahl in Hamburg:</td>
@@ -21,7 +19,7 @@
         <% } %>
             <tr>
                 <td>Größe der abgefragten Fläche:</td>
-                <td><%=Math.floor(data.suchflaeche)%> m²</td>
+                <td><%=data.suchflaeche%></td>
             </tr>
     </table>
     <% if (data.einwohner_fhh > 0) { %>

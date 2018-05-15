@@ -113,6 +113,7 @@ define(function (require) {
          */
         handleWPSError: function (response) {
             Radio.trigger("Alert", "alert", JSON.stringify(response["wps:ergebnis"]));
+            this.resetView();
         },
         /**
          * Used when statuscode is 200 and wps did not return an error
@@ -121,15 +122,86 @@ define(function (require) {
         handleSuccess: function (response) {
             try {
                 response = JSON.parse(response["wps:ergebnis"]);
+                this.prepareDataForRendering(response);
                 this.setData(response);
                 this.setDataReceived(true);
             }
-            catch (error) {
+            catch (e) {
                 Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + JSON.stringify(response));
+                this.resetView();
+                (console.error || console.log).call(console, e.stack || e);
             }
-            finally {
-                return;
+        },
+        /**
+         * Iterates ofer response properties
+         * @param  {} response
+         */
+        prepareDataForRendering: function (response) {
+            _.each(response, function (value, key, list) {
+                var stringVal = "";
+
+                if (!isNaN(value)) {
+                    if (key === "suchflaeche") {
+                        stringVal = this.chooseUnitAndPunctuate(value);
+                    }
+                    else {
+                        stringVal = this.punctuate(value);
+                    }
+                    value = stringVal;
+                }
+
+                list[key] = value;
+            }, this);
+        },
+        /**
+         * Chooses unit based on value, calls panctuate and converts to unit and appends unit
+         * @param  {} value
+         */
+        chooseUnitAndPunctuate: function (value) {
+
+            if (value < 250000) {
+                return this.punctuate(value) + " m²";
             }
+            if (value < 10000000) {
+
+                return this.punctuate(value / 10000) + " ha";
+            }
+
+            return this.punctuate(value / 1000000) + " km²";
+        },
+        /**
+         * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
+         * @param  {[type]} value - feature attribute values
+         */
+        punctuate: function (value) {
+            var pattern = /(-?\d+)(\d{3})/,
+                stringValue = value.toString(),
+                predecimals = stringValue;
+
+            if (stringValue.indexOf(".") !== -1) {
+                predecimals = stringValue.split(".")[0];
+            }
+            while (pattern.test(predecimals)) {
+                predecimals = predecimals.replace(pattern, "$1.$2");
+            }
+            return predecimals + this.getFormattedDecimalString(stringValue, 3);
+        },
+        /**
+         * Returns the pecimal part cut aftera  max length of number represented as string
+         * adds "," in front of decimals if applicable
+         * @param  {string} number input number
+         * @param  {} maxLength decimals are cut after maxlength chars
+         */
+        getFormattedDecimalString: function (number, maxLength) {
+            var decimals = "";
+
+            if (number.indexOf(".") !== -1) {
+                decimals = number.split(".")[1];
+                if (decimals.length > 0) {
+                    return "," + decimals.substring(0, maxLength);
+                }
+            }
+            return "";
         },
         /**
          * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
