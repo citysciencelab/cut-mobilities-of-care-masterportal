@@ -115,7 +115,7 @@ define(function (require) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
-            else if (deaktivateGFI == true) {
+            else if (deaktivateGFI === true) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
             else if (_.isUndefined(deaktivateGFI)) {
@@ -170,15 +170,15 @@ define(function (require) {
 
             // WMS | GROUP
             _.each(visibleLayerList, function (model) {
-                if (model.getGfiAttributes() !== "ignore") {
+                if (model.getGfiAttributes() !== "ignore" || _.isUndefined(model.getGfiAttributes()) === true) {
                     if (model.getTyp() === "WMS") {
                         model.attributes.gfiUrl = model.getGfiUrl();
                         gfiParams.push(model.attributes);
                     }
                     else {
-                        model.get("gfiParams").forEach(function (params, index) {
-                            params.gfiUrl = model.getGfiUrl(index);
-                            gfiParams.push(model.getGfiParams()[index]);
+                       _.each(model.getGfiParams(), function (params) {
+                            params.gfiUrl = model.getGfiUrl(params, evt.coordinate, params.childLayerIndex);
+                            gfiParams.push(params);
                         });
                     }
                 }
