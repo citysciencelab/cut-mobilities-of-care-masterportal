@@ -28,7 +28,8 @@ define(function (require) {
             // Index für das aktuelle Theme
             themeIndex: 0,
             // Anzahl der Themes
-            numberOfThemes: 0
+            numberOfThemes: 0,
+            rotateAngle: 0
         },
         initialize: function () {
             var channel = Radio.channel("GFI");
