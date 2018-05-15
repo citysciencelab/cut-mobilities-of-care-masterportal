@@ -131,7 +131,7 @@ define(function (require) {
                     color: "rgba(" + color + ", " + opacity + ")"
                 }),
                 stroke: new ol.style.Stroke({
-                    color: "rgba(" + color + ", 1)",
+                    color: "rgba(" + color + ", " + opacity + ")",
                     width: this.get("strokeWidth")
                 }),
                 image: new ol.style.Circle({
@@ -176,12 +176,12 @@ define(function (require) {
         // Aktiviert/Deaktiviert das Modifizieren von Features
         toggleModifyInteraction: function (value) {
             if (value) {
-                Radio.trigger("Map", "addInteraction",  this.get("modifyInteraction"));
+                Radio.trigger("Map", "addInteraction", this.get("modifyInteraction"));
                 this.get("drawInteraction").setActive(false);
                 this.setGlyphToCursor("glyphicon glyphicon-wrench");
             }
             else {
-                Radio.trigger("Map", "removeInteraction",  this.get("modifyInteraction"));
+                Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
                 this.get("drawInteraction").setActive(true);
                 this.setGlyphToCursor("glyphicon glyphicon-pencil");
             }
@@ -293,7 +293,7 @@ define(function (require) {
         },
 
         setLayer: function (value) {
-            this.set("layer", value)
+            this.set("layer", value);
         }
     });
 
