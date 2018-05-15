@@ -8,7 +8,8 @@ define([
     var GroupLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
-            this.groupLayerObjectsByUrl();
+            this.setLayerdefinitions(this.groupLayerObjectsByUrl(this.getLayerdefinitions()));
+            this.setAttributes();
         },
 
         /**
@@ -32,26 +33,49 @@ define([
 
             this.setGfiParams(gfiParams);
         },
-        groupLayerObjectsByUrl: function () {
-            var groupByUrl = _.groupBy(this.getLayerdefinitions(), "url"),
-                newLayerDefs = [];
+        /**
+         * Groups layerdefinitions by url.
+         * If gfiAttributes is set on group layer-object,
+         *     then the gfi-Attributes for sublayers are overwitten and can be grouped.
+         * Else the gfiAttributes of all layers are taken.
+         *
+         * If the gfiAttributes of all layers are equal, then the layers can be aggregated.
+         * Otherwise the layers can not be grouped by url.
+         *
+         */
+        groupLayerObjectsByUrl: function (layerDefinitions) {
+            var groupByUrl = _.groupBy(layerDefinitions, "url"),
+                newLayerDefs = [],
+                gfiAttributes = this.get("gfiAttributes");
 
             _.each(groupByUrl, function (layerGroup) {
-                var newLayerObj = _.clone(layerGroup[0]);
+                var newLayerObj = _.clone(layerGroup[0]),
+                    isGroupable = false;
 
-                // get all layers for service
-                newLayerObj.layers = _.pluck(layerGroup, "layers").toString();
-                // calculate maxScale from all Layers
-                newLayerObj.maxScale = _.max(_.pluck(layerGroup, "maxScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                // calculate minScale from all Layers
-                newLayerObj.minScale = _.min(_.pluck(layerGroup, "minScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                newLayerDefs.push(newLayerObj);
+                gfiAttributes = _.isUndefined(gfiAttributes) === false ? gfiAttributes : _.pluck(layerGroup, "gfiAttributes"),
+                gfiAttributes = _.isArray(gfiAttributes) === false ? gfiAttributes : _.uniq(gfiAttributes).toString();
+                isGroupable = gfiAttributes.indexOf(",") === -1 ? true : false;
+
+                if (isGroupable) {
+                    // get all layers for service
+                    newLayerObj.layers = _.pluck(layerGroup, "layers").toString();
+                    // calculate maxScale from all Layers
+                    newLayerObj.maxScale = _.max(_.pluck(layerGroup, "maxScale"), function (scale) {
+                        return parseInt(scale, 10);
+                    });
+                    // calculate minScale from all Layers
+                    newLayerObj.minScale = _.min(_.pluck(layerGroup, "minScale"), function (scale) {
+                        return parseInt(scale, 10);
+                    });
+                    newLayerDefs.push(newLayerObj);
+                }
+                else {
+                    _.each(layerGroup, function (layer) {
+                        newLayerDefs.push(layer);
+                    });
+                }
             });
-            this.setLayerdefinitions(newLayerDefs);
+            return newLayerDefs;
         },
 
         /**
