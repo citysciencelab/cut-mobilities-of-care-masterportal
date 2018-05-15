@@ -1,16 +1,108 @@
 <!DOCTYPE html>
 <select class="form-control input-sm interaction">
-    <% _.each(interactions, function (interaction) { %>
-        <option value="<%= interaction.name %>" <% if (selectedInteraction === interaction.name) { print ("SELECTED")} %>><%= interaction.text %></option>
-    <% }); %>
+    <option value="Point">Punkt zeichnen</option>
+    <option value="LineString">Linie zeichnen</option>
+    <option value="Polygon">Fläche zeichnen</option>
+    <option value="Circle">Kreis zeichnen</option>
+    <option value="Point">Text schreiben</option>
 </select>
 <hr>
-<form class="form-horizontal style" role="form"></form>
+<form class="form-horizontal" role="form">
+    <div class="form-group form-group-sm text">
+        <label class="col-md-5 col-sm-5 control-label">Text</label>
+        <div class="col-md-7 col-sm-7">
+            <input type="text" class="form-control" placeholder="Klicken Sie auf die Karte um den Text zu platzieren">
+        </div>
+    </div>
+    <div class="form-group form-group-sm font-size">
+        <label class="col-md-5 col-sm-5 control-label">Schriftgröße</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm">
+                <option value="10">10 px</option>
+                <option value="12">12 px</option>
+                <option value="16">16 px</option>
+                <option value="20">20 px</option>
+                <option value="24">24 px</option>
+                <option value="32">32 px</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm font">
+        <label class="col-md-5 col-sm-5 control-label">Schriftart</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm">
+                <option value="Arial">Arial</option>
+                <option value="Calibri">Calibri</option>
+                <option value="Times New Roman">Times New Roman</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm radius">
+        <label class="col-md-5 col-sm-5 control-label">Größe</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm">
+                <option value="6">6 px</option>
+                <option value="8">8 px</option>
+                <option value="10">10 px</option>
+                <option value="12">12 px</option>
+                <option value="14">14 px</option>
+                <option value="16">16 px</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm stroke-width">
+        <label class="col-md-5 col-sm-5 control-label">Strichstärke</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm">
+                <option value="1">1 px</option>
+                <option value="2">2 px</option>
+                <option value="3">3 px</option>
+                <option value="4">4 px</option>
+                <option value="5">5 px</option>
+                <option value="6">6 px</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm opacity">
+        <label class="col-md-5 col-sm-5 control-label">Transparenz</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm">
+                <option value="1.0">0 %</option>
+                <option value="0.9">10 %</option>
+                <option value="0.8">20 %</option>
+                <option value="0.7">30 %</option>
+                <option value="0.6">40 %</option>
+                <option value="0.5">50 %</option>
+                <option value="0.4">60 %</option>
+                <option value="0.3">70 %</option>
+                <option value="0.2">80 %</option>
+                <option value="0.1">90 %</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-horizontal" role="form">
+        <div class="form-group form-group-sm color">
+            <label class="col-md-5 col-sm-5 control-label">Farbe</label>
+            <div class="col-md-7 col-sm-7">
+                <select class="form-control input-sm">
+                    <option value="55, 126, 184">Blau</option>
+                    <option value="255, 255, 51">Gelb</option>
+                    <option value="153, 153, 153">Grau</option>
+                    <option value="77, 175, 74">Grün</option>
+                    <option value="255, 127, 0">Orange</option>
+                    <option value="228, 26, 28">Rot</option>
+                    <option value="0, 0, 0">Schwarz</option>
+                    <option value="255, 255, 255">Weiß</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
 <hr>
 <div class="form-horizontal" role="form">
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <button class="btn btn-panel-submit btn-sm col-md-12 col-sm-12 modify">
+            <button class="btn btn-sm btn-block modify once">
             <span class="glyphicon glyphicon-wrench"></span>
             Geometrie bearbeiten
             </button>
@@ -18,7 +110,7 @@
     </div>
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <button class="btn btn-panel-submit btn-sm col-md-12 col-sm-12 downloadDrawing">
+            <button class="btn btn-sm btn-block downloadDrawing">
                 <span class="glyphicon glyphicon-floppy-disk"></span>
                 Herunterladen
             </button>
@@ -26,7 +118,7 @@
     </div>
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <button class="btn btn-panel-submit btn-sm col-md-12 col-sm-12 trash">
+            <button class="btn btn-sm btn-block trash once">
             <span class="glyphicon glyphicon-trash"></span>
             Geometrie / Text löschen
             </button>
@@ -34,7 +126,7 @@
     </div>
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <button class="btn btn-panel-submit btn-sm col-md-12 col-sm-12 delete">
+            <button class="btn btn-sm btn-block delete">
             <span class="glyphicon glyphicon-trash"></span>
             Alles löschen
             </button>

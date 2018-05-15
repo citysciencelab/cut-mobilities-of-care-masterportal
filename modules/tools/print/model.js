@@ -313,7 +313,6 @@ define([
          */
         setLayer: function (layer) {
             var features = [],
-                circleFeatures = [], // Kreise können nicht gedruckt werden
                 featureStyles = {},
                 type,
                 styles,
@@ -323,56 +322,54 @@ define([
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
-                        circleFeatures.push(feature);
+                        // creates a regular polygon from a circle with 32(default) sides
+                        feature.setGeometry(ol.geom.Polygon.fromCircle(feature.getGeometry()));
                     }
                 });
 
                 _.each(layer.getSource().getFeatures(), function (feature, index) {
-                    // nur wenn es sich nicht um ein Feature mit Kreis-Geometrie handelt
-                    if (_.contains(circleFeatures, feature) === false) {
-                        features.push({
-                            type: "Feature",
-                            properties: {
-                                _style: index
-                            },
-                            geometry: {
-                                coordinates: feature.getGeometry().getCoordinates(),
-                                type: feature.getGeometry().getType()
-                            }
-                        });
-
-                        type = feature.getGeometry().getType(),
-                        styles = feature.getStyleFunction().call(feature),
-                        style = styles[0];
-                        // Punkte
-                        if (type === "Point") {
-                            // Punkte ohne Text
-                            if (style.getText() === null) {
-                                featureStyles[index] = {
-                                fillColor: this.getColor(style.getImage().getFill().getColor()).color,
-                                fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
-                                pointRadius: style.getImage().getRadius(),
-                                strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
-                                strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
-                                };
-                            }
-                            // Texte
-                            else {
-                                featureStyles[index] = {
-                                    label: style.getText().getText(),
-                                    fontColor: this.getColor(style.getText().getFill().getColor()).color
-                                };
-                            }
+                    features.push({
+                        type: "Feature",
+                        properties: {
+                            _style: index
+                        },
+                        geometry: {
+                            coordinates: feature.getGeometry().getCoordinates(),
+                            type: feature.getGeometry().getType()
                         }
-                        // Polygone oder Linestrings
-                        else {
+                    });
+
+                    type = feature.getGeometry().getType(),
+                    styles = feature.getStyleFunction().call(feature),
+                    style = styles[0];
+                    // Punkte
+                    if (type === "Point") {
+                        // Punkte ohne Text
+                        if (style.getText() === null) {
                             featureStyles[index] = {
-                                fillColor: this.getColor(style.getFill().getColor()).color,
-                                fillOpacity: this.getColor(style.getFill().getColor()).opacity,
-                                strokeColor: this.getColor(style.getStroke().getColor()).color,
-                                strokeWidth: style.getStroke().getWidth()
+                            fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                            fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                            pointRadius: style.getImage().getRadius(),
+                            strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                            strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
                             };
                         }
+                        // Texte
+                        else {
+                            featureStyles[index] = {
+                                label: style.getText().getText(),
+                                fontColor: this.getColor(style.getText().getFill().getColor()).color
+                            };
+                        }
+                    }
+                    // Polygone oder Linestrings
+                    else {
+                        featureStyles[index] = {
+                            fillColor: this.getColor(style.getFill().getColor()).color,
+                            fillOpacity: this.getColor(style.getFill().getColor()).opacity,
+                            strokeColor: this.getColor(style.getStroke().getColor()).color,
+                            strokeWidth: style.getStroke().getWidth()
+                        };
                     }
                 }, this);
                 this.push("layerToPrint", {

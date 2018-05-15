@@ -150,7 +150,7 @@
             "name": "Flurstückssuche",
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
-            "StoredQueryID": "Flurstueck",
+            "storedQueryID": "Flurstueck",
             "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
