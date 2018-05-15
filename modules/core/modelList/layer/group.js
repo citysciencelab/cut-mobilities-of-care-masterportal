@@ -5,7 +5,7 @@ define(function (require) {
         Layer = require("modules/core/modelList/layer/model"),
         GroupLayer;
 
-        GroupLayer = Layer.extend({
+    GroupLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
             this.setLayerdefinitions(this.groupLayerObjectsByUrl(this.getLayerdefinitions()));
@@ -18,7 +18,7 @@ define(function (require) {
         setAttributes: function () {
             var gfiParams = [];
 
-            _.each(this.getLayerdefinitions(), function (layerdef) {
+            _.each(this.getLayerdefinitions(), function (layerdef, index) {
                 if (layerdef.gfiAttributes !== "ignore") {
                     gfiParams.push({
                         featureCount: layerdef.featureCount ? layerdef.featureCount : 1,
@@ -26,11 +26,11 @@ define(function (require) {
                         gfiAttributes: layerdef.gfiAttributes,
                         name: layerdef.name,
                         typ: layerdef.typ,
-                        gfiTheme: layerdef.gfiTheme
+                        gfiTheme: layerdef.gfiTheme,
+                        childLayerIndex: index
                     });
                 }
             }, this);
-
             this.setGfiParams(gfiParams);
         },
         /**
@@ -266,11 +266,9 @@ define(function (require) {
             return this.get("gfiParams");
         },
 
-        getGfiUrl: function (index) {
+        getGfiUrl: function (gfiParams, coordinate, index) {
             var resolution = Radio.request("MapView", "getResolution").resolution,
                 projection = Radio.request("MapView", "getProjection"),
-                coordinate = Radio.request("GFI", "getCoordinate"),
-                gfiParams = this.getGfiParams()[index],
                 childLayer = this.getChildLayers().item(index);
 
             return childLayer.getSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: gfiParams.infoFormat, FEATURE_COUNT: gfiParams.featureCount});
