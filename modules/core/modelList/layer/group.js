@@ -53,8 +53,9 @@ define(function (require) {
                     isGroupable = false;
 
                 gfiAttributes = this.groupGfiAttributes(gfiAttributes, layerGroup);
-                isGroupable = gfiAttributes.indexOf(",") === -1 ? true : false;
-
+                if ((_.isObject(gfiAttributes) && !_.isString(gfiAttributes)) || (_.isString(gfiAttributes) && gfiAttributes.indexOf(",") === -1)) {
+                    isGroupable = true;
+                }
                 if (isGroupable) {
                     // get all layers for service
                     newLayerObj.layers = _.pluck(layerGroup, "layers").toString();
@@ -66,6 +67,7 @@ define(function (require) {
                     newLayerObj.minScale = _.min(_.pluck(layerGroup, "minScale"), function (scale) {
                         return parseInt(scale, 10);
                     });
+                    newLayerObj.gfiAttributes = gfiAttributes;
                     newLayerDefs.push(newLayerObj);
                 }
                 else {
@@ -80,9 +82,9 @@ define(function (require) {
         groupGfiAttributes: function (gfiAttributes, layerGroup) {
             if (_.isUndefined(gfiAttributes)) {
                 gfiAttributes = _.pluck(layerGroup, "gfiAttributes");
-            }
-            if (_.isArray(gfiAttributes)) {
-                gfiAttributes = _.uniq(gfiAttributes).toString();
+                if (_.isArray(gfiAttributes)) {
+                    gfiAttributes = _.uniq(gfiAttributes).toString();
+                }
             }
             return gfiAttributes;
         },
