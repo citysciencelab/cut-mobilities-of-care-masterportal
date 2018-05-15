@@ -1,3 +1,11 @@
+//history.replaceState(null, document.title, location.pathname + location.search);
+//um Link ohne hash aufzurufen
+if(window.history.pushState) {
+        window.history.pushState('', '/', window.location.pathname)
+    } else {
+        window.location.hash = '';
+    }
+
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
     configPath = window.location.href + "config",
