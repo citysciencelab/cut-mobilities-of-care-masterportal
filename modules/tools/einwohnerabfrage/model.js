@@ -145,7 +145,7 @@ define(function (require) {
                         stringVal = this.chooseUnitAndPunctuate(value);
                     }
                     else {
-                        stringVal = this.punctuate(value);
+                        stringVal = this.punctuate(value) + this.getFormattedDecimalString(stringValue, 3);
                     }
                     value = stringVal;
                 }
@@ -155,19 +155,26 @@ define(function (require) {
         },
         /**
          * Chooses unit based on value, calls panctuate and converts to unit and appends unit
-         * @param  {} value
+         * @param  {number} value
+         * @param  {number} maxLength decimals are cut after maxlength chars
          */
-        chooseUnitAndPunctuate: function (value) {
+        chooseUnitAndPunctuate: function (value, maxDecimals) {
+            var decimals = "";
 
             if (value < 250000) {
-                return this.punctuate(value) + " m²";
+                decimals = this.getFormattedDecimalString(value, maxDecimals);
+                return this.punctuate(value) + decimals + " m²";
             }
             if (value < 10000000) {
+                value = value / 10000.0;
+                decimals = this.getFormattedDecimalString(value, maxDecimals);
 
-                return this.punctuate(value / 10000) + " ha";
+                return this.punctuate(value) + decimals + " ha";
             }
+            value = value / 1000000.0;
+            decimals = this.getFormattedDecimalString(value, maxDecimals);
 
-            return this.punctuate(value / 1000000) + " km²";
+            return this.punctuate(value) + decimals + " km²";
         },
         /**
          * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
@@ -184,20 +191,22 @@ define(function (require) {
             while (pattern.test(predecimals)) {
                 predecimals = predecimals.replace(pattern, "$1.$2");
             }
-            return predecimals + this.getFormattedDecimalString(stringValue, 3);
+            return predecimals;
         },
         /**
          * Returns the pecimal part cut aftera  max length of number represented as string
          * adds "," in front of decimals if applicable
          * @param  {string} number input number
-         * @param  {} maxLength decimals are cut after maxlength chars
+         * @param  {num} maxLength decimals are cut after maxlength chars
+         * @return {String} decimals string with leading with ',' is not empty
          */
         getFormattedDecimalString: function (number, maxLength) {
-            var decimals = "";
+            var decimals = "",
+                number = number.toString();
 
             if (number.indexOf(".") !== -1) {
                 decimals = number.split(".")[1];
-                if (decimals.length > 0) {
+                if (maxLength > 0 && decimals.length > 0) {
                     return "," + decimals.substring(0, maxLength);
                 }
             }
