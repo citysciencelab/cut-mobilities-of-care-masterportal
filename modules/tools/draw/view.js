@@ -43,27 +43,23 @@ define([
         },
 
         render: function () {
+            var attr;
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
+                attr = this.model.toJSON();
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
-                $("#map").removeClass("no-cursor");
-                $("#cursorGlyph").remove();
-                $("#map").off("mousemove");
-                this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
+                if ($("#cursorGlyph").attr("class") !== "glyphicon glyphicon-pencil") {
+                    this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
+                }
                 this.delegateEvents();
             }
             else if (this.model.get("isCurrentWin") === false) {
                 $("#map").removeClass("no-cursor");
+                $("#map").removeClass("cursor-crosshair");
                 $("#cursorGlyph").remove();
                 $("#map").off("mousemove");
-            }
-            else {
-                $("#map").removeClass("no-cursor");
-                $("#cursorGlyph").remove();
-                $("#map").off("mousemove");
-                this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
                 this.undelegateEvents();
             }
             this.renderForm();

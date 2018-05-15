@@ -15,7 +15,8 @@ define([
                 positioning: "center-center",
                 stopEvent: false
             }),
-            isPoiOn: false,
+            showPoi: false,
+            poiDistances: [500, 1000, 2000],
             tracking: false, // Flag, ob derzeit getrackt wird.
             geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
             position: "",
@@ -23,14 +24,6 @@ define([
             isGeoLocationPossible: false
         },
         initialize: function () {
-            this.setZoomMode(Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr);
-            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "poi"})) === false) {
-                this.setIsPoiOn(Radio.request("Parser", "getItemByAttributes", {id: "poi"}).attr);
-            }
-            this.listenTo(Radio.channel("ModelList"), {
-                "updateVisibleInMapList": this.checkWFS
-            });
-
             var channel = Radio.channel("geolocation");
 
             channel.on({
@@ -42,7 +35,11 @@ define([
             channel.reply({
                 "isGeoLocationPossible": function () {
                     return this.getIsGeoLocationPossible();
-                }
+                },
+                "getPoiDistances": function () {
+                    return this.getPoiDistances();
+                },
+                "getFeaturesInCircle": this.getVectorFeaturesInCircle
             }, this);
 
             this.listenTo(this, {
@@ -51,8 +48,42 @@ define([
                 }
             }, this);
 
+            this.listenTo(Radio.channel("ModelList"), {
+                "updateVisibleInMapList": this.checkWFS
+            });
+
+            this.setConfig();
             this.setIsGeoLocationPossible();
         },
+
+        /**
+         * Fügt das Element der ol.Overview hinzu. Erst nach render kann auf document.getElementById zugegriffen werden.
+         */
+        addElement: function () {
+            this.getMarker().setElement(document.getElementById("geolocation_marker"));
+        },
+
+        /**
+         * Übernimmt die Einträge der config.json
+         */
+        setConfig: function () {
+            var config = Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr;
+
+            if (config.zoomMode) {
+                this.setZoomMode(config.zoomMode);
+            }
+
+            if (config.poiDistances) {
+                if (_.isArray(config.poiDistances) && config.poiDistances.length > 0) {
+                    this.setPoiDistances(config.poiDistances);
+                    this.setShowPoi(true);
+                }
+                else if (config.poiDistances === true) {
+                    this.setShowPoi(true);
+                }
+            }
+        },
+
         /*
         * Triggert die Standpunktkoordinate auf Radio
         */
@@ -69,7 +100,7 @@ define([
             }
         },
         removeOverlay: function () {
-            Radio.trigger("Map", "removeOverlay", this.get("marker"));
+            Radio.trigger("Map", "removeOverlay", this.getMarker());
         },
         untrack: function () {
             var geolocation = this.get("geolocation");
@@ -81,10 +112,10 @@ define([
             this.removeOverlay();
         },
         track: function () {
-            if (this.getIsGeolocationDenied() === false) {
-                var geolocation;
+            var geolocation;
 
-                Radio.trigger("Map", "addOverlay", this.get("marker"));
+            if (this.getIsGeolocationDenied() === false) {
+                Radio.trigger("Map", "addOverlay", this.getMarker());
                 if (this.get("geolocation") === null) {
                     geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                     this.set("geolocation", geolocation);
@@ -103,7 +134,7 @@ define([
         },
         positionMarker: function (position) {
             try {
-                this.get("marker").setPosition(position);
+                this.getMarker().setPosition(position);
             }
             catch (e) {
             }
@@ -156,7 +187,7 @@ define([
         trackPOI: function () {
             var geolocation;
 
-            Radio.trigger("Map", "addOverlay", this.get("marker"));
+            Radio.trigger("Map", "addOverlay", this.getMarker());
             if (this.get("geolocation") === null) {
                 geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                 this.set("geolocation", geolocation);
@@ -175,36 +206,52 @@ define([
             geolocation.un ("error", this.onPOIError, this);
         },
         callGetPOI: function () {
-            this.getPOI(0);
-            this.untrackPOI();
+            Radio.trigger("POI", "showPOIModal");
         },
-        getPOI: function (distance) {
+
+        /**
+         * Ermittelt die Features aus Vektprlayern in einem Umkreis zur Position. Funktioniert auch mit Clusterlayern.
+         * @param  {integer} distance Umkreis
+         * @return {Array}          Array of ol.features
+         */
+        getVectorFeaturesInCircle: function (distance) {
             var geolocation = this.get("geolocation"),
                 position = geolocation.getPosition(),
-                centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position);
+                centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position),
+                circle = new ol.geom.Circle(centerPosition, distance),
+                circleExtent = circle.getExtent(),
+                visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
+                featuresAll = [],
+                features = [];
 
-            this.positionMarker(centerPosition);
-            this.set("distance", distance);
-            this.set("newCenter", centerPosition);
-            var circle = new ol.geom.Circle(centerPosition, this.get("distance")),
-                circleExtent = circle.getExtent();
+            _.each(visibleWFSLayers, function (layer) {
+                if (layer.has("layerSource") === true) {
+                    features = layer.get("layerSource").getFeaturesInExtent(circleExtent);
+                    _.each(features, function (feat) {
+                        feat = _.extend(feat, {
+                            styleId: layer.get("styleId"),
+                            layerName: layer.get("name"),
+                            dist2Pos: this.getDistance(feat, centerPosition)
+                        });
+                    }, this);
+                    featuresAll = _.union(features, featuresAll);
+                }
+            }, this);
 
-            this.set("circleExtent", circleExtent);
-            this.getPOIParams();
+            return featuresAll;
         },
-        getPOIParams: function (visibleWFSLayers) {
-            var visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
 
-            if (this.get("circleExtent") && visibleWFSLayers) {
-                _.each(visibleWFSLayers, function (layer) {
-                    if (layer.has("layerSource") === true) {
-                        layer.get("layer").getSource().forEachFeatureInExtent(this.get("circleExtent"), function (feature) {
-                            Radio.trigger("Orientation", "setModel", feature, this.get("distance"), this.get("newCenter"), layer);
-                        }, this);
-                    }
-                }, this);
-                Radio.trigger("poi", "showPOIModal");
-            }
+        /**
+         * Ermittelt die Entfernung des Features zur Geolocation auf Metergenauigkeit
+         * @param  {ol.feature} feat Feature
+         * @return {float}      Entfernung
+         */
+        getDistance: function (feat, centerPosition) {
+            var closestPoint = feat.getGeometry().getClosestPoint(centerPosition),
+                line = new ol.geom.LineString([closestPoint, centerPosition]),
+                dist = Math.round(line.getLength() * 1) / 1;
+
+            return dist;
         },
 
         /**
@@ -215,12 +262,13 @@ define([
             this.set("zoomMode", value);
         },
 
-        /**
-         * Setter Methode für das Attribut isPoiOn
-         * @param {bool} value
-         */
-        setIsPoiOn: function (value) {
-            this.set("isPoiOn", value);
+        // setter für showPoi
+        setShowPoi: function (value) {
+            this.set("showPoi", value);
+        },
+        // getter für showPoi
+        getShowPoi: function () {
+            return this.get("showPoi");
         },
 
         setIsGeolocationDenied: function (value) {
@@ -231,11 +279,30 @@ define([
         getIsGeolocationDenied: function () {
             return this.get("isGeolocationDenied");
         },
+
         getIsGeoLocationPossible: function () {
             return this.get("isGeoLocationPossible");
         },
         setIsGeoLocationPossible: function () {
             this.set("isGeoLocationPossible", window.location.protocol === "https:" || _.contains(["localhost","127.0.0.1"], window.location.hostname));
+        },
+
+        // getter for poiDistances
+        getPoiDistances: function () {
+            return this.get("poiDistances");
+        },
+        // setter for poiDistances
+        setPoiDistances: function (value) {
+            this.set("poiDistances", value);
+        },
+
+        // getter for marker
+        getMarker: function () {
+            return this.get("marker");
+        },
+        // setter for marker
+        setMarker: function (value) {
+            this.set("marker", value);
         }
     });
 

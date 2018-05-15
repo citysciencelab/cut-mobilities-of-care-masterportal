@@ -17,7 +17,7 @@ define([
             this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
             this.$el.draggable({
                 containment: "#map",
-                handle: ".header",
+                handle: ".move",
                 stop: function (event, ui) {
                     ui.helper.css({"height": "", "width": ""});
                 }

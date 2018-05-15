@@ -2,7 +2,7 @@ define(function (require) {
 
     var SnippetDropdownView = require("modules/snippets/dropdown/view"),
         ValueView = require("modules/snippets/value/view"),
-        CheckBoxView = require("modules/snippets/checkbox/view"),
+        SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         Template = require("text!modules/tools/filter/query/templateDetailView.html"),
         SnippetSliderView = require("modules/snippets/slider/range/view"),
         QueryDetailView;
@@ -18,7 +18,6 @@ define(function (require) {
         initialize: function () {
             this.listenTo(this.model, {
                 "rerenderSnippets": this.rerenderSnippets,
-                "renderSnippets": this.renderSnippets,
                 "change:isSelected": this.removeView,
                 "change:featureIds": this.updateFeatureCount,
                 "change:isLayerVisible": this.render
@@ -29,12 +28,18 @@ define(function (require) {
             }, this);
         },
         render: function () {
-            var attr = this.model.toJSON();
+            var attr;
+
+            if (!this.model.get("features")) {
+                this.$el.html("<div id='filter-loader'><img src='../../img/ajax-loader.gif'></div>");
+                return this.$el;
+            }
+            attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
             this.renderSnippets();
             this.renderValueViews();
-            this.renderCheckboxView();
+            this.renderSnippetCheckBoxView();
             return this.$el;
         },
         rerenderSnippets: function (changedValue) {
@@ -57,7 +62,7 @@ define(function (require) {
         },
 
         zoomToSelectedFeatures: function () {
-            this.model.zoomToSelectedFeatures();
+            this.model.sendFeaturesToRemote();
             if (Radio.request("Util", "isViewMobile") === true) {
                 this.model.trigger("closeFilter");
             }
@@ -67,18 +72,19 @@ define(function (require) {
 
             if (this.model.get("isLayerVisible")) {
                 _.each(this.model.get("snippetCollection").models, function (snippet) {
-                    if (snippet.get("type") === "string") {
+                    if (snippet.get("type") === "string" || snippet.get("type") === "text") {
                         view = new SnippetDropdownView({model: snippet});
-                        this.$el.append(view.render());
                     }
                     else if (snippet.get("type") === "boolean") {
                         view = new SnippetDropdownView({model: snippet});
-                        this.$el.append(view.render());
+                    }
+                    else if (snippet.get("snippetType") === "slider") {
+                        view = new SnippetSliderView({model: snippet});
                     }
                     else {
-                        view = new SnippetSliderView({model: snippet});
-                        this.$el.append(view.render());
+                        view = new SnippetCheckBoxView({model: snippet});
                     }
+                    this.$el.append(view.render());
                 }, this);
             }
             else {
@@ -95,10 +101,11 @@ define(function (require) {
             _.each(this.model.get("snippetCollection").models, function (snippet) {
                 _.each(snippet.get("valuesCollection").models, function (valueModel) {
                     valueModel.trigger("removeView");
+                    var view;
 
                     if (valueModel.get("isSelected")) {
                         countSelectedValues++;
-                        var view = new ValueView({model: valueModel});
+                        view = new ValueView({model: valueModel});
 
                         this.$el.find(".value-views-container .text:nth-child(1)").after(view.render());
                     }
@@ -108,10 +115,12 @@ define(function (require) {
             countSelectedValues === 0 ? this.$el.find(".text:last-child").show() : this.$el.find(".text:last-child").hide();
             countSelectedValues > 1 ? this.$el.find(".remove-all").show() : this.$el.find(".remove-all").hide();
         },
-        renderCheckboxView: function () {
+        renderSnippetCheckBoxView: function () {
             // this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
+            var view;
+
             if (!this.model.get("activateOnSelection")) {
-                var view = new CheckBoxView({model: this.model.get("btnIsActive")});
+                view = new SnippetCheckBoxView({model: this.model.get("btnIsActive")});
 
                 this.$el.find(".detailview-head").after(view.render());
             }

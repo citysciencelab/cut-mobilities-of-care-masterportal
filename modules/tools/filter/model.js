@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var QueryModel = require("modules/tools/filter/query/source/wfs"),
+    var WfsQueryModel = require("modules/tools/filter/query/source/wfs"),
         Radio = require("backbone.radio"),
         FilterModel;
 
@@ -9,10 +9,13 @@ define(function (require) {
             isGeneric: false,
             isInitOpen: false,
             isVisible: false,
+            isVisibleInMenu: true,
             id: "filter",
             queryCollection: {},
             isActive: false,
-            allowMultipleQueriesPerLayer: true
+            allowMultipleQueriesPerLayer: true,
+            liveZoomToFeatures: false,
+            sendToRemote: false
         },
         initialize: function () {
             var channel = Radio.channel("Filter");
@@ -29,9 +32,10 @@ define(function (require) {
                     this.deactivateOtherModels(model);
                 },
                 "deselectAllModels": this.deselectAllModels,
-                "featureIdsChanged": function (featureIds) {
+                "featureIdsChanged": function (featureIds, layerId) {
                     this.updateMap();
-                    this.updateGFI(featureIds);
+                    this.updateGFI(featureIds, layerId);
+                    this.updateFilterObject();
                 },
                 "closeFilter": function () {
                     this.setIsActive(false);
@@ -41,6 +45,7 @@ define(function (require) {
 
             this.createQueries(this.getConfiguredQueries());
         },
+
         resetFilter: function () {
             this.deselectAllModels();
             this.deactivateAllModels();
@@ -61,7 +66,7 @@ define(function (require) {
                 model.deselectAllValueModels();
             }, this);
         },
-        deselectAllModels: function (selectedModel) {
+        deselectAllModels: function () {
             _.each(this.get("queryCollection").models, function (model) {
                 model.setIsSelected(false);
             }, this);
@@ -89,8 +94,10 @@ define(function (require) {
          */
         updateMap: function () {
             // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
+            var allFeatureIds;
+
             if (_.contains(this.get("queryCollection").pluck("isSelected"), true)) {
-                var allFeatureIds = this.groupFeatureIdsByLayer(this.get("queryCollection"));
+                allFeatureIds = this.groupFeatureIdsByLayer(this.get("queryCollection"));
 
                 _.each(allFeatureIds, function (layerFeatures) {
                     Radio.trigger("ModelList", "showFeaturesById", layerFeatures.layer, layerFeatures.ids);
@@ -103,16 +110,38 @@ define(function (require) {
             }
         },
 
-        updateGFI: function (featureIds) {
-            var getVisibleTheme = Radio.request("GFI", "getVisibleTheme");
+        updateGFI: function (featureIds, layerId) {
+            var getVisibleTheme = Radio.request("GFI", "getVisibleTheme"),
+                featureId;
 
-            if (getVisibleTheme) {
-                var featureId = getVisibleTheme.get("feature").getId();
+            if (getVisibleTheme && getVisibleTheme.get("id") === layerId) {
+                featureId = getVisibleTheme.get("feature").getId();
 
                 if (!_.contains(featureIds, featureId)) {
-                    Radio.trigger("GFI", "hideGFI");
+                    Radio.trigger("GFI", "setIsVisible", false);
                 }
             }
+        },
+
+        /**
+         * builds an array of object that reflects the current filter
+         * @return {void}
+         */
+        updateFilterObject: function () {
+            var filterObjects = [];
+
+            this.get("queryCollection").forEach(function (query) {
+                var ruleList = [];
+
+                query.get("snippetCollection").forEach(function (snippet) {
+                    // searchInMapExtent is ignored
+                    if (snippet.getSelectedValues().values.length > 0 && snippet.get("type") !== "searchInMapExtent") {
+                        ruleList.push(_.omit(snippet.getSelectedValues(), "type"));
+                    }
+                });
+                filterObjects.push({name: query.get("name"), isSelected: query.get("isSelected"), rules: ruleList});
+            });
+            Radio.trigger("ParametricURL", "updateQueryStringParam", "filter", JSON.stringify(filterObjects));
         },
 
         /**
@@ -175,19 +204,41 @@ define(function (require) {
             _.each(config, function (value, key) {
                 this.set(key, value);
             }, this);
+
+            if (Radio.request("ParametricURL", "getIsInitOpen") === "FILTER") {
+                this.set("isInitOpen", true);
+            }
         },
 
         createQueries: function (queries) {
+            var queryObjects = Radio.request("ParametricURL", "getFilter");
+
             _.each(queries, function (query) {
+                var queryObject;
+
+                if (!_.isUndefined(queryObjects)) {
+                    queryObject = _.findWhere(queryObjects, {name: query.name});
+
+                    query = _.extend(query, queryObject);
+                }
                 this.createQuery(query);
             }, this);
         },
 
         createQuery: function (model) {
-            var query = new QueryModel(model);
+            var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
+                query = (layer.getTyp() === "WFS" || layer.getTyp() === "GeoJSON") ? new WfsQueryModel(model): undefined;
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+            }
+
+            if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
+                query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
+            }
+
+            if (!_.isUndefined(this.get("sendToRemote"))) {
+                query.set("sendToRemote", this.get("sendToRemote"));
             }
 
             if (query.get("isSelected")) {
@@ -203,16 +254,18 @@ define(function (require) {
         },
 
         setIsActive: function (value) {
+            var model;
+
             this.set("isActive", value);
             if (!value) {
-                var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
+                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
 
                 model.setIsActive(false);
                 Radio.trigger("Sidebar", "toggle", false);
             }
         },
         closeGFI: function () {
-            Radio.trigger("GFI", "hideGFI");
+            Radio.trigger("GFI", "setIsVisible", false);
             Radio.trigger("MapMarker", "hideMarker");
         },
         collapseOpenSnippet: function () {

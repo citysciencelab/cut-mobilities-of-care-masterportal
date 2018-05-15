@@ -1,21 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/core/modelList/layer/wms",
-    "modules/core/modelList/layer/wfs",
-    "modules/core/modelList/layer/geojson",
-    "modules/core/modelList/layer/group",
-    "modules/core/modelList/folder/model",
-    "modules/core/modelList/tool/model",
-    "modules/core/modelList/staticlink/model",
-    "modules/layer/wfsStyle/list"
-], function () {
+define(function (require) {
 
     var Backbone = require("backbone"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
-        StyleList = require("modules/layer/wfsStyle/list"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
@@ -28,7 +16,6 @@ define([
         initialize: function () {
             var channel = Radio.channel("ModelList");
 
-            new StyleList();
             channel.reply({
                 "getCollection": this,
                 "getModelsByAttributes": function (attributes) {
@@ -94,10 +81,12 @@ define([
                     return new WMSLayer(attrs, options);
                 }
                 else if (attrs.typ === "WFS") {
-                    return new WFSLayer(attrs, options);
-                }
-                else if (attrs.typ === "GeoJSON") {
-                    return new GeoJSONLayer(attrs, options);
+                    if (attrs.outputFormat === "GeoJSON") {
+                        return new GeoJSONLayer(attrs, options);
+                    }
+                    else {
+                        return new WFSLayer(attrs, options);
+                    }
                 }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
@@ -111,6 +100,9 @@ define([
             }
             else if (attrs.type === "staticlink") {
                 return new StaticLink(attrs, options);
+            }
+            else {
+                Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + "attrs.type");
             }
         },
         /**
@@ -347,14 +339,48 @@ define([
             // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
             // wie sie hinzugefügt werden
             var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
-                treeType = Radio.request("Parser", "getTreeType");
+                treeType = Radio.request("Parser", "getTreeType"),
+                lightModels,
+                itemIsVisibleInMap,
+                lightModel;
 
             if (treeType === "light") {
-                var lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
+                lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
 
-                lightModels.reverse();
+                lightModels = this.mergeParamsToLightModels(lightModels, paramLayers);
+                this.add(lightModels);
+            }
+            else if (paramLayers.length > 0) {
+                itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
+                _.each(itemIsVisibleInMap, function (layer) {
+                    layer.isVisibleInMap = false;
+                    layer.isSelected = false;
+                }, this);
 
-                // Merge die parametrisierten Einstellungen an die geparsten Models
+                 _.each(paramLayers, function (paramLayer) {
+                    lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
+
+                    if (_.isUndefined(lightModel) === false) {
+                        this.add(lightModel);
+                        this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
+                        // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
+                        if (paramLayer.visibility === false && _.isUndefined(this.get(paramLayer.id)) === false) {
+                            this.get(paramLayer.id).setIsVisibleInMap(false);
+                        }
+                    }
+                }, this);
+
+            }
+            else {
+                this.addModelsByAttributes({type: "layer", isSelected: true});
+            }
+
+        },
+
+        mergeParamsToLightModels: function (lightModels, paramLayers) {
+            lightModels.reverse();
+            // Merge die parametrisierten Einstellungen an die geparsten Models
+            if (_.isUndefined(paramLayers) === false && paramLayers.length !== 0) {
                 _.each(lightModels, function (lightModel) {
                     var hit = _.find(paramLayers, function (paramLayer) {
                         return paramLayer.id === lightModel.id;
@@ -364,37 +390,12 @@ define([
                         lightModel.isSelected = hit.visibility;
                         lightModel.transparency = hit.transparency;
                     }
-                });
-                this.add(lightModels);
-            }
-            // Parametrisierter Aufruf
-            else if (paramLayers.length > 0) {
-                _.each(Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true}), function (layer) {
-                    layer.isVisibleInMap = false;
-                    layer.isSelected = false;
-                });
-                _.each(paramLayers, function (paramLayer) {
-                    var lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
-
-                    if (_.isUndefined(lightModel) === false) {
-                        this.add(lightModel);
-                        if (paramLayer.visibility === true) {
-                            this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
-                        }
-                        else {
-                            this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
-                            // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
-                            if (_.isUndefined(this.get(paramLayer.id)) === false) {
-                                this.get(paramLayer.id).setIsVisibleInMap(false);
-                            }
-                        }
+                    else {
+                        lightModel.isSelected = false;
                     }
-                }, this);
+                });
             }
-            // Only Add models in selection
-            else {
-                this.addModelsByAttributes({type: "layer", isSelected: true});
-            }
+            return lightModels;
         },
 
         setModelAttributesById: function (id, attrs) {
@@ -407,6 +408,7 @@ define([
 
         addModelsByAttributes: function (attrs) {
             var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
+
             this.add(lightModels);
         },
 

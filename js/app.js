@@ -1,41 +1,51 @@
-define("app",
-    [
-    "jquery",
-    "config",
-    "modules/core/util",
-    "modules/core/rawLayerList",
-    "modules/restReader/collection",
-    "modules/core/configLoader/preparser",
-    "modules/core/map",
-    "modules/core/parametricURL",
-    "modules/core/crs",
-    "modules/core/autostarter",
-    "modules/alerting/view"
-    ], function ($, Config, Util, RawLayerList, RestReaderList, Preparser, Map, ParametricURL, CRS, Autostarter, Alerting) {
+define("app", function (require) {
 
+var $ = require("jquery"),
+    Config = require("config"),
+    Alert = require("modules/alerting/view"),
+    RestReaderList = require("modules/restReader/collection"),
+    Autostarter = require("modules/core/autostarter"),
+    Util = require("modules/core/util"),
+    StyleList = require("modules/vectorStyle/list"),
+    RawLayerList = require("modules/core/rawLayerList"),
+    Preparser = require("modules/core/configLoader/preparser"),
+    ParametricURL = require("modules/core/parametricURL"),
+    CRS = require("modules/core/crs"),
+    Map = require("modules/core/map"),
+    WPS = require("modules/core/wps"),
+    AddGeoJSON = require("modules/tools/addGeoJSON/model"),
+    RemoteInterface = require("modules/remoteInterface/model");
 
     // Core laden
+    new Alert();
+    new RemoteInterface();
+    new Alert();
     new Autostarter();
     new Util();
+    new StyleList();
     new RawLayerList();
     new Preparser();
     new ParametricURL();
     new CRS();
     new Map();
+    new RestReaderList();
+    new WPS();
+    new AddGeoJSON();
+
     // Graph laden
     require(["modules/tools/graph/model"], function (GraphModel) {
         new GraphModel();
     });
-
     // Module laden
+    require(["modules/wfsTransaction/model"], function (WFSTransactionModel) {
+        new WFSTransactionModel();
+    });
+
     require(["modules/menu/menuLoader"], function (MenuLoader) {
         new MenuLoader();
     });
-    new RestReaderList();
 
-    require(["modules/remoteInterface/model"], function (Remoteinterface) {
-        new Remoteinterface();
-    });
+
 
     require(["modules/zoomToGeometry/model"], function (ZoomToGeometry) {
         new ZoomToGeometry();
@@ -60,7 +70,6 @@ define("app",
         require(["geoapi"], function () {
         });
     }
-
 
     require(["modules/snippets/slider/view", "modules/snippets/slider/range/view", "modules/snippets/dropdown/view"], function (SliderView, SliderRangeView, DropdownView) {
         // new SliderView();
@@ -111,6 +120,12 @@ define("app",
 
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
+                case "einwohnerabfrage": {
+                    require(["modules/tools/einwohnerabfrage/view"], function (EinwohnerabfrageView) {
+                        new EinwohnerabfrageView();
+                    });
+                    break;
+                }
                 case "animation": {
                     require(["modules/tools/animation/view"], function (AnimationView) {
                         new AnimationView();
@@ -130,7 +145,7 @@ define("app",
                     break;
                 }
                 case "coord": {
-                    require(["modules/coordpopup/view"], function (CoordPopupView) {
+                    require(["modules/tools/getCoord/view"], function (CoordPopupView) {
                         new CoordPopupView();
                     });
                     break;
@@ -229,9 +244,6 @@ define("app",
                     require(["modules/legend/legendLoader"], function (LegendLoader) {
                         new LegendLoader();
                     });
-                    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
-                        new AddGeoJSON();
-                    });
                     break;
                 }
                 default: {
@@ -240,74 +252,91 @@ define("app",
             }
         });
     });
-    // controls
-    require(["modules/controls/view"], function (ControlsView) {
-        var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
-            controlsView = new ControlsView();
-
-        _.each(controls, function (control) {
-            switch (control.id) {
-                case "zoom": {
-                    if (control.attr === true) {
-                        var el = controlsView.addRowTR(control.id);
-
-                        require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                            new ZoomControlView({el: el});
-                        });
-                    }
-                    break;
-                }
-                case "orientation": {
-                    var el = controlsView.addRowTR(control.id);
-
-                    require(["modules/controls/orientation/view"], function (OrientationView) {
-                        new OrientationView({el: el});
-                    });
-                    break;
-                }
-                case "mousePosition": {
-                    if (control.attr === true) {
-                        var el = controlsView.addRowBL(control.id);
-
-                        require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                            new MousePositionView({el: el});
-                        });
-                    }
-                    break;
-                }
-                case "fullScreen": {
-                    if (control.attr === true) {
-                        var el = controlsView.addRowTR(control.id);
-
-                        require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                            new FullScreenView({el: el});
-                        });
-                    }
-                    break;
-                }
-                case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        var el = controlsView.addRowBR(control.id);
-
-                        require(["modules/controls/attributions/view"], function (AttributionsView) {
-                            new AttributionsView({el: el});
-                        });
-                    }
-                    break;
-                }
-                case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        var el = controlsView.addRowBR(control.id);
-
-                        require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
-                            new OverviewmapView({el: el});
-                        });
-                    }
-                    break;
-                }
-            }
-        });
+    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
+        new AddGeoJSON();
     });
+    // controls
+    var style = Radio.request("ParametricURL", "getStyle");
+
+    if (!style || style !== "SIMPLE") {
+        require(["modules/controls/view"], function (ControlsView) {
+            var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
+                controlsView = new ControlsView();
+
+            _.each(controls, function (control) {
+                switch (control.id) {
+                    case "zoom": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
+
+                            require(["modules/controls/zoom/view"], function (ZoomControlView) {
+                                new ZoomControlView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "orientation": {
+                        var el = controlsView.addRowTR(control.id);
+
+                        require(["modules/controls/orientation/view"], function (OrientationView) {
+                            new OrientationView({el: el});
+                        });
+                        break;
+                    }
+                    case "mousePosition": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowBL(control.id);
+
+                            require(["modules/controls/mousePosition/view"], function (MousePositionView) {
+                                new MousePositionView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "fullScreen": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
+
+                            require(["modules/controls/fullScreen/view"], function (FullScreenView) {
+                                new FullScreenView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "totalview": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
+
+                            require(["modules/controls/totalview/view"], function (TotalView) {
+                                new TotalView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "attributions": {
+                        if (control.attr === true || typeof control.attr === "object") {
+                            var el = controlsView.addRowBR(control.id);
+
+                            require(["modules/controls/attributions/view"], function (AttributionsView) {
+                                new AttributionsView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "overviewmap": {
+                        if (control.attr === true || typeof control.attr === "object") {
+                            var el = controlsView.addRowBR(control.id);
+
+                            require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
+                                new OverviewmapView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                }
+            });
+        });
+    }
 
     require(["modules/mapMarker/view"], function (MapMarkerView) {
         new MapMarkerView();
@@ -328,6 +357,10 @@ define("app",
 
     require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
         new StyleWMSView();
+    });
+
+    require(["modules/highlightFeature/model"], function (HighlightFeature) {
+        new HighlightFeature();
     });
 
     Radio.trigger("Util", "hideLoader");

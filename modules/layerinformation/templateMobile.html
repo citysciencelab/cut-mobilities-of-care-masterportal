@@ -44,13 +44,22 @@
                                 _.each(legendURL.img, function (image, index2) {
                                 %>
                                     <tr>
-                                       <td class="tdLegend">
-                                           <img src="<%= image %>">
-                                       </td>
-                                       <td class="tdLegend">
-                                           <span><%= legendURL.legendname[index2] %></span>
-                                       </td>
-                                   </tr>
+                                   <% if (image.indexOf(".png") === -1 && image.indexOf(".svg") === -1){%>
+                                <td class="tdLegend">
+                                   <div class="tdLegend-no-image"><%= image %></div>
+                                </td>
+                                <td class="tdLegend">
+                                   <span><%= legendURL.legendname[index2] %></span>
+                                </td>
+                                <%} else {%>
+                                   <td class="tdLegend">
+                                       <img src="<%= image %>">
+                                   </td>
+                                   <td class="tdLegend">
+                                       <span><%= legendURL.legendname[index2] %></span>
+                                   </td>
+                                <%}%>
+                               </tr>
                                 <%
                                 });
                                 %>
@@ -76,7 +85,7 @@
                               }
                               else {
                                 if (typeof legendURL.img === "string") {
-                                    if (legendURL.img.search(".pdf") !== -1) {
+                                    if (new RegExp(/(\.pdf)$/i).test(legendURL.img) === true) {
                                    %>
                                         <a href=<%= legendURL.img %> target="_blank">weitere Informationen</a>
                                     <%

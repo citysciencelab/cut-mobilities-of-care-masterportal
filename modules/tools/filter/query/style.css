@@ -1,4 +1,4 @@
-.filter .checkbox-container > label, .filter .detailview-head > label {
+.filter .detailview-head > label {
     font-size: 16px;
     color: rgb(182, 0, 0);
     padding-top: 4px;
@@ -112,4 +112,15 @@
     -ms-transform:rotate(-7deg);
     -o-transform:rotate(-7deg);
     transform:rotate(-7deg);
+}
+
+.filter #filter-loader {
+    height: 200px;
+    width: 100%;
+    position: relative;
+}
+.filter #filter-loader img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
 }

@@ -77,7 +77,7 @@ define(function (require) {
                 });
             });
             values = _.uniq(values);
-            values.sort();
+            // values.sort(); Sortierung nach String funktioniert nicht für timestamp, daher auskommentiert und Daten vorsortiert
             return d3.scaleBand()
                     .range(rangeArray)
                     .domain(values);
@@ -89,8 +89,13 @@ define(function (require) {
                     .nice();
         },
         // create bottomAxis.
-        createAxisBottom: function (scale) {
+        createAxisBottom: function (scale, xThinningFactor) {
             return d3.axisBottom(scale)
+                    .tickValues(scale.domain().filter(function (d, i) {
+                        var val = i % xThinningFactor;
+
+                        return (!val);
+                    }))
                     .tickFormat(function (d) {
                         d = d.toString();
                         return d;
@@ -213,17 +218,17 @@ define(function (require) {
                     .append("g")
                     .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
         },
-        appendLegend: function (svg, attrToShowArray) {
+        appendLegend: function (svg, attrToShowArray, legendArray) {
             var legend = svg.append("g")
-                    .attr("class", "graph-legend")
-                    .selectAll("g")
-                    .data([this.createAndGetLegendText(attrToShowArray[0])])
-                    .enter()
-                    .append("g")
-                        .attr("class", "graph-legend-item")
-                        .attr("transform", function () {
-                            return "translate(" + -60 + "," + -20 + ")";
-                    });
+                .attr("class", "graph-legend")
+                .selectAll("g")
+                .data(this.getLegendTextArray(attrToShowArray, legendArray))
+                .enter()
+                .append("g")
+                    .attr("class", "graph-legend-item")
+                    .attr("transform", function () {
+                        return "translate(" + -60 + "," + -20 + ")";
+                });
 
             legend.append("circle")
                 .attr("cx", 5)
@@ -239,16 +244,20 @@ define(function (require) {
                 });
         },
 
-        createAndGetLegendText: function (value) {
-            if (value === "DTV") {
-                return "DTV (Kfz/24h)";
-            }
-            else if (value === "DTVw") {
-                return "DTVw (Kfz/24h)";
-            }
-            else {
-                return "SV-Anteil am DTVw (%)";
-            }
+        getLegendTextArray: function (attrArray, legendArray) {
+            var valueArray = [];
+
+            _.each(attrArray, function (attr) {
+                var legendObj = _.find(legendArray, function (legend) {
+                    if (legend.key === attr) {
+                        return legend;
+                    }
+                });
+
+                valueArray.push(legendObj.value);
+            });
+
+            return valueArray;
         },
 
         createLineGraph: function (graphConfig) {
@@ -258,7 +267,7 @@ define(function (require) {
                 data = graphConfig.data,
                 xAttr = graphConfig.xAttr,
                 xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : graphConfig.xAttr,
-                yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : this.createAndGetLegendText(graphConfig.attrToShowArray[0]),
+                yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : this.getLegendTextArray(graphConfig.attrToShowArray, graphConfig.legendArray),
                 attrToShowArray = graphConfig.attrToShowArray,
                 margin = {top: 20, right: 20, bottom: 70, left: 70},
                 width = graphConfig.width - margin.left - margin.right,
@@ -267,12 +276,13 @@ define(function (require) {
                 scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
                 valueLine,
                 tooltipDiv = d3.select(graphConfig.selectorTooltip),
-                xAxis = this.createAxisBottom(scaleX),
+                xThinning = graphConfig.xThinning ? graphConfig.xThinning : 1,
+                xAxis = this.createAxisBottom(scaleX, xThinning),
                 yAxis = this.createAxisLeft(scaleY),
                 svg = this.createSvg(selector, margin, width, height),
                 offset = 10;
 
-            this.appendLegend(svg, attrToShowArray);
+            this.appendLegend(svg, attrToShowArray, graphConfig.legendArray);
             _.each(attrToShowArray, function (yAttrToShow) {
 
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow, offset);

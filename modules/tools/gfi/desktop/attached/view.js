@@ -3,6 +3,7 @@ define(function (require) {
 
     var DesktopView = require("modules/tools/gfi/view"),
         Template = require("text!modules/tools/gfi/desktop/template.html"),
+        Radio = require("backbone.radio"),
         GFIAttachedView;
 
     GFIAttachedView = DesktopView.extend({
@@ -45,6 +46,7 @@ define(function (require) {
         toggle: function () {
             if (this.model.getIsVisible() === true) {
                 $(this.model.getOverlayElement()).popover("show");
+                Radio.trigger("GFI", "afterRender");
             }
             else {
                 $(this.model.getOverlayElement()).popover("hide");

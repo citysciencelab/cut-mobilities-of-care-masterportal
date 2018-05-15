@@ -1,12 +1,17 @@
 define(function (require) {
 
     var QueryModel = require("modules/tools/filter/query/model"),
+        ol = require("openlayers"),
         WfsQueryModel;
 
     WfsQueryModel = QueryModel.extend({
         initialize: function () {
             this.superInitialize();
             this.prepareQuery();
+
+            if (this.get("searchInMapExtent") === true) {
+                Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive, this);
+            }
         },
         /**
          * gathers Information for this Query including the wfs features and metadata
@@ -42,7 +47,7 @@ define(function (require) {
          * @return {[type]} [description]
          */
         listenToFeaturesLoaded: function () {
-            this.listenTo(Radio.channel("WFSLayer"), {
+            this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
                     if (layerId === this.get("layerId")) {
                         this.processFeatures(features);
@@ -77,11 +82,14 @@ define(function (require) {
                 featureType,
                 version;
 
+            if (this.get("searchInMapExtent") === true) {
+                this.addSearchInMapExtentSnippet();
+            }
             if (!_.isUndefined(layerObject)) {
                 url = Radio.request("Util", "getProxyURL", layerObject.get("url"));
                 featureType = layerObject.get("featureType");
                 version = layerObject.get("version");
-                this.requestMetadata(url, featureType, version, this.createSnippets);
+                this.requestMetadata(url, featureType, version, this.parseResponse);
             }
         },
         /**
@@ -113,30 +121,10 @@ define(function (require) {
                 featureAttributesMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
             });
 
-            return featureAttributesMap;
+            this.createSnippets(featureAttributesMap);
         },
 
-        collectAttributeValues: function (featureAttributesMap) {
-            return this.getRemainingAttributeValues(featureAttributesMap);
-        },
 
-        /**
-         * [description]
-         * @param  {[type]} typeMap [description]
-         * @return {[type]}         [description]
-         */
-        getRemainingAttributeValues: function (featureAttributesMap, features) {
-            var features = features || this.get("features");
-
-            _.each(featureAttributesMap, function (featureAttribute) {
-                featureAttribute.values = [];
-
-                _.each(features, function (feature) {
-                    featureAttribute.values = _.union(featureAttribute.values, this.parseStringType(feature, featureAttribute));
-                }, this);
-            }, this);
-            return featureAttributesMap;
-        },
         /**
          * [getValuesFromFeature description]
          * @param  {ol.feature} feature
@@ -150,27 +138,42 @@ define(function (require) {
         },
 
         /**
-         * parses attribut values with pipe-sign ("|") and returnes array with single values
+         * parses attribute values with pipe-sign ("|") and returnes array with single values
          * @param  {ol.Feature} feature
-         * @param  {[type]} featureAttribute [description]
-         * @return {[type]}                  [description]
+         * @param  {string} attributeName - key name of a feature attribute
+         * @return {string[] || number[]}
          */
-        parseValuesFromString: function (feature, attrName) {
-            var values = [];
+        parseValuesFromString: function (feature, attributeName) {
+            var values = [],
+                attributeValue = feature.get(attributeName);
 
-            if (!_.isUndefined(feature.get(attrName))) {
-                if (feature.get(attrName).indexOf("|") !== -1) {
-                    var featureValues = feature.get(attrName).split("|");
+            if (!_.isUndefined(attributeValue)) {
+                if (_.isString(attributeValue) && attributeValue.indexOf("|") !== -1) {
+                    var attributeValues = attributeValue.split("|");
 
-                    _.each(featureValues, function (value) {
-                        values.push(value);
-                    });
+                    _.each(attributeValues, function (value) {
+                        if (this.isValid(value)) {
+                            values.push(value);
+                        }
+                    }, this);
+                }
+                else if (_.isArray(attributeValue)) {
+                    _.each(attributeValue, function (value) {
+                        if (this.isValid(value)) {
+                            values.push(value);
+                        }
+                    }, this);
                 }
                 else {
-                    values.push(feature.get(attrName));
+                    if (this.isValid(attributeValue)) {
+                        values.push(attributeValue);
+                    }
                 }
             }
             return _.unique(values);
+        },
+        isValid: function (value) {
+            return value !== null && !_.isUndefined(value);
         },
 
         /**
@@ -230,14 +233,21 @@ define(function (require) {
 
             this.updateSnippets(features, selectedAttributes);
             this.setFeatureIds(featureIds);
-            this.trigger("featureIdsChanged", featureIds);
+            this.trigger("featureIdsChanged", featureIds, this.get("layerId"));
         },
-        /**
-         * triggers map to zoom to given features of given layer
-         * @return {[type]} [description]
-         */
-        zoomToSelectedFeatures: function () {
-            Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+
+        sendFeaturesToRemote: function () {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+                features = [],
+                feature;
+
+            _.each(this.get("featureIds"), function (id) {
+                feature = model.getLayerSource().getFeatureById(id);
+                feature.set("extent", feature.getGeometry().getExtent());
+                features.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+            });
+
+            Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.getId(), "layerName": model.getName()});
         },
         /**
          * determines the attributes and their values that are still selectable
@@ -247,28 +257,26 @@ define(function (require) {
          * @return {object[]}                    array of attributes and their values that are still selectable
          */
         collectSelectableOptions: function (features, selectedAttributes, allAttributes) {
-            var selectableOptions = [];
+            var selectableOptions = [],
+                selectableValues = [];
 
-            if (_.isUndefined(allAttributes) === false && allAttributes.length === 0) {
-                selectableOptions = this.getRemainingAttributeValues(allAttributes, features);
-            }
-            else {
-                _.each(allAttributes, function (attribute) {
-                    var selectableValues = {name: attribute.name, values: []};
+            _.each(allAttributes, function (attribute) {
+                selectableValues = {name: attribute.name, displayName: attribute.displayName, type: attribute.type, values: []};
 
-                    _.each(features, function (feature) {
-                        var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
-                            return attr.attrName !== attribute.name;
-                        }));
+                _.each(features, function (feature) {
+                    var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
+                        return attr.attrName !== attribute.name;
+                    }));
 
-                        if (isMatch) {
-                            selectableValues.values.push(this.getValuesFromFeature(feature, attribute.name, attribute.type));
-                        }
-                    }, this);
-                    selectableValues.values = _.unique(_.flatten(selectableValues.values));
-                    selectableOptions.push(selectableValues);
+                    if (isMatch) {
+                        selectableValues.values.push(this.parseValuesFromString(feature, attribute.name));
+                    }
                 }, this);
-            }
+                selectableValues.values = _.unique(_.flatten(selectableValues.values));
+
+                selectableOptions.push(selectableValues);
+            }, this);
+
             return selectableOptions;
         },
         /**
@@ -298,8 +306,9 @@ define(function (require) {
 
             isMatch = _.find(attribute.values, function (value) {
                     if (_.isUndefined(feature.get(attribute.attrName)) === false) {
-                        return feature.get(attribute.attrName).indexOf(value) !== -1;
+                            return feature.get(attribute.attrName).indexOf(value) !== -1;
                     }
+                    return false;
                 });
             return !_.isUndefined(isMatch);
         },
@@ -307,22 +316,28 @@ define(function (require) {
         /**
          * checks if a value is within a range of values
          * @param  {ol.Feature} feature
-         * @param  {object} attribute
+         * @param  {string} attributeName
+         * @param  {number[]} values
          * @return {boolean}
          */
-        isIntegerInRange: function (feature, attribute) {
-            var isMatch = false,
-                valueList = _.extend([], attribute.values);
+        isNumberInRange: function (feature, attributeName, values) {
+            var valueList = _.extend([], values),
+                featureValue = feature.get(attributeName),
+                isMatch;
 
-            if (_.isUndefined(feature.get(attribute.attrName)) === false) {
-                var featureValue = parseInt(feature.get(attribute.attrName), 10);
+            valueList.push(featureValue);
+            valueList = _.sortBy(valueList);
+            isMatch = valueList[1] === featureValue;
 
-                valueList.push(featureValue);
-                valueList = _.sortBy(valueList);
-                isMatch = valueList[1] === featureValue;
-            }
-            return isMatch;
+            return valueList[1] === featureValue;
         },
+
+        isFeatureInExtent: function (feature) {
+            var mapExtent = Radio.request("MapView", "getCurrentExtent");
+
+            return ol.extent.intersects(mapExtent, feature.getGeometry().getExtent());
+        },
+
         /**
          * checks if feature matches the filter
          * @param  {ol.Feature}  feature    [description]
@@ -333,8 +348,14 @@ define(function (require) {
             var isMatch = false;
 
             isMatch = _.every(filterAttr, function (attribute) {
-                if (attribute.type === "integer") {
-                    return this.isIntegerInRange(feature, attribute);
+                if (feature.get(attribute.attrName) === null) {
+                    return false;
+                }
+                else if (attribute.type === "integer" || attribute.type === "decimal") {
+                    return this.isNumberInRange(feature, attribute.attrName, attribute.values);
+                }
+                else if (attribute.type === "searchInMapExtent") {
+                    return this.isFeatureInExtent(feature);
                 }
                 else {
                     return this.isValueMatch(feature, attribute);
@@ -343,29 +364,6 @@ define(function (require) {
             return isMatch;
         },
 
-        /**
-         * parsed attributwerte mit einem Pipe-Zeichen ("|") und returned ein Array mit den einzelnen Werten
-         * @param  {ol.Feature} feature          [description]
-         * @param  {object}     featureAttribute [description]
-         * @return {string[]}
-         */
-        parseStringType: function (feature, featureAttribute) {
-            var values = [];
-
-            if (!_.isUndefined(feature.get(featureAttribute.name))) {
-                if (feature.get(featureAttribute.name).indexOf("|") !== -1) {
-                    var featureValues = feature.get(featureAttribute.name).split("|");
-
-                    _.each(featureValues, function (value) {
-                        values.push(value);
-                    });
-                }
-                else {
-                    values.push(feature.get(featureAttribute.name));
-                }
-            }
-            return values;
-        },
         setFeatures: function (value) {
             this.set("features", value);
         }

@@ -75,6 +75,9 @@ var cars = new Array();
 var car = {goes:"far"};
 var cars = [];
 ```
+#### Benamung von Variablen
+* einfache Variablen werden in camelCase benamt.
+* Von außen zugeladene Abhängigkeiten werden zur Unterscheidung in PascalCase geschrieben.
 
 #### Typprüfung
 * Zur Typprüfung wird Underscore JS eingesetzt

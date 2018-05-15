@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<h3 class="pull-left" title="<%= title %>"><%= title %></h3>
+<button class="btn btn-default btn-sm pull-right" title="Exposé">
+    <span>Exposé</span>
+</button>
+<table class="table table-hover">
+    <tbody>
+    <%  _.each(gfiContent, function(value, key) { %>
+    <tr>
+        <td>
+            <%= key %>
+        </td>
+        <td>
+            <%= value %>
+        </td>
+    </tr>
+    <% }); %>
+    </tbody>
+</table>

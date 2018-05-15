@@ -165,13 +165,7 @@ require("jqueryui/widgets/draggable");
             $("#featurelist-themes").show();
             $("#featurelist-list").hide();
             $("#featurelist-details").hide();
-            this.model.setPrevFeatureId(-1);
-            // trycatch damit im IE nicht die Console aufgeht. Nach Merge Mml-->Dev überprüfen und ggf. entfernen
-            try {
-                this.model.unscaleFeature();
-            }
-            catch (e) {
-            }
+            this.model.downlightFeature();
             this.model.set("layerid", {});
         },
         /*
@@ -208,13 +202,8 @@ require("jqueryui/widgets/draggable");
         hoverTr: function (evt) {
             var featureid = evt.currentTarget.id;
 
-            // trycatch damit im IE nicht die Console aufgeht. Nach Merge Mml-->Dev überprüfen und ggf. entfernen
-            try {
-                this.model.unscaleFeature();
-                this.model.scaleFeature(featureid);
-            }
-            catch (e) {
-            }
+            this.model.downlightFeature();
+            this.model.highlightFeature(featureid);
         },
         /*
         * Bei Klick auf Layer wird dieser gehighlighted und Layerid wird gesertzt
@@ -365,8 +354,7 @@ require("jqueryui/widgets/draggable");
             else {
                 Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
             }
-            this.model.setPrevFeatureId(-1);
-            this.model.unscaleFeature();
+            this.model.downlightFeature();
         },
         setMaxHeight: function () {
             var totalFeaturesCount = this.model.get("layer").features ? this.model.get("layer").features.length : -1,

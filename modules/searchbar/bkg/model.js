@@ -1,15 +1,12 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/searchbar/model"
-    ], function (Backbone, Radio) {
-    "use strict";
-    return Backbone.Model.extend({
-        /**
-        *
-        */
+define(function (require) {
+
+    require("modules/searchbar/model");
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        BKGSearchModel;
+
+    BKGSearchModel = Backbone.Model.extend({
         defaults: {
-            inUse: false,
             minChars: 3,
             bkgSuggestURL: "",
             bkgSearchURL: "",
@@ -17,7 +14,9 @@ define([
             suggestCount: 20,
             epsg: "EPSG:25832",
             filter: "filter=(typ:*)",
-            score: 0.6
+            score: 0.6,
+            ajaxRequests: {},
+            typeOfRequest: ""
         },
         /**
          * @description Initialisierung der BKG Suggest Suche
@@ -75,16 +74,14 @@ define([
         * @param {string} searchString - Suchstring
         */
         directSearch: function (searchString) {
-            if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
-                this.set("inUse", true);
-                $("#searchInput").attr("value", searchString);
+            var request;
 
-                var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
-
-                this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false);
-
+            if (searchString.length >= this.get("minChars")) {
+                $("#searchInput").val(searchString);
+                request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
+                this.setTypeOfRequest("direct");
+                this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false, this.getTypeOfRequest());
                 Radio.trigger("Searchbar", "createRecommendedList");
-                this.set("inUse", false);
             }
         },
         directPushSuggestions: function (data) {
@@ -109,11 +106,8 @@ define([
         * Wird von der Searchbar getriggert.
         */
         search: function (searchString) {
-            if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
-                this.set("inUse", true);
+            if (searchString.length >= this.get("minChars")) {
                 this.suggestByBKG(searchString);
-                Radio.trigger("Searchbar", "createRecommendedList");
-                this.set("inUse", false);
             }
         },
         /**
@@ -122,7 +116,8 @@ define([
         suggestByBKG: function (searchString) {
             var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
 
-            this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, false);
+            this.setTypeOfRequest("suggest");
+            this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, true, this.getTypeOfRequest());
         },
         /**
          * [pushSuggestions description]
@@ -140,6 +135,7 @@ define([
                     });
                 }
             }, this);
+            Radio.trigger("Searchbar", "createRecommendedList");
         },
         /**
          * [bkgSearch description]
@@ -148,7 +144,8 @@ define([
         bkgSearch: function (name) {
             var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&count=1" + "&query=" + encodeURIComponent(name);
 
-            this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this);
+            this.setTypeOfRequest("search");
+            this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.getTypeOfRequest());
         },
         /**
          * @description Triggert das Zoomen auf den Eintrag
@@ -164,20 +161,75 @@ define([
          * @param {String} data - Data to be sent to the server
          * @param {function} successFunction - A function to be called if the request succeeds
          * @param {boolean} asyncBool - asynchroner oder synchroner Request
+         * @param {String} type - Typ des Requests
          */
-        sendRequest: function (url, data, successFunction, asyncBool) {
-            $.ajax({
+        sendRequest: function (url, data, successFunction, asyncBool, type) {
+            var ajax = this.get("ajaxRequests");
+
+            if (ajax[type] !== null && !_.isUndefined(ajax[type])) {
+                ajax[type].abort();
+                this.polishAjax(type);
+            }
+            this.ajaxSend(url, data, successFunction, asyncBool, type);
+        },
+
+        ajaxSend: function (url, data, successFunction, asyncBool, typeRequest) {
+            this.get("ajaxRequests")[typeRequest] = ($.ajax({
                 url: url,
                 data: data,
+                dataType: "json",
                 context: this,
                 async: asyncBool,
                 type: "GET",
                 success: successFunction,
                 timeout: 6000,
-                error: function () {
-                    Radio.trigger("Alert", "alert", url + " nicht erreichbar.");
+                typeRequest: typeRequest,
+                error: function (err) {
+                    if (err.status !== 0) { // Bei abort keine Fehlermeldung
+                        this.showError(err);
+                    }
+                },
+                complete: function () {
+                    this.polishAjax(typeRequest);
                 }
-            });
+            }, this));
+        },
+
+        /**
+         * Triggert die Darstellung einer Fehlermeldung
+         * @param {object} err Fehlerobjekt aus Ajax-Request
+         */
+        showError: function (err) {
+            var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+
+            Radio.trigger("Alert", "alert", "BKG-Adressdienst nicht erreichbar. " + detail);
+        },
+
+        /**
+         * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
+         * @param {string} type Bezeichnung des Typs
+         */
+        polishAjax: function (type) {
+            var ajax = this.get("ajaxRequests"),
+                cleanedAjax = _.omit(ajax, type);
+
+            this.set("ajaxRequests", cleanedAjax);
+        },
+
+        /**
+        * Holt den jeweiligen Typ der gesendet wird
+        */
+        getTypeOfRequest: function () {
+            return this.get("typeOfRequest");
+        },
+
+        /**
+        * Setzt den jeweiligen Typ der gesendet wird
+        */
+        setTypeOfRequest: function (value) {
+            this.set("typeOfRequest", value);
         }
     });
+
+    return BKGSearchModel;
 });

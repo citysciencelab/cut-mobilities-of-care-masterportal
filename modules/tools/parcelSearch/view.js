@@ -1,14 +1,13 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/tools/parcelSearch/template.html",
-    "modules/tools/parcelSearch/model"
-], function (Backbone, Radio, parcelSearchTemplate, ParcelSearch) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        ParcelSearchTemplate = require("text!modules/tools/parcelSearch/template.html"),
+        ParcelSearch = require("modules/tools/parcelSearch/model"),
+        ParcelSearchView;
 
-    var ParcelSearchView = Backbone.View.extend({
+    ParcelSearchView = Backbone.View.extend({
         model: new ParcelSearch(),
         className: "win-body",
-        template: _.template(parcelSearchTemplate),
+        template: _.template(ParcelSearchTemplate),
         events: {
             "change #districtField": "districtFieldChanged",
             "change #cadastralDistrictField": "cadastralDistrictFieldChanged",
@@ -16,7 +15,8 @@ define([
             "change #parcelFieldDenominator": "setParcelDenominatorNumber",
             "keyup #parcelField": "setParcelNumber",
             "keyup #parcelFieldDenominator": "setParcelDenominatorNumber",
-            "click #submitbutton": "submitClicked"
+            "click #submitbutton": "submitClicked",
+            "click #reportbutton": "reportClicked"
         },
         /*
          * In init wird configuration nach "renderToDOM" untersucht.
@@ -34,7 +34,6 @@ define([
 
             if (_.isString(renderToDOM)) {
                 this.setElement(renderToDOM);
-                this.model.readConfig(psconfig);
                 this.listenTo(this.model, {
                     "change:fetched": function () {
                         this.render2DOM();
@@ -43,12 +42,7 @@ define([
             }
             else {
                 this.listenTo(this.model, {
-                    "change:isCollapsed change:isCurrentWin": this.render2Window,
-                    "change:fetched": function () {
-                        this.model.set("isCollapsed", false, {silent: true});
-                        this.model.set("isCurrentWin", true, {silent: true});
-                        this.render2Window();
-                    }
+                    "change:isCollapsed change:isCurrentWin": this.render2Window
                 });
             }
         },
@@ -58,7 +52,7 @@ define([
         render2Window: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+            if (this.model.getIsCurrentWin() === true && this.model.getIsCollapsed() === false) {
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
             }
@@ -75,15 +69,17 @@ define([
             this.$el.html(this.template(attr));
         },
         checkInput: function () {
-            if (this.model.get("districtNumber") !== "0" &&
-                (this.model.get("cadastralDistrictField") === false || this.model.get("cadastralDistrictNumber") !== "0") &&
-                this.model.get("parcelNumber") !== "" &&
-                _.isNumber(parseInt(this.model.get("parcelNumber"), 10)) &&
-                (this.model.get("parcelDenominatorField") === false || this.model.get("parcelDenominatorNumber") !== "")) {
+            if (this.model.getDistrictNumber() !== "0" &&
+                (this.model.getCadastralDistrictField() === false || this.model.getCadastralDistrictNumber() !== "0") &&
+                this.model.getParcelNumber() !== "" &&
+                _.isNumber(parseInt(this.model.getParcelNumber(), 10)) &&
+                (this.model.getParcelDenominatorField() === false || this.model.getParcelDenominatorNumber() !== "")) {
                 $("#submitbutton").attr("disabled", false);
+                $("#reportbutton").attr("disabled", false);
             }
             else {
                 $("#submitbutton").attr("disabled", true);
+                $("#reportbutton").attr("disabled", true);
             }
         },
         cadastralDistrictFieldChanged: function () {
@@ -103,13 +99,13 @@ define([
             var value = $("#districtField").val();
 
             if (value !== "0") {
-                if (this.model.get("cadastralDistrictField") === true) {
+                if (this.model.getCadastralDistrictField() === true) {
                     this.insertCadastralDistricts($("#districtField").val());
                     $("#cadastralDistrictFieldSet").attr("disabled", false);
                     $("#parcelField").attr("disabled", true);
                     $("#parcelFieldDenominator").attr("disabled", true);
                     $("#parcelField").val("").trigger("change");
-                    $("#parcelFieldDenominator").val("").trigger("change");
+                    $("#parcelFieldDenominator").val("0").trigger("change");
                 }
                 else {
                     $("#parcelField").attr("disabled", false);
@@ -127,7 +123,7 @@ define([
          * Setzt die gültigen Fluren für die ausgewählte Gemarkung in select.
          */
         insertCadastralDistricts: function (districtNumber) {
-            var cadastralDistricts = this.model.get("cadastralDistricts");
+            var cadastralDistricts = this.model.getCadastralDistricts();
 
             this.model.setCadastralDistrictNumber("0");
             $("#cadastralDistrictField").empty();
@@ -152,6 +148,9 @@ define([
         },
         submitClicked: function () {
             this.model.sendRequest();
+        },
+        reportClicked: function () {
+            this.model.createReport();
         }
     });
 

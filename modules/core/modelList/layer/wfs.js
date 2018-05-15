@@ -9,7 +9,6 @@ define(function (require) {
 
         initialize: function () {
             this.superInitialize();
-            var channel = Radio.channel("WFSLayer");
         },
 
         /**
@@ -27,7 +26,7 @@ define(function (require) {
         createClusterLayerSource: function () {
             this.setClusterLayerSource(new ol.source.Cluster({
                 source: this.getLayerSource(),
-                distance: this.get("clusterDistance")
+                distance: this.getClusterDistance()
             }));
         },
 
@@ -37,12 +36,12 @@ define(function (require) {
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
-                source: (this.has("clusterDistance") === true) ? this.getClusterLayerSource() : this.getLayerSource(),
-                name: this.get("name"),
-                typ: this.get("typ"),
-                gfiAttributes: this.get("gfiAttributes"),
-                routable: this.get("routable"),
-                gfiTheme: this.get("gfiTheme"),
+                source: this.has("clusterDistance") ? this.getClusterLayerSource() : this.getLayerSource(),
+                name: this.getName(),
+                typ: this.getTyp(),
+                gfiAttributes: this.getGfiAttributes(),
+                routable: this.getRoutable(),
+                gfiTheme: this.getGfiTheme(),
                 id: this.getId()
             }));
 
@@ -67,8 +66,8 @@ define(function (require) {
 
         getWfsFormat: function () {
             return new ol.format.WFS({
-                featureNS: this.get("featureNS"),
-                featureType: this.get("featureType")
+                featureNS: this.getFeatureNS(),
+                featureType: this.getFeatureType()
             });
         },
 
@@ -77,7 +76,7 @@ define(function (require) {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
                 SRSNAME: Radio.request("MapView", "getProjection").getCode(),
-                TYPENAME: this.get("featureType"),
+                TYPENAME: this.getFeatureType(),
                 VERSION: this.getVersion()
             };
 
@@ -91,218 +90,46 @@ define(function (require) {
                 context: this,
                 success: function (data) {
                     Radio.trigger("Util", "hideLoader");
-                    try {
-                        var wfsReader = new ol.format.WFS({
-                                featureNS: this.get("featureNS")
-                            }),
-                            features = wfsReader.readFeatures(data);
+                    var wfsReader = new ol.format.WFS({
+                            featureNS: this.getFeatureNS()
+                        }),
+                        features = wfsReader.readFeatures(data),
+                        isClustered = this.has("clusterDistance") ? true : false;
 
-                        this.getLayerSource().addFeatures(features);
-                        this.set("loadend", "ready");
-                        Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
-                        // für WFS-T wichtig --> benutzt den ol-default Style
-                        if (_.isUndefined(this.get("editable")) === true || this.get("editable") === false) {
-                            this.styling();
-                        }
-                        this.getLayer().setStyle(this.get("style"));
-                    }
-                    catch (e) {
-                    }
+                    // nur die Features verwenden die eine geometrie haben aufgefallen bei KITAs am 05.01.2018 (JW)
+                    features = _.filter(features, function (feature) {
+                        return !_.isUndefined(feature.getGeometry());
+                    });
+                    this.getLayerSource().addFeatures(features);
+                    this.set("loadend", "ready");
+                    Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
+                    this.styling(isClustered);
+                    this.getLayer().setStyle(this.getStyle());
+                    this.featuresLoaded(features);
                 },
-                error: function (jqXHR, errorText, error) {
+                error: function () {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
         },
+        styling: function (isClustered) {
+            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
-        /*
-        * Wenn MapView Option verändert werden: bei neuem Maßstab
-        */
-        optionsChanged: function () {
-            var isResolutionInRange = this.isResolutionInRange(),
-                visibility = this.get("visibility");
-
-            if (visibility === true && isResolutionInRange === true) {
-                this.get("layer").setVisible(true);
-            }
-            else {
-                this.get("layer").setVisible(false);
-            }
-            this.set("isResolutionInRange", isResolutionInRange);
-        },
-        /*
-        * Prüft, ob dieser Layer aktuell im sichtbaren Maßstabsbereich liegt und gibt true/false zurück
-        */
-        isResolutionInRange: function () {
-            var layerMaxScale = parseFloat(this.get("maxScale")),
-                layerMinScale = parseFloat(this.get("minScale")),
-                mapOptions = Radio.request("MapView", "getOptions"),
-                mapScale = parseFloat(mapOptions.scale);
-
-            if (layerMaxScale && mapScale) {
-                if (mapScale > layerMaxScale) {
-                    return false;
-                }
-            }
-            if (layerMinScale && mapScale) {
-                if (mapScale < layerMinScale) {
-                    return false;
-                }
-            }
-            return true;
-        },
-        setVisibility: function () {
-            var visibility = this.get("visibility"),
-                isResolutionInRange = this.isResolutionInRange();
-
-            this.set("isResolutionInRange", isResolutionInRange);
-            if (visibility === true && isResolutionInRange === true) {
-                if (this.get("layer").getSource().getFeatures().length === 0) {
-                    this.updateData();
-                    this.set("visibility", false, {silent: true});
-                }
-                else {
-                    this.get("layer").setVisible(true);
-                }
-                this.toggleEventAttribution(true);
-            }
-            else {
-                this.get("layer").setVisible(false);
-                this.set("visibility", false, {silent: true});
-                this.toggleEventAttribution(false);
+            if (!_.isUndefined(stylelistmodel)) {
+                /**
+                 * function that takes a feature and resolution and returns an array of styles
+                 * Erfordert beide Parameter, sonst Laufzeitfehler (in ol <= 4.6.5)
+                 * @param  {[ol.feature]} feature
+                 * @param  {number} resolution
+                 * @return {[ol.style.Style]}
+                 * @tutorial https://openlayers.org/en/latest/apidoc/ol.html#.StyleFunction
+                 */
+                this.setStyle(function (feature) {
+                    return stylelistmodel.createStyle(feature, isClustered);
+                });
             }
         },
-        styling: function () {
-            // NOTE Hier werden die Styles zugeordnet
-            if (this.get("styleField") && this.get("styleField") !== "") {
-                if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
-                    if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        this.setSimpleStyleForStyleFieldAndLabel();
-                    }
-                    else {
-                        this.setSimpleStyleForStyleField();
-                    }
-                }
-                else {
-                    if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        // TODO
-                    }
-                    else {
-                        this.setClusterStyleForStyleField();
-                    }
-                }
-            }
-            else {
-                if (this.get("clusterDistance") <= 0 || !this.get("clusterDistance")) {
-                    if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        this.setSimpleCustomLabeledStyle();
-                    }
-                    else {
-                        this.setSimpleStyle();
-                    }
-                }
-                else {
-                    if (this.get("styleLabelField") && this.get("styleLabelField") !== "") {
-                        this.getClusterStyle();
-                    }
-                    else {
-                        this.setClusterStyle();
-                    }
-                }
-            }
-        },
-        setSimpleCustomLabeledStyle: function () {
-            var styleId = this.getStyleId(),
-                styleLabelField = this.get("styleLabelField");
 
-            this.set("style", function (feature) {
-                var stylelistmodel = Radio.request("StyleList", "returnModelById", styleId),
-                    label = _.values(_.pick(feature.getProperties(), styleLabelField))[0].toString();
-
-                return stylelistmodel.getCustomLabeledStyle(label);
-            });
-        },
-        setSimpleStyleForStyleField: function () {
-            var styleId = this.getStyleId(),
-                styleField = this.get("styleField");
-
-            this.set("style", function (feature) {
-                var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
-                    stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
-
-                return stylelistmodel.getSimpleStyle();
-            });
-        },
-        setSimpleStyleForStyleFieldAndLabel: function () {
-            var styleId = this.getStyleId(),
-                styleLabelField = this.get("styleLabelField"),
-                styleField = this.get("styleField");
-
-            this.set("style", function (feature) {
-                var styleFieldValue = _.values(_.pick(feature.getProperties(), styleField))[0],
-                    label = _.values(_.pick(feature.getProperties(), styleLabelField))[0],
-                    stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
-
-                return stylelistmodel.getCustomLabeledStyle(label);
-            });
-        },
-        setClusterStyleForStyleField: function () {
-            var styleId = this.getStyleId(),
-                styleField = this.get("styleField");
-
-            this.set("style", function (feature) {
-                var size = feature.get("features").length,
-                    stylelistmodel;
-
-                if (size > 1) {
-                    stylelistmodel = Radio.request("StyleList", "returnModelById", styleId + "_cluster");
-                }
-                if (!stylelistmodel) {
-                    var styleFieldValue = _.values(_.pick(feature.get("features")[0].getProperties(), styleField))[0];
-
-                    stylelistmodel = Radio.request("StyleList", "returnModelByValue", styleId, styleFieldValue);
-                }
-                return stylelistmodel.getClusterStyle(feature);
-            });
-        },
-        setSimpleStyle: function () {
-            var styleId = this.getStyleId(),
-                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
-
-            this.set("style", stylelistmodel.getSimpleStyle());
-        },
-        setClusterStyle: function () {
-            var styleId = this.getStyleId(),
-                stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
-
-            this.set("style", function (feature) {
-                return stylelistmodel.getClusterStyle(feature);
-            });
-        },
-        // buildGetRequest: function () {
-        //     var newURL;
-        //
-        //     if (this.get("url").search(location.host) === -1) {
-        //         newURL = Util.getProxyURL(this.get("url"));
-        //         this.set("url", newURL);
-        //     }
-        //
-        //     var data = "REQUEST=GetFeature&SERVICE=WFS&TYPENAME=" + this.get("featureType");
-        //
-        //     if (this.get("version") && this.get("version") !== "" && this.get("version") !== "nicht vorhanden") {
-        //         data += "&VERSION=" + this.get("version");
-        //     }
-        //     else {
-        //         data += "&VERSION=1.1.0";
-        //     }
-        //     if (this.get("srsname") && this.get("srsname") !== "" && this.get("srsname") !== "nicht vorhanden") {
-        //         data += "&SRSNAME=" + this.get("srsname");
-        //     }
-        //     else {
-        //         data += "&SRSNAME=" + Config.view.epsg;
-        //     }
-        //     this.set("data", data);
-        // },
         setProjection: function (proj) {
             this.set("projection", proj);
         },
@@ -313,28 +140,34 @@ define(function (require) {
 
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
-            if (!this.get("legendURL").length) {
+            if (!this.getLegendURL().length) {
                 var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
-                this.set("legendURL", [style.get("imagepath") + style.get("imagename")]);
+                if (!_.isUndefined(style)) {
+                    this.setLegendURL([style.getImagePath() + style.getImageName()]);
+                }
             }
         },
+
         /**
-         * Versteckt alle Features mit dem Hidden-Style
+         * sets null style (= no style) for all features
          */
         hideAllFeatures: function () {
             var collection = this.getLayerSource().getFeatures();
 
             collection.forEach(function (feature) {
-                feature.setStyle(this.getHiddenStyle());
+                feature.setStyle(function () {
+                    return null;
+                });
             }, this);
         },
+
         showAllFeatures: function () {
             var collection = this.getLayerSource().getFeatures(),
                 style;
 
             collection.forEach(function (feature) {
-                style = this.getStyleAsFunction(this.get("style"));
+                style = this.getStyleAsFunction(this.getStyle());
 
                 feature.setStyle(style(feature));
             }, this);
@@ -349,7 +182,7 @@ define(function (require) {
                 var feature = this.getLayerSource().getFeatureById(id),
                     style = [];
 
-                style = this.getStyleAsFunction(this.get("style"));
+                style = this.getStyleAsFunction(this.getStyle());
 
                 feature.setStyle(style(feature));
             }, this);
@@ -359,23 +192,33 @@ define(function (require) {
                 return style;
             }
             else {
-                return function (feature) {
+                return function () {
                     return style;
-                }
+                };
             }
         },
-        getHiddenStyle: function () {
-            return new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 2,
-                    fill: new ol.style.Fill({
-                        color: "rgba(0, 0, 0, 0)"
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: "rgba(0, 0, 0, 0)"
-                    })
-                })
-            });
+
+        // getter for style
+        getStyle: function () {
+            return this.get("style");
+        },
+        // setter for style
+        setStyle: function (value) {
+            this.set("style", value);
+        },
+
+        // getter for clusterDistance
+        getClusterDistance: function () {
+            return this.get("clusterDistance");
+        },
+
+        // getter for featureNS
+        getFeatureNS: function () {
+            return this.get("featureNS");
+        },
+        // getter for featureType
+        getFeatureType: function () {
+            return this.get("featureType");
         }
     });
 

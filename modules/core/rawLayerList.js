@@ -14,8 +14,12 @@ define([
         url: function () {
             return Radio.request("Util", "getPath", Config.layerConf);
         },
-        initialize: function () {
+        initialize: function (urlForTest) {
             var channel = Radio.channel("RawLayerList");
+
+            if (urlForTest) {
+                this.url = urlForTest;
+            }
 
             channel.reply({
                 "getLayerWhere": this.getLayerWhere,
@@ -42,11 +46,6 @@ define([
             // Alle Layer eines Metadatensatzes die nicht dargestellt werden sollen --> z.B. MRH Fachdaten im FHH-Atlas
             if (_.has(Config.tree, "metaIDsToIgnore")) {
                 response = this.deleteLayersByMetaIds(response, Config.tree.metaIDsToIgnore);
-            }
-            // Layer eines Metadatensatzes (nicht alle) die gruppiert werden sollen --> z.B. Geobasisdaten (farbig)
-            // Da alle Layer demselben Metadtaensatz zugordnet sind, werden sie über die Id gruppiert
-            if (_.has(Config.tree, "layerIDsToMerge")) {
-                // response = this.mergeLayersByIds(response, Config.tree.layerIDsToMerge);
             }
             // Alle Layer eines Metadatensatzes die gruppiert dargestellt werden sollen --> z.B. Bauschutzbereich § 12 LuftVG Hamburg im FHH-Atlas
             if (_.has(Config.tree, "metaIDsToMerge")) {
@@ -86,44 +85,6 @@ define([
         },
 
         /**
-         * Gruppiert Objekte aus der response, die mit den Ids in der übergebenen Liste übereinstimmen
-         * @param  {Object[]} response - Objekte aus der services.json
-         * @param  {string[]} ids - Array von Ids deren Objekte gruppiert werden
-         * @return {Object[]} response - Objekte aus der services.json
-         */
-        mergeLayersByIds: function (response, ids) {
-            var objectsByIds,
-                newObject;
-
-            _.each(ids, function (groupedIds) {
-                // Objekte die gruppiert werden
-                objectsByIds = _.filter(response, function (object) {
-                    return _.contains(groupedIds, object.id);
-                });
-                // Das erste Objekt wird kopiert
-                newObject = _.clone(objectsByIds[0]);
-                // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
-                newObject.layers = _.pluck(objectsByIds, "layers").toString();
-                // Das Attribut maxScale wird gruppiert
-                // Am kopierten Objekt wird der höchste Wert gesetzt
-                newObject.maxScale = _.max(_.pluck(objectsByIds, "maxScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                // Das Attribut minScale wird gruppiert
-                // Am kopierten Objekt wird der niedrigste Wert gesetzt
-                newObject.minScale = _.min(_.pluck(objectsByIds, "minScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                // Entfernt alle zu "gruppierenden" Objekte aus der response
-                response = _.difference(response, objectsByIds);
-                // Fügt das kopierte (gruppierte) Objekt der response hinzu
-                response.push(newObject);
-            });
-
-            return response;
-        },
-
-        /**
          * Gruppiert Objekte aus der response, die mit einer der übergebenen Metadaten-Ids übereinstimmen
          * @param {Object[]} response - Objekte aus der services.json
          * @param  {string[]} metaIds - Metadaten-Ids von Objekten die gruppiert werden
@@ -139,23 +100,25 @@ define([
                     return layer.typ === "WMS" && layer.datasets.length > 0 && layer.datasets[0].md_id === metaID;
                 });
                 // Das erste Objekt wird kopiert
-                newObject = _.clone(objectsById[0]);
-                // Das kopierte Objekt bekommt den gleichen Namen wie der Metadatensatz
-                newObject.name = objectsById[0].datasets[0].md_name;
-                // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
-                newObject.layers = _.pluck(objectsById, "layers").toString();
-                // Das Attribut maxScale wird gruppiert und der höchste Wert am kopierten Objekt gesetzt
-                newObject.maxScale = _.max(_.pluck(objectsById, "maxScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                // Das Attribut minScale wird gruppiert und der niedrigste Wert am kopierten Objekt gesetzt
-                newObject.minScale = _.min(_.pluck(objectsById, "minScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
-                // Entfernt alle zu "gruppierenden" Objekte aus der response
-                response = _.difference(response, objectsById);
-                // Fügt das kopierte (gruppierte) Objekt der response hinzu
-                response.push(newObject);
+                if (_.isEmpty(objectsById) === false) {
+                    newObject = _.clone(objectsById[0]);
+                    // Das kopierte Objekt bekommt den gleichen Namen wie der Metadatensatz
+                    newObject.name = objectsById[0].datasets[0].md_name;
+                    // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
+                    newObject.layers = _.pluck(objectsById, "layers").toString();
+                    // Das Attribut maxScale wird gruppiert und der höchste Wert am kopierten Objekt gesetzt
+                    newObject.maxScale = _.max(_.pluck(objectsById, "maxScale"), function (scale) {
+                        return parseInt(scale, 10);
+                    });
+                    // Das Attribut minScale wird gruppiert und der niedrigste Wert am kopierten Objekt gesetzt
+                    newObject.minScale = _.min(_.pluck(objectsById, "minScale"), function (scale) {
+                        return parseInt(scale, 10);
+                    });
+                    // Entfernt alle zu "gruppierenden" Objekte aus der response
+                    response = _.difference(response, objectsById);
+                    // Fügt das kopierte (gruppierte) Objekt der response hinzu
+                    response.push(newObject);
+                }
             });
 
             return response;

@@ -9,7 +9,8 @@ define([
         defaults: {
             layerParams: [],
             isInitOpen: "",
-            zoomToGeometry: ""
+            zoomToGeometry: "",
+            style: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -21,7 +22,15 @@ define([
                 "getInitString": this.getInitString,
                 "getCenter": this.getCenter,
                 "getZoomLevel": this.getZoomLevel,
-                "getZoomToGeometry": this.getZoomToGeometry
+                "getZoomToGeometry": this.getZoomToGeometry,
+                "getZoomToExtent": this.getZoomToExtent,
+                "getStyle": this.getStyle,
+                "getFilter": this.getFilter,
+                "getHighlightFeature": this.getHighlightFeature
+            }, this);
+
+            channel.on({
+                "updateQueryStringParam": this.updateQueryStringParam
             }, this);
 
             this.parseURL();
@@ -100,20 +109,20 @@ define([
             }
 
             _.each(layerIdList, function (val, index) {
-                 var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                 layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
-                 treeType = Radio.request("Parser", "getTreeType");
+                var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
+                    layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
+                    treeType = Radio.request("Parser", "getTreeType"),
+                    layerToPush;
 
-                 layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
+                layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
 
-                 if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
-                     var layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
-
-                     Radio.trigger("Parser", "addItemAtTop", layerToPush);
-                 }
-                 else if (_.isUndefined(layerConfigured)) {
-                     Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning" });
-                 }
+                if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
+                    layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
+                    Radio.trigger("Parser", "addItemAtTop", layerToPush);
+                }
+                else if (_.isUndefined(layerConfigured)) {
+                    Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning" });
+                }
             }, this);
 
             this.setLayerParams(layerParams);
@@ -151,6 +160,12 @@ define([
             values = _.map(values, Number);
             this.set("center", values);
 
+        },
+
+        parseZOOMTOEXTENT: function (result) {
+            var values = _.values(_.pick(result, "ZOOMTOEXTENT"))[0].split(",");
+
+            this.set("zoomToExtent", [parseFloat(values[0]), parseFloat(values[1]), parseFloat(values[2]), parseFloat(values[3])]);
         },
         parseBezirk: function (result) {
             var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
@@ -199,13 +214,14 @@ define([
         },
         parseQuery: function (result) {
             var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
-                    initString = "";
+                initString = "",
+                split;
 
             // Bei " " oder "-" im Suchstring
             if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
 
                 // nach " " splitten
-                var split = value.split(" ");
+                split = value.split(" ");
 
                 _.each (split, function (splitpart) {
                     initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
@@ -232,18 +248,26 @@ define([
             if (value === "SIMPLE") {
                 $("#main-nav").hide();
                 $("#map").css("height", "100%");
+                this.setStyle(value);
             }
         },
         parseURL: function (result) {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
-                result = {};
+                result = {},
+                value;
 
-            query.split("&").forEach(function (keyValue) {
-                var item = keyValue.split("=");
+            if (query.length > 0) {
+                query.split("&").forEach(function (keyValue) {
+                    var item = keyValue.split("=");
 
-                result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
-            });
+                    result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
+                });
+
+            }
+            else {
+                result = undefined;
+            }
 
             this.setResult(result);
             /**
@@ -263,6 +287,10 @@ define([
              */
             if (_.has(result, "CENTER")) {
                 this.parseCenter(result);
+            }
+
+            if (_.has(result, "ZOOMTOEXTENT")) {
+                this.parseZOOMTOEXTENT(result);
             }
 
             if (_.has(result, "BEZIRK")) {
@@ -318,7 +346,55 @@ define([
             if (_.has(result, "STYLE")) {
                 this.parseStyle(result);
             }
+
+            if (_.has(result, "FILTER")) {
+                value = _.values(_.pick(result, "FILTER"))[0];
+
+                this.set("filter", JSON.parse(value));
+            }
+
+            if (_.has(result, "HIGHLIGHTFEATURE")) {
+                value = _.values(_.pick(result, "HIGHLIGHTFEATURE"))[0];
+
+                this.set("highlightfeature", value);
+            }
         },
+
+        /**
+         * https://gist.github.com/excalq/2961415
+         * @param  {string} key
+         * @param  {string} value
+         * @return {void}
+         */
+        updateQueryStringParam: function (key, value) {
+            var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
+                urlQueryString = document.location.search,
+                newParam = key + "=" + value,
+                params = "?" + newParam,
+                keyRegex;
+
+            // If the "search" string exists, then build params from it
+            if (urlQueryString) {
+                keyRegex = new RegExp("([\?&])" + key + "[^&]*");
+
+                // If param exists already, update it
+                if (urlQueryString.match(keyRegex) !== null) {
+                    params = urlQueryString.replace(keyRegex, "$1" + newParam);
+                }
+                 // Otherwise, add it to end of query string
+                else {
+                    params = urlQueryString + "&" + newParam;
+                }
+            }
+            // iframe
+            if (window !== window.top) {
+                Radio.trigger("RemoteInterface", "postMessage", {"urlParams": params});
+            }
+            else {
+                window.history.replaceState({}, "", baseUrl + params);
+            }
+        },
+
         // getter for zoomToGeometry
         getZoomToGeometry: function () {
             return this.get("zoomToGeometry");
@@ -334,6 +410,25 @@ define([
         // setter for zoomLevel
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
+        },
+
+        getZoomToExtent: function () {
+            return this.get("zoomToExtent");
+        },
+
+        // getter for style
+        getStyle: function () {
+            return this.get("style");
+        },
+        // setter for style
+        setStyle: function (value) {
+            this.set("style", value);
+        },
+        getFilter: function () {
+            return this.get("filter");
+        },
+        getHighlightFeature: function () {
+            return this.get("highlightfeature");
         }
     });
 

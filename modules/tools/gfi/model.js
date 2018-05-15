@@ -33,8 +33,7 @@ define(function (require) {
 
             channel.on({
                 "setIsVisible": this.setIsVisible,
-                "setGfiParams": this.setGfiParamsFromCustomModule,
-                "hideGFI": this.hideGFI
+                "setGfiParams": this.setGfiParamsFromCustomModule
             }, this);
 
             channel.reply({
@@ -106,10 +105,6 @@ define(function (require) {
                 this.toggleGFI(tool.id);
             }
             this.initView();
-        },
-
-        hideGFI: function () {
-            this.trigger("hideGFI");
         },
 
         /**
@@ -213,7 +208,7 @@ define(function (require) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")});
 
             if (_.isUndefined(model) === false) {
-                var modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
+                var modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id");
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
                     modelAttributes.feature = featureAtPixel;

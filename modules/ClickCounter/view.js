@@ -1,7 +1,7 @@
 define([
     "backbone",
     "backbone.radio",
-    "modules/clickCounter/model"
+    "modules/ClickCounter/model"
 ], function (Backbone, Radio, ClickCounterModel) {
 
     var ClickCounterView = Backbone.View.extend({

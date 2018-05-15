@@ -41,10 +41,10 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |[attributions](#markdown-header-portalconfigcontrolsattributions)|nein|Boolean/Object|false|Boolean: Zeigt vorhandene Attributions an. Object: Zeigt vorhandene Attributions mit folgenden Eigenschaften an, siehe [Object](#markdown-header-portalconfigcontrolsattributions)|
 |fullScreen|nein|Boolean|false|Ermöglicht dem User die Darstellung im Vollbildmodus (ohne Tabs und Adressleiste) per Klick auf den Button. Ein erneuter Klick auf den Button wechselt wieder in den normalen Modus.|
 |mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
-|orientation|nein|String|"none"|Orientation ist eine Funktion zur Standortbestimmung des Nutzers. Mögliche Werte sind none (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
-|poi|nein|Boolean|false|Zeigt eine Liste von Features in der Umgebung an. Funktioniert nur wenn die Standortbestimmung (orientation) aktiviert ist. |
-|zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen. |
+|[orientation](#markdown-header-portalconfigcontrolsorientation)|nein|Object||Orientation nutzt die geolocation des Browsers zur Standortbestimmung des Nutzers. Siehe [orientation](#markdown-header-portalconfigcontrolsorientation).|
+|zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen.|
 |[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
+|[totalview](#markdown-header-portalconfigcontrolstotalview)|nein|Boolean|false|Zeigt einen Button für die Startansicht an.|
 
 **Beispiel controls:**
 
@@ -54,8 +54,10 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 "controls": {
         "zoom": true,
-        "orientation": "once",
-        "poi": true,
+        "orientation": {
+          "zoomMode": "once",
+          "poiDistances": [500, 1000, 2000]
+        },
         "fullScreen": true,
         "mousePosition": true,
         "attributions": {
@@ -75,6 +77,14 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |----|-------------|---|-------|------------|
 |isInitOpenDesktop|nein|Boolean|true|Legt fest, ob die Attributions (Desktop-Ansicht) initial ausgeklappt werden sollen.|
 |isInitOpenMobile|nein|Boolean|false|Legt fest, ob die Attributions (Mobile-Ansicht) initial ausgeklappt werden sollen.|
+
+******
+### Portalconfig.controls.orientation ###
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|zoomMode|nein|String|"once"|*none* (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
+|poiDistances|nein|Boolean / [integer]|"true": [500,1000,2000] / "Array": []|Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Anbgabe eines Array werden die darin definierten Abstände angeboten. Bei Angabe von true der default.|
 
 ******
 ### Portalconfig.controls.overviewmap ###
@@ -97,6 +107,18 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 
 
 ```
+******
+### Portalconfig.controls.zoom ###
+
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|showInSimpleMap|nein|Boolean||Gibt an ob die Zoom-Buttons auch in der simple Map ([URL-Parameter](URL_Parameter.md) "?style=simple" gezeichnet werden sollen.|
+|showMobile|nein|Boolean|false|Gibt an ob die Zoom-Buttons auch in der mobilen Ansicht gezeichnet werden sollen.|
+******
+### Portalconfig.controls.totalview ###
+
+Es werden die initialen Parameter zoomLevel und startCenter aus [mapView](#markdown-header-portalconfigmapview) verwendet.
 
 ### Portalconfig.mapView ###
 
@@ -106,8 +128,8 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |startCenter|nein|Array|[565874, 5934140]|Die initiale Zentrumskoordinate.|
 |options|nein|Array|[{resolution:66.14579761460263,scale:250000,zoomLevel:0},{resolution:26.458319045841044,scale:100000,zoomLevel:1},{resolution:15.874991427504629,scale:60000,zoomLevel:2},{resolution: 10.583327618336419,scale:40000,zoomLevel:3},{resolution:5.2916638091682096,scale:20000,zoomLevel:4},{resolution:2.6458319045841048,scale:10000,zoomLevel:5},{resolution:1.3229159522920524,scale:5000,zoomLevel:6},{resolution:0.6614579761460262,scale:2500,zoomLevel:7},{resolution:0.2645831904584105,scale: 1000,zoomLevel:8},{resolution:0.13229159522920521,scale:500,zoomLevel:9}]|Die initialen Maßstabsstufen und deren Auflösungen.|
 |extent|nein|Array|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|
-|resolution|nein|Float|15.874991427504629|Die initiale Auflösung der Karte aus options. Alternativ zu zoomLevel.|
-|zoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Alternativ zu resolution.|
+|resolution|nein|Float|15.874991427504629|Die initiale Auflösung der Karte aus options. Vorzug vor zoomLevel.|
+|zoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Nachrangig zu resolution.|
 |epsg|nein|String|EPSG:25832|Der EPSG-Code der Projektion der Karte. Der EPSG-Code muss als namedProjection definiert sein.|
 
 **Beispiel mapView:**
@@ -232,7 +254,7 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
 |name|ja|String||Name, wie der Link im Menu angezeigt werden soll.|
 |glyphicon|ja|String||Glyphicon des Linkes für den Menueintrag.|
 |url|nein|String||URL zur externen Webseite. |
-|onClickTrigger|nein|Object: {"channel": String ,"event": String, "data": String || Enthält den Channel namen, das Event, welches getriggert wird und die daten die mitgeschickt werden.|
+|onClickTrigger|nein|Array|| Ein Array von Objekten mit den jeweiligen Channel Namen, das Event, welches getriggert wird und die Daten die mitgeschickt werden.|
 
 
 **Beispiel staticlinks:**
@@ -269,11 +291,11 @@ Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müs
         {
             "name": "Altona",
             "glyphicon": "glyphicon-globe",
-            "onClickTrigger": {
+            "onClickTrigger": [{
                 "channel": "ZoomToGeometry",
                 "event": "zoomToGeometry",
                 "data": "Altona"
-            }
+            }]
         }]
     }
 }
@@ -399,6 +421,7 @@ Im Objekt *tools* werden die Werkzeuge, deren Reihenfolge und das Erscheinungsbi
 |[children](#markdown-header-portalconfigmenutoolschildren)|nein|Object||Objekte, die die Tools konfigurieren.|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Reiters unter dem der Baum in der Menüleiste erscheint.|
+|isVisibleInMenu|nein|Boolean|true|Soll das Tool in der Menüleiste erscheinen.|
 
 ******
 
@@ -465,7 +488,7 @@ Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Men�
 
 Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten, die im Folgenden erläutert werden.
 
-###### Portalconfig.menu.tools.children.animation ######
+#### Portalconfig.menu.tools.children.animation
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -476,7 +499,8 @@ Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten,
 ******
 ******
 
-###### Portalconfig.menu.tools.children.coord ######
+#### Portalconfig.menu.tools.children.coord ######
+Ermöglicht die Ermittlung von Koordinaten in allen definierten Koordinatensystemen (siehe [namedProjections](config.js.md)). Der Titel wird dem "+title"-Attribut entnommen. Alternativ wird der Name (z.B. "EPSG:25832") verwendet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -487,7 +511,7 @@ Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten,
 ******
 ******
 
-###### Portalconfig.menu.tools.children.draw ######
+#### Portalconfig.menu.tools.children.draw
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -499,7 +523,7 @@ Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten,
 ******
 ******
 
-###### Portalconfig.menu.tools.children.extendedFilter ######
+#### Portalconfig.menu.tools.children.extendedFilter ######
 Der *erweiterte Filter* ist ein Filter, der in der Lage ist, sämtliche in der Karte verfügbaren WFS nach allen möglichen Attributen und -werten zu filtern.
 Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt werden, den Layer auch zu verwenden. Dies geschieht über folgenden Parameter:
 
@@ -513,7 +537,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 ******
 ******
 
-###### Portalconfig.menu.tools.children.featureLister ######
+#### Portalconfig.menu.tools.children.featureLister ######
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
@@ -524,7 +548,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 ******
 ******
 
-###### Portalconfig.menu.tools.children.filter ######
+#### Portalconfig.menu.tools.children.filter ######
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |name|nein|String||Name des Werkzeuges im Menüeintrag|
@@ -545,7 +569,9 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |isActive|nein|Boolean||Wird der Filter initial ausgeführt|
 |isSelected|nein|Boolean||Ist der Filter initial ausgewählt|
 |isVisible|nein|Boolean|||
+|searchInMapExtent|nein|Boolean|false|Suche im aktuellen Kartenausschnitt|
 |allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
+liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |name|nein|String||Name des Filters
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
 |predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
@@ -583,7 +609,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 ******
 ******
 
-###### Portalconfig.menu.tools.children.gfi ######
+#### Portalconfig.menu.tools.children.gfi ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -597,7 +623,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 ******
 ******
 
-###### Portalconfig.menu.tools.children.kmlimport ######
+#### Portalconfig.menu.tools.children.kmlimport ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -608,7 +634,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 ******
 ******
 
-###### Portalconfig.menu.tools.children.measure ######
+#### Portalconfig.menu.tools.children.measure ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -621,7 +647,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 
 
 
-###### Portalconfig.menu.tools.children.parcelSearch ######
+#### Portalconfig.menu.tools.children.parcelSearch ######
 Flurstücksuche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -632,7 +658,9 @@ Flurstücksuche
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
 |parcelDenominator|nein|Boolean|false|Gibt an ob auch Flure mit an die *StoredQuery* übergeben werden.|
 |serviceId|nein|String||ID, des Gazeteer-WFS. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
-|StoredQueryID|nein|String||Name der *StoredQuery*, die angesprochen werden soll.|
+|storedQueryID|nein|String||Name der *StoredQuery*, die angesprochen werden soll.|
+|createReport|nein|Bool|false|Gibt an ob eine Berichtsfunktionalität erstellt werden soll.|
+|reportServiceId|nein|String||Gibt die ID des Dienstes an, der aufgerufen werden soll.|
 
 ******
 ******
@@ -678,7 +706,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 ******
 ******
 
-###### Portalconfig.menu.tools.children.print ######
+#### Portalconfig.menu.tools.children.print ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -689,6 +717,8 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |printID|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
 |title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
 |[gfiMarker](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
+|configYAML|nein|String|master|Der Name der YAML-Datei der MapFish-Webapp.|
+|outputFilename|nein|String|Ausdruck|Der Dateiname der PDF, den die MapFish-Webapp erstellt.|
 
 **Beispiel:**
 
@@ -729,7 +759,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |outerCircle|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
 |point|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
 
-###### Portalconfig.menu.tools.children.routing ######
+#### Portalconfig.menu.tools.children.routing ######
 Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Parameter müssen am Werkzeug vorhanden sein:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -747,7 +777,7 @@ Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Paramet
 ******
 
 
-###### Portalconfig.menu.tools.children.searchByCoord ######
+#### Portalconfig.menu.tools.children.searchByCoord ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -760,7 +790,7 @@ Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Paramet
 ******
 ******
 
-###### Portalconfig.menu.tools.children.wfsFeatureFilter ######
+#### Portalconfig.menu.tools.children.wfsFeatureFilter ######
 Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann nur nach den Attributen und -werten gefiltert werden, die in der WFS-Layer-Konfiguration in den [filterOptions](#markdown-header-filteroptions) definiert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1240,10 +1270,8 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |[filterOptions](#markdown-header-filteroptions)|nein|Object||Filtereinstellungen für diesen Layer, wird vom Tool  [wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter) ausgewertet|
 |mouseHoverField|nein|Array [String] oder String||Attributename, der beim MouseHover-Event als Tooltip angzeigt wird. Voraussetzung Control „Mousehover“ ist aktiviert (siehe [config.js](config.js.md)).|
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
-|searchField|nein|String||Attributname, über den die Suche die Featuers des Layers finden kann.|
-|styleField|nein|String||Zusätzliches Feld für die Style-Zuweisung aus der [style.json](style.json.md).|
-|styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md) zu.|
-|styleLabelField|nein|String||Zusätzliches Feld für die Style-Zuweisung aus der [style.json](style.json.md).|
+|searchField|nein|String || Attray [String]||Attributname[n], über den die Suche die Featuers des Layers finden kann.|
+|styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md).|
 
 
 #### filterOptions ####
