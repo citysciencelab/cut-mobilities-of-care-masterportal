@@ -153,7 +153,7 @@ define(function (require) {
                         stringVal = this.chooseUnitAndPunctuate(value);
                     }
                     else {
-                        stringVal = this.punctuate(value) + this.getFormattedDecimalString(stringValue, 3);
+                        stringVal = this.punctuate(value) + this.getFormattedDecimalString(value, 3);
                     }
                     value = stringVal;
                 }
@@ -209,9 +209,9 @@ define(function (require) {
          * @return {String} decimals string with leading with ',' is not empty
          */
         getFormattedDecimalString: function (number, maxLength) {
-            var decimals = "",
-                number = number.toString();
+            var decimals = "";
 
+            number = number.toString();
             if (number.indexOf(".") !== -1) {
                 decimals = number.split(".")[1];
                 if (maxLength > 0 && decimals.length > 0) {
@@ -328,21 +328,40 @@ define(function (require) {
          */
         createDrawInteraction: function (value) {
             value = this.getValues()[value];
-            var layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
+            var that = this,
+                layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
+                createBoxFunc = ol.interaction.Draw.createBox();
                 drawInteraction = new ol.interaction.Draw({
                     // destination for drawn features
                     source: layer.getSource(),
                     // drawing type
-                    // a circle with for points is internnaly used as Box, since type "Box" does not exist
+                    // a circle with four points is internnaly used as Box, since type "Box" does not exist
                     type: value === "Box" ? "Circle" : value,
                     // is called when a geometry's coordinates are updated
-                    geometryFunction: value === "Box" ? ol.interaction.Draw.createBox() : undefined
-                });
+                    geometryFunction: value === "Polygon" ? undefined : function (coordinates, opt_geom) {
+                        if (value === "Box") {
+                            return createBoxFunc(coordinates, opt_geom);
+                        }
+                        else if (value === "Circle") {
+                            return that.snapRadiusToInterval(coordinates, opt_geom, that);
+                        }
+                    }
+            });
 
             this.toggleOverlay(value, this.get("circleOverlay"));
             this.setDrawInteractionListener(drawInteraction, layer);
             this.setDrawInteraction(drawInteraction);
             Radio.trigger("Map", "addInteraction", drawInteraction);
+        },
+        snapRadiusToInterval: function (coordinates, opt_geom, that) {
+            var radius = Math.sqrt(Math.pow(coordinates[1][0] - coordinates[0][0], 2) + Math.pow(coordinates[1][1] - coordinates[0][1], 2));
+
+            radius = that.precisionRound(radius, -1);
+            geometry = opt_geom || new ol.geom.Circle(coordinates[0]);
+            geometry.setRadius(radius);
+
+            that.showOverlayOnSketch(radius, coordinates[1]);
+            return geometry;
         },
         /**
          * sets listeners for draw interaction events
@@ -352,9 +371,6 @@ define(function (require) {
         setDrawInteractionListener: function (interaction, layer) {
             interaction.on("drawstart", function (evt) {
                 layer.getSource().clear();
-                if (evt.feature.getGeometry().getType() === "Circle") {
-                    this.showOverlayOnSketch(evt.feature.getGeometry(), this.get("circleOverlay"));
-                }
             }, this);
 
             interaction.on("drawend", function (evt) {
@@ -396,15 +412,19 @@ define(function (require) {
          * @param {ol.Geometry} geometry - circle geometry
          * @param {ol.Overlay} circleOverlay
          */
-        showOverlayOnSketch: function (geometry, circleOverlay) {
-            geometry.on("change", function (evt) {
-                var radius = this.roundRadius(evt.target.getRadius());
+        showOverlayOnSketch: function (radius, coords) {
+            var radius = this.roundRadius(radius),
+            circleOverlay = this.get("circleOverlay");
 
-                circleOverlay.getElement().innerHTML = radius;
-                circleOverlay.setPosition(evt.target.getLastCoordinate());
-            }, this);
+            circleOverlay.getElement().innerHTML = radius;
+            circleOverlay.setPosition(coords);
         },
 
+        precisionRound: function (number, precision) {
+            var factor = Math.pow(10, precision);
+
+            return Math.round(number * factor) / factor;
+        },
         /**
          * converts a feature to a geojson
          * if the feature geometry is a circle, it is converted to a polygon
