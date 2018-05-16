@@ -1,13 +1,13 @@
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
-    configPath = window.location.href.split('#')[0] + "config",  
+    configPath = window.location.origin + window.location.pathname + "config",
     Radio;
 
 if (window.location.search !== "") {
     var index = window.location.href.indexOf("?"),
         strippedLocation = window.location.href.slice(0, index);
 
-    configPath = strippedLocation + "config" ;
+    configPath = strippedLocation + "config";
 }
 
 scriptTagsArray.forEach(function (scriptTag) {
@@ -16,6 +16,7 @@ scriptTagsArray.forEach(function (scriptTag) {
         configPath = scriptTag.getAttribute("data-lgv-config") + "?noext";
     }
 }, this);
+
 
 require.config({
     waitSeconds: 60,
