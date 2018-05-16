@@ -8,6 +8,8 @@ define(function (require) {
     GroupLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
+            this.setLayerdefinitions(this.groupLayerObjectsByUrl(this.getLayerdefinitions()));
+            this.setAttributes();
         },
 
         /**
@@ -16,7 +18,7 @@ define(function (require) {
         setAttributes: function () {
             var gfiParams = [];
 
-            _.each(this.get("layerdefinitions"), function (layerdef, index) {
+            _.each(this.getLayerdefinitions(), function (layerdef, index) {
                 if (layerdef.gfiAttributes !== "ignore") {
                     gfiParams.push({
                         featureCount: layerdef.featureCount ? layerdef.featureCount : 1,
@@ -31,14 +33,68 @@ define(function (require) {
             }, this);
             this.setGfiParams(gfiParams);
         },
+        /**
+         * Groups layerdefinitions by url.
+         * If gfiAttributes is set on group layer-object,
+         *     then the gfi-Attributes for sublayers are overwitten and can be grouped.
+         * Else the gfiAttributes of all layers are taken.
+         *
+         * If the gfiAttributes of all layers are equal, then the layers can be aggregated.
+         * Otherwise the layers can not be grouped by url.
+         *
+         */
+        groupLayerObjectsByUrl: function (layerDefinitions) {
+            var groupByUrl = _.groupBy(layerDefinitions, "url"),
+                newLayerDefs = [],
+                gfiAttributes = this.getGfiAttributes();
 
+            _.each(groupByUrl, function (layerGroup) {
+                var newLayerObj = _.clone(layerGroup[0]),
+                    isGroupable = false;
+
+                gfiAttributes = this.groupGfiAttributes(gfiAttributes, layerGroup);
+                if ((_.isObject(gfiAttributes) && !_.isString(gfiAttributes)) || (_.isString(gfiAttributes) && gfiAttributes.indexOf(",") === -1)) {
+                    isGroupable = true;
+                }
+                if (isGroupable) {
+                    // get all layers for service
+                    newLayerObj.layers = _.pluck(layerGroup, "layers").toString();
+                    // calculate maxScale from all Layers
+                    newLayerObj.maxScale = _.max(_.pluck(layerGroup, "maxScale"), function (scale) {
+                        return parseInt(scale, 10);
+                    });
+                    // calculate minScale from all Layers
+                    newLayerObj.minScale = _.min(_.pluck(layerGroup, "minScale"), function (scale) {
+                        return parseInt(scale, 10);
+                    });
+                    newLayerObj.gfiAttributes = gfiAttributes;
+                    newLayerDefs.push(newLayerObj);
+                }
+                else {
+                    _.each(layerGroup, function (layer) {
+                        newLayerDefs.push(layer);
+                    });
+                }
+            }, this);
+            return newLayerDefs;
+        },
+
+        groupGfiAttributes: function (gfiAttributes, layerGroup) {
+            if (_.isUndefined(gfiAttributes)) {
+                gfiAttributes = _.pluck(layerGroup, "gfiAttributes");
+                if (_.isArray(gfiAttributes)) {
+                    gfiAttributes = _.uniq(gfiAttributes).toString();
+                }
+            }
+            return gfiAttributes;
+        },
         /**
          *
          */
         createLayerSource: function () {
             // TODO noch keine Typ unterscheidung -> nur WMS
-            this.createChildLayerSources(this.get("layerdefinitions"));
-            this.createChildLayers(this.get("layerdefinitions"));
+            this.createChildLayerSources(this.getLayerdefinitions());
+            this.createChildLayers(this.getLayerdefinitions());
             this.setMaxScale(this.get("id"));
             this.setMinScale(this.get("id"));
             this.createLayer();
@@ -101,16 +157,16 @@ define(function (require) {
         createLegendURL: function () {
             var legendURL = [];
 
-            _.each(this.get("layerdefinitions"), function (layer) {
+            _.each(this.getLayerdefinitions(), function (layer) {
                 if (layer.legendURL === "" || layer.legendURL === undefined) {
                     var layerNames = layer.layers.split(",");
 
                     if (layerNames.length === 1) {
-                        legendURL.push(layer.url + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layer.layers);
+                        legendURL.push(layer.url + "?VERSION=" + layer.version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layer.layers);
                     }
                     else if (layerNames.length > 1) {
                         _.each(layerNames, function (layerName) {
-                            legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
+                            legendURL.push(this.get("url") + "?VERSION=" + layer.version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
                         }, this);
                     }
                 }
@@ -130,7 +186,7 @@ define(function (require) {
                 name = this.get("name"),
                 legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null;
 
-            _.each(this.get("layerdefinitions"), function (layer) {
+            _.each(this.getLayerdefinitions(), function (layer) {
                 var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
 
                 if (layerMetaId) {
@@ -216,6 +272,14 @@ define(function (require) {
                 childLayer = this.getChildLayers().item(index);
 
             return childLayer.getSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: gfiParams.infoFormat, FEATURE_COUNT: gfiParams.featureCount});
+        },
+        // getter for layerdefinitions
+        getLayerdefinitions: function () {
+            return this.get("layerdefinitions");
+        },
+        // setter for layerdefinitions
+        setLayerdefinitions: function (value) {
+            this.set("layerdefinitions", value);
         }
 
     });
