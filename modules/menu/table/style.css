@@ -90,7 +90,7 @@
     width: 40px;
     height: 40px;
 }
-.panel {
+#collapseLayerPanel {
     background: transparent;
     border-width: 0px;
     -webkit-box-shadow: none;
