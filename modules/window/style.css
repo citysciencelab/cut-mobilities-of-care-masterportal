@@ -83,3 +83,8 @@
     overflow: auto;
     background-color: rgb(255, 255, 255);
 }
+
+.win-body .checkbox-container {
+    padding-left: 0;
+    padding-right: 0;
+}
