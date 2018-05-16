@@ -9,7 +9,6 @@ define([
     var MeasureView = Backbone.View.extend({
         model: new Measure(),
         className: "win-body",
-        // template: _.template(DefaultTemplate),
         events: {
             "change select#geomField": "setGeometryType",
             "change select#unitField": "setUnit",
