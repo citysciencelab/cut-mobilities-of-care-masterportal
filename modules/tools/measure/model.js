@@ -274,7 +274,7 @@ define([
 
             if (this.get("uiStyle") === "TABLE") {
                 if (this.get("unit") === "km") {
-                     output = (lengthRed / 1000).toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                     output = (lengthRed / 1000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 }
                 else {
                     output = lengthRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
@@ -319,7 +319,7 @@ define([
             areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2)) - (0.0008 * area));
             if (this.get("uiStyle") === "TABLE") {
                 if (this.get("unit") === "km<sup>2</sup>") {
-                    output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>" ;
+                    output = (areaRed / 1000000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>" ;
                 }
                 else {
                      output = areaRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
