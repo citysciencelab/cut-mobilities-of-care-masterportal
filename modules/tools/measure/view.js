@@ -20,7 +20,6 @@ define([
         },
 
         initialize: function () {
-            debugger;
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin change:type": this.render
             });
