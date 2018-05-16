@@ -25,16 +25,14 @@ define(function (require) {
 
             _.each(models, function (model) {
                 switch (model.getType()) {
-                    case "tool": {
+                    case "tool":
                         this.addToolView(model);
                         break;
-                    }
-                    case "folder": {
+                    case "folder":
                         if (model.getId() === "tools") {
                             this.addToolsMenuView ();
                         }
                         break;
-                    }
                 }
             }, this);
         },
