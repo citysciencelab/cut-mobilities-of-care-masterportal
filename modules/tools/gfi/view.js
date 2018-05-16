@@ -95,6 +95,7 @@ define(function (require) {
                this.model.set("rotateAngle", 0);
             }
             $(".gfi-detached-table").css({"transform": "rotate(" + this.model.get("rotateAngle") + "deg)"});
+            $(".gfi-detached-table").css({"-webkit-transform-origin": "50%  51%"});
         }
     });
 
