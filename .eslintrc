@@ -9,7 +9,8 @@
     },
     "globals": {
         "_": true,
-        "Radio": true
+        "Radio": true,
+        "Backbone": true
     },
     "rules": {
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
