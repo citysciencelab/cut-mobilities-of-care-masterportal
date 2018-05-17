@@ -17,7 +17,6 @@ var $ = require("jquery"),
     RemoteInterface = require("modules/remoteInterface/model");
 
     // Core laden
-    new Alert();
     new RemoteInterface();
     new Alert();
     new Autostarter();
@@ -121,7 +120,7 @@ var $ = require("jquery"),
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
                 case "einwohnerabfrage": {
-                    require(["modules/tools/einwohnerabfrage/view"], function (EinwohnerabfrageView) {
+                    require(["modules/tools/einwohnerabfrage/selectView"], function (EinwohnerabfrageView) {
                         new EinwohnerabfrageView();
                     });
                     break;

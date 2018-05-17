@@ -186,7 +186,7 @@ define(function (require) {
             _.each(rules, function (rule) {
                 var attrMap = _.findWhere(featureAttributesMap, {name: rule.attrName});
 
-                attrMap.initSelectedValues = rule.values;
+                attrMap.preselectedValues = rule.values;
             });
 
             return featureAttributesMap;

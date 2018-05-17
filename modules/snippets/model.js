@@ -58,13 +58,13 @@ var ValueModel = require("modules/snippets/value/model"),
         this.trigger("removeView");
     },
 
-    // getter for initSelectedValues
-    getInitSelectedValues: function () {
-        return this.get("initSelectedValues");
+    // getter for initPreectedValues
+    getPreselectedValues: function () {
+        return this.get("preselectedValues");
     },
-    // setter for initSelectedValues
-    setInitSelectedValues: function (value) {
-        this.set("initSelectedValues", value);
+    // setter for initPreectedValues
+    setPreselectedValues: function (value) {
+        this.set("preselectedValues", value);
     },
 
     // getter for type

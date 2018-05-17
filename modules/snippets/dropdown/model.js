@@ -10,15 +10,17 @@ define(function (require) {
             isOpen: false,
             // init dropdown values
             values: [],
+            preselectedValues: [],
             // number of entries displayed
-            numOfOptions: 10
+            numOfOptions: 10,
+            isMultiple: true
         },
 
         initialize: function () {
             this.superInitialize();
             this.addValueModels(this.getValues());
-            if (this.has("initSelectedValues")) {
-                this.updateSelectedValues(this.getInitSelectedValues());
+            if (this.getPreselectedValues().length > 0) {
+                this.updateSelectedValues(this.getPreselectedValues());
             }
             this.setValueModelsToShow(this.getValuesCollection().where({isSelectable: true}));
             this.listenTo(this.getValuesCollection(), {
@@ -87,6 +89,10 @@ define(function (require) {
          */
         updateSelectedValues: function (values) {
             if (!_.isArray(values)) {
+                if (!this.getIsMultiple()) {
+                    this.setDisplayName(values);
+
+                }
                 values = [values];
             }
             _.each(this.getValuesCollection().models, function (valueModel) {
@@ -148,6 +154,18 @@ define(function (require) {
                 });
             }
             return obj;
+        },
+        setIsMultiple: function (value) {
+            this.set("isMultiple", value);
+        },
+        getIsMultiple: function () {
+            return this.get("isMultiple");
+        },
+        setDisplayName: function (value) {
+            this.set("displayName", value);
+        },
+        getPreselectedValues: function () {
+            return this.get("preselectedValues");
         }
     });
 

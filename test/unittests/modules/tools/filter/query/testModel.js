@@ -51,16 +51,16 @@ define(function (require) {
                 expect(returnedFeatureAttributesMap).to.have.lengthOf(3);
             });
 
-            it("should have 'initSelectedValues' with the value 'Altona'", function () {
+            it("should have 'preselectedValues' with the value 'Altona'", function () {
                 var returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
 
-                expect(returnedFeatureAttributesMap[0].initSelectedValues).to.have.members(["Altona"]);
+                expect(returnedFeatureAttributesMap[0].preselectedValues).to.have.members(["Altona"]);
             });
 
-            it("should be undefined for 'initSelectedValues'", function () {
+            it("should be undefined for 'preselectedValues'", function () {
                 var returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
 
-                expect(returnedFeatureAttributesMap[1].initSelectedValues).to.be.an("undefined");
+                expect(returnedFeatureAttributesMap[1].preselectedValues).to.be.an("undefined");
             });
         });
 
