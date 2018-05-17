@@ -96,7 +96,7 @@ define(function (require) {
             }
             $(".gfi-detached-table").css({
                     "transform": "rotate(" + this.model.get("rotateAngle") + "deg)",
-                    "-webkit-transform-origin": "50%  51%"
+                    "-webkit-transform-origin": "50% 52%"
                 });
         }
     });
