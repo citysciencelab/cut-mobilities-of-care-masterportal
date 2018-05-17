@@ -46,7 +46,6 @@ define([
                 if (Radio.request("Util", "getUiStyle") === "TABLE") {
                     $(".lgv-container").append(this.$el.html(this.templateTable(attr)));
                     this.$el.addClass("table-tool-window");
-                    this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
                 }
                 else if (this.model.get("isCollapsed") === true) {
                     $("body").append(this.$el.html(this.templateMin(attr)));

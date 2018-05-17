@@ -88,6 +88,9 @@
     font-family: "HamburgSans",sans-serif;
     border-radius: 12px !important;
     background-color: #F2F2F2;
+    top: 70%;
+    left: calc(50% + 560px);
+    margin-bottom: 30px;
 }
 
 .table-tool-window .header{
