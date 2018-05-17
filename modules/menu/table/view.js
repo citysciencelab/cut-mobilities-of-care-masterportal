@@ -39,10 +39,10 @@ define(function (require) {
         renderTool: function () {
             this.$el.append(new ToolView().render());
         },
-        setActiveElement: function(element) {
+        setActiveElement: function (element) {
             this.activeElement = element;
         },
-        getActiveElement: function() {
+        getActiveElement: function () {
             return this.activeElement;
         }
     });
