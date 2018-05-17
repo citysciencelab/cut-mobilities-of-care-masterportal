@@ -39,18 +39,13 @@ define(function(require) {
 
         describe("showOverlayOnSketch", function () {
             it("should update overlay innerHTML on geometry changes", function () {
-                var geometry = new ol.geom.Circle([556440.777563342, 5935149.148611423]);
-
-                model.showOverlayOnSketch(geometry, model.get("circleOverlay"));
-                geometry.setRadius(50);
+                model.showOverlayOnSketch(50, []);
                 expect(model.get("circleOverlay").getElement().innerHTML).to.equal("50 m");
             });
             it("should update overlay position on geometry changes", function () {
-                var geometry = new ol.geom.Circle([556440.777563342, 5935149.148611423]);
-
-                model.showOverlayOnSketch(geometry, model.get("circleOverlay"));
-                geometry.setRadius(50);
-                expect(geometry.getLastCoordinate()).to.deep.equal(model.get("circleOverlay").getPosition());
+                var outerCoord = [556440.777563342, 5935149.148611423]
+                model.showOverlayOnSketch(50, outerCoord);
+                expect(outerCoord).to.deep.equal(model.get("circleOverlay").getPosition());
             });
         });
 
