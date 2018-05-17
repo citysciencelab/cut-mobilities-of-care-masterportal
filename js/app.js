@@ -1,20 +1,20 @@
 define("app", function (require) {
 
-var $ = require("jquery"),
-    Config = require("config"),
-    Alert = require("modules/alerting/view"),
-    RestReaderList = require("modules/restReader/collection"),
-    Autostarter = require("modules/core/autostarter"),
-    Util = require("modules/core/util"),
-    StyleList = require("modules/vectorStyle/list"),
-    RawLayerList = require("modules/core/rawLayerList"),
-    Preparser = require("modules/core/configLoader/preparser"),
-    ParametricURL = require("modules/core/parametricURL"),
-    CRS = require("modules/core/crs"),
-    Map = require("modules/core/map"),
-    WPS = require("modules/core/wps"),
-    AddGeoJSON = require("modules/tools/addGeoJSON/model"),
-    RemoteInterface = require("modules/remoteInterface/model");
+    var $ = require("jquery"),
+        Config = require("config"),
+        Alert = require("modules/alerting/view"),
+        RestReaderList = require("modules/restReader/collection"),
+        Autostarter = require("modules/core/autostarter"),
+        Util = require("modules/core/util"),
+        StyleList = require("modules/vectorStyle/list"),
+        RawLayerList = require("modules/core/rawLayerList"),
+        Preparser = require("modules/core/configLoader/preparser"),
+        ParametricURL = require("modules/core/parametricURL"),
+        CRS = require("modules/core/crs"),
+        Map = require("modules/core/map"),
+        WPS = require("modules/core/wps"),
+        AddGeoJSON = require("modules/tools/addGeoJSON/model"),
+        RemoteInterface = require("modules/remoteInterface/model");
 
     // Core laden
     new RemoteInterface();
@@ -44,8 +44,6 @@ var $ = require("jquery"),
         new MenuLoader();
     });
 
-
-
     require(["modules/zoomToGeometry/model"], function (ZoomToGeometry) {
         new ZoomToGeometry();
     });
@@ -62,11 +60,6 @@ var $ = require("jquery"),
             require([element], function (CustomModule) {
                 new CustomModule();
             });
-         });
-    }
-
-    if (Config.geoAPI && Config.geoAPI === true) {
-        require(["geoapi"], function () {
         });
     }
 
@@ -112,7 +105,7 @@ var $ = require("jquery"),
     require(["modules/window/view"], function (WindowView) {
         new WindowView();
     });
-        // Module laden
+    // Module laden
     // Tools
     require(["modules/sidebar/view"], function (SidebarView) {
         var sidebarView = new SidebarView();
@@ -251,9 +244,7 @@ var $ = require("jquery"),
             }
         });
     });
-    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
-        new AddGeoJSON();
-    });
+
     // controls
     var style = Radio.request("ParametricURL", "getStyle");
 
@@ -263,10 +254,11 @@ var $ = require("jquery"),
                 controlsView = new ControlsView();
 
             _.each(controls, function (control) {
+                var el;
                 switch (control.id) {
                     case "zoom": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowTR(control.id);
+                            el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/zoom/view"], function (ZoomControlView) {
                                 new ZoomControlView({el: el});
@@ -275,7 +267,7 @@ var $ = require("jquery"),
                         break;
                     }
                     case "orientation": {
-                        var el = controlsView.addRowTR(control.id);
+                        el = controlsView.addRowTR(control.id);
 
                         require(["modules/controls/orientation/view"], function (OrientationView) {
                             new OrientationView({el: el});
@@ -284,7 +276,7 @@ var $ = require("jquery"),
                     }
                     case "mousePosition": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowBL(control.id);
+                            el = controlsView.addRowBL(control.id);
 
                             require(["modules/controls/mousePosition/view"], function (MousePositionView) {
                                 new MousePositionView({el: el});
@@ -294,7 +286,7 @@ var $ = require("jquery"),
                     }
                     case "fullScreen": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowTR(control.id);
+                            el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/fullScreen/view"], function (FullScreenView) {
                                 new FullScreenView({el: el});
@@ -304,7 +296,7 @@ var $ = require("jquery"),
                     }
                     case "totalview": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowTR(control.id);
+                            el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/totalview/view"], function (TotalView) {
                                 new TotalView({el: el});
@@ -314,7 +306,7 @@ var $ = require("jquery"),
                     }
                     case "attributions": {
                         if (control.attr === true || typeof control.attr === "object") {
-                            var el = controlsView.addRowBR(control.id);
+                            el = controlsView.addRowBR(control.id);
 
                             require(["modules/controls/attributions/view"], function (AttributionsView) {
                                 new AttributionsView({el: el});
@@ -324,12 +316,15 @@ var $ = require("jquery"),
                     }
                     case "overviewmap": {
                         if (control.attr === true || typeof control.attr === "object") {
-                            var el = controlsView.addRowBR(control.id);
+                            el = controlsView.addRowBR(control.id);
 
                             require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
                                 new OverviewmapView({el: el});
                             });
                         }
+                        break;
+                    }
+                    default: {
                         break;
                     }
                 }
