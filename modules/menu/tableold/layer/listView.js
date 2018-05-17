@@ -16,11 +16,6 @@ define(function (require) {
         },
         initialize: function () {
             this.collection = Radio.request("ModelList", "getCollection");
-            this.listenTo(Radio.channel("TableMenu"), {
-                "closeLayerItem": function () {
-                    this.$el.find("#collapseLayerPanel").removeClass("in");
-                }
-            });
 
         },
         burgerMenuIsActive: function (event) {
