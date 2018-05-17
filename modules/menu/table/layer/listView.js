@@ -17,14 +17,16 @@ define(function (require) {
         initialize: function () {
             this.collection = Radio.request("ModelList", "getCollection");
             this.listenTo(Radio.channel("TableMenu"), {
-                "closeLayerItem": function () {
+                "Layer": function () {
                     this.$el.find("#collapseLayerPanel").removeClass("in");
+                    this.$el.removeClass("burgerMenuIsActive");
+                    this.$el.find(".icon-burgermenu_alt").addClass("collapsed");
                 }
             });
-
         },
         burgerMenuIsActive: function (event) {
             $(event.currentTarget.parentElement).toggleClass("burgerMenuIsActive");
+            Radio.trigger("TableMenu", "elementIsActive", "Layer");
         },
         render: function () {
             this.$el.html(this.template());

@@ -90,6 +90,10 @@ define([
                 this.renderRecommendedList();
             });
 
+            this.listenTo(Radio.channel("TableMenu"), {
+                "Searchbar": this.hideMenu
+            });
+
             this.listenTo(Radio.channel("Searchbar"), {
                 "deleteSearchString": this.deleteSearchString,
                 "setFocus": this.setFocus
@@ -182,6 +186,7 @@ define([
             "click": function () {
                 this.clearSelection();
                 $("#searchInput").focus();
+                Radio.trigger("TableMenu", "elementIsActive", "Searchbar");
             }
         },
         /**

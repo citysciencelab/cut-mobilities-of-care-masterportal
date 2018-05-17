@@ -13,9 +13,21 @@ define(function (require) {
         className: "table-nav",
         template: _.template(MainTemplate),
         initialize: function () {
+            this.listenTo(Radio.channel("TableMenu"), {
+                "elementIsActive": this.toggleActiveElement
+            });
+
             this.render();
             this.renderLayerList();
             this.renderTool();
+        },
+        toggleActiveElement: function (element) {
+            var oldActiveElement = this.getActiveElement();
+
+            if (oldActiveElement !== element) {
+                Radio.trigger("TableMenu", oldActiveElement);
+                this.setActiveElement(element);
+            }
         },
         render: function () {
             $(this.el).html(this.template());
@@ -26,6 +38,12 @@ define(function (require) {
         },
         renderTool: function () {
             this.$el.append(new ToolView().render());
+        },
+        setActiveElement: function(element) {
+            this.activeElement = element;
+        },
+        getActiveElement: function() {
+            return this.activeElement;
         }
     });
         return Menu;
