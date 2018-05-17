@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Backbone = require("backbone"),
-        ResultTemplate = require("text!modules/tools/einwohnerabfrage/resultTemplate.html"),
+        ResultTemplate = require("text!modules/tools/einwohnerabfrage_hh/resultTemplate.html"),
         ResultView;
 
         ResultView = Backbone.View.extend({

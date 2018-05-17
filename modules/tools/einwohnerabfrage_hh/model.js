@@ -121,7 +121,6 @@ define(function (require) {
          */
         handleWPSError: function (response) {
             Radio.trigger("Alert", "alert", JSON.stringify(response["wps:ergebnis"]));
-            this.resetView();
         },
         /**
          * Used when statuscode is 200 and wps did not return an error
@@ -248,11 +247,12 @@ define(function (require) {
          * @param  {} args
          */
         setStatus: function (args) {
+            var selectedValues;
+
             if (args[2].getId() === "einwohnerabfrage" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
-                var selectedValues = this.getDropDownSnippet().getSelectedValues();
-
+                selectedValues = this.getDropDownSnippet().getSelectedValues();
                 this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.getValues())[0]);
             }
             else {
@@ -303,7 +303,7 @@ define(function (require) {
          * @return {string} date
          */
         parseDate: function (response) {
-             var citation = $("gmd\\:citation,citation", response),
+            var citation = $("gmd\\:citation,citation", response),
                 dates = $("gmd\\:CI_Date,CI_Date", citation),
                 datetype, dateTime;
 
@@ -326,11 +326,11 @@ define(function (require) {
          * creates a draw interaction and adds it to the map.
          * @param {string} value - drawing type (Box | Circle | Polygon)
          */
-        createDrawInteraction: function (value) {
-            value = this.getValues()[value];
+        createDrawInteraction: function (drawType) {
             var that = this,
+                value = this.getValues()[drawType],
                 layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
-                createBoxFunc = ol.interaction.Draw.createBox();
+                createBoxFunc = ol.interaction.Draw.createBox(),
                 drawInteraction = new ol.interaction.Draw({
                     // destination for drawn features
                     source: layer.getSource(),
@@ -343,24 +343,25 @@ define(function (require) {
                             return createBoxFunc(coordinates, opt_geom);
                         }
                         else if (value === "Circle") {
-                            return that.snapRadiusToInterval(coordinates, opt_geom, that);
+                            return that.snapRadiusToInterval(coordinates, opt_geom);
                         }
                     }
-            });
+                });
 
             this.toggleOverlay(value, this.get("circleOverlay"));
             this.setDrawInteractionListener(drawInteraction, layer);
             this.setDrawInteraction(drawInteraction);
             Radio.trigger("Map", "addInteraction", drawInteraction);
         },
-        snapRadiusToInterval: function (coordinates, opt_geom, that) {
-            var radius = Math.sqrt(Math.pow(coordinates[1][0] - coordinates[0][0], 2) + Math.pow(coordinates[1][1] - coordinates[0][1], 2));
+        snapRadiusToInterval: function (coordinates, opt_geom) {
+            var radius = Math.sqrt(Math.pow(coordinates[1][0] - coordinates[0][0], 2) + Math.pow(coordinates[1][1] - coordinates[0][1], 2)),
+                geometry;
 
-            radius = that.precisionRound(radius, -1);
+            radius = this.precisionRound(radius, -1);
             geometry = opt_geom || new ol.geom.Circle(coordinates[0]);
             geometry.setRadius(radius);
 
-            that.showOverlayOnSketch(radius, coordinates[1]);
+            this.showOverlayOnSketch(radius, coordinates[1]);
             return geometry;
         },
         /**
@@ -391,10 +392,10 @@ define(function (require) {
          * @param  {} geoJson
          */
         makeRequest: function (geoJson) {
+            var requestId = _.uniqueId("wps");
             this.setDataReceived(false);
             this.setRequesting(true);
             this.trigger("renderResult");
-            var requestId = _.uniqueId("wps");
 
             this.get("requests").push(requestId);
             Radio.trigger("WPS", "request", "1001", requestId, "einwohner_ermitteln.fmw", {
@@ -414,7 +415,7 @@ define(function (require) {
          */
         showOverlayOnSketch: function (radius, coords) {
             var radius = this.roundRadius(radius),
-            circleOverlay = this.get("circleOverlay");
+                circleOverlay = this.get("circleOverlay");
 
             circleOverlay.getElement().innerHTML = radius;
             circleOverlay.setPosition(coords);
@@ -489,7 +490,7 @@ define(function (require) {
             });
         },
 
-         /**
+        /**
          * show or hide the alkis adressen layer
          * @param {boolean} value
          */
@@ -519,7 +520,7 @@ define(function (require) {
             return this.get("values");
         },
 
-         /**
+        /**
          * sets the attribute fhhDate
          * @param {xml} response
          */
@@ -591,7 +592,7 @@ define(function (require) {
             return this.get("checkBoxRaster");
         },
 
-         /**
+        /**
          * gets the attribute checkBox
          * @returns {Backbone.Model}
          */
