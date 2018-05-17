@@ -1,7 +1,7 @@
 define(function(require) {
     var expect = require("chai").expect,
         Util = require("util"),
-        Model = require("../../../../../modules/tools/einwohnerabfrage/model.js");
+        Model = require("../../../../../modules/tools/einwohnerabfrage_hh/model.js");
 
     describe("tools/einwohnerabfrageModel", function () {
         var model,
