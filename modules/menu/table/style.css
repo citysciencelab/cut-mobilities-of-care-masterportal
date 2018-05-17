@@ -60,17 +60,14 @@
 	position: absolute;
 }
 
-.table-tools-menu:after {
-	border-color: rgba(0, 0, 0, 0);
-	border-top-color: #F2F2F2;
-	border-width: 10px;
-	margin-left: -10px;
+
+.table-tools-menu #funnel {
+    bottom: 0px;
+    left: 33px;
 }
-.table-tools-menu:before {
-	border-color: rgba(0, 0, 0, 0);
-	border-top-color: #F2F2F2;
-	border-width: 10px;
-	margin-left: -10px;
+
+.table-tools-menu #funnel #middle-funnel {
+    width: 24px;
 }
 
 .table-tools-active {
