@@ -432,7 +432,7 @@ define([
             });
             this.addItem({
                 type: "folder",
-                name: "Auswahl der Themen",
+                name: "Ausgewählte Themen",
                 glyphicon: "glyphicon-plus-sign",
                 id: "SelectedLayer",
                 parentId: "tree",
