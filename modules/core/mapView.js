@@ -99,6 +99,7 @@ define(function (require) {
                 "getResolution": function () {
                     return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
                 },
+                "getExtent": this.getExtent,
                 "getResoByScale": this.getResoByScale,
                 "getScales": this.getScales,
                 "getCurrentExtent": this.getCurrentExtent

@@ -326,7 +326,7 @@ define("app", function (require) {
                     }
                     case "button3d": {
                         if (control.attr === true) {
-                            el = controlsView.addRow(control.id);
+                            el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/button3d/view"], function (Button3dView) {
                                 new Button3dView({el: el});
@@ -336,7 +336,7 @@ define("app", function (require) {
                     }
                     case "orientation3d": {
                         if (control.attr === true) {
-                            el = controlsView.addRow(control.id);
+                            el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/orientation3d/view"], function (Orientation3DView) {
                                 new Orientation3DView({ el: el });

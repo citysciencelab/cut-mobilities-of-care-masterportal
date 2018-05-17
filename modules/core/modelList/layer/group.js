@@ -290,6 +290,13 @@ define(function (require) {
         // setter for layerdefinitions
         setLayerdefinitions: function (value) {
             this.set("layerdefinitions", value);
+        },
+        getExtent: function() {
+            if(this.has("extent")){
+                return this.get("extent");
+            } else {
+                return Radio.request("MapView", "getExtent");
+            }
         }
     });
 

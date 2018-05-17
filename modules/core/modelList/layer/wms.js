@@ -247,7 +247,7 @@ define(function (require) {
             if(this.has("extent")){
                 return this.get("extent");
             } else {
-                return Config.extent;
+                return Radio.request("MapView", "getExtent");
             }
         }
     });

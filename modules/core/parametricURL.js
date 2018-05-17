@@ -358,34 +358,6 @@ define([
 
                 this.set("highlightfeature", value);
             }
-        },
-
-        /**
-         * https://gist.github.com/excalq/2961415
-         * @param  {string} key
-         * @param  {string} value
-         * @return {void}
-         */
-        updateQueryStringParam: function (key, value) {
-            var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
-                urlQueryString = document.location.search,
-                newParam = key + "=" + value,
-                params = "?" + newParam,
-                keyRegex;
-
-            // If the "search" string exists, then build params from it
-            if (urlQueryString) {
-                keyRegex = new RegExp("([\?&])" + key + "[^&]*");
-
-                // If param exists already, update it
-                if (urlQueryString.match(keyRegex) !== null) {
-                    params = urlQueryString.replace(keyRegex, "$1" + newParam);
-                }
-                 // Otherwise, add it to end of query string
-                else {
-                    params = urlQueryString + "&" + newParam;
-                }
-            }
             /**
              * passt den Config startingMap3D Parameter an.
              */
@@ -415,6 +387,34 @@ define([
             if (_.has(result, "ALTITUDE")) {
                 var altitude = _.values(_.pick(result, "ALTITUDE"))[0];
                 Config.cameraParameter.altitude = altitude;
+            }
+        },
+
+        /**
+         * https://gist.github.com/excalq/2961415
+         * @param  {string} key
+         * @param  {string} value
+         * @return {void}
+         */
+        updateQueryStringParam: function (key, value) {
+            var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
+                urlQueryString = document.location.search,
+                newParam = key + "=" + value,
+                params = "?" + newParam,
+                keyRegex;
+
+            // If the "search" string exists, then build params from it
+            if (urlQueryString) {
+                keyRegex = new RegExp("([\?&])" + key + "[^&]*");
+
+                // If param exists already, update it
+                if (urlQueryString.match(keyRegex) !== null) {
+                    params = urlQueryString.replace(keyRegex, "$1" + newParam);
+                }
+                 // Otherwise, add it to end of query string
+                else {
+                    params = urlQueryString + "&" + newParam;
+                }
             }
             // iframe
             if (window !== window.top) {
