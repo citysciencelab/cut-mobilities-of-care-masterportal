@@ -102,6 +102,23 @@
     margin-left: -28px;
     width: 480px;
     bottom: -20px;
+
+}
+
+.table-layer-list a:link {
+    text-decoration: none;
+}
+
+.table-layer-list a:visited {
+    text-decoration: none;
+}
+
+.table-layer-list a:hover {
+    text-decoration: none;
+}
+
+.table-layer-list a:active {
+    text-decoration: none;
 }
 
 .layers {

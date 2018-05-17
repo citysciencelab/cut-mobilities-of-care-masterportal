@@ -296,3 +296,14 @@ li.results:hover {
     left: 12px;
 }
 
+#table-searchForm input#searchInput.form-control {
+    font-family: "HamburgSans", sans-serif;
+    font-size: 22px;
+}
+
+input#searchInput.form-control:focus {
+    border-color: #003063;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
