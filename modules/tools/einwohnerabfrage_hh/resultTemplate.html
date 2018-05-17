@@ -3,17 +3,15 @@
 <% if (dataReceived) { %>
     <div class="heading additional-text">Unter Berücksichtigung der Geheimhaltung wurde folgender Wert berechnet:</div>
     <table class="table">
-        <tr>
-            <td>Einwohnerzahl gesamt:</td>
-            <td><%=data.einwohner_gesamt%></td>
-        </tr>
-        <% if (data.quelle_fhh === "tlw" && data.quelle_mrh === "tlw") { %>
+        <% if (data.quelle_fhh !== "nein") { %>
             <tr>
                 <td>Einwohnerzahl in Hamburg:</td>
                 <td><%=data.einwohner_fhh%></td>
             </tr>
+        <% } %>
+        <% if (data.quelle_mrh !== "nein") { %>
             <tr>
-                <td>Einwohnerzahl außerhalb Hamburgs:</td>
+                <td>Einwohnerzahl in der Metropolregion ohne Hamburg:</td>
                 <td><%=data.einwohner_mrh%></td>
             </tr>
         <% } %>
@@ -24,7 +22,7 @@
     </table>
     <% if (data.einwohner_fhh > 0) { %>
         <div class="hinweis additional-text">
-            <span>Hinweis:</span> Aus Datenschutzgründen wird bei Einwohnerzahlen kleiner 3 die Zahl drei oder null verwendet.
+            <span>Hinweis:</span> Aus Datenschutzgründen wird bei Einwohnerzahlen aus dem Melderegister in Hamburg kleiner 3 die Zahl drei oder null verwendet.
             <br>
             <span>Datenquelle Hamburg:</span> Einwohner mit Hauptwohnsitz, Melderegister 31.12.2017.
         </div>

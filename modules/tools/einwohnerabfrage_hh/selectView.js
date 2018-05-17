@@ -1,10 +1,10 @@
 define(function (require) {
 
     var Backbone = require("backbone"),
-        EinwohnerabfrageModel = require("modules/tools/einwohnerabfrage/model"),
+        EinwohnerabfrageModel = require("modules/tools/einwohnerabfrage_hh/model"),
         SnippetDropdownView = require("modules/snippets/dropdown/view"),
-        ResultView = require("modules/tools/einwohnerabfrage/resultView"),
-        Template = require("text!modules/tools/einwohnerabfrage/selectTemplate.html"),
+        ResultView = require("modules/tools/einwohnerabfrage_hh/resultView"),
+        Template = require("text!modules/tools/einwohnerabfrage_hh/selectTemplate.html"),
         SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SelectView;
 
