@@ -45,6 +45,8 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen.|
 |[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
 |[totalview](#markdown-header-portalconfigcontrolstotalview)|nein|Boolean|false|Zeigt einen Button für die Startansicht an.|
+|button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung nach 3D angezeigt werden soll. |
+|orientation3d|nein|Boolean|false|Legt fest, ob ein im 3D Modus eine Navigationsrose anzeiget werden soll. |
 
 **Beispiel controls:**
 
@@ -1133,6 +1135,8 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 |name|nein|String|Name aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
+|supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
+|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung des WMS Dienstes, der WMS Dienst wird nur in dem Extent angezeigt (Die entsprechenden Kachel).||
 
 **Beispiel Hintergrundkarten:**
 
@@ -1249,6 +1253,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |name|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
+|supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
 
 **Folgende Layerkonfigurationen gelten nur für WMS:**
 
@@ -1260,6 +1265,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |infoFormat|nein|String|Wert aus der [services.json](services.json.md) sonst *„text/xml“*|Format für die GFI-Abfrage.|
 |styleable|nein|Boolean||True -> Layer kann im Client anders gestylt werden. Zusätzlich müssen *geomType* und *attributesToStyle* gesetzt werden.|
 |styles|nein|Array [String]||Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.|
+|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung des WMS Dienstes, der WMS Dienst wird nur in dem Extent angezeigt (Die entsprechenden Kachel).||
 
 **Folgende Layerkonfigurationen gelten nur für WFS:**
 

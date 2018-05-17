@@ -95,7 +95,8 @@ define(function (require) {
                         color: "blue",
                         width: 5
                     })
-                })
+                }),
+                altitudeMode : "clampToGround"
             }));
         },
         /**

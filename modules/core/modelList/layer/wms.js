@@ -2,9 +2,15 @@ define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
         ol = require("openlayers"),
+        Config = require("config"),
         WMSLayer;
 
     WMSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            supported: ["2D", "3D"],
+            showSettings: true,
+            extent: null
+        }),
         initialize: function () {
             this.superInitialize();
             this.setAttributes();
@@ -47,10 +53,7 @@ define(function (require) {
                     params: params,
                     tileGrid: new ol.tilegrid.TileGrid({
                         resolutions: Radio.request("MapView", "getResolutions"),
-                        origin: [
-                            442800,
-                            5809000
-                        ],
+                        extent: this.getExtent("extent"),
                         tileSize: parseInt(this.get("tilesize"), 10)
                     })
                 }),
@@ -95,7 +98,8 @@ define(function (require) {
                 legendURL: this.get("legendURL"),
                 routable: this.get("routable"),
                 gfiTheme: this.get("gfiTheme"),
-                infoFormat: this.get("infoFormat")
+                infoFormat: this.get("infoFormat"),
+                extent: this.getExtent()
             };
 
             if (this.getSingleTile() !== true) {
@@ -229,12 +233,22 @@ define(function (require) {
             return this.get("infoFormat");
         },
 
-        getGfiUrl: function () {
-            var resolution = Radio.request("MapView", "getResolution").resolution,
-                projection = Radio.request("MapView", "getProjection"),
-                coordinate = Radio.request("GFI", "getCoordinate");
-
+        getGfiUrl: function (resolution, coordinate, projection) {
             return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, { INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
+        },
+        updateSupported: function() {
+            if(this.getSingleTile()){
+                this.set("supported", ['2D']);
+            }else {
+                this.set("supported", ['2D', '3D']);
+            }
+        },
+        getExtent: function() {
+            if(this.has("extent")){
+                return this.get("extent");
+            } else {
+                return Config.extent;
+            }
         }
     });
 

@@ -6,6 +6,10 @@ define(function (require) {
         GroupLayer;
 
     GroupLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            supported: ['2D', '3D'],
+            showSettings: true
+        }),
         initialize: function () {
             this.superInitialize();
             this.setLayerdefinitions(this.groupLayerObjectsByUrl(this.getLayerdefinitions()));
@@ -108,6 +112,7 @@ define(function (require) {
             var sources = [];
 
             _.each(childlayers, function (child) {
+                var tilesize = child.tilesize ? parseInt(child.tilesize, 10) : 512;
                 var source = new ol.source.TileWMS({
                     url: child.url,
                     params: {
@@ -115,12 +120,17 @@ define(function (require) {
                         FORMAT: child.format,
                         VERSION: child.version,
                         TRANSPARENT: true
-                    }
+                    },
+                    tileGrid: new ol.tilegrid.TileGrid({
+                        resolutions: Radio.request("MapView", "getResolutions"),
+                        extent: this.getExtent(child),
+                        tileSize: tilesize
+                    })
                 });
 
                 sources.push(source);
                 child.source = source;
-            });
+            }, this);
             this.setChildLayerSources(sources);
         },
 
@@ -133,7 +143,8 @@ define(function (require) {
 
             _.each(childlayers, function (childLayer, index) {
                 layer.push(new ol.layer.Tile({
-                    source: this.getChildLayerSources()[index]
+                    source: this.getChildLayerSources()[index],
+                    extent: this.getExtent(childLayer)
                 }));
             }, this);
             this.setChildLayers(layer);
@@ -144,7 +155,7 @@ define(function (require) {
          */
         createLayer: function () {
             var groupLayer = new ol.layer.Group({
-                layers: this.getChildLayers()
+                layers: this.getChildLayers(),
             });
 
             this.setLayer(groupLayer);
@@ -265,7 +276,6 @@ define(function (require) {
         getGfiParams: function () {
             return this.get("gfiParams");
         },
-
         getGfiUrl: function (gfiParams, coordinate, index) {
             var resolution = Radio.request("MapView", "getResolution").resolution,
                 projection = Radio.request("MapView", "getProjection"),
@@ -281,7 +291,6 @@ define(function (require) {
         setLayerdefinitions: function (value) {
             this.set("layerdefinitions", value);
         }
-
     });
 
     return GroupLayer;

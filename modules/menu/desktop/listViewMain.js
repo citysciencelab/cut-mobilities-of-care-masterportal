@@ -1,6 +1,7 @@
 define([
     "backbone",
     "modules/menu/desktop/tool/view",
+    "modules/menu/desktop/viewpoint/view",
     "modules/menu/desktop/folder/viewMenu",
     "modules/menu/desktop/folder/viewCatalog",
     "modules/menu/desktop/staticlink/view",
@@ -10,6 +11,7 @@ define([
     function () {
         var Backbone = require("backbone"),
             DesktopToolView = require("modules/menu/desktop/tool/view"),
+            DesktopViewpointView = require("modules/menu/desktop/viewpoint/view"),
             DesktopFolderView = require("modules/menu/desktop/folder/viewMenu"),
             CatalogFolderView = require("modules/menu/desktop/folder/viewCatalog"),
             DesktopStaticLinkView = require("modules/menu/desktop/staticlink/view"),
@@ -30,7 +32,7 @@ define([
             },
             renderTopMenu: function () {
                 var models = _.filter(this.collection.models, function (model) {
-                        return model.getType() === "tool" || model.getType() === "staticlink" || model.getType() === "folder";
+                        return model.getType() === "tool" || model.getType() === "staticlink" || model.getType() === "folder" || model.getType() === "viewpoint";
                     });
 
                 this.parseViews(models);
@@ -56,6 +58,9 @@ define([
                             }
                             break;
                         }
+                        case "viewpoint": {
+                            this.addViewpointView(model);
+                        }
                     }
                 }, this);
             },
@@ -67,6 +72,9 @@ define([
             },
             addToolView: function (model) {
                 new DesktopToolView({model: model});
+            },
+            addViewpointView: function(model) {
+                new DesktopViewpointView({model: model});
             },
             addStaticLinkView: function (model) {
                 new DesktopStaticLinkView({model: model});

@@ -16,7 +16,15 @@ define(function (require) {
             this.listenTo(this.model, {
                 "change:isActive": this.toggleIsActiveClass
             });
+
+            this.listenTo(Radio.channel("Map"), {
+                "change": function (mode) {
+                    this.toggleSupportedVisibility(mode);
+                }
+            });
+
             this.render();
+            this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
             this.setCssClass();
             this.toggleIsActiveClass();
         },
@@ -25,6 +33,16 @@ define(function (require) {
 
             if (this.model.getIsVisibleInMenu() !== false) {
                 $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+            }
+        },
+
+        toggleSupportedVisibility: function(mode) {
+            if(mode === '2D'){
+                this.$el.show();
+            } else if(this.model.get("supportedIn3d").indexOf(this.model.getId()) >= 0){
+                this.$el.show();
+            } else {
+                this.$el.hide();
             }
         },
 

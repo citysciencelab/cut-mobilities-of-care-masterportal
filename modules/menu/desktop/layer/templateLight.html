@@ -11,5 +11,7 @@
 </span>
 <span class="pull-right">
     <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Informationen und Legende"></span>
-    <span class="glyphicon glyphicon-cog rotate" title="Einstellungen"></span>
+    <% if (showSettings === true) { %>
+        <span class="glyphicon glyphicon-cog rotate settings" title="Einstellungen"></span>
+    <% } %>
 </span>

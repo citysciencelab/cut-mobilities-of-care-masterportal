@@ -59,7 +59,8 @@ define(function () {
             imglink: "../img/location_eventlotse.svg",
             layerid: "4561",
             WFSid: "4560"
-        }
+        },
+        startingMap3D: false
    };
 
    return config;

@@ -16,6 +16,12 @@ define(function (require) {
             this.listenTo(this.model, {
                 "change:isVisibleInTree": this.removeIfNotVisible
             });
+            this.listenTo(Radio.channel("Map"), {
+                "change": function (mode) {
+                    this.toggleSupportedVisibility(mode);
+                }
+            });
+            this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -26,6 +32,16 @@ define(function (require) {
             }
             else {
                 return "";
+            }
+        },
+
+        toggleSupportedVisibility: function(mode) {
+            if(mode === '2D'){
+                this.$el.show();
+            } else if(this.model.get("supportedIn3d").indexOf(this.model.getId()) >= 0){
+                this.$el.show();
+            } else {
+                this.$el.hide();
             }
         },
         checkItem: function () {

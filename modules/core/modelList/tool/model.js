@@ -23,7 +23,8 @@ define(function (require) {
             // true wenn das Tool aktiviert ist
             isActive: false,
             // deaktiviert GFI, wenn dieses tool geöffnet wird
-            deaktivateGFI: true
+            deaktivateGFI: true,
+            supportedIn3d: ['coord', 'gfi', 'wfsFeatureFilter', 'searchByCoord', 'legend', 'contact', 'saveSelection', 'measure']
         },
 
         initialize: function () {

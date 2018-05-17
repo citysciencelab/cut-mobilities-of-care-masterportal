@@ -12,9 +12,18 @@ define([
         },
         initialize: function () {
             this.render();
+            if (!Radio.request("Map", "isMap3d")) {
+                this.show();
+            }
+            var channel = Radio.channel("Map");
+            channel.on({
+                "activateMap3d": this.hide,
+                "deactivateMap3d": this.show
+            }, this);
         },
         render: function () {
             this.$el.html(this.template);
+            this.hide();
         },
         setZoomLevelUp: function () {
             Radio.trigger("MapView", "setZoomLevelUp");
@@ -23,6 +32,12 @@ define([
         setZoomLevelDown: function () {
             Radio.trigger("MapView", "setZoomLevelDown");
             Radio.trigger("ClickCounter", "zoomChanged");
+        },
+        show: function () {
+            this.$el.show();
+        },
+        hide: function () {
+            this.$el.hide();
         }
     });
 

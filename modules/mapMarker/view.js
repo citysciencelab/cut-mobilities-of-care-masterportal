@@ -18,7 +18,8 @@ define([
             fill: new ol.style.Fill({
                 color: "rgba(8, 119, 95, 0.3)"
             })
-        })
+        }),
+        altitudeMode : "clampToGround",
     });
 
     Radio.trigger("Map", "addLayerToIndex", [searchVector, Radio.request("Map", "getLayers").getArray().length]);

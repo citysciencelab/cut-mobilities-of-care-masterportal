@@ -35,13 +35,21 @@ define([
                 "change:isOutOfRange": this.toggleColor
             });
 
+            if(this.model.attributes.supported) {
+                this.listenTo(Radio.channel("Map"), {
+                    "change": function (mode) {
+                        this.toggleSupportedVisibility(mode);
+                    }
+                });
+            }
+
             this.$el.on({
                 click: function (e) {
                     e.stopPropagation();
                 }
             });
             this.render();
-
+            this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
             this.toggleColor(this.model, this.model.getIsOutOfRange());
         },
 
@@ -120,6 +128,14 @@ define([
             $(".nav li:first-child").removeClass("open");
         },
 
+        toggleSupportedVisibility: function(mode) {
+
+            if(this.model.attributes.supported.indexOf(mode) >= 0) {
+                this.$el.show();
+            }else{
+                this.$el.hide();
+            }
+        },
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
          */

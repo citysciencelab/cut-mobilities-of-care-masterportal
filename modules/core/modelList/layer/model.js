@@ -18,7 +18,9 @@ define(function (require) {
             selectionIDX: 0,
             layerInfoClicked: false,
             minScale: "0",
-            maxScale: "1000000"
+            maxScale: "1000000",
+            supported: ["2D"],
+            showSettings: true
         },
         superInitialize: function () {
             var channel = Radio.Channel("Layer");
@@ -51,8 +53,18 @@ define(function (require) {
                 "setLayerInfoChecked": function (layerInfoChecked) {
                     this.setLayerInfoChecked(layerInfoChecked);
                 }
-              });
-
+            });
+            this.listenTo(Radio.channel("Map"), {
+                "change": function(mode) {
+                    if (this.get("supported").indexOf(mode) >= 0) {
+                        if(this.getIsVisibleInMap()) {
+                            this.getLayer().setVisible(true);
+                        }
+                    } else {
+                        this.getLayer().setVisible(false);
+                    }
+                }
+            });
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
                     // triggert das Ein- und Ausschalten von Layern
@@ -444,7 +456,6 @@ define(function (require) {
                 return undefined;
             }
         },
-
         getUrl: function () {
             return this.get("url");
         },

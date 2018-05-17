@@ -324,6 +324,25 @@ define("app", function (require) {
                         }
                         break;
                     }
+                    case "button3d": {
+                        if (control.attr === true) {
+                            el = controlsView.addRow(control.id);
+
+                            require(["modules/controls/button3d/view"], function (Button3dView) {
+                                new Button3dView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "orientation3d": {
+                        if (control.attr === true) {
+                            el = controlsView.addRow(control.id);
+
+                            require(["modules/controls/orientation3d/view"], function (Orientation3DView) {
+                                new Orientation3DView({ el: el });
+                            });
+                        }
+                    }
                     default: {
                         break;
                     }

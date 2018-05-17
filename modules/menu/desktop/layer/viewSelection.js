@@ -35,7 +35,15 @@ define([
                 "change:transparency": this.rerender,
                 "change:isOutOfRange": this.toggleColor
             });
+            if(this.model.attributes.supported) {
+                this.listenTo(Radio.channel("Map"), {
+                    "change": function (mode) {
+                        this.toggleSupportedVisibility(mode);
+                    }
+                });
+            }
             this.render();
+            this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
             this.toggleColor(this.model, this.model.getIsOutOfRange());
         },
 
@@ -46,6 +54,14 @@ define([
             selector.prepend(this.$el.html(this.template(attr)));
             if (this.model.getIsSettingVisible() === true) {
                 this.$el.append(this.templateSettings(attr));
+            }
+        },
+        toggleSupportedVisibility: function(mode) {
+
+            if(this.model.attributes.supported.indexOf(mode) >= 0) {
+                this.$el.show();
+            }else{
+                this.$el.hide();
             }
         },
         rerender: function () {

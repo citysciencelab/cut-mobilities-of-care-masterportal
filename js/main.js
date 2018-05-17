@@ -3,6 +3,9 @@ var Radio;
 require.config({
     waitSeconds: 60,
     paths: {
+        openlayers: "../lib/olcesium",
+        cesium: "../lib/Cesium/Cesium",
+        mouseeventPolyfill: "../lib/mouseevent",
         app: "app",
         backbone: "../node_modules/backbone/backbone",
         "backbone.radio": "../node_modules/backbone.radio/build/backbone.radio.min",
@@ -17,7 +20,7 @@ require.config({
         jqueryui: "../node_modules/jquery-ui/ui",
         modules: "../modules",
         moment: "../node_modules/moment/min/moment.min",
-        openlayers: "../node_modules/openlayers/dist/ol",
+        // openlayers: "../node_modules/openlayers/dist/ol",
         proj4: "../node_modules/proj4/dist/proj4",
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         templates: "../templates",
@@ -36,6 +39,9 @@ require.config({
         },
         openlayers: {
             exports: "ol"
+        },
+        cesium: {
+            exports: "Cesium"
         }
     },
     map: {

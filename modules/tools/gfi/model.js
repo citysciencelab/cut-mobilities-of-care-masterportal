@@ -26,7 +26,8 @@ define(function (require) {
             // Index für das aktuelle Theme
             themeIndex: 0,
             // Anzahl der Themes
-            numberOfThemes: 0
+            numberOfThemes: 0,
+            active3d: false
         },
         initialize: function () {
             var channel = Radio.channel("GFI");
@@ -95,6 +96,11 @@ define(function (require) {
                 }
             });
 
+            this.listenTo(Radio.channel("Map"), {
+                "clickedWindowPosition": this.setGfiParams3d
+            }, this);
+
+
             if (_.has(Config, "gfiWindow")) {
                 this.setDesktopViewType(Config.gfiWindow);
             }
@@ -114,12 +120,14 @@ define(function (require) {
         toggleGFI: function (id, deaktivateGFI) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
+                this.active3d = true;
             }
             else if (deaktivateGFI === true) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
             else if (_.isUndefined(deaktivateGFI)) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
+                this.active3d = false;
             }
         },
 
@@ -149,6 +157,87 @@ define(function (require) {
             this.setCurrentView(new CurrentView({model: this}));
         },
 
+        setGfiParams3d: function(event) {
+            if(this.active3d) {
+                if (Radio.request("Map", "isMap3d")) {
+                    // Abbruch, wenn auf SearchMarker x geklickt wird.
+                    if (this.checkInsideSearchMarker(event.position.x, event.position.y) === true) {
+                        return;
+                    }
+
+
+                    var features = Radio.request("Map", "getFeatures3dAtPosition", event.position);
+                    for (var i = 0; i < features.length; i++) {
+                        var object = features[i];
+                        if(object) {
+                            if (object instanceof Cesium.Cesium3DTileFeature) {
+                                var properties = {};
+                                var propertyNames = object.getPropertyNames();
+                                var length = propertyNames.length;
+                                for (var j = 0; j < length; ++j) {
+                                    var propertyName = propertyNames[j];
+                                    properties[propertyName] = object.getProperty(propertyName);
+                                }
+                                if(properties.attributes && properties.id){
+                                    properties.attributes.gmlid = properties.id;
+                                }
+                                var modelattributes = {
+                                    attributes: properties.attributes ? properties.attributes : properties,
+                                    gfiAttributes: "showAll",
+                                    typ: "Cesium3DTileFeature",
+                                    name: "Buildings"
+                                };
+                                gfiParams.push(modelattributes);
+                                break; // nur das erste 3D Objekt
+                            } else if (object.primitive) {
+                                var feature = object.primitive.olFeature;
+                                var layer = object.primitive.olLayer;
+                                if (feature && layer) {
+                                    this.searchModelByFeature(feature, layer);
+                                    break; // nur das erste 3D Objekt
+                                }
+                            }
+                        }
+                    }
+
+                    if (gfiParams.length >= 1) {
+                        if(event.pickedPosition && event.pickedPosition[2] >= event.coordinate[2]) {
+                            this.setCoordinate(event.pickedPosition);
+                        } else {
+                            this.setCoordinate(event.coordinate);
+                        }
+                    } else { // wenn keine 3D Objekte gefunden wurden, check WMS Layer
+                        this.setCoordinate(event.coordinate);
+                        var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"});
+                        var visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"});
+                        var visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList);
+
+                        var resolution = event.resolution;
+                        var projection = Radio.request("MapView", "getProjection");
+                        var coordinate = event.coordinate.slice(0,2);
+                        // WMS | GROUP
+                        _.each(visibleLayerList, function (model) {
+                            if (model.getGfiAttributes() !== "ignore") {
+                                if (model.getTyp() === "WMS") {
+                                    model.attributes.gfiUrl = model.getGfiUrl(resolution, coordinate, projection);
+                                    gfiParams.push(model.attributes);
+                                }
+                                else {
+                                    model.get("gfiParams").forEach(function (params, index) {
+                                        params.gfiUrl = model.getGfiUrl(index, resolution, coordinate, projection);
+                                        gfiParams.push(model.getGfiParams()[index]);
+                                    });
+                                }
+                            }
+                        }, this);
+                    }
+                    this.setThemeIndex(0);
+                    this.getThemeList().reset(gfiParams);
+                    gfiParams = [];
+                }
+            }
+        },
+
         /**
          *
          * @param {ol.MapBrowserPointerEvent} evt
@@ -167,12 +256,14 @@ define(function (require) {
             if (isFeatureAtPixel === true) {
                 Radio.trigger("Map", "forEachFeatureAtPixel", eventPixel, this.searchModelByFeature);
             }
-
+            var resolution = Radio.request("MapView", "getResolution").resolution,
+                projection = Radio.request("MapView", "getProjection"),
+                coordinate = evt.coordinate;
             // WMS | GROUP
             _.each(visibleLayerList, function (model) {
                 if (model.getGfiAttributes() !== "ignore" || _.isUndefined(model.getGfiAttributes()) === true) {
                     if (model.getTyp() === "WMS") {
-                        model.attributes.gfiUrl = model.getGfiUrl();
+                        model.attributes.gfiUrl = model.getGfiUrl(resolution, coordinate, projection);
                         gfiParams.push(model.attributes);
                     }
                     else {

@@ -33,6 +33,15 @@ define([
                  "change:isVisibleInTree": this.removeIfNotVisible,
                 "change:isOutOfRange": this.toggleColor
             });
+            if(this.model.attributes.supported) {
+                this.listenTo(Radio.channel("Map"), {
+                    "change": function (mode) {
+                        this.toggleSupportedVisibility(mode);
+                    }
+                });
+            }
+            this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
+
             this.toggleColor(this.model, this.model.getIsOutOfRange());
         },
 
@@ -61,6 +70,14 @@ define([
             }
 
             return this;
+        },
+        toggleSupportedVisibility: function(mode) {
+
+            if(this.model.attributes.supported.indexOf(mode) >= 0) {
+                this.$el.show();
+            }else{
+                this.$el.hide();
+            }
         },
 
         /**

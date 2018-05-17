@@ -1,12 +1,14 @@
 define(function (require) {
-
     var Backbone = require("backbone"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
+        TerrainLayer = require("modules/core/modelList/layer/terrain"),
+        TileSetLayer = require("modules/core/modelList/layer/tileset"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
+        Viewpoint = require("modules/core/modelList/viewpoint/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
         Radio = require("backbone.radio"),
         ModelList;
@@ -91,6 +93,12 @@ define(function (require) {
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
                 }
+                else if (attrs.typ === "Terrain") {
+                    return new TerrainLayer(attrs, options);
+                }
+                else if (attrs.typ === "TileSet") {
+                    return new TileSetLayer(attrs, options);
+                }
             }
             else if (attrs.type === "folder") {
                 return new Folder(attrs, options);
@@ -100,6 +108,9 @@ define(function (require) {
             }
             else if (attrs.type === "staticlink") {
                 return new StaticLink(attrs, options);
+            }
+            else if (attrs.type === "viewpoint") {
+                return new Viewpoint(attrs, options);
             }
             else {
                 Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + "attrs.type");

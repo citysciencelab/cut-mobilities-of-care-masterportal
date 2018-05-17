@@ -53,6 +53,8 @@ define(function () {
             ["SR-ORG:95", "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +units=m +no_defs"],
             // WGS84
             ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
+            // das ist von VCS
+            // ["EPSG:4326", "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
         ],
         footer: {
             visibility: true,
@@ -79,7 +81,20 @@ define(function () {
         },
         isMenubarVisible: true,
         geoAPI: false,
-        clickCounter: {}
+        clickCounter: {},
+        startingMap3D: false,
+        cesiumParameter: {
+            tileCacheSize: 20,
+            enableLighting: false,
+            fog: {
+                enabled: true,
+                density: 0.0002,
+                screenSpaceErrorFactor: 2.0
+            },
+            maximumScreenSpaceError: 2,
+            fxaa: true
+        },
+        extent: [546000,5916500,589000,5957700]
     };
 
     return config;

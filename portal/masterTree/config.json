@@ -233,7 +233,8 @@
         "resolution": 611.4974492763076,
         "baselayer": "452"
       },
-      "mousePosition": true
+      "mousePosition": true,
+      "button3d": true
     },
     "scaleLine": true,
     "Baumtyp": "custom"
@@ -269,6 +270,16 @@
       },
       {
         "id": "453"
+      },
+      {
+        "id": "terrain",
+        "name": "Gelände",
+        "visibility": true
+      },
+      {
+        "id": "buildings",
+        "name": "Gebäude LoD2",
+        "visibility": true
       }]
     },
     "Fachdaten":

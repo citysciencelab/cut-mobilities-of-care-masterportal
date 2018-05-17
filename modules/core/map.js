@@ -2,11 +2,14 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
+        mouseeventPolyfill = require("mouseeventPolyfill"),
         ol = require("openlayers"),
+        Cesium = require("cesium"),
         MapView = require("modules/core/mapView"),
+        Config = require("config"),
         Map;
 
-     Map = Backbone.Model.extend({
+    Map = Backbone.Model.extend({
 
         /**
          *
@@ -32,7 +35,11 @@ define(function (require) {
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
                 "getSize": this.getSize,
                 "getPixelFromCoordinate": this.getPixelFromCoordinate,
-                "getMap": this.getMap
+                "getMap": this.getMap,
+                "isMap3d" : this.isMap3d,
+                "getMap3d" : this.getMap3d,
+                "getMapMode" : this.getMapMode,
+                "getFeatures3dAtPosition": this.getFeatures3dAtPosition
             }, this);
 
             channel.on({
@@ -56,7 +63,10 @@ define(function (require) {
                 "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
                 "updateSize": function () {
                     this.getMap().updateSize();
-                }
+                },
+                "activateMap3d" : this.activateMap3d,
+                "deactivateMap3d" : this.deactivateMap3d,
+                "setCameraParameter" : this.setCameraParameter
             }, this);
 
             this.listenTo(this, {
@@ -76,12 +86,18 @@ define(function (require) {
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
 
+            this.getMap().on('click', this.reactToClickEvent, this);
+
+
             Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
             if (!_.isUndefined(Radio.request("ParametricURL", "getZoomToExtent"))) {
                 this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
             }
             this.stopMouseMoveEvent();
+            if (Config.startingMap3D) {
+                this.activateMap3d();
+            }
         },
 
         /**
@@ -106,7 +122,8 @@ define(function (require) {
             var layer = new ol.layer.Vector({
                 source: new ol.source.Vector({useSpatialIndex: false}),
                 alwaysOnTop: true,
-                name: layerName
+                name: layerName,
+                altitudeMode: "clampToGround"
             });
 
             this.setVectorLayer(layer);
@@ -136,6 +153,183 @@ define(function (require) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }
+        },
+        getMapMode: function () {
+            return this.getMap3d() && this.getMap3d().getEnabled() ? "3D" : "2D";
+        },
+        /**
+        *
+        */
+        isMap3d: function () {
+            return this.getMap3d() && this.getMap3d().getEnabled();
+        },
+        /**
+         */
+        activateMap3d: function () {
+            if(!this.getMap3d()) {
+                this.setMap3d(new olcs.OLCesium({
+                    map: this.getMap(),
+                    stopOpenLayersEventsPropagation : true,
+                    createSynchronizers: function(map, scene){
+                        return [
+                            new olcs.WMSRasterSynchronizer(map, scene),
+                            new olcs.VectorSynchronizer(map, scene),
+                            new olcs.OverlaySynchronizer(map, scene)
+                        ];
+                    }
+                }));
+                var eventHandler = new Cesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
+                eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), Cesium.ScreenSpaceEventType["LEFT_CLICK"]);
+                var camera = this.getMap3d().getCamera();
+                if (Config.cameraParameter.tilt) {
+                    var tilt = Number.parseFloat(Config.cameraParameter.tilt);
+                    camera.setTilt(tilt);
+                }
+                if (Config.cameraParameter.heading) {
+                    var heading = Number.parseFloat(Config.cameraParameter.heading);
+                    camera.setHeading(heading);
+                }
+                if (Config.cameraParameter.altitude) {
+                    var altitude  = Number.parseFloat(Config.cameraParameter.altitude);
+                    camera.setAltitude(altitude);
+                }
+                var scene = this.getMap3d().getCesiumScene();
+                var cesiumCamera = scene.camera;
+                var provider = new Cesium.SingleTileImageryProvider({"url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAABAAEDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD95KKKKAP/2Q=="});
+                var defaultLayer = new Cesium.ImageryLayer(provider, {});
+                scene.globe.imageryLayers.add(defaultLayer, 0);
+                if (Config.cesiumParameter) {
+                    if (Config.cesiumParameter.fog) {
+                        if (_.isBoolean(Config.cesiumParameter.fog.enabled)) {
+                            scene.fog.enabled = Config.cesiumParameter.fog.enabled;
+                        }
+                        if (_.isNumber(Config.cesiumParameter.fog.density)) {
+                            scene.fog.density = Config.cesiumParameter.fog.density;
+                        }
+                        if (_.isNumber(Config.cesiumParameter.fog.screenSpaceErrorFactor)) {
+                            scene.fog.screenSpaceErrorFactor = Config.cesiumParameter.fog.screenSpaceErrorFactor;
+                        }
+                    }
+                    if (_.isNumber(Config.cesiumParameter.tileCacheSize)) {
+                        scene.globe.tileCacheSize = Config.cesiumParameter.tileCacheSize;
+                    }
+                    if (_.isNumber(Config.cesiumParameter.maximumScreenSpaceError)) {
+                        scene.globe.maximumScreenSpaceError = Config.cesiumParameter.maximumScreenSpaceError;
+                    }
+                    if (_.isBoolean(Config.cesiumParameter.fxaa)) {
+                        scene.fxaa = Config.cesiumParameter.fxaa;
+                    }
+                    if (_.isBoolean(Config.cesiumParameter.enableLighting)) {
+                        scene.globe.enableLighting = Config.cesiumParameter.enableLighting;
+                    }
+                }
+
+                cesiumCamera.changed.addEventListener(this.reactToCameraChanged, this);
+            }
+            this.getMap3d().setEnabled(true);
+            Radio.trigger("Map", "change", "3D");
+        },
+
+        setCameraParameter: function(parameter) {
+            if(this.getMap3d()) {
+                var camera = this.getMap3d().getCamera();
+                if (parameter.tilt) {
+                    var tilt = Number.parseFloat(parameter.tilt);
+                    camera.setTilt(tilt);
+                }
+                if (parameter.heading) {
+                    var heading = Number.parseFloat(parameter.heading);
+                    camera.setHeading(heading);
+                }
+                if (parameter.altitude) {
+                    var altitude = Number.parseFloat(parameter.altitude);
+                    camera.setAltitude(altitude);
+                }
+            }
+        },
+         getFeatures3dAtPosition : function(position) {
+            if(this.getMap3d()) {
+                var scene = this.getMap3d().getCesiumScene();
+                var objects = scene.drillPick(position);
+                return objects;
+            }
+        },
+        reactToClickEvent : function(evt) {
+            var coords = evt.coordinate;
+            Radio.trigger("Map", "clickedMAP", coords);
+        },
+
+        reactTo3DClickEvent : function(event){
+            var scene = this.getMap3d().getCesiumScene();
+            var ray = scene.camera.getPickRay(event.position);
+            var cartesian = scene.globe.pick(ray, scene);
+            var height;
+            var coords;
+            if (cartesian) {
+                var cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+                coords = [Cesium.Math.toDegrees(cartographic.longitude), Cesium.Math.toDegrees(cartographic.latitude)];
+                height = scene.globe.getHeight(cartographic);
+                if(height){
+                    coords = coords.concat([height]);
+                }
+
+                var distance = Cesium.Cartesian3.distance(cartesian, scene.camera.position);
+                var resolution =  this.getMap3d().getCamera().calcResolutionForDistance(distance, cartographic.latitude);
+                var mapProjection = Radio.request("MapView", "getProjection");
+                var transformedCoords = ol.proj.transform(coords, ol.proj.get("EPSG:4326"), mapProjection);
+                var transformedPickedPosition = null;
+
+                if (scene.pickPositionSupported) {
+                    var pickedPositionCartesian = scene.pickPosition(event.position);
+                    if (pickedPositionCartesian) {
+                        var cartographicPickedPosition = scene.globe.ellipsoid.cartesianToCartographic(pickedPositionCartesian);
+                        transformedPickedPosition = ol.proj.transform([Cesium.Math.toDegrees(cartographicPickedPosition.longitude), Cesium.Math.toDegrees(cartographicPickedPosition.latitude)], ol.proj.get("EPSG:4326"), mapProjection);
+                        transformedPickedPosition.push(cartographicPickedPosition.height);
+                    }
+                }
+                Radio.trigger("Map", "clickedMAP", transformedCoords);
+                Radio.trigger("Map", "clickedWindowPosition", {position:event.position, pickedPosition: transformedPickedPosition, coordinate:transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution});
+            }
+        },
+        /**
+         */
+        deactivateMap3d: function () {
+            if(this.getMap3d()) {
+                this.get("view").animate({rotation: 0}, function(){
+                    this.getMap3d().setEnabled(false);
+                    this.get("view").setRotation(0);
+                    var resolution = this.get("view").getResolution();
+                    var resolutions = this.get("view").getResolutions();
+                    if (resolution > resolutions[0]) {
+                        this.get("view").setResolution(resolutions[0]);
+                    }
+                    if (resolution < resolutions[resolutions.length-1]) {
+                        this.get("view").setResolution(resolutions[resolutions.length-1]);
+                    }
+                    Radio.trigger("Map", "change", "2D");
+                }.bind(this));
+            }
+        },
+
+        /**
+         *
+         */
+        setMap3d: function (map3d) {
+            return this.set("map3d", map3d);
+        },
+
+        /**
+         *
+         */
+        getMap3d: function () {
+            return this.get("map3d");
+        },
+        /**
+         *
+         */
+        reactToCameraChanged: function() {
+            var camera = this.getMap3d().getCamera();
+            Radio.trigger("Map", "cameraChanged", {"heading" : camera.getHeading(), "altitude" : camera.getAltitude(), "tilt" : camera.getTilt()});
         },
 
         getWGS84MapSizeBBOX: function () {
@@ -400,7 +594,8 @@ define(function (require) {
                     layer = new ol.layer.Vector({
                     name: name,
                     source: source,
-                    alwaysOnTop: true
+                    alwaysOnTop: true,
+                    altitudeMode : "clampToGround"
                 });
 
                 resultLayer = layer;

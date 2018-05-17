@@ -5,12 +5,15 @@ define(function (require) {
         GeoJSONLayer;
 
     GeoJSONLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            supported: ["2D", "3D"],
+            showSettings: true
+        }),
         initialize: function () {
             this.superInitialize();
             this.setStyleId(this.getStyleId() || this.getId());
             this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.getStyleId()));
         },
-
         /**
          * [createLayerSource description]
          * @return {[type]} [description]
@@ -31,7 +34,8 @@ define(function (require) {
                 gfiAttributes: this.getGfiAttributes(),
                 routable: this.getRoutable(),
                 gfiTheme: this.getGfiTheme(),
-                id: this.getId()
+                id: this.getId(),
+                altitudeMode : "clampToGround"
             }));
             if (_.isUndefined(this.get("geojson"))) {
                 this.updateData();

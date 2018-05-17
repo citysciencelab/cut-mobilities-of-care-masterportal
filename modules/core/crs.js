@@ -21,14 +21,24 @@ define([
         },
 
         initialize: function () {
+            Proj4.defs(Config.namedProjections);
+            ol.proj.setProj4(Proj4);
+            for(var i = 0; i < Config.namedProjections.length; i++){
+                var projection =ol.proj.get(Config.namedProjections[i][0]);
+                ol.proj.addProjection(projection);
+            }
             var channel = Radio.channel("CRS");
 
             channel.reply({
-                "getProjection": this.getProjection,
+                "getProjection": function (name) {
+                    return this.getProjection(name);
+                },
                 "getProjections": this.getProjections,
-                "transformToMapProjection": this.transformToMapProjection,
-                "transformFromMapProjection": this.transformFromMapProjection,
-                "transform": this.transform
+                 "transformToMapProjection": this.transformToMapProjection,
+                 "transformFromMapProjection": this.transformFromMapProjection,
+                "transform": function (par) {
+                    return this.transform(par);
+                }
             }, this);
 
             if (Config.namedProjections) {
@@ -89,7 +99,6 @@ define([
                 return Proj4(sourceProjection, targetProjection, point);
             }
         },
-
         transform: function (par) {
             if (!this.getProjection(par.fromCRS) || !this.getProjection(par.toCRS) || !par.point) {
                 Radio.trigger("Alert", "alert", {text: "Koordinatentransformation mit ungültigen Eingaben wird abgebrochen.", kategorie: "alert-danger"});

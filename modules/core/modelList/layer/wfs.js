@@ -6,6 +6,10 @@ define(function (require) {
         WFSLayer;
 
     WFSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            supported: ['2D', '3D'],
+            showSettings: true
+        }),
 
         initialize: function () {
             this.superInitialize();
@@ -42,7 +46,8 @@ define(function (require) {
                 gfiAttributes: this.getGfiAttributes(),
                 routable: this.getRoutable(),
                 gfiTheme: this.getGfiTheme(),
-                id: this.getId()
+                id: this.getId(),
+                altitudeMode : "clampToGround"
             }));
 
             this.updateData();
@@ -89,7 +94,6 @@ define(function (require) {
                 type: "GET",
                 context: this,
                 success: function (data) {
-                    Radio.trigger("Util", "hideLoader");
                     var wfsReader = new ol.format.WFS({
                             featureNS: this.getFeatureNS()
                         }),
@@ -106,6 +110,7 @@ define(function (require) {
                     this.styling(isClustered);
                     this.getLayer().setStyle(this.getStyle());
                     this.featuresLoaded(features);
+                    Radio.trigger("Util", "hideLoader");
                 },
                 error: function () {
                     Radio.trigger("Util", "hideLoader");
@@ -183,7 +188,6 @@ define(function (require) {
                     style = [];
 
                 style = this.getStyleAsFunction(this.getStyle());
-
                 feature.setStyle(style(feature));
             }, this);
         },

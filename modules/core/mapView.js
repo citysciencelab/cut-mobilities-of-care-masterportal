@@ -1,9 +1,4 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function () {
+define(function (require) {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
@@ -154,8 +149,7 @@ define([
 
             // Listener für ol.View
             this.get("view").on("change:resolution", function () {
-                 this.set("resolution", this.get("view").constrainResolution(this.get("view").getResolution()));
-                // this.set("resolution", this.get("view").getResolution());
+                this.set("resolution", this.get("view").constrainResolution(this.get("view").getResolution()));
                 channel.trigger("changedZoomLevel", this.getZoom());
             }, this);
             this.get("view").on("change:center", function () {
@@ -370,7 +364,12 @@ define([
          *
          */
         setCenter: function (coords, zoomLevel) {
-            this.get("view").setCenter(coords);
+            if(!_.isUndefined(coords)){
+                if(coords.length > 2) {
+                    coords = coords.slice(0,2);
+                }
+                this.get("view").setCenter(coords);
+            }
             if (!_.isUndefined(zoomLevel)) {
                 this.get("view").setZoom(zoomLevel);
             }

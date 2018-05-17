@@ -13,7 +13,8 @@ define(function (require) {
             layer: new ol.layer.Vector({
                 source: new ol.source.Vector(),
                 alwaysOnTop: true,
-                style: null
+                style: null,
+                altitudeMode : "clampToGround"
             }),
             pendlerLegend: [],
             // Der aktuelle Animation Durchlauf (eine Richtung = ein Durchlauf)
