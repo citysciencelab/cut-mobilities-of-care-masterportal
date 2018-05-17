@@ -1,0 +1,180 @@
+{
+  "Portalconfig":
+  {
+    "portalTitle":
+    {
+      "title": "Master",
+      "logo": "../../node_modules/lgv-config/img/hh-logo.png",
+      "link": "http://geoinfo.hamburg.de",
+      "tooltip": "Landesbetrieb Geoinformation und Vermessung"
+    },
+    "searchBar":
+    {
+      "gazetteer":
+      {
+        "minChars": 3,
+        "serviceId": "6",
+        "searchStreets": true,
+        "searchHouseNumbers": true,
+        "searchDistricts": true,
+        "searchParcels": true,
+        "searchStreetKey": true
+      },
+      "bkg":
+      {
+        "minChars": 3,
+        "suggestServiceId": "4",
+        "geosearchServiceId": "5",
+        "extent": [454591, 5809000, 700000, 6075769],
+        "suggestCount": 10,
+        "epsg": "EPSG:25832",
+        "filter": "filter=(typ:*)",
+        "score": 0.6
+      },
+      "specialWFS":
+      {
+        "minChar": 3,
+        "definitions": [
+        {
+          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+          "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
+          "name": "bplan"
+        },
+        {
+          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+          "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
+          "name": "bplan"
+        }]
+      },
+      "visibleWFS":
+      {
+        "minChars": 3
+      },
+      "zoomLevel": 9,
+      "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
+    },
+    "mapView":
+    {
+      "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+      "startCenter": [561210, 5932600]
+    },
+    "menu":
+    {
+      "tree":
+      {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": false
+      },
+      "ansichten": {
+        "name" : "Ansichten",
+        "glyphicon": "glyphicon-list",
+        "children": {
+          "view1": {
+            "name": "Ansicht1",
+            "type" : "viewpoint",
+            "glyphicon": "glyphicon-screenshot",
+            "heading": -0.30858728378862876,
+            "tilt": 0.9321791580603296,
+            "altitude" :272.3469798217454,
+            "center" : [564028.7954571751,5934555.967867207],
+            "zoomLevel" :  7.456437968949651
+          }
+        }
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children":
+        {
+          "measure":
+          {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "coord":
+          {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "gfi":
+          {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          }
+        }
+      }
+    },
+    "controls":
+    {
+      "fullScreen": true,
+      "orientation3d": true,
+      "zoom": true,
+      "orientation": {
+        "zoomMode": "once",
+        "poiDistances": [500, 1000, 2000]
+      },
+      "totalview": true,
+      "attributions":
+      {
+        "isInitOpenDesktop": true,
+        "isInitOpenMobile": false
+      },
+      "button3d": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": ["717", "718", "719", "720"],
+          "name": "Geobasiskarten",
+          "visibility": true
+        },
+        {
+          "id": "terrain",
+          "name": "Gelände",
+          "visibility": false
+        },
+        {
+          "id": "buildings",
+          "name": "Gebäude LoD2",
+          "visibility": false
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+      {
+        "id": "1711",
+        "styleId": "1711",
+        "visibility": true,
+        "layerAttribution": "<span>Attributierung für Fachlayer</span>",
+        "mouseHoverField": ["name", "strasse"],
+        "searchField": "name",
+        "filterOptions": [
+          {
+            "fieldName": "teilnahme_geburtsklinik",
+            "filterType": "combo",
+            "filterName": "Geburtshilfe",
+            "filterString": ["*", "Ja", "Nein"]
+          },
+          {
+            "fieldName": "teilnahme_notversorgung",
+            "filterType": "combo",
+            "filterName": "Not- und Unfallversorgung",
+            "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+          }
+        ],
+        "extendedFilter": true
+      }
+    ]
+    }
+  }
+}

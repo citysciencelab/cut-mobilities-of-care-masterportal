@@ -63,7 +63,7 @@ define(function (require) {
                     });
                 }
             }
-            this.setAttributes();
+            // this.setAttributes();
         },
 
         /**
