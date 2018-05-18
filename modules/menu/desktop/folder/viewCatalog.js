@@ -31,15 +31,19 @@ define([
                     $(".input-save-url").select();
                 }
             },
-            initialize: function () {
+            initialize: function () {              
                 this.listenTo(this.model, {
-                    "change:isExpanded": this.toggleGlyphicon
+                    "change:isExpanded": this.toggleGlyphicon,
+                    "toggle:3d_daten": function () {
+                        this.$el.toggle();
+                    }
                 }, this);
 
                 this.$el.on({
                 click: function (e) {
                    e.stopPropagation();
                 }});
+
                 this.render();
             },
             render: function () {
@@ -51,6 +55,9 @@ define([
                 attr.backgroundImage = Radio.request("Parser", "getItemByAttributes", {id: "backgroundImage"});
                 this.$el.find(".header").toggleClass("closed");
                 $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+                if (this.model.get("id") === "3d_daten") {
+                    this.$el.hide();
+                }
             },
             toggleIsExpanded: function () {
                 this.model.toggleIsExpanded();

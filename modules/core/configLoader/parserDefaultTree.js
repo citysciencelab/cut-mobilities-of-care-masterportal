@@ -13,12 +13,12 @@ define([
         parseTree: function (layerList) {
             // Im Default-Tree(FHH-Atlas / GeoOnline) werden nur WMS angezeigt
             // Und nur Layer die min. einem Metadatensatz zugeordnet sind
-            layerList = this.filterList(layerList);
+            layerList = this.filterList(layerList);          
             // Entfernt alle Layer, die bereits im Cache dargestellt werden
             layerList = this.deleteLayersIncludeCache(layerList);
             // Für Layer mit mehr als 1 Datensatz, wird pro Datensatz 1 zusätzlichen Layer erzeugt
             layerList = this.createLayerPerDataset(layerList);
-
+            
             this.parseLayerList(layerList);
 
         },
@@ -30,7 +30,7 @@ define([
          */
         filterList: function (layerList) {
             return _.filter(layerList, function (element) {
-                return (element.datasets.length > 0 && element.typ === "WMS") ;
+                return element.datasets.length > 0 && _.contains(["WMS", "Terrain", "TileSet"], element.typ);
             });
         },
 
@@ -83,14 +83,21 @@ define([
         parseLayerList: function (layerList) {
 
             var baseLayerIds = _.flatten(_.pluck(this.getBaselayer().Layer, "id")),
-                // Unterscheidung nach Overlay und Baselayer
+                // Unterscheidung nach Overlay, Baselayer und 3D Layer
                 typeGroup = _.groupBy(layerList, function (layer) {
-                    return (_.contains(baseLayerIds, layer.id)) ? "baselayers" : "overlays";
+                    if (layer.typ === "Terrain" || layer.typ === "TileSet") {
+                        return "layer3d";
+                    }
+                    return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
                 });
+            console.log(typeGroup);
+            
             // Models für die Hintergrundkarten erzeugen
             this.createBaselayer(layerList);
             // Models für die Fachdaten erzeugen
             this.groupDefaultTreeOverlays(typeGroup.overlays);
+            // Models für 3D Daten erzeugen
+            this.create3dLayer(typeGroup.layer3d);
         },
 
         createBaselayer: function (layerList) {
@@ -102,6 +109,12 @@ define([
                     layer = _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
                 }
                 this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0, isVisibleInTree: "true"}, layer));
+            }, this);
+        },
+
+        create3dLayer: function (layerList) {
+            _.each(layerList, function (layer) {
+                this.addItem(_.extend({type: "layer", parentId: "3d_daten", level: 0, isVisibleInTree: "true"}, layer));
             }, this);
         },
 

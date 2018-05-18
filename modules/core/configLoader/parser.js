@@ -439,6 +439,16 @@ define([
             });
             this.addItem({
                 type: "folder",
+                name: "3D Daten",
+                glyphicon: "glyphicon-plus-sign",
+                id: "3d_daten",
+                parentId: "tree",
+                isInThemen: true,
+                isInitiallyExpanded: false,
+                level: 0
+            });
+            this.addItem({
+                type: "folder",
                 name: "Ausgewählte Themen",
                 glyphicon: "glyphicon-plus-sign",
                 id: "SelectedLayer",

@@ -28,6 +28,14 @@ define([
         }),
 
         initialize: function () {
+            if (this.get("id") === "3d_daten") {
+                this.listenTo(Radio.channel("Map"), {
+                    "change": function () {
+                        this.trigger("toggle:3d_daten");
+                    }
+                });
+            }
+            
             // Wenn alle Layer in einem Folder selektiert sind, wird der Folder auch selektiert
             if (this.getParentId() === "Overlayer") {
                 var items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.getId()}),
