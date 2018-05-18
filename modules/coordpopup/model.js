@@ -8,7 +8,7 @@ define([
 ], function (Backbone, Radio, ol, proj4, Config) {
 
     var CoordPopup = Backbone.Model.extend({
-         defaults: {
+        defaults: {
             element: $("#popup"),
             coordOverlay: {},
             coordinateUTM: {},
@@ -21,7 +21,7 @@ define([
             });
 
             this.listenTo(Radio.channel("Map"), {
-                "clickedMAP": this.setPosition
+                "clickedWindowPosition": this.setPosition
             });
             this.setCoordOverlay(new ol.Overlay({
                 element: this.getElement()[0]
@@ -66,13 +66,17 @@ define([
         showPopup: function () {
             this.getElement().popover("show");
         },
-        setPosition: function (coords) {
-             if(this.active) {
-                 this.getCoordOverlay().setPosition(coords);
-                 this.setCoordinateUTM(coords);
-                 var coords4326 = Radio.request("CRS", "transformFromMapProjection", proj4("EPSG:4326"), this.getCoordinateUTM());
-                 this.setCoordinateGeo(ol.coordinate.toStringHDMS(coords4326));//proj4(proj4(Config.view.epsg), proj4("EPSG:4326"), this.getCoordinateUTM())));
-             }
+        setPosition: function (obj) {
+            var coords = obj.coordinate,
+                coords4326;
+
+            if (this.active) {
+                this.getCoordOverlay().setPosition(coords);
+                this.setCoordinateUTM(coords);
+                coords4326 = Radio.request("CRS", "transformFromMapProjection", proj4("EPSG:4326"), this.getCoordinateUTM());
+                // proj4(proj4(Config.view.epsg), proj4("EPSG:4326"), this.getCoordinateUTM())));
+                this.setCoordinateGeo(ol.coordinate.toStringHDMS(coords4326));
+            }
         }
     });
 

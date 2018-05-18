@@ -216,6 +216,7 @@
     },
     "controls":
     {
+      "orientation3d": true,
       "fullScreen": true,
       "zoom": true,
       "orientation": {

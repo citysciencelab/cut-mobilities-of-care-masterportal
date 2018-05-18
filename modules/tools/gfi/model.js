@@ -26,11 +26,12 @@ define(function (require) {
             // Index für das aktuelle Theme
             themeIndex: 0,
             // Anzahl der Themes
-            numberOfThemes: 0,
-            active3d: false
+            numberOfThemes: 0
+            // active3d: false
         },
         initialize: function () {
-            var channel = Radio.channel("GFI");
+            var channel = Radio.channel("GFI"),
+                tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
 
             channel.on({
                 "setIsVisible": this.setIsVisible,
@@ -91,21 +92,14 @@ define(function (require) {
             }, this);
 
             this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": function (id, deaktivateGFI) {
-                    this.toggleGFI(id, deaktivateGFI);
+                "activatedTool": function (id, deactivateGFI) {
+                    this.toggleGFI(id, deactivateGFI);
                 }
             });
-
-            this.listenTo(Radio.channel("Map"), {
-                "clickedWindowPosition": this.setGfiParams3d
-            }, this);
-
 
             if (_.has(Config, "gfiWindow")) {
                 this.setDesktopViewType(Config.gfiWindow);
             }
-
-            var tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
 
             if (!_.isUndefined(tool)) {
                 this.toggleGFI(tool.id);
@@ -116,24 +110,31 @@ define(function (require) {
         /**
          * Prüft ob GFI aktiviert ist und registriert entsprechend den Listener oder eben nicht
          * @param  {String} id - Tool Id
+         * @param {bool} deactivateGFI Flag if GFI has to be deactivated
+         * @return {void}
          */
-        toggleGFI: function (id, deaktivateGFI) {
+        toggleGFI: function (id, deactivateGFI) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
-                this.active3d = true;
+
+                this.listenTo(Radio.channel("Map"), {
+                    "clickedWindowPosition": this.setGfiParams
+                }, this);
             }
-            else if (deaktivateGFI === true) {
+            else if (deactivateGFI === true) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
+                this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
             }
-            else if (_.isUndefined(deaktivateGFI)) {
+            else if (_.isUndefined(deactivateGFI)) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
-                this.active3d = false;
+                this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
             }
         },
 
         /**
          * Löscht vorhandene View - falls vorhanden - und erstellt eine neue
          * mobile | detached | attached
+         * @return {void}
          */
         initView: function () {
             var CurrentView;
@@ -157,108 +158,72 @@ define(function (require) {
             this.setCurrentView(new CurrentView({model: this}));
         },
 
-        setGfiParams3d: function(event) {
-            if(this.active3d) {
-                if (Radio.request("Map", "isMap3d")) {
-                    // Abbruch, wenn auf SearchMarker x geklickt wird.
-                    if (this.checkInsideSearchMarker(event.position.x, event.position.y) === true) {
-                        return;
+        setGfiParams3d: function (evt) {
+            var features;
+
+            features = Radio.request("Map", "getFeatures3dAtPosition", evt.position);
+            this.setCoordinate(evt.coordinate);
+            _.each(features, function (feature) {
+                var properties = {},
+                    propertyNames,
+                    modelattributes,
+                    olFeature,
+                    layer;
+
+                if (feature instanceof Cesium.Cesium3DTileFeature) {
+                    propertyNames = feature.getPropertyNames();
+                    _.each(propertyNames, function (propertyName) {
+                        properties[propertyName] = feature.getProperty(propertyName);
+                    });
+                    if (properties.attributes && properties.id) {
+                        properties.attributes.gmlid = properties.id;
                     }
-
-
-                    var features = Radio.request("Map", "getFeatures3dAtPosition", event.position);
-                    for (var i = 0; i < features.length; i++) {
-                        var object = features[i];
-                        if(object) {
-                            if (object instanceof Cesium.Cesium3DTileFeature) {
-                                var properties = {};
-                                var propertyNames = object.getPropertyNames();
-                                var length = propertyNames.length;
-                                for (var j = 0; j < length; ++j) {
-                                    var propertyName = propertyNames[j];
-                                    properties[propertyName] = object.getProperty(propertyName);
-                                }
-                                if(properties.attributes && properties.id){
-                                    properties.attributes.gmlid = properties.id;
-                                }
-                                var modelattributes = {
-                                    attributes: properties.attributes ? properties.attributes : properties,
-                                    gfiAttributes: "showAll",
-                                    typ: "Cesium3DTileFeature",
-                                    name: "Buildings"
-                                };
-                                gfiParams.push(modelattributes);
-                                break; // nur das erste 3D Objekt
-                            } else if (object.primitive) {
-                                var feature = object.primitive.olFeature;
-                                var layer = object.primitive.olLayer;
-                                if (feature && layer) {
-                                    this.searchModelByFeature(feature, layer);
-                                    break; // nur das erste 3D Objekt
-                                }
-                            }
-                        }
-                    }
-
-                    if (gfiParams.length >= 1) {
-                        if(event.pickedPosition && event.pickedPosition[2] >= event.coordinate[2]) {
-                            this.setCoordinate(event.pickedPosition);
-                        } else {
-                            this.setCoordinate(event.coordinate);
-                        }
-                    } else { // wenn keine 3D Objekte gefunden wurden, check WMS Layer
-                        this.setCoordinate(event.coordinate);
-                        var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"});
-                        var visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"});
-                        var visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList);
-
-                        var resolution = event.resolution;
-                        var projection = Radio.request("MapView", "getProjection");
-                        var coordinate = event.coordinate.slice(0,2);
-                        // WMS | GROUP
-                        _.each(visibleLayerList, function (model) {
-                            if (model.getGfiAttributes() !== "ignore") {
-                                if (model.getTyp() === "WMS") {
-                                    model.attributes.gfiUrl = model.getGfiUrl(resolution, coordinate, projection);
-                                    gfiParams.push(model.attributes);
-                                }
-                                else {
-                                    model.get("gfiParams").forEach(function (params, index) {
-                                        params.gfiUrl = model.getGfiUrl(index, resolution, coordinate, projection);
-                                        gfiParams.push(model.getGfiParams()[index]);
-                                    });
-                                }
-                            }
-                        }, this);
-                    }
-                    this.setThemeIndex(0);
-                    this.getThemeList().reset(gfiParams);
-                    gfiParams = [];
+                    modelattributes = {
+                        attributes: properties.attributes ? properties.attributes : properties,
+                        gfiAttributes: "showAll",
+                        typ: "Cesium3DTileFeature",
+                        name: "Buildings"
+                    };
+                    gfiParams.push(modelattributes);
                 }
-            }
+                else if (feature.primitive) {
+                    olFeature = feature.primitive.olFeature;
+                    layer = feature.primitive.olLayer;
+                    if (olFeature && layer) {
+                        this.searchModelByFeature(olFeature, layer);
+                    }
+                }
+            }, this);
         },
 
-        /**
-         *
-         * @param {ol.MapBrowserPointerEvent} evt
-         */
         setGfiParams: function (evt) {
-            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"}),
-                visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"}),
-                visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList),
-                eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
-                isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel);
+            console.log(this);
+            var visibleWMSLayerList,
+                visibleGroupLayerList,
+                visibleLayerList,
+                eventPixel,
+                isFeatureAtPixel,
+                resolution,
+                projection,
+                coordinate = evt.coordinate;
 
-            this.setCoordinate(evt.coordinate);
+            if (Radio.request("Map", "isMap3d")) {
+                this.setGfiParams3d(evt);
+            }
+            visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"});
+            visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"});
+            visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList);
+            eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent);
+            isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel);
+            this.setCoordinate(coordinate);
 
             // Vector
             Radio.trigger("ClickCounter", "gfi");
             if (isFeatureAtPixel === true) {
                 Radio.trigger("Map", "forEachFeatureAtPixel", eventPixel, this.searchModelByFeature);
             }
-            var resolution = Radio.request("MapView", "getResolution").resolution,
-                projection = Radio.request("MapView", "getProjection"),
-                coordinate = evt.coordinate;
+            resolution = Radio.request("MapView", "getResolution").resolution;
+            projection = Radio.request("MapView", "getProjection");
             // WMS | GROUP
             _.each(visibleLayerList, function (model) {
                 if (model.getGfiAttributes() !== "ignore" || _.isUndefined(model.getGfiAttributes()) === true) {
@@ -267,7 +232,7 @@ define(function (require) {
                         gfiParams.push(model.attributes);
                     }
                     else {
-                       _.each(model.getGfiParams(), function (params) {
+                        _.each(model.getGfiParams(), function (params) {
                             params.gfiUrl = model.getGfiUrl(params, evt.coordinate, params.childLayerIndex);
                             gfiParams.push(params);
                         });
@@ -291,15 +256,16 @@ define(function (require) {
             gfiParams = [];
         },
         /**
-         *
-         * @param  {ol.Feature} featureAtPixel
-         * @param  {ol.layer.Vector} olLayer
+         * @param {ol.Feature} featureAtPixel Feature
+         * @param {ol.Layer} olLayer Layer
+         * @return {void}
          */
         searchModelByFeature: function (featureAtPixel, olLayer) {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")});
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")}),
+                modelAttributes;
 
             if (_.isUndefined(model) === false) {
-                var modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id");
+                modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id");
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
                     modelAttributes.feature = featureAtPixel;
@@ -401,26 +367,7 @@ define(function (require) {
 
         getVisibleTheme: function () {
             return this.getThemeList().findWhere({isVisible: true});
-        },
-
-        /**
-        * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
-        */
-        checkInsideSearchMarker: function (top, left) {
-            var button = Radio.request("MapMarker", "getCloseButtonCorners"),
-                bottomSM = button.bottom,
-                leftSM = button.left,
-                topSM = button.top,
-                rightSM = button.right;
-
-            if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
-                return true;
-            }
-            else {
-                return false;
-            }
         }
-
     });
 
     return Gfi;

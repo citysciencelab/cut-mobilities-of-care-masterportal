@@ -60,6 +60,17 @@ define(function () {
             layerid: "4561",
             WFSid: "4560"
         },
+        cesiumParameter: {
+            tileCacheSize: 20,
+            enableLighting: false,
+            fog: {
+                enabled: true,
+                density: 0.0002,
+                screenSpaceErrorFactor: 2.0
+            },
+            maximumScreenSpaceError: 2,
+            fxaa: false
+        },
         startingMap3D: false
    };
 
