@@ -67,8 +67,7 @@ define(function () {
             },
             maximumScreenSpaceError: 2,
             fxaa: true
-        },
-        extent: [546000,5916500,589000,5957700]
+        }
     };
 
     return config;

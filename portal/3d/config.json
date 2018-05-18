@@ -139,12 +139,12 @@
         {
           "id": "terrain",
           "name": "Gelände",
-          "visibility": false
+          "visibility": true
         },
         {
           "id": "buildings",
           "name": "Gebäude LoD2",
-          "visibility": false
+          "visibility": true
         }
       ]
     },
