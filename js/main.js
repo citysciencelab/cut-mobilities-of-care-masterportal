@@ -1,6 +1,6 @@
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
-    configPath = window.location.href + "config",
+    configPath = window.location.origin + window.location.pathname + "config",
     Radio;
 
 if (window.location.search !== "") {
@@ -16,6 +16,7 @@ scriptTagsArray.forEach(function (scriptTag) {
         configPath = scriptTag.getAttribute("data-lgv-config") + "?noext";
     }
 }, this);
+
 
 require.config({
     waitSeconds: 60,
