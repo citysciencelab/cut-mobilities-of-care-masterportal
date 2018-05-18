@@ -1,0 +1,23 @@
+.freeze-view {
+    z-index: 10000;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: -100000px;
+    left: -100000px;
+}
+
+.freeze-activated {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+
+.freeze-view-close {
+    z-index: 10001;
+    cursor: pointer;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}

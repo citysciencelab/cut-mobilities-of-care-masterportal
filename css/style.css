@@ -64,6 +64,7 @@
 @import "../modules/snippets/checkbox/style.css";
 @import "../modules/tools/filter/style.css";
 @import "../modules/tools/filter/query/style.css";
+@import "../modules/tools/freeze/style.css";
 @import "../modules/sidebar/style.css";
 @import "../modules/controls/orientation/poi/style.css";
 @import "../modules/controls/totalview/style.css";

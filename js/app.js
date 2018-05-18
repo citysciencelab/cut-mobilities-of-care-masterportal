@@ -245,6 +245,12 @@ define("app", function (require) {
                     });
                     break;
                 }
+                case "freeze": {
+                    require(["modules/tools/freeze/view"], function (FreezeView) {
+                        new FreezeView();
+                    });
+                    break;
+                }
                 default: {
                     break;
                 }
