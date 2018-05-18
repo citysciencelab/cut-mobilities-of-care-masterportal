@@ -32,12 +32,16 @@ define(function (require) {
                 $("div.freeze-view").css("height", "10px");
                 $("div.freeze-view").css("width", "10px");
                 $("div.freeze-view").removeClass("freeze-activated");
+                $("p.freeze-view-close").css("left", "0px");
+                $("p.freeze-view-close").css("top", "0px");
                 this.model.setVisible(false);
             }
             else {
                 $("div.freeze-view").css("height", ($(".lgv-container").height()));
                 $("div.freeze-view").css("width", ($(".lgv-container").width()));
                 $("div.freeze-view").addClass("freeze-activated");
+                $("p.freeze-view-close").css("left", ($(".icon-tools").offset().left));
+                $("p.freeze-view-close").css("top", ($(".icon-tools").offset().top));
                 this.model.setVisible(true);
             }
         }

@@ -18,6 +18,8 @@
     z-index: 10001;
     cursor: pointer;
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    top: 0px;
+    left: 0px;
+    border-radius: 12px !important;
+    font-size: 26px;
 }
