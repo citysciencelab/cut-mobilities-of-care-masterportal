@@ -17,7 +17,7 @@ define(function (require) {
         initialize: function () {
             this.render();
             this.listenTo(Radio.channel("TableMenu"), {
-                "Tool": this.toggleToolMenu
+                "Tool": this.closeToolMenu
             });
         },
         render: function () {
@@ -49,15 +49,19 @@ define(function (require) {
             }
         },
         toggleToolMenu: function () {
-            $("div.table-tools-menu").toggle();
+            // $("div.table-tools-menu").toggle();
             if ($("div.table-tools").hasClass("table-tools-active")) {
-                $("div.table-tools").removeClass("table-tools-active");
+                this.closeToolMenu();
             }
             else {
                 $("div.table-tools").addClass("table-tools-active");
+                $("div.table-tools-menu").show();
                 Radio.trigger("TableMenu", "elementIsActive", "Tool");
             }
-
+        },
+        closeToolMenu: function () {
+            $("div.table-tools").removeClass("table-tools-active");
+            $("div.table-tools-menu").hide();
         }
     });
 
