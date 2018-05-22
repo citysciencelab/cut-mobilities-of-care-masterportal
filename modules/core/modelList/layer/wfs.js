@@ -148,16 +148,20 @@ define(function (require) {
                 }
             }
         },
+
         /**
-         * Versteckt alle Features mit dem Hidden-Style
+         * sets null style (= no style) for all features
          */
         hideAllFeatures: function () {
             var collection = this.getLayerSource().getFeatures();
 
             collection.forEach(function (feature) {
-                feature.setStyle(this.getHiddenStyle());
+                feature.setStyle(function () {
+                    return null;
+                });
             }, this);
         },
+
         showAllFeatures: function () {
             var collection = this.getLayerSource().getFeatures(),
                 style;
@@ -192,19 +196,6 @@ define(function (require) {
                     return style;
                 };
             }
-        },
-        getHiddenStyle: function () {
-            return new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 2,
-                    fill: new ol.style.Fill({
-                        color: "rgba(0, 0, 0, 0)"
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: "rgba(0, 0, 0, 0)"
-                    })
-                })
-            });
         },
 
         // getter for style

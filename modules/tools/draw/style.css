@@ -1,13 +1,3 @@
-.tooltip-default-circle {
-    background: rgb(255, 255, 255);
-    color: rgb(85, 85, 85);
-    padding: 4px;
-    white-space: nowrap;
-    font-size: 12px;
-    opacity: 1;
-    font-size: 12px;
-    border: 1px solid rgb(85, 85, 85);
-}
 .no-cursor {
     cursor: none;
 }

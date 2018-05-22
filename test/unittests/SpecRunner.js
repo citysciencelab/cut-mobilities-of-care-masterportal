@@ -64,7 +64,8 @@ define(function (require) {
     "modules/core/testCRS.js",
     "modules/core/testWPS.js",
     "modules/alerting/testModel.js",
-    "modules/tools/einwohnerabfrage/testModel.js"
+    "modules/tools/einwohnerabfrage/testModel.js",
+    "modules/tools/parcelSearch/testModel.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();

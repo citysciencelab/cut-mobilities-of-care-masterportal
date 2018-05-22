@@ -14,6 +14,11 @@ define([
 
         this.treeType = Radio.request("Parser", "getTreeType");
 
+        /**
+         * Prüft initial und nach jedem Resize, ob und welches Menü geladen werden muss und lädt bzw. entfernt Module.
+         * @param  {Object} caller this MenuLoader
+         * @return {Object}        this
+         */
         this.loadMenu = function (caller) {
             var isMobile = Radio.request("Util", "isViewMobile");
 
@@ -28,8 +33,8 @@ define([
                 });
             }
             else if (this.menuStyle === "DEFAULT") {
-                    $("#map").css("height", "calc(100% - 50px)");
-                    $("#main-nav").show();
+                $("#map").css("height", "calc(100% - 50px)");
+                $("#main-nav").show();
 
                 if (isMobile) {
                     require(["modules/menu/mobile/listView"], function (Menu) {
@@ -51,6 +56,8 @@ define([
                         });
                     }
                 }
+                // Nachdem die MapSize geändert wurde, muss die Map aktualisiert werden.
+                Radio.trigger("Map", "updateSize");
             }
         };
         this.currentMenu = this.loadMenu(this);

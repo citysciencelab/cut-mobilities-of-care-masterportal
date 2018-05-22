@@ -49,6 +49,7 @@ define([
                             var objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: childLayer.id});
 
                             if (!_.isNull(objFromRawList)) {
+                                objFromRawList = _.extend(objFromRawList, childLayer);
                                 layerdefinitions.push(objFromRawList);
                             }
                         });

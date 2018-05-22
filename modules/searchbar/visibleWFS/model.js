@@ -156,7 +156,7 @@ define(function (require) {
 
         // getter for minChars
         getMinChars: function () {
-            return this.getMinChars();
+            return this.get("minChars");
         },
         // setter for minChars
         setMinChars: function (value) {
@@ -165,7 +165,7 @@ define(function (require) {
 
         // getter for inUse
         getInUse: function () {
-            return this.getInUse();
+            return this.get("inUse");
         },
         // setter for inUse
         setInUse: function (value) {

@@ -98,6 +98,7 @@
     width: 40px;
     height: 40px;
 }
+
 .table-nav-layers-panel {
     background: transparent;
     border-width: 0px;
@@ -132,10 +133,9 @@
     text-decoration: none;
 }
 
-
 .layers {
-padding-left: 0px;
-padding-bottom: 12px;
+    padding-left: 0px;
+    padding-bottom: 12px;
 }
 
 .icon-checkbox2:before {
