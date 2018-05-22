@@ -24,6 +24,8 @@ define(function (require) {
         ItGbmTheme = require("modules/tools/gfi/themes/itgbm/model"),
         ItGbmThemeView = require("modules/tools/gfi/themes/itgbm/view"),
         DipasThemeView = require("modules/tools/gfi/themes/dipas/view"),
+        FlaecheninfoTheme = require("modules/tools/gfi/themes/flaecheninfo/model"),
+        FlaecheninfoThemeView = require("modules/tools/gfi/themes/flaecheninfo/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -57,6 +59,9 @@ define(function (require) {
             }
             else if (attrs.gfiTheme === "itgbm") {
                 return new ItGbmTheme(attrs, options);
+            }
+            else if (attrs.gfiTheme === "flaecheninfo") {
+                return new FlaecheninfoTheme(attrs, options);
             }
             else {
                 return new DefaultTheme(attrs, options);
@@ -130,6 +135,10 @@ define(function (require) {
                 }
                 case "dipas": {
                     new DipasThemeView({model: model});
+                    break;
+                }
+                case "flaecheninfo": {
+                    new FlaecheninfoThemeView({model: model});
                     break;
                 }
                 default: {
