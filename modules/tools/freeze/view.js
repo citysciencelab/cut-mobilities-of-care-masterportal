@@ -40,8 +40,14 @@ define(function (require) {
                 $("div.freeze-view").css("height", ($(".lgv-container").height()));
                 $("div.freeze-view").css("width", ($(".lgv-container").width()));
                 $("div.freeze-view").addClass("freeze-activated");
-                $("p.freeze-view-close").css("left", ($(".icon-tools").offset().left));
-                $("p.freeze-view-close").css("top", ($(".icon-tools").offset().top));
+                if ($(".icon-tools")) {
+                    $("p.freeze-view-close").css("left", ($(".icon-tools").offset().left));
+                    $("p.freeze-view-close").css("top", ($(".icon-tools").offset().top));
+                }
+                else {
+                    $("p.freeze-view-close").css("left", "30px");
+                    $("p.freeze-view-close").css("top", "30px");
+                }
                 this.model.setVisible(true);
             }
         }
