@@ -16,6 +16,9 @@ define(function (require) {
         },
         initialize: function () {
             this.render();
+            this.listenTo(Radio.channel("TableMenu"), {
+                "Tool": this.toggleToolMenu
+            });
         },
         render: function () {
             var collection = Radio.request("ModelList", "getCollection"),
@@ -52,6 +55,7 @@ define(function (require) {
             }
             else {
                 $("div.table-tools").addClass("table-tools-active");
+                Radio.trigger("TableMenu", "elementIsActive", "Tool");
             }
 
         }
