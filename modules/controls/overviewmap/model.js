@@ -2,22 +2,44 @@ define(function (require) {
 
     var Radio = require("backbone.radio"),
         ol = require("openlayers"),
+        $ = require("jquery"),
         OverviewmapModel;
 
     OverviewmapModel = Backbone.Model.extend({
         defaults: {
             baselayer: "",
-            newOvmView: ""
+            ovMap: ""
         },
         initialize: function () {
             var map = Radio.request("Map", "getMap"),
-                maxResolution = _.first(Radio.request("MapView", "getResolutions")),
-                mapView = map.getView(),
                 layers = map.getLayers().getArray(),
                 ovmConfig = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}),
                 ovmConfigRes = _.isUndefined(ovmConfig) === false ? ovmConfig.attr : ovmConfig,
                 initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
                 initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
+                newOlView,
+                ovMap;
+
+            newOlView = this.createOlView();
+            this.setBaselayer(ovmConfigRes.baselayer ? this.getBaseLayerFromCollection(layers, ovmConfigRes.baselayer) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
+            ovMap = this.newOverviewmap(newOlView);
+            this.setOvMap(ovMap);
+            if (_.isUndefined(this.getBaselayer()) === false) {
+                Radio.trigger("Map", "addControl", ovMap);
+            }
+            else {
+                $("#overviewmap").remove();
+            }
+            this.listenTo(Radio.channel("Map"), {
+                "change": this.mapChanged
+            });
+        },
+        createOlView: function (value) {
+            var map = Radio.request("Map", "getMap"),
+                maxResolution = _.first(Radio.request("MapView", "getResolutions")),
+                mapView = map.getView(),
+                ovmConfig = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}),
+                ovmConfigRes = _.isUndefined(ovmConfig) === false ? ovmConfig.attr : ovmConfig,
                 newOlView;
 
             newOlView = new ol.View({
@@ -26,25 +48,38 @@ define(function (require) {
                 resolution: mapView.getResolution(),
                 resolutions: [ovmConfigRes.resolution ? ovmConfigRes.resolution : maxResolution]
             });
-            this.setNewOvmView(newOlView);
-            this.setBaselayer(ovmConfigRes.baselayer ? this.getBaseLayerFromCollection(layers, ovmConfigRes.baselayer) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
-            if (_.isUndefined(this.getBaselayer()) === false) {
-                Radio.trigger("Map", "addControl", this.newOverviewmap());
-            }
-            else {
-                $("#overviewmap").remove();
-            }
+            // if (_.isUndefined(value) === false && value === "3D") {
+            //     newOlView = new ol.View({
+            //         projection: new ol.proj.Projection({
+            //             code: "EPSG:4326",
+            //             extent: [
+            //                 -180.0000, -90.0000, 180.0000, 90.0000
+            //             ],
+            //             axisOrientation: "enu"
+            //         }),
+            //         extent: [9, 53, 10, 54],
+            //         resolution: mapView.getResolution(),
+            //         resolutions: [ovmConfigRes.resolution ? ovmConfigRes.resolution : maxResolution]
+            //     });
+            // }
+            return newOlView;
         },
+        mapChanged: function (value) {
+            var view = this.createOlView(value),
+                ovMap = this.newOverviewmap(view);
 
-        newOverviewmap: function () {
+            Radio.trigger("Map", "removeControl", this.getOvMap());
+            this.setOvMap(ovMap);
+            Radio.trigger("Map", "addControl", ovMap);
+
+        },
+        newOverviewmap: function (view) {
             var overviewmap = new ol.control.OverviewMap({
-                    collapsible: false,
-                    className: "overviewmap ol-overviewmap ol-custom-overviewmap hidden-xs",
-                    layers: [
-                      this.getOvmLayer(this.getBaselayer())
-                    ],
-                    view: this.getNewOvmView()
-                });
+                collapsible: false,
+                className: "overviewmap ol-overviewmap ol-custom-overviewmap hidden-xs",
+                layers: [this.getOvmLayer(this.getBaselayer())],
+                view: view
+            });
 
             return overviewmap;
         },
@@ -53,7 +88,7 @@ define(function (require) {
             var modelFromCollection,
                 baseLayerParams;
 
-                modelFromCollection = Radio.request("RawLayerList", "getLayerWhere", {id: baselayer});
+            modelFromCollection = Radio.request("RawLayerList", "getLayerWhere", {id: baselayer});
             if (_.isUndefined(modelFromCollection) === false) {
                 baseLayerParams = {
                     layerUrl: modelFromCollection.get("url"),
@@ -61,20 +96,16 @@ define(function (require) {
                         t: new Date().getMilliseconds(),
                         zufall: Math.random(),
                         LAYERS: modelFromCollection.get("layers"),
-                        FORMAT: (modelFromCollection.get("format") === "nicht vorhanden") ? "image/png" : modelFromCollection.get("format"),
+                        FORMAT: modelFromCollection.get("format") === "nicht vorhanden" ? "image/png" : modelFromCollection.get("format"),
                         VERSION: modelFromCollection.get("version"),
                         TRANSPARENT: modelFromCollection.get("transparent").toString()
                     }
                 };
-
-                return baseLayerParams;
             }
             else {
                 Radio.trigger("Alert", "alert", "Die Overviewmap konnte nicht erstellt werden da kein Layer für die angegebene ID gefunden wurde. (" + baselayer + ")");
-
-                return undefined;
             }
-
+            return baseLayerParams;
         },
 
         getOvmLayer: function (baselayer) {
@@ -102,14 +133,13 @@ define(function (require) {
             this.set("baselayer", value);
         },
 
-        // getter for newOvmView
-        getNewOvmView: function () {
-            return this.get("newOvmView");
+        // getter for ovMap
+        getOvMap: function () {
+            return this.get("ovMap");
         },
-
-        // setter for newOvmView
-        setNewOvmView: function (value) {
-            this.set("newOvmView", value);
+        // setter for ovMap
+        setOvMap: function (value) {
+            this.set("ovMap", value);
         }
 
     });

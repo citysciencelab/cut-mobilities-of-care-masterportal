@@ -121,6 +121,11 @@
         "isInitOpenDesktop": true,
         "isInitOpenMobile": false
       },
+      "overviewmap":
+      {
+        "resolution": 611.4974492763076,
+        "baselayer": "4988"
+      },
       "button3d": true
     },
     "scaleLine": true,
