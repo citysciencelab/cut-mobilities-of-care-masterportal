@@ -35,16 +35,32 @@
       {
         "minChar": 3,
         "definitions": [
-        {
-          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-          "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
-          "name": "bplan"
-        },
-        {
-          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-          "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
-          "name": "bplan"
-        }]
+          {
+            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:mrh_row_bplan&propertyName=name",
+            "name": "bplan"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
+            "name": "bplan"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
+            "name": "bplan"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
+            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:KitaEinrichtungen&propertyName=app:Name",
+            "name": "kita"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
+            "data": "service=WFS&request=GetFeature&version=1.1.0&typeName=app:stoerfallbetrieb&propertyName=app:standort",
+            "name": "stoerfallbetrieb"
+          }
+        ]
       },
       "visibleWFS":
       {

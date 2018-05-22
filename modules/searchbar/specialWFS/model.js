@@ -7,13 +7,11 @@ define(function (require) {
 
     SpecialWFSModel = Backbone.Model.extend({
         defaults: {
-            inUse: false,
             minChars: 3,
-            bPlans: [],
-            kita: [],
-            stoerfallbetrieb: [],
-            bplanURL: "" // bplan-URL für evtl. requests des mapHandlers
+            glyphicon: "glyphicon-home",
+            wfsMembers: {}
         },
+
         /**
          * @description Initialisierung der wfsFeature Suche.
          * @param {Objekt} config - Das Konfigurationsarray für die specialWFS-Suche
@@ -26,67 +24,59 @@ define(function (require) {
          */
          initialize: function (config) {
             if (config.minChars) {
-                this.set("minChars", config.minChars);
+                this.setMinChars(config.minChars);
             }
+            // Jede Konfiguration eines SpecialWFS wird abgefragt
             _.each(config.definitions, function (element) {
-                if (element.name === "bplan") {
-                    this.set("bplanURL", element.url);
-                    this.sendRequest(element.url, element.data, this.getFeaturesForBPlan, false);
-                }
-                else if (element.name === "kita") {
-                    this.sendRequest(element.url, element.data, this.getFeaturesForKita, false);
-                }
-                else if (element.name === "stoerfallbetrieb") {
-                    this.sendRequest(element.url, element.data, this.getFeaturesForStoerfallbetrieb, false);
-                }
+                this.sendRequest(element, false);
             }, this);
 
+            // set Listener
             this.listenTo(Radio.channel("Searchbar"), {
                 "search": this.search
             });
-
             this.listenTo(Radio.channel("SpecialWFS"), {
                 "requestbplan": this.requestbplan
             });
 
+            // initiale Suche
             if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
                 this.search(Radio.request("ParametricURL", "getInitString"));
             }
         },
+
         /**
          * @description Suchfunktion, wird von Searchbar getriggert
          * @param {string} searchString - Der Suchstring.
          */
          search: function (searchString) {
-            this.set("searchString", searchString);
-            if (this.get("inUse") === false) {
-                this.set("inUse", true);
-                searchString = searchString.replace(/[()]/g, "\\$&");
-                var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
+            var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
-                if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInBPlans(searchString);
-                }
-                if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInKita(searchStringRegExp);
-                }
-                if (this.get("stoerfallbetrieb").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInStoerfallbetrieb(searchStringRegExp);
-                }
-                Radio.trigger("Searchbar", "createRecommendedList");
-                this.set("inUse", false);
+            if (searchString.length > this.getMinChars()) {
+                // if (this.get("bPlans").length > 0) {
+                //     this.searchInBPlans(searchString);
+                // }
+                // if (this.get("kita").length > 0) {
+                //     this.searchInKita(searchStringRegExp);
+                // }
+                // if (this.get("stoerfallbetrieb").length > 0) {
+                //     this.searchInStoerfallbetrieb(searchStringRegExp);
+                // }
+                // Radio.trigger("Searchbar", "createRecommendedList");
             }
         },
+
         /**
-         * @description Methode, um Koordinaten eines B-Plan abzufragen. Wird vom mapHandler getriggert.
-         * @param {string} type - Der ausgewählte BPlan-Typ, der abgefragt werden soll.
+         * Prosin-WFS liefern keine Koordinate mit aus, daher muss diese separat abgefragt werden
+         * @param  {string} type Name des Typs des SpecialWFS
+         * @param  {string} name B-Planname
          */
          requestbplan: function (type, name) {
             var typeName = (type === "festgestellt") ? "prosin_festgestellt" : "prosin_imverfahren",
                 propertyName = (type === "festgestellt") ? "planrecht" : "plan",
                 data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
 
-            this.sendRequest(this.get("bplanURL"), data, this.getExtentFromBPlan, true, true);
+            this.sendRequest(this.get("bplanURL"), data, this.getExtentFromBPlan, true);
         },
         /**
         * @description Methode zum Zurückschicken des gefundenen Plans an mapHandler.
@@ -140,10 +130,12 @@ define(function (require) {
          */
          getFeaturesForBPlan: function (data) {
             var hits = $("wfs\\:member,member", data),
-            name,
-            type;
+                name,
+                type,
+                elements = [];
 
             _.each(hits, function (hit) {
+                elements.push($(hit).first()[0].textContent.trim());
                 if (!_.isUndefined($(hit).find("app\\:planrecht, planrecht")[0])) {
                     name = $(hit).find("app\\:planrecht, planrecht")[0].textContent;
                     type = "festgestellt";
@@ -169,6 +161,8 @@ define(function (require) {
                     }
                 }
             }, this);
+
+            return elements;
         },
 
         /**
@@ -209,22 +203,43 @@ define(function (require) {
             hitName;
 
             _.each(hits, function (hit) {
-             if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
-                position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                if ($(hit).find("app\\:standort, standort")[0] !== undefined) {
-                    hitName = $(hit).find("app\\:standort, standort")[0].textContent;
-                    this.get("stoerfallbetrieb").push({
-                        name: hitName,
-                        type: "Stoerfallbetrieb",
-                        coordinate: coordinate,
-                        glyphicon: "glyphicon-home",
-                        id: hitName.replace(/ /g, "") + "Stoerfallbetrieb"
-                    });
+                if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
+                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                    if ($(hit).find("app\\:standort, standort")[0] !== undefined) {
+                        hitName = $(hit).find("app\\:standort, standort")[0].textContent;
+                        this.get("stoerfallbetrieb").push({
+                            name: hitName,
+                            type: "Stoerfallbetrieb",
+                            coordinate: coordinate,
+                            glyphicon: "glyphicon-home",
+                            id: hitName.replace(/ /g, "") + "Stoerfallbetrieb"
+                        });
+                    }
                 }
-            }
-        }, this);
+            }, this);
         },
+
+        getWFSMembers: function (data) {
+            var hits = $("wfs\\:member,member", data),
+                type = this.getRequestInfo().type,
+                url = this.getRequestInfo().url,
+                glyphicon = this.getRequestInfo().glyphicon,
+                elements = [];
+
+            _.each(hits, function (hit) {
+                elements.push({
+                    id: _.uniqueId("type"),
+                    name: $(hit).first()[0].textContent.trim(),
+                    type: type,
+                    glyphicon: glyphicon
+                });
+            });
+
+            this.setWfsMembers(type, elements);
+            // console.log(this.getWFSMembers());
+        },
+
         /**
          * @description Führt einen HTTP-Request aus.
          * @param {String} url - A string containing the URL to which the request is sent
@@ -233,22 +248,82 @@ define(function (require) {
          * @param {boolean} asyncBool - asynchroner oder synchroner Request
          * @param {boolean} [usePOST] - POST anstelle von GET?
          */
-         sendRequest: function (url, data, successFunction, asyncBool, usePOST) {
-            var type = (usePOST && usePOST === true) ? "POST" : "GET";
+         sendRequest: function (element, usePOST) {
+            var type = (usePOST && usePOST === true) ? "POST" : "GET",
+                url = element.url,
+                data = element.data,
+                name = element.name,
+                glyphicon = element.glyphicon ? element.glyphicon : this.getGlyphicon();
+
+            this.setRequestInfo({
+                url: url,
+                data: data,
+                type: name,
+                glyphicon: glyphicon
+            });
 
             $.ajax({
                 url: url,
                 data: data,
                 context: this,
-                async: asyncBool,
+                async: false,
                 type: type,
-                success: successFunction,
+                success: this.getWFSMembers,
                 timeout: 6000,
                 contentType: "text/xml",
                 error: function () {
                     Radio.trigger("Alert", "alert", url + " nicht erreichbar.");
                 }
             });
+        },
+
+        // getter for minChars
+        getMinChars: function () {
+            return this.get("minChars");
+        },
+        // setter for minChars
+        setMinChars: function (value) {
+            this.set("minChars", value);
+        },
+
+        // getter for RequestInfo
+        getRequestInfo: function () {
+            return this.get("requestInfo");
+        },
+        // setter for RequestInfo
+        setRequestInfo: function (value) {
+            this.set("requestInfo", value);
+        },
+
+        // getter for Glyphicon
+        getGlyphicon: function () {
+            return this.get("glyphicon");
+        },
+
+        // getter for wfsMembers
+        getWfsMembers: function () {
+            return this.get("wfsMembers");
+        },
+        // setter for wfsMembers
+        setWfsMembers: function (key, values) {
+            var wfsMembers = this.get("wfsMembers"),
+                oldObj,
+                oldValues,
+                newObj;
+
+            if (!_.has(wfsMembers, key)) {
+                newObj = _.object([key], [values]);
+                _.extend(wfsMembers, newObj);
+            }
+            else {
+                oldObj = _.pick(wfsMembers, key);
+                oldValues = _.values(oldObj)[0];
+                newObj = _.object([key], [_.union(oldValues, values)]);
+                wfsMembers = _.omit(wfsMembers, key);
+                 _.extend(wfsMembers, newObj);
+            }
+
+            this.set("wfsMembers", wfsMembers);
         }
     });
 
