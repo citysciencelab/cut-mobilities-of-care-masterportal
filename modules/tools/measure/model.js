@@ -31,6 +31,7 @@ define([
             unit: "m",
             decimal: 1,
             measureTooltips: [],
+            uiStyle: "DEFAULT",
             quickHelp: false
         },
 
@@ -51,6 +52,8 @@ define([
                 name: "measure_layer",
                 alwaysOnTop: true
             }));
+
+            this.set("uiStyle", Radio.request("Util", "getUiStyle"));
 
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
 
@@ -269,11 +272,21 @@ define([
             rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
             lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2))) - (0.0004 * length));
 
-            if (this.get("unit") === "km") {
-                 output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
+            if (this.get("uiStyle") === "TABLE") {
+                if (this.get("unit") === "km") {
+                     output = (lengthRed / 1000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                }
+                else {
+                    output = lengthRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                }
             }
             else {
-                output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
+                if (this.get("unit") === "km") {
+                     output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
+                }
+                else {
+                    output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
+                }
             }
             return output;
         },
@@ -304,11 +317,21 @@ define([
             fehler = 0.5 * scaleError * Math.sqrt(fehler);
             rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
             areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2)) - (0.0008 * area));
-            if (this.get("unit") === "km<sup>2</sup>") {
-                output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
+            if (this.get("uiStyle") === "TABLE") {
+                if (this.get("unit") === "km<sup>2</sup>") {
+                    output = (areaRed / 1000000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>" ;
+                }
+                else {
+                     output = areaRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                }
             }
             else {
-                 output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
+                if (this.get("unit") === "km<sup>2</sup>") {
+                    output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
+                }
+                else {
+                     output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
+                }
             }
             return output;
         }
