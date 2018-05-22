@@ -1,14 +1,14 @@
 define([
     "backbone",
     "backbone.radio",
-    "text!modules/tools/measure/template.html",
+    "text!modules/tools/measure/default/template.html",
+    "text!modules/tools/measure/table/template.html",
     "modules/tools/measure/model"
-], function (Backbone, Radio, MeasureTemplate, Measure) {
+], function (Backbone, Radio, DefaultTemplate, TableTemplate, Measure) {
 
     var MeasureView = Backbone.View.extend({
         model: new Measure(),
         className: "win-body",
-        template: _.template(MeasureTemplate),
         events: {
             "change select#geomField": "setGeometryType",
             "change select#unitField": "setUnit",
@@ -26,10 +26,11 @@ define([
 
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
+                var attr = this.model.toJSON(),
+                    template = Radio.request("Util", "getUiStyle") === "TABLE" ? _.template(TableTemplate) : _.template(DefaultTemplate);
 
                 this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+                $(".win-heading").after(this.$el.html(template(attr)));
                 this.delegateEvents();
             }
             else {

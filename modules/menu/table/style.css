@@ -48,6 +48,7 @@
     position: relative;
     bottom: 210px;
     left: -52px;
+    padding: 12px;
 }
 
 .table-tools-menu:after, .table-tools-menu:before {
@@ -83,11 +84,21 @@
     font-size: 26px;
 }
 
-#toggler{
+.table-tool {
+    margin-bottom: 6px;
+    font-family: "HamburgSans",sans-serif;
+    font-size: 14px;
+}
+
+.table-tool > a {
+    color: #808080;
+}
+
+#table-nav-layers-panel-toggler {
     width: 40px;
     height: 40px;
 }
-.panel {
+.table-nav-layers-panel {
     background: transparent;
     border-width: 0px;
     -webkit-box-shadow: none;
@@ -120,6 +131,7 @@
 .table-layer-list a:active {
     text-decoration: none;
 }
+
 
 .layers {
 padding-left: 0px;
@@ -162,7 +174,7 @@ div#isActivated {
     font-family: "HamburgSans-Bold", sans-serif;
 }
 
-.tablefont {
+.layer-item {
     font-family: "HamburgSans", sans-serif;
     font-size: 17px;
 }
@@ -183,8 +195,9 @@ div#isActivated {
     cursor: pointer;
 }
 
-.panel-group {
-
+.info-icon{
+    position: absolute;
+    right: 30px;
 }
 
 #funnel {
@@ -215,30 +228,28 @@ div#isActivated {
         radial-gradient(circle at 100% 100%, transparent 10px, #F2F2F2 10px);
 }
 
-ul#layers {
-    border: none;
-    font-size: 15px;
-    padding: 0px 0;
-    min-width:  410px;
-    overflow: auto;
-}
+#table-nav-layers-panel {
 
-ul#layers ul {
-    list-style: none;
-    padding: 0 0 0 0px;
-    -webkit-padding-start: 0px;
-}
+    ul#layers {
+        border: none;
+        font-size: 15px;
+        padding: 0px 0;
+        min-width:  410px;
+        overflow: auto;
+    }
 
-ul#layers ul li {
-    border-bottom: 1px solid #ddd;
-    padding: 5px 15px;
-}
+    ul#layers ul {
+        list-style: none;
+        padding: 0 0 0 0px;
+        -webkit-padding-start: 0px;
+    }
 
-.info-icon{
-    position: absolute;
-    right: 30px;
-}
+    ul#layers ul li {
+        border-bottom: 1px solid #ddd;
+        padding: 5px 15px;
+    }
 
-ul#layers {
-    padding-bottom: 7px;
+    ul#layers {
+        padding-bottom: 7px;
+    }
 }

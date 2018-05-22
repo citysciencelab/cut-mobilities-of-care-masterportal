@@ -18,7 +18,7 @@ define(function (require) {
             this.collection = Radio.request("ModelList", "getCollection");
             this.listenTo(Radio.channel("TableMenu"), {
                 "Layer": function () {
-                    this.$el.find("#collapseLayerPanel").removeClass("in");
+                    this.$el.find("#table-nav-layers-panel").removeClass("in");
                     this.$el.removeClass("burgerMenuIsActive");
                     this.$el.find(".icon-burgermenu_alt").addClass("collapsed");
                 }

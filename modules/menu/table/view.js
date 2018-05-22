@@ -19,7 +19,7 @@ define(function (require) {
 
             this.render();
             this.renderLayerList();
-            this.renderTool();
+            this.renderTools();
         },
         toggleActiveElement: function (element) {
             var oldActiveElement = this.getActiveElement();
@@ -36,14 +36,14 @@ define(function (require) {
         renderLayerList: function () {
             this.$el.find("#table-nav-main").append(new LayerListView().render());
         },
-        renderTool: function () {
-            this.$el.append(new ToolView().render());
-        },
         setActiveElement: function (element) {
             this.activeElement = element;
         },
         getActiveElement: function () {
             return this.activeElement;
+        },
+        renderTools: function () {
+            new ToolView();
         }
     });
         return Menu;
