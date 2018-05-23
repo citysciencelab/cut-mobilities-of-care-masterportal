@@ -3,9 +3,9 @@ var Radio;
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: "../lib/olcesium",
-        cesium: "../lib/Cesium/Cesium",
-        mouseeventPolyfill: "../lib/mouseevent",
+        openlayers: "../lib/ol-cesium/dist/olcesium",
+        cesium: "../node_modules/cesium/Build/Cesium/Cesium",
+        // mouseeventPolyfill: "../lib/mouseevent",
         app: "app",
         backbone: "../node_modules/backbone/backbone",
         "backbone.radio": "../node_modules/backbone.radio/build/backbone.radio.min",
