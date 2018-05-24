@@ -6,7 +6,7 @@ define([
 ], function (Backbone, Radio, ol) {
 
     var CoordPopup = Backbone.Model.extend({
-         defaults: {
+        defaults: {
             selectPointerMove: null,
             projections: [],
             mapProjection: null,
@@ -16,6 +16,13 @@ define([
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
+            });
+
+            // for 3d mode
+            this.listenTo(Radio.channel("Map"), {
+                "clickedWindowPosition": function (obj) {
+                    this.positionClicked(obj.coordinate);
+                }
             });
 
             this.setProjections(Radio.request("CRS", "getProjections"));
