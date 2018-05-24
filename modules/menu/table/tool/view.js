@@ -49,7 +49,6 @@ define(function (require) {
             }
         },
         toggleToolMenu: function () {
-            // $("div.table-tools-menu").toggle();
             if ($("div.table-tools").hasClass("table-tools-active")) {
                 this.closeToolMenu();
             }
