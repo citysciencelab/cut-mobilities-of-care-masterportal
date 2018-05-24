@@ -8,7 +8,6 @@ define(function (require) {
         defaults: _.extend({}, Layer.prototype.defaults, {
             supported: ["3D"],
             showSettings: false
-
         }),
         initialize: function () {
             this.listenToOnce(this, {

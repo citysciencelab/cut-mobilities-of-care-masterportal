@@ -1,22 +1,19 @@
-define([
-    "backbone",
-    "modules/core/configLoader/parserDefaultTree",
-    "modules/core/configLoader/parserCustomTree",
-    "config"
-], function () {
-    var Backbone = require("backbone"),
-        DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
+define(function (require) {
+    var DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
         CustomTreeParser = require("modules/core/configLoader/parserCustomTree"),
+        $ = require("jquery"),
         Config = require("config"),
         Preparser;
 
     Preparser = Backbone.Model.extend({
         url: function () {
-            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json";
+            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json",
+                addPath,
+                isAddPathValid;
 
             if (path.slice(-5) !== ".json") {
-                var addPath = Radio.request("Util", "getConfig"),
-                    isAddPathValid = addPath.length > 1 ? true : false;
+                addPath = Radio.request("Util", "getConfig");
+                isAddPathValid = addPath.length > 1;
                 // removes trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
                 if (isAddPathValid) {
                     if (path.slice(-1) === "/") {
@@ -49,10 +46,10 @@ define([
                 portalConfig: response.Portalconfig,
                 baselayer: response.Themenconfig.Hintergrundkarten,
                 overlayer: response.Themenconfig.Fachdaten,
+                overlayer_3d: response.Themenconfig.Fachdaten_3D,
                 treeType: response.Portalconfig.Baumtyp,
                 snippetInfos: this.requestSnippetInfos()
             };
-
             if (attributes.treeType === "default") {
                 new DefaultTreeParser(attributes);
             }

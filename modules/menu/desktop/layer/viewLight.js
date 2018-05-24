@@ -1,14 +1,8 @@
-define([
-    "backbone",
-    "text!modules/menu/desktop/layer/templateSettings.html",
-    "text!modules/menu/desktop/layer/templateLight.html",
-    "backbone.radio"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        TemplateSettings = require("text!modules/menu/desktop/layer/templateSettings.html"),
+    var TemplateSettings = require("text!modules/menu/desktop/layer/templateSettings.html"),
         Template = require("text!modules/menu/desktop/layer/templateLight.html"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -35,7 +29,7 @@ define([
                 "change:isOutOfRange": this.toggleColor
             });
 
-            if(this.model.attributes.supported) {
+            if (this.model.attributes.supported) {
                 this.listenTo(Radio.channel("Map"), {
                     "change": function (mode) {
                         this.toggleSupportedVisibility(mode);
@@ -49,8 +43,8 @@ define([
                 }
             });
             this.render();
-            this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
             this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
         },
 
         render: function () {
@@ -59,7 +53,7 @@ define([
 
             selector.prepend(this.$el.html(this.template(attr)));
             if (this.model.getIsSettingVisible() === true) {
-                 this.$el.append(this.templateSettings(attr));
+                this.$el.append(this.templateSettings(attr));
             }
         },
 
@@ -83,7 +77,7 @@ define([
             // Slide-Animation templateSetting
             if (this.model.getIsSettingVisible() === false) {
                 this.$el.find(".layer-settings").slideUp("slow", function () {
-                    $(this).remove();
+                    this.$el.remove();
                 });
             }
             else {
@@ -128,12 +122,18 @@ define([
             $(".nav li:first-child").removeClass("open");
         },
 
-        toggleSupportedVisibility: function(mode) {
-
-            if(this.model.attributes.supported.indexOf(mode) >= 0) {
-                this.$el.show();
-            }else{
-                this.$el.hide();
+        toggleSupportedVisibility: function (mode) {
+            if (this.model.attributes.supported.indexOf(mode) >= 0) {
+                this.$el.removeClass("disabled");
+                this.$el.find("*").css("pointer-events", "auto");
+                this.$el.find("*").css("cursor", "pointer");
+                this.$el.attr("title", "");
+            }
+            else {
+                this.$el.addClass("disabled");
+                this.$el.find("*").css("pointer-events", "none");
+                this.$el.find("*").css("cursor", "not-allowed");
+                this.$el.attr("title", "Layer nur im 3D-Modus verfügbar");
             }
         },
         /**
@@ -143,15 +143,15 @@ define([
             if (model.has("minScale") === true) {
                 if (value === true) {
                     this.$el.addClass("disabled");
-                    this.$el.find("*").css("pointer-events","none");
-                    this.$el.find("*").css("cursor","not-allowed");
-                    this.$el.attr("title","Layer wird in dieser Zoomstufe nicht angezeigt");
+                    this.$el.find("*").css("pointer-events", "none");
+                    this.$el.find("*").css("cursor", "not-allowed");
+                    this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
                 }
                 else {
                     this.$el.removeClass("disabled");
-                    this.$el.find("*").css("pointer-events","auto");
-                    this.$el.find("*").css("cursor","pointer");
-                    this.$el.attr("title","");
+                    this.$el.find("*").css("pointer-events", "auto");
+                    this.$el.find("*").css("cursor", "pointer");
+                    this.$el.attr("title", "");
                 }
             }
         }

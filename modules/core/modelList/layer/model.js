@@ -23,7 +23,7 @@ define(function (require) {
             showSettings: true
         },
         superInitialize: function () {
-            var channel = Radio.Channel("Layer");
+            var channel = Radio.channel("Layer");
 
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
@@ -45,22 +45,23 @@ define(function (require) {
                 }
             });
             this.listenTo(channel, {
-                  "updateLayerInfo": function (name) {
-                      if (this.getName() === name && this.getLayerInfoChecked() === true) {
-                          this.showLayerInformation();
-                      }
-                  },
+                "updateLayerInfo": function (name) {
+                    if (this.getName() === name && this.getLayerInfoChecked() === true) {
+                        this.showLayerInformation();
+                    }
+                },
                 "setLayerInfoChecked": function (layerInfoChecked) {
                     this.setLayerInfoChecked(layerInfoChecked);
                 }
             });
             this.listenTo(Radio.channel("Map"), {
-                "change": function(mode) {
+                "change": function (mode) {
                     if (this.get("supported").indexOf(mode) >= 0) {
-                        if(this.getIsVisibleInMap()) {
+                        if (this.getIsVisibleInMap()) {
                             this.getLayer().setVisible(true);
                         }
-                    } else {
+                    }
+                    else {
                         this.getLayer().setVisible(false);
                     }
                 }
@@ -142,18 +143,11 @@ define(function (require) {
             }
         },
 
-        /**
-         * abstrakte Funktionen die in den Subclasses überschrieben werden
-         */
-        createLegendURL: function () {},
-        createLayerSource: function () {},
-        createLayer: function () {},
-
         getResolutions: function () {
             var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
                 resoByMinScale = Radio.request("MapView", "getResoByScale", this.getMinScale(), "min");
 
-            this.setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
+            this.setMaxResolution(resoByMaxScale + resoByMaxScale / 100);
             this.setMinResolution(resoByMinScale);
         },
 
@@ -300,7 +294,7 @@ define(function (require) {
             }
         },
         decTransparency: function () {
-             if (this.getTransparency() >= 10) {
+            if (this.getTransparency() >= 10) {
                 this.setTransparency(this.getTransparency() - 10);
             }
         },
@@ -375,7 +369,7 @@ define(function (require) {
 
                 if (this.getIsVisibleInMap() === true) {
                     Radio.trigger(channelName, eventName, this);
-                    this.getAttributions().interval = setInterval (function (model) {
+                    this.getAttributions().interval = setInterval(function (model) {
                         Radio.trigger(channelName, eventName, model);
                     }, timeout, this);
                 }
@@ -424,7 +418,7 @@ define(function (require) {
             this.set("selectionIDX", idx);
         },
         getSelectionIDX: function () {
-           return this.get("selectionIDX");
+            return this.get("selectionIDX");
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
@@ -438,11 +432,9 @@ define(function (require) {
          */
         getmetaID: function () {
             if (this.get("datasets")[0]) {
-             return this.get("datasets")[0].md_id;
+                return this.get("datasets")[0].md_id;
             }
-            else {
-                    return undefined;
-            }
+            return undefined;
         },
         /**
          * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt den Metanamen wieder
@@ -452,9 +444,7 @@ define(function (require) {
             if (this.get("datasets")[0]) {
                 return this.get("datasets")[0].md_name;
             }
-            else {
-                return undefined;
-            }
+            return undefined;
         },
         getUrl: function () {
             return this.get("url");

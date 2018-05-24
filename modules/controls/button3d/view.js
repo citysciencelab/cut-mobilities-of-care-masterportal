@@ -8,7 +8,7 @@ define(function (require) {
         className: "row",
         template: _.template(Button3dTemplate),
         events: {
-            "click .glyphicon-globe": "mapChange"
+            "click .button3D": "mapChange"
         },
         initialize: function () {
             this.render();
@@ -26,6 +26,8 @@ define(function (require) {
             }
             else {
                 Radio.trigger("Map", "activateMap3d");
+                // Radio.trigger("ModelList", "setModelAttributesById", "3d_daten", {isExpanded: true});
+                // Radio.trigger("ModelList", "setModelAttributesById", "terrain", {isSelected: true});
                 $("#button3D").addClass("toggleButtonPressed");
             }
 

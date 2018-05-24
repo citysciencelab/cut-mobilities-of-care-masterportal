@@ -1,12 +1,7 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/menu/desktop/layer/template.html"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Template = require("text!modules/menu/desktop/layer/template.html"),
+    var Template = require("text!modules/menu/desktop/layer/template.html"),
+        $ = require("jquery"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -25,16 +20,12 @@ define([
                 "change:isVisibleInTree": this.removeIfNotVisible,
                 "change:isOutOfRange": this.toggleColor
             });
-            if(this.model.attributes.supported) {
-                this.listenTo(Radio.channel("Map"), {
-                    "change": function (mode) {
-                        this.toggleSupportedVisibility(mode);
-                    }
-                });
-            }
+            this.listenTo(Radio.channel("Map"), {
+                "change": this.toggleSupportedVisibility
+            });
             this.render();
-            this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
             this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
         },
 
         render: function () {
@@ -49,35 +40,43 @@ define([
                 else {
                     selector.after(this.$el.html(this.template(attr)));
                 }
-                $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
+                $(this.$el).css("padding-left", this.model.getLevel() * 15 + 5 + "px");
             }
         },
-        toggleSupportedVisibility: function(mode) {
+        toggleSupportedVisibility: function (mode) {
+            if (this.model.attributes.supported.indexOf(mode) >= 0) {
+                this.removeClassDisabled();
+            }
+            else {
+                this.addClassDisabled();
+            }
+        },
 
-            if(this.model.attributes.supported.indexOf(mode) >= 0) {
-                this.$el.show();
-            }else{
-                this.$el.hide();
-            }
-        },
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {
                 if (value === true) {
-                    this.$el.addClass("disabled");
-                    this.$el.find("*").css("pointer-events","none");
-                    this.$el.find("*").css("cursor","not-allowed");
-                    this.$el.attr("title","Layer wird in dieser Zoomstufe nicht angezeigt");
+                    this.addClassDisabled();
                 }
                 else {
-                    this.$el.removeClass("disabled");
-                    this.$el.find("*").css("pointer-events","auto");
-                    this.$el.find("*").css("cursor","pointer");
-                    this.$el.attr("title","");
+                    this.removeClassDisabled();
                 }
             }
+        },
+
+        addClassDisabled: function () {
+            this.$el.addClass("disabled");
+            this.$el.find("*").css("pointer-events", "none");
+            this.$el.find("*").css("cursor", "not-allowed");
+            this.$el.attr("title", "Layer nur im 3D-Modus verfügbar");
+        },
+        removeClassDisabled: function () {
+            this.$el.removeClass("disabled");
+            this.$el.find("*").css("pointer-events", "auto");
+            this.$el.find("*").css("cursor", "pointer");
+            this.$el.attr("title", "");
         },
 
         rerender: function () {

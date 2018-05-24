@@ -229,11 +229,10 @@
 .button3D > .glyphicon {
     font-size: 22px;
     margin-top: 4px;
+    padding: 6px;
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
 }
 
-.button3D > .glyphicon-globe {
-    padding: 5px 5px 6px 7px;
-}
 /***** FullScreen *****/
 .full-screen-button {
     margin-top: 20px;

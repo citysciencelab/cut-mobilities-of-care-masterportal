@@ -271,17 +271,23 @@
       },
       {
         "id": "453"
-      },
-      {
-        "id": "terrain",
-        "name": "Gelände",
-        "visibility": true
-      },
-      {
-        "id": "buildings",
-        "name": "Gebäude LoD2",
-        "visibility": true
-      }]
+      }
+      ]
+    },
+    "Fachdaten_3D":
+    {
+      "Layer": [
+        {
+          "id": "terrain",
+          "name": "Gelände",
+          "visibility": true
+        },
+        {
+          "id": "buildings",
+          "name": "Gebäude LoD2",
+          "visibility": true
+        }
+      ]
     },
     "Fachdaten":
     {
