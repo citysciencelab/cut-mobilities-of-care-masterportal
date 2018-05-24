@@ -302,17 +302,31 @@ define(function (require) {
          * @return {Boolean}               true if feature has attribute that contains value
          */
         isValueMatch: function (feature, attribute) {
+            if (attribute.attrName === "schulform" || attribute.attrName === "fremdsprachen") {
+                attribute.matchingMode = "AND";
+            }
+
+            return attribute.matchingMode === "AND" ? this.isANDMatch(feature, attribute) : this.isORMatch(feature, attribute);
+        },
+        isORMatch: function (feature, attribute) {
             var isMatch = false;
 
             isMatch = _.find(attribute.values, function (value) {
-                    if (_.isUndefined(feature.get(attribute.attrName)) === false) {
-                            return feature.get(attribute.attrName).indexOf(value) !== -1;
-                    }
-                    return false;
-                });
+                return this.containsValue(feature, attribute, value);
+            }, this);
             return !_.isUndefined(isMatch);
         },
-
+        isANDMatch: function (feature, attribute) {
+            return _.every(attribute.values, function (value) {
+                return this.containsValue(feature, attribute, value);
+            }, this);
+        },
+        containsValue: function (feature, attribute, value) {
+            if (_.isUndefined(feature.get(attribute.attrName)) === false) {
+                return feature.get(attribute.attrName).indexOf(value) !== -1;
+            }
+            return false;
+        },
         /**
          * checks if a value is within a range of values
          * @param  {ol.Feature} feature
