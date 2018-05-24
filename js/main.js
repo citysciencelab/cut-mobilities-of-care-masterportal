@@ -3,7 +3,7 @@ var Radio;
 require.config({
     waitSeconds: 60,
     paths: {
-        openlayers: "../lib/ol-cesium/dist/olcesium",
+        openlayers: "../lib/ol-cesium/build/olcesium",
         cesium: "../node_modules/cesium/Build/Cesium/Cesium",
         // mouseeventPolyfill: "../lib/mouseevent",
         app: "app",
