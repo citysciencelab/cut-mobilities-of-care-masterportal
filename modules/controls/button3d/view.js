@@ -8,7 +8,7 @@ define(function (require) {
         className: "row",
         template: _.template(Button3dTemplate),
         events: {
-            "click .glyphicon-globe": "mapChange"
+            "click .button3D": "mapChange"
         },
         initialize: function () {
             this.render();
