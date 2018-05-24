@@ -329,7 +329,7 @@ define(function (require) {
                 imagestyle,
                 style;
 
-            if (isClustered && feature.get("features").length > 1) {
+            if (isClustered && feature.get("features") && feature.get("features").length > 1) {
                 imagestyle = this.createClusterStyle();
             }
             else {
@@ -507,7 +507,7 @@ define(function (require) {
         createClusteredTextStyle: function (feature, labelField) {
             var clusterTextObj = {};
 
-            if (feature.get("features").length === 1) {
+            if (feature.get("features") && feature.get("features").length === 1) {
                 clusterTextObj.text = feature.get("features")[0].get(labelField);
                 clusterTextObj.textAlign = this.getTextAlign();
                 clusterTextObj.font = this.getTextFont().toString();
@@ -520,7 +520,9 @@ define(function (require) {
             }
             else {
                 if (this.getClusterText() === "COUNTER") {
-                    clusterTextObj.text = feature.get("features").length.toString();
+                    if (feature.get("features")) {
+                        clusterTextObj.text = feature.get("features").length.toString();
+                    }
                 }
                 else if (this.getClusterText() === "NONE") {
                     return;
