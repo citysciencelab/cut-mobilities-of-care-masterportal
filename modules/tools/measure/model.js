@@ -1,12 +1,12 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config",
-    "cesium"
-], function (Backbone, Radio, ol, Config, Cesium) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        Config = require("config"),
+        Cesium = require("cesium"),
+        Measure;
 
-    var Measure = Backbone.Model.extend({
+    Measure = Backbone.Model.extend({
         defaults: {
             source: new ol.source.Vector(),
             style: new ol.style.Style({
@@ -68,10 +68,11 @@ define([
 
         changeMap: function(map) {
             this.deleteFeatures();
-            if(map === "3D") {
+            if (map === "3D") {
                 this.set("isMap3d", true);
                 this.set("type", "3d");
-            } else {
+            }
+            else {
                 this.set("isMap3d", false);
                 this.set("type", "LineString");
             }
@@ -89,89 +90,81 @@ define([
                 this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
             }
         },
+        handle3DClicked: function (obj) {
+            var scene = Radio.request("Map", "getMap3d").getCesiumScene(),
+                object = scene.pick(obj.position),
+                hit,
+                cartographic,
+                ray,
+                coords,
+                mapProjection = Radio.request("MapView", "getProjection"),
+                hits3d = this.get("hits3d"),
+                firstHit = hits3d[0],
+                pointId = "__3dMeasurmentFirstPoint",
+                source = this.get("source"),
+                lon,
+                lat,
+                feature,
+                distance,
+                heightDiff,
+                firstPoint;
 
-        handle3DClicked: function(obj) {
-            var scene = Radio.request("Map", "getMap3d").getCesiumScene();
-
-            var createFractionPoint = function (pointOne, pointTwo) {
-                var geodesic = new Cesium.EllipsoidGeodesic(
-                    scene.globe.ellipsoid.cartesianToCartographic(pointOne),
-                    scene.globe.ellipsoid.cartesianToCartographic(pointTwo)
-                );
-                var cartographic = geodesic.interpolateUsingFraction(0.5);
-                var coords = [
-                    Cesium.Math.toDegrees(cartographic.longitude),
-                    Cesium.Math.toDegrees(cartographic.latitude),
-                    cartographic.height
-                ];
-
-                var mapProjection = Radio.request("MapView", "getProjection");
-                return ol.proj.transform(coords, ol.proj.get("EPSG:4326"), mapProjection);
-            };
-
-            var object = scene.pick(obj.position);
-            var hit;
-            var cartographic;
             if (object) {
                 hit = scene.pickPosition(obj.position);
                 cartographic = scene.globe.ellipsoid.cartesianToCartographic(hit);
-            } else {
-                var ray = scene.camera.getPickRay(obj.position);
+            }
+            else {
+                ray = scene.camera.getPickRay(obj.position);
                 hit = scene.globe.pick(ray, scene);
                 cartographic = scene.globe.ellipsoid.cartesianToCartographic(hit);
                 cartographic.height = scene.globe.getHeight(cartographic);
             }
-
-            var coords = [
-                Cesium.Math.toDegrees(cartographic.longitude),
-                Cesium.Math.toDegrees(cartographic.latitude),
-                cartographic.height
-            ];
-
-            var mapProjection = Radio.request("MapView", "getProjection");
+            lon = Cesium.Math.toDegrees(cartographic.longitude);
+            lat = Cesium.Math.toDegrees(cartographic.latitude);
+            coords = [lon, lat, cartographic.height];
             coords = ol.proj.transform(coords, ol.proj.get("EPSG:4326"), mapProjection);
+            // draw first point
+            if (hits3d.length === 0) {
+                feature = this.createPointFeature(coords, pointId);
 
-            var hits3d = this.get("hits3d");
-            var pointId = '__3dMeasurmentFirstPoint';
-            var source = this.get("source");
-            if (hits3d.length) {
-                var firstHit = hits3d[0];
-                var distance = Cesium.Cartesian3.distance(firstHit.cartesian, hit);
-                var heightDiff = Math.abs(coords[2] - firstHit.coords[2]);
-                var flatDistance = Math.sqrt(Math.pow(distance, 2) - Math.pow(heightDiff, 2));
-                var heightPosition = firstHit.coords[2] < coords[2] ? firstHit.coords.slice() : coords.slice();
-                heightPosition[2] = firstHit.coords[2] < coords[2] ? coords[2] : firstHit.coords[2];
-
-                this.place3dMeasureTooltip(distance, coords);
-                this.place3dMeasureTooltip(heightDiff, heightPosition);
-
-                var fractionPoint = createFractionPoint(firstHit.cartesian, hit);
-                fractionPoint[2] = heightPosition[2];
-                this.place3dMeasureTooltip(flatDistance, fractionPoint);
-
-                this.set("measureTooltip", null);
-                source.addFeature(new ol.Feature({
-                    geometry: new ol.geom.LineString([
-                        firstHit.coords,
-                        coords,
-                        heightPosition,
-                        firstHit.coords
-                    ])
-                }));
-                this.set("hits3d", []);
-                var firstPoint = source.getFeatureById(pointId);
-                source.removeFeature(firstPoint);
-            } else {
-                var feautre = new ol.Feature({
-                    geometry: new ol.geom.Point(coords)
-                });
-                feautre.setId(pointId);
-                source.addFeature(feautre);
+                source.addFeature(feature);
                 hits3d.push({
                     cartesian: hit,
                     coords: coords
                 });
             }
+            // draw second point as Line and remove first drawn point
+            else {
+                distance = Cesium.Cartesian3.distance(firstHit.cartesian, hit);
+                heightDiff = Math.abs(coords[2] - firstHit.coords[2]);
+                this.set("measureTooltip", null);
+                feature = this.createLineFeature(firstHit.coords, coords);
+                source.addFeature(feature);
+                this.place3dMeasureTooltip(distance, heightDiff, coords)
+                this.set("hits3d", []);
+
+                firstPoint = source.getFeatureById(pointId);
+                source.removeFeature(firstPoint);
+            }
+        },
+        createPointFeature: function (coords, id) {
+            var feature = new ol.Feature({
+                geometry: new ol.geom.Point(coords)
+            });
+
+            feature.setId(id);
+
+            return feature;
+        },
+        createLineFeature: function (firstCoord, lastCoord) {
+            var feature = new ol.Feature({
+                geometry: new ol.geom.LineString([
+                    firstCoord,
+                    lastCoord
+                ])
+            });
+
+            return feature;
         },
         createInteraction: function () {
             if (!this.get("isCurrentWin")) {
@@ -254,13 +247,18 @@ define([
             }
         },
 
-        place3dMeasureTooltip: function (distance, position) {
-            var output;
+        place3dMeasureTooltip: function (distance, heightDiff, position) {
+            var output = "<span class='glyphicon glyphicon-resize-horizontal'/> ";
+
             if (this.get("unit") === "km") {
-                output = (distance / 1000).toFixed(3) + " " + this.get("unit");
-            } else {
-                output = distance.toFixed(2) + " " + this.get("unit");
+                output += (distance / 1000).toFixed(3) + " " + this.get("unit");
             }
+            else {
+                output += distance.toFixed(2) + " " + this.get("unit");
+            }
+
+            output += "<br><span class='glyphicon glyphicon-resize-vertical'/> ";
+            output += heightDiff.toFixed(2) + " m";
 
             this.createMeasureTooltip();
             this.get("measureTooltipElement").innerHTML = output;
