@@ -1,12 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/core/modelList/list"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ModelList = require("modules/core/modelList/list"),
+    var ModelList = require("modules/core/modelList/list"),
         Parser;
 
     Parser = Backbone.Model.extend({
@@ -45,7 +39,7 @@ define([
                 "getSnippetInfos": function () {
                     return this.get("snippetInfos");
                 },
-                "getInitVisibBaselayer" : this.getInitVisibBaselayer
+                "getInitVisibBaselayer": this.getInitVisibBaselayer
             }, this);
 
             channel.on({
@@ -88,12 +82,13 @@ define([
                 this.parseTree(this.getBaselayer(), "tree", 0);
             }
             else if (this.getTreeType() === "custom") {
-                this.addTreeMenuItems();
+                this.addTreeMenuItems("custom", this.get("overlayer_3d"));
                 this.parseTree(this.getBaselayer(), "Baselayer", 0);
                 this.parseTree(this.getOverlayer(), "Overlayer", 0);
+                this.parseTree(this.get("overlayer_3d"), "3d_daten", 0);
             }
             else {
-                this.addTreeMenuItems();
+                this.addTreeMenuItems("default");
                 this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
             }
             this.createModelList();
@@ -108,8 +103,12 @@ define([
          */
         parseMenu: function (items, parentId) {
             _.each(items, function (value, key) {
+                var item,
+                    toolitem,
+                    ansicht;
+
                 if (_.has(value, "children") || key === "tree") {
-                    var item = {
+                    item = {
                         type: "folder",
                         parentId: parentId,
                         id: key,
@@ -127,31 +126,29 @@ define([
                     }
                     this.parseMenu(value.children, key);
                 }
-                else {
-                    if (key.search("staticlinks") !== -1) {
-                        _.each(value, function (staticlink) {
-                            var toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
-
-                            this.addItem(toolitem);
-                        }, this);
-                    }
-                    else if (_.has(value, "type") && value.type === "viewpoint") {
-                        var ansicht = _.extend(value, {parentId: parentId, id: _.uniqueId(key + "_")});
-                        this.addItem(ansicht);
-                    }
-                    else {
-                        var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
-
-                        // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
-                        if (!_.has(toolitem, "onlyDesktop")) {
-                            // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
-                            if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
-                                toolitem = _.extend(toolitem, {onlyDesktop: true});
-                            }
-                        }
+                // else {
+                else if (key.search("staticlinks") !== -1) {
+                    _.each(value, function (staticlink) {
+                        toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
                         this.addItem(toolitem);
-                    }
+                    }, this);
                 }
+                else if (_.has(value, "type") && value.type === "viewpoint") {
+                    ansicht = _.extend(value, {parentId: parentId, id: _.uniqueId(key + "_")});
+                    this.addItem(ansicht);
+                }
+                else {
+                    toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+                    // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
+                    if (!_.has(toolitem, "onlyDesktop")) {
+                        // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
+                        if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
+                            toolitem = _.extend(toolitem, {onlyDesktop: true});
+                        }
+                    }
+                    this.addItem(toolitem);
+                }
+                // }
             }, this);
         },
 
@@ -167,7 +164,7 @@ define([
             });
         },
 
-         /** [parseMapView description]
+        /** [parseMapView description]
          * @param  {[type]} items [description]
          * @return {[type]}       [description]
          */
@@ -330,14 +327,14 @@ define([
             return this.set("baselayer", value);
         },
 
-         /**
+        /**
           * Getter für Attribut "overlayer"
           * @return {Object}
           */
         getOverlayer: function () {
             return this.get("overlayer");
         },
-         /**
+        /**
           * Setter für Attribut "overlayer"
           * @return {Object}
           */
@@ -350,14 +347,14 @@ define([
           * @return {String}
           */
         getTreeType: function () {
-             return this.get("treeType");
+            return this.get("treeType");
         },
         /**
           * Getter für Attribut "treeType"
           * @return {String}
           */
         setTreeType: function (value) {
-             return this.set("treeType", value);
+            return this.set("treeType", value);
         },
 
         /**
@@ -365,7 +362,7 @@ define([
           * @return {String}
           */
         getCategory: function () {
-             return this.get("category");
+            return this.get("category");
         },
 
         /**
@@ -381,7 +378,7 @@ define([
           * @return {String}
           */
         setCategory: function (value) {
-             return this.set("category", value);
+            return this.set("category", value);
         },
 
         /**
@@ -416,7 +413,7 @@ define([
             }));
         },
 
-        addTreeMenuItems: function () {
+        addTreeMenuItems: function (treeType) {
             this.addItem({
                 type: "folder",
                 name: "Hintergrundkarten",
@@ -437,16 +434,18 @@ define([
                 isInitiallyExpanded: false,
                 level: 0
             });
-            this.addItem({
-                type: "folder",
-                name: "3D Daten",
-                glyphicon: "glyphicon-plus-sign",
-                id: "3d_daten",
-                parentId: "tree",
-                isInThemen: true,
-                isInitiallyExpanded: false,
-                level: 0
-            });
+            if (treeType === "default" || !_.isUndefined(this.get("overlayer_3d"))) {
+                this.addItem({
+                    type: "folder",
+                    name: "3D Daten",
+                    // glyphicon: "glyphicon-plus-sign",
+                    id: "3d_daten",
+                    parentId: "tree",
+                    isInThemen: true,
+                    isInitiallyExpanded: false,
+                    level: 0
+                });
+            }
             this.addItem({
                 type: "folder",
                 name: "Ausgewählte Themen",
@@ -502,19 +501,15 @@ define([
          * @return {String} value - Uniq-Id
          */
         createUniqId: function (value) {
-            value = value.replace(/[^a-zA-Z0-9]/g, "");
+            var uniqueId = value.replace(/[^a-zA-Z0-9]/g, "");
 
-            return _.uniqueId(value);
+            return _.uniqueId(uniqueId);
         },
 
         getItemsByMetaID: function (metaID) {
             var layers = _.filter(this.getItemList(), function (item) {
-                if (item.type === "layer") {
-                    if (item.datasets.length > 0) {
-                        return item.datasets[0].md_id === metaID;
-                    }
-                }
-            }, this);
+                return item.type === "layer" && item.datasets.length > 0 && item.datasets[0].md_id === metaID;
+            });
 
             return layers;
         },

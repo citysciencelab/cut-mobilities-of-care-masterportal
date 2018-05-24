@@ -26,6 +26,8 @@ define(function (require) {
             }
             else {
                 Radio.trigger("Map", "activateMap3d");
+                // Radio.trigger("ModelList", "setModelAttributesById", "3d_daten", {isExpanded: true});
+                // Radio.trigger("ModelList", "setModelAttributesById", "terrain", {isSelected: true});
                 $("#button3D").addClass("toggleButtonPressed");
             }
 

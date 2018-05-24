@@ -1,6 +1,4 @@
-define([
-    "modules/core/modelList/item"
-], function () {
+define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
         Radio = require("backbone.radio"),
@@ -28,20 +26,14 @@ define([
         }),
 
         initialize: function () {
-            if (this.get("id") === "3d_daten") {
-                this.listenTo(Radio.channel("Map"), {
-                    "change": function () {
-                        this.trigger("toggle:3d_daten");
-                    }
-                });
-            }
-            
+            var items,
+                isEveryLayerSelected;
             // Wenn alle Layer in einem Folder selektiert sind, wird der Folder auch selektiert
             if (this.getParentId() === "Overlayer") {
-                var items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.getId()}),
-                    isEveryLayerSelected = _.every(items, function (item) {
-                        return item.isSelected === true;
-                    });
+                items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.getId()});
+                isEveryLayerSelected = _.every(items, function (item) {
+                    return item.isSelected === true;
+                });
 
                 if (isEveryLayerSelected === true) {
                     this.setIsSelected(true);

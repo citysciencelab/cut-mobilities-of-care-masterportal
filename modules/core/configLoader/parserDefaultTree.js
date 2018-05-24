@@ -1,6 +1,4 @@
-define([
-    "modules/core/configLoader/parser"
-], function () {
+define(function (require) {
 
     var Parser = require("modules/core/configLoader/parser"),
         DefaultTreeParser;
@@ -13,12 +11,12 @@ define([
         parseTree: function (layerList) {
             // Im Default-Tree(FHH-Atlas / GeoOnline) werden nur WMS angezeigt
             // Und nur Layer die min. einem Metadatensatz zugeordnet sind
-            layerList = this.filterList(layerList);          
+            layerList = this.filterList(layerList);
             // Entfernt alle Layer, die bereits im Cache dargestellt werden
             layerList = this.deleteLayersIncludeCache(layerList);
             // Für Layer mit mehr als 1 Datensatz, wird pro Datensatz 1 zusätzlichen Layer erzeugt
             layerList = this.createLayerPerDataset(layerList);
-            
+
             this.parseLayerList(layerList);
 
         },
@@ -90,8 +88,7 @@ define([
                     }
                     return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
                 });
-            console.log(typeGroup);
-            
+
             // Models für die Hintergrundkarten erzeugen
             this.createBaselayer(layerList);
             // Models für die Fachdaten erzeugen
@@ -166,7 +163,7 @@ define([
                         return layer.datasets[0].kategorie_organisation;
                     }
                 }, this);
-           // Gruppierung nach MetaName
+            // Gruppierung nach MetaName
             _.each(categoryGroups, function (group, name) {
                 var metaNameGroups = _.groupBy(group, function (layer) {
                     return layer.datasets[0].md_name;
