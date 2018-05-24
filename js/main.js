@@ -1,11 +1,33 @@
 var Radio;
 
+// add mouseevent polyfill to fix ie11 clickhandler
+// for 3d mode
+(function (window) {
+    if (typeof window.CustomEvent === "function") {
+        return false; // If not IE
+    }
+
+    // Polyfills DOM4 MouseEvent
+
+    function MouseEvent (eventType, params) {
+        var params = params || {bubbles: false, cancelable: false},
+            mouseEvent = document.createEvent("MouseEvent");
+
+        mouseEvent.initMouseEvent(eventType, params.bubbles, params.cancelable, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+        return mouseEvent;
+    }
+
+    MouseEvent.prototype = Event.prototype;
+
+    window.MouseEvent = MouseEvent;
+})(window);
+
 require.config({
     waitSeconds: 60,
     paths: {
         openlayers: "../lib/ol-cesium/build/olcesium",
         cesium: "../node_modules/cesium/Build/Cesium/Cesium",
-        // mouseeventPolyfill: "../lib/mouseevent",
         app: "app",
         backbone: "../node_modules/backbone/backbone",
         "backbone.radio": "../node_modules/backbone.radio/build/backbone.radio.min",
