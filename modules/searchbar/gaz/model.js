@@ -41,6 +41,9 @@ define(function (require) {
             this.listenTo(Radio.channel("Gaz"), {
                 "adressSearch": this.adressSearch
             });
+            Radio.channel("Gaz").reply({
+                "streetsSearch": this.streetsSearch
+            }, this);
 
             if (gazService && gazService.get("url")) {
                 this.set("gazetteerURL", gazService.get("url"));
@@ -132,6 +135,11 @@ define(function (require) {
                 this.setTypeOfRequest("adress2");
                 this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.getAdress, false, this.getTypeOfRequest());
             }
+        },
+        streetsSearch: function (adress) {
+            this.setTypeOfRequest("searchHouseNumbers1");
+            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(adress.name), this.getHouseNumbers, false, this.getTypeOfRequest());
+            return this.get("houseNumbers");
         },
         /**
         * @description Veränderte Suchabfolge bei initialer Suche, z.B. über Config.initialQuery
@@ -360,16 +368,18 @@ define(function (require) {
                 hitName;
 
             _.each(hits, function (hit) {
-                coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
-                hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
-                // "Hitlist-Objekte"
-                Radio.trigger("Searchbar", "pushHits", "hitList", {
-                    name: hitName,
-                    type: "Straße",
-                    coordinate: coordinates,
-                    glyphicon: "glyphicon-road",
-                    id: hitName.replace(/ /g, "") + "Straße"
-                });
+                if ($(hit).find("gml\\:posList,posList").length > 0 && $(hit).find("dog\\:strassenname, strassenname").length > 0){
+                    coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
+                    hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
+                    // "Hitlist-Objekte"
+                    Radio.trigger("Searchbar", "pushHits", "hitList", {
+                        name: hitName,
+                        type: "Straße",
+                        coordinate: coordinates,
+                        glyphicon: "glyphicon-road",
+                        id: hitName.replace(/ /g, "") + "Straße"
+                    });
+                }
             }, this);
             Radio.trigger("Searchbar", "createRecommendedList");
         },

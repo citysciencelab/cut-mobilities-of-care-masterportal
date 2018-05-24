@@ -219,13 +219,15 @@ li.results:hover {
 
 #table-searchForm button.btn.btn-default.btn-table-search {
     border-radius: 12px !important;
+    border-color: white;
+    height: 40px;
+    width: 40px;
     padding: 6px 12px 1px 5px;
-    margin: 3px 5px 5px 5px;
+    margin: 0px 5px 5px 5px;
 }
 
 #table-searchForm .btn-table-search > .icon-search {
-    font-size: 22px;
-    padding: 9px;
+    font-size: 24px;
 }
 
 #table-searchForm > .input-group {
@@ -246,12 +248,13 @@ li.results:hover {
     bottom: 100%;
     z-index: 1001;
     padding: 0;
-    top: unset;
+    top: auto;
 }
 
 #table-searchForm #searchInput {
-    margin: 4px 0px 7px 78px;
-    border-radius: 10px !important;
+    margin: 1px 0px 7px 78px;
+    height: 40px;
+    border-radius: 12px !important;
 }
 
 #table-searchForm .dropdown-menu-search .glyphicon {
@@ -296,3 +299,18 @@ li.results:hover {
     left: 12px;
 }
 
+#table-searchForm input#searchInput.form-control {
+    font-family: "HamburgSans", sans-serif;
+    font-size: 22px;
+}
+
+input#searchInput.form-control:focus {
+    border-color: #003063;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+
+input#searchInput::placeholder {
+    font-family: "HamburgSans-Bold", sans-serif;
+}

@@ -488,7 +488,7 @@ Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Men�
 
 Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten, die im Folgenden erläutert werden.
 
-###### Portalconfig.menu.tools.children.animation ######
+#### Portalconfig.menu.tools.children.animation
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -499,7 +499,7 @@ Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten,
 ******
 ******
 
-###### Portalconfig.menu.tools.children.coord ######
+#### Portalconfig.menu.tools.children.coord ######
 Ermöglicht die Ermittlung von Koordinaten in allen definierten Koordinatensystemen (siehe [namedProjections](config.js.md)). Der Titel wird dem "+title"-Attribut entnommen. Alternativ wird der Name (z.B. "EPSG:25832") verwendet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -511,7 +511,7 @@ Ermöglicht die Ermittlung von Koordinaten in allen definierten Koordinatensyste
 ******
 ******
 
-###### Portalconfig.menu.tools.children.draw ######
+#### Portalconfig.menu.tools.children.draw
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -523,7 +523,7 @@ Ermöglicht die Ermittlung von Koordinaten in allen definierten Koordinatensyste
 ******
 ******
 
-###### Portalconfig.menu.tools.children.extendedFilter ######
+#### Portalconfig.menu.tools.children.extendedFilter ######
 Der *erweiterte Filter* ist ein Filter, der in der Lage ist, sämtliche in der Karte verfügbaren WFS nach allen möglichen Attributen und -werten zu filtern.
 Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt werden, den Layer auch zu verwenden. Dies geschieht über folgenden Parameter:
 
@@ -537,7 +537,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 ******
 ******
 
-###### Portalconfig.menu.tools.children.featureLister ######
+#### Portalconfig.menu.tools.children.featureLister ######
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
@@ -548,7 +548,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 ******
 ******
 
-###### Portalconfig.menu.tools.children.filter ######
+#### Portalconfig.menu.tools.children.filter ######
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |name|nein|String||Name des Werkzeuges im Menüeintrag|
@@ -609,7 +609,7 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
 ******
 ******
 
-###### Portalconfig.menu.tools.children.gfi ######
+#### Portalconfig.menu.tools.children.gfi ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -623,7 +623,7 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
 ******
 ******
 
-###### Portalconfig.menu.tools.children.kmlimport ######
+#### Portalconfig.menu.tools.children.kmlimport ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -634,7 +634,7 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
 ******
 ******
 
-###### Portalconfig.menu.tools.children.measure ######
+#### Portalconfig.menu.tools.children.measure ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -647,7 +647,7 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
 
 
 
-###### Portalconfig.menu.tools.children.parcelSearch ######
+#### Portalconfig.menu.tools.children.parcelSearch ######
 Flurstücksuche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -658,7 +658,9 @@ Flurstücksuche
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
 |parcelDenominator|nein|Boolean|false|Gibt an ob auch Flure mit an die *StoredQuery* übergeben werden.|
 |serviceId|nein|String||ID, des Gazeteer-WFS. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
-|StoredQueryID|nein|String||Name der *StoredQuery*, die angesprochen werden soll.|
+|storedQueryID|nein|String||Name der *StoredQuery*, die angesprochen werden soll.|
+|createReport|nein|Bool|false|Gibt an ob eine Berichtsfunktionalität erstellt werden soll.|
+|reportServiceId|nein|String||Gibt die ID des Dienstes an, der aufgerufen werden soll.|
 
 ******
 ******
@@ -704,7 +706,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 ******
 ******
 
-###### Portalconfig.menu.tools.children.print ######
+#### Portalconfig.menu.tools.children.print ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -757,7 +759,7 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |outerCircle|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
 |point|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
 
-###### Portalconfig.menu.tools.children.routing ######
+#### Portalconfig.menu.tools.children.routing ######
 Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Parameter müssen am Werkzeug vorhanden sein:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -775,7 +777,7 @@ Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Paramet
 ******
 
 
-###### Portalconfig.menu.tools.children.searchByCoord ######
+#### Portalconfig.menu.tools.children.searchByCoord ######
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -788,7 +790,7 @@ Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Paramet
 ******
 ******
 
-###### Portalconfig.menu.tools.children.wfsFeatureFilter ######
+#### Portalconfig.menu.tools.children.wfsFeatureFilter ######
 Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann nur nach den Attributen und -werten gefiltert werden, die in der WFS-Layer-Konfiguration in den [filterOptions](#markdown-header-filteroptions) definiert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|

@@ -1,6 +1,7 @@
 define(function (require) {
 
 var ValueModel = require("modules/snippets/value/model"),
+    Config = require("config"),
     Snippet = Backbone.Model.extend({
     defaults: {
         // snippet info text
@@ -13,7 +14,9 @@ var ValueModel = require("modules/snippets/value/model"),
     superInitialize: function () {
         this.set("valuesCollection", new Backbone.Collection());
 
-        this.checkSnippetInfos(Radio.request("Parser", "getSnippetInfos"), this.get("name"));
+        if (_.has(Config, "infoJson")) {
+            this.checkSnippetInfos(Radio.request("Parser", "getSnippetInfos"), this.get("name"));
+        }
     },
 
     /**

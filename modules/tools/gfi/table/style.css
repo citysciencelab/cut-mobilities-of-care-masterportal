@@ -23,3 +23,10 @@
 .gfi-detached-table > .gfi-footer > .pager-right {
     border-bottom-right-radius: 12px !important;
 }
+
+.icon-turnarticle {
+    position: relative;
+    display: inline-block;
+    bottom: 20px;
+    right: 25px;
+}

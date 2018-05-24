@@ -4,8 +4,9 @@ define([
     "modules/window/model",
     "text!modules/window/templateMax.html",
     "text!modules/window/templateMin.html",
+    "text!modules/window/templateTable.html",
     "jqueryui/widgets/draggable"
-], function (Backbone, Radio, Window, templateMax, templateMin) {
+], function (Backbone, Radio, Window, templateMax, templateMin, templateTable) {
 
     var WindowView = Backbone.View.extend({
         id: "window",
@@ -13,6 +14,7 @@ define([
         model: Window,
         templateMax: _.template(templateMax),
         templateMin: _.template(templateMin),
+        templateTable: _.template(templateTable),
         initialize: function () {
             this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
             this.$el.draggable({
@@ -25,6 +27,7 @@ define([
             this.$el.css({
                 "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
             });
+
             $(window).resize($.proxy(function () {
                 this.$el.css({
                     "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
@@ -40,7 +43,11 @@ define([
             var attr = this.model.toJSON();
 
             if (this.model.get("isVisible") === true) {
-                if (this.model.get("isCollapsed") === true) {
+                if (Radio.request("Util", "getUiStyle") === "TABLE") {
+                    $(".lgv-container").append(this.$el.html(this.templateTable(attr)));
+                    this.$el.addClass("table-tool-window");
+                }
+                else if (this.model.get("isCollapsed") === true) {
                     $("body").append(this.$el.html(this.templateMin(attr)));
                     this.$el.css({"top": "", "bottom": "0", "left": "0", "margin-bottom": "60px"});
                 }

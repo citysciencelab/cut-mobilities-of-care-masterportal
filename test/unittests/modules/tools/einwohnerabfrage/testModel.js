@@ -6,12 +6,12 @@ define(function(require) {
     describe("tools/einwohnerabfrageModel", function () {
         var model,
             utilModel,
-            testFeature;
+            cswResponseXml;
 
         before(function () {
             model = new Model();
             utilModel = new Util();
-            testFeature = utilModel.createTestFeatures()[0];
+            cswResponseXml = utilModel.getCswResponse();
         });
 
         describe("roundRadius", function () {
@@ -58,6 +58,12 @@ define(function(require) {
             it("should have a draw interaction", function () {
                 model.createDrawInteraction("Box");
                 expect(model.get("drawInteraction")).not.to.be.undefined;
+            });
+        });
+
+        describe("parseDate", function () {
+            it("should return '31.12.2013'", function () {
+                expect(model.parseDate(cswResponseXml)).to.equal("31.12.2013");
             });
         });
     });
