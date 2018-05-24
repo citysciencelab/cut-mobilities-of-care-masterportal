@@ -1,14 +1,12 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
         Cesium = require("cesium"),
         TerrainLayer;
 
     TerrainLayer = Layer.extend({
         defaults: _.extend({}, Layer.prototype.defaults, {
-            supported: ['3D'],
+            supported: ["3D"],
             showSettings: false
 
         }),
@@ -54,7 +52,7 @@ define(function (require) {
                 }
 
                 this.createTerrainProvider();
-                if(this.getIsSelected()){
+                if (this.getIsSelected()) {
                     this.listenToOnce(Radio.channel("Map"), {
                         // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                         "activateMap3d": function () {
@@ -71,21 +69,26 @@ define(function (require) {
          * Abhängig vom Attribut "isSelected"
          */
         toggleLayerOnMap: function () {
+            var map3d;
+
             if (Radio.request("Map", "isMap3d") === true) {
-                var map3d = Radio.request("Map", "getMap3d");
+                map3d = Radio.request("Map", "getMap3d");
                 if (this.getIsVisibleInMap() === true) {
                     map3d.getCesiumScene().terrainProvider = this.getTerrainProvider();
-                } else {
+                }
+                else {
                     map3d.getCesiumScene().terrainProvider = new Cesium.EllipsoidTerrainProvider({});
                 }
             }
         },
 
 
-        createTerrainProvider: function() {
-            if(this.has("terrainProvider") === false){
-                var options = {};
-                if(this.has("cesiumTerrainProviderOptions")){
+        createTerrainProvider: function () {
+            var options;
+
+            if (this.has("terrainProvider") === false) {
+                options = {};
+                if (this.has("cesiumTerrainProviderOptions")) {
                     _.extend(options, this.get("cesiumTerrainProviderOptions"));
                 }
                 options.url = this.get("url");

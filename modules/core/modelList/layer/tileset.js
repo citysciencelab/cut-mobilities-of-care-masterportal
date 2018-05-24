@@ -1,14 +1,12 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
         Cesium = require("cesium"),
         TileSetLayer;
 
     TileSetLayer = Layer.extend({
         defaults: _.extend({}, Layer.prototype.defaults, {
-            supported: ['3D'],
+            supported: ["3D"],
             showSettings: false
 
         }),
@@ -53,7 +51,7 @@ define(function (require) {
                 }
 
                 this.createTileSet();
-                if(this.getIsSelected()){
+                if (this.getIsSelected()) {
                     this.listenToOnce(Radio.channel("Map"), {
                         // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                         "activateMap3d": function () {
@@ -70,25 +68,33 @@ define(function (require) {
          * Abhängig vom Attribut "isSelected"
          */
         toggleLayerOnMap: function () {
+            var map3d,
+                tileset;
+
             if (Radio.request("Map", "isMap3d") === true) {
-                var map3d = Radio.request("Map", "getMap3d");
-                var tileset = this.getTileSet();
+                map3d = Radio.request("Map", "getMap3d");
+                tileset = this.getTileSet();
+
                 if (this.getIsVisibleInMap() === true) {
-                    if(!map3d.getCesiumScene().primitives.contains(tileset)){
+                    if (!map3d.getCesiumScene().primitives.contains(tileset)) {
                         map3d.getCesiumScene().primitives.add(tileset);
-                    }else{
+                    }
+                    else {
                         tileset.show = true;
                     }
-                } else {
+                }
+                else {
                     tileset.show = false;
                 }
             }
         },
 
-        createTileSet: function() {
-            if(this.has("tileSet") === false){
-                var options = {};
-                if(this.has("cesium3DTilesetOptions")){
+        createTileSet: function () {
+            var options;
+
+            if (this.has("tileSet") === false) {
+                options = {};
+                if (this.has("cesium3DTilesetOptions")) {
                     _.extend(options, this.get("cesium3DTilesetOptions"));
                 }
                 options.url = this.get("url");
