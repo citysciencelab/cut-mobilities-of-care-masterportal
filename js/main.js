@@ -62,7 +62,7 @@ require.config({
             "video.js": "videojs"
         }
     },
-    urlArgs: "bust=" + (new Date()).getTime()
+   // urlArgs: "bust=" + (new Date()).getTime()
 });
 
 // Überschreibt das Errorhandling von Require so,

@@ -25,9 +25,6 @@ define(function (require) {
             if (this.model.getName() === "legend") {
                 Radio.trigger("Legend", "toggleLegendWin");
             }
-            else if (this.model.getName() === "Ansicht einfrieren") {
-                Radio.trigger("Freeze", "toggleFreezeWin");
-            }
             else {
                 this.model.setIsActive(true);
             }

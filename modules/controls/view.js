@@ -4,8 +4,10 @@ define([
 
     var ControlsView = Backbone.View.extend({
         className: "controls-view",
-        initialize: function () {
+        initialize: function (style) {
+            this.uiStyle = style;
             this.render();
+
 
             this.$el.on({
                 click: function (e) {
@@ -14,8 +16,10 @@ define([
             });
         },
         render: function () {
-            $("#map .ol-overlaycontainer-stopevent").append(this.$el);
-            this.renderSubViews();
+            if (!this.uiStyle || this.uiStyle !== "TABLE") {
+                $("#map .ol-overlaycontainer-stopevent").append(this.$el);
+                this.renderSubViews();
+            }
         },
 
         renderSubViews: function () {
@@ -24,14 +28,24 @@ define([
             this.$el.append("<div class='control-view-bottom-left'></div>");
         },
 
+        renderToToolbar: function () {
+
+        },
+
         addRowTR: function (id, showMobile) {
-            if (showMobile === true) {
-                this.$el.find(".control-view-top-right").append("<div class='row controls-row-right' id='" + id + "'></div>");
+            if (!this.uiStyle || this.uiStyle !== "TABLE") {
+                if (showMobile === true) {
+                    this.$el.find(".control-view-top-right").append("<div class='row controls-row-right' id='" + id + "'></div>");
+                }
+                else {
+                    this.$el.find(".control-view-top-right").append("<div class='row controls-row-right hidden-xs' id='" + id + "'></div>");
+                }
+                return this.$el.find(".control-view-top-right").children().last();
             }
             else {
-                this.$el.find(".control-view-top-right").append("<div class='row controls-row-right hidden-xs' id='" + id + "'></div>");
+                // Im Table-Design werden die Controls nicht oben rechts gerendert, sondern im Werkzeug-Fenster
+                $("#table-tools-menu").append("<div id='" + id + "'></div>");
             }
-            return this.$el.find(".control-view-top-right").children().last();
         },
 
         addRowBR: function (id) {

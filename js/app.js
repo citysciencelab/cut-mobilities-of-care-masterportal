@@ -245,12 +245,6 @@ define("app", function (require) {
                     });
                     break;
                 }
-                case "freeze": {
-                    require(["modules/tools/freeze/view"], function (FreezeView) {
-                        new FreezeView();
-                    });
-                    break;
-                }
                 default: {
                     break;
                 }
@@ -266,7 +260,7 @@ define("app", function (require) {
     if (!style || style !== "SIMPLE") {
         require(["modules/controls/view"], function (ControlsView) {
             var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
-                controlsView = new ControlsView();
+                controlsView = new ControlsView(style);
 
             _.each(controls, function (control) {
                 switch (control.id) {
@@ -334,6 +328,16 @@ define("app", function (require) {
 
                             require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
                                 new OverviewmapView({el: el});
+                            });
+                        }
+                        break;
+                    }
+                    case "freeze": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
+
+                            require(["modules/controls/freeze/view"], function (FreezeView) {
+                                new FreezeView({el: el});
                             });
                         }
                         break;
