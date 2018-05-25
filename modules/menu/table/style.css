@@ -114,7 +114,7 @@
     margin-left: -28px;
     width: 480px;
     bottom: -20px;
-
+    display: none;
 }
 
 .table-layer-list a:link {
@@ -151,6 +151,15 @@
     font-weight: 900;
 }
 
+.icon-burgermenu_alt #table-nav-layers-panel-toggler {
+    background-color: #808080;
+    border-radius: 12px !important;
+}
+
+.icon-burgermenu_alt.collapsed #table-nav-layers-panel-toggler {
+    background-color: #ffffff;
+}
+
 .icon-burgermenu_alt.collapsed:before {
     content: "\e903";
     color: #003063;
@@ -177,13 +186,6 @@ div#isActivated {
 #table-nav-layers-panel .layers .layer-item {
     font-family: "HamburgSans", sans-serif;
     font-size: 17px;
-}
-
-.burgerMenuIsActive {
-    background-color: #aaa !important;
-    height: 40px;
-    width: 40px;
-
 }
 
 .icon-info:before {
