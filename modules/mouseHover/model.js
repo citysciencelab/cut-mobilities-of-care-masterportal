@@ -1,14 +1,15 @@
 define(function (require) {
     var Config = require("config"),
-        Backbone = require("backbone"),
-        Radio = require ("backbone.radio"),
+        ol = require("openlayers"),
         MouseHoverPopup;
 
     MouseHoverPopup = Backbone.Model.extend({
         defaults: {
+            overlay: new ol.Overlay({
+                id: "mousehover-overlay"
+            }),
             textPosition: null,
             textArray: null,
-            wfsList: [],
             minShift: Config.mouseHover.minShift ? Config.mouseHover.minShift : 5,
             numFeaturesToShow: Config.mouseHover.numFeaturesToShow ? Config.mouseHover.numFeaturesToShow : 2,
             infoText: Config.mouseHover.infoText ? Config.mouseHover.infoText : "(weitere Objekte. Bitte zoomen.)"
@@ -20,7 +21,7 @@ define(function (require) {
             this.listenTo(channel, {
                 "hide": this.destroyPopup
             });
-
+            Radio.trigger("Map", "addOverlay", this.get("overlay"));
             Radio.trigger("Map", "registerListener", "pointermove", this.checkDragging, this);
             this.getMouseHoverInfosFromConfig();
         },
@@ -45,15 +46,20 @@ define(function (require) {
         destroyPopup: function () {
             this.setTextArray(null);
             this.setTextPosition(null);
-            this.trigger("destroy");
+            this.setOverlayPosition(undefined);
         },
 
         showPopup: function () {
-            this.trigger("render", this.getTextArray(), this.getTextPosition());
+            this.trigger("render", this.getTextArray());
         },
 
-        movePopup: function () {
-            this.trigger("move", this.getTextPosition());
+        /**
+         * sets the position for the overlay
+         * @param {ol.Coordinate | undefined} value - if the value is undefined the overlay is hidden
+         * @returns {void}
+         */
+        setOverlayPosition: function (value) {
+            this.get("overlay").setPosition(value);
         },
 
         getFeaturesAtPixel: function (evt) {
@@ -69,12 +75,10 @@ define(function (require) {
         },
 
         isClusterFeature: function (feature) {
-            var isClusterFeature = false;
-
             if (feature.getProperties().features) {
-                isClusterFeature = true;
+                return true;
             }
-            return isClusterFeature;
+            return false;
         },
 
         fillFeatureArray: function (featureAtPixel) {
@@ -112,9 +116,10 @@ define(function (require) {
          * @listens "Map:pointermove"
          */
         checkDragging: function (evt) {
-            if (!evt.dragging) {
-                this.checkTextPosition(evt);
+            if (evt.dragging) {
+                return;
             }
+            this.checkTextPosition(evt);
         },
 
         /**
@@ -131,23 +136,21 @@ define(function (require) {
                 featuresArray = _.union(featuresArray, featureArray);
             }, this);
 
-            this.checkAction(featuresArray);
+            this.checkAction(featuresArray, evt);
         },
 
         /**
          * Prüft anhand der neu darzustellenden Features welche Aktion mit dem MouseHover geschehen soll
          * @param  {Array} featuresArray Array der darzustellenden Features
          */
-        checkAction: function (featuresArray) {
+        checkAction: function (featuresArray, evt) {
             var textArray;
 
             if (featuresArray.length > 0) {
                 textArray = this.checkTextArray(featuresArray);
 
-                if (this.isTextEqual(textArray, this.getTextArray())) {
-                    this.movePopup();
-                }
-                else {
+                this.setOverlayPosition(evt.coordinate);
+                if (!this.isTextEqual(textArray, this.getTextArray())) {
                     this.setTextArray(textArray);
                     this.showPopup();
                 }
@@ -170,9 +173,7 @@ define(function (require) {
             if (diff1.length > 0 || diff2.length > 0) {
                 return false;
             }
-            else {
-                return true;
-            }
+            return true;
         },
 
         /**
@@ -180,13 +181,12 @@ define(function (require) {
          * @param  {evt} evt MouseHove
          */
         checkTextPosition: function (evt) {
-            var lastPosition = this.getTextPosition(),
-                lastPixel = lastPosition ? Radio.request("Map", "getPixelFromCoordinate", lastPosition) : null,
+            var lastPixel = this.getTextPosition(),
                 newPixel = evt.pixel,
                 minShift = this.getMinShift();
 
-            if (!lastPixel || newPixel[0] < (lastPixel[0] - minShift) || newPixel[0] > (lastPixel[0] + minShift) || newPixel[1] < (lastPixel[1] - minShift) || newPixel[1] > (lastPixel[1] + minShift)) {
-                this.setTextPosition(evt.coordinate);
+            if (!lastPixel || newPixel[0] < lastPixel[0] - minShift || newPixel[0] > lastPixel[0] + minShift || newPixel[1] < lastPixel[1] - minShift || newPixel[1] > lastPixel[1] + minShift) {
+                this.setTextPosition(evt.pixel);
                 this.checkForFeaturesAtPixel(evt);
             }
         },
@@ -302,17 +302,6 @@ define(function (require) {
         // setter for textArray
         setTextArray: function (value) {
             this.set("textArray", value);
-        },
-
-        // getter for mhpOverlay
-        getMhpOverlay: function () {
-            return this.get("mhpOverlay");
-        },
-
-        // setter for mhpOverlay
-        setMhpOverlay: function (value) {
-            this.set("mhpOverlay", value);
-            Radio.trigger("Map", "addOverlay", value);
         },
 
         // getter for mouseHoverInfos
