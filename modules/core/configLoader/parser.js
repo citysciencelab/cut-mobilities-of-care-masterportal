@@ -118,13 +118,7 @@ define([
 
                     // Attribute aus der config.json werden von item geerbt
                     _.extend(item, value);
-                    // folder Themen bekommt noch den Baumtyp als Attribut
-                    if (key === "tree") {
-                        this.addItem(_.extend(item, {treeType: this.getTreeType()}));
-                    }
-                    else {
-                        this.addItem(item);
-                    }
+                    this.addItem(item);
                     this.parseMenu(value.children, key);
                 }
                 else {
