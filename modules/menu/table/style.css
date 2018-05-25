@@ -174,7 +174,7 @@ div#isActivated {
     font-family: "HamburgSans-Bold", sans-serif;
 }
 
-.layer-item {
+#table-nav-layers-panel .layers .layer-item {
     font-family: "HamburgSans", sans-serif;
     font-size: 17px;
 }
