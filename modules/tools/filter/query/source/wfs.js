@@ -302,7 +302,7 @@ define(function (require) {
          * @return {Boolean}               true if feature has attribute that contains value
          */
         isValueMatch: function (feature, attribute) {
-            if (attribute.attrName === "schulform" || attribute.attrName === "fremdsprachen") {
+            if (attribute.attrName === "schulform" || attribute.attrName === "fremdsprache") {
                 attribute.matchingMode = "AND";
             }
 
