@@ -77,7 +77,7 @@ define(function (require) {
             // Slide-Animation templateSetting
             if (this.model.getIsSettingVisible() === false) {
                 this.$el.find(".layer-settings").slideUp("slow", function () {
-                    this.$el.remove();
+                    $(this).remove();
                 });
             }
             else {
