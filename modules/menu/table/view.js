@@ -18,12 +18,11 @@ define(function (require) {
             });
 
             this.render();
-            this.renderLayerList();
+            this.renderLayerList(); 
             this.renderTools();
         },
         toggleActiveElement: function (element) {
             var oldActiveElement = this.getActiveElement();
-
             if (oldActiveElement !== element) {
                 Radio.trigger("TableMenu", oldActiveElement);
                 this.setActiveElement(element);

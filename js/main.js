@@ -34,6 +34,7 @@ require.config({
         geoapi: "GeoAPI",
         jquery: "../node_modules/jquery/dist/jquery.min",
         jqueryui: "../node_modules/jquery-ui/ui",
+        jqueryuitouchpunch: "../node_modules/jquery-ui-touch-punch/jquery.ui.touch-punch",
         modules: "../modules",
         moment: "../node_modules/moment/min/moment.min",
         openlayers: "../node_modules/openlayers/dist/ol",
