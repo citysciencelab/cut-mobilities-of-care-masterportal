@@ -32,6 +32,9 @@ define(function (require) {
         },
         render: function () {
             this.$el.html(this.template());
+            if (Radio.request("TableMenu", "getActiveElement") === "Layer") {
+                $("#table-nav-layers-panel").collapse("show");
+            }
             this.renderList();
             return this.$el;
         },
