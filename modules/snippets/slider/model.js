@@ -32,14 +32,14 @@ define(function (require) {
             this.getValuesCollection().add([
                 new ValueModel({
                     attr: this.getName(),
-                    displayName: this.getDisplayName + " ab",
+                    displayName: this.getDisplayName() + " ab",
                     value: min,
                     type: this.getType(),
                     isMin: true
                 }),
                 new ValueModel({
                     attr: this.getName(),
-                    displayName: this.getDisplayName + " bis",
+                    displayName: this.getDisplayName() + " bis",
                     value: max,
                     type: this.getType(),
                     isMin: false
