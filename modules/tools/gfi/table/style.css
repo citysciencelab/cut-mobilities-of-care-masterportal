@@ -32,5 +32,5 @@
 }
 
 body {
-    -ms-touch-action: none;
+    -ms-touch-action: auto;
 }
