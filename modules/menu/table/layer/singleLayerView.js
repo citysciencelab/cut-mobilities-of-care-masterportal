@@ -28,7 +28,7 @@ define([
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isSettingVisible": this.renderSetting,
-                "change:transparency": this.rerender
+                "change:transparency": this.render
             });
             this.$el.on({
                 click: function (e) {
