@@ -28,7 +28,6 @@ define(function (require) {
             this.$el.on("touchmove", function(evt) {
                 var touch = evt.originalEvent.touches[0];
                 var width = $(this). width() /2;
-                // var height = $(this). height() /2;
                 var x = touch.clientX - width;
                 var y = touch.clientY;
                 $(this).css({
@@ -36,9 +35,6 @@ define(function (require) {
                     "top": y + "px"
                 });
             });
-            this.$el.bind("contextmenu", function (e) {
-                e.preventDefault();
-            }, false);
         },
 
         /**
