@@ -36,6 +36,9 @@ define(function (require) {
                     "top": y + "px"
                 });
             });
+            this.$el.bind("contextmenu", function (e) {
+                e.preventDefault();
+            }, false);
         },
 
         /**
