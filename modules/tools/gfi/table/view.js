@@ -28,9 +28,9 @@ define(function (require) {
             this.$el.on("touchmove", function(evt) {
                 var touch = evt.originalEvent.touches[0];
                 var width = $(this). width() /2;
-                var height = $(this). height() /2;
+                // var height = $(this). height() /2;
                 var x = touch.clientX - width;
-                var y = touch.clientY - height;
+                var y = touch.clientY;
                 $(this).css({
                     "left": x + "px",
                     "top": y + "px"
