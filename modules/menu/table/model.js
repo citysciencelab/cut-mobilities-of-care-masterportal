@@ -12,7 +12,9 @@ define(function () {
             },
 
             setActiveElement: function (element) {
-                channel.trigger("hideMenuElement" + this.getActiveElement());
+                if (this.get("isActiveElement") !== element) {
+                    channel.trigger("hideMenuElement" + this.getActiveElement());
+                }
                 this.set("isActiveElement", element);
             },
             getActiveElement: function () {
