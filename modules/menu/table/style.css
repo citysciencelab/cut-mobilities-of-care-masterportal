@@ -244,21 +244,21 @@
 #table-nav-layers-panel .layer-settings {
         clear: both;
         margin-top: 32px;
-        border-bottom: 1px solid #ddd;
         padding-top: 8px;
         font-size: 14px;
         margin-left: 12px;
     }
 
 #table-nav-layers-panel .layer-settings .glyphicon {
-        font-size: large;
+        font-size: x-large;
         color: #808080;
-        top: 6px;
+        top: 8px;
     }
 
 
 #table-nav-layers-panel .layer-settings .badge {
         font-size: 14px;
+        padding-top: 6px;
     }
 
 #table-nav-layers-panel .icon-info{
@@ -267,7 +267,7 @@
     }
 
 #table-nav-layers-panel .glyphicon-cog{
-        color: #808080;
         font-size: 14px;
+        color: #808080;
         top: 4px;
     }
