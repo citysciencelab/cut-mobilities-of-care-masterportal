@@ -34,9 +34,11 @@ define(function (require) {
                     }
                     case "folder": {
                         if (model.getId() === "tools") {
-                            this.addToolsMenuView ();
+                            this.addToolsMenuView();
                         }
+                        break;
                     }
+                    default:
                 }
             }, this);
         },
