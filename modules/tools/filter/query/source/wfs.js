@@ -302,11 +302,11 @@ define(function (require) {
          * @return {Boolean}               true if feature has attribute that contains value
          */
         isValueMatch: function (feature, attribute) {
-            if (attribute.attrName === "schulform" || attribute.attrName === "fremdsprache") {
-                attribute.matchingMode = "AND";
+            if (attribute.attrName === "bezirk" || attribute.attrName === "stadtteil") {
+                attribute.matchingMode = "OR";
             }
 
-            return attribute.matchingMode === "AND" ? this.isANDMatch(feature, attribute) : this.isORMatch(feature, attribute);
+            return attribute.matchingMode === "OR" ? this.isORMatch(feature, attribute) : this.isANDMatch(feature, attribute);
         },
         isORMatch: function (feature, attribute) {
             var isMatch = false;
