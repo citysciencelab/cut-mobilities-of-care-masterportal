@@ -27,22 +27,29 @@ define(function (require) {
                 offset: [15, 0],
                 positioning: "center-left"
             }),
+            tooltipOverlay: new ol.Overlay({
+                offset: [15, 20],
+                positioning: "top-left"
+            }),
             requests: [],
             data: {},
             receivedData: false,
             requesting: false,
             snippetDropdownModel: {},
             values: {
-                "Rechteck": "Box",
-                "Kreis": "Circle",
-                "Polygon": "Polygon"
+                "Rechteck aufziehen": "Box",
+                "Kreis aufziehen": "Circle",
+                "Fläche zeichnen": "Polygon"
             },
+            currentValue: "",
             // mrh meta data id
             mrhId: "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
             mrhDate: undefined,
             // fhh meta data id
             fhhId: "D3DDBBA3-7329-475C-BB07-14D539ED6B1E",
-            fhhDate: undefined
+            fhhDate: undefined,
+            tooltipMessage: "Klicken zum Starten und Beenden",
+            tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen"
             // hmdk/metaver link
             // metaDataLink: Radio.request("RestReader", "getServiceById", "2").get("url")
         },
@@ -64,7 +71,8 @@ define(function (require) {
                 "valuesChanged": this.toggleAlkisAddressLayer
             });
             this.on("change:isCurrentWin", this.handleCswRequests);
-            this.createDomOverlay(this.get("circleOverlay"));
+            this.createDomOverlay("circle-overlay", this.get("circleOverlay"));
+            this.createDomOverlay("tooltip-overlay", this.get("tooltipOverlay"));
             this.setDropDownSnippet(new SnippetDropdownModel({
                 name: "Geometrie",
                 type: "string",
@@ -261,6 +269,7 @@ define(function (require) {
                     this.getDrawInteraction().setActive(false);
                 }
                 Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
+                Radio.trigger("Map", "removeOverlay", this.get("tooltipOverlay"));
             }
         },
 
@@ -347,10 +356,13 @@ define(function (require) {
                         }
                     }
                 });
-
+            this.setCurrentValue(value);
             this.toggleOverlay(value, this.get("circleOverlay"));
+            Radio.trigger("Map", "addOverlay", this.get("tooltipOverlay"));
+
             this.setDrawInteractionListener(drawInteraction, layer);
             this.setDrawInteraction(drawInteraction);
+            Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay, this);
             Radio.trigger("Map", "addInteraction", drawInteraction);
         },
         snapRadiusToInterval: function (coordinates, opt_geom) {
@@ -420,6 +432,19 @@ define(function (require) {
             circleOverlay.getElement().innerHTML = radius;
             circleOverlay.setPosition(coords);
         },
+        showTooltipOverlay: function (evt) {
+            var coords = evt.coordinate,
+                tooltipOverlay = this.get("tooltipOverlay"),
+                currentValue = this.getCurrentValue();
+
+            if (currentValue === "Polygon") {
+                tooltipOverlay.getElement().innerHTML = this.get("tooltipMessagePolygon");
+            }
+            else {
+                tooltipOverlay.getElement().innerHTML = this.get("tooltipMessage");
+            }
+            tooltipOverlay.setPosition(coords);
+        },
 
         precisionRound: function (number, precision) {
             var factor = Math.pow(10, precision);
@@ -446,12 +471,12 @@ define(function (require) {
          * @param {string} type - geometry type
          * @param {ol.Overlay} circleOverlay
          */
-        toggleOverlay: function (type, circleOverlay) {
+        toggleOverlay: function (type, overlay) {
             if (type === "Circle") {
-                Radio.trigger("Map", "addOverlay", circleOverlay);
+                Radio.trigger("Map", "addOverlay", overlay);
             }
             else {
-                Radio.trigger("Map", "removeOverlay", circleOverlay);
+                Radio.trigger("Map", "removeOverlay", overlay);
             }
         },
 
@@ -472,11 +497,11 @@ define(function (require) {
          * and adds it to the overlay
          * @param {ol.Overlay} circleOverlay
          */
-        createDomOverlay: function (circleOverlay) {
+        createDomOverlay: function (id, overlay) {
             var element = document.createElement("div");
 
-            element.setAttribute("id", "circle-overlay");
-            circleOverlay.setElement(element);
+            element.setAttribute("id", id);
+            overlay.setElement(element);
         },
 
         /**
@@ -598,6 +623,15 @@ define(function (require) {
          */
         getCheckboxAddress: function () {
             return this.get("checkBoxAddress");
+        },
+
+        // getter for currentValue
+        getCurrentValue: function () {
+            return this.get("currentValue");
+        },
+        // setter for currentValue
+        setCurrentValue: function (value) {
+            this.set("currentValue", value);
         }
     });
 
