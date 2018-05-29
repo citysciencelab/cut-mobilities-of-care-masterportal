@@ -1,10 +1,10 @@
 .freeze-view {
     z-index: 10000;
-    width: 10px;
-    height: 10px;
     position: absolute;
     top: -100000px;
     left: -100000px;
+    width: 10px;
+    height: 10px;
 }
 
 .freeze-activated {
@@ -12,7 +12,6 @@
     top: 0px;
     left: 0px;
 }
-
 
 .freeze-view-close {
     z-index: 10001;
@@ -22,4 +21,11 @@
     left: 0px;
     border-radius: 12px !important;
     font-size: 26px;
+    width: 600px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    background-color: #646262;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
 }

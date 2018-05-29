@@ -28,10 +28,6 @@ define([
             this.$el.append("<div class='control-view-bottom-left'></div>");
         },
 
-        renderToToolbar: function () {
-
-        },
-
         addRowTR: function (id, showMobile) {
             if (!this.uiStyle || this.uiStyle !== "TABLE") {
                 if (showMobile === true) {
@@ -44,7 +40,8 @@ define([
             }
             else {
                 // Im Table-Design werden die Controls nicht oben rechts gerendert, sondern im Werkzeug-Fenster
-                $("#table-tools-menu").append("<div id='" + id + "'></div>");
+                // ToDo: hier ist das table-tools-menu aber noch tnicht geladen!!!!!
+
             }
         },
 

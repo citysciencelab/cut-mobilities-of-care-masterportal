@@ -336,8 +336,8 @@ define("app", function (require) {
                         if (control.attr === true) {
                             var el = controlsView.addRowTR(control.id);
 
-                            require(["modules/controls/freeze/view"], function (FreezeView) {
-                                new FreezeView({el: el});
+                            require(["modules/controls/freeze/model"], function (FreezeModel) {
+                                new FreezeModel(style);
                             });
                         }
                         break;
