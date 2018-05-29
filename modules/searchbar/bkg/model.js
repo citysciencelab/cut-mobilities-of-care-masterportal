@@ -77,7 +77,6 @@ define(function (require) {
             var request;
 
             if (searchString.length >= this.get("minChars")) {
-                $("#searchInput").val(searchString);
                 request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
                 this.setTypeOfRequest("direct");
                 this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false, this.getTypeOfRequest());
