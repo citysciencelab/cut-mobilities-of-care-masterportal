@@ -319,7 +319,7 @@ function loadApp () {
                     break;
                 }
                 case "backforwardview": {
-                    if (control.attr === true) {
+                    if (control.attr === true || (_.isUndefined(control.attr["glyphicon-forward"]) === false && _.isUndefined(control.attr["glyphicon-backward"]) === false)) {
                         var el = controlsView.addRowTR(control.id);
 
                         require(["modules/controls/backforward/view"], function (backforwardview) {

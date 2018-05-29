@@ -49,9 +49,9 @@ define([
             this.model.pushState(evt.map.getView());
         },
         render: function() {
-            var icon = this.model.getIcons();
-            this.template = this.template.replace("$icon-for", icon["icon-forward"] || 'glyphicon-step-forward');
-            this.template = this.template.replace("$icon-back", icon["icon-backward"] || 'glyphicon-step-backward');
+            var glyphicons = this.model.getGlyphicons();
+            this.template = this.template.replace("$glyphicon-for", glyphicons["glyphicon-forward"] || 'glyphicon-step-forward');
+            this.template = this.template.replace("$glyphicon-back", glyphicons["glyphicon-backward"] || 'glyphicon-step-backward');
             this.$el.html(_.template(this.template));
 
         },

@@ -15,13 +15,13 @@ define([
         initialize: function() {
 
         },
-        //get icons from configuration
-        getIcons: function() {
-            var icons = Radio.request("Parser", "getItemsByAttributes", {id: "backforwardview"});
-            if (icons) {
-                icons = icons[0].attr;
+        //get glyphicons from configuration
+        getGlyphicons: function() {
+            var glyphicons = Radio.request("Parser", "getItemsByAttributes", {id: "backforwardview"});
+            if (glyphicons) {
+                glyphicons = glyphicons[0].attr;
             }
-            return icons;
+            return glyphicons;
         },
 
         isUpdate: function() {
