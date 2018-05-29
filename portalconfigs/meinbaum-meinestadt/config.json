@@ -1,0 +1,152 @@
+{
+  "Portalconfig":
+  {
+    "portalTitle": {
+      "title": "Mein Baum - Meine Stadt",
+      "logo": "../../img/meinbaum-logo.jpg",
+      "link": "https://www.hamburg.de/mein-baum-meine-stadt/",
+      "tooltip": "Mein Baum - Meine Stadt"
+    },
+    "searchBar": {
+        "minChars": 3,
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true
+        },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "placeholder": "Suche nach Adresse/Stadtteil"
+    },
+    "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+        "resolution": 66.14579761460263
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": true
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Mein Baum-Meine Stadt",
+            "gfi": true,
+            "outputFilename": "DruckPDF",
+            "gfiMarker": {
+              "outerCircle": {
+                "fill": false,
+                "pointRadius": 10,
+                "stroke": true,
+                "strokeColor": "#005dff",
+                "strokeWidth": 3
+              },
+              "point": {
+                "fill": true,
+                "pointRadius": 1,
+                  "fillColor": "#000000",
+                  "stroke": false
+                }
+            }
+          },
+          "searchByCoord": {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          }
+        }
+      },
+
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+     "toggleMenu": true,
+      "fullScreen": true,
+      "zoom": true,
+      "orientation": "once",
+      "poi": false,
+      "attributions": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+
+        {
+          "id": ["3323", "3322"],
+          "visibility": true,
+          "name": "Aktuelle Pflanzstandorte",
+          "layerAttribution": "<span>Darstellung der Baumkennzahl  ab Maßstab 1: 2500 </span>"
+        },
+        {
+          "id": ["3318", "3319", "3320", "3321", "4571", "6317"],
+          "name": "Vorjahreskampagnen",
+          "visibility": false,
+          "legendUrl": "ignore"
+        }
+      ]
+    }
+  }
+}

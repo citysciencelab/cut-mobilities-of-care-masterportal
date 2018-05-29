@@ -1,0 +1,57 @@
+
+#startWin {
+    position: absolute;
+    /*height: 490px;*/
+    width: 600px;
+    top: 50%;
+    left: 50%;
+    margin-top: -245px; /* height / 2 */
+    margin-left: -300px; /* width / 2 */
+    z-index: 2500;
+    text-align: justify;
+    background: rgb(255,255,255);
+/*    box-shadow: 6px 6px 6px #666666;*/
+    font-size: 13px;
+    font-family: "UniversNextW01-Regular",sans-serif;
+}
+#startContent {
+    padding: 10px;
+}
+
+#startContent h4 {
+    font-weight: bold;
+    padding-top: 20px;
+}
+
+#startTop {
+    padding: 0px;
+    font-size: 16px;
+    font-weight: bold;
+/*    background: rgb(96, 96, 96);*/
+    color: #ffffff;
+}
+
+#startClose {
+    float: right;
+    font-size: 20px;
+    color: rgb(96, 96, 96);
+    cursor: pointer;
+    margin-right: 25px;
+    border: 1px solid silver;
+    padding: 4px;
+}
+
+#banner2 {
+    width: 540px;
+    height: 51px;
+}
+
+.title2 {
+    position: absolute;
+    top: 16px;
+    left: 10px;
+    color: white;
+    width: 100%;
+    font-weight: bold;
+    font-size: 20px;
+}

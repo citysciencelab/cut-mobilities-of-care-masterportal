@@ -1,0 +1,113 @@
+{
+  "Portalconfig":
+  {
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+        },
+        "zoomLevel": 9,
+        "placeholder": "Suche nach Straße/Adresse",
+        "renderToDOM": "#searchbarInMap",
+        "searchbarTemplate": "mml"
+    },
+    "mapView": {
+        "backgroundImage": "backgroundCanvas.jpeg",
+        "startCenter": [565764, 5933975]
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "gfi": {
+        "name": "Informationen abfragen",
+        "glyphicon": "glyphicon-info-sign",
+        "isActive": true,
+        "zoomToFeature": true
+      },
+      "hide": true
+    },
+    "simpleLister": {
+      "layerId": "6061",
+      "errortxt": "keine Anliegen im Kartenausschnitt",
+      "featuresPerPage": 20,
+      "sortProperty": "ende"
+    },
+    "mapMarkerModul": {
+      "marker": "mapMarker",
+      "dragMarkerLandesgrenzeId": "6074"
+    },
+    "mmlFilter": {
+      "layerId": "6061"
+    },
+
+    "controls": {
+      "toggleMenu": false,
+      "fullScreen": true,
+      "zoom": true,
+      "mmlFilterButton": true,
+      "orientation": {
+        "zoomMode": "once",
+        "markerIcon": "geolocation_Marker",
+        "addClass": "visible-xs",
+        "geolocationIcon": "orientation_mml.svg",
+        "initial": true
+      },
+      "poi": false,
+      "attributions": false,
+      "toggleBaselayer": true,
+      "style": "mml",
+      "mmlNewIssueButton": {
+        "visible": true,
+        "assistantURL": "https://stage.afm.hamburg.de/intelliform/forms/mml_melde_michel/standard/mml_melde_michel/index",
+        "welcomeScreen": false
+      }
+    },
+    "scaleLine": true,
+    "Baumtyp": "light",
+    "reverseGeocoder": {
+      "wpsId": "1001",
+      "timeout": 3000
+    }
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452",
+          "name": "Luftbilder"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+        {
+          "id": "6061",
+          "name": "Anliegen",
+          "visibility": true,
+          "styleId": "mml",
+          "clusterDistance": 60,
+          "mouseHoverField": {
+            "header": ["str", "hsnr"],
+            "text": ["skat_text"],
+            "clusterHeader": "Mehrere Anliegen",
+            "clusterText": "Klick zum Zoomen"
+          }
+        }
+      ]
+    }
+  }
+}

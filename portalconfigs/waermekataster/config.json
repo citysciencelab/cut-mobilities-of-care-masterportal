@@ -1,0 +1,345 @@
+{
+  "Portalconfig":
+    {
+    "portalTitle": {
+      "title": "Wärmekataster-Portal",
+      "logo": "/../lgv-config/img/hh-logo.png",
+      "link": "http://geoinfo.hamburg.de",
+      "tooltip": "Landesbetrieb Geoinformation und Vermessung"
+    },
+      "searchBar": {
+        "minChars": 3,
+        "gazetteer": {
+           "minChars": 3,
+           "serviceId": "6",
+           "searchStreets": true,
+           "searchHouseNumbers": true,
+           "searchDistricts": true,
+           "searchParcels": true
+       },
+       "visibleWFS": {
+           "minChars": 3
+       },
+       "tree": {
+           "minChars": 3
+       },
+       "placeholder": "Suche nach Adresse, Stadtteil, Thema",
+       "geoLocateHit": true
+   },
+      "menu": {
+        "tree": {
+          "name": "Themen",
+          "glyphicon": "glyphicon-list"
+        },
+        "tools": {
+          "name": "Werkzeuge",
+          "glyphicon": "glyphicon-wrench",
+          "children": {
+
+            "parcelSearch": {
+              "name": "Flurstückssuche",
+              "glyphicon": "glyphicon-search",
+              "serviceId": "6",
+              "StoredQueryID": "Flurstueck",
+              "configJSON": "/lgv-config/gemarkungen_hh.json",
+              "parcelDenominator": false
+            },
+            "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full"
+            },
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+            },
+            "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print"
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "searchByCoord": {
+              "name": "Koordinatensuche",
+              "glyphicon": "glyphicon-record"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
+            },
+            "saveSelection": {
+              "name": "Auswahl speichern",
+              "glyphicon": "glyphicon-share"
+            },
+            "addWMS": {
+              "name": "WMS hinzufügen",
+              "glyphicon": "glyphicon-plus"
+            },
+            "featureLister": {
+              "name": "Liste",
+              "glyphicon": "glyphicon-menu-hamburger",
+              "lister": 10
+            }
+              
+          }
+        },
+        "legend": {
+          "name": "Legende",
+          "glyphicon": "glyphicon-book"
+        },
+        "info":{
+          "name": "Info",
+          "glyphicon": "glyphicon-option-vertical",
+          "children": 
+            {
+            "staticlinks": 
+              [{
+                "name": "Haftungsausschluss",
+                "glyphicon": "glyphicon-globe",
+                "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+              },
+              {
+                "name": "Wärmekataster Handbuch",
+                "glyphicon": "glyphicon-book",
+                "url": "http://www.hamburg.de/contentblob/8679336/4f0bfb8ca368f2212853cfdd33f275e0/data/d-handbuch.pdf"
+              }
+              ],
+            "contact": 
+              {
+              "name": "Kontakt",
+              "glyphicon": "glyphicon-envelope",
+              "serviceID": "80001",
+              "includeSystemInfo": true,
+              "contactInfo": "Vielen Dank für ihr Interesse am Wärmekataster der Freien und Hansestadt Hamburg. Haben Sie Fragen oder Ergänzungen zum Wärmekataster, können Sie uns gerne eine Nachricht hinterlassen."
+              }
+          }
+        }
+      },
+      "controls": {
+        "toggleMenu": true,
+        "zoom": true,
+        "orientation": "once",
+        "poi": true,
+        "fullScreen": true,
+        "mousePosition": true,
+        "attributions":true
+      },
+      "scaleLine": true,
+      "Baumtyp": "custom"
+    },
+  "Themenconfig":
+    {
+      "Hintergrundkarten":
+        {
+          "Layer": [
+            
+            {
+              "id": "452"
+            },
+            {
+              "id": ["713", "714", "715", "716"],
+              "name": "Geobasiskarten (schwarz-weiß)"
+            },
+            {
+              "id": ["1043", "1044", "1045", "1046"],
+              "name": "Geobasiskarten (grau-blau)"
+            },
+            {
+              "id": ["717", "718", "719", "720"],
+              "visibility": true,
+              "name": "Geobasiskarten (farbig)"
+            },
+            {
+              "id": "453"
+            }
+          ]
+        },
+      "Fachdaten":
+        {
+          "Ordner": [
+
+            {
+              "Titel": "Wärmebedarf",
+              "Ordner": [
+                {
+                  "Titel": "Wärmebedarf Baublock",
+                  "Layer": [
+                    {
+                      "id": "6040",
+                      "name": "Wärmebedarf Baublock Ist-Zustand"
+                    },
+                    {
+                      "id": "6042",              
+                      "name": "Wärmebedarf Baublock Sanierungsstufe I"
+                    },
+                    {
+                      "id": "6044",
+                      "name": "Wärmebedarf Baublock Sanierungsstufe II"
+                    }
+                  ]
+                },
+                {
+                  "Titel": "Wärmebedarf Cluster",
+                  "Layer": [
+                    {
+                      "id": "6041",
+                      "name": "Wärmebedarf Cluster Ist-Zustand"
+                        
+                    },
+                    {
+                      "id": "6043",
+                      "name": "Wärmebedarf Cluster Sanierungsstufe I"
+                        
+                    },
+                    {
+                      "id": "6045",
+                      "name": "Wärmebedarf Cluster Sanierungsstufe II"
+                        
+                    }
+                  ]
+                }
+              ]
+            },
+                
+            {
+              "Titel": "Wärmeerzeugung und -verteilung",
+              "Layer": [
+                  
+                 {
+                    "id": "6093",
+                    "visibility": true,
+                    "styleId": "6093",
+                    "mouseHoverField": ["name"],
+                    "styleField": "kraftwerkstyp",
+                    "name" : "Energieerzeugungsanlagen"
+                },
+                {
+                  "id": "6047"
+                },
+                {
+                  "id": "6048"
+                }
+              ]
+            },
+
+            {
+              "Titel": "Solar und Geothermie",
+              "Ordner": [
+                {
+                  "Titel": "Wärmeentzugsleistung",
+
+                  "Layer": [
+                    {
+                      "id": "4543"
+                    },
+                    {
+                      "id": "4544"
+                    },
+                    {
+                      "id": "4545"
+                    },
+                    {
+                      "id": "4546"
+                    }
+                  ]
+                }
+              ],
+              "Layer": [
+                {
+                  "id": "4542"
+                },
+                {
+                  "id": "4541"
+                },
+                {
+                  "id": "4423",
+                  "infoFormat": "text/html"
+                },
+                {
+                  "id": ["4537", "4538"],
+                    "name": "Solarpotenzialflächen",
+                    "legendURL": ["http://www.geoportal-hamburg.de/legende/legende_solar.png"],
+                    "gfiTheme": "solaratlas",
+                    "maxScale": 5000
+                }
+              ]
+            },
+
+            {
+              "Titel": "Infrastruktur, Bauen, Wohnen ",
+              "Ordner": [
+                {
+                  "Titel": "Integrierte Stadtteilentwicklung - RISE",
+                  "Layer": [
+                    {
+                      "id": "4409"
+                    },
+                    {
+                      "id": "4410"
+                    },
+                    {
+                      "id": "4411"
+                    },
+                    {
+                      "id": "4412"
+                    },
+                    {
+                      "id": "4414"
+                    }
+                  ]
+                },
+                {
+                  "Titel": "Wohnungsdaten zu Stadtteilen",
+                  "Layer": [
+                    {
+                      "id": "2759"
+                    },
+                    {
+                      "id": "2760"
+                    },
+                    {
+                      "id": "2761"
+                    },
+                    {
+                      "id": "2762"
+                    }
+                  ]
+                }
+              ],
+              "Layer": [
+                {
+                  "id": ["1173","1886"]
+                },
+                {
+                  "id": "1561"
+                },
+                {
+                  "id": "1562"
+                },
+                {
+                  "id": "40"
+                },
+                {
+                  "id": "1530",
+                  "name" : "Wohnungsbauprojekte"
+                }
+              ]
+            },
+
+            {
+              "Titel": "Umwelt und Klima ",
+              "Layer": [
+
+                {
+                  "id": "1566"
+                }
+              ]
+            }
+
+
+          ]
+        }
+    }
+}

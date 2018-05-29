@@ -1,0 +1,996 @@
+{
+  "Portalconfig":
+  {
+    "portalTitle":
+      {
+      "title": "FHH-Flächeninformationssystem",
+      "logo": "/../lgv-config/img/hh-logo.png",
+      "link": "http://immobilien-lig.hamburg.de/",
+      "tooltip": "Landesbetrieb Immobilienmanagement und Grundvermögen (LIG)"
+      },
+    "searchBar":
+      {
+      "minChars": 3,
+      "gazetteer":
+        {
+        "minChars": 3,
+        "serviceId": "6",
+        "searchStreets": true,
+        "searchHouseNumbers": true,
+        "searchDistricts": true,
+        "searchParcels": true,
+        "searchStreetKey": true
+        },
+      "specialWFS":
+        {
+        "minChar": 3
+        },
+      "visibleWFS":
+        {
+        "minChars": 3
+        },
+      "tree":
+        {
+        "minChars": 3
+        },
+      "placeholder": "Suche nach Adresse / Stadtteil / Flurstück(0123/1234)"
+     },
+    "menu":
+     {
+      "tree":
+        {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": true
+        },
+      "tools":
+        {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children":
+
+          {
+
+
+          "draw":
+            {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+            },
+          "measure":
+            {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+            },
+          "coord":
+            {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+            },
+          "gfi":
+            {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+            },
+          "print":
+            {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Master-Portal",
+            "gfi": false,
+            "outputFilename": "DruckPDF",
+            "gfiMarker":
+                  {
+                  "outerCircle":
+                    {
+                    "fill": false,
+                    "pointRadius": 8,
+                    "stroke": true,
+                    "strokeColor": "#ff0000",
+                    "strokeWidth": 3
+                    },
+                  "point":
+                    {
+                    "fill": true,
+                    "pointRadius": 1,
+                    "fillColor": "#000000",
+                    "stroke": false
+                    }
+                  }
+            },
+          "kmlimport":
+            {
+            "name": "KML Import",
+            "glyphicon": "glyphicon-import"
+            },
+          "saveSelection":
+            {
+            "name": "Auswahl speichern",
+            "glyphicon": "glyphicon-share"
+            },
+          "addWMS":
+            {
+            "name": "WMS hinzufügen",
+            "glyphicon": "glyphicon-plus"
+            }
+         }
+      },
+      "parcelSearch":
+            {
+            "name": "Flurstückssuche-Bericht",
+            "glyphicon": "glyphicon-search",
+            "serviceId": "6",
+            "reportServiceId": "9",
+            "storedQueryID": "Flurstueck",
+            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
+            "parcelDenominator": false,
+            "createReport": true
+            },
+
+      "legend":
+        {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+        },
+      "contact":
+        {
+        "name": "Kontakt",
+        "glyphicon": "glyphicon-envelope",
+        "serviceID": "80001",
+        "includeSystemInfo": true
+        },
+      "info":
+        {
+        "name": "Informationen",
+        "glyphicon": "glyphicon-info-sign",
+
+        "children":
+          {
+          "staticlinks": [
+                {
+                "name": "BORIS Bodenrichtwertauskunft",
+                "glyphicon": "glyphicon-eur",
+                "url": "http://geoportal-hamburg.de/boris/"
+                },
+                {
+                "name": "ELBE+ -Leitungsauskunft",
+                "glyphicon": "glyphicon-random",
+                "url": "http://www.hamburg.de/elbeplus/4595320/elbeplus-allgemeine-informationen/"
+                }
+              ]
+        }
+       }
+    },
+    "controls":
+      {
+      "fullScreen": true,
+      "zoom": true,
+      "attributions":
+            {
+            "isInitOpenDesktop": true,
+            "isInitOpenMobile": false
+            },
+      "overviewmap":
+            {
+            "resolution": 611.4974492763076,
+            "baselayer": "39"
+            },
+      "mousePosition": true
+      },
+    "scaleLine": true,
+    "Baumtyp": "custom"
+    },
+  "Themenconfig":
+    {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+            {
+            "id": "453",
+            "visibility": true
+            },
+            {
+            "id": ["1043", "1044", "1045", "1046"],
+            "name": "Stadtplan - grau-blau"
+            },
+            {
+            "id": ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
+            "name": "ALKIS - farbig"
+            },
+            {
+            "id": ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
+            "name": "ALKIS - grau-blau"
+            },
+            {
+            "id": "8"
+            },
+            {
+            "id": "148"
+            }
+      ]
+    },
+    "Fachdaten":
+      {
+      "Ordner": [
+        {
+        "Titel": "Lage und Gebietszugehörigkeit",
+
+        "Layer":
+            [
+              { "id": "2427" },
+              { "id": "2426" },
+              { "id": "2425" },
+              { "id": "2424" },
+              { "id": "2423" },
+              { "id": "1037" },
+              { "id": "2428" },
+              { "id": "1172",
+                "name": "Geländehöhen im 5m Raster-Abfrage"
+              },
+              {
+              "id":[
+                      { "id": "1200" },
+                      { "id": "1199" },
+                      { "id": "1198" },
+                      { "id": "1197" }
+                  ],
+                "name": "Höhenlinien"
+             }
+            ]
+        },
+
+        {
+        "Titel": "Eigentum und tatsächliche Nutzung",
+
+        "Layer":
+            [
+                {
+                "id":"2619",
+                "name": "Flurstücksfläche - ab 1 :5000",
+                "maxScale": 5000,
+                "visibility": true,
+                "gfiTheme": "flaecheninfo",
+                "gfiAttributes" :
+                   {
+                   "gemarkung" : "Gemarkung",
+                   "flurstueck" : "Flurstück",
+                   "amtliche_flaeche" : "Fläche_qm"
+                   }
+                },
+                {
+                "id": [
+                      { "id": "1529" },
+                      { "id": "1528" },
+                      { "id": "1527" },
+                      { "id": "2807" },
+                      { "id": "1525" },
+                      { "id": "1524" },
+                      { "id": "1523" },
+                      { "id": "1522" },
+                      { "id": "1521" },
+                      { "id": "6348" },
+                      { "id": "1520" },
+                      { "id": "2806" },
+                      { "id": "7213" },
+                      { "id": "1440" },
+                      { "id": "1439" },
+                      { "id": "1438" },
+                      { "id": "1437" },
+                      { "id": "7218" },
+                      { "id": "1436" },
+                      { "id": "7245" },
+                      { "id": "1433" },
+                      { "id": "1434" },
+                      { "id": "2815" },
+                      { "id": "7220" },
+                      { "id": "2816" },
+                      { "id": "1431" },
+                      { "id": "7229" },
+                      { "id": "7230" },
+                      { "id": "7227" },
+                      { "id": "2817" },
+                      { "id": "7228" },
+                      { "id": "2818" },
+                      { "id": "2819" },
+                      { "id": "1430" },
+                      { "id": "1429" },
+                      { "id": "1426" },
+                      { "id": "1428" },
+                      { "id": "1427" },
+                      { "id": "7236" },
+                      { "id": "1425" },
+                      { "id": "2812" },
+                      { "id": "2813" },
+                      { "id": "2814" },
+                      { "id": "2811" },
+                      { "id": "7244" },
+                      { "id": "1423" },
+                      { "id": "7246" }
+                    ],
+                    "name": "Landesgrundbesitzverzeichnis - ab 1:30 000",
+                    "maxScale": 30000,
+                    "gfiAttributes" :
+                        {
+                        "flurst_nr" : "Flurstücks-Nr.",
+                        "flaeche" : "Fläche",
+                        "art" : "Art",
+                        "typ" : "Typ"
+                        }
+                },
+                {
+                "id": "936"
+                }
+            ],
+
+        "Ordner":
+            [
+            {
+              "Titel": "Bundesflächen",
+              "Layer": [
+                    {"id": "4363" },
+                    { "id": "4362" },
+                    {"id": "4361",
+                      "name": "Deutsche Bahn AG" },
+                    {"id": "4360" },
+                    {"id": "4359" }
+                ]
+            },
+            {
+              "Titel": "Tatsächliche Nutzung ALKIS - ab 1:5000",
+              "Layer":
+                [
+                    {
+                    "id": "2439",
+                    "maxScale": 5000
+                    },
+                    {
+                    "id": "2440",
+                    "maxScale": 5000
+                    },
+                    {
+                    "id": "2441",
+                    "maxScale": 5000
+                    },
+                    {
+                    "id": "2442",
+                    "maxScale": 5000
+                    }
+                ]
+            },
+            {
+              "Titel": "Bebauung",
+              "Layer":
+                [
+                    {
+                    "id": "2444",
+                    "name": "Gebäudeflächen - ab 1:2500",
+                    "maxScale": 2500
+                    },
+                    {
+                    "id": "2456",
+                    "name": "Hausadressen - ab 1:1000",
+                    "maxScale": 1000
+                    }
+                ]
+            }
+
+          ]
+        },
+
+        {
+        "Titel": "Landesgrundbesitzverzeichnis - ab 1:30 000 ",
+            "Ordner": [
+                {
+                "Titel": "Übergeordnete Vermögensarten ",
+                "Layer": [
+                    { "id": "1528" },
+                    { "id": "1529" },
+                    { "id": "1527" },
+                    { "id": "2807" },
+                    { "id": "1525" },
+                    { "id": "1524" },
+                    { "id": "1523" },
+                    { "id": "1522" },
+                    { "id": "1521" },
+                    { "id": "6348" },
+                    { "id": "1520" },
+                    { "id": "2806" }
+                  ],
+                  "gfiAttributes" : "showAll"
+                },
+                {
+                "Titel": "Aufgliederung Verwaltungsvermögen",
+                "Layer": [
+                    { "id": "7213" },
+                    { "id": "1440" },
+                    { "id": "1439" },
+                    { "id": "1438" },
+                    { "id": "1437" },
+                    { "id": "7218" },
+                    { "id": "1436" },
+                    { "id": "7245" },
+                    { "id": "1433" },
+                    { "id": "1434" },
+                    { "id": "2815" },
+                    { "id": "7220" },
+                    { "id": "2816" },
+                    { "id": "1431" },
+                    { "id": "7229" },
+                    { "id": "7230" },
+                    { "id": "7227" },
+                    { "id": "2817" },
+                    { "id": "7228" },
+                    { "id": "2818" },
+                    { "id": "2819" },
+                    { "id": "1430" },
+                    { "id": "1429" },
+                    { "id": "1426" },
+                    { "id": "1428" },
+                    { "id": "1427" },
+                    { "id": "7236" },
+                    { "id": "1425" },
+                    { "id": "2812" },
+                    { "id": "2813" },
+                    { "id": "2814" },
+                    { "id": "2811" },
+                    { "id": "7244" },
+                    { "id": "1423" },
+                    { "id": "7246" }
+                  ],
+                  "gfiAttributes" : "showAll"
+                }
+              ]
+        },
+        {
+        "Titel": "Wohnqualität",
+
+            "Layer": [
+                {
+                "id": "2835",
+                "name": "Wohnlagen - ab 1:40 000",
+                "maxScale": 40000
+                }
+            ]
+        },
+
+        {
+        "Titel": "Verkehrsanbindung",
+        "Layer": [
+                  {
+                  "id": "1935",
+                  "styles":
+                      [
+                      "geofox_Faehre",
+                      "geofox-bahn",
+                      "geofox-bus",
+                      "geofox_BusName"
+                      ],
+                    "name":
+                      [
+                      "Fährverbindungen",
+                      "Bahnlinien",
+                      "Buslinien",
+                      "Busliniennummern"
+                      ],
+                    "legendURL":
+                      [
+                      "http://87.106.16.168/legende_mrh/hvv-faehre.png",
+                      "http://87.106.16.168/legende_mrh/hvv-bahn.png",
+                      "http://87.106.16.168/legende_mrh/hvv-bus.png",
+                      "http://87.106.16.168/legende_mrh/hvv-bus.png"
+                      ]
+                  },
+                  {
+                    "id": "1933",
+                    "styles":
+                      [
+                      "geofox_stations"
+                      ],
+                      "name":
+                      [
+                      "Haltestellen"
+                      ],
+                      "legendURL":
+                      [
+                      "http://87.106.16.168/legende_mrh/hvv-bus.png"
+                      ]
+                  }
+              ]
+        },
+
+        {
+        "Titel": "Flüchtlingsunterkünfte",
+        "Layer":
+          [
+            {
+            "id": [
+                    { "id": "4460" },
+                    { "id": "4461" }
+              ],
+              "name": "Zentrale Erstaufnahmeeinrichtung (ZEA)"
+            },
+            {
+            "id": [
+                    { "id": "4462" },
+                    { "id": "4463" }
+              ],
+              "name": "Öffentlich rechtliche Unterbringung (Folgeunterkünfte)"
+            },
+            {
+            "id": [
+                    {"id": "4458"},
+                    {"id": "3952"}
+              ],
+              "name": "Flüchtlingsunterkünfte mit der Perspektive Wohnen"
+            }
+         ]
+        },
+
+        {
+        "Titel": "Soziale Infrastrktur",
+        "Layer":
+            [
+              { "id": "2684" },
+              { "id": "2869" },
+              { "id": "1585" },
+              { "id": "5055",
+                "name" : "Kita-Einrichtungen"  },
+              { "id": "1731",
+                "name" : "Krankenhäuser" }
+            ]
+        },
+
+        {
+        "Titel": "Entwicklungspotenziale",
+        "Ordner":
+            [
+            {
+              "Titel": "Wohnungsbaupotenziale",
+              "Layer":
+                [
+                    { "id": "1532",
+                      "name": "Wohnungsbaupotenziale kurz-u. mittelfriestig (Teilmenge aus PAUL)"
+                    },
+                    { "id": "1171",
+                      "name" : "Wohnungsbauflächen aktiv PAUL"
+                    }
+                ]
+            },
+            {
+              "Titel": "Gewerbeflächenpotentiale",
+              "Layer":
+                [
+                    {
+                    "id": "1170",
+                    "name" : "Gewerbeflächen aktiv PAUL"
+                    }
+                ]
+            }
+          ]
+        },
+
+        {
+        "Titel": "Grundstücksangebote",
+
+        "Layer":
+            [
+              { "id": "7718" }
+            ]
+        },
+
+        {
+        "Titel": "Planerische Ausweisungen u. Bes. Vorkaufsrecht",
+        "Ordner":
+            [
+              {
+              "Titel": "Vorbereitende Bauleitplanung",
+              "Layer":
+                [
+                    {
+                    "id": "1747",
+                    "name" : "Flächennutzungsplan - bis 1:10 000",
+                    "minScale": 10000
+                    }
+                ]
+              },
+              {
+              "Titel": "Verbindliche Bauleitplanung",
+              "Ordner":
+                  [
+                    {
+                    "Titel": "Inhalte festgestellter Bebauungspläne",
+                    "Layer":
+                      [
+                          { "id": "1201" },
+                          { "id": "1202",
+                            "name" : "Spezielle Nutzung Fläche" },
+                          { "id": "1206" },
+                          { "id": "1203" },
+                          { "id": "1204" },
+                          { "id": "1210" }
+                      ]
+                    }
+                ],
+              "Layer":
+                [
+                    {
+                    "id": "1561",
+                    "name" : "Festgestellte Bebauungspläne"
+                    },
+                    {
+                    "id": "2941",
+                    "name" : "Rasterplanzeichnung",
+                    "minScale": 20000
+                    },
+                    {
+                    "id": "1562",
+                    "name" : "Bebauungspläne im Verfahren"
+                    }
+                ]
+              },
+              {
+              "Titel": "Landschaftsplanung",
+              "Layer":
+                [
+                    {
+                    "id": "1749",
+                    "name" : "Lanschaftsprogramm (LAPRO)"
+                    },
+                    {
+                    "id": ["1409","1410","1411","1412","1413","1414","1415","1416"],
+                    "name" : "Fachkarte Arten- und Biotopschutz (AuBS)"
+                    },
+                    {
+                    "id": ["2316","2317","2318","2319","2320","2321","2322","2323","2324","2325","2326","2327","2328","2329","2330","2331","2332","2394","2395","2396","2397"],
+                    "name" : "Grünes Netz Hamburg / Freiraumverbund"
+                    }
+                ]
+              },
+              {
+              "Titel": "Erhaltungsverordnungen",
+              "Layer":
+                [
+                    {
+                    "id": "1205",
+                    "name" : "Gebiet mit Erhaltungsverordnung"
+                    },
+                    {
+                    "id": "4446"
+                    },
+                    {
+                    "id": "4445"
+                    }
+                ]
+              }
+            ],
+            "Layer":
+              [
+                  {
+                  "id": "2436",
+                   "name" : "Besonderes Vorkkaufsrecht - § 25 BauGB "
+                  }
+              ]
+        },
+
+        {
+        "Titel": "Integrierte Stadtteilentwicklung",
+        "Ordner":
+            [
+            {
+              "Titel": "Fördergebiete integrierte Stadtentwicklung",
+              "Layer":
+                [
+                    { "id": "4412" },
+                    { "id": "4409" },
+                    { "id": "4410" },
+                    { "id": "4411" },
+                    { "id": "4413" }
+                ]
+            },
+            {
+              "Titel": "Sozialmonitoring",
+                   "Ordner":
+                      [
+                        {
+                        "Titel": "Nur bewohnte Bereiche",
+                        "Layer":
+                          [
+                              { "id": "1677" },
+                              { "id": "2097" },
+                              { "id": "3994" },
+                              { "id": "7265" },
+                              { "id": "10655" }
+                          ]
+                        },
+                        {
+                        "Titel": "Nur ganze Statistische Gebiete",
+                        "Layer":
+                          [
+                              { "id": "1676" },
+                              { "id": "2096" },
+                              { "id": "3993" },
+                              { "id": "7264" },
+                              { "id": "10656" }
+                          ]
+                        }
+                    ]
+            }
+          ]
+        },
+
+        {
+        "Titel": "Schutzgebiete u. Schutzgüter",
+        "Layer":
+            [
+              { "id": "1992" },
+              { "id": "1999" },
+              { "id": "1998" },
+              { "id": "1994" },
+              { "id": "1995" },
+              { "id": "1993" },
+              { "id": "1997" },
+              { "id": "1996" },
+              {
+                "id":
+                    [
+                      { "id": "2922" },
+                      { "id": "2923" },
+                      { "id": "2924" },
+                      { "id": "2925" },
+                      { "id": "2926" }
+                    ],
+                "name": "Gesetzlich geschützte Biotope"
+              },
+              {
+                "id":
+                    [
+                      { "id": "10447" },
+                      { "id": "10455" },
+                      { "id": "10451" }
+                    ],
+                "name": "Wasserschutzgebiete"
+              },
+
+              { "id": "1849" }
+            ]
+        },
+
+        {
+        "Titel":"Denkmalschutz",
+        "Layer":
+            [
+              {"id":"1758",
+               "name": "Geschützter Grenzstein"},
+              {"id":"1759",
+               "name": "Geschütztes Denkmalobjekt"},
+              {"id":"1757"},
+              {"id":"1756",
+               "name": "Geschütztes Gewässer"},
+              {"id":"1755"},
+              {"id":"1754"}
+            ]
+        },
+
+        {
+        "Titel":"Historische Karte 1:5000",
+        "Layer":
+            [
+              {
+                "id":
+                [
+                    { "id": "2802",
+                       "gfiAttributes": "ignore" },
+                    { "id": "2805"}
+                ],
+                "name": "Jahrgang 2015"
+              },
+              {
+                "id":
+                [
+                    { "id": "90",
+                       "gfiAttributes": "ignore" },
+                    { "id": "93"}
+                ],
+                "name": "Jahrgang 2010"
+              },
+              {
+                "id":
+                [
+                    { "id": "86",
+                       "gfiAttributes": "ignore" },
+                    { "id": "89"}
+                ],
+                "name": "Jahrgang 2005"
+              },
+              {
+                "id":
+                [
+                    { "id": "82",
+                       "gfiAttributes": "ignore" },
+                    { "id": "85"}
+                ],
+                "name": "Jahrgang 1990-2000"
+              },
+              {
+                "id":
+                [
+                    { "id": "78",
+                       "gfiAttributes": "ignore" },
+                    { "id": "81"}
+                ],
+                "name": "Jahrgang 1980-1990"
+              },
+              {
+                "id":
+                [
+                    { "id": "74",
+                       "gfiAttributes": "ignore" },
+                    { "id": "77"}
+                ],
+                "name": "Jahrgang 1970-1980"
+              },
+              {
+                "id":
+                [
+                    { "id": "70",
+                       "gfiAttributes": "ignore" },
+                    { "id": "73"}
+                ],
+                "name": "Jahrgang 1960-1970"
+              },
+              {
+                "id":
+                [
+                    { "id": "66",
+                       "gfiAttributes": "ignore" },
+                    { "id": "69"}
+                ],
+                "name": "Jahrgang 1950-1960"
+              },
+              {
+                "id":
+                [
+                    { "id": "62",
+                       "gfiAttributes": "ignore" },
+                    { "id": "65"}
+                ],
+                "name": "Jahrgang 1940-1950"
+              },
+              {
+                "id":
+                [
+                    { "id": "58",
+                       "gfiAttributes": "ignore" },
+                    { "id": "61"}
+                ],
+                "name": "Jahrgang 1930-1940"
+              },
+              {
+                "id":
+                [
+                    { "id": "54",
+                       "gfiAttributes": "ignore" },
+                    { "id": "57"}
+                ],
+                "name": "Jahrgang 1925-1930"
+              }
+            ]
+        },
+
+        {
+        "Titel":"Bodenordnung",
+        "Layer":
+            [
+            {"id":"2438"}
+            ]
+        },
+        {
+        "Titel":"Baugrund und Boden",
+        "Layer":
+            [
+            {"id":"1554"}
+            ]
+        },
+
+        {
+        "Titel": "Einschränkungen der Bebaubarkeit",
+
+
+        "Ordner":
+            [
+
+            {
+              "Titel": "Luftverkehr",
+                   "Ordner":
+                      [
+                        {
+                        "Titel": "Bauschutzbereich",
+                        "Layer": [
+                              { "id":["430","431"]},
+                              {
+                                "id": ["428","429"],
+                                "name" : "Startbahnbezugspunkt"
+                              },
+                              {
+                                "id": "427",
+                                "name" : "Start- und Landebahnen"
+                              },
+                              { "id": "425" },
+                              {
+                                "id": "424",
+                                "name" : "Sicherheitsflächen"
+                              },
+                              {
+                                "id": ["422","423"],
+                                "name" : "Anflugsektoren 10km Hauptlandeflächen"
+                              },
+                              {
+                                "id": ["418","419"],
+                                "name" : "Anflugsektoren 8500m Nebenlandeflächen"
+                              },
+                              { "id": "417" },
+                              {
+                                "id": ["416","415"],
+                                "name" : "Bauschutzbereich §12 Abs. 3 S. 1 Nr. 1a LuftVG"
+                              },
+                              {
+                                "id": ["413","414"],
+                                "name" : "Bauschutzbereich §12 Abs. 3 S. 1 Nr. 1b LuftVG"
+                              },
+                              {
+                                "id": "412",
+                                "name" : "Luftverkehrsfläche (FNP)"
+                              },
+                              { "id":["4341","4342"],
+                                "name" : "Siedlungsbeschränkungsbereiche (FNP)"}
+                          ]
+                        }
+                    ]
+            },
+            {
+              "Titel": "Fluglärmschutzzonen",
+              "Layer":  [
+                    { "id": "2413" },
+                    { "id": "2412" },
+                    { "id": "2414" }
+                ]
+            },
+            {
+              "Titel": "Straßenverkehrslärm",
+              "Layer":  [
+                    { "id": "95" },
+                    { "id": "96" }
+                ]
+            }
+
+
+          ],
+           "Layer":  [
+                    { "id": "2676",
+                      "name" : "Baulasten" },
+                    { "id": "1553",
+                      "name" : "Stadtgrün (Digitaler Grünplan)" },
+                    { "id": "1453" },
+                    { "id": "1511" },
+                    { "id": "687" },
+                    { "id": "182" },
+                    { "id": "759",
+                      "name" : "Störfallbetrieb Standort" },
+                    { "id": "758",
+                      "name" : "Störfallbetrieb Abstandsflächen" },
+                    { "id":["435","436"]},
+                    { "id": "1103" },
+                    { "id": "2933",
+                      "name" : "Genemigungspflichtige Betriebe u. Anlagen nach BimSchG" }
+                ]
+        }
+
+
+
+
+      ]
+    }
+  }
+}

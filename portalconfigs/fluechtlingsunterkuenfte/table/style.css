@@ -1,0 +1,104 @@
+#RefugeesTable {
+    position: relative;
+    height: 35%;
+}
+
+  -moz-#RefugeesTable {
+    font-weight: lighter !important;
+  }
+
+
+#RefugeesTable .table-container {
+    height: 90%;
+}
+
+#RefugeesTable p {
+    padding: 8px;
+    font-size: 16px;
+    float: left;
+}
+
+#RefugeesTable button {
+    padding: 4px;
+    font-size: 26px;
+}
+
+#RefugeesTable td {
+    vertical-align: baseline;
+}
+
+#RefugeesTable th {
+    text-align:left;
+    padding: 3px 0 3px 0;
+    font-weight: bold;
+}
+
+#RefugeesTable tbody tr:hover {
+    color: white;
+    background-color: #777;
+    cursor: pointer;
+}
+
+#RefugeesTable thead tr:hover {
+    cursor: not-allowed;
+}
+
+#RefugeesTable td {
+    text-align:left;
+    padding: 3px 8px 3px 8px;
+    font-weight: 400;
+}
+#RefugeesTable #bestehendeStandorte td:nth-child(1), #RefugeesTable #bestehendeStandorte th:nth-child(1) {
+    text-align: center;
+}
+#RefugeesTable #geplanteStandorte td:nth-child(1), #RefugeesTable #geplanteStandorte th:nth-child(1) {
+    text-align: center;
+}
+
+#RefugeesTable #bestehendeStandorte td:nth-child(1), #RefugeesTable #bestehendeStandorte th:nth-child(1) { width: 8%; }
+#RefugeesTable #bestehendeStandorte td:nth-child(2), #RefugeesTable #bestehendeStandorte th:nth-child(2) { width: 16%; }
+#RefugeesTable #bestehendeStandorte td:nth-child(3), #RefugeesTable #bestehendeStandorte th:nth-child(3) { width: 16%; }
+#RefugeesTable #bestehendeStandorte td:nth-child(4), #RefugeesTable #bestehendeStandorte th:nth-child(4) { width: 8%; }
+#RefugeesTable #bestehendeStandorte td:nth-child(5), #RefugeesTable #bestehendeStandorte th:nth-child(5) { width: 38%; }
+#RefugeesTable #bestehendeStandorte td:nth-child(6), #RefugeesTable #bestehendeStandorte th:nth-child(6) { width: 10%; }
+
+#RefugeesTable #geplanteStandorte td:nth-child(1), #RefugeesTable #geplanteStandorte th:nth-child(1) { width: 8%; }
+#RefugeesTable #geplanteStandorte td:nth-child(2), #RefugeesTable #geplanteStandorte th:nth-child(2) { width: 16%; }
+#RefugeesTable #geplanteStandorte td:nth-child(3), #RefugeesTable #geplanteStandorte th:nth-child(3) { width: 16%; }
+#RefugeesTable #geplanteStandorte td:nth-child(4), #RefugeesTable #geplanteStandorte th:nth-child(4) { width: 8%; }
+#RefugeesTable #geplanteStandorte td:nth-child(5), #RefugeesTable #geplanteStandorte th:nth-child(5) { width: 28%; }
+#RefugeesTable #geplanteStandorte td:nth-child(6), #RefugeesTable #geplanteStandorte th:nth-child(6) { width: 10%; }
+#RefugeesTable #geplanteStandorte td:nth-child(7), #RefugeesTable #geplanteStandorte th:nth-child(7) { width: 10%; }
+
+#RefugeesTable tr {
+    width: 100%;
+    display: inline-table;
+    table-layout: auto;
+}
+
+#RefugeesTable table{
+ display: -moz-groupbox;
+
+}
+#RefugeesTable tbody{
+  overflow-y: auto;
+  max-height: 90%;
+  width: 100%;
+  position: absolute;
+}
+
+#RefugeesTable h4{
+    height: 10%;
+    padding: 5px 0 0 0;
+    margin: 0;
+    font-weight: bold;
+}
+
+#RefugeesTable ul.nav {
+    height: 13%;
+}
+
+#RefugeesTable .tab-content {
+    height:73%;
+    position: relative;
+}

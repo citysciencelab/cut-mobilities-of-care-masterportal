@@ -1,0 +1,170 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "Hochwasser Gefahren- u. RisikoKarten",
+    "PortalLogo": "../img/hh-logo.png",
+    "LogoLink": "http://geoinfo.hamburg.de",
+    "LogoToolTip": "Landesbetrieb Geoinformation und Vermessung",
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+        },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "zoomLevel": 9,
+        "placeholder": "Suche nach Adresse/Stadtteil"
+    },
+    "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [561210, 5932600],
+        "resolution": 66.14579761460263
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": true
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full",
+            "onlyDesktop": true
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print"
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "toggleMenu": true,
+      "fullScreen": true,
+      "zoom": true,
+      "attributions": false
+    },
+    "scaleLine": true,
+    "Baumtyp": "custom"
+  },
+
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        },
+        {
+          "id": ["713", "714", "715", "716"],
+          "name": "Stadtplan S-W"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Ordner":[
+            {
+              "Titel": "HW-Szenarien",
+              "Ordner": [
+                {
+                  "Titel": "Szenarien-BinnenHW",
+                  "Layer": [
+                    {
+                      "id": "1915"
+                    },
+                    {
+                      "id": "1916"
+                    },
+                    {
+                      "id": "1917"
+                    }
+                  ]
+                },
+                {
+                  "Titel": "Szenarien-Sturmflut",
+                  "Layer": [
+                    {
+                      "id": "1912"
+
+                    },
+                    {
+                      "id": "1913"
+
+                    },
+                    {
+                      "id": "1914"
+                    }
+                  ]
+                }
+
+              ]
+            },
+            {
+              "Titel": "HW-Risikogebiete",
+              "Layer": [
+
+                 {
+                    "id":  ["1924","435"],
+                  "name" : "Sturmflut"
+                },
+                {
+                  "id": ["1925","436"],
+                  "visibility": true,
+                  "name" : "Binnenhochwasser"
+                }
+              ]
+            }
+      ]
+    }
+  }
+}

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Masterportal</title>
+    <link rel="stylesheet"  href="http://localhost:3000/lgv-cors/css/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.2.min.js" integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk=" crossorigin="anonymous"></script>
+    <script type="text/javascript"  data-main="http://localhost:3000/lgv-cors/js/main"  data-lgv-config="../portalconfigs/mml_afm-assistent/"  src="http://localhost:3000/lgv-cors/components/requirejs/require.js"> </script>
+<style >
+    table {
+        border-collapse: collapse;
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+<script>
+    var initialList = new Array(),
+        setterGetterList = new Array(),
+        pReadyDiv;
+
+
+    initialList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "setZoomLevel",
+            "attributes": [2]
+        },
+        "getter": {
+            "function": "getZoomLevel"
+        },
+        "notice": "Setzt das ZoomLevel der Karte auf 2."
+    });
+
+    initialList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "setCenter",
+            "attributes": [ [565754, 5933960] ]
+        },
+        "getter": {
+            "function": "getCenter"
+        },
+        "notice": "Setzt das Kartenzentrum auf [565754, 5933960]."
+    });
+
+    initialList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "setDragMarkerPosition",
+            "attributes": [ [565781, 5934318] ]
+        },
+        "getter": {
+            "function": "getDragMarkerPosition"
+        },
+        "notice": "Setzt die Position des DragMarkers auf die Position [565781, 5934318]."
+    });
+    initialList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "hideLayers",
+            "attributes": [ ["Stadtplan"] ]
+        },
+        "getter": {
+            "function": "getVisibleBaseLayers",
+            "expReturnValue": "[]"
+        },
+        "notice": "Blendet den Stadtplan aus."
+    });
+    initialList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "showLayers",
+            "attributes": [ ["Luftbilder"], false]
+        },
+        "getter": {
+            "function": "getVisibleBaseLayers",
+            "expReturnValue": "[Luftbilder]"
+        },
+        "notice": "Blendet die Luftbilder !zusätzlich! ein."
+    });
+    initialList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "showLayers",
+            "attributes": [ ["Stadtplan"], false]
+        },
+        "getter": {
+            "function": "getVisibleBaseLayers",
+            "expReturnValue": "[Luftbilder,Stadtplan]"
+        },
+        "notice": "Blendet den Stadtplan !zusätzlich! ein."
+    });
+    initialList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "showLayers",
+            "attributes": [ ["Luftbilder"], true]
+        },
+        "getter": {
+            "function": "getVisibleBaseLayers",
+            "expReturnValue": "[Luftbilder]"
+        },
+        "notice": "Blendet nur die Luftbilder ein."
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "hideSearchbar"
+        },
+        "notice": "Schaltet die Suchleiste unsichtbar."
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "showSearchbar"
+        },
+        "notice": "Schaltet die Suchleiste sichtbar."
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "setZoomLevel",
+            "attributes": [6]
+        },
+        "getter": {
+            "function": "getZoomLevel"
+        },
+        "notice": "Setzt das ZoomLevel der Karte auf 6."
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "setCenter",
+            "attributes": [ [565929, 5934323] ]
+        },
+        "getter": {
+            "function": "getCenter"
+        },
+        "notice": "Setzt das Kartenzentrum auf [565929, 5934323]."
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "hideLayers",
+            "attributes": [ ["Stadtplan","Luftbilder"] ]
+        },
+        "getter": {
+            "function": "getVisibleBaseLayers"
+        },
+        "notice": "Versteckt die Layer [\"Stadtplan\",\"Luftbilder\"]."
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "showLayers",
+            "attributes": [ ["Stadtplan"], true]
+        },
+        "getter": {
+            "function": "getVisibleBaseLayers",
+            "expReturnValue": "[]"
+        },
+        "notice": "Zeigt den Layer [\"Stadtplan\"] an. (Mit gesetzter Flag, dass die anderen Layer ausgeblendet werden sollen)"
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "setDragMarkerPosition",
+            "attributes": [ [565929, 5934363] ]
+        },
+        "getter": {
+            "function": "getDragMarkerPosition"
+        },
+        "notice": "Setzt die Position des DragMarkers auf die Position [565929, 5934363]."
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "setter": {
+            "function": "requestDragMarkerAddress"
+        },
+        "notice": "Initiiert die erneute Auslieferung der newDragMarkerAddress. Notfalls wird WPS erneut abgefragt."
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "getter": {
+            "function": "getAllBaseLayers"
+        },
+        "notice": "Gibt alle Hintergrundkarten zurück."
+    });
+    setterGetterList.push({
+        "channel": "RemoteInterface",
+        "getter": {
+            "function": "getExtent"
+        },
+        "notice": "Fragt den aktuellen, sichtbaren Ausschnitt der Map ab."
+    });
+
+    window.addEventListener("message", function (messageEvent) {
+        if (messageEvent.data === "portalReady") {
+            window.Backbone.Radio.on("RemoteInterface","changedExtent", function (extent) {
+                extent = formatReturnRequest(extent);
+                $("#extentChanged").html("");
+                $("#extentChanged").html(extent);
+            });
+            window.Backbone.Radio.on("RemoteInterface","newDragMarkerAddress", function (dragMarkerAddress, initialDMA) {
+                adresse = JSON.stringify(dragMarkerAddress);
+                $("#dragMarkerAddress").html("");
+                $("#dragMarkerAddress").html(adresse + "<br>InitialDMA: " + initialDMA);
+            });
+            pReadyDiv = "<div style=\"background-color:green; width: 10px; height: 10px;\"></div>";
+            for (var i = 0; i < initialList.length; i++) {
+                initialSetter(i, initialList[i].channel, initialList[i].setter, initialList[i].getter, initialList[i].notice);
+            }
+            for (var i = 0; i < setterGetterList.length; i++) {
+                manualSetterGetter(i, setterGetterList[i].channel, setterGetterList[i].setter, setterGetterList[i].getter, setterGetterList[i].notice);
+            }
+        }
+        else {
+            pReadyDiv = "<div style=\"background-color:red; width:  10px; height: 10px;\"></div>";
+        }
+        $("#header").after("<tr><td>portalReady</td><td>Wird grün, wenn das Portal-readyEvent kommt.</td><td>" + pReadyDiv + "</td><td></td><td></td></tr>");
+    });
+
+    function initialSetter (id, channel, setter, getter, notice) {
+        var sAttr = setter.attributes,
+            gAttr = getter.attributes,
+            expVal = getter.expReturnValue,
+            okDiv,
+            color;
+
+        if (sAttr !== undefined) {
+            switch (sAttr.length) {
+                case 1:
+                    window.Backbone.Radio.trigger(channel, setter.function, sAttr[0]);
+                    break;
+                case 2:
+                    window.Backbone.Radio.trigger(channel, setter.function, sAttr[0], sAttr[1]);
+                    break;
+                case 3:
+                    window.Backbone.Radio.trigger(channel, setter.function, sAttr[0], sAttr[1], sAttr[2]);
+                    break;
+                case 4:
+                    window.Backbone.Radio.trigger(channel, setter.function, sAttr[0], sAttr[1], sAttr[2], sAttr[3]);
+                    break;
+                default:
+                    window.Backbone.Radio.trigger(channel, setter.function);
+            }
+        }
+        else {
+            window.Backbone.Radio.trigger(channel, setter.function);
+        }
+        if (gAttr !== undefined) {
+            switch (gAttr.length) {
+                case 1:
+                    returnRequest = window.Backbone.Radio.request(channel, getter.function, gAttr[0]);
+                    break;
+                case 2:
+                    returnRequest = window.Backbone.Radio.request(channel, getter.function, gAttr[0], gAttr[1]);
+                    break;
+                case 3:
+                    returnRequest = window.Backbone.Radio.request(channel, getter.function, gAttr[0], gAttr[1], gAttr[2]);
+                    break;
+                case 4:
+                    returnRequest = window.Backbone.Radio.request(channel, getter.function, gAttr[0], gAttr[1], gAttr[2], gAttr[3]);
+                    break;
+                default:
+                    returnRequest = window.Backbone.Radio.request(channel, getter.function);
+            }
+        }
+        else {
+            returnRequest = window.Backbone.Radio.request(channel, getter.function);
+        }
+        returnRequest = formatReturnRequest(returnRequest);
+        if (sAttr.length === 1) {
+            sAttr = sAttr[0];
+        }
+        sAttr = formatReturnRequest(sAttr);
+        if (expVal ? (_.isEqual(returnRequest,expVal)) : false) {
+            color = "green";
+        }
+        else if (_.isEqual(returnRequest,sAttr)) {
+            color = "green";
+        }
+        else {
+            color = "red";
+        }
+        okDiv = "<div id=\"ok_" + id + "\" style=\"background-color:" + color + "; width: 10px; height: 10px;\"></div>";
+
+        $("#initialTable").append("<tr><td>" + setter.function + "</td><td>" + notice + "</td><td>" + okDiv + "</td><td>" + sAttr + "</td><td>" + returnRequest + "</td>");
+    };
+    function manualSetterGetter (id, channel, setter, getter, notice) {
+        var setterBtn = "",
+            getterBtn = "";
+
+        if (setter) {
+            setterBtn = "<button onClick=\"setterBtnClicked(" + id + ")\"> " + setter.function + " </button>";
+        }
+        if (getter) {
+            getterBtn = "<button onClick=\"getterBtnClicked(" + id + ")\"> " + getter.function + " </button>";
+        }
+        $("#manualSetter").append("<tr><td>" + setterBtn + "</td><td>" + notice + "</td><td>" + getterBtn + "</td><td id=\"wert_" + id + "\"></td>");
+    };
+    function formatReturnRequest (returnRequest) {
+        var newReturnRequest = "";
+
+        switch (typeof returnRequest) {
+            case "number":
+                newReturnRequest = returnRequest.toString();
+                break;
+            case "object":
+                if (Array.isArray(returnRequest)) {
+                    newReturnRequest = "[" + returnRequest.toString() + "]";
+                }
+                else {
+                    newReturnRequest = JSON.stringify(returnRequest);
+                }
+                break;
+            default:
+                newReturnRequest = returnRequest;
+        }
+        return newReturnRequest;
+    };
+    function setterBtnClicked (id) {
+        var setterGetterObj = setterGetterList[id],
+            func = setterGetterObj.setter.function,
+            channel = setterGetterObj.channel,
+            attr = setterGetterObj.setter.attributes;
+
+        if (attr !== undefined) {
+            switch (attr.length) {
+                case 1:
+                window.Backbone.Radio.trigger(channel, func, attr[0]);
+                break;
+                case 2:
+                window.Backbone.Radio.trigger(channel, func, attr[0], attr[1]);
+                break;
+                case 3:
+                window.Backbone.Radio.trigger(channel, func, attr[0], attr[1], attr[2]);
+                break;
+                case 4:
+                window.Backbone.Radio.trigger(channel, func, attr[0], attr[1], attr[2], attr[3]);
+                break;
+                default:
+                window.Backbone.Radio.trigger(channel, func);
+            }
+        }
+        else {
+            window.Backbone.Radio.trigger(channel, func);
+        }
+    };
+    function getterBtnClicked (id) {
+        var setterGetterObj = setterGetterList[id],
+            func = setterGetterObj.getter.function,
+            channel = setterGetterObj.channel,
+            attr = setterGetterObj.getter.attributes,
+            returnRequest;
+
+        if (attr !== undefined) {
+            switch (attr.length) {
+                case 1:
+                    returnRequest = window.Backbone.Radio.request(channel, func, attr[0]);
+                    break;
+                case 2:
+                    returnRequest = window.Backbone.Radio.request(channel, func, attr[0], attr[1]);
+                    break;
+                case 3:
+                    returnRequest = window.Backbone.Radio.request(channel, func, attr[0], attr[1], attr[2]);
+                    break;
+                case 4:
+                    returnRequest = window.Backbone.Radio.request(channel, func, attr[0], attr[1], attr[2], attr[3]);
+                    break;
+                default:
+                    returnRequest = window.Backbone.Radio.request(channel, func);
+            }
+        }
+        else {
+            returnRequest = window.Backbone.Radio.request(channel, func);
+        }
+        returnRequest = formatReturnRequest(returnRequest);
+        $("#wert_" + id).html("");
+        $("#wert_" + id).html(returnRequest);
+    };
+</script>
+</head>
+<body>
+    <div id="lgv-container" class="lgv-container" style="width: 80%; height: 500px;"></div>
+
+    <table id="initialTable" style="width:100%;">Initiale Setter und Getter
+      <tr id="header">
+        <th>Setter</th>
+        <th>Notiz</th>
+        <th>Test</th>
+        <th>Setter</th>
+        <th>Getter</th>
+      </tr>
+    </table>
+    <br>
+    <table id="changedExtent" style="width:100%;">Listeners (manuell gepflegt)
+      <tr>
+        <th>Listener</th>
+        <th>Rückgabewert</th>
+        <th>Notiz</th>
+      </tr>
+      <tr>
+          <td>changedExtent</td>
+          <td id ="extentChanged"></td>
+          <td>"Reagiert auf die Änderung des Extents und zeigt ihn an."</td>
+      </tr>
+      <tr>
+          <td>newDragMarkerAddress</td>
+          <td id ="dragMarkerAddress"></td>
+          <td>"Reagiert auf Ergebnisse der Adressabfragen."</td>
+      </tr>
+    </table>
+    <br>
+    <table id="manualSetter" style="width:100%;">Setter (manuell)
+      <tr>
+        <th>Setter</th>
+        <th>Notiz</th>
+        <th>Getter</th>
+        <th>Wert</th>
+      </tr>
+    </table>
+    <br>
+
+</body>
+</html>

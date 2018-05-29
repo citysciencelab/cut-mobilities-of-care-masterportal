@@ -1,0 +1,629 @@
+{
+  "Hintergrundkarten": [
+    {
+      "Layer": [
+        {
+          "id": "149",
+          "visibility": false,
+          "name" : "Liegenschaftskataster (Grau / Blau) - ab 1:5000 bis 1:500",
+          "metaName": "Liegenschaftskataster (Grau / Blau) - ab 1:5000 bis 1:500"
+        },
+        {
+          "id": "368",
+          "visibility": false,
+          "name" : "Liegenschaftskataster (farbig) - ab 1:5000 bis 1:500",
+          "metaName": "Liegenschaftskataster (farbig) - ab 1:5000 bis 1:500"
+        },
+        {
+          "id": "8",
+          "visibility": false,
+          "name" : "Luftbilder DOP 10 (unbelaubt)",
+          "metaName": "Luftbilder DOP 10 (unbelaubt)"
+        },
+        {
+          "id": "148",
+          "visibility": false,
+          "name" : "Luftbilder DOP 10 (belaubt)",
+          "metaName": "Luftbilder DOP 10 (belaubt)"
+        },
+        {
+          "id": "713",
+          "visibility": false,
+          "name" : "Stadtplan (Schwarz/Weiß)",
+          "metaName": "Stadtplan (Schwarz/Weiß)"
+        },
+        {
+          "id": "1043",
+          "visibility": true,
+          "name" : "Stadtplan (Grau)",
+          "metaName": "Stadtplan (Grau)"
+        },
+        {
+          "id": "717",
+          "visibility": false,
+          "name" : "Stadtplan (farbig)",
+          "metaName": "Stadtplan (farbig)"
+        }
+      ]
+    }
+  ],
+  "Fachdaten": [
+    {
+      "Ordner": [
+        {
+          "Titel": "Lage und Gebietszugehörigkeit",
+          "Layer": [
+            {
+              "id": "2427",
+              "visibility": false
+            },
+            {
+              "id": "2426",
+              "visibility": false
+            },
+            {
+              "id": "2425",
+              "visibility": false
+            },
+            {
+              "id": "2423",
+              "visibility": false
+            },
+            {
+              "id": "2428",
+              "visibility": false
+            },
+            {
+              "id": "936",
+              "visibility": false,
+              "name" : "Hafengebiet (§ 2 HafenEG)"
+            }
+          ]
+        },
+        {
+          "Titel": "Vermessungswesen",
+          "Layer": [
+            {
+              "id": "1200",
+              "visibility": false
+            },
+            {
+              "id": "1199",
+              "visibility": false
+            },
+            {
+              "id": "1198",
+              "visibility": false
+            },
+            {
+              "id": "1197",
+              "visibility": false
+            }
+          ]
+        },
+        {
+          "Titel": "Städtebaurecht",
+          "Layer": [
+            {
+              "id": "1747",
+              "visibility": false,
+              "name" : "Flächennutzungsplan (§§ 5, 6 BauGB)",
+              "metaName":"Flächennutzungsplan (§§ 5, 6 BauGB)"
+            },
+            {
+              "id": "2042",
+              "visibility": false,
+              "name" : "Flächenutzungsplan Hamburg - Änderungsübersicht",
+              "metaName":"Flächenutzungsplan Hamburg - Änderungsübersicht"
+            },
+            {
+              "id": "1561",
+              "visibility": false,
+              "name" : "Festgestellte Bebauungspläne (§ 10 BauGB)",
+              "metaName":"Festgestellte Bebauungspläne (§ 10 BauGB)"
+            },
+            {
+              "id": "1562",
+              "visibility": false,
+              "name" : "Bebauungspläne im Verfahren (§ 2 BauGB)",
+              "metaName":"Bebauungspläne im Verfahren (§ 2 BauGB)"
+            },
+            {
+              "id": "2941",
+              "visibility": false,
+              "name" : "Planzeichnungen der Bebauungspläne (ab 1:10 000)",
+              "metaName":"Planzeichnungen der Bebauungspläne (ab 1:10 000)"
+            },
+            {
+              "id": "2437",
+              "visibility": false,
+              "name" : "Sanierungsgebiete (§§ 136 ff BauGB)",
+              "metaName":"Sanierungsgebiete (§§ 136 ff BauGB)"
+            },
+            {
+              "id": "1205",
+              "visibility": false,
+              "name" : "Städtebauliche Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 1 BauGB)",
+              "metaName":"Städtebauliche Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 1 BauGB)"
+            },
+            {
+              "id": "1204",
+              "visibility": false,
+              "name" : "Erhaltungsbereiche in Bebauungsplänen",
+              "metaName":"Erhaltungsbereiche in Bebauungsplänen"
+            },
+            {
+              "id": "4445",
+              "visibility": false,
+              "name" : "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Kraft",
+              "metaName":"Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Kraft"
+            },
+            {
+              "id": "4446",
+              "visibility": false,
+              "name" : "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Aufstellung",
+              "metaName":"Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Aufstellung"
+            },
+            {
+              "id": "4414",
+              "visibility": false,
+              "name" : "Städtebauliche Sanierungsmaßnahmen (§§ 136 ff BauGB)",
+              "metaName":"Städtebauliche Sanierungsmaßnahmen (§§ 136 ff BauGB)"
+            }
+            ,{
+              "id": "4411",
+              "visibility": false,
+              "name" : "Aktive Stadt- und Ortsteilzentren - RISE - Fördergebiete",
+              "metaName":"Aktive Stadt- und Ortsteilzentren - RISE - Fördergebiete"
+            },
+            {
+              "id": "4413",
+              "visibility": false,
+              "name" : "Hamburgische Landesförderung - RISE - Fördergebiete",
+              "metaName":"Hamburgische Landesförderung - RISE - Fördergebiete"
+            },
+            {
+              "id": "4409",
+              "visibility": false,
+              "name" : "Soziale Stadt - RISE -  Fördergebiete",
+              "metaName":"Soziale Stadt - RISE -  Fördergebiete"
+            },
+            {
+              "id": "4412",
+              "visibility": false,
+              "name" : "Stadtumbau West - RISE -  Fördergebiete",
+              "metaName":"Stadtumbau West - RISE -  Fördergebiete"
+            },
+            {
+              "id": "4410",
+              "visibility": false,
+              "name" : "Städtebaulicher Denkmalschutz - RISE -  Fördergebiete",
+              "metaName":"Städtebaulicher Denkmalschutz - RISE -  Fördergebiete"
+            }
+          ]
+        },
+        {
+          "Titel": "Bauordnungsrecht",
+          "Ordner": [
+            {
+              "Titel": "Grundstücksbezogene Belastungen",
+              "Layer": [
+                {
+                  "id": "2676",
+                  "visibility": false,
+                  "name": "Baulasten",
+                  "metaName": "Baulasten"
+                }
+              ]
+            }
+          ],
+          "Layer": [
+            {
+              "id": "1206",
+              "visibility": false,
+              "maxScale":"10000",
+              "name": "Scheinböcke (ab 1 :10.00)",
+              "metaName":"Scheinböcke (ab 1 :10.00)"
+            },
+            {
+              "id": "1203",
+              "visibility": false,
+              "maxScale":"10000",
+              "name" : "Kennzeichnungen (ab 1:10.000)",
+              "metaName":"Kennzeichnungen (ab 1:10.000)"
+            },
+            {
+              "id": "1201",
+              "visibility": false,
+              "name" : "Nutzungsart nach BauNVO bzw BPVO",
+              "metaName":"Nutzungsart nach BauNVO bzw BPVO"
+            }
+          ]
+        },
+        {
+          "Titel": "Denkmalschutz",
+          "Layer": [
+            {
+              "id": "1757",
+              "visibility": false,
+              "name" : "Baudenkmäler (§§ 4, 6 DSchG)",
+              "metaName":"Baudenkmäler (§§ 4, 6 DSchG)"
+            },
+            {
+              "id": "1755",
+              "visibility": false,
+              "name" : "Gartendenkmäler (§§ 4, 6 DSchG)",
+              "metaName":"Gartendenkmäler (§§ 4, 6 DSchG)"
+            },
+            {
+              "id": "1754",
+              "visibility": false,
+              "name" : "Ensemble (§§ 4, 6 DSchG)",
+              "metaName":"Ensemble (§§ 4, 6 DSchG)"
+            },
+            {
+              "id": "1758",
+              "visibility": false
+            },
+            {
+              "id": "1758",
+              "visibility": false
+            },
+            {
+              "id": "1756",
+              "visibility": false
+            },
+            {
+              "id": "1849",
+              "visibility": false,
+              "name" : "Bodendenkmale, Grabungsschutzgebiete (§ 15 DSchG)",
+              "metaName":"Bodendenkmale, Grabungsschutzgebiete (§ 15 DSchG)"
+            }
+          ]
+        },
+        {
+          "Titel": "Naturschutz und Landschaftsschutz",
+          "Ordner": [
+            {
+              "Titel": "Biotopkataster gesetzlich geschützte Biotope (§ 30 BNatSchG, § 14 HmbBNatSchAG) - ab 1:5000 bis 1:500",
+              "Layer": [
+                {
+                  "id": "2926",
+                  "visibility": false,
+                  "name" : "Punktförmige Biotope",
+                  "metaName":"Punktförmige Biotope"
+                },
+                {
+                  "id": "2925",
+                  "visibility": false,
+                  "name" : "lineare Biotope (teilweise geschützt)",
+                  "metaName":"lineare Biotope (teilweise geschützt)"
+                },
+                {
+                  "id": "2924",
+                  "visibility": false,
+                  "name" : "lineare Biotope (vollständig geschützt)",
+                  "metaName":"lineare Biotope (vollständig geschützt)"
+                },
+                {
+                  "id": "2923",
+                  "visibility": false,
+                  "name" : "flächenhafte Biotope (teilweise geschützt)",
+                  "metaName": "flächenhafte Biotope (teilweise geschützt)"
+                },
+                {
+                  "id": "2922",
+                  "visibility": false,
+                  "name" : "flächenhafte Biotope (vollständig geschützt)",
+                  "metaName":"flächenhafte Biotope (vollständig geschützt)"
+                }
+              ]
+              }],
+              "Layer": [
+                {
+                  "id": "1453",
+                  "visibility": false,
+                  "name" : "Ausgleichsfächen (§§ 13, 17 Absatz 6 BNatSchG)",
+                  "metaName":"Ausgleichsfächen (§§ 13, 17 Absatz 6 BNatSchG)"
+                },
+                {
+                  "id": "1992",
+                  "visibility": false,
+                  "name" : "Naturschutzgebiete (§ 23 BNatSchG)",
+                  "metaName":"Naturschutzgebiete (§ 23 BNatSchG)"
+                },
+                {
+                  "id": "1996",
+                  "visibility": false,
+                  "name" : "Nationalpark (§ 24 BNatSchG)",
+                  "metaName":"Nationalpark (§ 24 BNatSchG)"
+                },
+                {
+                  "id": "1997",
+                  "visibility": false,
+                  "name" : "Biosphärenreservate (§ 25 BNatSchG)",
+                  "metaName":"Biosphärenreservate (§ 25 BNatSchG)"
+                },
+                {
+                  "id": "1998",
+                  "visibility": false,
+                  "name" : "Landschaftsschutzgebiete (§ 26 BNatSchG)",
+                  "metaName":"Landschaftsschutzgebiete (§ 26 BNatSchG)"
+                },
+                {
+                  "id": "2333",
+                  "visibility": false,
+                  "name" : "Landschaftsprogramm (LaPro)",
+                  "metaName":"Landschaftsprogramm (LaPro)"
+                },
+                {
+                  "id": "2117",
+                  "visibility": false,
+                  "name" : "Landschaftsprogramm Hamburg - Änderungsübersicht",
+                  "metaName":"Landschaftsprogramm Hamburg - Änderungsübersicht"
+                },
+                {
+                  "id": "1999",
+                  "visibility": false,
+                  "name" : "Naturdenkmäler (§ 28 BNatSchG)",
+                  "metaName":"Naturdenkmäler (§ 28 BNatSchG)"
+                },
+                {
+                  "id": "1995",
+                  "visibility": false,
+                  "name" : "Ramsargebiete",
+                  "metaName":"Ramsargebiete"
+                },
+                {
+                  "id": "1993",
+                  "visibility": false,
+                  "name" : "Fauna-Flora-Habitat-Gebiete ",
+                  "metaName":"Fauna-Flora-Habitat-Gebiete "
+                },
+                {
+                  "id": "1994",
+                  "visibility": false,
+                  "name" : "Vogelschutzgebiete",
+                  "metaName":"Vogelschutzgebiete"
+                },
+                {
+                  "id": "1553",
+                  "visibility": false,
+                  "name" : "Digitaler Grünplan",
+                  "metaName": "Digitaler Grünplan"
+                },
+                {
+                  "id": "1750",
+                  "visibility": false
+                },
+                {
+                  "id": "2297",
+                  "visibility": false
+                }
+              ]
+            },
+            {
+              "Titel": "Wasserrecht",
+              "Ordner": [
+                {
+                  "Titel": "Überschwemmungsgebiete (ÜSG)",
+                  "Layer": [
+                    {
+                      "id": "2432",
+                      "visibility": false,
+                      "name" : "Festgesetzte ÜSG (§ 76 WHG, § 54 HWaG)",
+                      "metaName": "Festgesetzte ÜSG (§ 76 WHG, § 54 HWaG)"
+                    },
+                    {
+                      "id": "2433",
+                      "visibility": false,
+                      "name" : "Vorläufig gesicherte ÜSG (§ 76 WHG)",
+                      "metaName": "Vorläufig gesicherte ÜSG (§ 76 WHG)"
+                    }
+                  ]
+                }
+              ],
+              "Layer": [
+                {
+                  "id": "685",
+                  "visibility": false,
+                  "name" : "Hamburger Wasserschutzgebiete (§§ 51 ff WHG)",
+                  "metaName": "Wasserschutzgebiete (§§ 51 ff WHG)"
+                }
+              ]
+            },
+            {
+              "Titel": "Luftverkehr",
+              "Ordner": [
+                {
+                  "Titel": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
+                  "Layer": [
+                    {
+                      "id": "431,430",
+                      "visibility": false,
+                      "name" : "Fluhafenbezugspunkt",
+                      "metaName": "Fluhafenbezugspunkt"
+                    },
+                    {
+                      "id": "429,428",
+                      "visibility": false,
+                      "name" : "Startbahnbezugspunkt",
+                      "metaName": "Startbahnbezugspunkt"
+                    },
+                    {
+                      "id": "427",
+                      "visibility": false,
+                      "name" : "Start- und Landebahnen",
+                      "metaName": "Start- und Landebahnen"
+                    },
+                    {
+                      "id": "426",
+                      "visibility": false,
+                      "name" : "Landebahnachsen",
+                      "metaName": "Landebahnachsen"
+                    },
+                    {
+                      "id": "425",
+                      "visibility": false,
+                      "name" : "Schutzstreifen",
+                      "metaName": "Schutzstreifen"
+                    },
+                    {
+                      "id": "424",
+                      "visibility": false,
+                      "name" : "Sicherheitsflächen",
+                      "metaName": "Sicherheitsflächen"
+                    },
+                    {
+                      "id": "422",
+                      "visibility": false,
+                      "name" : "Anflugsektoren 10km Hauptlandeflächen",
+                      "metaName": "Anflugsektoren 10km Hauptlandeflächen"
+                    },
+                    {
+                      "id": "421,420",
+                      "visibility": false,
+                      "name" : "Anflugsektoren 15km Hauptlandeflächen",
+                      "metaName": "Anflugsektoren 15km Hauptlandeflächen"
+                    },
+                    {
+                      "id": "419,418",
+                      "visibility": false,
+                      "name" : "Anflugsektoren 8500m Nebenlandeflächen",
+                      "metaName": "Anflugsektoren 8500m Nebenlandeflächen"
+                    },
+                    {
+                      "id": "417",
+                      "visibility": false,
+                      "name" : "Bauschutzbereich §12 Abs. 2 LuftVG",
+                      "metaName": "Bauschutzbereich §12 Abs. 2 LuftVG"
+                    },
+                    {
+                      "id": "416,415",
+                      "visibility": false,
+                      "name" : "Bauschutzbereich §12 Abs. 3 S. 1 Nr. 1a LuftVG",
+                      "metaName": "Bauschutzbereich §12 Abs. 3 S. 1 Nr. 1a LuftVG"
+                    },
+                    {
+                      "id": "414,413",
+                      "visibility": false,
+                      "name" : "Bauschutzbereich §12 Abs. 3 S. 1 Nr. 1b LuftVG",
+                      "metaName": "Bauschutzbereich §12 Abs. 3 S. 1 Nr. 1b LuftVG"
+                    },
+                    {
+                      "id": "412",
+                      "visibility": false,
+                      "name" : "Luftverkehrsfläche (FNP)",
+                      "metaName": "Luftverkehrsfläche (FNP)"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel": "Emissionen",
+              "Ordner": [
+                {
+                  "Titel": "Störfallbetriebe Hamburg",
+                  "Layer": [
+                    {
+                      "id": "759",
+                      "visibility": false,
+                      "name" : "Lage von Störfallbetrieben (§ 3 Abs. 5a BImSchG)",
+                      "metaName": "Lage von Störfallbetrieben (§ 3 Abs. 5a BImSchG)"
+                    },
+                    {
+                      "id": "758",
+                      "visibility": false,
+                      "name" : "Abstände nach § 50 BImSchG",
+                      "metaName": "Abstände nach § 50 BImSchG"
+                    }
+                  ]
+                },
+                {
+                  "Titel": "Lärmschutzbereiche Flughafen Hamburg (FluLärmHmbV)",
+                  "Layer": [
+                    {
+                      "id": "2415",
+                      "visibility": false,
+                      "name" : "Lärmschutzbereich Tag",
+                      "metaName": "Lärmschutzbereich Tag"
+                    },
+                    {
+                      "id": "2413",
+                      "visibility": false,
+                      "name" : "Lärmschutzbereich Tag-Schutzzone 1",
+                      "metaName": "Lärmschutzbereich Tag-Schutzzone 1"
+                    },
+                    {
+                      "id": "2412",
+                      "visibility": false,
+                      "name" : "Lärmschutzbereich Tag-Schutzzone 2",
+                      "metaName": "Lärmschutzbereich Tag-Schutzzone 2"
+                    },
+                    {
+                      "id": "2416",
+                      "visibility": false,
+                      "name" : "Lärmschutzbereich Nacht",
+                      "metaName": "Lärmschutzbereich Nacht"
+                    },
+                    {
+                      "id": "2414",
+                      "visibility": false,
+                      "name" : "Lärmschutzbereich Nacht-Schutzzone",
+                      "metaName": "Lärmschutzbereich Nacht-Schutzzone"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel": "Eisenbahnwesen / Personenbeförderung",
+              "Ordner": [
+                {
+                  "Titel": "Hamburger Verkehrsverbund (HVV)",
+                  "Layer": [
+                    {
+                      "id": "1935",
+                      "visibility": false,
+                      "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
+                      "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
+                      "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
+                    },
+                    {
+                      "id": "1933",
+                      "visibility": false,
+                      "styles": ["geofox_stations"],
+                      "name": ["Haltestellen"],
+                      "legendURL": ["http://87.106.16.168/legende_mrh/hvv-bus.png"]
+                    }
+                  ]
+                }
+              ],
+              "Layer": [
+                {
+                  "id": "2182",
+                  "visibility": false
+                },
+                {
+                  "id": "2181",
+                  "visibility": false
+                },
+                {
+                  "id": "2180",
+                  "visibility": false
+                },
+                {
+                  "id": "2179",
+                  "visibility": false
+                },
+                {
+                  "id": "2178",
+                  "visibility": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }

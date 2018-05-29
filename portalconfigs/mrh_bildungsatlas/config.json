@@ -1,0 +1,239 @@
+{
+  "Portalconfig":
+  {
+    "portalTitle":{
+      "title": "MRH Bildungsatlas",
+      "logo": "img/Logo_MRH.png",
+      "link": "http://metropolregion.hamburg.de/",
+      "tooltip": "Metropolregion Hamburg"
+    },
+
+   "searchBar": {
+       "bkg": {
+           "minChars": 3,
+           "suggestServiceId": "4",
+           "geosearchServiceId": "5",
+           "extent": [454591, 5809000, 700000, 6075769],
+           "epsg": "EPSG:25832",
+           "filter": "filter=(typ:*)",
+           "score": 0.6,
+           "suggestCount": 1000
+       },
+       "tree": {
+           "minChars": 3
+       },
+       "placeholder": "Suche nach Adresse",
+       "geoLocateHit": true
+   },
+      "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+         "startCenter": [565874, 5934140],
+            "options": [
+                {
+                    "resolution": 611.4974492763076,
+                    "scale": 2311167,
+                    "zoomLevel": 0
+                },
+                {
+                    "resolution": 305.7487246381551,
+                    "scale": 1155583,
+                    "zoomLevel": 1
+                },
+                {
+                    "resolution": 152.87436231907702,
+                    "scale": 577791,
+                    "zoomLevel": 2
+                },
+                {
+                    "resolution": 76.43718115953851,
+                    "scale": 288896,
+                    "zoomLevel": 3
+                },
+                {
+                    "resolution": 38.21859057976939,
+                    "scale": 144448,
+                    "zoomLevel": 4
+                },
+                {
+                    "resolution": 19.109295289884642,
+                    "scale": 72223,
+                    "zoomLevel": 5
+                },
+                {
+                    "resolution": 9.554647644942321,
+                    "scale": 36112,
+                    "zoomLevel": 6
+                },
+                {
+                    "resolution": 4.7773238224711605,
+                    "scale": 18056,
+                    "zoomLevel": 7
+                },
+                {
+                    "resolution": 2.3886619112355802,
+                    "scale": 9028,
+                    "zoomLevel": 8
+                },
+                {
+                    "resolution": 1.1943309556178034,
+                    "scale": 4514,
+                    "zoomLevel": 9
+                },
+                {
+                    "resolution": 0.5971654778089017,
+                    "scale": 2257,
+                    "zoomLevel": 10
+                }
+            ],
+          "extent": [277620.0, 5231960.0, 918470.0, 6100290.0],
+          "resolution": 152.87436231907702
+     },
+
+    "menu":
+    {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children":
+          {
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+            },
+            "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "searchByCoord": {
+              "name": "Koordinatensuche",
+              "glyphicon": "glyphicon-record"
+            },
+            "kmlimport": {
+              "name": "KML Import",
+              "glyphicon": "glyphicon-import"
+            },
+            "saveSelection": {
+              "name": "Auswahl speichern",
+              "glyphicon": "glyphicon-share"
+            },
+            "addWMS": {
+              "name": "WMS hinzufügen",
+              "glyphicon": "glyphicon-plus"
+            },
+            "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print",
+              "printID": "99999",
+              "title": "MRH-Bildungsatlas",
+              "gfi": true,
+              "outputFilename": "Ausdruck MRH-Bildungsatlas",
+              "configYAML": "gdimrh"
+            }
+          }
+        },
+      "legend":
+          {
+          "name": "Legende",
+          "glyphicon": "glyphicon-book"
+          },
+      "contact":
+          {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80002",
+          "from": 
+            [
+              {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+              }
+            ],
+          "to": 
+            [
+              {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+              }
+            ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+          }
+      },
+      "controls":
+      {
+          "fullScreen": true,
+          "zoom": true,
+          "orientation":
+              {
+              "zoomMode": "once",
+              "poiDistances": [1000, 5000, 10000]
+              },
+          "poi": false,
+          "mousePosition": true,
+          "attributions": false
+      },
+      "scaleLine": true,
+      "Baumtyp": "light"
+    },
+  "Themenconfig":
+    {
+    "Hintergrundkarten":
+      {
+        "Layer": [
+            {
+             "id": "8010",
+             "visibility": false
+            },
+            {"id": "8011"},
+            {"id": "8012"},
+            {
+             "id": "8042",
+             "maxScale": 5000
+            }
+          ]
+      },
+    "Fachdaten":
+      {
+        "Layer": [
+            {"id": "11079"},
+            {
+             "id": "9069",
+             "visibility": true
+            },            
+            {"id": "11080"},
+            {"id": "11087"},
+            {"id": "11081"},
+            {"id": "11088"},
+            {"id": "11082"},
+            {"id": "11089"},
+            {"id": "11083"},
+            {"id": "11090"},
+            {"id": "11084"},
+            {"id": "11091"},
+            {"id": "11085"},
+            {"id": "11092"},
+            {"id": "11086"},
+            {"id": "11093"}
+
+        ]
+      }
+    }
+}

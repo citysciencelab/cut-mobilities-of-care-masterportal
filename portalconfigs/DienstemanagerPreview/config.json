@@ -1,0 +1,89 @@
+{
+    "Portalconfig": {
+        "searchBar": {
+            "gazetteer": {
+                "minChars": 3,
+                "serviceId": "6",
+                "searchStreets": true,
+                "searchHouseNumbers": true,
+                "searchDistricts": true,
+                "searchParcels": true,
+                "searchStreetKey": true
+            },
+            "zoomLevel": 6,
+            "placeholder": "Suche nach Adresse"
+        },
+        "menu": {
+            "tree": {
+                "name": "Themen",
+                "glyphicon": "glyphicon-list"
+            },
+            "tools": {
+                "name": "Werkzeuge",
+                "glyphicon": "glyphicon-wrench",
+                "children": {
+                    "parcelSearch": {
+                        "name": "Flurstückssuche",
+                        "glyphicon": "glyphicon-search",
+                        "serviceId": "6",
+                        "StoredQueryID": "Flurstueck",
+                        "configJSON": "/..//lgv-config/gemarkungen_hh.json",
+                        "parcelDenominator": false
+                    },
+                    "measure": {
+                        "name": "Strecke / Fläche messen",
+                        "glyphicon": "glyphicon-resize-full",
+                        "onlyDesktop": true
+                    },
+                    "gfi": {
+                        "name": "Informationen abfragen",
+                        "glyphicon": "glyphicon-info-sign",
+                        "isActive": true
+                    },
+                    "print": {
+                        "name": "Karte drucken",
+                        "glyphicon": "glyphicon-print"
+                    },
+                    "searchByCoord": {
+                        "name": "Koordinatensuche",
+                        "glyphicon": "glyphicon-record"
+                    },
+                    "draw": {
+                        "name": "Zeichnen / Schreiben",
+                        "glyphicon": "glyphicon-pencil"
+                    }
+                }
+            },
+            "legend": {
+                "name": "Legende",
+                "glyphicon": "glyphicon-book"
+            }
+        },
+        "controls": {
+            "zoom": true
+        },
+        "scaleLine": true,
+        "Baumtyp": "light"
+    },
+    "Themenconfig": {
+        "Hintergrundkarten": {
+        "Layer": [
+        {
+          "id": "8"
+        },
+        {
+          "id": "6357"
+        },
+        {
+          "id": "453",
+          "visibility": true
+        }
+        ]
+        },
+        "Fachdaten": {
+            "Layer": [
+
+            ]
+        }
+    }
+}

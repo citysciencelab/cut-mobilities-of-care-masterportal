@@ -1,0 +1,124 @@
+{
+  "Portalconfig":
+    {
+      "PortalTitle": "GeoViewer",
+      "searchBar": {
+          "gazetteer": {
+              "url": "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+              "searchStreets": true,
+              "searchHouseNumbers": true,
+              "searchDistricts": true,
+              "searchParcels": true
+          },
+          "placeholder": "Adresssuche"
+      },
+      "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+        "resolution": 66.14579761460263
+      },
+      "menu": {
+        "tree": {
+          "name": "Themen",
+          "glyphicon": "glyphicon-list"
+        },
+        "tools": {
+          "name": "Werkzeuge",
+          "glyphicon": "glyphicon-wrench",
+          "children": {
+            "parcelSearch": {
+              "name": "Flurstückssuche",
+              "glyphicon": "glyphicon-search"
+            },
+            "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full",
+              "onlyDesktop": true
+            },
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+            },
+            "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print"
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "searchByCoord": {
+              "name": "Koordinatensuche",
+              "glyphicon": "glyphicon-record"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
+            }
+          }
+        },
+        "legend": {
+          "name": "Legende",
+          "glyphicon": "glyphicon-book"
+        },
+        "contact": {
+            "name": "Kontakt",
+            "glyphicon": "glyphicon-envelope",
+            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+            "serviceID": "80001",
+            "from": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+              }
+            ],
+            "to": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+               }
+             ],
+            "ccToUser": true,
+            "cc": [],
+            "bcc": [],
+            "textPlaceholder": "Bitte formulieren",
+            "includeSystemInfo": true
+        }
+      },
+      "controls": {
+        "toggleMenu": true,
+        "fullScreen": true,
+        "zoom": true,
+        "orientation": "once",
+        "mousePosition": true
+      },
+      "scaleLine": true,
+      "Baumtyp": "light"
+    },
+  "Themenconfig":
+    {
+      "Hintergrundkarten":
+        {
+          "Layer": [
+            {
+              "id": "2425",
+              "visibility": true,
+              "gfiAttributes": "ignore",
+              "singleTile": true,
+			        "styles": ["style_verwaltungsgrenzen_stadtteile_gefuellt"]
+            }
+          ]
+        },
+      "Fachdaten":
+        {
+          "Layer": [
+            {
+              "id": "3302",
+              "gfiTheme": "trinkwasser",
+              "visibility": true,
+              "featureCount": 5
+            }
+          ]
+        }
+    }
+}

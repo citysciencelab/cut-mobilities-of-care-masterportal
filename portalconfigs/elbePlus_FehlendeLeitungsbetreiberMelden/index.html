@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<head>
+	<meta charset="utf-8"/>
+  <title>Fehlende Leitungsbetreiber melden</title>
+
+  <script type="text/javascript" src="../libs/jQuery/jquery.min.js"></script>
+
+  <script type="text/javascript" src="../libs/bootstrap-3.3.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="../libs/bootstrap-3.3.2/css/bootstrap.min.css">
+
+  <script type="text/javascript" src="LGV_FehlendeLeitungsbetreiberMelden.js"></script>
+  <link rel="stylesheet" href="../libs/fonts/fonts.css">
+
+ </head>
+
+<body>
+  <!--
+  <h1>Fehlende Leitungsbetreiber melden</h1>
+  <h3>Dies ist noch ein Testsystem!!!</h3>
+	-->
+  <!-- Modal -->
+      <div class="modal fade" id="confirmModal" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title" id="confirmModalHeader">Modal Header</h4>
+            </div>
+            <div class="modal-body" id="confirmModalText">
+              <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+	<form class="form-horizontal" role="form" style="padding-left:10px;">
+		<div class="form-group form-group-sm">
+            <label for="FirmaField" class="col-md-1 col-sm-1 col-xs-3 control-label">Firma *</label>
+            <div class="col-md-5 col-sm-5 col-xs-7">
+                <input type="text" class="form-control" id="FirmaField" placeholder="Name Leitungsbetreiber">
+            </div>
+        </div>
+		<div class="form-group form-group-sm">
+            <label for="WebseiteField" class="col-md-1 col-sm-1 col-xs-3 control-label">Webseite</label>
+            <div class="col-md-5 col-sm-5 col-xs-7">
+                <input type="text" class="form-control" id="WebseiteField" placeholder="www.leitungsbetreiber.de">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label for="AnsprechpartnerField" class="col-md-1 col-sm-1 col-xs-3 control-label">Ansprechpartner</label>
+            <div class="col-md-5 col-sm-5 col-xs-7">
+                <input type="text" class="form-control" id="AnsprechpartnerField" placeholder="Vorname Nachname">
+            </div>
+        </div>
+		<div class="form-group form-group-sm">
+            <label for="EmailBetreiberField" class="col-md-1 col-sm-1 col-xs-3 control-label">E-mail<br>Leitungsbetreiber</label>
+			<div class="col-md-5 col-sm-5 col-xs-7">
+                <input type="text" class="form-control" id="EmailBetreiberField" placeholder="firma@firma.de">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label for="EmailMelderField" class="col-md-1 col-sm-1 col-xs-3 control-label">E-mail des Meldenden * <br>(ggf. für Rückfragen)</label>
+            <div class="col-md-5 col-sm-5 col-xs-7">
+                <input type="text" class="form-control" id="EmailMelderField" placeholder="vorname.nachname@firma.de">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="col-md-6 col-sm-6">
+                (*) Pflichtfeld
+			</div>
+        </div>
+		<div class="form-group form-group-sm">
+			<div class="col-md-3 col-sm-3 col-xs-3">
+				<button id="btnSend" type="button" class="btn btn-primary btn-panel-submit col-md-12 col-sm-12" onclick="checkInputs()">Daten abschicken</button>
+			</div>
+		</div>
+	</form>
+</body>

@@ -1,0 +1,21 @@
+div#gfi-on-address {
+    z-index: 1;
+    position: absolute;
+    background-color: white;
+    max-width: 40%;
+    max-height: 80%;
+    overflow: auto;
+}
+div#gfi-on-address.top-center {
+    top: 60px;
+    right: 60px;
+}
+div#gfi-on-address .address {
+    width: 50px;
+    float: left;
+    margin: 5px;
+}
+div#gfi-on-address .address:hover {
+    cursor: pointer;
+}
+

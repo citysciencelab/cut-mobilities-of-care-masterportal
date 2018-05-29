@@ -1,0 +1,207 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "GeoViewer",
+    "searchBar": {
+        "minChars": 3,
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true
+        },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "placeholder": "Suche nach Adresse"
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "coord": {
+            "name": "Koordinate abfragen",
+            "glyphicon": "glyphicon-screenshot"
+            },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "zoom": true,
+      "toggleMenu": true,
+      "orientation": "once",
+      "poi": false,
+      "fullScreen": true,
+      "attributions": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+         {
+          "id": "2265",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },{
+          "id": "2264",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },
+        {
+          "id": "2263",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },
+        {
+          "id": "2262",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },
+        {
+          "id": "2261",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },
+        {
+          "id": "2260",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },{
+          "id": "2259",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },{
+          "id": "2258",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },{
+          "id": "2257",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },{
+          "id": "2256",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },{
+          "id": "2255",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },
+        {
+          "id": "2254",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },
+        {
+          "id": "2253",
+          "visibility": false,
+          "mouseHoverField": "Name"
+        },
+         {
+              "id": "1935",
+              "visibility": false,
+              "styles": [
+                  "geofox_Faehre",
+                  "geofox-bahn", "geofox-bus",
+                  "geofox_BusName"
+                        ],
+              "name": [
+                  "HVV Fährverbindungen",
+                  "HVV Bahnlinien", "HVV Buslinien",
+                  "HVV Busliniennummern"
+                      ],
+              "legendURL": [
+                  "http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"
+                           ]
+            },
+            {
+              "id": "1933",
+              "visibility": false,
+              "styles": [
+                  "geofox_stations"
+                        ],
+              "name": [
+                  "HVV Haltestellen"
+                      ],
+             "attributions": "<span>Darstellung ab Maßstab 1: 20 000</span>",
+
+              "legendURL": [
+                  "http://87.106.16.168/legende_mrh/hvv-bus.png"
+                            ]
+            },
+          {
+          "id": "2425",
+          "visibility": false,
+          "mouseHoverField": "Name"
+          }
+
+
+      ]
+    }
+  }
+}

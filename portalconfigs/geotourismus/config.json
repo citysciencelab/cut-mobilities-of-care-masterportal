@@ -1,0 +1,202 @@
+{
+  "Portalconfig":
+  {
+    "portalTitle": {
+      "title": "Geotourismus",
+      "logo": "/../lgv-config/img/hh-logo.png",
+      "link": "http://hamburg.de/geologie",
+      "tooltip": "Geologisches Landesamt"
+    },
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+            },
+
+        "visibleWFS": {
+            "minChars": 3
+            },
+        "zoomLevel": 9,
+        "placeholder": "Suche nach Adresse / Stadtteil"
+    },
+    "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [561210, 5932600],
+        "resolution":  26.458319045841044
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": false
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "searchByCoord": {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Master",
+            "gfi": true,
+            "outputFilename": "DruckPDF",
+
+               "gfiMarker": {
+                  "outerCircle": {
+                    "fill": false,
+                    "pointRadius": 8,
+                    "stroke": true,
+                    "strokeColor": "#ff0000",
+                    "strokeWidth": 3
+                  },
+                  "point": {
+                    "fill": true,
+                    "pointRadius": 1,
+                      "fillColor": "#000000",
+                      "stroke": false
+                  }
+            }
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "serviceID": "80001",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "fullScreen": true,
+      "zoom": true,
+      "orientation":
+              {
+              "zoomMode": "once",
+              "poiDistances": [500, 1000, 2000]
+               },
+      "poi": true,
+      "overviewmap": {
+        "resolution": 611.4974492763076,
+        "baselayer": "452"
+      },
+      "mousePosition": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+
+        {
+          "id":"353",
+          "styleId":"353",
+          "clusterDistance":25,
+          "visibility": true,
+          "mouseHoverField": "name"
+        },
+        {
+          "id":"2058",
+          "styleId":"2058",
+          "clusterDistance":25,
+          "visibility": true,
+          "mouseHoverField": "name"
+        },
+        {
+          "id":"2054",
+          "styleId":"2054",
+          "clusterDistance":25,
+          "visibility": true,
+          "mouseHoverField": "name"
+        },
+        {
+          "id":"2060",
+          "styleId":"2060",
+          "clusterDistance":25,
+          "visibility": true,
+          "mouseHoverField": "name"
+        },
+        {
+          "id":"356",
+          "styleId":"356",
+          "clusterDistance":25,
+          "visibility": true,
+          "mouseHoverField": "name"
+        },
+        {
+          "id":"2057",
+          "styleId":"2057",
+          "clusterDistance":25,
+          "visibility": true,
+          "mouseHoverField": "name"
+        },
+        {
+          "id":"2059",
+          "styleId":"2059",
+          "clusterDistance":25,
+          "visibility": true,
+          "mouseHoverField": "name"
+        },
+        {
+          "id":"2056",
+          "styleId":"2056",
+          "clusterDistance":25,
+          "visibility": true,
+          "mouseHoverField": "name"
+        },
+        {
+          "id":"2055",
+          "styleId":"2055",
+          "visibility": true,
+          "mouseHoverField": "name"
+        }
+      ]
+    }
+  }
+}

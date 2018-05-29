@@ -1,0 +1,155 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "Pendlerströme",
+    "PortalLogo": "none",
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+        },
+        "bkg": {
+            "minChars": 3,
+            "suggestServiceId": "4",
+            "geosearchServiceId": "5",
+            "extent": [454591, 5809000, 700000, 6075769],
+            "suggestCount": 10,
+            "epsg": "EPSG:25832",
+            "filter": "filter=(typ:*)",
+            "score": 0.6
+        },
+        "zoomLevel": 9,
+        "placeholder": "Suche nach Adresse"
+    },
+    "mapView": {
+        "backgroundImage": "/..//lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [561210, 5932600]
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full",
+            "onlyDesktop": true
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print"
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "searchByCoord": {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          "animation": {
+            "name": "Pendler Animation",
+            "glyphicon": "glyphicon-play-circle"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80002",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "toggleMenu": true,
+      "fullScreen": true,
+      "zoom": true,
+      "orientation": "once",
+      "attributions": false,
+      "mousePosition": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+    {
+      "id": "8010",
+      "visibility": true
+    },
+    {
+      "id": "8011"
+    }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+        {
+          "id": "5087"
+        },
+        {
+          "id": "4888"
+        },
+        {
+          "id": "4889"
+        },
+        {
+          "id": "4892"
+        },
+    {
+      "id": "5195"
+    },
+        {
+          "id": "5086"
+        },
+        {
+          "id": "5085"
+        }
+      ]
+    }
+  }
+}

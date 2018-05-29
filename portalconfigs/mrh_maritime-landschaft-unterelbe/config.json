@@ -1,0 +1,250 @@
+{
+  "Portalconfig":
+  {
+    "portalTitle": {
+      "title": "Maritime Landschaft Unterelbe",
+      "logo": "../../img/Logo_MLU.png",
+      "link": "http://www.maritime-elbe.de/",
+      "tooltip": "Maritime Landschaft Unterelbe"
+    },
+
+      "searchBar": {
+        "bkg": {
+            "minChars": 3,
+            "suggestServiceId": "4",
+            "geosearchServiceId": "5",
+            "extent": [454591, 5809000, 700000, 6075769],
+            "epsg": "EPSG:25832",
+            "filter": "filter=(typ:*)",
+            "score": 0.6,
+            "suggestCount": 1000
+        },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "tree": {
+           "minChars": 3
+       },
+        "placeholder": "Suche nach Adresse",
+        "geoLocateHit": true
+      },
+
+     "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+         "startCenter": [522525, 5957400],
+            "options": [
+                {
+                    "resolution": 611.4974492763076,
+                    "scale": 2311167,
+                    "zoomLevel": 0
+                },
+                {
+                    "resolution": 305.7487246381551,
+                    "scale": 1155583,
+                    "zoomLevel": 1
+                },
+                {
+                    "resolution": 152.87436231907702,
+                    "scale": 577791,
+                    "zoomLevel": 2
+                },
+                {
+                    "resolution": 76.43718115953851,
+                    "scale": 288896,
+                    "zoomLevel": 3
+                },
+                {
+                    "resolution": 38.21859057976939,
+                    "scale": 144448,
+                    "zoomLevel": 4
+                },
+                {
+                    "resolution": 19.109295289884642,
+                    "scale": 72223,
+                    "zoomLevel": 5
+                },
+                {
+                    "resolution": 9.554647644942321,
+                    "scale": 36112,
+                    "zoomLevel": 6
+                },
+                {
+                    "resolution": 4.7773238224711605,
+                    "scale": 18056,
+                    "zoomLevel": 7
+                },
+                {
+                    "resolution": 2.3886619112355802,
+                    "scale": 9028,
+                    "zoomLevel": 8
+                },
+                {
+                    "resolution": 1.1943309556178034,
+                    "scale": 4514,
+                    "zoomLevel": 9
+                },
+                {
+                    "resolution": 0.5971654778089017,
+                    "scale": 2257,
+                    "zoomLevel": 10
+                }
+            ],
+          "extent": [277620.0, 5231960.0, 918470.0, 6100290.0],
+          "resolution": 76.43718115953851
+     },
+
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": false
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print",
+              "printID": "99999",
+              "title": "Maritime Landschaft Unterelbe",
+              "gfi": true,
+              "outputFilename": "Ausdruck Maritime Landschaft Unterelbe",
+              "configYAML": "gdimrh"
+            },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+            "saveSelection": {
+              "name": "Auswahl speichern",
+              "glyphicon": "glyphicon-share"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80002",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+     "toggleMenu": true,
+      "fullScreen": true,
+      "zoom": true,
+      "orientation": "once",
+      "poi": false
+    },
+    "scaleLine": true,
+    "Baumtyp": "custom"
+  },
+
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "8010",
+          "visibility": true
+        },
+        {
+          "id": "8011"
+        },
+        {
+          "id": "8012"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+        {
+         "id": "5692",
+         "visibility": true
+        },
+        {
+         "id": "5691",
+         "visibility": true
+        },
+        {
+         "id": "5694",
+         "visibility": true
+        },
+        {
+         "id": "2685",
+         "visibility": true
+        },
+        {
+         "id": "2677",
+         "visibility": true
+        },
+        {
+         "id": "2689",
+         "visibility": true
+        },
+        {
+         "id": "5696",
+         "visibility": true
+        },
+        {
+         "id": "5695",
+         "visibility": true
+        },
+        {
+         "id": "5693",
+         "visibility": true
+        },
+
+        {
+         "id": "9087",
+         "visibility": false
+        },
+        {
+         "id": "9088",
+         "visibility": false
+        },
+        {
+         "id": "2877",
+         "visibility": false
+        },
+        {
+         "id": "9089",
+         "visibility": false
+        }
+      ]
+    }
+  }
+}

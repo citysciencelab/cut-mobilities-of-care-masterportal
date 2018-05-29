@@ -1,0 +1,176 @@
+{
+  "Portalconfig":
+  {
+   "portalTitle": {
+      "title": "HH Straßen- u. Gebietsauskunft",
+      "logo": "../../img/stano.png",
+      "link": "http://www.statistik-nord.de/",
+      "tooltip": "Statistikamt Nord"
+    },
+
+
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "8",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+        },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "zoomLevel": 8,
+        "placeholder": "Suche nach Adresse/ Stadtteil/ Flurstück(0123/1234)"
+    },
+    "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg"
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+
+          "parcelSearch": {
+            "name": "Flurstückssuche",
+            "glyphicon": "glyphicon-search",
+            "serviceId": "6",
+            "storedQueryID": "Flurstueck",
+            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
+            "parcelDenominator": false
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full",
+            "onlyDesktop": true
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+         "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Master",
+            "gfi": true,
+            "outputFilename": "DruckPDF"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "zoom": true,
+      "attributions": false,
+      "fullScreen": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+          {
+          "id": "189"
+          },
+          {
+          "id": "2426"
+          },
+          {
+          "id": "2425"
+          },
+          {
+          "id": "8054"
+          },
+          {
+          "id": "1037"
+          },
+          {
+          "id": "2455",
+          "maxScale": "5000"
+          },
+          {
+          "id": "211",
+          "transparency": "70"
+          },
+          {
+          "id": "213",
+          "transparency": "70"
+          },
+          {
+          "id": "367"
+          },
+          {
+          "id": "5718"
+          },
+          {
+          "id": "6168"
+          },
+          {
+          "id": "6166"
+          },
+          {
+          "id": "6167"
+          },
+          {
+          "id": "6165"
+          }
+        ]
+
+    }
+  }
+}

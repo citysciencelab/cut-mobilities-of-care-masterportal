@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<div class="row">
+    <a class="btn btn-info btn-md col-lg-2 col-md-2 col-sm-3 col-xs-6" href="<%= bedienungsanleitung %>" role="button" target="_blank" title="Bedienungsanleitung">Bedienungsanleitung</a>
+    <a class="btn btn-info btn-md col-lg-2 col-md-2 col-sm-3 col-xs-6" href="<%= musterAuskunft %>" role="button" target="_blank" title="Muster-Auskunft">Muster-Auskunft</a>
+    <a class="btn btn-info btn-md col-lg-2 col-md-3 col-sm-3 col-xs-6" href="<%= fachlicheErlaeuterung %>" role="button" target="_blank" title="Fachliche Erläuterung">Fachliche Erläuterung</a>
+    <a class="btn btn-info btn-md col-lg-2 col-md-3 col-sm-3 col-xs-6" href="<%= datenschutzerklaerung %>" role="button" target="_blank" title="Datenschutzerklärung">Datenschutzerklärung</a>
+    <a class="btn btn-info btn-md col-lg-2 col-md-2 col-sm-3 col-xs-6" href="<%= nutzungsbedingungen %>" role="button" target="_blank" title="Nutzungsbedingungen">Nutzungsbedingungen</a>
+    <a class="btn btn-info btn-md col-lg-2 col-md-2 col-sm-3 col-xs-6" href="<%= gebuehrenordnung %>" role="button" target="_blank" title="Gebührenordnung">Gebührenordnung</a>
+    <a class="btn btn-info btn-md col-lg-2 col-md-1 col-sm-3 col-xs-6" href="<%= gebuehr %>" role="button" target="_blank" title="Gebühr">Gebühr</a>
+    <a class="btn btn-info btn-md col-lg-2 col-md-1 col-sm-3 col-xs-6" href="<%= glossar %>" role="button" target="_blank" title="Glossar">Glossar</a>
+    <a class="btn btn-info btn-md col-lg-2 col-md-1 col-sm-3 col-xs-6" href="#" role="button" data-toggle="modal" data-target="#contactModal" title="Kontakt">Kontakt</a>
+    <a class="btn btn-info btn-md col-lg-2 col-md-2 col-sm-3 col-xs-6" href="<%= impressum %>" role="button" target="_blank" title="Impressum">Impressum</a>
+</div>
+<br>
+<div class="row">
+    <div id="navbar" class="btn-group btn-group-justified" role="group" aria-label="Navigationsleiste">
+        <div id="navbar-1-queries" class="navi btn-group" role="group">
+            <button type="button" class="btn btn-default" aria-label="Left Align" title ="Lage, Nutzung, Stichjahr, Produkt eingeben" disabled="true">
+              <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+              <span class="hidden-xs input-sm">Produkt</span>
+            </button>
+        </div>
+        <div id="navbar-2-brw" class="navi btn-group" role="group">
+            <button type="button" class="btn btn-default" aria-label="Left Align" title ="ggf. benötigte Bodenrichtwertnummern eingeben" disabled="true">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+              <span class="hidden-xs input-sm">BRW</span>
+            </button>
+        </div>
+        <div id="navbar-3-parameter" class="navi btn-group" role="group">
+            <button type="button" class="btn btn-default" aria-label="Left Align" title ="Weitere Objektdaten eingeben" disabled="true">
+              <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+              <span class="hidden-xs input-sm">Weitere Daten</span>
+            </button>
+        </div>
+        <div id="navbar-4-summary" class="navi btn-group" role="group">
+            <button type="button" class="btn btn-default" aria-label="Left Align" title ="Übersicht der eingegebenen Daten" disabled="true">
+              <span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>
+              <span class="hidden-xs input-sm">Übersicht</span>
+            </button>
+        </div>
+        <% if (isInternetOrDev === true) { %>
+        <div id="navbar-5-payment" class="navi btn-group" role="group">
+            <button type="button" class="btn btn-default" aria-label="Left Align" title ="Weiterleitung an Payment-Provider" disabled="true">
+              <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+              <span class="hidden-xs input-sm">Bezahlen</span>
+            </button>
+        </div>
+        <% } %>
+        <div id="navbar-6-download" class="navi btn-group" role="group">
+            <button type="button" class="btn btn-default" aria-label="Left Align" title ="PDF herunterladen" disabled="true">
+              <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+              <span class="hidden-xs input-sm">Download</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="contactModalLabel">Kontakt-Formular</h4>
+      </div>
+      <div class="modal-body">
+        <div id="contactNameDiv" class="form-group has-feedback">
+            <div class="input-group">
+                <span class="contactInputGroup input-group-addon">Name</span>
+                <input type="text" class="form-control" id="contactName" aria-describedby="contactNameStatus" placeholder="Ihr Name" value="<%= userName %>">
+            </div>
+            <span id="contactNameFeedback" class="contactHide glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="contactNameStatus" class="sr-only">(success)</span>
+            <label id="contactNameLabel" class="contactHide control-label" for="contactName">Bitte geben Sie Ihren Namen ohne Sonderzeichen ein.</label>
+        </div>
+        <div id="contactEmailDiv" class="form-group has-feedback">
+            <div class="input-group">
+                <span class="contactInputGroup input-group-addon">Email</span>
+                <input type="email" class="form-control" id="contactEmail" aria-describedby="contactEmailStatus" placeholder="Ihre Emailadresse" value="<%= userEmail %>">
+            </div>
+            <span id="contactEmailFeedback" class="contactHide glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="contactEmailStatus" class="sr-only">(success)</span>
+            <label id="contactEmailLabel" class="contactHide control-label" for="contactName">Bitte geben Sie eine gültige Emailadresse ein.</label>
+        </div>
+        <div id="contactTelDiv" class="form-group has-feedback">
+            <div class="input-group">
+                <span class="contactInputGroup input-group-addon">Tel.</span>
+                <input type="tel" class="form-control" id="contactTel" aria-describedby="contactTelStatus" placeholder="Ihre Telefonnummer" value="<%= userTel %>">
+            </div>
+            <span id="contactTelFeedback" class="contactHide glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="contactTelStatus" class="sr-only">(success)</span>
+            <label id="contactTelLabel" class="contactHide control-label" for="contactName">Unter welcher Telefonnummer können wir Sie erreichen?</label>
+        </div>
+        <div id="textDiv" class="form-group has-feedback">
+            <textarea class="contactResizeNone form-control" id="contactText" rows="10" maxlength="2000" placeholder="<%= textPlaceholder %>" aria-describedby="contactTextStatus"><%= userText %></textarea>
+            <span id="contactTextFeedback" class="contactHide glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="contactTextStatus" class="sr-only">(success)</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="disabled contactButton btn btn-default" title="Eingaben jetzt abschicken.">
+            Abschicken
+        </button>
+    </div>
+   </div>
+ </div>
+</div>

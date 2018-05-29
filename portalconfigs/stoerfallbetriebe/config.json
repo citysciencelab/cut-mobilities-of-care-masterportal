@@ -1,0 +1,122 @@
+{
+  "Portalconfig":
+  {
+    "PortalTitle": "Störfallbetriebe-Portal",
+    "PortalLogo": "../img/hh-logo.png",
+    "LogoLink": "http://geoinfo.hamburg.de",
+    "LogoToolTip": "Landesbetrieb Geoinformation und Vermessung",
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+        },
+        "specialWFS": {
+            "minChar": 3,
+            "definitions": [
+                {
+                    "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
+                    "data": "service=WFS&request=GetFeature&version=1.1.0&typeName=app:stoerfallbetrieb&propertyName=app:standort,app:geom",
+                    "name": "stoerfallbetrieb"
+                }
+            ]
+        },
+        "zoomLevel": 9,
+        "placeholder": "Suche nach Adresse/ Name-Betrieb"
+    },
+    "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+        "startCenter": [565874, 5934140]
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": true
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+
+         "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full"
+            },
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
+            },
+            "featureLister": {
+              "name": "Liste",
+              "glyphicon": "glyphicon-menu-hamburger",
+              "lister": 10
+            }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "serviceID": "80001",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "toggleMenu": true,
+      "fullScreen": true,
+      "zoom": true,
+      "orientation": "always",
+      "poi": true,
+      "attributions": false
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+        {
+          "id": "4961",
+          "name": "Stoerfallbetrieb",
+          "visibility": true,
+          "name": "Störfallbetrieb",
+          "styleId": "4961",
+          "searchField": "standort",
+          "mouseHoverField": "standort"
+        }
+
+      ]
+    }
+  }
+}

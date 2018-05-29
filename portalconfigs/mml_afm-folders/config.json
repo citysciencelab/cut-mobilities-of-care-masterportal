@@ -1,0 +1,79 @@
+{
+  "Portalconfig":
+  {
+    "searchBar": {
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+        },
+        "zoomLevel": 9,
+        "placeholder": "Suche nach Straße/Adresse",
+        "renderToDOM": "#searchbarInMap",
+        "searchbarTemplate": "mml"
+    },
+    "mapView": {
+        "backgroundImage": "backgroundCanvas.jpeg",
+        "startCenter": [565764, 5933975]
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "gfi": {
+        "name": "Informationen abfragen",
+        "glyphicon": "glyphicon-info-sign",
+        "isActive": true,
+        "zoomToFeature": true
+      },
+      "hide": true
+    },
+    "mapMarkerModul": {
+      "marker": "dragMarker",
+      "dragMarkerLandesgrenzeId": "6074",
+      "visible": false
+    },
+
+    "controls": {
+      "toggleMenu": false,
+      "fullScreen": false,
+      "zoom": true,
+      "orientation": false,
+      "poi": false,
+      "attributions": false,
+      "toggleBaselayer": true,
+      "style": "mml"
+    },
+    "scaleLine": true,
+    "Baumtyp": "light",
+    "reverseGeocoder": {
+      "wpsId": "1001"
+    }
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452",
+          "name": "Luftbilder"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+      ]
+    }
+  }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<div class="panel panel-default">
+    <div id="toggleSummary" class="panel-heading">
+        <h2>Ihre Zusammenfassung<small> (Mich kann man klicken)</small></h2>
+    </div>
+    <div id="summaryDetails" class="panel-body" style="display: none;">
+        <div class="panel-body col-md-3 col-sm-3 col-xs-12">
+            <blockquote class="noMargin">
+                <p><strong>Lage:</strong></p>
+                <%if (lage.type==="Adresse") {%>
+                <p><%=lage.strassenname%> <%=lage.hausnummer%><%=lage.hausnummerZusatz%></p>
+                <p><%=lage.plz%></p>
+                <p><%=lage.stadtteil%></p>
+                <%} else {%>
+                <p>Gemarkung : <%=lage.gemarkung%></p>
+                <p>Flurstück : <%=lage.flurstueck%></p>
+                <p>Stadtteil : <%=lage.stadtteil%></p>
+                <p>Zuwegung : <%=lage.zuwegung%></p>
+
+                <%}%>
+            </blockquote>
+        </div>
+        <div class="panel-body col-md-3 col-sm-3 col-xs-12">
+            <blockquote class="noMargin">
+                <p><strong>Produkt:</strong></p>
+                <p><%=produkt%></p>
+            </blockquote>
+        </div>
+        <div class="panel-body col-md-3 col-sm-3 col-xs-12">
+            <blockquote class="noMargin">
+                <p><strong>Jahr:</strong></p>
+                <p><%=jahr%></p>
+            </blockquote>
+        </div>
+        <div class="panel-body col-md-3 col-sm-3 col-xs-12">
+            <blockquote class="noMargin">
+                <p><strong>Nutzung:</strong></p>
+                <p><%=nutzung%></p>
+            </blockquote>
+        </div>
+        <div class="panel-body col-md-12 col-sm-12 col-xs-12">
+            <blockquote class="noMargin">
+                <p><strong>Parameter:</strong></p>
+                <table class="table">
+                    <%_.each(params, function (value, key) {%>
+                    <tr><td><%=key%></td><td><%=value%></td></tr>
+                    <%})%>
+                </table>
+            </blockquote>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,162 @@
+{
+  "Portalconfig":
+  {
+    "portalTitle": {
+      "title": "KEHR.WIEDER.-Portal",
+      "logo": "../../img/kehr_wieder_becher.png",
+      "link": "http://www.hamburg.de/kehrwieder",
+      "tooltip": "KEHR.WIEDER."
+    },
+    "searchBar": {
+        "minChars": 3,
+        "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true
+        },
+        "visibleWFS": {
+            "minChars": 3
+        },
+        "placeholder": "Suche nach Adresse/ Stadtteil"
+    },
+    "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg"
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": false
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Kehr.Wieder-Portal",
+            "gfi": true,
+            "outputFilename": "DruckPDF",
+            "gfiMarker": {
+              "outerCircle": {
+                "fill": false,
+                "pointRadius": 13,
+                "stroke": true,
+                "strokeColor": "#005dff",
+                "strokeWidth": 3
+              },
+              "point": {
+                "fill": true,
+                "pointRadius": 1,
+                  "fillColor": "#000000",
+                  "stroke": false
+                }
+            }
+          },
+          "searchByCoord": {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          }
+        }
+      },
+
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+          "name": "Kontakt",
+          "glyphicon": "glyphicon-envelope",
+          "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+          "serviceID": "80001",
+          "from": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+            }
+          ],
+          "to": [
+            {
+              "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+              "name": "LGVGeoportalHilfe"
+             }
+           ],
+          "ccToUser": true,
+          "cc": [],
+          "bcc": [],
+          "subject": "",
+          "textPlaceholder": "Bitte formulieren",
+          "includeSystemInfo": true
+      }
+    },
+    "controls": {
+     "toggleMenu": true,
+      "fullScreen": true,
+      "zoom": true,
+      "orientation": "once",
+      "poi": true,
+      "attributions": false
+    },
+    "scaleLine": true,
+    "Baumtyp": "light"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        }
+      ]
+    },
+    "Fachdaten":
+    {
+      "Layer": [
+
+        {
+          "id": "9109",
+          "visibility": true,
+          "styleId": "9109",
+          "name": "KEHR.WIEDER.",
+          "mouseHoverField": "name"
+        },
+
+        {
+           "id":"1933",
+            "visibility": true,
+            "maxScale":20000,
+            "styles":[
+               "geofox_stations"
+                  ],
+            "name":[
+                    "HVV-Haltestellen"
+                  ],
+              "legendURL":[
+                    "http://87.106.16.168/legende_mrh/hvv-bus.png"
+                    ]
+        }
+
+      ]
+    }
+  }
+}

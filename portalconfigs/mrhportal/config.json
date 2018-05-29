@@ -1,0 +1,1135 @@
+{
+  "Portalconfig":
+    {
+      "portalTitle":{
+      "title": "Geoportal MRH",
+      "logo": "img/Logo_MRH.png",
+      "link": "http://metropolregion.hamburg.de/",
+      "tooltip": "Metropolregion Hamburg"
+    },
+      "searchBar": {
+       "bkg": {
+           "minChars": 3,
+           "suggestServiceId": "4",
+           "geosearchServiceId": "5",
+           "extent": [454591, 5809000, 700000, 6075769],
+           "epsg": "EPSG:25832",
+           "filter": "filter=(typ:*)",
+           "score": 0.6,
+           "suggestCount": 1000
+       },
+       "tree": {
+           "minChars": 3
+       },
+       "placeholder": "Suche nach Adresse, Thema",
+       "geoLocateHit": true
+   },
+        "mapView": {
+            "center": [565874, 5934140],
+            "extent": [454591, 5809000, 700000, 6075769],
+            "resolution": 152.87436231907702,
+            "options": [
+                {
+                    "resolution": 611.4974492763076,
+                    "scale": 2311167,
+                    "zoomLevel": 0
+                },
+                {
+                    "resolution": 305.7487246381551,
+                    "scale": 1155583,
+                    "zoomLevel": 1
+                },
+                {
+                    "resolution": 152.87436231907702,
+                    "scale": 577791,
+                    "zoomLevel": 2
+                },
+                {
+                    "resolution": 76.43718115953851,
+                    "scale": 288896,
+                    "zoomLevel": 3
+                },
+                {
+                    "resolution": 38.21859057976939,
+                    "scale": 144448,
+                    "zoomLevel": 4
+                },
+                {
+                    "resolution": 19.109295289884642,
+                    "scale": 72223,
+                    "zoomLevel": 5
+                },
+                {
+                    "resolution": 9.554647644942321,
+                    "scale": 36112,
+                    "zoomLevel": 6
+                },
+                {
+                    "resolution": 4.7773238224711605,
+                    "scale": 18056,
+                    "zoomLevel": 7
+                },
+                {
+                    "resolution": 2.3886619112355802,
+                    "scale": 9028,
+                    "zoomLevel": 8
+                },
+                {
+                    "resolution": 1.1943309556178034,
+                    "scale": 4514,
+                    "zoomLevel": 9
+                },
+                {
+                    "resolution": 0.5971654778089017,
+                    "scale": 2257,
+                    "zoomLevel": 10
+                },
+                {
+                    "resolution": 0.2985827389044509,
+                    "scale": 1129,
+                    "zoomLevel": 11
+                }
+            ]
+      },
+      "menu": {
+        "tree": {
+          "name": "Themen",
+          "glyphicon": "glyphicon-list"
+        },
+        "tools": {
+          "name": "Werkzeuge",
+          "glyphicon": "glyphicon-wrench",
+          "children": {
+
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+            },
+            "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print",
+              "printID": "99999",
+              "title": "Geoportal der Metropolregion Hamburg",
+              "gfi": true,
+              "outputFilename": "Ausdruck Geoportal GDI-MRH",
+              "configYAML": "gdimrh"
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "searchByCoord": {
+              "name": "Koordinatensuche",
+              "glyphicon": "glyphicon-record"
+            },
+            "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
+            },
+            "kmlimport": {
+              "name": "KML Import",
+              "glyphicon": "glyphicon-import"
+            },
+            "saveSelection": {
+              "name": "Auswahl speichern",
+              "glyphicon": "glyphicon-share"
+            },
+            "animation": {
+            "name": "Pendler Animation",
+            "glyphicon": "glyphicon-play-circle"
+            }
+          }
+        },
+        "addWMS": {
+          "name": "WMS hinzufügen",
+          "glyphicon": "glyphicon-plus"
+        },
+        "legend": {
+          "name": "Legende",
+          "glyphicon": "glyphicon-book"
+        },
+        "contact":
+          {
+            "name": "Kontakt",
+            "glyphicon": "glyphicon-envelope",
+            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+            "serviceID": "80002",
+            "from":
+              [
+                {
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+                }
+              ],
+            "to":
+              [
+                {
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+                 }
+               ],
+            "ccToUser": true,
+            "cc": [],
+            "bcc": [],
+            "subject": "",
+            "textPlaceholder": "Bitte formulieren",
+            "includeSystemInfo": true
+          }
+          },
+          "controls":
+          {
+                "fullScreen": true,
+                "zoom": true,
+               "orientation":
+                    {
+                    "zoomMode": "once",
+                    "poiDistances": [1000, 5000, 10000]
+                     },
+                "poi": true,
+                "mousePosition": true,
+                "attributions": true
+          },
+          "scaleLine": true,
+          "Baumtyp": "custom"
+        },
+
+  "Themenconfig":
+    {
+      "Hintergrundkarten":
+        {
+          "Layer": [
+            {
+              "id": "8010",
+              "visibility": false
+            },
+            {
+             "id": "8011"
+            },
+            {
+             "id": "8012"
+            },
+            {
+             "id":[
+                    {
+                    "id": "7834"
+                    },
+                    {
+                    "id": "8042"
+                    }
+            ],
+             "maxScale": 5000,
+             "name": "Karte 1: 5000"
+            }
+          ]
+        },
+
+      "Fachdaten":
+        {
+          "Ordner": [
+            {
+              "Titel": "Allgemeine Informationen",
+              "Layer": [
+                {
+                  "id": [
+                      {
+                      "id": "7829"
+                      },
+                      {
+                      "id": "2876"
+                      }
+                    ],
+                    "name": "Grenzen der Gemeinden in der MRH"
+                },
+                {
+                  "id": "2877"
+                },
+                {
+                  "id": [
+                      {
+                      "id": "7828"
+                      },
+                      {
+                      "id": "2875"
+                      }
+                  ],
+                "name": "Grenzen der Ämter in der MRH"
+                },
+                {
+                  "id": [
+                      {
+                      "id": "7827"
+                      },
+                      {
+                      "id": "2874"
+                      }
+                  ],
+                    "name": "Kreisgrenzen in der MRH"
+                }
+              ]
+            },
+
+            {
+              "Titel": "Bauleitplanung & Raumordnung",
+              "Ordner": [
+                {
+                  "Titel": "Bebauungspläne",
+                  "Layer": [
+                    {
+                      "id": "7623"
+                    },
+                    {
+                      "id": "2866"
+                    },
+                    {
+                      "id": "1561",
+                      "name": "Hamburg",
+                      "legendURL": "http://geoportal.metropolregion.hamburg.de/legende_mrh/bplan_mrh_legende.png"
+                    },
+                    {
+                      "id": "7714"
+                    },
+                    {
+                      "id": ["7716","7717"]
+                    },
+                    {
+                      "id": "7736"
+                    },
+                    {
+                      "id": ["7739","7740","7741","7742","7743","7744","7745","7746","7747","7748"]
+                    },
+                    {
+                      "id": ["7929","7930","7931","7932","7933"]
+                    },
+                    {
+                      "id": ["7801","7802"]
+                    },
+                    {
+                      "id": "4607"
+                    },
+                    {
+                      "id": "6039"
+                    },
+                    {
+                      "id": "2895"
+                    },
+                    {
+                      "id": "7839"
+                    },
+                    {
+                      "id": "7912"
+                    },
+                    {
+                      "id": "2905"
+                    },
+                    {
+                      "id": "2856"
+                    },
+                    {
+                      "id": "7913"
+                    },
+                    {
+                      "id": [
+                                {
+                                "id": "7279"
+                                },
+                                {
+                                "id": "7280"
+                                }
+                            ],
+                        "name": "Lübeck"
+                    }
+                  ]
+                },
+                {
+                  "Titel": "Raumordnung",
+                  "Layer": [
+                    {
+                      "id":                 ["2205","2206","2207","2208","2209","2210","2211","2212","2213","2214","2215","2216","2217","2218","2219","2221","2222","2223","2224","2225","2226","2227","2228","2229","2230","2231","2232","2233","2234","2235","2236","2237","2238","2239","2240","2241","2242","2243","2244","2245","2711","2716","551","552","556","557","558","2246"],
+                      "maxScale": 20000,
+                    "name": "Flächennutzungsplan Hamburg",
+                    "gfiAttributes": "ignore",
+                    "layerAttribution": "<b>Hinweis:</b> Der Layer <b>Flächennutzungsplan Hamburg</b> wird ab dem Maßstabsbereich 1: 18 000 dargestellt.",
+                    "legendURL": "http://daten-hamburg.de/infrastruktur_bauen_wohnen/flaechennutzungsplan_hamburg/F_Plan_Legende.pdf"
+
+                    },
+                    {
+                      "id": "7818"
+                    },
+                    {
+                      "id": ["7901","7902","7903","7904","7905","7906","7907","7908","7909","7910","7911"]
+                    }
+                  ]
+                },
+                {
+                  "Titel": "Raumentwicklungsprogramm Mecklenburg-Vorpommern",
+                  "Layer": [
+                    {
+                      "id": ["7757","7758","7759","7760","7761","7762","7763","7764","7765"],
+                      "maxScale": 300000,
+                      "minScale": 63000
+                    },
+                    {
+                      "id": ["7766","7767","7768","7769","7770"],
+                      "maxScale": 300000,
+                      "minScale": 63000
+                    },
+                    {
+                      "id": ["7771","7772","7773","7774","7775","7776","7777","7778"],
+                      "maxScale": 300000,
+                      "minScale": 63000
+                    }
+                  ]
+                },
+                {
+                  "Titel": "Regionales Raumordnungsprogramm Niedersachsen",
+                  "Layer": [
+                    {
+                      "id": "9081",
+                        "maxScale": 150000
+                    },
+                    {
+                      "id": "9082"
+                    },
+                    {
+                      "id": "9083"
+                    },
+                    {
+                      "id": ["7729","7730","7731","7900"],
+                      "maxScale": 280000
+                    },
+                    {
+                      "id": "9084"
+                    },
+                    {
+                      "id": ["3679","3680","3681","3682","3683","3684","3685","3686","3687","3688","3689","3690","3691","3692","3693","3694","3695","3696","3697","3698","3699","3700","3701","3702","3703","3704","3705","3706","3707","3708","3709","3710","3711","3712","3713","3714","3715","3716","3717","3718","3719","3720","3721"]
+                    },
+                    {
+                      "id": "678"
+                    }
+                  ]
+                },
+                {
+                  "Titel": "Regionalplanung Schleswig-Holstein",
+                  "Layer": [
+                    {
+                      "id": "7808"
+                    },
+                    {
+                      "id": "7809"
+                    },
+                    {
+                      "id": "7810"
+                    },
+                    {
+                      "id": "7811"
+                    },
+                    {
+                      "id": "7812"
+                    },
+                    {
+                      "id": "7813"
+                    },
+                    {
+                      "id": "7814"
+                    },
+                    {
+                      "id": "7815"
+                    },
+                    {
+                      "id": "7816"
+                    },
+                    {
+                      "id": "7817"
+                    }
+                  ]
+                }
+              ]
+            },
+
+            {
+              "Titel": "Bildung & Soziales",
+              "Layer": [
+                {
+                  "id": "7837"
+                },
+                {
+                  "id": ["7806","7807"]
+                },
+                {
+                  "id": "2880"
+                },
+                {
+                  "id": "4354"
+                },
+                {
+                  "id": "9069"
+                },
+                {
+                  "id": "9068"
+                },
+                {
+                  "id": "10189",
+                  "name": "Schulen im LK Harburg"
+                },
+				{
+                  "id": ["7890","7891","7892","7893","7894","7895","7897","7898"]
+                }
+              ]
+            },
+
+            {
+              "Titel": "Energie",
+              "Layer": [
+                {
+                  "id": "7947"
+                },
+                {
+                  "id": "7946"
+                },
+                {
+                  "id": "183"
+                },
+                {
+                  "id": "189"
+                },
+                {
+                  "id": "7941"
+                },
+                {
+                  "id": "7940"
+                },
+                {
+                  "id": "9080"
+                },
+                {
+                  "id": [
+                            {
+                            "id": "7830"
+                            },
+                            {
+                            "id": "7831"
+                            },
+                            {
+                            "id": "9079"
+                            }
+                        ],
+                    "name": "Windkraftanlagen"
+                    }
+                ]
+            },
+
+            {
+              "Titel": "Freizeit & Tourismus",
+              "Ordner": [
+                    {
+                    "Titel": "Cuxhaven: Baden- und Wassersport",
+                    "Layer": [
+                        {
+                        "id": ["6461","6460"]
+                        },
+                        {
+                        "id": ["6459","6458"]
+                        },
+                        {
+                        "id": ["6457","6456"]
+                        },
+                        {
+                        "id": "6455"
+                        },
+                        {
+                        "id": ["6454","6453"]
+                        },
+                        {
+                        "id": "6452"
+                        },
+                        {
+                        "id": ["6451","6450"]
+                        },
+                        {
+                        "id": "6449"
+                        },
+                        {
+                        "id": "6448"
+                        },
+                        {
+                        "id": ["6447","6446"]
+                        },
+                        {
+                        "id": "6445"
+                        }
+                    ]
+                },
+                {
+                  "Titel": "Cuxhaven: Ball- und Bahnensport",
+                  "Layer": [
+                        {
+                        "id": ["6444","6443"]
+                        },
+                        {
+                        "id": "6442"
+                        },
+                        {
+                        "id": "6441"
+                        },
+                        {
+                        "id": "6440"
+                        },
+                        {
+                        "id": "6439"
+                        }
+                    ]
+                },
+                {
+                  "Titel": "Cuxhaven: Erlebnisse und Events",
+                  "Layer": [
+                        {
+                          "id": "6466"
+                        },
+                        {
+                          "id": "6465"
+                        },
+                        {
+                          "id": "6464"
+                        },
+                        {
+                          "id": "6463"
+                        },
+                        {
+                          "id": "6462"
+                        }
+                    ]
+                },
+                {
+                  "Titel": "Cuxhaven: Infrastruktur",
+                  "Layer": [
+                        {
+                          "id": "6408"
+                        },
+                        {
+                          "id": "6407"
+                        },
+                        {
+                          "id": "6406"
+                        },{
+                          "id": "6405"
+                        },
+                        {
+                          "id": "6404"
+                        },
+                        {
+                          "id": "6403"
+                        },
+                        {
+                          "id": "6402"
+                        },
+                        {
+                          "id": "6401"
+                        },
+                        {
+                          "id": "6400"
+                        },
+                        {
+                          "id": "6399"
+                        },
+                        {
+                          "id": "6398"
+                        },
+                        {
+                          "id": "6397"
+                        },
+                        {
+                          "id": "6396"
+                        }
+                    ]
+                },
+                {
+                  "Titel": "Cuxhaven: Information",
+                  "Layer": [
+                        {
+                         "id": ["6395","6394"]
+                        },
+                        {
+                         "id": "6393"
+                        },
+                        {
+                         "id": ["6392","6391"]
+                        }
+                    ]
+                },
+                {
+                  "Titel": "Cuxhaven: Kultur und Geschichte",
+                  "Layer": [
+                        {
+                        "id": ["6421","6420"]
+                        },
+                        {
+                          "id": "6419"
+                        },
+                        {
+                          "id": "6418"
+                        },
+                        {
+                          "id": "6417"
+                        },
+                        {
+                          "id": "6416"
+                        },
+                        {
+                          "id": "6415"
+                        },
+                        {
+                          "id": "6414"
+                        },
+                        {
+                          "id": "6413"
+                        },
+                        {
+                          "id": "6412"
+                        },
+                        {
+                          "id": "6411"
+                        },
+                        {
+                          "id": "6410"
+                        },
+                        {
+                          "id": "6409"
+                        }
+                    ]
+                },
+                {
+                  "Titel": "Cuxhaven: Radwandern und Radsport",
+                  "Layer": [
+                        {
+                          "id": "6436"
+                        },
+                        {
+                          "id": "6435"
+                        },
+                        {
+                          "id": "6434"
+                        },
+                        {
+                          "id": "6433"
+                        },
+                        {
+                          "id": "6432"
+                        },
+                        {
+                          "id": "6431"
+                        }
+                    ],
+                "Ordner": [
+                      {
+                        "Titel": "Rad-Themenroute",
+                        "Layer": [
+                                {
+                                  "id": "7449"
+                                },
+                                {
+                                  "id": "7450"
+                                },
+                                {
+                                  "id": "7451"
+                                }
+                            ]
+                        },
+                        {
+                        "Titel": "Radfernweg",
+                        "Layer": [
+                                {
+                                  "id": "7452"
+                                },
+                                {
+                                  "id": "7453"
+                                },
+                                {
+                                  "id": "7454"
+                                },
+                                {
+                                  "id": "7455"
+                                },
+                                {
+                                  "id": "7456"
+                                },
+                                {
+                                  "id": "7457"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                  "Titel": "Cuxhaven: Reiten",
+                  "Layer": [
+                        {
+                          "id": "6438"
+                        },
+                        {
+                          "id": "6437"
+                        }
+                    ]
+                },
+                {
+                  "Titel": "Cuxhaven: Wandern und Naturerleben",
+                  "Layer": [
+                        {
+                          "id": "6430"
+                        },
+                        {
+                          "id": "6429"
+                        },
+                        {
+                          "id": ["6428","6427"]
+                        },
+                        {
+                          "id": "6426"
+                        },
+                        {
+                          "id": "6425"
+                        },
+                        {
+                          "id": "6424"
+                        },
+                        {
+                          "id": "6423"
+                        },
+                        {
+                          "id": "6422"
+                        }
+                    ],
+                "Ordner": [
+                        {
+                            "Titel": "Programm Natur erleben",
+                            "Layer": [
+                                {
+                                  "id": "7447"
+                                },
+                                {
+                                  "id": "7448"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+                "Layer": [
+                        {
+                          "id": "3932",
+                          "styleId": "3932",
+                          "visibility": false,
+                          "mouseHoverField": "bezeichnung"
+                        },
+                        {
+                          "id": "3933",
+                          "styleId": "3933",
+                          "visibility": false,
+                          "mouseHoverField": "Bezeichnung"
+                        },
+                        {
+                          "id": "4516",
+                          "styleId": "4516",
+                          "name": "Lieblingsplätze für Aktive",
+                          "visibility": false,
+                          "mouseHoverField": "bezeichnung"
+                        },
+                        {
+                          "id": "4515",
+                          "styleId": "4515",
+                          "name": "Wander- und Radwege für Aktive",
+                          "visibility": false,
+                          "mouseHoverField": "bezeichnung"
+                        },
+
+
+                        {
+                          "id": "9091"
+                        },
+                        {
+                          "id": "3934",
+                          "styleId": "3934",
+                          "visibility": false,
+                          "mouseHoverField": "Golfclub"
+                        },
+                        {
+                          "id": "2683"
+                        },
+                        {
+                          "id": "3935",
+                          "styleId": "3935",
+                          "visibility": false,
+                          "mouseHoverField": "name"
+                        },
+                        {
+                          "id": "3941",
+                          "styleId": "3941",
+                          "visibility": false,
+                          "mouseHoverField": "name"
+                        },
+                        {
+                          "id": "3936",
+                          "styleId": "3936",
+                          "visibility": false,
+                          "mouseHoverField": "name"
+                        },
+                        {
+                          "id": "3937",
+                          "styleId": "3937",
+                          "clusterDistance":20,
+                          "visibility": false,
+                          "mouseHoverField": "name"
+                        }
+                    ]
+            },
+
+            {
+              "Titel": "Umwelt",
+              "Ordner": [
+                    {
+                      "Titel": "Boden",
+                      "Layer": [
+                        {
+                          "id": "2872"
+                        },
+                        {
+                          "id": "2873"
+                        }
+                      ]
+                    },
+                    {
+                      "Titel": "Lärmschutzbereich Flughafen Hamburg",
+                      "Layer": [
+                            {
+                              "id": "2413",
+                              "name": "Tag-Schutzzone 1 mit Isolinien LAeq in dB(A)",
+                              "legendURL": "http://geoportal.metropolregion.hamburg.de/legende_mrh/fluglaerm_tag_1.png"
+                            },
+                            {
+                              "id": ["2415","2412"],
+                              "name": "Tag-Schutzzone 2 mit Isolinien LAeq in dB(A)",
+                              "legendURL": "http://geoportal.metropolregion.hamburg.de/legende_mrh/fluglaerm_tag_2.png"
+                            },
+                            {
+                              "id": ["2416","2414"],
+                              "name": "Nacht-Schutzzone mit Isolinien LAeq in dB(A)",
+                              "legendURL": "http://geoportal.metropolregion.hamburg.de/legende_mrh/fluglaerm_nacht.png"
+                            }
+                        ]
+                    },
+                    {
+                      "Titel": "Schadstoffausstoßende Industrie",
+                      "Layer": [
+                        {
+                          "id": ["7867","7868","7869","7870","7871","7872","7873","7874","7875","7876"]
+                        },
+                        {
+                          "id": ["7865","7866"]
+                        }
+                      ]
+                    },
+                {
+                  "Titel": "Schutzgebiete",
+                  "Layer": [
+                       {
+                         "id": "10138",
+                         "legendURL": "http://daten-hamburg.de/zz_sonstiges/legenden/mrh_archoeologisch_inspire_sh.png"
+                        },
+                        {
+                          "id": "9070"
+                        },
+                        {
+                          "id": "9071"
+                        },
+                        {
+                          "id": "7711"
+                        },
+                        {
+                          "id": "9072"
+                        },
+                        {
+                          "id": "9073"
+                        },
+                        {
+                          "id": ["7707","7708"]
+                        },
+                        {
+                          "id": "2000",
+                          "styleId": "2000",
+                          "visibility": false,
+                          "mouseHoverField": "schutzgebiet"
+                        },
+                        {
+                          "id": "9075"
+                        },
+                        {
+                          "id": "9074"
+                        },
+                        {
+                          "id": "9076"
+                        },
+                        {
+                          "id": "9077"
+                        },
+                        {
+                          "id": "9078"
+                        }
+                    ]
+                },
+                {
+                  "Titel": "Zensus 2011",
+                  "Layer": [
+                        {
+                          "id": "7877"
+                        },
+                        {
+                          "id": "7878"
+                        },
+                        {
+                          "id": "7879"
+                        },
+                        {
+                          "id": "7880"
+                        },
+                        {
+                          "id": "7881"
+                        },
+                        {
+                          "id": "7882"
+                        },
+                        {
+                          "id": "7883"
+                        },
+                        {
+                          "id": "7884"
+                        },
+                        {
+                          "id": "7885"
+                        },
+                        {
+                          "id": "7886"
+                        }
+                    ]
+                  }
+                ]
+            },
+
+            {
+              "Titel": "Verkehr",
+              "Layer": [
+                        {
+                          "id": "1933",
+                          "styles": ["geofox_stations"],
+                          "name": ["HVV-Haltestellen"],
+                          "legendURL": ["http://87.106.16.168/legende_mrh/hvv-bus.png"]
+                        },
+                        {
+                          "id": "1935",
+                          "styles": ["geofox_Faehre",
+                                     "geofox-bahn",
+                                     "geofox-bus",
+                                     "geofox_BusName"],
+                          "name": ["HVV-Fährverbindungen",
+                                   "HVV-Bahnlinien",
+                                   "HVV-Buslinien",
+                                   "HVV-Busliniennummern"],
+                          "legendURL":
+                            ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
+                        },
+                        {
+                          "id": "9065"
+                        },
+                        {
+                          "id": "9066"
+                        },
+                        {
+                          "id": [
+                                  {"id":"5057"},
+                                  {"id":"2862"},
+                                  {"id":"2912"}
+                                ],
+                            "name": "Ladesäulen für Elektrofahrzeuge"
+                        },
+
+                        {
+                          "id": "3938",
+                          "styleId": "3938",
+                          "visibility": false,
+                          "mouseHoverField": "anbieter"
+                        },
+
+                        {
+                          "id": "6512"
+                        },
+                        {
+                          "id": "6513"
+                        },
+                        {
+                          "id": "6514"
+                        }
+                ]
+            },
+
+            {
+              "Titel": "Wirtschaft",
+              "Ordner": [
+                {
+                  "Titel": "Gewerbeflächen",
+                  "Layer": [
+                        {
+                          "id": "9092"
+                        },
+                        {
+                          "id": "7718"
+                        },
+                        {
+                          "id": ["7841","7842"]
+                        }
+                    ]
+                }
+              ]
+            },
+
+            {
+              "Titel": "Wissenschaft",
+                 "Layer": [
+                        {
+                          "id": "2681"
+                        },
+                        {
+                          "id": "2684"
+                        }
+                    ]
+            },
+
+            {
+              "Titel": "Sonstige Informationen",
+              "Ordner": [
+                {
+                  "Titel": "Pegelonline",
+                  "Layer": [
+                    {
+                      "id": "7887"
+                    }
+                  ]
+                },
+
+                {
+                  "Titel": "Sonstige Daten",
+                  "Layer": [
+                    {
+                      "id": "7888"
+                    }
+                  ]
+                }
+
+              ]
+            }
+          ]
+        }
+    }
+}

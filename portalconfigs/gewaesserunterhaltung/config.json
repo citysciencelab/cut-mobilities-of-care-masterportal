@@ -1,0 +1,256 @@
+{
+  "Portalconfig":
+  {
+    "portalTitle":
+    {
+      "title": "Gewässerunterhaltung",
+      "logo": "../../node_modules/lgv-config/img/hh-logo.png",
+      "link": "http://geoinfo.hamburg.de",
+      "tooltip": "Landesbetrieb Geoinformation und Vermessung"
+    },
+    "searchBar":
+    {
+      "gazetteer":
+      {
+        "minChars": 3,
+        "serviceId": "6",
+        "searchStreets": true,
+        "searchHouseNumbers": true,
+        "searchDistricts": true,
+        "searchParcels": true,
+        "searchStreetKey": true
+      },
+      "visibleWFS":
+      {
+        "minChars": 3
+      },
+      "zoomLevel": 9,
+      "placeholder": "Suche nach Adresse"
+    },
+    "mapView":
+    {
+      "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+      "startCenter": [561210, 5932600]
+    },
+    "menu":
+    {
+      "tree":
+      {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list",
+        "isInitOpen": false
+      },
+      "tools":
+      {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children":
+        {
+
+          "parcelSearch":
+          {
+            "name": "Flurstückssuche",
+            "glyphicon": "glyphicon-search",
+            "serviceId": "6",
+            "StoredQueryID": "Flurstueck",
+            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
+            "parcelDenominator": false
+          },
+          "measure":
+          {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "coord":
+          {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "gfi":
+          {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "print":
+          {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "printID": "99999",
+            "title": "Master",
+            "gfi": true,
+            "outputFilename": "DruckPDF"
+          },
+          "searchByCoord":
+          {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          },
+          "kmlimport":
+          {
+            "name": "KML Import",
+            "glyphicon": "glyphicon-import"
+          },
+          "draw":
+          {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          "addWMS":
+          {
+            "name": "WMS hinzufügen",
+            "glyphicon": "glyphicon-plus"
+          },
+
+          "saveSelection": {
+            "name": "Auswahl speichern",
+            "glyphicon": "glyphicon-share"
+          }
+        }
+      },
+      "legend":
+      {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact":
+      {
+        "name": "Kontakt",
+        "glyphicon": "glyphicon-envelope",
+        "serviceID": "80001",
+        "includeSystemInfo": true
+      }
+    },
+    "controls":
+    {
+      "fullScreen": true,
+      "zoom": true,
+      "attributions":
+            {
+            "isInitOpenDesktop": false,
+            "isInitOpenMobile": false
+            },
+      "overviewmap":
+            {
+            "resolution": 611.4974492763076,
+            "baselayer": "452"
+            },
+      "mousePosition": true
+    },
+    "scaleLine": true,
+    "Baumtyp": "custom"
+  },
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+        "id": "453",
+        "visibility": true
+        },
+        {"id": "452"},
+        {"id": "1119"}
+      ]
+    },
+
+    "Fachdaten":
+    {
+      "Ordner": [
+        
+        {
+        "Titel": "Gewässer",
+        "Layer": [
+            {
+              "id": "11073",
+              "visibility": true
+            },
+            {"id": "11072"}
+          ]
+        },
+          
+        {
+        "Titel": "Unterhaltungspläne",
+        "Layer": [
+            {"id": "11035"},
+            {"id": "11036"}
+          ]
+        },          
+        
+        {
+        "Titel": "Natur- und Artenschutz",
+        "Ordner": [
+            
+            {
+            "Titel": "Arten- und Biotopschutz - AuBS (ehem. APRO)",
+            "Layer": [
+                {"id": "1412"},
+                {"id": "1410"},
+                {"id": "1409"},
+                {"id": "1413"},
+                {"id": "1415"}
+              ]
+            },
+            {
+            "Titel": "Biotopkataster",
+            "Layer": [
+                {"id": "2923"},
+                {"id": "2922"},
+                {"id": "1687"},
+                {"id": "2925"},
+                {"id": "2924"},
+                {"id": "1688"},
+                {"id": "2926"},
+                {"id": "1689"}
+              ]
+            },
+            {
+            "Titel": "Schutzgebiete",
+            "Layer": [
+                {"id": "1993"},
+                {"id": "1994"},
+                {"id": "1992"},
+                {"id": "1999"},
+                {"id": "1998"},
+                {"id": "1995"},
+                {"id": "1997"},
+                {"id": "1996"}
+              ]
+            },
+            {
+            "Titel": "Wasserschutzgebiete",
+            "Layer": [
+                {"id": "10454"},
+                {"id": "10446"}
+              ]
+            }
+           ]
+        },
+
+        {
+        "Titel": "Zuständigkeiten",
+        "Ordner": [
+            {
+            "Titel": "Wasser- und Bodenverbände",
+            "Layer": [
+                {
+                "id": "2312",
+                 "name": "Wasser- und Bodenverbände"
+                }
+              ]
+            },
+            {
+            "Titel": "Verwaltungsgrenzen",
+            "Layer": [
+                {"id": "2426"}
+              ]
+            }
+           ]
+        }       
+          
+          
+
+     ]
+    }
+  }
+}

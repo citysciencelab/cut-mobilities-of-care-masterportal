@@ -1,0 +1,233 @@
+{
+  "Portalconfig": {
+    "mapView": {
+      "extent": [
+        442800,
+        5809000,
+        738000,
+        6102200
+      ]
+    },
+    "portalTitle": {
+      "title": "SAGA-Portal",
+      "logo": "./img/fav-saga.jpg",
+      "link": "https://www.saga-gwg.de/"
+    },
+    "searchBar": {
+      "minChars": 3,
+      "placeholder": "Suche Adresse, Stadtteil, Themen, Flurstück",
+      "gazetteer": {
+        "minChars": 3,
+        "serviceId": "6",
+        "searchStreets": true,
+        "searchHouseNumbers": true,
+        "searchDistricts": true,
+        "searchParcels": true
+      },
+      "tree": {
+        "minChars": 3
+      }
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen",
+        "glyphicon": "glyphicon-list"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "parcelSearch": {
+            "name": "Flurstückssuche",
+            "glyphicon": "glyphicon-search",
+            "serviceId": "6",
+            "StoredQueryID": "Flurstueck",
+            "configJSON": "/lgv-config/gemarkungen_hh.json",
+            "parcelDenominator": false
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "gfi": {
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
+          },
+          "print": {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print"
+          },
+          "coord": {
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "searchByCoord": {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          "saveSelection": {
+            "name": "Auswahl speichern",
+            "glyphicon": "glyphicon-share"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+      },
+      "contact": {
+        "name": "Kontakt",
+        "glyphicon": "glyphicon-envelope",
+        "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+        "serviceID": "80002",
+        "from": [
+          {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name": "LGVGeoportalHilfe"
+          }
+        ],
+        "to": [
+          {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name": "LGVGeoportalHilfe"
+          }
+        ],
+        "ccToUser": true,
+        "cc": [],
+        "bcc": [],
+        "textPlaceholder": "Bitte formulieren",
+        "includeSystemInfo": true
+      }
+    },
+    "controls": {
+      "zoom": true,
+      "mousePosition": true,
+      "fullScreen": true,
+      "orientation": true,
+      "attributions": true
+    },
+    "Baumtyp": "default"
+  },
+  "Themenconfig": {
+    "Hintergrundkarten": {
+      "Layer": [
+        {
+          "id": [
+            "368",
+            "369",
+            "370",
+            "371",
+            "372",
+            "373",
+            "374",
+            "375",
+            "376",
+            "377",
+            "378",
+            "379",
+            "380",
+            "381",
+            "382",
+            "383",
+            "384",
+            "385",
+            "386",
+            "387",
+            "388",
+            "389",
+            "390",
+            "391",
+            "392",
+            "393",
+            "394",
+            "395",
+            "396",
+            "397"
+          ],
+          "name": "ALKIS farbig"
+        },
+        {
+          "id": [
+            "149",
+            "150",
+            "151",
+            "152",
+            "153",
+            "154",
+            "155",
+            "156",
+            "157",
+            "158",
+            "159",
+            "160",
+            "161",
+            "162",
+            "163",
+            "164",
+            "165",
+            "166",
+            "167",
+            "168",
+            "169",
+            "170",
+            "171",
+            "172",
+            "173",
+            "174",
+            "175",
+            "176",
+            "177",
+            "178"
+          ],
+          "name": "ALKIS grau-blau"
+        },
+        {
+          "id": "756"
+        },
+        {
+          "id": "452",
+          "name": "Luftbilder DOP 40 (mit Umland)"
+        },
+        {
+          "id": "94"
+        },
+        {
+          "id": [
+            "1043",
+            "1044",
+            "1045",
+            "1046"
+          ],
+          "name": "Geobasiskarten (grau-blau)"
+        },
+        {
+          "id": [
+            "713",
+            "714",
+            "715",
+            "716"
+          ],
+          "name": "Geobasiskarten (schwarz-weiß)"
+        },
+        {
+          "id": [
+            "717",
+            "718",
+            "719",
+            "720"
+          ],
+          "name": "Geobasiskarten (farbig)"
+        },
+        {
+          "id": "453",
+          "visibility": true
+        }
+      ]
+    }
+  }
+}

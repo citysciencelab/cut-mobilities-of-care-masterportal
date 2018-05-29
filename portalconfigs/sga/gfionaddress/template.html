@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<div class="alert" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <p>Bitte wählen Sie eine Hausnummer:</p>
+    <% _.each(houseNumbers, function (houseNumber) { %>
+        <%if (_.isUndefined(houseNumber.affix) === true ){ %>
+            <a class="address" street="<%= streetName %>" hsnr="<%= houseNumber.nr %>"><%= houseNumber.nr%></a>
+        <% } else { %>
+            <a class="address" street="<%= streetName %>" hsnr="<%= houseNumber.nr %>" affix="<%= houseNumber.affix %>"><%= houseNumber.nr + " " + houseNumber.affix %></a>
+        <% } %>
+    <% }); %>
+</div>

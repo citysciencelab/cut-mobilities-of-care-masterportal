@@ -1,0 +1,729 @@
+{
+  "Portalconfig":
+    {
+      "portalTitle": {
+      "title": "Biotopverbundkarte der MRH",
+      "logo": "../img/Logo_MRH.png",
+      "link": "http://metropolregion.hamburg.de",
+      "toolTip": "Metropolregion Hamburg"
+    },
+
+    "searchBar": {
+         "bkg": {
+           "minChars": 3,
+           "suggestServiceId": "4",
+           "geosearchServiceId": "5",
+           "extent": [454591, 5809000, 700000, 6075769],
+           "epsg": "EPSG:25832",
+           "filter": "filter=(typ:*)",
+           "score": 0.6,
+           "suggestCount": 1000
+       },
+       "tree": {
+           "minChars": 3
+       },
+       "placeholder": "Suche nach Adresse/ Thema",
+       "geoLocateHit": true
+    },
+     "mapView": {
+        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+         "startCenter": [565874, 5934140],
+            "options": [
+                {
+                    "resolution": 611.4974492763076,
+                    "scale": 2311167,
+                    "zoomLevel": 0
+                },
+                {
+                    "resolution": 305.7487246381551,
+                    "scale": 1155583,
+                    "zoomLevel": 1
+                },
+                {
+                    "resolution": 152.87436231907702,
+                    "scale": 577791,
+                    "zoomLevel": 2
+                },
+                {
+                    "resolution": 76.43718115953851,
+                    "scale": 288896,
+                    "zoomLevel": 3
+                },
+                {
+                    "resolution": 38.21859057976939,
+                    "scale": 144448,
+                    "zoomLevel": 4
+                },
+                {
+                    "resolution": 19.109295289884642,
+                    "scale": 72223,
+                    "zoomLevel": 5
+                },
+                {
+                    "resolution": 9.554647644942321,
+                    "scale": 36112,
+                    "zoomLevel": 6
+                },
+                {
+                    "resolution": 4.7773238224711605,
+                    "scale": 18056,
+                    "zoomLevel": 7
+                },
+                {
+                    "resolution": 2.3886619112355802,
+                    "scale": 9028,
+                    "zoomLevel": 8
+                },
+                {
+                    "resolution": 1.1943309556178034,
+                    "scale": 4514,
+                    "zoomLevel": 9
+                },
+                {
+                    "resolution": 0.5971654778089017,
+                    "scale": 2257,
+                    "zoomLevel": 10
+                }
+            ],
+             "extent": [277620.0, 5231960.0, 918470.0, 6100290.0],
+      "resolution": 152.87436231907702    },
+
+
+      "menu": {
+        "tree": {
+          "name": "Themen",
+          "glyphicon": "glyphicon-list"
+        },
+        "tools": {
+          "name": "Werkzeuge",
+          "glyphicon": "glyphicon-wrench",
+          "children": {
+           
+            "gfi": {
+              "name": "Informationen abfragen",
+              "glyphicon": "glyphicon-info-sign",
+              "isActive": true
+            },
+            "coord": {
+              "name": "Koordinaten abfragen",
+              "glyphicon": "glyphicon-screenshot"
+            },
+            "searchByCoord": {
+              "name": "Koordinatensuche",
+              "glyphicon": "glyphicon-record"
+            },
+             "measure": {
+              "name": "Strecke / Fläche messen",
+              "glyphicon": "glyphicon-resize-full"
+            },
+            "draw": {
+              "name": "Zeichnen / Schreiben",
+              "glyphicon": "glyphicon-pencil"
+            },
+            "kmlimport": {
+              "name": "KML Import",
+              "glyphicon": "glyphicon-import"
+            }, 
+            "print": {
+              "name": "Karte drucken",
+              "glyphicon": "glyphicon-print",
+              "printID": "99999",
+              "title": "Biotopverbundkarte der Metropolregion Hamburg",
+              "gfi": true,
+              "outputFilename": "Ausdruck Biotopverbundkarte GDI-MRH",
+              "configYAML": "gdimrh"
+            },
+            "saveSelection": {
+              "name": "Auswahl speichern",
+              "glyphicon": "glyphicon-share"
+            }
+          }
+        },
+        "legend": {
+          "name": "Legende",
+          "glyphicon": "glyphicon-book"
+        },
+
+          "contact": {
+            "name": "Kontakt",
+            "glyphicon": "glyphicon-envelope",
+            "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
+            "serviceID": "80002",
+            "from": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+              }
+            ],
+            "to": [
+              {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+               }
+             ],
+            "ccToUser": true,
+            "cc": [],
+            "bcc": [],
+            "subject": "",
+            "textPlaceholder": "Bitte formulieren",
+            "includeSystemInfo": true
+        }
+    },
+    "controls":
+       {
+        "fullScreen": true,
+        "zoom": true,
+        "mousePosition": true,
+        "attributions": false
+      },
+      "scaleLine": true,
+      "Baumtyp": "custom"
+    },
+
+  "Themenconfig":
+    {
+      "Hintergrundkarten":
+      {
+      "Layer": [
+        {
+          "id": "8010"
+        },
+        {
+          "id": "8011",
+          "visibility": false
+        },
+        {
+          "id": "8012"
+        },
+        {
+          "id": "8042",
+          "maxScale": 5000
+        }
+      ]
+    },
+
+
+      "Fachdaten":
+    {
+      "Ordner": [
+          {
+              "Titel": "Allgemeine Informationen",
+              "Layer": [
+                {
+                  "id": "7151"
+                },
+                {
+                  "id": "7152"
+                },
+                {
+                  "id": "2679"
+                }
+              ]
+            },
+          {
+              "Titel": "Leitprojekt Biotopverbund-Karte MRH",
+              "Layer": [
+                {
+                  "id": "9055"
+                },
+                {
+                  "id": "9059"
+                },
+                {
+                  "id": "9058"
+                },
+                {
+                  "id": "9053"
+                },
+                {
+                  "id": "9054"
+                },
+                {
+                  "id": "9056"
+                },
+                {
+                  "id": "9057"
+                },
+                {
+                  "id": "9063"
+                },
+                {
+                  "id": "9062"
+                },
+                {
+                  "id": "9060"
+                },
+                {
+                  "id": "9061"
+                }
+              ]
+            },
+          {
+              "Titel": "Biotopverbundkarten",
+              "Ordner": [
+                {
+                  "Titel": "Bundesländer",
+                  "Layer":  [
+                    {
+                      "id": "7251"
+                    },
+                    {
+                      "id": "7252"
+                    },
+                    {
+                      "id": "7253"
+                    },
+                    {
+                      "id": "7254"
+                    },
+                    {
+                      "id": "7248"
+                    },
+                    {
+                      "id": "7249"
+                    },
+                    {
+                      "id": "7250"
+                    },
+                    {
+                      "id": "7247"
+                    }
+                  ]
+                },
+
+
+                {
+                  "Titel": "Hamburg - Nicht abgestimmte Fachgrundlage",
+                          "Ordner": [
+                
+                {
+                   "Titel": "Biotopverbund der Feuchtlebensräume",
+                   "Layer": [
+                    {
+                      "id": "7297"
+                    },
+                    {
+                      "id": "7301"
+                    },
+                    {
+                      "id": "7308"
+                    },
+                    {
+                      "id": "7311"
+                    },
+                    {
+                      "id": "7304"
+                    }
+                  ]
+                },
+                {
+                   "Titel": "Biotopverbund der Waldlebensräume",
+                   "Layer": [
+                    {
+                      "id": "7300"
+                    },
+                    {
+                      "id": "7303"
+                    },
+                    {
+                      "id": "7310"
+                    },
+                    {
+                      "id": "7314"
+                    },
+                    {
+                      "id": "7307"
+                    }
+                  ]
+                },
+                {
+                   "Titel": "Biotopverbund der Trockenlebensräume",
+                   "Layer": [
+                    {
+                      "id": "7299"
+                    },
+                    {
+                      "id": "7302"
+                    },
+                    {
+                      "id": "7309"
+                    },
+                    {
+                      "id": "7313"
+                    },
+                    {
+                      "id": "7306"
+                    }
+                  ]
+                },
+                {
+                   "Titel": "Biotopverbund der Gewässerlebensräume",
+                   "Layer": [
+                    {
+                      "id": "7298"
+                    },
+                    {
+                      "id": "7312"
+                    },
+                    {
+                      "id": "7305"
+                    }
+                  ]
+                }
+
+              ]
+            },
+
+                {
+                  "Titel": "LK Harburg",
+                  "Layer": [
+                    {
+                      "id": "7094"
+                    },
+                    {
+                      "id": "7095"
+                    },
+                    {
+                      "id": "7096"
+                    },
+                    {
+                      "id": "7097"
+                    },
+                    {
+                      "id": "7098"
+                    },
+                    {
+                      "id": "7099"
+                    },
+                    {
+                      "id": "7100"
+                    },
+                    {
+                      "id": "7101"
+                    },
+                    {
+                      "id": "7102"
+                    }
+                  ]
+                },
+                {
+                  "Titel": "LK Heidekreis",
+                  "Layer": [
+                    {
+                      "id": "7276"
+                    },
+                    {
+                      "id": "7275"
+                    },
+                    {
+                      "id": "7274"
+                    },
+                    {
+                      "id": "7273"
+                    }
+                  ]
+                },
+                {
+                  "Titel": "LK Lüneburg",
+                  "Layer": [
+                    {
+                      "id": "7285"
+                    },
+                    {
+                      "id": "7283"
+                    },
+                    {
+                      "id": "7284"
+                    },
+                    {
+                      "id": "7286"
+                    }
+                  ]
+                },
+        {
+                  "Titel": "LK Rotenburg/Wümme",
+                  "Ordner": [
+          {
+          "Titel": "Biotopverbund",
+          "Layer": [
+            {
+              "id": "7356"
+            },
+            {
+              "id": "7357"
+            },
+            {
+              "id": "7358"
+            },
+            {
+              "id": "7359"
+            },
+            {
+              "id": "7360"
+            },
+            {
+              "id": "7361"
+            },
+            {
+              "id": "7362"
+            },
+            {
+              "id": "7363"
+            },
+            {
+              "id": "7364"
+            },
+            {
+              "id": "7365"
+            }
+          ]
+           },
+           {
+           "Titel": "Entwicklungsflächen",
+           "Layer": [
+            {
+              "id": "7367"
+            },
+            {
+              "id": "7368"
+            },
+            {
+              "id": "7369"
+            },
+            {
+              "id": "7370"
+            },
+            {
+              "id": "7371"
+            },
+            {
+              "id": "7372"
+            },
+            {
+              "id": "7374"
+            },
+            {
+              "id": "7375"
+            },
+            {
+              "id": "7366"
+            }
+          ]
+           },
+           {
+           "Titel": "Verbundachsen",
+           "Layer": [
+            {
+              "id": "7376"
+            },
+            {
+              "id": "7373"
+            },
+            {
+              "id": "7377"
+            },
+            {
+              "id": "7378"
+            },
+            {
+              "id": "7379"
+            },
+            {
+              "id": "7380"
+            },
+            {
+              "id": "7381"
+            },
+            {
+              "id": "7382"
+            },
+            {
+              "id": "7383"
+            },
+            {
+              "id": "7384"
+            },
+            {
+              "id": "7385"
+            },
+            {
+              "id": "7386"
+            },
+            {
+              "id": "7387"
+            },
+            {
+              "id": "7388"
+            }
+          ]
+          }
+                  ]
+                },
+                {
+                  "Titel": "LK Stade",
+                  "Layer": [
+                    {
+                      "id": "7143"
+                    },
+                    {
+                      "id": "7145"
+                    },
+                    {
+                      "id": "7146"
+                    },
+                    {
+                      "id": "7144"
+                    },
+                    {
+                      "id": "7141"
+                    },
+                    {
+                      "id": "7142"
+                    },
+                    {
+                      "id": "7147"
+                    },
+                    {
+                      "id": "7149"
+                    },
+                    {
+                      "id": "7150"
+                    },
+                    {
+                      "id": "7138"
+                    },
+                    {
+                      "id": "7139"
+                    },
+                    {
+                      "id": "7140"
+                    }
+                  ]
+                },
+                {
+                  "Titel": "LK Uelzen",
+                  "Layer": [
+                    {
+                      "id": "7271"
+                    },
+                    {
+                      "id": "7272"
+                    },
+                    {
+                      "id": "7270"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Titel": "Biotopkataster Hamburg",
+              "Layer": [
+                {
+                  "id": "1689"
+                },
+                {
+                  "id": "1687"
+                },
+                {
+                  "id": "1688"
+                }
+              ]
+            },
+            {
+              "Titel": "Arten- und Biotopschutz",
+              "Layer": [
+                {
+                  "id": "1409"
+                },
+                {
+                  "id": "1410"
+                },
+                {
+                  "id": "1411"
+                },
+                {
+                  "id": "1412"
+                },
+                {
+                  "id": "1413"
+                },
+                {
+                  "id": "1414"
+                },
+                {
+                  "id": "1415"
+                },
+                {
+                  "id": "1416"
+                },
+                {
+                  "id": "2850"
+                }
+              ]
+            },
+      {
+        "Titel": "Schutzgebiete",
+        "Layer": [
+        {
+          "id": "9076"
+        },
+        {
+          "id": "9070"
+        },
+        {
+          "id": "9071"
+        },
+        {
+          "id": "9077"
+        },
+        {
+          "id": "9073"
+        },
+        {
+          "id": "9074"
+        },
+        {
+          "id": "9072"
+        },
+        {
+          "id": "9075"
+        },
+        {
+          "id": "7711"
+        },
+        {
+          "id": ["7707","7708"]
+        },
+        {
+          "id": "1999"
+        },
+        {
+          "id": "9078"
+        }
+        ]
+      }
+          ]
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

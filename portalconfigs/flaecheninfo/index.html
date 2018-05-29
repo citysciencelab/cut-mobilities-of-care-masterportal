@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Flächeninformationssystem</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="css/welcomescreen_style.css">
+    <script type="text/javascript" data-main="../../js/main" src="../../node_modules/requirejs/require.js"></script>
+    <script type="text/javascript">
+        function hideStartWin() {
+            document.getElementById("startWin").style.display = "none";
+        }
+    </script>
+</head>
+<body>
+
+    <div id="startWin" class="hamburgde">
+        <div id="startTop">
+            <img id="banner2" src="../../img/bug_lang.png" alt="FHH - Flächeninformationssystem" />
+            <p class="title2">FHH - Flächeninformationssystem - Kurzinformation <span onclick="hideStartWin();" id="startClose">X</span>
+            </p>
+        </div>
+        <div id="startContent">
+            <p>
+                Das FHH-Flächeninformationssystem ist als interaktive Kartenanwendung aufgebaut. Die Kartenanwendung und die integrierte Berichtsfunktion bieten einen umfassenden Überblick über die relevanten Grundstücksinformationen, die für die Entwicklung von Flächen sowie das strategische Flächenmanagement benötigt werden. Die Berichtsfunktion bietet eine Zusammenstellung der Daten zu einzelnen Flurstücken. Über einen Klick in der Kartenanwendung können punktuell Informationen abgerufen werden. Als Datenquelle dienen in der Stadt oder Metropolregion Hamburg verfügbare und im FHH-Intranet freigegebene Daten.
+            </p>
+            <h4>Themen</h4>
+            <p>
+                Einzelne Datenthemen (Layer) können durch Anhaken in der Kartenansicht Dargestellt werden. Über den I-Button werden Informationen aus dem Hamburger Metadatenkatalog (HMDK) und die Legende der einzelnen Layer angezeigt. Weitere Informationen zu einem Layer können über einen Doppelklick auf den dargestellten Layer abgerufen werden.
+            </p>
+            <h4>Grundfunktionen</h4>
+            <p>
+                Folgende Grundfunktionen/Werkzeuge stehen zur Verfügung: Zeichnen/Schreiben, Strecke/Fläche messen, Koordinaten abfragen, Drucken, KML Import, Auswahl speichern, Legende, Kontakt, Informationen (Bodenrichtwertauskunft, Leitungsauskunft) und ein Hilfemenü.
+            </p>
+            <h4>Adresssuche und Flurstücke</h4>
+            <p>
+                Die gezielte Suche nach einer Adresse oder einem Flurstück (Gemarkungsnummer gefolgt von der Flurstücksnummer, mit/ohne Leerzeichen) ist über die Eingabemaske (Suche) oberhalb der Kartendarstellung möglich. Zum Anzeigen von zugehörigen Informationen wird in der Karte ein Flurstück per einfachen Klick ausgewählt (ab Maßstab 1:5000).
+            </p>
+            <h4>Berichtsfunktion</h4>
+            <p>
+                Durch Auswahl eines Flurstücks (ab 1:5000 / Darstellung rot markiert) und Auswahl des Buttons „Bericht erzeugen“ kann der mehrseitige Ergebnisbericht erstellt werden (kann evtl. einige Minuten dauern) und ggf. gespeichert oder ausgedruckt werden. Der Bericht enthält sowohl Felder, die im Rahmen der aktuell verfügbaren Datenbasis gefüllt werden, als auch Felder, die erst in Zukunft bedient werden können. Letztere werden im PDF-Dokument durch den Platzhalter dargestellt „derzeit keine Daten verfügbar“. Hinter „leeren“ Feldern hingegen liegt eine Datenbank, die aber zu diesem Thema (z.B. Schutzgebiete) keinen Eintrag liefert.
+            </p>
+        </div>
+    </div>
+    <div class="lgv-container">
+        <div id='loader'><img src='../../img/ajax-loader.gif'></div>
+        <!-- Hack um die Bildschirmauflösung zu bekommen -->
+        <div id='dpidiv' style='height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;'></div>
+        <div id="popup"></div>
+        <!-- <div id="gfipopup"></div> -->
+        <nav id="main-nav" class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div id="navbarRow" class="row">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Navigation ein-/ausblenden</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav-menu" id="root">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div id="map"></div>
+    </div>
+</body>
+</html>
