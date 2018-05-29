@@ -53,7 +53,7 @@ define(function (require) {
                 this.showPositionByExtentNoScroll(event.data.showPositionByExtentNoScroll);
             }
             else if (event.data.hasOwnProperty("transactFeatureById")) {
-                 Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
+                Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
             }
             else if (event.data.hasOwnProperty("zoomToExtent")) {
                 Radio.trigger("Map", "zoomToExtent", event.data.zoomToExtent);
@@ -119,11 +119,11 @@ define(function (require) {
                 extent = feature.getGeometry().getExtent(),
                 center = ol.extent.getCenter(extent);
 
-                Radio.trigger("MapMarker", "showMarker", center);
+            Radio.trigger("MapMarker", "showMarker", center);
         },
 
         zoomToFeature: function (hit) {
-             var feature = this.getFeatureFromHit(hit),
+            var feature = this.getFeatureFromHit(hit),
                 extent = feature.getGeometry().getExtent();
 
             Radio.trigger("Map", "zoomToExtent", extent);
@@ -157,9 +157,9 @@ define(function (require) {
                     type: hit.typ
                 });
 
-                feature.setProperties(_.omit(hit, "geometry_UTM_EPSG_25832"));
-                feature.setId(hit.id);
-                return feature;
+            feature.setProperties(_.omit(hit, "geometry_UTM_EPSG_25832"));
+            feature.setId(hit.id);
+            return feature;
         },
         getMapState: function () {
             return Radio.request("SaveSelection", "getMapState");
