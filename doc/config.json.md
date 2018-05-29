@@ -258,6 +258,8 @@ Konfiguration der Suche über die sichtbaren WFS
 |button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung in den 3D Modus angezeigt werden soll.|
 |orientation3d|nein|Boolean|false|Legt fest, ob im 3D Modus eine Navigationsrose angezeigt werden soll.|
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
+|backforwardview|nein|Boolean/Object|false|Boolean: Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an. Object: Es kann definiert werden welche Icons in der Oberfläche angezeigt wird.|
+
 
 ***
 

@@ -336,6 +336,17 @@ function loadApp () {
                     }
                     break;
                 }
+                case "backforwardview":{
+                    if (control.attr === true || (control.attr["icon-forward"] && control.attr["icon-backward"])) {
+                        var el = controlsView.addRowTR(control.id);
+                        require(["modules/controls/backforward/view"], function(backforwardview) {
+                            new backforwardview({
+                                el: el
+                            });
+                        });
+                    }
+                    break;
+                }
                 case "overviewmap": {
                     if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id, false);

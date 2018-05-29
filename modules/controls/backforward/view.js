@@ -6,11 +6,11 @@ define([
 ], function(Backbone, Radio, BackForwardModel, BackForwardTemplate) {
     BackForwardView = Backbone.View.extend({
         model: BackForwardModel,
-        template: _.template(BackForwardTemplate),
+        template: BackForwardTemplate,
         id: "backforwardview",
         events: {
-            "click .glyphicon-chevron-right": "setNextView",
-            "click .glyphicon-chevron-left": "setLastView"
+            "click .forward": "setNextView",
+            "click .backward": "setLastView"
         },
         initialize: function() {
             var channel = Radio.channel("BackForwardView");
@@ -49,7 +49,11 @@ define([
             this.model.pushState(evt.map.getView());
         },
         render: function() {
-            this.$el.html(this.template());
+            var icon = this.model.getIcons();
+            this.template = this.template.replace("$icon-for", icon["icon-forward"] || 'glyphicon-step-forward');
+            this.template = this.template.replace("$icon-back", icon["icon-backward"] || 'glyphicon-step-backward');
+            this.$el.html(_.template(this.template));
+
         },
         setNextView: function() {
             window.history.forward();

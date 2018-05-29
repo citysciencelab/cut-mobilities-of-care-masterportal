@@ -15,6 +15,15 @@ define([
         initialize: function() {
 
         },
+        //get icons from configuration
+        getIcons: function() {
+            var icons = Radio.request("Parser", "getItemsByAttributes", {id: "backforwardview"});
+            if (icons) {
+                icons = icons[0].attr;
+            }
+            return icons;
+        },
+
         isUpdate: function() {
             return this.get("update");
         },
@@ -22,7 +31,8 @@ define([
             this.set("update", bool);
         },
         pushState: function(view) {
-            var state = {
+            var hash, state;
+            state = {
                 zoom: view.getZoom(),
                 center: view.getCenter(),
                 rotation: view.getRotation()
