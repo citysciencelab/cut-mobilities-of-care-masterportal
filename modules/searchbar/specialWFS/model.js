@@ -50,20 +50,36 @@ define(function (require) {
          * @param {string} searchString - Der Suchstring.
          */
          search: function (searchString) {
-            var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
+            var simpleSearchString = this.simplifyString(searchString),
+                searchStringRegExp = new RegExp(simpleSearchString),
+                wfsMembers = this.getWfsMembers(),
+                hits,
+                elementName;
 
-            if (searchString.length > this.getMinChars()) {
-                // if (this.get("bPlans").length > 0) {
-                //     this.searchInBPlans(searchString);
-                // }
-                // if (this.get("kita").length > 0) {
-                //     this.searchInKita(searchStringRegExp);
-                // }
-                // if (this.get("stoerfallbetrieb").length > 0) {
-                //     this.searchInStoerfallbetrieb(searchStringRegExp);
-                // }
-                // Radio.trigger("Searchbar", "createRecommendedList");
+            if (searchString.length >= this.getMinChars()) {
+                _.each(wfsMembers, function(elements) {
+                    hits = _.filter(elements, function (element) {
+                        elementName = this.simplifyString(element.name);
+                        return elementName.search(searchStringRegExp) !== -1; // Prüft ob der Suchstring ein Teilstring vom Namen ist
+                    }, this);
+                    Radio.trigger("Searchbar", "pushHits", "hitList", hits);
+                }, this);
+                Radio.trigger("Searchbar", "createRecommendedList");
             }
+        },
+
+        /**
+         * @description Entfernt Sonderzeichen aus dem Suchstring
+         * @param {string} searchString - Der Suchstring
+         */
+        simplifyString: function (searchString) {
+            var value = searchString.toLowerCase(),
+                value = value.replace(/\u00e4/g, "ae"),
+                value = value.replace(/\u00f6/g, "oe"),
+                value = value.replace(/\u00fc/g, "ue"),
+                value = value.replace(/\u00df/g, "ss");
+
+            return value;
         },
 
         /**
@@ -220,7 +236,7 @@ define(function (require) {
             }, this);
         },
 
-        getWFSMembers: function (data) {
+        readWFSMembers: function (data) {
             var hits = $("wfs\\:member,member", data),
                 type = this.getRequestInfo().type,
                 url = this.getRequestInfo().url,
@@ -237,7 +253,6 @@ define(function (require) {
             });
 
             this.setWfsMembers(type, elements);
-            // console.log(this.getWFSMembers());
         },
 
         /**
@@ -268,7 +283,7 @@ define(function (require) {
                 context: this,
                 async: false,
                 type: type,
-                success: this.getWFSMembers,
+                success: this.readWFSMembers,
                 timeout: 6000,
                 contentType: "text/xml",
                 error: function () {
