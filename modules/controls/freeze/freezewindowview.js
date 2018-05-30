@@ -26,13 +26,13 @@ define(function (require) {
             $("div.freeze-view").css("height", ($(".lgv-container").height()));
             $("div.freeze-view").css("width", ($(".lgv-container").width()));
             $("div.freeze-view").addClass("freeze-activated");
-            if ($(".table-nav-main")) {
-                $("p.freeze-view-close").css("left", ($(".table-nav-main").offset().left));
-                $("p.freeze-view-close").css("top", ($(".table-nav-main").offset().top));
-            }
-            else {
+            if ($(".table-nav-main").length === 0) {
                 $("p.freeze-view-close").css("left", "30px");
                 $("p.freeze-view-close").css("top", "30px");
+            }
+            else {
+                $("p.freeze-view-close").css("left", ($(".table-nav-main").offset().left));
+                $("p.freeze-view-close").css("top", ($(".table-nav-main").offset().top));
             }
         },
         hideFreezeWin: function () {

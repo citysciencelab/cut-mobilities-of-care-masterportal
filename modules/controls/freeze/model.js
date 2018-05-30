@@ -9,29 +9,20 @@ define([
     var FreezeModel = Backbone.Model.extend({
 
         defaults: {
-            visible: false
+
         },
 
-        initialize: function (style) {
+        initialize: function () {
             var channel = Radio.channel("Freeze");
 
-            this.setStyle(style);
             this.setView(new FreezeView({model:this}));
 
-            if (style === "TABLE"){
-                this.setMenuEntry(new FreezeToolMenuView({model: this}));
+            if (this.getStyle() === "TABLE"){
+                new FreezeToolMenuView({model: this});
             }
             else {
-              //  this.setMenuEntry(new FreezeControlMenuView({model: this}));
+                new FreezeControlMenuView({model: this, el: this.getElement()});
             }
-        },
-
-        setVisible: function (val) {
-            this.set("visible", val);
-        },
-
-        getVisible: function () {
-            return this.get("visible");
         },
 
         setStyle: function (val) {
@@ -50,12 +41,12 @@ define([
             return this.get("view");
         },
 
-        setMenuEntry: function (val) {
-            this.set("menuEntry", val);
+        setElement: function (val) {
+            this.set("el", val);
         },
 
-        getMenuEntry: function (val) {
-            return this.get("menuEntry");
+        getElement: function (val) {
+            return this.get("el");
         },
 
         startFreezeWin: function () {

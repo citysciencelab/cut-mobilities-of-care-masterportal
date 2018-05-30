@@ -22,7 +22,7 @@ define(function (require) {
             });
         },
         renderToToolbar: function () {
-            $(this.$el).html(this.template({name: "Ansicht sperren", glyphicon: "icon-close"}));
+            $(this.$el).html(this.template({name: "Ansicht sperren", glyphicon: "icon-lock"}));
             $(this.$el).children().last().addClass("freeze-view-start");
             $("#table-tools-menu").append(this.$el);
         },

@@ -4,8 +4,7 @@ define([
 
     var ControlsView = Backbone.View.extend({
         className: "controls-view",
-        initialize: function (style) {
-            this.uiStyle = style;
+        initialize: function () {
             this.render();
 
 
@@ -16,10 +15,8 @@ define([
             });
         },
         render: function () {
-            if (!this.uiStyle || this.uiStyle !== "TABLE") {
-                $("#map .ol-overlaycontainer-stopevent").append(this.$el);
-                this.renderSubViews();
-            }
+            $("#map .ol-overlaycontainer-stopevent").append(this.$el);
+            this.renderSubViews();
         },
 
         renderSubViews: function () {
@@ -29,20 +26,13 @@ define([
         },
 
         addRowTR: function (id, showMobile) {
-            if (!this.uiStyle || this.uiStyle !== "TABLE") {
-                if (showMobile === true) {
-                    this.$el.find(".control-view-top-right").append("<div class='row controls-row-right' id='" + id + "'></div>");
-                }
-                else {
-                    this.$el.find(".control-view-top-right").append("<div class='row controls-row-right hidden-xs' id='" + id + "'></div>");
-                }
-                return this.$el.find(".control-view-top-right").children().last();
+            if (showMobile === true) {
+                this.$el.find(".control-view-top-right").append("<div class='row controls-row-right' id='" + id + "'></div>");
             }
             else {
-                // Im Table-Design werden die Controls nicht oben rechts gerendert, sondern im Werkzeug-Fenster
-                // ToDo: hier ist das table-tools-menu aber noch tnicht geladen!!!!!
-
+                this.$el.find(".control-view-top-right").append("<div class='row controls-row-right hidden-xs' id='" + id + "'></div>");
             }
+            return this.$el.find(".control-view-top-right").children().last();
         },
 
         addRowBR: function (id) {

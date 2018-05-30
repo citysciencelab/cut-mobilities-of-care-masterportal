@@ -337,7 +337,7 @@ define("app", function (require) {
                             var el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/freeze/model"], function (FreezeModel) {
-                                new FreezeModel(style);
+                                new FreezeModel({uiStyle: style, el: el});
                             });
                         }
                         break;
