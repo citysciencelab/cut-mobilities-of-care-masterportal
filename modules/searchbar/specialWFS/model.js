@@ -116,6 +116,10 @@ define(function (require) {
             });
         },
 
+        /**
+         * @description Durchsucht die Response auf Koordinatenangaben und initiiert den Zoom
+         * @param  {response}   response-XML
+         */
         extractGeom: function (response) {
             var posList = $(response).find("gml\\:posList, posList")[0],
                 pos = $(response).find("gml\\:pos, pos")[0];
@@ -134,6 +138,11 @@ define(function (require) {
             }
         },
 
+        /**
+         * @description Extrahiert den Extent aus einer posList
+         * @param  {string} textArray mit Koordinatenangaben    
+         * @return {Array}  Extent
+         */
         getMinMax: function (textArray) {
             var coordinates = textArray.textContent.split(" "),
                 coordinatesX = _.filter(coordinates, function(val, index){
@@ -148,14 +157,6 @@ define(function (require) {
                 maxY = _.max(coordinatesY);
 
             return [minX, minY, maxX, maxY];
-        },
-
-        /**
-        * @description Methode zum Zurückschicken des gefundenen Plans an mapHandler.
-        * @param {string} data - Die Data-XML.
-        */
-        getExtentFromBPlan: function (data) {
-            Radio.trigger("MapMarker", "zoomToBPlan", data);
         },
 
         /**
