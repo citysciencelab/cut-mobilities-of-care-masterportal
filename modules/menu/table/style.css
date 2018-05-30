@@ -2,6 +2,7 @@
     bottom: 30px;
     position: absolute;
     width: 100%;
+    font-family: "HamburgSans",sans-serif;
 }
 
 .table-nav {
@@ -42,7 +43,7 @@
 .table-tools-menu {
     background-color: #F2F2F2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
-    width: 300px;
+    width: 200px;
     height: 200px;
     display: none;
     position: relative;
@@ -86,7 +87,6 @@
 
 .table-tool {
     margin-bottom: 6px;
-    font-family: "HamburgSans",sans-serif;
     font-size: 14px;
 }
 
@@ -114,7 +114,7 @@
     margin-left: -28px;
     width: 480px;
     bottom: -20px;
-
+    display: none;
 }
 
 .table-layer-list a:link {
@@ -149,6 +149,15 @@
     font-weight: 900;
 }
 
+.icon-burgermenu_alt #table-nav-layers-panel-toggler {
+    background-color: #808080;
+    border-radius: 12px !important;
+}
+
+.icon-burgermenu_alt.collapsed #table-nav-layers-panel-toggler {
+    background-color: #ffffff;
+}
+
 .icon-burgermenu_alt.collapsed:before {
     color: #003063;
 }
@@ -165,25 +174,9 @@
     border: none;
 }
 
-div#isActivated {
-    color: #003063;
-    font-family: "HamburgSans-Bold", sans-serif;
-}
-
-.layer-item {
+#table-nav-layers-panel .layers .layer-item {
     font-family: "HamburgSans", sans-serif;
     font-size: 17px;
-}
-
-.burgerMenuIsActive {
-    background-color: #aaa !important;
-    height: 40px;
-    width: 40px;
-
-}
-
-.icon-info:before {
-    padding-top: -12px !important;
 }
 
 .checkboxicon-left {
@@ -191,10 +184,7 @@ div#isActivated {
     cursor: pointer;
 }
 
-.info-icon{
-    position: absolute;
-    right: 30px;
-}
+
 
 #funnel {
     position: absolute;
@@ -224,28 +214,56 @@ div#isActivated {
         radial-gradient(circle at 100% 100%, transparent 10px, #F2F2F2 10px);
 }
 
-#table-nav-layers-panel {
-
-    ul#layers {
+#table-nav-layers-panel ul#layers {
         border: none;
         font-size: 15px;
         padding: 0px 0;
         min-width:  410px;
         overflow: auto;
+        padding-bottom: 7px;
     }
 
-    ul#layers ul {
+#table-nav-layers-panel ul#layers ul {
         list-style: none;
         padding: 0 0 0 0px;
         -webkit-padding-start: 0px;
     }
 
-    ul#layers ul li {
+#table-nav-layers-panel ul#layers ul li {
         border-bottom: 1px solid #ddd;
         padding: 5px 15px;
     }
 
-    ul#layers {
-        padding-bottom: 7px;
+
+
+    /**************** Layer Settings ****************/
+#table-nav-layers-panel .layer-settings {
+        clear: both;
+        margin-top: 32px;
+        padding-top: 8px;
+        font-size: 14px;
+        margin-left: 12px;
     }
-}
+
+#table-nav-layers-panel .layer-settings .glyphicon {
+        font-size: x-large;
+        color: #808080;
+        top: 8px;
+    }
+
+
+#table-nav-layers-panel .layer-settings .badge {
+        font-size: 14px;
+        padding-top: 6px;
+    }
+
+#table-nav-layers-panel .icon-info{
+        position: absolute;
+        right: 50px;
+    }
+
+#table-nav-layers-panel .glyphicon-cog{
+        font-size: 14px;
+        color: #808080;
+        top: 4px;
+    }
