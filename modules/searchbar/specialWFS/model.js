@@ -27,8 +27,8 @@ define(function (require) {
                 this.setMinChars(config.minChars);
             }
             // Jede Konfiguration eines SpecialWFS wird abgefragt
-            _.each(config.definitions, function (element) {
-                this.sendRequest(element, false);
+            _.each(config.definitions, function (definition) {
+                this.requestWFS(definition);
             }, this);
 
             // set Listener
@@ -101,193 +101,53 @@ define(function (require) {
         getExtentFromBPlan: function (data) {
             Radio.trigger("MapMarker", "zoomToBPlan", data);
         },
+
         /**
-        *
-        */
-        searchInKita: function (searchStringRegExp) {
-            _.each(this.get("kita"), function (kita) {
-                // Prüft ob der Suchstring ein Teilstring vom kita ist
-                if (kita.name.search(searchStringRegExp) !== -1) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", kita);
-                }
-            }, this);
-        },
-        /**
-         *
+         * @summary Liest das XML des WFS ein.
+         * @description Diese Funktion setzt vorraus, dass die Features im root-Element des response-XML als direkte Child-Elemente gelistet sind. 
+         * @description Der textContent jedes Elements eines Features wird für die Bezeichnung verwendet.
+         * @param  {xml}
+         * @return {[Object]} Datenobjekt zur Speicherung im Model
          */
-         searchInStoerfallbetrieb: function (searchStringRegExp) {
-            _.each(this.get("stoerfallbetrieb"), function (stoerfallbetrieb) {
-                // Prüft ob der Suchstring ein Teilstring vom stoerfallbetrieb ist
-                if (stoerfallbetrieb.name.search(searchStringRegExp) !== -1) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", stoerfallbetrieb);
-                }
-            }, this);
-        },
-        /**
-        *
-        */
-        searchInBPlans: function (searchString) {
-            _.each(this.get("bPlans"), function (bPlan) {
-                searchString = searchString.replace(/ö/g, "oe");
-                searchString = searchString.replace(/ä/g, "ae");
-                searchString = searchString.replace(/ü/g, "ue");
-                searchString = searchString.replace(/ß/g, "ss");
-                var searchBplanStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i");
-                // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                if (bPlan.name.search(searchBplanStringRegExp) !== -1) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", bPlan);
-                }
-            }, this);
-        },
+        extractWFSMembers: function (data, type, url, glyphicon) {
+            var rootElement = $(data).contents()[0],
+                elements = $(rootElement).children(),
+                features = [];
 
-        /**
-         *Schreibt Ergebnisse in "bplan".
-         * @param  {xml} data - getFeature-Request
-         */
-         getFeaturesForBPlan: function (data) {
-            var hits = $("wfs\\:member,member", data),
-                name,
-                type,
-                elements = [];
-
-            _.each(hits, function (hit) {
-                elements.push($(hit).first()[0].textContent.trim());
-                if (!_.isUndefined($(hit).find("app\\:planrecht, planrecht")[0])) {
-                    name = $(hit).find("app\\:planrecht, planrecht")[0].textContent;
-                    type = "festgestellt";
-                    // BPlan-Objekte
-                    this.get("bPlans").push({
-                        name: name.trim(),
-                        type: type,
-                        glyphicon: "glyphicon-picture",
-                        id: name.replace(/ /g, "") + "BPlan"
-                    });
-                }
-                else {
-                    if (!_.isUndefined($(hit).find("app\\:plan, plan")[0])) {
-                        name = $(hit).find("app\\:plan, plan")[0].textContent;
-                        type = "im Verfahren";
-                        // BPlan-Objekte
-                        this.get("bPlans").push({
-                            name: name.trim(),
-                            type: type,
-                            glyphicon: "glyphicon-picture",
-                            id: name.replace(/ /g, "") + "BPlan"
-                        });
-                    }
-                }
-            }, this);
-
-            return elements;
-        },
-
-        /**
-         * success-Funktion für die Kitastandorte. Schreibt Ergebnisse in "kita".
-         * @param  {xml} data - getFeature-Request
-         */
-         getFeaturesForKita: function (data) {
-            var hits = $("wfs\\:member,member", data),
-            coordinate,
-            position,
-            hitName;
-
-            _.each(hits, function (hit) {
-             if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
-                position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                if ($(hit).find("app\\:Name, Name")[0] !== undefined) {
-                    hitName = $(hit).find("app\\:Name, Name")[0].textContent;
-                    this.get("kita").push({
-                        name: hitName,
-                        type: "Kita",
-                        coordinate: coordinate,
-                        glyphicon: "glyphicon-home",
-                        id: hitName.replace(/ /g, "") + "Kita"
-                    });
-                }
-            }
-        }, this);
-        },
-            /**
-         * success-Funktion für die Störfallbetriebe. Schreibt Ergebnisse in "stoerfallbetrieb".
-         * @param  {xml} data - getFeature-Request
-         */
-         getFeaturesForStoerfallbetrieb: function (data) {
-            var hits = $("gml\\:featureMember,featureMember", data),
-            coordinate,
-            position,
-            hitName;
-
-            _.each(hits, function (hit) {
-                if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
-                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    if ($(hit).find("app\\:standort, standort")[0] !== undefined) {
-                        hitName = $(hit).find("app\\:standort, standort")[0].textContent;
-                        this.get("stoerfallbetrieb").push({
-                            name: hitName,
-                            type: "Stoerfallbetrieb",
-                            coordinate: coordinate,
-                            glyphicon: "glyphicon-home",
-                            id: hitName.replace(/ /g, "") + "Stoerfallbetrieb"
-                        });
-                    }
-                }
-            }, this);
-        },
-
-        readWFSMembers: function (data) {
-            var hits = $("wfs\\:member,member", data),
-                type = this.getRequestInfo().type,
-                url = this.getRequestInfo().url,
-                glyphicon = this.getRequestInfo().glyphicon,
-                elements = [];
-
-            _.each(hits, function (hit) {
-                elements.push({
-                    id: _.uniqueId("type"),
-                    name: $(hit).first()[0].textContent.trim(),
+            _.each(elements, function (element) {
+                features.push({
+                    id: _.uniqueId(type.toString()),
+                    name: $(element).text().trim(),
                     type: type,
-                    glyphicon: glyphicon
+                    glyphicon: glyphicon,
+                    url: url
                 });
             });
 
-            this.setWfsMembers(type, elements);
+            return features;
         },
 
-        /**
-         * @description Führt einen HTTP-Request aus.
-         * @param {String} url - A string containing the URL to which the request is sent
-         * @param {String} data - Data to be sent to the server
-         * @param {function} successFunction - A function to be called if the request succeeds
-         * @param {boolean} asyncBool - asynchroner oder synchroner Request
-         * @param {boolean} [usePOST] - POST anstelle von GET?
-         */
-         sendRequest: function (element, usePOST) {
-            var type = (usePOST && usePOST === true) ? "POST" : "GET",
-                url = element.url,
-                data = element.data,
+        
+        requestWFS: function (element) {
+            var url = element.url,
+                parameter = element.data,
                 name = element.name,
                 glyphicon = element.glyphicon ? element.glyphicon : this.getGlyphicon();
 
-            this.setRequestInfo({
-                url: url,
-                data: data,
-                type: name,
-                glyphicon: glyphicon
-            });
-
             $.ajax({
                 url: url,
-                data: data,
+                data: parameter,
                 context: this,
-                async: false,
-                type: type,
-                success: this.readWFSMembers,
+                type: "GET",
+                success: function (data) {
+                    var features = this.extractWFSMembers(data, name, url, glyphicon);
+
+                    this.setWfsMembers(name, features);
+                },
                 timeout: 6000,
                 contentType: "text/xml",
-                error: function () {
-                    Radio.trigger("Alert", "alert", url + " nicht erreichbar.");
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus +": " + url);
                 }
             });
         },
