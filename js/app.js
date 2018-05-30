@@ -14,10 +14,16 @@ define("app", function (require) {
         Map = require("modules/core/map"),
         WPS = require("modules/core/wps"),
         AddGeoJSON = require("modules/tools/addGeoJSON/model"),
-        RemoteInterface = require("modules/remoteInterface/model");
+        style,
+        sbconfig;
 
+    // RemoteInterface laden
+    if (Config.remoteInterface && Config.remoteInterface === true) {
+        require(["modules/remoteInterface/model"], function (RemoteInterface) {
+            new RemoteInterface();
+        });
+    }
     // Core laden
-    new RemoteInterface();
     new Alert();
     new Autostarter();
     new Util();
@@ -246,7 +252,7 @@ define("app", function (require) {
     });
 
     // controls
-    var style = Radio.request("ParametricURL", "getStyle");
+    style = Radio.request("ParametricURL", "getStyle");
 
     if (!style || style !== "SIMPLE") {
         require(["modules/controls/view"], function (ControlsView) {
@@ -336,7 +342,7 @@ define("app", function (require) {
         new MapMarkerView();
     });
 
-    var sbconfig = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
+    sbconfig = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
 
     if (sbconfig) {
         require(["modules/searchbar/view"], function (SearchbarView) {
