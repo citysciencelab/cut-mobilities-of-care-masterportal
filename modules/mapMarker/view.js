@@ -133,14 +133,6 @@ define([
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
-                case "festgestellt": {
-                    Radio.trigger("SpecialWFS", "requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
-                    break;
-                }
-                case "im Verfahren": {
-                    Radio.trigger("SpecialWFS", "requestbplan", hit.type, hit.name); // Abfrage der Details des BPlans, inkl. Koordinaten
-                    break;
-                }
                 case "SearchByCoord": {
                     Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     this.showMarker(hit.coordinate);
@@ -152,16 +144,6 @@ define([
                 }
                 case "Feature-Lister-Click": {
                     Radio.trigger("Map", "zoomToExtent", hit.coordinate);
-                    break;
-                }
-                case "Kita": {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
-                    break;
-                }
-                case "Stoerfallbetrieb": {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                     break;
                 }
                 case "Schulinfosystem": {
@@ -185,21 +167,7 @@ define([
                 }
             }
         },
-        /*
-        * @description Getriggert vom specialWFS empfängt diese Methode die XML des zu suchenden BPlans.
-        * @param {string} data - Die Data-XML des request.
-        */
-        zoomToBPlan: function (data) {
-            var GMLReader = new ol.format.GML(),
-                feature = GMLReader.readFeatures(data)[0],
-                extent;
 
-            this.clearMarker();
-            extent = feature.getGeometry().getExtent();
-            searchVector.getSource().addFeature(feature);
-            searchVector.setVisible(true);
-            Radio.trigger("Map", "zoomToExtent", extent);
-        },
         /*
         * @description Getriggert von bkg empfängt diese Methode die XML der gesuchten Adresse
         * @param {string} data - Die Data-Object des request.

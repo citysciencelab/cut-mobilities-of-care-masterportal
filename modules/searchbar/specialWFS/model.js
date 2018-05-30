@@ -114,8 +114,34 @@ define(function (require) {
             var posList = $(response).find("gml\\:posList, posList")[0],
                 pos = $(response).find("gml\\:pos, pos")[0];
 
-            console.log(posList);
-            console.log(pos);
+            if (posList) {
+                Radio.trigger("MapMarker", "zoomTo", {
+                    type: "default",
+                    coordinate: this.getMinMax(posList)
+                });
+            }
+            else {
+                Radio.trigger("MapMarker", "zoomTo", {
+                    type: "default",
+                    coordinate: pos.textContent.split(" ")
+                });
+            }
+        },
+
+        getMinMax: function (textArray) {
+            var coordinates = textArray.textContent.split(" "),
+                coordinatesX = _.filter(coordinates, function(val, index){
+                    return index % 2 === 0;
+                }),
+                coordinatesY = _.filter(coordinates, function(val, index){
+                    return index % 2 !== 0;
+                }),
+                minX = _.min(coordinatesX),
+                maxX = _.max(coordinatesX),
+                minY = _.min(coordinatesY),
+                maxY = _.max(coordinatesY);
+
+            return [minX, minY, maxX, maxY];
         },
 
         /**
