@@ -7,7 +7,6 @@ define([
         initialize: function () {
             this.render();
 
-
             this.$el.on({
                 click: function (e) {
                     e.stopPropagation();
