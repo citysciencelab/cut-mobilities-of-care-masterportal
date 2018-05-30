@@ -33,7 +33,7 @@
       },
       "specialWFS":
       {
-        "minChar": 3,
+        "minChars": 3,
         "timeout": 10000,
         "definitions": [
           {
