@@ -127,7 +127,7 @@ define(function (require) {
             if (posList) {
                 Radio.trigger("MapMarker", "zoomTo", {
                     type: "default",
-                    coordinate: this.getMinMax(posList)
+                    coordinate: this.getMinMax(posList.textContent)
                 });
             }
             else {
@@ -139,12 +139,12 @@ define(function (require) {
         },
 
         /**
-         * @description Extrahiert den Extent aus einer posList
+         * @description Extrahiert den Extent aus einer Array von Koordinaten
          * @param  {string} textArray mit Koordinatenangaben    
          * @return {Array}  Extent
          */
         getMinMax: function (textArray) {
-            var coordinates = textArray.textContent.split(" "),
+            var coordinates = textArray.split(" "),
                 coordinatesX = _.filter(coordinates, function(val, index){
                     return index % 2 === 0;
                 }),
