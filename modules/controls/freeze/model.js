@@ -50,7 +50,6 @@ define([
         },
 
         startFreezeWin: function () {
-            //this.getView().render();
             this.getView().showFreezeWin();
         }
     });
