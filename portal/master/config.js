@@ -20,7 +20,7 @@ define(function () {
             colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
         },
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
-        gfiWindow: "detached",
+        gfiWindow: "attached",
         simpleMap: false,
         wfsImgPath: "../node_modules/lgv-config/img/",
         allowParametricURL: true,
