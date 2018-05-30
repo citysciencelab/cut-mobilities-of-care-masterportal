@@ -260,7 +260,7 @@ define("app", function (require) {
     if (!style || style !== "SIMPLE") {
         require(["modules/controls/view"], function (ControlsView) {
             var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
-                controlsView = new ControlsView(style);
+                controlsView = new ControlsView();
 
             _.each(controls, function (control) {
                 switch (control.id) {
