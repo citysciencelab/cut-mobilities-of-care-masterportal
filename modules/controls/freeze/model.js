@@ -29,7 +29,7 @@ define([
             this.set("uiStyle", val);
         },
 
-        getStyle: function (val) {
+        getStyle: function () {
             return this.get("uiStyle");
         },
 
@@ -37,7 +37,7 @@ define([
             this.set("view", val);
         },
 
-        getView: function (val) {
+        getView: function () {
             return this.get("view");
         },
 
@@ -45,7 +45,7 @@ define([
             this.set("el", val);
         },
 
-        getElement: function (val) {
+        getElement: function () {
             return this.get("el");
         },
 
