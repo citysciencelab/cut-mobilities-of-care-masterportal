@@ -296,10 +296,15 @@ define([
             this.setSearchbarString(hit.name);
             // 2. Verberge Suchmenü
             this.hideMenu();
-            // 3. Zoome ggf. auf Ergebnis
+            // 3. Hide das GFI
             Radio.trigger("GFI", "setIsVisible", false);
-            // 4. Zoome ggf. auf Ergebnis
-            Radio.trigger("MapMarker", "zoomTo", hit, 5000);
+            // 4. Zoome ggf. auf Ergebnis oder Sonderbehandlung
+            if (_.has(hit, "triggerEvent")) {
+                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit);
+            }
+            else {
+                Radio.trigger("MapMarker", "zoomTo", hit, 5000);
+            }
             // 5. Triggere Treffer über Radio
             // Wird benötigt für IDA und sgv-online, ...
             Radio.trigger("Searchbar", "hit", hit);

@@ -36,7 +36,7 @@ define(function (require) {
                 "search": this.search
             });
             this.listenTo(Radio.channel("SpecialWFS"), {
-                "requestbplan": this.requestbplan
+                "requestFeature": this.requestFeature
             });
 
             // initiale Suche
@@ -60,6 +60,12 @@ define(function (require) {
                 _.each(wfsMembers, function(elements) {
                     hits = _.filter(elements, function (element) {
                         elementName = this.simplifyString(element.name);
+                        _.extend(element, {
+                            triggerEvent: {
+                                channel: "SpecialWFS",
+                                event: "requestFeature"
+                            }
+                        });
                         return elementName.search(searchStringRegExp) !== -1; // Prüft ob der Suchstring ein Teilstring vom Namen ist
                     }, this);
                     Radio.trigger("Searchbar", "pushHits", "hitList", hits);
@@ -83,17 +89,35 @@ define(function (require) {
         },
 
         /**
-         * Prosin-WFS liefern keine Koordinate mit aus, daher muss diese separat abgefragt werden
-         * @param  {string} type Name des Typs des SpecialWFS
-         * @param  {string} name B-Planname
+         * @description Die geom kann sehr komplex sein. Daher wird sie separat abgefragt.
+         * @param  {string} feature, das geklickt worden ist mit filter
          */
-         requestbplan: function (type, name) {
-            var typeName = (type === "festgestellt") ? "prosin_festgestellt" : "prosin_imverfahren",
-                propertyName = (type === "festgestellt") ? "planrecht" : "plan",
-                data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
+        requestFeature: function (feature) {
+            var data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + feature.filter.typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>" + feature.filter.propertyName + "</ogc:PropertyName><ogc:Literal>" + feature.filter.literal + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
 
-            this.sendRequest(this.get("bplanURL"), data, this.getExtentFromBPlan, true);
+            $.ajax({
+                url: feature.filter.url,
+                data: data,
+                context: this,
+                type: "POST",
+                success: this.extractGeom,
+                timeout: 6000,
+                contentType: "text/xml",
+                error: function () {
+                    console.error(textStatus +": " + url);
+                    Radio.trigger("Alert", "alert", "Beim Abfragen der Koordinaten trat ein Fehler auf.");
+                }
+            });
         },
+
+        extractGeom: function (response) {
+            var posList = $(response).find("gml\\:posList, posList")[0],
+                pos = $(response).find("gml\\:pos, pos")[0];
+
+            console.log(posList);
+            console.log(pos);
+        },
+
         /**
         * @description Methode zum Zurückschicken des gefundenen Plans an mapHandler.
         * @param {string} data - Die Data-XML.
@@ -112,22 +136,37 @@ define(function (require) {
         extractWFSMembers: function (data, type, url, glyphicon) {
             var rootElement = $(data).contents()[0],
                 elements = $(rootElement).children(),
+                feature, property,
                 features = [];
 
             _.each(elements, function (element) {
-                features.push({
-                    id: _.uniqueId(type.toString()),
-                    name: $(element).text().trim(),
-                    type: type,
-                    glyphicon: glyphicon,
-                    url: url
-                });
+                feature = $(element).children().first()[0];
+                property = $(element).children().first().children().first()[0];
+
+                if (feature && property) {
+                    features.push({
+                        id: _.uniqueId(type.toString()),
+                        name: $(element).text().trim(),
+                        type: type,
+                        glyphicon: glyphicon,
+                        filter: {
+                            url: url,
+                            typeName: feature.nodeName,
+                            propertyName: property.nodeName,
+                            literal: property.textContent
+                        }
+                    });
+                }
+
             });
 
             return features;
         },
 
-        
+        /**
+         * @description Fragt einen WFS nach Features ab und speichert die Ergebnisse im Model.
+         * @param  {Object}
+         */
         requestWFS: function (element) {
             var url = element.url,
                 parameter = element.data,
