@@ -9,22 +9,28 @@ define(function (require) {
         defaults: {
             minChars: 3,
             glyphicon: "glyphicon-home",
-            wfsMembers: {}
+            wfsMembers: {},
+            timeout: 6000
         },
 
         /**
          * @description Initialisierung der wfsFeature Suche.
          * @param {Objekt} config - Das Konfigurationsarray für die specialWFS-Suche
          * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+         * @param {integer} [config.timeout=6000] - Timeout der Ajax-Requests im Millisekunden.
          * @param {Object[]} config.definitions - Definitionen der SpecialWFS.
          * @param {Object} config.definitions[].definition - Definition eines SpecialWFS.
          * @param {string} config.definitions[].definition.url - Die URL, des WFS
          * @param {string} config.definitions[].definition.data - Query string des WFS-Request
-         * @param {string} config.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|kita)
+         * @param {string} config.definitions[].definition.name - MetaName der Kategorie für Vorschlagssuche
+         * @param {string} [config.definitions[].definition.glyphicon="glyphicon-home"] - Name des Glyphicon für Vorschlagssuche
          */
          initialize: function (config) {
             if (config.minChars) {
                 this.setMinChars(config.minChars);
+            }
+            if (config.timeout) {
+                this.setTimeout(config.timeout);
             }
             // Jede Konfiguration eines SpecialWFS wird abgefragt
             _.each(config.definitions, function (definition) {
@@ -101,7 +107,7 @@ define(function (require) {
                 context: this,
                 type: "POST",
                 success: this.extractGeom,
-                timeout: 6000,
+                timeout: this.getTimeout(),
                 contentType: "text/xml",
                 error: function () {
                     console.error(textStatus +": " + url);
@@ -209,7 +215,7 @@ define(function (require) {
 
                     this.setWfsMembers(name, features);
                 },
-                timeout: 6000,
+                timeout: this.getTimeout(),
                 contentType: "text/xml",
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error(textStatus +": " + url);
@@ -264,6 +270,15 @@ define(function (require) {
             }
 
             this.set("wfsMembers", wfsMembers);
+        },
+
+        // getter for timeout
+        getTimeout: function () {
+            return this.get("timeout");
+        },
+        // setter for timeout
+        setTimeout: function (value) {
+            this.set("timeout", value);
         }
     });
 

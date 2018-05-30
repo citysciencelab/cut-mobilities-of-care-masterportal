@@ -34,6 +34,7 @@
       "specialWFS":
       {
         "minChar": 3,
+        "timeout": 10000,
         "definitions": [
           {
             "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
