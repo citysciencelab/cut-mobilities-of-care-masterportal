@@ -46,6 +46,7 @@ define(function (require) {
     "modules/tools/download/testModel.js",
     "modules/mouseHover/testModel.js",
     "modules/searchbar/testModel.js",
+    "modules/searchbar/specialWFSTestModel.js",
     "modules/tools/filter/query/source/testWfs.js",
     "modules/tools/filter/query/testModel.js",
     "modules/tools/filter/testFilter.js",
