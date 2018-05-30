@@ -79,7 +79,8 @@ define(function () {
         },
         isMenubarVisible: true,
         geoAPI: false,
-        clickCounter: {}
+        clickCounter: {},
+        remoteInterface: true
     };
 
     return config;
