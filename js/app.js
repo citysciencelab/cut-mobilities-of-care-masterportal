@@ -17,6 +17,12 @@ define("app", function (require) {
         style,
         sbconfig;
 
+    // RemoteInterface laden
+    if (Config.remoteInterface && Config.remoteInterface === true) {
+        require(["modules/remoteInterface/model"], function (RemoteInterface) {
+            new RemoteInterface();
+        });
+    }
     // Core laden
     new Alert();
     new Autostarter();
@@ -31,12 +37,6 @@ define("app", function (require) {
     new WPS();
     new AddGeoJSON();
 
-    // RemoteInterface laden
-    if (Config.remoteInterface && Config.remoteInterface === true) {
-        require(["modules/remoteInterface/model"], function (RemoteInterface) {
-            new RemoteInterface();
-        });
-    }
     // Graph laden
     require(["modules/tools/graph/model"], function (GraphModel) {
         new GraphModel();
