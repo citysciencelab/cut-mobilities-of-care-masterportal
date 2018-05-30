@@ -96,7 +96,11 @@ define(function (require) {
                             type: "Ort",
                             bkg: true,
                             glyphicon: "glyphicon-road",
-                            id: _.uniqueId("bkgSuggest")
+                            id: _.uniqueId("bkgSuggest"),
+                            triggerEvent: {
+                                channel: "Searchbar",
+                                event: "bkgSearch"
+                            }
                         });
                     }
                 }, this);
@@ -131,7 +135,11 @@ define(function (require) {
                         type: "Ort",
                         bkg: true,
                         glyphicon: "glyphicon-road",
-                        id: _.uniqueId("bkgSuggest")
+                        id: _.uniqueId("bkgSuggest"),
+                        triggerEvent: {
+                            channel: "Searchbar",
+                            event: "bkgSearch"
+                        }
                     });
                 }
             }, this);
@@ -141,8 +149,9 @@ define(function (require) {
          * [bkgSearch description]
          * @param  {string} name - Gesuchter String
          */
-        bkgSearch: function (name) {
-            var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&count=1" + "&query=" + encodeURIComponent(name);
+        bkgSearch: function (hit) {
+            var name = hit.name,
+                request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&count=1" + "&query=" + encodeURIComponent(name);
 
             this.setTypeOfRequest("search");
             this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.getTypeOfRequest());

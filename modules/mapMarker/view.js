@@ -71,10 +71,6 @@ define([
 
             this.clearMarker();
             switch (hit.type) {
-                case "Ort": {
-                    Radio.trigger("Searchbar", "bkgSearch", hit.name); // Abfrage der Details zur Adresse inkl. Koordinaten
-                    break;
-                }
                 case "Straße": {
                     this.model.getWKTFromString("POLYGON", hit.coordinate);
 
