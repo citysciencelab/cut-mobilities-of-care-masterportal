@@ -139,13 +139,11 @@
 }
 
 .icon-checkbox2:before {
-    content: "\e918";
     color: #808080;
     margin-top: 8px;
 }
 
 .icon-checkbox:before {
-    content: "\e917";
     color: #003063;
     margin-top: 8px;
     font-weight: 900;
@@ -161,12 +159,10 @@
 }
 
 .icon-burgermenu_alt.collapsed:before {
-    content: "\e903";
     color: #003063;
 }
 
 .icon-burgermenu_alt:before {
-    content: "\e903";
     color: #f2f2f2;
 }
 

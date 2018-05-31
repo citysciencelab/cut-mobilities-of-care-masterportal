@@ -1,6 +1,7 @@
 define([
-    "backbone"
-], function (Backbone) {
+    "backbone",
+    "jquery"
+], function (Backbone, $) {
 
     var ControlsView = Backbone.View.extend({
         className: "controls-view",
