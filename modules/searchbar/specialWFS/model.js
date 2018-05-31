@@ -1,9 +1,11 @@
 define(function (require) {
 
-    require("modules/searchbar/model");
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
+        $ = require("jquery"),
         SpecialWFSModel;
+
+    require("modules/searchbar/model");
 
     SpecialWFSModel = Backbone.Model.extend({
         defaults: {
@@ -24,8 +26,9 @@ define(function (require) {
          * @param {string} config.definitions[].definition.data - Query string des WFS-Request
          * @param {string} config.definitions[].definition.name - MetaName der Kategorie für Vorschlagssuche
          * @param {string} [config.definitions[].definition.glyphicon="glyphicon-home"] - Name des Glyphicon für Vorschlagssuche
+         * @returns {void}
          */
-         initialize: function (config) {
+        initialize: function (config) {
             if (config.minChars) {
                 this.setMinChars(config.minChars);
             }
@@ -54,8 +57,9 @@ define(function (require) {
         /**
          * @description Suchfunktion, wird von Searchbar getriggert
          * @param {string} searchString - Der Suchstring.
+         * @returns {void}
          */
-         search: function (searchString) {
+        search: function (searchString) {
             var simpleSearchString = this.simplifyString(searchString),
                 searchStringRegExp = new RegExp(simpleSearchString),
                 wfsMembers = this.getWfsMembers(),
@@ -63,7 +67,7 @@ define(function (require) {
                 elementName;
 
             if (searchString.length >= this.getMinChars()) {
-                _.each(wfsMembers, function(elements) {
+                _.each(wfsMembers, function (elements) {
                     hits = _.filter(elements, function (element) {
                         elementName = this.simplifyString(element.name);
                         _.extend(element, {
@@ -83,13 +87,10 @@ define(function (require) {
         /**
          * @description Entfernt Sonderzeichen aus dem Suchstring
          * @param {string} searchString - Der Suchstring
+         * @returns {void}
          */
         simplifyString: function (searchString) {
-            var value = searchString.toLowerCase(),
-                value = value.replace(/\u00e4/g, "ae"),
-                value = value.replace(/\u00f6/g, "oe"),
-                value = value.replace(/\u00fc/g, "ue"),
-                value = value.replace(/\u00df/g, "ss");
+            var value = searchString.toLowerCase().replace(/\u00e4/g, "ae").replace(/\u00f6/g, "oe").replace(/\u00fc/g, "ue").replace(/\u00df/g, "ss");
 
             return value;
         },
@@ -97,6 +98,7 @@ define(function (require) {
         /**
          * @description Die geom kann sehr komplex sein. Daher wird sie separat abgefragt.
          * @param  {string} feature, das geklickt worden ist mit filter
+         * @returns {void}
          */
         requestFeature: function (feature) {
             var data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + feature.filter.typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>" + feature.filter.propertyName + "</ogc:PropertyName><ogc:Literal>" + feature.filter.literal + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
@@ -109,8 +111,8 @@ define(function (require) {
                 success: this.extractGeom,
                 timeout: this.getTimeout(),
                 contentType: "text/xml",
-                error: function () {
-                    console.error(textStatus +": " + url);
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus + ": " + errorThrown);
                     Radio.trigger("Alert", "alert", "Beim Abfragen der Koordinaten trat ein Fehler auf.");
                 }
             });
@@ -118,7 +120,8 @@ define(function (require) {
 
         /**
          * @description Durchsucht die Response auf Koordinatenangaben und initiiert den Zoom
-         * @param  {response}   response-XML
+         * @param {xml} response Response des Requests
+         * @returns {void}
          */
         extractGeom: function (response) {
             var posList = $(response).find("gml\\:posList, posList")[0],
@@ -140,15 +143,15 @@ define(function (require) {
 
         /**
          * @description Extrahiert den Extent aus einer Array von Koordinaten
-         * @param  {string} textArray mit Koordinatenangaben    
+         * @param  {string} textArray mit Koordinatenangaben
          * @return {Array}  Extent
          */
         getMinMax: function (textArray) {
             var coordinates = textArray.split(" "),
-                coordinatesX = _.filter(coordinates, function(val, index){
+                coordinatesX = _.filter(coordinates, function (val, index) {
                     return index % 2 === 0;
                 }),
-                coordinatesY = _.filter(coordinates, function(val, index){
+                coordinatesY = _.filter(coordinates, function (val, index) {
                     return index % 2 !== 0;
                 }),
                 minX = _.min(coordinatesX),
@@ -156,14 +159,18 @@ define(function (require) {
                 minY = _.min(coordinatesY),
                 maxY = _.max(coordinatesY);
 
-            return [minX, minY, maxX, maxY];
+            return [
+                minX, minY, maxX, maxY
+            ];
         },
 
         /**
          * @summary Liest das XML des WFS ein.
-         * @description Diese Funktion setzt vorraus, dass die Features im root-Element des response-XML als direkte Child-Elemente gelistet sind. 
-         * @description Der textContent jedes Elements eines Features wird für die Bezeichnung verwendet.
-         * @param  {xml}
+         * @description Diese Funktion setzt vorraus, dass die Features im root-Element des response-XML als direkte Child-Elemente gelistet sind.         * @description Der textContent jedes Elements eines Features wird für die Bezeichnung verwendet.
+         * @param  {xml} data Response des requests
+         * @param {string} type MetaName bzw. Kategorie für Suchtreffer
+         * @param {string} url URL des Dienstes
+         * @param {string} glyphicon Glyphicon für Suchtreffer
          * @return {[Object]} Datenobjekt zur Speicherung im Model
          */
         extractWFSMembers: function (data, type, url, glyphicon) {
@@ -198,7 +205,8 @@ define(function (require) {
 
         /**
          * @description Fragt einen WFS nach Features ab und speichert die Ergebnisse im Model.
-         * @param  {Object}
+         * @param  {object} element Konfiguration eines SpecialWFS aus config
+         * @returns {void}
          */
         requestWFS: function (element) {
             var url = element.url,
@@ -218,8 +226,8 @@ define(function (require) {
                 },
                 timeout: this.getTimeout(),
                 contentType: "text/xml",
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error(textStatus +": " + url);
+                error: function (jqXHR, textStatus) {
+                    console.error(textStatus + ": " + url);
                 }
             });
         },
@@ -267,7 +275,7 @@ define(function (require) {
                 oldValues = _.values(oldObj)[0];
                 newObj = _.object([key], [_.union(oldValues, values)]);
                 wfsMembers = _.omit(wfsMembers, key);
-                 _.extend(wfsMembers, newObj);
+                _.extend(wfsMembers, newObj);
             }
 
             this.set("wfsMembers", wfsMembers);
