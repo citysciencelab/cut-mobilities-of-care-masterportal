@@ -21,5 +21,5 @@ define(function (require) {
             this.model.startFreezeWin();
         }
     });
-        return FreezeControlViewMenu;
+    return FreezeControlViewMenu;
 });
