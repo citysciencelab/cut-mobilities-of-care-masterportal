@@ -23,6 +23,13 @@ define(function (require) {
                     this.$el.find(".icon-burgermenu_alt").addClass("collapsed");
                 }
             });
+            this.listenTo(this.collection, {
+                "updateSelection": function () {
+                    this.render();
+                    $("#table-nav-layers-panel").collapse("show");
+                    this.$el.addClass("burgerMenuIsActive");
+                }
+            });
         },
         burgerMenuIsActive: function (event) {
             $(event.currentTarget.parentElement).toggleClass("burgerMenuIsActive");
@@ -41,7 +48,6 @@ define(function (require) {
             });
             this.addViews(models);
         },
-
         addViews: function (models) {
             var childElement = {};
 
