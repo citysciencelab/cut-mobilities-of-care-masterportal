@@ -9,7 +9,6 @@ define(function () {
         },
 
         initialize: function () {
-            Radio.trigger("Sidebar", "toggle", true);
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": this.sortSchoolsByName
             });

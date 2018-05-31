@@ -262,7 +262,6 @@ define(function (require) {
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
 
                 model.setIsActive(false);
-                Radio.trigger("Sidebar", "toggle", false);
             }
         },
         closeGFI: function () {

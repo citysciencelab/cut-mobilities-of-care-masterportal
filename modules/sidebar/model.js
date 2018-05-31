@@ -5,34 +5,48 @@ define(function () {
             // true if sidebar is visible
             isVisible: false,
             // true if viewport width < 768px
-            isMobile: false
+            isMobile: false,
+            renderElement: null,
+            toolName: ""
         },
         initialize: function () {
             var channel = Radio.channel("Sidebar");
 
             this.listenTo(channel, {
-                "toggle": this.setIsVisible
+                "toggle": this.setIsVisible,
+                "append": this.append
             });
             this.listenTo(Radio.channel("Util"), {
                 "isViewMobileChanged": this.setIsMobile
             });
             this.setIsMobile(Radio.request("Util", "isViewMobile"));
         },
+        append: function (name, element) {
+            console.log(name);
+            if (this.getToolName() !== name) {
+                this.setRenderElement(element);
+                this.setToolName(name);
+                this.trigger("render");
+            }
+        },
 
-        /**
-         * sets the isMobile attribute
-         * @param  {boolean} value
-         */
         setIsMobile: function (value) {
             this.set("isMobile", value);
         },
-
-        /**
-         * sets the isVisible attribute
-         * @param  {boolean} value
-         */
         setIsVisible: function (value) {
             this.set("isVisible", value);
+        },
+        getRenderElement: function () {
+            return this.get("renderElement");
+        },
+        setRenderElement: function (value) {
+            this.set("renderElement", value);
+        },
+        getToolName: function () {
+            return this.get("toolName");
+        },
+        setToolName: function (value) {
+            this.set("toolName", value);
         }
     });
 

@@ -17,16 +17,15 @@ define(function (require) {
             "focusout .address-search": "hideHitlist",
             "focusin .address-search": "showHitlist",
             // This event fires after the select's value has been changed
-            "changed.bs.select": "updateSelectedValues"
+            "changed.bs.select": "updateSelectedValues",
+            "click .close": "closeView"
         },
-        initialize: function (attr) {
+        initialize: function () {
             this.listenTo(this.model, {
                 "change:schoolNames": this.render,
                 "change:streetNames": this.renderHitlist,
                 "change:houseNumbers": this.renderHitlist
             });
-            // Target wird in der app.js übergeben
-            this.domTarget = attr.domTarget;
 
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"});
             this.model.sortSchoolsByName("8712", layerModel.get("layer").getSource().getFeatures());
@@ -37,7 +36,8 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initToogle();
             this.initSelectpicker();
-            this.domTarget.append(this.$el);
+            Radio.trigger("Sidebar", "append", "schulwegrouting", this.$el);
+            Radio.trigger("Sidebar", "toggle", true);
         },
 
         initToogle: function () {
@@ -80,7 +80,9 @@ define(function (require) {
                 // oder siehe searchInHouseNumbers in gaz
             // }
         },
-
+        closeView: function () {
+            Radio.trigger("Sidebar", "toggle", false);
+        },
         updateSelectedValues: function () {
             console.log(54);
         }

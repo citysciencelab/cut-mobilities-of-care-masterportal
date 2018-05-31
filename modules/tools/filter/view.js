@@ -7,15 +7,14 @@ define(function (require) {
         FilterView;
 
     FilterView = Backbone.View.extend({
+        model: new FilterModel(),
         id: "filter-view",
         template: _.template(template),
         className: "filter",
         events: {
             "click .close": "closeFilter"
         },
-        initialize: function (attr) {
-            this.domTarget = attr.domTarget;
-            this.model = new FilterModel();
+        initialize: function () {
             this.listenTo(this.model, {
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
@@ -25,7 +24,7 @@ define(function (require) {
                         this.$el.remove();
                     }
                 }
-            }),
+            });
             this.listenTo(this.model.get("queryCollection"), {
                 "change:isSelected": function (model, value) {
                     if (value === true) {
@@ -34,7 +33,7 @@ define(function (require) {
                     this.model.closeGFI();
                 },
                 "renderDetailView": this.renderDetailView
-             });
+            });
             if (this.model.get("isInitOpen")) {
                 Radio.trigger("Sidebar", "toggle", true);
                 this.model.set("isActive", true);
@@ -44,8 +43,7 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            // Target wird in der app.js übergeben
-            // this.domTarget.append(this.$el.html(this.template(attr)));
+            Radio.trigger("Sidebar", "append", "filter", this.$el.html(this.template(attr)));
             this.renderSimpleViews();
             this.delegateEvents();
         },
@@ -77,6 +75,7 @@ define(function (require) {
             this.model.setIsActive(false);
             this.$el.remove();
             this.model.collapseOpenSnippet();
+            Radio.trigger("Sidebar", "toggle", false);
         }
     });
 
