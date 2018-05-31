@@ -130,6 +130,12 @@ define("app", function (require) {
                     });
                     break;
                 }
+                case "schulwegrouting": {
+                    require(["modules/tools/schulwegRouting_hh/view"], function (SchulwegRoutingView) {
+                        new SchulwegRoutingView({domTarget: sidebarView.$el});
+                    });
+                    break;
+                }
                 case "gfi": {
                     require(["modules/tools/gfi/model"], function (GfiModel) {
                         new GfiModel();

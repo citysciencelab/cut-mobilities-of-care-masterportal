@@ -195,6 +195,7 @@ define(function (require) {
         },
         activate: function (id) {
             if (this.get("id") === id) {
+                console.log(56);
                 this.setIsActive(true);
             }
         },

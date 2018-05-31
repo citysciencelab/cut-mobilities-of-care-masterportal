@@ -38,14 +38,14 @@ define(function (require) {
             if (this.model.get("isInitOpen")) {
                 Radio.trigger("Sidebar", "toggle", true);
                 this.model.set("isActive", true);
-                // this.render();
+                this.render();
             }
         },
         render: function () {
             var attr = this.model.toJSON();
 
             // Target wird in der app.js übergeben
-            this.domTarget.append(this.$el.html(this.template(attr)));
+            // this.domTarget.append(this.$el.html(this.template(attr)));
             this.renderSimpleViews();
             this.delegateEvents();
         },

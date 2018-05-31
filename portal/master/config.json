@@ -66,6 +66,10 @@
         "glyphicon": "glyphicon-list",
         "isInitOpen": false
       },
+      "schulwegrouting": {
+        "name": "Schulweg-Routing",
+        "glyphicon": "glyphicon-filter"
+      },
       "tools":
       {
         "name": "Werkzeuge",
@@ -82,7 +86,7 @@
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false,
             "isGeneric": false,
-            "isInitOpen": false,
+            "isInitOpen": true,
             "allowMultipleQueriesPerLayer": true,
             "predefinedQueries": [
                 {
@@ -432,6 +436,7 @@
       },
       {
         "id": "8712",
+        "visibility": true,
         "name": "Schulinfosystem",
         "styleId": "8712",
         "searchField": "schulname",

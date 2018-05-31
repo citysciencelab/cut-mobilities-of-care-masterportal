@@ -12,7 +12,7 @@ define(function (require) {
             isLayerVisible: false,
             activateOnSelection: false,
             // flag for the search in the current map extent
-            searchInMapExtent: false,
+            searchInMapExtent: true,
             liveZoomToFeatures: false
         },
 

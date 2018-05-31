@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div class="row">
+    <ul class="list-group hit-list col-xs-12">
+        <% if (streetNames.length > 1) { %>
+            <% streetNames.every(function (streetName, index) { %>
+                <li class="list-group-item"><%= streetName %></li>
+                <% return index !== 5; %>
+            <% }); %>
+        <% }
+        else { %>
+            <% houseNumbers.every(function (houseNumber, index) { %>
+                <li class="list-group-item"><%= streetNames[0] + " " + houseNumber.number + houseNumber.affix %></li>
+                <% return index !== 5; %>
+            <% }); %>
+        <% } %>
+    </ul>
+</div>

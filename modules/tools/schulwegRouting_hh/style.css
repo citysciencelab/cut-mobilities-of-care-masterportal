@@ -1,0 +1,47 @@
+.schulweg-routing .header {
+    width: 100%;
+    border-bottom: 1px solid rgb(229,229,229);
+    padding: 10px;
+}
+
+.schulweg-routing .tool-name {
+    padding-left: 15px;
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 16px;
+}
+
+.schulweg-routing .content {
+    padding-top: 20px;
+}
+
+.schulweg-routing .content .form-group {
+    margin-bottom: 25px;
+}
+.schulweg-routing .content .form-group > label {
+    float: left;
+    width: 75%;
+}
+
+.schulweg-routing .toggle {
+    float: right;
+}
+
+.schulweg-routing .bootstrap-select .dropdown-menu {
+    right: 0;
+    left: null;
+}
+
+.schulweg-routing .hit-list {
+    position: absolute;
+    z-index: 3;
+    padding-left: 15px;
+}
+
+.schulweg-routing .hit-list li:first-child {
+    border-top: 0;
+}
+
+.schulweg-routing .hit-list li:hover {
+    cursor: pointer;
+    background-color: #e3e3e3;
+}
