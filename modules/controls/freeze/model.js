@@ -3,7 +3,7 @@ define([
     "backbone.radio",
     "modules/controls/freeze/freezewindowview",
     "modules/controls/freeze/freezetoolmenuview",
-    "modules/controls/freeze/freezecontrolmenuview",
+    "modules/controls/freeze/freezecontrolmenuview"
 ], function (Backbone, Radio, FreezeView, FreezeToolMenuView, FreezeControlMenuView) {
 
     var FreezeModel = Backbone.Model.extend({
@@ -13,11 +13,9 @@ define([
         },
 
         initialize: function () {
-            var channel = Radio.channel("Freeze");
+            this.setView(new FreezeView({model: this}));
 
-            this.setView(new FreezeView({model:this}));
-
-            if (this.getStyle() === "TABLE"){
+            if (this.getStyle() === "TABLE") {
                 new FreezeToolMenuView({model: this});
             }
             else {

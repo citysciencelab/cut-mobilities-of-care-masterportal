@@ -14,7 +14,7 @@ define(function (require) {
         events: {
             "click .freeze-view-start": "toggleFreezeWindow"
         },
-        initialize: function (model) {
+        initialize: function () {
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function () {
                     this.renderToToolbar();
@@ -30,5 +30,5 @@ define(function (require) {
             this.model.startFreezeWin();
         }
     });
-        return FreezeToolViewMenu;
+    return FreezeToolViewMenu;
 });

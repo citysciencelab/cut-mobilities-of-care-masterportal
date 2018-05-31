@@ -1,7 +1,6 @@
 define(function (require) {
     var Backbone = require("backbone"),
         _ = require("underscore"),
-        $ = require("jquery"),
         FreezeControlViewMenu;
 
     FreezeControlViewMenu = Backbone.View.extend({
@@ -12,7 +11,7 @@ define(function (require) {
         events: {
             "click .freeze-view-start": "toggleFreezeWindow"
         },
-        initialize: function (model) {
+        initialize: function () {
             this.renderAsControl();
         },
         renderAsControl: function () {
