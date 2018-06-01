@@ -304,10 +304,8 @@ define("app", function (require) {
                     }
                     case "totalview": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowTR(control.id);
-
                             require(["modules/controls/totalview/view"], function (TotalView) {
-                                new TotalView({el: el});
+                                new TotalView();
                             });
                         }
                         break;
