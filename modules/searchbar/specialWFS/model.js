@@ -55,31 +55,49 @@ define(function (require) {
         },
 
         /**
+         * Durchsucht ein Object, bestehend aus Objekten, bestehend aus Array of Objects nach name
+         * @param  {string} searchString Der Suchstring
+         * @param  {object} masterObject wfsMembers
+         * @return {object}              Suchtreffer
+         */
+        collectHits: function (searchString, masterObject) {
+            var simpleSearchString = this.simplifyString(searchString),
+                searchStringRegExp = new RegExp(simpleSearchString),
+                hits,
+                elementName;
+
+            _.each(masterObject, function (elements) {
+                hits = _.filter(elements, function (element) {
+                    elementName = this.simplifyString(element.name);
+                    _.extend(element, {
+                        triggerEvent: {
+                            channel: "SpecialWFS",
+                            event: "requestFeature"
+                        }
+                    });
+                    return elementName.search(searchStringRegExp) !== -1; // Prüft ob der Suchstring ein Teilstring vom Namen ist
+                }, this);
+            }, this);
+
+            return hits;
+        },
+
+        /**
          * @description Suchfunktion, wird von Searchbar getriggert
          * @param {string} searchString - Der Suchstring.
          * @returns {void}
          */
         search: function (searchString) {
-            var simpleSearchString = this.simplifyString(searchString),
-                searchStringRegExp = new RegExp(simpleSearchString),
-                wfsMembers = this.getWfsMembers(),
-                hits,
-                elementName;
+            var wfsMembers = this.getWfsMembers(),
+                minChars = this.getMinChars(),
+                hits;
 
-            if (searchString.length >= this.getMinChars()) {
-                _.each(wfsMembers, function (elements) {
-                    hits = _.filter(elements, function (element) {
-                        elementName = this.simplifyString(element.name);
-                        _.extend(element, {
-                            triggerEvent: {
-                                channel: "SpecialWFS",
-                                event: "requestFeature"
-                            }
-                        });
-                        return elementName.search(searchStringRegExp) !== -1; // Prüft ob der Suchstring ein Teilstring vom Namen ist
-                    }, this);
-                    Radio.trigger("Searchbar", "pushHits", "hitList", hits);
-                }, this);
+            if (searchString.length < minChars) {
+                return;
+            }
+            hits = this.collectHits(searchString, wfsMembers);
+            if (hits.length > 0) {
+                Radio.trigger("Searchbar", "pushHits", "hitList", hits);
                 Radio.trigger("Searchbar", "createRecommendedList");
             }
         },
@@ -108,7 +126,7 @@ define(function (require) {
                 data: data,
                 context: this,
                 type: "POST",
-                success: this.extractGeom,
+                success: this.zoomTo,
                 timeout: this.getTimeout(),
                 contentType: "text/xml",
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -119,26 +137,30 @@ define(function (require) {
         },
 
         /**
-         * @description Durchsucht die Response auf Koordinatenangaben und initiiert den Zoom
+         * @description Durchsucht die Response auf Koordinatenangaben
          * @param {xml} response Response des Requests
-         * @returns {void}
+         * @returns {number[]}  Extent oder Koordinate
          */
         extractGeom: function (response) {
             var posList = $(response).find("gml\\:posList, posList")[0],
-                pos = $(response).find("gml\\:pos, pos")[0];
+                pos = $(response).find("gml\\:pos, pos")[0],
+                coordinate = posList ? this.getMinMax(posList.textContent) : pos.textContent.split(" ");
 
-            if (posList) {
-                Radio.trigger("MapMarker", "zoomTo", {
-                    type: "default",
-                    coordinate: this.getMinMax(posList.textContent)
-                });
-            }
-            else {
-                Radio.trigger("MapMarker", "zoomTo", {
-                    type: "default",
-                    coordinate: pos.textContent.split(" ")
-                });
-            }
+            return coordinate;
+        },
+
+        /**
+         * Triggert den zoom
+         * @param  {number[]} response Extent oder Koordinate
+         * @return {void}
+         */
+        zoomTo: function (response) {
+            var coordinate = this.extractGeom(response);
+
+            Radio.trigger("MapMarker", "zoomTo", {
+                type: "default",
+                coordinate: coordinate
+            });
         },
 
         /**
@@ -240,23 +262,24 @@ define(function (require) {
          * @return {object} ergänztes MasterObjekt
          */
         addObjectsInObject: function (key, values, masterObject) {
-            var oldObj,
+            var master = masterObject,
+                oldObj,
                 oldValues,
                 newObj;
 
-            if (!_.has(masterObject, key)) {
+            if (!_.has(master, key)) {
                 newObj = _.object([key], [values]);
-                _.extend(masterObject, newObj);
+                _.extend(master, newObj);
             }
             else {
-                oldObj = _.pick(masterObject, key);
+                oldObj = _.pick(master, key);
                 oldValues = _.values(oldObj)[0];
                 newObj = _.object([key], [_.union(oldValues, values)]);
-                masterObject = _.omit(masterObject, key);
-                _.extend(masterObject, newObj);
+                master = _.omit(master, key);
+                _.extend(master, newObj);
             }
-console.log(masterObject);
-            return masterObject;
+
+            return master;
         },
 
         // getter for minChars
