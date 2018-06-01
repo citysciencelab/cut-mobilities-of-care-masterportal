@@ -23,7 +23,7 @@ define(function (require) {
             this.listenTo(this.model, {
                 "change:schoolNames": this.render,
                 "change:streetNames": this.renderHitlist,
-                "change:houseNumbers": this.renderHitlist
+                "change:hitList": this.renderHitlist
             });
             // Target wird in der app.js übergeben
             this.domTarget = attr.domTarget;
@@ -60,7 +60,7 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.find(".hit-list").empty();
-            this.$el.find(".input-group").after(this.templateHitlist(attr));
+            this.$el.find(".hit-list").append(this.templateHitlist(attr));
         },
 
         hideHitlist: function () {
@@ -73,12 +73,8 @@ define(function (require) {
 
         searchAddress: function (evt) {
             if (evt.target.value.length > 2) {
-                Radio.trigger("Gaz", "findStreets", evt.target.value);
+                this.model.searchAddress(evt.target.value);
             }
-            // if (this.model.get("streetNames").length === 1) {
-                // dann suche in housenumbers
-                // oder siehe searchInHouseNumbers in gaz
-            // }
         },
 
         updateSelectedValues: function () {
