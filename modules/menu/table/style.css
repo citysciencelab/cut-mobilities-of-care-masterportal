@@ -46,8 +46,8 @@
     width: 200px;
     height: 200px;
     display: none;
-    position: relative;
-    bottom: 210px;
+    position: absolute;
+    bottom: 50px;
     left: -52px;
     padding: 12px;
 }
