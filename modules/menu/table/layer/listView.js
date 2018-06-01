@@ -23,6 +23,7 @@ define(function (require) {
                     this.$el.find(".icon-burgermenu_alt").addClass("collapsed");
                 }
             });
+            //Aktiviert ausgewälter Layer; Layermenu ist aktiv
             this.listenTo(this.collection, {
                 "updateSelection": function () {
                     this.render();
@@ -48,6 +49,7 @@ define(function (require) {
             });
             this.addViews(models);
         },
+
         addViews: function (models) {
             var childElement = {};
 
