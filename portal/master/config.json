@@ -306,7 +306,8 @@
         "resolution": 611.4974492763076,
         "baselayer": "452"
       },
-      "mousePosition": true
+      "mousePosition": true,
+      "freeze": true
     },
     "scaleLine": true,
     "Baumtyp": "light"

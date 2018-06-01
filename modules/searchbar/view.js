@@ -91,7 +91,7 @@ define([
             });
 
             this.listenTo(Radio.channel("TableMenu"), {
-                "Searchbar": this.hideMenu
+                "hideMenuElementSearchbar": this.hideMenu
             });
 
             this.listenTo(Radio.channel("Searchbar"), {
@@ -186,7 +186,7 @@ define([
             "click": function () {
                 this.clearSelection();
                 $("#searchInput").focus();
-                Radio.trigger("TableMenu", "elementIsActive", "Searchbar");
+                Radio.request("TableMenu", "setActiveElement", "Searchbar");
             }
         },
         /**

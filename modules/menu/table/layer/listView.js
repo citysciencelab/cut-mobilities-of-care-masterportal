@@ -2,6 +2,7 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         _ = require("underscore"),
+        TableNavView = require("modules/menu/table/layer/singleLayerView"),
         ListTemplate = require("text!modules/menu/table/layer/templates/template.html"),
         SingleLayerView = require("modules/menu/table/layer/singleLayerView"),
         $ = require("jquery"),
@@ -11,16 +12,14 @@ define(function (require) {
         id: "table-layer-list",
         className: "table-layer-list table-nav",
         template: _.template(ListTemplate),
-        events: {
-            "click .icon-burgermenu_alt": "burgerMenuIsActive"
-        },
         initialize: function () {
             this.collection = Radio.request("ModelList", "getCollection");
             this.listenTo(Radio.channel("TableMenu"), {
-                "Layer": function () {
-                    this.$el.find("#table-nav-layers-panel").removeClass("in");
-                    this.$el.removeClass("burgerMenuIsActive");
-                    this.$el.find(".icon-burgermenu_alt").addClass("collapsed");
+                "hideMenuElementLayer": this.hideMenu
+            });
+            this.listenTo(this.collection, {
+                "updateLightTree": function () {
+                    this.render();
                 }
             });
             //Aktiviert ausgewälter Layer; Layermenu ist aktiv
@@ -31,13 +30,19 @@ define(function (require) {
                     this.$el.addClass("burgerMenuIsActive");
                 }
             });
+            // bootstrap collapse event
+            this.$el.on("show.bs.collapse", function () {
+                Radio.request("TableMenu", "setActiveElement", "Layer");
+            });
         },
-        burgerMenuIsActive: function (event) {
-            $(event.currentTarget.parentElement).toggleClass("burgerMenuIsActive");
-            Radio.trigger("TableMenu", "elementIsActive", "Layer");
+        hideMenu: function () {
+            $("#table-nav-layers-panel").collapse("hide");
         },
         render: function () {
             this.$el.html(this.template());
+            if (Radio.request("TableMenu", "getActiveElement") === "Layer") {
+                $("#table-nav-layers-panel").collapse("show");
+            }
             this.renderList();
             return this.$el;
         },

@@ -138,6 +138,28 @@ function ControlTests (driver) {
               });
           });
       });
+
+  /*
+  *  ------------------- Freeze-View  -----------------------------------------------------------------------------
+  */
+      test.describe("FreezeView", function () {
+          var freezebutton, freezeview;
+
+          test.it("should have FreezeView", function () {
+              freezeview = driver.findElement(webdriver.By.css("div.freeze-view"));
+
+              expect(freezeview).to.exist;
+          });
+
+           test.it("should have FreezeButton", function () {
+              freezebutton = driver.findElement(webdriver.By.css("div.freeze-view-start"));
+
+              expect(freezebutton).to.exist;
+          });
+      });
+
+
+
     });
   }
 

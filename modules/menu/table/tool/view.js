@@ -17,7 +17,7 @@ define(function (require) {
         initialize: function () {
             this.render();
             this.listenTo(Radio.channel("TableMenu"), {
-                "Tool": this.closeToolMenu
+                "hideMenuElementTool": this.closeToolMenu
             });
         },
         render: function () {
@@ -34,9 +34,11 @@ define(function (require) {
                     }
                     case "folder": {
                         if (model.getId() === "tools") {
-                            this.addToolsMenuView ();
+                            this.addToolsMenuView();
                         }
+                        break;
                     }
+                    default:
                 }
             }, this);
         },
@@ -55,7 +57,7 @@ define(function (require) {
             else {
                 $("div.table-tools").addClass("table-tools-active");
                 $("div.table-tools-menu").show();
-                Radio.trigger("TableMenu", "elementIsActive", "Tool");
+                Radio.request("TableMenu", "setActiveElement", "Tool");
             }
         },
         closeToolMenu: function () {

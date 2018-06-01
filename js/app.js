@@ -332,6 +332,16 @@ define("app", function (require) {
                         }
                         break;
                     }
+                    case "freeze": {
+                        if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
+
+                            require(["modules/controls/freeze/model"], function (FreezeModel) {
+                                new FreezeModel({uiStyle: style, el: el});
+                            });
+                        }
+                        break;
+                    }
                 }
             });
         });
