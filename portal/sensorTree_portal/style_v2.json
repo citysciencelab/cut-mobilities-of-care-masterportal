@@ -55,6 +55,28 @@
     "imageScale" : "0.7"
   },
   {
+    "layerId" : "999995",
+    "class": "POINT",
+    "subClass" : "ADVANCED",
+    "scaling" : "INTERVAL",
+    "scalingShape" : "CIRCLE_BAR",
+    "scalingAttribute" : "state",
+    "circleBarScalingFactor" : 0.5,
+    "circleBarRadius" : 6,
+    "circleBarLineStroke" : 6,
+    "circleBarCircleFillColor" : [210, 0, 0, 1],
+    "circleBarCircleStrokeColor" : [210, 0, 0, 1],
+    "circleBarCircleStrokeWidth" : 1,
+    "circleBarLineStrokeColor" : [210, 0, 0, 1],
+    "labelField" : "state",
+    "textOffsetX" : 10,
+    "textScale" : 3,
+    "textStrokeColor" : [0, 0, 0, 1],
+    "textFillColor" : [0, 0, 0, 1],
+    "textStrokeWidth" : 1,
+    "textFont": "Comic Sans MS"
+  },
+  {
     "layerId" : "999998",
     "class": "POINT",
     "subClass" : "ADVANCED",

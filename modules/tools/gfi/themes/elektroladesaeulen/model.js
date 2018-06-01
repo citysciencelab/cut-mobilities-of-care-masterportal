@@ -58,7 +58,7 @@ define(function (require) {
                     gfiParams = this.get("gfiParams"),
                     historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams),
                     historicalDataClean = this.dataCleaning(historicalData),
-                    lastDay = moment(this.get("lastDate")).format("YYYY-MM-DD"),
+                    lastDay = (_.isUndefined(this.get("lastDate"))) ? undefined : moment(this.get("lastDate")).format("YYYY-MM-DD"),
                     dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay);
 
                 this.setDataStreamIds(dataStreamIds);
@@ -70,8 +70,7 @@ define(function (require) {
          * change gfi, if the tab-toogle "daten" ist active
          */
         changeData: function () {
-            var value,
-            index = this.get("dayIndex");
+            var value;
 
             this.parseProperties();
             this.loadData();
@@ -870,7 +869,7 @@ define(function (require) {
             $(".ladesaeulen .day").text(today).css("font-weight", "bold");
             $("<div class='noData' style='height: " + height + "px; width: " + width + "px;'>")
                     .appendTo("div" + graphTag)
-                    .text("Zur Zeit keine Informationen!");
+                    .text("Zurzeit keine Informationen!");
         },
 
         /**

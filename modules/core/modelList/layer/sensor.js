@@ -419,7 +419,7 @@ define(function (require) {
             streamDataJSON = JSON.parse(streamData),
             streamId = streamDataJSON.displayField,
             // streamId = streamDataJSON.timeInfo.trackIdField,
-            epsg = streamDataJSON.spatialReference.wkid,
+            epsg = (_.isUndefined(streamDataJSON.spatialReference)) ? "EPSG:4326" : streamDataJSON.spatialReference.wkid,
             wssUrl = streamDataJSON.streamUrls[0].urls[0];
 
             // only if there is a URL

@@ -189,43 +189,14 @@
           "visibility": false
         },
         {
-          "id": "999994",
-          "styleId": "999998",
-          "name" : "MONICA - Temperatur",
-          "visibility": false
-        },
-        {
-          "id": "999995",
-          "styleId": "999995",
-          "name" : "MONICA - Luftdruck",
-          "visibility": false
-        },
-        {
-          "id": "999996",
-          "styleId": "999998",
-          "name" : "MONICA - Luftfeuchtigkeit",
-          "visibility": false
-        },
-        {
-          "id": "999997",
-          "styleId": "999998",
-          "name" : "MONICA - Windgeschwindigkeit",
-          "visibility": false
-        },
-        {
           "id": "888888",
+          "name" : "Heatmap der belegten Elektro Ladestandorte (Live)",
           "dataLayerId" : "999999",
           "visibility": false
         },
         {
           "id": "888889",
           "dataLayerId" : "999999",
-          "visibility": false
-        },
-        {
-          "id": "999993",
-          "styleId": "999993",
-          "name" : "Fake Position der ISS (Live)",
           "visibility": false
         },
         {

@@ -77,6 +77,7 @@ define(function (require) {
          * @param  {[ol.Feature]} feature
          */
         initializeHeatmap: function (features) {
+            // debugger;
             var attribute = this.get("attribute"),
                 value = this.get("value"),
                 layerSource = this.getLayerSource(),
