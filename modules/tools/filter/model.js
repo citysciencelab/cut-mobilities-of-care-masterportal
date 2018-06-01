@@ -73,7 +73,7 @@ define(function (require) {
         },
         deactivateAllModels: function () {
             _.each(this.get("queryCollection").models, function (model) {
-                    model.setIsActive(false);
+                model.setIsActive(false);
             }, this);
         },
 
@@ -195,7 +195,6 @@ define(function (require) {
         },
         activate: function (id) {
             if (this.get("id") === id) {
-                console.log(56);
                 this.setIsActive(true);
             }
         },
@@ -259,6 +258,7 @@ define(function (require) {
 
             this.set("isActive", value);
             if (!value) {
+                // tool model aus modellist auf inactive setzen
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
 
                 model.setIsActive(false);

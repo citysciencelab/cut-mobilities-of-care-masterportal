@@ -21,13 +21,25 @@ define(function (require) {
             "click .close": "closeView"
         },
         initialize: function () {
-            this.listenTo(this.model, {
-                "change:schoolNames": this.render,
-                "change:streetNames": this.renderHitlist,
-                "change:houseNumbers": this.renderHitlist
-            });
-
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"});
+
+            if (this.model.getIsActive()) {
+                this.render();
+            }
+            this.listenTo(this.model, {
+                // "change:schoolNames": this.render,
+                "change:streetNames": this.renderHitlist,
+                "change:houseNumbers": this.renderHitlist,
+                "change:isActive": function (model, value) {
+                    if (value) {
+                        this.render();
+                    }
+                    else {
+                        this.$el.remove();
+                        Radio.trigger("Sidebar", "toggle", false);
+                    }
+                }
+            });
             this.model.sortSchoolsByName("8712", layerModel.get("layer").getSource().getFeatures());
         },
         render: function () {
@@ -38,6 +50,7 @@ define(function (require) {
             this.initSelectpicker();
             Radio.trigger("Sidebar", "append", "schulwegrouting", this.$el);
             Radio.trigger("Sidebar", "toggle", true);
+            this.delegateEvents();
         },
 
         initToogle: function () {
@@ -81,7 +94,7 @@ define(function (require) {
             // }
         },
         closeView: function () {
-            Radio.trigger("Sidebar", "toggle", false);
+            this.model.setIsActive(false);
         },
         updateSelectedValues: function () {
             console.log(54);

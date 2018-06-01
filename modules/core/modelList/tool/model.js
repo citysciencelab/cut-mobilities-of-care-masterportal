@@ -51,7 +51,7 @@ define(function (require) {
                 else if (this.getId() === "featureLister") {
                     Radio.trigger("FeatureListerView", "toggle");
                 }
-                else if (this.getId() === "filter") {
+                else if (this.getId() === "filter" || this.getId() === "schulwegrouting") {
                     Radio.trigger("Sidebar", "toggle", true);
                 }
                 else {

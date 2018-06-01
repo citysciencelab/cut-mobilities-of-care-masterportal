@@ -15,6 +15,10 @@ define(function (require) {
             "click .close": "closeFilter"
         },
         initialize: function () {
+            if (this.model.get("isInitOpen")) {
+                this.model.set("isActive", true);
+                this.render();
+            }
             this.listenTo(this.model, {
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
@@ -22,6 +26,7 @@ define(function (require) {
                     }
                     else {
                         this.$el.remove();
+                        Radio.trigger("Sidebar", "toggle", false);
                     }
                 }
             });
@@ -34,25 +39,22 @@ define(function (require) {
                 },
                 "renderDetailView": this.renderDetailView
             });
-            if (this.model.get("isInitOpen")) {
-                Radio.trigger("Sidebar", "toggle", true);
-                this.model.set("isActive", true);
-                this.render();
-            }
         },
         render: function () {
             var attr = this.model.toJSON();
 
             Radio.trigger("Sidebar", "append", "filter", this.$el.html(this.template(attr)));
+            Radio.trigger("Sidebar", "toggle", true);
             this.renderSimpleViews();
             this.delegateEvents();
         },
 
         renderDetailView: function () {
-            var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true});
+            var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true}),
+                view;
 
             if (_.isUndefined(selectedModel) === false) {
-                var view = new QueryDetailView({model: selectedModel});
+                view = new QueryDetailView({model: selectedModel});
 
                 this.$el.find(".detail-view-container").html(view.render());
             }
@@ -73,7 +75,6 @@ define(function (require) {
         },
         closeFilter: function () {
             this.model.setIsActive(false);
-            this.$el.remove();
             this.model.collapseOpenSnippet();
             Radio.trigger("Sidebar", "toggle", false);
         }
