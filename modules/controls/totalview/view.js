@@ -35,7 +35,7 @@ define(function (require) {
             this.$el.html(this.template());
         },
         renderToToolbar: function () {
-            $("#table-tools-menu").prepend(this.tabletemplate());
+            this.$el.prepend(this.tabletemplate());
         },
         setTotalView: function () {
             var center = this.model.getStartCenter(),
