@@ -1,53 +1,55 @@
-define([
-    "backbone",
-    "text!modules/searchbar/template.html",
-    "text!modules/searchbar/templateRecommendedList.html",
-    "text!modules/searchbar/templateHitList.html",
-    "modules/searchbar/model",
-    "backbone.radio"
-], function (Backbone, SearchbarTemplate, SearchbarRecommendedListTemplate, SearchbarHitListTemplate, Searchbar, Radio) {
-    "use strict";
-    return Backbone.View.extend({
+define(function (require) {
+
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        SearchbarTemplate = require("text!modules/searchbar/template.html"),
+        SearchbarRecommendedListTemplate = require("text!modules/searchbar/templateRecommendedList.html"),
+        SearchbarHitListTemplate = require("text!modules/searchbar/templateHitList.html"),
+        Searchbar = require("modules/searchbar/model"),
+        $ = require("jquery"),
+        SearchbarView;
+
+    SearchbarView = Backbone.View.extend({
         model: new Searchbar(),
         id: "searchbar", // wird ignoriert, bei renderToDOM
         className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
         searchbarKeyNavSelector: "#searchInputUL",
         template: _.template(SearchbarTemplate),
         /**
-        * @memberof config
-        * @type {Object}
         * @description Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
-        * @property {Object} [visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
-        * @property {integer} [visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {Object} [tree] - Das Konfigurationsobjekt der Tree-Suche, wenn Treesuche gewünscht.
-        * @property {integer} [tree.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {Objekt} [specialWFS] - Das Konfigurationsarray für die specialWFS-Suche
-        * @property {integer} [specialWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {Object[]} specialWFS.definitions - Definitionen der SpecialWFS.
-        * @property {Object} specialWFS.definitions[].definition - Definition eines SpecialWFS.
-        * @property {string} specialWFS.definitions[].definition.url - Die URL, des WFS
-        * @property {string} specialWFS.definitions[].definition.data - Query string des WFS-Request
-        * @property {string} specialWFS.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
-        * @property {Object} bkg - Das Konfigurationsobjet der BKG Suche.
-        * @property {integer} [bkg.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @property {string} bkg.bkgSuggestURL - URL für schnelles Suggest.
-        * @property {string} [bkg.bkgSearchURL] - URL für ausführliche Search.
-        * @property {float} [bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
-        * @property {integer} [bkg.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
-        * @property {string} [bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
-        * @property {string} [bkg.filter=filter=(typ:*)] - Filterstring
-        * @property {float} [bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
-        * @property {Object} [gazetteer] - Das Konfigurationsobjekt für die Gazetteer-Suche.
-        * @property {string} gazetteer.url - Die URL.
-        * @property {boolean} [gazetteer.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
-        * @property {boolean} [gazetteer.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
-        * @property {boolean} [gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
-        * @property {boolean} [gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
-        * @property {integer} [gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
-        * @property {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
-        * @property {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
-        * @property {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
-        * @property {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
+        * @param {Object} config - Das Konfigurationsobjet der BKG Suche.
+        * @param {Object} [config.visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
+        * @param {integer} [config.visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @param {Object} [config.tree] - Das Konfigurationsobjekt der Tree-Suche, wenn Treesuche gewünscht.
+        * @param {integer} [config.tree.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @param {Objekt} [config.specialWFS] - Das Konfigurationsarray für die specialWFS-Suche
+        * @param {integer} [config.specialWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @param {Object[]} config.specialWFS.definitions - Definitionen der SpecialWFS.
+        * @param {Object} config.specialWFS.definitions[].definition - Definition eines SpecialWFS.
+        * @param {string} config.specialWFS.definitions[].definition.url - Die URL, des WFS
+        * @param {string} config.specialWFS.definitions[].definition.data - Query string des WFS-Request
+        * @param {string} config.specialWFS.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
+        * @param {Object} config.bkg - Das Konfigurationsobjet der BKG Suche.
+        * @param {integer} [config.bkg.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @param {string} config.bkg.bkgSuggestURL - URL für schnelles Suggest.
+        * @param {string} [config.bkg.bkgSearchURL] - URL für ausführliche Search.
+        * @param {float} [config.bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
+        * @param {integer} [config.bkg.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
+        * @param {string} [config.bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
+        * @param {string} [config.bkg.filter=filter=(typ:*)] - Filterstring
+        * @param {float} [config.bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
+        * @param {Object} [config.gazetteer] - Das Konfigurationsobjekt für die Gazetteer-Suche.
+        * @param {string} config.gazetteer.url - Die URL.
+        * @param {boolean} [config.gazetteer.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
+        * @param {boolean} [config.gazetteer.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
+        * @param {boolean} [config.gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
+        * @param {boolean} [config.gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
+        * @param {integer} [config.gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+        * @param {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
+        * @param {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
+        * @param {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
+        * @param {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
+        * @returns {void}
         */
         initialize: function (config) {
             // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
@@ -179,9 +181,7 @@ define([
                 $("#searchInput").focus();
             }
         },
-        /**
-        *
-        */
+
         render: function () {
             var attr = this.model.toJSON();
 
@@ -202,32 +202,32 @@ define([
         /**
         * @description Methode, um den Searchstring über den Radio zu steuern ohne Event auszulösen
         * @param {string} searchstring - Der einzufügende Searchstring
+        * @returns {void}
         */
         setSearchbarString: function (searchstring) {
             $("#searchInput").val(searchstring);
         },
         /**
         * @description Verbirgt die Menubar
+        * @returns {void}
         */
         hideMenu: function () {
             $(".dropdown-menu-search").hide();
         },
-        /**
-        *
-        */
+
         renderRecommendedList: function () {
             var attr = this.model.toJSON(),
                 template;
                 // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
                 // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
-                this.prepareAttrStrings(attr.hitList);
-                template = _.template(SearchbarRecommendedListTemplate);
+            this.prepareAttrStrings(attr.hitList);
+            template = _.template(SearchbarRecommendedListTemplate);
 
             $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
             $("ul.dropdown-menu-search").html(template(attr));
             // }
             // bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
-            if (this.model.getInitSearchString() !== undefined && this.model.get("hitList").length === 1) {
+            if (!_.isUndefined(this.model.getInitSearchString()) && this.model.get("hitList").length === 1) {
                 this.hitSelected();
             }
             $("#searchInput + span").show();
@@ -244,42 +244,41 @@ define([
                 }
                 // IE 11 svg bug -> png
                 hit.imageSrc = this.model.changeFileExtension(hit.imageSrc, ".png");
-             }, this);
+            }, this);
         },
 
-        /**
-        *
-        */
         renderHitList: function () {
-            // if (this.model.get("isHitListReady") === true) {
-                if (this.model.get("hitList").length === 1) {
-                    this.hitSelected(); // erster und einziger Eintrag in Liste
-                }
-                else {
-                    this.model.set("typeList", _.uniq(_.pluck(this.model.get("hitList"), "type")));
-                    var attr = this.model.toJSON(),
-                    // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
-                    // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
-                        template = _.template(SearchbarHitListTemplate);
+            var attr, template;
 
-                    $("ul.dropdown-menu-search").html(template(attr));
-                }
-            // }
+            if (this.model.get("hitList").length === 1) {
+                this.hitSelected(); // erster und einziger Eintrag in Liste
+            }
+            else {
+                this.model.set("typeList", _.uniq(_.pluck(this.model.get("hitList"), "type")));
+                attr = this.model.toJSON();
+                // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
+                // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
+                template = _.template(SearchbarHitListTemplate);
+                $("ul.dropdown-menu-search").html(template(attr));
+            }
         },
+
         /*
          * Methode, um den Focus über den Radio in SearchInput zu legen
          */
         setFocus: function () {
             $("#searchInput").focus();
         },
-        /**
-        * Wird ausgeführt, wenn ein Eintrag ausgewählt oder bestätigt wurde.
-        */
-        hitSelected: function (evt) {
-            Radio.trigger("Filter", "resetFilter");
 
-            var hit,
-                hitID;
+        /**
+         * Vorschlag wurde ausgewählt.
+         * @param  {evt} evt Event
+         * @return {void}
+         */
+        hitSelected: function (evt) {
+            var hit, hitID;
+
+            Radio.trigger("Filter", "resetFilter");
 
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
@@ -313,14 +312,15 @@ define([
                 evt.stopPropagation();
             }
         },
+
         navigateList: function (e) {
             var selected = {},
-            firstListElement = {},
-            // fix für Firefox
-            event = e || window.event;
+                firstListElement = {},
+                // fix für Firefox
+                event = e || window.event;
 
             if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
-                var selected = this.getSelectedElement(),
+                selected = this.getSelectedElement();
                 firstListElement = this.getFirstElement();
             }
 
@@ -330,7 +330,7 @@ define([
             else {
                 // uparrow
                 if (event.keyCode === 38) {
-                      this.prevElement(selected);
+                    this.prevElement(selected);
                 }
                 // down arrow
                 if (event.keyCode === 40) {
@@ -360,10 +360,10 @@ define([
             return element.is(":first-child");
         },
         isChildElement: function (element) {
-            return (element.parent().prev().hasClass("type"));
+            return element.parent().prev().hasClass("type");
         },
 
-       getFirstChildElement: function (selected) {
+        getFirstChildElement: function (selected) {
             return selected.next().children().first();
         },
         isFolderElement: function (element) {
@@ -372,15 +372,15 @@ define([
 
         scrollToNext: function (li) {
             var parent = li.parent(),
-            pos = parent.scrollTop(),
-            scrollHeight = pos + li.outerHeight(true);
+                pos = parent.scrollTop(),
+                scrollHeight = pos + li.outerHeight(true);
 
             parent.scrollTop(scrollHeight);
         },
         scrollToPrev: function (li) {
             var parent = li.parent(),
-            pos = parent.scrollTop(),
-            scrollHeight = pos - li.outerHeight(true);
+                pos = parent.scrollTop(),
+                scrollHeight = pos - li.outerHeight(true);
 
             parent.scrollTop(scrollHeight);
         },
@@ -389,37 +389,33 @@ define([
         },
 
         nextElement: function (selected) {
-            selected.removeClass("selected");
             var next = {};
+
+            selected.removeClass("selected");
 
             if (this.isFolderElement(selected) && selected.hasClass("open")) {
                 next = this.getFirstChildElement(selected);
                 this.resetScroll(selected.nextAll("div:first"));
             }
-            else {
-                if (this.isLastElement(selected)) {
-                    if (this.isChildElement(selected)) {
-                        if (this.isLastElement(selected.parent())) {
-                           this.getFirstElement().addClass("selected");
-                           return;
-                        }
-                        else {
-                            next = this.getNextElement(selected.parent());
-                            this.scrollToNext(selected);
-                        }
-                    }
-                    else {
+            else if (this.isLastElement(selected)) {
+                if (this.isChildElement(selected)) {
+                    if (this.isLastElement(selected.parent())) {
                         this.getFirstElement().addClass("selected");
                         return;
                     }
-                }
-                else {
-                    next = this.getNextElement(selected);
+                    next = this.getNextElement(selected.parent());
                     this.scrollToNext(selected);
                 }
+                else {
+                    this.getFirstElement().addClass("selected");
+                    return;
+                }
+            }
+            else {
+                next = this.getNextElement(selected);
+                this.scrollToNext(selected);
             }
             next.addClass("selected");
-
         },
 
         getNextElement: function (selected) {
@@ -427,8 +423,9 @@ define([
         },
 
         prevElement: function (selected) {
-            selected.removeClass("selected");
             var prev = {};
+
+            selected.removeClass("selected");
 
             if (this.isFirstElement(selected)) {
                 if (this.isChildElement(selected)) {
@@ -459,17 +456,16 @@ define([
             return this.$el.find(this.searchbarKeyNavSelector + " li").last();
         },
 
-        /**
-        *
-        */
         setSearchString: function (evt) {
+            var that;
+
             if (evt.target.value.length === 0) {
                 // suche zurücksetzten, wenn der nletzte Buchstabe gelöscht wurde
                 this.deleteSearchString();
             }
             else {
                 if (evt.type === "paste") {
-                    var that = this;
+                    that = this;
 
                     // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
                     setTimeout(function () {
@@ -511,9 +507,7 @@ define([
                 target.siblings().removeClass("open");
             }
         },
-        /**
-        *
-        */
+
         toggleStyleForRemoveIcon: function (evt) {
             if (evt.type === "focusin") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
@@ -532,9 +526,7 @@ define([
                 $(".btn-deleteSearch").css("border-color", "#cccccc");
             }
         },
-        /**
-        *
-        */
+
         deleteSearchString: function () {
             this.model.setSearchString("");
             $("#searchInput").val("");
@@ -547,9 +539,7 @@ define([
             $("#searchInputUL").html("");
 
         },
-        /**
-        *
-        */
+
         showMarker: function (evt) {
             var hitID = evt.currentTarget.id,
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
@@ -558,9 +548,7 @@ define([
                 Radio.trigger("MapMarker", "showMarker", hit.coordinate);
             }
         },
-        /**
-        *
-        */
+
         hideMarker: function () {
             if ($(".dropdown-menu-search").css("display") === "block") {
                 Radio.trigger("MapMarker", "hideMarker");
@@ -570,6 +558,7 @@ define([
         /**
         * Platziert den Cursor am Ende vom String
         * @param {Element} element - Das Dom-Element
+        * @returns {void}
         */
         focusOnEnd: function (element) {
             var strLength = element.val().length * 2;
@@ -578,4 +567,6 @@ define([
             element[0].setSelectionRange(strLength, strLength);
         }
     });
+
+    return SearchbarView;
 });

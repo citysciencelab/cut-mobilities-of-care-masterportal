@@ -1,34 +1,33 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "modules/mapMarker/model"
-    ], function (Backbone, Radio, ol, MapHandlerModel) {
-    "use strict";
-
-    var searchVector = new ol.layer.Vector({
-        source: new ol.source.Vector(),
-        alwaysOnTop: true,
-        style: new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: "#08775f",
-                lineDash: [8],
-                width: 4
-            }),
-            fill: new ol.style.Fill({
-                color: "rgba(8, 119, 95, 0.3)"
+define(function (require) {
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        MapHandlerModel = require("modules/mapMarker/model"),
+        searchVector = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            alwaysOnTop: true,
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: "#08775f",
+                    lineDash: [8],
+                    width: 4
+                }),
+                fill: new ol.style.Fill({
+                    color: "rgba(8, 119, 95, 0.3)"
+                })
             })
-        })
-    });
+        }),
+        MapMarker;
 
     Radio.trigger("Map", "addLayerToIndex", [searchVector, Radio.request("Map", "getLayers").getArray().length]);
 
-    var MapMarker = Backbone.View.extend({
+    MapMarker = Backbone.View.extend({
         model: new MapHandlerModel(),
         id: "searchMarker",
         className: "glyphicon glyphicon-map-marker",
         /**
         * @description View des Map Handlers
+        * @returns {void}
         */
         initialize: function () {
             var markerPosition,
@@ -56,6 +55,7 @@ define([
         },
         /**
         * @description Entfernt den searchVector
+        * @returns {void}
         */
         clearMarker: function () {
             searchVector.getSource().clear();
@@ -63,11 +63,13 @@ define([
         /**
         * @description Zoom auf Treffer
         * @param {Object} hit - Treffer der Searchbar
+        * @returns {void}
         */
         zoomTo: function (hit) {
             // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
             var resolutions = Radio.request("MapView", "getResolutions"),
-                index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105);
+                index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105),
+                hasPolygon, isMobile;
 
             this.clearMarker();
             switch (hit.type) {
@@ -92,7 +94,7 @@ define([
                     break;
                 }
                 case "Stadtteil": {
-                    var hasPolygon = hit.polygon ? true : false;
+                    hasPolygon = _.has(hit, "polygon");
 
                     if (hasPolygon) {
                         this.model.getWKTFromString("POLYGON", hit.polygon);
@@ -105,7 +107,7 @@ define([
                     break;
                 }
                 case "Thema": {
-                    var isMobile = Radio.request("Util", "isViewMobile");
+                    isMobile = Radio.request("Util", "isViewMobile");
 
                     // desktop - Themenbaum wird aufgeklappt
                     if (isMobile === false) {
@@ -185,17 +187,13 @@ define([
                 Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString());
             }
         },
-        /**
-        *
-        */
+
         showMarker: function (coordinate) {
             this.clearMarker();
             this.model.get("marker").setPosition(coordinate);
             this.$el.show();
         },
-        /**
-        *
-        */
+
         hideMarker: function () {
             this.$el.hide();
         }
