@@ -68,39 +68,40 @@ define(function (require) {
             });
         });
 
-        describe("setWfsMembers", function () {
-            var thema1 = {
-                    filter: {
-                        url: "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
-                        typeName: "app:stoerfallbetrieb",
-                        propertyName: "app:standort",
-                        literal: "Shell Deutschland Oil GmbH, GLC Nord"
-                    },
+        describe("addObjectsInObject", function () {
+                var thema1 = [{
+                    filter: "blah",
                     glyphicon: "glyphicon-home",
                     id: "Störfallbetrieb6088",
                     name: "Shell Deutschland Oil GmbH, GLC Nord",
                     type: "Störfallbetrieb"
-                },
-                thema2 = {
-                    filter: {
-                        url: "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
-                        typeName: "app:stoerfallbetrieb",
-                        propertyName: "app:standort",
-                        literal: "Lufthansa Technik Aktiengesellschaft"
-                    },
+                }],
+                thema2 = [{
+                    filter: "blah",
                     glyphicon: "glyphicon-home",
                     id: "Störfallbetrieb6089",
                     name: "Lufthansa Technik Aktiengesellschaft",
                     type: "Störfallbetrieb"
-                };
+                }],
+                temp1, temp2, temp3;
 
-            it("should set wfsMember", function () {
-                model.setWfsMembers("thema1", thema1);
-                expect(model.getWfsMembers()).to.be.an("object").to.have.deep.property("thema1");
+            it("should create Object in Object", function () {
+                temp1 = model.addObjectsInObject("thema1", thema1, {});
+                expect(temp1).to.have.deep.property("thema1");
+                expect(temp1.thema1).to.be.an('array').to.have.lengthOf(1);
             });
-            it("should add new wfsMember", function () {
-                model.setWfsMembers("thema2", thema2);
-                expect(model.getWfsMembers()).to.be.an("object").to.have.deep.property("thema2");
+            it("should add other Object in Object", function () {
+                temp2 = model.addObjectsInObject("thema2", thema2, temp1);
+                expect(temp2).to.have.deep.property("thema1");
+                expect(temp2).to.have.deep.property("thema2");
+                expect(temp2.thema2).to.be.an('array').to.have.lengthOf(1);
+            });
+            it("should add Object in added Object", function () {
+                temp3 = model.addObjectsInObject("thema2", thema1, temp2);
+                expect(temp3).to.have.deep.property("thema1");
+                expect(temp3).to.have.deep.property("thema2");
+                expect(temp3.thema1).to.be.an('array').to.have.lengthOf(1);
+                expect(temp3.thema2).to.be.an('array').to.have.lengthOf(2);
             });
         });
     });

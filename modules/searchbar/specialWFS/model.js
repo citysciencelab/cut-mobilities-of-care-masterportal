@@ -232,6 +232,33 @@ define(function (require) {
             });
         },
 
+        /**
+         * Fügt einem Objekt untergeordnete Objekte hinzu bzw. ergänzt diese
+         * @param {string} key          Name des Objekt
+         * @param {string[]} values     Werte des Objekts
+         * @param {object} masterObject Übergeordnetes Objekt dem die untergeordneten Objekte zugefügt werden sollen
+         * @return {object} ergänztes MasterObjekt
+         */
+        addObjectsInObject: function (key, values, masterObject) {
+            var oldObj,
+                oldValues,
+                newObj;
+
+            if (!_.has(masterObject, key)) {
+                newObj = _.object([key], [values]);
+                _.extend(masterObject, newObj);
+            }
+            else {
+                oldObj = _.pick(masterObject, key);
+                oldValues = _.values(oldObj)[0];
+                newObj = _.object([key], [_.union(oldValues, values)]);
+                masterObject = _.omit(masterObject, key);
+                _.extend(masterObject, newObj);
+            }
+console.log(masterObject);
+            return masterObject;
+        },
+
         // getter for minChars
         getMinChars: function () {
             return this.get("minChars");
@@ -262,23 +289,9 @@ define(function (require) {
         // setter for wfsMembers
         setWfsMembers: function (key, values) {
             var wfsMembers = this.get("wfsMembers"),
-                oldObj,
-                oldValues,
-                newObj;
+                newWfsMembers = this.addObjectsInObject(key, values, wfsMembers);
 
-            if (!_.has(wfsMembers, key)) {
-                newObj = _.object([key], [values]);
-                _.extend(wfsMembers, newObj);
-            }
-            else {
-                oldObj = _.pick(wfsMembers, key);
-                oldValues = _.values(oldObj)[0];
-                newObj = _.object([key], [_.union(oldValues, values)]);
-                wfsMembers = _.omit(wfsMembers, key);
-                _.extend(wfsMembers, newObj);
-            }
-
-            this.set("wfsMembers", wfsMembers);
+            this.set("wfsMembers", newWfsMembers);
         },
 
         // getter for timeout
