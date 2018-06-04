@@ -8,6 +8,10 @@ define(function (require) {
     GFIDetachedTableView = DesktopView.extend({
         className: "gfi gfi-detached gfi-detached-table",
         template: _.template(Template),
+        events: {
+            "click .icon-turnarticle": "rotateGFI",
+            "click .glyphicon-remove": "hideGFI"
+        },
         render: function () {
             var attr = this.model.toJSON();
 
