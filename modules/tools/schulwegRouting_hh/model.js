@@ -1,8 +1,8 @@
-define(function () {
+define(function (require) {
     var ol = require("openlayers"),
-        Sidebar;
+        SchulwegRouting;
 
-    Sidebar = Backbone.Model.extend({
+    SchulwegRouting = Backbone.Model.extend({
 
         defaults: {
             // names of all schools
@@ -35,7 +35,7 @@ define(function () {
                 },
                 "houseNumbers": function (houseNumberList) {
                     this.setAddressList(this.prepareAddressList(houseNumberList, this.get("streetNameList")));
-                    this.setFilteredAddressList(this.filterAddressList(this.get("addressList"), this.get("searchStringRegExp")));
+                    this.setFilteredAddressList(this.filterAddressList(this.get("addressList"), this.get("searchRegExp")));
                 }
             });
         },
@@ -66,15 +66,16 @@ define(function () {
                     Radio.trigger("Gaz", "findHouseNumbers", streetNameList[0]);
                 }
                 else {
-                    this.setFilteredAddressList(this.filterAddressList(addressList, this.get("searchStringRegExp")));
+                    this.setFilteredAddressList(this.filterAddressList(addressList, this.get("searchRegExp")));
                 }
             }
             else if (streetNameList.length > 0) {
+                this.setAddressList([]);
                 this.setFilteredAddressList([]);
                 this.setStreetNameList(streetNameList);
             }
             else {
-                filteredAddressList = this.filterAddressList(addressList, this.get("searchStringRegExp"));
+                filteredAddressList = this.filterAddressList(addressList, this.get("searchRegExp"));
 
                 this.setFilteredAddressList(filteredAddressList);
                 if (filteredAddressList.length === 1) {
@@ -187,7 +188,7 @@ define(function () {
         },
 
         setSearchRegExp: function (value) {
-            this.set("searchStringRegExp", new RegExp(value.replace(/ /g, ""), "i"));
+            this.set("searchRegExp", new RegExp(value.replace(/ /g, ""), "i"));
         },
 
         setFilteredAddressList: function (value) {
@@ -203,5 +204,5 @@ define(function () {
         }
     });
 
-    return Sidebar;
+    return SchulwegRouting;
 });
