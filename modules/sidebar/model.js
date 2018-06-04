@@ -22,7 +22,6 @@ define(function () {
             this.setIsMobile(Radio.request("Util", "isViewMobile"));
         },
         append: function (name, element) {
-            console.log(name);
             if (this.getToolName() !== name) {
                 this.setRenderElement(element);
                 this.setToolName(name);

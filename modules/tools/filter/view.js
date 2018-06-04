@@ -15,7 +15,7 @@ define(function (require) {
             "click .close": "closeFilter"
         },
         initialize: function () {
-            if (this.model.get("isInitOpen")) {
+            if (this.model.getIsInitOpen()) {
                 this.model.set("isActive", true);
                 this.render();
             }
@@ -23,6 +23,7 @@ define(function (require) {
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
                         this.render();
+                        this.renderDetailView();
                     }
                     else {
                         this.$el.remove();
@@ -62,7 +63,6 @@ define(function (require) {
 
         renderSimpleViews: function () {
             var view;
-
             if (this.model.get("queryCollection").models.length > 1) {
                 _.each(this.model.get("queryCollection").models, function (query) {
                     view = new QuerySimpleView({model: query});

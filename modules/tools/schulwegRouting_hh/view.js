@@ -30,8 +30,8 @@ define(function (require) {
                 // "change:schoolNames": this.render,
                 "change:streetNames": this.renderHitlist,
                 "change:houseNumbers": this.renderHitlist,
-                "change:isActive": function (model, value) {
-                    if (value) {
+                "change:isActive": function (model, isActive) {
+                    if (isActive) {
                         this.render();
                     }
                     else {

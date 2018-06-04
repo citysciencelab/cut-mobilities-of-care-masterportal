@@ -11,11 +11,14 @@ define(function () {
         },
 
         initialize: function () {
+            var model;
+
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": this.sortSchoolsByName
             });
             this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": this.activate
+                "activatedTool": this.activate,
+                "deactivatedTool": this.deactivate
             });
             this.listenTo(Radio.channel("Gaz"), {
                 "streetNames": function (value) {
@@ -25,12 +28,20 @@ define(function () {
                 "houseNumbers": this.setHouseNumbers
             });
             if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
-                this.setIsActive(true);
+                // model in modellist gets activated.
+                // And there the "Tool", "activatedTool" is triggered where this model listens to.
+                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
+                model.setIsActive(true);
             }
         },
         activate: function (id) {
             if (this.get("id") === id) {
                 this.setIsActive(true);
+            }
+        },
+        deactivate: function (id) {
+            if (this.get("id") === id) {
+                this.setIsActive(false);
             }
         },
         sortSchoolsByName: function (layerId, features) {

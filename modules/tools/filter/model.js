@@ -24,7 +24,8 @@ define(function (require) {
                 "resetFilter": this.resetFilter
             });
             this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": this.activate
+                "activatedTool": this.activate,
+                "deactivatedTool": this.deactivate
             });
             this.set("queryCollection", new Backbone.Collection());
             this.listenTo(this.get("queryCollection"), {
@@ -198,15 +199,27 @@ define(function (require) {
                 this.setIsActive(true);
             }
         },
+        deactivate: function (id) {
+            if (this.get("id") === id) {
+                this.setIsActive(false);
+            }
+        },
         setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "filter"});
+            var config = Radio.request("Parser", "getItemByAttributes", {id: "filter"}),
+                model;
 
             _.each(config, function (value, key) {
                 this.set(key, value);
             }, this);
-
+            if (this.getIsInitOpen()) {
+                Radio.trigger("ParametricURL", "pushToIsInitOpen", this.get("id").toUpperCase());
+            }
             if (Radio.request("ParametricURL", "getIsInitOpen") === "FILTER") {
-                this.set("isInitOpen", true);
+                this.setIsInitOpen(true);
+            }
+            if (this.getIsInitOpen()) {
+                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
+                model.setIsActive(true);
             }
         },
 
@@ -281,6 +294,14 @@ define(function (require) {
                     openSnippet.setIsOpen(false);
                 }
             }
+        },
+        // getter for isInitOpen
+        getIsInitOpen: function () {
+            return this.get("isInitOpen");
+        },
+        // setter for isInitOpen
+        setIsInitOpen: function (value) {
+            this.set("isInitOpen", value);
         }
     });
 

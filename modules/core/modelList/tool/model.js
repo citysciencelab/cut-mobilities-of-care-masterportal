@@ -35,6 +35,9 @@ define(function (require) {
                         this.activateTool();
                         channel.trigger("activatedTool", this.getId(), this.get("deaktivateGFI"));
                     }
+                    else {
+                        channel.trigger("deactivatedTool", this.getId(), this.get("deaktivateGFI"));
+                    }
                 }
             });
         },
@@ -51,7 +54,10 @@ define(function (require) {
                 else if (this.getId() === "featureLister") {
                     Radio.trigger("FeatureListerView", "toggle");
                 }
-                else if (this.getId() === "filter" || this.getId() === "schulwegrouting") {
+                else if (this.getId() === "filter") {
+                    Radio.trigger("Sidebar", "toggle", true);
+                }
+                else if (this.getId() === "schulwegrouting") {
                     Radio.trigger("Sidebar", "toggle", true);
                 }
                 else {
