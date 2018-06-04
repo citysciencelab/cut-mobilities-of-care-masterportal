@@ -8,7 +8,6 @@ define(function (require) {
     GFIDetachedTableView = DesktopView.extend({
         className: "gfi gfi-detached gfi-detached-table",
         template: _.template(Template),
-
         render: function () {
             var attr = this.model.toJSON();
 
@@ -58,6 +57,17 @@ define(function (require) {
         removeView: function () {
             Radio.trigger("MapMarker", "hideMarker");
             this.remove();
+        },
+
+        rotateGFI: function() {
+             this.model.set("rotateAngle", this.model.get("rotateAngle") - 90);
+            if (this.model.get("rotateAngle") === -360) {
+               this.model.set("rotateAngle", 0);
+            }
+            $(".gfi-detached-table").css({
+                    "transform": "rotate(" + this.model.get("rotateAngle") + "deg)",
+                    "-webkit-transform-origin": "50% 52%"
+                });
         }
     });
 

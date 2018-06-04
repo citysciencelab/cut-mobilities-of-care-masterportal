@@ -1,11 +1,20 @@
 define([
     "backbone",
+    "backbone.radio",
     "jquery"
-], function (Backbone, $) {
+], function (Backbone, Radio, $) {
 
     var ControlsView = Backbone.View.extend({
         className: "controls-view",
         initialize: function () {
+            var channel = Radio.channel("ControlsView");
+
+            channel.reply({
+                "addRowTR": this.addRowTR,
+                "addRowBR": this.addRowBR,
+                "addRowBL": this.addRowBL
+            }, this);
+
             this.render();
 
             this.$el.on({

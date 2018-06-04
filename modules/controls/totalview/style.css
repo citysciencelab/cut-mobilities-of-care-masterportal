@@ -21,3 +21,14 @@
         display: none;
     }
 }
+
+.total-view-menuelement {
+    display:block;
+    text-align: center;
+    color: #808080;
+    padding-bottom: 5px;
+}
+
+.total-view-menuelement > .icon-home {
+    font-size: 16px;
+}
