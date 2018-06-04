@@ -2,7 +2,6 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         _ = require("underscore"),
-        TableNavView = require("modules/menu/table/layer/singleLayerView"),
         ListTemplate = require("text!modules/menu/table/layer/templates/template.html"),
         SingleLayerView = require("modules/menu/table/layer/singleLayerView"),
         $ = require("jquery"),
@@ -20,6 +19,14 @@ define(function (require) {
             this.listenTo(this.collection, {
                 "updateLightTree": function () {
                     this.render();
+                }
+            });
+            // Aktiviert ausgewälter Layer; Layermenu ist aktiv
+            this.listenTo(this.collection, {
+                "updateSelection": function () {
+                    this.render();
+                    $("#table-nav-layers-panel").collapse("show");
+                    this.$el.addClass("burgerMenuIsActive");
                 }
             });
             // bootstrap collapse event
