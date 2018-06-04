@@ -26,9 +26,15 @@ define([
             this.askForMarkers();
         },
 
-        getExtentFromString: function () {
+        getFeature: function () {
             var format = new ol.format.WKT(),
-                feature = format.readFeature(this.get("wkt")),
+                feature = format.readFeature(this.get("wkt"));
+
+            return feature;
+        },
+
+        getExtentFromString: function () {
+            var feature = this.getFeature(),
                 extent = feature.getGeometry().getExtent();
 
             return extent;
