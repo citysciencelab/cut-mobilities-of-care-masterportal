@@ -9,9 +9,6 @@ define(function (require) {
         className: "gfi gfi-detached gfi-detached-table",
         template: _.template(Template),
 
-        /**
-         * Zeichnet das Template und macht es "draggable"
-         */
         render: function () {
             var attr = this.model.toJSON();
 
@@ -25,11 +22,13 @@ define(function (require) {
                     // $(".gfi").css("top", (ui.position.top - 50) + "px");
                 }
             });
-            this.$el.on("touchmove", function(evt) {
-                var touch = evt.originalEvent.touches[0];
-                var width = $(this). width() /2;
-                var x = touch.clientX - width;
-                var y = touch.clientY;
+
+            this.$el.on("touchmove", function (evt) {
+                var touch = evt.originalEvent.touches[0],
+                    width = $(this).width() / 2,
+                    x = touch.clientX - width,
+                    y = touch.clientY;
+
                 $(this).css({
                     "left": x + "px",
                     "top": y + "px"
@@ -37,9 +36,6 @@ define(function (require) {
             });
         },
 
-        /**
-         * Blendet das Popover ein oder aus
-         */
         toggle: function () {
             if (this.model.getIsVisible() === true) {
                 this.$el.show();

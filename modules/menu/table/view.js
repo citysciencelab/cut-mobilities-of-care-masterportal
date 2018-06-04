@@ -15,12 +15,12 @@ define(function (require) {
         template: _.template(MainTemplate),
         initialize: function () {
             this.render();
-            this.renderLayerList(); 
+            this.renderLayerList();
             this.renderTools();
         },
         toggleActiveElement: function (element) {
             var oldActiveElement = this.getActiveElement();
-            
+
             if (oldActiveElement !== element) {
                 Radio.trigger("TableMenu", oldActiveElement);
                 this.setActiveElement(element);
