@@ -191,7 +191,7 @@ define(function (require) {
                 hitName;
 
             _.each(hits, function (hit) {
-                coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
+                coordinates = $(hit).find("gml\\:posList,posList")[0].textContent.split(" ");
                 hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
                 hitNames.push(hitName);
                 // "Hitlist-Objekte"
@@ -243,14 +243,12 @@ define(function (require) {
             _.each(hits, function (hit) {
                 posList = $(hit).find("gml\\:posList,posList")[0];
                 pos = $(hit).find("gml\\:pos,pos")[0];
-                coordinate = pos ? [parseFloat(pos.textContent.split(" ")[0]), parseFloat(pos.textContent.split(" ")[1])] : "";
-                polygon = posList ? posList.textContent : "";
+                coordinate = posList ? posList.textContent : pos.textContent,
+                coordinateArray = coordinate.split(" ");
                 hitName = $(hit).find("iso19112\\:geographicIdentifier , geographicIdentifier")[0].textContent;
-                // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", { name: hitName,
                     type: "Stadtteil",
-                    coordinate: coordinate,
-                    polygon: polygon,
+                    coordinate: coordinateArray,
                     glyphicon: "glyphicon-map-marker",
                     id: hitName.replace(/ /g, "") + "Stadtteil"
                 });
@@ -369,7 +367,7 @@ define(function (require) {
 
             _.each(hits, function (hit) {
                 if ($(hit).find("gml\\:posList,posList").length > 0 && $(hit).find("dog\\:strassenname, strassenname").length > 0){
-                    coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
+                    coordinates = $(hit).find("gml\\:posList,posList")[0].textContent.split(" ");
                     hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
                     // "Hitlist-Objekte"
                     Radio.trigger("Searchbar", "pushHits", "hitList", {

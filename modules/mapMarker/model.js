@@ -50,7 +50,7 @@ define(function (require) {
             return feature;
         },
 
-        getExtentFromString: function () {
+        getExtent: function () {
             var feature = this.getFeature(),
                 extent = feature.getGeometry().getExtent();
 

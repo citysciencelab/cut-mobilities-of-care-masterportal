@@ -62,7 +62,7 @@ define(function (require) {
                 case "Straße": {
                     this.model.setWkt("POLYGON", coord);
 
-                    Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
+                    Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
                     break;
                 }
                 case "Parcel": {
@@ -80,15 +80,13 @@ define(function (require) {
                     break;
                 }
                 case "Stadtteil": {
-                    hasPolygon = _.has(hit, "polygon");
-
-                    if (hasPolygon) {
-                        this.model.setWkt("POLYGON", hit.polygon);
-                        Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
-                    }
-                    else {
+                    if (coord.length === 2) {
                         this.showMarker(coord);
                         Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                    }
+                    else if (coord.length > 2) {
+                        this.model.setWkt("POLYGON", coord);
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
                     }
                     break;
                 }
@@ -149,8 +147,8 @@ define(function (require) {
                     }
                     else if (coord.length > 4) {
                         this.model.setWkt("POLYGON", coord);
-                        this.model.showFeature();
-                        Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString());
+                        this.model.showFeature(); // bei Flächen soll diese sichtbar sein
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
                     }
 
                     break;
@@ -176,7 +174,7 @@ define(function (require) {
                     coordinates += point[0] + " " + point[1] + " ";
                 });
                 this.model.setWkt("POLYGON", coordinates.trim());
-                Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString());
+                Radio.trigger("Map", "zoomToExtent", this.model.getExtent());
             }
         },
 
