@@ -91,7 +91,7 @@ define([
             });
 
             this.listenTo(Radio.channel("TableMenu"), {
-                "Searchbar": this.hideMenu
+                "hideMenuElementSearchbar": this.hideMenu
             });
 
             this.listenTo(Radio.channel("Searchbar"), {
@@ -100,7 +100,13 @@ define([
             });
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function (parentElementId) {
-                        this.render(parentElementId);
+                    this.render(parentElementId);
+                    if (!_.isUndefined(this.model.getInitSearchString())) {
+                        this.renderRecommendedList();
+                        $("#searchInput").val(this.model.getInitSearchString());
+                        this.model.unset("initSearchString", true);
+                    }
+
                     if (window.innerWidth >= 768) {
                         $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
                     }
@@ -113,7 +119,7 @@ define([
                 }
             });
 
-            this.render();
+            // this.render();
 
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
                 $("#searchInput").val(this.model.get("placeholder"));
@@ -186,7 +192,7 @@ define([
             "click": function () {
                 this.clearSelection();
                 $("#searchInput").focus();
-                Radio.trigger("TableMenu", "elementIsActive", "Searchbar");
+                Radio.request("TableMenu", "setActiveElement", "Searchbar");
             }
         },
         /**
@@ -203,7 +209,6 @@ define([
                 else {
                     $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
                 }
-                this.focusOnEnd($("#searchInput"));
                 if (this.model.get("searchString").length !== 0) {
                     $("#searchInput:focus").css("border-right-width", "0");
                 }
@@ -248,7 +253,6 @@ define([
                 this.hitSelected();
             }
             $("#searchInput + span").show();
-            this.model.unset("initSearchString", true);
         },
         prepareAttrStrings: function (hitlist) {
             // kepps hit.names from overflowing
