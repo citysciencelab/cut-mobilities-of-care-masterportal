@@ -1,11 +1,12 @@
-define([
-    "backbone",
-    "openlayers",
-    "backbone.radio",
-    "config"
-    ], function (Backbone, ol, Radio, Config) {
-    "use strict";
-    var MapHandlerModel = Backbone.Model.extend({
+define(function (require) {
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        Config = require("config"),
+        $ = require("jquery"),
+        MapMarkerModel;
+
+    MapMarkerModel = Backbone.Model.extend({
         defaults: {
             marker: new ol.Overlay({
                 positioning: "bottom-center",
@@ -17,18 +18,19 @@ define([
             zoomLevel: 7
         },
         initialize: function () {
-            Radio.trigger("Map", "addOverlay", this.get("marker"));
             var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
 
+            Radio.trigger("Map", "addOverlay", this.getMarker());
+
             if (_.has(searchConf, "zoomLevel")) {
-                this.set("zoomLevel", searchConf.zoomLevel);
+                this.setZoomLevel(searchConf.zoomLevel);
             }
             this.askForMarkers();
         },
 
         getFeature: function () {
             var format = new ol.format.WKT(),
-                feature = format.readFeature(this.get("wkt"));
+                feature = format.readFeature(this.getWkt());
 
             return feature;
         },
@@ -41,30 +43,32 @@ define([
         },
 
         /**
-        * @description Hilsfunktion zum ermitteln eines Features mit textueller Beschreibung
-        */
+         * Hilsfunktion zum ermitteln eines Features mit textueller Beschreibung
+         * @param  {string} type Geometrietyp
+         * @param  {string} geom Text mit Koordinatenwerten
+         * @return {void}
+         */
         getWKTFromString: function (type, geom) {
-            var wkt;
+            var wkt,
+                split,
+                regExp;
 
             if (type === "POLYGON") {
-                var split = geom.split(" ");
-
+                split = geom.split(" ");
                 wkt = type + "((";
-            _.each(split, function (element, index, list) {
-                if (index % 2 === 0) {
-                    wkt += element + " ";
-                }
-                else if (index === list.length - 1) {
-                    wkt += element + "))";
-                }
-                else {
-                    wkt += element + ", ";
-                }
-            });
+                _.each(split, function (element, index, list) {
+                    if (index % 2 === 0) {
+                        wkt += element + " ";
+                    }
+                    else if (index === list.length - 1) {
+                        wkt += element + "))";
+                    }
+                    else {
+                        wkt += element + ", ";
+                    }
+                });
             }
             else if (type === "POINT") {
-                var wkt;
-
                 wkt = type + "(";
                 wkt += geom[0] + " " + geom[1];
                 wkt += ")";
@@ -72,17 +76,17 @@ define([
             else if (type === "MULTIPOLYGON") {
                 wkt = type + "(((";
                 _.each(geom, function (element, index) {
-                    var split = geom[index].split(" ");
+                    split = geom[index].split(" ");
 
-                    _.each(split, function (element, index, list) {
-                        if (index % 2 === 0) {
-                            wkt += element + " ";
+                    _.each(split, function (coord, index2, list) {
+                        if (index2 % 2 === 0) {
+                            wkt += coord + " ";
                         }
-                        else if (index === list.length - 1) {
-                            wkt += element + "))";
+                        else if (index2 === list.length - 1) {
+                            wkt += coord + "))";
                         }
                         else {
-                            wkt += element + ", ";
+                            wkt += coord + ", ";
                         }
                     });
                     if (index === geom.length - 1) {
@@ -92,28 +96,33 @@ define([
                         wkt += ",((";
                     }
                 });
-                var regExp = new RegExp(", \\)\\?\\(", "g");
-
+                regExp = new RegExp(", \\)\\?\\(", "g");
                 wkt = wkt.replace(regExp, "),(");
             }
-            this.set("wkt", wkt);
+
+            this.setWkt(wkt);
 
             return wkt;
         },
 
         // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der pro Feature-BBox
         askForMarkers: function () {
+            var centers,
+                imglink;
+
             if (_.has(Config, "zoomtofeature")) {
-                var centers = Radio.request("ZoomToFeature", "getCenterList"),
-                    imglink = Config.zoomtofeature.imglink;
+                centers = Radio.request("ZoomToFeature", "getCenterList");
+                imglink = Config.zoomtofeature.imglink;
 
                 _.each(centers, function (center, i) {
-                    var id = "featureMarker" + i;
+                    var id = "featureMarker" + i,
+                        marker,
+                        markers;
 
                     // lokaler Pfad zum IMG-Ordner ist anders
                     $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Radio.request("Util", "getPath", imglink) + "'></div>");
 
-                    var marker = new ol.Overlay({
+                    marker = new ol.Overlay({
                         id: id,
                         offset: [-12, 0],
                         positioning: "bottom-center",
@@ -122,16 +131,52 @@ define([
                     });
 
                     marker.setPosition(center);
-                    var markers = this.get("markers");
-
+                    markers = this.getMarkers();
                     markers.push(marker);
-                    this.set("markers", markers);
+                    this.setMarkers(markers);
                     Radio.trigger("Map", "addOverlay", marker);
                 }, this);
                 Radio.trigger("ZoomToFeature", "zoomtofeatures");
             }
+        },
+
+
+        // getter for zoomLevel
+        getZoomLevel: function () {
+            return this.get("zoomLevel");
+        },
+        // setter for zoomLevel
+        setZoomLevel: function (value) {
+            this.set("zoomLevel", value);
+        },
+
+        // getter for wkt
+        getWkt: function () {
+            return this.get("wkt");
+        },
+        // setter for wkt
+        setWkt: function (value) {
+            this.set("wkt", value);
+        },
+
+        // getter for marker
+        getMarker: function () {
+            return this.get("marker");
+        },
+        // setter for marker
+        setMarker: function (value) {
+            this.set("marker", value);
+        },
+
+        // getter for markers
+        getMarkers: function () {
+            return this.get("markers");
+        },
+        // setter for markers
+        setMarkers: function (value) {
+            this.set("markers", value);
         }
     });
 
-    return MapHandlerModel;
+    return MapMarkerModel;
 });
