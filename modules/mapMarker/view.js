@@ -154,13 +154,19 @@ define(function (require) {
                     break;
                 }
                 default: {
-                    if (hit.coordinate.length === 4) {
-                        Radio.trigger("Map", "zoomToExtent", hit.coordinate);
-                    }
-                    else {
+                    if (hit.coordinate.length === 2) {
                         Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
                         this.showMarker(hit.coordinate);
                     }
+                    else if (hit.coordinate.length === 4) {
+                        Radio.trigger("Map", "zoomToExtent", hit.coordinate);
+                    }
+                    else if (hit.coordinate.length > 4) {
+                        this.model.getWKTFromString("POLYGON", hit.coordinate);
+                        this.showPolyline();
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString());
+                    }
+
                     break;
                 }
             }
@@ -186,6 +192,17 @@ define(function (require) {
                 this.model.getWKTFromString("POLYGON", coordinates.trim());
                 Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString());
             }
+        },
+
+        /**
+         * Erstellt eine Polyline um das WKT-Feature
+         * @return {void}
+         */
+        showPolyline: function () {
+            var feature = this.model.getFeature();
+
+            searchVector.getSource().addFeature(feature);
+            searchVector.setVisible(true);
         },
 
         showMarker: function (coordinate) {
