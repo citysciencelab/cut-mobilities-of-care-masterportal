@@ -1,25 +1,8 @@
 define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        ol = require("openlayers"),
         MapHandlerModel = require("modules/mapMarker/model"),
-        searchVector = new ol.layer.Vector({
-            source: new ol.source.Vector(),
-            alwaysOnTop: true,
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "#08775f",
-                    lineDash: [8],
-                    width: 4
-                }),
-                fill: new ol.style.Fill({
-                    color: "rgba(8, 119, 95, 0.3)"
-                })
-            })
-        }),
         MapMarker;
-
-    Radio.trigger("Map", "addLayerToIndex", [searchVector, Radio.request("Map", "getLayers").getArray().length]);
 
     MapMarker = Backbone.View.extend({
         model: new MapHandlerModel(),
@@ -53,13 +36,16 @@ define(function (require) {
         render: function () {
             this.model.get("marker").setElement(this.$el[0]);
         },
+
         /**
         * @description Entfernt den searchVector
         * @returns {void}
         */
         clearMarker: function () {
-            searchVector.getSource().clear();
+            this.model.hideFeature();
+            this.hideMarker();
         },
+
         /**
         * @description Zoom auf Treffer
         * @param {Object} hit - Treffer der Searchbar
@@ -69,40 +55,41 @@ define(function (require) {
             // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
             var resolutions = Radio.request("MapView", "getResolutions"),
                 index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105),
-                hasPolygon, isMobile;
+                hasPolygon, isMobile,
+                coord = _.isArray(hit.coordinate) ? hit.coordinate : hit.coordinate.split(" ");
 
             this.clearMarker();
             switch (hit.type) {
                 case "Straße": {
-                    this.model.getWKTFromString("POLYGON", hit.coordinate);
+                    this.model.setWkt("POLYGON", coord);
 
                     Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
                     break;
                 }
                 case "Parcel": {
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
-                    this.showMarker(hit.coordinate);
+                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                    this.showMarker(coord);
                     break;
                 }
                 case "Krankenhaus": {
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                     break;
                 }
                 case "Adresse": {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    this.showMarker(coord);
+                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                     break;
                 }
                 case "Stadtteil": {
                     hasPolygon = _.has(hit, "polygon");
 
                     if (hasPolygon) {
-                        this.model.getWKTFromString("POLYGON", hit.polygon);
+                        this.model.setWkt("POLYGON", hit.polygon);
                         Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString(), {maxZoom: index});
                     }
                     else {
-                        this.showMarker(hit.coordinate);
-                        Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                        this.showMarker(coord);
+                        Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                     }
                     break;
                 }
@@ -122,48 +109,48 @@ define(function (require) {
                     break;
                 }
                 case "Olympiastandort": {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    this.showMarker(coord);
+                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                     break;
                 }
                 case "Paralympiastandort": {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
+                    this.showMarker(coord);
+                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                     break;
                 }
                 case "SearchByCoord": {
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
-                    this.showMarker(hit.coordinate);
+                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                    this.showMarker(coord);
                     break;
                 }
                 case "Feature-Lister-Hover": {
-                    this.showMarker(hit.coordinate);
+                    this.showMarker(coord);
                     break;
                 }
                 case "Feature-Lister-Click": {
-                    Radio.trigger("Map", "zoomToExtent", hit.coordinate);
+                    Radio.trigger("Map", "zoomToExtent", coord);
                     break;
                 }
                 case "Schulinfosystem": {
-                    this.showMarker(hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, 6);
+                    this.showMarker(coord);
+                    Radio.trigger("MapView", "setCenter", coord, 6);
                     break;
                 }
                 case "POI": {
-                    Radio.trigger("Map", "zoomToExtent", hit.coordinate, {maxZoom: index});
+                    Radio.trigger("Map", "zoomToExtent", coord, {maxZoom: index});
                     break;
                 }
                 default: {
-                    if (hit.coordinate.length === 2) {
-                        Radio.trigger("MapView", "setCenter", hit.coordinate, this.model.get("zoomLevel"));
-                        this.showMarker(hit.coordinate);
+                    if (coord.length === 2) {
+                        Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                        this.showMarker(coord);
                     }
-                    else if (hit.coordinate.length === 4) {
-                        Radio.trigger("Map", "zoomToExtent", hit.coordinate);
+                    else if (coord.length === 4) {
+                        Radio.trigger("Map", "zoomToExtent", coord);
                     }
-                    else if (hit.coordinate.length > 4) {
-                        this.model.getWKTFromString("POLYGON", hit.coordinate);
-                        this.showPolyline();
+                    else if (coord.length > 4) {
+                        this.model.setWkt("POLYGON", coord);
+                        this.model.showFeature();
                         Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString());
                     }
 
@@ -189,20 +176,9 @@ define(function (require) {
                 _.each(data.features[0].properties.bbox.coordinates[0], function (point) {
                     coordinates += point[0] + " " + point[1] + " ";
                 });
-                this.model.getWKTFromString("POLYGON", coordinates.trim());
+                this.model.setWkt("POLYGON", coordinates.trim());
                 Radio.trigger("Map", "zoomToExtent", this.model.getExtentFromString());
             }
-        },
-
-        /**
-         * Erstellt eine Polyline um das WKT-Feature
-         * @return {void}
-         */
-        showPolyline: function () {
-            var feature = this.model.getFeature();
-
-            searchVector.getSource().addFeature(feature);
-            searchVector.setVisible(true);
         },
 
         showMarker: function (coordinate) {

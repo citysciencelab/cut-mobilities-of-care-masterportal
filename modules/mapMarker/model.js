@@ -12,6 +12,20 @@ define(function (require) {
                 positioning: "bottom-center",
                 stopEvent: false
             }),
+            polygon: new ol.layer.Vector({
+                source: new ol.source.Vector(),
+                alwaysOnTop: true,
+                style: new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: "#08775f",
+                        lineDash: [8],
+                        width: 4
+                    }),
+                    fill: new ol.style.Fill({
+                        color: "rgba(8, 119, 95, 0.3)"
+                    })
+                })
+            }),
             wkt: "",
             markers: [],
             source: new ol.source.Vector(),
@@ -21,6 +35,7 @@ define(function (require) {
             var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
 
             Radio.trigger("Map", "addOverlay", this.getMarker());
+            Radio.trigger("Map", "addLayerToIndex", [this.getPolygon(), Radio.request("Map", "getLayers").getArray().length]);
 
             if (_.has(searchConf, "zoomLevel")) {
                 this.setZoomLevel(searchConf.zoomLevel);
@@ -45,18 +60,17 @@ define(function (require) {
         /**
          * Hilsfunktion zum ermitteln eines Features mit textueller Beschreibung
          * @param  {string} type Geometrietyp
-         * @param  {string} geom Text mit Koordinatenwerten
-         * @return {void}
+         * @param  {number[]} geom Array mit Koordinatenwerten
+         * @return {string} wkt WellKnownText-Geom
          */
-        getWKTFromString: function (type, geom) {
+        getWKTGeom: function (type, geom) {
             var wkt,
                 split,
                 regExp;
 
             if (type === "POLYGON") {
-                split = geom.split(" ");
                 wkt = type + "((";
-                _.each(split, function (element, index, list) {
+                _.each(geom, function (element, index, list) {
                     if (index % 2 === 0) {
                         wkt += element + " ";
                     }
@@ -100,8 +114,6 @@ define(function (require) {
                 wkt = wkt.replace(regExp, "),(");
             }
 
-            this.setWkt(wkt);
-
             return wkt;
         },
 
@@ -140,6 +152,24 @@ define(function (require) {
             }
         },
 
+        /**
+         * Erstellt ein Polygon um das WKT-Feature
+         * @return {void}
+         */
+        showFeature: function () {
+            var feature = this.getFeature();
+
+            this.getPolygon().getSource().addFeature(feature);
+            this.getPolygon().setVisible(true);
+        },
+
+        /**
+         * Löscht das Polygon
+         * @return {void}
+         */
+        hideFeature: function () {
+            this.getPolygon().getSource().clear();
+        },
 
         // getter for zoomLevel
         getZoomLevel: function () {
@@ -155,7 +185,9 @@ define(function (require) {
             return this.get("wkt");
         },
         // setter for wkt
-        setWkt: function (value) {
+        setWkt: function (type, geom) {
+            var value = this.getWKTGeom(type, geom);
+
             this.set("wkt", value);
         },
 
@@ -175,6 +207,15 @@ define(function (require) {
         // setter for markers
         setMarkers: function (value) {
             this.set("markers", value);
+        },
+
+        // getter for polygon
+        getPolygon: function () {
+            return this.get("polygon");
+        },
+        // setter for polygon
+        setPolygon: function (value) {
+            this.set("polygon", value);
         }
     });
 
