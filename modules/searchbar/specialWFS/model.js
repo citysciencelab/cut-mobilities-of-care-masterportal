@@ -144,9 +144,10 @@ define(function (require) {
         extractGeom: function (response) {
             var posList = $(response).find("gml\\:posList, posList")[0],
                 pos = $(response).find("gml\\:pos, pos")[0],
-                coordinate = posList ? this.getMinMax(posList.textContent) : pos.textContent.split(" ");
+                coordinate = posList ? posList.textContent : pos.textContent,
+                coordArray = coordinate.split(" ");
 
-            return coordinate;
+            return coordArray;
         },
 
         /**
@@ -161,29 +162,6 @@ define(function (require) {
                 type: "default",
                 coordinate: coordinate
             });
-        },
-
-        /**
-         * @description Extrahiert den Extent aus einer Array von Koordinaten
-         * @param  {string} textArray mit Koordinatenangaben
-         * @return {Array}  Extent
-         */
-        getMinMax: function (textArray) {
-            var coordinates = textArray.split(" "),
-                coordinatesX = _.filter(coordinates, function (val, index) {
-                    return index % 2 === 0;
-                }),
-                coordinatesY = _.filter(coordinates, function (val, index) {
-                    return index % 2 !== 0;
-                }),
-                minX = _.min(coordinatesX),
-                maxX = _.max(coordinatesX),
-                minY = _.min(coordinatesY),
-                maxY = _.max(coordinatesY);
-
-            return [
-                minX, minY, maxX, maxY
-            ];
         },
 
         /**
