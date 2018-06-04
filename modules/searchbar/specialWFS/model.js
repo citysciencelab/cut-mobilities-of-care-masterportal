@@ -63,11 +63,12 @@ define(function (require) {
         collectHits: function (searchString, masterObject) {
             var simpleSearchString = this.simplifyString(searchString),
                 searchStringRegExp = new RegExp(simpleSearchString),
-                hits,
+                masterObjectHits = [],
+                elementsHits = [],
                 elementName;
 
             _.each(masterObject, function (elements) {
-                hits = _.filter(elements, function (element) {
+                elementsHits = _.filter(elements, function (element) {
                     elementName = this.simplifyString(element.name);
                     _.extend(element, {
                         triggerEvent: {
@@ -77,9 +78,11 @@ define(function (require) {
                     });
                     return elementName.search(searchStringRegExp) !== -1; // Prüft ob der Suchstring ein Teilstring vom Namen ist
                 }, this);
+
+                masterObjectHits.push(elementsHits);
             }, this);
 
-            return hits;
+            return masterObjectHits;
         },
 
         /**
@@ -91,7 +94,6 @@ define(function (require) {
             var wfsMembers = this.getWfsMembers(),
                 minChars = this.getMinChars(),
                 hits;
-
             if (searchString.length < minChars) {
                 return;
             }
