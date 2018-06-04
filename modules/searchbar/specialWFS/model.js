@@ -146,7 +146,8 @@ define(function (require) {
         extractGeom: function (response) {
             var posList = $(response).find("gml\\:posList, posList")[0],
                 pos = $(response).find("gml\\:pos, pos")[0],
-                coordinate = posList ? posList.textContent : pos.textContent;
+                coordinate = posList ? posList.textContent : pos.textContent,
+                coordinateArray = coordinate.split(" ");
 
             return coordinate;
         },

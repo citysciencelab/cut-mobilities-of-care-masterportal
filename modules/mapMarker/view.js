@@ -21,7 +21,6 @@ define(function (require) {
                 "zoomTo": this.zoomTo,
                 "hideMarker": this.hideMarker,
                 "showMarker": this.showMarker,
-                "zoomToBPlan": this.zoomToBPlan,
                 "zoomToBKGSearchResult": this.zoomToBKGSearchResult
             }, this);
 
