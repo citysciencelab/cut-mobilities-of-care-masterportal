@@ -2,15 +2,10 @@ define([
     "backbone",
     "text!modules/menu/table/layer/templates/templateSettings.html",
     "text!modules/menu/table/layer/templates/templateSingleLayer.html",
-    "backbone.radio"
-], function () {
+    "jquery"
+], function (Backbone, TemplateSettings, Template, $) {
 
-    var Backbone = require("backbone"),
-        TemplateSettings = require("text!modules/menu/table/layer/templates/templateSettings.html"),
-        Template = require("text!modules/menu/table/layer/templates/templateSingleLayer.html"),
-        LayerView;
-
-    LayerView = Backbone.View.extend({
+    var LayerView = Backbone.View.extend({
         tagName: "li",
         className: "burgermenu-layer-list list-group-item",
         template: _.template(Template),
