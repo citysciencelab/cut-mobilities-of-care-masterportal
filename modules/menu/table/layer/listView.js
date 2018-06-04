@@ -2,7 +2,6 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         _ = require("underscore"),
-        TableNavView = require("modules/menu/table/layer/singleLayerView"),
         ListTemplate = require("text!modules/menu/table/layer/templates/template.html"),
         SingleLayerView = require("modules/menu/table/layer/singleLayerView"),
         $ = require("jquery"),
@@ -22,7 +21,7 @@ define(function (require) {
                     this.render();
                 }
             });
-            //Aktiviert ausgewälter Layer; Layermenu ist aktiv
+            // Aktiviert ausgewälter Layer; Layermenu ist aktiv
             this.listenTo(this.collection, {
                 "updateSelection": function () {
                     this.render();
