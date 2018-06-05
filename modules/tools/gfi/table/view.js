@@ -10,7 +10,8 @@ define(function (require) {
         template: _.template(Template),
         events: {
             "click .icon-turnarticle": "rotateGFI",
-            "click .glyphicon-remove": "hideGFI"
+            "click .glyphicon-remove": "hideGFI",
+            "touchmove .gfi-header": "moveGFI"
         },
         render: function () {
             var attr = this.model.toJSON();
@@ -25,17 +26,17 @@ define(function (require) {
                     // $(".gfi").css("top", (ui.position.top - 50) + "px");
                 }
             });
+        },
 
-            this.$el.on("touchmove", function (evt) {
-                var touch = evt.originalEvent.touches[0],
-                    width = $(this).width() / 2,
-                    x = touch.clientX - width,
-                    y = touch.clientY;
+        moveGFI: function (evt) {
+            var touch = evt.originalEvent.touches[0],
+                width = this.$el.find(".gfi-header").width() / 2,
+                x = touch.clientX - width,
+                y = touch.clientY;
 
-                $(this).css({
-                    "left": x + "px",
-                    "top": y + "px"
-                });
+            this.$el.css({
+                "left": x + "px",
+                "top": y + "px"
             });
         },
 
