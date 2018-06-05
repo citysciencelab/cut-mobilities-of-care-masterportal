@@ -15,7 +15,8 @@ define(function (require) {
             layer: {},
             isActive: false,
             id: "schulwegrouting",
-            requests: []
+            requestIDs: [],
+            selectedSchoolID: ""
         },
 
         initialize: function () {
@@ -37,7 +38,7 @@ define(function (require) {
                 "deactivatedTool": this.deactivate
             });
             this.listenTo(Radio.channel("WPS"), {
-                "response": this.parseWPSResponse
+                "response": this.handleResponse
             });
             this.listenTo(Radio.channel("Gaz"), {
                 "streetNames": function (streetNameList) {
@@ -80,12 +81,72 @@ define(function (require) {
                     value: "fast"
                 }
             };
-            this.get("requests").push("123456");
-            Radio.trigger("WPS", "request", "1001", "123456", "schulwegrouting.fmw", testData);
+            // this.get("requestIDs").push("123456");
+            // Radio.trigger("WPS", "request", "1001", "123456", "schulwegrouting.fmw", testData);
         },
-        parseWPSResponse: function (requestID, object, status) {
+        handleResponse: function (requestID, response, status) {
+            var parsedData;
+
             if (this.isRoutingRequest(this.get("requests"), requestID)) {
-                console.log(object);
+                parsedData = response.Data.ComplexData.Schulweg.Ergebnis;
+                this.removeId(this.get("requests"), requestID);
+                if (status === 200) {
+                    if (parsedData.ErrorOccured === "yes") {
+                        this.handleWPSError(parsedData);
+                    }
+                    else {
+                        this.handleSuccess(parsedData);
+                    }
+                }
+                else {
+                    // TODO reset view
+                }
+            }
+        },
+        handleWPSError: function (response) {
+            Radio.trigger("Alert", "alert", JSON.stringify(response));
+        },
+        handleSuccess: function (response) {
+            // TODO handle Response
+            console.log(response);
+        },
+        prepareRequest: function () {
+            var schoolID = this.get("selectedSchoolID"),
+                address = this.get("addressListFiltered")[0],
+                requestID = _.uniqueId("schulwegrouting_"),
+                requestObj = {};
+
+            if (!_.isUndefined(address) && schoolID.length > 0) {
+                requestObj = this.setObjectAttribute(requestObj, "Schul-ID", "string", schoolID);
+                requestObj = this.setObjectAttribute(requestObj, "SchuelerStrasse", "string", address.street);
+                requestObj = this.setObjectAttribute(requestObj, "SchuelerHausnr", "integer", parseInt(address.number, 10));
+                requestObj = this.setObjectAttribute(requestObj, "SchuelerZusatz", "string", address.affix);
+                requestObj = this.setObjectAttribute(requestObj, "RouteAusgeben", "boolean", 1);
+                requestObj = this.setObjectAttribute(requestObj, "tm_tag", "string", "fast");
+
+                this.get("requestIDs").push(requestID);
+                this.sendRequest(requestID, requestObj);
+            }
+        },
+        sendRequest: function (requestID, requestObj) {
+            console.log(requestID);
+            console.log(requestObj);
+            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting.fmw", requestObj);
+        },
+        setObjectAttribute: function (object, attrName, dataType, value) {
+            var dataObj = {
+                dataType: dataType,
+                value: value
+            };
+
+            object[attrName] = dataObj;
+            return object;
+        },
+        removeId: function (requests, requestId) {
+            var index = requests.indexOf(requestId);
+
+            if (index > -1) {
+                requests.splice(index, 1);
             }
         },
         isRoutingRequest: function (ownRequests, requestID) {
@@ -274,12 +335,11 @@ define(function (require) {
             this.set("addressListFiltered", value);
         },
 
-        /**
-         * @param {ol.layer} layer -
-         * @returns {void}
-         */
         setLayer: function (layer) {
             this.set("layer", layer);
+        },
+        setSelectedSchoolID: function (value) {
+            this.set("selectedSchoolID", value);
         }
     });
 

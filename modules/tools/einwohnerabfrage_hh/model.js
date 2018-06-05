@@ -33,7 +33,7 @@ define(function (require) {
             }),
             requests: [],
             data: {},
-            receivedData: false,
+            dataReceived: false,
             requesting: false,
             snippetDropdownModel: {},
             values: {

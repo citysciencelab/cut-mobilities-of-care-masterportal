@@ -44,7 +44,7 @@ define(function (require) {
         },
         renderResult: function () {
             this.$el.find(".result").html("");
-            this.$el.find(".result").append(new ResultView({ model: this.model}).render());
+            this.$el.find(".result").append(new ResultView({model: this.model}).render());
         },
         createDrawInteraction: function (evt) {
             this.model.getDrawInteraction().setActive(false);

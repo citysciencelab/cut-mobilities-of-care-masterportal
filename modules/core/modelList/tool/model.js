@@ -33,7 +33,6 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isActive": function (model, value) {
-                    console.log(value);
                     if (value) {
                         this.activateTool();
                         channel.trigger("activatedTool", this.getId(), this.get("deaktivateGFI"));
@@ -70,19 +69,9 @@ define(function (require) {
             }
         },
 
-        /**
-         * Setter für das Attribut "isActive"
-         * @param {boolean} value
-         * @param {Object} [options] - {silent: true} unterbindet das "change-Event"
-         */
         setIsActive: function (value, options) {
             this.set("isActive", value, options);
         },
-
-        /**
-         * Getter für das Attribut "isActive"
-         * @return {boolean}
-         */
         getIsActive: function () {
             return this.get("isActive");
         },
