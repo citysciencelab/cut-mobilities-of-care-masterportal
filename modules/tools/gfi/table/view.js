@@ -1,6 +1,7 @@
 define(function (require) {
 
     var DesktopView = require("modules/tools/gfi/view"),
+        $ = require("jquery"),
         Radio = require("backbone.radio"),
         Template = require("text!modules/tools/gfi/table/template.html"),
         GFIDetachedTableView;
@@ -22,7 +23,7 @@ define(function (require) {
                 handle: ".gfi-header",
                 stop: function (evt, ui) {
                     // helper, so that "left" is never 0. needed for gfi/themes/view.js adjustGfiWindow()
-                    $(".gfi").css("left", (ui.position.left + 1) + "px");
+                    $(".gfi").css("left", ui.position.left + 1 + "px");
                     // $(".gfi").css("top", (ui.position.top - 50) + "px");
                 }
             });

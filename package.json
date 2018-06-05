@@ -21,14 +21,14 @@
     "d3": "4.9.x",
     "jquery": "2.x",
     "jquery-ui": "1.x",
-    "moment": "2.x",
+    "moment": "^2.22.2",
     "openlayers": "4.4.2",
     "proj4": "2.x",
     "requirejs": "2.x",
     "requirejs-text": "2.x",
-    "underscore": "1.x",
+    "underscore": "^1.9.1",
     "underscore.string": "3.3.x",
-    "video.js": "6.x",
+    "video.js": "^6.10.1",
     "videojs-flash": "^2.1.0"
   },
   "devDependencies": {
