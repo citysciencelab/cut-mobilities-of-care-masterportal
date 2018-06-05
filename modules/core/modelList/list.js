@@ -124,8 +124,8 @@ define(function (require) {
         */
         setModelsVisibleByParentId: function (parentId) {
             var itemListByParentId = this.where({parentId: parentId}),
-            // Falls es ein LeafFolder ist --> "Alle auswÃ¤hlen" Template
-            selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
+                // Falls es ein LeafFolder ist --> "Alle auswÃ¤hlen" Template
+                selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
 
             _.each(_.union(selectedLeafFolder, itemListByParentId), function (item) {
                 item.setIsVisibleInTree(true);
@@ -156,7 +156,7 @@ define(function (require) {
         */
         setVisibleByParentIsExpanded: function (parentId) {
             var itemListByParentId = this.where({parentId: parentId}),
-            parent = this.findWhere({id: parentId});
+                parent = this.findWhere({id: parentId});
 
             if (!parent.getIsExpanded()) {
                 this.setAllDescendantsInvisible(parentId);
@@ -208,10 +208,10 @@ define(function (require) {
         */
         setIsSelectedOnParent: function (model) {
             var layers = this.where({parentId: model.getParentId()}),
-            folderModel = this.findWhere({id: model.getParentId()}),
-            allLayersSelected = _.every(layers, function (layer) {
-                return layer.getIsSelected() === true;
-            });
+                folderModel = this.findWhere({id: model.getParentId()}),
+                allLayersSelected = _.every(layers, function (layer) {
+                    return layer.getIsSelected() === true;
+                });
 
             if (allLayersSelected === true) {
                 folderModel.setIsSelected(true);

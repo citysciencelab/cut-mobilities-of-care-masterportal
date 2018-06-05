@@ -126,13 +126,13 @@ define("app", function (require) {
                 }
                 case "filter": {
                     require(["modules/tools/filter/view"], function (FilterView) {
-                        new FilterView({domTarget: sidebarView.$el});
+                        new FilterView();
                     });
                     break;
                 }
                 case "schulwegrouting": {
                     require(["modules/tools/schulwegRouting_hh/view"], function (SchulwegRoutingView) {
-                        new SchulwegRoutingView({domTarget: sidebarView.$el});
+                        new SchulwegRoutingView();
                     });
                     break;
                 }

@@ -26,33 +26,45 @@ define(function (require) {
             },
             "click": "hideHitlist",
             "focusin .address-search": "showHitlist",
+            "click .close": "closeView",
             // Fires after the select's value (schoolNames) has been changed
             "changed.bs.select": "updateSelectedValues"
         },
-        initialize: function (attr) {
-            this.listenTo(this.model, {
-                "change:schoolNames": this.render,
-                "change:streetNameList": this.renderHitlist,
-                "change:addressListFiltered": this.renderHitlist
-            });
-            // Target wird in der app.js übergeben
-            this.domTarget = attr.domTarget;
-
+        initialize: function () {
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
                 features = layerModel.get("layer").getSource().getFeatures();
 
+            if (this.model.getIsActive()) {
+                this.render();
+            }
+            this.listenTo(this.model, {
+                "change:streetNameList": this.renderHitlist,
+                "change:addressListFiltered": this.renderHitlist,
+                "change:isActive": function (model, isActive) {
+                    if (isActive) {
+                        this.render();
+                    }
+                    else {
+                        this.$el.remove();
+                        Radio.trigger("Sidebar", "toggle", false);
+                    }
+                }
+            });
             this.model.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
             this.model.addRouteFeatures(this.model.get("layer").getSource());
             this.model.get("layer").setStyle(this.model.routeStyle);
             this.model.setSchoolNames(this.model.sortSchoolsByName(features));
         },
+
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
             this.initToogle();
             this.initSelectpicker();
-            this.domTarget.append(this.$el);
+            Radio.trigger("Sidebar", "append", "schulwegrouting", this.$el);
+            Radio.trigger("Sidebar", "toggle", true);
+            this.delegateEvents();
         },
 
         initToogle: function () {
@@ -95,9 +107,11 @@ define(function (require) {
             this.$el.find(".address-search").val(evt.target.textContent);
             this.model.searchAddress(evt.target.textContent);
         },
-
+        closeView: function () {
+            this.model.setIsActive(false);
+        },
         updateSelectedValues: function () {
-            console.log(54);
+            // console.log(54);
         }
     });
 

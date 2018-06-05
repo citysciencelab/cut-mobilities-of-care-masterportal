@@ -12,11 +12,13 @@ define(function (require) {
             addressList: [],
             addressListFiltered: [],
             // route layer
-            layer: {}
+            layer: {},
+            isActive: false,
+            id: "schulwegrouting"
         },
 
         initialize: function () {
-            Radio.trigger("Sidebar", "toggle", true);
+            var model;
 
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
@@ -28,7 +30,10 @@ define(function (require) {
                     }
                 }
             });
-
+            this.listenTo(Radio.channel("Tool"), {
+                "activatedTool": this.activate,
+                "deactivatedTool": this.deactivate
+            });
             this.listenTo(Radio.channel("Gaz"), {
                 "streetNames": function (streetNameList) {
                     this.startSearch(streetNameList, this.get("addressList"));
@@ -38,6 +43,22 @@ define(function (require) {
                     this.setFilteredAddressList(this.filterAddressList(this.get("addressList"), this.get("searchRegExp")));
                 }
             });
+            if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
+                // model in modellist gets activated.
+                // And there the "Tool", "activatedTool" is triggered where this model listens to.
+                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
+                model.setIsActive(true);
+            }
+        },
+        activate: function (id) {
+            if (this.get("id") === id) {
+                this.setIsActive(true);
+            }
+        },
+        deactivate: function (id) {
+            if (this.get("id") === id) {
+                this.setIsActive(false);
+            }
         },
 
         /**
@@ -177,6 +198,23 @@ define(function (require) {
 
         setSchoolNames: function (value) {
             this.set("schoolNames", value);
+        },
+
+        // getter for isActive
+        getIsActive: function () {
+            return this.get("isActive");
+        },
+        // setter for isActive
+        setIsActive: function (value) {
+            var model;
+
+            this.set("isActive", value);
+            if (!value) {
+                // tool model aus modellist auf inactive setzen
+                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
+
+                model.setIsActive(false);
+            }
         },
 
         setStreetNameList: function (value) {
