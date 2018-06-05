@@ -113,9 +113,11 @@ define(function (require) {
          * @param  {ol.Feature} feature - the feature which has been changed
          */
         changeFeature: function (feature) {
+            var gfiFeature,
+                gfiTheme;
+
             if (this.get("isVisible")) {
-                var gfiFeature = this.attributes.themeList.models[0].attributes.feature,
-                    gfiTheme;
+                gfiFeature = this.attributes.themeList.models[0].attributes.feature;
 
                 if (gfiFeature === feature) {
                     gfiTheme = this.attributes.themeList.models[0].attributes.gfiTheme;
