@@ -1,9 +1,9 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        d3 = require("d3"),
         ElektroladesaeulenTheme,
-        moment = require("moment");
+        moment = require("moment"),
+        $ = require("jquery");
 
     ElektroladesaeulenTheme = Theme.extend({
 
@@ -31,7 +31,6 @@ define(function (require) {
                 requestURL = allProperties.requestURL,
                 versionURL = allProperties.versionURL,
                 gfiParams = this.get("feature").get("gfiParams"),
-                indicatorDataArray,
                 headTitleObject = this.createGfiHeadingChargingStation(allProperties),
                 tableheadArray = this.createGfiTableHeadingChargingStation(allProperties);
 
@@ -51,15 +50,24 @@ define(function (require) {
          * processes the historical data and the indicators as soon as the gfi is visible
          */
         loadData: function () {
+            var gfiContent,
+                allProperties,
+                dataStreamIds,
+                gfiParams,
+                historicalData,
+                historicalDataClean,
+                lastDay,
+                dataByWeekday;
+
             if (this.get("isVisible") === true) {
-                var gfiContent = this.get("gfiContent"),
-                    allProperties = this.splitProperties(gfiContent.allProperties),
-                    dataStreamIds = allProperties.dataStreamId,
-                    gfiParams = this.get("gfiParams"),
-                    historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams),
-                    historicalDataClean = this.dataCleaning(historicalData),
-                    lastDay = (_.isUndefined(this.get("lastDate"))) ? undefined : moment(this.get("lastDate")).format("YYYY-MM-DD"),
-                    dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay);
+                gfiContent = this.get("gfiContent");
+                allProperties = this.splitProperties(gfiContent.allProperties);
+                dataStreamIds = allProperties.dataStreamId;
+                gfiParams = this.get("gfiParams");
+                historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams);
+                historicalDataClean = this.dataCleaning(historicalData);
+                lastDay = (_.isUndefined(this.get("lastDate"))) ? undefined : moment(this.get("lastDate")).format("YYYY-MM-DD");
+                dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay);
 
                 this.setDataStreamIds(dataStreamIds);
                 this.setWeekday(dataByWeekday);

@@ -14,7 +14,6 @@
             "searchStreets": true,
             "searchHouseNumbers": true,
             "searchDistricts": true,
-            "searchParcels": true,
             "searchStreetKey": true
         },
         "bkg": {
@@ -50,14 +49,6 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          "parcelSearch": {
-            "name": "Flurstückssuche",
-            "glyphicon": "glyphicon-search",
-            "serviceId": "6",
-            "StoredQueryID": "Flurstueck",
-            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
-            "parcelDenominator": false
-          },
           "measure": {
             "name": "Strecke / Fläche messen",
             "glyphicon": "glyphicon-resize-full"

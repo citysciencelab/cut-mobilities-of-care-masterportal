@@ -220,10 +220,10 @@
       "utc" : "+1",
       "gfiTheme" : "elektroladesaeulen",
       "gfiParams" : {
-        "startDate_" : "01.01.2018",
+        "startDate" : "01.01.2018",
         "endDate_" : "28.02.2018",
-        "periodTime" : 3,
-        "periodUnit" : "Monate"
+        "periodTime_" : 3,
+        "periodUnit_" : "Monate"
       },
       "gfiAttributes" : {
          "phenomenonTime" : "Letze Zustandsänderung",
