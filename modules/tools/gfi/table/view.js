@@ -64,10 +64,10 @@ define(function (require) {
         },
 
         rotateGFI: function() {
-             this.model.set("rotateAngle", this.model.get("rotateAngle") - 90);
+            this.model.set("rotateAngle", this.model.get("rotateAngle") - 90);
             if (this.model.get("rotateAngle") === -360) {
-               this.model.set("rotateAngle", 0);
-            }
+                this.model.set("rotateAngle", 0);
+                }
             $(".gfi-detached-table").css({
                     "transform": "rotate(" + this.model.get("rotateAngle") + "deg)",
                     "-webkit-transform-origin": "50% 52%"
