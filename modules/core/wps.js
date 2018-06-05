@@ -19,48 +19,13 @@ define(function (require) {
             dataInputXmlTemplate: "<wps:Input><ows:Identifier></ows:Identifier><wps:Data><wps:LiteralData></wps:LiteralData></wps:Data></wps:Input>"
         },
         initialize: function () {
-            var channel = Radio.channel("WPS"),
-                testData;
+            var channel = Radio.channel("WPS");
 
             this.listenTo(channel, {
-                "request": this.request,
-                "response": this.response
+                "request": this.request
             }, this);
-
-            testData = {
-                "Schul-ID": {
-                    dataType: "string",
-                    value: "5742-0"
-                },
-                SchuelerStrasse: {
-                    dataType: "string",
-                    value: "Neuenfelder Straße"
-                },
-                SchuelerHausnr: {
-                    dataType: "integer",
-                    value: 19
-                },
-                SchuelerZusatz: {
-                    dataType: "string",
-                    value: ""
-                },
-                RouteAusgeben: {
-                    dataType: "boolean",
-                    value: 1
-                },
-                "tm_tag": {
-                    dataType: "string",
-                    value: "fast"
-                }
-            };
-            Radio.trigger("WPS", "request", "1001", "123456", "schulwegrouting.fmw", testData);
         },
 
-        response: function (requestID, obj, status) {
-            console.log(requestID);
-            console.log(obj);
-            console.log(status);
-        },
         /**
          * @desc request to be built and sent to WPS
          * @param {string} wpsID The service id, defined in rest-services.json
@@ -123,9 +88,13 @@ define(function (require) {
          * @returns {object} xml parsed as object
          */
         parseDataString: function (dataString) {
-            var xml = new DOMParser().parseFromString(dataString, "text/xml"),
+            // var xml = new DOMParser().parseFromString(dataString, "text/xml"),
+            //     obj;
+            var xml = $.parseXML(dataString),
+                data = $(xml).find("wps\\:Data")[0].outerHTML,
                 obj;
 
+            xml = new DOMParser().parseFromString(data, "text/xml");
             obj = this.parseXmlToObject(xml);
 
             return obj;
@@ -141,7 +110,7 @@ define(function (require) {
 
             // if  element does not have any children --> leaf
             if (children.length === 0) {
-                obj = $(xml)[0].textContent;
+                obj = _.isUndefined($(xml)[0]) ? undefined : $(xml)[0].textContent;
             }
             else {
                 _.each(children, function (child) {
@@ -196,7 +165,7 @@ define(function (require) {
          * @returns {string} newdataString with added dada
          */
         setXMLElement: function (dataString, closingTagName, value, dataType) {
-            var newDataString = dataString;
+            var newDataString = _.isUndefined(dataString) ? "" : dataString;
 
             if (!_.isUndefined(dataType)) {
                 newDataString = newDataString.toString().replace("<wps:LiteralData>", "<wps:LiteralData dataType='" + dataType + "'>");

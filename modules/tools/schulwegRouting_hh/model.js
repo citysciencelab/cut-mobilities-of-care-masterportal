@@ -14,11 +14,13 @@ define(function (require) {
             // route layer
             layer: {},
             isActive: false,
-            id: "schulwegrouting"
+            id: "schulwegrouting",
+            requests: []
         },
 
         initialize: function () {
-            var model;
+            var model,
+                testData;
 
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
@@ -33,6 +35,9 @@ define(function (require) {
             this.listenTo(Radio.channel("Tool"), {
                 "activatedTool": this.activate,
                 "deactivatedTool": this.deactivate
+            });
+            this.listenTo(Radio.channel("WPS"), {
+                "response": this.parseWPSResponse
             });
             this.listenTo(Radio.channel("Gaz"), {
                 "streetNames": function (streetNameList) {
@@ -49,6 +54,42 @@ define(function (require) {
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
                 model.setIsActive(true);
             }
+            testData = {
+                "Schul-ID": {
+                    dataType: "string",
+                    value: "5742-0"
+                },
+                SchuelerStrasse: {
+                    dataType: "string",
+                    value: "Neuenfelder Straße"
+                },
+                SchuelerHausnr: {
+                    dataType: "integer",
+                    value: 19
+                },
+                SchuelerZusatz: {
+                    dataType: "string",
+                    value: ""
+                },
+                RouteAusgeben: {
+                    dataType: "boolean",
+                    value: 1
+                },
+                "tm_tag": {
+                    dataType: "string",
+                    value: "fast"
+                }
+            };
+            this.get("requests").push("123456");
+            Radio.trigger("WPS", "request", "1001", "123456", "schulwegrouting.fmw", testData);
+        },
+        parseWPSResponse: function (requestID, object, status) {
+            if (this.isRoutingRequest(this.get("requests"), requestID)) {
+                console.log(object);
+            }
+        },
+        isRoutingRequest: function (ownRequests, requestID) {
+            return _.contains(ownRequests, requestID);
         },
         activate: function (id) {
             if (this.get("id") === id) {
