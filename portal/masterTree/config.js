@@ -51,6 +51,7 @@ define(function () {
         quickHelp: true,
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
         scaleLine: true,
+        
         simpleMap: false,
         styleConf: "../node_modules/lgv-config/style_v2.json",
         wfsImgPath: "../node_modules/lgv-config/img",

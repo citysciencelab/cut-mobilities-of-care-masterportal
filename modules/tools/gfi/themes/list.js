@@ -25,6 +25,8 @@ define(function (require) {
         ItGbmThemeView = require("modules/tools/gfi/themes/itgbm/view"),
         FlaecheninfoTheme = require("modules/tools/gfi/themes/flaecheninfo/model"),
         FlaecheninfoThemeView = require("modules/tools/gfi/themes/flaecheninfo/view"),
+        ElektroladesaeulenThemeView = require("modules/tools/gfi/themes/elektroladesaeulen/view"),
+        ElektroladesaeulenTheme = require("modules/tools/gfi/themes/elektroladesaeulen/model"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -62,11 +64,25 @@ define(function (require) {
             else if (attrs.gfiTheme === "flaecheninfo") {
                 return new FlaecheninfoTheme(attrs, options);
             }
+            else if (attrs.gfiTheme === "elektroladesaeulen") {
+                return new ElektroladesaeulenTheme(attrs, options);
+            }
             else {
                 return new DefaultTheme(attrs, options);
             }
         },
         initialize: function () {
+            var channel = Radio.channel("gfiList");
+
+            // get new feature data
+            this.listenTo(channel, {
+                redraw: function () {
+                    this.forEach(function (model) {
+                        model.requestFeatureInfos();
+                    });
+                }
+            }),
+
             this.listenTo(this, {
                 "reset": function () {
                     this.forEach(function (model) {
@@ -134,6 +150,10 @@ define(function (require) {
                 }
                 case "flaecheninfo": {
                     new FlaecheninfoThemeView({model: model});
+                    break;
+                }
+                case "elektroladesaeulen": {
+                    new ElektroladesaeulenThemeView({model: model});
                     break;
                 }
                 default: {

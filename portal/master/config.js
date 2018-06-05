@@ -67,9 +67,10 @@ define(function () {
         },
         quickHelp: true,
         portalConf: "../../portal/master/",
-        layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
-        restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
+        layerConf: "../node_modules/lgv-config/services-internet.json",
+        restConf: "../node_modules/lgv-config/rest-services-internet.json",
         styleConf: "../node_modules/lgv-config/style_v2.json",
+
         proxyURL: "/cgi-bin/proxy.cgi",
         attributions: true,
         scaleLine: true,

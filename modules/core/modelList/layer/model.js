@@ -36,6 +36,7 @@ define(function (require) {
                         this.createClusterLayerSource();
                     }
                     this.createLayer();
+
                 },
                 "change:layer": function () {
                     this.updateLayerTransparency();

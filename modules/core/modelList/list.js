@@ -5,6 +5,8 @@ define(function (require) {
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
+        SensorLayer = require("modules/core/modelList/layer/sensor"),
+        HeatmapLayer = require("modules/core/modelList/layer/heatmap"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
@@ -90,6 +92,12 @@ define(function (require) {
                 }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
+                }
+                else if (attrs.typ === "Sensor") {
+                    return new SensorLayer(attrs, options);
+                }
+                else if (attrs.typ === "Heatmap") {
+                    return new HeatmapLayer(attrs, options);
                 }
             }
             else if (attrs.type === "folder") {

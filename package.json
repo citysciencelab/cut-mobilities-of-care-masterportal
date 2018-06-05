@@ -8,7 +8,7 @@
     "url": "https://bitbucket.org/lgv-g12/lgv.git"
   },
   "scripts": {
-    "test": "mocha test/end2end/TestRunner.js"
+    "installBrowserMqtt": "cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js"
   },
   "dependencies": {
     "backbone": "1.x",
@@ -18,10 +18,12 @@
     "bootstrap-select": "1.12.x",
     "bootstrap-slider": "9.x",
     "bootstrap-toggle": "2.x.x",
+    "browserify": "15.2.0",
     "d3": "4.9.x",
     "jquery": "2.x",
     "jquery-ui": "1.x",
     "moment": "2.x",
+    "mqtt": "^2.15.x",
     "openlayers": "4.4.2",
     "proj4": "2.x",
     "requirejs": "2.x",
@@ -38,7 +40,7 @@
     "eslint": "^4.14.0",
     "fs": "0.0.1-security",
     "glob": "4.2.1",
-    "grunt": "^0.4.5",
+    "grunt": "^1.0.1",
     "grunt-changelog": "^0.3.2",
     "grunt-connect-proxy": "^0.2.0",
     "grunt-contrib-clean": "^0.6.0",
@@ -53,7 +55,7 @@
     "grunt-jsdoc": "^1.0.0",
     "jaguarjs-jsdoc": "0.0.1",
     "jit-grunt": "^0.9.0",
-    "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config.git",
+    "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config-public.git",
     "mocha": "3.5.0",
     "selenium-webdriver": "^3.5.0",
     "time-grunt": "1.0.0"

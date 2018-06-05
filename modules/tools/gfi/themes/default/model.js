@@ -10,10 +10,18 @@ define(function (require) {
     DefaultTheme = Theme.extend({
 
         initialize: function () {
+            var channel = Radio.channel("defaultTheme");
+
             this.listenTo(this, {
                 "change:isReady": function () {
                     this.replaceValuesWithChildObjects();
                     this.checkRoutable();
+                }
+            });
+
+            this.listenTo(channel, {
+                "changeGfi": function () {
+                    Radio.trigger("gfiView", "render");
                 }
             });
         },
@@ -55,7 +63,7 @@ define(function (require) {
                                 copyright = element[index]["copyright"];
                                 element[index]["copyright"] = "#";
                             }
-                            
+
                             var imgView = new ImgView(val, copyright);
 
                             element[index][key] = "#";
