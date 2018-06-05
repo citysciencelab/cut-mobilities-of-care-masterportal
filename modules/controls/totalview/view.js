@@ -5,12 +5,12 @@ define(function (require) {
         TotalView;
 
     TotalView = Backbone.View.extend({
-        template: _.template("<div class='total-view-button'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
-        tabletemplate: _.template("<div class='total-view-menuelement'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>"),
+        template: _.template("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
+        tabletemplate: _.template("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>"),
         model: new Model(),
         id: "totalview",
         events: {
-            "click": "setTotalView"
+            "click div#start-totalview": "setTotalView"
         },
         initialize: function () {
             var style = Radio.request("Util", "getUiStyle"),
