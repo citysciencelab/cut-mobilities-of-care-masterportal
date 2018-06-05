@@ -66,6 +66,7 @@ define(function (require) {
     "modules/core/testWPS.js",
     "modules/alerting/testModel.js",
     "modules/tools/einwohnerabfrage/testModel.js",
+    "modules/tools/schulwegrouting_hh/testModel.js",
     "modules/tools/parcelSearch/testModel.js"
     ], function () {
         Radio = Backbone.Radio;

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<div class="header">
+    <span class="glyphicon glyphicon-road"></span>
+    <span class="tool-name">Schulweg-Routing</span>
+    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+<div class="content">
+    <div class="form-group col-xs-12 test">
+        <div class="input-group" style="width: 100%">
+            <input type="text" class="form-control address-search" placeholder="Startadresse">
+            <!-- <div class="input-group-btn">
+                <button type="button" class="btn btn-default" title="mein Standort">
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                </button>
+            </div> -->
+        </div>
+        <div class="row">
+            <ul class="list-group hit-list col-xs-12">
+            </ul>
+        </div>
+    </div>
+    <div class="form-group col-xs-12">
+        <label>Regional zuständige Grundschule als Ziel auswählen</label>
+        <input id="regional-school" type="checkbox">
+    </div>
+    <div class="form-group col-xs-12">
+        <select class="selectpicker" title="Schule auswählen" data-live-search="true">
+            <% schoolNames.forEach(function (school) { %>
+                <option><%= school.get("schulname") %></option>
+            <% }); %>
+         </select>
+    </div>
+    <div class="form-group col-xs-12">
+        <button type="button" class="btn btn-default btn-sm pull-right">
+            Route löschen
+        </button>
+    </div>
+</div>

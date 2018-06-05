@@ -23,7 +23,9 @@ define(function (require) {
             // true wenn das Tool aktiviert ist
             isActive: false,
             // deaktiviert GFI, wenn dieses tool geöffnet wird
-            deaktivateGFI: true
+            deaktivateGFI: true,
+            // Tools die in die Sidebar und nicht in das Fenster sollen
+            toolsToRenderInSidebar: ["filter", "schulwegrouting"]
         },
 
         initialize: function () {
@@ -31,9 +33,16 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isActive": function (model, value) {
+                    console.log(value);
                     if (value) {
                         this.activateTool();
                         channel.trigger("activatedTool", this.getId(), this.get("deaktivateGFI"));
+                    }
+                    else {
+                        channel.trigger("deactivatedTool", this.getId(), this.get("deaktivateGFI"));
+                    }
+                    if (_.contains(this.get("toolsToRenderInSidebar"), this.getId())) {
+                        channel.trigger("activatedTool", "gfi", false);
                     }
                 }
             });
@@ -51,8 +60,9 @@ define(function (require) {
                 else if (this.getId() === "featureLister") {
                     Radio.trigger("FeatureListerView", "toggle");
                 }
-                else if (this.getId() === "filter") {
+                else if (_.contains(this.get("toolsToRenderInSidebar"), this.getId())) {
                     Radio.trigger("Sidebar", "toggle", true);
+                    Radio.trigger("Window", "closeWin", false);
                 }
                 else {
                     Radio.trigger("Window", "toggleWin", this);

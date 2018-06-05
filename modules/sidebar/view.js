@@ -1,6 +1,7 @@
 define(function (require) {
 
     var SidebarModel = require("modules/sidebar/model"),
+        $ = require("jquery"),
         SidebarView;
 
     SidebarView = Backbone.View.extend({
@@ -9,23 +10,24 @@ define(function (require) {
             if (this.model.get("isMobile")) {
                 return "sidebar-mobile";
             }
-            else {
-                return "sidebar";
-            }
+            return "sidebar";
         },
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isVisible": this.toggle,
-                "change:isMobile": this.toggleCssClass
+                "change:isMobile": this.toggleCssClass,
+                "render": this.render
             });
         },
 
         render: function () {
+            this.$el.html("");
             $("#map").after(this.$el);
             if (!this.model.get("isMobile")) {
                 this.$el.css("height", $("#map").height());
                 $("#map").css("width", "70%");
                 Radio.trigger("Map", "updateSize");
+                this.$el.append(this.model.getRenderElement());
                 this.removeBackdrop();
             }
             else {
