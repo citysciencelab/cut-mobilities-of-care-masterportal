@@ -12,6 +12,7 @@
 
 .schulweg-routing .content {
     padding-top: 20px;
+    position: absolute;
 }
 
 .schulweg-routing .content .form-group {
@@ -32,7 +33,7 @@
 }
 
 .schulweg-routing .hit-list {
-    position: absolute;
+    /* position: absolute; */
     z-index: 3;
     padding-left: 15px;
 }

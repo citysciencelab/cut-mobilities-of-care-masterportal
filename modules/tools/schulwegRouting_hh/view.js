@@ -14,22 +14,32 @@ define(function (require) {
         templateHitlist: _.template(templateHitlist),
         events: {
             "keyup .address-search": "searchAddress",
-            "focusout .address-search": "hideHitlist",
+            "click li.street": function (evt) {
+                this.setAddressSearchValue(evt);
+                this.$el.find(".address-search").focus();
+                evt.stopPropagation();
+            },
+            "click li.address": "setAddressSearchValue",
+            "click .address-search": function (evt) {
+                // stop event bubbling
+                evt.stopPropagation();
+            },
+            "click": "hideHitlist",
             "focusin .address-search": "showHitlist",
-            // This event fires after the select's value has been changed
-            "changed.bs.select": "updateSelectedValues",
-            "click .close": "closeView"
+            "click .close": "closeView",
+            // Fires after the select's value (schoolNames) has been changed
+            "changed.bs.select": "updateSelectedValues"
         },
         initialize: function () {
-            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"});
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
+                features = layerModel.get("layer").getSource().getFeatures();
 
             if (this.model.getIsActive()) {
                 this.render();
             }
             this.listenTo(this.model, {
-                // "change:schoolNames": this.render,
-                "change:streetNames": this.renderHitlist,
-                "change:houseNumbers": this.renderHitlist,
+                "change:streetNameList": this.renderHitlist,
+                "change:addressListFiltered": this.renderHitlist,
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
                         this.render();
@@ -40,8 +50,12 @@ define(function (require) {
                     }
                 }
             });
-            this.model.sortSchoolsByName("8712", layerModel.get("layer").getSource().getFeatures());
+            this.model.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
+            this.model.addRouteFeatures(this.model.get("layer").getSource());
+            this.model.get("layer").setStyle(this.model.routeStyle);
+            this.model.setSchoolNames(this.model.sortSchoolsByName(features));
         },
+
         render: function () {
             var attr = this.model.toJSON();
 
@@ -72,8 +86,7 @@ define(function (require) {
         renderHitlist: function () {
             var attr = this.model.toJSON();
 
-            this.$el.find(".hit-list").empty();
-            this.$el.find(".input-group").after(this.templateHitlist(attr));
+            this.$el.find(".hit-list").html(this.templateHitlist(attr));
         },
 
         hideHitlist: function () {
@@ -86,18 +99,19 @@ define(function (require) {
 
         searchAddress: function (evt) {
             if (evt.target.value.length > 2) {
-                Radio.trigger("Gaz", "findStreets", evt.target.value);
+                this.model.searchAddress(evt.target.value);
             }
-            // if (this.model.get("streetNames").length === 1) {
-                // dann suche in housenumbers
-                // oder siehe searchInHouseNumbers in gaz
-            // }
+        },
+
+        setAddressSearchValue: function (evt) {
+            this.$el.find(".address-search").val(evt.target.textContent);
+            this.model.searchAddress(evt.target.textContent);
         },
         closeView: function () {
             this.model.setIsActive(false);
         },
         updateSelectedValues: function () {
-            console.log(54);
+            // console.log(54);
         }
     });
 
