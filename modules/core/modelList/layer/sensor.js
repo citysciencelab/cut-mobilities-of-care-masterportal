@@ -18,7 +18,6 @@ define(function (require) {
         ),
         initialize: function () {
             this.superInitialize();
-            var channel = Radio.channel("SensorLayer");
 
             // change language from moment.js to german
             moment.locale("de");
