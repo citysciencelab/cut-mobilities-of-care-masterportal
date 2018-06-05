@@ -88,6 +88,7 @@ define(function (require) {
 
             xhr.open("POST", url);
             xhr.timeout = 10000;
+
             xhr.onload = function (event) {
                 context.handleResponse(event.currentTarget.responseText, requestID, xhr.status);
             };
@@ -195,14 +196,14 @@ define(function (require) {
          * @returns {string} newdataString with added dada
          */
         setXMLElement: function (dataString, closingTagName, value, dataType) {
-            var newDataString = "";
+            var newDataString = dataString;
 
             if (!_.isUndefined(dataType)) {
-                dataString = dataString.toString().replace("<wps:LiteralData>", "<wps:LiteralData dataType='" + dataType + "'>");
+                newDataString = newDataString.toString().replace("<wps:LiteralData>", "<wps:LiteralData dataType='" + dataType + "'>");
             }
 
             if (_.isUndefined(dataString) === false && _.isUndefined(closingTagName) === false && _.isUndefined(value) === false) {
-                newDataString = dataString.toString().replace(closingTagName.toString(), value.toString() + closingTagName.toString());
+                newDataString = newDataString.toString().replace(closingTagName.toString(), value.toString() + closingTagName.toString());
             }
             return newDataString;
         },
@@ -214,7 +215,7 @@ define(function (require) {
          */
         buildUrl: function (identifier, restModel) {
             var url = "",
-                version = (_.isUndefined(restModel) === false && _.isUndefined(restModel.get("version")) === false) ? restModel.get("version") : "1.1.0";
+                version = _.isUndefined(restModel) === false && _.isUndefined(restModel.get("version")) === false ? restModel.get("version") : "1.1.0";
 
             if (identifier && restModel && restModel.get("url")) {
                 url = restModel.get("url") + "?service=WPS&version=" + version + "&request=execute&identifier=" + identifier;
