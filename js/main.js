@@ -8,7 +8,7 @@ require.config({
         "backbone.radio": "../node_modules/backbone.radio/build/backbone.radio.min",
         bootstrap: "../node_modules/bootstrap/js",
         "bootstrap-select": "../node_modules/bootstrap-select/dist/js/bootstrap-select.min",
-        "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.min",
+        "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.mi<n",
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
         config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
         d3: "../node_modules/d3/build/d3.min",
