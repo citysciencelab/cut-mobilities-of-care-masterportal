@@ -1,6 +1,7 @@
 define(function (require) {
 
     var SidebarModel = require("modules/sidebar/model"),
+        $ = require("jquery"),
         SidebarView;
 
     SidebarView = Backbone.View.extend({
@@ -9,9 +10,7 @@ define(function (require) {
             if (this.model.get("isMobile")) {
                 return "sidebar-mobile";
             }
-            else {
-                return "sidebar";
-            }
+            return "sidebar";
         },
         initialize: function () {
             this.listenTo(this.model, {
