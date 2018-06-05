@@ -142,7 +142,7 @@ define(function (require) {
          */
         drawPoints: function (sensorData) {
             var features = [],
-            epsg = epsg = this.get("epsg");
+                epsg = this.get("epsg");
 
             _.each(sensorData, function (thisSensorData, index) {
                 var xyTransfrom = ol.proj.transform(thisSensorData.location, epsg, Config.view.epsg),
@@ -527,7 +527,7 @@ define(function (require) {
 
             client.on("connect", function () {
                 _.each(dataStreamIds, function (id) {
-                     client.subscribe("v1.0/Datastreams(" + id + ")/Observations");
+                    client.subscribe("v1.0/Datastreams(" + id + ")/Observations");
                 });
             });
 
