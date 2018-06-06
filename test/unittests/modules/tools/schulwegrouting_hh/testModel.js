@@ -81,13 +81,13 @@ define(function (require) {
         });
 
         describe("filterSchoolById", function () {
-            it("should have a school with the id 'APP_STAATLICHE_SCHULEN_172968'", function () {
-                var schoolFeature = model.filterSchoolById(schoolFeatures, "APP_STAATLICHE_SCHULEN_172968");
+            it("should have a school with the id '5928-0'", function () {
+                var schoolFeature = model.filterSchoolById(schoolFeatures, "5928-0");
 
-                expect(schoolFeature.getId()).to.equal("APP_STAATLICHE_SCHULEN_172968");
+                expect(schoolFeature.get("schul_id")).to.equal("5928-0");
             });
-            it("should be undefined for a school with the id 'AP_STTCHE_SHLEN_268'", function () {
-                var schoolFeature = model.filterSchoolById(schoolFeatures, "AP_STTCHE_SHLEN_268");
+            it("should be undefined for a school with the id '5928-'", function () {
+                var schoolFeature = model.filterSchoolById(schoolFeatures, "5928-");
 
                 expect(schoolFeature).to.be.undefined;
             });

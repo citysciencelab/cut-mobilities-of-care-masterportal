@@ -164,7 +164,7 @@ define(function (require) {
          */
         filterSchoolById: function (schoolList, schoolId) {
             return _.find(schoolList, function (school) {
-                return school.getId() === schoolId;
+                return school.get("schul_id") === schoolId;
             });
         },
 

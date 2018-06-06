@@ -109,7 +109,10 @@ define(function (require) {
             this.model.setIsActive(false);
         },
         selectSchool: function (evt) {
-            this.model.selectSchool(this.model.get("schoolList"), evt.target.value);
+            var value = evt.target.value;
+
+            this.model.selectSchool(this.model.get("schoolList"), value);
+            this.model.setSelectedSchoolID(value);
             this.model.prepareRequest();
         }
     });
