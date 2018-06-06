@@ -11,6 +11,7 @@
 }
 
 .schulweg-routing .content {
+    max-width: 30%;
     padding-top: 20px;
     position: absolute;
 }

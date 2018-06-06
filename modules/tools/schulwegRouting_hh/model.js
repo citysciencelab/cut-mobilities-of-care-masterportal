@@ -5,8 +5,8 @@ define(function (require) {
     SchulwegRouting = Backbone.Model.extend({
 
         defaults: {
-            // names of all schools
-            schoolNames: [],
+            // ol-features of all schools
+            schoolList: [],
             // names of streets found
             streetNameList: [],
             addressList: [],
@@ -20,18 +20,17 @@ define(function (require) {
         },
 
         initialize: function () {
-            var model;
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
+                model;
 
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
                     if (layerId === "8712") {
-                        this.setSchoolNames(this.sortSchoolsByName(features));
-                        this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
-                        this.addRouteFeatures(this.get("layer").getSource());
-                        this.get("layer").setStyle(this.routeStyle);
+                        this.setSchoolList(this.sortSchoolsByName(features));
                     }
                 }
             });
+
             this.listenTo(Radio.channel("Tool"), {
                 "activatedTool": this.activate,
                 "deactivatedTool": this.deactivate
@@ -53,6 +52,13 @@ define(function (require) {
                 // And there the "Tool", "activatedTool" is triggered where this model listens to.
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
                 model.setIsActive(true);
+            }
+
+            this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
+            this.addRouteFeatures(this.get("layer").getSource());
+            this.get("layer").setStyle(this.routeStyle);
+            if (!_.isUndefined(layerModel)) {
+                this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
             }
         },
         handleResponse: function (requestID, response, status) {
@@ -151,6 +157,18 @@ define(function (require) {
         },
 
         /**
+         * filters the schools by id. returns the first hit
+         * @param {ol.feature[]} schoolList - features of all schools
+         * @param {string} schoolId - id of the school feature
+         * @returns {ol.feature} -
+         */
+        filterSchoolById: function (schoolList, schoolId) {
+            return _.find(schoolList, function (school) {
+                return school.getId() === schoolId;
+            });
+        },
+
+        /**
          * performs the address search depending on the individual cases
          * @param {string[]} streetNameList - response from Gazetteer
          * @param {object[]} addressList - list of addresses
@@ -197,6 +215,9 @@ define(function (require) {
          */
         prepareAddressList: function (addressList, streetNameList) {
             addressList.forEach(function (address) {
+                var coords = address.position.split(" ");
+
+                address.position = [parseInt(coords[0], 10), parseInt(coords[1], 10)];
                 address.street = streetNameList[0];
                 address.joinAddress = address.street.replace(/ /g, "") + address.number + address.affix;
             }, this);
@@ -217,6 +238,20 @@ define(function (require) {
         },
 
         /**
+         * finds the selected school and sets the route endpoint
+         * @param {ol.feature[]} schoolList - features of all schools
+         * @param {string} schoolId - id of the school feature
+         * @returns {void}
+         */
+        selectSchool: function (schoolList, schoolId) {
+            var school = this.filterSchoolById(schoolList, schoolId),
+                coordinates = school.getGeometry().getCoordinates();
+
+            coordinates.pop();
+            this.setRoutePositionById("endPoint", this.get("layer").getSource(), coordinates);
+        },
+
+        /**
          * add features with an id to the route layer
          * @param {ol.source} source - vector source of the route layer
          * @returns {void}
@@ -234,14 +269,14 @@ define(function (require) {
          * sets the position for the route features
          * @param {string} featureId - id of the feature (startPoint | endPoint)
          * @param {ol.source} source - vector source of the route layer
-         * @param {string} position - postion of the feature
+         * @param {string} coordinates - postion of the feature
          * @returns {void}
          */
-        setRoutePositionById: function (featureId, source, position) {
-            var coords = position.split(" "),
-                geom = new ol.geom.Point([parseInt(coords[0], 10), parseInt(coords[1], 10)]);
+        setRoutePositionById: function (featureId, source, coordinates) {
+            var geom = new ol.geom.Point(coordinates);
 
             source.getFeatureById(featureId).setGeometry(geom);
+            Radio.trigger("MapView", "setCenter", coordinates);
         },
 
         /**
@@ -274,8 +309,8 @@ define(function (require) {
             return null;
         },
 
-        setSchoolNames: function (value) {
-            this.set("schoolNames", value);
+        setSchoolList: function (value) {
+            this.set("schoolList", value);
         },
 
         // getter for isActive

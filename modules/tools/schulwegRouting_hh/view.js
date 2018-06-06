@@ -28,13 +28,10 @@ define(function (require) {
             "click": "hideHitlist",
             "focusin .address-search": "showHitlist",
             "click .close": "closeView",
-            // Fires after the select's value (schoolNames) has been changed
-            "changed.bs.select": "updateSelectedValues"
+            // Fires after the select's value (schoolList) has been changed
+            "changed.bs.select": "selectSchool"
         },
         initialize: function () {
-            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
-                features = layerModel.get("layer").getSource().getFeatures();
-
             if (this.model.getIsActive()) {
                 this.render();
             }
@@ -51,10 +48,6 @@ define(function (require) {
                     }
                 }
             });
-            this.model.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
-            this.model.addRouteFeatures(this.model.get("layer").getSource());
-            this.model.get("layer").setStyle(this.model.routeStyle);
-            this.model.setSchoolNames(this.model.sortSchoolsByName(features));
         },
 
         render: function () {
@@ -115,11 +108,8 @@ define(function (require) {
         closeView: function () {
             this.model.setIsActive(false);
         },
-        updateSelectedValues: function (evt) {
-            var target = evt.currentTarget,
-                value = $(target).find("option:selected").val();
-
-            this.model.setSelectedSchoolID(value);
+        selectSchool: function (evt) {
+            this.model.selectSchool(this.model.get("schoolList"), evt.target.value);
             this.model.prepareRequest();
         }
     });
