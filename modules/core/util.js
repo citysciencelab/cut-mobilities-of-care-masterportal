@@ -1,10 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "require"
-], function (Backbone, Radio, Require) {
+define(function (require) {
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        Require = require("require"),
+        $ = require("jquery"),
+        Util;
 
-    var Util = Backbone.Model.extend({
+    Util = Backbone.Model.extend({
         defaults: {
             // isViewMobile: false,
             config: "",
@@ -24,8 +25,9 @@ define([
                 "isChrome": this.isChrome,
                 "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny,
-                "getConfig" : this.getConfig,
-                "getIgnoredKeys" : this.getIgnoredKeys
+                "getConfig": this.getConfig,
+                "getIgnoredKeys": this.getIgnoredKeys,
+                "punctuate": this.punctuate
             }, this);
 
             channel.on({
@@ -46,6 +48,24 @@ define([
             $(window).on("resize", _.bind(this.updateMapHeight, this));
 
             this.parseConfigFromURL();
+        },
+        /**
+         * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
+         * @param  {[type]} value - feature attribute values
+         * @returns {string} punctuated value
+         */
+        punctuate: function (value) {
+            var pattern = /(-?\d+)(\d{3})/,
+                stringValue = value.toString(),
+                predecimals = stringValue;
+
+            if (stringValue.indexOf(".") !== -1) {
+                predecimals = stringValue.split(".")[0];
+            }
+            while (pattern.test(predecimals)) {
+                predecimals = predecimals.replace(pattern, "$1.$2");
+            }
+            return predecimals;
         },
         updateMapHeight: function () {
             var navHeight = $("#main-nav").is(":visible") ? $("#main-nav").height() : 0,
@@ -70,29 +90,29 @@ define([
             return navigator.userAgent.match(/IEMobile/i);
         },
         isChrome: function () {
+            var isChrome = false;
+
             if (/Chrome/i.test(navigator.userAgent)) {
-                return true;
+                isChrome = true;
             }
-            else {
-                return false;
-            }
+            return isChrome;
         },
         isAny: function () {
             return (this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows());
         },
         isInternetExplorer: function () {
+            var ie = false;
+
             if (/MSIE 9/i.test(navigator.userAgent)) {
-                return "IE9";
+                ie = "IE9";
             }
             else if (/MSIE 10/i.test(navigator.userAgent)) {
-                return "IE10";
+                ie = "IE10";
             }
             else if (/rv:11.0/i.test(navigator.userAgent)) {
-                return "IE11";
+                ie = "IE11";
             }
-            else {
-                return false;
-            }
+            return ie;
         },
         getPath: function (path) {
             var baseUrl = Require.toUrl("").split("?")[0];
@@ -116,12 +136,12 @@ define([
         hideLoader: function () {
             $("#loader").hide();
         },
-       getProxyURL: function (url) {
+        getProxyURL: function (url) {
             var parser = document.createElement("a"),
-            protocol = "",
-            result = "",
-            hostname = "",
-            port = "";
+                protocol = "",
+                result = "",
+                hostname = "",
+                port = "";
 
             parser.href = url;
             protocol = parser.protocol;
@@ -143,25 +163,14 @@ define([
             return result;
         },
 
-        /**
-         * Setter für Attribut isViewMobile
-         * @param {boolean} value
-         */
         setIsViewMobile: function (value) {
             this.set("isViewMobile", value);
         },
 
-        /**
-         * Getter für Attribut isViewMobile
-         * @return {boolean}
-         */
         getIsViewMobile: function () {
             return this.get("isViewMobile");
         },
 
-        /**
-         * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
-         */
         toggleIsViewMobile: function () {
             if (window.innerWidth >= 768) {
                 this.setIsViewMobile(false);

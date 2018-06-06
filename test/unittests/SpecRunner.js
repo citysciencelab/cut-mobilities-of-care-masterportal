@@ -64,6 +64,7 @@ define(function (require) {
         "modules/tools/getCoord/testModel.js",
         "modules/core/testCRS.js",
         "modules/core/testWPS.js",
+        "modules/core/testUtil.js",
         "modules/alerting/testModel.js",
         "modules/tools/einwohnerabfrage/testModel.js",
         "modules/tools/schulwegrouting_hh/testModel.js",

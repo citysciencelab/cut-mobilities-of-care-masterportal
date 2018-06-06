@@ -1,6 +1,7 @@
 define(function (require) {
     var template = require("text!modules/tools/schulwegRouting_hh/template.html"),
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
+        templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
         Model = require("modules/tools/schulwegRouting_hh/model"),
         SchulwegRoutingView;
 
@@ -12,6 +13,7 @@ define(function (require) {
         className: "schulweg-routing",
         template: _.template(template),
         templateHitlist: _.template(templateHitlist),
+        templateRouteResult: _.template(templateRouteResult),
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
@@ -21,7 +23,7 @@ define(function (require) {
             },
             "click li.address": function (evt) {
                 this.setAddressSearchValue(evt);
-                this.model.setStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
+                this.model.selectStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
             },
             "click .address-search": function (evt) {
                 // stop event bubbling
@@ -38,6 +40,7 @@ define(function (require) {
                 this.render();
             }
             this.listenTo(this.model, {
+                "change:routeResult": this.renderRouteResult,
                 "change:streetNameList": this.renderHitlist,
                 "change:addressListFiltered": this.renderHitlist,
                 "change:isActive": function (model, isActive) {
@@ -83,6 +86,12 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.find(".hit-list").html(this.templateHitlist(attr));
+        },
+
+        renderRouteResult: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.find(".route-result").html(this.templateRouteResult(attr));
         },
 
         hideHitlist: function () {

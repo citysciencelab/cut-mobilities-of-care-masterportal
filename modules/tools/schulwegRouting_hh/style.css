@@ -47,3 +47,16 @@
     cursor: pointer;
     background-color: #e3e3e3;
 }
+
+.schulweg-routing .result-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.schulweg-routing .route-result {
+    background-color: rgb(229, 229, 229);
+}
+
+.schulweg-routing .route-result span {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 15px;
+}
