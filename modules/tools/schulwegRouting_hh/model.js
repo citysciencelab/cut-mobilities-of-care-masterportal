@@ -83,9 +83,26 @@ define(function (require) {
             Radio.trigger("Alert", "alert", JSON.stringify(response));
         },
         handleSuccess: function (response) {
-            // TODO handle Response
-            console.log(response);
+            var routeGeometry = this.parseRoute(response.route.edge);
+
+            this.setGeometryByFeatureId("route", this.get("layer").getSource(), routeGeometry);
         },
+
+        /**
+         * creates one MultiLineString geometry from the routing parts
+         * @param {object[]} routeParts - the routing parts including wkt geometry
+         * @returns {ol.geom.MultiLineString} multiLineString -
+         */
+        parseRoute: function (routeParts) {
+            var wktParser = new ol.format.WKT(),
+                multiLineString = new ol.geom.MultiLineString();
+
+            routeParts.forEach(function (routePart) {
+                multiLineString.appendLineString(wktParser.readGeometry(routePart.wkt));
+            });
+            return multiLineString;
+        },
+
         prepareRequest: function () {
             var schoolID = this.get("selectedSchoolID"),
                 address = this.get("addressListFiltered")[0],
@@ -197,7 +214,7 @@ define(function (require) {
 
                 this.setAddressListFiltered(filteredAddressList);
                 if (filteredAddressList.length === 1) {
-                    this.setRoutePositionById("startPoint", this.get("layer").getSource(), filteredAddressList[0].position);
+                    this.setGeometryByFeatureId("startPoint", this.get("layer").getSource(), filteredAddressList[0].geometry);
                 }
             }
         },
@@ -208,7 +225,7 @@ define(function (require) {
         },
 
         /**
-         * finds a specific address in the address list and calls 'setRoutePositionById' for the startPoint
+         * finds a specific address in the address list and calls 'setGeometryByFeatureId' for the startPoint
          * will be executed after a click on a address in the hitList
          * @param {string} searchString -
          * @param {object[]} addressListFiltered - filtered list of addresses
@@ -219,7 +236,7 @@ define(function (require) {
                 return address.joinAddress === searchString.replace(/ /g, "");
             });
 
-            this.setRoutePositionById("startPoint", this.get("layer").getSource(), startAddress.position);
+            this.setGeometryByFeatureId("startPoint", this.get("layer").getSource(), startAddress.geometry);
         },
 
         /**
@@ -232,7 +249,7 @@ define(function (require) {
             addressList.forEach(function (address) {
                 var coords = address.position.split(" ");
 
-                address.position = [parseInt(coords[0], 10), parseInt(coords[1], 10)];
+                address.geometry = new ol.geom.Point([parseInt(coords[0], 10), parseInt(coords[1], 10)]);
                 address.street = streetNameList[0];
                 address.joinAddress = address.street.replace(/ /g, "") + address.number + address.affix;
             }, this);
@@ -253,17 +270,15 @@ define(function (require) {
         },
 
         /**
-         * finds the selected school and sets the route endpoint
+         * finds the selected school and sets the endpoint geometry
          * @param {ol.feature[]} schoolList - features of all schools
          * @param {string} schoolId - id of the school feature
          * @returns {void}
          */
         selectSchool: function (schoolList, schoolId) {
-            var school = this.filterSchoolById(schoolList, schoolId),
-                coordinates = school.getGeometry().getCoordinates();
+            var school = this.filterSchoolById(schoolList, schoolId);
 
-            coordinates.pop();
-            this.setRoutePositionById("endPoint", this.get("layer").getSource(), coordinates);
+            this.setGeometryByFeatureId("endPoint", this.get("layer").getSource(), school.getGeometry());
         },
 
         /**
@@ -281,17 +296,15 @@ define(function (require) {
         },
 
         /**
-         * sets the position for the route features
+         * sets the geometry for the route features and zoom to the feature extent
          * @param {string} featureId - id of the feature (startPoint | endPoint)
          * @param {ol.source} source - vector source of the route layer
-         * @param {string} coordinates - postion of the feature
+         * @param {string} geometry - geometry of the feature
          * @returns {void}
          */
-        setRoutePositionById: function (featureId, source, coordinates) {
-            var geom = new ol.geom.Point(coordinates);
-
-            source.getFeatureById(featureId).setGeometry(geom);
-            Radio.trigger("MapView", "setCenter", coordinates, 4);
+        setGeometryByFeatureId: function (featureId, source, geometry) {
+            source.getFeatureById(featureId).setGeometry(geometry);
+            Radio.trigger("Map", "zoomToExtent", geometry.getExtent());
         },
 
         /**
@@ -321,7 +334,12 @@ define(function (require) {
                     })
                 });
             }
-            return null;
+            return new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: "rgba(225, 0, 25, 0.6)",
+                    width: 6
+                })
+            });
         },
 
         setSchoolList: function (value) {
