@@ -6,6 +6,7 @@ define(function (require) {
         Config = require("config"),
         mqtt = require("mqtt"),
         moment = require("moment"),
+        $ = require("jquery"),
         SensorLayer;
 
     SensorLayer = Layer.extend({
@@ -13,7 +14,9 @@ define(function (require) {
         defaults: _.extend({}, Layer.prototype.defaults,
             {
                 webSocketPortSTS: 9876,
-                epsg: "EPSG:4326"
+                epsg: "EPSG:4326",
+                utc: "+1",
+                version: "1.0"
             }
         ),
         initialize: function () {
@@ -68,13 +71,15 @@ define(function (require) {
                 features = undefined,
                 subTyp = this.get("subTyp").toUpperCase(),
                 isClustered = this.has("clusterDistance") ? true : false,
-                startTime = new Date().getTime(),
-                endTime;
+                url = this.get("url"),
+                version = this.get("version"),
+                urlParams = this.get("urlParameter"),
+                epsg = this.get("epsg");
 
             // check for subtypes
             if (subTyp === "SENSORTHINGS") {
-                sensorData = this.loadSensorThings();
-                features = this.drawPoints(sensorData);
+                sensorData = this.loadSensorThings(url, version, urlParams);
+                features = this.drawPoints(sensorData, epsg);
                 this.createMqttConnectionToSensorThings();
                 // this.createWebSocketConnection();
             }
@@ -91,13 +96,6 @@ define(function (require) {
             if (!_.isUndefined(features)) {
                 this.styling(isClustered);
                 this.getLayer().setStyle(this.getStyle());
-
-                endTime = new Date().getTime();
-                console.log(subTyp);
-                console.log(this.attributes.name + ":");
-                console.log("Parsen: " + (endTime - startTime) / 1000 + " Sekunden");
-                console.log("Anzahl der Features: " + features.length);
-                console.log("-----------------------");
             }
         },
 
@@ -106,13 +104,13 @@ define(function (require) {
          * @param  {String} requestURL - to request sensordata
          * @return {objects} response with sensorObjects
          */
-        getResponseFromRequestURL: function (requestURL, asynchronous) {
+        getResponseFromRequestURL: function (requestURL) {
             var response = undefined;
 
             Radio.trigger("Util", "showLoader");
             $.ajax({
                 url: requestURL,
-                async: asynchronous,
+                async: false,
                 type: "GET",
                 context: this,
 
@@ -138,19 +136,27 @@ define(function (require) {
          * draw points on the map
          * @param  {array} sensorData - sensor with location and properties
          * @param  {Sting} epsg - from Sensortype
+         * @return {ol.Features} feature to draw
          */
-        drawPoints: function (sensorData) {
-            var features = [],
-                epsg = this.get("epsg");
+        drawPoints: function (sensorData, epsg) {
+            var features = [];
 
-            _.each(sensorData, function (thisSensorData, index) {
-                var xyTransfrom = ol.proj.transform(thisSensorData.location, epsg, Config.view.epsg),
+            _.each(sensorData, function (data, index) {
+                var xyTransfrom,
+                    feature;
+
+                if (_.has(data, "location") && !_.isUndefined(epsg)) {
+                    xyTransfrom = ol.proj.transform(data.location, epsg, Config.view.epsg);
                     feature = new ol.Feature({
                         geometry: new ol.geom.Point(xyTransfrom)
                     });
+                }
+                else {
+                    return;
+                }
 
                 feature.setId(index);
-                feature.setProperties(thisSensorData.properties);
+                feature.setProperties(data.properties);
                 // for a special theme
                 feature.set("gfiParams", this.get("gfiParams"));
                 features.push(feature);
@@ -162,69 +168,82 @@ define(function (require) {
             });
 
             // Add features to vectorlayer
-            this.getLayerSource().addFeatures(features);
+            if (!_.isEmpty(features)) {
+                this.getLayerSource().addFeatures(features);
+            }
 
             return features;
         },
 
         /**
          * change time zone by given UTC-time
-         * @param  {String} phenomenonTime
+         * @param  {String} phenomenonTime - time of measuring a phenomenon
+         * @param  {String} utc - timezone (default +1)
          * @return {String} phenomenonTime converted with UTC
          */
-        changeTimeZone: function (phenomenonTime) {
-            var time = phenomenonTime,
-                utc = this.get("utc");
+        changeTimeZone: function (phenomenonTime, utc) {
+            var utcAlgebraicSign,
+                utcNumber,
+                utcSub,
+                time;
 
-            if (!_.isUndefined(utc)) {
-                var utcAlgebraicSign = utc.substring(0, 1),
-                    utcNumber,
-                    utcSub;
+            if (_.isUndefined(phenomenonTime)) {
+                time = undefined;
+            }
+            else if (!_.isUndefined(utc) && (_.includes(utc, "+") || _.includes(utc, "-"))) {
+                utcAlgebraicSign = utc.substring(0, 1);
 
                 if (utc.length === 2) {
                     // check for winter- and summertime
                     utcSub = parseInt(utc.substring(1, 2), 10);
-                    utcSub = (moment(phenomenonTime).isDST()) ? utcSub + 1 : utcSub;
+                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
                     utcNumber = "0" + utcSub + "00";
                 }
                 else if (utc.length > 2) {
                     utcSub = parseInt(utc.substring(1, 3), 10);
-                    utcSub = (moment(phenomenonTime).isDST()) ? utcSub + 1 : utcSub;
+                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
                     utcNumber = utc.substring(1, 3) + "00";
                 }
 
                 time = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("DD MMMM YYYY, HH:mm:ss");
             }
+
             return time;
         },
 
         /**
          * load SensorThings by
+         * @param  {String} url - url to service
+         * @param  {String} version - version from service
+         * @param  {String} urlParams - url parameters
          * @return {array} all things with attributes and location
          */
-        loadSensorThings: function () {
+        loadSensorThings: function (url, version, urlParams) {
             var allThings = [],
                 thingsMerge = [],
-                requestURL = this.buildSensorThingsURL(),
-                things = this.getResponseFromRequestURL(requestURL, false),
+                requestURL = this.buildSensorThingsURL(url, version, urlParams),
+                things = this.getResponseFromRequestURL(requestURL),
                 thingsCount = things["@iot.count"], // count of all things
-                thingsbyOneRequest = things.value.length; // count of things on one request
+                thingsbyOneRequest = things.value.length, // count of things on one request
+                aggreateArrays,
+                thisRequestURL,
+                index;
 
             allThings.push(things.value);
-            for (var i = thingsbyOneRequest; i < thingsCount; i += thingsbyOneRequest) {
-                var thisRequestURL = requestURL + "&$skip=" + i;
+            for (index = thingsbyOneRequest; index < thingsCount; index += thingsbyOneRequest) {
+                thisRequestURL = requestURL + "&$skip=" + index;
 
-                things = this.getResponseFromRequestURL(thisRequestURL, false);
+                things = this.getResponseFromRequestURL(thisRequestURL);
                 allThings.push(things.value);
-            };
+            }
 
             allThings = _.flatten(allThings);
             allThings = this.mergeByCoordinates(allThings);
 
-            _.each(allThings, function (things, index) {
-                aggreateArrays = this.aggreateArrays(things);
+            _.each(allThings, function (thing) {
+                aggreateArrays = this.aggreateArrays(thing);
                 if (!_.isUndefined(aggreateArrays.location)) {
-                    thingsMerge.push(this.aggreateArrays(things));
+                    thingsMerge.push(this.aggreateArrays(thing));
                 }
 
             }, this);
@@ -234,12 +253,21 @@ define(function (require) {
 
         /**
          * build SensorThings URL
+         * @param  {String} url - url to service
+         * @param  {String} version - version from service
+         * @param  {String} urlParams - url parameters
          * @return {String} URL to request sensorThings
          */
-        buildSensorThingsURL: function () {
-            var requestURL = this.get("url") + "/v" + this.get("version") + "/Things?",
+        buildSensorThingsURL: function (url, version, urlParams) {
+            var requestURL,
                 and = "$",
-                urlParams = this.get("urlParameter");
+                versionAsString = version;
+
+            if (_.isNumber(version)) {
+                versionAsString = version.toFixed(1);
+            }
+
+            requestURL = url + "/v" + versionAsString + "/Things?";
 
             if (!_.isUndefined(urlParams)) {
                 _.each(urlParams, function (value, key) {
@@ -247,6 +275,7 @@ define(function (require) {
                     and = "&$";
                 });
             }
+
             return requestURL;
         },
 
@@ -257,29 +286,32 @@ define(function (require) {
          */
         mergeByCoordinates: function (allThings) {
             var mergeAllThings = [],
-                indices = [];
+                indices = [],
+                things,
+                xy,
+                xy2;
 
             _.each(allThings, function (thing, index) {
                 // if the thing was assigned already
                 if (!_.contains(indices, index)) {
-                    var things = [],
-                        xy = this.getCoordinates(thing);
+                    things = [];
+                    xy = this.getCoordinates(thing);
 
                     // if no datastream exists
                     if (_.isEmpty(thing.Datastreams)) {
                         return;
                     }
 
-                _.each(allThings, function (thing2, index2) {
-                    var xy2 = this.getCoordinates(thing2);
+                    _.each(allThings, function (thing2, index2) {
+                        xy2 = this.getCoordinates(thing2);
 
-                    if (_.isEqual(xy, xy2)) {
-                        things.push(thing2);
-                        indices.push(index2);
-                    }
-                }, this);
+                        if (_.isEqual(xy, xy2)) {
+                            things.push(thing2);
+                            indices.push(index2);
+                        }
+                    }, this);
 
-                mergeAllThings.push(things);
+                    mergeAllThings.push(things);
                 }
             }, this);
 
@@ -288,20 +320,24 @@ define(function (require) {
 
         /**
          * retrieves coordinates by different geometry types
-         * @param  {object} thing
+         * @param  {object} thing - thing
          * @return {array} coordinates
          */
         getCoordinates: function (thing) {
-            var xy;
+            var xy = undefined;
 
-            if (_.isEmpty(thing.Locations)) {
-                xy = undefined;
-            }
-            else if (thing.Locations[0].location.type === "Feature") {
-                xy = thing.Locations[0].location.geometry.coordinates;
-            }
-            else if (thing.Locations[0].location.type === "Point") {
-                xy = thing.Locations[0].location.coordinates;
+            if (!_.isUndefined(thing) && !_.isEmpty(thing.Locations)) {
+                if (thing.Locations[0].location.type === "Feature" &&
+                    !_.isUndefined(thing.Locations[0].location.geometry) &&
+                    !_.isUndefined(thing.Locations[0].location.geometry.coordinates)) {
+
+                    xy = thing.Locations[0].location.geometry.coordinates;
+                }
+                else if (thing.Locations[0].location.type === "Point" &&
+                    !_.isUndefined(thing.Locations[0].location.coordinates)) {
+                        
+                    xy = thing.Locations[0].location.coordinates;
+                }
             }
 
             return xy;
@@ -314,49 +350,29 @@ define(function (require) {
          */
         aggreateArrays: function (thingsArray) {
             var obj = {},
-                properties = {},
-                thingsProperties = [],
+                properties,
+                thingsProperties,
+                keys;
+
+            if (_.isEmpty(thingsArray)) {
+                return obj;
+            }
+            else if (_.has(thingsArray[0], "properties")) {
                 keys = _.keys(thingsArray[0].properties);
+            }
+            else {
+                keys = [];
+            }
 
             keys.push("state");
             keys.push("phenomenonTime");
             keys.push("dataStreamId");
 
             // add more properties
-            _.each(thingsArray, function (thing) {
-                // if no datastream exists
-                if (_.isEmpty(thing.Datastreams)) {
-                    return;
-                }
-
-                var thingsObservationsLength = thing.Datastreams[0].Observations.length;
-
-                if (!_.has(thing, "properties")) {
-                    thing.properties = {};
-                }
-                // get newest observation if existing
-                if (thingsObservationsLength > 0) {
-                    thing.properties.state = String(thing.Datastreams[0].Observations[0].result);
-                    thing.properties.phenomenonTime = this.changeTimeZone(thing.Datastreams[0].Observations[0].phenomenonTime);
-                }
-                else {
-                    thing.properties.state = "undefined";
-                    thing.properties.phenomenonTime = "undefined";
-                }
-
-                thing.properties.state = this.convertScaling(thing.properties.state);
-
-                thing.properties.dataStreamId = thing.Datastreams[0]["@iot.id"];
-                thingsProperties.push(thing.properties);
-            }, this);
+            thingsProperties = this.addProperties(thingsArray);
 
             // combine properties
-            _.each(keys, function (key) {
-                var propList = _.pluck(thingsProperties, key),
-                    propString = propList.join(" | ");
-
-                properties[key] = propString;
-            }, this);
+            properties = this.combineProperties(keys, thingsProperties);
 
             // set URL and version to properties, to build on custom theme with analytics
             properties.requestURL = this.get("url");
@@ -370,27 +386,92 @@ define(function (require) {
         },
 
         /**
+         * add properties to previous properties
+         * @param  {array} thingsArray - contain things with the same location
+         * @return {array} contains location and properties
+         */
+        addProperties: function (thingsArray) {
+            var thingsObservationsLength,
+                thingsProperties = [],
+                utc = this.get("utc");
+
+            _.each(thingsArray, function (thing) {
+                // if no datastream exists
+                if (_.isEmpty(thing.Datastreams)) {
+                    return;
+                }
+
+                thingsObservationsLength = thing.Datastreams[0].Observations.length;
+
+                if (!_.has(thing, "properties")) {
+                    thing.properties = {};
+                }
+                // get newest observation if existing
+                if (thingsObservationsLength > 0) {
+                    thing.properties.state = String(thing.Datastreams[0].Observations[0].result);
+                    thing.properties.phenomenonTime = this.changeTimeZone(thing.Datastreams[0].Observations[0].phenomenonTime, utc);
+                }
+                else {
+                    thing.properties.state = "undefined";
+                    thing.properties.phenomenonTime = "undefined";
+                }
+
+                thing.properties.state = this.convertScaling(thing.properties.state);
+
+                thing.properties.dataStreamId = thing.Datastreams[0]["@iot.id"];
+                thingsProperties.push(thing.properties);
+            }, this);
+
+            return thingsProperties;
+        },
+
+        /**
+         * combine various properties with a Pipe (|)
+         * @param  {array} keys - contains propertie fields
+         * @param  {array} thingsProperties - contains location and properties
+         * @return {object} contains location and properties
+         */
+        combineProperties: function (keys, thingsProperties) {
+            var properties = {},
+                propList,
+                propString;
+
+            _.each(keys, function (key) {
+                propList = _.pluck(thingsProperties, key);
+                propString = propList.join(" | ");
+                properties[key] = propString;
+            }, this);
+
+            return properties;
+        },
+
+        /**
          * convert Scaling with given factor and adds a unit
-         * @param  {ol.Feature} feature
+         * @param  {String} state - contains the state from observation
          * @return {String} state with converted value
          */
         convertScaling: function (state) {
             var conversionFactor = this.get("conversionFactor"),
                 scalingUnit = this.get("scalingUnit"),
-                scalingDecimal = this.get("scalingDecimal");
+                scalingDecimal = this.get("scalingDecimal"),
+                conversionState = !_.isNaN(parseFloat(state, 10)) ? parseFloat(state, 10) : state;
 
-            if (!_.isUndefined(conversionFactor)) {
-                state = state * conversionFactor;
-            }
-            if (!_.isUndefined(scalingDecimal)) {
-                state = parseFloat(state);
-                state = state.toFixed(scalingDecimal);
-            }
-            if (!_.isUndefined(scalingUnit)) {
-                state = state + " " + scalingUnit;
+            if (!_.isUndefined(conversionState) && !_.isString(conversionState)) {
+                if (!_.isUndefined(conversionFactor)) {
+                    conversionState = conversionState * conversionFactor;
+                }
+                if (!_.isUndefined(scalingDecimal)) {
+                    conversionState = parseFloat(conversionState);
+                    conversionState = conversionState.toFixed(scalingDecimal);
+                }
+                if (!_.isUndefined(scalingUnit)) {
+                    conversionState = conversionState + " " + scalingUnit;
+                }
+
+                conversionState = String(conversionState);
             }
 
-            return state;
+            return conversionState;
         },
 
         /**
@@ -400,7 +481,7 @@ define(function (require) {
          */
         loadStreamLayer: function () {
             var layerUrl = this.get("url") + "?f=pjson",
-                streamData = this.getResponseFromRequestURL(layerUrl, false),
+                streamData = this.getResponseFromRequestURL(layerUrl),
                 streamDataJSON,
                 streamId,
                 epsg,
@@ -415,17 +496,17 @@ define(function (require) {
                 return streamData;
             }
 
-            streamDataJSON = JSON.parse(streamData),
-            streamId = streamDataJSON.displayField,
-            // streamId = streamDataJSON.timeInfo.trackIdField,
-            epsg = (_.isUndefined(streamDataJSON.spatialReference)) ? "EPSG:4326" : streamDataJSON.spatialReference.wkid,
+            streamDataJSON = JSON.parse(streamData);
+            streamId = streamDataJSON.displayField;
+            // streamId = streamDataJSON.timeInfo.trackIdField;
+            epsg = _.isUndefined(streamDataJSON.spatialReference) ? "EPSG:4326" : streamDataJSON.spatialReference.wkid;
             wssUrl = streamDataJSON.streamUrls[0].urls[0];
 
             // only if there is a URL
             if (!_.isUndefined(streamDataJSON.keepLatestArchive)) {
                 featuresUrl = (_.isUndefined(streamDataJSON.keepLatestArchive.featuresUrl)) ? undefined : streamDataJSON.keepLatestArchive.featuresUrl;
                 featuresUrlWithQuery = featuresUrl + "/query?f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=" + epsg,
-                response = this.getResponseFromRequestURL(featuresUrlWithQuery, false),
+                response = this.getResponseFromRequestURL(featuresUrlWithQuery),
                 responseJSON = JSON.parse(response),
                 sensorData = responseJSON.features;
             }
@@ -548,8 +629,9 @@ define(function (require) {
             var dataStreamId = thing.dataStreamId,
                 features = this.getLayerSource().getFeatures(),
                 featureArray = this.getFeatureByDataStreamId(dataStreamId, features),
-                thingResult = String(this.convertScaling(thing.result)),
-                thingPhenomenonTime = this.changeTimeZone(thing.phenomenonTime);
+                thingResult = this.convertScaling(thing.result),
+                utc = this.get("utc"),
+                thingPhenomenonTime = this.changeTimeZone(thing.phenomenonTime, utc);
 
             this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
         },
@@ -587,8 +669,9 @@ define(function (require) {
             var dataStreamId = Object.keys(thing)[0],
                 features = this.getLayerSource().getFeatures(),
                 featureArray = this.getFeatureByDataStreamId(dataStreamId, features),
-                thingResult = String(this.convertScaling(thing[dataStreamId].result)),
-                thingPhenomenonTime = this.changeTimeZone(thing[dataStreamId].phenomenonTime);
+                thingResult = this.convertScaling(thing[dataStreamId].result),
+                utc = this.get("utc"),
+                thingPhenomenonTime = this.changeTimeZone(thing[dataStreamId].phenomenonTime, utc);
 
                 this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
         },

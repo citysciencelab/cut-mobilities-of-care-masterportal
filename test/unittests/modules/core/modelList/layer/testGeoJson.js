@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         Util = require("util"),
         GeoJsonLayerModel = require("../../../../../../modules/core/modelList/layer/geojson.js");
