@@ -83,8 +83,7 @@ define(function (require) {
             Radio.trigger("Alert", "alert", JSON.stringify(response));
         },
         handleSuccess: function (response) {
-            // TODO handle Response
-            console.log(response);
+            this.setRouteResult(response);
         },
         prepareRequest: function () {
             var schoolID = this.get("selectedSchoolID"),
@@ -197,6 +196,7 @@ define(function (require) {
 
                 this.setAddressListFiltered(filteredAddressList);
                 if (filteredAddressList.length === 1) {
+                    this.setStartAddress(filteredAddressList[0]);
                     this.setRoutePositionById("startPoint", this.get("layer").getSource(), filteredAddressList[0].position);
                 }
             }
@@ -214,11 +214,12 @@ define(function (require) {
          * @param {object[]} addressListFiltered - filtered list of addresses
          * @returns {void}
          */
-        setStartAddress: function (searchString, addressListFiltered) {
+        selectStartAddress: function (searchString, addressListFiltered) {
             var startAddress = _.find(addressListFiltered, function (address) {
                 return address.joinAddress === searchString.replace(/ /g, "");
             });
 
+            this.setStartAddress(startAddress);
             this.setRoutePositionById("startPoint", this.get("layer").getSource(), startAddress.position);
         },
 
@@ -253,7 +254,7 @@ define(function (require) {
         },
 
         /**
-         * finds the selected school and sets the route endpoint
+         * finds the selected school, sets the school and sets the route endpoint
          * @param {ol.feature[]} schoolList - features of all schools
          * @param {string} schoolId - id of the school feature
          * @returns {void}
@@ -262,6 +263,7 @@ define(function (require) {
             var school = this.filterSchoolById(schoolList, schoolId),
                 coordinates = school.getGeometry().getCoordinates();
 
+            this.setSelectedSchool(school);
             coordinates.pop();
             this.setRoutePositionById("endPoint", this.get("layer").getSource(), coordinates);
         },
@@ -354,8 +356,6 @@ define(function (require) {
         },
 
         setSearchRegExp: function (value) {
-            // console.log(value.replace(/ /g, ""));
-            // console.log(new RegExp(value.replace(/ /g, "") + "$", "i"));
             this.set("searchRegExp", new RegExp(value.replace(/ /g, ""), "i"));
         },
 
@@ -368,6 +368,15 @@ define(function (require) {
         },
         setSelectedSchoolID: function (value) {
             this.set("selectedSchoolID", value);
+        },
+        setSelectedSchool: function (value) {
+            this.set("selectedSchool", value);
+        },
+        setStartAddress: function (value) {
+            this.set("startAddress", value);
+        },
+        setRouteResult: function (value) {
+            this.set("routeResult", value);
         }
     });
 
