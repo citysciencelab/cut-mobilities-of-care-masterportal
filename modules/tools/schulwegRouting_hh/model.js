@@ -8,6 +8,7 @@ define(function (require) {
         defaults: {
             // ol-features of all schools
             schoolList: [],
+            selectedSchool: {},
             // names of streets found
             streetNameList: [],
             addressList: [],
@@ -17,7 +18,8 @@ define(function (require) {
             isActive: false,
             id: "schulwegrouting",
             requestIDs: [],
-            selectedSchoolID: ""
+            grammarSchoolName: "",
+            useRegionalSchool: false
         },
 
         initialize: function () {
@@ -46,7 +48,8 @@ define(function (require) {
                 "houseNumbers": function (houseNumberList) {
                     this.setAddressList(this.prepareAddressList(houseNumberList, this.get("streetNameList")));
                     this.setAddressListFiltered(this.filterAddressList(this.get("addressList"), this.get("searchRegExp")));
-                }
+                },
+                "getAdress": this.parseGrammarSchool
             });
             if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
                 // model in modellist gets activated.
@@ -89,6 +92,26 @@ define(function (require) {
             response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
             this.setRouteResult(response);
         },
+        findGrammarSchool: function () {
+            var address = this.get("startAddress"),
+                gazAddress = {};
+
+            if (!_.isUndefined(address)) {
+                gazAddress.streetname = address.street;
+                gazAddress.housenumber = address.number;
+                gazAddress.affix = address.affix;
+                Radio.trigger("Gaz", "adressSearch", gazAddress);
+            }
+        },
+        parseGrammarSchool: function (xml) {
+            var schoolID = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
+
+            if (this.get("useRegionalSchool") === true) {
+                this.trigger("updateSelectedSchool", schoolID);
+                this.selectSchool(this.get("schoolList"), schoolID);
+                this.prepareRequest();
+            }
+        },
 
         /**
          * creates one MultiLineString geometry from the routing parts
@@ -106,8 +129,8 @@ define(function (require) {
         },
 
         prepareRequest: function () {
-            var schoolID = this.get("selectedSchoolID"),
-                address = this.get("addressListFiltered")[0],
+            var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
+                address = this.get("startAddress"),
                 requestID = _.uniqueId("schulwegrouting_"),
                 requestObj = {};
 
@@ -383,12 +406,14 @@ define(function (require) {
         setAddressListFiltered: function (value) {
             this.set("addressListFiltered", value);
         },
-
         setLayer: function (layer) {
             this.set("layer", layer);
         },
-        setSelectedSchoolID: function (value) {
-            this.set("selectedSchoolID", value);
+        setGrammarSchoolName: function (value) {
+            this.set("grammarSchoolName", value);
+        },
+        setUseRegionalSchool: function (value) {
+            this.set("useRegionalSchool", value);
         },
         setSelectedSchool: function (value) {
             this.set("selectedSchool", value);
