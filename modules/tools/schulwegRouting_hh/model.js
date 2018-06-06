@@ -83,6 +83,7 @@ define(function (require) {
             Radio.trigger("Alert", "alert", JSON.stringify(response));
         },
         handleSuccess: function (response) {
+            response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
             this.setRouteResult(response);
         },
         prepareRequest: function () {
