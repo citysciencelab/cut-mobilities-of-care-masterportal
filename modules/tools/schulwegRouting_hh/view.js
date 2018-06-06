@@ -25,8 +25,7 @@ define(function (require) {
             "click li.address": function (evt) {
                 this.setAddressSearchValue(evt);
                 this.model.selectStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
-                this.model.findGrammarSchool();
-                this.model.prepareRequest();
+                this.model.findRegionalSchool(this.model.get("startAddress"));
             },
             "click .address-search": function (evt) {
                 // stop event bubbling
@@ -125,29 +124,24 @@ define(function (require) {
             this.model.setIsActive(false);
         },
         selectSchool: function (evt) {
-            var value = evt.target.value;
-
-            this.model.selectSchool(this.model.get("schoolList"), value);
-            this.model.prepareRequest();
+            this.model.selectSchool(this.model.get("schoolList"), evt.target.value);
+            this.model.prepareRequest(this.model.get("startAddress"));
         },
         updateSelectedSchool: function (schoolID) {
             this.$el.find(".selectpicker").selectpicker("val", schoolID);
         },
         useRegionalSchool: function (evt) {
-            var useRegionalSchool = !$(evt.target).parent().hasClass("off");
+            var useRegionalSchool = evt.target.checked;
 
             this.model.setUseRegionalSchool(useRegionalSchool);
             if (useRegionalSchool) {
-                this.model.findGrammarSchool();
-                // todo disable schulliste
+                this.model.findRegionalSchool(this.model.get("startAddress"));
                 this.$el.find(".selectpicker").prop("disabled", true);
-                this.$el.find(".selectpicker").selectpicker("refresh");
             }
             else {
-                // todo enable schulliste
                 this.$el.find(".selectpicker").prop("disabled", false);
-                this.$el.find(".selectpicker").selectpicker("refresh");
             }
+            this.$el.find(".selectpicker").selectpicker("refresh");
         }
     });
 

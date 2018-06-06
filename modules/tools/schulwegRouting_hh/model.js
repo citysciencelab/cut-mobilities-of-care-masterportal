@@ -18,7 +18,6 @@ define(function (require) {
             isActive: false,
             id: "schulwegrouting",
             requestIDs: [],
-            grammarSchoolName: "",
             useRegionalSchool: false
         },
 
@@ -49,7 +48,7 @@ define(function (require) {
                     this.setAddressList(this.prepareAddressList(houseNumberList, this.get("streetNameList")));
                     this.setAddressListFiltered(this.filterAddressList(this.get("addressList"), this.get("searchRegExp")));
                 },
-                "getAdress": this.parseGrammarSchool
+                "getAdress": this.parseRegionalSchool
             });
             if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
                 // model in modellist gets activated.
@@ -92,9 +91,8 @@ define(function (require) {
             response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
             this.setRouteResult(response);
         },
-        findGrammarSchool: function () {
-            var address = this.get("startAddress"),
-                gazAddress = {};
+        findRegionalSchool: function (address) {
+            var gazAddress = {};
 
             if (!_.isUndefined(address)) {
                 gazAddress.streetname = address.street;
@@ -103,20 +101,20 @@ define(function (require) {
                 Radio.trigger("Gaz", "adressSearch", gazAddress);
             }
         },
-        parseGrammarSchool: function (xml) {
+        parseRegionalSchool: function (xml) {
             var schoolID = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
 
             if (this.get("useRegionalSchool") === true) {
                 this.trigger("updateSelectedSchool", schoolID);
                 this.selectSchool(this.get("schoolList"), schoolID);
-                this.prepareRequest();
+                this.prepareRequest(this.get("startAddress"));
             }
         },
 
         /**
          * creates one MultiLineString geometry from the routing parts
          * @param {object[]} routeParts - the routing parts including wkt geometry
-         * @returns {ol.geom.MultiLineString} multiLineString -
+         * @returns {ol.geom.MultiLineString} multiLineString - the route geometry
          */
         parseRoute: function (routeParts) {
             var wktParser = new ol.format.WKT(),
@@ -128,9 +126,8 @@ define(function (require) {
             return multiLineString;
         },
 
-        prepareRequest: function () {
+        prepareRequest: function (address) {
             var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
-                address = this.get("startAddress"),
                 requestID = _.uniqueId("schulwegrouting_"),
                 requestObj = {};
 
@@ -408,9 +405,6 @@ define(function (require) {
         },
         setLayer: function (layer) {
             this.set("layer", layer);
-        },
-        setGrammarSchoolName: function (value) {
-            this.set("grammarSchoolName", value);
         },
         setUseRegionalSchool: function (value) {
             this.set("useRegionalSchool", value);
