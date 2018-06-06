@@ -39,7 +39,8 @@ define(function (require) {
 
             this.$el.css({
                 "left": x + "px",
-                "top": y + "px"
+                "top": y + "px",
+
             });
         },
 
