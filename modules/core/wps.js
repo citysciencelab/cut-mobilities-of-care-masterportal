@@ -88,14 +88,8 @@ define(function (require) {
          * @returns {object} xml parsed as object
          */
         parseDataString: function (dataString) {
-            // var xml = new DOMParser().parseFromString(dataString, "text/xml"),
-            //     obj;
             var xml = $.parseXML(dataString),
-                data = $(xml).find("wps\\:Data")[0].outerHTML,
-                obj;
-
-            xml = new DOMParser().parseFromString(data, "text/xml");
-            obj = this.parseXmlToObject(xml);
+                obj = this.parseXmlToObject(xml);
 
             return obj;
         },

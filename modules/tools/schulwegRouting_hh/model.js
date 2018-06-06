@@ -60,7 +60,7 @@ define(function (require) {
 
             if (this.isRoutingRequest(this.get("requestIDs"), requestID)) {
                 this.showLoader(false);
-                parsedData = response.Data.ComplexData.Schulweg.Ergebnis;
+                parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
                 this.removeId(this.get("requestIDs"), requestID);
                 if (status === 200) {
                     if (parsedData.ErrorOccured === "yes") {

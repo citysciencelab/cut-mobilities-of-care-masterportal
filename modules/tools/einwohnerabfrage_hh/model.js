@@ -102,7 +102,7 @@ define(function (require) {
 
             this.setRequesting(false);
             if (this.isEinwohnerRequest(this.get("requests"), requestId)) {
-                parsedData = response.Data.ComplexData.einwohner;
+                parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.einwohner;
                 this.removeId(this.get("requests"), requestId);
                 if (status === 200) {
                     if (parsedData.ErrorOccured === "yes") {
