@@ -1,6 +1,7 @@
 define(function (require) {
 
     var DesktopView = require("modules/tools/gfi/view"),
+        $ = require("jquery"),
         Radio = require("backbone.radio"),
         Template = require("text!modules/tools/gfi/table/template.html"),
         GFIDetachedTableView;
@@ -9,12 +10,12 @@ define(function (require) {
         className: "gfi gfi-detached gfi-detached-table",
         template: _.template(Template),
         events: {
-                    "click .icon-turnarticle": "rotateGFI",
-                    "click .glyphicon-remove": "hideGFI"
-            },
-        /**
-         * Zeichnet das Template und macht es "draggable"
-         */
+            "click .icon-turnarticle": "rotateGFI",
+            "click .glyphicon-remove": "hideGFI",
+            "touchmove .gfi-header": "moveGFI",
+            "click .pager-right": "renderNext",
+            "click .pager-left": "renderPrevious"
+        },
         render: function () {
             var attr = this.model.toJSON();
 
@@ -24,15 +25,25 @@ define(function (require) {
                 handle: ".gfi-header",
                 stop: function (evt, ui) {
                     // helper, so that "left" is never 0. needed for gfi/themes/view.js adjustGfiWindow()
-                    $(".gfi").css("left", (ui.position.left + 1) + "px");
+                    $(".gfi").css("left", ui.position.left + 1 + "px");
                     // $(".gfi").css("top", (ui.position.top - 50) + "px");
                 }
             });
         },
 
-        /**
-         * Blendet das Popover ein oder aus
-         */
+        moveGFI: function (evt) {
+            var touch = evt.originalEvent.touches[0],
+                width = this.$el.find(".gfi-header").width() / 2,
+                x = touch.clientX - width,
+                y = touch.clientY;
+
+            this.$el.css({
+                "left": x + "px",
+                "top": y + "px",
+
+            });
+        },
+
         toggle: function () {
             if (this.model.getIsVisible() === true) {
                 this.$el.show();
@@ -57,15 +68,15 @@ define(function (require) {
             this.remove();
         },
 
-        rotateGFI: function() {
-             this.model.set("rotateAngle", this.model.get("rotateAngle") - 90);
+        rotateGFI: function () {
+            this.model.set("rotateAngle", this.model.get("rotateAngle") - 90);
             if (this.model.get("rotateAngle") === -360) {
-               this.model.set("rotateAngle", 0);
+                this.model.set("rotateAngle", 0);
             }
             $(".gfi-detached-table").css({
-                    "transform": "rotate(" + this.model.get("rotateAngle") + "deg)",
-                    "-webkit-transform-origin": "50% 52%"
-                });
+                "transform": "rotate(" + this.model.get("rotateAngle") + "deg)",
+                "-webkit-transform-origin": "50% 52%"
+            });
         }
     });
 
