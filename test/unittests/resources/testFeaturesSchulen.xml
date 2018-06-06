@@ -1,0 +1,249 @@
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://www.deegree.org/app http://localhost:9001/fachdaten_n_s/services/wfs_hh_schulen?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=text%2Fxml%3B+subtype%3Dgml%2F3.1.1&amp;TYPENAME=app:staatliche_schulen&amp;NAMESPACE=xmlns(app=http%3A%2F%2Fwww.deegree.org%2Fapp)" xmlns:wfs="http://www.opengis.net/wfs" timeStamp="2018-06-05T14:47:46Z" xmlns:gml="http://www.opengis.net/gml">
+  <gml:featureMember>
+    <app:staatliche_schulen xmlns:app="http://www.deegree.org/app" gml:id="APP_STAATLICHE_SCHULEN_172962">
+      <app:adresse_ort>22047 Hamburg</app:adresse_ort>
+      <app:adresse_strasse_hausnr>Stephanstraße 103</app:adresse_strasse_hausnr>
+      <app:anzahl_schueler>563</app:anzahl_schueler>
+      <app:bezirk>Wandsbek</app:bezirk>
+      <app:bilingual>Englisch</app:bilingual>
+      <app:fax>+49 40 428 96 57-22</app:fax>
+      <app:ferienbetreuung_anteil>39.33 %</app:ferienbetreuung_anteil>
+      <app:ganztagsform>offen</app:ganztagsform>
+      <app:is_rebbz>true</app:is_rebbz>
+      <app:kapitelbezeichnung>Grundschulen</app:kapitelbezeichnung>
+      <app:kernzeitbetreuung>Klassenstufe 2  1%|Klassenstufe 3  84%|Klassenstufe 4  74%</app:kernzeitbetreuung>
+      <app:lgv_standortk_erwachsenenbildung>No</app:lgv_standortk_erwachsenenbildung>
+      <app:name_schulleiter>Regina Schubert</app:name_schulleiter>
+      <app:rebbz_homepage>http://rebbz-wandsbek-sued.hamburg.de/</app:rebbz_homepage>
+      <app:rechtsform>staatlich</app:rechtsform>
+      <app:schueleranzahl_schuljahr>2017</app:schueleranzahl_schuljahr>
+      <app:schuelerzeitung>Schlaubär</app:schuelerzeitung>
+      <app:schul_email>Schule-An-der-Gartenstadt@bsb.hamburg.de</app:schul_email>
+      <app:schul_homepage>http://www.schule-gartenstadt.hamburg.de</app:schul_homepage>
+      <app:kapitelbezeichnung>Grundschulen</app:kapitelbezeichnung>
+      <app:schul_id>5575-0</app:schul_id>
+      <app:schul_telefonnr>+49 40 428 96 57-0</app:schul_telefonnr>
+      <app:schulaufsicht>Behrend, Jan</app:schulaufsicht>
+      <app:schulform>Grundschule|vorschulische Sprachförderung|Vorschulklasse</app:schulform>
+      <app:schulinspektion_link>http://www.hamburg.de/inspektionsberichte/grundschulen/wandsbek/</app:schulinspektion_link>
+      <app:schulname>Schule An der Gartenstadt</app:schulname>
+      <app:schultyp>Hauptstandort</app:schultyp>
+      <app:stadtteil>Wandsbek</app:stadtteil>
+      <app:standort_id>552</app:standort_id>
+      <app:zuegigkeit_kl_1>4</app:zuegigkeit_kl_1>
+      <app:zustaendiges_rebbz>ReBBZ Wandsbek-Süd</app:zustaendiges_rebbz>
+      <app:the_geom>
+        <!--Inlined geometry 'APP_STAATLICHE_SCHULEN_172962_APP_THE_GEOM'-->
+        <gml:Point gml:id="APP_STAATLICHE_SCHULEN_172962_APP_THE_GEOM" srsName="EPSG:25832">
+          <gml:pos>571878.000 5938388.000</gml:pos>
+        </gml:Point>
+      </app:the_geom>
+    </app:staatliche_schulen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:staatliche_schulen xmlns:app="http://www.deegree.org/app" gml:id="APP_STAATLICHE_SCHULEN_172963">
+      <app:abschluss>Allgemeine Hochschulreife|erster allgemeinbildender Schulabschluss|Erweiterter erster allgemeinbildender Schulabschluss|mittlerer Schulabschluss|schulischer Teil der Fachhochschulreife</app:abschluss>
+      <app:adresse_ort>22527 Hamburg</app:adresse_ort>
+      <app:adresse_strasse_hausnr>Brehmweg 60</app:adresse_strasse_hausnr>
+      <app:anzahl_schueler>900</app:anzahl_schueler>
+      <app:auszeichnung>Starke Schule 2013, 2016,2017</app:auszeichnung>
+      <app:bezirk>Eimsbüttel</app:bezirk>
+      <app:bilingual>Spanisch</app:bilingual>
+      <app:fax>+49 40 428 89 82 36</app:fax>
+      <app:fremdsprache>Englisch|Französisch|Spanisch</app:fremdsprache>
+      <app:fremdsprache_mit_klasse>Englisch ab Klasse  5|Französisch ab Klasse  7|Spanisch ab Klasse  11|Spanisch ab Klasse  5|Spanisch ab Klasse  7</app:fremdsprache_mit_klasse>
+      <app:ganztagsform>GTS voll gebunden</app:ganztagsform>
+      <app:is_rebbz>true</app:is_rebbz>
+      <app:kantine_vorh>true</app:kantine_vorh>
+      <app:kapitelbezeichnung>Stadtteilschulen</app:kapitelbezeichnung>
+      <app:kernunterricht>Montag, Dienstag, Mittwoch, Donnerstag von 8:00 Uhr - 16:00 Uhr |Freitag von 8:00 Uhr - 12:20 Uhr |Montag, Dienstag, Mittwoch, Donnerstag, Freitag von 8:00 Uhr - 15:20 Uhr |Montag, Dienstag, Mittwoch, Donnerstag, Freitag von 8:00 Uhr - 17:00 Uhr (Jgg. 11 - 13)</app:kernunterricht>
+      <app:kiosk_vorh>true</app:kiosk_vorh>
+      <app:lgv_standortk_erwachsenenbildung>No</app:lgv_standortk_erwachsenenbildung>
+      <app:mittagspause>12:40 Uhr, 65 min (für Jgg. 5/6/7/8 Sportangebote, Schulbibliothek, Zirkus, Ruhe- und Spielraum)|13:50 Uhr, 30 min (für Jgg. 9/10 Essenspause)</app:mittagspause>
+      <app:name_schulleiter>Bernd Mader</app:name_schulleiter>
+      <app:nutzung_kantine_anteil>70 %</app:nutzung_kantine_anteil>
+      <app:offenetuer>13.01.2018, 12.30-15.00, Sporthalle Brehmweg 60</app:offenetuer>
+      <app:rebbz_homepage>http://rebbz-eimsbuettel.hamburg.de/</app:rebbz_homepage>
+      <app:rechtsform>staatlich</app:rechtsform>
+      <app:schueleranzahl_schuljahr>2017</app:schueleranzahl_schuljahr>
+      <app:schuelerzeitung>Stellinger News</app:schuelerzeitung>
+      <app:schul_email>stadtteilschule-stellingen@bsb.hamburg.de</app:schul_email>
+      <app:schul_homepage>http://www.stadtteilschule-stellingen.de</app:schul_homepage>
+      <app:kapitelbezeichnung>Stadtteilschulen</app:kapitelbezeichnung>
+      <app:schul_id>5655-0</app:schul_id>
+      <app:schul_telefonnr>+49 40 428 89 80 1</app:schul_telefonnr>
+      <app:schulaufsicht>Gerhard Albrecht</app:schulaufsicht>
+      <app:schulentlassene_mit_esa_anteil>33.33 %</app:schulentlassene_mit_esa_anteil>
+      <app:schulentlassene_mit_msa_anteil>30.86 %</app:schulentlassene_mit_msa_anteil>
+      <app:schulentlassene_oa_anteil>2.47 %</app:schulentlassene_oa_anteil>
+      <app:schulentlassenen_mit_fhr_anteil>33.33 %</app:schulentlassenen_mit_fhr_anteil>
+      <app:schulform>Stadtteilschule</app:schulform>
+      <app:schulische_ausrichtung>Sprache, Naturwissenschaften</app:schulische_ausrichtung>
+      <app:schulname>Stadtteilschule Stellingen</app:schulname>
+      <app:schulpartnerschaft>4. Gymnasium, Sarajevo, Bosnien-Herzegowina  |Deutsche Schule, Managua, Nicaragua  |Sevilla, Spanien</app:schulpartnerschaft>
+      <app:schultyp>Hauptstandort</app:schultyp>
+      <app:stadtteil>Stellingen</app:stadtteil>
+      <app:standort_id>137</app:standort_id>
+      <app:vegetarisch>5 vegetarische Essen pro Woche</app:vegetarisch>
+      <app:wahlmoeglichkeit_essen>true</app:wahlmoeglichkeit_essen>
+      <app:zuegigkeit_kl_5>7</app:zuegigkeit_kl_5>
+      <app:zustaendiges_rebbz>ReBBZ Eimsbüttel</app:zustaendiges_rebbz>
+      <app:the_geom>
+        <!--Inlined geometry 'APP_STAATLICHE_SCHULEN_172963_APP_THE_GEOM'-->
+        <gml:Point gml:id="APP_STAATLICHE_SCHULEN_172963_APP_THE_GEOM" srsName="EPSG:25832">
+          <gml:pos>562294.000 5937734.000</gml:pos>
+        </gml:Point>
+      </app:the_geom>
+    </app:staatliche_schulen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:staatliche_schulen xmlns:app="http://www.deegree.org/app" gml:id="APP_STAATLICHE_SCHULEN_172965">
+      <app:abschluss>erster allgemeinbildender Schulabschluss|Erweiterter erster allgemeinbildender Schulabschluss|mittlerer Schulabschluss</app:abschluss>
+      <app:adresse_ort>22179 Hamburg</app:adresse_ort>
+      <app:adresse_strasse_hausnr>Heidstücken 33</app:adresse_strasse_hausnr>
+      <app:anzahl_schueler>121</app:anzahl_schueler>
+      <app:bezirk>Wandsbek</app:bezirk>
+      <app:fax>040 428 96 82-22</app:fax>
+      <app:ferienbetreuung_anteil>26.92 %</app:ferienbetreuung_anteil>
+      <app:foerderart>Autismus|emotionale und soziale Entwicklung|Lernen|Sprache</app:foerderart>
+      <app:ganztagsform>GTS voll gebunden</app:ganztagsform>
+      <app:is_rebbz>true</app:is_rebbz>
+      <app:kapitelbezeichnung>Sonderschulen</app:kapitelbezeichnung>
+      <app:lgv_standortk_erwachsenenbildung>No</app:lgv_standortk_erwachsenenbildung>
+      <app:name_schulleiter>Nadja Gutschmidt</app:name_schulleiter>
+      <app:rebbz_homepage>http://rebbz-wandsbek-sued.hamburg.de/</app:rebbz_homepage>
+      <app:rechtsform>staatlich</app:rechtsform>
+      <app:schueleranzahl_schuljahr>2017</app:schueleranzahl_schuljahr>
+      <app:schul_email>rebbz-wandsbek-sued-bildung-zitzewitzstr@bsb.hamburg.de</app:schul_email>
+      <app:schul_homepage>http://rebbz-wandsbek-sued.hamburg.de/</app:schul_homepage>
+      <app:kapitelbezeichnung>Sonderschulen</app:kapitelbezeichnung>
+      <app:schul_id>5362-1</app:schul_id>
+      <app:schul_telefonnr>040 428 96 82-12</app:schul_telefonnr>
+      <app:schulaufsicht>Munck, Patricia</app:schulaufsicht>
+      <app:schulform>Sonderschule|Vorschulklasse</app:schulform>
+      <app:schulname>ReBBZ Wandsbek-Süd</app:schulname>
+      <app:schultyp>Zweigstelle</app:schultyp>
+      <app:stadtteil>Bramfeld</app:stadtteil>
+      <app:standort_id>770</app:standort_id>
+      <app:zustaendiges_rebbz>ReBBZ Wandsbek-Süd</app:zustaendiges_rebbz>
+      <app:the_geom>
+        <!--Inlined geometry 'APP_STAATLICHE_SCHULEN_172965_APP_THE_GEOM'-->
+        <gml:Point gml:id="APP_STAATLICHE_SCHULEN_172965_APP_THE_GEOM" srsName="EPSG:25832">
+          <gml:pos>572240.000 5941346.000</gml:pos>
+        </gml:Point>
+      </app:the_geom>
+    </app:staatliche_schulen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:staatliche_schulen xmlns:app="http://www.deegree.org/app" gml:id="APP_STAATLICHE_SCHULEN_172966">
+      <app:adresse_ort>22335 Hamburg</app:adresse_ort>
+      <app:adresse_strasse_hausnr>Ratsmühlendamm 39</app:adresse_strasse_hausnr>
+      <app:anzahl_schueler>329</app:anzahl_schueler>
+      <app:bezirk>Hamburg-Nord</app:bezirk>
+      <app:fax>+49 40 428 88-0122</app:fax>
+      <app:ferienbetreuung_anteil>55.28 %</app:ferienbetreuung_anteil>
+      <app:ganztagsform>offen</app:ganztagsform>
+      <app:is_rebbz>true</app:is_rebbz>
+      <app:kapitelbezeichnung>Grundschulen</app:kapitelbezeichnung>
+      <app:kernzeitbetreuung>Klassenstufe 1  88%|Klassenstufe 2  92%|Klassenstufe 3  80%|Klassenstufe 4  82%</app:kernzeitbetreuung>
+      <app:lgv_standortk_erwachsenenbildung>No</app:lgv_standortk_erwachsenenbildung>
+      <app:name_schulleiter>Peter Schroth</app:name_schulleiter>
+      <app:offenetuer>01.12.2017, 15.30 - 18.00, Hauptgebäude</app:offenetuer>
+      <app:rebbz_homepage>http://rebbz-nord.hamburg.de/</app:rebbz_homepage>
+      <app:rechtsform>staatlich</app:rechtsform>
+      <app:schueleranzahl_schuljahr>2017</app:schueleranzahl_schuljahr>
+      <app:schul_email>schule-ratsmuehlendamm@bsb.hamburg.de</app:schul_email>
+      <app:schul_homepage>http://www.schule-ratsmuehlendamm.hamburg.de</app:schul_homepage>
+      <app:kapitelbezeichnung>Grundschulen</app:kapitelbezeichnung>
+      <app:schul_id>5480-0</app:schul_id>
+      <app:schul_telefonnr>+49 40 428 88-010</app:schul_telefonnr>
+      <app:schulaufsicht>Barthe-Rasch, Ulrike</app:schulaufsicht>
+      <app:schulform>Grundschule|vorschulische Sprachförderung|Vorschulklasse</app:schulform>
+      <app:schulname>Schule Ratsmühlendamm</app:schulname>
+      <app:schultyp>Hauptstandort</app:schultyp>
+      <app:stadtteil>Fuhlsbüttel</app:stadtteil>
+      <app:standort_id>501</app:standort_id>
+      <app:zuegigkeit_kl_1>3</app:zuegigkeit_kl_1>
+      <app:zustaendiges_rebbz>ReBBZ Nord</app:zustaendiges_rebbz>
+      <app:the_geom>
+        <!--Inlined geometry 'APP_STAATLICHE_SCHULEN_172966_APP_THE_GEOM'-->
+        <gml:Point gml:id="APP_STAATLICHE_SCHULEN_172966_APP_THE_GEOM" srsName="EPSG:25832">
+          <gml:pos>567520.000 5942422.000</gml:pos>
+        </gml:Point>
+      </app:the_geom>
+    </app:staatliche_schulen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:staatliche_schulen xmlns:app="http://www.deegree.org/app" gml:id="APP_STAATLICHE_SCHULEN_172967">
+      <app:adresse_ort>22081 Hamburg</app:adresse_ort>
+      <app:adresse_strasse_hausnr>Zeisigstraße 3</app:adresse_strasse_hausnr>
+      <app:anzahl_schueler>301</app:anzahl_schueler>
+      <app:bezirk>Hamburg-Nord</app:bezirk>
+      <app:fax>+49 40 428 795-245</app:fax>
+      <app:ferienbetreuung_anteil>52.83 %</app:ferienbetreuung_anteil>
+      <app:ganztagsform>offen</app:ganztagsform>
+      <app:is_rebbz>true</app:is_rebbz>
+      <app:kapitelbezeichnung>Grundschulen</app:kapitelbezeichnung>
+      <app:kernzeitbetreuung>Klassenstufe 1  98%|Klassenstufe 2  98%|Klassenstufe 3  97%|Klassenstufe 4  99%</app:kernzeitbetreuung>
+      <app:lgv_standortk_erwachsenenbildung>No</app:lgv_standortk_erwachsenenbildung>
+      <app:name_schulleiter>Sabine Halbach</app:name_schulleiter>
+      <app:offenetuer>01.12.2017, 15:00 bis 17:00 Uhr, Brucknerstraße 1</app:offenetuer>
+      <app:rebbz_homepage>http://rebbz-winterhude.hamburg.de/</app:rebbz_homepage>
+      <app:rechtsform>staatlich</app:rechtsform>
+      <app:schueleranzahl_schuljahr>2017</app:schueleranzahl_schuljahr>
+      <app:schul_email>adolph-schoenfelder-schule@bsb.hamburg.de</app:schul_email>
+      <app:schul_homepage>http://www.adolph-schoenfelder-schule.hamburg.de</app:schul_homepage>
+      <app:kapitelbezeichnung>Grundschulen</app:kapitelbezeichnung>
+      <app:schul_id>5430-0</app:schul_id>
+      <app:schul_telefonnr>+49 40 428 795-0</app:schul_telefonnr>
+      <app:schulaufsicht>Barthe-Rasch, Ulrike</app:schulaufsicht>
+      <app:schulform>Grundschule|vorschulische Sprachförderung|Vorschulklasse</app:schulform>
+      <app:schulname>Adolph-Schönfelder-Schule</app:schulname>
+      <app:schultyp>Hauptstandort</app:schultyp>
+      <app:stadtteil>Barmbek-Süd</app:stadtteil>
+      <app:standort_id>519</app:standort_id>
+      <app:zuegigkeit_kl_1>2</app:zuegigkeit_kl_1>
+      <app:zustaendiges_rebbz>ReBBZ Winterhude</app:zustaendiges_rebbz>
+      <app:the_geom>
+        <!--Inlined geometry 'APP_STAATLICHE_SCHULEN_172967_APP_THE_GEOM'-->
+        <gml:Point gml:id="APP_STAATLICHE_SCHULEN_172967_APP_THE_GEOM" srsName="EPSG:25832">
+          <gml:pos>569352.000 5937041.000</gml:pos>
+        </gml:Point>
+      </app:the_geom>
+    </app:staatliche_schulen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:staatliche_schulen xmlns:app="http://www.deegree.org/app" gml:id="APP_STAATLICHE_SCHULEN_172968">
+      <app:abschluss>Abschlusszeugnis|Abschlusszeugnis mit allgemeiner Hochschulreife|Abschlusszeugnis mit dem schulischen Teil der FHR|Abschlusszeugnis mit erstem allgemeinbildenden Schulabschluss|Abschlusszeugnis mit fachgebundener Hochschulreife|Abschlusszeugnis mit Fachhochschulreife|Abschlusszeugnis mit mittleren Schulabschluss</app:abschluss>
+      <app:adresse_ort>22049 Hamburg</app:adresse_ort>
+      <app:adresse_strasse_hausnr>Eulenkamp 46</app:adresse_strasse_hausnr>
+      <app:anzahl_schueler>1759</app:anzahl_schueler>
+      <app:bezirk>Wandsbek</app:bezirk>
+      <app:fax>+49 40 428 951 11</app:fax>
+      <app:is_rebbz>false</app:is_rebbz>
+      <app:kapitelbezeichnung>Berufliche Schulen</app:kapitelbezeichnung>
+      <app:lgv_standortk_erwachsenenbildung>No</app:lgv_standortk_erwachsenenbildung>
+      <app:name_schulleiter>Ralph Walper</app:name_schulleiter>
+      <app:rechtsform>staatlich</app:rechtsform>
+      <app:schueleranzahl_schuljahr>2017</app:schueleranzahl_schuljahr>
+      <app:schul_email>BS17@hibb.hamburg.de</app:schul_email>
+      <app:schul_homepage>http://www.medienschule-hamburg-wandsbek.de</app:schul_homepage>
+      <app:kapitelbezeichnung>Berufliche Schulen</app:kapitelbezeichnung>
+      <app:schul_id>5928-0</app:schul_id>
+      <app:schul_telefonnr>+49 40 428 951 0</app:schul_telefonnr>
+      <app:schulaufsicht>Regina Henkis</app:schulaufsicht>
+      <app:schulform>Berufsfachschule|Berufsoberschule|Berufsschule|Berufsvorbereitungsschule|Fachoberschule</app:schulform>
+      <app:schulname>Berufliche Schule für Medien und Kommunikation</app:schulname>
+      <app:schulportrait>http://hibb.hamburg.de/schulen/schulportraits/bs17</app:schulportrait>
+      <app:schultyp>Hauptstandort</app:schultyp>
+      <app:stadtteil>Wandsbek</app:stadtteil>
+      <app:standort_id>319</app:standort_id>
+      <app:the_geom>
+        <!--Inlined geometry 'APP_STAATLICHE_SCHULEN_172968_APP_THE_GEOM'-->
+        <gml:Point gml:id="APP_STAATLICHE_SCHULEN_172968_APP_THE_GEOM" srsName="EPSG:25832">
+          <gml:pos>570874.000 5937381.000</gml:pos>
+        </gml:Point>
+      </app:the_geom>
+    </app:staatliche_schulen>
+  </gml:featureMember>
+</wfs:FeatureCollection>
