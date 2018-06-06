@@ -20,8 +20,7 @@ define(function (require) {
         },
 
         initialize: function () {
-            var model,
-                testData;
+            var model;
 
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
@@ -46,7 +45,7 @@ define(function (require) {
                 },
                 "houseNumbers": function (houseNumberList) {
                     this.setAddressList(this.prepareAddressList(houseNumberList, this.get("streetNameList")));
-                    this.setFilteredAddressList(this.filterAddressList(this.get("addressList"), this.get("searchRegExp")));
+                    this.setAddressListFiltered(this.filterAddressList(this.get("addressList"), this.get("searchRegExp")));
                 }
             });
             if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
@@ -55,41 +54,14 @@ define(function (require) {
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
                 model.setIsActive(true);
             }
-            testData = {
-                "Schul-ID": {
-                    dataType: "string",
-                    value: "5742-0"
-                },
-                SchuelerStrasse: {
-                    dataType: "string",
-                    value: "Neuenfelder Straße"
-                },
-                SchuelerHausnr: {
-                    dataType: "integer",
-                    value: 19
-                },
-                SchuelerZusatz: {
-                    dataType: "string",
-                    value: ""
-                },
-                RouteAusgeben: {
-                    dataType: "boolean",
-                    value: 1
-                },
-                "tm_tag": {
-                    dataType: "string",
-                    value: "fast"
-                }
-            };
-            // this.get("requestIDs").push("123456");
-            // Radio.trigger("WPS", "request", "1001", "123456", "schulwegrouting.fmw", testData);
         },
         handleResponse: function (requestID, response, status) {
             var parsedData;
 
-            if (this.isRoutingRequest(this.get("requests"), requestID)) {
+            if (this.isRoutingRequest(this.get("requestIDs"), requestID)) {
+                this.showLoader(false);
                 parsedData = response.Data.ComplexData.Schulweg.Ergebnis;
-                this.removeId(this.get("requests"), requestID);
+                this.removeId(this.get("requestIDs"), requestID);
                 if (status === 200) {
                     if (parsedData.ErrorOccured === "yes") {
                         this.handleWPSError(parsedData);
@@ -97,9 +69,6 @@ define(function (require) {
                     else {
                         this.handleSuccess(parsedData);
                     }
-                }
-                else {
-                    // TODO reset view
                 }
             }
         },
@@ -124,14 +93,21 @@ define(function (require) {
                 requestObj = this.setObjectAttribute(requestObj, "RouteAusgeben", "boolean", 1);
                 requestObj = this.setObjectAttribute(requestObj, "tm_tag", "string", "fast");
 
-                this.get("requestIDs").push(requestID);
                 this.sendRequest(requestID, requestObj);
             }
         },
         sendRequest: function (requestID, requestObj) {
-            console.log(requestID);
-            console.log(requestObj);
+            this.get("requestIDs").push(requestID);
+            this.showLoader(true);
             Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting.fmw", requestObj);
+        },
+        showLoader: function (show) {
+            if (show) {
+                $("#loader").show();
+            }
+            else {
+                $("#loader").hide();
+            }
         },
         setObjectAttribute: function (object, attrName, dataType, value) {
             var dataObj = {
@@ -189,18 +165,18 @@ define(function (require) {
                     Radio.trigger("Gaz", "findHouseNumbers", streetNameList[0]);
                 }
                 else {
-                    this.setFilteredAddressList(this.filterAddressList(addressList, this.get("searchRegExp")));
+                    this.setAddressListFiltered(this.filterAddressList(addressList, this.get("searchRegExp")));
                 }
             }
             else if (streetNameList.length > 0) {
                 this.setAddressList([]);
-                this.setFilteredAddressList([]);
+                this.setAddressListFiltered([]);
                 this.setStreetNameList(streetNameList);
             }
             else {
                 filteredAddressList = this.filterAddressList(addressList, this.get("searchRegExp"));
 
-                this.setFilteredAddressList(filteredAddressList);
+                this.setAddressListFiltered(filteredAddressList);
                 if (filteredAddressList.length === 1) {
                     this.setRoutePositionById("startPoint", this.get("layer").getSource(), filteredAddressList[0].position);
 
@@ -331,7 +307,7 @@ define(function (require) {
             this.set("searchRegExp", new RegExp(value.replace(/ /g, ""), "i"));
         },
 
-        setFilteredAddressList: function (value) {
+        setAddressListFiltered: function (value) {
             this.set("addressListFiltered", value);
         },
 

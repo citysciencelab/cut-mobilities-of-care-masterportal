@@ -90,7 +90,7 @@ define(function (require) {
             this.$el.find(".hit-list").html(this.templateHitlist(attr));
         },
 
-        hideHitlist: function (evt) {
+        hideHitlist: function () {
             this.$el.find(".hit-list").hide();
         },
 
@@ -102,16 +102,20 @@ define(function (require) {
             if (evt.target.value.length > 2) {
                 this.model.searchAddress(evt.target.value);
             }
+            if (evt.target.value.length === 0) {
+                this.model.setAddressListFiltered([]);
+            }
         },
 
         setAddressSearchValue: function (evt) {
             this.$el.find(".address-search").val(evt.target.textContent);
             this.model.searchAddress(evt.target.textContent);
+            this.model.prepareRequest();
         },
         closeView: function () {
             this.model.setIsActive(false);
         },
-        updateSelectedValues: function (evt) {
+        updateSelectedValues: function (evt, clickedIndex, newValue, oldValue) {
             var target = evt.currentTarget,
                 value = $(target).find("option:selected").val();
 
