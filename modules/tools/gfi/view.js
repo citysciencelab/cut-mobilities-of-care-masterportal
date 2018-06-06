@@ -1,6 +1,7 @@
 define(function (require) {
 
     var Backbone = require("backbone"),
+        $ = require("jquery"),
         GFIView;
 
     GFIView = Backbone.View.extend({
@@ -25,12 +26,11 @@ define(function (require) {
             }
         },
 
-        /**
-         *
-         */
         renderNext: function () {
+            var preWidth = 0;
+
             if ($(".pager-right").hasClass("disabled") === false) {
-                var preWidth = $(".gfi-attached").width();
+                preWidth = $(".gfi-attached").width();
 
                 this.model.set("themeIndex", this.model.get("themeIndex") + 1);
                 this.replaceArrow(preWidth);
@@ -41,9 +41,10 @@ define(function (require) {
          *
          */
         renderPrevious: function () {
-            if ($(".pager-left").hasClass("disabled") === false) {
-                var preWidth = $(".gfi-attached").width();
+            var preWidth = 0;
 
+            if ($(".pager-left").hasClass("disabled") === false) {
+                preWidth = $(".gfi-attached").width();
                 this.model.set("themeIndex", this.model.get("themeIndex") - 1);
                 this.replaceArrow(preWidth);
             }

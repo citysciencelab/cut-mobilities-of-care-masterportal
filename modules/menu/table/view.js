@@ -18,14 +18,6 @@ define(function (require) {
             this.renderLayerList();
             this.renderTools();
         },
-        toggleActiveElement: function (element) {
-            var oldActiveElement = this.getActiveElement();
-
-            if (oldActiveElement !== element) {
-                Radio.trigger("TableMenu", oldActiveElement);
-                this.setActiveElement(element);
-            }
-        },
         render: function () {
             $(this.el).html(this.template());
             $(".lgv-container").append(this.$el);

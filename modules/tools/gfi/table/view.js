@@ -12,7 +12,9 @@ define(function (require) {
         events: {
             "click .icon-turnarticle": "rotateGFI",
             "click .glyphicon-remove": "hideGFI",
-            "touchmove .gfi-header": "moveGFI"
+            "touchmove .gfi-header": "moveGFI",
+            "click .pager-right": "renderNext",
+            "click .pager-left": "renderPrevious"
         },
         render: function () {
             var attr = this.model.toJSON();
