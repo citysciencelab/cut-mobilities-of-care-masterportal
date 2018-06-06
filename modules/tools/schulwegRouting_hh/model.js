@@ -86,6 +86,8 @@ define(function (require) {
             var routeGeometry = this.parseRoute(response.route.edge);
 
             this.setGeometryByFeatureId("route", this.get("layer").getSource(), routeGeometry);
+            response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
+            this.setRouteResult(response);
         },
 
         /**
@@ -214,6 +216,7 @@ define(function (require) {
 
                 this.setAddressListFiltered(filteredAddressList);
                 if (filteredAddressList.length === 1) {
+                    this.setStartAddress(filteredAddressList[0]);
                     this.setGeometryByFeatureId("startPoint", this.get("layer").getSource(), filteredAddressList[0].geometry);
                 }
             }
@@ -231,11 +234,12 @@ define(function (require) {
          * @param {object[]} addressListFiltered - filtered list of addresses
          * @returns {void}
          */
-        setStartAddress: function (searchString, addressListFiltered) {
+        selectStartAddress: function (searchString, addressListFiltered) {
             var startAddress = _.find(addressListFiltered, function (address) {
                 return address.joinAddress === searchString.replace(/ /g, "");
             });
 
+            this.setStartAddress(startAddress);
             this.setGeometryByFeatureId("startPoint", this.get("layer").getSource(), startAddress.geometry);
         },
 
@@ -270,7 +274,7 @@ define(function (require) {
         },
 
         /**
-         * finds the selected school and sets the endpoint geometry
+         * finds the selected school, sets the school and sets the endpoint geometry
          * @param {ol.feature[]} schoolList - features of all schools
          * @param {string} schoolId - id of the school feature
          * @returns {void}
@@ -278,6 +282,7 @@ define(function (require) {
         selectSchool: function (schoolList, schoolId) {
             var school = this.filterSchoolById(schoolList, schoolId);
 
+            this.setSelectedSchool(school);
             this.setGeometryByFeatureId("endPoint", this.get("layer").getSource(), school.getGeometry());
         },
 
@@ -372,8 +377,6 @@ define(function (require) {
         },
 
         setSearchRegExp: function (value) {
-            // console.log(value.replace(/ /g, ""));
-            // console.log(new RegExp(value.replace(/ /g, "") + "$", "i"));
             this.set("searchRegExp", new RegExp(value.replace(/ /g, ""), "i"));
         },
 
@@ -386,6 +389,15 @@ define(function (require) {
         },
         setSelectedSchoolID: function (value) {
             this.set("selectedSchoolID", value);
+        },
+        setSelectedSchool: function (value) {
+            this.set("selectedSchool", value);
+        },
+        setStartAddress: function (value) {
+            this.set("startAddress", value);
+        },
+        setRouteResult: function (value) {
+            this.set("routeResult", value);
         }
     });
 

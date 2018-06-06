@@ -1,5 +1,6 @@
 define(function (require) {
     var expect = require("chai").expect,
+        ol = require("openlayers"),
         Util = require("util"),
         Model = require("../../../../../modules/tools/schulwegrouting_hh/model.js");
 
@@ -7,33 +8,41 @@ define(function (require) {
         var model,
             utilModel,
             schoolFeatures,
+            routeParts = [
+                {id: "513087", wkt: "LINESTRING(566318.249463363 5928187.98622225,566329.228 5928182.69)", length: "0.012"},
+                {id: "500163", wkt: "LINESTRING(566329.228 5928182.69,566340.464 5928177.176,566350.576 5928172.392)", length: "0.024"},
+                {id: "487902", wkt: "LINESTRING(566350.576 5928172.392,566355.385 5928170.072)", length: "0.005"},
+                {id: "511351", wkt: "LINESTRING(566355.385 5928170.072,566399.619 5928149.21,566408.222 5928145.158)", length: "0.058"},
+                {id: "495787", wkt: "LINESTRING(566408.222 5928145.158,566422.752 5928138.326)", length: "0.016"},
+                {id: "507002", wkt: "LINESTRING(566422.752 5928138.326,566451.387 5928127,566459.758 5928120.884,566462.705 5928119.483)", length: "0.044"}
+            ],
             addressList = [
                 {
                     affix: "a",
                     joinAddress: "NeuenfelderStraße13a",
                     number: "13",
-                    position: [566326.134, 5928222.917],
+                    geometry: new ol.geom.Point([566326.134, 5928222.917]),
                     street: "Neuenfelder Straße"
                 },
                 {
                     affix: "a",
                     joinAddress: "NeuenfelderStraße15a",
                     number: "15",
-                    position: [566376.183, 5928211.680],
+                    geometry: new ol.geom.Point([566376.183, 5928211.680]),
                     street: "Neuenfelder Straße"
                 },
                 {
                     affix: "b",
                     joinAddress: "NeuenfelderStraße84b",
                     number: "84",
-                    position: [567147.825, 5927969.049],
+                    geometry: new ol.geom.Point([567147.825, 5927969.049]),
                     street: "Neuenfelder Straße"
                 },
                 {
                     affix: "a",
                     joinAddress: "KielerStraße160a",
                     number: "160",
-                    position: [562202.187, 5936669.860],
+                    geometry: new ol.geom.Point([562202.187, 5936669.860]),
                     street: "Kieler Straße"
                 }
             ];
@@ -97,7 +106,7 @@ define(function (require) {
             it("should have the coordinates '567147.825 5927969.049' for the startpoint", function () {
                 var feature;
 
-                model.setRoutePositionById("startPoint", model.get("layer").getSource(), [567147.825, 5927969.049]);
+                model.setGeometryByFeatureId("startPoint", model.get("layer").getSource(), new ol.geom.Point([567147.825, 5927969.049]));
                 feature = model.get("layer").getSource().getFeatureById("startPoint");
                 expect(feature.getGeometry().getCoordinates()).to.deep.equal([567147.825, 5927969.049]);
             });
@@ -105,7 +114,7 @@ define(function (require) {
             it("should have the coordinates '566326.134 5928222.917' for the endpoint", function () {
                 var feature;
 
-                model.setRoutePositionById("endPoint", model.get("layer").getSource(), [566326.134, 5928222.917]);
+                model.setGeometryByFeatureId("endPoint", model.get("layer").getSource(), new ol.geom.Point([566326.134, 5928222.917]));
                 feature = model.get("layer").getSource().getFeatureById("endPoint");
                 expect(feature.getGeometry().getCoordinates()).to.deep.equal([566326.134, 5928222.917]);
             });
@@ -145,6 +154,25 @@ define(function (require) {
                 model.startSearch([], addressList);
                 expect(model.get("addressListFiltered")).to.have.lengthOf(1);
             });
+        });
+
+        describe("parseRoute", function () {
+            it("should return a MultiLineString geometry", function () {
+                var geometry = model.parseRoute(routeParts);
+
+                expect(geometry instanceof ol.geom.MultiLineString).to.be.true;
+            });
+            it("should return a MultiLineString geometry with six LineStrings", function () {
+                var geometry = model.parseRoute(routeParts);
+
+                expect(geometry.getLineStrings()).to.have.length(6);
+            });
+            it("should return a MultiLineString geometry with an extent of '[566318.249463363, 5928119.483, 566462.705, 5928187.98622225]'", function () {
+                var geometry = model.parseRoute(routeParts);
+
+                expect(geometry.getExtent()).to.deep.equal([566318.249463363, 5928119.483, 566462.705, 5928187.98622225]);
+            });
+
         });
     });
 });
