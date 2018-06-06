@@ -1,5 +1,6 @@
 define(function (require) {
     var ol = require("openlayers"),
+        $ = require("jquery"),
         SchulwegRouting;
 
     SchulwegRouting = Backbone.Model.extend({
@@ -65,7 +66,7 @@ define(function (require) {
             var parsedData;
 
             if (this.isRoutingRequest(this.get("requestIDs"), requestID)) {
-                this.showLoader(false);
+                this.toggleLoader(false);
                 parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
                 this.removeId(this.get("requestIDs"), requestID);
                 if (status === 200) {
@@ -104,10 +105,10 @@ define(function (require) {
         },
         sendRequest: function (requestID, requestObj) {
             this.get("requestIDs").push(requestID);
-            this.showLoader(true);
+            this.toggleLoader(true);
             Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting.fmw", requestObj);
         },
-        showLoader: function (show) {
+        toggleLoader: function (show) {
             if (show) {
                 $("#loader").show();
             }
@@ -197,7 +198,6 @@ define(function (require) {
                 this.setAddressListFiltered(filteredAddressList);
                 if (filteredAddressList.length === 1) {
                     this.setRoutePositionById("startPoint", this.get("layer").getSource(), filteredAddressList[0].position);
-
                 }
             }
         },
@@ -205,6 +205,21 @@ define(function (require) {
         searchAddress: function (value) {
             Radio.trigger("Gaz", "findStreets", value);
             this.setSearchRegExp(value);
+        },
+
+        /**
+         * finds a specific address in the address list and calls 'setRoutePositionById' for the startPoint
+         * will be executed after a click on a address in the hitList
+         * @param {string} searchString -
+         * @param {object[]} addressListFiltered - filtered list of addresses
+         * @returns {void}
+         */
+        setStartAddress: function (searchString, addressListFiltered) {
+            var startAddress = _.find(addressListFiltered, function (address) {
+                return address.joinAddress === searchString.replace(/ /g, "");
+            });
+
+            this.setRoutePositionById("startPoint", this.get("layer").getSource(), startAddress.position);
         },
 
         /**
@@ -276,7 +291,7 @@ define(function (require) {
             var geom = new ol.geom.Point(coordinates);
 
             source.getFeatureById(featureId).setGeometry(geom);
-            Radio.trigger("MapView", "setCenter", coordinates);
+            Radio.trigger("MapView", "setCenter", coordinates, 4);
         },
 
         /**
@@ -339,6 +354,8 @@ define(function (require) {
         },
 
         setSearchRegExp: function (value) {
+            // console.log(value.replace(/ /g, ""));
+            // console.log(new RegExp(value.replace(/ /g, "") + "$", "i"));
             this.set("searchRegExp", new RegExp(value.replace(/ /g, ""), "i"));
         },
 
