@@ -25,8 +25,8 @@
     </div>
     <div class="form-group col-xs-12">
         <select class="selectpicker" title="Schule auswählen" data-live-search="true">
-            <% schoolNames.forEach(function (school) { %>
-                <option><%= school.get("schulname") %></option>
+            <% schoolList.forEach(function (school) { %>
+                <option value="<%= school.getId() %>"><%= school.get("schulname") %></option>
             <% }); %>
          </select>
     </div>

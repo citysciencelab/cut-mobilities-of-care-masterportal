@@ -33,7 +33,6 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isActive": function (model, value) {
-                    console.log(value);
                     if (value) {
                         this.activateTool();
                         channel.trigger("activatedTool", this.getId(), this.get("deaktivateGFI"));
