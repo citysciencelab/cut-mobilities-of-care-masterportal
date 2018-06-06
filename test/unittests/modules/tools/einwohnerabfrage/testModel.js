@@ -1,17 +1,19 @@
 define(function(require) {
     var expect = require("chai").expect,
-        Util = require("util"),
+        testUtil = require("util"),
+        Util = require("../../../../../modules/core/util.js"),
         Model = require("../../../../../modules/tools/einwohnerabfrage_hh/model.js");
 
     describe("tools/einwohnerabfrageModel", function () {
         var model,
-            utilModel,
+            testUtilModel,
             cswResponseXml;
 
         before(function () {
             model = new Model();
-            utilModel = new Util();
-            cswResponseXml = utilModel.getCswResponse();
+            testUtilModel = new testUtil();
+            new Util();
+            cswResponseXml = testUtilModel.getCswResponse();
         });
 
         describe("roundRadius", function () {
@@ -59,29 +61,6 @@ define(function(require) {
         describe("parseDate", function () {
             it("should return '31.12.2013'", function () {
                 expect(model.parseDate(cswResponseXml)).to.equal("31.12.2013");
-            });
-        });
-        describe("punctuate", function () {
-            it("should not set two points for 7 digit number with decimals", function () {
-                expect(model.punctuate(1234567.890)).to.equal("1.234.567");
-            });
-            it("should not set two  points for 7 digit number", function () {
-                expect(model.punctuate(3456789)).to.equal("3.456.789");
-            });
-            it("should set  point for 4 digit number", function () {
-                expect(model.punctuate(1000)).to.equal("1.000");
-            });
-            it("should not set  point for 3 digit number", function () {
-                expect(model.punctuate(785)).to.equal("785");
-            });
-            it("should not set  point for 2 digit number", function () {
-                expect(model.punctuate(85)).to.equal("85");
-            });
-            it("should not set  point for 1 digit number", function () {
-                expect(model.punctuate(1)).to.equal("1");
-            });
-            it("should work with 1 digit number with decimals", function () {
-                expect(model.punctuate(5.22)).to.equal("5");
             });
         });
         describe("getFormattedDecimalString", function () {

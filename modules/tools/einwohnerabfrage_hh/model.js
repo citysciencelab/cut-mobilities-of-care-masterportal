@@ -163,7 +163,7 @@ define(function (require) {
                         stringVal = this.chooseUnitAndPunctuate(value);
                     }
                     else {
-                        stringVal = this.punctuate(value) + this.getFormattedDecimalString(value, 3);
+                        stringVal = Radio.request("Util", "punctuate", value) + this.getFormattedDecimalString(value, 3);
                     }
                     value = stringVal;
                 }
@@ -181,35 +181,18 @@ define(function (require) {
 
             if (value < 250000) {
                 decimals = this.getFormattedDecimalString(value, maxDecimals);
-                return this.punctuate(value) + decimals + " m²";
+                return Radio.request("Util", "punctuate", value) + decimals + " m²";
             }
             if (value < 10000000) {
                 value = value / 10000.0;
                 decimals = this.getFormattedDecimalString(value, maxDecimals);
 
-                return this.punctuate(value) + decimals + " ha";
+                return Radio.request("Util", "punctuate", value) + decimals + " ha";
             }
             value = value / 1000000.0;
             decimals = this.getFormattedDecimalString(value, maxDecimals);
 
-            return this.punctuate(value) + decimals + " km²";
-        },
-        /**
-         * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
-         * @param  {[type]} value - feature attribute values
-         */
-        punctuate: function (value) {
-            var pattern = /(-?\d+)(\d{3})/,
-                stringValue = value.toString(),
-                predecimals = stringValue;
-
-            if (stringValue.indexOf(".") !== -1) {
-                predecimals = stringValue.split(".")[0];
-            }
-            while (pattern.test(predecimals)) {
-                predecimals = predecimals.replace(pattern, "$1.$2");
-            }
-            return predecimals;
+            return Radio.request("Util", "punctuate", value) + decimals + " km²";
         },
         /**
          * Returns the pecimal part cut aftera  max length of number represented as string

@@ -8,6 +8,7 @@ define(function (require) {
         defaults: {
             // ol-features of all schools
             schoolList: [],
+            selectedSchool: {},
             // names of streets found
             streetNameList: [],
             addressList: [],
@@ -17,7 +18,6 @@ define(function (require) {
             isActive: false,
             id: "schulwegrouting",
             requestIDs: [],
-            selectedSchoolID: "",
             grammarSchoolName: "",
             useRegionalSchool: false
         },
@@ -69,7 +69,7 @@ define(function (require) {
             var parsedData;
 
             if (this.isRoutingRequest(this.get("requestIDs"), requestID)) {
-                this.showLoader(false);
+                this.toggleLoader(false);
                 parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
                 this.removeId(this.get("requestIDs"), requestID);
                 if (status === 200) {
@@ -86,11 +86,11 @@ define(function (require) {
             Radio.trigger("Alert", "alert", JSON.stringify(response));
         },
         handleSuccess: function (response) {
-            // TODO handle Response
-            console.log(response);
+            response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
+            this.setRouteResult(response);
         },
         findGrammarSchool: function () {
-            var address = this.get("addressListFiltered")[0],
+            var address = this.get("startAddress"),
                 gazAddress = {};
 
             if (!_.isUndefined(address)) {
@@ -98,22 +98,20 @@ define(function (require) {
                 gazAddress.housenumber = address.number;
                 gazAddress.affix = address.affix;
                 Radio.trigger("Gaz", "adressSearch", gazAddress);
-
             }
         },
         parseGrammarSchool: function (xml) {
-            var schoolID = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0",
-                schoolName = $(xml).find("gages\\:grundschule")[0].textContent;
+            var schoolID = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
 
             if (this.get("useRegionalSchool") === true) {
-                this.setGrammarSchoolName(schoolName);
-                this.setSelectedSchoolID(schoolID);
                 this.trigger("updateSelectedSchool", schoolID);
+                this.selectSchool(this.get("schoolList"), schoolID);
+                this.prepareRequest();
             }
         },
         prepareRequest: function () {
-            var schoolID = this.get("selectedSchoolID"),
-                address = this.get("addressListFiltered")[0],
+            var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
+                address = this.get("startAddress"),
                 requestID = _.uniqueId("schulwegrouting_"),
                 requestObj = {};
 
@@ -130,10 +128,10 @@ define(function (require) {
         },
         sendRequest: function (requestID, requestObj) {
             this.get("requestIDs").push(requestID);
-            this.showLoader(true);
+            this.toggleLoader(true);
             Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting.fmw", requestObj);
         },
-        showLoader: function (show) {
+        toggleLoader: function (show) {
             if (show) {
                 $("#loader").show();
             }
@@ -222,8 +220,8 @@ define(function (require) {
 
                 this.setAddressListFiltered(filteredAddressList);
                 if (filteredAddressList.length === 1) {
+                    this.setStartAddress(filteredAddressList[0]);
                     this.setRoutePositionById("startPoint", this.get("layer").getSource(), filteredAddressList[0].position);
-
                 }
             }
         },
@@ -231,6 +229,22 @@ define(function (require) {
         searchAddress: function (value) {
             Radio.trigger("Gaz", "findStreets", value);
             this.setSearchRegExp(value);
+        },
+
+        /**
+         * finds a specific address in the address list and calls 'setRoutePositionById' for the startPoint
+         * will be executed after a click on a address in the hitList
+         * @param {string} searchString -
+         * @param {object[]} addressListFiltered - filtered list of addresses
+         * @returns {void}
+         */
+        selectStartAddress: function (searchString, addressListFiltered) {
+            var startAddress = _.find(addressListFiltered, function (address) {
+                return address.joinAddress === searchString.replace(/ /g, "");
+            });
+
+            this.setStartAddress(startAddress);
+            this.setRoutePositionById("startPoint", this.get("layer").getSource(), startAddress.position);
         },
 
         /**
@@ -264,7 +278,7 @@ define(function (require) {
         },
 
         /**
-         * finds the selected school and sets the route endpoint
+         * finds the selected school, sets the school and sets the route endpoint
          * @param {ol.feature[]} schoolList - features of all schools
          * @param {string} schoolId - id of the school feature
          * @returns {void}
@@ -273,6 +287,7 @@ define(function (require) {
             var school = this.filterSchoolById(schoolList, schoolId),
                 coordinates = school.getGeometry().getCoordinates();
 
+            this.setSelectedSchool(school);
             coordinates.pop();
             this.setRoutePositionById("endPoint", this.get("layer").getSource(), coordinates);
         },
@@ -302,7 +317,7 @@ define(function (require) {
             var geom = new ol.geom.Point(coordinates);
 
             source.getFeatureById(featureId).setGeometry(geom);
-            Radio.trigger("MapView", "setCenter", coordinates);
+            Radio.trigger("MapView", "setCenter", coordinates, 4);
         },
 
         /**
@@ -374,14 +389,20 @@ define(function (require) {
         setLayer: function (layer) {
             this.set("layer", layer);
         },
-        setSelectedSchoolID: function (value) {
-            this.set("selectedSchoolID", value);
-        },
         setGrammarSchoolName: function (value) {
             this.set("grammarSchoolName", value);
         },
         setUseRegionalSchool: function (value) {
             this.set("useRegionalSchool", value);
+        },
+        setSelectedSchool: function (value) {
+            this.set("selectedSchool", value);
+        },
+        setStartAddress: function (value) {
+            this.set("startAddress", value);
+        },
+        setRouteResult: function (value) {
+            this.set("routeResult", value);
         }
     });
 

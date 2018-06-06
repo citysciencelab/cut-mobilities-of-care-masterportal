@@ -1,6 +1,7 @@
 define(function (require) {
     var template = require("text!modules/tools/schulwegRouting_hh/template.html"),
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
+        templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
         Model = require("modules/tools/schulwegRouting_hh/model"),
         $ = require("jquery"),
         SchulwegRoutingView;
@@ -13,6 +14,7 @@ define(function (require) {
         className: "schulweg-routing",
         template: _.template(template),
         templateHitlist: _.template(templateHitlist),
+        templateRouteResult: _.template(templateRouteResult),
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
@@ -20,7 +22,12 @@ define(function (require) {
                 this.$el.find(".address-search").focus();
                 evt.stopPropagation();
             },
-            "click li.address": "setAddressSearchValue",
+            "click li.address": function (evt) {
+                this.setAddressSearchValue(evt);
+                this.model.selectStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
+                this.model.findGrammarSchool();
+                this.model.prepareRequest();
+            },
             "click .address-search": function (evt) {
                 // stop event bubbling
                 evt.stopPropagation();
@@ -37,6 +44,7 @@ define(function (require) {
                 this.render();
             }
             this.listenTo(this.model, {
+                "change:routeResult": this.renderRouteResult,
                 "change:streetNameList": this.renderHitlist,
                 "change:addressListFiltered": this.renderHitlist,
                 "change:isActive": function (model, isActive) {
@@ -85,6 +93,12 @@ define(function (require) {
             this.$el.find(".hit-list").html(this.templateHitlist(attr));
         },
 
+        renderRouteResult: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.find(".route-result").html(this.templateRouteResult(attr));
+        },
+
         hideHitlist: function () {
             this.$el.find(".hit-list").hide();
         },
@@ -97,17 +111,15 @@ define(function (require) {
             if (evt.target.value.length > 2) {
                 this.model.searchAddress(evt.target.value);
             }
-            if (evt.target.value.length === 0) {
+            else {
                 this.model.setAddressListFiltered([]);
+                this.model.setStartAddress(undefined);
             }
         },
 
         setAddressSearchValue: function (evt) {
             this.$el.find(".address-search").val(evt.target.textContent);
             this.model.searchAddress(evt.target.textContent);
-            this.model.prepareRequest();
-            this.model.findGrammarSchool();
-
         },
         closeView: function () {
             this.model.setIsActive(false);
@@ -116,12 +128,10 @@ define(function (require) {
             var value = evt.target.value;
 
             this.model.selectSchool(this.model.get("schoolList"), value);
-            this.model.setSelectedSchoolID(value);
             this.model.prepareRequest();
         },
         updateSelectedSchool: function (schoolID) {
             this.$el.find(".selectpicker").selectpicker("val", schoolID);
-            this.model.prepareRequest();
         },
         useRegionalSchool: function (evt) {
             var useRegionalSchool = !$(evt.target).parent().hasClass("off");
@@ -129,6 +139,14 @@ define(function (require) {
             this.model.setUseRegionalSchool(useRegionalSchool);
             if (useRegionalSchool) {
                 this.model.findGrammarSchool();
+                // todo disable schulliste
+                this.$el.find(".selectpicker").prop("disabled", true);
+                this.$el.find(".selectpicker").selectpicker("refresh");
+            }
+            else {
+                // todo enable schulliste
+                this.$el.find(".selectpicker").prop("disabled", false);
+                this.$el.find(".selectpicker").selectpicker("refresh");
             }
         }
     });
