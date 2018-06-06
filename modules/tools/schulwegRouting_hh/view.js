@@ -115,7 +115,7 @@ define(function (require) {
         closeView: function () {
             this.model.setIsActive(false);
         },
-        updateSelectedValues: function (evt, clickedIndex, newValue, oldValue) {
+        updateSelectedValues: function (evt) {
             var target = evt.currentTarget,
                 value = $(target).find("option:selected").val();
 
