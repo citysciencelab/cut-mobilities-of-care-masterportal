@@ -14,7 +14,9 @@ define(function (require) {
             // route layer
             layer: {},
             isActive: false,
-            id: "schulwegrouting"
+            id: "schulwegrouting",
+            requestIDs: [],
+            selectedSchoolID: ""
         },
 
         initialize: function () {
@@ -33,13 +35,16 @@ define(function (require) {
                 "activatedTool": this.activate,
                 "deactivatedTool": this.deactivate
             });
+            this.listenTo(Radio.channel("WPS"), {
+                "response": this.handleResponse
+            });
             this.listenTo(Radio.channel("Gaz"), {
                 "streetNames": function (streetNameList) {
                     this.startSearch(streetNameList, this.get("addressList"));
                 },
                 "houseNumbers": function (houseNumberList) {
                     this.setAddressList(this.prepareAddressList(houseNumberList, this.get("streetNameList")));
-                    this.setFilteredAddressList(this.filterAddressList(this.get("addressList"), this.get("searchRegExp")));
+                    this.setAddressListFiltered(this.filterAddressList(this.get("addressList"), this.get("searchRegExp")));
                 }
             });
             if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
@@ -56,7 +61,79 @@ define(function (require) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
             }
         },
+        handleResponse: function (requestID, response, status) {
+            var parsedData;
 
+            if (this.isRoutingRequest(this.get("requestIDs"), requestID)) {
+                this.showLoader(false);
+                parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
+                this.removeId(this.get("requestIDs"), requestID);
+                if (status === 200) {
+                    if (parsedData.ErrorOccured === "yes") {
+                        this.handleWPSError(parsedData);
+                    }
+                    else {
+                        this.handleSuccess(parsedData);
+                    }
+                }
+            }
+        },
+        handleWPSError: function (response) {
+            Radio.trigger("Alert", "alert", JSON.stringify(response));
+        },
+        handleSuccess: function (response) {
+            // TODO handle Response
+            console.log(response);
+        },
+        prepareRequest: function () {
+            var schoolID = this.get("selectedSchoolID"),
+                address = this.get("addressListFiltered")[0],
+                requestID = _.uniqueId("schulwegrouting_"),
+                requestObj = {};
+
+            if (!_.isUndefined(address) && schoolID.length > 0) {
+                requestObj = this.setObjectAttribute(requestObj, "Schul-ID", "string", schoolID);
+                requestObj = this.setObjectAttribute(requestObj, "SchuelerStrasse", "string", address.street);
+                requestObj = this.setObjectAttribute(requestObj, "SchuelerHausnr", "integer", parseInt(address.number, 10));
+                requestObj = this.setObjectAttribute(requestObj, "SchuelerZusatz", "string", address.affix);
+                requestObj = this.setObjectAttribute(requestObj, "RouteAusgeben", "boolean", 1);
+                requestObj = this.setObjectAttribute(requestObj, "tm_tag", "string", "fast");
+
+                this.sendRequest(requestID, requestObj);
+            }
+        },
+        sendRequest: function (requestID, requestObj) {
+            this.get("requestIDs").push(requestID);
+            this.showLoader(true);
+            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting.fmw", requestObj);
+        },
+        showLoader: function (show) {
+            if (show) {
+                $("#loader").show();
+            }
+            else {
+                $("#loader").hide();
+            }
+        },
+        setObjectAttribute: function (object, attrName, dataType, value) {
+            var dataObj = {
+                dataType: dataType,
+                value: value
+            };
+
+            object[attrName] = dataObj;
+            return object;
+        },
+        removeId: function (requests, requestId) {
+            var index = requests.indexOf(requestId);
+
+            if (index > -1) {
+                requests.splice(index, 1);
+            }
+        },
+        isRoutingRequest: function (ownRequests, requestID) {
+            return _.contains(ownRequests, requestID);
+        },
         activate: function (id) {
             if (this.get("id") === id) {
                 this.setIsActive(true);
@@ -87,7 +164,7 @@ define(function (require) {
          */
         filterSchoolById: function (schoolList, schoolId) {
             return _.find(schoolList, function (school) {
-                return school.getId() === schoolId;
+                return school.get("schul_id") === schoolId;
             });
         },
 
@@ -106,18 +183,18 @@ define(function (require) {
                     Radio.trigger("Gaz", "findHouseNumbers", streetNameList[0]);
                 }
                 else {
-                    this.setFilteredAddressList(this.filterAddressList(addressList, this.get("searchRegExp")));
+                    this.setAddressListFiltered(this.filterAddressList(addressList, this.get("searchRegExp")));
                 }
             }
             else if (streetNameList.length > 0) {
                 this.setAddressList([]);
-                this.setFilteredAddressList([]);
+                this.setAddressListFiltered([]);
                 this.setStreetNameList(streetNameList);
             }
             else {
                 filteredAddressList = this.filterAddressList(addressList, this.get("searchRegExp"));
 
-                this.setFilteredAddressList(filteredAddressList);
+                this.setAddressListFiltered(filteredAddressList);
                 if (filteredAddressList.length === 1) {
                     this.setRoutePositionById("startPoint", this.get("layer").getSource(), filteredAddressList[0].position);
 
@@ -265,16 +342,15 @@ define(function (require) {
             this.set("searchRegExp", new RegExp(value.replace(/ /g, ""), "i"));
         },
 
-        setFilteredAddressList: function (value) {
+        setAddressListFiltered: function (value) {
             this.set("addressListFiltered", value);
         },
 
-        /**
-         * @param {ol.layer} layer -
-         * @returns {void}
-         */
         setLayer: function (layer) {
             this.set("layer", layer);
+        },
+        setSelectedSchoolID: function (value) {
+            this.set("selectedSchoolID", value);
         }
     });
 

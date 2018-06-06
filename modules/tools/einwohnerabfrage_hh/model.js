@@ -33,7 +33,7 @@ define(function (require) {
             }),
             requests: [],
             data: {},
-            receivedData: false,
+            dataReceived: false,
             requesting: false,
             snippetDropdownModel: {},
             values: {
@@ -98,15 +98,18 @@ define(function (require) {
          * @param  {} status the HTTPStatusCode
          */
         handleResponse: function (requestId, response, status) {
+            var parsedData;
+
             this.setRequesting(false);
             if (this.isEinwohnerRequest(this.get("requests"), requestId)) {
+                parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.einwohner;
                 this.removeId(this.get("requests"), requestId);
                 if (status === 200) {
-                    if (response["wps:erroroccured"] === "yes") {
-                        this.handleWPSError(response);
+                    if (parsedData.ErrorOccured === "yes") {
+                        this.handleWPSError(parsedData);
                     }
                     else {
-                        this.handleSuccess(response);
+                        this.handleSuccess(parsedData);
                     }
                 }
                 else {
@@ -128,7 +131,7 @@ define(function (require) {
          * @param  {String} response received by wps
          */
         handleWPSError: function (response) {
-            Radio.trigger("Alert", "alert", JSON.stringify(response["wps:ergebnis"]));
+            Radio.trigger("Alert", "alert", JSON.stringify(response["ergebnis"]));
         },
         /**
          * Used when statuscode is 200 and wps did not return an error
@@ -136,7 +139,7 @@ define(function (require) {
          */
         handleSuccess: function (response) {
             try {
-                response = JSON.parse(response["wps:ergebnis"]);
+                response = JSON.parse(response["ergebnis"]);
                 this.prepareDataForRendering(response);
                 this.setData(response);
                 this.setDataReceived(true);
@@ -411,7 +414,7 @@ define(function (require) {
 
             this.get("requests").push(requestId);
             Radio.trigger("WPS", "request", "1001", requestId, "einwohner_ermitteln.fmw", {
-                "such_flaeche": geoJson
+                "such_flaeche": JSON.stringify(geoJson)
             });
         },
         prepareData: function (geoJson) {

@@ -69,19 +69,9 @@ define(function (require) {
             }
         },
 
-        /**
-         * Setter für das Attribut "isActive"
-         * @param {boolean} value
-         * @param {Object} [options] - {silent: true} unterbindet das "change-Event"
-         */
         setIsActive: function (value, options) {
             this.set("isActive", value, options);
         },
-
-        /**
-         * Getter für das Attribut "isActive"
-         * @return {boolean}
-         */
         getIsActive: function () {
             return this.get("isActive");
         },

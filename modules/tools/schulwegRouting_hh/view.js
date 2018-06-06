@@ -2,6 +2,7 @@ define(function (require) {
     var template = require("text!modules/tools/schulwegRouting_hh/template.html"),
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
         Model = require("modules/tools/schulwegRouting_hh/model"),
+        $ = require("jquery"),
         SchulwegRoutingView;
 
     require("bootstrap-toggle");
@@ -94,17 +95,25 @@ define(function (require) {
             if (evt.target.value.length > 2) {
                 this.model.searchAddress(evt.target.value);
             }
+            if (evt.target.value.length === 0) {
+                this.model.setAddressListFiltered([]);
+            }
         },
 
         setAddressSearchValue: function (evt) {
             this.$el.find(".address-search").val(evt.target.textContent);
             this.model.searchAddress(evt.target.textContent);
+            this.model.prepareRequest();
         },
         closeView: function () {
             this.model.setIsActive(false);
         },
         selectSchool: function (evt) {
-            this.model.selectSchool(this.model.get("schoolList"), evt.target.value);
+            var value = evt.target.value;
+
+            this.model.selectSchool(this.model.get("schoolList"), value);
+            this.model.setSelectedSchoolID(value);
+            this.model.prepareRequest();
         }
     });
 
