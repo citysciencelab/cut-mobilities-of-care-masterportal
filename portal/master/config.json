@@ -13,7 +13,7 @@
       "gazetteer":
       {
         "minChars": 3,
-        "serviceId": "6",
+        "serviceId": "8",
         "searchStreets": true,
         "searchHouseNumbers": true,
         "searchDistricts": true,

@@ -29,7 +29,8 @@ define(function (require) {
             "focusin .address-search": "showHitlist",
             "click .close": "closeView",
             // Fires after the select's value (schoolList) has been changed
-            "changed.bs.select": "selectSchool"
+            "changed.bs.select": "selectSchool",
+            "change .regional-school": "useRegionalSchool"
         },
         initialize: function () {
             if (this.model.getIsActive()) {
@@ -46,7 +47,8 @@ define(function (require) {
                         this.$el.remove();
                         Radio.trigger("Sidebar", "toggle", false);
                     }
-                }
+                },
+                "updateSelectedSchool": this.updateSelectedSchool
             });
         },
 
@@ -104,6 +106,8 @@ define(function (require) {
             this.$el.find(".address-search").val(evt.target.textContent);
             this.model.searchAddress(evt.target.textContent);
             this.model.prepareRequest();
+            this.model.findGrammarSchool();
+
         },
         closeView: function () {
             this.model.setIsActive(false);
@@ -114,6 +118,18 @@ define(function (require) {
             this.model.selectSchool(this.model.get("schoolList"), value);
             this.model.setSelectedSchoolID(value);
             this.model.prepareRequest();
+        },
+        updateSelectedSchool: function (schoolID) {
+            this.$el.find(".selectpicker").selectpicker("val", schoolID);
+            this.model.prepareRequest();
+        },
+        useRegionalSchool: function (evt) {
+            var useRegionalSchool = !$(evt.target).parent().hasClass("off");
+
+            this.model.setUseRegionalSchool(useRegionalSchool);
+            if (useRegionalSchool) {
+                this.model.findGrammarSchool();
+            }
         }
     });
 
