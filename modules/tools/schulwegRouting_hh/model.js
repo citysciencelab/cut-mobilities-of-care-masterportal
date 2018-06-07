@@ -85,11 +85,13 @@ define(function (require) {
             Radio.trigger("Alert", "alert", JSON.stringify(response));
         },
         handleSuccess: function (response) {
-            var routeGeometry = this.parseRoute(response.route.edge);
+            var routeGeometry = this.parseRoute(response.route.edge),
+                routeDescription = response.routenbeschreibung.part;
 
             this.setGeometryByFeatureId("route", this.get("layer").getSource(), routeGeometry);
             response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
             this.setRouteResult(response);
+            this.setRouteDescription(routeDescription);
         },
         findRegionalSchool: function (address) {
             var gazAddress = {};
@@ -125,7 +127,6 @@ define(function (require) {
             });
             return multiLineString;
         },
-
         prepareRequest: function (address) {
             var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
                 requestID = _.uniqueId("schulwegrouting_"),
@@ -417,6 +418,9 @@ define(function (require) {
         },
         setRouteResult: function (value) {
             this.set("routeResult", value);
+        },
+        setRouteDescription: function (value) {
+            this.set("routeDescription", value);
         }
     });
 

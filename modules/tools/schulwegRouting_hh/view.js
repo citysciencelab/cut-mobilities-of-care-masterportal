@@ -2,6 +2,7 @@ define(function (require) {
     var template = require("text!modules/tools/schulwegRouting_hh/template.html"),
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
         templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
+        templateRouteDescription = require("text!modules/tools/schulwegRouting_hh/templateRouteDescription.html"),
         Model = require("modules/tools/schulwegRouting_hh/model"),
         SchulwegRoutingView;
 
@@ -14,6 +15,7 @@ define(function (require) {
         template: _.template(template),
         templateHitlist: _.template(templateHitlist),
         templateRouteResult: _.template(templateRouteResult),
+        templateRouteDescription: _.template(templateRouteDescription),
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
@@ -36,7 +38,8 @@ define(function (require) {
             "click .close": "closeView",
             // Fires after the select's value (schoolList) has been changed
             "changed.bs.select": "selectSchool",
-            "change .regional-school": "useRegionalSchool"
+            "change .regional-school": "useRegionalSchool",
+            "click .btn-route-desc": "toggleRouteDesc"
         },
         initialize: function () {
             if (this.model.getIsActive()) {
@@ -44,6 +47,7 @@ define(function (require) {
             }
             this.listenTo(this.model, {
                 "change:routeResult": this.renderRouteResult,
+                "change:routeDescription": this.renderRouteDescription,
                 "change:streetNameList": this.renderHitlist,
                 "change:addressListFiltered": this.renderHitlist,
                 "change:isActive": function (model, isActive) {
@@ -95,7 +99,12 @@ define(function (require) {
         renderRouteResult: function () {
             var attr = this.model.toJSON();
 
-            this.$el.find(".route-result").html(this.templateRouteResult(attr));
+            this.$el.find(".route-result").append(this.templateRouteResult(attr));
+        },
+        renderRouteDescription: function () {
+            var attr = this.model.toJSON();
+
+            this.$el.find(".route-result").append(this.templateRouteDescription(attr));
         },
 
         hideHitlist: function () {
@@ -142,6 +151,12 @@ define(function (require) {
                 this.$el.find(".selectpicker").prop("disabled", false);
             }
             this.$el.find(".selectpicker").selectpicker("refresh");
+        },
+        toggleRouteDesc: function (evt) {
+            var oldText = evt.target.innerHTML,
+                newText = oldText === "Routenbeschreibung einblenden" ? "Routenbeschreibung ausblenden" : "Routenbeschreibung einblenden";
+
+            this.$el.find(".btn-route-desc").text(newText);
         }
     });
 
