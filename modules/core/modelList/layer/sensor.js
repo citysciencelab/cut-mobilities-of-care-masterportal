@@ -143,7 +143,7 @@ define(function (require) {
 
             _.each(sensorData, function (data, index) {
                 var xyTransfrom,
-                    feature;
+                    feature;ö
 
                 if (_.has(data, "location") && !_.isUndefined(epsg)) {
                     xyTransfrom = ol.proj.transform(data.location, epsg, Config.view.epsg);
