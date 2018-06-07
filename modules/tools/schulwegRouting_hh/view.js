@@ -3,7 +3,6 @@ define(function (require) {
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
         templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
         Model = require("modules/tools/schulwegRouting_hh/model"),
-        $ = require("jquery"),
         SchulwegRoutingView;
 
     require("bootstrap-toggle");
