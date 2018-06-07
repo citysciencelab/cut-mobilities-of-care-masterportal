@@ -34,7 +34,6 @@
    {
       "id" : "999990",
       "name" : "AIS-Ostsee",
-      "fake" : false,
       "url" : "http://portal03.eggits.net/geoevent/rest/services/AIS-Ostsee-Stream/StreamServer",
       "typ" : "Sensor",
       "subTyp" : "ESRIStreamLayer",
@@ -44,7 +43,6 @@
    {
       "id" : "999991",
       "name" : "Weltsatelliten",
-      "fake" : false,
       "url" : "http://portal03.eggits.net/geoevent/rest/services/WorldSatellites/StreamServer",
       "typ" : "Sensor",
       "subTyp" : "ESRIStreamLayer",
@@ -63,7 +61,6 @@
    {
       "id" : "999992",
       "name" : "LA-Busse",
-      "fake" : true,
       "typ" : "Sensor",
       "subTyp" : "ESRIStreamLayer",
       "url" : "https://geoeventsample1.esri.com:6443/arcgis/rest/services/LABus/StreamServer",
@@ -79,7 +76,6 @@
    {
       "id" : "999993",
       "name" : "Live - Position der International Space Station",
-      "fake" : true,
       "url" : "http://portal03.eggits.net/geoevent/rest/services/iss-Location-Broadcast/StreamServer",
       "typ" : "Sensor",
       "subTyp" : "ESRIStreamLayer",

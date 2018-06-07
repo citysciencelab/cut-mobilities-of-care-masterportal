@@ -1,7 +1,7 @@
 define(function (require) {
     var expect = require("chai").expect,
         moment = require("moment"),
-        SensorLayerModel = require("../../../../../../modules/core/modelList/layer/sensor.js");
+        ol = require("openlayers"),SensorLayerModel = require("../../../../../../modules/core/modelList/layer/sensor.js");
 
     describe("core/modelList/layer/sensor", function () {
         var sensorLayer;
@@ -67,10 +67,10 @@ define(function (require) {
         });
 
         describe("mergeByCoordinates", function () {
-            it("should return an array that is empty", function () {
+            it("should return an array that is empty with undefined input", function () {
                 expect(sensorLayer.mergeByCoordinates(undefined)).to.be.an("array").that.is.empty;
             });
-            it("should return an array that is empty", function () {
+            it("should return an array that is empty for array with testdata", function () {
                 var dataArray = [{Test: [{name: "testname"}]}];
 
                 expect(sensorLayer.mergeByCoordinates(dataArray)).to.be.an("array").that.is.empty;
@@ -78,19 +78,19 @@ define(function (require) {
         });
 
         describe("aggreateArrays", function () {
-            it("should return an object that is empty", function () {
+            it("should return an object that is empty for undefined input", function () {
                 expect(sensorLayer.aggreateArrays(undefined)).to.be.an("object").that.is.empty;
             });
-            it("should return an array that is empty", function () {
+            it("should return an array that is empty for an empty array input", function () {
                 expect(sensorLayer.aggreateArrays([])).to.be.an("object").that.is.empty;
             });
         });
 
         describe("addProperties", function () {
-            it("should return an array that is empty", function () {
+            it("should return an array that is empty for undefined input", function () {
                 expect(sensorLayer.addProperties(undefined)).to.be.an("array").that.is.empty;
             });
-            it("should return an array that is empty", function () {
+            it("should return an array that is empty for an empty array input", function () {
                 expect(sensorLayer.addProperties([])).to.be.an("array").that.is.empty;
             });
         });
@@ -115,11 +115,11 @@ define(function (require) {
         });
 
         describe("changeTimeZone", function () {
-            it("should return undefined for undefined input", function () {
-                expect(sensorLayer.changeTimeZone(undefined, undefined)).that.is.undefined;
+            it("should return an empty for undefined input", function () {
+                expect(sensorLayer.changeTimeZone(undefined, undefined)).that.have.string("");
             });
-            it("should return undefinded for undefined phenomenontime and utc +1", function () {
-                expect(sensorLayer.changeTimeZone(undefined, "+1")).that.is.undefined;
+            it("should return an empty  string for undefined phenomenontime and utc +1", function () {
+                expect(sensorLayer.changeTimeZone(undefined, "+1")).that.have.string("");
             });
             it("should return an string in summertime", function () {
                 var summerTime = "2018-06-05T12:11:47.922Z";
@@ -160,6 +160,7 @@ define(function (require) {
                 expect(sensorLayer.convertScaling("available")).to.have.string("available");
             });
         });
+
         describe("drawPoints", function () {
             it("should return a empty array for empty array input", function () {
                 expect(sensorLayer.drawPoints(undefined, undefined)).to.be.an("array").that.is.empty;
@@ -173,5 +174,51 @@ define(function (require) {
                 expect(sensorLayer.drawPoints(data, undefined)).to.be.an("array").that.is.empty;
             });
         });
+        describe("getFeatureByDataStreamId", function () {
+            it("should return a empty array for undefined input", function () {
+                expect(sensorLayer.getFeatureByDataStreamId(undefined, undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return a empty array for given id and undefined features input", function () {
+                expect(sensorLayer.getFeatureByDataStreamId(15, undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return a empty array for undefined id and empty array input", function () {
+                expect(sensorLayer.getFeatureByDataStreamId(undefined, [])).to.be.an("array").that.is.empty;
+            });
+            it("should return a empty array for given id an empty array input", function () {
+                expect(sensorLayer.getFeatureByDataStreamId(15, [])).to.be.an("array").that.is.empty;
+            });
+            it("should return a empty array for false id an empty array input", function () {
+                expect(sensorLayer.getFeatureByDataStreamId("xyz", [])).to.be.an("array").that.is.empty;
+            });
+            it("should return a empty array", function () {
+                var feature0 = new ol.Feature({
+                        geometry: new ol.geom.Point([100, 100])
+                    }),
+                    feature1 = new ol.Feature({
+                        geometry: new ol.geom.Point([100, 100])
+                    }),
+                    features = [feature0, feature1];
+
+                expect(sensorLayer.getFeatureByDataStreamId("xyz", features)).to.be.an("array").that.is.empty;
+            });
+        });
+        describe("getDataStreamIds", function () {
+            it("should return a empty array for undefined input", function () {
+                expect(sensorLayer.getDataStreamIds(undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return an array with Strings for features input", function () {
+                var feature0 = new ol.Feature({
+                        geometry: new ol.geom.Point([100, 100])
+                    }),
+                    feature1 = new ol.Feature({
+                        geometry: new ol.geom.Point([100, 100])
+                    }),
+                    features = [feature0, feature1];
+
+                expect(sensorLayer.getDataStreamIds(features)).to.be.an("array").that.includes("", "");
+            });
+        });
+
+
     });
 });
