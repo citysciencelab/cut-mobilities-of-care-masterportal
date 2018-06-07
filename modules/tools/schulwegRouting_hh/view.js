@@ -25,6 +25,7 @@ define(function (require) {
                 this.setAddressSearchValue(evt);
                 this.model.selectStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
                 this.model.findRegionalSchool(this.model.get("startAddress"));
+                this.model.prepareRequest(this.model.get("startAddress"));
             },
             "click .address-search": function (evt) {
                 // stop event bubbling

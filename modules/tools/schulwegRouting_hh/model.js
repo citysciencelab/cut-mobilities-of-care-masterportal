@@ -69,9 +69,9 @@ define(function (require) {
 
             if (this.isRoutingRequest(this.get("requestIDs"), requestID)) {
                 this.toggleLoader(false);
-                parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
                 this.removeId(this.get("requestIDs"), requestID);
                 if (status === 200) {
+                    parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
                     if (parsedData.ErrorOccured === "yes") {
                         this.handleWPSError(parsedData);
                     }
