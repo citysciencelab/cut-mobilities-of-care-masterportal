@@ -76,7 +76,7 @@
         "glyphicon": "glyphicon-filter",
         "deaktivateGFI": false,
         "isGeneric": false,
-        "isInitOpen": true,
+        "isInitOpen": false,
         "allowMultipleQueriesPerLayer": true,
         "predefinedQueries": [
             {
