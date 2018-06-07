@@ -79,10 +79,14 @@ define(function (require) {
                         this.handleSuccess(parsedData);
                     }
                 }
+                else {
+                    this.handleWPSError("Routing kann nicht durchgeführt werden.<br>Bitte versuchen Sie es später erneut (Status: " + status + ").");
+                }
             }
         },
         handleWPSError: function (response) {
             Radio.trigger("Alert", "alert", JSON.stringify(response));
+            this.resetRoute();
         },
         handleSuccess: function (response) {
             var routeGeometry = this.parseRoute(response.route.edge);
@@ -366,16 +370,23 @@ define(function (require) {
                 })
             });
         },
+        resetRoute: function () {
+            var features = this.get("layer").getSource().getFeatures();
 
+            this.removeGeomFromFeatures(features);
+            this.trigger("resetRouteResult");
+        },
+        removeGeomFromFeatures: function (features) {
+            _.each(features, function (feature) {
+                feature.unset("geometry");
+            });
+        },
         setSchoolList: function (value) {
             this.set("schoolList", value);
         },
-
-        // getter for isActive
         getIsActive: function () {
             return this.get("isActive");
         },
-        // setter for isActive
         setIsActive: function (value) {
             var model;
 
@@ -387,7 +398,6 @@ define(function (require) {
                 model.setIsActive(false);
             }
         },
-
         setStreetNameList: function (value) {
             this.set("streetNameList", value);
         },
