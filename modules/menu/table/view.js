@@ -5,7 +5,7 @@ define(function (require) {
         TableNavModel = require("modules/menu/table/model"),
         $ = require("jquery"),
         LayerListView = require("modules/menu/table/layer/listView"),
-        CategoryList = require("modules/menu/table/categories/listView"),
+        CategoryList = require("modules/menu/table/categories/view"),
         ToolView = require("modules/menu/table/tool/view"),
         Menu;
 
