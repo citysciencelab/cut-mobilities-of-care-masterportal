@@ -43,7 +43,7 @@
 .table-tools-menu {
     background-color: #F2F2F2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
-    width: 200px;
+    width: 234px;
     height: 200px;
     display: none;
     position: absolute;
@@ -87,7 +87,7 @@
 
 .table-tool {
     margin-bottom: 6px;
-    font-size: 14px;
+    font-size: 17px;
 }
 
 .table-tool > a {
