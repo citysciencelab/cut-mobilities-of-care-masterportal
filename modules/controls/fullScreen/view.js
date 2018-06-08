@@ -1,17 +1,19 @@
-define([
-    "backbone"
-], function () {
+define(function (require) {
 
     var Backbone = require("backbone"),
+        _ = require("underscore"),
+        FullScreenTemplate = require("text!modules/menu/table/tool/tooltemplate.html"),
+        $ = require("jquery"),
         FullScreenView;
 
     FullScreenView = Backbone.View.extend({
-        className: "row",
+        id: "full-screen-button",
+        className: "table-tool",
         template: _.template("<div class='full-screen-button' title='Vollbild aktivieren'><span class='glyphicon glyphicon-fullscreen'></span></div>"),
-        tabletemplate: _.template("<div class='full-screen-view'><span class='glyphicon icon-fullscreen'></span></br>Vollbild umschalten</div>"),
+        tabletemplate: _.template(FullScreenTemplate),
         events: {
-            //"click div.full-screen-button": "toggleFullScreen",
-            "click div.full-screen-view": "toggleFullScreen"
+            "click .full-screen-button": "toggleFullScreen",
+            "click div#full-screen-view": "toggleFullScreen"
         },
         initialize: function () {
             var style = Radio.request("Util", "getUiStyle"),
@@ -38,10 +40,10 @@ define([
             this.$el.html(this.template);
         },
         renderToToolbar: function () {
-            this.$el.prepend(this.tabletemplate());
             //$(this.$el).html(this.tabletemplate({name: "Vollbild umschalten", glyphicon: "icon-fullscreen"}));
-            //(this.$el).children().last().addClass("full-screen-view");
-            //$("#table-tools-menu").append(this.$el);
+            //$(this.$el).children().last().addClass("full-screen-view");
+            //$("#table-tool").append(this.$el);
+            this.$el.append(this.tabletemplate({id:"full-screen-view", name: "Vollbild umschalten", glyphicon: "icon-fullscreen"}));
         },
         toggleFullScreen: function () {
             // true wenn "window" keine iframe ist --> FullScree-Modus (F11)
@@ -80,21 +82,13 @@ define([
                 window.open(window.location.href, "_blank");
             }
         },
-        /*toggleStyle: function () {
+        toggleStyle: function () {
             $(".full-screen-button > span").toggleClass("glyphicon-fullscreen glyphicon-remove");
             if ($(".full-screen-button").attr("title") === "Vollbild aktivieren") {
                 $(".full-screen-button").attr("title", "Vollbild deaktivieren");
             }
             else {
                 $(".full-screen-button").attr("title", "Vollbild aktivieren");
-            }*/
-         toggleStyle: function () {
-            $(".full-screen-view > span").toggleClass("glyphicon-fullscreen glyphicon-remove");
-            if ($(".full-screen-view").attr("title") === "Vollbild aktivieren") {
-                $(".full-screen-view").attr("title", "Vollbild deaktivieren");
-            }
-            else {
-                $(".full-screen-view").attr("title", "Vollbild aktivieren");
             }
         }
     });
