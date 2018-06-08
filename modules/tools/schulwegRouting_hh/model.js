@@ -103,7 +103,7 @@ define(function (require) {
         findRegionalSchool: function (address) {
             var gazAddress = {};
 
-            if (!_.isUndefined(address)) {
+            if (!_.isEmpty(address)) {
                 gazAddress.streetname = address.street;
                 gazAddress.housenumber = address.number;
                 gazAddress.affix = address.affix;
