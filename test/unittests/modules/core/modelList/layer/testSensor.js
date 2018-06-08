@@ -1,7 +1,8 @@
 define(function (require) {
     var expect = require("chai").expect,
         moment = require("moment"),
-        ol = require("openlayers"),SensorLayerModel = require("../../../../../../modules/core/modelList/layer/sensor.js");
+        ol = require("openlayers"),
+        SensorLayerModel = require("../../../../../../modules/core/modelList/layer/sensor.js");
 
     describe("core/modelList/layer/sensor", function () {
         var sensorLayer;
@@ -109,7 +110,8 @@ define(function (require) {
                 var thingsProperties = [{key1: "Text1", key2: "Text2"}, {key1: "Text3", key2: "Text4"}],
                     keys = ["key1", "key2"];
 
-                expect(sensorLayer.combineProperties(keys, thingsProperties)).to.be.an("object").that.includes({key1: "Text1 | Text3",
+                expect(sensorLayer.combineProperties(keys, thingsProperties)).to.be.an("object").that.includes({
+                    key1: "Text1 | Text3",
                     key2: "Text2 | Text4"});
             });
         });

@@ -19,6 +19,7 @@ define(function (require) {
                 }
             });
 
+            // render gfi new when changing properties of the associated features
             this.listenTo(channel, {
                 "changeGfi": function () {
                     Radio.trigger("gfiView", "render");

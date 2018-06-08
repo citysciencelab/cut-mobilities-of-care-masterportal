@@ -96,22 +96,27 @@ define(function (require) {
 
         /**
          * split properties by pipe (|)
-         * @param  {Object} properties
-         * @return {Object}
+         * @param  {Object} properties - from chargingstation
+         * @return {Object} propertiesObj
          */
         splitProperties: function (properties) {
             var propertiesObj = {};
 
             _.each(properties, function (value, key) {
-                if (value === "|") {
+                if (value === "|" || _.contains(value, "|")) {
                     propertiesObj[key] = String(value).split("|");
                 }
-                else if (_.contains(value, "|")) {
-                    propertiesObj[key] = String(value).split(" | ");
+                else if (_.isObject(value) && !_.isArray(value)) {
+                    propertiesObj[key] = [""];
                 }
                 else {
                     propertiesObj[key] = [String(value)];
                 }
+
+                // remove blanks
+                _.each(propertiesObj[key], function (str, index) {
+                    propertiesObj[key][index] = str.trim();
+                });
             });
 
             return propertiesObj;
@@ -119,36 +124,32 @@ define(function (require) {
 
         /**
          * creates the heading for the gfi of charging stations
-         * @param  {Object} allProperties
-         * @return {Object}
+         * @param  {Object} allProperties - from chargingstation
+         * @return {Object} headTitleObject
          */
         createGfiHeadingChargingStation: function (allProperties) {
             var headTitleObject = {};
 
-            if (this.attributes.name.indexOf("Elektro") !== -1) {
-                headTitleObject.StandortID = allProperties.chargings_station_nr[0];
-                headTitleObject.Adresse = allProperties.location_name[0] + ", " +
-                    allProperties.postal_code[0] + " " + allProperties.city[0];
-                headTitleObject.Eigentümer = allProperties.owner[0];
-            }
+            headTitleObject.StandortID = _.has(allProperties, "chargings_station_nr") ? String(allProperties.chargings_station_nr[0]) : "";
+            headTitleObject.Adresse = _.has(allProperties, "chargings_station_nr") && _.has(allProperties, "postal_code") && _.has(allProperties, "city")
+                ? allProperties.location_name[0] + ", " + allProperties.postal_code[0] + " " + allProperties.city[0] : "";
+            headTitleObject.Eigentümer = _.has(allProperties, "owner") ? allProperties.owner[0] : "";
 
             return headTitleObject;
         },
 
         /**
          * creates the heading for the table in the gfi of charging stations
-         * @param  {Object} allProperties
-         * @return {Array}
+         * @param  {Object} allProperties - from chargingstation
+         * @return {Array} tableheadArray
          */
         createGfiTableHeadingChargingStation: function (allProperties) {
-            var stationNumbers = allProperties.sms_no_charging_station,
+            var stationNumbers = _.has(allProperties, "sms_no_charging_station") ? allProperties.sms_no_charging_station : [],
                 tableheadArray = [];
 
-            if (this.attributes.name.indexOf("Elektro") !== -1) {
-                _.each(stationNumbers, function (num) {
-                    tableheadArray.push("Ladepunkt: " + num);
-                });
-            }
+            _.each(stationNumbers, function (num) {
+                tableheadArray.push("Ladepunkt: " + num);
+            });
 
             return tableheadArray;
         },
@@ -159,23 +160,26 @@ define(function (require) {
          * @return {Object} gfiProperties - with german state
          */
         changeStateToGerman: function (gfiProperties) {
+            console.log(gfiProperties);
             var translateObj = {
-                available: "Frei",
-                charging: "Belegt",
-                outoforder: "Außer Betrieb"
-            };
+                    available: "Frei",
+                    charging: "Belegt",
+                    outoforder: "Außer Betrieb"
+                },
+                gfiPropertiesGerman = !_.isUndefined(gfiProperties) ? gfiProperties : {};
 
-            _.each(gfiProperties.Zustand, function (state, index) {
+            _.each(gfiPropertiesGerman.Zustand, function (state, index) {
                 if (_.contains(_.keys(translateObj), state)) {
-                    gfiProperties.Zustand[index] = translateObj[state];
+                    gfiPropertiesGerman.Zustand[index] = translateObj[state];
                 }
                 else {
-                    gfiProperties.Zustand[index] = "";
+                    gfiPropertiesGerman.Zustand[index] = "";
                 }
 
             });
 
-            return gfiProperties;
+            console.log(gfiPropertiesGerman);
+            return gfiPropertiesGerman;
         },
 
         /**

@@ -271,7 +271,7 @@ define(function (require) {
                         keys.reverse();
                         values.reverse();
                         gfi = _.object(keys, values);
-                     }
+                    }
                 }
                 else {
                     _.each(gfiAttributes, function (value, key) {
