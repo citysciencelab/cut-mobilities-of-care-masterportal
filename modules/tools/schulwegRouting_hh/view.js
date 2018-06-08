@@ -36,7 +36,8 @@ define(function (require) {
             "click .close": "closeView",
             // Fires after the select's value (schoolList) has been changed
             "changed.bs.select": "selectSchool",
-            "change .regional-school": "useRegionalSchool"
+            "change .regional-school": "useRegionalSchool",
+            "click .delete-route": "resetRoute"
         },
         initialize: function () {
             if (this.model.getIsActive()) {
@@ -55,7 +56,8 @@ define(function (require) {
                         Radio.trigger("Sidebar", "toggle", false);
                     }
                 },
-                "updateSelectedSchool": this.updateSelectedSchool
+                "updateSelectedSchool": this.updateSelectedSchool,
+                "resetRouteResult": this.resetRouteResult
             });
         },
 
@@ -142,6 +144,12 @@ define(function (require) {
                 this.$el.find(".selectpicker").prop("disabled", false);
             }
             this.$el.find(".selectpicker").selectpicker("refresh");
+        },
+        resetRoute: function () {
+            this.model.resetRoute();
+        },
+        resetRouteResult: function () {
+            this.$el.find(".route-result").html("");
         }
     });
 
