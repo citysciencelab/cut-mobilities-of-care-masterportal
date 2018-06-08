@@ -26,12 +26,14 @@ define(function (require) {
                 this.hideMenu();
             }
             else {
+                $(".table-category-list").addClass("table-category-active");
                 $(".table-nav-cat-panel").addClass("in");
                 Radio.request("TableMenu", "setActiveElement", "Category");
             }
         },
         hideMenu: function () {
             $(".table-nav-cat-panel").removeClass("in");
+            $(".table-category-list").removeClass("table-category-active");
         },
         render: function () {
             this.$el.html(this.template());
