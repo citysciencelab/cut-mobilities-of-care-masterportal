@@ -266,7 +266,6 @@ define("app", function (require) {
                 switch (control.id) {
                     case "zoom": {
                         if (control.attr === true) {
-                            //var el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/zoom/view"], function (ZoomControlView) {
                                 new ZoomControlView();
@@ -294,7 +293,6 @@ define("app", function (require) {
                     }
                     case "fullScreen": {
                         if (control.attr === true) {
-                            //var el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/fullScreen/view"], function (FullScreenView) {
                                 new FullScreenView();

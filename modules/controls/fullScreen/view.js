@@ -40,9 +40,6 @@ define(function (require) {
             this.$el.html(this.template);
         },
         renderToToolbar: function () {
-            //$(this.$el).html(this.tabletemplate({name: "Vollbild umschalten", glyphicon: "icon-fullscreen"}));
-            //$(this.$el).children().last().addClass("full-screen-view");
-            //$("#table-tool").append(this.$el);
             this.$el.append(this.tabletemplate({id:"full-screen-view", name: "Vollbild umschalten", glyphicon: "icon-fullscreen"}));
         },
         toggleFullScreen: function () {
