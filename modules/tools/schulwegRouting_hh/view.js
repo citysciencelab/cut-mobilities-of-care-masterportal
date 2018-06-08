@@ -71,13 +71,30 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initToogle();
             this.initSelectpicker();
+            this.setPresetValues();
             Radio.trigger("Sidebar", "append", "schulwegrouting", this.$el);
             Radio.trigger("Sidebar", "toggle", true);
             this.renderRouteResult();
             this.renderRouteDescription();
             this.delegateEvents();
         },
+        setPresetValues: function () {
+            var schoolID = _.isEmpty(this.model.get("selectedSchool")) ? undefined : this.model.get("selectedSchool").get("schul_id");
 
+            this.setStartAddress();
+            if (!_.isUndefined(schoolID)) {
+                this.updateSelectedSchool(schoolID);
+            }
+        },
+        setStartAddress: function () {
+            var startAddress = this.model.get("startAddress"),
+                startStreet = "";
+
+            if (!_.isEmpty(startAddress)) {
+                startStreet = startAddress.street + " " + startAddress.number + startAddress.affix;
+                this.$el.find(".address-search").attr("value", startStreet);
+            }
+        },
         initToogle: function () {
             this.$el.find("#regional-school").bootstrapToggle({
                 on: "Ja",

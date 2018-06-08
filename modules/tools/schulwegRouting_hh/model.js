@@ -13,6 +13,7 @@ define(function (require) {
             streetNameList: [],
             addressList: [],
             addressListFiltered: [],
+            startAddress: {},
             // route layer
             layer: {},
             isActive: false,
