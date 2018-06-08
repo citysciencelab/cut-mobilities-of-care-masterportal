@@ -1,4 +1,4 @@
-<div class="result-container">
+<% if(!_.isEmpty(routeResult)) { %>
     <p>
     Die Gesamtlänge beträgt <span><%= routeResult.kuerzesteStrecke %>m</span>
     </p>
@@ -16,4 +16,4 @@
     <p>
         <span><%= selectedSchool.get("schulname") %>, <%= routeResult.SchuleingangTyp %> (<%= selectedSchool.get("adresse_strasse_hausnr")%>)</span>
     </p>
-</div>
+<% } %>

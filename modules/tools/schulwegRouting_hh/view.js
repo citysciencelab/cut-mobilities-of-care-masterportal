@@ -71,6 +71,8 @@ define(function (require) {
             this.initSelectpicker();
             Radio.trigger("Sidebar", "append", "schulwegrouting", this.$el);
             Radio.trigger("Sidebar", "toggle", true);
+            this.renderRouteResult();
+            this.renderRouteDescription();
             this.delegateEvents();
         },
 
@@ -99,12 +101,12 @@ define(function (require) {
         renderRouteResult: function () {
             var attr = this.model.toJSON();
 
-            this.$el.find(".route-result").append(this.templateRouteResult(attr));
+            this.$el.find(".result-container").html(this.templateRouteResult(attr));
         },
         renderRouteDescription: function () {
             var attr = this.model.toJSON();
 
-            this.$el.find(".route-result").append(this.templateRouteDescription(attr));
+            this.$el.find(".description-container").html(this.templateRouteDescription(attr));
         },
 
         hideHitlist: function () {

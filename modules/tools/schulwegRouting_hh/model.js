@@ -18,7 +18,9 @@ define(function (require) {
             isActive: false,
             id: "schulwegrouting",
             requestIDs: [],
-            useRegionalSchool: false
+            useRegionalSchool: false,
+            routeResult: {},
+            routeDescription: []
         },
 
         initialize: function () {

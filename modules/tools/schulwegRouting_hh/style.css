@@ -11,9 +11,8 @@
 }
 
 .schulweg-routing .content {
-    max-width: 30%;
+    width: 100%;
     padding-top: 20px;
-    position: absolute;
 }
 
 .schulweg-routing .content .form-group {
@@ -60,9 +59,6 @@
 }
 .schulweg-routing .description-container .route-part {
     border-bottom: 1px solid white;
-}
-.schulweg-routing .route-result {
-    background-color: rgb(229, 229, 229);
 }
 
 .schulweg-routing .route-result span {

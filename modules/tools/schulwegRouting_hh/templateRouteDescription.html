@@ -1,4 +1,4 @@
-<div class="description-container">
+<% if (routeDescription.length > 0) { %>
     <button type="button" class="btn btn-default col-md-12 btn-route-desc" data-toggle="collapse" data-target="#route-description">Routenbeschreibung einblenden</button>
     <div id="route-description" class="collapse">
         <p>
@@ -9,4 +9,4 @@
             <% }); %>
         </p>
     </div>
-</div>
+<% } %>
