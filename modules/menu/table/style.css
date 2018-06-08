@@ -88,6 +88,7 @@
 .table-tool {
     margin-bottom: 6px;
     font-size: 14px;
+    border-bottom: 1px solid #C0C0C0;
 }
 
 .table-tool > a {
