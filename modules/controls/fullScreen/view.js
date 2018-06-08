@@ -18,8 +18,8 @@ define(function (require) {
         initialize: function () {
             var style = Radio.request("Util", "getUiStyle"),
                 el;
-            //$(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", this.toggleStyle);
-            //this.render();
+            // $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", this.toggleStyle);
+            // this.render();
             if (style === "DEFAULT") {
                 el = Radio.request("ControlsView", "addRowTR", "toggleStyle");
                 this.setElement(el[0]);
@@ -40,37 +40,37 @@ define(function (require) {
             this.$el.html(this.template);
         },
         renderToToolbar: function () {
-            this.$el.append(this.tabletemplate({id:"full-screen-view", name: "Vollbild umschalten", glyphicon: "icon-fullscreen"}));
+            this.$el.append(this.tabletemplate({id: "full-screen-view", name: "Vollbild umschalten", glyphicon: "icon-fullscreen"}));
         },
         toggleFullScreen: function () {
             // true wenn "window" keine iframe ist --> FullScree-Modus (F11)
             if (window.self === window.top) {
                 if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
                     if (document.documentElement.requestFullscreen) {
-                      document.documentElement.requestFullscreen();
+                        document.documentElement.requestFullscreen();
                     }
                     else if (document.documentElement.msRequestFullscreen) {
-                      document.documentElement.msRequestFullscreen();
+                        document.documentElement.msRequestFullscreen();
                     }
                     else if (document.documentElement.mozRequestFullScreen) {
-                      document.documentElement.mozRequestFullScreen();
+                        document.documentElement.mozRequestFullScreen();
                     }
                     else if (document.documentElement.webkitRequestFullscreen) {
-                      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                        document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
                     }
                 }
                 else {
                     if (document.exitFullscreen) {
-                      document.exitFullscreen();
+                        document.exitFullscreen();
                     }
                     else if (document.msExitFullscreen) {
-                      document.msExitFullscreen();
+                        document.msExitFullscreen();
                     }
                     else if (document.mozCancelFullScreen) {
-                      document.mozCancelFullScreen();
+                        document.mozCancelFullScreen();
                     }
                     else if (document.webkitExitFullscreen) {
-                      document.webkitExitFullscreen();
+                        document.webkitExitFullscreen();
                     }
                 }
             }
