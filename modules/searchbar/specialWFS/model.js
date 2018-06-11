@@ -64,7 +64,7 @@ define(function (require) {
             var simpleSearchString = this.simplifyString(searchString),
                 searchStringRegExp = new RegExp(simpleSearchString),
                 masterObjectHits = [],
-                elementsHits = [],
+                elementsHits,
                 elementName;
 
             _.each(masterObject, function (elements) {
@@ -79,7 +79,9 @@ define(function (require) {
                     return elementName.search(searchStringRegExp) !== -1; // Prüft ob der Suchstring ein Teilstring vom Namen ist
                 }, this);
 
-                masterObjectHits.push(elementsHits);
+                if (elementsHits.length > 0) {
+                    masterObjectHits.push(elementsHits);
+                }
             }, this);
 
             return masterObjectHits;
