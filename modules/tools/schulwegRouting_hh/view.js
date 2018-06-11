@@ -39,7 +39,7 @@ define(function (require) {
             // Fires after the select's value (schoolList) has been changed
             "changed.bs.select": "selectSchool",
             "change .regional-school": "useRegionalSchool",
-            "click .btn-route-desc": "toggleRouteDesc",
+            "click .description button": "toggleRouteDesc",
             "click .delete-route": "resetRoute"
         },
         initialize: function () {
@@ -74,8 +74,6 @@ define(function (require) {
             this.setPresetValues();
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
-            this.renderRouteResult();
-            this.renderRouteDescription();
             this.delegateEvents();
         },
         setPresetValues: function () {
@@ -117,15 +115,19 @@ define(function (require) {
             this.$el.find(".hit-list").html(this.templateHitlist(attr));
         },
 
-        renderRouteResult: function () {
+        renderRouteResult: function (model, value) {
             var attr = this.model.toJSON();
 
-            this.$el.find(".result-container").html(this.templateRouteResult(attr));
+            if (Object.keys(value).length !== 0) {
+                this.$el.find(".result").html(this.templateRouteResult(attr));
+            }
         },
-        renderRouteDescription: function () {
+        renderRouteDescription: function (model, value) {
             var attr = this.model.toJSON();
 
-            this.$el.find(".description-container").html(this.templateRouteDescription(attr));
+            if (value.length > 0) {
+                this.$el.find(".description").html(this.templateRouteDescription(attr));
+            }
         },
 
         hideHitlist: function () {
@@ -177,13 +179,13 @@ define(function (require) {
             var oldText = evt.target.innerHTML,
                 newText = oldText === "Routenbeschreibung einblenden" ? "Routenbeschreibung ausblenden" : "Routenbeschreibung einblenden";
 
-            this.$el.find(".btn-route-desc").text(newText);
+            evt.target.innerHTML = newText;
         },
         resetRoute: function () {
             this.model.resetRoute();
         },
         resetRouteResult: function () {
-            this.$el.find(".route-result").html("");
+            this.$el.find(".route-container").html("");
         }
     });
 

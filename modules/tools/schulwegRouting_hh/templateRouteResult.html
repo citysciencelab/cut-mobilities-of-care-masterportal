@@ -1,19 +1,18 @@
-<% if(!_.isEmpty(routeResult)) { %>
-    <p>
-    Die Gesamtlänge beträgt <span><%= routeResult.kuerzesteStrecke %>m</span>
-    </p>
-    <br>
-    <p>
-    <small>von:</small>
-    </p>
-    <p>
-        <span><%= startAddress.street + " " + startAddress.number + startAddress.affix %></span>
-    </p>
-    <br>
-    <p>
-        <small>nach:</small>
-    </p>
-    <p>
-        <span><%= selectedSchool.get("schulname") %>, <%= routeResult.SchuleingangTyp %> (<%= selectedSchool.get("adresse_strasse_hausnr")%>)</span>
-    </p>
-<% } %>
+<!DOCTYPE html>
+<p>
+Die Gesamtlänge beträgt <span><%= routeResult.kuerzesteStrecke %>m</span>
+</p>
+<br>
+<p>
+<small>von:</small>
+</p>
+<p>
+    <span><%= startAddress.street + " " + startAddress.number + startAddress.affix %></span>
+</p>
+<br>
+<p>
+    <small>nach:</small>
+</p>
+<p>
+    <span><%= selectedSchool.get("schulname") %>, <%= routeResult.SchuleingangTyp %> (<%= selectedSchool.get("adresse_strasse_hausnr")%>)</span>
+</p>

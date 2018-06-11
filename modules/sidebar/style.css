@@ -4,6 +4,7 @@
     float: left;
     overflow: auto;
     display: none;
+    position: relative;
 }
 
 .sidebar-mobile {

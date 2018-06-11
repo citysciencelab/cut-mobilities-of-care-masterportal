@@ -1,12 +1,9 @@
-<% if (routeDescription.length > 0) { %>
-    <button type="button" class="btn btn-default col-md-12 btn-route-desc" data-toggle="collapse" data-target="#route-description">Routenbeschreibung einblenden</button>
-    <div id="route-description" class="collapse">
-        <p>
-            <% _.each(routeDescription, function (routePart, index) { %>
-            <span class="col-md-12 col-sm-12 route-part">
-                <%= routePart.anweisung %>
-            </span>
-            <% }); %>
-        </p>
-    </div>
-<% } %>
+<!DOCTYPE html>
+<button type="button" class="btn btn-default btn-sm btn-block" data-toggle="collapse" data-target="#route-description">Routenbeschreibung ausblenden</button>
+<ol id="route-description" class="collapse in">
+    <% _.each(routeDescription, function (routePart) { %>
+        <li>
+            <%= routePart.anweisung %>
+        </li>
+    <% }); %>
+</ol>
