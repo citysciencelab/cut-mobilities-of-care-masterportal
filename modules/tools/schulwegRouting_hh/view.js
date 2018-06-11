@@ -185,7 +185,8 @@ define(function (require) {
             this.model.resetRoute();
         },
         resetRouteResult: function () {
-            this.$el.find(".route-container").html("");
+            this.$el.find(".result").html("");
+            this.$el.find(".description").html("");
         }
     });
 
