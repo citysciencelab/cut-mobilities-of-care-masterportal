@@ -28,7 +28,6 @@ define(function (require) {
             }),
             wkt: "",
             markers: [],
-            source: new ol.source.Vector(),
             zoomLevel: 7
         },
         initialize: function () {
