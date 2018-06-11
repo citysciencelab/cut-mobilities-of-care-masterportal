@@ -40,7 +40,7 @@ define(function (require) {
                     else {
                         channel.trigger("deactivatedTool", this.getId(), this.get("deaktivateGFI"));
                     }
-                    if (_.contains(this.get("toolsToRenderInSidebar"), this.getId())) {
+                    if (_.contains(this.get("toolsToRenderInSidebar"), this.getId()) || this.getId() === "legend") {
                         channel.trigger("activatedTool", "gfi", false);
                     }
                 }
@@ -51,7 +51,9 @@ define(function (require) {
             if (this.getIsActive() === true) {
                 // triggert das Ändern eines Tools
                 Radio.trigger("ClickCounter", "toolChanged");
-                this.collection.setActiveToolToFalse(this, this.get("deaktivateGFI"));
+                if (this.getId() !== "legend") {
+                    this.collection.setActiveToolToFalse(this, this.get("deaktivateGFI"));
+                }
 
                 if (this.getId() === "legend") {
                     Radio.trigger("Legend", "toggleLegendWin");
