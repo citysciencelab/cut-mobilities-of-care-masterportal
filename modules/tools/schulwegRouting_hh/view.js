@@ -142,7 +142,7 @@ define(function (require) {
             }
             else {
                 this.model.setAddressListFiltered([]);
-                this.model.setStartAddress(undefined);
+                this.model.setStartAddress({});
             }
         },
 
