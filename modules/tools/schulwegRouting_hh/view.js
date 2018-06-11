@@ -72,7 +72,7 @@ define(function (require) {
             this.initToogle();
             this.initSelectpicker();
             this.setPresetValues();
-            Radio.trigger("Sidebar", "append", "schulwegrouting", this.$el);
+            Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.renderRouteResult();
             this.renderRouteDescription();

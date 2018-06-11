@@ -44,7 +44,8 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            Radio.trigger("Sidebar", "append", "filter", this.$el.html(this.template(attr)));
+            this.$el.html(this.template(attr));
+            Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.renderSimpleViews();
             this.delegateEvents();
