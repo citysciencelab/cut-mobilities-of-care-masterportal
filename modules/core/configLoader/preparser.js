@@ -1,13 +1,10 @@
-define([
-    "backbone",
-    "modules/core/configLoader/parserDefaultTree",
-    "modules/core/configLoader/parserCustomTree",
-    "config"
-], function () {
+define(function (require) {
+
     var Backbone = require("backbone"),
         DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
         CustomTreeParser = require("modules/core/configLoader/parserCustomTree"),
         Config = require("config"),
+        $ = require("jquery"),
         Preparser;
 
     Preparser = Backbone.Model.extend({
@@ -45,11 +42,13 @@ define([
             });
         },
         parse: function (response) {
+
             var attributes = {
                 portalConfig: response.Portalconfig,
                 baselayer: response.Themenconfig.Hintergrundkarten,
                 overlayer: response.Themenconfig.Fachdaten,
                 treeType: response.Portalconfig.Baumtyp,
+                isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
                 snippetInfos: this.requestSnippetInfos()
             };
 
@@ -59,6 +58,13 @@ define([
             else {
                 new CustomTreeParser(attributes);
             }
+        },
+
+        parseIsFolderSelectable: function (globalFlag) {
+            if (globalFlag === false) {
+                return false;
+            }
+            return true;
         },
 
         requestSnippetInfos: function () {
