@@ -18,6 +18,8 @@ require.config({
         modules: "../modules",
         moment: "../node_modules/moment/min/moment.min",
         openlayers: "../node_modules/openlayers/dist/ol",
+        pdfmake: "../node_modules/pdfmake/build/pdfmake.min",
+        pdffonts: "../node_modules/pdfmake/build/vfs_fonts",
         proj4: "../node_modules/proj4/dist/proj4",
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         templates: "../templates",

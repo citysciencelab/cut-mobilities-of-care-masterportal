@@ -10,6 +10,7 @@ define(function (require) {
             schoolList: [],
             selectedSchool: {},
             // names of streets found
+            startAddress: {},
             streetNameList: [],
             addressList: [],
             addressListFiltered: [],
@@ -63,6 +64,102 @@ define(function (require) {
             if (!_.isUndefined(layerModel)) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
             }
+        },
+        printRoute: function () {
+            var map = Radio.request("Map", "createScreenshot"),
+                address = this.get("startAddress"),
+                school = this.get("selectedSchool"),
+                route = this.get("routeResult"),
+                pdfDef = this.createPDFDef(map, address, school, route);
+
+            Radio.trigger("BrowserPrint", "print", "Ihr_Schulweg", pdfDef, "download");
+        },
+        createPDFDef: function (map, address, school, route) {
+            var addr = address.street + " " + address.number + address.affix,
+                schoolname = school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
+                routeDesc = this.createRouteDesc(route),
+                defs = {
+                    content: [
+                        {
+                            text: "Schulwegrouting",
+                            style: ["header", "bold"]
+                        },
+                        {
+                            image: map,
+                            fit: [500, 500],
+                            style: "image"
+                        },
+                        {
+                            text: "Zusammenfassung:",
+                            style: "subheader"
+                        },
+                        {
+                            canvas: [{
+                                type: "rect",
+                                x: 0,
+                                y: 0,
+                                w: 500,
+                                h: 90,
+                                r: 0,
+                                color: "gray"
+                            }]
+                        },
+                        {
+                            text: [
+                                {text: "Die Gesamtlänge beträgt ", style: "normal"},
+                                {text: route.kuerzesteStrecke + "m.\n", style: ["normal", "bold"]},
+                                {text: "von:\n", style: "small"},
+                                {text: addr + "\n", style: ["normal", "bold"]},
+                                {text: "nach:\n", style: "small"},
+                                {text: schoolname + "\n", style: ["normal", "bold"]}
+                            ],
+                            relativePosition: {
+                                x: 0,
+                                y: -90
+                            },
+                            style: "onGrey"
+                        },
+                        {
+                            text: "Routenbeschreibung:",
+                            style: "subheader"
+                        },
+                        {
+                            ol: routeDesc
+                        }
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 18
+                        },
+                        subheader: {
+                            fontSize: 14,
+                            margin: [0, 10]
+                        },
+                        normal: {
+                            fontSize: 12
+                        },
+                        bold: {
+                            bold: true
+                        },
+                        small: {
+                            fontSize: 10
+                        },
+                        image: {
+                            margin: [0, 10],
+                            alignment: "left"
+                        },
+                        onGrey: {
+                            margin: [10, 10],
+                            alignment: "center"
+                        }
+                    }
+                };
+
+            console.log(route);
+            return defs;
+        },
+        createRouteDesc: function (route) {
+            return _.pluck(route.routenbeschreibung.part, "anweisung");
         },
         handleResponse: function (requestID, response, status) {
             var parsedData;
@@ -381,6 +478,7 @@ define(function (require) {
                 feature.unset("geometry");
             });
         },
+
         setSchoolList: function (value) {
             this.set("schoolList", value);
         },

@@ -37,6 +37,12 @@ define("app", function (require) {
     new WPS();
     new AddGeoJSON();
 
+    // Funktionalitäten laden
+
+    // Browser Druck Modul
+    require(["modules/functionalities/browserPrint/model"], function (BrowserPrintModel) {
+        new BrowserPrintModel();
+    });
     // Graph laden
     require(["modules/tools/graph/model"], function (GraphModel) {
         new GraphModel();

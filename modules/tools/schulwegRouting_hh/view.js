@@ -37,7 +37,8 @@ define(function (require) {
             // Fires after the select's value (schoolList) has been changed
             "changed.bs.select": "selectSchool",
             "change .regional-school": "useRegionalSchool",
-            "click .delete-route": "resetRoute"
+            "click .delete-route": "resetRoute",
+            "click .print-route": "printRoute"
         },
         initialize: function () {
             if (this.model.getIsActive()) {
@@ -150,6 +151,9 @@ define(function (require) {
         },
         resetRouteResult: function () {
             this.$el.find(".route-result").html("");
+        },
+        printRoute: function() {
+            this.model.printRoute();
         }
     });
 

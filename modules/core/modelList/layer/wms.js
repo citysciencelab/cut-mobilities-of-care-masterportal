@@ -52,7 +52,8 @@ define(function (require) {
                             5809000
                         ],
                         tileSize: parseInt(this.get("tilesize"), 10)
-                    })
+                    }),
+                    crossOrigin: "anonymous"
                 }),
                 context = this;
 
@@ -75,7 +76,8 @@ define(function (require) {
                 this.setLayerSource(new ol.source.ImageWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
-                    params: params
+                    params: params,
+                    crossOrigin: "anonymous"
                 }));
             }
             this.registerErrorListener();
