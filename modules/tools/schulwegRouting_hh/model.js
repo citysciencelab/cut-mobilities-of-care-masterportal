@@ -13,12 +13,15 @@ define(function (require) {
             streetNameList: [],
             addressList: [],
             addressListFiltered: [],
+            startAddress: {},
             // route layer
             layer: {},
             isActive: false,
             id: "schulwegrouting",
             requestIDs: [],
-            useRegionalSchool: false
+            useRegionalSchool: false,
+            routeResult: {},
+            routeDescription: []
         },
 
         initialize: function () {
@@ -89,16 +92,18 @@ define(function (require) {
             this.resetRoute();
         },
         handleSuccess: function (response) {
-            var routeGeometry = this.parseRoute(response.route.edge);
+            var routeGeometry = this.parseRoute(response.route.edge),
+                routeDescription = response.routenbeschreibung.part;
 
             this.setGeometryByFeatureId("route", this.get("layer").getSource(), routeGeometry);
             response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
             this.setRouteResult(response);
+            this.setRouteDescription(routeDescription);
         },
         findRegionalSchool: function (address) {
             var gazAddress = {};
 
-            if (!_.isUndefined(address)) {
+            if (!_.isEmpty(address)) {
                 gazAddress.streetname = address.street;
                 gazAddress.housenumber = address.number;
                 gazAddress.affix = address.affix;
@@ -129,7 +134,6 @@ define(function (require) {
             });
             return multiLineString;
         },
-
         prepareRequest: function (address) {
             var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
                 requestID = _.uniqueId("schulwegrouting_"),
@@ -427,6 +431,9 @@ define(function (require) {
         },
         setRouteResult: function (value) {
             this.set("routeResult", value);
+        },
+        setRouteDescription: function (value) {
+            this.set("routeDescription", value);
         }
     });
 
