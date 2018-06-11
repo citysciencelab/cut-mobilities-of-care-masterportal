@@ -54,7 +54,7 @@ define(function (require) {
             // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
             var resolutions = Radio.request("MapView", "getResolutions"),
                 index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105),
-                hasPolygon, isMobile,
+                isMobile,
                 coord = _.isArray(hit.coordinate) ? hit.coordinate : hit.coordinate.split(" ");
 
             this.clearMarker();
