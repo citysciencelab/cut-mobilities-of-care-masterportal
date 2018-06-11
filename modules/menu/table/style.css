@@ -172,19 +172,7 @@
     display: none;
 }
 
-.table-layer-list a:link {
-    text-decoration: none;
-}
-
-.table-layer-list a:visited {
-    text-decoration: none;
-}
-
-.table-layer-list a:hover {
-    text-decoration: none;
-}
-
-.table-layer-list a:active {
+.table-layer-list a:link, a:visited, a:hover, a:active {
     text-decoration: none;
 }
 
