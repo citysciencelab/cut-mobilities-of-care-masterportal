@@ -27,8 +27,9 @@
 
 #table-category-list {
     position: relative;
-    margin-left: 488px;
-    margin-top: -40px;
+    float: right;
+    left: 556px;
+    margin-top: -45px;
     width: 40px;
     background-color: #fff;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);

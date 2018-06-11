@@ -28,7 +28,8 @@ define(function (require) {
             this.$el.find("#table-nav-main").append(new LayerListView().render());
         },
         renderCategoryList: function () {
-            this.$el.find("#table-nav-main").append(new CategoryList().render());
+            // new CategoryList();
+            this.$el.append(new CategoryList().render());
         },
         renderTools: function () {
             new ToolView();
