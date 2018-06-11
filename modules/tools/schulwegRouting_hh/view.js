@@ -2,6 +2,7 @@ define(function (require) {
     var template = require("text!modules/tools/schulwegRouting_hh/template.html"),
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
         templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
+        templateRouteDescription = require("text!modules/tools/schulwegRouting_hh/templateRouteDescription.html"),
         Model = require("modules/tools/schulwegRouting_hh/model"),
         SchulwegRoutingView;
 
@@ -14,6 +15,7 @@ define(function (require) {
         template: _.template(template),
         templateHitlist: _.template(templateHitlist),
         templateRouteResult: _.template(templateRouteResult),
+        templateRouteDescription: _.template(templateRouteDescription),
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
@@ -38,7 +40,9 @@ define(function (require) {
             "changed.bs.select": "selectSchool",
             "change .regional-school": "useRegionalSchool",
             "click .delete-route": "resetRoute",
-            "click .print-route": "printRoute"
+            "click .print-route": "printRoute",
+            "click .description button": "toggleRouteDesc",
+            "click .delete-route": "resetRoute"
         },
         initialize: function () {
             if (this.model.getIsActive()) {
@@ -46,6 +50,7 @@ define(function (require) {
             }
             this.listenTo(this.model, {
                 "change:routeResult": this.renderRouteResult,
+                "change:routeDescription": this.renderRouteDescription,
                 "change:streetNameList": this.renderHitlist,
                 "change:addressListFiltered": this.renderHitlist,
                 "change:isActive": function (model, isActive) {
@@ -68,11 +73,28 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initToogle();
             this.initSelectpicker();
+            this.setPresetValues();
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
         },
+        setPresetValues: function () {
+            var schoolID = _.isEmpty(this.model.get("selectedSchool")) ? undefined : this.model.get("selectedSchool").get("schul_id");
 
+            this.setStartAddress();
+            if (!_.isUndefined(schoolID)) {
+                this.updateSelectedSchool(schoolID);
+            }
+        },
+        setStartAddress: function () {
+            var startAddress = this.model.get("startAddress"),
+                startStreet = "";
+
+            if (!_.isEmpty(startAddress)) {
+                startStreet = startAddress.street + " " + startAddress.number + startAddress.affix;
+                this.$el.find(".address-search").attr("value", startStreet);
+            }
+        },
         initToogle: function () {
             this.$el.find("#regional-school").bootstrapToggle({
                 on: "Ja",
@@ -95,10 +117,19 @@ define(function (require) {
             this.$el.find(".hit-list").html(this.templateHitlist(attr));
         },
 
-        renderRouteResult: function () {
+        renderRouteResult: function (model, value) {
             var attr = this.model.toJSON();
 
-            this.$el.find(".route-result").html(this.templateRouteResult(attr));
+            if (Object.keys(value).length !== 0) {
+                this.$el.find(".result").html(this.templateRouteResult(attr));
+            }
+        },
+        renderRouteDescription: function (model, value) {
+            var attr = this.model.toJSON();
+
+            if (value.length > 0) {
+                this.$el.find(".description").html(this.templateRouteDescription(attr));
+            }
         },
 
         hideHitlist: function () {
@@ -115,7 +146,7 @@ define(function (require) {
             }
             else {
                 this.model.setAddressListFiltered([]);
-                this.model.setStartAddress(undefined);
+                this.model.setStartAddress({});
             }
         },
 
@@ -146,13 +177,21 @@ define(function (require) {
             }
             this.$el.find(".selectpicker").selectpicker("refresh");
         },
+        toggleRouteDesc: function (evt) {
+            var oldText = evt.target.innerHTML,
+                newText = oldText === "Routenbeschreibung einblenden" ? "Routenbeschreibung ausblenden" : "Routenbeschreibung einblenden";
+
+            evt.target.innerHTML = newText;
+        },
         resetRoute: function () {
             this.model.resetRoute();
         },
         resetRouteResult: function () {
             this.$el.find(".route-result").html("");
+            this.$el.find(".result").html("");
+            this.$el.find(".description").html("");
         },
-        printRoute: function() {
+        printRoute: function () {
             this.model.printRoute();
         }
     });

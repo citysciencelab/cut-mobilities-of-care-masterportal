@@ -11,9 +11,9 @@
 }
 
 .schulweg-routing .content {
+    position: absolute;
     /* max-width: 30%; */
     padding-top: 20px;
-    position: absolute;
 }
 
 .schulweg-routing .content .form-group {
@@ -34,7 +34,6 @@
 }
 
 .schulweg-routing .hit-list {
-    /* position: absolute; */
     z-index: 3;
     padding-left: 15px;
 }
@@ -48,15 +47,36 @@
     background-color: #e3e3e3;
 }
 
-.schulweg-routing .result-container {
-    padding-top: 20px;
-    padding-bottom: 20px;
+.description ol {
+    padding-left: 15px;
 }
-.schulweg-routing .route-result {
+
+.description li {
+    padding-bottom: 5px;
+}
+
+.schulweg-routing .description button {
+    margin: 20px 0;
+}
+.schulweg-routing .result {
     background-color: rgb(229, 229, 229);
 }
 
-.schulweg-routing .route-result span {
+.schulweg-routing .result p:first-child{
+    padding-top: 20px;
+}
+
+.schulweg-routing .result p:last-child{
+    padding-bottom: 20px;
+}
+
+.schulweg-routing .route-container span {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     font-size: 15px;
+}
+
+@media (max-width: 767px) {
+    .schulweg-routing ol, .schulweg-routing label {
+        font-size: 14px;
+    }
 }
