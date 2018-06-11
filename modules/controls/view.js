@@ -40,7 +40,14 @@ define([
             }
             else {
                 this.$el.find(".control-view-top-right").append("<div class='row controls-row-right hidden-xs' id='" + id + "'></div>");
-            }
+                /*if ($("control-view-top-right").hasClass('.full-screen-buttom')) {
+                    $(this).parent().addClass(".full-screen-buttom");
+                }
+                else {
+                    this.$el.find(".control-view-top-right").append("<div class='row controls-row-right hidden-xs' id='" + id + "'></div>");
+                }
+                $(".control-view-top-right").next().hasClass(".full-screen-button").prepend( "<div class='fa fa-plus'></div>" );
+            */}
             return this.$el.find(".control-view-top-right").children().last();
         },
 

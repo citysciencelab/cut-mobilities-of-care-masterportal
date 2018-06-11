@@ -266,9 +266,10 @@ define("app", function (require) {
                 switch (control.id) {
                     case "zoom": {
                         if (control.attr === true) {
+                            var el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                                new ZoomControlView();
+                                new ZoomControlView({el: el});
                             });
                         }
                         break;
