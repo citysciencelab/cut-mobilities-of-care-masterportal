@@ -43,26 +43,14 @@
     color: #F2F2F2;
 }
 
-.table-category-list a:link {
-    text-decoration: none;
-}
-
-.table-category-list a:visited {
-    text-decoration: none;
-}
-
-.table-category-list a:hover {
-    text-decoration: none;
-}
-
-.table-category-list a:active {
-    text-decoration: none;
-}
-
 #table-tools {
     position: relative;
     top: -45px;
     left: 324px;
+}
+
+.table-category-list a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
 }
 
 .table-tools {
