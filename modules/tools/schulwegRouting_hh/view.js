@@ -67,7 +67,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initToogle();
             this.initSelectpicker();
-            Radio.trigger("Sidebar", "append", "schulwegrouting", this.$el);
+            Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
         },
