@@ -14,7 +14,6 @@ define(function (require) {
             streetNameList: [],
             addressList: [],
             addressListFiltered: [],
-            startAddress: {},
             // route layer
             layer: {},
             isActive: false,
@@ -73,19 +72,30 @@ define(function (require) {
                 address = this.get("startAddress"),
                 school = this.get("selectedSchool"),
                 route = this.get("routeResult"),
-                pdfDef = this.createPDFDef(map, address, school, route);
+                date = new Date().toUTCString(),
+                pdfDef = this.createPDFDef(map, address, school, route, date);
 
             Radio.trigger("BrowserPrint", "print", "Ihr_Schulweg", pdfDef, "download");
         },
-        createPDFDef: function (map, address, school, route) {
+        createPDFDef: function (map, address, school, route, date) {
             var addr = address.street + " " + address.number + address.affix,
                 schoolname = school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
                 routeDesc = this.createRouteDesc(route),
                 defs = {
+                    pageSize: "A4",
+                    pageOrientation: "portrait",
                     content: [
                         {
-                            text: "Schulwegrouting",
-                            style: ["header", "bold"]
+                            text: [
+                                {
+                                    text: "Schulwegrouting",
+                                    style: ["header", "bold", "center"]
+                                },
+                                {
+                                    text: " (Stand: " + date + ")",
+                                    style: ["normal", "center"]
+                                }
+                            ]
                         },
                         {
                             image: map,
@@ -120,7 +130,8 @@ define(function (require) {
                                 x: 0,
                                 y: -90
                             },
-                            style: "onGrey"
+                            style: ["onGrey", "center"],
+                            pageBreak: "after"
                         },
                         {
                             text: "Routenbeschreibung:",
@@ -130,6 +141,19 @@ define(function (require) {
                             ol: routeDesc
                         }
                     ],
+                    footer: function (currentPage, pageCount) {
+                        var footer = [
+                            {
+                                text: currentPage.toString() + " / " + pageCount,
+                                style: ["normal", "center"]
+                            },
+                            {
+                                text: "Geoinformationen © Landesbetrieb Geoinformation und Vermessung, www.geoinfo.hamburg.de",
+                                style: ["small", "center"]
+                            }];
+
+                        return footer;
+                    },
                     styles: {
                         header: {
                             fontSize: 18
@@ -152,7 +176,9 @@ define(function (require) {
                             alignment: "left"
                         },
                         onGrey: {
-                            margin: [10, 10],
+                            margin: [10, 10]
+                        },
+                        center: {
                             alignment: "center"
                         }
                     }

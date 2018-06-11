@@ -41,8 +41,7 @@ define(function (require) {
             "change .regional-school": "useRegionalSchool",
             "click .delete-route": "resetRoute",
             "click .print-route": "printRoute",
-            "click .description button": "toggleRouteDesc",
-            "click .delete-route": "resetRoute"
+            "click .description button": "toggleRouteDesc"
         },
         initialize: function () {
             if (this.model.getIsActive()) {

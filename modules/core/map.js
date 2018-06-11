@@ -88,7 +88,7 @@ define(function (require) {
             var screenshot,
                 map = this.getMap();
 
-            map.once("postcompose", function(event) {
+            map.once("postcompose", function (event) {
                 var canvas = event.context.canvas;
 
                 screenshot = canvas.toDataURL("image/png");
