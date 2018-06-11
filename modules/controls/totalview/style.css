@@ -27,7 +27,7 @@
     text-align: center;
     color: #808080;
     padding-bottom: 5px;
-    /*border-bottom: 1px solid #C0C0C0;*/
+    font-size: 13px;
 }
 
 .total-view-menuelement > .icon-home {
