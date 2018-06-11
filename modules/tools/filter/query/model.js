@@ -218,6 +218,9 @@ define(function (require) {
                 this.setIsSelected(true);
                 if (this.getIsActive()) {
                     this.runFilter();
+                    if (this.getLiveZoomToFeatures()) {
+                        Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(), this.getLayerId());
+                    }
                 }
             }
         },
