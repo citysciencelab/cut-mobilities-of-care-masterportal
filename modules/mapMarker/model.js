@@ -13,6 +13,7 @@ define(function (require) {
                 stopEvent: false
             }),
             polygon: new ol.layer.Vector({
+                name: "mapMarker",
                 source: new ol.source.Vector(),
                 alwaysOnTop: true,
                 style: new ol.style.Style({
