@@ -14,7 +14,7 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(Radio.channel("TableMenu"), {
-                "hideMenuElementCategory": this.hideMenu
+                "hideMenuElementCategory": this.hideCategoryMenu
             });
 
             this.$el.on("show.bs.collapse", function () {
@@ -23,17 +23,20 @@ define(function (require) {
         },
         toggleCategoryMenu: function () {
             if ($(".table-nav-cat-panel").hasClass("in")) {
-                this.hideMenu();
+                this.hideCategoryMenu();
             }
             else {
-                $(".table-category-list").addClass("table-category-active");
-                $(".table-nav-cat-panel").addClass("in");
-                Radio.request("TableMenu", "setActiveElement", "Category");
+                this.showCategoryMenu();
             }
         },
-        hideMenu: function () {
+        hideCategoryMenu: function () {
             $(".table-nav-cat-panel").removeClass("in");
             $(".table-category-list").removeClass("table-category-active");
+        },
+        showCategoryMenu: function () {
+            $(".table-category-list").addClass("table-category-active");
+            $(".table-nav-cat-panel").addClass("in");
+            Radio.request("TableMenu", "setActiveElement", "Category");
         },
         render: function () {
             this.$el.html(this.template());
