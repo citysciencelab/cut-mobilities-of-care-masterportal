@@ -135,11 +135,11 @@ define(function (require) {
             return multiLineString;
         },
         prepareRequest: function (address) {
-            var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
+             var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
                 requestID = _.uniqueId("schulwegrouting_"),
                 requestObj = {};
 
-            if (!_.isUndefined(address) && schoolID.length > 0) {
+            if (Object.keys(address).length !== 0 && schoolID.length > 0) {
                 requestObj = this.setObjectAttribute(requestObj, "Schul-ID", "string", schoolID);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerStrasse", "string", address.street);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerHausnr", "integer", parseInt(address.number, 10));
