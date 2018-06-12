@@ -23,5 +23,11 @@
     background-color: rgba(0,0,0,.5);
 }
 .schulinfo table {
-    border-top: 3px solid rgb(229,229,229);
+    border-top: 1px solid rgb(229,229,229);
+}
+
+.schulinfo .route-container {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: 1px solid rgb(229, 229, 229);
 }

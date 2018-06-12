@@ -26,7 +26,16 @@ define(function (require) {
 
         initialize: function () {
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
+                channel = Radio.channel("SchulwegRouting"),
                 model;
+
+            this.listenTo(channel, {
+                "selectSchool": function (schoolId) {
+                    this.trigger("updateSelectedSchool", schoolId);
+                    this.selectSchool(this.get("schoolList"), schoolId);
+                    this.prepareRequest(this.get("startAddress"));
+                }
+            }, this);
 
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
