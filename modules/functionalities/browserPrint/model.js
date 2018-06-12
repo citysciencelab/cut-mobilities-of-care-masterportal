@@ -2,7 +2,6 @@ define(function (require) {
     var browserPrintModel;
 
     require("pdfmake");
-    require("pdffonts");
 
     browserPrintModel = Backbone.Model.extend({
         initialize: function () {
