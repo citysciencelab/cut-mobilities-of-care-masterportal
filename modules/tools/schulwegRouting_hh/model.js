@@ -73,15 +73,16 @@ define(function (require) {
                 address = this.get("startAddress"),
                 school = this.get("selectedSchool"),
                 route = this.get("routeResult"),
+                routeDesc = this.get("routeDescription"),
                 date = momentJS(new Date()).format("DD.MM.YYYY"),
-                pdfDef = this.createPDFDef(map, address, school, route, date);
+                pdfDef = this.createPDFDef(map, address, school, route, routeDesc, date);
 
             Radio.trigger("BrowserPrint", "print", "Ihr_Schulweg", pdfDef, "download");
         },
-        createPDFDef: function (map, address, school, route, date) {
+        createPDFDef: function (map, address, school, route, routeDescription, date) {
             var addr = address.street + " " + address.number + address.affix,
                 schoolname = school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
-                routeDesc = this.createRouteDesc(route.routenbeschreibung.part),
+                routeDesc = this.createRouteDesc(routeDescription),
                 defs = {
                     pageSize: "A4",
                     pageOrientation: "portrait",
@@ -222,6 +223,7 @@ define(function (require) {
             response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
             this.setRouteResult(response);
             this.setRouteDescription(routeDescription);
+            this.trigger("togglePrintEnabled", true);
         },
         findRegionalSchool: function (address) {
             var gazAddress = {};
@@ -502,6 +504,7 @@ define(function (require) {
 
             this.removeGeomFromFeatures(features);
             this.trigger("resetRouteResult");
+            this.trigger("togglePrintEnabled", false);
         },
         removeGeomFromFeatures: function (features) {
             _.each(features, function (feature) {

@@ -19,6 +19,7 @@ define(function (require) {
             };
         },
         print: function (name, defs, mode) {
+            console.log(defs);
             if (mode === "download") {
                 window.pdfMake.createPdf(defs).download(name);
             }

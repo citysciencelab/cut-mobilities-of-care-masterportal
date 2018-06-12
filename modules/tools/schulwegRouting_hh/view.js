@@ -62,7 +62,8 @@ define(function (require) {
                     }
                 },
                 "updateSelectedSchool": this.updateSelectedSchool,
-                "resetRouteResult": this.resetRouteResult
+                "resetRouteResult": this.resetRouteResult,
+                "togglePrintEnabled": this.togglePrintEnabled
             });
         },
 
@@ -76,6 +77,14 @@ define(function (require) {
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
+        },
+        togglePrintEnabled: function (value) {
+            if (value) {
+                this.$el.find(".print-route").removeAttr("disabled");
+            }
+            else {
+                this.$el.find(".print-route").attr("disabled", true);
+            }
         },
         setPresetValues: function () {
             var schoolID = _.isEmpty(this.model.get("selectedSchool")) ? undefined : this.model.get("selectedSchool").get("schul_id");
