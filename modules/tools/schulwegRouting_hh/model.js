@@ -81,7 +81,7 @@ define(function (require) {
         createPDFDef: function (map, address, school, route, date) {
             var addr = address.street + " " + address.number + address.affix,
                 schoolname = school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
-                routeDesc = this.createRouteDesc(route),
+                routeDesc = this.createRouteDesc(route.routenbeschreibung.part),
                 defs = {
                     pageSize: "A4",
                     pageOrientation: "portrait",
@@ -187,8 +187,8 @@ define(function (require) {
 
             return defs;
         },
-        createRouteDesc: function (route) {
-            return _.pluck(route.routenbeschreibung.part, "anweisung");
+        createRouteDesc: function (routeDescArray) {
+            return _.pluck(routeDescArray, "anweisung");
         },
         handleResponse: function (requestID, response, status) {
             var parsedData;
