@@ -102,7 +102,7 @@ define(function (require) {
                         {
                             image: map,
                             fit: [500, 500],
-                            style: "image"
+                            style: ["image", "center"]
                         },
                         {
                             text: "Zusammenfassung:",
@@ -116,8 +116,9 @@ define(function (require) {
                                 w: 500,
                                 h: 90,
                                 r: 0,
-                                color: "gray"
-                            }]
+                                color: "#e5e5e5"
+                            }],
+                            style: "center"
                         },
                         {
                             text: [
@@ -147,12 +148,21 @@ define(function (require) {
                         var footer = [
                             {
                                 text: currentPage.toString() + " / " + pageCount,
-                                style: ["normal", "center"]
+                                style: ["xsmall", "center"]
                             },
                             {
-                                text: "Geoinformationen © Landesbetrieb Geoinformation und Vermessung, www.geoinfo.hamburg.de",
-                                style: ["small", "center"]
-                            }];
+                                text: [
+                                    {
+                                        text: "Herausgeber: ",
+                                        style: ["bold"]
+                                    },
+                                    {
+                                        text: "Freie und Hansestadt Hamburg. Landesbetrieb Geoinformation und Vermessung",
+                                    }
+                                ],
+                                style: ["xsmall", "center"]
+                            }
+                        ];
 
                         return footer;
                     },
@@ -172,6 +182,9 @@ define(function (require) {
                         },
                         small: {
                             fontSize: 10
+                        },
+                        xsmall: {
+                            fontSize: 8
                         },
                         image: {
                             margin: [0, 10],
