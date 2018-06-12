@@ -181,10 +181,10 @@ define(function (require) {
             it("should return an array for undefined input", function () {
                 expect(model.createRouteDesc(undefined)).to.be.an("array");
             });
-            it("should return an array for object input", function () {
+            it("should return an array for empty object input", function () {
                 expect(model.createRouteDesc({})).to.be.an("array");
             });
-            it("should return an array for object input", function () {
+            it("should return an array for given array[object] input", function () {
                 var array = [
                     {
                         anweisung: "test1"
