@@ -2,6 +2,7 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         _ = require("underscore"),
+        FreezeControlTemplate = require("text!modules/menu/table/tool/tooltemplate.html"),
         FreezeControlViewMenu;
 
     FreezeControlViewMenu = Backbone.View.extend({
@@ -9,6 +10,7 @@ define(function (require) {
         id: "freeze-view-control",
         className: "freeze-view-start",
         template: _.template("<div class='freeze-view-start' title='Ansicht sperren'><span class='glyphicon icon-lock lock-control'></span></div>"),
+        tabletemplate: _.template(FreezeControlTemplate),
         events: {
             "click .freeze-view-start": "toggleFreezeWindow"
         },
@@ -18,7 +20,7 @@ define(function (require) {
             if (style === "DEFAULT") {
                 el = Radio.request("ControlsView", "addRowTR", "freeze-view-control");
                 this.setElement(el[0]);
-                this.render();
+                this.renderAsControl();
             }
             else if (style === "TABLE") {
                 this.listenTo(Radio.channel("MenuLoader"), {
@@ -37,6 +39,13 @@ define(function (require) {
         },
         renderAsControl: function () {
             this.$el.html(this.template);
+        },
+        renderToToolbar: function () {
+            //this.$el.prepend(this.tabletemplate());
+            this.$el.append(this.tabletemplate({id: "freeze-view", name: "Ansicht sperren", glyphicon: "icon-lock"}));
+            $(this.$el).children().last().addClass("freeze-view-start");
+            $("#table-tools-menu").append(this.$el);
+
         },
         toggleFreezeWindow: function () {
             this.model.startFreezeWin();
