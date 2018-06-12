@@ -1,6 +1,7 @@
 define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
+        momentJS = require("moment"),
         SchulwegRouting;
 
     SchulwegRouting = Backbone.Model.extend({
@@ -10,10 +11,10 @@ define(function (require) {
             schoolList: [],
             selectedSchool: {},
             // names of streets found
+            startAddress: {},
             streetNameList: [],
             addressList: [],
             addressListFiltered: [],
-            startAddress: {},
             // route layer
             layer: {},
             isActive: false,
@@ -76,6 +77,142 @@ define(function (require) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
             }
         },
+        printRoute: function () {
+            var map = Radio.request("Map", "createScreenshot"),
+                address = this.get("startAddress"),
+                school = this.get("selectedSchool"),
+                route = this.get("routeResult"),
+                routeDesc = this.get("routeDescription"),
+                date = momentJS(new Date()).format("DD.MM.YYYY"),
+                pdfDef = this.createPDFDef(map, address, school, route, routeDesc, date);
+
+            Radio.trigger("BrowserPrint", "print", "Ihr_Schulweg", pdfDef, "download");
+        },
+        createPDFDef: function (map, address, school, route, routeDescription, date) {
+            var addr = address.street + " " + address.number + address.affix,
+                schoolname = school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
+                routeDesc = this.createRouteDesc(routeDescription),
+                defs = {
+                    pageSize: "A4",
+                    pageOrientation: "portrait",
+                    content: [
+                        {
+                            text: [
+                                {
+                                    text: "Schulwegrouting",
+                                    style: ["header", "bold", "center"]
+                                },
+                                {
+                                    text: " (Stand: " + date + ")",
+                                    style: ["normal", "center"]
+                                }
+                            ]
+                        },
+                        {
+                            image: map,
+                            fit: [500, 500],
+                            style: ["image", "center"]
+                        },
+                        {
+                            text: "Zusammenfassung:",
+                            style: "subheader"
+                        },
+                        {
+                            canvas: [{
+                                type: "rect",
+                                x: 0,
+                                y: 0,
+                                w: 500,
+                                h: 90,
+                                r: 0,
+                                color: "#e5e5e5"
+                            }],
+                            style: "center"
+                        },
+                        {
+                            text: [
+                                {text: "Die Gesamtlänge beträgt ", style: "normal"},
+                                {text: route.kuerzesteStrecke + "m.\n", style: ["normal", "bold"]},
+                                {text: "von:\n", style: "small"},
+                                {text: addr + "\n", style: ["normal", "bold"]},
+                                {text: "nach:\n", style: "small"},
+                                {text: schoolname + "\n", style: ["normal", "bold"]}
+                            ],
+                            relativePosition: {
+                                x: 0,
+                                y: -90
+                            },
+                            style: ["onGrey", "center"],
+                            pageBreak: "after"
+                        },
+                        {
+                            text: "Routenbeschreibung:",
+                            style: "subheader"
+                        },
+                        {
+                            ol: routeDesc
+                        }
+                    ],
+                    footer: function (currentPage, pageCount) {
+                        var footer = [
+                            {
+                                text: currentPage.toString() + " / " + pageCount,
+                                style: ["xsmall", "center"]
+                            },
+                            {
+                                text: [
+                                    {
+                                        text: "Herausgeber: ",
+                                        style: ["bold"]
+                                    },
+                                    {
+                                        text: "Freie und Hansestadt Hamburg. Landesbetrieb Geoinformation und Vermessung",
+                                    }
+                                ],
+                                style: ["xsmall", "center"]
+                            }
+                        ];
+
+                        return footer;
+                    },
+                    styles: {
+                        header: {
+                            fontSize: 18
+                        },
+                        subheader: {
+                            fontSize: 14,
+                            margin: [0, 10]
+                        },
+                        normal: {
+                            fontSize: 12
+                        },
+                        bold: {
+                            bold: true
+                        },
+                        small: {
+                            fontSize: 10
+                        },
+                        xsmall: {
+                            fontSize: 8
+                        },
+                        image: {
+                            margin: [0, 10],
+                            alignment: "left"
+                        },
+                        onGrey: {
+                            margin: [10, 10]
+                        },
+                        center: {
+                            alignment: "center"
+                        }
+                    }
+                };
+
+            return defs;
+        },
+        createRouteDesc: function (routeDescArray) {
+            return _.pluck(routeDescArray, "anweisung");
+        },
         handleResponse: function (requestID, response, status) {
             var parsedData;
 
@@ -108,6 +245,7 @@ define(function (require) {
             response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
             this.setRouteResult(response);
             this.setRouteDescription(routeDescription);
+            this.trigger("togglePrintEnabled", true);
         },
         findRegionalSchool: function (address) {
             var gazAddress = {};
@@ -388,12 +526,14 @@ define(function (require) {
 
             this.removeGeomFromFeatures(features);
             this.trigger("resetRouteResult");
+            this.trigger("togglePrintEnabled", false);
         },
         removeGeomFromFeatures: function (features) {
             _.each(features, function (feature) {
                 feature.unset("geometry");
             });
         },
+
         setSchoolList: function (value) {
             this.set("schoolList", value);
         },

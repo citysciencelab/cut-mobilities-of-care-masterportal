@@ -39,8 +39,9 @@ define(function (require) {
             // Fires after the select's value (schoolList) has been changed
             "changed.bs.select": "selectSchool",
             "change .regional-school": "useRegionalSchool",
-            "click .description button": "toggleRouteDesc",
-            "click .delete-route": "resetRoute"
+            "click .delete-route": "resetRoute",
+            "click .print-route": "printRoute",
+            "click .description button": "toggleRouteDesc"
         },
         initialize: function () {
             if (this.model.getIsActive()) {
@@ -61,7 +62,8 @@ define(function (require) {
                     }
                 },
                 "updateSelectedSchool": this.updateSelectedSchool,
-                "resetRouteResult": this.resetRouteResult
+                "resetRouteResult": this.resetRouteResult,
+                "togglePrintEnabled": this.togglePrintEnabled
             });
         },
 
@@ -75,6 +77,14 @@ define(function (require) {
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
+        },
+        togglePrintEnabled: function (value) {
+            if (value) {
+                this.$el.find(".print-route").removeAttr("disabled");
+            }
+            else {
+                this.$el.find(".print-route").attr("disabled", true);
+            }
         },
         setPresetValues: function () {
             var schoolID = _.isEmpty(this.model.get("selectedSchool")) ? undefined : this.model.get("selectedSchool").get("schul_id");
@@ -185,8 +195,12 @@ define(function (require) {
             this.model.resetRoute();
         },
         resetRouteResult: function () {
+            this.$el.find(".route-result").html("");
             this.$el.find(".result").html("");
             this.$el.find(".description").html("");
+        },
+        printRoute: function () {
+            this.model.printRoute();
         }
     });
 

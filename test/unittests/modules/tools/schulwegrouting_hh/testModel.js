@@ -82,7 +82,7 @@ define(function (require) {
         });
 
         describe("sortSchoolsByName", function () {
-            it("should have a school with the id 'APP_STAATLICHE_SCHULEN_172968'", function () {
+            it("should have a school with name 'Adolph-Schönfelder-Schule'", function () {
                 var schoolList = model.sortSchoolsByName(schoolFeatures);
 
                 expect(schoolList[0].get("schulname")).to.equal("Adolph-Schönfelder-Schule");
@@ -171,6 +171,30 @@ define(function (require) {
                 var geometry = model.parseRoute(routeParts);
 
                 expect(geometry.getExtent()).to.deep.equal([566318.249463363, 5928119.483, 566462.705, 5928187.98622225]);
+            });
+
+        });
+        describe("createRouteDesc", function () {
+            it("should return an array for empty array input", function () {
+                expect(model.createRouteDesc([])).to.be.an("array");
+            });
+            it("should return an array for undefined input", function () {
+                expect(model.createRouteDesc(undefined)).to.be.an("array");
+            });
+            it("should return an array for empty object input", function () {
+                expect(model.createRouteDesc({})).to.be.an("array");
+            });
+            it("should return an array for given array[object] input", function () {
+                var array = [
+                    {
+                        anweisung: "test1"
+                    },
+                    {
+                        anweisung: "test2"
+                    }
+                ];
+
+                expect(model.createRouteDesc(array)).to.be.an("array").to.deep.equal(["test1", "test2"]);
             });
 
         });

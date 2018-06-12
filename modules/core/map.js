@@ -31,7 +31,8 @@ define(function (require) {
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
                 "getSize": this.getSize,
                 "getPixelFromCoordinate": this.getPixelFromCoordinate,
-                "getMap": this.getMap
+                "getMap": this.getMap,
+                "createScreenshot": this.createScreenshot
             }, this);
 
             channel.on({
@@ -81,6 +82,18 @@ define(function (require) {
                 this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
             }
             this.stopMouseMoveEvent();
+        },
+        createScreenshot: function () {
+            var screenshot,
+                map = this.getMap();
+
+            map.once("postcompose", function (event) {
+                var canvas = event.context.canvas;
+
+                screenshot = canvas.toDataURL("image/png");
+            });
+            map.renderSync();
+            return screenshot;
         },
 
         /**
