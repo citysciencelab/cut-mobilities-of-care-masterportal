@@ -1,6 +1,7 @@
 define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
+        momentJS = require("moment"),
         SchulwegRouting;
 
     SchulwegRouting = Backbone.Model.extend({
@@ -72,7 +73,7 @@ define(function (require) {
                 address = this.get("startAddress"),
                 school = this.get("selectedSchool"),
                 route = this.get("routeResult"),
-                date = new Date().toUTCString(),
+                date = momentJS(new Date()).format("DD.MM.YYYY"),
                 pdfDef = this.createPDFDef(map, address, school, route, date);
 
             Radio.trigger("BrowserPrint", "print", "Ihr_Schulweg", pdfDef, "download");
@@ -184,7 +185,6 @@ define(function (require) {
                     }
                 };
 
-            console.log(route);
             return defs;
         },
         createRouteDesc: function (route) {
