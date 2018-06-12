@@ -1,7 +1,9 @@
 #table-nav {
-    bottom: 30px;
+    bottom: 80px;
     position: absolute;
-    width: 100%;
+    left: calc(50% - 485px / 2);
+    width: 485px;
+    height: 50px;
     font-family: "HamburgSans",sans-serif;
 }
 
@@ -27,11 +29,10 @@
 
 #table-category-list {
     position: relative;
-    float: right;
-    left: 556px;
+    left: calc(50% + 252px);
     margin-top: -45px;
     width: 40px;
-    background-color: #fff;
+    background-color: #F2F2F2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
 }
 
@@ -45,8 +46,8 @@
 
 #table-tools {
     position: relative;
-    top: -45px;
-    left: 324px;
+    top: -40px;
+    left: calc(50% + 303px);
 }
 
 .table-category-list a:link, a:visited, a:hover, a:active {
@@ -55,7 +56,6 @@
 
 .table-tools {
     background-color: #F2F2F2;
-    margin: auto;
     width: 40px;
     height: 40px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -91,7 +91,6 @@
 	width: 0;
 	position: absolute;
 }
-
 
 .table-tools-menu #funnel {
     bottom: 0px;
