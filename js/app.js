@@ -266,19 +266,19 @@ define("app", function (require) {
                 switch (control.id) {
                     case "zoom": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowTR(control.id);
+                            //var el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                                new ZoomControlView({el: el});
+                                new ZoomControlView(/*{el: el}*/);
                             });
                         }
                         break;
                     }
                     case "orientation": {
-                        var el = controlsView.addRowTR(control.id);
+                        //var el = controlsView.addRowTR(control.id);
 
                         require(["modules/controls/orientation/view"], function (OrientationView) {
-                            new OrientationView({el: el});
+                            new OrientationView(/*{el: el}*/);
                         });
                         break;
                     }
@@ -331,10 +331,10 @@ define("app", function (require) {
                     }
                     case "freeze": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowTR(control.id);
+                            //var el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/freeze/model"], function (FreezeModel) {
-                                new FreezeModel({uiStyle: style, el: el});
+                                new FreezeModel(/*{uiStyle: style, el: el}*/);
                             });
                         }
                         break;
