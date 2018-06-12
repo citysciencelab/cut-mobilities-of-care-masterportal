@@ -18,7 +18,14 @@ define([
             var showGeolocation = this.model.getIsGeoLocationPossible(),
                 showPoi = this.model.getShowPoi(),
                 poiDistances = this.model.getPoiDistances(),
-                channel;
+                channel,
+                style = Radio.request("Util", "getUiStyle"),
+                el;
+            if (style === "DEFAULT") {
+                el = Radio.request("ControlsView", "addRowTR");
+                this.setElement(el[0]);
+                this.render();
+            }
 
             if (showGeolocation) {// Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
                 channel = Radio.channel("orientation");
