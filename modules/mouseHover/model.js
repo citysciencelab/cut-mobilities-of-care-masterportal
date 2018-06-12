@@ -36,7 +36,7 @@ define(function (require) {
                 mouseHoverInfos = _.map(mouseHoverLayers, function (layer) {
                     return _.pick(layer, "id", "mouseHoverField");
                 });
-console.log(mouseHoverInfos);
+
             this.setMouseHoverInfos(mouseHoverInfos);
         },
 
