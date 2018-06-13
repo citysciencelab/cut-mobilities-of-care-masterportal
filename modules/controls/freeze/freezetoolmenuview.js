@@ -12,7 +12,7 @@ define(function (require) {
         className: "table-tool",
         template: _.template(FreezeToolTemplate),
         events: {
-            "click .freeze-view-start": "toggleFreezeWindow"
+            "click div#freeze-view-start": "toggleFreezeWindow"
         },
         initialize: function () {
             this.listenTo(Radio.channel("MenuLoader"), {
@@ -36,7 +36,7 @@ define(function (require) {
             this.renderToToolbar();
         },*/
         renderToToolbar: function () {
-            this.$el.append(this.template({id: "freeze-view", name: "Ansicht sperren", glyphicon: "icon-lock"}));
+            this.$el.append(this.template({id: "freeze-view-start", name: "Ansicht sperren", glyphicon: "icon-lock"}));
             //$(this.$el).html(this.template({/*id: "freeze-view", */name: "Ansicht sperren", glyphicon: "icon-lock"}));
             //$(this.$el).children().last().addClass("freeze-view-start");
             //$("#table-tools-menu").append(this.$el);
