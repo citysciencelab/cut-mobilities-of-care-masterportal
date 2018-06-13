@@ -36,9 +36,10 @@ define(function (require) {
             this.renderToToolbar();
         },*/
         renderToToolbar: function () {
-            $(this.$el).html(this.template({/*id: "freeze-view", */name: "Ansicht sperren", glyphicon: "icon-lock"}));
-            $(this.$el).children().last().addClass("freeze-view-start");
-            $("#table-tools-menu").append(this.$el);
+            this.$el.append(this.template({id: "freeze-view", name: "Ansicht sperren", glyphicon: "icon-lock"}));
+            //$(this.$el).html(this.template({/*id: "freeze-view", */name: "Ansicht sperren", glyphicon: "icon-lock"}));
+            //$(this.$el).children().last().addClass("freeze-view-start");
+            //$("#table-tools-menu").append(this.$el);
         },
         toggleFreezeWindow: function () {
             this.model.startFreezeWin();
