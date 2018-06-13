@@ -53,6 +53,9 @@ define(function (require) {
             this.listenTo(Radio.channel("WPS"), {
                 "response": this.handleResponse
             });
+            this.listenTo(Radio.channel("Map"), {
+                "screenshotCreated": this.printRoute
+            });
             this.listenTo(Radio.channel("Gaz"), {
                 "streetNames": function (streetNameList) {
                     this.startSearch(streetNameList, this.get("addressList"));
@@ -77,18 +80,20 @@ define(function (require) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
             }
         },
-        printRoute: function () {
-            var map = Radio.request("Map", "createScreenshot"),
-                address = this.get("startAddress"),
+        createScreenshot: function () {
+            Radio.trigger("Map", "createScreenshot");
+        },
+        printRoute: function (screenshotMap) {
+            var address = this.get("startAddress"),
                 school = this.get("selectedSchool"),
                 route = this.get("routeResult"),
                 routeDesc = this.get("routeDescription"),
                 date = momentJS(new Date()).format("DD.MM.YYYY"),
-                pdfDef = this.createPDFDef(map, address, school, route, routeDesc, date);
+                pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc, date);
 
             Radio.trigger("BrowserPrint", "print", "Ihr_Schulweg", pdfDef, "download");
         },
-        createPDFDef: function (map, address, school, route, routeDescription, date) {
+        createPDFDef: function (screenshotMap, address, school, route, routeDescription, date) {
             var addr = address.street + " " + address.number + address.affix,
                 schoolname = school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
                 routeDesc = this.createRouteDesc(routeDescription),
@@ -109,7 +114,7 @@ define(function (require) {
                             ]
                         },
                         {
-                            image: map,
+                            image: screenshotMap,
                             fit: [500, 500],
                             style: ["image", "center"]
                         },

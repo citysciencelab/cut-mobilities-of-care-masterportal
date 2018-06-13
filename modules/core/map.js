@@ -3,6 +3,8 @@ define(function (require) {
     var ol = require("openlayers"),
         MapView = require("modules/core/mapView"),
         $ = require("jquery"),
+        polyfill = require("promise-polyfill"),
+        html2canvas = require("html2canvas"),
         Map;
 
     Map = Backbone.Model.extend({
@@ -31,8 +33,7 @@ define(function (require) {
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
                 "getSize": this.getSize,
                 "getPixelFromCoordinate": this.getPixelFromCoordinate,
-                "getMap": this.getMap,
-                "createScreenshot": this.createScreenshot
+                "getMap": this.getMap
             }, this);
 
             channel.on({
@@ -41,6 +42,7 @@ define(function (require) {
                 "addOverlay": this.addOverlay,
                 "addInteraction": this.addInteraction,
                 "addControl": this.addControl,
+                "createScreenshot": this.createScreenshot,
                 "removeLayer": this.removeLayer,
                 "removeOverlay": this.removeOverlay,
                 "removeInteraction": this.removeInteraction,
@@ -88,12 +90,18 @@ define(function (require) {
                 map = this.getMap();
 
             map.once("postcompose", function (event) {
-                var canvas = event.context.canvas;
+                var mapCanvas = event.context.canvas;
 
-                screenshot = canvas.toDataURL("image/png");
+                screenshot = html2canvas(mapCanvas).then(function (canvas) {
+                    var dataURL = canvas.toDataURL("image/png");
+
+                    return dataURL;
+                });
             });
             map.renderSync();
-            return screenshot;
+            screenshot.then(function (value) {
+                Radio.trigger("Map", "screenshotCreated", value);
+            });
         },
 
         /**
