@@ -34,7 +34,7 @@ define(function (require) {
         renderTools: function () {
             new ToolView();
         },
-        hideContextMenu () {
+        hideContextMenu: function () {
             $("body").attr("oncontextmenu", "return false;");
         }
     });
