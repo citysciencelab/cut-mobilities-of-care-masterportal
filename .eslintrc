@@ -217,7 +217,6 @@
         "operator-assignment": "off",
         "operator-linebreak": "off",
         "padded-blocks": "off",
-        "padding-line-between-statements": "off",
         "quote-props": "off",
         "quotes": "error",
         "require-jsdoc": 0,
@@ -267,6 +266,11 @@
         "sort-imports": "off",
         "symbol-description": "off",
         "template-curly-spacing": "off",
-        "yield-star-spacing": "off"
+        "yield-star-spacing": "off",
+        "padding-line-between-statements": [
+            "error",
+            { blankLine: "always", prev: ["const", "let", "var"], next: "*"},
+            { blankLine: "any",    prev: ["const", "let", "var"], next: ["const", "let", "var"]}
+        ]
     }
 }
