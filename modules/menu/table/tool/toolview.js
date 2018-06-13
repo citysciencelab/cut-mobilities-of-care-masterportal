@@ -8,7 +8,6 @@ define(function (require) {
 
     ToolView = Backbone.View.extend({
         id: "table-tool",
-        className: "table-tool",
         template: _.template(ToolTemplate),
         events: {
             "click": "checkItem"

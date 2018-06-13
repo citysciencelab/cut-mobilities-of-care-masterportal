@@ -17,15 +17,26 @@ define(function (require) {
         initialize: function () {
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function () {
+                    this.setElement("#table-tools-menu");
+                    this.renderToToolbar();
+                }
+            });
+            // Hier unschön gehackt, da in gebauter Version der MenuLoader schon fertig ist und sein ready lange gesendet hat
+            // bis hier der Listener enabled wird. Muss noch mal generell überarbeitet werden ToDo! Christa Becker 05.06.2018
+            this.setElement("#table-tools-menu");
+            this.renderToToolbar();
+        },
+            /*this.listenTo(Radio.channel("MenuLoader"), {
+                "ready": function () {
                     this.renderToToolbar();
                 }
             });
             // Hier unschön gehackt, da in gebauter Version der MenuLoader schon fertig ist und sein ready lange gesendet hat
             // bis hier der Listener enabled wird. Muss noch mal generell überarbeitet werden ToDo! Christa Becker 05.06.2018
             this.renderToToolbar();
-        },
+        },*/
         renderToToolbar: function () {
-            $(this.$el).html(this.template({id: "freeze-view", name: "Ansicht sperren", glyphicon: "icon-lock"}));
+            $(this.$el).html(this.template({/*id: "freeze-view", */name: "Ansicht sperren", glyphicon: "icon-lock"}));
             $(this.$el).children().last().addClass("freeze-view-start");
             $("#table-tools-menu").append(this.$el);
         },
