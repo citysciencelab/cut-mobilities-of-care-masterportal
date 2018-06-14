@@ -4,6 +4,7 @@ define(function (require) {
         templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
         templateRouteDescription = require("text!modules/tools/schulwegRouting_hh/templateRouteDescription.html"),
         Model = require("modules/tools/schulwegRouting_hh/model"),
+        SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SchulwegRoutingView;
 
     require("bootstrap-toggle");
@@ -65,6 +66,7 @@ define(function (require) {
                 "resetRouteResult": this.resetRouteResult,
                 "togglePrintEnabled": this.togglePrintEnabled
             });
+            this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
         },
 
         render: function () {
@@ -74,6 +76,7 @@ define(function (require) {
             this.initToogle();
             this.initSelectpicker();
             this.setPresetValues();
+            this.$el.find(".checkbox").append(this.checkBoxHVV.render());
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();

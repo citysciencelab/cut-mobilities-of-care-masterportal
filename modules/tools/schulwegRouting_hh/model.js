@@ -2,6 +2,7 @@ define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
         momentJS = require("moment"),
+        SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         SchulwegRouting;
 
     SchulwegRouting = Backbone.Model.extend({
@@ -22,7 +23,11 @@ define(function (require) {
             requestIDs: [],
             useRegionalSchool: false,
             routeResult: {},
-            routeDescription: []
+            routeDescription: [],
+            checkBoxHVV: new SnippetCheckboxModel({
+                isSelected: false,
+                label: "HVV Layer einblenden"
+            })
         },
 
         initialize: function () {
@@ -66,6 +71,9 @@ define(function (require) {
                 },
                 "getAdress": this.parseRegionalSchool
             });
+            this.listenTo(this.get("checkBoxHVV"), {
+                "valuesChanged": this.toggleHVVLayer
+            });
             if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
                 // model in modellist gets activated.
                 // And there the "Tool", "activatedTool" is triggered where this model listens to.
@@ -80,6 +88,24 @@ define(function (require) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
             }
             this.setDefaults();
+        },
+        toggleHVVLayer: function (value) {
+            Radio.trigger("ModelList", "setModelAttributesById", "1935geofox-bus", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+            Radio.trigger("ModelList", "setModelAttributesById", "1935geofox_BusName", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+            Radio.trigger("ModelList", "setModelAttributesById", "1935geofox-bahn", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+            Radio.trigger("ModelList", "setModelAttributesById", "1935geofox_Faehre", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
         },
 
         setDefaults: function () {
