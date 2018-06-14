@@ -76,6 +76,10 @@
             "name": "Einwohneranzahl abfragen",
             "glyphicon": "glyphicon-wrench"
           },
+          "compareFeatures": {
+            "name": "Vergleichsliste",
+            "glyphicon": "glyphicon-th-list"
+          },
           "filter":
           {
             "name": "Filter",

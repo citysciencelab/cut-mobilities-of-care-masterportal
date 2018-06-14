@@ -31,7 +31,7 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isActive": function (model, value) {
-                    if (value) {
+                     if (value) {
                         this.activateTool();
                         channel.trigger("activatedTool", this.getId(), this.get("deaktivateGFI"));
                     }
@@ -43,7 +43,9 @@ define(function (require) {
             if (this.getIsActive() === true) {
                 // triggert das Ändern eines Tools
                 Radio.trigger("ClickCounter", "toolChanged");
-                this.collection.setActiveToolToFalse(this, this.get("deaktivateGFI"));
+                if (this.getId() !== "legend" || this.getId() !== "compareFeatures") {
+                    this.collection.setActiveToolToFalse(this, this.get("deaktivateGFI"));
+                }
 
                 if (this.getId() === "legend") {
                     Radio.trigger("Legend", "toggleLegendWin");
@@ -53,6 +55,9 @@ define(function (require) {
                 }
                 else if (this.getId() === "filter") {
                     Radio.trigger("Sidebar", "toggle", true);
+                }
+                else if (this.getId() === "compareFeatures") {
+                    Radio.trigger("CompareFeatures", "setIsActivated", true);
                 }
                 else {
                     Radio.trigger("Window", "toggleWin", this);
