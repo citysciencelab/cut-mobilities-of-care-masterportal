@@ -12,8 +12,6 @@ define(function (require) {
             "click .freeze-view-start": "toggleFreezeWindow"
         },
         initialize: function () {
-            var el = Radio.request("ControlsView", "addRowTR", "freeze-view-control");
-            this.setElement(el[0]);
             this.renderAsControl();
         },
         renderAsControl: function () {

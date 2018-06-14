@@ -14,20 +14,13 @@ define([
 
         initialize: function () {
             this.setView(new FreezeView({model: this}));
-            var style = Radio.request("Util", "getUiStyle");
-            if (style === "TABLE") {
-                new FreezeToolMenuView({model: this});
-            }
-            else {
-                new FreezeControlMenuView({model: this, el: this.getElement()});
-            }
 
-            /*if (this.getStyle() === "TABLE") {
+            if (this.getStyle() === "TABLE") {
                 new FreezeToolMenuView({model: this});
             }
             else {
                 new FreezeControlMenuView({model: this, el: this.getElement()});
-            }*/
+            }
         },
 
         setStyle: function (val) {

@@ -18,11 +18,9 @@ define(function (require) {
         initialize: function () {
             var style = Radio.request("Util", "getUiStyle"),
                 el;
-            // $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", this.toggleStyle);
+            $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", this.toggleStyle);
             // this.render();
             if (style === "DEFAULT") {
-                el = Radio.request("ControlsView", "addRowTR", "toggleStyle");
-                this.setElement(el[0]);
                 this.render();
             }
             else if (style === "TABLE") {

@@ -1,24 +1,17 @@
-define(function (require) {
+define([
+    "backbone",
+    "backbone.radio",
+    "text!modules/controls/zoom/template.html"
+], function (Backbone, Radio, ZoomControlTemplate) {
 
-    var Backbone = require("backbone"),
-        _ = require("underscore"),
-        ZoomControlTemplate = require("text!modules/controls/zoom/template.html"),
-        ZoomControlView;
-
-    ZoomControlView = Backbone.View.extend({
+    var ZoomControlView = Backbone.View.extend({
         template: _.template(ZoomControlTemplate),
         events: {
             "click .glyphicon-plus": "setZoomLevelUp",
             "click .glyphicon-minus": "setZoomLevelDown"
         },
         initialize: function () {
-            var style = Radio.request("Util", "getUiStyle"),
-                el;
-            if (style === "DEFAULT") {
-                el = Radio.request("ControlsView", "addRowTR", "setZoomLevelUp", "setZoomLevelDown");
-                this.setElement(el[0]);
-                this.render();
-            }
+            this.render();
         },
         render: function () {
             this.$el.html(this.template);
