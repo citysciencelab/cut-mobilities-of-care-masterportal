@@ -2,25 +2,21 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         _ = require("underscore"),
-        FullScreenTemplate = require("text!modules/menu/table/tool/tooltemplate.html"),
         $ = require("jquery"),
         FullScreenView;
 
     FullScreenView = Backbone.View.extend({
         id: "full-screen-button",
-        className: "table-tool",
         template: _.template("<div class='full-screen-button' title='Vollbild aktivieren'><span class='glyphicon glyphicon-fullscreen'></span></div>"),
-        tabletemplate: _.template(FullScreenTemplate),
+        tabletemplate: _.template("<div id='full-screen-view' class='table-tool'><a href='#'><span class='glyphicon icon-fullscreen'></span> Vollbild umschalten</a> </div>"),
         events: {
             "click .full-screen-button": "toggleFullScreen",
             "click div#full-screen-view": "toggleFullScreen"
         },
         initialize: function () {
-            var style = Radio.request("Util", "getUiStyle"),
-                el;
-            $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", this.toggleStyle);
-            // this.render();
+            var style = Radio.request("Util", "getUiStyle");
             if (style === "DEFAULT") {
+                $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", this.toggleStyle);
                 this.render();
             }
             else if (style === "TABLE") {
@@ -38,7 +34,8 @@ define(function (require) {
             this.$el.html(this.template);
         },
         renderToToolbar: function () {
-            this.$el.append(this.tabletemplate({id: "full-screen-view", name: "Vollbild umschalten", glyphicon: "icon-fullscreen"}));
+            this.$el.append(this.tabletemplate);
+
         },
         toggleFullScreen: function () {
             // true wenn "window" keine iframe ist --> FullScree-Modus (F11)
