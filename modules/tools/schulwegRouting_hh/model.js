@@ -323,7 +323,7 @@ define(function (require) {
             return multiLineString;
         },
         prepareRequest: function (address) {
-             var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
+            var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
                 requestID = _.uniqueId("schulwegrouting_"),
                 requestObj = {};
 
@@ -535,25 +535,25 @@ define(function (require) {
          */
         routeStyle: function (feature) {
             if (feature.getGeometry() instanceof ol.geom.Point) {
-                return new ol.style.Style({
-                    image: new ol.style.Circle({
-                        radius: 12,
-                        fill: new ol.style.Fill({
-                            color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019"
-                        }),
-                        stroke: new ol.style.Stroke({
-                            color: "#ffffff",
-                            width: 3
+                return [
+                    new ol.style.Style({
+                        image: new ol.style.Circle({
+                            radius: 17,
+                            stroke: new ol.style.Stroke({
+                                color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019",
+                                width: 3
+                            })
                         })
                     }),
-                    text: new ol.style.Text({
-                        text: feature.getId() === "startPoint" ? "A" : "B",
-                        scale: 1.5,
-                        fill: new ol.style.Fill({
-                            color: "#ffffff"
+                    new ol.style.Style({
+                        image: new ol.style.Circle({
+                            radius: 3,
+                            fill: new ol.style.Fill({
+                                color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019",
+                            })
                         })
                     })
-                });
+                ];
             }
             return new ol.style.Style({
                 stroke: new ol.style.Stroke({
