@@ -98,9 +98,10 @@ define(function (require) {
                 route = this.get("routeResult"),
                 routeDesc = this.get("routeDescription"),
                 date = momentJS(new Date()).format("DD.MM.YYYY"),
+                filename = "Schulweg_zu_" + school.get("schulname"),
                 pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc, date);
 
-            Radio.trigger("BrowserPrint", "print", "Ihr_Schulweg", pdfDef, "download");
+            Radio.trigger("BrowserPrint", "print", filename, pdfDef, "download");
         },
         createPDFDef: function (screenshotMap, address, school, route, routeDescription, date) {
             var addr = address.street + " " + address.number + address.affix,
