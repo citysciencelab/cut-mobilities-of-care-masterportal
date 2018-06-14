@@ -12,6 +12,7 @@
         "Radio": true,
         "Backbone": true
     },
+    "extends": "plugin:backbone/recommended",
     "rules": {
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
         "for-direction": "error",
