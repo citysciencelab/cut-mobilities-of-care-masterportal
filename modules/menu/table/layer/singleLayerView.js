@@ -37,6 +37,7 @@ define([
             this.$el.html(this.template(attr));
             if (this.model.getIsSettingVisible() === true) {
                 this.$el.append(this.templateSettings(attr));
+                this.$el.css({"background": "#d8d8d8"});
             }
             return this.$el;
         },
@@ -47,11 +48,13 @@ define([
             this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
             if (this.model.getIsSettingVisible() === false) {
+                this.$el.css({"background": "#f2f2f2"});
                 this.$el.find(".layer-settings").slideUp("slow", function () {
                     $(this).remove();
                 });
             }
             else {
+                this.$el.css({"background": "#d8d8d8"});
                 this.$el.append(this.templateSettings(attr));
                 this.$el.find(".layer-settings").hide();
                 this.$el.find(".layer-settings").slideDown();
