@@ -79,6 +79,15 @@ define(function (require) {
             if (!_.isUndefined(layerModel)) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
             }
+            this.setDefaults();
+        },
+
+        setDefaults: function () {
+            var config = Radio.request("Parser", "getItemByAttributes", {id: "schulwegrouting"});
+
+            _.each(config, function (value, key) {
+                this.set(key, value);
+            }, this);
         },
         createScreenshot: function () {
             Radio.trigger("Map", "createScreenshot");
