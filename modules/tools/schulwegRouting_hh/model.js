@@ -538,6 +538,8 @@ define(function (require) {
         resetRoute: function () {
             var features = this.get("layer").getSource().getFeatures();
 
+            this.setStartAddress({});
+            this.setSelectedSchool({});
             this.removeGeomFromFeatures(features);
             this.trigger("resetRouteResult");
             this.trigger("togglePrintEnabled", false);

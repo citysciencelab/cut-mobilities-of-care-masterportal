@@ -193,6 +193,8 @@ define(function (require) {
         },
         resetRoute: function () {
             this.model.resetRoute();
+            this.updateSelectedSchool("");
+            this.$el.find(".address-search").val("");
         },
         resetRouteResult: function () {
             this.$el.find(".route-result").html("");
