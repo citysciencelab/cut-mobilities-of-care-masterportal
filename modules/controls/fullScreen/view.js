@@ -15,6 +15,7 @@ define(function (require) {
         },
         initialize: function () {
             var style = Radio.request("Util", "getUiStyle");
+
             if (style === "DEFAULT") {
                 $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", this.toggleStyle);
                 this.render();
@@ -26,6 +27,8 @@ define(function (require) {
                         this.renderToToolbar();
                     }
                 });
+                // Hier unschön gehackt, da in gebauter Version der MenuLoader schon fertig ist und sein ready lange gesendet hat
+                // bis hier der Listener enabled wird. Muss noch mal generell überarbeitet werden ToDo! Christa Becker 05.06.
                 this.setElement("#table-tools-menu");
                 this.renderToToolbar();
             }
@@ -54,19 +57,17 @@ define(function (require) {
                         document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
                     }
                 }
-                else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    }
-                    else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                    else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    }
-                    else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen();
-                    }
+                else if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+                else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                }
+                else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
                 }
             }
             // wenn "window" ein iframe ist --> Weiterleitung auf geoportale-hamburg.de
