@@ -40,7 +40,7 @@
 @import "../modules/menu/style.css";
 @import "../modules/menu/desktop/style.css";
 @import "../modules/tools/styleWMS/style.css";
-@import "../modules/tools/einwohnerabfrage/style.css";
+@import "../modules/tools/einwohnerabfrage_hh/style.css";
 @import "../modules/menu/desktop/layer/style.css";
 @import "../modules/core/style.css";
 @import "../modules/menu/mobile/breadCrumb/style.css";

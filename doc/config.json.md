@@ -1173,6 +1173,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
 |Layer|nein|Array||Layerobjekte|
 |Ordner|nein|Array||Ordnerobjekte|
 |Titel|nein|String||Ordnername|
+|isFolderSelectable|nein|Boolean|[globaler Wert](config.js.md#tree)|Legt fest, ob eine Auswahlbox zur Selektierung aller Layer eines Ordners angezeigt werden soll. Diese Eigenschaft ist nur für Blatt-Ordner (die ausschließlich Layer enthalten) relevant.|
 
 **Beispiel Ordnerkonfiguration Fachdaten:**
 
@@ -1191,6 +1192,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
                   "Ordner": [
                     {
                       "Titel": "Überschwemmungsgebiete",
+                      "isFolderSelectable": true,
                       "Layer": [
                         {
                           "id": "1103",
@@ -1207,7 +1209,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
                     {
                       "id": "684",
                       "visibility": false
-                    },
+                    }
                   ]
                 }
               ],

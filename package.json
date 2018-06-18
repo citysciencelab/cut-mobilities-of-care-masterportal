@@ -15,7 +15,7 @@
     "backbone.radio": "1.x",
     "bootstrap": "3.x",
     "bootstrap-colorpicker": "2.x",
-    "bootstrap-select": "1.x.x",
+    "bootstrap-select": "1.12.x",
     "bootstrap-slider": "9.x",
     "bootstrap-toggle": "2.x.x",
     "d3": "4.9.x",

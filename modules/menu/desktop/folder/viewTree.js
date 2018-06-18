@@ -1,15 +1,11 @@
 define([
     "backbone",
     "backbone.radio",
+    "jquery",
     "text!modules/menu/desktop/folder/templateTree.html"
-], function () {
+], function (Backbone, Radio, $, FolderTemplate) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        FolderTemplate = require("text!modules/menu/desktop/folder/templateTree.html"),
-        FolderView;
-
-    FolderView = Backbone.View.extend({
+    var FolderView = Backbone.View.extend({
         tagName: "li",
         className: "themen-folder",
         id: "",
@@ -22,7 +18,7 @@ define([
             // Verhindert, dass sich der Themenbaum wg Bootstrap schließt
             this.$el.on({
                 click: function (e) {
-                   e.stopPropagation();
+                    e.stopPropagation();
                 }
             });
             this.listenTo(this.model, {
@@ -36,15 +32,14 @@ define([
             this.$el.html("");
 
             if (this.model.getIsVisibleInTree()) {
+                var attr = this.model.toJSON();
 
                 this.$el.attr("id", this.model.getId());
 
 
-                var attr = this.model.toJSON();
-
                 // external Folder
                 if (this.model.getParentId() === "ExternalLayer") {
-                        $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+                    $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
                 }
                 else {
                     // Folder ab der ersten Ebene
@@ -59,11 +54,12 @@ define([
                             selector = "#Baselayer";
                         }
                         else {
-                           selector = "#Overlayer";
+                            selector = "#Overlayer";
                         }
                         $(selector).append(this.$el.html(this.template(attr)));
                     }
-                    $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
+                    var paddingLeftValue = this.model.getLevel() * 15 +5;
+                    $(this.$el).css("padding-left", paddingLeftValue + "px");
                 }
             }
 

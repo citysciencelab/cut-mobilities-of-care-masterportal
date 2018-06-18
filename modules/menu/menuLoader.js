@@ -47,12 +47,14 @@ define([
                         require(["modules/menu/desktop/listViewLight"], function (Menu) {
                             caller.currentMenu = new Menu();
                             channel.trigger("ready");
+                             Radio.trigger("Map", "updateSize");
                         });
                     }
                     else {
                         require(["modules/menu/desktop/listView"], function (Menu) {
                             caller.currentMenu = new Menu();
                             channel.trigger("ready");
+                            Radio.trigger("Map", "updateSize");
                         });
                     }
                 }

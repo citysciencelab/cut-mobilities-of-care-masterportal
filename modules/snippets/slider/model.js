@@ -12,8 +12,8 @@ define(function (require) {
             parsedValues = this.parseValues(attributes.values);
 
             this.addValueModels(_.min(parsedValues), _.max(parsedValues));
-            if (this.has("initSelectedValues")) {
-                this.updateValues(this.getInitSelectedValues());
+            if (this.has("PreselectedValues")) {
+                this.updateValues(this.getPreselectedValues());
             }
             this.listenTo(this.getValuesCollection(), {
                 "change:value": function (model, value) {
@@ -32,14 +32,14 @@ define(function (require) {
             this.getValuesCollection().add([
                 new ValueModel({
                     attr: this.getName(),
-                    displayName: this.getDisplayName + " ab",
+                    displayName: this.getDisplayName() + " ab",
                     value: min,
                     type: this.getType(),
                     isMin: true
                 }),
                 new ValueModel({
                     attr: this.getName(),
-                    displayName: this.getDisplayName + " bis",
+                    displayName: this.getDisplayName() + " bis",
                     value: max,
                     type: this.getType(),
                     isMin: false

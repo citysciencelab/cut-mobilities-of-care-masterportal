@@ -1,6 +1,5 @@
 define("app", function (require) {
-
-    var $ = require("jquery"),
+var $ = require("jquery"),
     Config = require("config"),
     Alert = require("modules/alerting/view"),
     RestReaderList = require("modules/restReader/collection"),
@@ -14,11 +13,17 @@ define("app", function (require) {
     Map = require("modules/core/map"),
     WPS = require("modules/core/wps"),
     AddGeoJSON = require("modules/tools/addGeoJSON/model"),
-    RemoteInterface = require("modules/remoteInterface/model");
+    style,
+    sbconfig;
 
+    // RemoteInterface laden
+    if (Config.remoteInterface && Config.remoteInterface === true) {
+        require(["modules/remoteInterface/model"], function (RemoteInterface) {
+            new RemoteInterface();
+        });
+    }
     // Core laden
     new Alert();
-    new RemoteInterface();
     new Autostarter();
     new Util();
     new StyleList();
@@ -44,8 +49,6 @@ define("app", function (require) {
         new MenuLoader();
     });
 
-
-
     require(["modules/zoomToGeometry/model"], function (ZoomToGeometry) {
         new ZoomToGeometry();
     });
@@ -62,11 +65,6 @@ define("app", function (require) {
             require([element], function (CustomModule) {
                 new CustomModule();
             });
-         });
-    }
-
-    if (Config.geoAPI && Config.geoAPI === true) {
-        require(["geoapi"], function () {
         });
     }
 
@@ -112,7 +110,7 @@ define("app", function (require) {
     require(["modules/window/view"], function (WindowView) {
         new WindowView();
     });
-        // Module laden
+    // Module laden
     // Tools
     require(["modules/sidebar/view"], function (SidebarView) {
         var sidebarView = new SidebarView();
@@ -120,7 +118,7 @@ define("app", function (require) {
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
                 case "einwohnerabfrage": {
-                    require(["modules/tools/einwohnerabfrage/view"], function (EinwohnerabfrageView) {
+                    require(["modules/tools/einwohnerabfrage_hh/selectView"], function (EinwohnerabfrageView) {
                         new EinwohnerabfrageView();
                     });
                     break;
@@ -251,11 +249,9 @@ define("app", function (require) {
             }
         });
     });
-    require(["modules/tools/addGeoJSON/model"], function (AddGeoJSON) {
-        new AddGeoJSON();
-    });
+
     // controls
-    var style = Radio.request("Util", "getUiStyle");
+    style = Radio.request("Util", "getUiStyle");
 
     if (!style || style !== "SIMPLE") {
         require(["modules/controls/view"], function (ControlsView) {
@@ -263,10 +259,11 @@ define("app", function (require) {
                 controlsView = new ControlsView();
 
             _.each(controls, function (control) {
+                var el;
                 switch (control.id) {
                     case "zoom": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowTR(control.id);
+                            el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/zoom/view"], function (ZoomControlView) {
                                 new ZoomControlView({el: el});
@@ -275,7 +272,7 @@ define("app", function (require) {
                         break;
                     }
                     case "orientation": {
-                        var el = controlsView.addRowTR(control.id);
+                        el = controlsView.addRowTR(control.id);
 
                         require(["modules/controls/orientation/view"], function (OrientationView) {
                             new OrientationView({el: el});
@@ -284,7 +281,7 @@ define("app", function (require) {
                     }
                     case "mousePosition": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowBL(control.id);
+                            el = controlsView.addRowBL(control.id);
 
                             require(["modules/controls/mousePosition/view"], function (MousePositionView) {
                                 new MousePositionView({el: el});
@@ -294,7 +291,7 @@ define("app", function (require) {
                     }
                     case "fullScreen": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowTR(control.id);
+                            el = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/fullScreen/view"], function (FullScreenView) {
                                 new FullScreenView({el: el});
@@ -312,7 +309,7 @@ define("app", function (require) {
                     }
                     case "attributions": {
                         if (control.attr === true || typeof control.attr === "object") {
-                            var el = controlsView.addRowBR(control.id);
+                            el = controlsView.addRowBR(control.id);
 
                             require(["modules/controls/attributions/view"], function (AttributionsView) {
                                 new AttributionsView({el: el});
@@ -322,7 +319,7 @@ define("app", function (require) {
                     }
                     case "overviewmap": {
                         if (control.attr === true || typeof control.attr === "object") {
-                            var el = controlsView.addRowBR(control.id);
+                            el = controlsView.addRowBR(control.id);
 
                             require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
                                 new OverviewmapView({el: el});
@@ -349,7 +346,7 @@ define("app", function (require) {
         new MapMarkerView();
     });
 
-    var sbconfig = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
+    sbconfig = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
 
     if (sbconfig) {
         require(["modules/searchbar/view"], function (SearchbarView) {

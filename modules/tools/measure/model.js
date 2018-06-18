@@ -186,7 +186,7 @@ define([
         * @param {number} scale - Maßstabszahl
         */
         getScaleError: function (scale) {
-            var scaleError = 0;
+            var scaleError;
 
             switch (scale) {
                 case 500: {
@@ -229,6 +229,10 @@ define([
                     scaleError = 250;
                     break;
                 }
+                default: {
+                    scaleError = 0;
+                    break;
+                }
             }
             return scaleError;
         },
@@ -240,8 +244,8 @@ define([
         */
         calcDeltaPow: function (coordinates, pos0, pos1) {
             var dx = coordinates[pos0][0] - coordinates[pos1][0],
-            dy = coordinates[pos0][1] - coordinates[pos1][1],
-            deltaPow = (Math.pow(dx, 2) + Math.pow(dy, 2));
+                dy = coordinates[pos0][1] - coordinates[pos1][1],
+                deltaPow = Math.pow(dx, 2) + Math.pow(dy, 2);
 
             return deltaPow;
         },
@@ -269,7 +273,7 @@ define([
                 }
             }
             fehler = Math.sqrt(fehler);
-            rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
+            rechtswertMittel = rechtswertMittel / coords.length / 1000;
             lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2))) - (0.0004 * length));
 
             if (this.get("uiStyle") === "TABLE") {
@@ -305,7 +309,7 @@ define([
                 scale = parseInt(this.get("scale"), 10),
                 scaleError = this.getScaleError(scale);
 
-            for (var i = 0;i < coords.length;i++) {
+            for (var i = 0; i < coords.length; i++) {
                 rechtswertMittel += parseInt(coords[i][0], 10);
                 if (i === coords.length - 1) {
                     fehler += this.calcDeltaPow(coords, i, 0);

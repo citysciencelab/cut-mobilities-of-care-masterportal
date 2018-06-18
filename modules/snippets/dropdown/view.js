@@ -2,11 +2,10 @@ define(function (require) {
     require("bootstrap-select");
 
     var Template = require("text!modules/snippets/dropdown/template.html"),
-        DropdownModel = require("modules/snippets/dropdown/model"),
         DropdownView;
 
     DropdownView = Backbone.View.extend({
-        model: new DropdownModel(),
+        model: {},
         className: "dropdown-container",
         // className: "container-fluid",
         template: _.template(Template),
@@ -40,6 +39,7 @@ define(function (require) {
                 this.initDropdown();
                 this.markSelectedValues();
             }
+            this.delegateEvents();
             return this.$el;
         },
 

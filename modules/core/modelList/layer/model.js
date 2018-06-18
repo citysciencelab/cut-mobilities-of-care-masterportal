@@ -91,7 +91,6 @@ define(function (require) {
                 this.setIsVisibleInMap(this.getIsSelected());
             }
             this.checkForScale(Radio.request("MapView", "getOptions"));
-            this.setAttributes();
             this.createLegendURL();
         },
 
@@ -137,7 +136,6 @@ define(function (require) {
         createLegendURL: function () {},
         createLayerSource: function () {},
         createLayer: function () {},
-        setAttributes: function () {},
 
         getResolutions: function () {
             var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),

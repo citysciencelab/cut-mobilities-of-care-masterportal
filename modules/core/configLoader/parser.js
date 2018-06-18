@@ -1,8 +1,4 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/core/modelList/list"
-], function () {
+define(function (require) {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
@@ -28,10 +24,19 @@ define([
             // Nur für Lighttree: Index der zuletzt eingefügten Layer,
             // wird für die Sortierung/das Verschieben benötigt
             selectionIDX: -1,
-            onlyDesktopTools: ["measure", "print", "kmlimport", "draw", "featureLister", "animation", "addWMS"]
+            onlyDesktopTools: [
+                "measure",
+                "print",
+                "kmlimport",
+                "draw",
+                "featureLister",
+                "animation",
+                "addWMS"
+            ]
         },
 
         initialize: function () {
+
             var channel = Radio.channel("Parser");
 
             channel.reply({
@@ -45,7 +50,7 @@ define([
                 "getSnippetInfos": function () {
                     return this.get("snippetInfos");
                 },
-                "getInitVisibBaselayer" : this.getInitVisibBaselayer
+                "getInitVisibBaselayer": this.getInitVisibBaselayer
             }, this);
 
             channel.on({
@@ -99,6 +104,10 @@ define([
             this.createModelList();
         },
 
+        getIsFolderSelectable: function () {
+            return this.get("isFolderSelectable");
+        },
+
         getPortalConfig: function () {
             return this.get("portalConfig");
         },
@@ -118,13 +127,7 @@ define([
 
                     // Attribute aus der config.json werden von item geerbt
                     _.extend(item, value);
-                    // folder Themen bekommt noch den Baumtyp als Attribut
-                    if (key === "tree") {
-                        this.addItem(_.extend(item, {treeType: this.getTreeType()}));
-                    }
-                    else {
-                        this.addItem(item);
-                    }
+                    this.addItem(item);
                     this.parseMenu(value.children, key);
                 }
                 else {
@@ -163,7 +166,7 @@ define([
             });
         },
 
-         /** [parseMapView description]
+        /** [parseMapView description]
          * @param  {[type]} items [description]
          * @return {[type]}       [description]
          */
@@ -324,14 +327,14 @@ define([
             return this.set("baselayer", value);
         },
 
-         /**
+        /**
           * Getter für Attribut "overlayer"
           * @return {Object}
           */
         getOverlayer: function () {
             return this.get("overlayer");
         },
-         /**
+        /**
           * Setter für Attribut "overlayer"
           * @return {Object}
           */
@@ -344,14 +347,14 @@ define([
           * @return {String}
           */
         getTreeType: function () {
-             return this.get("treeType");
+            return this.get("treeType");
         },
         /**
           * Getter für Attribut "treeType"
           * @return {String}
           */
         setTreeType: function (value) {
-             return this.set("treeType", value);
+            return this.set("treeType", value);
         },
 
         /**
@@ -359,7 +362,7 @@ define([
           * @return {String}
           */
         getCategory: function () {
-             return this.get("category");
+            return this.get("category");
         },
 
         /**
@@ -375,7 +378,7 @@ define([
           * @return {String}
           */
         setCategory: function (value) {
-             return this.set("category", value);
+            return this.set("category", value);
         },
 
         /**
@@ -432,7 +435,7 @@ define([
             });
             this.addItem({
                 type: "folder",
-                name: "Auswahl der Themen",
+                name: "Ausgewählte Themen",
                 glyphicon: "glyphicon-plus-sign",
                 id: "SelectedLayer",
                 parentId: "tree",
@@ -485,9 +488,9 @@ define([
          * @return {String} value - Uniq-Id
          */
         createUniqId: function (value) {
-            value = value.replace(/[^a-zA-Z0-9]/g, "");
+            var trimmedValue = value.replace(/[^a-zA-Z0-9]/g, "");
 
-            return _.uniqueId(value);
+            return _.uniqueId(trimmedValue);
         },
 
         getItemsByMetaID: function (metaID) {
@@ -497,6 +500,7 @@ define([
                         return item.datasets[0].md_id === metaID;
                     }
                 }
+                return false;
             }, this);
 
             return layers;
@@ -512,8 +516,8 @@ define([
 
             if (_.isArray(layer.id)) {
                 layer.id = layer.id[0];
-            };
-            return layer
+            }
+            return layer;
         }
     });
 
