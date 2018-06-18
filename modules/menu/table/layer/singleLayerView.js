@@ -37,7 +37,6 @@ define([
             this.$el.html(this.template(attr));
             if (this.model.getIsSettingVisible() === true) {
                 this.$el.append(this.templateSettings(attr));
-                this.$el.addClass("layer-settings-activated");
             }
             return this.$el;
         },
@@ -48,14 +47,13 @@ define([
             this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
             if (this.model.getIsSettingVisible() === false) {
-                this.$el.addClass("layer-settings-deactivated");
+                this.$el.removeClass("layer-settings-activated");
                 this.$el.find(".layer-settings").slideUp("slow", function () {
                     $(this).remove();
                 });
             }
             else {
                 this.$el.addClass("layer-settings-activated");
-                this.$el.removeClass("layer-settings-deactivated");
                 this.$el.append(this.templateSettings(attr));
                 this.$el.find(".layer-settings").hide();
                 this.$el.find(".layer-settings").slideDown();
