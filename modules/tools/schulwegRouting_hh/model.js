@@ -8,8 +8,11 @@ define(function (require) {
     SchulwegRouting = Backbone.Model.extend({
 
         defaults: {
+            id: "schulwegrouting",
             // ol-features of all schools
             schoolList: [],
+            // the regional school in charge
+            regionalSchool: {},
             selectedSchool: {},
             // names of streets found
             startAddress: {},
@@ -19,9 +22,7 @@ define(function (require) {
             // route layer
             layer: {},
             isActive: false,
-            id: "schulwegrouting",
             requestIDs: [],
-            useRegionalSchool: false,
             routeResult: {},
             routeDescription: [],
             checkBoxHVV: new SnippetCheckboxModel({
@@ -207,7 +208,7 @@ define(function (require) {
                                         style: ["bold"]
                                     },
                                     {
-                                        text: "Freie und Hansestadt Hamburg. Landesbetrieb Geoinformation und Vermessung",
+                                        text: "Freie und Hansestadt Hamburg. Landesbetrieb Geoinformation und Vermessung"
                                     }
                                 ],
                                 style: ["xsmall", "center"]
@@ -299,13 +300,11 @@ define(function (require) {
             }
         },
         parseRegionalSchool: function (xml) {
-            var schoolID = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
+            var schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0",
+                school = this.filterSchoolById(this.get("schoolList"), schoolId);
 
-            if (this.get("useRegionalSchool") === true) {
-                this.trigger("updateSelectedSchool", schoolID);
-                this.selectSchool(this.get("schoolList"), schoolID);
-                this.prepareRequest(this.get("startAddress"));
-            }
+            this.setRegionalSchool(school);
+            this.trigger("updateRegionalSchool", school.get("schulname"));
         },
 
         /**
@@ -525,7 +524,12 @@ define(function (require) {
          */
         setGeometryByFeatureId: function (featureId, source, geometry) {
             source.getFeatureById(featureId).setGeometry(geometry);
-            Radio.trigger("Map", "zoomToExtent", geometry.getExtent());
+            if (geometry.getType() === "Point") {
+                Radio.trigger("MapView", "setCenter", geometry.getCoordinates(), 6);
+            }
+            else {
+                Radio.trigger("Map", "zoomToExtent", geometry.getExtent());
+            }
         },
 
         /**
@@ -538,18 +542,21 @@ define(function (require) {
                 return [
                     new ol.style.Style({
                         image: new ol.style.Circle({
-                            radius: 17,
+                            radius: 18,
                             stroke: new ol.style.Stroke({
                                 color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019",
                                 width: 3
+                            }),
+                            fill: new ol.style.Fill({
+                                color: "rgba(255, 255, 255, 0.8)"
                             })
                         })
                     }),
                     new ol.style.Style({
                         image: new ol.style.Circle({
-                            radius: 3,
+                            radius: 4,
                             fill: new ol.style.Fill({
-                                color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019",
+                                color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019"
                             })
                         })
                     })
@@ -567,6 +574,7 @@ define(function (require) {
 
             this.setStartAddress({});
             this.setSelectedSchool({});
+            this.setAddressListFiltered([]);
             this.removeGeomFromFeatures(features);
             this.trigger("resetRouteResult");
             this.trigger("togglePrintEnabled", false);
@@ -612,8 +620,8 @@ define(function (require) {
         setLayer: function (layer) {
             this.set("layer", layer);
         },
-        setUseRegionalSchool: function (value) {
-            this.set("useRegionalSchool", value);
+        setRegionalSchool: function (value) {
+            this.set("regionalSchool", value);
         },
         setSelectedSchool: function (value) {
             this.set("selectedSchool", value);
