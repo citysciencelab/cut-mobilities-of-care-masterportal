@@ -37,6 +37,7 @@ define([
             this.$el.html(this.template(attr));
             if (this.model.getIsSettingVisible() === true) {
                 this.$el.append(this.templateSettings(attr));
+                this.$el.addClass("layer-settings-activated");
             }
             return this.$el;
         },
