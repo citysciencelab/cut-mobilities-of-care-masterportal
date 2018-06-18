@@ -235,7 +235,7 @@ define(function (require) {
                 var layerObj;
 
                 _.each(model.mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge), function (obj) {
-                    if (obj.layers.includes("KitaEinrichtungen_Details") && obj.layers.includes("KitaEinrichtungen")) {
+                    if (obj.layers.indexOf("KitaEinrichtungen_Details") >= 0 && obj.layers.indexOf("KitaEinrichtungen") >= 0) {
                         layerObj = obj;
                     }
                 });
