@@ -1,12 +1,13 @@
 define(function (require) {
+    var $ = require("jquery"),
+        ol = require("openlayers"),
+        GazetteerModel;
 
     require("modules/searchbar/model");
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        GazetteerModel;
 
     GazetteerModel = Backbone.Model.extend({
         defaults: {
+            namespace: "http://www.adv-online.de/namespaces/adv/dog",
             minChars: 3,
             gazetteerURL: "",
             searchStreets: false,
@@ -39,6 +40,8 @@ define(function (require) {
             });
 
             this.listenTo(Radio.channel("Gaz"), {
+                "findStreets": this.findStreets,
+                "findHouseNumbers": this.findHouseNumbers,
                 "adressSearch": this.adressSearch
             });
             Radio.channel("Gaz").reply({
@@ -119,6 +122,52 @@ define(function (require) {
                 }
             }
         },
+
+        findStreets: function (searchString) {
+            this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.parseStreets, true);
+        },
+
+        parseStreets: function (data) {
+            var hits = $("wfs\\:member,member", data),
+                streetNames = [];
+
+            _.each(hits, function (hit) {
+                streetNames.push($(hit).find("dog\\:strassenname, strassenname")[0].textContent);
+            }, this);
+
+            Radio.trigger("Gaz", "streetNames", streetNames.sort());
+            return streetNames.sort();
+        },
+
+        findHouseNumbers: function (street) {
+            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(street), this.parseHousenumbers, true);
+        },
+
+        parseHousenumbers: function (data) {
+            var hits = $("wfs\\:member,member", data),
+                sortedHouseNumbers,
+                houseNumbers = [];
+
+            _.each(hits, function (hit) {
+                houseNumbers.push({
+                    position: $(hit).find("gml\\:pos,pos")[0].textContent,
+                    number: $(hit).find("dog\\:hausnummer,hausnummer")[0].textContent,
+                    affix: $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0] ? $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0].textContent : ""
+                });
+            });
+            sortedHouseNumbers = _.chain(houseNumbers)
+                .sortBy(function (houseNumber) {
+                    return houseNumber.affix;
+                })
+                .sortBy(function (houseNumber) {
+                    return parseInt(houseNumber.number, 10);
+                })
+                .value();
+
+            Radio.trigger("Gaz", "houseNumbers", sortedHouseNumbers);
+            return sortedHouseNumbers;
+        },
+
         /**
         * @description Adresssuche mit Straße und Hausnummer und Zusatz. Wird nicht über die Searchbar getriggert.
         * @param {Object} adress - Adressobjekt zur Suche

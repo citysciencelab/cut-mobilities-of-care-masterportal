@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <div class = "schulinfo-head">
     <div class= "btn-group btn-group-sm">
-    <% _.each(featureInfos, function (kategory) { %>
-        <% if (kategory.attributes.length > 0){ %>
-            <button value = "<%=kategory.name%>" class="btn btn-default <%if(kategory.isSelected) {print('btn-select');}%>"><%=kategory.name%></button>
-        <% } %>
-    <% }); %>
+        <% _.each(featureInfos, function (kategory) { %>
+            <% if (kategory.attributes.length > 0){ %>
+                <button value = "<%=kategory.name%>" class="btn btn-default <%if(kategory.isSelected) {print('btn-select');}%>"><%=kategory.name%></button>
+            <% } %>
+        <% }); %>
     </div>
+</div>
+<div class="route-container col-xs-12">
+    <button class="btn btn-default btn-block btn-sm" type="submit">Schule als Ziel übernehmen</button>
 </div>
 <div class = "schulinfo-content">
     <table class="table table-condensed table-hover">

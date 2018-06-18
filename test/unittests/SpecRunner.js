@@ -46,6 +46,7 @@ define(function (require) {
 
     /** load testfiles here **/
     require([
+    // -------------------------load Testfiles here!!!-------------------------
         "modules/tools/download/testModel.js",
         "modules/mouseHover/testModel.js",
         "modules/searchbar/testModel.js",
@@ -74,7 +75,9 @@ define(function (require) {
         "modules/core/configLoader/testParserDefaultTree.js",
         "modules/core/configLoader/testPreparser.js",
         "modules/menu/desktop/folder/testViewTree.js",
-        "modules/menu/mobile/folder/testView.js"
+        "modules/menu/mobile/folder/testView.js",
+        "modules/core/testUtil.js",
+        "modules/tools/schulwegrouting_hh/testModel.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();

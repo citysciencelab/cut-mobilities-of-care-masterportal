@@ -1,8 +1,10 @@
 .sidebar {
-    /*height: 100%;*/
+    height: calc(100% - 50px);
     width: 30%;
     float: left;
     overflow: auto;
+    display: none;
+    position: relative;
 }
 
 .sidebar-mobile {

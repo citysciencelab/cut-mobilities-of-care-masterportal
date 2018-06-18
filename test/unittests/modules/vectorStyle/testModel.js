@@ -10,7 +10,7 @@ define(function(require) {
 
         before(function () {
            utilModel = new Util();
-            features = utilModel.createTestFeatures();
+            features = utilModel.createTestFeatures("resources/testFeatures.xml");
         });
 
         describe("createStyle", function () {
