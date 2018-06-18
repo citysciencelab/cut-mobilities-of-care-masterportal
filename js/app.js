@@ -1,20 +1,19 @@
 define("app", function (require) {
-var $ = require("jquery"),
-    Config = require("config"),
-    Alert = require("modules/alerting/view"),
-    RestReaderList = require("modules/restReader/collection"),
-    Autostarter = require("modules/core/autostarter"),
-    Util = require("modules/core/util"),
-    StyleList = require("modules/vectorStyle/list"),
-    RawLayerList = require("modules/core/rawLayerList"),
-    Preparser = require("modules/core/configLoader/preparser"),
-    ParametricURL = require("modules/core/parametricURL"),
-    CRS = require("modules/core/crs"),
-    Map = require("modules/core/map"),
-    WPS = require("modules/core/wps"),
-    AddGeoJSON = require("modules/tools/addGeoJSON/model"),
-    style,
-    sbconfig;
+    var Config = require("config"),
+        Alert = require("modules/alerting/view"),
+        RestReaderList = require("modules/restReader/collection"),
+        Autostarter = require("modules/core/autostarter"),
+        Util = require("modules/core/util"),
+        StyleList = require("modules/vectorStyle/list"),
+        RawLayerList = require("modules/core/rawLayerList"),
+        Preparser = require("modules/core/configLoader/preparser"),
+        ParametricURL = require("modules/core/parametricURL"),
+        CRS = require("modules/core/crs"),
+        Map = require("modules/core/map"),
+        WPS = require("modules/core/wps"),
+        AddGeoJSON = require("modules/tools/addGeoJSON/model"),
+        style,
+        sbconfig;
 
     // RemoteInterface laden
     if (Config.remoteInterface && Config.remoteInterface === true) {
@@ -61,8 +60,8 @@ var $ = require("jquery"),
 
     // load customModules from config
     if (Config.customModules) {
-        _.each(Config.customModules, function (element) {
-            require([element], function (CustomModule) {
+        _.each(Config.customModules, function (module) {
+            require([module], function (CustomModule) {
                 new CustomModule();
             });
         });
@@ -258,43 +257,47 @@ var $ = require("jquery"),
             var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
                 controlsView = new ControlsView();
 
+
             _.each(controls, function (control) {
-                var el;
+                var element;
+
                 switch (control.id) {
                     case "zoom": {
+
                         if (control.attr === true) {
-                            el = controlsView.addRowTR(control.id);
+
+                            element = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/zoom/view"], function (ZoomControlView) {
-                                new ZoomControlView({el: el});
+                                new ZoomControlView({el: element});
                             });
                         }
                         break;
                     }
                     case "orientation": {
-                        el = controlsView.addRowTR(control.id);
+                        element = controlsView.addRowTR(control.id);
 
                         require(["modules/controls/orientation/view"], function (OrientationView) {
-                            new OrientationView({el: el});
+                            new OrientationView({el: element});
                         });
                         break;
                     }
                     case "mousePosition": {
                         if (control.attr === true) {
-                            el = controlsView.addRowBL(control.id);
+                            element = controlsView.addRowBL(control.id);
 
                             require(["modules/controls/mousePosition/view"], function (MousePositionView) {
-                                new MousePositionView({el: el});
+                                new MousePositionView({el: element});
                             });
                         }
                         break;
                     }
                     case "fullScreen": {
                         if (control.attr === true) {
-                            el = controlsView.addRowTR(control.id);
+                            element = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/fullScreen/view"], function (FullScreenView) {
-                                new FullScreenView({el: el});
+                                new FullScreenView({el: element});
                             });
                         }
                         break;
@@ -309,32 +312,35 @@ var $ = require("jquery"),
                     }
                     case "attributions": {
                         if (control.attr === true || typeof control.attr === "object") {
-                            el = controlsView.addRowBR(control.id);
+                            element = controlsView.addRowBR(control.id);
 
                             require(["modules/controls/attributions/view"], function (AttributionsView) {
-                                new AttributionsView({el: el});
+                                new AttributionsView({el: element});
                             });
                         }
                         break;
                     }
                     case "overviewmap": {
                         if (control.attr === true || typeof control.attr === "object") {
-                            el = controlsView.addRowBR(control.id);
+                            element = controlsView.addRowBR(control.id);
 
                             require(["modules/controls/overviewmap/view"], function (OverviewmapView) {
-                                new OverviewmapView({el: el});
+                                new OverviewmapView({el: element});
                             });
                         }
                         break;
                     }
                     case "freeze": {
                         if (control.attr === true) {
-                            var el = controlsView.addRowTR(control.id);
+                            element = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/freeze/model"], function (FreezeModel) {
-                                new FreezeModel({uiStyle: style, el: el});
+                                new FreezeModel({uiStyle: style, el: element});
                             });
                         }
+                        break;
+                    }
+                    default: {
                         break;
                     }
                 }
