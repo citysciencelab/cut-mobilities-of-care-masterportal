@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <div class="header">
-    <span class="glyphicon glyphicon-road"></span>
-    <span class="tool-name">Schulweg-Routing</span>
+    <span class="glyphicon <%=glyphicon%>"></span>
+    <span class="tool-name"><%= name %></span>
     <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 </div>
 <div class="content">
@@ -20,8 +20,7 @@
         </div>
     </div>
     <div class="form-group col-xs-12">
-        <label>Regional zuständige Grundschule als Ziel auswählen</label>
-        <input id="regional-school" class="regional-school" type="checkbox">
+        <span>Regional zuständige Grundschule: <a id="regional-school"></a></span>
     </div>
     <div class="form-group col-xs-12">
         <select class="selectpicker" title="Schule auswählen" data-live-search="true">
@@ -30,8 +29,7 @@
             <% }); %>
          </select>
     </div>
-    <div class="form-group col-xs-6">
-    </div>
+    <div class="checkbox"></div>
     <div class="form-group col-md-12 col-xs-12">
         <button type="button" class="btn btn-default btn-sm print-route pull-left" disabled>
             Route drucken

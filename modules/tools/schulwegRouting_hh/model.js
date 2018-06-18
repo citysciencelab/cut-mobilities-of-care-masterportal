@@ -2,13 +2,17 @@ define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
         momentJS = require("moment"),
+        SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         SchulwegRouting;
 
     SchulwegRouting = Backbone.Model.extend({
 
         defaults: {
+            id: "schulwegrouting",
             // ol-features of all schools
             schoolList: [],
+            // the regional school in charge
+            regionalSchool: {},
             selectedSchool: {},
             // names of streets found
             startAddress: {},
@@ -18,11 +22,13 @@ define(function (require) {
             // route layer
             layer: {},
             isActive: false,
-            id: "schulwegrouting",
             requestIDs: [],
-            useRegionalSchool: false,
             routeResult: {},
-            routeDescription: []
+            routeDescription: [],
+            checkBoxHVV: new SnippetCheckboxModel({
+                isSelected: false,
+                label: "HVV Layer einblenden"
+            })
         },
 
         initialize: function () {
@@ -66,6 +72,9 @@ define(function (require) {
                 },
                 "getAdress": this.parseRegionalSchool
             });
+            this.listenTo(this.get("checkBoxHVV"), {
+                "valuesChanged": this.toggleHVVLayer
+            });
             if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
                 // model in modellist gets activated.
                 // And there the "Tool", "activatedTool" is triggered where this model listens to.
@@ -79,6 +88,33 @@ define(function (require) {
             if (!_.isUndefined(layerModel)) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
             }
+            this.setDefaults();
+        },
+        toggleHVVLayer: function (value) {
+            Radio.trigger("ModelList", "setModelAttributesById", "1935geofox-bus", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+            Radio.trigger("ModelList", "setModelAttributesById", "1935geofox_BusName", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+            Radio.trigger("ModelList", "setModelAttributesById", "1935geofox-bahn", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+            Radio.trigger("ModelList", "setModelAttributesById", "1935geofox_Faehre", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+        },
+
+        setDefaults: function () {
+            var config = Radio.request("Parser", "getItemByAttributes", {id: "schulwegrouting"});
+
+            _.each(config, function (value, key) {
+                this.set(key, value);
+            }, this);
         },
         createScreenshot: function () {
             Radio.trigger("Map", "createScreenshot");
@@ -89,9 +125,10 @@ define(function (require) {
                 route = this.get("routeResult"),
                 routeDesc = this.get("routeDescription"),
                 date = momentJS(new Date()).format("DD.MM.YYYY"),
+                filename = "Schulweg_zu_" + school.get("schulname"),
                 pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc, date);
 
-            Radio.trigger("BrowserPrint", "print", "Ihr_Schulweg", pdfDef, "download");
+            Radio.trigger("BrowserPrint", "print", filename, pdfDef, "download");
         },
         createPDFDef: function (screenshotMap, address, school, route, routeDescription, date) {
             var addr = address.street + " " + address.number + address.affix,
@@ -171,7 +208,7 @@ define(function (require) {
                                         style: ["bold"]
                                     },
                                     {
-                                        text: "Freie und Hansestadt Hamburg. Landesbetrieb Geoinformation und Vermessung",
+                                        text: "Freie und Hansestadt Hamburg. Landesbetrieb Geoinformation und Vermessung"
                                     }
                                 ],
                                 style: ["xsmall", "center"]
@@ -263,13 +300,11 @@ define(function (require) {
             }
         },
         parseRegionalSchool: function (xml) {
-            var schoolID = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
+            var schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0",
+                school = this.filterSchoolById(this.get("schoolList"), schoolId);
 
-            if (this.get("useRegionalSchool") === true) {
-                this.trigger("updateSelectedSchool", schoolID);
-                this.selectSchool(this.get("schoolList"), schoolID);
-                this.prepareRequest(this.get("startAddress"));
-            }
+            this.setRegionalSchool(school);
+            this.trigger("updateRegionalSchool", school.get("schulname"));
         },
 
         /**
@@ -287,7 +322,7 @@ define(function (require) {
             return multiLineString;
         },
         prepareRequest: function (address) {
-             var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
+            var schoolID = !_.isEmpty(this.get("selectedSchool")) ? this.get("selectedSchool").get("schul_id") : "",
                 requestID = _.uniqueId("schulwegrouting_"),
                 requestObj = {};
 
@@ -489,7 +524,12 @@ define(function (require) {
          */
         setGeometryByFeatureId: function (featureId, source, geometry) {
             source.getFeatureById(featureId).setGeometry(geometry);
-            Radio.trigger("Map", "zoomToExtent", geometry.getExtent());
+            if (geometry.getType() === "Point") {
+                Radio.trigger("MapView", "setCenter", geometry.getCoordinates(), 6);
+            }
+            else {
+                Radio.trigger("Map", "zoomToExtent", geometry.getExtent());
+            }
         },
 
         /**
@@ -499,25 +539,28 @@ define(function (require) {
          */
         routeStyle: function (feature) {
             if (feature.getGeometry() instanceof ol.geom.Point) {
-                return new ol.style.Style({
-                    image: new ol.style.Circle({
-                        radius: 12,
-                        fill: new ol.style.Fill({
-                            color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019"
-                        }),
-                        stroke: new ol.style.Stroke({
-                            color: "#ffffff",
-                            width: 3
+                return [
+                    new ol.style.Style({
+                        image: new ol.style.Circle({
+                            radius: 18,
+                            stroke: new ol.style.Stroke({
+                                color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019",
+                                width: 3
+                            }),
+                            fill: new ol.style.Fill({
+                                color: "rgba(255, 255, 255, 0.8)"
+                            })
                         })
                     }),
-                    text: new ol.style.Text({
-                        text: feature.getId() === "startPoint" ? "A" : "B",
-                        scale: 1.5,
-                        fill: new ol.style.Fill({
-                            color: "#ffffff"
+                    new ol.style.Style({
+                        image: new ol.style.Circle({
+                            radius: 4,
+                            fill: new ol.style.Fill({
+                                color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019"
+                            })
                         })
                     })
-                });
+                ];
             }
             return new ol.style.Style({
                 stroke: new ol.style.Stroke({
@@ -529,6 +572,9 @@ define(function (require) {
         resetRoute: function () {
             var features = this.get("layer").getSource().getFeatures();
 
+            this.setStartAddress({});
+            this.setSelectedSchool({});
+            this.setAddressListFiltered([]);
             this.removeGeomFromFeatures(features);
             this.trigger("resetRouteResult");
             this.trigger("togglePrintEnabled", false);
@@ -574,8 +620,8 @@ define(function (require) {
         setLayer: function (layer) {
             this.set("layer", layer);
         },
-        setUseRegionalSchool: function (value) {
-            this.set("useRegionalSchool", value);
+        setRegionalSchool: function (value) {
+            this.set("regionalSchool", value);
         },
         setSelectedSchool: function (value) {
             this.set("selectedSchool", value);
