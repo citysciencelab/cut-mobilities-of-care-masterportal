@@ -12,6 +12,12 @@
         "Radio": true,
         "Backbone": true
     },
+    "plugins": [
+        "chai-friendly"
+    ],
+    "parserOptions": {
+        "sourceType": "module"
+    },
     "rules": {
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
         "for-direction": "error",
@@ -104,7 +110,8 @@
         "no-sequences": "error",
         "no-throw-literal": "error",
         "no-unmodified-loop-condition": "error",
-        "no-unused-expressions": "error",
+        "no-unused-expressions": 0,
+        "chai-friendly/no-unused-expressions": 2,
         "no-unused-labels": "error",
         "no-useless-call": "error",
         "no-useless-concat": "error",
