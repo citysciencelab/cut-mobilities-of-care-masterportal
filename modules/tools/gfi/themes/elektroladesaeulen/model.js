@@ -28,8 +28,8 @@ define(function (require) {
                 gfiProperties = this.splitProperties(gfiContent[0]),
                 allProperties = this.splitProperties(gfiContent.allProperties),
                 dataStreamIds = allProperties.dataStreamId,
-                requestURL = allProperties.requestURL,
-                versionURL = allProperties.versionURL,
+                requestURL = allProperties.requestURL[0],
+                versionURL = allProperties.versionURL[0],
                 gfiParams = this.get("feature").get("gfiParams"),
                 headTitleObject = this.createGfiHeadingChargingStation(allProperties),
                 tableheadArray = this.createGfiTableHeadingChargingStation(allProperties);
@@ -66,7 +66,7 @@ define(function (require) {
                 gfiParams = this.get("gfiParams");
                 historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams);
                 historicalDataClean = this.dataCleaning(historicalData);
-                lastDay = (_.isUndefined(this.get("lastDate"))) ? undefined : moment(this.get("lastDate")).format("YYYY-MM-DD");
+                lastDay = _.isUndefined(this.get("lastDate")) ? undefined : moment(this.get("lastDate")).format("YYYY-MM-DD");
                 dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay);
 
                 this.setDataStreamIds(dataStreamIds);
@@ -160,7 +160,6 @@ define(function (require) {
          * @return {Object} gfiProperties - with german state
          */
         changeStateToGerman: function (gfiProperties) {
-            console.log(gfiProperties);
             var translateObj = {
                     available: "Frei",
                     charging: "Belegt",
@@ -169,7 +168,7 @@ define(function (require) {
                 gfiPropertiesGerman = !_.isUndefined(gfiProperties) ? gfiProperties : {};
 
             _.each(gfiPropertiesGerman.Zustand, function (state, index) {
-                if (_.contains(_.keys(translateObj), state)) {
+                if (_.contains(_.keys(translateObj), state.toLowerCase())) {
                     gfiPropertiesGerman.Zustand[index] = translateObj[state];
                 }
                 else {
@@ -178,7 +177,6 @@ define(function (require) {
 
             });
 
-            console.log(gfiPropertiesGerman);
             return gfiPropertiesGerman;
         },
 
@@ -186,12 +184,16 @@ define(function (require) {
          * builds the request and collect the historical data for each datastream
          * one object with results and phenomenonTimes for every chargingpoint
          * @param  {boolean} async - mode for ajax
-         * @return {[Object]}
+         * @param  {boolean} dataStreamIds -  - from features
+         * @param  {boolean} gfiParams - limits the period of observations
+         * @return {[Object]} historicalData
          */
         createHistoricalData: function (async, dataStreamIds, gfiParams) {
             var historicalData,
                 query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc",
-                requestURL;
+                requestURL = this.get("requestURL"),
+                versionURL = this.get("versionURL"),
+                completeURL;
 
             // add gfiParams to query
             if (!_.isUndefined(gfiParams)) {
@@ -207,8 +209,8 @@ define(function (require) {
                 }
             });
 
-            requestURL = this.buildRequestFromQuery(query);
-            historicalData = this.sendRequest(requestURL, async);
+            completeURL = this.buildRequestFromQuery(query, requestURL, versionURL);
+            historicalData = this.sendRequest(completeURL, async);
 
             // if with one request not all data can be fetched
             _.each(historicalData, function (data) {
@@ -218,8 +220,8 @@ define(function (require) {
 
                 if (observationsCount > observationsLength) {
                     for (var i = observationsLength; i < observationsCount; i += observationsLength) {
-                        var skipRequestURL = requestURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
-                            skipHistoricalData = this.sendRequest(skipRequestURL, async);
+                        var skipCompleteURL = completeURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
+                            skipHistoricalData = this.sendRequest(skipCompleteURL, async);
 
                         data.Observations.push.apply(data.Observations, skipHistoricalData[0].Observations);
                     }
@@ -284,30 +286,36 @@ define(function (require) {
 
         /**
          * create the request with given query for one Datastream
-         * @param  {String} requestURL
+         * @param  {[type]} query - add filter to url
+         * @param  {String} requestURL - url to service
          * @param  {String} versionURL - version of the service
-         * @param  {[type]} id - of the dataStream
          * @return {String} complete URL
          */
-        buildRequestFromQuery: function (query) {
-            var requestURL = this.get("requestURL"),
-                versionURL = this.get("versionURL");
+        buildRequestFromQuery: function (query, requestURL, versionURL) {
+            var completeURL;
 
-            return historicalDataURL = requestURL + "/" +
-                "v" + versionURL + "/" +
-                "Datastreams" + query;
+            if (_.isUndefined(query || requestURL) || _.isNaN(parseFloat(versionURL, 10))) {
+                completeURL = "";
+            }
+            else {
+                completeURL = requestURL + "/"
+                    + "v" + versionURL + "/"
+                    + "Datastreams" + query;
+            }
+
+            return completeURL;
         },
 
-         /**
+        /**
          * returns the historicalData by Ajax-Request
          * @param  {String} requestURLHistoricaldata - url with query
-         * @param  {boolean} async
+         * @param  {boolean} async - state fo ajax-request
          * @return {[Object]} historicalData
          */
         sendRequest: function (requestURLHistoricaldata, async) {
-           var response;
+            var response;
 
-           $.ajax({
+            $.ajax({
                 url: requestURLHistoricaldata,
                 async: async,
                 type: "GET",
@@ -317,7 +325,7 @@ define(function (require) {
                 success: function (resp) {
                     response = resp.value;
                 },
-                error: function (jqXHR, errorText, error) {
+                error: function () {
                     Radio.trigger("Alert", "alert", {
                         text: "<strong>Es ist ein unerwarteter Fehler beim Anfordern der historischen Daten aufgetreten!</strong>",
                         kategorie: "alert-danger"
@@ -325,7 +333,7 @@ define(function (require) {
                 }
             });
 
-           return response;
+            return response;
         },
 
 // *************************************************************
@@ -354,9 +362,9 @@ define(function (require) {
 
         /**
          * creates indicator for total number of chargings per year
-         * @param  {boolean} async
-         * @param  {Array} dataStreamIds
-         * @return {Array}
+         * @param  {boolean} async - mode for ajax-request
+         * @param  {Array} dataStreamIds - from features
+         * @return {Array} processedIndicatorChargingCounter
          */
         createIndicatorChargingCount: function (async, dataStreamIds) {
             var indicatorChargingCounterData = this.createIndicatorChargingCountData(async, dataStreamIds),
@@ -368,54 +376,54 @@ define(function (require) {
 
         /**
          * gets the data for the indicator charging
-         * @param  {boolean} async
-         * @param  {Array} dataStreamIds
-         * @return {[Object]}
+         * @param  {boolean} async - mode for ajax-request
+         * @param  {Array} dataStreamIds - dataStreamIds from features
+         * @return {[Object]} dataArray
          */
         createIndicatorChargingCountData: function (async, dataStreamIds) {
-            var historicalData = [],
-                minYear = 2017,
+            var minYear = 2017,
                 maxYear = moment().format("YYYY"),
                 dataArray = [],
-                requestURL;
+                requestURL = this.get("requestURL"),
+                versionURL = this.get("versionURL"),
+                completeURL;
 
-                for (var i = minYear; i <= maxYear; i++) {
-                    var array = [],
-                        data,
-                        dataObj = {},
-                        query = "?$expand=Observations($filter=result%20eq%27charging%27and%20year(phenomenonTime)%20eq%20" + i + ")&$filter=";
+            for (var i = minYear; i <= maxYear; i++) {
+                var data,
+                    dataObj = {},
+                    query = "?$expand=Observations($filter=result%20eq%27charging%27and%20year(phenomenonTime)%20eq%20" + i + ")&$filter=";
 
-                    _.each(dataStreamIds, function (id, index) {
-                        query = query + "@iot.id eq'" + id + "'";
+                _.each(dataStreamIds, function (id, index) {
+                    query = query + "@iot.id eq'" + id + "'";
 
-                        if (index !== (dataStreamIds.length - 1)) {
-                            query = query + "or ";
+                    if (index !== (dataStreamIds.length - 1)) {
+                        query = query + "or ";
+                    }
+                });
+
+                // build and send request
+                completeURL = this.buildRequestFromQuery(query, requestURL, versionURL);
+                data = this.sendRequest(completeURL, async);
+                data.year = i;
+
+                // if with one request not all data can be fetched
+                _.each(data, function (dat) {
+                    var observationsID = dat["@iot.id"],
+                        observationsCount = dat["Observations@iot.count"],
+                        observationsLength = dat.Observations.length;
+
+                    if (observationsCount > observationsLength) {
+                        for (var i = observationsLength; i < observationsCount; i += observationsLength) {
+                            var skipcompleteURL = completeURL.split(")")[0] + ")" + completeURL.split(")")[1] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
+                                skipData = this.sendRequest(skipcompleteURL, async);
+
+                            dat.Observations.push.apply(dat.Observations, skipData[0].Observations);
                         }
-                    });
+                    }
+                }, this);
 
-                    // build and send request
-                    requestURL = this.buildRequestFromQuery(query);
-                    data = this.sendRequest(requestURL, async);
-                    data.year = i;
-
-                    // if with one request not all data can be fetched
-                    _.each(data, function (dat) {
-                        var observationsID = dat["@iot.id"],
-                            observationsCount = dat["Observations@iot.count"],
-                            observationsLength = dat.Observations.length;
-
-                        if (observationsCount > observationsLength) {
-                            for (var i = observationsLength; i < observationsCount; i += observationsLength) {
-                                var skipRequestURL = requestURL.split(")")[0] + ")" + requestURL.split(")")[1] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
-                                    skipData = this.sendRequest(skipRequestURL, async);
-
-                                dat.Observations.push.apply(dat.Observations, skipData[0].Observations);
-                            }
-                        }
-                    }, this);
-
-                    dataArray.push(data);
-                }
+                dataArray.push(data);
+            }
 
             return dataArray;
         },
@@ -423,7 +431,7 @@ define(function (require) {
         /**
          * starts cleaning data for every loadingpoint
          * @param  {Array} dataArray
-         * @return {Array}
+         * @return {Array} dataArray
          */
         dataCleaningChargingIndicator: function (dataArray) {
             _.each(dataArray, function (data) {
@@ -436,11 +444,15 @@ define(function (require) {
         /**
          * removes doublicates
          * duplicates are records whose phenomenontime is less than 1000 milliseconds
-         * @param  {Array} dataArray
+         * @param  {Array} dataArray - 
+         * 
          * @return {Array}
          */
         dataCleaning: function (dataArray) {
-            _.each(dataArray, function (loadingPoint) {
+            var workingArray = _.isUndefined(dataArray) ? [] : dataArray;
+
+            console.log(workingArray);
+            _.each(workingArray, function (loadingPoint) {
                 var observations = loadingPoint.Observations,
                     lastTime = 0,
                     lastState = "",
@@ -469,7 +481,7 @@ define(function (require) {
                 });
             });
 
-            return dataArray;
+            return workingArray;
         },
 
         /**
@@ -563,14 +575,16 @@ define(function (require) {
 
         /**
          * gets all data for the charging stations
-         * @param  {boolean} async
-         * @param  {Array} dataStreamIds
+         * @param  {boolean} async - state fo ajax-request
+         * @param  {Array} dataStreamIds - from features
          * @return {Array} chargingData - per loadingpoint
          */
         createDataIndicatorChargingHour: function (async, dataStreamIds) {
             var chargingData,
                 query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc)&$filter=",
-                requestURL;
+                requestURL = this.get("requestURL"),
+                versionURL = this.get("versionURL"),
+                completeURL;
 
             _.each(dataStreamIds, function (id, index) {
                 query = query + "@iot.id eq'" + id + "'";
@@ -580,8 +594,8 @@ define(function (require) {
                 }
             });
 
-            requestURL = this.buildRequestFromQuery(query);
-            chargingData = this.sendRequest(requestURL, async);
+            completeURL = this.buildRequestFromQuery(query, requestURL, versionURL);
+            chargingData = this.sendRequest(completeURL, async);
 
             // if with one request not all data can be fetched
             _.each(chargingData, function (data) {
@@ -591,8 +605,8 @@ define(function (require) {
 
                 if (observationsCount > observationsLength) {
                     for (var i = observationsLength; i < observationsCount; i += observationsLength) {
-                        var skipRequestURL = requestURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
-                            skipChargingData = this.sendRequest(skipRequestURL, async);
+                        var skipCompleteURL = completeURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
+                            skipChargingData = this.sendRequest(skipCompleteURL, async);
 
                         data.Observations.push.apply(data.Observations, skipChargingData[0].Observations);
                     }

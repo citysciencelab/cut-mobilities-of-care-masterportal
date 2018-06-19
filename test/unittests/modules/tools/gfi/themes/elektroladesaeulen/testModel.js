@@ -122,6 +122,50 @@ define(function (require) {
             it("should return an empty object for empty object input", function () {
                 expect(model.changeStateToGerman({})).to.be.an("object").that.is.empty;
             });
+            it("should return an empty object for correct object input", function () {
+                var gfiProperties = {
+                    Zustand: ["available", "charging", "outoforder"]
+                };
+
+                expect(model.changeStateToGerman(gfiProperties)).to.be.an("object")
+                    .to.nested.include({"Zustand[0]": "Frei"})
+                    .and.to.nested.include({"Zustand[1]": "Belegt"})
+                    .and.to.nested.include({"Zustand[2]": "Außer Betrieb"});
+            });
+            it("should return an empty object for incorrect object input", function () {
+                var gfiProperties = {
+                    Zustand: ["xxx", "yyy", "zzz"]
+                };
+
+                expect(model.changeStateToGerman(gfiProperties)).to.be.an("object")
+                    .to.nested.include({"Zustand[0]": ""})
+                    .and.to.nested.include({"Zustand[1]": ""})
+                    .and.to.nested.include({"Zustand[2]": ""});
+            });
+        });
+        describe("buildRequestFromQuery", function () {
+            it("should return an empty string for undefined input", function () {
+                expect(model.buildRequestFromQuery(undefined, undefined, undefined)).to.be.an("string").that.is.empty;
+            });
+            it("should return an empty string for strings input", function () {
+                expect(model.buildRequestFromQuery("test", "test", "test")).to.be.an("string").that.is.empty;
+            });
+            it("should return url as string for strings input, version as string that contains a number", function () {
+                expect(model.buildRequestFromQuery("test", "test", "1.0")).to.be.an("string").to.equal("test/v1.0/Datastreamstest");
+            });
+            it("should return url as string for correct input", function () {
+                expect(model.buildRequestFromQuery(
+                    "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt 2017-12-11T00:00:00.000Z)&$filter=@iot.id eq'89'or @iot.id eq'727'",
+                    "https://51.5.242.162/itsLGVhackathon",
+                    "1.0"))
+                    .to.be.an("string")
+                    .to.equal("https://51.5.242.162/itsLGVhackathon/v1.0/Datastreams?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt 2017-12-11T00:00:00.000Z)&$filter=@iot.id eq'89'or @iot.id eq'727'");
+            });
+        });
+        describe("dataCleaning", function () {
+            it("should return an empty array for undefined input", function () {
+                expect(model.dataCleaning(undefined)).to.be.an("array").that.is.empty;
+            });
         });
     });
 });
