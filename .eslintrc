@@ -12,16 +12,13 @@
         "Radio": true,
         "Backbone": true
     },
-<<<<<<< HEAD
     "plugins": [
         "chai-friendly"
     ],
     "parserOptions": {
         "sourceType": "module"
     },
-=======
     "extends": "plugin:backbone/recommended",
->>>>>>> dev
     "rules": {
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
         "for-direction": "error",
@@ -151,12 +148,7 @@
         "keyword-spacing": "error",
         "max-depth": "error",
         "max-nested-callbacks": ["error", 4],
-<<<<<<< HEAD
-        "max-params": ["error", 10],
-        "max-statements": "off",
-=======
         "max-params": ["warn", 6],
->>>>>>> dev
         "max-statements-per-line": "error",
         "new-cap": "error",
         "new-parens": "error",
@@ -176,13 +168,6 @@
         "object-property-newline": 0,
         "one-var": "error",
         "one-var-declaration-per-line": "error",
-<<<<<<< HEAD
-        "operator-assignment": "off",
-        "operator-linebreak": "off",
-        "padded-blocks": "off",
-        "quote-props": "off",
-=======
->>>>>>> dev
         "quotes": "error",
         "require-jsdoc": 0,
         "semi": "error",
@@ -202,25 +187,10 @@
         "prefer-const": "error",
         "prefer-numeric-literals": "error",
         "prefer-rest-params": "error",
-<<<<<<< HEAD
-        "prefer-spread": "off",
-        "prefer-template": "off",
-        "require-yield": "off",
-        "rest-spread-spacing": "off",
-        "sort-imports": "off",
-        "symbol-description": "off",
-        "template-curly-spacing": "off",
-        "yield-star-spacing": "off",
         "padding-line-between-statements": [
             "error",
-            { blankLine: "always", prev: ["const", "let", "var"], next: "*"},
-            { blankLine: "any",    prev: ["const", "let", "var"], next: ["const", "let", "var"]}
-=======
-        "padding-line-between-statements": [
-            "error", 
             {"blankLine": "always", "prev": ["const", "let", "var"], "next": "*"},
             {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]}
->>>>>>> dev
         ]
     }
 }
