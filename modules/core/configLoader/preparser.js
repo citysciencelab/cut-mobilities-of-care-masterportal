@@ -9,14 +9,16 @@ define(function (require) {
 
     Preparser = Backbone.Model.extend({
         url: function () {
-            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json";
+            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json",
+                addPath,
+                isAddPathValid;
 
             if (path.slice(-6) === "?noext") {
                 path = Config.portalConf;
             }
             else if (path.slice(-5) !== ".json") {
-                var addPath = Radio.request("Util", "getConfig"),
-                    isAddPathValid = addPath.length > 1 ? true : false;
+                addPath = Radio.request("Util", "getConfig");
+                isAddPathValid = addPath.length > 1;
                 // removes trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
 
                 if (isAddPathValid) {
@@ -74,7 +76,11 @@ define(function (require) {
 
         requestSnippetInfos: function () {
             var infos,
-                url = _.has(Config, "infoJson") ? Config.infoJson : undefined;
+                url;
+
+            if (_.has(Config, "infoJson")) {
+                url = Config.infoJson;
+            }
 
             if (!_.isUndefined(url)) {
                 $.ajax({
@@ -84,8 +90,8 @@ define(function (require) {
                         infos = data;
                     }
                 });
-                return infos;
             }
+            return infos;
         }
     });
 
