@@ -31,6 +31,7 @@ define(function (require) {
                 requestURL = allProperties.requestURL[0],
                 versionURL = allProperties.versionURL[0],
                 gfiParams = this.get("feature").get("gfiParams"),
+                utc = this.get("feature").get("utc"),
                 headTitleObject = this.createGfiHeadingChargingStation(allProperties),
                 tableheadArray = this.createGfiTableHeadingChargingStation(allProperties);
 
@@ -41,6 +42,7 @@ define(function (require) {
             this.setVersionURL(versionURL);
             this.setDataStreamIds(dataStreamIds);
             this.setGfiParams(gfiParams);
+            this.setUTC(utc);
             this.setHeadTitleObject(headTitleObject);
             this.setTableheadArray(tableheadArray);
             this.setGfiProperties(gfiProperties);
@@ -66,7 +68,7 @@ define(function (require) {
                 gfiParams = this.get("gfiParams");
                 historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams);
                 historicalDataClean = this.dataCleaning(historicalData);
-                lastDay = _.isUndefined(this.get("lastDate")) ? undefined : moment(this.get("lastDate")).format("YYYY-MM-DD");
+                lastDay = _.isUndefined(this.get("lastDate")) ? "" : moment(this.get("lastDate")).format("YYYY-MM-DD");
                 dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay);
 
                 this.setDataStreamIds(dataStreamIds);
@@ -184,7 +186,7 @@ define(function (require) {
          * builds the request and collect the historical data for each datastream
          * one object with results and phenomenonTimes for every chargingpoint
          * @param  {boolean} async - mode for ajax
-         * @param  {boolean} dataStreamIds -  - from features
+         * @param  {boolean} dataStreamIds - from features
          * @param  {boolean} gfiParams - limits the period of observations
          * @return {[Object]} historicalData
          */
@@ -195,19 +197,9 @@ define(function (require) {
                 versionURL = this.get("versionURL"),
                 completeURL;
 
-            // add gfiParams to query
-            if (!_.isUndefined(gfiParams)) {
-                query = this.addGfiParams(query, gfiParams);
-            }
-
-            query = query + ")&$filter=";
-            _.each(dataStreamIds, function (id, index) {
-                query = query + "@iot.id eq'" + id + "'";
-
-                if (index !== (dataStreamIds.length - 1)) {
-                    query = query + "or ";
-                }
-            });
+            // add gfiParams an filter to query
+            query = this.addGfiParams(query, gfiParams);
+            query = this.addFilter(query, dataStreamIds);
 
             completeURL = this.buildRequestFromQuery(query, requestURL, versionURL);
             historicalData = this.sendRequest(completeURL, async);
@@ -216,51 +208,75 @@ define(function (require) {
             _.each(historicalData, function (data) {
                 var observationsID = data["@iot.id"],
                     observationsCount = data["Observations@iot.count"],
-                    observationsLength = data.Observations.length;
+                    observationsLength = data.Observations.length,
+                    skipCompleteURL,
+                    skipHistoricalData;
 
-                if (observationsCount > observationsLength) {
-                    for (var i = observationsLength; i < observationsCount; i += observationsLength) {
-                        var skipCompleteURL = completeURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
-                            skipHistoricalData = this.sendRequest(skipCompleteURL, async);
-
-                        data.Observations.push.apply(data.Observations, skipHistoricalData[0].Observations);
-                    }
+                // this.moreHistoricalData(data, observationsCount, completeURL, observationsLength, observationsID, async);
+                while (observationsCount > data.Observations.length) {
+                    skipCompleteURL = completeURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'";
+                    skipHistoricalData = this.sendRequest(skipCompleteURL, async);
+    
+                    data.Observations.push.apply(data.Observations, skipHistoricalData[0].Observations);
                 }
-
             }, this);
 
             return historicalData;
         },
 
+
+        /**
+         * adds filter to a given query
+         * @param {string} query - filter load observations
+         * @param {string} dataStreamIds - from feature
+         * @return {[Object]} workingQuery
+         */
+        addFilter: function (query, dataStreamIds) {
+            var workingQuery = query + ")&$filter=";
+
+            _.each(dataStreamIds, function (id, index) {
+                var dataStreamIdLen = dataStreamIds.length - 1;
+
+                workingQuery = workingQuery + "@iot.id eq'" + id + "'";
+                if (index !== dataStreamIdLen) {
+                    workingQuery = workingQuery + "or ";
+                }
+            });
+            return workingQuery;
+        },
+
         /**
          * adds time params to query by given gfiParams
-         * @param {String} query
-         * @param {[Object]} gfiParams
+         * @param {String} query - filter load observations
+         * @param {[Object]} gfiParams - attributes that specify the historical data period
          * @return {String} extended query
          */
         addGfiParams: function (query, gfiParams) {
-            var startDate = gfiParams.startDate,
-                endDate = gfiParams.endDate,
-                periodTime = gfiParams.periodTime,
-                periodUnit = gfiParams.periodUnit,
+            var startDate = _.has(gfiParams, "startDate") ? gfiParams.startDate : undefined,
+                endDate = _.has(gfiParams, "endDate") ? gfiParams.endDate : undefined,
+                periodTime = _.has(gfiParams, "periodTime") ? gfiParams.periodTime : undefined,
+                periodUnit = _.has(gfiParams, "periodUnit") ? gfiParams.periodUnit : undefined,
+                workingQuery = _.isUndefined(query) ? "" : query,
                 lastDate,
-                time;
+                time,
+                translateUnit,
+                unit;
 
             // handle Dates
             if (!_.isUndefined(startDate)) {
                 lastDate = moment(startDate, "DD.MM.YYYY");
                 // request 3 more weeks to find the latest status
                 time = moment(startDate, "DD.MM.YYYY").subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
-                query = query + ";$filter=phenomenonTime gt " + time;
+                workingQuery = workingQuery + ";$filter=phenomenonTime gt " + time;
 
                 if (!_.isUndefined(endDate)) {
                     endDate = moment(endDate, "DD.MM.YYYY").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
-                    query = query + " and phenomenonTime lt " + endDate;
+                    workingQuery = workingQuery + " and phenomenonTime lt " + endDate;
                 }
             }
             // handle period
             else if (!_.isUndefined(periodTime) && !_.isUndefined(periodUnit)) {
-                var translateUnit = {
+                translateUnit = {
                     Jahr: "years",
                     Monat: "months",
                     Woche: "weeks",
@@ -269,19 +285,20 @@ define(function (require) {
                     Monate: "months",
                     Wochen: "weeks",
                     Tage: "days"
-                    },
-                    unit = translateUnit[periodUnit],
-                    // request 3 more weeks to find the latest status
-                    time = moment().subtract(periodTime, unit).subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
+                };
+                unit = translateUnit[periodUnit];
+
+                // request 3 more weeks to find the latest status
+                time = moment().subtract(periodTime, unit).subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
 
                 lastDate = moment().subtract(periodTime, unit);
-                query = query + ";$filter=phenomenonTime gt " + time;
+                workingQuery = workingQuery + ";$filter=phenomenonTime gt " + time;
             }
 
             // necessary for processing historical data
             this.setLastDate(lastDate);
 
-            return query;
+            return workingQuery;
         },
 
         /**
@@ -444,14 +461,13 @@ define(function (require) {
         /**
          * removes doublicates
          * duplicates are records whose phenomenontime is less than 1000 milliseconds
-         * @param  {Array} dataArray - 
-         * 
-         * @return {Array}
+         * and have the same result
+         * @param  {Array} dataArray - that contains data from the features
+         * @return {Array} workingArray - without doublicates
          */
         dataCleaning: function (dataArray) {
             var workingArray = _.isUndefined(dataArray) ? [] : dataArray;
 
-            console.log(workingArray);
             _.each(workingArray, function (loadingPoint) {
                 var observations = loadingPoint.Observations,
                     lastTime = 0,
@@ -467,7 +483,7 @@ define(function (require) {
                         lastState = state;
                         return;
                     }
-                    else if (Math.abs((moment(lastTime).diff(time))) < 1000 && state === lastState) {
+                    else if (Math.abs(moment(lastTime).diff(time)) < 1000 && state === lastState) {
                         indexArray.push(index);
                     }
 
@@ -671,7 +687,7 @@ define(function (require) {
         /**
          * sums the data of the individual days of the week together
          * @param  {Array} allWeekdaysByYear
-         * @return {number}
+         * @return {number} sum
          */
         calculateSumIndicatorData: function (allWeekdaysByYear) {
             var sum = 0;
@@ -685,26 +701,21 @@ define(function (require) {
             return Math.round(sum);
         },
 
-// *************************************************************
-// ***** Processing data                                   *****
-// *************************************************************
         /**
          *generates a record for each day of the week
          * @param  {Array} historicalData [description]
          * @param  {Date} lastDay - until this date the data will be evaluated
-         * @return {Array}
+         * @return {Array} dataByWeekday
          */
         processDataForAllWeekdays: function (historicalData, lastDay) {
             var historicalDataThisTimeZone,
                 historicalDataWithIndex,
                 dataByWeekday,
-                dataPerHour,
-                processedData,
-                graphConfig;
+                utc = _.isUndefined(this.get("utc")) ? "+1" : this.get("utc");
 
             // Check if data is available
-            if (!this.checkObservationsEmpty(historicalData)) {
-                historicalDataThisTimeZone = this.changeTimeZone(historicalData);
+            if (this.checkObservationsNotEmpty(historicalData)) {
+                historicalDataThisTimeZone = this.changeTimeZone(historicalData, utc);
                 historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
                 dataByWeekday = this.divideDataByWeekday(historicalDataWithIndex, lastDay);
             }
@@ -717,14 +728,16 @@ define(function (require) {
 
         /**
          * checks if there are any observations
-         * @param  {[Object]} historicalData
-         * @return {boolean}
+         * @param  {[Object]} historicalData - data from feature
+         * @return {boolean} boolean
          */
-        checkObservationsEmpty: function (historicalData) {
+        checkObservationsNotEmpty: function (historicalData) {
             var boolean = false;
 
             _.each(historicalData, function (data) {
-                (_.isEmpty(data.Observations)) ? boolean = true : boolean = false;
+                if (!_.isEmpty(data.Observations)) {
+                    boolean = true;
+                }
             });
 
             return boolean;
@@ -733,53 +746,83 @@ define(function (require) {
 
         /**
          * change the timzone for the historicalData
-         * @param  {[Object]} historicalData
-         * @return {[Object]}
+         * @param  {[Object]} historicalData - data from feature
+         * @param  {[Object]} utc - timezone
+         * @return {[Object]} data
          */
-        changeTimeZone: function (historicalData) {
-            _.each(historicalData, function (loadingPointData) {
+        changeTimeZone: function (historicalData, utc) {
+            var data = _.isUndefined(historicalData) ? [] : historicalData;
+
+            _.each(data, function (loadingPointData) {
                 _.each(loadingPointData.Observations, function (obs) {
-                    obs.phenomenonTime = moment(obs.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss");
+                    var phenomenonTime = obs.phenomenonTime,
+                        utcAlgebraicSign = utc.substring(0, 1),
+                        utcSub,
+                        utcNumber,
+                        utcString = _.isUndefined(utc) ? "+1" : utc;
+
+                    if (utcString.length === 2) {
+                        // check for winter- and summertime
+                        utcSub = parseInt(utcString.substring(1, 2), 10);
+                        utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                        utcNumber = "0" + utcSub + "00";
+                    }
+                    else if (utcString.length > 2) {
+                        utcSub = parseInt(utcString.substring(1, 3), 10);
+                        utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                        utcNumber = utc.substring(1, 3) + "00";
+                    }
+    
+                    obs.phenomenonTime = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("YYYY-MM-DDTHH:mm:ss");
+
                 });
             });
 
-            return historicalData;
+            return data;
         },
 
         /**
          * add an index to the historicalData
-         * @param {[object]} historicalData
+         * @param {[object]} historicalData -  - data from feature
+         * @return {[Object]} data
          */
         addIndex: function (historicalData) {
-            _.each(historicalData, function (loadingPointData) {
+            var data = _.isUndefined(historicalData) ? [] : historicalData;
+
+            _.each(data, function (loadingPointData) {
                 _.each(loadingPointData.Observations, function (obs, index) {
                     obs.index = index;
                 });
             });
 
-            return historicalData;
+            return data;
         },
 
         /**
          * divides the day into 7 days of the week
          * and generate an observation for every day at 0 o'clock
-         * @param  {Array} historicalDataWithIndex
+         * @param  {Array} historicalDataWithIndex - from features
          * @param  {Date} lastDay - the day on which the evaluation of the data should end
-         * @return {}
+         * @return {array} weekArray
          */
         divideDataByWeekday: function (historicalDataWithIndex, lastDay) {
-            var weekArray = [[], [], [], [], [], [], []];
+            var weekArray = [
+                [], [], [], [], [], [], []
+            ];
 
             _.each(historicalDataWithIndex, function (historicalData) {
-                var observations = historicalData.Observations,
+                var observations = _.has(historicalData, "Observations") ? historicalData.Observations : [],
                     actualDay = moment().format("YYYY-MM-DD"),
-                    thisLastDay = (_.isUndefined(lastDay)) ? moment(observations[(observations).length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay,
                     arrayIndex = 0,
-                    booleanLoop = true;
+                    booleanLoop = true,
+                    thisLastDay;
 
-                weekArray[arrayIndex].push([]);
+                if (!_.isEmpty(observations)) {
+                    thisLastDay = _.isUndefined(lastDay) || lastDay === "" ? moment(observations[observations.length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay;
+                    weekArray[arrayIndex].push([]);
+                }
 
-                _.each(observations, function (data, index) {
+                _.each(observations, function (data) {
                     var phenomenonDay = moment(data.phenomenonTime).format("YYYY-MM-DD"),
                         zeroTime,
                         zeroResult,
@@ -790,7 +833,7 @@ define(function (require) {
                         weekArrayIndexLength = weekArray[arrayIndex].length - 1;
 
                         // when the last date is reached, the loop is no longer needed
-                         if (moment(actualDay) < moment(thisLastDay)) {
+                        if (moment(actualDay) < moment(thisLastDay)) {
                             booleanLoop = false;
                             weekArray[arrayIndex].pop();
                             break;
@@ -807,7 +850,14 @@ define(function (require) {
 
                             // Danach aktuellen Tag auf vorherigen Tag und ArrayIndex auf nächstes Array setzen
                             actualDay = moment(actualDay).subtract(1, "days").format("YYYY-MM-DD");
-                            (arrayIndex >= 6) ? arrayIndex = 0 : arrayIndex++;
+                            
+                            if (arrayIndex >= 6) {
+                                arrayIndex = 0;
+                            }
+                            else {
+                                arrayIndex++;
+                            }
+
                             weekArray[arrayIndex].push([]);
                         }
                     }
@@ -819,16 +869,17 @@ define(function (require) {
 
         /**
          * create the config to draw graph
-         * @param  {String} targetResult
-         * @param  {String} graphTag
-         * @param  {number} index
+         * @param  {String} targetResult - result to draw
+         * @param  {String} graphTag - div
+         * @param  {number} index - day
          */
         triggerToBarGraph: function (targetResult, graphTag, index) {
             var width = this.get("gfiWidth"),
                 height = this.get("gfiHeight"),
                 dataByWeekday = this.get("weekday"),
                 dataPerHour,
-                processedData;
+                processedData,
+                graphConfig;
 
             // need to toggle weekdays
             this.setDayIndex(index);
@@ -885,27 +936,28 @@ define(function (require) {
 
         /**
          * message if data is not evaluable or not existing
-         * @param  {String} graphTag
-         * @param  {number} width
-         * @param  {number} height
+         * @param  {String} graphTag - div to draw graph
+         * @param  {number} width - from frame
+         * @param  {number} height - from frame
+         * @param  {number} index - day
          */
         drawErrorMessage: function (graphTag, width, height, index) {
             var today = moment().subtract(index, "days").format("dddd");
 
             $(".ladesaeulen .day").text(today).css("font-weight", "bold");
             $("<div class='noData' style='height: " + height + "px; width: " + width + "px;'>")
-                    .appendTo("div" + graphTag)
-                    .text("Zurzeit keine Informationen!");
+                .appendTo("div" + graphTag)
+                .text("Zurzeit keine Informationen!");
         },
 
         /**
          * calculate workload for every day
          * the workload is divided into 24 hours
-         * @param  {[[object]]} dataByWeekday
-         * @param  {String} targetResult
-         * @return {[[object]]}
+         * @param  {[array]} dataByWeekday - historical data sorted by weekday
+         * @param  {String} targetResult - result to draw
+         * @return {[[object]]} allDataArray
          */
-       calculateWorkloadPerDayPerHour: function (dataByWeekday, targetResult) {
+        calculateWorkloadPerDayPerHour: function (dataByWeekday, targetResult) {
             var allDataArray = [];
 
             _.each(dataByWeekday, function (dayData) {
@@ -1131,6 +1183,10 @@ define(function (require) {
             this.set("gfiParams", value);
         },
 
+        setUTC: function (value) {
+            this.set("utc", value);
+        },
+
         setHeadTitleObject: function (value) {
             this.set("headTitleObject", value);
         },
@@ -1179,3 +1235,4 @@ define(function (require) {
 
     return ElektroladesaeulenTheme;
 });
+

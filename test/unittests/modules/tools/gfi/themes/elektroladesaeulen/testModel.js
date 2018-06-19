@@ -154,10 +154,8 @@ define(function (require) {
                 expect(model.buildRequestFromQuery("test", "test", "1.0")).to.be.an("string").to.equal("test/v1.0/Datastreamstest");
             });
             it("should return url as string for correct input", function () {
-                expect(model.buildRequestFromQuery(
-                    "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt 2017-12-11T00:00:00.000Z)&$filter=@iot.id eq'89'or @iot.id eq'727'",
-                    "https://51.5.242.162/itsLGVhackathon",
-                    "1.0"))
+                expect(model.buildRequestFromQuery("?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt 2017-12-11T00:00:00.000Z)&$filter=@iot.id eq'89'or @iot.id eq'727'",
+                    "https://51.5.242.162/itsLGVhackathon", "1.0"))
                     .to.be.an("string")
                     .to.equal("https://51.5.242.162/itsLGVhackathon/v1.0/Datastreams?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt 2017-12-11T00:00:00.000Z)&$filter=@iot.id eq'89'or @iot.id eq'727'");
             });
@@ -165,6 +163,319 @@ define(function (require) {
         describe("dataCleaning", function () {
             it("should return an empty array for undefined input", function () {
                 expect(model.dataCleaning(undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for empty array input", function () {
+                expect(model.dataCleaning([])).to.be.an("array").that.is.empty;
+            });
+            it("should return an array that is equal to input array for incorrect array input", function () {
+                expect(model.dataCleaning([
+                    "xyz", 123, "xyz", "abcde"
+                ])).to.be.an("array").that.includes("xyz", 123, "xyz", "abcde");
+            });
+            it("should return an array without doublicates for correct array input", function () {
+                var dataArray = [{
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available"
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available"
+                    }]
+                },
+                {
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "charging"
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "available"
+                    }]
+                }];
+
+                expect(model.dataCleaning(dataArray)).to.have.deep.members([{
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available"
+                    }]
+                },
+                {
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "charging"
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "available"
+                    }]
+                }]);
+            });
+        });
+        describe("checkObservationsNotEmpty", function () {
+            it("should return false for undefined input", function () {
+                expect(model.checkObservationsNotEmpty(undefined)).to.be.false;
+            });
+            it("should return false for empty array input", function () {
+                expect(model.checkObservationsNotEmpty([])).to.be.false;
+            });
+            it("should return false for incorrect array input", function () {
+                expect(model.checkObservationsNotEmpty(["test", "abc"])).to.be.false;
+            });
+            it("should return true for correct array input", function () {
+                var historicalData = [{
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available"
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T12:55:52",
+                        result: "charging"
+                    }]
+                }];
+
+                expect(model.checkObservationsNotEmpty(historicalData)).to.be.true;
+            });
+        });
+        describe("changeTimeZone", function () {
+            it("should return an empty array for undefined input", function () {
+                expect(model.changeTimeZone(undefined, undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for empty array and timezone +3 input", function () {
+                expect(model.changeTimeZone([], "+3")).to.be.an("array").that.is.empty;
+            });
+            it("should return an array that is equal to input array for incorrect array and timezone +1 input", function () {
+                expect(model.changeTimeZone(["test", "abc"], "+1")).to.be.an("array").that.includes("test", "abc");
+            });
+            it("should return array with changend phenomenonTime for correct array and timezone +5 input", function () {
+                var historicalData = [{
+                    Observations: [{
+                        phenomenonTime: "2018-06-19T07:13:57.421Z",
+                        result: "available"
+                    },
+                    {
+                        phenomenonTime: "2018-01-19T07:13:57.421Z",
+                        result: "charging"
+                    }]
+                }];
+
+                expect(model.changeTimeZone(historicalData, "+5")).to.be.an("array");
+            });
+        });
+        describe("addIndex", function () {
+            it("should return an empty array for undefined input", function () {
+                expect(model.addIndex(undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for empty array input", function () {
+                expect(model.addIndex([])).to.be.an("array").that.is.empty;
+            });
+            it("should return an array that is equal to input array for incorrect array input", function () {
+                expect(model.addIndex(["test", "abc"])).to.be.an("array").that.includes("test", "abc");
+            });
+            it("should return array with index for correct array input", function () {
+                var historicalData = [{
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available"
+                    }]
+                },
+                {
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "charging"
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T12:59:15",
+                        result: "available"
+                    }]
+                }];
+
+                expect(model.addIndex(historicalData)).to.be.an("array").to.have.deep.members([{
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available",
+                        index: 0
+                    }]
+                },
+                {
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "charging",
+                        index: 0
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T12:59:15",
+                        result: "available",
+                        index: 1
+                    }]
+                }]);
+            });
+        });
+        describe("divideDataByWeekday", function () {
+            it("should return an array with seven empty arrays for undefined input", function () {
+                expect(model.divideDataByWeekday(undefined, undefined)).to.be.an("array").to.have.deep.members([
+                    [], [], [], [], [], [], []
+                ]);
+            });
+            it("should return an array with seven empty arrays for empty array and empty string input", function () {
+                expect(model.divideDataByWeekday([], "")).to.be.an("array").to.have.deep.members([
+                    [], [], [], [], [], [], []
+                ]);
+            });
+            it("should return an array with seven empty arrays for empty array and empty string input", function () {
+                expect(model.divideDataByWeekday(["test", 1111, "abcd"], "")).to.be.an("array").to.have.deep.members([
+                    [], [], [], [], [], [], []
+                ]);
+            });
+            it("should return an array with seven arrays that contains divided data for correct data without lastDay input", function () {
+                var historicalDataWithIndex = [{
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available",
+                        index: 0
+                    }]
+                },
+                {
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T12:59:15",
+                        result: "charging",
+                        index: 0
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "available",
+                        index: 1
+                    }]
+                }];
+                expect(model.divideDataByWeekday(historicalDataWithIndex, "")).to.be.an("array").to.have.deep.members([
+                    [[{
+                        phenomenonTime: "2018-06-19T00:00:00",
+                        result: "available"
+                    }],
+                    [{
+                        phenomenonTime: "2018-06-19T00:00:00",
+                        result: "charging"
+                    }]],
+                    [[{
+                        phenomenonTime: "2018-06-18T00:00:00",
+                        result: "available"
+                    }],
+                    [{
+                        phenomenonTime: "2018-06-18T00:00:00",
+                        result: "charging"
+                    }]],
+                    [[{
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available",
+                        index: 0
+                    }],
+                    [{
+                        phenomenonTime: "2018-06-17T12:59:15",
+                        result: "charging",
+                        index: 0
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "available",
+                        index: 1
+
+                    }]],
+                    [], [], [], []
+                ]);
+            });
+        });
+        describe("processDataForAllWeekdays", function () {
+            it("should return an empty array for undefined input", function () {
+                expect(model.processDataForAllWeekdays(undefined, undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for empty input", function () {
+                expect(model.processDataForAllWeekdays([], "")).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for incorrect input", function () {
+                expect(model.processDataForAllWeekdays(["xyz", 83247], "")).to.be.an("array").that.is.empty;
+            });
+            it("should return an array with seven arrays that contains divided data for correct data without lastDay input", function () {
+                var historicalData = [{
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available",
+                        index: 0
+                    }]
+                },
+                {
+                    Observations: [{
+                        phenomenonTime: "2018-06-17T12:59:15",
+                        result: "charging",
+                        index: 0
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "available",
+                        index: 1
+                    }]
+                }];
+
+                expect(model.processDataForAllWeekdays(historicalData, "")).to.be.an("array").to.have.deep.members([
+                    [[{
+                        phenomenonTime: "2018-06-19T00:00:00",
+                        result: "available"
+                    }],
+                    [{
+                        phenomenonTime: "2018-06-19T00:00:00",
+                        result: "charging"
+                    }]],
+                    [[{
+                        phenomenonTime: "2018-06-18T00:00:00",
+                        result: "available"
+                    }],
+                    [{
+                        phenomenonTime: "2018-06-18T00:00:00",
+                        result: "charging"
+                    }]],
+                    [[{
+                        phenomenonTime: "2018-06-17T10:55:52",
+                        result: "available",
+                        index: 0
+                    }],
+                    [{
+                        phenomenonTime: "2018-06-17T12:59:15",
+                        result: "charging",
+                        index: 0
+                    },
+                    {
+                        phenomenonTime: "2018-06-17T12:57:15",
+                        result: "available",
+                        index: 1
+
+                    }]],
+                    [], [], [], []
+                ]);
+            });
+        });
+        describe("addGfiParams", function () {
+            it("should return an empty string for undefined input", function () {
+                expect(model.addGfiParams(undefined, undefined)).to.be.an("string").that.is.empty;
+            });
+            it("should return an empty string for empty input", function () {
+                expect(model.addGfiParams("", {})).to.be.an("string").that.is.empty;
+            });
+            it("should return an empty string for incorrect input", function () {
+                expect(model.addGfiParams("abc", {xyz: 2})).to.be.an("string").that.includes("abc");
+            });
+            it("should return query with date as string for correct input", function () {
+                var query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc",
+                    gfiParams = {
+                        startDate: "31.01.2018"
+                    };
+
+                expect(model.addGfiParams(query, gfiParams)).to.be.an("string").that.includes("?"
+                    + "$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc"
+                    + ";$filter=phenomenonTime gt 2018-01-10T00:00:00.000Z");
+            });
+        });
+        describe("calculateWorkloadPerDayPerHour", function () {
+            it("should return an empty string for undefined input", function () {
+                expect(model.calculateWorkloadPerDayPerHour(undefined, undefined)).that.is.empty;
             });
         });
     });

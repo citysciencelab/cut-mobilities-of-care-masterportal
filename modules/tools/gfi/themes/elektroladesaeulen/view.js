@@ -2,7 +2,7 @@ define(function (require) {
 
     var ThemeView = require("modules/tools/gfi/themes/view"),
         ElektroladesaeulenThemeTemplate = require("text!modules/tools/gfi/themes/elektroladesaeulen/template.html"),
-        Config = require("config"),
+        $ = require("jquery"),
         ElektroladesaeulenThemeView;
 
     ElektroladesaeulenThemeView = ThemeView.extend({
@@ -52,11 +52,12 @@ define(function (require) {
         toggleTab: function (evt) {
             var contentId = $(evt.currentTarget).attr("value"),
                 modelDayIndex = this.model.get("dayIndex"),
-                index = _.isUndefined(modelDayIndex) ? 0 : modelDayIndex;
+                index = _.isUndefined(modelDayIndex) ? 0 : modelDayIndex,
+                gfiSize;
 
             // sets the window size so that it is always the same
             if (_.isUndefined(this.model.get("gfiHeight")) || _.isUndefined(this.model.get("gfiWidth"))) {
-                var gfiSize = {
+                gfiSize = {
                     width: $(".gfi-content").css("width").slice(0, -2),
                     height: $(".gfi-content").css("height").slice(0, -2)
                 };
@@ -89,7 +90,7 @@ define(function (require) {
         /**
          * calculates the available height for the graph
          * @param  {number} gfiHeight - height of the already drwan gfi
-         * @return {String}
+         * @return {String} availableHeight
          */
         calculateHeight: function (gfiHeight) {
             var heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
@@ -101,7 +102,7 @@ define(function (require) {
 
         /**
          * Reduce height by the size of the button
-         * @param  {number} gfiHeight
+         * @param  {number} gfiHeight - height from gfi
          * @return {number} gfiHeight - without height from arrow buttons
          */
         calculateIndicatorHeight: function (gfiHeight) {
