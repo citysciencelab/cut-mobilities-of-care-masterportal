@@ -1,9 +1,10 @@
 define([
     "backbone",
+    "jquery",
     "backbone.radio",
     "config",
     "require"
-], function (Backbone, Radio, Config, Require) {
+], function (Backbone, $, Radio, Config, Require) {
 
     var Util = Backbone.Model.extend({
         defaults: {
@@ -51,10 +52,6 @@ define([
             this.setUiStyle(uiStyle);
             this.parseConfigFromURL();
         },
-        updateMapHeight: function () {
-            var navHeight = $("#main-nav").is(":visible") ? $("#main-nav").height() : 0,
-                mapHeight = $(".lgv-container").height() - navHeight;
-        },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);
         },
@@ -75,12 +72,12 @@ define([
             if (/Chrome/i.test(navigator.userAgent)) {
                 return true;
             }
-            else {
-                return false;
-            }
+
+            return false;
+
         },
         isAny: function () {
-            return (this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows());
+            return this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows();
         },
         isInternetExplorer: function () {
             if (/MSIE 9/i.test(navigator.userAgent)) {
@@ -92,9 +89,9 @@ define([
             else if (/rv:11.0/i.test(navigator.userAgent)) {
                 return "IE11";
             }
-            else {
-                return false;
-            }
+
+            return false;
+
         },
         getPath: function (path) {
             var baseUrl = Require.toUrl("").split("?")[0];
@@ -108,9 +105,9 @@ define([
                 }
                 return baseUrl + path;
             }
-            else {
-                return "";
-            }
+
+            return "";
+
         },
         showLoader: function () {
             $("#loader").show();
@@ -118,12 +115,12 @@ define([
         hideLoader: function () {
             $("#loader").hide();
         },
-       getProxyURL: function (url) {
+        getProxyURL: function (url) {
             var parser = document.createElement("a"),
-            protocol = "",
-            result = "",
-            hostname = "",
-            port = "";
+                protocol = "",
+                result = "",
+                hostname = "",
+                port = "";
 
             parser.href = url;
             protocol = parser.protocol;
@@ -147,7 +144,8 @@ define([
 
         /**
          * Setter für Attribut isViewMobile
-         * @param {boolean} value
+         * @param {boolean} value sichtbar
+         * @return {undefined}
          */
         setIsViewMobile: function (value) {
             this.set("isViewMobile", value);
@@ -155,7 +153,7 @@ define([
 
         /**
          * Getter für Attribut isViewMobile
-         * @return {boolean}
+         * @return {boolean} mobil
          */
         getIsViewMobile: function () {
             return this.get("isViewMobile");
@@ -163,6 +161,7 @@ define([
 
         /**
          * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
+         * @return {undefined}
          */
         toggleIsViewMobile: function () {
             if (window.innerWidth >= 768) {
@@ -173,7 +172,7 @@ define([
             }
         },
 
-        parseConfigFromURL: function (result) {
+        parseConfigFromURL: function () {
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {},
                 config;
