@@ -9,13 +9,16 @@ define(function (require) {
 
     CompareFeaturesView = Backbone.View.extend({
         className: "modal fade",
-        model: new CompareFeaturesModel(),
-        templateError: _.template(CompareFeaturesTemplateError),
-        templateList: _.template(CompareFeaturesTemplateList),
+
         events: {
             "hidden.bs.modal": "setIsActivatedToFalse"
         },
+
         initialize: function () {
+            this.model = new CompareFeaturesModel();
+            this.templateError = _.template(CompareFeaturesTemplateError);
+            this.templateList = _.template(CompareFeaturesTemplateList);
+
             this.listenTo(this.model, {
                 "change:isActivated": this.render
             });
@@ -40,6 +43,7 @@ define(function (require) {
             else {
                 this.$el.empty();
             }
+            return this;
         },
 
         setIsActivatedToFalse: function () {
