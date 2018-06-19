@@ -39,6 +39,7 @@
     "chai": "4.1.1",
     "deep-extend": "^0.3.2",
     "eslint": "^4.14.0",
+    "eslint-plugin-backbone": "^2.1.1",
     "fs": "0.0.1-security",
     "glob": "4.2.1",
     "grunt": "^0.4.5",
