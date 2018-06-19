@@ -162,8 +162,11 @@ define(function (require) {
 
                 feature.setId(index);
                 feature.setProperties(data.properties);
+
                 // for a special theme
                 feature.set("gfiParams", this.get("gfiParams"));
+                feature.set("utc", this.get("utc"));
+                
                 features.push(feature);
             }, this);
 
