@@ -1,9 +1,10 @@
 define(function (require) {
-
-    require("modules/searchbar/model");
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
+        $ = require("jquery"),
         GazetteerModel;
+
+    require("modules/searchbar/model");
 
     GazetteerModel = Backbone.Model.extend({
         defaults: {
@@ -24,11 +25,12 @@ define(function (require) {
          * @description Initialisierung der Gazetteer Suche
          * @param {Object} config - Das Konfigurationsobjekt für die Gazetteer-Suche.
          * @param {string} config.serviceId - ID aus rest-conf für URL des GAZ.
-         * @param {boolean} [config.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
-         * @param {boolean} [config.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
-         * @param {boolean} [config.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
-         * @param {boolean} [config.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
-         * @param {integer} [config.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+         * @param {boolean} [config.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers.
+         * @param {boolean} [config.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen?
+         * @param {boolean} [config.searchDistricts=false] - Soll nach Stadtteilen gesucht werden?
+         * @param {boolean} [config.searchParcels=false] - Soll nach Flurstücken gesucht werden?
+         * @param {integer} [config.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird.
+         * @returns {void}
          */
         initialize: function (config) {
             var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
@@ -55,7 +57,7 @@ define(function (require) {
                 this.set("searchHouseNumbers", config.searchHouseNumbers);
             }
             if (config.searchDistricts) {
-               this.set("searchDistricts", config.searchDistricts);
+                this.set("searchDistricts", config.searchDistricts);
             }
             if (config.searchParcels) {
                 this.set("searchParcels", config.searchParcels);
@@ -76,11 +78,9 @@ define(function (require) {
             this.set("pastedHouseNumber", value);
         },
 
-        /**
-        *
-        */
-        search: function (searchString) {
-            var gemarkung, flurstuecksnummer;
+        search: function (pattern) {
+            var gemarkung, flurstuecksnummer,
+                searchString = pattern;
 
             this.set("searchString", searchString);
             if (searchString.length >= this.get("minChars")) {
@@ -92,15 +92,15 @@ define(function (require) {
                     this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true, this.getTypeOfRequest());
                 }
                 if (this.get("searchDistricts") === true) {
-                    if (!_.isNull(searchString.match(/^[a-z\-]+$/i))) {
+                    if (!_.isNull(searchString.match(/^[a-z-]+$/i))) {
                         this.setTypeOfRequest("searchDistricts");
                         this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, true, this.getTypeOfRequest());
                     }
                 }
                 if (this.get("searchParcels") === true) {
-                    if (!_.isNull(searchString.match(/^[0-9]{4}[\s|\/][0-9]*$/))) {
-                        gemarkung = searchString.split(/[\s|\/]/)[0];
-                        flurstuecksnummer = searchString.split(/[\s|\/]/)[1];
+                    if (!_.isNull(searchString.match(/^[0-9]{4}[\s|/][0-9]*$/))) {
+                        gemarkung = searchString.split(/[\s|/]/)[0];
+                        flurstuecksnummer = searchString.split(/[\s|/]/)[1];
                         this.setTypeOfRequest("searchParcels1");
                         this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true, this.getTypeOfRequest());
                     }
@@ -125,6 +125,7 @@ define(function (require) {
         * @param {string} adress.streetname - Straßenname
         * @param {integer} adress.housenumber - Hausnummer
         * @param {string} [adress.affix] - Zusatz zur Hausnummer
+        * @returns {void}
         */
         adressSearch: function (adress) {
             if (adress.affix && adress.affix !== "") {
@@ -143,17 +144,19 @@ define(function (require) {
         },
         /**
         * @description Veränderte Suchabfolge bei initialer Suche, z.B. über Config.initialQuery
-        * @param {string} searchString - Suchstring
+        * @param {string} pattern - Suchstring
+        * @returns {void}
         */
-        directSearch: function (searchString) {
-            var splitInitString;
+        directSearch: function (pattern) {
+            var searchString = pattern,
+                splitInitString;
 
             this.set("searchString", searchString);
             if (searchString.search(",") !== -1) {
                 splitInitString = searchString.split(",");
                 this.set("onlyOneStreetName", splitInitString[0]);
-                searchString = searchString.replace(/\ /g, "");
-                this.set("searchStringRegExp", new RegExp(searchString.replace(/\,/g, ""), "i")); // Erst join dann als regulärer Ausdruck
+                searchString = searchString.replace(/ /g, "");
+                this.set("searchStringRegExp", new RegExp(searchString.replace(/,/g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.setTypeOfRequest("onlyOneStreetName1");
                 this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, false, this.getTypeOfRequest());
             }
@@ -175,6 +178,7 @@ define(function (require) {
         /**
         * @description Methode zur Weiterleitung der adressSearch
         * @param {xml} data - Response
+        * @returns {void}
         */
         getAdress: function (data) {
             Radio.trigger("Gaz", "getAdress", data);
@@ -182,6 +186,7 @@ define(function (require) {
         /**
          * [getStreets description]
          * @param  {[type]} data [description]
+         * @returns {void}
          */
         getStreets: function (data) {
             var hits = $("wfs\\:member,member", data),
@@ -190,7 +195,7 @@ define(function (require) {
                 hitName;
 
             _.each(hits, function (hit) {
-                coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
+                coordinates = $(hit).find("gml\\:posList,posList")[0].textContent.split(" ");
                 hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
                 hitNames.push(hitName);
                 // "Hitlist-Objekte"
@@ -214,11 +219,11 @@ define(function (require) {
                     this.searchInHouseNumbers();
                 }
                 else {
-                    _.each(hitNames, function (hitName) {
-                        if (hitName.toLowerCase() === this.get("searchString").toLowerCase()) {
-                            this.set("onlyOneStreetName", hitName);
+                    _.each(hitNames, function (value) {
+                        if (value.toLowerCase() === this.get("searchString").toLowerCase()) {
+                            this.set("onlyOneStreetName", value);
                             this.setTypeOfRequest("searchHouseNumbers2");
-                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, false, this.getTypeOfRequest());
+                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(value), this.getHouseNumbers, false, this.getTypeOfRequest());
                             this.searchInHouseNumbers();
                         }
                     }, this);
@@ -226,6 +231,7 @@ define(function (require) {
             }
             Radio.trigger("Searchbar", "createRecommendedList");
         },
+
         /**
          * [getDistricts description]
          * @param  {[type]} data [description]
@@ -234,7 +240,7 @@ define(function (require) {
         getDistricts: function (data) {
             var hits = $("wfs\\:member,member", data),
                 coordinate,
-                polygon,
+                coordinateArray,
                 hitName,
                 pos,
                 posList;
@@ -242,20 +248,20 @@ define(function (require) {
             _.each(hits, function (hit) {
                 posList = $(hit).find("gml\\:posList,posList")[0];
                 pos = $(hit).find("gml\\:pos,pos")[0];
-                coordinate = pos ? [parseFloat(pos.textContent.split(" ")[0]), parseFloat(pos.textContent.split(" ")[1])] : "";
-                polygon = posList ? posList.textContent : "";
+                coordinate = posList ? posList.textContent : pos.textContent;
+                coordinateArray = coordinate.split(" ");
                 hitName = $(hit).find("iso19112\\:geographicIdentifier , geographicIdentifier")[0].textContent;
-                // "Hitlist-Objekte"
-                Radio.trigger("Searchbar", "pushHits", "hitList", { name: hitName,
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
+                    name: hitName,
                     type: "Stadtteil",
-                    coordinate: coordinate,
-                    polygon: polygon,
+                    coordinate: coordinateArray,
                     glyphicon: "glyphicon-map-marker",
                     id: hitName.replace(/ /g, "") + "Stadtteil"
                 });
             }, this);
             Radio.trigger("Searchbar", "createRecommendedList");
         },
+
         searchInHouseNumbers: function () {
             var address, number;
 
@@ -283,6 +289,7 @@ define(function (require) {
         /**
          * [getHouseNumbers description]
          * @param  {[type]} data [description]
+         * @returns {void}
          */
         getHouseNumbers: function (data) {
             var hits = $("wfs\\:member,member", data),
@@ -309,7 +316,7 @@ define(function (require) {
                     };
                 }
                 else {
-                    name = this.get("onlyOneStreetName") + " " + number ;
+                    name = this.get("onlyOneStreetName") + " " + number;
                     adress = {
                         streetname: this.get("onlyOneStreetName"),
                         housenumber: number,
@@ -329,9 +336,7 @@ define(function (require) {
                 this.get("houseNumbers").push(obj);
             }, this);
         },
-        /**
-         *
-         */
+
         getParcel: function (data) {
             var hits = $("wfs\\:member,member", data),
                 coordinate,
@@ -352,23 +357,21 @@ define(function (require) {
                     type: "Parcel",
                     coordinate: coordinate,
                     glyphicon: "glyphicon-map-marker",
-                    geom: "geom",
+                    geom: geom,
                     id: "Parcel"
                 });
             }, this);
             Radio.trigger("Searchbar", "createRecommendedList");
         },
-        /**
-         *
-         */
+
         getStreetKey: function (data) {
             var hits = $("wfs\\:member,member", data),
                 coordinates,
                 hitName;
 
             _.each(hits, function (hit) {
-                if ($(hit).find("gml\\:posList,posList").length > 0 && $(hit).find("dog\\:strassenname, strassenname").length > 0){
-                    coordinates = $(hit).find("gml\\:posList,posList")[0].textContent;
+                if ($(hit).find("gml\\:posList,posList").length > 0 && $(hit).find("dog\\:strassenname, strassenname").length > 0) {
+                    coordinates = $(hit).find("gml\\:posList,posList")[0].textContent.split(" ");
                     hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
                     // "Hitlist-Objekte"
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
@@ -389,6 +392,7 @@ define(function (require) {
          * @param {function} successFunction - A function to be called if the request succeeds
          * @param {boolean} asyncBool - asynchroner oder synchroner Request
          * @param {String} type - Typ des Requests
+         * @returns {void}
          */
         sendRequest: function (data, successFunction, asyncBool, type) {
             var ajax = this.get("ajaxRequests");
@@ -401,7 +405,7 @@ define(function (require) {
         },
 
         ajaxSend: function (data, successFunction, asyncBool, typeRequest) {
-            this.get("ajaxRequests")[typeRequest] = ($.ajax({
+            this.get("ajaxRequests")[typeRequest] = $.ajax({
                 url: this.get("gazetteerURL"),
                 data: data,
                 dataType: "xml",
@@ -419,12 +423,13 @@ define(function (require) {
                 complete: function () {
                     this.polishAjax(typeRequest);
                 }
-            }, this));
+            }, this);
         },
 
         /**
          * Triggert die Darstellung einer Fehlermeldung
          * @param {object} err Fehlerobjekt aus Ajax-Request
+         * @returns {void}
          */
         showError: function (err) {
             var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
@@ -435,6 +440,7 @@ define(function (require) {
         /**
          * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
          * @param {string} type Bezeichnung des Typs
+         * @returns {void}
          */
         polishAjax: function (type) {
             var ajax = this.get("ajaxRequests"),
@@ -445,6 +451,7 @@ define(function (require) {
 
         /**
         * Holt den jeweiligen Typ der gesendet wird
+        * @returns {string} typeOfRequest
         */
         getTypeOfRequest: function () {
             return this.get("typeOfRequest");
@@ -452,6 +459,8 @@ define(function (require) {
 
         /**
         * Setzt den jeweiligen Typ der gesendet wird
+        * @param {string} value typeOfRequest
+        * @returns {void}
         */
         setTypeOfRequest: function (value) {
             this.set("typeOfRequest", value);
