@@ -13,12 +13,11 @@ define(function (require) {
 
         defaults: _.extend({}, Layer.prototype.defaults,
             {
-                webSocketPortSTS: 9876,
                 epsg: "EPSG:4326",
                 utc: "+1",
                 version: "1.0"
-            }
-        ),
+            }),
+
         initialize: function () {
             this.superInitialize();
 
@@ -552,7 +551,7 @@ define(function (require) {
          * change all numbers from features from StreamLayer to String
          * this is necessary to draw the gfi
          * @param  {Object} data
-         * @return {Object}
+         * @return {Object} data
          */
         changeValueToString: function (data) {
             var attributes = data.attributes,
@@ -585,13 +584,13 @@ define(function (require) {
         /**
          * create connection to a given MQTT-Broker
          * this must be passes this as a context to call the updateFromMqtt function
+         * @param {array} features - features with DatastreamID
          */
         createMqttConnectionToSensorThings: function (features) {
-            // var features = this.getLayerSource().getFeatures(),
             var dataStreamIds = this.getDataStreamIds(features),
                 client = mqtt.connect({
                     host: this.get("url").split("/")[2],
-                    port: this.get("webSocketPortSTS"),
+                    protocol: "wss",
                     path: "/mqtt",
                     context: this
                 });

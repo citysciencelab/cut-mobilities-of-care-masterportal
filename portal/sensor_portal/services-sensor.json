@@ -181,7 +181,7 @@
    {
       "id" : "999998",
       "name" : "Live - Temperatur",
-      "url" : "http://51.5.242.162/itsLGVhackathon",
+      "url" : "https://51.5.242.162/itsLGVhackathon",
       "typ" : "Sensor",
       "subTyp" : "SensorThings",
       "version" : "1.0",
@@ -207,7 +207,7 @@
       "typ" : "Sensor",
       "subTyp" : "SensorThings",
       "version" : "1.0",
-      "url" : "http://51.5.242.162/itsLGVhackathon",
+      "url" : "https://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"]
