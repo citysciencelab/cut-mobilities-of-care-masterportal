@@ -75,13 +75,13 @@ define([
             // Sichtbarkeit auslesen. Wenn fehlend true
             if (visibilityListString === "") {
                 visibilityList = _.map(layerIdList, function () {
-                   return true;
-               });
+                    return true;
+                });
             }
             else if (visibilityListString.indexOf(",") > -1) {
                 visibilityList = _.map(visibilityListString.split(","), function (val) {
-                     return _String.toBoolean(val);
-                 });
+                    return _String.toBoolean(val);
+                });
             }
             else {
                 visibilityList = new Array(_String.toBoolean(visibilityListString));
@@ -90,13 +90,13 @@ define([
             // Tranzparenzwert auslesen. Wenn fehlend Null.
             if (transparencyListString === "") {
                 transparencyList = _.map(layerIdList, function () {
-                   return 0;
-               });
+                    return 0;
+                });
             }
             else if (transparencyListString.indexOf(",") > -1) {
                 transparencyList = _.map(transparencyListString.split(","), function (val) {
-                     return _String.toNumber(val);
-                 });
+                    return _String.toNumber(val);
+                });
             }
             else {
                 transparencyList = [parseInt(transparencyListString, 0)];
@@ -108,19 +108,19 @@ define([
             }
 
             _.each(layerIdList, function (val, index) {
-                var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                    layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
+                var layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: val}),
+                    layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: val}),
                     treeType = Radio.request("Parser", "getTreeType"),
                     layerToPush;
 
-                layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
+                layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
 
                 if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
                     layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
                     Radio.trigger("Parser", "addItemAtTop", layerToPush);
                 }
                 else if (_.isUndefined(layerConfigured)) {
-                    Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning" });
+                    Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning"});
                 }
             }, this);
 
@@ -205,7 +205,7 @@ define([
 
             this.set("zoomLevel", value);
         },
-       parseIsInitOpen: function (result) {
+        parseIsInitOpen: function (result) {
             this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
         parseStartupModul: function (result) {
@@ -222,7 +222,7 @@ define([
                 // nach " " splitten
                 split = value.split(" ");
 
-                _.each (split, function (splitpart) {
+                _.each(split, function (splitpart) {
                     initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
                 });
                 initString = initString.substring(0, initString.length - 1);
@@ -231,7 +231,7 @@ define([
                 split = "";
                 split = initString.split("-");
                 initString = "";
-                _.each (split, function (splitpart) {
+                _.each(split, function (splitpart) {
                     initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
                 });
                 initString = initString.substring(0, initString.length - 1);
@@ -248,7 +248,7 @@ define([
                 Radio.trigger("Util", "setUiStyle", value);
             }
         },
-        parseURL: function (result) {
+        parseURL: function () {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {},
@@ -358,8 +358,8 @@ define([
 
         /**
          * https://gist.github.com/excalq/2961415
-         * @param  {string} key
-         * @param  {string} value
+         * @param  {string} key Name des Parameters
+         * @param  {string} value Wert des Parameters
          * @return {void}
          */
         updateQueryStringParam: function (key, value) {
@@ -371,13 +371,13 @@ define([
 
             // If the "search" string exists, then build params from it
             if (urlQueryString) {
-                keyRegex = new RegExp("([\?&])" + key + "[^&]*");
+                keyRegex = new RegExp("([?&])" + key + "[^&]*");
 
                 // If param exists already, update it
                 if (urlQueryString.match(keyRegex) !== null) {
                     params = urlQueryString.replace(keyRegex, "$1" + newParam);
                 }
-                 // Otherwise, add it to end of query string
+                // Otherwise, add it to end of query string
                 else {
                     params = urlQueryString + "&" + newParam;
                 }
