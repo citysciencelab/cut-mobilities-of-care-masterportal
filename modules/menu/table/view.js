@@ -19,6 +19,7 @@ define(function (require) {
             this.renderLayerList();
             this.renderCategoryList();
             this.renderTools();
+            this.hideContextMenu();
         },
         render: function () {
             $(this.el).html(this.template());
@@ -32,6 +33,9 @@ define(function (require) {
         },
         renderTools: function () {
             new ToolView();
+        },
+        hideContextMenu: function () {
+            $("body").attr("oncontextmenu", "return false;");
         }
     });
     return Menu;
