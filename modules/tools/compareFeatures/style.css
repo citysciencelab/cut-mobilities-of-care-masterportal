@@ -1,0 +1,15 @@
+.compare-feature-modal .modal-title {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+}
+
+.compare-feature-modal h4 {
+    line-height: 1.4;
+}
+
+.compare-feature-modal .btn {
+    background-color: rgb(0, 92, 169);
+}
+
+.compare-feature-modal .btn:hover {
+    opacity: 0.9;
+}

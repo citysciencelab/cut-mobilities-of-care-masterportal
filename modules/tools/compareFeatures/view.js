@@ -1,26 +1,28 @@
 define(function (require) {
 
     var CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
-        CompareFeaturesTemplateError = require("text!modules/tools/compareFeatures/templateError.html"),
-        CompareFeaturesTemplateList = require("text!modules/tools/compareFeatures/templateList.html"),
+        CompareFeaturesTemplateFeedback = require("text!modules/tools/compareFeatures/templateFeedback.html"),
+        CompareFeaturesTemplate = require("text!modules/tools/compareFeatures/template.html"),
         CompareFeaturesView;
 
     require("bootstrap/modal");
 
     CompareFeaturesView = Backbone.View.extend({
-        className: "modal fade",
+        className: "compare-feature-modal modal fade",
 
         events: {
-            "hidden.bs.modal": "setIsActivatedToFalse"
+            "hidden.bs.modal": "setIsActivatedToFalse",
+            "click .btn-open-list": "setIsActivatedToTrue"
         },
 
         initialize: function () {
             this.model = new CompareFeaturesModel();
-            this.templateError = _.template(CompareFeaturesTemplateError);
-            this.templateList = _.template(CompareFeaturesTemplateList);
+            this.template = _.template(CompareFeaturesTemplate);
+            this.templateFeedback = _.template(CompareFeaturesTemplateFeedback);
 
             this.listenTo(this.model, {
-                "change:isActivated": this.render
+                "change:isActivated": this.render,
+                "renderFeedbackModal": this.renderFeedbackModal
             });
             document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
         },
@@ -31,13 +33,10 @@ define(function (require) {
          * @returns {void}
          */
         render: function (model, value) {
+            var attr = this.model.toJSON();
+
             if (value) {
-                if (model.get("featureList").length === 0) {
-                    this.$el.html(this.templateError());
-                }
-                else {
-                    this.$el.html(this.templateList());
-                }
+                this.$el.html(this.template(attr));
                 this.$el.modal("show");
             }
             else {
@@ -46,9 +45,20 @@ define(function (require) {
             return this;
         },
 
+        renderFeedbackModal: function (feature) {
+            this.$el.html(this.templateFeedback({feature: feature}));
+            this.$el.modal("show");
+        },
+
         setIsActivatedToFalse: function () {
             this.model.setIsActivated(false);
             Radio.trigger("ModelList", "setModelAttributesById", "compareFeatures", {isActive: false});
+            // Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
+        },
+
+        setIsActivatedToTrue: function () {
+            this.model.setIsActivated(true);
+            Radio.trigger("ModelList", "setModelAttributesById", "compareFeatures", {isActive: true});
         }
     });
 

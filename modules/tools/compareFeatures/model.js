@@ -34,11 +34,8 @@ define(function () {
                 this.get("featureList").push(feature);
                 // after the list has been updated, it is regrouped
                 this.setGroupedFeatureListByLayer(this.groupedFeaturesBy(this.get("featureList"), "layerId"));
-                // render zwischenfenster Objekt wurde zur Vergleichliste hinzugefügt
             }
-            else {
-                // render zwischenfenster Die maximale zahl an Objekten im Vergleich wurde erreicht
-            }
+            this.trigger("renderFeedbackModal", feature);
         },
 
         /**
