@@ -1,6 +1,5 @@
 define(function (require) {
     var Backbone = require("backbone"),
-        _ = require("underscore"),
         FreezeTemplate = require("text!modules/controls/freeze/template.html"),
         $ = require("jquery"),
         FreezeView;

@@ -1,6 +1,5 @@
 define(function (require) {
     var Backbone = require("backbone"),
-        _ = require("underscore"),
         FreezeToolTemplate = require("text!modules/menu/table/tool/tooltemplate.html"),
         $ = require("jquery"),
         Radio = require("backbone.radio"),
