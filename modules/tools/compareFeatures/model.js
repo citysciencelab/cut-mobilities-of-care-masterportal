@@ -10,7 +10,7 @@ define(function () {
             featureList: [],
             // the comparable features group by layer
             groupedFeatureList: [],
-            // max number of featurs to be displayed
+            // max number of features to be displayed per layer
             maxFeatures: 3
         },
         initialize: function () {
@@ -24,17 +24,16 @@ define(function () {
         },
 
         /**
-         * @param {object} compareObject -
-         * @param {ol.feature} compareObject.feature - feature to be compared
-         * @param {string} compareObject.layerId - the layer id for the given feature
-         * @param {string} compareObject.name - the layer name for thie given feature
+         * adds a feature to the featureList if possible
+         * @param {ol.feature} feature - feature to be compared
          * @returns {void}
          */
-        addFeatureToList: function (compareObject) {
-            if (this.isFeatureListFull(compareObject.layerId, this.get("groupedFeatureList"), this.get("maxFeatures"))) {
-                this.get("featureList").push(compareObject);
-                this.setGroupedFeatureList(_.groupBy(this.get("featureList"), "layerId"));
-                compareObject.feature.set("isOnCompareList", true);
+        addFeatureToList: function (feature) {
+            if (!this.isFeatureListFull(feature.get("layerId"), this.get("groupedFeatureList"), this.get("maxFeatures"))) {
+                this.setFeatureIsOnCompareList(feature, true);
+                this.get("featureList").push(feature);
+                // after the list has been updated, it is regrouped
+                this.setGroupedFeatureListByLayer(this.groupedFeaturesBy(this.get("featureList"), "layerId"));
                 // render zwischenfenster Objekt wurde zur Vergleichliste hinzugefügt
             }
             else {
@@ -42,15 +41,50 @@ define(function () {
             }
         },
 
-        removeFeatureFromList: function () {
-            console.log("removeFeatureFromList");
+        /**
+         * removes a features from the featureList and sets the features attrbiute 'isOnCompareList' to false
+         * @param {ol.feature} featureToRemoved - feature to be removed form the featureList
+         * @returns {void}
+         */
+        removeFeatureFromList: function (featureToRemoved) {
+            var featureIndex = _.findIndex(this.get("featureList"), function (feature) {
+                return feature.get("id") === featureToRemoved.get("id");
+            });
+
+            this.setFeatureIsOnCompareList(featureToRemoved, false);
+            this.get("featureList").splice(featureIndex, 1);
+            // after the list has been updated, it is regrouped
+            this.setGroupedFeatureListByLayer(this.groupedFeaturesBy(this.get("featureList"), "layerId"));
         },
 
         /**
-         * @param {string} layerId -
-         * @param {string} groupedFeatureList -
-         * @param {string} maxFeatures -
-         * @returns {boolean} true if
+         * splits the features into sets, grouped by the given property
+         * @param {ol.feature[]} featureList - the comparable features
+         * @param {string} property - value is grouped by
+         * @returns {object} object grouped by property
+         */
+        groupedFeaturesBy: function (featureList, property) {
+            return _.groupBy(featureList, function (feature) {
+                return feature.get(property);
+            });
+        },
+
+        /**
+         * sets the feature attribute 'isOnCompareList'
+         * @param {ol.feature} feature - to be added to or removed from the list
+         * @param {boolean} value - shows if the feature is on the compare list
+         * @returns {void}
+         */
+        setFeatureIsOnCompareList: function (feature, value) {
+            feature.set("isOnCompareList", value);
+        },
+
+        /**
+         * checks if the list has already reached the maximum number of features per layer
+         * @param {string} layerId - layer id of the feature
+         * @param {object} groupedFeatureList - features grouped by layerId
+         * @param {number} maxFeatures - max number of features per layer
+         * @returns {boolean} true - if the max number of features per layer has not been reached
          */
         isFeatureListFull: function (layerId, groupedFeatureList, maxFeatures) {
             if (typeof groupedFeatureList[layerId] === "undefined") {
@@ -63,15 +97,19 @@ define(function () {
         },
 
         /**
-         * @param {boolean} value -
+         * @param {object} value - features grouped by layerId
+         * @returns {void}
+         */
+        setGroupedFeatureListByLayer: function (value) {
+            this.set("groupedFeatureList", value);
+        },
+
+        /**
+         * @param {boolean} value - true if the tool is activated
          * @returns {void}
          */
         setIsActivated: function (value) {
             this.set("isActivated", value);
-        },
-
-        setGroupedFeatureList: function (value) {
-            this.set("groupedFeatureList", value);
         }
     });
 

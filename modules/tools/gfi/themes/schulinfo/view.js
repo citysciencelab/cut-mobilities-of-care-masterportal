@@ -13,6 +13,16 @@ define(function (require) {
             "click .glyphicon-star-empty": "addFeatureToCompareList",
             "click .glyphicon-star": "removeFeatureFromCompareList"
         },
+
+        initialize: function () {
+            // call ThemeView's initialize method explicitly
+            ThemeView.prototype.initialize.apply(this);
+
+            this.listenTo(this.model, {
+                "toggleStarGlyphicon": this.toggleStarGlyphicon
+            });
+        },
+
         btnClicked: function (evt) {
             this.model.updateFeatureInfos(evt.currentTarget.value);
             this.render();
@@ -29,27 +39,61 @@ define(function (require) {
             Radio.trigger("SchulwegRouting", "selectSchool", this.model.get("feature").get("schul_id"));
         },
 
+        /**
+         * triggers the event "addFeatureToList"
+         * to the CompareFeatures module to add the feature
+         * @returns {void}
+         */
         addFeatureToCompareList: function () {
-            this.toggleStarGlyphicon();
-        },
-
-        removeFeatureFromCompareList: function () {
-            this.toggleStarGlyphicon();
+            Radio.trigger("CompareFeatures", "addFeatureToList", this.model.get("feature"));
         },
 
         /**
-         * toggles the glyphicon star and sets the title attribute
+         * triggers the event "removeFeatureFromList"
+         * to the CompareFeatures module to remove the feature
          * @returns {void}
          */
-        toggleStarGlyphicon: function () {
-            var title = "Auf die Vergleichsliste",
-                glyphiconElement = this.$("span:nth-child(2)");
+        removeFeatureFromCompareList: function () {
+            Radio.trigger("CompareFeatures", "removeFeatureFromList", this.model.get("feature"));
+        },
 
-            glyphiconElement.toggleClass("glyphicon-star glyphicon-star-empty");
-            if (glyphiconElement.attr("title") === "Auf die Vergleichsliste") {
-                title = "Von der Vergleichslite entfernen";
+        /**
+         * toggles the glyphicon star
+         * @param {ol.feature} feature -
+         * @returns {void}
+         */
+        toggleStarGlyphicon: function (feature) {
+            // glyphicon-star || glyphicon-star-empty
+            var glyphiconElement = this.$("span:nth-child(2)");
+
+            if (feature.get("isOnCompareList")) {
+                this.highlightStarGlyphicon(glyphiconElement);
             }
-            glyphiconElement.attr("title", title);
+            else {
+                this.unhighlighStarGlyphicon(glyphiconElement);
+            }
+        },
+
+        /**
+         * highlights the star glyphicon and sets the title attribute
+         * @param {jQuery} glyphiconElement - the glyphicon span element
+         * @returns {void}
+         */
+        highlightStarGlyphicon: function (glyphiconElement) {
+            glyphiconElement.addClass("glyphicon-star");
+            glyphiconElement.removeClass("glyphicon-star-empty");
+            glyphiconElement.attr("title", "Von der Vergleichslite entfernen");
+        },
+
+        /**
+         * unhighlights the star glyphicon and sets the title attribute
+         * @param {jQuery} glyphiconElement - the glyphicon span element
+         * @returns {void}
+         */
+        unhighlighStarGlyphicon: function (glyphiconElement) {
+            glyphiconElement.addClass("glyphicon-star-empty");
+            glyphiconElement.removeClass("glyphicon-star");
+            glyphiconElement.attr("title", "Von der Vergleichslite entfernen");
         }
     });
 

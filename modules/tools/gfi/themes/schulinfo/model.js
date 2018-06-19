@@ -90,6 +90,15 @@ define(function (require) {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
             });
+
+            this.get("feature").on("propertychange", function (evt) {
+                if (evt.key === "isOnCompareList") {
+                    this.trigger("toggleStarGlyphicon", evt.target);
+                }
+            }, this);
+
+            this.get("feature").set("layerId", this.get("id"));
+            this.get("feature").set("layerName", this.get("name"));
         },
 
         getVectorGfi: function () {

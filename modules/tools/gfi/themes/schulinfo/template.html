@@ -9,7 +9,12 @@
     </div>
     <div class="col-xs-3">
         <span class="glyphicon glyphicon-map-marker pull-right" title="Schule als Ziel übernehmen"></span>
-        <span class="glyphicon glyphicon-star-empty pull-right" title="Auf die Vergleichsliste"></span>
+        <% if (feature.get("isOnCompareList")) { %>
+            <span class="glyphicon glyphicon-star pull-right" title="Von der Vergleichsliste entfernen"></span>
+        <% }
+        else { %>
+            <span class="glyphicon glyphicon-star-empty pull-right" title="Auf die Vergleichsliste"></span>
+        <% } %>
     </div>
 </div>
 <div class="schulinfo-content row">
