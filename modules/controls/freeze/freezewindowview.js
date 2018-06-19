@@ -7,7 +7,7 @@ define(function (require) {
     FreezeView = Backbone.View.extend({
         collection: {},
         id: "freeze-view",
-        className: "freeze-view",
+        className: "freeze-view freeze-deactivated",
         template: _.template(FreezeTemplate),
         events: {
             "click .freeze-view-close": "hideFreezeWin"
@@ -21,8 +21,7 @@ define(function (require) {
             $(".lgv-container").append(this.$el);
         },
         showFreezeWin: function () {
-            $("div.freeze-view").css("height", $(".lgv-container").height());
-            $("div.freeze-view").css("width", $(".lgv-container").width());
+            $("div.freeze-view").removeClass("freeze-deactivated");
             $("div.freeze-view").addClass("freeze-activated");
             if ($(".table-nav-main").length === 0) {
                 $("p.freeze-view-close").css("left", "30px");
@@ -34,11 +33,8 @@ define(function (require) {
             }
         },
         hideFreezeWin: function () {
-            $("div.freeze-view").css("height", "10px");
-            $("div.freeze-view").css("width", "10px");
             $("div.freeze-view").removeClass("freeze-activated");
-            $("p.freeze-view-close").css("left", "0px");
-            $("p.freeze-view-close").css("top", "0px");
+            $("div.freeze-view").addClass("freeze-deactivated");
         }
     });
     return FreezeView;
