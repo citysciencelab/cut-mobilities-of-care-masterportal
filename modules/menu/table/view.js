@@ -1,7 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        _ = require("underscore"),
-        MainTemplate = require("text!modules/menu/table/main/template.html"),
+    var MainTemplate = require("text!modules/menu/table/main/template.html"),
         TableNavModel = require("modules/menu/table/model"),
         $ = require("jquery"),
         LayerListView = require("modules/menu/table/layer/listView"),
