@@ -1,3 +1,14 @@
+# Changelog LGV Master-Portal 2.0.3
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 817a2f0 bkg search triggers searchbar to render recommended list
+  - 69342d6 Flurstückssuche löscht default Flurstücksnenner beim Wechsel der Gemarkung bei parcelDenominator = true
+
 # Changelog LGV Master-Portal 2.0.2
 
 NEU:
