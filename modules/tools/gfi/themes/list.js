@@ -63,11 +63,11 @@ define(function (require) {
             else if (attrs.gfiTheme === "flaecheninfo") {
                 return new FlaecheninfoTheme(attrs, options);
             }
-            else {
-                return new DefaultTheme(attrs, options);
-            }
+            return new DefaultTheme(attrs, options);
         },
         initialize: function () {
+            var removeModels;
+
             this.listenTo(this, {
                 "reset": function () {
                     this.forEach(function (model) {
@@ -78,7 +78,7 @@ define(function (require) {
                     if (_.contains(this.pluck("isReady"), false) === false) {
                     // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                         // WMS Layer die beim Klickpunkt keine GFIs haben
-                        var removeModels = this.filter(function (model) {
+                        removeModels = this.filter(function (model) {
                             return model.get("gfiContent") === undefined;
                         });
 
@@ -155,6 +155,7 @@ define(function (require) {
 
         /**
          * Setzt visibility aller Themes auf false
+         * @return {undefined}
          */
         setAllInVisible: function () {
             this.forEach(function (model) {
