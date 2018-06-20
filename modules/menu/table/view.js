@@ -10,19 +10,21 @@ define(function (require) {
         Menu;
 
     Menu = Backbone.View.extend({
-        model: new TableNavModel(),
-        id: "table-nav",
-        className: "table-nav",
-        template: _.template(MainTemplate),
         initialize: function () {
             this.render();
             this.renderLayerList();
             this.renderCategoryList();
             this.renderTools();
         },
+        model: new TableNavModel(),
+        id: "table-nav",
+        className: "table-nav",
+        template: _.template(MainTemplate),
         render: function () {
             $(this.el).html(this.template());
             $(".lgv-container").append(this.$el);
+
+            return this;
         },
         renderLayerList: function () {
             this.$el.find("#table-nav-main").append(new LayerListView().render());
