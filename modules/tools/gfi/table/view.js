@@ -26,7 +26,6 @@ define(function (require) {
                 stop: function (evt, ui) {
                     // helper, so that "left" is never 0. needed for gfi/themes/view.js adjustGfiWindow()
                     $(".gfi").css("left", ui.position.left + 1 + "px");
-                    // $(".gfi").css("top", (ui.position.top - 50) + "px");
                 }
             });
         },
@@ -39,8 +38,7 @@ define(function (require) {
 
             this.$el.css({
                 "left": x + "px",
-                "top": y + "px",
-
+                "top": y + "px"
             });
         },
 
