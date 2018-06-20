@@ -108,7 +108,6 @@ define(function (require) {
             }
             this.className = "navbar-form col-xs-9";
 
-            // this.listenTo(this.model, "change:searchString", this.render);
             this.listenTo(this.model, "change:recommendedList", function () {
                 this.renderRecommendedList();
             });
@@ -142,7 +141,6 @@ define(function (require) {
                 }
             });
 
-            // this.render();
 
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
                 this.$("#searchInput").val(this.model.get("placeholder"));
