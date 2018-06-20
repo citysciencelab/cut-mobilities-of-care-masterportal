@@ -45,13 +45,15 @@ define(function () {
          */
         removeFeatureFromList: function (featureToRemoved) {
             var featureIndex = _.findIndex(this.get("featureList"), function (feature) {
-                return feature.get("id") === featureToRemoved.get("id");
+                return feature.getId() === featureToRemoved.getId();
             });
 
-            this.setFeatureIsOnCompareList(featureToRemoved, false);
-            this.get("featureList").splice(featureIndex, 1);
-            // after the list has been updated, it is regrouped
-            this.setGroupedFeatureListByLayer(this.groupedFeaturesBy(this.get("featureList"), "layerId"));
+            if (featureIndex !== -1) {
+                this.setFeatureIsOnCompareList(featureToRemoved, false);
+                this.get("featureList").splice(featureIndex, 1);
+                // after the list has been updated, it is regrouped
+                this.setGroupedFeatureListByLayer(this.groupedFeaturesBy(this.get("featureList"), "layerId"));
+            }
         },
 
         /**
