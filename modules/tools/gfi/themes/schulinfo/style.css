@@ -10,15 +10,12 @@
     }
 }
 
-.schulinfo td {
-    font-family: font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
-}
 .schulinfo .bold td {
     font-weight: bold;
 }
 .schulinfo .schulinfo-head {
     padding: 8px 0;
-    background-color: rgba(227, 227, 227, 0.8);
+    background-color: rgba(227, 227, 227, 0.5);
 }
 .schulinfo .btn-group-sm .btn-default {
     margin: 4px;
@@ -38,7 +35,7 @@
 } */
 
 .schulinfo .glyphicon {
-    font-size: 26px;
+    font-size: 28px;
     padding: 0 2px;
 }
 

@@ -53,7 +53,6 @@ define(function (require) {
         setIsActivatedToFalse: function () {
             this.model.setIsActivated(false);
             Radio.trigger("ModelList", "setModelAttributesById", "compareFeatures", {isActive: false});
-            // Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
         },
 
         setIsActivatedToTrue: function () {

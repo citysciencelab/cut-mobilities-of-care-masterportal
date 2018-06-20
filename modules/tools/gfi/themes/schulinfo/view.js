@@ -82,7 +82,7 @@ define(function (require) {
         highlightStarGlyphicon: function (glyphiconElement) {
             glyphiconElement.addClass("glyphicon-star");
             glyphiconElement.removeClass("glyphicon-star-empty");
-            glyphiconElement.attr("title", "Von der Vergleichslite entfernen");
+            glyphiconElement.attr("title", "Von der Vergleichsliste entfernen");
         },
 
         /**
@@ -93,7 +93,7 @@ define(function (require) {
         unhighlighStarGlyphicon: function (glyphiconElement) {
             glyphiconElement.addClass("glyphicon-star-empty");
             glyphiconElement.removeClass("glyphicon-star");
-            glyphiconElement.attr("title", "Von der Vergleichslite entfernen");
+            glyphiconElement.attr("title", "Auf die Vergleichsliste");
         }
     });
 
