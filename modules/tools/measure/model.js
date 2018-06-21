@@ -53,7 +53,7 @@ define([
                 alwaysOnTop: true
             }));
 
-            this.set("uiStyle", Radio.request("Util", "getUiStyle"));
+            this.setUiStyle(Radio.request("Util", "getUiStyle"));
 
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
 
@@ -161,6 +161,10 @@ define([
 
         setUnit: function (value) {
             this.set("unit", value);
+        },
+
+        setUiStyle: function (value) {
+            this.set("uiStyle", value);
         },
 
         setDecimal: function (value) {
