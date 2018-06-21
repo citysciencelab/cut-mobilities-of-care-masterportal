@@ -1,11 +1,12 @@
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
     configPath = window.location.origin + window.location.pathname + "config",
-    Radio;
+    index,
+    strippedLocation;
 
 if (window.location.search !== "") {
-    var index = window.location.href.indexOf("?"),
-        strippedLocation = window.location.href.slice(0, index);
+    index = window.location.href.indexOf("?");
+    strippedLocation = window.location.href.slice(0, index);
 
     configPath = strippedLocation + "config";
 }
@@ -39,7 +40,6 @@ require.config({
         openlayers: "../node_modules/openlayers/dist/ol",
         proj4: "../node_modules/proj4/dist/proj4",
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
-        templates: "../templates",
         text: "../node_modules/requirejs-text/text",
         underscore: "../node_modules/underscore/underscore-min",
         "underscore.string": "../node_modules/underscore.string/dist/underscore.string.min",
