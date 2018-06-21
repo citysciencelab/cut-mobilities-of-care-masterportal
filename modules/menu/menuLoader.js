@@ -1,13 +1,10 @@
 define([
-    "config",
-    "backbone.radio",
     "modules/menu/desktop/listViewLight",
     "modules/menu/desktop/listView",
     "modules/menu/mobile/listView",
     "modules/menu/table/view"
-], function (Config) {
-    var Radio = require("backbone.radio"),
-        MenuLoader;
+], function () {
+    var MenuLoader;
 
     MenuLoader = function () {
         var channel = Radio.channel("MenuLoader");
@@ -47,7 +44,7 @@ define([
                         require(["modules/menu/desktop/listViewLight"], function (Menu) {
                             caller.currentMenu = new Menu();
                             channel.trigger("ready");
-                             Radio.trigger("Map", "updateSize");
+                            Radio.trigger("Map", "updateSize");
                         });
                     }
                     else {
