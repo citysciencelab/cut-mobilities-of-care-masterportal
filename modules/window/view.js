@@ -1,22 +1,21 @@
 define([
-    "backbone",
-    "backbone.radio",
     "modules/window/model",
     "text!modules/window/templateMax.html",
     "text!modules/window/templateMin.html",
     "text!modules/window/templateTable.html",
     "jqueryui/widgets/draggable"
-], function (Backbone, Radio, Window, templateMax, templateMin, templateTable) {
+], function (Window, templateMax, templateMin, templateTable) {
 
     var WindowView = Backbone.View.extend({
-        id: "window",
-        className: "tool-window ui-widget-content",
-        model: Window,
-        templateMax: _.template(templateMax),
-        templateMin: _.template(templateMin),
-        templateTable: _.template(templateTable),
+        events: {
+            "click .glyphicon-minus": "minimize",
+            "click .header-min > .title": "maximize",
+            "click .glyphicon-remove": "hide"
+        },
         initialize: function () {
-            this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
+            this.listenTo(this.model, {
+                "change:isVisible change:isCollapsed change:winType": this.render
+            });
             this.$el.draggable({
                 containment: "#map",
                 handle: ".move",
@@ -34,11 +33,12 @@ define([
                 });
             }, this));
         },
-        events: {
-            "click .glyphicon-minus": "minimize",
-            "click .header-min > .title": "maximize",
-            "click .glyphicon-remove": "hide"
-        },
+        id: "window",
+        className: "tool-window ui-widget-content",
+        model: Window,
+        templateMax: _.template(templateMax),
+        templateMin: _.template(templateMin),
+        templateTable: _.template(templateTable),
         render: function () {
             var attr = this.model.toJSON();
 
@@ -61,6 +61,7 @@ define([
             else {
                 this.$el.hide("slow");
             }
+            return this;
         },
         minimize: function () {
             this.model.set("maxPosTop", this.$el.css("top"));
@@ -87,4 +88,4 @@ define([
     });
 
     return WindowView;
-    });
+});
