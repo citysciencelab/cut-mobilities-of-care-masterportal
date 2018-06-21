@@ -1,56 +1,40 @@
 <!DOCTYPE html>
-<% if (featureList.length === 0) { %>
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Vergleichsliste</h4>
-            </div>
-            <div class="modal-body">
-                <p>Es sind keine Objekte für die Vergleichsliste ausgewählt</p>
-            </div>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Vergleichsliste</h4>
+        </div>
+        <div class="modal-body">
+            <table class="table table-hover table-responsive">
+                <tbody>
+                    <% featureList.forEach(function (obj, index) {
+                        if (index < rowsToShow) { %>
+                            <tr>
+                        <% }
+                        else { %>
+                            <tr class="toggle-row">
+                        <% } %>
+                            <% Object.keys(obj).forEach(function (key, index) { %>
+                                <td class="<%= key %>">
+                                    <% if (_.isArray(obj[key])) {
+                                        obj[key].forEach(function (value) {
+                                            print (value); %>
+                                            <br>
+                                        <% });
+                                    }
+                                    else {
+                                        print (obj[key]);
+                                    } %>
+                                </td>
+                            <% }); %>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-infos">mehr Infos</button>
         </div>
     </div>
-<% }
-else { %>
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Vergleichsliste</h4>
-            </div>
-            <div class="modal-body">
-                <table class="table table-hover table-responsive">
-                    <tbody>
-                        <% rows.forEach(function (obj, index) {
-                            if (index < numberOfAttributesToShow) { %>
-                                <tr class="row-show">
-                            <% }
-                            else { %>
-                                <tr class="row-hide">
-                            <% } %>
-
-                                <% Object.keys(obj).forEach(function (key, index) { %>
-                                    <td class="<%= key %>">
-                                        <% if (_.isArray(obj[key])) {
-                                            obj[key].forEach(function (value) {
-                                                print (value); %>
-                                                <br>
-                                            <% });
-                                        }
-                                        else {
-                                            print (obj[key]);
-                                        } %>
-                                    </td>
-                                <% }); %>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-more-infos">mehr Infos</button>
-            </div>
-        </div>
-    </div>
-<% } %>
+</div>

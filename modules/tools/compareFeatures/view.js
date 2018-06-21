@@ -2,6 +2,7 @@ define(function (require) {
 
     var CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
         CompareFeaturesTemplateFeedback = require("text!modules/tools/compareFeatures/templateFeedback.html"),
+        CompareFeaturesTemplateNoFeatures = require("text!modules/tools/compareFeatures/templateNoFeatures.html"),
         CompareFeaturesTemplate = require("text!modules/tools/compareFeatures/template.html"),
         CompareFeaturesView;
 
@@ -13,12 +14,13 @@ define(function (require) {
         events: {
             "hidden.bs.modal": "setIsActivatedToFalse",
             "click .btn-open-list": "setIsActivatedToTrue",
-            "click .btn-more-infos": "showAllAttributes"
+            "click .btn-infos": "toggleRows"
         },
 
         initialize: function () {
             this.model = new CompareFeaturesModel();
             this.template = _.template(CompareFeaturesTemplate);
+            this.templateNoFeatures = _.template(CompareFeaturesTemplateNoFeatures);
             this.templateFeedback = _.template(CompareFeaturesTemplateFeedback);
 
             this.listenTo(this.model, {
@@ -34,10 +36,13 @@ define(function (require) {
          * @returns {void}
          */
         render: function (model, value) {
-            var attr = this.model.toJSON();
-
             if (value) {
-                this.$el.html(this.template(attr));
+                if (model.get("featureList").length === 0) {
+                    this.$el.html(this.templateNoFeatures());
+                }
+                else {
+                    this.$el.html(this.template({featureList: model.getFeatureListToShow(), rowsToShow: model.get("numberOfAttributesToShow")}));
+                }
                 this.$el.modal("show");
             }
             else {
@@ -46,27 +51,42 @@ define(function (require) {
             return this;
         },
 
+        /**
+         * @param {ol.feature} feature -
+         * @returns {void}
+         */
         renderFeedbackModal: function (feature) {
             this.$el.html(this.templateFeedback({feature: feature}));
             this.$el.modal("show");
         },
 
-
-        showAllAttributes: function (evt) {
+        /**
+         * shows or hides the rows wiht the class toggle-row
+         * and sets the button text
+         * @param {MouseEvent} evt - click event
+         * @returns {void}
+         */
+        toggleRows: function (evt) {
             var text = "mehr Infos";
 
-            this.$el.find(".row-hide").toggle();
+            this.$el.find(".toggle-row").toggle();
             if (evt.target.textContent === "mehr Infos") {
                 text = "weniger Infos";
             }
             evt.target.textContent = text;
         },
 
+        /**
+         * @returns {void}
+         */
         setIsActivatedToFalse: function () {
             this.model.setIsActivated(false);
             Radio.trigger("ModelList", "setModelAttributesById", "compareFeatures", {isActive: false});
         },
 
+        /**
+         * @returns {void}
+         */
         setIsActivatedToTrue: function () {
             this.model.setIsActivated(true);
             Radio.trigger("ModelList", "setModelAttributesById", "compareFeatures", {isActive: true});

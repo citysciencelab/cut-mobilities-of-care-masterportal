@@ -15,18 +15,14 @@ define(function () {
             // number of features to be displayed per layer
             numberOfFeaturesToShow: 3,
             // number of attributes to be displayed
-            numberOfAttributesToShow: 11
+            numberOfAttributesToShow: 12
         },
         initialize: function () {
             var channel = Radio.channel("CompareFeatures");
 
             channel.on({
                 "setIsActivated": this.setIsActivated,
-                "addFeatureToList": function (feature) {
-                    var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.get("layerId")});
-
-                    this.addFeatureToList(feature, layerModel.get("gfiAttributes"));
-                },
+                "addFeatureToList": this.addFeatureToList,
                 "removeFeatureFromList": this.removeFeatureFromList
             }, this);
 
@@ -44,18 +40,16 @@ define(function () {
         /**
          * adds a feature to the featureList if possible
          * @param {ol.feature} feature - feature to be compared
-         * @param {obj} gfiAttributes -
          * @returns {void}
          */
-        addFeatureToList: function (feature, gfiAttributes) {
+        addFeatureToList: function (feature) {
             if (!this.isFeatureListFull(feature.get("layerId"), this.get("groupedFeatureList"), this.get("numberOfFeaturesToShow"))) {
                 this.setLayerId(feature.get("layerId"));
                 this.setFeatureIsOnCompareList(feature, true);
-                this.beautifyAttributes(feature);
+                this.beautifyAttributeValues(feature);
                 this.get("featureList").push(feature);
                 // after the list has been updated, it is regrouped
                 this.setGroupedFeatureListByLayer(this.groupedFeaturesBy(this.get("featureList"), "layerId"));
-                this.prepareCompareTable(this.get("groupedFeatureList")[this.get("layerId")], this.get("numberOfAttributesToShow"), gfiAttributes);
             }
             this.trigger("renderFeedbackModal", feature);
         },
@@ -78,20 +72,28 @@ define(function () {
             }
         },
 
-        prepareCompareTable: function (featureList, minAttr, gfiAttributes) {
-            var rows = [];
+        /**
+         * prepares the list for rendering using the 'gfiAttributes'
+         * creates a JSON where an object matches to a row
+         * one object attribute is created for each feature (column)
+         * @returns {object[]} list - one object per row
+         */
+        getFeatureListToShow: function () {
+            var list = [],
+                layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+                gfiAttributes = layerModel.get("gfiAttributes"),
+                featureList = this.get("groupedFeatureList")[this.get("layerId")];
 
             Object.keys(gfiAttributes).forEach(function (key) {
-                var obj = {};
+                var row = {};
 
-                obj["col-1"] = gfiAttributes[key];
-                featureList.forEach(function (feature, idx) {
-                    obj["col-" + (idx + 2)] = feature.get(key);
+                row["col-1"] = gfiAttributes[key];
+                featureList.forEach(function (feature, index) {
+                    row["col-" + (index + 2)] = feature.get(key);
                 });
-                rows.push(obj);
-                // return index === minAttr;
+                list.push(row);
             });
-            this.set("rows", rows);
+            return list;
         },
 
         /**
@@ -133,7 +135,12 @@ define(function () {
             return true;
         },
 
-        beautifyAttributes: function (feature) {
+        /**
+         * parses attribute values with pipe-sign ("|") and replace it with an array of single values
+         * @param {ol.feature} feature - feature of the attributes
+         * @returns {void}
+         */
+        beautifyAttributeValues: function (feature) {
             Object.keys(feature.getProperties()).forEach(function (key) {
                 if (typeof feature.get(key) === "string" && feature.get(key).indexOf("|") !== -1) {
                     feature.set(key, feature.get(key).split("|"));
