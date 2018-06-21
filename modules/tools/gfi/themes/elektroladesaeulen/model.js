@@ -58,6 +58,7 @@ define(function (require) {
                 gfiParams,
                 historicalData,
                 historicalDataClean,
+                endDay,
                 lastDay,
                 dataByWeekday;
 
@@ -69,7 +70,8 @@ define(function (require) {
                 historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams);
                 historicalDataClean = this.dataCleaning(historicalData);
                 lastDay = _.isUndefined(this.get("lastDate")) ? "" : moment(this.get("lastDate")).format("YYYY-MM-DD");
-                dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay);
+                endDay = moment().format("YYYY-MM-DD");
+                dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay, endDay);
 
                 this.setDataStreamIds(dataStreamIds);
                 this.setWeekday(dataByWeekday);
@@ -566,14 +568,15 @@ define(function (require) {
 
         /**
          * creates indicator for total operating time of chargings per year
-         * @param  {boolean} async
+         * @param  {boolean} async - for ajax
          * @param  {Array} dataStreamIds
          * @return {Array} indicatorChargingTime - contains the times
          */
         createIndicatorChargingTime: function (async, dataStreamIds) {
             var indicatorChargingHourData = this.createDataIndicatorChargingHour(false, dataStreamIds),
                 indicatorChargingHourDataClean = this.dataCleaning(indicatorChargingHourData),
-                indicatorChargingHourDataByWeekday = this.processDataForAllWeekdays(indicatorChargingHourDataClean),
+                endDay = moment().format("YYYY-MM-DD"),
+                indicatorChargingHourDataByWeekday = this.processDataForAllWeekdays(indicatorChargingHourDataClean, "", endDay),
                 minYear = 2017,
                 maxYear = moment().format("YYYY"),
                 allData = [];
@@ -705,9 +708,10 @@ define(function (require) {
          *generates a record for each day of the week
          * @param  {Array} historicalData [description]
          * @param  {Date} lastDay - until this date the data will be evaluated
+         * @param  {Date} endDay - the date at which the evaluation should end
          * @return {Array} dataByWeekday
          */
-        processDataForAllWeekdays: function (historicalData, lastDay) {
+        processDataForAllWeekdays: function (historicalData, lastDay, endDay) {
             var historicalDataThisTimeZone,
                 historicalDataWithIndex,
                 dataByWeekday,
@@ -717,7 +721,7 @@ define(function (require) {
             if (this.checkObservationsNotEmpty(historicalData)) {
                 historicalDataThisTimeZone = this.changeTimeZone(historicalData, utc);
                 historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
-                dataByWeekday = this.divideDataByWeekday(historicalDataWithIndex, lastDay);
+                dataByWeekday = this.divideDataByWeekday(historicalDataWithIndex, lastDay, endDay);
             }
             else {
                 dataByWeekday = [];
@@ -803,19 +807,20 @@ define(function (require) {
          * and generate an observation for every day at 0 o'clock
          * @param  {Array} historicalDataWithIndex - from features
          * @param  {Date} lastDay - the day on which the evaluation of the data should end
+         * @param  {Date} endDay - the date at which the evaluation should end
          * @return {array} weekArray
          */
-        divideDataByWeekday: function (historicalDataWithIndex, lastDay) {
+        divideDataByWeekday: function (historicalDataWithIndex, lastDay, endDay) {
             var weekArray = [
                 [], [], [], [], [], [], []
             ];
 
             _.each(historicalDataWithIndex, function (historicalData) {
                 var observations = _.has(historicalData, "Observations") ? historicalData.Observations : [],
-                    actualDay = moment().format("YYYY-MM-DD"),
                     arrayIndex = 0,
                     booleanLoop = true,
-                    thisLastDay;
+                    thisLastDay,
+                    actualDay = _.isUndefined(endDay) ? moment().format("YYYY-MM-DD") : endDay;
 
                 if (!_.isEmpty(observations)) {
                     thisLastDay = _.isUndefined(lastDay) || lastDay === "" ? moment(observations[observations.length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay;
@@ -953,9 +958,9 @@ define(function (require) {
         /**
          * calculate workload for every day
          * the workload is divided into 24 hours
-         * @param  {[array]} dataByWeekday - historical data sorted by weekday
+         * @param  {array} dataByWeekday - historical data sorted by weekday
          * @param  {String} targetResult - result to draw
-         * @return {[[object]]} allDataArray
+         * @return {array} allDataArray
          */
         calculateWorkloadPerDayPerHour: function (dataByWeekday, targetResult) {
             var allDataArray = [];
@@ -963,13 +968,14 @@ define(function (require) {
             _.each(dataByWeekday, function (dayData) {
                 var zeroTime = moment(moment(dayData[0].phenomenonTime).format("YYYY-MM-DD")).format("YYYY-MM-DDTHH:mm:ss"),
                     firstTimeDayData = moment(dayData[0].phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
-                    dayObj = this.createInitialDayPerHour();
+                    emptyDayObj = this.createInitialDayPerHour(),
+                    dayObj;
 
-                if (firstTimeDayData !== zeroTime) {
+                if (firstTimeDayData !== zeroTime && _.isArray(dayData)) {
                     dayData.reverse();
                 }
 
-                dayObj = this.calculateWorkloadforOneDay(dayObj, dayData, targetResult);
+                dayObj = this.calculateWorkloadforOneDay(emptyDayObj, dayData, targetResult);
                 allDataArray.push(dayObj);
             }, this);
 
@@ -979,12 +985,13 @@ define(function (require) {
         /**
          * create an object with 24 pairs, which represents 24 hours for one day
          * the values are by initialize 0
-         * @return {object}
+         * @return {object} dayObj
          */
         createInitialDayPerHour: function () {
-            var dayObj = {};
+            var dayObj = {},
+                i;
 
-            for (var i = 0; i < 24; i++) {
+            for (i = 0; i < 24; i++) {
                 dayObj[i] = 0;
             }
 
@@ -993,24 +1000,29 @@ define(function (require) {
 
         /**
          * calculate the workload for one day
-         * @param  {object} dayObj
-         * @param  {[object]} dayData
-         * @param  {String} targetResult
-         * @return {object}
+         * @param  {object} emptyDayObj - contains 24 objects
+         * @param  {[object]} dayData - observations from one date
+         * @param  {String} targetResult - result to draw
+         * @return {object} dayObj
          */
-        calculateWorkloadforOneDay: function (dayObj, dayData, targetResult) {
-            var actualState = dayData[0].result,
-                actualStateAsNumber = (targetResult === actualState) ? 1 : 0,
-                startDate = moment(dayData[0].phenomenonTime).format("YYYY-MM-DD");
+        calculateWorkloadforOneDay: function (emptyDayObj, dayData, targetResult) {
+            var dataFromDay = _.isUndefined(dayData) ? [] : dayData,
+                actualState = _.has(dataFromDay[0], "result") ? dataFromDay[0].result : "",
+                actualStateAsNumber = targetResult === actualState ? 1 : 0,
+                startDate = _.has(dataFromDay[0], "phenomenonTime") ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
+                dayObj = _.isUndefined(emptyDayObj) ? {} : emptyDayObj;
 
-            // Loop from 0 till 23 o'clock
-            for (var i = 0; i < 24; i++) {
-                var actualTimeStep = moment(startDate).add(i, "hour").format("YYYY-MM-DDTHH:mm:ss"),
-                    nextTimeStep = moment(startDate).add((i + 1), "hour").format("YYYY-MM-DDTHH:mm:ss"),
-                    dataByActualTimeStep = this.filterDataByActualTimeStep(dayData, actualTimeStep, nextTimeStep);
+            _.each(dayObj, function (value, key) {
+                var i = parseFloat(key, 10),
+                    actualTimeStep = moment(startDate).add(i, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+                    nextTimeStep = moment(startDate).add(i + 1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+                    dataByActualTimeStep = this.filterDataByActualTimeStep(dataFromDay, actualTimeStep, nextTimeStep);
 
                 // if the requested period is in the future
-                if (moment(nextTimeStep).toDate().getTime() > moment().toDate().getTime()) {
+                if (!_.isNumber(i)) {
+                    return;
+                }
+                else if (moment(nextTimeStep).toDate().getTime() > moment().toDate().getTime()) {
                     dayObj[i] = undefined;
                 }
                 else if (_.isEmpty(dataByActualTimeStep)) {
@@ -1019,73 +1031,77 @@ define(function (require) {
                 else {
                     dayObj[i] = this.calculateOneHour(dataByActualTimeStep, actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult);
                     actualState = _.last(dataByActualTimeStep).result;
-                    actualStateAsNumber = (targetResult === actualState) ? 1 : 0;
+                    actualStateAsNumber = targetResult === actualState ? 1 : 0;
                 }
-            }
+            }, this);
 
             return dayObj;
         },
 
         /**
          * filters out the objects of the current timestep
-         * @param  {[object]} dayData
-         * @param  {String} actualTimeStep
-         * @param  {String} nextTimeStep
-         * @return {[object]}
+         * @param  {array} dayData - observations from one date
+         * @param  {String} actualTimeStep - startTime
+         * @param  {String} nextTimeStep - endTime
+         * @return {array} dataByActualTimeStep
          */
         filterDataByActualTimeStep: function (dayData, actualTimeStep, nextTimeStep) {
             return _.filter(dayData, function (data) {
-                var dataToCheck = moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss");
+                var dataToCheck = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
 
-                return ((dataToCheck >= actualTimeStep) && (dataToCheck < nextTimeStep));
+                return dataToCheck >= actualTimeStep && dataToCheck < nextTimeStep;
             });
         },
 
         /**
          * calculates the workload for the current hour
          * time calculations in milliseconds
-         * @param  {[object]} dataByActualTimeStep
-         * @param  {[String} actualState
-         * @param  {number} actualStateAsNumber
-         * @param  {String} actualTimeStep
-         * @param  {String} nextTimeStep
-         * @param  {String} targetResult
-         * @return {number}
+         * @param  {array} dataByActualTimeStep - within an hour
+         * @param  {String} actualState - status of the last observation
+         * @param  {number} actualStateAsNumber - state as number 0 or 1
+         * @param  {String} actualTimeStep - startTime
+         * @param  {String} nextTimeStep - endTime
+         * @param  {String} targetResult - result to draw
+         * @return {number} workload
          */
         calculateOneHour: function (dataByActualTimeStep, actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult) {
             var actualPhenomenonTime = moment(actualTimeStep).toDate().getTime(),
                 endTime = moment(nextTimeStep).toDate().getTime(),
-                timeDiff = 0;
+                timeDiff = 0,
+                currentState = actualState,
+                currentStateAsNumber = actualStateAsNumber,
+                betweenErg;
 
             _.each(dataByActualTimeStep, function (data) {
-                var state = data.result;
+                var state = _.has(data, "result") ? data.result : currentState,
+                    phenomenonTime,
+                    erg;
 
-                if (state === actualState) {
-                    return;
-                }
-                else {
-                    var phenomenonTime = moment(data.phenomenonTime).toDate().getTime();
+                if (state !== currentState) {
+                    phenomenonTime = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).toDate().getTime() : "";
 
-                    timeDiff = timeDiff + (phenomenonTime - actualPhenomenonTime) * actualStateAsNumber;
+                    erg = (phenomenonTime - actualPhenomenonTime) * currentStateAsNumber;
+                    timeDiff = timeDiff + erg;
 
                     // update the current status and time
                     actualPhenomenonTime = phenomenonTime;
-                    actualState = state;
-                    actualStateAsNumber = (targetResult === actualState) ? 1 : 0;
+                    currentState = state;
+                    currentStateAsNumber = targetResult === currentState ? 1 : 0;
                 }
             });
 
             // add last difference to next full hour
-            timeDiff = timeDiff + (endTime - actualPhenomenonTime) * actualStateAsNumber;
+            betweenErg = (endTime - actualPhenomenonTime) * currentStateAsNumber;
+            timeDiff = _.isNaN(betweenErg) ? timeDiff : timeDiff + betweenErg;
 
             // result in the unit hour, rounded to 3 decimal places
-            return Math.round((timeDiff / 3600)) / 1000;
+            return Math.round(timeDiff / 3600) / 1000;
         },
 
         /**
          * calculates the arithemtic Meaning for all datas
-         * @param  {[[Object]]} dataPerHour
-         * @return {Object}
+         * @param  {array} dataPerHour - data for every day, according to targetresult
+         * @return {Object} dayMeanArray
          */
         calculateSumAndArithmeticMean: function (dataPerHour) {
             var dayLength = 24,

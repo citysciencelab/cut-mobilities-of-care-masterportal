@@ -313,41 +313,43 @@ define(function (require) {
         });
         describe("divideDataByWeekday", function () {
             it("should return an array with seven empty arrays for undefined input", function () {
-                expect(model.divideDataByWeekday(undefined, undefined)).to.be.an("array").to.have.deep.members([
+                expect(model.divideDataByWeekday(undefined, undefined, undefined)).to.be.an("array").to.have.deep.members([
                     [], [], [], [], [], [], []
                 ]);
             });
             it("should return an array with seven empty arrays for empty array and empty string input", function () {
-                expect(model.divideDataByWeekday([], "")).to.be.an("array").to.have.deep.members([
+                expect(model.divideDataByWeekday([], "", "")).to.be.an("array").to.have.deep.members([
                     [], [], [], [], [], [], []
                 ]);
             });
             it("should return an array with seven empty arrays for empty array and empty string input", function () {
-                expect(model.divideDataByWeekday(["test", 1111, "abcd"], "")).to.be.an("array").to.have.deep.members([
+                expect(model.divideDataByWeekday(["test", 1111, "abcd"], "", "xa")).to.be.an("array").to.have.deep.members([
                     [], [], [], [], [], [], []
                 ]);
             });
             it("should return an array with seven arrays that contains divided data for correct data without lastDay input", function () {
                 var historicalDataWithIndex = [{
-                    Observations: [{
-                        phenomenonTime: "2018-06-17T10:55:52",
-                        result: "available",
-                        index: 0
-                    }]
-                },
-                {
-                    Observations: [{
-                        phenomenonTime: "2018-06-17T12:59:15",
-                        result: "charging",
-                        index: 0
+                        Observations: [{
+                            phenomenonTime: "2018-06-17T10:55:52",
+                            result: "available",
+                            index: 0
+                        }]
                     },
                     {
-                        phenomenonTime: "2018-06-17T12:57:15",
-                        result: "available",
-                        index: 1
-                    }]
-                }];
-                expect(model.divideDataByWeekday(historicalDataWithIndex, "")).to.be.an("array").to.have.deep.members([
+                        Observations: [{
+                            phenomenonTime: "2018-06-17T12:59:15",
+                            result: "charging",
+                            index: 0
+                        },
+                        {
+                            phenomenonTime: "2018-06-17T12:57:15",
+                            result: "available",
+                            index: 1
+                        }]
+                    }],
+                    endDay = "2018-06-19";
+
+                expect(model.divideDataByWeekday(historicalDataWithIndex, "", endDay)).to.be.an("array").to.have.deep.members([
                     [[{
                         phenomenonTime: "2018-06-19T00:00:00",
                         result: "available"
@@ -386,36 +388,37 @@ define(function (require) {
         });
         describe("processDataForAllWeekdays", function () {
             it("should return an empty array for undefined input", function () {
-                expect(model.processDataForAllWeekdays(undefined, undefined)).to.be.an("array").that.is.empty;
+                expect(model.processDataForAllWeekdays(undefined, undefined, undefined)).to.be.an("array").that.is.empty;
             });
             it("should return an empty array for empty input", function () {
-                expect(model.processDataForAllWeekdays([], "")).to.be.an("array").that.is.empty;
+                expect(model.processDataForAllWeekdays([], "", "")).to.be.an("array").that.is.empty;
             });
             it("should return an empty array for incorrect input", function () {
-                expect(model.processDataForAllWeekdays(["xyz", 83247], "")).to.be.an("array").that.is.empty;
+                expect(model.processDataForAllWeekdays(["xyz", 83247], "", "")).to.be.an("array").that.is.empty;
             });
             it("should return an array with seven arrays that contains divided data for correct data without lastDay input", function () {
                 var historicalData = [{
-                    Observations: [{
-                        phenomenonTime: "2018-06-17T10:55:52",
-                        result: "available",
-                        index: 0
-                    }]
-                },
-                {
-                    Observations: [{
-                        phenomenonTime: "2018-06-17T12:59:15",
-                        result: "charging",
-                        index: 0
+                        Observations: [{
+                            phenomenonTime: "2018-06-17T10:55:52",
+                            result: "available",
+                            index: 0
+                        }]
                     },
                     {
-                        phenomenonTime: "2018-06-17T12:57:15",
-                        result: "available",
-                        index: 1
-                    }]
-                }];
+                        Observations: [{
+                            phenomenonTime: "2018-06-17T12:59:15",
+                            result: "charging",
+                            index: 0
+                        },
+                        {
+                            phenomenonTime: "2018-06-17T12:57:15",
+                            result: "available",
+                            index: 1
+                        }]
+                    }],
+                    endDay = "2018-06-19";
 
-                expect(model.processDataForAllWeekdays(historicalData, "")).to.be.an("array").to.have.deep.members([
+                expect(model.processDataForAllWeekdays(historicalData, "", endDay)).to.be.an("array").to.have.deep.members([
                     [[{
                         phenomenonTime: "2018-06-19T00:00:00",
                         result: "available"
@@ -473,9 +476,127 @@ define(function (require) {
                     + ";$filter=phenomenonTime gt 2018-01-10T00:00:00.000Z");
             });
         });
+        describe("filterDataByActualTimeStep", function () {
+            it("should return an empty object for undefined input", function () {
+                expect(model.filterDataByActualTimeStep(undefined, undefined, undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty object for empty input", function () {
+                expect(model.filterDataByActualTimeStep([], "", "")).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty object for incorrect input", function () {
+                expect(model.filterDataByActualTimeStep([{test: "text"}], "123", "abc")).to.be.an("array").that.is.empty;
+            });
+            it("should return an array with objects between the timesteps for correct input", function () {
+                var dayData = [{
+                        phenomenonTime: "2018-06-21T00:00:00",
+                        result: "charging"
+                    },
+                    {
+                        phenomenonTime: "2018-06-21T01:10:00",
+                        result: "available"
+                    }],
+                    actualTimeStep = "2018-06-21T01:00:00",
+                    nextTimeStep = "2018-06-21T02:00:00";
+
+                expect(model.filterDataByActualTimeStep(dayData, actualTimeStep, nextTimeStep)).to.have.deep.members([{
+                    phenomenonTime: "2018-06-21T01:10:00",
+                    result: "available"
+                }]);
+            });
+        });
+        describe("calculateOneHour", function () {
+            it("should return number 0 for undefined input", function () {
+                expect(model.calculateOneHour(undefined, undefined, undefined, undefined, undefined, undefined)).to.be.a("number").to.equal(0);
+            });
+            it("should return number 0 for empty input", function () {
+                expect(model.calculateOneHour([], "", -1, "", "", "")).to.be.a("number").to.equal(0);
+            });
+            it("should return number 0 for empty input", function () {
+                expect(model.calculateOneHour([{test: "123"}], "abc", -999, "1123", "hhh", "bbb")).to.be.a("number").to.equal(0);
+            });
+            it("should return number 0.167 for a result change after 10 minutes input", function () {
+                var dataByActualTimeStep = [{
+                        phenomenonTime: "2018-06-21T01:10:00",
+                        result: "available"
+                    }],
+                    actualState = "charging",
+                    actualStateAsNumber = 1,
+                    actualTimeStep = "2018-06-21T01:00:00",
+                    nextTimeStep = "2018-06-21T02:00:00",
+                    targetResult = "charging";
+
+                expect(model.calculateOneHour(dataByActualTimeStep, actualState, actualStateAsNumber,
+                    actualTimeStep, nextTimeStep, targetResult)).to.be.a("number").to.equal(0.167);
+            });
+        });
+        describe("calculateWorkloadforOneDay", function () {
+            it("should return an empty object for undefined input", function () {
+                expect(model.calculateWorkloadforOneDay(undefined, undefined, undefined)).to.be.an("object").that.is.empty;
+            });
+            it("should return an empty object for empty input", function () {
+                expect(model.calculateWorkloadforOneDay({}, [], "")).to.be.an("object").that.is.empty;
+            });
+            it("should return object that includes data from input object for incorrect input", function () {
+                expect(model.calculateWorkloadforOneDay({lff: 123}, [{bcd: 33}], "123")).to.be.an("object").that.includes({
+                    lff: 123
+                });
+            });
+            it("should return object that includes data from input object for incorrect input", function () {
+                var emptyDayObj = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
+                        8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0,
+                        16: 0, 17: 0, 18: 0, 19: 0, 20: 0, 21: 0, 22: 0, 23: 0},
+                    dayData = [{
+                        phenomenonTime: "2018-06-20T00:00:00",
+                        result: "available"
+                    },
+                    {
+                        phenomenonTime: "2018-06-20T22:00:00",
+                        result: "charging"
+                    }],
+                    targetResult = "charging";
+
+                expect(model.calculateWorkloadforOneDay(emptyDayObj, dayData, targetResult)).to.be.an("object").that.includes({
+                    0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
+                    8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0,
+                    15: 0, 16: 0, 17: 0, 18: 0, 19: 0, 20: 0, 21: 0, 22: 1, 23: 1
+                });
+            });
+        });
         describe("calculateWorkloadPerDayPerHour", function () {
-            it("should return an empty string for undefined input", function () {
-                expect(model.calculateWorkloadPerDayPerHour(undefined, undefined)).that.is.empty;
+            it("should return an empty array for undefined input", function () {
+                expect(model.calculateWorkloadPerDayPerHour(undefined, undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for empty input", function () {
+                expect(model.calculateWorkloadPerDayPerHour([], "")).to.be.an("array").that.is.empty;
+            });
+            it("should return an array with 24 objects array for incorrect input", function () {
+                expect(model.calculateWorkloadPerDayPerHour(["abc"], "123")).to.be.an("array").to.have.deep.members([{
+                    0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
+                    8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0,
+                    15: 0, 16: 0, 17: 0, 18: 0, 19: 0, 20: 0, 21: 0, 22: 0, 23: 0
+                }]);
+            });
+            it("should return an array with 24 objects representing the workload array for correct input", function () {
+                var divideDataByWeekday = [[{
+                        phenomenonTime: "2018-06-07T00:00:00",
+                        result: "available"
+                    },
+                    {
+                        phenomenonTime: "2018-06-07T23:00:00",
+                        result: "charging"
+                    }]],
+                    targetResult = "charging";
+
+                expect(model.calculateWorkloadPerDayPerHour(divideDataByWeekday, targetResult)).to.be.an("array").to.have.deep.members([{
+                    0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
+                    8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0,
+                    15: 0, 16: 0, 17: 0, 18: 0, 19: 0, 20: 0, 21: 0, 22: 0, 23: 1
+                }]);
+            });
+        });
+        describe("calculateSumAndArithmeticMean", function () {
+            it("should return an empty object for undefined input", function () {
+                expect(model.calculateSumAndArithmeticMean(undefined,)).to.be.an("object").that.is.empty;
             });
         });
     });
