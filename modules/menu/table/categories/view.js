@@ -17,6 +17,13 @@ define(function (require) {
                 Radio.request("TableMenu", "setActiveElement", "Category");
             });
         },
+        render: function () {
+            this.$el.html(this.template());
+            if (Radio.request("TableMenu", "getActiveElement") === "Category") {
+                this.$(".table-nav-cat-panel").collapse("show");
+            }
+            return this.$el;
+        },
         id: "table-category-list",
         className: "table-category-list table-nav",
         template: _.template(Template),
@@ -36,13 +43,6 @@ define(function (require) {
             this.$(".table-category-list").addClass("table-category-active");
             this.$(".table-nav-cat-panel").addClass("in");
             Radio.request("TableMenu", "setActiveElement", "Category");
-        },
-        render: function () {
-            this.$el.html(this.template());
-            if (Radio.request("TableMenu", "getActiveElement") === "Category") {
-                this.$(".table-nav-cat-panel").collapse("show");
-            }
-            return this.$el;
         }
     });
 
