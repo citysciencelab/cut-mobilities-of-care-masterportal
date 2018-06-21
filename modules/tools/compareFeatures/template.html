@@ -20,9 +20,37 @@ else { %>
                 <h4 class="modal-title">Vergleichsliste</h4>
             </div>
             <div class="modal-body">
-                <p>hier kommt der vergleich</p>
+                <table class="table table-hover table-responsive">
+                    <tbody>
+                        <% rows.forEach(function (obj, index) {
+                            if (index < numberOfAttributesToShow) { %>
+                                <tr class="row-show">
+                            <% }
+                            else { %>
+                                <tr class="row-hide">
+                            <% } %>
+
+                                <% Object.keys(obj).forEach(function (key, index) { %>
+                                    <td class="<%= key %>">
+                                        <% if (_.isArray(obj[key])) {
+                                            obj[key].forEach(function (value) {
+                                                print (value); %>
+                                                <br>
+                                            <% });
+                                        }
+                                        else {
+                                            print (obj[key]);
+                                        } %>
+                                    </td>
+                                <% }); %>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-more-infos">mehr Infos</button>
             </div>
         </div>
     </div>
 <% } %>
-

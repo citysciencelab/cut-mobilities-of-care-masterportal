@@ -2,8 +2,22 @@
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
 }
 
+.compare-feature-modal .modal-lg .modal-body {
+    overflow: auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.compare-feature-modal .modal-lg .modal-footer {
+    text-align: center;
+}
+
 .compare-feature-modal h4 {
     line-height: 1.4;
+}
+
+.compare-feature-modal .row-hide {
+    display: none;
 }
 
 .compare-feature-modal .btn {
@@ -12,4 +26,24 @@
 
 .compare-feature-modal .btn:hover {
     opacity: 0.9;
+}
+
+.compare-feature-modal tr:first-child td {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 16px;
+    border-top: 0;
+}
+
+.compare-feature-modal tr:first-child .col-1:first-child {
+    color: transparent;
+    border: none;
+}
+
+.compare-feature-modal .col-1 {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 14px;
+}
+
+.compare-feature-modal td, .compare-feature-modal thead th {
+    border-left: 1px solid #ddd;
 }

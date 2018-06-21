@@ -12,7 +12,8 @@ define(function (require) {
 
         events: {
             "hidden.bs.modal": "setIsActivatedToFalse",
-            "click .btn-open-list": "setIsActivatedToTrue"
+            "click .btn-open-list": "setIsActivatedToTrue",
+            "click .btn-more-infos": "showAllAttributes"
         },
 
         initialize: function () {
@@ -48,6 +49,17 @@ define(function (require) {
         renderFeedbackModal: function (feature) {
             this.$el.html(this.templateFeedback({feature: feature}));
             this.$el.modal("show");
+        },
+
+
+        showAllAttributes: function (evt) {
+            var text = "mehr Infos";
+
+            this.$el.find(".row-hide").toggle();
+            if (evt.target.textContent === "mehr Infos") {
+                text = "weniger Infos";
+            }
+            evt.target.textContent = text;
         },
 
         setIsActivatedToFalse: function () {
