@@ -1,10 +1,13 @@
 define(function (require) {
     var expect = require("chai").expect,
         Model = require("../../../../../../../modules/tools/gfi/themes/elektroladesaeulen/model.js"),
+        moment = require("moment"),
         model;
 
     before(function () {
         model = new Model();
+
+        moment.locale("de");
     });
 
     describe("tools/gfi/themes/elektroladesaeulen", function () {
@@ -594,9 +597,114 @@ define(function (require) {
                 }]);
             });
         });
+        describe("arrayPerHour", function () {
+            it("should return an empty array for undefined input", function () {
+                expect(model.arrayPerHour(undefined, undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for empty input", function () {
+                expect(model.arrayPerHour([], -1)).to.be.an("array").that.is.empty;
+            });
+            it("should return an array with data from input array for incorrect input", function () {
+                expect(model.arrayPerHour(["abc"], 1)).to.be.an("array").that.is.empty;
+            });
+            it("should return an array with data for correct input", function () {
+                var dataPerHour = [{
+                    0: 1,
+                    1: 0
+                },
+                {
+                    0: 1,
+                    1: 1
+                },
+                {
+                    0: 0,
+                    1: 0
+                }];
+
+                expect(model.arrayPerHour(dataPerHour, 1)).to.be.an("array").that.includes(0, 1, 0);
+            });
+        });
         describe("calculateSumAndArithmeticMean", function () {
-            it("should return an empty object for undefined input", function () {
-                expect(model.calculateSumAndArithmeticMean(undefined,)).to.be.an("object").that.is.empty;
+            it("should return an empty array for undefined input", function () {
+                expect(model.calculateSumAndArithmeticMean(undefined)).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for empty input", function () {
+                expect(model.calculateSumAndArithmeticMean([])).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for incorrect input", function () {
+                expect(model.calculateSumAndArithmeticMean(["abc"])).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array for undefined input", function () {
+                var dataPerHour = [{
+                    0: 1,
+                    1: 0
+                },
+                {
+                    0: 1,
+                    1: 1
+                },
+                {
+                    0: 0,
+                    1: 0
+                }];
+
+                expect(model.calculateSumAndArithmeticMean(dataPerHour)).to.be.an("array").to.have.deep.members([{
+                    hour: 0,
+                    sum: 2,
+                    mean: 0.667
+                },
+                {
+                    hour: 1,
+                    sum: 1,
+                    mean: 0.333
+                }]);
+            });
+        });
+        describe("checkValue", function () {
+            it("should return undefined for undefined input", function () {
+                expect(model.checkValue(undefined, undefined)).to.be.an("undefined");
+            });
+            it("should return undefined for empty input", function () {
+                expect(model.checkValue([], "")).to.be.an("undefined");
+            });
+            it("should return undefined for incorrect input", function () {
+                expect(model.checkValue(["abc"], "def")).to.be.an("undefined");
+            });
+            it("should return data for correct input", function () {
+                var processedData = [{
+                    hour: 0,
+                    sum: 2,
+                    mean: 0.667
+                },
+                {
+                    hour: 1,
+                    sum: 1,
+                    mean: 0.333
+                }];
+
+                expect(model.checkValue(processedData, "mean")).to.be.an("object").that.includes({
+                    hour: 0,
+                    sum: 2,
+                    mean: 0.667
+                });
+            });
+        });
+        describe("createXAxisLabel", function () {
+ 
+            it("should return empty string for undefined input", function () {
+                expect(model.createXAxisLabel(undefined, undefined)).to.be.an("string").that.is.empty;
+            });
+            it("should return empty string for empty input", function () {
+                expect(model.createXAxisLabel("", "")).to.be.an("string").that.is.empty;
+            });
+            it("should return empty string for incorrect input", function () {
+                expect(model.createXAxisLabel("abc", "def")).to.be.an("string").that.is.empty;
+            });
+            it("should return empty string for incorrect input", function () {
+                var day = moment("2018-06-22T10:05:52").format("dddd");
+
+                expect(model.createXAxisLabel(day, "charging")).to.be.an("string").to.equal("Durchschnittliche "
+                + "Auslastung Freitags");
             });
         });
     });

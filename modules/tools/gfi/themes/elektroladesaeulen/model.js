@@ -218,7 +218,7 @@ define(function (require) {
                 while (observationsCount > data.Observations.length) {
                     skipCompleteURL = completeURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'";
                     skipHistoricalData = this.sendRequest(skipCompleteURL, async);
-    
+
                     data.Observations.push.apply(data.Observations, skipHistoricalData[0].Observations);
                 }
             }, this);
@@ -405,12 +405,14 @@ define(function (require) {
                 dataArray = [],
                 requestURL = this.get("requestURL"),
                 versionURL = this.get("versionURL"),
-                completeURL;
+                completeURL,
+                i,
+                data,
+                query;
 
-            for (var i = minYear; i <= maxYear; i++) {
-                var data,
-                    dataObj = {},
-                    query = "?$expand=Observations($filter=result%20eq%27charging%27and%20year(phenomenonTime)%20eq%20" + i + ")&$filter=";
+            for (i = minYear; i <= maxYear; i++) {
+                data = 0;
+                query = "?$expand=Observations($filter=result%20eq%27charging%27and%20year(phenomenonTime)%20eq%20" + i + ")&$filter=";
 
                 _.each(dataStreamIds, function (id, index) {
                     query = query + "@iot.id eq'" + id + "'";
@@ -449,7 +451,7 @@ define(function (require) {
 
         /**
          * starts cleaning data for every loadingpoint
-         * @param  {Array} dataArray
+         * @param  {Array} dataArray - 
          * @return {Array} dataArray
          */
         dataCleaningChargingIndicator: function (dataArray) {
@@ -505,7 +507,7 @@ define(function (require) {
         /**
          * Counts the number of observations
          * these only include the status: charging
-         * @param  {Array} dataArray
+         * @param  {Array} dataArray - 
          * @return {Array} processedDataArray - contains the total number per loadingpoint
          */
         processIndicatorCharging: function (dataArray) {
@@ -530,7 +532,7 @@ define(function (require) {
 
         /**
          * creates a header from the indicator data that is displayed in the table
-         * @param  {[Object]} indicatorDataArray
+         * @param  {[Object]} indicatorDataArray - 
          * @return {Array} tableheadIndicatorArray - with years as head
          */
         createIndicatorHead: function (indicatorDataArray) {
@@ -545,12 +547,11 @@ define(function (require) {
 
         /**
          * generates an object from the indicatorData
-         * @param  {[Object]} indicatorDataArray
+         * @param  {[Object]} indicatorDataArray - 
          * @return {[Object]} indicatorPropertiesObj - the values are stored as an array
          */
         processChargingIndicator: function (indicatorDataArray) {
-            var indicatorPropertiesArray = [],
-                indicatorPropertiesObj = {};
+            var indicatorPropertiesArray = [];
 
             // add indiocator to gfiProperties
             _.each(indicatorDataArray, function (indicator) {
@@ -569,7 +570,7 @@ define(function (require) {
         /**
          * creates indicator for total operating time of chargings per year
          * @param  {boolean} async - for ajax
-         * @param  {Array} dataStreamIds
+         * @param  {Array} dataStreamIds - 
          * @return {Array} indicatorChargingTime - contains the times
          */
         createIndicatorChargingTime: function (async, dataStreamIds) {
@@ -579,12 +580,16 @@ define(function (require) {
                 indicatorChargingHourDataByWeekday = this.processDataForAllWeekdays(indicatorChargingHourDataClean, "", endDay),
                 minYear = 2017,
                 maxYear = moment().format("YYYY"),
-                allData = [];
+                allData = [],
+                i,
+                dataByYear,
+                allWeekdaysByYear,
+                sumByYear;
 
-            for (var i = minYear; i <= maxYear; i++) {
-                var dataByYear = this.splitIndicatorDataByYear(indicatorChargingHourDataByWeekday, i),
-                    allWeekdaysByYear = this.getWeekDayIndicatorData(dataByYear),
-                    sumByYear = this.calculateSumIndicatorData(allWeekdaysByYear);
+            for (i = minYear; i <= maxYear; i++) {
+                dataByYear = this.splitIndicatorDataByYear(indicatorChargingHourDataByWeekday, i);
+                allWeekdaysByYear = this.getWeekDayIndicatorData(dataByYear);
+                sumByYear = this.calculateSumIndicatorData(allWeekdaysByYear);
 
                 allData.push(sumByYear + " Std.");
             }
@@ -620,12 +625,15 @@ define(function (require) {
             _.each(chargingData, function (data) {
                 var observationsID = data["@iot.id"],
                     observationsCount = data["Observations@iot.count"],
-                    observationsLength = data.Observations.length;
+                    observationsLength = data.Observations.length,
+                    skipCompleteURL,
+                    skipChargingData,
+                    i;
 
                 if (observationsCount > observationsLength) {
-                    for (var i = observationsLength; i < observationsCount; i += observationsLength) {
-                        var skipCompleteURL = completeURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'",
-                            skipChargingData = this.sendRequest(skipCompleteURL, async);
+                    for (i = observationsLength; i < observationsCount; i += observationsLength) {
+                        skipCompleteURL = completeURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'";
+                        skipChargingData = this.sendRequest(skipCompleteURL, async);
 
                         data.Observations.push.apply(data.Observations, skipChargingData[0].Observations);
                     }
@@ -638,8 +646,8 @@ define(function (require) {
 
         /**
          * filters the data for the given year
-         * @param  {Array} indicatorChargingHourDataByWeekday
-         * @param  {number} year
+         * @param  {Array} indicatorChargingHourDataByWeekday -
+         * @param  {number} year -
          * @return {Array} dataByYear - data only with the given year
          */
         splitIndicatorDataByYear: function (indicatorChargingHourDataByWeekday, year) {
@@ -671,17 +679,20 @@ define(function (require) {
         /**
          * determines the data for each day of the week
          * mean and sum
-         * @param  {Array} dataByYear
-         * @return {Array}
+         * @param  {Array} dataByYear -
+         * @return {Array} allData
          */
         getWeekDayIndicatorData: function (dataByYear) {
-            var allData = [];
+            var allData = [],
+                i,
+                dataPerHour,
+                processedData;
 
-            for (var i = 0; i < 7; i++) {
-                var dataPerHour = this.calculateWorkloadPerDayPerHour(dataByYear[i], "charging"),
-                    processedData = this.calculateSumAndArithmeticMean(dataPerHour);
+            for (i = 0; i < 7; i++) {
+                dataPerHour = this.calculateWorkloadPerDayPerHour(dataByYear[i], "charging");
+                processedData = this.calculateSumAndArithmeticMean(dataPerHour);
 
-                    allData.push(processedData);
+                allData.push(processedData);
             }
 
             return allData;
@@ -689,7 +700,7 @@ define(function (require) {
 
         /**
          * sums the data of the individual days of the week together
-         * @param  {Array} allWeekdaysByYear
+         * @param  {Array} allWeekdaysByYear - 
          * @return {number} sum
          */
         calculateSumIndicatorData: function (allWeekdaysByYear) {
@@ -855,7 +866,7 @@ define(function (require) {
 
                             // Danach aktuellen Tag auf vorherigen Tag und ArrayIndex auf nächstes Array setzen
                             actualDay = moment(actualDay).subtract(1, "days").format("YYYY-MM-DD");
-                            
+
                             if (arrayIndex >= 6) {
                                 arrayIndex = 0;
                             }
@@ -884,7 +895,8 @@ define(function (require) {
                 dataByWeekday = this.get("weekday"),
                 dataPerHour,
                 processedData,
-                graphConfig;
+                graphConfig,
+                day = moment().subtract(index, "days").format("dddd");
 
             // need to toggle weekdays
             this.setDayIndex(index);
@@ -926,7 +938,7 @@ define(function (require) {
                     unit: "Uhr"
                 },
                 xAxisLabel: {
-                    label: this.createXAxisLabel(index, targetResult),
+                    label: this.createXAxisLabel(day, targetResult),
                     offset: 10,
                     textAnchor: "middle",
                     fill: "#000",
@@ -1101,23 +1113,25 @@ define(function (require) {
         /**
          * calculates the arithemtic Meaning for all datas
          * @param  {array} dataPerHour - data for every day, according to targetresult
-         * @return {Object} dayMeanArray
+         * @return {array} dayMeanArray
          */
         calculateSumAndArithmeticMean: function (dataPerHour) {
             var dayLength = 24,
-                dayMeanArray = [];
+                dayMeanArray = [],
+                i,
+                sum,
+                mean,
+                arrayPerHour;
 
-            for (var i = 0; i <= dayLength; i++) {
-                var arrayPerHour = [],
-                    sum,
-                    mean,
-                    obj = {};
+            for (i = 0; i <= dayLength; i++) {
+                // initialize
+                sum = 0;
+                mean = 0;
+                arrayPerHour = this.arrayPerHour(dataPerHour, i);
 
-                // returns an array which contains values at hour i
-                _.each(dataPerHour, function (day) {
-                    arrayPerHour.push(_.pick(day, String(i))[i]);
-                });
-
+                if (_.isEmpty(arrayPerHour)) {
+                    break;
+                }
                 // remove all undefined data
                 arrayPerHour = _.filter(arrayPerHour, function (value) {
                     return !_.isUndefined(value);
@@ -1148,9 +1162,31 @@ define(function (require) {
         },
 
         /**
+         * returns an array which contains values at hour position
+         * @param  {array} dataPerHour - data for every day, according to targetresult
+         * @param  {number} position - one hour
+         * @return {array} arrayPerHour
+         */
+        arrayPerHour: function (dataPerHour, position) {
+            var arrayPerHour = [];
+
+            _.each(dataPerHour, function (day) {
+                var positionData = parseFloat(_.pick(day, String(position))[position], 10);
+
+                if (!_.isUndefined(positionData) && !_.isNaN(positionData)) {
+                    arrayPerHour.push(positionData);
+                }
+            });
+
+            return arrayPerHour;
+        },
+
+        /**
          * checks if processdData is existing
-         * @param  {[type]} processedData [description]
-         * @return {[type]}               [description]
+         * if no data is found, undefined will be delivered
+         * @param  {array} processedData - data with mean
+         * @param  {array} value - the key is searched
+         * @return {object} first data that was found
          */
         checkValue: function (processedData, value) {
             return _.find(processedData, function (data) {
@@ -1158,28 +1194,33 @@ define(function (require) {
             });
         },
 
+
         /**
          * creates the caption for the graph
-         * @param  {String} state
-         * @return {String}
+         * @param  {String} day - the day that is drawing
+         * @param  {String} targetResult - result to draw
+         * @return {String} label
          */
-        createXAxisLabel: function (index, state) {
-            var today = moment().subtract(index, "days").format("dddd"),
-                stateLabel;
+        createXAxisLabel: function (day, targetResult) {
+            var stateLabel,
+                label;
 
-            if (state === "available") {
+            if (targetResult === "available") {
                 stateLabel = "Durchschnittliche Verfügbarkeit ";
             }
-            else if (state === "charging") {
+            else if (targetResult === "charging") {
                 stateLabel = "Durchschnittliche Auslastung ";
             }
-            else if (state === "outoforder") {
+            else if (targetResult === "outoforder") {
                 stateLabel = "Durchschnittlich außer Betrieb ";
             }
 
-            $(".ladesaeulen .day").text(today).css("font-weight", "bold");
+            $(".ladesaeulen .day").text(day).css("font-weight", "bold");
 
-            return stateLabel + today + "s";
+            label = _.isUndefined(day) || _.isUndefined(targetResult) || _.isUndefined(stateLabel)
+                ? "" : stateLabel + day + "s";
+
+            return label;
         },
 
         // setter-functions
