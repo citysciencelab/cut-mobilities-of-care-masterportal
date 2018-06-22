@@ -22,8 +22,12 @@ define(function (require) {
             "imageOffsetY": 0.5,
             // für subclass CIRCLE
             "circleRadius": 10,
-            "circleFillColor": [0, 153, 255, 1],
-            "circleStrokeColor": [0, 0, 0, 1],
+            "circleFillColor": [
+                0, 153, 255, 1
+            ],
+            "circleStrokeColor": [
+                0, 0, 0, 1
+            ],
             "circleStrokeWidth": 2,
             // Für Label
             "textAlign": "left",
@@ -31,15 +35,23 @@ define(function (require) {
             "textScale": 1,
             "textOffsetX": 0,
             "textOffsetY": 0,
-            "textFillColor": [255, 255, 255, 1],
-            "textStrokeColor": [0, 0, 0, 1],
+            "textFillColor": [
+                255, 255, 255, 1
+            ],
+            "textStrokeColor": [
+                0, 0, 0, 1
+            ],
             "textStrokeWidth": 3,
             // Für Cluster
             "clusterClass": "CIRCLE",
             // Für Cluster Class CIRCLE
             "clusterCircleRadius": 10,
-            "clusterCircleFillColor": [0, 153, 255, 1],
-            "clusterCircleStrokeColor": [0, 0, 0, 1],
+            "clusterCircleFillColor": [
+                0, 153, 255, 1
+            ],
+            "clusterCircleStrokeColor": [
+                0, 0, 0, 1
+            ],
             "clusterCircleStrokeWidth": 2,
             // Für Cluster Class SIMPLE
             "clusterImageName": "blank.png",
@@ -55,31 +67,51 @@ define(function (require) {
             "clusterTextScale": 1,
             "clusterTextOffsetX": 0,
             "clusterTextOffsetY": 0,
-            "clusterTextFillColor": [255, 255, 255, 1],
-            "clusterTextStrokeColor": [0, 0, 0, 1],
+            "clusterTextFillColor": [
+                255, 255, 255, 1
+            ],
+            "clusterTextStrokeColor": [
+                0, 0, 0, 1
+            ],
             "clusterTextStrokeWidth": 3,
             // Für Polygon
-            "polygonFillColor": [255, 255, 255, 1],
-            "polygonStrokeColor": [0, 0, 0, 1],
+            "polygonFillColor": [
+                255, 255, 255, 1
+            ],
+            "polygonStrokeColor": [
+                0, 0, 0, 1
+            ],
             "polygonStrokeWidth": 2,
             // Für Line
-            lineStrokeColor: [0, 0, 0, 1],
-            lineStrokeWidth: 2,
+            "lineStrokeColor": [
+                0, 0, 0, 1
+            ],
+            "lineStrokeWidth": 2,
             // Für subClass ADVANCED
             // Für scalingShape CIRCLESEGMENTS
-            circleSegmentsRadius: 10,
-            circleSegmentsStrokeWidth: 4,
-            circleSegmentsBackgroundColor: [255, 255, 255, 0],
-            scalingValueDefaultColor: [0, 0, 0, 1],
-            circleSegmentsGap: 10,
+            "circleSegmentsRadius": 10,
+            "circleSegmentsStrokeWidth": 4,
+            "circleSegmentsBackgroundColor": [
+                255, 255, 255, 0
+            ],
+            "scalingValueDefaultColor": [
+                0, 0, 0, 1
+            ],
+            "circleSegmentsGap": 10,
             // Für scalingShape CIRCLE_BAR
-            circleBarScalingFactor: 1,
-            circleBarRadius: 6,
-            circleBarLineStroke: 5,
-            circleBarCircleFillColor: [0, 0, 0, 1],
-            circleBarCircleStrokeColor: [0, 0, 0, 1],
-            circleBarCircleStrokeWidth: 1,
-            circleBarLineStrokeColor: [0, 0, 0, 1]
+            "circleBarScalingFactor": 1,
+            "circleBarRadius": 6,
+            "circleBarLineStroke": 5,
+            "circleBarCircleFillColor": [
+                0, 0, 0, 1
+            ],
+            "circleBarCircleStrokeColor": [
+                0, 0, 0, 1
+            ],
+            "circleBarCircleStrokeWidth": 1,
+            "circleBarLineStrokeColor": [
+                0, 0, 0, 1
+            ]
         },
         initialize: function () {
             this.setImagePath(Radio.request("Util", "getPath", Config.wfsImgPath));
@@ -169,9 +201,9 @@ define(function (require) {
                 }),
                 style;
 
-                style = style = new ol.style.Style({
-                    stroke: strokestyle
-                });
+            style = style = new ol.style.Style({
+                stroke: strokestyle
+            });
 
             return style;
         },
@@ -228,7 +260,7 @@ define(function (require) {
             featureValue = feature.get(styleField);
             if (!_.isUndefined(featureValue)) {
                 styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
-                return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+                    return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
                 })[0];
             }
 
@@ -242,7 +274,7 @@ define(function (require) {
             strokestyle = new ol.style.Stroke({
                 color: this.returnColor(polygonStrokeColor, "rgb"),
                 width: parseFloat(polygonStrokeWidth)
-            }),
+            });
             fillstyle = new ol.style.Fill({
                 color: this.returnColor(polygonFillColor, "rgb")
             });
@@ -291,9 +323,6 @@ define(function (require) {
             else if (clusterClass === "CIRCLE") {
                 clusterStyle = this.createCircleClusterStyle();
             }
-            // else if (clusterClass === "ADVANCED") {
-            //     clusterStyle = this.createAdvancedClusterStyle();
-            // }
             return clusterStyle;
         },
 
@@ -417,7 +446,7 @@ define(function (require) {
                 if (_.isUndefined(styleFieldValueObj)) {
                     return style;
                 }
-                src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.getImagePath() + styleFieldValueObj.imageName : this.getImagePath() + this.getImageName();
+                src = !_.isUndefined(styleFieldValueObj && _.has(styleFieldValueObj, "imageName")) ? this.getImagePath() + styleFieldValueObj.imageName : this.getImagePath() + this.getImageName();
                 isSVG = src.indexOf(".svg") > -1 ? true : false;
                 width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.getImageWidth();
                 height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.getImageHeight();
@@ -458,10 +487,10 @@ define(function (require) {
                 circleStyle = this.createClusterStyle();
             }
             else {
-                radius = parseFloat(this.getCircleRadius(), 10),
-                fillcolor = this.returnColor(this.getCircleFillColor(), "rgb"),
-                strokecolor = this.returnColor(this.getCircleStrokeColor(), "rgb"),
-                strokewidth = parseFloat(this.getCircleStrokeWidth(), 10),
+                radius = parseFloat(this.getCircleRadius(), 10);
+                fillcolor = this.returnColor(this.getCircleFillColor(), "rgb");
+                strokecolor = this.returnColor(this.getCircleStrokeColor(), "rgb");
+                strokewidth = parseFloat(this.getCircleStrokeWidth(), 10);
                 circleStyle = new ol.style.Circle({
                     radius: radius,
                     fill: new ol.style.Fill({
@@ -488,10 +517,12 @@ define(function (require) {
          */
         createAdvancedPointStyle: function (feature, isClustered) {
             var styleScaling = this.get("scaling").toUpperCase(),
-                style;
+                style,
+                imagestyle,
+                workingFeature = feature;
 
             if (isClustered && feature.get("features").length > 1) {
-                var imagestyle = this.createClusterStyle();
+                imagestyle = this.createClusterStyle();
 
                 style = new ol.style.Style({
                     image: imagestyle
@@ -500,16 +531,16 @@ define(function (require) {
             else {
 
                 // parse from array
-                if (_.isArray(feature.get("features"))) {
-                    feature = feature.get("features")[0];
+                if (_.isArray(workingFeature.get("features"))) {
+                    workingFeature = workingFeature.get("features")[0];
                 }
 
                 // check scaling
                 if (styleScaling === "NOMINAL") {
-                    style = this.createNominalAdvancedPointStyle(feature);
+                    style = this.createNominalAdvancedPointStyle(workingFeature);
                 }
                 else if (styleScaling === "INTERVAL") {
-                    style = this.createIntervalAdvancedPointStyle(feature);
+                    style = this.createIntervalAdvancedPointStyle(workingFeature);
                 }
             }
 
@@ -526,7 +557,8 @@ define(function (require) {
                 imageName = this.get("imageName"),
                 imageNameDefault = this.defaults.imageName,
                 svgPath,
-                style;
+                style,
+                imageStyle;
 
             if (styleScalingShape === "CIRCLESEGMENTS") {
                 svgPath = this.createNominalCircleSegments(feature);
@@ -550,7 +582,8 @@ define(function (require) {
          */
         createIntervalAdvancedPointStyle: function (feature) {
             var styleScalingShape = this.get("scalingShape").toUpperCase(),
-                svgPath;
+                svgPath,
+                style;
 
             if (styleScalingShape === "CIRCLE_BAR") {
                 svgPath = this.createIntervalCircleBar(feature);
@@ -711,13 +744,14 @@ define(function (require) {
         },
         hexToRgb: function (hex) {
             // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+                result;
 
             hex = hex.replace(shorthandRegex, function (m, r, g, b) {
                 return r + r + g + g + b + b;
             });
 
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
             return result ? [parseFloat(result[1], 16), parseFloat(result[2], 16), parseFloat(result[3], 16)] : null;
         },
@@ -737,14 +771,15 @@ define(function (require) {
                 scalingValues = this.get("scalingValues"),
                 scalingObject = this.fillScalingAttributes(feature),
                 totalSegments = _.reduce(_.values(scalingObject), function (memo, num) {
-                        return memo + num;
-                    }, 0),
+                    return memo + num;
+                }, 0),
                 degreeSegment = 360 / totalSegments,
                 startAngelDegree = 0,
                 endAngelDegree = degreeSegment,
                 svg,
                 d,
-                strokeColor;
+                strokeColor,
+                i;
 
             // calculate size
             if (((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2) >= size) {
@@ -766,7 +801,7 @@ define(function (require) {
                 }
 
                 // create segments
-                for (var i = 0; i < value; i++) {
+                for (i = 0; i < value; i++) {
                     d = this.calculateCircleSegment(startAngelDegree, endAngelDegree, circleSegmentsRadius, size);
 
                     svg = this.extendsSvgNominalCircleSegments(svg, circleSegmentsStrokeWidth, strokeColor, d);
@@ -774,7 +809,7 @@ define(function (require) {
                     // set degree for next circular segment
                     startAngelDegree = startAngelDegree + degreeSegment;
                     endAngelDegree = endAngelDegree + degreeSegment;
-                };
+                }
             }, this);
 
             svg = svg + "</svg>";
@@ -886,7 +921,7 @@ define(function (require) {
             var rad = Math.PI / 180,
                 xy = size / 2,
                 gap = this.get("circleSegmentsGap"),
-                isCircle = (startAngelDegree === 0 && endAngelDegree === 360) ? true : false,
+                isCircle = startAngelDegree === 0 && endAngelDegree === 360,
                 startAngleRad,
                 endAngleRad,
                 xStart,
@@ -1368,7 +1403,7 @@ define(function (require) {
         setClusterText: function (value) {
             this.set("clusterText", value);
         },
-        
+   
         // getter for clusterTextAlign
         getClusterTextAlign: function () {
             return this.get("clusterTextAlign");

@@ -690,7 +690,7 @@ define(function (require) {
             });
         });
         describe("createXAxisLabel", function () {
- 
+
             it("should return empty string for undefined input", function () {
                 expect(model.createXAxisLabel(undefined, undefined)).to.be.an("string").that.is.empty;
             });

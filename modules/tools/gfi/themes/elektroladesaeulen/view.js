@@ -16,7 +16,7 @@ define(function (require) {
 
         /**
          * changeGraph by click on arrowButton
-         * @param  {event} evt
+         * @param  {event} evt - event that is triggered
          */
         changeGraph: function (evt) {
             var actualIndex = this.model.get("dayIndex"),
@@ -36,18 +36,28 @@ define(function (require) {
             // check wich button is clicked
             // actualIndex: today = 0, yesterday = 1, tomorrow = 6, etc.
             if (buttonId === "left") {
-                (actualIndex === 6) ? actualIndex = 0 : actualIndex++;
+                if (actualIndex === 6) {
+                    actualIndex = 0;
+                }
+                else {
+                    actualIndex++;
+                }
             }
             else if (buttonId === "right") {
-                (actualIndex === 0) ? actualIndex = 6 : actualIndex--;
+                if (actualIndex === 0) {
+                    actualIndex = 6;
+                }
+                else {
+                    actualIndex--;
+                }
             }
 
             this.setDiagrammParams(graphTyp, actualIndex);
-       },
+        },
 
         /**
          * changes dataset, which draw in gfi
-         * @param  {event} evt
+         * @param  {event} evt - event that is triggered
          */
         toggleTab: function (evt) {
             var contentId = $(evt.currentTarget).attr("value"),
@@ -71,7 +81,7 @@ define(function (require) {
             this.removeAllData();
 
             // deactivate all tabs and their contents
-            $(evt.currentTarget).parent().find("li").each(function (index, li) {
+            $(evt.currentTarget).parent().find("li").each(function (i, li) {
                 var tabContentId = $(li).attr("value");
 
                 $(li).removeClass("active");

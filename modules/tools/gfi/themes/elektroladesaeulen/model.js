@@ -355,12 +355,13 @@ define(function (require) {
             return response;
         },
 
-// *************************************************************
-// ***** create Indicators                                 *****
-// *************************************************************
+        // *************************************************************
+        // ***** create Indicators                                 *****
+        // *************************************************************
+
         /**
          * create various indicators
-         * @param  {boolean} async
+         * @param  {boolean} async - for ajax
          */
         createIndicators: function (async) {
             var dataStreamIds = this.get("dataStreamIds"),
@@ -715,6 +716,8 @@ define(function (require) {
             return Math.round(sum);
         },
 
+        // ****************** Indicators End *********************
+
         /**
          *generates a record for each day of the week
          * @param  {Array} historicalData [description]
@@ -787,7 +790,7 @@ define(function (require) {
                         utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
                         utcNumber = utc.substring(1, 3) + "00";
                     }
-    
+
                     obs.phenomenonTime = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("YYYY-MM-DDTHH:mm:ss");
 
                 });
