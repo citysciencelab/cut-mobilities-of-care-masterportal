@@ -21,15 +21,19 @@
             <div class="row">
                 <table class="table table-hover table-responsive">
                     <tbody>
-                        <% featureList.forEach(function (obj, index) {
+                        <% list.forEach(function (obj, index) {
                             if (index < rowsToShow) { %>
                                 <tr>
                             <% }
                             else { %>
                                 <tr class="toggle-row">
                             <% } %>
-                                <% Object.keys(obj).forEach(function (key, index) { %>
+                                <% Object.keys(obj).forEach(function (key, idx) {  %>
                                     <td class="<%= key %>">
+                                        <% if (index === 0 && idx !== 0) { %>
+                                            <button type="button" class="close" aria-label="Close"><span class="<%= key %>" id="<%= featureIds[idx - 1] %>" aria-hidden="true">&times;</span></button>
+                                        <% } %>
+                                        <span>
                                         <% if (_.isArray(obj[key])) {
                                             obj[key].forEach(function (value) {
                                                 print (value); %>
@@ -39,6 +43,7 @@
                                         else {
                                             print (obj[key]);
                                         } %>
+                                        </span>
                                     </td>
                                 <% }); %>
                             </tr>

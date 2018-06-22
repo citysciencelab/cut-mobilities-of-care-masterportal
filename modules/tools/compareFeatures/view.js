@@ -12,9 +12,11 @@ define(function (require) {
         className: "compare-feature-modal modal fade",
 
         events: {
+            // is fired when the modal has finished being hidden
             "hidden.bs.modal": "setIsActivatedToFalse",
             "click .btn-open-list": "setIsActivatedToTrue",
             "click .btn-infos": "toggleRows",
+            "click table button": "removeFeatureFromList",
             "change select": function (evt) {
                 this.model.setLayerId(evt.target.value);
                 this.renderListModal(this.model);
@@ -62,9 +64,10 @@ define(function (require) {
         renderListModal: function (model) {
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: model.get("layerId")}),
                 attr = {
-                    featureList: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
+                    list: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
                     rowsToShow: model.get("numberOfAttributesToShow"),
-                    layerSelection: model.getLayerSelection(this.model.get("groupedFeatureList"))
+                    featureIds: model.getFeatureIds(model.get("groupedFeatureList"), model.get("layerId")),
+                    layerSelection: model.getLayerSelection(model.get("groupedFeatureList"))
                 };
 
             this.$el.html(this.template(attr));
@@ -77,6 +80,21 @@ define(function (require) {
         renderFeedbackModal: function (feature) {
             this.$el.html(this.templateFeedback({feature: feature}));
             this.$el.modal("show");
+        },
+
+        /**
+         * removes the clicked column from the table
+         * and finds the feature to be removed
+         * @param {MouseEvent} evt - click event
+         * @returns {void}
+         */
+        removeFeatureFromList: function (evt) {
+            var featureToRemoved = _.find(this.model.get("featureList"), function (feature) {
+                return feature.getId() === evt.target.id;
+            });
+
+            this.$el.find("." + evt.target.className).remove();
+            this.model.removeFeatureFromList(featureToRemoved);
         },
 
         /**

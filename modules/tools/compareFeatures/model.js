@@ -134,6 +134,11 @@ define(function () {
             return true;
         },
 
+        /**
+         * returns a list of all available layers in the featureList
+         * @param {object} groupedFeatureList - features grouped by layerId
+         * @returns {object[]} including name and id
+         */
         getLayerSelection: function (groupedFeatureList) {
             var selectionList = [];
 
@@ -145,6 +150,22 @@ define(function () {
             });
             return selectionList;
         },
+
+        /**
+         * returns the feature ids of a layer
+         * @param {object} groupedFeatureList - features grouped by layerId
+         * @param {string} layerId -  layer id of the features needed
+         * @returns {string[]} featureIdList
+         */
+        getFeatureIds: function (groupedFeatureList, layerId) {
+            var idList = [];
+
+            groupedFeatureList[layerId].forEach(function (feature) {
+                idList.push(feature.getId());
+            });
+            return idList;
+        },
+
         /**
          * parses attribute values with pipe-sign ("|") and replace it with an array of single values
          * @param {ol.feature} feature - feature of the attributes

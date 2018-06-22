@@ -41,6 +41,11 @@
     opacity: 0.9;
 }
 
+.compare-feature-modal table button {
+    font-size: 25px;
+    margin-top: -6px;
+}
+
 .compare-feature-modal tr:first-child td {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     font-size: 16px;
