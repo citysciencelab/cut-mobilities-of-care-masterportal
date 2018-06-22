@@ -14,7 +14,11 @@ define(function (require) {
         events: {
             "hidden.bs.modal": "setIsActivatedToFalse",
             "click .btn-open-list": "setIsActivatedToTrue",
-            "click .btn-infos": "toggleRows"
+            "click .btn-infos": "toggleRows",
+            "change select": function (evt) {
+                this.model.setLayerId(evt.target.value);
+                this.renderListModal(this.model);
+            }
         },
 
         initialize: function () {
@@ -36,16 +40,12 @@ define(function (require) {
          * @returns {void}
          */
         render: function (model, value) {
-            var layerModel;
-
             if (value) {
                 if (model.get("featureList").length === 0) {
                     this.$el.html(this.templateNoFeatures());
                 }
                 else {
-                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: model.get("layerId")});
-
-                    this.$el.html(this.template({featureList: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")), rowsToShow: model.get("numberOfAttributesToShow")}));
+                    this.renderListModal(model);
                 }
                 this.$el.modal("show");
             }
@@ -53,6 +53,21 @@ define(function (require) {
                 this.$el.empty();
             }
             return this;
+        },
+
+        /**
+         * @param {Backbone.Model} model - this.model
+         * @returns {void}
+         */
+        renderListModal: function (model) {
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: model.get("layerId")}),
+                attr = {
+                    featureList: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
+                    rowsToShow: model.get("numberOfAttributesToShow"),
+                    layerSelection: model.getLayerSelection(this.model.get("groupedFeatureList"))
+                };
+
+            this.$el.html(this.template(attr));
         },
 
         /**

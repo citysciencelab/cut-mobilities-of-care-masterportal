@@ -6,32 +6,46 @@
             <h4 class="modal-title">Vergleichsliste</h4>
         </div>
         <div class="modal-body">
-            <table class="table table-hover table-responsive">
-                <tbody>
-                    <% featureList.forEach(function (obj, index) {
-                        if (index < rowsToShow) { %>
-                            <tr>
-                        <% }
-                        else { %>
-                            <tr class="toggle-row">
-                        <% } %>
-                            <% Object.keys(obj).forEach(function (key, index) { %>
-                                <td class="<%= key %>">
-                                    <% if (_.isArray(obj[key])) {
-                                        obj[key].forEach(function (value) {
-                                            print (value); %>
-                                            <br>
-                                        <% });
-                                    }
-                                    else {
-                                        print (obj[key]);
-                                    } %>
-                                </td>
-                            <% }); %>
-                        </tr>
-                    <% }); %>
-                </tbody>
-            </table>
+            <% if (layerSelection.length > 1) { %>
+            <div class="modal-sub-header row">
+                <label class="col-xs-3">Themen Auswahl</label>
+                <div class="col-xs-4">
+                    <select class="form-control">
+                        <% layerSelection.forEach(function (layer) { %>
+                            <option value="<%= layer.id %>"><%= layer.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+            </div>
+            <% } %>
+            <div class="row">
+                <table class="table table-hover table-responsive">
+                    <tbody>
+                        <% featureList.forEach(function (obj, index) {
+                            if (index < rowsToShow) { %>
+                                <tr>
+                            <% }
+                            else { %>
+                                <tr class="toggle-row">
+                            <% } %>
+                                <% Object.keys(obj).forEach(function (key, index) { %>
+                                    <td class="<%= key %>">
+                                        <% if (_.isArray(obj[key])) {
+                                            obj[key].forEach(function (value) {
+                                                print (value); %>
+                                                <br>
+                                            <% });
+                                        }
+                                        else {
+                                            print (obj[key]);
+                                        } %>
+                                    </td>
+                                <% }); %>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary btn-infos">mehr Infos</button>

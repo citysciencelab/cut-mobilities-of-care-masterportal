@@ -1,27 +1,32 @@
 .compare-feature-modal {
     /*
-        bootstrap default is 1050
+        bootstrap modal default is 1050, bootstrap tooltip default is 1070
         so that it is above others, for example gfi
     */
-    z-index: 1060;
+    z-index: 1080;
     font-size: 14px;
 }
+
+.compare-feature-modal label {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    padding-top: 7px;
+}
+
 .compare-feature-modal .modal-title {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
 }
 
 .compare-feature-modal .modal-lg .modal-body {
     overflow: auto;
-    padding-left: 0;
-    padding-right: 0;
+}
+
+.compare-feature-modal .modal-sub-header {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
 }
 
 .compare-feature-modal .modal-lg .modal-footer {
     text-align: center;
-}
-
-.compare-feature-modal h4 {
-    line-height: 1.4;
 }
 
 .compare-feature-modal .toggle-row {

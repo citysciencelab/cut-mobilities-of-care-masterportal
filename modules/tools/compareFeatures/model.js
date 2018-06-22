@@ -134,6 +134,17 @@ define(function () {
             return true;
         },
 
+        getLayerSelection: function (groupedFeatureList) {
+            var selectionList = [];
+
+            Object.keys(groupedFeatureList).forEach(function (key) {
+                selectionList.push({
+                    id: key,
+                    name: groupedFeatureList[key][0].get("layerName")
+                });
+            });
+            return selectionList;
+        },
         /**
          * parses attribute values with pipe-sign ("|") and replace it with an array of single values
          * @param {ol.feature} feature - feature of the attributes
