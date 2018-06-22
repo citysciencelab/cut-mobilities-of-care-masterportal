@@ -76,12 +76,11 @@ define(function () {
          * prepares the list for rendering using the 'gfiAttributes'
          * creates a JSON where an object matches to a row
          * one object attribute is created for each feature (column)
+         * @param {object} gfiAttributes -
          * @returns {object[]} list - one object per row
          */
-        getFeatureListToShow: function () {
+        prepareFeatureListToShow: function (gfiAttributes) {
             var list = [],
-                layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
-                gfiAttributes = layerModel.get("gfiAttributes"),
                 featureList = this.get("groupedFeatureList")[this.get("layerId")];
 
             Object.keys(gfiAttributes).forEach(function (key) {

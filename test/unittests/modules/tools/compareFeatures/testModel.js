@@ -3,34 +3,42 @@ define(function (require) {
         Util = require("util"),
         Model = require("../../../../../../modules/tools/compareFeatures/model.js");
 
-    describe("filter/query/source/wfs", function () {
+    describe("tools/compareFeatures", function () {
         var model,
             utilModel,
+            gfiAttributes,
             testFeatures;
 
         before(function () {
-            model = new Model();
+            model = new Model({layerId: "1711"});
             utilModel = new Util();
-            testFeatures = utilModel.createTestFeatures("resources/testFeatures.xml");
+            testFeatures = utilModel.createTestFeatures("resources/testFeaturesSchulen.xml");
             testFeatures.forEach(function (feature) {
                 feature.set("layerId", "1711");
                 feature.set("layerName", "Krankenhäuser");
                 feature.setId(_.uniqueId());
             });
-            testFeatures[10].set("layerId", "1234");
-            testFeatures[11].set("layerId", "1234");
+            testFeatures[4].set("layerId", "1234");
+            testFeatures[5].set("layerId", "1234");
+            gfiAttributes = {
+                "abschluss": "Abschluss",
+                "adresse_ort": "Ort",
+                "adresse_strasse_hausnr": "Straße",
+                "anzahl_schueler": "Schülerzahl",
+                "bezirk" : "Bezirk"
+            };
         });
 
         describe("isFeatureListFull", function () {
             it("should return false if there is only one feature per layer in the list", function () {
                 model.addFeatureToList(testFeatures[0]);
-                expect(model.isFeatureListFull(testFeatures[0].get("layerId"), model.get("groupedFeatureList"), model.get("maxFeatures"))).to.be.false;
+                expect(model.isFeatureListFull(testFeatures[0].get("layerId"), model.get("groupedFeatureList"), model.get("numberOfFeaturesToShow"))).to.be.false;
             });
             it("should return true if there are already three features per layer in the list", function () {
                 model.addFeatureToList(testFeatures[1]);
                 model.addFeatureToList(testFeatures[2]);
-                model.addFeatureToList(testFeatures[10]);
-                expect(model.isFeatureListFull(testFeatures[3].get("layerId"), model.get("groupedFeatureList"), model.get("maxFeatures"))).to.be.true;
+                model.addFeatureToList(testFeatures[4]);
+                expect(model.isFeatureListFull(testFeatures[3].get("layerId"), model.get("groupedFeatureList"), model.get("numberOfFeaturesToShow"))).to.be.true;
             });
         });
 
@@ -61,11 +69,11 @@ define(function (require) {
 
         describe("removeFeatureFromList", function () {
             it("should expect a feature list of three features", function () {
-                model.removeFeatureFromList(testFeatures[1]);
+                model.removeFeatureFromList(testFeatures[4]);
                 expect(model.get("featureList")).to.have.lengthOf(3);
             });
             it("should expect a feature list of three features", function () {
-                model.removeFeatureFromList(testFeatures[8]);
+                model.removeFeatureFromList(testFeatures[4]);
                 expect(model.get("featureList")).to.have.lengthOf(3);
             });
             it("should expect a feature list of two features", function () {
@@ -80,8 +88,24 @@ define(function (require) {
                 expect(model.get("featureList")).to.have.lengthOf(3);
             });
             it("should expect a feature list of three features", function () {
-                model.addFeatureToList(testFeatures[11]);
+                model.addFeatureToList(testFeatures[5]);
                 expect(model.get("featureList")).to.have.lengthOf(4);
+            });
+        });
+
+        describe("beautifyAttributeValues", function () {
+            it("expects an array with four value for the attribute 'kernzeitbetreuung'", function () {
+                model.beautifyAttributeValues(testFeatures[3]);
+                expect(testFeatures[3].get("kernzeitbetreuung")).to.be.an("array").to.have.lengthOf(4);
+            });
+        });
+
+        describe("prepareFeatureListToShow", function () {
+            it("expects an array with a length of five", function () {
+                expect(model.prepareFeatureListToShow(gfiAttributes)).to.be.an("array").to.have.lengthOf(5);
+            });
+            it("expects an object with the attribute keys 'col-1' and 'col-2'", function () {
+                expect(model.prepareFeatureListToShow(gfiAttributes)[1]).to.have.all.key("col-1", "col-2");
             });
         });
     });

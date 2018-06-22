@@ -36,12 +36,16 @@ define(function (require) {
          * @returns {void}
          */
         render: function (model, value) {
+            var layerModel;
+
             if (value) {
                 if (model.get("featureList").length === 0) {
                     this.$el.html(this.templateNoFeatures());
                 }
                 else {
-                    this.$el.html(this.template({featureList: model.getFeatureListToShow(), rowsToShow: model.get("numberOfAttributesToShow")}));
+                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: model.get("layerId")});
+
+                    this.$el.html(this.template({featureList: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")), rowsToShow: model.get("numberOfAttributesToShow")}));
                 }
                 this.$el.modal("show");
             }
