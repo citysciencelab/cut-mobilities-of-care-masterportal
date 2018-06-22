@@ -1,3 +1,11 @@
+.compare-feature-modal {
+    /*
+        bootstrap default is 1050
+        so that it is above others, for example gfi
+    */
+    z-index: 1060;
+    font-size: 14px;
+}
 .compare-feature-modal .modal-title {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
 }
@@ -41,7 +49,6 @@
 
 .compare-feature-modal .col-1 {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    font-size: 14px;
 }
 
 .compare-feature-modal td, .compare-feature-modal thead th {
