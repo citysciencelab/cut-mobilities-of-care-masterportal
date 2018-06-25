@@ -13,10 +13,10 @@ define(function (require) {
             model = new Model({layerId: "1711"});
             utilModel = new Util();
             testFeatures = utilModel.createTestFeatures("resources/testFeaturesSchulen.xml");
-            testFeatures.forEach(function (feature) {
+            testFeatures.forEach(function (feature, index) {
                 feature.set("layerId", "1711");
                 feature.set("layerName", "Krankenhäuser");
-                feature.setId(_.uniqueId());
+                feature.setId("id_" + index);
             });
             testFeatures[4].set("layerId", "1234");
             testFeatures[5].set("layerId", "1234");
@@ -25,7 +25,7 @@ define(function (require) {
                 "adresse_ort": "Ort",
                 "adresse_strasse_hausnr": "Straße",
                 "anzahl_schueler": "Schülerzahl",
-                "bezirk" : "Bezirk"
+                "bezirk": "Bezirk"
             };
         });
 
@@ -84,11 +84,11 @@ define(function (require) {
 
         describe("addFeatureToList", function () {
             it("should expect a feature list of two features", function () {
-                model.addFeatureToList(testFeatures[1]);
+                model.addFeatureToList(testFeatures[2]);
                 expect(model.get("featureList")).to.have.lengthOf(3);
             });
             it("should expect a feature list of three features", function () {
-                model.addFeatureToList(testFeatures[5]);
+                model.addFeatureToList(testFeatures[4]);
                 expect(model.get("featureList")).to.have.lengthOf(4);
             });
         });
@@ -106,6 +106,30 @@ define(function (require) {
             });
             it("expects an object with the attribute keys 'col-1' and 'col-2'", function () {
                 expect(model.prepareFeatureListToShow(gfiAttributes)[1]).to.have.all.key("col-1", "col-2");
+            });
+        });
+
+        describe("getLayerSelection", function () {
+            it("expects an array with a length of two", function () {
+                expect(model.getLayerSelection(model.get("groupedFeatureList"))).to.be.an("array").to.have.lengthOf(2);
+            });
+            it("expects an object with the keys 'id' and 'name'", function () {
+                expect(model.getLayerSelection(model.get("groupedFeatureList"))[0]).to.have.deep.keys("id", "name");
+            });
+        });
+
+        describe("getFeatureIds", function () {
+            it("expects an array with a length of three for the layer with the id '1711", function () {
+                expect(model.getFeatureIds(model.get("groupedFeatureList"), "1711")).to.be.an("array").to.have.lengthOf(3);
+            });
+            it("expects an array with a length of one for the layer with the id '1234", function () {
+                expect(model.getFeatureIds(model.get("groupedFeatureList"), "1234")).to.be.an("array").to.have.lengthOf(1);
+            });
+            it("expects an array with the values 'id_0', 'id_1', 'id_2' for the layer with the id '1711'", function () {
+                expect(model.getFeatureIds(model.get("groupedFeatureList"), "1711")).to.have.members(["id_0", "id_1", "id_2"]);
+            });
+            it("expects an array with the values 'id_4' for the layer with the id '1234'", function () {
+                expect(model.getFeatureIds(model.get("groupedFeatureList"), "1234")).to.have.members(["id_4"]);
             });
         });
     });
