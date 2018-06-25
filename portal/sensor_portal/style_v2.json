@@ -1,5 +1,27 @@
 [
   {
+    "layerId" : "999989",
+    "class": "POINT",
+    "subClass" : "ADVANCED",
+    "scaling" : "INTERVAL",
+    "scalingShape" : "CIRCLE_BAR"
+  },
+  {
+    "layerId" : "999990",
+    "class": "POINT",
+    "subClass" : "ADVANCED",
+    "scaling" : "NOMINAL",
+    "scalingShape" : "CIRCLESEGMENTS"
+  },
+  {
+    "layerId" : "1711",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "clusterImageName": "krankenhaus.png",
+    "imageName" : "krankenhaus.png",
+    "imageScale" : "0.7"
+  },
+  {
     "layerId" : "999991",
     "class": "POINT",
     "subClass" : "CIRCLE",

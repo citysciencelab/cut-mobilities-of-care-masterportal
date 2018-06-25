@@ -511,8 +511,8 @@ define(function (require) {
 
         /**
          * create advanced style for pointFeatures
-         * @param  {ol.Feature} feature
-         * @param  {boolean} isClustered
+         * @param  {ol.Feature} feature - feature to be draw
+         * @param  {boolean} isClustered - Value includes whether features should be clustered
          * @return {ol.Style} style
          */
         createAdvancedPointStyle: function (feature, isClustered) {
@@ -549,7 +549,7 @@ define(function (require) {
 
         /**
          * create nominal scaled advanced style for pointFeatures
-         * @param  {ol.Feature} feature
+         * @param  {ol.Feature} feature - feature to be draw
          * @return {ol.Style} style
          */
         createNominalAdvancedPointStyle: function (feature) {
@@ -562,9 +562,8 @@ define(function (require) {
 
             if (styleScalingShape === "CIRCLESEGMENTS") {
                 svgPath = this.createNominalCircleSegments(feature);
+                style = this.createSVGStyle(svgPath);
             }
-
-            style = this.createSVGStyle(svgPath);
 
             // create style from svg and image
             if (imageName !== imageNameDefault) {
@@ -577,7 +576,7 @@ define(function (require) {
 
         /**
          * create interval scaled advanced style for pointFeatures
-         * @param  {ol.Feature} feature
+         * @param  {ol.Feature} feature - feature to be draw
          * @return {ol.Style} style
          */
         createIntervalAdvancedPointStyle: function (feature) {
@@ -597,7 +596,7 @@ define(function (require) {
 
         /**
          * create Style for SVG
-         * @param  {String} svgPath
+         * @param  {String} svgPath - contains the params to be draw
          * @return {ol.Style} style
          */
         createSVGStyle: function (svgPath) {
@@ -758,7 +757,7 @@ define(function (require) {
 
         /**
          * create a svg with colored circle segments by nominal scaling
-         * @param  {ol.Feature} feature
+         * @param  {ol.Feature} feature - feature to be draw
          * @return {String} svg with colored circle segments
          */
         createNominalCircleSegments: function (feature) {
@@ -769,21 +768,24 @@ define(function (require) {
                 circleSegmentsBackgroundColor = this.returnColor(this.get("circleSegmentsBackgroundColor"), "hex"),
                 scalingValueDefaultColor = this.returnColor(this.get("scalingValueDefaultColor"), "hex"),
                 scalingValues = this.get("scalingValues"),
-                scalingObject = this.fillScalingAttributes(feature),
+                scalingAttributesAsObject = this.getScalingAttributesAsObject(scalingValues),
+                scalingAttribute = feature.get(this.get("scalingAttribute")),
+                scalingObject = this.fillScalingAttributes(scalingAttributesAsObject, scalingAttribute),
                 totalSegments = _.reduce(_.values(scalingObject), function (memo, num) {
                     return memo + num;
                 }, 0),
-                degreeSegment = 360 / totalSegments,
+                degreeSegment = totalSegments >= 0 ? 360 / totalSegments : 360,
                 startAngelDegree = 0,
                 endAngelDegree = degreeSegment,
                 svg,
                 d,
                 strokeColor,
-                i;
+                i,
+                gap = this.get("circleSegmentsGap");
 
             // calculate size
             if (((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2) >= size) {
-                size = size + ((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2);
+                size = size + (circleSegmentsRadius + circleSegmentsStrokeWidth) * 2;
             }
 
             // is required for the display in the Internet Explorer,
@@ -802,7 +804,8 @@ define(function (require) {
 
                 // create segments
                 for (i = 0; i < value; i++) {
-                    d = this.calculateCircleSegment(startAngelDegree, endAngelDegree, circleSegmentsRadius, size);
+
+                    d = this.calculateCircleSegment(startAngelDegree, endAngelDegree, circleSegmentsRadius, size, gap);
 
                     svg = this.extendsSvgNominalCircleSegments(svg, circleSegmentsStrokeWidth, strokeColor, d);
 
@@ -819,15 +822,20 @@ define(function (require) {
 
         /**
          * fills the object with values
-         * @param {ol.feature} feature
+         * @param {object} scalingAttributesAsObject - object with possible attributes as keys and values = 0
+         * @param {string} scalingAttribute - actual states from feature
          * @return {Object} scalingObject - contains the states
          */
-        fillScalingAttributes: function (feature) {
-            var scalingObject = this.getScalingAttributesAsObject(),
-                states = feature.get(this.get("scalingAttribute"));
+        fillScalingAttributes: function (scalingAttributesAsObject, scalingAttribute) {
+            var scalingObject = _.isUndefined(scalingAttributesAsObject) || _.isEmpty(scalingAttributesAsObject)
+                    ? {empty: 0} : scalingAttributesAsObject,
+                states = scalingAttribute;
 
             if (_.contains(states, "|")) {
                 states = states.split(" | ");
+            }
+            else if (_.isUndefined(states)) {
+                states = undefined;
             }
             else {
                 states = [states];
@@ -847,12 +855,11 @@ define(function (require) {
 
         /**
          * convert scalingAttributes to object
-         * to fo object
+         * @param {object} scalingValues - contains attribute with color
          * @return {object} scalingAttribute with value 0
          */
-        getScalingAttributesAsObject: function () {
-            var obj = {},
-                scalingValues = this.get("scalingValues");
+        getScalingAttributesAsObject: function (scalingValues) {
+            var obj = {};
 
             if (!_.isUndefined(scalingValues)) {
                 _.each(scalingValues, function (key, value) {
@@ -868,20 +875,21 @@ define(function (require) {
         /**
          * create SVG for nominalscaled circle segments
          * @param  {number} size - size of the section to be drawn
-         * @param  {number} circleSegmentsRadius
-         * @param  {String} circleSegmentsBackgroundColor
-         * @param  {number} circleSegmentsStrokeWidth
-         * @param  {String} circleSegmentsFillOpacity
+         * @param  {number} circleSegmentsRadius - radius from circlesegment
+         * @param  {String} circleSegmentsBackgroundColor - backgroundcolor from circlesegment
+         * @param  {number} circleSegmentsStrokeWidth - strokewidth from circlesegment
+         * @param  {String} circleSegmentsFillOpacity - opacity from circlesegment
          * @return {String} svg
          */
         createSvgNominalCircleSegments: function (size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity) {
-            var svg = "<svg width='" + size + "'" +
+            var halfSize = size / 2,
+                svg = "<svg width='" + size + "'" +
                     " height='" + size + "'" +
                     " xmlns='http://www.w3.org/2000/svg'" +
                     " xmlns:xlink='http://www.w3.org/1999/xlink'>";
 
-            svg = svg + "<circle cx='" + (size / 2) + "'" +
-                " cy='" + (size / 2) + "'" +
+            svg = svg + "<circle cx='" + halfSize + "'" +
+                " cy='" + halfSize + "'" +
                 " r='" + circleSegmentsRadius + "'" +
                 " stroke='" + circleSegmentsBackgroundColor + "'" +
                 " stroke-width='" + circleSegmentsStrokeWidth + "'" +
@@ -894,33 +902,31 @@ define(function (require) {
         /**
          * extends the SVG with given tags
          * @param  {String} svg - String with svg tags
-         * @param  {number} circleSegmentsStrokeWidth
-         * @param  {String} strokeColor
+         * @param  {number} circleSegmentsStrokeWidth strokewidth from circlesegment
+         * @param  {String} strokeColor - strokecolor from circlesegment
          * @param  {String} d - circle segment
          * @return {String} extended svg
          */
         extendsSvgNominalCircleSegments: function (svg, circleSegmentsStrokeWidth, strokeColor, d) {
-            svg = svg + "<path" +
+            return svg + "<path" +
                 " fill='none'" +
                 " stroke-width='" + circleSegmentsStrokeWidth + "'" +
                 " stroke='" + strokeColor + "'" +
                 " d='" + d + "'/>";
-
-            return svg;
         },
 
         /**
          * create circle segments
          * @param  {number} startAngelDegree - start with circle segment
          * @param  {number} endAngelDegree - finish with circle segment
-         * @param  {number} circleRadius
+         * @param  {number} circleRadius - radius from circle
          * @param  {number} size - size of the window to be draw
+         * @param  {number} gap - gap between segments
          * @return {String} all circle segments
          */
-        calculateCircleSegment: function (startAngelDegree, endAngelDegree, circleRadius, size) {
+        calculateCircleSegment: function (startAngelDegree, endAngelDegree, circleRadius, size, gap) {
             var rad = Math.PI / 180,
                 xy = size / 2,
-                gap = this.get("circleSegmentsGap"),
                 isCircle = startAngelDegree === 0 && endAngelDegree === 360,
                 startAngleRad,
                 endAngleRad,
@@ -928,22 +934,24 @@ define(function (require) {
                 yStart,
                 xEnd,
                 yEnd,
-                d;
+                d,
+                endAngelDegreeActual = endAngelDegree,
+                gapActual = gap;
 
             if (isCircle) {
-                endAngelDegree = endAngelDegree / 2;
-                gap = 0;
+                endAngelDegreeActual = endAngelDegreeActual / 2;
+                gapActual = 0;
             }
 
             // convert angle from degree to radiant
-            startAngleRad = (startAngelDegree + gap / 2) * rad;
-            endAngleRad = (endAngelDegree - gap / 2) * rad;
+            startAngleRad = (startAngelDegree + gapActual / 2) * rad;
+            endAngleRad = (endAngelDegreeActual - gapActual / 2) * rad;
 
-            xStart = xy + (Math.cos(startAngleRad) * circleRadius);
-            yStart = xy - (Math.sin(startAngleRad) * circleRadius);
+            xStart = xy + Math.cos(startAngleRad) * circleRadius;
+            yStart = xy - Math.sin(startAngleRad) * circleRadius;
 
-            xEnd = xy + (Math.cos(endAngleRad) * circleRadius);
-            yEnd = xy - (Math.sin(endAngleRad) * circleRadius);
+            xEnd = xy + Math.cos(endAngleRad) * circleRadius;
+            yEnd = xy - Math.sin(endAngleRad) * circleRadius;
 
             if (isCircle) {
                 d = [
@@ -997,16 +1005,17 @@ define(function (require) {
 
         /**
          * calculate size for intervalscaled circle bar
-         * @param  {number} stateValue
-         * @param  {number} circleBarScalingFactor
-         * @param  {number} circleBarLineStroke
+         * @param  {number} stateValue - value from feature
+         * @param  {number} circleBarScalingFactor - factor is multiplied by the stateValue
+         * @param  {number} circleBarLineStroke - stroke from bar
+         * @param  {number} circleBarRadius - radius from point
          * @return {number} size - size of the section to be drawn
          */
         calculateSizeIntervalCircleBar: function (stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius) {
             var size = circleBarRadius * 2;
 
-            if (((stateValue * circleBarScalingFactor) + circleBarLineStroke) >= size) {
-                size = size + ((stateValue * circleBarScalingFactor) + circleBarLineStroke);
+            if ((stateValue * circleBarScalingFactor + circleBarLineStroke) >= size) {
+                size = size + stateValue * circleBarScalingFactor + circleBarLineStroke;
             }
 
             return size;
@@ -1015,21 +1024,21 @@ define(function (require) {
         /**
          * calculate the length for the bar
          * @param  {number} size - size of the section to be drawn
-         * @param  {number} circleBarRadius
-         * @param  {number} stateValue
-         * @param  {number} circleBarScalingFactor
+         * @param  {number} circleBarRadius - radius from point
+         * @param  {number} stateValue - value from feature
+         * @param  {number} circleBarScalingFactor - factor is multiplied by the stateValue
          * @return {number} barLength
          */
         calculateLengthIntervalCircleBar: function (size, circleBarRadius, stateValue, circleBarScalingFactor) {
             var barLength;
 
             if (stateValue >= 0) {
-                barLength = (size / 2 - circleBarRadius - stateValue * circleBarScalingFactor);
+                barLength = size / 2 - circleBarRadius - stateValue * circleBarScalingFactor;
             }
             else if (stateValue < 0) {
-                barLength = (size / 2 + circleBarRadius - stateValue * circleBarScalingFactor);
+                barLength = size / 2 + circleBarRadius - stateValue * circleBarScalingFactor;
             }
-            else if (_.isNaN(stateValue) || stateValue === "NaN") {
+            else {
                 barLength = 0;
             }
 
@@ -1039,27 +1048,29 @@ define(function (require) {
         /**
          * create SVG for intervalscaled circle bars
          * @param  {number} size - size of the section to be drawn
-         * @param  {number} barLength
-         * @param  {String} circleBarCircleFillColor
-         * @param  {String} circleBarCircleStrokeColor
-         * @param  {number} circleBarCircleStrokeWidth
-         * @param  {String} circleBarLineStrokeColor
-         * @param  {number} circleBarLineStroke
-         * @param  {number} circleBarRadius
+         * @param  {number} barLength - length from bar
+         * @param  {String} circleBarCircleFillColor - fill color from circle
+         * @param  {String} circleBarCircleStrokeColor - stroke color from circle
+         * @param  {number} circleBarCircleStrokeWidth - stroke width from circle
+         * @param  {String} circleBarLineStrokeColor - stroke color from bar
+         * @param  {number} circleBarLineStroke - stroke from bar
+         * @param  {number} circleBarRadius - radius from point
          * @return {String} svg
          */
         createSvgIntervalCircleBar: function (size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius) {
             var svg = "<svg width='" + size + "'" +
                     " height='" + size + "'" +
                     " xmlns='http://www.w3.org/2000/svg'" +
-                    " xmlns:xlink='http://www.w3.org/1999/xlink'>",
+                    " xmlns:xlink='http://www.w3.org/1999/xlink'>";
+
                 // draw bar
                 svg = svg + "<line x1='" + (size / 2) + "'" +
                     " y1='" + (size / 2) + "'" +
                     " x2='" + (size / 2) + "'" +
                     " y2='" + barLength + "'" +
                     " stroke='" + circleBarLineStrokeColor + "'" +
-                    " stroke-width='" + circleBarLineStroke + "' />",
+                    " stroke-width='" + circleBarLineStroke + "' />";
+
                 // draw circle
                 svg = svg + "<circle cx='" + (size / 2) + "'" +
                     " cy='" + (size / 2) + "'" +
@@ -1403,7 +1414,7 @@ define(function (require) {
         setClusterText: function (value) {
             this.set("clusterText", value);
         },
-   
+
         // getter for clusterTextAlign
         getClusterTextAlign: function () {
             return this.get("clusterTextAlign");
