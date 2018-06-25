@@ -49,6 +49,7 @@ define(function (require) {
             }
         },
         initialize: function () {
+            this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
             if (this.model.getIsActive()) {
                 this.render();
             }
@@ -71,7 +72,7 @@ define(function (require) {
                 "resetRouteResult": this.resetRouteResult,
                 "togglePrintEnabled": this.togglePrintEnabled
             });
-            this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
+
         },
 
         render: function () {
