@@ -36,20 +36,10 @@ define(function (require) {
             // check wich button is clicked
             // actualIndex: today = 0, yesterday = 1, tomorrow = 6, etc.
             if (buttonId === "left") {
-                if (actualIndex === 6) {
-                    actualIndex = 0;
-                }
-                else {
-                    actualIndex++;
-                }
+                actualIndex = actualIndex === 6 ? 0 : actualIndex + 1;
             }
             else if (buttonId === "right") {
-                if (actualIndex === 0) {
-                    actualIndex = 6;
-                }
-                else {
-                    actualIndex--;
-                }
+                actualIndex = actualIndex === 0 ? 6 : actualIndex - 1;
             }
 
             this.setDiagrammParams(graphTyp, actualIndex);
