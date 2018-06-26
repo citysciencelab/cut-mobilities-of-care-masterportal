@@ -4,6 +4,7 @@ define(function (require) {
         templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
         templateRouteDescription = require("text!modules/tools/schulwegRouting_hh/templateRouteDescription.html"),
         Model = require("modules/tools/schulwegRouting_hh/model"),
+        SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SchulwegRoutingView;
 
     require("bootstrap-toggle");
@@ -38,12 +39,17 @@ define(function (require) {
             "click .close": "closeView",
             // Fires after the select's value (schoolList) has been changed
             "changed.bs.select": "selectSchool",
-            "change .regional-school": "useRegionalSchool",
             "click .delete-route": "resetRoute",
             "click .print-route": "printRoute",
-            "click .description button": "toggleRouteDesc"
+            "click .description button": "toggleRouteDesc",
+            "click #regional-school": function () {
+                this.updateSelectedSchool(this.model.get("regionalSchool").get("schul_id"));
+                this.model.selectSchool(this.model.get("schoolList"), this.model.get("regionalSchool").get("schul_id"));
+                this.model.prepareRequest(this.model.get("startAddress"));
+            }
         },
         initialize: function () {
+            this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
             if (this.model.getIsActive()) {
                 this.render();
             }
@@ -61,19 +67,21 @@ define(function (require) {
                         Radio.trigger("Sidebar", "toggle", false);
                     }
                 },
+                "updateRegionalSchool": this.updateRegionalSchool,
                 "updateSelectedSchool": this.updateSelectedSchool,
                 "resetRouteResult": this.resetRouteResult,
                 "togglePrintEnabled": this.togglePrintEnabled
             });
+
         },
 
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            this.initToogle();
             this.initSelectpicker();
             this.setPresetValues();
+            this.$el.find(".checkbox").append(this.checkBoxHVV.render());
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
@@ -102,13 +110,6 @@ define(function (require) {
                 startStreet = startAddress.street + " " + startAddress.number + startAddress.affix;
                 this.$el.find(".address-search").attr("value", startStreet);
             }
-        },
-        initToogle: function () {
-            this.$el.find("#regional-school").bootstrapToggle({
-                on: "Ja",
-                off: "Nein",
-                size: "small"
-            });
         },
 
         initSelectpicker: function () {
@@ -169,21 +170,12 @@ define(function (require) {
             this.model.selectSchool(this.model.get("schoolList"), evt.target.value);
             this.model.prepareRequest(this.model.get("startAddress"));
         },
-        updateSelectedSchool: function (schoolID) {
-            this.$el.find(".selectpicker").selectpicker("val", schoolID);
+        updateSelectedSchool: function (schoolId) {
+            this.$el.find(".selectpicker").selectpicker("val", schoolId);
         },
-        useRegionalSchool: function (evt) {
-            var useRegionalSchool = evt.target.checked;
 
-            this.model.setUseRegionalSchool(useRegionalSchool);
-            if (useRegionalSchool) {
-                this.model.findRegionalSchool(this.model.get("startAddress"));
-                this.$el.find(".selectpicker").prop("disabled", true);
-            }
-            else {
-                this.$el.find(".selectpicker").prop("disabled", false);
-            }
-            this.$el.find(".selectpicker").selectpicker("refresh");
+        updateRegionalSchool: function (value) {
+            this.$el.find("#regional-school").text(value);
         },
         toggleRouteDesc: function (evt) {
             var oldText = evt.target.innerHTML,
@@ -193,6 +185,9 @@ define(function (require) {
         },
         resetRoute: function () {
             this.model.resetRoute();
+            this.updateSelectedSchool("");
+            this.updateRegionalSchool("");
+            this.$el.find(".address-search").val("");
         },
         resetRouteResult: function () {
             this.$el.find(".route-result").html("");
