@@ -19,7 +19,7 @@ define(function (require) {
         },
         print: function (name, defs, mode) {
             if (mode === "download") {
-                window.pdfMake.createPdf(defs).download(name);
+                window.pdfMake.createPdf(defs).download(name + ".pdf");
             }
         }
     });

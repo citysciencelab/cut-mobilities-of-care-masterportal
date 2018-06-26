@@ -59,9 +59,7 @@ define(function (require) {
             this.listenTo(Radio.channel("WPS"), {
                 "response": this.handleResponse
             });
-            this.listenTo(Radio.channel("Map"), {
-                "screenshotCreated": this.printRoute
-            });
+
             this.listenTo(Radio.channel("Gaz"), {
                 "streetNames": function (streetNameList) {
                     this.startSearch(streetNameList, this.get("addressList"));
@@ -116,16 +114,16 @@ define(function (require) {
                 this.set(key, value);
             }, this);
         },
-        createScreenshot: function () {
-            Radio.trigger("Map", "createScreenshot");
-        },
-        printRoute: function (screenshotMap) {
+
+        printRoute: function () {
             var address = this.get("startAddress"),
                 school = this.get("selectedSchool"),
                 route = this.get("routeResult"),
                 routeDesc = this.get("routeDescription"),
                 date = momentJS(new Date()).format("DD.MM.YYYY"),
                 filename = "Schulweg_zu_" + school.get("schulname"),
+                mapCanvas = document.getElementsByTagName("canvas")[0],
+                screenshotMap = mapCanvas.toDataURL("image/png"),
                 pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc, date);
 
             Radio.trigger("BrowserPrint", "print", filename, pdfDef, "download");

@@ -195,7 +195,7 @@ define(function (require) {
             this.$el.find(".description").html("");
         },
         printRoute: function () {
-            this.model.createScreenshot();
+            this.model.printRoute();
         }
     });
 
