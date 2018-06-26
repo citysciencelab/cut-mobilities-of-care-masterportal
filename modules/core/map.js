@@ -3,8 +3,6 @@ define(function (require) {
     var ol = require("openlayers"),
         MapView = require("modules/core/mapView"),
         $ = require("jquery"),
-        polyfill = require("promise-polyfill"),
-        html2canvas = require("html2canvas"),
         Map;
 
     Map = Backbone.Model.extend({
@@ -42,7 +40,6 @@ define(function (require) {
                 "addOverlay": this.addOverlay,
                 "addInteraction": this.addInteraction,
                 "addControl": this.addControl,
-                "createScreenshot": this.createScreenshot,
                 "removeLayer": this.removeLayer,
                 "removeOverlay": this.removeOverlay,
                 "removeInteraction": this.removeInteraction,
@@ -84,24 +81,6 @@ define(function (require) {
                 this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
             }
             this.stopMouseMoveEvent();
-        },
-        createScreenshot: function () {
-            var screenshot,
-                map = this.getMap();
-
-            map.once("postcompose", function (event) {
-                var mapCanvas = event.context.canvas;
-
-                screenshot = html2canvas(mapCanvas).then(function (canvas) {
-                    var dataURL = canvas.toDataURL("image/png");
-
-                    return dataURL;
-                });
-            });
-            map.renderSync();
-            screenshot.then(function (value) {
-                Radio.trigger("Map", "screenshotCreated", value);
-            });
         },
 
         /**
