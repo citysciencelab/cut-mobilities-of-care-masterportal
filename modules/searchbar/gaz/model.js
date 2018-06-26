@@ -435,6 +435,7 @@ define(function (require) {
          * Setter für houseNumbers
          * @param  {xml} data       Antwort des Dienstes
          * @param  {string} streetname Straßenname
+         * @returns {void}
          */
         setHouseNumbers: function (data, streetname) {
             var hits = $("wfs\\:member,member", data),
