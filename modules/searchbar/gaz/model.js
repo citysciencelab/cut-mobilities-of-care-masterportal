@@ -183,7 +183,12 @@ define(function (require) {
             Radio.trigger("Gaz", "getAdress", data);
         },
 
-        triggerGetStreets: function(data) {
+        /**
+         * Trigger die gefundenen Hausnummern
+         * @param  {xml} data Response
+         * @returns {void}
+         */
+        triggerGetStreets: function (data) {
             this.createHouseNumbers(data);
             Radio.trigger("Gaz", "getStreets", this.getHouseNumbers());
         },
