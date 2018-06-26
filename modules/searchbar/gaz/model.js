@@ -139,8 +139,8 @@ define(function (require) {
         },
         streetsSearch: function (adress) {
             this.setTypeOfRequest("searchHouseNumbers1");
-            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(adress.name), this.getHouseNumbers, false, this.getTypeOfRequest());
-            return this.get("houseNumbers");
+            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(adress.name), this.createHouseNumbers, false, this.getTypeOfRequest());
+            return this.getHouseNumbers();
         },
         /**
         * @description Veränderte Suchabfolge bei initialer Suche, z.B. über Config.initialQuery
@@ -152,13 +152,14 @@ define(function (require) {
                 splitInitString;
 
             this.set("searchString", searchString);
+            // Suche nach Straße, Hausnummer
             if (searchString.search(",") !== -1) {
                 splitInitString = searchString.split(",");
                 this.set("onlyOneStreetName", splitInitString[0]);
                 searchString = searchString.replace(/ /g, "");
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/,/g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.setTypeOfRequest("onlyOneStreetName1");
-                this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.getHouseNumbers, false, this.getTypeOfRequest());
+                this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.handleHouseNumbers, true, this.getTypeOfRequest());
             }
             else {
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
@@ -166,15 +167,14 @@ define(function (require) {
                 this.setTypeOfRequest("onlyOneStreetName2");
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true, this.getTypeOfRequest());
             }
+            // Suche nach Straßenschlüssel
             if (this.get("searchStreetKey") === true) {
                 if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
                     this.setTypeOfRequest("searchStreetKey2");
                     this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true, this.getTypeOfRequest());
                 }
             }
-            $("#searchInput").val(searchString);
-
-            Radio.trigger("Searchbar", "createRecommendedList");
+            $("#searchInput").val(this.get("searchString"));
         },
         /**
         * @description Methode zur Weiterleitung der adressSearch
@@ -213,8 +213,7 @@ define(function (require) {
                 if (hits.length === 1) {
                     this.set("onlyOneStreetName", hitName);
                     this.setTypeOfRequest("searchHouseNumbers1");
-                    this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.getHouseNumbers, false, this.getTypeOfRequest());
-                    this.searchInHouseNumbers();
+                    this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.handleHouseNumbers, true, this.getTypeOfRequest());
                 }
                 else if (hits.length === 0) {
                     this.searchInHouseNumbers();
@@ -224,8 +223,7 @@ define(function (require) {
                         if (value.toLowerCase() === this.get("searchString").toLowerCase()) {
                             this.set("onlyOneStreetName", value);
                             this.setTypeOfRequest("searchHouseNumbers2");
-                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(value), this.getHouseNumbers, false, this.getTypeOfRequest());
-                            this.searchInHouseNumbers();
+                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(value), this.handleHouseNumbers, true, this.getTypeOfRequest());
                         }
                     }, this);
                 }
@@ -268,7 +266,7 @@ define(function (require) {
 
             // Adressuche über Copy/Paste
             if (this.get("pastedHouseNumber") !== undefined) {
-                _.each(this.get("houseNumbers"), function (houseNumber) {
+                _.each(this.getHouseNumbers(), function (houseNumber) {
                     address = houseNumber.name.replace(/ /g, "");
                     number = houseNumber.adress.housenumber + houseNumber.adress.affix;
                     if (number === this.get("pastedHouseNumber")) {
@@ -278,7 +276,7 @@ define(function (require) {
                 this.unset("pastedHouseNumber");
             }
             else {
-                _.each(this.get("houseNumbers"), function (houseNumber) {
+                _.each(this.getHouseNumbers(), function (houseNumber) {
                     address = houseNumber.name.replace(/ /g, "");
 
                     if (address.search(this.get("searchStringRegExp")) !== -1) {
@@ -287,55 +285,17 @@ define(function (require) {
                 }, this);
             }
         },
-        /**
-         * [getHouseNumbers description]
-         * @param  {[type]} data [description]
-         * @returns {void}
-         */
-        getHouseNumbers: function (data) {
-            var hits = $("wfs\\:member,member", data),
-                number,
-                affix,
-                coordinate,
-                position,
-                name,
-                adress = {},
-                obj = {};
 
-            this.set("houseNumbers", []);
-            _.each(hits, function (hit) {
-                position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                number = $(hit).find("dog\\:hausnummer,hausnummer")[0].textContent;
-                if ($(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0] !== undefined) {
-                    affix = $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0].textContent;
-                    name = this.get("onlyOneStreetName") + " " + number + affix;
-                    adress = {
-                        streetname: this.get("onlyOneStreetName"),
-                        housenumber: number,
-                        affix: affix
-                    };
-                }
-                else {
-                    name = this.get("onlyOneStreetName") + " " + number;
-                    adress = {
-                        streetname: this.get("onlyOneStreetName"),
-                        housenumber: number,
-                        affix: ""
-                    };
-                }
-                // "Hitlist-Objekte"
-                obj = {
-                    name: name,
-                    type: "Adresse",
-                    coordinate: coordinate,
-                    glyphicon: "glyphicon-map-marker",
-                    adress: adress,
-                    id: _.uniqueId("Adresse")
-                };
+        handleHouseNumbers: function (data) {
+            this.createHouseNumbers(data);
+            this.searchInHouseNumbers();
+            Radio.trigger("Searchbar", "createRecommendedList");
+        },
 
-                this.get("houseNumbers").push(obj);
-            }, this);
+        createHouseNumbers: function (data) {
+            var streetname = this.get("onlyOneStreetName");
+
+            this.setHouseNumbers(data, streetname);
         },
 
         getParcel: function (data) {
@@ -465,6 +425,63 @@ define(function (require) {
         */
         setTypeOfRequest: function (value) {
             this.set("typeOfRequest", value);
+        },
+
+        // getter for houseNumbers
+        getHouseNumbers: function () {
+            return this.get("houseNumbers");
+        },
+        /**
+         * Setter für houseNumbers
+         * @param  {xml} data       Antwort des Dienstes
+         * @param  {string} streetname Straßenname
+         */
+        setHouseNumbers: function (data, streetname) {
+            var hits = $("wfs\\:member,member", data),
+                number,
+                affix,
+                coordinate,
+                position,
+                name,
+                adress = {},
+                obj = {},
+                houseNumbers = [];
+
+            _.each(hits, function (hit) {
+                position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
+                coordinate = [parseFloat(position[0]), parseFloat(position[1])];
+                number = $(hit).find("dog\\:hausnummer,hausnummer")[0].textContent;
+                if ($(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0] !== undefined) {
+                    affix = $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0].textContent;
+                    name = streetname + " " + number + affix;
+                    adress = {
+                        streetname: streetname,
+                        housenumber: number,
+                        affix: affix
+                    };
+                }
+                else {
+                    name = streetname + " " + number;
+                    adress = {
+                        streetname: streetname,
+                        housenumber: number,
+                        affix: ""
+                    };
+                }
+                // "Hitlist-Objekte"
+                obj = {
+                    name: name,
+                    type: "Adresse",
+                    coordinate: coordinate,
+                    glyphicon: "glyphicon-map-marker",
+                    adress: adress,
+                    id: _.uniqueId("Adresse")
+                };
+
+                houseNumbers.push(obj);
+            }, this);
+
+            this.set("houseNumbers", houseNumbers);
         }
     });
 
