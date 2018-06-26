@@ -1,6 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         FullScreenView;
 
     FullScreenView = Backbone.View.extend({
