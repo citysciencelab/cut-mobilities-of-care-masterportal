@@ -41,11 +41,9 @@ define(function (require) {
             });
 
             this.listenTo(Radio.channel("Gaz"), {
-                "adressSearch": this.adressSearch
-            });
-            Radio.channel("Gaz").reply({
+                "adressSearch": this.adressSearch,
                 "streetsSearch": this.streetsSearch
-            }, this);
+            });
 
             if (gazService && gazService.get("url")) {
                 this.set("gazetteerURL", gazService.get("url"));
@@ -89,12 +87,12 @@ define(function (require) {
                     this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                     this.set("onlyOneStreetName", "");
                     this.setTypeOfRequest("searchStreets");
-                    this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true, this.getTypeOfRequest());
+                    this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, this.getTypeOfRequest());
                 }
                 if (this.get("searchDistricts") === true) {
                     if (!_.isNull(searchString.match(/^[a-z-]+$/i))) {
                         this.setTypeOfRequest("searchDistricts");
-                        this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, true, this.getTypeOfRequest());
+                        this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, this.getTypeOfRequest());
                     }
                 }
                 if (this.get("searchParcels") === true) {
@@ -102,19 +100,19 @@ define(function (require) {
                         gemarkung = searchString.split(/[\s|/]/)[0];
                         flurstuecksnummer = searchString.split(/[\s|/]/)[1];
                         this.setTypeOfRequest("searchParcels1");
-                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true, this.getTypeOfRequest());
+                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, this.getTypeOfRequest());
                     }
                     else if (!_.isNull(searchString.match(/^[0-9]{5,}$/))) {
                         gemarkung = searchString.slice(0, 4);
                         flurstuecksnummer = searchString.slice(4);
                         this.setTypeOfRequest("searchParcels2");
-                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, true, this.getTypeOfRequest());
+                        this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, this.getTypeOfRequest());
                     }
                 }
                 if (this.get("searchStreetKey") === true) {
                     if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
                         this.setTypeOfRequest("searchStreetKey");
-                        this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true, this.getTypeOfRequest());
+                        this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, this.getTypeOfRequest());
                     }
                 }
             }
@@ -130,18 +128,18 @@ define(function (require) {
         adressSearch: function (adress) {
             if (adress.affix && adress.affix !== "") {
                 this.setTypeOfRequest("adress1");
-                this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber) + "&zusatz=" + encodeURIComponent(adress.affix), this.getAdress, false, this.getTypeOfRequest());
+                this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber) + "&zusatz=" + encodeURIComponent(adress.affix), this.triggerGetAdress, this.getTypeOfRequest());
             }
             else {
                 this.setTypeOfRequest("adress2");
-                this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.getAdress, false, this.getTypeOfRequest());
+                this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.triggerGetAdress, this.getTypeOfRequest());
             }
         },
         streetsSearch: function (adress) {
             this.setTypeOfRequest("searchHouseNumbers1");
-            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(adress.name), this.createHouseNumbers, false, this.getTypeOfRequest());
-            return this.getHouseNumbers();
+            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(adress.name), this.triggerGetStreets, this.getTypeOfRequest());
         },
+
         /**
         * @description Veränderte Suchabfolge bei initialer Suche, z.B. über Config.initialQuery
         * @param {string} pattern - Suchstring
@@ -159,19 +157,19 @@ define(function (require) {
                 searchString = searchString.replace(/ /g, "");
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/,/g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.setTypeOfRequest("onlyOneStreetName1");
-                this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.handleHouseNumbers, true, this.getTypeOfRequest());
+                this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(this.get("onlyOneStreetName")), this.handleHouseNumbers, this.getTypeOfRequest());
             }
             else {
                 this.set("searchStringRegExp", new RegExp(searchString.replace(/ /g, ""), "i")); // Erst join dann als regulärer Ausdruck
                 this.set("onlyOneStreetName", "");
                 this.setTypeOfRequest("onlyOneStreetName2");
-                this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, true, this.getTypeOfRequest());
+                this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, this.getTypeOfRequest());
             }
             // Suche nach Straßenschlüssel
             if (this.get("searchStreetKey") === true) {
                 if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
                     this.setTypeOfRequest("searchStreetKey2");
-                    this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, true, this.getTypeOfRequest());
+                    this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, this.getTypeOfRequest());
                 }
             }
             $("#searchInput").val(this.get("searchString"));
@@ -181,8 +179,13 @@ define(function (require) {
         * @param {xml} data - Response
         * @returns {void}
         */
-        getAdress: function (data) {
+        triggerGetAdress: function (data) {
             Radio.trigger("Gaz", "getAdress", data);
+        },
+
+        triggerGetStreets: function(data) {
+            this.createHouseNumbers(data);
+            Radio.trigger("Gaz", "getStreets", this.getHouseNumbers());
         },
         /**
          * [getStreets description]
@@ -213,7 +216,7 @@ define(function (require) {
                 if (hits.length === 1) {
                     this.set("onlyOneStreetName", hitName);
                     this.setTypeOfRequest("searchHouseNumbers1");
-                    this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.handleHouseNumbers, true, this.getTypeOfRequest());
+                    this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(hitName), this.handleHouseNumbers, this.getTypeOfRequest());
                 }
                 else if (hits.length === 0) {
                     this.searchInHouseNumbers();
@@ -223,7 +226,7 @@ define(function (require) {
                         if (value.toLowerCase() === this.get("searchString").toLowerCase()) {
                             this.set("onlyOneStreetName", value);
                             this.setTypeOfRequest("searchHouseNumbers2");
-                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(value), this.handleHouseNumbers, true, this.getTypeOfRequest());
+                            this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(value), this.handleHouseNumbers, this.getTypeOfRequest());
                         }
                     }, this);
                 }
@@ -348,30 +351,27 @@ define(function (require) {
         },
         /**
          * @description Führt einen HTTP-GET-Request aus.
-         *
          * @param {String} data - Data to be sent to the server
          * @param {function} successFunction - A function to be called if the request succeeds
-         * @param {boolean} asyncBool - asynchroner oder synchroner Request
          * @param {String} type - Typ des Requests
          * @returns {void}
          */
-        sendRequest: function (data, successFunction, asyncBool, type) {
+        sendRequest: function (data, successFunction, type) {
             var ajax = this.get("ajaxRequests");
 
             if (ajax[type] !== null && !_.isUndefined(ajax[type])) {
                 ajax[type].abort();
                 this.polishAjax(type);
             }
-            this.ajaxSend(data, successFunction, asyncBool, type);
+            this.ajaxSend(data, successFunction, type);
         },
 
-        ajaxSend: function (data, successFunction, asyncBool, typeRequest) {
+        ajaxSend: function (data, successFunction, typeRequest) {
             this.get("ajaxRequests")[typeRequest] = $.ajax({
                 url: this.get("gazetteerURL"),
                 data: data,
                 dataType: "xml",
                 context: this,
-                async: asyncBool,
                 type: "GET",
                 success: successFunction,
                 timeout: 6000,
