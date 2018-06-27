@@ -1,15 +1,9 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        FreezeToolTemplate = require("text!modules/menu/table/tool/tooltemplate.html"),
+    var FreezeToolTemplate = require("text!modules/menu/table/tool/tooltemplate.html"),
         $ = require("jquery"),
-        Radio = require("backbone.radio"),
         FreezeToolViewMenu;
 
     FreezeToolViewMenu = Backbone.View.extend({
-        collection: {},
-        id: "freeze-view-menu",
-        className: "table-tool",
-        template: _.template(FreezeToolTemplate),
         events: {
             "click .freeze-view-start": "toggleFreezeWindow"
         },
@@ -23,6 +17,10 @@ define(function (require) {
             // bis hier der Listener enabled wird. Muss noch mal generell überarbeitet werden ToDo! Christa Becker 05.06.2018
             this.renderToToolbar();
         },
+        collection: {},
+        id: "freeze-view-menu",
+        className: "table-tool",
+        template: _.template(FreezeToolTemplate),
         renderToToolbar: function () {
             $(this.$el).html(this.template({name: "Ansicht sperren", glyphicon: "icon-lock"}));
             $(this.$el).children().last().addClass("freeze-view-start");
