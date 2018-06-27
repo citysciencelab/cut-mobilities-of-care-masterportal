@@ -1,10 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "jquery"
-], function (Backbone, Radio, $) {
+define(function (require) {
+    var $ = require("jquery"),
+        ControlsView;
 
-    var ControlsView = Backbone.View.extend({
+
+    ControlsView = Backbone.View.extend({
         className: "controls-view",
         initialize: function () {
             var channel = Radio.channel("ControlsView");
@@ -26,6 +25,8 @@ define([
         render: function () {
             $("#map .ol-overlaycontainer-stopevent").append(this.$el);
             this.renderSubViews();
+
+            return this;
         },
 
         renderSubViews: function () {
