@@ -1,5 +1,4 @@
 define(function (require) {
-
     var $ = require("jquery"),
         FullScreenView;
 
@@ -70,7 +69,7 @@ define(function (require) {
                     document.webkitExitFullscreen();
                 }
             }
-            // wenn "window" ein iframe ist --> Weiterleitung auf geoportale-hamburg.de
+            // wenn "window" ein iframe ist --> Weiterleitung URL of the current page
             else {
                 window.open(window.location.href, "_blank");
             }

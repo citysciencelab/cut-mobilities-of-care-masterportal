@@ -1,11 +1,10 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "underscore.string",
-    "config"
-], function (Backbone, Radio, _String, Config) {
+define(function (require) {
 
-    var ParametricURL = Backbone.Model.extend({
+    var $ = require("jquery"),
+        Config = require("config"),
+        ParametricURL;
+
+    ParametricURL = Backbone.Model.extend({
         defaults: {
             layerParams: [],
             isInitOpen: "",
@@ -34,6 +33,45 @@ define([
 
             this.parseURL();
             channel.trigger("ready");
+        },
+
+        /**
+         * Turn strings that can be commonly considered as booleas to real booleans. Such as "true", "false", "1" and "0". This function is case insensitive.
+         * Aus underscore.string
+         * @param  {number|string} value    der zu prüfende Wert
+         * @return {boolean}                Rückgabe eines Boolean
+         */
+        toBoolean: function (value) {
+            var val = typeof value === "string" ? value.toLowerCase() : value;
+
+            switch (val) {
+                case true:
+                case "true":
+                case 1:
+                case "1":
+                case "on":
+                case "yes":
+                    return true;
+                default:
+                    return false;
+            }
+        },
+
+        /**
+         * Parse string to number. Returns NaN if string can't be parsed to number.
+         * Aus underscore.string
+         * @param  {string} num             Text
+         * @param  {[number]} precision   Dezimalstellen
+         * @return {number}                 Zahl
+         */
+        toNumber: function (num, precision) {
+            var factor;
+
+            if (num === null) {
+                return 0;
+            }
+            factor = Math.pow(10, isFinite(precision) ? precision : 0);
+            return Math.round(num * factor) / factor;
         },
 
         setResult: function (value) {
@@ -80,11 +118,11 @@ define([
             }
             else if (visibilityListString.indexOf(",") > -1) {
                 visibilityList = _.map(visibilityListString.split(","), function (val) {
-                    return _String.toBoolean(val);
-                });
+                    return this.toBoolean(val);
+                }, this);
             }
             else {
-                visibilityList = new Array(_String.toBoolean(visibilityListString));
+                visibilityList = new Array(this.toBoolean(visibilityListString));
             }
 
             // Tranzparenzwert auslesen. Wenn fehlend Null.
@@ -95,8 +133,8 @@ define([
             }
             else if (transparencyListString.indexOf(",") > -1) {
                 transparencyList = _.map(transparencyListString.split(","), function (val) {
-                    return _String.toNumber(val);
-                });
+                    return this.toNumber(val);
+                }, this);
             }
             else {
                 transparencyList = [parseInt(transparencyListString, 0)];
@@ -260,12 +298,12 @@ define([
 
                     result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
                 });
+                this.setResult(result);
             }
             else {
-                result = undefined;
+                this.setResult(undefined);
             }
 
-            this.setResult(result);
             /**
              * Über diesen Parameter wird GeoOnline aus dem Transparenzporal aufgerufen
              * Der entsprechende Datensatz soll angezeigt werden
@@ -358,9 +396,9 @@ define([
 
         /**
          * https://gist.github.com/excalq/2961415
-         * @param  {string} key Name des Parameters
-         * @param  {string} value Wert des Parameters
-         * @return {void}
+         * @param  {string} key   Key
+         * @param  {string} value Value
+         * @returns {void}
          */
         updateQueryStringParam: function (key, value) {
             var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
@@ -371,7 +409,7 @@ define([
 
             // If the "search" string exists, then build params from it
             if (urlQueryString) {
-                keyRegex = new RegExp("([?&])" + key + "[^&]*");
+                keyRegex = new RegExp("([&])" + key + "[^&]*");
 
                 // If param exists already, update it
                 if (urlQueryString.match(keyRegex) !== null) {

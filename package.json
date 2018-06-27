@@ -1,6 +1,6 @@
 {
   "name": "LGV-Master",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "LGV Master",
   "license": "MIT",
   "repository": {
@@ -26,9 +26,8 @@
     "proj4": "2.x",
     "requirejs": "2.x",
     "requirejs-text": "2.x",
-    "underscore": "^1.9.1",
-    "underscore.string": "3.3.x",
-    "video.js": "^6.10.1",
+    "underscore": "1.x",
+    "video.js": "6.x",
     "videojs-flash": "^2.1.0"
   },
   "devDependencies": {

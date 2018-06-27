@@ -42,7 +42,6 @@ require.config({
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
         text: "../node_modules/requirejs-text/text",
         underscore: "../node_modules/underscore/underscore-min",
-        "underscore.string": "../node_modules/underscore.string/dist/underscore.string.min",
         videojs: "../node_modules/video.js/dist/video.min",
         videojsflash: "../node_modules/videojs-flash/dist/videojs-flash.min"
     },
