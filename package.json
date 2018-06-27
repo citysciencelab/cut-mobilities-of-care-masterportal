@@ -27,7 +27,6 @@
     "requirejs": "2.x",
     "requirejs-text": "2.x",
     "underscore": "1.x",
-    "underscore.string": "3.3.x",
     "video.js": "6.x",
     "videojs-flash": "^2.1.0"
   },
