@@ -1,8 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         Config = require("config"),
         ParametricURL;
 
