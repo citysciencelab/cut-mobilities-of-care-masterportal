@@ -1,12 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/controls/freeze/freezewindowview",
-    "modules/controls/freeze/freezetoolmenuview",
-    "modules/controls/freeze/freezecontrolmenuview"
-], function (Backbone, Radio, FreezeView, FreezeToolMenuView, FreezeControlMenuView) {
+define(function (require) {
+    var FreezeView = require("modules/controls/freeze/freezewindowview"),
+        FreezeToolMenuView = require("modules/controls/freeze/freezetoolmenuview"),
+        FreezeControlMenuView = require("modules/controls/freeze/freezecontrolmenuview"),
+        FreezeModel;
 
-    var FreezeModel = Backbone.Model.extend({
+
+    FreezeModel = Backbone.Model.extend({
 
         defaults: {
 
