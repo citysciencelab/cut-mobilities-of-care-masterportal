@@ -1,13 +1,13 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
+    var DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
         CustomTreeParser = require("modules/core/configLoader/parserCustomTree"),
         Config = require("config"),
         $ = require("jquery"),
         Preparser;
 
     Preparser = Backbone.Model.extend({
+        defaults: {},
         url: function () {
             var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json",
                 addPath,
