@@ -21,20 +21,20 @@ define(function (require) {
             return this;
         },
         showFreezeWin: function () {
-            this.$("div.freeze-view").removeClass("freeze-deactivated");
-            this.$("div.freeze-view").addClass("freeze-activated");
+            $("div.freeze-view").removeClass("freeze-deactivated");
+            $("div.freeze-view").addClass("freeze-activated");
             if ($(".table-nav-main").length === 0) {
-                this.$("p.freeze-view-close").css("left", "30px");
-                this.$("p.freeze-view-close").css("top", "30px");
+                $("p.freeze-view-close").css("left", "30px");
+                $("p.freeze-view-close").css("top", "30px");
             }
             else {
-                this.$("p.freeze-view-close").css("left", $(".table-nav-main").offset().left);
-                this.$("p.freeze-view-close").css("top", $(".table-nav-main").offset().top);
+                $("p.freeze-view-close").css("left", $(".table-nav-main").offset().left);
+                $("p.freeze-view-close").css("top", $(".table-nav-main").offset().top);
             }
         },
         hideFreezeWin: function () {
-            this.$("div.freeze-view").removeClass("freeze-activated");
-            this.$("div.freeze-view").addClass("freeze-deactivated");
+            $("div.freeze-view").removeClass("freeze-activated");
+            $("div.freeze-view").addClass("freeze-deactivated");
         }
     });
     return FreezeView;
