@@ -210,7 +210,7 @@
       "url" : "https://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",
-         "expand" : ["Locations", "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"]
+         "expand" : "Locations, Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
       },
       "epsg": "EPSG:4326",
       "utc" : "+1",

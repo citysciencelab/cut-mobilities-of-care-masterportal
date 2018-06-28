@@ -762,8 +762,8 @@ define(function (require) {
          */
         createNominalCircleSegments: function (feature) {
             var size = 10,
-                circleSegmentsRadius = parseInt(this.get("circleSegmentsRadius"), 10),
-                circleSegmentsStrokeWidth = parseInt(this.get("circleSegmentsStrokeWidth"), 10),
+                circleSegmentsRadius = parseFloat(this.get("circleSegmentsRadius"), 10),
+                circleSegmentsStrokeWidth = parseFloat(this.get("circleSegmentsStrokeWidth"), 10),
                 circleSegmentsFillOpacity = _.last(this.get("circleSegmentsBackgroundColor")),
                 circleSegmentsBackgroundColor = this.returnColor(this.get("circleSegmentsBackgroundColor"), "hex"),
                 scalingValueDefaultColor = this.returnColor(this.get("scalingValueDefaultColor"), "hex"),
@@ -781,7 +781,7 @@ define(function (require) {
                 d,
                 strokeColor,
                 i,
-                gap = this.get("circleSegmentsGap");
+                gap = parseFloat(this.get("circleSegmentsGap"), 10);
 
             // calculate size
             if (((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2) >= size) {
@@ -978,8 +978,8 @@ define(function (require) {
         createIntervalCircleBar: function (feature) {
             var stateValue = feature.get(this.get("scalingAttribute")),
                 circleBarScalingFactor = parseFloat(this.get("circleBarScalingFactor")),
-                circleBarRadius = parseInt(this.get("circleBarRadius"), 10),
-                circleBarLineStroke = parseInt(this.get("circleBarLineStroke"), 10),
+                circleBarRadius = parseFloat(this.get("circleBarRadius"), 10),
+                circleBarLineStroke = parseFloat(this.get("circleBarLineStroke"), 10),
                 circleBarCircleFillColor = this.returnColor(this.get("circleBarCircleFillColor"), "hex"),
                 circleBarCircleStrokeColor = this.returnColor(this.get("circleBarCircleStrokeColor"), "hex"),
                 circleBarCircleStrokeWidth = this.get("circleBarCircleStrokeWidth"),
