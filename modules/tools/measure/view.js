@@ -1,10 +1,11 @@
-define([
-    "text!modules/tools/measure/default/template.html",
-    "text!modules/tools/measure/table/template.html",
-    "modules/tools/measure/model"
-], function (DefaultTemplate, TableTemplate, Measure) {
+define(function (require) {
+    var DefaultTemplate = require("text!modules/tools/measure/default/template.html"),
+        TableTemplate = require("text!modules/tools/measure/table/template.html"),
+        Measure = require("modules/tools/measure/model"),
+        $ = require("jquery"),
+        MeasureView;
 
-    var MeasureView = Backbone.View.extend({
+    MeasureView = Backbone.View.extend({
         events: {
             "change select#geomField": "setGeometryType",
             "change select#unitField": "setUnit",
