@@ -66,7 +66,6 @@ define(function (require) {
 
                 this.model.setGfiHeight(this.calculateHeight(gfiSize.height));
                 this.model.setGfiWidth(gfiSize.width);
-                this.model.setIndicatorGfiHeight(this.calculateIndicatorHeight(gfiSize.height));
             }
 
             // delete all graphs an data
@@ -137,12 +136,6 @@ define(function (require) {
                 this.loadDiagramm("outoforder", ".ladesaeulenAusserBetrieb-graph", index);
                 $(".ladesaeulen .buttonDiv").show();
             }
-            else if (contentId === "indikatoren") {
-                // starts calculate indicators
-                this.model.createIndicators(false);
-                this.drawIndicator(".tabIndikator-pane");
-                $(".ladesaeulen .buttonDiv").hide();
-            }
         },
 
         /**
@@ -167,38 +160,6 @@ define(function (require) {
             $(".ladesaeulenVerfuegbar-graph .noData").remove();
             $(".ladesaeulenBelegt-graph .noData").remove();
             $(".ladesaeulenAusserBetrieb-graph .noData").remove();
-            $(".ladesaeulen .indicatorTable").remove();
-        },
-
-        /**
-         * draws different indicators such as the total number of chargings
-         * data is calculated in the model
-         * @param  {String} dataTag - container to draw data
-         * @returns {void}
-         */
-        drawIndicator: function (dataTag) {
-            var tableHead = this.model.get("tableheadIndicatorArray"),
-                properties = this.model.get("indicatorPropertiesObj"),
-                height = this.model.get("indicatorGfiHeight"),
-                width = this.model.get("gfiWidth"),
-                content = "<table width='" + width + "' height='" + height + "' class='table indicatorTable'><thead><tr class='row' height='1'><th>Indikator</th>";
-
-            _.each(tableHead, function (head) {
-                content += "<th>" + head + "</th>";
-            });
-
-            content += "</tr></thead><tbody>";
-
-            _.each(properties, function (value, key) {
-                content += "<tr class='row'><th height='1'>" + key + "</th>";
-                _.each(value, function (val) {
-                    content += "<td>" + val + "</td>";
-                });
-                content += "</tr>";
-            });
-
-            content += "</tbody></table>";
-            $(".ladesaeulen " + dataTag).append(content);
         }
     });
 
