@@ -332,7 +332,7 @@ define(function (require) {
         */
         createSimpleClusterStyle: function () {
             var src = this.getImagePath() + this.getClusterImageName(),
-                isSVG = src.indexOf(".svg") > -1 ? true : false,
+                isSVG = src.indexOf(".svg") > -1,
                 width = this.getClusterImageWidth(),
                 height = this.getClusterImageHeight(),
                 scale = parseFloat(this.getClusterImageScale()),
@@ -391,7 +391,7 @@ define(function (require) {
             }
             else {
                 src = this.getImagePath() + this.getImageName();
-                isSVG = src.indexOf(".svg") > -1 ? true : false;
+                isSVG = src.indexOf(".svg") > -1;
                 width = this.getImageWidth();
                 height = this.getImageHeight();
                 scale = parseFloat(this.getImageScale());
@@ -447,7 +447,7 @@ define(function (require) {
                     return style;
                 }
                 src = !_.isUndefined(styleFieldValueObj && _.has(styleFieldValueObj, "imageName")) ? this.getImagePath() + styleFieldValueObj.imageName : this.getImagePath() + this.getImageName();
-                isSVG = src.indexOf(".svg") > -1 ? true : false;
+                isSVG = src.indexOf(".svg") > -1;
                 width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.getImageWidth();
                 height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.getImageHeight();
                 scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.getImageScale());
