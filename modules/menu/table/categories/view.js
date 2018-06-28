@@ -16,13 +16,15 @@ define(function (require) {
             this.$el.on("show.bs.collapse", function () {
                 Radio.request("TableMenu", "setActiveElement", "Category");
             });
+
+            this.render();
         },
         render: function () {
             this.$el.html(this.template());
             if (Radio.request("TableMenu", "getActiveElement") === "Category") {
                 this.$(".table-nav-cat-panel").collapse("show");
             }
-            return this.$el;
+            return this;
         },
         id: "table-category-list",
         className: "table-category-list table-nav",
