@@ -66,8 +66,6 @@ define(function (require) {
             return new DefaultTheme(attrs, options);
         },
         initialize: function () {
-            var removeModels;
-
             this.listenTo(this, {
                 "reset": function () {
                     this.forEach(function (model) {
@@ -75,6 +73,8 @@ define(function (require) {
                     });
                 },
                 "change:isReady": function () {
+                    var removeModels;
+
                     if (_.contains(this.pluck("isReady"), false) === false) {
                     // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                         // WMS Layer die beim Klickpunkt keine GFIs haben
