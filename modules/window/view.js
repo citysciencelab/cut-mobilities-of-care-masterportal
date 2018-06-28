@@ -1,12 +1,14 @@
-define([
-    "modules/window/model",
-    "text!modules/window/templateMax.html",
-    "text!modules/window/templateMin.html",
-    "text!modules/window/templateTable.html",
-    "jqueryui/widgets/draggable"
-], function (Window, templateMax, templateMin, templateTable) {
+define(function (require) {
+    var Window = require("modules/window/model"),
+        templateMax = require("text!modules/window/templateMax.html"),
+        templateMin = require("text!modules/window/templateMin.html"),
+        templateTable = require("text!modules/window/templateTable.html"),
+        $ = require("jquery"),
+        WindowView;
 
-    var WindowView = Backbone.View.extend({
+    require("jqueryui/widgets/draggable");
+
+    WindowView = Backbone.View.extend({
         events: {
             "click .glyphicon-minus": "minimize",
             "click .header-min > .title": "maximize",
