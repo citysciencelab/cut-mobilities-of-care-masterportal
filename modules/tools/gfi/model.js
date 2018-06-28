@@ -145,13 +145,13 @@ define(function (require) {
             if (this.getIsMobile()) {
                 CurrentView = require("modules/tools/gfi/mobile/view");
             }
+            else if (this.getDesktopViewType() === "attached") {
+                CurrentView = require("modules/tools/gfi/desktop/attached/view");
+            }
+            else if (this.getUiStyle() === "TABLE") {
+                CurrentView = require("modules/tools/gfi/table/view");
+            }
             else {
-                if (this.getDesktopViewType() === "attached") {
-                    CurrentView = require("modules/tools/gfi/desktop/attached/view");
-                }
-                else if (this.getUiStyle() === "TABLE") {
-                    CurrentView = require("modules/tools/gfi/table/view");
-                }
                 CurrentView = require("modules/tools/gfi/desktop/detached/view");
             }
             this.setCurrentView(new CurrentView({model: this}));
