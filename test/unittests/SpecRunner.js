@@ -71,7 +71,11 @@ define(function (require) {
         "modules/tools/getCoord/testModel.js",
         "modules/core/testCRS.js",
         "modules/core/testWPS.js",
+        "modules/core/testUtil.js",
         "modules/alerting/testModel.js",
+        "modules/tools/einwohnerabfrage/testModel.js",
+        "modules/tools/schulwegrouting_hh/testModel.js",
+        "modules/tools/parcelSearch/testModel.js",
         "modules/tools/einwohnerabfrage/testModel.js",
         "modules/tools/parcelSearch/testModel.js",
         "modules/core/configLoader/testParserCustomTree.js",
@@ -81,7 +85,8 @@ define(function (require) {
         "modules/menu/mobile/folder/testView.js",
         "modules/core/testUtil.js",
         "modules/tools/schulwegrouting_hh/testModel.js",
-        "modules/tools/compareFeatures/testModel.js"
+        "modules/tools/compareFeatures/testModel.js",
+        "modules/menu/mobile/folder/testView.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();
