@@ -7,7 +7,7 @@ define(function (require) {
     ParametricURL = Backbone.Model.extend({
         defaults: {
             layerParams: [],
-            isInitOpen: "",
+            isInitOpen: [],
             zoomToGeometry: "",
             style: ""
         },
@@ -29,7 +29,8 @@ define(function (require) {
             }, this);
 
             channel.on({
-                "updateQueryStringParam": this.updateQueryStringParam
+                "updateQueryStringParam": this.updateQueryStringParam,
+                "pushToIsInitOpen": this.pushToIsInitOpen
             }, this);
 
             this.parseURL();
@@ -92,7 +93,33 @@ define(function (require) {
         },
 
         getIsInitOpen: function () {
+            return this.get("isInitOpen")[0];
+        },
+        getIsInitOpenArray: function () {
             return this.get("isInitOpen");
+        },
+        setIsInitOpenArray: function (value) {
+            this.set("isInitOpen", value);
+        },
+        pushToIsInitOpen: function (value) {
+            var isInitOpenArray = this.getIsInitOpenArray(),
+                msg = "";
+
+            isInitOpenArray.push(value);
+            isInitOpenArray = _.uniq(isInitOpenArray);
+
+            if (isInitOpenArray.length > 1) {
+                msg += "Fehlerhafte Kombination von Portalkonfiguration und parametrisiertem Aufruf.<br>";
+                _.each(isInitOpenArray, function (tool, index) {
+                    msg += tool;
+                    if (index < isInitOpenArray.length - 1) {
+                        msg += " und ";
+                    }
+                });
+                msg += " können nicht gleichzeitig geöffnet sein";
+                Radio.trigger("Alert", "alert", msg);
+            }
+            this.setIsInitOpenArray(isInitOpenArray);
         },
 
         getCenter: function () {
@@ -245,10 +272,10 @@ define(function (require) {
             this.set("zoomLevel", value);
         },
         parseIsInitOpen: function (result) {
-            this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
+            this.get("isInitOpen").push(_.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
         parseStartupModul: function (result) {
-            this.set("isInitOpen", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
+            this.get("isInitOpen").push(_.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
         },
         parseQuery: function (result) {
             var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),

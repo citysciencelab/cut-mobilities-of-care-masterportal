@@ -1,14 +1,13 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        WMSLayer = require("modules/core/modelList/layer/wms"),
+    var WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         ModelList;
 
     ModelList = Backbone.Collection.extend({
@@ -84,9 +83,7 @@ define(function (require) {
                     if (attrs.outputFormat === "GeoJSON") {
                         return new GeoJSONLayer(attrs, options);
                     }
-                    else {
-                        return new WFSLayer(attrs, options);
-                    }
+                    return new WFSLayer(attrs, options);
                 }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
@@ -102,7 +99,7 @@ define(function (require) {
                 return new StaticLink(attrs, options);
             }
             else {
-                Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + "attrs.type");
+                Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + attrs.type);
             }
         },
         /**
@@ -124,8 +121,8 @@ define(function (require) {
         */
         setModelsVisibleByParentId: function (parentId) {
             var itemListByParentId = this.where({parentId: parentId}),
-            // Falls es ein LeafFolder ist --> "Alle auswÃ¤hlen" Template
-            selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
+                // Falls es ein LeafFolder ist --> "Alle auswÃ¤hlen" Template
+                selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
 
             _.each(_.union(selectedLeafFolder, itemListByParentId), function (item) {
                 item.setIsVisibleInTree(true);
@@ -156,7 +153,7 @@ define(function (require) {
         */
         setVisibleByParentIsExpanded: function (parentId) {
             var itemListByParentId = this.where({parentId: parentId}),
-            parent = this.findWhere({id: parentId});
+                parent = this.findWhere({id: parentId});
 
             if (!parent.getIsExpanded()) {
                 this.setAllDescendantsInvisible(parentId);
@@ -208,10 +205,10 @@ define(function (require) {
         */
         setIsSelectedOnParent: function (model) {
             var layers = this.where({parentId: model.getParentId()}),
-            folderModel = this.findWhere({id: model.getParentId()}),
-            allLayersSelected = _.every(layers, function (layer) {
-                return layer.getIsSelected() === true;
-            });
+                folderModel = this.findWhere({id: model.getParentId()}),
+                allLayersSelected = _.every(layers, function (layer) {
+                    return layer.getIsSelected() === true;
+                });
 
             if (allLayersSelected === true) {
                 folderModel.setIsSelected(true);
@@ -281,7 +278,7 @@ define(function (require) {
         },
         moveModelDown: function (model) {
             var oldIDX = model.getSelectionIDX(),
-            newIDX = oldIDX - 1;
+                newIDX = oldIDX - 1;
 
             if (oldIDX > 0) {
                 this.removeFromSelectionIDX(model);
@@ -297,7 +294,7 @@ define(function (require) {
         },
         moveModelUp: function (model) {
             var oldIDX = model.getSelectionIDX(),
-            newIDX = oldIDX + 1;
+                newIDX = oldIDX + 1;
 
             if (oldIDX < this.selectionIDX.length - 1) {
                 this.removeFromSelectionIDX(model);
@@ -357,7 +354,7 @@ define(function (require) {
                     layer.isSelected = false;
                 }, this);
 
-                 _.each(paramLayers, function (paramLayer) {
+                _.each(paramLayers, function (paramLayer) {
                     lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
                     if (_.isUndefined(lightModel) === false) {
@@ -468,7 +465,7 @@ define(function (require) {
         */
         addAndExpandModelsRecursive: function (parentId) {
             var lightSiblingsModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
-            parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightSiblingsModels[0].parentId});
+                parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightSiblingsModels[0].parentId});
 
             this.add(lightSiblingsModels);
             // Abbruchbedingung

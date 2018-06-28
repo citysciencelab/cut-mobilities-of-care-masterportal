@@ -1,12 +1,11 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         MapView = require("modules/core/mapView"),
+        $ = require("jquery"),
         Map;
 
-     Map = Backbone.Model.extend({
+    Map = Backbone.Model.extend({
 
         /**
          *
@@ -87,15 +86,14 @@ define(function (require) {
         /**
          * Findet einen Layer über seinen Namen und gibt ihn zurück
          * @param  {string} layerName - Name des Layers
-         * @return {ol.layer}
+         * @return {ol.layer} - found layer
          */
         getLayerByName: function (layerName) {
-            var layers = this.get("map").getLayers().getArray(),
-                layer = _.find(layers, function (layer) {
-                    return layer.get("name") === layerName;
-                });
+            var layers = this.get("map").getLayers().getArray();
 
-            return layer;
+            return _.find(layers, function (layer) {
+                return layer.get("name") === layerName;
+            });
         },
 
         /**
@@ -273,7 +271,7 @@ define(function (require) {
          * Bewegt den Layer auf der Karte an die vorhergesehene Position
          * @param {Array} args - [0] = Layer, [1] = Index
          */
-         addLayerToIndex: function (args) {
+        addLayerToIndex: function (args) {
             var layer = args[0],
                 index = args[1],
                 layersCollection = this.get("map").getLayers();
@@ -386,6 +384,8 @@ define(function (require) {
         createLayerIfNotExists: function (name) {
             var layers = this.getLayers(),
                 found = false,
+                layer,
+                source,
                 resultLayer = {};
 
             _.each(layers.getArray(), function (layer) {
@@ -396,8 +396,8 @@ define(function (require) {
             }, this);
 
             if (!found) {
-                var source = new ol.source.Vector({useSpatialIndex: false}),
-                    layer = new ol.layer.Vector({
+                source = new ol.source.Vector({useSpatialIndex: false});
+                layer = new ol.layer.Vector({
                     name: name,
                     source: source,
                     alwaysOnTop: true

@@ -11,7 +11,8 @@ define(function(require) {
 
         describe("setXMLElement", function () {
             it("should return empty String if input strings are undefined", function () {
-                expect(model.setXMLElement(undefined, undefined, undefined)).to.be.a("string").to.have.a.lengthOf(0);            });
+                expect(model.setXMLElement(undefined, undefined, undefined)).to.be.a("string").to.have.a.lengthOf(0);
+            });
             it("should return String with \"hallo \" prepended to \"world\"", function () {
                 expect(model.setXMLElement("world", "world", "hallo ")).to.have.string("hallo world");
             });
@@ -44,11 +45,11 @@ define(function(require) {
         });
         describe("buildUrl", function () {
             var restModel = new Backbone.Model({
-                    "id": "1001",
-                    "name": "Deegree WPS RZ2 Produktion",
-                    "url": "https://geodienste.hamburg.de/HH_WPS",
-                    "typ": "WPS"
-                });
+                "id": "1001",
+                "name": "Deegree WPS RZ2 Produktion",
+                "url": "https://geodienste.hamburg.de/HH_WPS",
+                "typ": "WPS"
+            });
 
             it("return empty string if inputs are undefined", function () {
                 expect(model.buildUrl(undefined, undefined)).to.be.a("string").to.have.a.lengthOf(0);
@@ -61,17 +62,17 @@ define(function(require) {
                 expect(model.buildUrl("test.fmw", restModel)).to.be.a("string").to.have.string("version=2.0.0");
             });
         });
-        describe("buildObj", function () {
-            it("return undefined if inputs are undefined", function () {
-                expect(model.buildObj(undefined, undefined)).to.be.undefined;
+        describe("parseXmlToObject", function () {
+            it("return empty object if input xml string is undefined", function () {
+                expect(model.parseXmlToObject(undefined)).to.be.undefined;
             });
-            it("return empty object if input xml string is undefined and object is {}", function () {
-                expect(model.buildObj(undefined, {})).to.be.a("object").that.is.empty;
+            it("return empty object if input xml string is empty", function () {
+                expect(model.parseXmlToObject("")).to.be.undefined;
             });
             it("return empty object if input xml string is undefined and object is {}", function () {
                 var xml = "<xml><data1>test</data1><data2>123</data2></wps:Input></xml>";
 
-                expect(model.buildObj(xml, {})).to.deep.equal({data1: "test", data2: "123"});
+                expect(model.parseXmlToObject(xml)).to.deep.equal({data1: "test", data2: "123"});
             });
         });
 

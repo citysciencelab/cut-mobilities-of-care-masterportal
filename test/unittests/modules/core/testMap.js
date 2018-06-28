@@ -11,7 +11,7 @@ define(function(require) {
         before(function () {
             model = new Model();
             utilModel = new Util();
-            features = utilModel.createTestFeatures();
+            features = utilModel.createTestFeatures("resources/testFeatures.xml");
         });
 
         describe("calculateExtent", function () {

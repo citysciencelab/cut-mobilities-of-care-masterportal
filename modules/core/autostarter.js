@@ -40,7 +40,7 @@ define([
 
             _.each(configAutostart, function (modul) {
                 if (_.has(modul, "id")) {
-                   this.get("autostartModuls").push(modul.id.toLowerCase());
+                    this.get("autostartModuls").push(modul.id.toLowerCase());
                 }
             }, this);
             this.set("configAnalysed", true);
@@ -50,7 +50,8 @@ define([
          * wenn die Paramter der URL untersucht wurden, werden die isInitOpen Module in Erfahrung gebracht
          */
         parametersAnalysed: function () {
-            var parametricAutostart = Radio.request("ParametricURL", "getIsInitOpen").toString(),
+            var isInitOpen = Radio.request("ParametricURL", "getIsInitOpen"),
+                parametricAutostart = !_.isUndefined(isInitOpen) ? isInitOpen.toString() : undefined,
                 autostartParameter = parametricAutostart ? parametricAutostart : null,
                 autostartModuls = this.get("autostartModuls");
 

@@ -60,14 +60,18 @@ define(function (require) {
             this.get("overlay").setPosition(value);
         },
 
-        getFeaturesAtPixel: function (evt) {
-            var features = [];
+        getFeaturesAtPixel: function (evt, mouseHoverInfos) {
+            var features = [],
+                layerIds = _.pluck(mouseHoverInfos, "id");
 
             evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-                features.push({
-                    feature: feature,
-                    layer: layer
-                });
+                if (_.contains(layerIds, layer.get("id"))) {
+                    features.push({
+                        feature: feature,
+                        layer: layer
+                    });
+                }
+
             });
             return features;
         },
@@ -129,7 +133,7 @@ define(function (require) {
         checkForFeaturesAtPixel: function (evt) {
             var featuresArray = [],
                 featureArray = [],
-                featuresAtPixel = this.getFeaturesAtPixel(evt);
+                featuresAtPixel = this.getFeaturesAtPixel(evt, this.getMouseHoverInfos());
 
             _.each(featuresAtPixel, function (featureAtPixel) {
                 featureArray = this.fillFeatureArray(featureAtPixel);

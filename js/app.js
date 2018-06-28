@@ -37,6 +37,12 @@ define("app", function (require) {
     new WPS();
     new AddGeoJSON();
 
+    // Funktionalitäten laden
+
+    // Browser Druck Modul
+    require(["modules/functionalities/browserPrint/model"], function (BrowserPrintModel) {
+        new BrowserPrintModel();
+    });
     // Graph laden
     require(["modules/tools/graph/model"], function (GraphModel) {
         new GraphModel();
@@ -132,7 +138,13 @@ define("app", function (require) {
                 }
                 case "filter": {
                     require(["modules/tools/filter/view"], function (FilterView) {
-                        new FilterView({domTarget: sidebarView.$el});
+                        new FilterView();
+                    });
+                    break;
+                }
+                case "schulwegrouting": {
+                    require(["modules/tools/schulwegRouting_hh/view"], function (SchulwegRoutingView) {
+                        new SchulwegRoutingView();
                     });
                     break;
                 }
