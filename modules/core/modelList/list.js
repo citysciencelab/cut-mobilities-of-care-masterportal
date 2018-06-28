@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
