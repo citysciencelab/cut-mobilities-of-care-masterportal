@@ -1,16 +1,11 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        _ = require("underscore"),
-        ListTemplate = require("text!modules/menu/table/layer/templates/template.html"),
+    var ListTemplate = require("text!modules/menu/table/layer/templates/template.html"),
         SingleLayerView = require("modules/menu/table/layer/singleLayerView"),
         $ = require("jquery"),
         LayerView;
 
     LayerView = Backbone.View.extend({
-        id: "table-layer-list",
-        className: "table-layer-list table-nav",
-        template: _.template(ListTemplate),
         initialize: function () {
             this.collection = Radio.request("ModelList", "getCollection");
             this.listenTo(Radio.channel("TableMenu"), {
@@ -34,6 +29,9 @@ define(function (require) {
                 Radio.request("TableMenu", "setActiveElement", "Layer");
             });
         },
+        id: "table-layer-list",
+        className: "table-layer-list table-nav",
+        template: _.template(ListTemplate),
         hideMenu: function () {
             $("#table-nav-layers-panel").collapse("hide");
         },
