@@ -11,9 +11,11 @@
 }
 
 .schulweg-routing .content {
-    /* position: absolute; */
-    /* max-width: 30%; */
     padding-top: 20px;
+}
+
+.schulweg-routing #regional-school {
+    cursor: pointer;
 }
 
 .schulweg-routing .content .form-group {
