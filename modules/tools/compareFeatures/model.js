@@ -176,6 +176,12 @@ define(function () {
                 if (typeof feature.get(key) === "string" && feature.get(key).indexOf("|") !== -1) {
                     feature.set(key, feature.get(key).split("|"));
                 }
+                else if (feature.get(key) === "true") {
+                    feature.set(key, "ja");
+                }
+                else if (feature.get(key) === "false") {
+                    feature.set(key, "nein");
+                }
             });
         },
 
