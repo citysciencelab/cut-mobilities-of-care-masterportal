@@ -4,7 +4,7 @@
    <% } else { %>
         <span class="glyphicon glyphicon-plus-sign"> </span>
    <% } %>
-    <% if(isLeafFolder) { %>
+    <% if(isLeafFolder && isFolderSelectable) { %>
         <% if(isSelected) { %>
             <span class="glyphicon glyphicon-check selectall" title="Alle Layer entfernen"></span>
         <%} else {%>

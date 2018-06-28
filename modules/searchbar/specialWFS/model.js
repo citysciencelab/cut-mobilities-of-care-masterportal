@@ -1,272 +1,313 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/searchbar/model"],
-       function (Backbone, Radio) {
-        "use strict";
-        return Backbone.Model.extend({
-        /**
-        *
-        */
-            defaults: {
-                inUse: false,
-                minChars: 3,
-                bPlans: [],
-                kita: [],
-                stoerfallbetrieb: [],
-                bplanURL: "" // bplan-URL für evtl. requests des mapHandlers
-            },
+define(function (require) {
+
+    var Backbone = require("backbone"),
+        Radio = require("backbone.radio"),
+        $ = require("jquery"),
+        SpecialWFSModel;
+
+    require("modules/searchbar/model");
+
+    SpecialWFSModel = Backbone.Model.extend({
+        defaults: {
+            minChars: 3,
+            glyphicon: "glyphicon-home",
+            wfsMembers: {},
+            timeout: 6000
+        },
+
         /**
          * @description Initialisierung der wfsFeature Suche.
          * @param {Objekt} config - Das Konfigurationsarray für die specialWFS-Suche
          * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+         * @param {integer} [config.timeout=6000] - Timeout der Ajax-Requests im Millisekunden.
          * @param {Object[]} config.definitions - Definitionen der SpecialWFS.
          * @param {Object} config.definitions[].definition - Definition eines SpecialWFS.
          * @param {string} config.definitions[].definition.url - Die URL, des WFS
          * @param {string} config.definitions[].definition.data - Query string des WFS-Request
-         * @param {string} config.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|kita)
+         * @param {string} config.definitions[].definition.name - MetaName der Kategorie für Vorschlagssuche
+         * @param {string} [config.definitions[].definition.glyphicon="glyphicon-home"] - Name des Glyphicon für Vorschlagssuche
+         * @returns {void}
          */
-            initialize: function (config) {
-                if (config.minChars) {
-                    this.set("minChars", config.minChars);
-                }
-                _.each(config.definitions, function (element) {
-                    if (element.name === "bplan") {
-                        this.set("bplanURL", element.url);
-                        this.sendGetRequest(element.url, element.data, this.getFeaturesForBPlan, false);
-                    }
-                else if (element.name === "kita") {
-                    this.sendRequest(element.url, element.data, this.getFeaturesForKita, false);
-                }
-                 else if (element.name === "stoerfallbetrieb") {
-                    this.sendRequest(element.url, element.data, this.getFeaturesForStoerfallbetrieb, false);
-                }
+        initialize: function (config) {
+            if (config.minChars) {
+                this.setMinChars(config.minChars);
+            }
+            if (config.timeout) {
+                this.setTimeout(config.timeout);
+            }
+            // Jede Konfiguration eines SpecialWFS wird abgefragt
+            _.each(config.definitions, function (definition) {
+                this.requestWFS(definition);
             }, this);
 
+            // set Listener
             this.listenTo(Radio.channel("Searchbar"), {
                 "search": this.search
             });
-
             this.listenTo(Radio.channel("SpecialWFS"), {
-                "requestbplan": this.requestbplan
+                "requestFeature": this.requestFeature
             });
 
+            // initiale Suche
             if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
                 this.search(Radio.request("ParametricURL", "getInitString"));
             }
         },
+
+        /**
+         * Durchsucht ein Object, bestehend aus Objekten, bestehend aus Array of Objects nach name
+         * @param  {string} searchString Der Suchstring
+         * @param  {object} masterObject wfsMembers
+         * @return {object}              Suchtreffer
+         */
+        collectHits: function (searchString, masterObject) {
+            var simpleSearchString = this.simplifyString(searchString),
+                searchStringRegExp = new RegExp(simpleSearchString),
+                masterObjectHits = [],
+                elementsHits,
+                elementName;
+
+            _.each(masterObject, function (elements) {
+                elementsHits = _.filter(elements, function (element) {
+                    elementName = this.simplifyString(element.name);
+                    _.extend(element, {
+                        triggerEvent: {
+                            channel: "SpecialWFS",
+                            event: "requestFeature"
+                        }
+                    });
+                    return elementName.search(searchStringRegExp) !== -1; // Prüft ob der Suchstring ein Teilstring vom Namen ist
+                }, this);
+
+                if (elementsHits.length > 0) {
+                    masterObjectHits.push(elementsHits);
+                }
+            }, this);
+
+            return masterObjectHits;
+        },
+
         /**
          * @description Suchfunktion, wird von Searchbar getriggert
          * @param {string} searchString - Der Suchstring.
-        */
+         * @returns {void}
+         */
         search: function (searchString) {
-            this.set("searchString", searchString);
-            if (this.get("inUse") === false) {
-                this.set("inUse", true);
-                searchString = searchString.replace(/[()]/g, "\\$&");
-                var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
-
-                if (this.get("bPlans").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInBPlans(searchString);
-                }
-                if (this.get("kita").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInKita(searchStringRegExp);
-                }
-                if (this.get("stoerfallbetrieb").length > 0 && searchString.length >= this.get("minChars")) {
-                    this.searchInStoerfallbetrieb(searchStringRegExp);
-                }
+            var wfsMembers = this.getWfsMembers(),
+                minChars = this.getMinChars(),
+                hits;
+            if (searchString.length < minChars) {
+                return;
+            }
+            hits = this.collectHits(searchString, wfsMembers);
+            if (hits.length > 0) {
+                Radio.trigger("Searchbar", "pushHits", "hitList", hits);
                 Radio.trigger("Searchbar", "createRecommendedList");
-                this.set("inUse", false);
             }
         },
-        /**
-         * @description Methode, um Koordinaten eines B-Plan abzufragen. Wird vom mapHandler getriggert.
-         * @param {string} type - Der ausgewählte BPlan-Typ, der abgefragt werden soll.
-        */
-        requestbplan: function (type, name) {
-            var typeName = (type === "festgestellt") ? "prosin_festgestellt" : "prosin_imverfahren",
-                propertyName = (type === "festgestellt") ? "planrecht" : "plan",
-                data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>app:" + propertyName + "</ogc:PropertyName><ogc:Literal>" + name + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
-
-            this.sendRequest(this.get("bplanURL"), data, this.getExtentFromBPlan, true, true);
-        },
-        /**
-        * @description Methode zum Zurückschicken des gefundenen Plans an mapHandler.
-        * @param {string} data - Die Data-XML.
-        */
-        getExtentFromBPlan: function (data) {
-            Radio.trigger("MapMarker", "zoomToBPlan", data);
-        },
-        /**
-        *
-        */
-        searchInKita: function (searchStringRegExp) {
-            _.each(this.get("kita"), function (kita) {
-                // Prüft ob der Suchstring ein Teilstring vom kita ist
-                if (kita.name.search(searchStringRegExp) !== -1) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", kita);
-                }
-            }, this);
-        },
-        /**
-         *
-        */
-        searchInStoerfallbetrieb: function (searchStringRegExp) {
-            _.each(this.get("stoerfallbetrieb"), function (stoerfallbetrieb) {
-                // Prüft ob der Suchstring ein Teilstring vom stoerfallbetrieb ist
-                if (stoerfallbetrieb.name.search(searchStringRegExp) !== -1) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", stoerfallbetrieb);
-                }
-            }, this);
-        },
-        /**
-        *
-        */
-        searchInBPlans: function (searchString) {
-            _.each(this.get("bPlans"), function (bPlan) {
-                searchString = searchString.replace(/ö/g, "oe");
-                searchString = searchString.replace(/ä/g, "ae");
-                searchString = searchString.replace(/ü/g, "ue");
-                searchString = searchString.replace(/ß/g, "ss");
-                var searchBplanStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i");
-                // Prüft ob der Suchstring ein Teilstring vom B-Plan ist
-                 if (bPlan.name.search(searchBplanStringRegExp) !== -1) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", bPlan);
-                }
-            }, this);
-        },
 
         /**
-         *Schreibt Ergebnisse in "bplan".
-         * @param  {xml} data - getFeature-Request
+         * @description Entfernt Sonderzeichen aus dem Suchstring
+         * @param {string} searchString - Der Suchstring
+         * @returns {void}
          */
-        getFeaturesForBPlan: function (data) {
-            var hits = $("wfs\\:member,member", data),
-                name,
-                type;
+        simplifyString: function (searchString) {
+            var value = searchString.toLowerCase().replace(/\u00e4/g, "ae").replace(/\u00f6/g, "oe").replace(/\u00fc/g, "ue").replace(/\u00df/g, "ss");
 
-            _.each(hits, function (hit) {
-                if (!_.isUndefined($(hit).find("app\\:planrecht, planrecht")[0])) {
-                    name = $(hit).find("app\\:planrecht, planrecht")[0].textContent;
-                    type = "festgestellt";
-                    // BPlan-Objekte
-                    this.get("bPlans").push({
-                        name: name.trim(),
+            return value;
+        },
+
+        /**
+         * @description Die geom kann sehr komplex sein. Daher wird sie separat abgefragt.
+         * @param  {string} feature, das geklickt worden ist mit filter
+         * @returns {void}
+         */
+        requestFeature: function (feature) {
+            var data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + feature.filter.typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>" + feature.filter.propertyName + "</ogc:PropertyName><ogc:Literal>" + feature.filter.literal + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
+
+            $.ajax({
+                url: feature.filter.url,
+                data: data,
+                context: this,
+                type: "POST",
+                success: this.zoomTo,
+                timeout: this.getTimeout(),
+                contentType: "text/xml",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus + ": " + errorThrown);
+                    Radio.trigger("Alert", "alert", "Beim Abfragen der Koordinaten trat ein Fehler auf.");
+                }
+            });
+        },
+
+        /**
+         * @description Durchsucht die Response auf Koordinatenangaben
+         * @param {xml} response Response des Requests
+         * @returns {number[]}  Extent oder Koordinate
+         */
+        extractGeom: function (response) {
+            var posList = $(response).find("gml\\:posList, posList")[0],
+                pos = $(response).find("gml\\:pos, pos")[0],
+                coordinate = posList ? posList.textContent : pos.textContent,
+                coordinateArray = coordinate.split(" ");
+
+            return coordinate;
+        },
+
+        /**
+         * Triggert den zoom
+         * @param  {number[]} response Extent oder Koordinate
+         * @return {void}
+         */
+        zoomTo: function (response) {
+            var coordinate = this.extractGeom(response);
+
+            Radio.trigger("MapMarker", "zoomTo", {
+                type: "default",
+                coordinate: coordinate
+            });
+        },
+
+        /**
+         * @summary Liest das XML des WFS ein.
+         * @description Diese Funktion setzt vorraus, dass die Features im root-Element des response-XML als direkte Child-Elemente gelistet sind.         * @description Der textContent jedes Elements eines Features wird für die Bezeichnung verwendet.
+         * @param  {xml} data Response des requests
+         * @param {string} type MetaName bzw. Kategorie für Suchtreffer
+         * @param {string} url URL des Dienstes
+         * @param {string} glyphicon Glyphicon für Suchtreffer
+         * @return {[Object]} Datenobjekt zur Speicherung im Model
+         */
+        extractWFSMembers: function (data, type, url, glyphicon) {
+            var rootElement = $(data).contents()[0],
+                elements = $(rootElement).children(),
+                feature, property,
+                features = [];
+
+            _.each(elements, function (element) {
+                feature = $(element).children().first()[0];
+                property = $(element).children().first().children().first()[0];
+
+                if (feature && property) {
+                    features.push({
+                        id: _.uniqueId(type.toString()),
+                        name: $(element).text().trim(),
                         type: type,
-                        glyphicon: "glyphicon-picture",
-                        id: name.replace(/ /g, "") + "BPlan"
+                        glyphicon: glyphicon,
+                        filter: {
+                            url: url,
+                            typeName: feature.nodeName,
+                            propertyName: property.nodeName,
+                            literal: property.textContent
+                        }
                     });
                 }
-                else {
-                    if (!_.isUndefined($(hit).find("app\\:plan, plan")[0])) {
-                        name = $(hit).find("app\\:plan, plan")[0].textContent;
-                        type = "im Verfahren";
-                        // BPlan-Objekte
-                        this.get("bPlans").push({
-                            name: name.trim(),
-                            type: type,
-                            glyphicon: "glyphicon-picture",
-                            id: name.replace(/ /g, "") + "BPlan"
-                        });
-                    }
-                }
-            }, this);
-        },
 
-        /**
-         * success-Funktion für die Kitastandorte. Schreibt Ergebnisse in "kita".
-         * @param  {xml} data - getFeature-Request
-         */
-        getFeaturesForKita: function (data) {
-            var hits = $("wfs\\:member,member", data),
-                coordinate,
-                position,
-                hitName;
-
-            _.each(hits, function (hit) {
-               if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
-                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    if ($(hit).find("app\\:Name, Name")[0] !== undefined) {
-                        hitName = $(hit).find("app\\:Name, Name")[0].textContent;
-                        this.get("kita").push({
-                            name: hitName,
-                            type: "Kita",
-                            coordinate: coordinate,
-                            glyphicon: "glyphicon-home",
-                            id: hitName.replace(/ /g, "") + "Kita"
-                        });
-                    }
-               }
-            }, this);
-        },
-            /**
-         * success-Funktion für die Störfallbetriebe. Schreibt Ergebnisse in "stoerfallbetrieb".
-         * @param  {xml} data - getFeature-Request
-         */
-        getFeaturesForStoerfallbetrieb: function (data) {
-            var hits = $("gml\\:featureMember,featureMember", data),
-                coordinate,
-                position,
-                hitName;
-
-            _.each(hits, function (hit) {
-               if ($(hit).find("gml\\:pos,pos")[0] !== undefined) {
-                    position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
-                    coordinate = [parseFloat(position[0]), parseFloat(position[1])];
-                    if ($(hit).find("app\\:standort, standort")[0] !== undefined) {
-                        hitName = $(hit).find("app\\:standort, standort")[0].textContent;
-                        this.get("stoerfallbetrieb").push({
-                            name: hitName,
-                            type: "Stoerfallbetrieb",
-                            coordinate: coordinate,
-                            glyphicon: "glyphicon-home",
-                            id: hitName.replace(/ /g, "") + "Stoerfallbetrieb"
-                        });
-                    }
-               }
-            }, this);
-        },
-        /**
-         * @description Führt einen HTTP-GET-Request aus.
-         *
-         * @param {String} url - A string containing the URL to which the request is sent
-         * @param {String} data - Data to be sent to the server
-         * @param {function} successFunction - A function to be called if the request succeeds
-         * @param {boolean} asyncBool - asynchroner oder synchroner Request
-         * @param {boolean} [usePOST] - POST anstelle von GET?
-         */
-        sendRequest: function (url, data, successFunction, asyncBool, usePOST) {
-            var type = (usePOST && usePOST === true) ? "POST" : "GET";
-
-            $.ajax({
-                url: url,
-                data: data,
-                context: this,
-                async: asyncBool,
-                type: type,
-                success: successFunction,
-                timeout: 6000,
-                contentType: "text/xml",
-                error: function () {
-                    Radio.trigger("Alert", "alert", url + " nicht erreichbar.");
-                }
             });
+
+            return features;
         },
 
-        sendGetRequest: function (url, data, successFunction, asyncBool) {
+        /**
+         * @description Fragt einen WFS nach Features ab und speichert die Ergebnisse im Model.
+         * @param  {object} element Konfiguration eines SpecialWFS aus config
+         * @returns {void}
+         */
+        requestWFS: function (element) {
+            var url = element.url,
+                parameter = element.data,
+                name = element.name,
+                glyphicon = element.glyphicon ? element.glyphicon : this.getGlyphicon();
+
             $.ajax({
                 url: url,
-                data: data,
+                data: parameter,
                 context: this,
-                async: asyncBool,
                 type: "GET",
-                success: successFunction,
-                timeout: 6000,
-                error: function () {
-                    Radio.trigger("Alert", "alert", url + " nicht erreichbar.");
+                success: function (data) {
+                    var features = this.extractWFSMembers(data, name, url, glyphicon);
+
+                    this.setWfsMembers(name, features);
+                },
+                timeout: this.getTimeout(),
+                contentType: "text/xml",
+                error: function (jqXHR, textStatus) {
+                    console.error(textStatus + ": " + url);
                 }
             });
+        },
+
+        /**
+         * Fügt einem Objekt untergeordnete Objekte hinzu bzw. ergänzt diese
+         * @param {string} key          Name des Objekt
+         * @param {string[]} values     Werte des Objekts
+         * @param {object} masterObject Übergeordnetes Objekt dem die untergeordneten Objekte zugefügt werden sollen
+         * @return {object} ergänztes MasterObjekt
+         */
+        addObjectsInObject: function (key, values, masterObject) {
+            var master = masterObject,
+                oldObj,
+                oldValues,
+                newObj;
+
+            if (!_.has(master, key)) {
+                newObj = _.object([key], [values]);
+                _.extend(master, newObj);
+            }
+            else {
+                oldObj = _.pick(master, key);
+                oldValues = _.values(oldObj)[0];
+                newObj = _.object([key], [_.union(oldValues, values)]);
+                master = _.omit(master, key);
+                _.extend(master, newObj);
+            }
+
+            return master;
+        },
+
+        // getter for minChars
+        getMinChars: function () {
+            return this.get("minChars");
+        },
+        // setter for minChars
+        setMinChars: function (value) {
+            this.set("minChars", value);
+        },
+
+        // getter for RequestInfo
+        getRequestInfo: function () {
+            return this.get("requestInfo");
+        },
+        // setter for RequestInfo
+        setRequestInfo: function (value) {
+            this.set("requestInfo", value);
+        },
+
+        // getter for Glyphicon
+        getGlyphicon: function () {
+            return this.get("glyphicon");
+        },
+
+        // getter for wfsMembers
+        getWfsMembers: function () {
+            return this.get("wfsMembers");
+        },
+        // setter for wfsMembers
+        setWfsMembers: function (key, values) {
+            var wfsMembers = this.get("wfsMembers"),
+                newWfsMembers = this.addObjectsInObject(key, values, wfsMembers);
+
+            this.set("wfsMembers", newWfsMembers);
+        },
+
+        // getter for timeout
+        getTimeout: function () {
+            return this.get("timeout");
+        },
+        // setter for timeout
+        setTimeout: function (value) {
+            this.set("timeout", value);
         }
     });
+
+    return SpecialWFSModel;
 });

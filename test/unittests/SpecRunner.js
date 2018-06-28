@@ -1,6 +1,7 @@
 require.config({
     paths: {
         jquery: "../../node_modules/jquery/dist/jquery.min",
+        jqueryui: "../../node_modules/jquery-ui/ui",
         underscore: "../../node_modules/underscore/underscore-min",
         "underscore.string": "../../node_modules/underscore.string/dist/underscore.string.min",
         backbone: "../../node_modules/backbone/backbone",
@@ -16,7 +17,8 @@ require.config({
         config: "testConfig",
         moment: "../../node_modules/moment/min/moment.min",
         services: "resources/testServices.json",
-        bootstrap: "../../node_modules/bootstrap/js"
+        bootstrap: "../../node_modules/bootstrap/js",
+        text: "../../node_modules/requirejs-text/text"
     },
     shim: {
         bootstrap: {
@@ -41,11 +43,14 @@ define(function (require) {
     require("underscore.string");
 
     mocha.setup("bdd");
+
+    /** load testfiles here **/
     require([
-    // -------------------------load Testfiles here!!!-------------------------
+        /* ******** load Testfiles here!!!**********/
         "modules/tools/download/testModel.js",
         "modules/mouseHover/testModel.js",
         "modules/searchbar/testModel.js",
+        "modules/searchbar/testSpecialWFSModel.js",
         "modules/tools/filter/query/source/testWfs.js",
         "modules/tools/filter/query/testModel.js",
         "modules/tools/filter/testFilter.js",
@@ -68,10 +73,16 @@ define(function (require) {
         "modules/alerting/testModel.js",
         "modules/tools/einwohnerabfrage/testModel.js",
         "modules/tools/schulwegrouting_hh/testModel.js",
-        "modules/tools/parcelSearch/testModel.js"
+        "modules/tools/parcelSearch/testModel.js",
+        "modules/tools/einwohnerabfrage/testModel.js",
+        "modules/tools/parcelSearch/testModel.js",
+        "modules/core/configLoader/testParserCustomTree.js",
+        "modules/core/configLoader/testParserDefaultTree.js",
+        "modules/core/configLoader/testPreparser.js",
+        "modules/menu/desktop/folder/testViewTree.js",
+        "modules/menu/mobile/folder/testView.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();
     });
-
 });

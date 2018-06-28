@@ -1024,17 +1024,19 @@ Die definierten WFS-Dienste werden angefragt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|[definitions](#markdown-header-portalconfigsearchbarspecialwfsdefinitions)|ja|Array[Object]||Ein Array von Dienst-Objekten die angefragt werden (**url**: URL des WFS-Dienstes, **data**: String des WFS-Requests, **name**: Name der speziellen Filterfunktion (bplan, olympia, paralympia)). Bei mehreren Diensten, kommasepariert.|
+|[definitions](#markdown-header-portalconfigsearchbarspecialwfsdefinitions)|ja|Array[Object]||Ein Array von Dienst-Objekten die initial ausgelesen werden (**url**: URL des WFS-Dienstes, **data**: Parameter des WFS-Requests, **name**: MetaName in Suche, **glyphicon**: Glyphicon in Suche.|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|timeout|nein|Number|6000|Timeout der Ajax-Requests im Millisekunden.|
 
 
 ##### Portalconfig.searchBar.specialWFS.definitions #####
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|data|ja|String||String des WFS-Requests|
-|name|ja|String||Name der speziellen Filterfunktion (bplan, Olympia, paralympia)|
 |url|ja|String||URL des WFS-Dienstes|
+|data|ja|String||Parameter des WFS-Requests zum Filtern der featureMember auf Suchstring (erstes Element des featureMember).|
+|name|ja|String||MetaName der Kategorie. Wird nur zur Anzeige in der Vorschlagssuche verwendet.|
+|glyphicon|nein|String|"glyphicon-home"|Bezeichnung des Glyphicons. Wird nur zur Anzeige in der Vorschlagssuche verwendet.|
 
 **Beispiel specialWFS:**
 
@@ -1044,6 +1046,7 @@ Die definierten WFS-Dienste werden angefragt.
 
   "specialWFS": {
             "minChar": 3,
+            "timeout": 2000,
             "definitions": [
                 {
                     "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
@@ -1171,6 +1174,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
 |Layer|nein|Array||Layerobjekte|
 |Ordner|nein|Array||Ordnerobjekte|
 |Titel|nein|String||Ordnername|
+|isFolderSelectable|nein|Boolean|[globaler Wert](config.js.md#tree)|Legt fest, ob eine Auswahlbox zur Selektierung aller Layer eines Ordners angezeigt werden soll. Diese Eigenschaft ist nur für Blatt-Ordner (die ausschließlich Layer enthalten) relevant.|
 
 **Beispiel Ordnerkonfiguration Fachdaten:**
 
@@ -1189,6 +1193,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
                   "Ordner": [
                     {
                       "Titel": "Überschwemmungsgebiete",
+                      "isFolderSelectable": true,
                       "Layer": [
                         {
                           "id": "1103",
@@ -1205,7 +1210,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
                     {
                       "id": "684",
                       "visibility": false
-                    },
+                    }
                   ]
                 }
               ],

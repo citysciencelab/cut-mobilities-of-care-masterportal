@@ -1,8 +1,5 @@
-define([
-    "backbone"
-], function () {
-
-    var Backbone = require("backbone"),
+define(function (require) {
+    var $ = require("jquery"),
         FullScreenView;
 
     FullScreenView = Backbone.View.extend({
@@ -23,34 +20,32 @@ define([
             if (window.self === window.top) {
                 if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
                     if (document.documentElement.requestFullscreen) {
-                      document.documentElement.requestFullscreen();
+                        document.documentElement.requestFullscreen();
                     }
                     else if (document.documentElement.msRequestFullscreen) {
-                      document.documentElement.msRequestFullscreen();
+                        document.documentElement.msRequestFullscreen();
                     }
                     else if (document.documentElement.mozRequestFullScreen) {
-                      document.documentElement.mozRequestFullScreen();
+                        document.documentElement.mozRequestFullScreen();
                     }
                     else if (document.documentElement.webkitRequestFullscreen) {
-                      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                        document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
                     }
                 }
-                else {
-                    if (document.exitFullscreen) {
-                      document.exitFullscreen();
-                    }
-                    else if (document.msExitFullscreen) {
-                      document.msExitFullscreen();
-                    }
-                    else if (document.mozCancelFullScreen) {
-                      document.mozCancelFullScreen();
-                    }
-                    else if (document.webkitExitFullscreen) {
-                      document.webkitExitFullscreen();
-                    }
+                else if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+                else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                }
+                else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
                 }
             }
-            // wenn "window" ein iframe ist --> Weiterleitung auf geoportale-hamburg.de
+            // wenn "window" ein iframe ist --> Weiterleitung URL of the current page
             else {
                 window.open(window.location.href, "_blank");
             }
