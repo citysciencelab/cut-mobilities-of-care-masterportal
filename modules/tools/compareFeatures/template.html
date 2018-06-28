@@ -31,7 +31,7 @@
                                 <% Object.keys(obj).forEach(function (key, idx) {  %>
                                     <td class="<%= key %>">
                                         <% if (index === 0 && idx !== 0) { %>
-                                            <button type="button" class="close" aria-label="Close"><span class="<%= key %>" id="<%= featureIds[idx - 1] %>" aria-hidden="true">&times;</span></button>
+                                            <span class="<%= key %> glyphicon glyphicon-remove pull-right" id="<%= featureIds[idx - 1] %>"></span>
                                         <% } %>
                                         <span>
                                         <% if (_.isArray(obj[key])) {

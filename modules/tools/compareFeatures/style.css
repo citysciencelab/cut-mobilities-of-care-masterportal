@@ -41,9 +41,8 @@
     opacity: 0.9;
 }
 
-.compare-feature-modal table button {
-    font-size: 25px;
-    margin-top: -6px;
+.compare-feature-modal table .glyphicon-remove {
+    cursor: pointer;
 }
 
 .compare-feature-modal tr:first-child td {

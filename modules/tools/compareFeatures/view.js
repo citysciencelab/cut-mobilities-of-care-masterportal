@@ -16,7 +16,7 @@ define(function (require) {
             "hidden.bs.modal": "setIsActivatedToFalse",
             "click .btn-open-list": "setIsActivatedToTrue",
             "click .btn-infos": "toggleRows",
-            "click table button": "removeFeatureFromList",
+            "click table .glyphicon-remove": "removeFeatureFromList",
             "change select": function (evt) {
                 this.model.setLayerId(evt.target.value);
                 this.renderListModal(this.model);
@@ -93,7 +93,7 @@ define(function (require) {
                 return feature.getId() === evt.target.id;
             });
 
-            this.$el.find("." + evt.target.className).remove();
+            this.$el.find("." + evt.target.classList[0]).remove();
             this.model.removeFeatureFromList(featureToRemoved);
         },
 
