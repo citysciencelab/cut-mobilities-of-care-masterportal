@@ -27,6 +27,7 @@ define(function (require) {
 
         /**
          * creates ol.source.Vector as LayerSource
+         * @returns {void}
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
@@ -34,6 +35,7 @@ define(function (require) {
 
         /**
          * creates the layer and trigger to updateData
+         * @returns {void}
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
@@ -52,7 +54,8 @@ define(function (require) {
         },
 
         /**
-         * create ClusterLayerSource
+         * create ClusterLayerSourc
+         * @returns {void}
          */
         createClusterLayerSource: function () {
             this.setClusterLayerSource(new ol.source.Cluster({
@@ -64,12 +67,13 @@ define(function (require) {
         /**
          * initial loading of sensor data function
          * differences by subtypes
+         * @returns {void}
          */
         updateData: function () {
             var sensorData,
                 features,
                 subTyp = this.get("subTyp").toUpperCase(),
-                isClustered = this.has("clusterDistance") ? true : false,
+                isClustered = this.has("clusterDistance"),
                 url = this.get("url"),
                 version = this.get("version"),
                 urlParams = this.get("urlParameter"),
@@ -124,7 +128,7 @@ define(function (require) {
                     Radio.trigger("Util", "hideLoader");
                     response = resp;
                 },
-                error: function (jqXHR, errorText, error) {
+                error: function () {
                     Radio.trigger("Util", "hideLoader");
                     Radio.trigger("Alert", "alert", {
                         text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers " +
@@ -166,7 +170,7 @@ define(function (require) {
                 // for a special theme
                 feature.set("gfiParams", this.get("gfiParams"));
                 feature.set("utc", this.get("utc"));
-                
+
                 features.push(feature);
             }, this);
 
@@ -522,8 +526,8 @@ define(function (require) {
 
         /**
          * draw features from esriJSON
-         * @param  {esriJSON} sensorData
-         * @return {[ol.Feature]}
+         * @param  {esriJSON} sensorData - features
+         * @return {array} olFeaturesArray
          */
         drawESRIGeoJson: function (sensorData) {
             var streamId = this.get("streamId"),
@@ -553,8 +557,8 @@ define(function (require) {
         /**
          * change all numbers from features from StreamLayer to String
          * this is necessary to draw the gfi
-         * @param  {Object} data
-         * @return {Object} data
+         * @param  {Object} data - feature
+         * @returns {Object} data
          */
         changeValueToString: function (data) {
             var attributes = data.attributes,
@@ -572,7 +576,8 @@ define(function (require) {
 
         /**
          * create style, function triggers to style_v2.json
-         * @param  {boolean} isClustered
+         * @param  {boolean} isClustered - should
+         * @returns {void}
          */
         styling: function (isClustered) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
@@ -588,6 +593,7 @@ define(function (require) {
          * create connection to a given MQTT-Broker
          * this must be passes this as a context to call the updateFromMqtt function
          * @param {array} features - features with DatastreamID
+         * @returns {void}
          */
         createMqttConnectionToSensorThings: function (features) {
             var dataStreamIds = this.getDataStreamIds(features),
@@ -620,6 +626,7 @@ define(function (require) {
          * update the phenomenontime and states of the Feature
          * this function is triggerd from MQTT
          * @param  {json} thing - thing contains a new observation and accompanying topic
+         * @returns {void}
          */
         updateFromMqtt: function (thing) {
             var thingToUpdate = !_.isUndefined(thing) ? thing : {},
@@ -635,9 +642,10 @@ define(function (require) {
 
         /**
          * performs the live update
-         * @param  {Array} featureArray
-         * @param  {String} thingResult
-         * @param  {String} thingPhenomenonTime
+         * @param  {Array} featureArray - contains the and index and feature which should be updates
+         * @param  {String} thingResult - the new state
+         * @param  {String} thingPhenomenonTime - the new phenomenonTime
+         * @returns {void}
          */
         liveUpdate: function (featureArray, thingResult, thingPhenomenonTime) {
             var itemNumber = featureArray[0],
@@ -725,9 +733,11 @@ define(function (require) {
         /**
          * create a connection to a websocketserver,
          * which fire new observation using MQTT
+         * thingPhenomenonTime
+         * @returns {void}
          */
         createWebSocketConnectionToStreamLayer: function () {
-            var thisSensor = this,
+            var that = this,
                 websocketURL = this.get("wssUrl") + "/subscribe",
                 connection = new WebSocket(websocketURL);
 
@@ -743,14 +753,15 @@ define(function (require) {
             connection.onmessage = function (ev) {
                 var jsonData = JSON.parse(ev.data);
 
-                thisSensor.updateFromWebSocketStreamLayer(jsonData);
+                that.updateFromWebSocketStreamLayer(jsonData);
             };
         },
 
         /**
          * function updates the features when an event comes from ESRI-StreamLayer
          * one stream deliver only one feature
-         * @param  {JSON} esriJson
+         * @param  {JSON} esriJson - contains the updated feature
+         * @returns {void}
          */
         updateFromWebSocketStreamLayer: function (esriJson) {
             var streamId = this.get("streamId"),
@@ -771,7 +782,7 @@ define(function (require) {
                     dataProjection: epsgCode,
                     featureProjection: Config.view.epsg
                 });
-                isClustered = this.has("clusterDistance") ? true : false;
+                isClustered = this.has("clusterDistance");
 
                 olFeature.setId(id);
                 this.getLayerSource().addFeature(olFeature);

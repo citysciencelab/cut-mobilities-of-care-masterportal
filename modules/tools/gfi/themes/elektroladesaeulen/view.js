@@ -17,6 +17,7 @@ define(function (require) {
         /**
          * changeGraph by click on arrowButton
          * @param  {event} evt - event that is triggered
+         * @returns {void}
          */
         changeGraph: function (evt) {
             var actualIndex = this.model.get("dayIndex"),
@@ -48,6 +49,7 @@ define(function (require) {
         /**
          * changes dataset, which draw in gfi
          * @param  {event} evt - event that is triggered
+         * @returns {void}
          */
         toggleTab: function (evt) {
             var contentId = $(evt.currentTarget).attr("value"),
@@ -114,8 +116,9 @@ define(function (require) {
 
         /**
          * sets the diagrams or data and hides the arrow buttons if necessary
-         * @param {String} contentId
+         * @param {String} contentId - id from list item
          * @param {number} index - represents the weekday, today = 0
+         * @returns {void}
          */
         setDiagrammParams: function (contentId, index) {
             if (contentId === "daten") {
@@ -147,6 +150,7 @@ define(function (require) {
          * @param  {String} state - category from data
          * @param  {String} graphTag - container for special graph in html
          * @param  {number} index - weekday
+         * @returns {void}
          */
         loadDiagramm: function (state, graphTag, index) {
             this.model.triggerToBarGraph(state, graphTag, index);
@@ -154,6 +158,7 @@ define(function (require) {
 
         /**
          * clean gfi-window to create space for new data
+         * @returns {void}
          */
         removeAllData: function () {
             $(".ladesaeulenVerfuegbar-graph svg").remove();
@@ -169,6 +174,7 @@ define(function (require) {
          * draws different indicators such as the total number of chargings
          * data is calculated in the model
          * @param  {String} dataTag - container to draw data
+         * @returns {void}
          */
         drawIndicator: function (dataTag) {
             var tableHead = this.model.get("tableheadIndicatorArray"),

@@ -22,6 +22,7 @@ define(function (require) {
 
         /**
          * generates the properties to be displayed when creating the gfi
+         * @returns {void}
          */
         parseProperties: function () {
             var gfiContent = this.get("gfiContent"),
@@ -50,6 +51,7 @@ define(function (require) {
 
         /**
          * processes the historical data and the indicators as soon as the gfi is visible
+         * @returns {void}
          */
         loadData: function () {
             var gfiContent,
@@ -80,6 +82,7 @@ define(function (require) {
 
         /**
          * change gfi, if the tab-toogle "daten" ist active
+         * @returns {void}
          */
         changeData: function () {
             var value;
@@ -362,6 +365,7 @@ define(function (require) {
         /**
          * create various indicators
          * @param  {boolean} async - for ajax
+         * @returns {void}
          */
         createIndicators: function (async) {
             var dataStreamIds = this.get("dataStreamIds"),
@@ -407,9 +411,9 @@ define(function (require) {
                 requestURL = this.get("requestURL"),
                 versionURL = this.get("versionURL"),
                 completeURL,
+                query,
                 i,
-                data,
-                query;
+                data;
 
             for (i = minYear; i <= maxYear; i++) {
                 data = 0;
@@ -452,7 +456,7 @@ define(function (require) {
 
         /**
          * starts cleaning data for every loadingpoint
-         * @param  {Array} dataArray - 
+         * @param  {Array} dataArray
          * @return {Array} dataArray
          */
         dataCleaningChargingIndicator: function (dataArray) {
@@ -508,7 +512,7 @@ define(function (require) {
         /**
          * Counts the number of observations
          * these only include the status: charging
-         * @param  {Array} dataArray - 
+         * @param  {Array} dataArray
          * @return {Array} processedDataArray - contains the total number per loadingpoint
          */
         processIndicatorCharging: function (dataArray) {
@@ -533,7 +537,7 @@ define(function (require) {
 
         /**
          * creates a header from the indicator data that is displayed in the table
-         * @param  {[Object]} indicatorDataArray - 
+         * @param  {[Object]} indicatorDataArray
          * @return {Array} tableheadIndicatorArray - with years as head
          */
         createIndicatorHead: function (indicatorDataArray) {
@@ -548,7 +552,7 @@ define(function (require) {
 
         /**
          * generates an object from the indicatorData
-         * @param  {[Object]} indicatorDataArray - 
+         * @param  {[Object]} indicatorDataArray
          * @return {[Object]} indicatorPropertiesObj - the values are stored as an array
          */
         processChargingIndicator: function (indicatorDataArray) {
@@ -571,7 +575,7 @@ define(function (require) {
         /**
          * creates indicator for total operating time of chargings per year
          * @param  {boolean} async - for ajax
-         * @param  {Array} dataStreamIds - 
+         * @param  {Array} dataStreamIds
          * @return {Array} indicatorChargingTime - contains the times
          */
         createIndicatorChargingTime: function (async, dataStreamIds) {
@@ -701,7 +705,7 @@ define(function (require) {
 
         /**
          * sums the data of the individual days of the week together
-         * @param  {Array} allWeekdaysByYear - 
+         * @param  {Array} allWeekdaysByYear -
          * @return {number} sum
          */
         calculateSumIndicatorData: function (allWeekdaysByYear) {
@@ -891,6 +895,7 @@ define(function (require) {
          * @param  {String} targetResult - result to draw
          * @param  {String} graphTag - div
          * @param  {number} index - day
+         * @returns {void}
          */
         triggerToBarGraph: function (targetResult, graphTag, index) {
             var width = this.get("gfiWidth"),
@@ -960,6 +965,7 @@ define(function (require) {
          * @param  {number} width - from frame
          * @param  {number} height - from frame
          * @param  {number} index - day
+         * @returns {void}
          */
         drawErrorMessage: function (graphTag, width, height, index) {
             var today = moment().subtract(index, "days").format("dddd");
@@ -1034,10 +1040,7 @@ define(function (require) {
                     dataByActualTimeStep = this.filterDataByActualTimeStep(dataFromDay, actualTimeStep, nextTimeStep);
 
                 // if the requested period is in the future
-                if (!_.isNumber(i)) {
-                    return;
-                }
-                else if (moment(nextTimeStep).toDate().getTime() > moment().toDate().getTime()) {
+                if (moment(nextTimeStep).toDate().getTime() > moment().toDate().getTime()) {
                     dayObj[i] = undefined;
                 }
                 else if (_.isEmpty(dataByActualTimeStep)) {

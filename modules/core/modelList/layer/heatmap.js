@@ -3,7 +3,6 @@ define(function (require) {
     var Layer = require("modules/core/modelList/layer/model"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
-        Config = require("config"),
         HeatmapLayer;
 
     HeatmapLayer = Layer.extend({
@@ -12,13 +11,14 @@ define(function (require) {
             {
                 radius: 10,
                 blur: 15,
-                gradient: ["#00f", "#0ff", "#0f0", "#ff0", "#f00"]
-            }
-        ),
+                gradient: [
+                    "#00f", "#0ff", "#0f0", "#ff0", "#f00"
+                ]
+            }),
 
         initialize: function () {
-            this.superInitialize();
             var channel = Radio.channel("HeatmapLayer");
+            this.superInitialize();
 
             this.listenTo(channel, {
                 "loadInitialData": this.loadInitialData,
@@ -40,6 +40,7 @@ define(function (require) {
 
         /**
          * creates ol.source.Vector as LayerSource
+         * @returns {void}
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
@@ -47,6 +48,7 @@ define(function (require) {
 
         /**
          * creates the heatmapLayer
+         * @returns {void}
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Heatmap({
@@ -64,9 +66,10 @@ define(function (require) {
             }));
         },
 
-       /**
+        /**
          * check the triggered id with given the layerid
-         * @param  {String} layerId
+         * @param  {String} layerId - id from layer
+         * @returns {void}
          */
         checkDataLayerId: function (layerId) {
             return this.get("dataLayerId") === layerId;
@@ -74,20 +77,21 @@ define(function (require) {
 
         /**
          * draw heatmap with initialize features
-         * @param  {[ol.Feature]} feature
+         * @param  {[ol.Feature]} features - all features from associated sensorLayer
+         * @returns {void}
          */
         initializeHeatmap: function (features) {
-            // debugger;
             var attribute = this.get("attribute"),
                 value = this.get("value"),
                 layerSource = this.getLayerSource(),
                 cloneFeatures = [];
 
             _.each(features, function (feature) {
-                var cloneFeature = feature.clone();
+                var cloneFeature = feature.clone(),
+                    count;
 
                 if (!_.isUndefined(attribute || value)) {
-                     var count = this.countStates(feature, attribute, value);
+                    count = this.countStates(feature, attribute, value);
 
                     cloneFeature.set("weightForHeatmap", count);
                 }
@@ -106,8 +110,8 @@ define(function (require) {
 
         /**
          * update the heatmap with given feature
-         * @param  {ol.Feature} feature
-         * @return {[type]}
+         * @param  {ol.Feature} feature - feature to be update
+         * @return {void}
          */
         updateHeatmap: function (feature) {
             var attribute = this.get("attribute"),
@@ -115,7 +119,8 @@ define(function (require) {
                 layerSource = this.getLayerSource(),
                 featureId = feature.getId(),
                 cloneFeature = feature.clone(),
-                heatmapFeature;
+                heatmapFeature,
+                count;
 
             cloneFeature.setId(featureId);
 
@@ -128,7 +133,7 @@ define(function (require) {
 
             // insert weighting
             if (!_.isUndefined(attribute || value)) {
-                var count = this.countStates(feature, attribute, value);
+                count = this.countStates(feature, attribute, value);
 
                 cloneFeature.set("weightForHeatmap", count);
             }
@@ -151,22 +156,24 @@ define(function (require) {
         /**
          * normalizes the values to a scale from 0 to 1
          * @param  {[ol.Feature]} featuresWithValue
-         * @return {[ol.Feature]} featuresWithValue
+         * @returns {void}
          */
         normalizeWeight: function (featuresWithValue) {
             var max = _.max(featuresWithValue, function (feature) {
-                    return feature.get("weightForHeatmap");
-                }).get("weightForHeatmap");
+                return feature.get("weightForHeatmap");
+            }).get("weightForHeatmap");
 
-                _.each(featuresWithValue, function (feature) {
-                    feature.set("normalizeWeightForHeatmap", (feature.get("weightForHeatmap") / max));
-                });
+            _.each(featuresWithValue, function (feature) {
+                feature.set("normalizeWeightForHeatmap", feature.get("weightForHeatmap") / max);
+            });
         },
 
         /**
          * count given states of a feature
          * @param  {String} state
-         * @return {[String]}
+         * @param  {} heatmapAttribute
+         * @param  {} heatmapValue
+         * @return {[String]} count
          */
         countStates: function (feature, heatmapAttribute, heatmapValue) {
             var state = String(feature.get(heatmapAttribute)),
@@ -190,7 +197,8 @@ define(function (require) {
 
         /**
          * Setter for attribute "layer"
-         * @param {ol.layer} value
+         * @param {ol.layer} value - HeatmapLayer
+         * @returns {void}
          */
         setLayer: function (value) {
             this.set("layer", value);
@@ -198,7 +206,8 @@ define(function (require) {
 
         /**
          * Setter for attribute "layerSource"
-         * @param {ol.source} value
+         * @param {ol.source} value - HeatmapLayerSource
+         * @returns {void}
          */
         setLayerSource: function (value) {
             this.set("layerSource", value);
