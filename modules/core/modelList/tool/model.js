@@ -23,7 +23,9 @@ define(function (require) {
             // true wenn das Tool aktiviert ist
             isActive: false,
             // deaktiviert GFI, wenn dieses tool geöffnet wird
-            deaktivateGFI: true
+            deaktivateGFI: true,
+            // Tools die in die Sidebar und nicht in das Fenster sollen
+            toolsToRenderInSidebar: ["filter", "schulwegrouting"]
         },
 
         initialize: function () {
@@ -35,6 +37,12 @@ define(function (require) {
                         this.activateTool();
                         channel.trigger("activatedTool", this.getId(), this.get("deaktivateGFI"));
                     }
+                    else {
+                        channel.trigger("deactivatedTool", this.getId(), this.get("deaktivateGFI"));
+                    }
+                    if (_.contains(this.get("toolsToRenderInSidebar"), this.getId()) || this.getId() === "legend") {
+                        channel.trigger("activatedTool", "gfi", false);
+                    }
                 }
             });
         },
@@ -43,7 +51,9 @@ define(function (require) {
             if (this.getIsActive() === true) {
                 // triggert das Ändern eines Tools
                 Radio.trigger("ClickCounter", "toolChanged");
-                this.collection.setActiveToolToFalse(this, this.get("deaktivateGFI"));
+                if (this.getId() !== "legend") {
+                    this.collection.setActiveToolToFalse(this, this.get("deaktivateGFI"));
+                }
 
                 if (this.getId() === "legend") {
                     Radio.trigger("Legend", "toggleLegendWin");
@@ -51,8 +61,9 @@ define(function (require) {
                 else if (this.getId() === "featureLister") {
                     Radio.trigger("FeatureListerView", "toggle");
                 }
-                else if (this.getId() === "filter") {
+                else if (_.contains(this.get("toolsToRenderInSidebar"), this.getId())) {
                     Radio.trigger("Sidebar", "toggle", true);
+                    Radio.trigger("Window", "closeWin", false);
                 }
                 else {
                     Radio.trigger("Window", "toggleWin", this);
@@ -60,19 +71,9 @@ define(function (require) {
             }
         },
 
-        /**
-         * Setter für das Attribut "isActive"
-         * @param {boolean} value
-         * @param {Object} [options] - {silent: true} unterbindet das "change-Event"
-         */
         setIsActive: function (value, options) {
             this.set("isActive", value, options);
         },
-
-        /**
-         * Getter für das Attribut "isActive"
-         * @return {boolean}
-         */
         getIsActive: function () {
             return this.get("isActive");
         },

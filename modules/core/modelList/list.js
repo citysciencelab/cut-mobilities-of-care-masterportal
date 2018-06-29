@@ -8,7 +8,7 @@ define(function (require) {
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         ModelList;
 
     ModelList = Backbone.Collection.extend({

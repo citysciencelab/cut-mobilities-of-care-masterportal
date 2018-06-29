@@ -43,7 +43,7 @@ define(function (require) {
         },
 
         toggleIsActiveClass: function () {
-            if (this.model.getIsActive() === true && this.model.getParentId() === "Werkzeuge") {
+            if (this.model.getIsActive() === true) {
                 this.$el.addClass("active");
             }
             else {

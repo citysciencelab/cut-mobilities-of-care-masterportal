@@ -1,12 +1,9 @@
-define([
-    "backbone",
-    "jquery",
-    "backbone.radio",
-    "config",
-    "require"
-], function (Backbone, $, Radio, Config, Require) {
+define(function (require) {
+    var Config = require("config"),
+        $ = require("jquery"),
+        Util;
 
-    var Util = Backbone.Model.extend({
+    Util = Backbone.Model.extend({
         defaults: {
             // isViewMobile: false,
             config: "",
@@ -29,7 +26,8 @@ define([
                 "isAny": this.isAny,
                 "getConfig": this.getConfig,
                 "getUiStyle": this.getUiStyle,
-                "getIgnoredKeys": this.getIgnoredKeys
+                "getIgnoredKeys": this.getIgnoredKeys,
+                "punctuate": this.punctuate
             }, this);
 
             channel.on({
@@ -52,6 +50,24 @@ define([
             this.setUiStyle(uiStyle);
             this.parseConfigFromURL();
         },
+        /**
+         * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
+         * @param  {[type]} value - feature attribute values
+         * @returns {string} punctuated value
+         */
+        punctuate: function (value) {
+            var pattern = /(-?\d+)(\d{3})/,
+                stringValue = value.toString(),
+                predecimals = stringValue;
+
+            if (stringValue.indexOf(".") !== -1) {
+                predecimals = stringValue.split(".")[0];
+            }
+            while (pattern.test(predecimals)) {
+                predecimals = predecimals.replace(pattern, "$1.$2");
+            }
+            return predecimals;
+        },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);
         },
@@ -69,32 +85,32 @@ define([
             return navigator.userAgent.match(/IEMobile/i);
         },
         isChrome: function () {
+            var isChrome = false;
+
             if (/Chrome/i.test(navigator.userAgent)) {
-                return true;
+                isChrome = true;
             }
-
-            return false;
-
+            return isChrome;
         },
         isAny: function () {
             return this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows();
         },
         isInternetExplorer: function () {
+            var ie = false;
+
             if (/MSIE 9/i.test(navigator.userAgent)) {
-                return "IE9";
+                ie = "IE9";
             }
             else if (/MSIE 10/i.test(navigator.userAgent)) {
-                return "IE10";
+                ie = "IE10";
             }
             else if (/rv:11.0/i.test(navigator.userAgent)) {
-                return "IE11";
+                ie = "IE11";
             }
-
-            return false;
-
+            return ie;
         },
         getPath: function (path) {
-            var baseUrl = Require.toUrl("").split("?")[0];
+            var baseUrl = require.toUrl("").split("?")[0];
 
             if (path) {
                 if (path.indexOf("/") === 0) {

@@ -23,6 +23,7 @@
     "jquery-ui": "1.x",
     "moment": "2.x",
     "openlayers": "4.4.2",
+    "pdfmake": "^0.1.36",
     "proj4": "2.x",
     "requirejs": "2.x",
     "requirejs-text": "2.x",

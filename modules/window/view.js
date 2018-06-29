@@ -61,7 +61,7 @@ define(function (require) {
                 this.$el.show("slow");
             }
             else {
-                this.$el.hide("slow");
+                this.hide();
             }
             return this;
         },
@@ -85,7 +85,7 @@ define(function (require) {
             this.$el.hide("slow");
             this.model.setVisible(false);
             this.model.sendParamsToWinCotent();
-            Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
+            Radio.channel("Tool").trigger("activatedTool", "gfi", false);
         }
     });
 

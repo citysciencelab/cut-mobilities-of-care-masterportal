@@ -12,7 +12,7 @@ define(function (require) {
             isLayerVisible: false,
             activateOnSelection: false,
             // flag for the search in the current map extent
-            searchInMapExtent: false,
+            searchInMapExtent: true,
             liveZoomToFeatures: false
         },
 
@@ -218,6 +218,9 @@ define(function (require) {
                 this.setIsSelected(true);
                 if (this.getIsActive()) {
                     this.runFilter();
+                    if (this.getLiveZoomToFeatures()) {
+                        Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(), this.getLayerId());
+                    }
                 }
             }
         },

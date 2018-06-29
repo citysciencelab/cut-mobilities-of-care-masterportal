@@ -13,13 +13,13 @@ define(function (require) {
 
     Util = Backbone.Model.extend({
         initialize: function () {},
-        createTestFeatures: function() {
+        createTestFeatures: function(path) {
             var format = new ol.format.WFS({
                 featureNS: "http://www.deegree.org/app"
             }),
             features;
             $.ajax({
-                url: "resources/testFeatures.xml",
+                url: path,
                 async: false,
                 success: function (data) {
                     features = format.readFeatures(data);
