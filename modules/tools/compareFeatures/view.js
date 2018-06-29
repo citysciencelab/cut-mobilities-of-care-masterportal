@@ -44,7 +44,7 @@ define(function (require) {
         render: function (model, value) {
             if (value) {
                 if (model.get("featureList").length === 0) {
-                    this.$el.html(this.templateNoFeatures());
+                    this.renderErrorModal();
                 }
                 else {
                     this.renderListModal(model);
@@ -83,6 +83,19 @@ define(function (require) {
         },
 
         /**
+         * @returns {void}
+         */
+        renderErrorModal: function () {
+            var comparableLayerModels = Radio.request("ModelList", "getModelsByAttributes", {isComparable: true}),
+                displayText = "Objekt";
+
+            if (comparableLayerModels.length < 2) {
+                displayText = comparableLayerModels[0].get("name");
+            }
+            this.$el.html(this.templateNoFeatures({text: displayText}));
+        },
+
+        /**
          * removes the clicked column from the table
          * and finds the feature to be removed
          * @param {MouseEvent} evt - click event
@@ -95,6 +108,9 @@ define(function (require) {
 
             this.$el.find("." + evt.target.classList[0]).remove();
             this.model.removeFeatureFromList(featureToRemoved);
+            if (this.model.get("featureList").length === 0) {
+                this.renderErrorModal();
+            }
         },
 
         /**

@@ -20,6 +20,23 @@
     overflow: auto;
 }
 
+.compare-feature-modal .modal-error {
+    width: 450px;
+}
+
+.compare-feature-modal .modal-error .glyphicon {
+    font-size: 22px;
+}
+
+.compare-feature-modal .modal-error p {
+    line-height: 22px;
+}
+
+.compare-feature-modal .modal-error p:first-child {
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+    font-size: 14px;
+}
+
 .compare-feature-modal .modal-sub-header {
     padding-bottom: 15px;
     border-bottom: 1px solid #ddd;
@@ -41,8 +58,17 @@
     opacity: 0.9;
 }
 
+.compare-feature-modal .glyphicon-star {
+    color: #fec44f;
+}
+
 .compare-feature-modal table .glyphicon-remove {
+    opacity: 0.3;
+}
+
+.compare-feature-modal table .glyphicon-remove:hover {
     cursor: pointer;
+    opacity: 1;
 }
 
 .compare-feature-modal tr:first-child td {
