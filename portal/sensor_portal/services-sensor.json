@@ -64,6 +64,7 @@
       "typ" : "Sensor",
       "subTyp" : "ESRIStreamLayer",
       "url" : "https://geoeventsample1.esri.com:6443/arcgis/rest/services/LABus/StreamServer",
+      "legendURL" : "",
       "gfiTheme" : "default",
       "gfiAttributes" : {
          "id" : "ID",
@@ -194,6 +195,7 @@
       "conversionFactor" : 0.01,
       "scalingDecimal" : 2,
       "scalingUnit" : "°C",
+      "legendURL" : "",
       "gfiTheme" : "default",
       "gfiAttributes" : {
          "phenomenonTime" : "Letzter Messwert",
@@ -214,6 +216,7 @@
       },
       "epsg": "EPSG:4326",
       "utc" : "+1",
+      "legendURL" : "",
       "gfiTheme" : "elektroladesaeulen",
       "gfiParams" : {
         "startDate" : "01.01.2018",
@@ -303,7 +306,64 @@
          }
       ]
    },
-
+   {
+    "id" : "45",
+    "name" : "Bike and Ride Parkplätze",
+    "url" : "https://geodienste.hamburg.de/HH_WFS_Verkehr_opendata",
+    "typ" : "WFS",
+    "featureType" : "bikeandride",
+    "format" : "image/png",
+    "version" : "1.1.0",
+    "featureNS" : "http://www.deegree.org/app",
+    "outputFormat" : "XML",
+    "gfiAttributes" : "showAll",
+    "layerAttribution" : "nicht vorhanden",
+    "legendURL" : "",
+    "datasets" : [
+       {
+          "md_id" : "6520CC0A-D2A6-11D5-88C8-000102DCCF41",
+          "rs_id" : "https://registry.gdi-de.org/id/de.hh/c8898da0-c19e-453e-9e48-0de68994a3cb",
+          "md_name" : "Bike + Ride Anlagen Hamburg",
+          "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+          "kategorie_opendata" : [
+             "Transport und Verkehr"
+          ],
+          "kategorie_inspire" : [
+             "Verkehrsnetze"
+          ],
+          "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
+       }
+    ]
+ },
+ {
+  "id" : "2767",
+  "name" : "Einpersonenhaushalte in Prozent  31.12.2014 ",
+  "url" : "https://geodienste.hamburg.de/HH_WFS_Statistik_Stadtteile_Bevoelkerung",
+  "typ" : "WFS",
+  "featureType" : "Einpersonenhaushalte_in_Prozent__31.12.2014_",
+  "format" : "image/png",
+  "version" : "1.1.0",
+  "featureNS" : "http://geodienste.hamburg.de/HH_WFS_Statistik_Stadtteile_Bevoelkerung",
+  "outputFormat" : "XML",
+  "gfiAttributes" : "showAll",
+  "layerAttribution" : "nicht vorhanden",
+  "legendURL" : "",
+  "datasets" : [
+     {
+        "md_id" : "C2B674ED-73DB-4D29-9955-8621C1B5906A",
+        "rs_id" : "https://registry.gdi-de.org/id/de.hh/839c8d84-191f-499c-9c08-6a54d6b26c4d",
+        "md_name" : "Bevölkerungsdaten zu Stadtteilen in Hamburg",
+        "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata" : [
+           "Bevölkerung"
+        ],
+        "kategorie_inspire" : [
+           "Verteilung der Bevölkerung - Demografie"
+        ],
+        "kategorie_organisation" : "Statistisches Amt für Hamburg und Schleswig-Holstein"
+     }
+  ]
+},
    {
       "id" : "713",
       "name" : "Image",

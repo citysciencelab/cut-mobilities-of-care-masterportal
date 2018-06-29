@@ -1,7 +1,5 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function (Backbone, Radio) {
+define(["backbone",
+    "backbone.radio"], function (Backbone, Radio) {
 
     var Legend = Backbone.Model.extend({
 
@@ -20,7 +18,7 @@ define([
             var channel = Radio.channel("Legend");
 
             channel.reply({
-               "getLegendParams": this.getLegendParams
+                "getLegendParams": this.getLegendParams
             }, this);
 
             this.listenTo(Radio.channel("ModelList"), {
@@ -29,10 +27,10 @@ define([
             this.listenTo(Radio.channel("StyleWMS"), {
                 "updateParamsStyleWMS": this.updateParamsStyleWMSArray
             });
-            // console.log("Test");
             this.listenTo(this, {
                 "change:wmsLayerList": this.setLegendParamsFromWMS,
                 "change:wfsLayerList": this.setLegendParamsFromVector,
+                "change:sensorLayerList": this.setLegendParamsFromVector,
                 "change:geojsonLayerList": this.setLegendParamsFromVector,
                 "change:groupLayerList": this.setLegendParamsFromGROUP,
                 "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
@@ -51,9 +49,9 @@ define([
 
         updateParamsStyleWMSArray: function (params) {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-            paramsStyleWMSArray2 = [];
+                paramsStyleWMSArray2 = [];
 
-            _.each (paramsStyleWMSArray, function (paramsStyleWMS) {
+            _.each(paramsStyleWMSArray, function (paramsStyleWMS) {
                 if (params.styleWMSName !== paramsStyleWMS.styleWMSName) {
                     paramsStyleWMSArray2.push(paramsStyleWMS);
                 }
@@ -69,18 +67,18 @@ define([
                 legendParams = this.get("legendParams");
 
             _.each(this.get("legendParams"), function (legendParam, i) {
-                    _.find (paramsStyleWMSArray, function (paramsStyleWMS) {
-                        if (legendParam.layername === paramsStyleWMS.styleWMSName) {
-                            var layername = legendParam.layername,
-                                isVisibleInMap = legendParam.isVisibleInMap;
+                _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
+                    if (legendParam.layername === paramsStyleWMS.styleWMSName) {
+                        var layername = legendParam.layername,
+                            isVisibleInMap = legendParam.isVisibleInMap;
 
-                            legendParams.splice(i, 1, {params: paramsStyleWMS,
-                                               layername: layername,
-                                               typ: "styleWMS",
-                                               isVisibleInMap: isVisibleInMap});
+                        legendParams.splice(i, 1, {params: paramsStyleWMS,
+                            layername: layername,
+                            typ: "styleWMS",
+                            isVisibleInMap: isVisibleInMap});
 
-                        }
-                    });
+                    }
+                });
             });
             this.set("legendParams", legendParams);
         },
@@ -100,7 +98,7 @@ define([
                 groupedLayers,
                 modelList = Radio.request("ModelList", "getCollection");
 
-//            layerlist = modelList.where({type: "layer", isVisibleInMap: true});
+            // layerlist = modelList.where({type: "layer", isVisibleInMap: true});
             this.unsetLegendParams();
             // Die Layer die in der Legende dargestellt werden sollen
             filteredLayerList = _.filter(modelList.models, function (layer) {
@@ -118,6 +116,9 @@ define([
             if (_.has(groupedLayers, "WFS")) {
                 this.set("wfsLayerList", groupedLayers.WFS);
             }
+            if (_.has(groupedLayers, "Sensor")) {
+                this.set("sensorLayerList", groupedLayers.Sensor);
+            }
             if (_.has(groupedLayers, "GeoJSON")) {
                 this.set("geojsonLayerList", groupedLayers.GeoJSON);
             }
@@ -129,6 +130,7 @@ define([
 
         unsetLegendParams: function () {
             this.set("wfsLayerList", "");
+            this.set("sensorLayerList", "");
             this.set("wmsLayerList", "");
             this.set("geojsonLayerList", "");
             this.set("groupLayerList", "");
@@ -137,7 +139,8 @@ define([
 
         setLegendParamsFromWMS: function () {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-            paramsStyleWMS = "";
+                paramsStyleWMS = "",
+                legendURL;
 
             _.each(this.get("wmsLayerList"), function (layer) {
                 paramsStyleWMS = _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
@@ -155,7 +158,7 @@ define([
                     });
                 }
                 else {
-                    var legendURL = layer.get("legendURL");
+                    legendURL = layer.get("legendURL");
 
                     this.push("tempArray", {
                         layername: layer.get("name"),
@@ -168,6 +171,14 @@ define([
         },
         setLegendParamsFromVector: function (model, layerList) {
             _.each(layerList, function (layer) {
+                var image,
+                    name,
+                    style,
+                    styleClass,
+                    styleSubClass,
+                    styleFieldValues,
+                    styleScalingValues;
+
                 if (typeof layer.get("legendURL") === "string") {
                     this.push("tempArray", {
                         layername: layer.get("name"),
@@ -177,12 +188,12 @@ define([
                     });
                 }
                 else {
-                    var image = [],
-                        name = [],
-                        style = Radio.request("StyleList", "returnModelById", layer.getStyleId()),
-                        styleClass = style.get("class"),
-                        styleSubClass = style.get("subClass"),
-                        styleFieldValues = style.get("styleFieldValues");
+                    image = [];
+                    name = [];
+                    style = Radio.request("StyleList", "returnModelById", layer.getStyleId());
+                    styleClass = style.get("class");
+                    styleSubClass = style.get("subClass");
+                    styleFieldValues = style.get("styleFieldValues");
 
                     if (styleClass === "POINT") {
                         // Custom Point Styles
@@ -198,8 +209,25 @@ define([
                             });
                         }
                         // Circle Point Style
-                        if (styleSubClass === "CIRCLE") {
+                        else if (styleSubClass === "CIRCLE") {
                             image.push(this.createCircleSVG(style));
+                            name.push(layer.get("name"));
+                        }
+                        else if (styleSubClass === "ADVANCED") {
+                            styleScalingValues = style.get("scalingValues");
+
+                            // sclingValues
+                            // scalingValueDefaultColor to scalingValues
+                            // svg anlegen
+                            // Segmente berechnen
+                            // Segmente in SVG schreiben
+
+                            console.log("Hier muss noch das Styling hin");
+                            // _.each(styleScalingValues, function (value, key) {
+                            //     image.push(style.get("imagePath") + key);
+                            // }, this);
+                            
+                            image.push(style.get("imagePath") + style.get("imageName"));
                             name.push(layer.get("name"));
                         }
                         else {
@@ -320,6 +348,7 @@ define([
         },
         /**
          * Übergibt GroupLayer in den tempArray. Für jeden GroupLayer wird der Typ "Group" gesetzt und als legendURL ein Array übergeben.
+         * @returns {void}
          */
         setLegendParamsFromGROUP: function () {
             var groupLayerList = this.get("groupLayerList");
@@ -342,6 +371,7 @@ define([
          * @desc Hilfsmethode um ein Attribut vom Typ Array zu setzen.
          * @param {String} attribute - Das Attribut das gesetzt werden soll.
          * @param {whatever} value - Der Wert des Attributs.
+         * @returns {void}
          */
         push: function (attribute, value) {
             var tempArray = _.clone(this.get(attribute));

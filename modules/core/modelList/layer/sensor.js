@@ -826,6 +826,23 @@ define(function (require) {
             return feature;
         },
 
+        /**
+         * create legend
+         * @returns {void}
+         */
+        createLegendURL: function () {
+            var style;
+
+            if (!this.getLegendURL().length) {
+                style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
+                if (!_.isUndefined(style)) {
+                    this.setLegendURL([style.getImagePath() + style.getImageName()]);
+
+                }
+            }
+        },
+
         getStyle: function () {
             return this.get("style");
         },

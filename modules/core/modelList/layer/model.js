@@ -44,15 +44,15 @@ define(function (require) {
                 }
             });
             this.listenTo(channel, {
-                  "updateLayerInfo": function (name) {
-                      if (this.getName() === name && this.getLayerInfoChecked() === true) {
-                          this.showLayerInformation();
-                      }
-                  },
+                "updateLayerInfo": function (name) {
+                    if (this.getName() === name && this.getLayerInfoChecked() === true) {
+                        this.showLayerInformation();
+                    }
+                },
                 "setLayerInfoChecked": function (layerInfoChecked) {
                     this.setLayerInfoChecked(layerInfoChecked);
                 }
-              });
+            });
 
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
