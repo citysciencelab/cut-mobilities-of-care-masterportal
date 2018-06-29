@@ -21,7 +21,7 @@
     "d3": "4.9.x",
     "jquery": "2.x",
     "jquery-ui": "1.x",
-    "moment": "^2.22.2",
+    "moment": "2.x",
     "openlayers": "4.4.2",
     "proj4": "2.x",
     "requirejs": "2.x",
