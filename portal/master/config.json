@@ -166,6 +166,10 @@
             "name": "Einwohneranzahl abfragen",
             "glyphicon": "glyphicon-wrench"
           },
+          "compareFeatures": {
+            "name": "Vergleichsliste",
+            "glyphicon": "glyphicon-th-list"
+          },
           "parcelSearch":
           {
             "name": "Flurstückssuche",

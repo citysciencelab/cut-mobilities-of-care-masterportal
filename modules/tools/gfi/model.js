@@ -201,14 +201,17 @@ define(function (require) {
         },
         /**
          *
-         * @param  {ol.Feature} featureAtPixel
-         * @param  {ol.layer.Vector} olLayer
+         * @param  {ol.Feature} featureAtPixel -
+         * @param  {ol.layer.Vector} olLayer -
+         * @returns {void}
          */
         searchModelByFeature: function (featureAtPixel, olLayer) {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")});
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")}),
+                modelAttributes;
 
             if (_.isUndefined(model) === false) {
-                var modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id");
+                modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
                     modelAttributes.feature = featureAtPixel;
