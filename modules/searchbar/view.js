@@ -3,6 +3,7 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         SearchbarTemplate = require("text!modules/searchbar/template.html"),
+        TemplateTable = require("text!modules/searchbar/templateTable.html"),
         SearchbarRecommendedListTemplate = require("text!modules/searchbar/templateRecommendedList.html"),
         SearchbarHitListTemplate = require("text!modules/searchbar/templateHitList.html"),
         Searchbar = require("modules/searchbar/model"),
@@ -10,11 +11,34 @@ define(function (require) {
         SearchbarView;
 
     SearchbarView = Backbone.View.extend({
-        model: new Searchbar(),
-        id: "searchbar", // wird ignoriert, bei renderToDOM
-        className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
-        searchbarKeyNavSelector: "#searchInputUL",
-        template: _.template(SearchbarTemplate),
+        events: {
+            "paste input": "setSearchString",
+            "keyup input": "setSearchString",
+            "focusin input": "toggleStyleForRemoveIcon",
+            "focusout input": "toggleStyleForRemoveIcon",
+            "click .form-control-feedback": "deleteSearchString",
+            "click .btn-search": "renderHitList",
+            "click .btn-table-search": "renderHitList",
+            "click .list-group-item.hit": "hitSelected",
+            "click .list-group-item.results": "renderHitList",
+            "mouseover .list-group-item.hit": "showMarker",
+            "mouseleave .list-group-item.hit": "hideMarker",
+            "click .list-group-item.type": function (e) {
+                // fix für Firefox
+                var event = e || window.event;
+
+                this.collapseHits($(event.target));
+            },
+            "click .btn-search-question": function () {
+                Radio.trigger("Quickhelp", "showWindowHelp", "search");
+            },
+            "keydown": "navigateList",
+            "click": function () {
+                this.clearSelection();
+                this.$("#searchInput").focus();
+                Radio.request("TableMenu", "setActiveElement", "Searchbar");
+            }
+        },
         /**
         * @description Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
         * @param {Object} config - Das Konfigurationsobjet der BKG Suche.
@@ -84,9 +108,12 @@ define(function (require) {
             }
             this.className = "navbar-form col-xs-9";
 
-            // this.listenTo(this.model, "change:searchString", this.render);
             this.listenTo(this.model, "change:recommendedList", function () {
                 this.renderRecommendedList();
+            });
+
+            this.listenTo(Radio.channel("TableMenu"), {
+                "hideMenuElementSearchbar": this.hideMenu
             });
 
             this.listenTo(Radio.channel("Searchbar"), {
@@ -94,9 +121,16 @@ define(function (require) {
                 "setFocus": this.setFocus
             });
             this.listenTo(Radio.channel("MenuLoader"), {
-                "ready": function () {
+                "ready": function (parentElementId) {
+                    this.render(parentElementId);
+                    if (!_.isUndefined(this.model.getInitSearchString())) {
+                        this.renderRecommendedList();
+                        this.$("#searchInput").val(this.model.getInitSearchString());
+                        this.model.unset("initSearchString", true);
+                    }
+
                     if (window.innerWidth >= 768) {
-                        $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                        this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
                     }
                 }
             });
@@ -107,12 +141,11 @@ define(function (require) {
                 }
             });
 
-            this.render();
 
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                $("#searchInput").val(this.model.get("placeholder"));
+                this.$("#searchInput").val(this.model.get("placeholder"));
             }
-            $("#searchInput").blur();
+            this.$("#searchInput").blur();
             // bedarfsweises Laden der Suchalgorythmen
             if (_.has(config, "gazetteer") === true) {
                 require(["modules/searchbar/gaz/model"], function (GAZModel) {
@@ -148,71 +181,57 @@ define(function (require) {
             // Hack für flexible Suchleiste
             $(window).on("resize", function () {
                 if (window.innerWidth >= 768) {
-                    $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                    this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
                 }
             });
             if (window.innerWidth >= 768) {
-                $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
             }
         },
-        events: {
-            "paste input": "setSearchString",
-            "keyup input": "setSearchString",
-            "focusin input": "toggleStyleForRemoveIcon",
-            "focusout input": "toggleStyleForRemoveIcon",
-            "click .form-control-feedback": "deleteSearchString",
-            "click .btn-search": "renderHitList",
-            "click .list-group-item.hit": "hitSelected",
-            "click .list-group-item.results": "renderHitList",
-            "mouseover .list-group-item.hit": "showMarker",
-            "mouseleave .list-group-item.hit": "hideMarker",
-            "click .list-group-item.type": function (e) {
-                // fix für Firefox
-                var event = e || window.event;
-
-                this.collapseHits($(event.target));
-            },
-            "click .btn-search-question": function () {
-                Radio.trigger("Quickhelp", "showWindowHelp", "search");
-            },
-            "keydown": "navigateList",
-            "click": function () {
-                this.clearSelection();
-                $("#searchInput").focus();
-            }
-        },
-
-        render: function () {
+        model: new Searchbar(),
+        id: "searchbar", // wird ignoriert, bei renderToDOM
+        className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
+        searchbarKeyNavSelector: "#searchInputUL",
+        template: _.template(SearchbarTemplate),
+        templateTable: _.template(TemplateTable),
+        render: function (parentElementId) {
             var attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
-            if (window.innerWidth < 768) {
-                $(".navbar-toggle").before(this.$el); // vor dem toggleButton
+            if (parentElementId !== "table-nav") {
+                this.$el.html(this.template(attr));
+                if (window.innerWidth < 768) {
+                    $(".navbar-toggle").before(this.$el); // vor dem toggleButton
+                }
+                else {
+                    $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
+                }
+                if (this.model.get("searchString").length !== 0) {
+                    this.$("#searchInput:focus").css("border-right-width", "0");
+                }
+                this.delegateEvents(this.events);
+                Radio.trigger("Title", "setSize");
             }
             else {
-                $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
+                this.$el.html(this.templateTable(attr));
+                $("#table-nav-main").prepend(this.$el);
             }
-            this.focusOnEnd($("#searchInput"));
-            if (this.model.get("searchString").length !== 0) {
-                $("#searchInput:focus").css("border-right-width", "0");
-            }
-            this.delegateEvents(this.events);
-            Radio.trigger("Title", "setSize");
+            return this;
         },
+
         /**
         * @description Methode, um den Searchstring über den Radio zu steuern ohne Event auszulösen
         * @param {string} searchstring - Der einzufügende Searchstring
         * @returns {void}
         */
         setSearchbarString: function (searchstring) {
-            $("#searchInput").val(searchstring);
+            this.$("#searchInput").val(searchstring);
         },
         /**
         * @description Verbirgt die Menubar
         * @returns {void}
         */
         hideMenu: function () {
-            $(".dropdown-menu-search").hide();
+            this.$(".dropdown-menu-search").hide();
         },
 
         renderRecommendedList: function () {
@@ -220,18 +239,18 @@ define(function (require) {
                 template;
                 // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
                 // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+
             this.prepareAttrStrings(attr.hitList);
             template = _.template(SearchbarRecommendedListTemplate);
 
-            $("ul.dropdown-menu-search").css("max-width", $("#searchForm").width());
-            $("ul.dropdown-menu-search").html(template(attr));
+            this.$("ul.dropdown-menu-search").css("max-width", this.$("#searchForm").width());
+            this.$("ul.dropdown-menu-search").html(template(attr));
             // }
             // bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
             if (!_.isUndefined(this.model.getInitSearchString()) && this.model.get("hitList").length === 1) {
                 this.hitSelected();
             }
-            $("#searchInput + span").show();
-            this.model.unset("initSearchString", true);
+            this.$("#searchInput + span").show();
         },
         prepareAttrStrings: function (hitlist) {
             // kepps hit.names from overflowing
@@ -259,7 +278,7 @@ define(function (require) {
                 // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
                 // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
                 template = _.template(SearchbarHitListTemplate);
-                $("ul.dropdown-menu-search").html(template(attr));
+                this.$("ul.dropdown-menu-search").html(template(attr));
             }
         },
 
@@ -267,7 +286,7 @@ define(function (require) {
          * Methode, um den Focus über den Radio in SearchInput zu legen
          */
         setFocus: function () {
-            $("#searchInput").focus();
+            this.$("#searchInput").focus();
         },
 
         /**
@@ -457,7 +476,7 @@ define(function (require) {
         },
 
         setSearchString: function (evt) {
-            var that;
+            var that = this;
 
             if (evt.target.value.length === 0) {
                 // suche zurücksetzten, wenn der nletzte Buchstabe gelöscht wurde
@@ -465,7 +484,6 @@ define(function (require) {
             }
             else {
                 if (evt.type === "paste") {
-                    that = this;
 
                     // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
                     setTimeout(function () {
@@ -488,15 +506,15 @@ define(function (require) {
 
                 // Der "x-Button" in der Suchleiste
                 if (evt.target.value.length > 0) {
-                    $("#searchInput + span").show();
+                    this.$("#searchInput + span").show();
                 }
                 else {
-                    $("#searchInput + span").hide();
+                    this.$("#searchInput + span").hide();
                 }
             }
         },
         collapseHits: function (target) {
-            $(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
+            this.$(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
             if (target.next().css("display") === "block") {
                 target.next().hide("slow");
                 target.removeClass("open");
@@ -511,32 +529,32 @@ define(function (require) {
         toggleStyleForRemoveIcon: function (evt) {
             if (evt.type === "focusin") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                    if ($("#searchInput").attr("value") === this.model.get("placeholder")) {
-                        $("#searchInput").val("");
+                    if (this.$("#searchInput").attr("value") === this.model.get("placeholder")) {
+                        this.$("#searchInput").val("");
                     }
                 }
-                $(".btn-deleteSearch").css("border-color", "#66afe9");
+                this.$(".btn-deleteSearch").css("border-color", "#66afe9");
             }
             else if (evt.type === "focusout") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
-                    if ($("#searchInput").attr("value") === "") {
-                        $("#searchInput").val(this.model.get("placeholder"));
+                    if (this.$("#searchInput").attr("value") === "") {
+                        this.$("#searchInput").val(this.model.get("placeholder"));
                     }
                 }
-                $(".btn-deleteSearch").css("border-color", "#cccccc");
+                this.$(".btn-deleteSearch").css("border-color", "#cccccc");
             }
         },
 
         deleteSearchString: function () {
             this.model.setSearchString("");
-            $("#searchInput").val("");
-            $("#searchInput + span").hide();
-            this.focusOnEnd($("#searchInput"));
+            this.$("#searchInput").val("");
+            this.$("#searchInput + span").hide();
+            this.focusOnEnd(this.$("#searchInput"));
             this.hideMarker();
             Radio.trigger("MapMarker", "clearMarker");
             this.clearSelection();
             // Suchvorschläge löschen
-            $("#searchInputUL").html("");
+            this.$("#searchInputUL").html("");
 
         },
 
@@ -550,7 +568,7 @@ define(function (require) {
         },
 
         hideMarker: function () {
-            if ($(".dropdown-menu-search").css("display") === "block") {
+            if (this.$(".dropdown-menu-search").css("display") === "block") {
                 Radio.trigger("MapMarker", "hideMarker");
             }
         },

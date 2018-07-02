@@ -1,7 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Require = require("require"),
+    var Config = require("config"),
         $ = require("jquery"),
         Util;
 
@@ -12,7 +10,8 @@ define(function (require) {
             ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"]
         },
         initialize: function () {
-            var channel = Radio.channel("Util");
+            var channel = Radio.channel("Util"),
+                uiStyle = Config.uiStyle ? Config.uiStyle.toUpperCase() : "DEFAULT";
 
             channel.reply({
                 "isViewMobile": this.getIsViewMobile,
@@ -26,13 +25,15 @@ define(function (require) {
                 "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny,
                 "getConfig": this.getConfig,
+                "getUiStyle": this.getUiStyle,
                 "getIgnoredKeys": this.getIgnoredKeys,
                 "punctuate": this.punctuate
             }, this);
 
             channel.on({
                 "hideLoader": this.hideLoader,
-                "showLoader": this.showLoader
+                "showLoader": this.showLoader,
+                "setUiStyle": this.setUiStyle
             }, this);
 
             // initial isMobileView setzen
@@ -45,8 +46,8 @@ define(function (require) {
             });
 
             $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
-            $(window).on("resize", _.bind(this.updateMapHeight, this));
 
+            this.setUiStyle(uiStyle);
             this.parseConfigFromURL();
         },
         /**
@@ -66,12 +67,6 @@ define(function (require) {
                 predecimals = predecimals.replace(pattern, "$1.$2");
             }
             return predecimals;
-        },
-        updateMapHeight: function () {
-            var navHeight = $("#main-nav").is(":visible") ? $("#main-nav").height() : 0,
-                mapHeight = $(".lgv-container").height() - navHeight;
-
-            $("#map").css("height", mapHeight + "px");
         },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);
@@ -98,7 +93,7 @@ define(function (require) {
             return isChrome;
         },
         isAny: function () {
-            return (this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows());
+            return this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows();
         },
         isInternetExplorer: function () {
             var ie = false;
@@ -115,7 +110,7 @@ define(function (require) {
             return ie;
         },
         getPath: function (path) {
-            var baseUrl = Require.toUrl("").split("?")[0];
+            var baseUrl = require.toUrl("").split("?")[0];
 
             if (path) {
                 if (path.indexOf("/") === 0) {
@@ -126,9 +121,9 @@ define(function (require) {
                 }
                 return baseUrl + path;
             }
-            else {
-                return "";
-            }
+
+            return "";
+
         },
         showLoader: function () {
             $("#loader").show();
@@ -163,14 +158,27 @@ define(function (require) {
             return result;
         },
 
+        /**
+         * Setter für Attribut isViewMobile
+         * @param {boolean} value sichtbar
+         * @return {undefined}
+         */
         setIsViewMobile: function (value) {
             this.set("isViewMobile", value);
         },
 
+        /**
+         * Getter für Attribut isViewMobile
+         * @return {boolean} mobil
+         */
         getIsViewMobile: function () {
             return this.get("isViewMobile");
         },
 
+        /**
+         * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
+         * @return {undefined}
+         */
         toggleIsViewMobile: function () {
             if (window.innerWidth >= 768) {
                 this.setIsViewMobile(false);
@@ -180,7 +188,7 @@ define(function (require) {
             }
         },
 
-        parseConfigFromURL: function (result) {
+        parseConfigFromURL: function () {
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {},
                 config;
@@ -214,6 +222,16 @@ define(function (require) {
         // setter for config
         setConfig: function (value) {
             this.set("config", value);
+        },
+
+        // getter for UiStyle
+        getUiStyle: function () {
+            return this.get("uiStyle");
+        },
+
+        // setter for UiStyle
+        setUiStyle: function (value) {
+            this.set("uiStyle", value);
         },
 
         getIgnoredKeys: function () {

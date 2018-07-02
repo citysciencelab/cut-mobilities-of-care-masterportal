@@ -12,6 +12,12 @@
         "Radio": true,
         "Backbone": true
     },
+    "plugins": [
+        "chai-friendly"
+    ],
+    "parserOptions": {
+        "sourceType": "module"
+    },
     "extends": "plugin:backbone/recommended",
     "rules": {
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
@@ -29,7 +35,7 @@
         "no-empty-character-class": "error",
         "no-ex-assign": "error",
         "no-extra-boolean-cast": "error",
-        "no-extra-parens": "error",
+        "no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
         "no-extra-semi": "error",
         "no-func-assign": "error",
         "no-inner-declarations": "error",
@@ -71,7 +77,6 @@
         "no-implicit-coercion": "error",
         "no-implicit-globals": "error",
         "no-implied-eval": "error",
-        "no-invalid-this": "error",
         "no-iterator": "error",
         "no-labels": "error",
         "no-lone-blocks": "error",
@@ -94,7 +99,8 @@
         "no-sequences": "error",
         "no-throw-literal": "error",
         "no-unmodified-loop-condition": "error",
-        "no-unused-expressions": "error",
+        "no-unused-expressions": 0,
+        "chai-friendly/no-unused-expressions": 2,
         "no-unused-labels": "error",
         "no-useless-call": "error",
         "no-useless-concat": "error",
@@ -181,7 +187,7 @@
         "prefer-numeric-literals": "error",
         "prefer-rest-params": "error",
         "padding-line-between-statements": [
-            "error", 
+            "error",
             {"blankLine": "always", "prev": ["const", "let", "var"], "next": "*"},
             {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]}
         ]

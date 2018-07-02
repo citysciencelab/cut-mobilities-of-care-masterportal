@@ -1,20 +1,26 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
+    var DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
         CustomTreeParser = require("modules/core/configLoader/parserCustomTree"),
         Config = require("config"),
         $ = require("jquery"),
         Preparser;
 
     Preparser = Backbone.Model.extend({
+        defaults: {},
         url: function () {
-            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json";
+            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json",
+                addPath,
+                isAddPathValid;
 
-            if (path.slice(-5) !== ".json") {
-                var addPath = Radio.request("Util", "getConfig"),
-                    isAddPathValid = addPath.length > 1 ? true : false;
+            if (path.slice(-6) === "?noext") {
+                path = Config.portalConf;
+            }
+            else if (path.slice(-5) !== ".json") {
+                addPath = Radio.request("Util", "getConfig");
+                isAddPathValid = addPath.length > 1;
                 // removes trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
+
                 if (isAddPathValid) {
                     if (path.slice(-1) === "/") {
                         path = path.slice(0, -1);
@@ -28,6 +34,7 @@ define(function (require) {
                     path = "config.json";
                 }
             }
+
             return path;
         },
         initialize: function () {
@@ -69,7 +76,11 @@ define(function (require) {
 
         requestSnippetInfos: function () {
             var infos,
-                url = _.has(Config, "infoJson") ? Config.infoJson : undefined;
+                url;
+
+            if (_.has(Config, "infoJson")) {
+                url = Config.infoJson;
+            }
 
             if (!_.isUndefined(url)) {
                 $.ajax({
@@ -79,8 +90,8 @@ define(function (require) {
                         infos = data;
                     }
                 });
-                return infos;
             }
+            return infos;
         }
     });
 

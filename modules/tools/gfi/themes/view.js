@@ -1,25 +1,23 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         Config = require("config"),
         ThemeView;
 
     ThemeView = Backbone.View.extend({
-        defaults: {
-            gfiWindow: "detached"
-        },
         initialize: function () {
             var gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached";
 
             this.listenTo(this.model, {
-                 "change:isVisible": this.appendTheme
+                "change:isVisible": this.appendTheme
             });
 
             this.gfiWindow = gfiWindow;
             this.render();
         },
-
+        defaults: {
+            gfiWindow: "detached"
+        },
         render: function () {
             var attr;
 
@@ -27,6 +25,8 @@ define(function (require) {
                 attr = this.model.toJSON();
                 this.$el.html(this.template(attr));
             }
+
+            return this;
         },
 
         appendTheme: function (model, value) {
@@ -81,15 +81,16 @@ define(function (require) {
          * Alle Children werden dem gfi-content appended. Eine Übernahme in dessen table ist nicht HTML-konform (<div> kann nicht in <table>).
          * Nur $.append, $.replaceWith usw. sorgen für einen korrekten Zusammenbau eines <div>. Mit element.val.el.innerHTML wird HTML nur kopiert, sodass Events
          * nicht im view ankommen.
+         * @return {undefined}
          */
         appendChildren: function () {
             var children = this.model.get("children");
 
-            $(".gfi-content").removeClass("has-image");
+            this.$(".gfi-content").removeClass("has-image");
             _.each(children, function (element) {
                 if (element.type && element.type === "image") {
                     this.$el.before(element.val.$el);
-                    $(".gfi-content").addClass("has-image");
+                    this.$(".gfi-content").addClass("has-image");
                 }
                 else {
                     this.$el.after(element.val.$el);
@@ -98,6 +99,7 @@ define(function (require) {
         },
         /**
          * Fügt den Button dem gfiContent hinzu
+         * @return {undefined}
          */
         appendRoutableButton: function () {
             var rb;

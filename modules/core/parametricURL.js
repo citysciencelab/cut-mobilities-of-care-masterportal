@@ -8,8 +8,7 @@ define(function (require) {
         defaults: {
             layerParams: [],
             isInitOpen: [],
-            zoomToGeometry: "",
-            style: ""
+            zoomToGeometry: ""
         },
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
@@ -310,10 +309,8 @@ define(function (require) {
         parseStyle: function (result) {
             var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
 
-            if (value === "SIMPLE") {
-                $("#main-nav").hide();
-                $("#map").css("height", "100%");
-                this.setStyle(value);
+            if (value && (value === "TABLE" || value === "SIMPLE")) {
+                Radio.trigger("Util", "setUiStyle", value);
             }
         },
         parseURL: function () {
@@ -478,15 +475,6 @@ define(function (require) {
 
         getZoomToExtent: function () {
             return this.get("zoomToExtent");
-        },
-
-        // getter for style
-        getStyle: function () {
-            return this.get("style");
-        },
-        // setter for style
-        setStyle: function (value) {
-            this.set("style", value);
         },
         getFilter: function () {
             return this.get("filter");

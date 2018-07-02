@@ -45,6 +45,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen.|
 |[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
 |[totalview](#markdown-header-portalconfigcontrolstotalview)|nein|Boolean|false|Zeigt einen Button für die Startansicht an.|
+|freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
 
 **Beispiel controls:**
 
@@ -115,6 +116,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |----|-------------|---|-------|------------|
 |showInSimpleMap|nein|Boolean||Gibt an ob die Zoom-Buttons auch in der simple Map ([URL-Parameter](URL_Parameter.md) "?style=simple" gezeichnet werden sollen.|
 |showMobile|nein|Boolean|false|Gibt an ob die Zoom-Buttons auch in der mobilen Ansicht gezeichnet werden sollen.|
+
 ******
 ### Portalconfig.controls.totalview ###
 
@@ -1277,6 +1279,12 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
 |searchField|nein|String || Attray [String]||Attributname[n], über den die Suche die Featuers des Layers finden kann.|
 |styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md).|
+
+**Folgende Layerkonfigurationen gelten nur für GeoJSON:**
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
 
 
 #### filterOptions ####
