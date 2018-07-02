@@ -87,9 +87,9 @@ define(function (require) {
          */
         renderErrorModal: function () {
             var comparableLayerModels = Radio.request("ModelList", "getModelsByAttributes", {isComparable: true}),
-                displayText = "Objekt";
+                displayText = "Objekte";
 
-            if (comparableLayerModels.length < 2) {
+            if (comparableLayerModels.length > 0 && comparableLayerModels.length < 2) {
                 displayText = comparableLayerModels[0].get("name");
             }
             this.$el.html(this.templateNoFeatures({text: displayText}));
