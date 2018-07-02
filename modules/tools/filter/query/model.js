@@ -122,7 +122,7 @@ define(function (require) {
          */
         createSnippets: function (featureAttributes) {
             var featureAttributesMap = this.trimAttributes(featureAttributes);
-
+            console.log(featureAttributesMap);
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
             featureAttributesMap = this.collectSelectableOptions(this.getFeatures(), [], featureAttributesMap);
             featureAttributesMap = this.mapRules(featureAttributesMap, this.getRules());
@@ -147,15 +147,30 @@ define(function (require) {
                 featureAttribute;
 
             _.each(this.getAttributeWhiteList(), function (attr) {
-                featureAttribute = _.findWhere(featureAttributesMap, {name: attr});
+                var attrObj = this.createAttrObject(attr);
+
+                featureAttribute = _.findWhere(featureAttributesMap, {name: attrObj.name});
                 if (featureAttribute !== undefined) {
+                    featureAttribute.matchingMode = attrObj.matchingMode;
                     trimmedFeatureAttributesMap.push(featureAttribute);
                 }
-            });
+            }, this);
 
             return trimmedFeatureAttributesMap;
         },
 
+        createAttrObject: function (attr) {
+            var attrObj = {};
+
+            if (_.isString(attr)) {
+                attrObj.name = attr;
+                attrObj.matchingMode = "OR";
+            }
+            else if (_.has(attr, "name") && _.has(attr, "matchingMode")) {
+                attrObj = attr;
+            }
+            return attrObj
+        },
         /**
          * Konfigurierter Labeltext wird den Features zugeordnet
          * @param  {object} featureAttributesMap - Mapobject

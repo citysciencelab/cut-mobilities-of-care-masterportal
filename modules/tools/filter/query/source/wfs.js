@@ -259,7 +259,7 @@ define(function (require) {
                 selectableValues = [];
 
             _.each(allAttributes, function (attribute) {
-                selectableValues = {name: attribute.name, displayName: attribute.displayName, type: attribute.type, values: []};
+                selectableValues = {name: attribute.name, displayName: attribute.displayName, type: attribute.type, values: [], matchingMode: attribute.matchingMode};
 
                 _.each(features, function (feature) {
                     var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
@@ -300,10 +300,9 @@ define(function (require) {
          * @return {Boolean}               true if feature has attribute that contains value
          */
         isValueMatch: function (feature, attribute) {
-            if (attribute.attrName === "bezirk" || attribute.attrName === "stadtteil") {
-                attribute.matchingMode = "OR";
-            }
+            var featureMap = _.findWhere(this.get("featureAttributesMap"), {name: attribute.attrName});
 
+            attribute.matchingMode = featureMap.matchingMode;
             return attribute.matchingMode === "OR" ? this.isORMatch(feature, attribute) : this.isANDMatch(feature, attribute);
         },
         isORMatch: function (feature, attribute) {
