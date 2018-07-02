@@ -614,8 +614,21 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
 |----|-------------|---|-------|------------|
 |name|ja|String||Attribut-Name.|
 |matchingMode|ja|String||Modus wie die Werte eines Attributes bei Mehrfachauswahl verknüpft werden sollen. "AND" für UND-Verknüpfung oder "OR" für ODER-Verknüfpung innerhalb eines Attributes.|
-******
-******
+
+**Beispiel:**
+
+```
+#!json
+
+"attributeWhiteList": [
+  {"name": "bezirk", "matchingMode": "OR"},
+  {"name": "stadtteil", "matchingMode": "OR"},
+  {"name": "abschluss", "matchingMode": "AND"},
+  {"name": "anzahl_schueler", "matchingMode": "AND"},
+  {"name": "fremdsprache", "matchingMode": "AND"}
+]
+```
+
 
 #### Portalconfig.menu.tools.children.gfi ######
 
