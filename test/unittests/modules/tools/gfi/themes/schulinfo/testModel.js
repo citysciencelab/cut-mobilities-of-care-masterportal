@@ -1,28 +1,33 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
-        Radio = require("backbone.radio"),
+        Util = require("util"),
         Model = require("../../../../../../../modules/tools/gfi/themes/schulinfo/model.js");
 
     describe("tools/gfi/themes/schulinfo", function () {
         var model,
+            utilModel,
+            testFeatures,
             gfiContent = {
-                    Name: "Katharinenschule in der HafenCity",
-                    Schulform: "Vorschulklasse|Grundschule",
-                    Bezirk: "Hamburg-Mitte"
-                },
+                Name: "Katharinenschule in der HafenCity",
+                Schulform: "Vorschulklasse|Grundschule",
+                Bezirk: "Hamburg-Mitte"
+            },
             featureInfos;
 
         before(function () {
-            model = new Model();
+            utilModel = new Util();
+            testFeatures = utilModel.createTestFeatures("resources/testFeatures.xml");
+            model = new Model({feature: testFeatures[0]});
         });
         beforeEach(function () {
             featureInfos = [{
                 name: "Grundätzliche Informationen",
-                attributes : [],
+                attributes: [],
                 isSelected: true
-            },{
+            },
+            {
                 name: "Schulgröße",
-                attributes : [],
+                attributes: [],
                 isSelected: false
             }];
         });
@@ -43,15 +48,15 @@ define(function(require) {
             it("sets object.isSelected true, when object.name matches \"Schulgröße\"", function () {
                 expect(model.setIsSelected("Schulgröße", featureInfos)).to.be.an("array").to.deep.include({
                     name: "Schulgröße",
-                    attributes : [],
+                    attributes: [],
                     isSelected: true
                 });
             });
             it("return unchanged featureInfos, when no object.name matches \"Ganztag\"", function () {
                 expect(model.setIsSelected("Ganztag", featureInfos)).to.be.an("array").to.deep.include({
-                name: "Grundätzliche Informationen",
-                attributes : [],
-                isSelected: true
+                    name: "Grundätzliche Informationen",
+                    attributes: [],
+                    isSelected: true
                 });
             });
         });

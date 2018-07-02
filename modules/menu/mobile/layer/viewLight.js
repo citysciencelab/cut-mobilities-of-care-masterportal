@@ -28,9 +28,9 @@ define([
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isSelected change:isVisibleInMap": this.render,
-                 "change:isSettingVisible": this.renderSetting,
-                 "change:isVisibleInTree": this.removeIfNotVisible,
+                "change:isSelected change:isVisibleInMap": this.render,
+                "change:isSettingVisible": this.renderSetting,
+                "change:isVisibleInTree": this.removeIfNotVisible,
                 "change:isOutOfRange": this.toggleColor
             });
             this.toggleColor(this.model, this.model.getIsOutOfRange());
@@ -43,11 +43,11 @@ define([
             if (model.has("minScale") === true) {
                 if (value === true) {
                     this.$el.addClass("disabled");
-                    this.$el.find("*").css("pointer-events","none");
+                    this.$el.find("*").css("pointer-events", "none");
                 }
                 else {
                     this.$el.removeClass("disabled");
-                    this.$el.find("*").css("pointer-events","auto");
+                    this.$el.find("*").css("pointer-events", "auto");
                 }
             }
         },

@@ -2,7 +2,7 @@ define(function (require) {
 
     var ThemeView = require("modules/tools/gfi/themes/view"),
         MietenspiegelTemplate = require("text!modules/tools/gfi/themes/mietenspiegel/template.html"),
-        MietenspiegelFormularTemplate = ("text!modules/tools/gfi/themes/mietenspiegel/template-formular.html"),
+        MietenspiegelFormularTemplate = "text!modules/tools/gfi/themes/mietenspiegel/template-formular.html",
         Radio = require("backbone.radio"),
         MietenspiegelThemeView;
 
@@ -17,7 +17,7 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isVisible": this.appendTheme
+                "change:isVisible": this.appendTheme
             });
 
             this.init();
@@ -42,7 +42,7 @@ define(function (require) {
             }, this);
 
             this.listenToOnce(this.model, "change:readyState", function () { // Beim ersten Abfragen läuft initialize durch, bevor das Model fertig ist. Daher wird change:readyState getriggert
-                this.model.newWindow (layer, response, coordinate);
+                this.model.newWindow(layer, response, coordinate);
                 $(".gfi-content").append(this.$el.html(this.template(this.model.toJSON())));
                 this.focusNextMerkmal(0);
             });
@@ -51,7 +51,7 @@ define(function (require) {
             this.listenTo(this.model, "change:msSpanneMax", this.changedSpanneMax);
             this.listenTo(this.model, "change:msDatensaetze", this.changedDatensaetze);
             if (this.model.get("readyState") === true) {
-                this.model.newWindow (layer, response, coordinate);
+                this.model.newWindow(layer, response, coordinate);
                 this.render();
             }
         },
@@ -98,6 +98,7 @@ define(function (require) {
         fillMerkmaleInCombobox: function (comboboxId) {
             var merkmale = this.returnMerkmaleListe(),
                 validMerkmale = this.model.returnValidMerkmale(comboboxId, merkmale);
+
             // Combobox erst leeren
             $(".msmerkmal").each(function () {
                 if ($(this).attr("id") === comboboxId) {
@@ -121,7 +122,7 @@ define(function (require) {
             var id,
                 merkmale;
 
-            $(".msmerkmal").each (function (index) {
+            $(".msmerkmal").each(function (index) {
                 if (activateIndex === index) {
                     $(this).removeAttr("disabled");
                     id = $(this).attr("id");

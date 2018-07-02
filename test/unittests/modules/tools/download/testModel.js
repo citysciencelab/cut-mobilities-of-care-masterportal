@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var assert = require("chai").assert,
         Model = require("../../../../../modules/tools/download/model.js");
 

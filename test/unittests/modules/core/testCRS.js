@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         Model = require("../../../../modules/core/crs.js");
 
@@ -46,7 +46,7 @@ define(function(require) {
 
             it("transforms from EPSG:31461 to EPSG:31462", function () {
                 expect(model.transform(par)).to.have.lengthOf(2);
-                expect(model.transform(par)[0]).to.equal(2760384.0229459424);
+                expect(model.transform(par)[0]).to.equal(2760384.022945942);
                 expect(model.transform(par)[1]).to.equal(5944842.574243492);
             });
         });

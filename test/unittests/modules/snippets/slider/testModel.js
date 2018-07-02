@@ -14,8 +14,8 @@ define(function (require) {
             it("should return an array of numbers", function () {
                 var parsedValues = model.parseValues(model.get("values")),
                     allValues = _.every(parsedValues, function (value) {
-                    return _.isNumber(value);
-                });
+                        return _.isNumber(value);
+                    });
 
                 expect(allValues).to.be.true;
             });

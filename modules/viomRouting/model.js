@@ -23,7 +23,7 @@ define([
             bbox: "",
             routelayer: "",
             mhpOverlay: "",
-            isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true ? true : false
+            isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true
         },
         initialize: function () {
             Radio.on("Window", "winParams", this.setStatus, this);
@@ -88,7 +88,7 @@ define([
                 query = "&query=" + _.without(arr, plz[0], hsnr[0]),
                 bbox = _.isNull(this.get("bbox")) === false ? this.get("bbox") : "",
                 filter = plz.length === 1 && hsnr.length === 1 ? "&filter=(plz:" + plz + ") AND (typ:Haus) AND haus:(" + hsnr + "*)" :
-                        plz.length === 1 && hsnr.length !== 1 ? "&filter=(plz:" + plz + ") AND (typ:Strasse OR typ:Ort OR typ:Geoname)" :
+                    plz.length === 1 && hsnr.length !== 1 ? "&filter=(plz:" + plz + ") AND (typ:Strasse OR typ:Ort OR typ:Geoname)" :
                         plz.length !== 1 && hsnr.length === 1 ? "&filter=(typ:Haus) AND haus:(" + hsnr + "*)" : " &filter=(typ:Strasse OR typ:Ort OR typ:Geoname)";
 
             $.ajax({
@@ -159,6 +159,7 @@ define([
             Radio.trigger("ClickCounter", "calcRoute");
 
             var request = "PROVIDERID=" + this.get("viomProviderID") + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
+
             /* Erwartete Übergabeparameter:
             *  routingtime [hh:mm]
             *  routingdate [yyyy-mm-dd]
@@ -224,7 +225,7 @@ define([
                 html = html + "</div>";
 
             $("#map").append(html);
-            this.set("mhpOverlay", new ol.Overlay({ element: $("#routingoverlay")[0]}));
+            this.set("mhpOverlay", new ol.Overlay({element: $("#routingoverlay")[0]}));
             this.get("mhpOverlay").setPosition([position[0] + 7, position[1] - 7]);
             Radio.trigger("Map", "addOverlay", this.get("mhpOverlay"));
         },

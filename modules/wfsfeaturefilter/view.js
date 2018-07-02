@@ -42,21 +42,17 @@ define([
                 _.each(layer.filterOptions, function (filter) {
                     id = "#" + layer.id + "_" + filter.fieldName;
                     value = $(id).val();
-                    filters.push(
-                        {
-                            id: id,
-                            filtertype: filter.filterType,
-                            fieldName: filter.fieldName,
-                            fieldValue: value
-                        }
-                    );
+                    filters.push({
+                        id: id,
+                        filtertype: filter.filterType,
+                        fieldName: filter.fieldName,
+                        fieldValue: value
+                    });
                 });
-                layerfilters.push(
-                    {
-                        layerId: layer.id,
-                        filter: filters
-                    }
-                );
+                layerfilters.push({
+                    layerId: layer.id,
+                    filter: filters
+                });
             });
             if (layerfilters.length > 0) {
                 this.filterLayers(layerfilters);
@@ -98,13 +94,16 @@ define([
                     }
 
                     features.forEach(function (feature) {
-                        var featuredarstellen = true, attributname, attributvalue, featurevalue0, featurevalue;
+                        var featuredarstellen = true,
+                            attributname, attributvalue, featurevalue0, featurevalue;
+
                         // Prüfung, ob Feature dargestellt werden soll
                         _.each(layerfilter.filter, function (elementfilter) {
                             attributname = elementfilter.fieldName;
                             attributvalue = elementfilter.fieldValue;
                             if (attributvalue !== "*") {
                                 var featureattribute = _.pick(feature.getProperties(), attributname);
+
                                 if (featureattribute && !_.isNull(featureattribute)) {
                                     featurevalue0 = _.values(featureattribute)[0];
                                     if (featurevalue0) {
@@ -121,13 +120,11 @@ define([
                                 feature.setStyle(feature.defaultStyle);
                                 delete feature.defaultStyle;
                             }
+                            else if (layers[0].styleField) {
+                                feature.setStyle(layer.defaultStyle(feature));
+                            }
                             else {
-                                if (layers[0].styleField){
-                                    feature.setStyle(layer.defaultStyle(feature));
-                                }
-                                else {
-                                    feature.setStyle(layer.defaultStyle);
-                                }
+                                feature.setStyle(layer.defaultStyle);
                             }
                         }
                         else if (featuredarstellen === false) {
@@ -140,7 +137,7 @@ define([
         },
         render: function () {
             var attr,
-                layerfilters=this.model.get("layerfilters");
+                layerfilters = this.model.get("layerfilters");
 
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.model.getLayers();
@@ -174,5 +171,6 @@ define([
             $("#wfsFilterWin").css("max-height", maxHeight);
         }
     });
+
     return wfsFeatureFilterView;
 });

@@ -20,7 +20,7 @@ define([
             var channel = Radio.channel("Legend");
 
             channel.reply({
-               "getLegendParams": this.getLegendParams
+                "getLegendParams": this.getLegendParams
             }, this);
 
             this.listenTo(Radio.channel("ModelList"), {
@@ -51,9 +51,9 @@ define([
 
         updateParamsStyleWMSArray: function (params) {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-            paramsStyleWMSArray2 = [];
+                paramsStyleWMSArray2 = [];
 
-            _.each (paramsStyleWMSArray, function (paramsStyleWMS) {
+            _.each(paramsStyleWMSArray, function (paramsStyleWMS) {
                 if (params.styleWMSName !== paramsStyleWMS.styleWMSName) {
                     paramsStyleWMSArray2.push(paramsStyleWMS);
                 }
@@ -69,18 +69,18 @@ define([
                 legendParams = this.get("legendParams");
 
             _.each(this.get("legendParams"), function (legendParam, i) {
-                    _.find (paramsStyleWMSArray, function (paramsStyleWMS) {
-                        if (legendParam.layername === paramsStyleWMS.styleWMSName) {
-                            var layername = legendParam.layername,
-                                isVisibleInMap = legendParam.isVisibleInMap;
+                _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
+                    if (legendParam.layername === paramsStyleWMS.styleWMSName) {
+                        var layername = legendParam.layername,
+                            isVisibleInMap = legendParam.isVisibleInMap;
 
-                            legendParams.splice(i, 1, {params: paramsStyleWMS,
-                                               layername: layername,
-                                               typ: "styleWMS",
-                                               isVisibleInMap: isVisibleInMap});
+                        legendParams.splice(i, 1, {params: paramsStyleWMS,
+                            layername: layername,
+                            typ: "styleWMS",
+                            isVisibleInMap: isVisibleInMap});
 
-                        }
-                    });
+                    }
+                });
             });
             this.set("legendParams", legendParams);
         },
@@ -100,7 +100,7 @@ define([
                 groupedLayers,
                 modelList = Radio.request("ModelList", "getCollection");
 
-//            layerlist = modelList.where({type: "layer", isVisibleInMap: true});
+            //            layerlist = modelList.where({type: "layer", isVisibleInMap: true});
             this.unsetLegendParams();
             // Die Layer die in der Legende dargestellt werden sollen
             filteredLayerList = _.filter(modelList.models, function (layer) {
@@ -137,7 +137,7 @@ define([
 
         setLegendParamsFromWMS: function () {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-            paramsStyleWMS = "";
+                paramsStyleWMS = "";
 
             _.each(this.get("wmsLayerList"), function (layer) {
                 paramsStyleWMS = _.find(paramsStyleWMSArray, function (paramsStyleWMS) {

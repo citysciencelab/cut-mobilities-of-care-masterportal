@@ -20,7 +20,7 @@ define([
                 poiDistances = this.model.getPoiDistances(),
                 channel;
 
-            if (showGeolocation) {// Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
+            if (showGeolocation) { // Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
                 channel = Radio.channel("orientation");
 
                 channel.on({

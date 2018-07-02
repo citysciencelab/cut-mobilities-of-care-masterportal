@@ -15,8 +15,8 @@ define(function (require) {
         splitContent: function () {
             if (_.isUndefined(this.get("gfiContent")) === false) {
                 var allgemContent = {},
-                 mikrobioContent = {},
-                 chemContent = {};
+                    mikrobioContent = {},
+                    chemContent = {};
 
                 _.each(this.getGfiContent(), function (element) {
                     _.each(element, function (value, key) {

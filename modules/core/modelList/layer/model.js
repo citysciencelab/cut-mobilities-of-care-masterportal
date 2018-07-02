@@ -43,15 +43,15 @@ define(function (require) {
                 }
             });
             this.listenTo(channel, {
-                  "updateLayerInfo": function (name) {
-                      if (this.getName() === name && this.getLayerInfoChecked() === true) {
-                          this.showLayerInformation();
-                      }
-                  },
+                "updateLayerInfo": function (name) {
+                    if (this.getName() === name && this.getLayerInfoChecked() === true) {
+                        this.showLayerInformation();
+                    }
+                },
                 "setLayerInfoChecked": function (layerInfoChecked) {
                     this.setLayerInfoChecked(layerInfoChecked);
                 }
-              });
+            });
 
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
@@ -288,7 +288,7 @@ define(function (require) {
             }
         },
         decTransparency: function () {
-             if (this.getTransparency() >= 10) {
+            if (this.getTransparency() >= 10) {
                 this.setTransparency(this.getTransparency() - 10);
             }
         },
@@ -363,7 +363,7 @@ define(function (require) {
 
                 if (this.getIsVisibleInMap() === true) {
                     Radio.trigger(channelName, eventName, this);
-                    this.getAttributions().interval = setInterval (function (model) {
+                    this.getAttributions().interval = setInterval(function (model) {
                         Radio.trigger(channelName, eventName, model);
                     }, timeout, this);
                 }
@@ -378,6 +378,7 @@ define(function (require) {
          */
         updateLayerTransparency: function () {
             var opacity = (100 - this.getTransparency()) / 100;
+
             // Auch wenn die Layer im simple Tree noch nicht selected wurde können
             // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
             if (!_.isUndefined(this.getLayer())) {
@@ -412,7 +413,7 @@ define(function (require) {
             this.set("selectionIDX", idx);
         },
         getSelectionIDX: function () {
-           return this.get("selectionIDX");
+            return this.get("selectionIDX");
         },
         moveDown: function () {
             this.collection.moveModelDown(this);
@@ -426,11 +427,11 @@ define(function (require) {
          */
         getmetaID: function () {
             if (this.get("datasets")[0]) {
-             return this.get("datasets")[0].md_id;
+                return this.get("datasets")[0].md_id;
             }
-            else {
-                    return undefined;
-            }
+
+            return undefined;
+
         },
         /**
          * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt den Metanamen wieder
@@ -440,9 +441,9 @@ define(function (require) {
             if (this.get("datasets")[0]) {
                 return this.get("datasets")[0].md_name;
             }
-            else {
-                return undefined;
-            }
+
+            return undefined;
+
         },
 
         getUrl: function () {

@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
@@ -8,11 +8,10 @@ define(function (require) {
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         ModelList;
 
     ModelList = Backbone.Collection.extend({
-        selectionIDX: [],
         initialize: function () {
             var channel = Radio.channel("ModelList");
 
@@ -75,6 +74,7 @@ define(function (require) {
                 }
             });
         },
+        selectionIDX: [],
         model: function (attrs, options) {
             if (attrs.type === "layer") {
                 if (attrs.typ === "WMS") {
@@ -84,9 +84,11 @@ define(function (require) {
                     if (attrs.outputFormat === "GeoJSON") {
                         return new GeoJSONLayer(attrs, options);
                     }
-                    else {
-                        return new WFSLayer(attrs, options);
-                    }
+                    return new WFSLayer(attrs, options);
+
+                }
+                else if (attrs.typ === "GeoJSON") {
+                    return new GeoJSONLayer(attrs, options);
                 }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
@@ -102,8 +104,9 @@ define(function (require) {
                 return new StaticLink(attrs, options);
             }
             else {
-                Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + "attrs.type");
+                Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + attrs.type + ". Bitte wenden Sie sich an einen Administrator!");
             }
+            return null;
         },
         /**
         * [checkIsExpanded description]
@@ -121,11 +124,12 @@ define(function (require) {
         * Setzt bei Ã„nderung der Ebene, alle Model
         * auf der neuen Ebene auf sichtbar
         * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
+        * @return {undefined}
         */
         setModelsVisibleByParentId: function (parentId) {
             var itemListByParentId = this.where({parentId: parentId}),
-            // Falls es ein LeafFolder ist --> "Alle auswÃ¤hlen" Template
-            selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
+                // Falls es ein LeafFolder ist --> "Alle auswÃ¤hlen" Template
+                selectedLeafFolder = this.where({id: parentId, isLeafFolder: true});
 
             _.each(_.union(selectedLeafFolder, itemListByParentId), function (item) {
                 item.setIsVisibleInTree(true);
@@ -135,6 +139,7 @@ define(function (require) {
         * Setzt bei Ã„nderung der Ebene, alle Model
         * auf der alten Ebene auf unsichtbar
         * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
+        * @return {undefined}
         */
         setModelsInvisibleByParentId: function (parentId) {
             var children;
@@ -153,10 +158,11 @@ define(function (require) {
         *
         *
         * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
+        * @return {undefined}
         */
         setVisibleByParentIsExpanded: function (parentId) {
             var itemListByParentId = this.where({parentId: parentId}),
-            parent = this.findWhere({id: parentId});
+                parent = this.findWhere({id: parentId});
 
             if (!parent.getIsExpanded()) {
                 this.setAllDescendantsInvisible(parentId);
@@ -181,6 +187,7 @@ define(function (require) {
 
         /**
         * Setzt alle Models unsichtbar
+        * @return {undefined}
         */
         setAllModelsInvisible: function () {
             this.forEach(function (model) {
@@ -193,6 +200,7 @@ define(function (require) {
         /**
         * Alle Layermodels von einem Leaffolder werden "selected" oder "deselected"
         * @param {Backbone.Model} model - folderModel
+        * @return {undefined}
         */
         setIsSelectedOnChildLayers: function (model) {
             var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()}));
@@ -205,13 +213,14 @@ define(function (require) {
         * PrÃ¼ft ob alle Layer im Leaffolder isSelected = true sind
         * Falls ja, wird der Leaffolder auch auf isSelected = true gesetzt
         * @param {Backbone.Model} model - layerModel
+        * @return {undefined}
         */
         setIsSelectedOnParent: function (model) {
             var layers = this.where({parentId: model.getParentId()}),
-            folderModel = this.findWhere({id: model.getParentId()}),
-            allLayersSelected = _.every(layers, function (layer) {
-                return layer.getIsSelected() === true;
-            });
+                folderModel = this.findWhere({id: model.getParentId()}),
+                allLayersSelected = _.every(layers, function (layer) {
+                    return layer.getIsSelected() === true;
+                });
 
             if (allLayersSelected === true) {
                 folderModel.setIsSelected(true);
@@ -281,7 +290,7 @@ define(function (require) {
         },
         moveModelDown: function (model) {
             var oldIDX = model.getSelectionIDX(),
-            newIDX = oldIDX - 1;
+                newIDX = oldIDX - 1;
 
             if (oldIDX > 0) {
                 this.removeFromSelectionIDX(model);
@@ -297,7 +306,7 @@ define(function (require) {
         },
         moveModelUp: function (model) {
             var oldIDX = model.getSelectionIDX(),
-            newIDX = oldIDX + 1;
+                newIDX = oldIDX + 1;
 
             if (oldIDX < this.selectionIDX.length - 1) {
                 this.removeFromSelectionIDX(model);
@@ -321,7 +330,8 @@ define(function (require) {
 
         /**
         * Setzt bei allen Models vom Typ "layer" das Attribut "isSettingVisible"
-        * @param {boolean} value
+        * @param {boolean} value ist sichtbar?
+        * @return {undefined}
         */
         setIsSettingVisible: function (value) {
             var models = this.where({type: "layer"});
@@ -333,6 +343,7 @@ define(function (require) {
         /**
         * Im Lighttree alle Models hinzufÃ¼gen ansonsten, die Layer die initial
         * angezeigt werden sollen.
+        * @return {undefined}
         */
         addInitialyNeededModels: function () {
             // lighttree: Alle models gleich hinzufÃ¼gen, weil es nicht viele sind und sie direkt einen Selection index
@@ -357,7 +368,7 @@ define(function (require) {
                     layer.isSelected = false;
                 }, this);
 
-                 _.each(paramLayers, function (paramLayer) {
+                _.each(paramLayers, function (paramLayer) {
                     lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
                     if (_.isUndefined(lightModel) === false) {
@@ -369,7 +380,6 @@ define(function (require) {
                         }
                     }
                 }, this);
-
             }
             else {
                 this.addModelsByAttributes({type: "layer", isSelected: true});
@@ -415,7 +425,8 @@ define(function (require) {
         /**
         * Wird aus der Themensuche heraus aufgerufen
         * Ã–ffnet den Themenbaum, selektiert das Model und fÃ¼gt es zur Themenauswahl hinzu
-        * @param  {String} modelId
+        * @param  {String} modelId die Id des Models
+        * @return {undefined}
         */
         showModelInTree: function (modelId) {
             var lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
@@ -435,13 +446,14 @@ define(function (require) {
 
         /**
         * Scrolled auf den Layer
-        * @param {String} layername - in "Fachdaten" wird auf diesen Layer gescrolled
+        * @param {String} overlayername - in "Fachdaten" wird auf diesen Layer gescrolled
+        * @return {undefined}
         */
         scrollToLayer: function (overlayername) {
             var liLayer = _.findWhere($("#Overlayer").find("span"), {title: overlayername}),
-            offsetFromTop = liLayer ? $(liLayer).offset().top : null,
-            heightThemen = $("#tree").css("height"),
-            scrollToPx = 0;
+                offsetFromTop = liLayer ? $(liLayer).offset().top : null,
+                heightThemen = $("#tree").css("height"),
+                scrollToPx = 0;
 
             if (offsetFromTop) {
                 // die "px" oder "%" vom string lÃ¶schen und zu int parsen
@@ -452,7 +464,7 @@ define(function (require) {
                     heightThemen = parseInt(heightThemen.slice(0, -1), 10);
                 }
 
-                scrollToPx = offsetFromTop - heightThemen / 2;
+                scrollToPx = (offsetFromTop - heightThemen) / 2;
 
                 $("#Overlayer").animate({
                     scrollTop: scrollToPx
@@ -465,10 +477,11 @@ define(function (require) {
         * FÃ¼gt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
         * Beim ZurÃ¼cklaufen werden die Parent-Models expanded
         * @param {String} parentId - Models mit dieser parentId werden zur Liste hinzugefÃ¼gt
+        * @return {undefined}
         */
         addAndExpandModelsRecursive: function (parentId) {
             var lightSiblingsModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
-            parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightSiblingsModels[0].parentId});
+                parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightSiblingsModels[0].parentId});
 
             this.add(lightSiblingsModels);
             // Abbruchbedingung

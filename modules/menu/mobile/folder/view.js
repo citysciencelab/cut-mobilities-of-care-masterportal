@@ -1,9 +1,4 @@
-define([
-    "backbone",
-    "text!modules/menu/mobile/folder/template.html",
-    "text!modules/menu/mobile/folder/templateLeaf.html",
-    "backbone.radio"
-], function () {
+define(function (require) {
 
     var Backbone = require("backbone"),
         FolderTemplate = require("text!modules/menu/mobile/folder/template.html"),
@@ -22,12 +17,13 @@ define([
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isSelected": this.render,
-                 "change:isVisibleInTree": this.removeIfNotVisible
+                "change:isSelected": this.render,
+                "change:isVisibleInTree": this.removeIfNotVisible
             });
         },
         render: function () {
             var attr = this.model.toJSON();
+
             if (this.model.getIsExpanded() === true && this.model.getParentId() !== "tree") {
                 this.$el.html(this.templateLeaf(attr));
             }

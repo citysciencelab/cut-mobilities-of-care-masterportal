@@ -128,7 +128,7 @@ define(function (require) {
             this.model.setCadastralDistrictNumber("0");
             $("#cadastralDistrictField").empty();
             $("#cadastralDistrictField").append("<option selected disabled value='0'>bitte wählen</option>");
-            _.each((_.values(_.pick(cadastralDistricts, districtNumber))[0]), function (cadastralDistrict) {
+            _.each(_.values(_.pick(cadastralDistricts, districtNumber))[0], function (cadastralDistrict) {
                 $("#cadastralDistrictField").append("<option value=" + cadastralDistrict + ">" + cadastralDistrict + "</option>");
             });
             $("#cadastralDistrictField").focus();

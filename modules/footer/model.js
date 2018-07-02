@@ -27,6 +27,6 @@ define([
         }
     });
 
-return new FooterModel();
+    return new FooterModel();
 
 });

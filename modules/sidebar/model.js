@@ -11,7 +11,8 @@ define(function () {
             var channel = Radio.channel("Sidebar");
 
             this.listenTo(channel, {
-                "toggle": this.setIsVisible
+                "toggle": this.setIsVisible,
+                "append": this.addContent
             });
             this.listenTo(Radio.channel("Util"), {
                 "isViewMobileChanged": this.setIsMobile
@@ -20,17 +21,18 @@ define(function () {
         },
 
         /**
-         * sets the isMobile attribute
-         * @param  {boolean} value
+         * passes a DOM element to the view
+         * @param {DOM} element - from a tool view
+         * @returns {void}
          */
+        addContent: function (element) {
+            this.trigger("addContent", element);
+        },
+
         setIsMobile: function (value) {
             this.set("isMobile", value);
         },
 
-        /**
-         * sets the isVisible attribute
-         * @param  {boolean} value
-         */
         setIsVisible: function (value) {
             this.set("isVisible", value);
         }

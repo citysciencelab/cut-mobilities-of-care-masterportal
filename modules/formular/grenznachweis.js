@@ -99,7 +99,7 @@ define([
                 return min <= max;
             },
             pattern: function (value, pattern) {
-                return new RegExp(pattern, "gi").test(value) ? true : false;
+                return Boolean(new RegExp(pattern, "gi").test(value));
             }
         },
         validate: function (attributes, identifier) {

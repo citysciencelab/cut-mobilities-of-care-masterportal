@@ -1,31 +1,31 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         GroupLayerModel = require("../../../../../../modules/core/modelList/layer/group.js");
 
     describe("core/modelList/layer/group", function () {
         var groupLayer,
             layerdefinitions = [{
-                  "id": "2802",
-                  "name": "Jahrgang 2015",
-                  "url": "https://geodienste.hamburg.de/HH_WMS_Historische_Karte_1_5000",
-                  "typ": "WMS",
-                  "layers": "62",
-                  "version": "1.3.0",
-                  "minScale": "0",
-                  "maxScale": "2500000",
-                  "gfiAttributes": "ignore"
-               },{
-                  "id": "2803",
-                  "name": "Footprint",
-                  "url": "https://geodienste.hamburg.de/HH_WMS_Historische_Karte_1_5000",
-                  "typ": "WMS",
-                  "layers": "63",
-                  "version": "1.3.0",
-                  "minScale": "0",
-                  "maxScale": "2500000",
-                  "gfiAttributes": "showAll"
-               }
-                ];
+                "id": "2802",
+                "name": "Jahrgang 2015",
+                "url": "https://geodienste.hamburg.de/HH_WMS_Historische_Karte_1_5000",
+                "typ": "WMS",
+                "layers": "62",
+                "version": "1.3.0",
+                "minScale": "0",
+                "maxScale": "2500000",
+                "gfiAttributes": "ignore"
+            }, {
+                "id": "2803",
+                "name": "Footprint",
+                "url": "https://geodienste.hamburg.de/HH_WMS_Historische_Karte_1_5000",
+                "typ": "WMS",
+                "layers": "63",
+                "version": "1.3.0",
+                "minScale": "0",
+                "maxScale": "2500000",
+                "gfiAttributes": "showAll"
+            }
+            ];
 
         before(function () {
             groupLayer = new GroupLayerModel();
@@ -39,7 +39,7 @@ define(function(require) {
                 expect(groupLayer.groupGfiAttributes("showAll", layerdefinitions)).to.have.string("showAll");
             });
             it("should return an object with gfiAttributes of groupLayer (Object)", function () {
-                expect(groupLayer.groupGfiAttributes({"test1": "TEST1","test2": "TEST2"}, layerdefinitions)).to.deep.include({test1: "TEST1",test2: "TEST2"});
+                expect(groupLayer.groupGfiAttributes({"test1": "TEST1", "test2": "TEST2"}, layerdefinitions)).to.deep.include({test1: "TEST1", test2: "TEST2"});
             });
         });
         describe("groupLayerObjectsByUrl", function () {

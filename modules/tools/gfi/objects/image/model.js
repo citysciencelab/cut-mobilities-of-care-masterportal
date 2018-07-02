@@ -33,13 +33,14 @@ define([
         },
         reloadImage: function () {
             var img = document.getElementById(this.get("id"));
+
             if (img) {
                 img.src = img.src.split("?")[0] + "?" + this.get("zufallszahl");
                 this.checkImage();
             }
         },
         checkImage: function () {
-            window.clearInterval(this.get("checkInterval")); //altes Interval löschen
+            window.clearInterval(this.get("checkInterval")); // altes Interval löschen
             this.set("checkInterval", setInterval(function () {
                 if (document.getElementById(this.get("id")) && document.getElementById(this.get("id")).complete) {
                     if (document.getElementById(this.get("id")).naturalWidth !== 0) {
@@ -60,5 +61,6 @@ define([
             window.clearInterval(this.get("reloadInterval"));
         }
     });
+
     return ImgModel;
 });

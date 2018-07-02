@@ -21,6 +21,7 @@ define([
         },
         initialize: function () {
             var channel = Radio.channel("SaveSelection");
+
             channel.reply({
                 "getMapState": this.getMapState
             }, this);
@@ -29,12 +30,12 @@ define([
             });
 
             this.listenTo(Radio.channel("ModelList"), {
-                 "updatedSelectedLayerList": this.filterExternalLayer
+                "updatedSelectedLayerList": this.filterExternalLayer
             });
 
             this.listenTo(Radio.channel("MapView"), {
-                 "changedZoomLevel": this.setZoomLevel,
-                 "changedCenter": this.setCenterCoords
+                "changedZoomLevel": this.setZoomLevel,
+                "changedCenter": this.setCenterCoords
             });
 
             this.listenTo(this, {

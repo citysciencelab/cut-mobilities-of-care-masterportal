@@ -39,7 +39,7 @@ define(function (require) {
          * Löscht das Modal Backdrop und sich selbst
          */
         removeView: function () {
-            $(".modal-backdrop").remove();
+            this.$el.modal("hide");
             this.remove();
         }
     });

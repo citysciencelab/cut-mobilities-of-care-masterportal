@@ -22,7 +22,7 @@ define([
                     $("#categoryInput").val(evt.target.textContent);
                     evt.data.model.setCategory(evt.target.textContent);
                     $("#typeInput").prop("disabled", false);
-                     $(".dropdown-toggle-type").prop("disabled", false);
+                    $(".dropdown-toggle-type").prop("disabled", false);
                     $("#typeInput").val("");
                     $("#typeInput").focus();
                 }
@@ -124,7 +124,7 @@ define([
             this.model.removeFilter();
         },
         setFilterParams: function () {
-             this.model.setFilterParams();
+            this.model.setFilterParams();
         },
         setYearMin: function (evt) {
             this.model.setYearMin(evt.target.value);

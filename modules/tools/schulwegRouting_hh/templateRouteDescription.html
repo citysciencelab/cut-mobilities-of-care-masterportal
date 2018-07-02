@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<button type="button" class="btn btn-default btn-sm btn-block" data-toggle="collapse" data-target="#route-description">Routenbeschreibung einblenden</button>
+<ol id="route-description" class="collapse">
+    <% _.each(routeDescription, function (routePart) { %>
+        <li>
+            <%= routePart.anweisung %>
+        </li>
+    <% }); %>
+</ol>

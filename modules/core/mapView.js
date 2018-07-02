@@ -1,14 +1,8 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         Config = require("config"),
+        $ = require("jquery"),
         MapView;
 
     MapView = Backbone.Model.extend({
@@ -90,7 +84,7 @@ define([
                     return this.get("projection");
                 },
                 "getOptions": function () {
-                    return (_.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                    return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
                 },
                 "getCenter": function () {
                     return this.getCenter();
@@ -125,9 +119,6 @@ define([
                     // triggert das Zoom in / out übers Mausrad / Touch
                     Radio.trigger("ClickCounter", "zoomChanged");
                 },
-                "change:center": function () {
-                    channel.trigger("changedCenter", this.getCenter());
-                },
                 "change:scale": function () {
                     var params = _.findWhere(this.get("options"), {scale: this.get("scale")});
 
@@ -154,12 +145,13 @@ define([
 
             // Listener für ol.View
             this.get("view").on("change:resolution", function () {
-                 this.set("resolution", this.get("view").constrainResolution(this.get("view").getResolution()));
+                this.set("resolution", this.get("view").constrainResolution(this.get("view").getResolution()));
                 // this.set("resolution", this.get("view").getResolution());
                 channel.trigger("changedZoomLevel", this.getZoom());
             }, this);
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
+                channel.trigger("changedCenter", this.getCenter());
             }, this);
         },
         resetView: function () {
@@ -412,18 +404,14 @@ define([
                     return this.getResolutions()[index];
                 }
             }
-            else {
-                if (scaleType === "max") {
-                    if (index === 0) {
-                        return this.getResolutions()[index];
-                    }
-                    else {
-                        return this.getResolutions()[index];
-                    }
+            else if (scaleType === "max") {
+                if (index === 0) {
+                    return this.getResolutions()[index];
                 }
-                else if (scaleType === "min") {
-                    return this.getResolutions()[index - 1];
-                }
+                return this.getResolutions()[index];
+            }
+            else if (scaleType === "min") {
+                return this.getResolutions()[index - 1];
             }
         },
 

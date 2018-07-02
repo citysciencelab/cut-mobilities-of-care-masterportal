@@ -1,10 +1,10 @@
-define( function (require) {
+define(function (require) {
 
     var WFSStyle = require("../vectorStyle/model"),
         Config = require("config"),
         StyleList;
 
-        StyleList = Backbone.Collection.extend ({
+    StyleList = Backbone.Collection.extend({
         model: WFSStyle,
         url: function () {
             if (!_.has(Config, "styleConf") || Config.styleConf === "") {

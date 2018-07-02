@@ -126,7 +126,7 @@ define(function (require) {
             var layers = this.get("layerlist"),
                 layer = _.find(layers, {id: this.get("layerid")});
 
-             // wenn Layer wechselt, kann auch kein Feature mehr aktiv sein.
+            // wenn Layer wechselt, kann auch kein Feature mehr aktiv sein.
             this.set("featureid", "");
             // Layer wegen Tab-switch-Reihenfolge erst hinterher setten.
             if (layer) {

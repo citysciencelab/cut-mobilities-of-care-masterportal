@@ -56,7 +56,7 @@ define(function (require) {
         renderForm: function () {
             var element = this.$el.find(".interaction")[0];
 
-            switch (element.options[element.selectedIndex].text){
+            switch (element.options[element.selectedIndex].text) {
                 case "Punkt zeichnen": {
                     this.$el.find(".text").toggle(false);
                     this.$el.find(".font-size").toggle(false);
