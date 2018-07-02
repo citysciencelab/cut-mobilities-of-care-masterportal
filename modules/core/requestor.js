@@ -160,7 +160,7 @@ define(function (require) {
                 context: this, // das model
                 success: function (data) {
                     var gfiList = [],
-                        gfiFormat ,
+                        gfiFormat,
                         gfiFeatures;
 
                     // handle non text/xml responses arriving as string
@@ -214,7 +214,7 @@ define(function (require) {
                     alert("Ajax-Request " + textStatus);
                 },
                 complete: function () {
-                     --this.requestCount;
+                    --this.requestCount;
 
                     if (this.requestCount === 0) {
                         this.getGFIFeatureContent();
@@ -287,10 +287,8 @@ define(function (require) {
                             preGfi[key] = value;
                         }
                     }
-                    else {
-                        if (this.isValidKey(key) && this.isValidValue(value)) {
-                            preGfi[key] = value.trim();
-                        }
+                    else if (this.isValidKey(key) && this.isValidValue(value)) {
+                        preGfi[key] = value.trim();
                     }
                 }, this);
                 if (gfiAttributes === "showAll") {
@@ -302,28 +300,28 @@ define(function (require) {
                         gfi[key] = value;
                     }, this);
                     // im IE müssen die Attribute für WMS umgedreht werden
-                 if (Radio.request("Util", "isInternetExplorer") !== false && typ === "WMS") {
+                    if (Radio.request("Util", "isInternetExplorer") !== false && typ === "WMS") {
                         var keys = [],
                             values = [];
 
-                        _.each (gfi, function (value, key) {
+                        _.each(gfi, function (value, key) {
                             keys.push(key);
                             values.push(value);
                         }, this);
                         keys.reverse();
                         values.reverse();
                         gfi = _.object(keys, values);
-                     }
+                    }
                 }
                 else {
                     // map object keys to gfiAttributes from layer model
 
-//                    _.each(preGfi, function (value, key) {
-//                        key = gfiAttributes[key];
-//                        if (key) {
-//                            gfi[key] = value;
-//                        }
-//                    });
+                    //                    _.each(preGfi, function (value, key) {
+                    //                        key = gfiAttributes[key];
+                    //                        if (key) {
+                    //                            gfi[key] = value;
+                    //                        }
+                    //                    });
                     _.each(gfiAttributes, function (value, key) {
                         key = preGfi[key];
                         if (key) {
@@ -336,7 +334,7 @@ define(function (require) {
                 }
             }, this);
             return pgfi;
-    }
+        }
     });
 
     return new Requestor();

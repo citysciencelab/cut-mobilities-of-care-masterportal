@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         Util = require("util"),
         Model = require("../../../../../../../modules/tools/filter/query/source/wfs.js");

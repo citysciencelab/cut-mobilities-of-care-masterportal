@@ -164,10 +164,8 @@ define(function (require) {
                         }
                     }, this);
                 }
-                else {
-                    if (this.isValid(attributeValue)) {
-                        values.push(attributeValue);
-                    }
+                else if (this.isValid(attributeValue)) {
+                    values.push(attributeValue);
                 }
             }
             return _.unique(values);
@@ -305,11 +303,11 @@ define(function (require) {
             var isMatch = false;
 
             isMatch = _.find(attribute.values, function (value) {
-                    if (_.isUndefined(feature.get(attribute.attrName)) === false) {
-                            return feature.get(attribute.attrName).indexOf(value) !== -1;
-                    }
-                    return false;
-                });
+                if (_.isUndefined(feature.get(attribute.attrName)) === false) {
+                    return feature.get(attribute.attrName).indexOf(value) !== -1;
+                }
+                return false;
+            });
             return !_.isUndefined(isMatch);
         },
 
@@ -357,9 +355,9 @@ define(function (require) {
                 else if (attribute.type === "searchInMapExtent") {
                     return this.isFeatureInExtent(feature);
                 }
-                else {
-                    return this.isValueMatch(feature, attribute);
-                }
+
+                return this.isValueMatch(feature, attribute);
+
             }, this);
             return isMatch;
         },

@@ -32,7 +32,7 @@ define(function (require) {
         },
         addViews: function (models) {
             _.each(models, function (model) {
-                 new DesktopLayerViewLight({model: model});
+                new DesktopLayerViewLight({model: model});
             }, this);
         },
         startModul: function (modulId) {

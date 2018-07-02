@@ -55,7 +55,7 @@ define(function (require) {
             }
         },
         createStyle: function () {
-           return new ol.style.Style({
+            return new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: "#ed8804",
                     width: 4

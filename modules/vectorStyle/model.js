@@ -147,9 +147,9 @@ define(function (require) {
                 }),
                 style;
 
-                style = style = new ol.style.Style({
-                    stroke: strokestyle
-                });
+            style = style = new ol.style.Style({
+                stroke: strokestyle
+            });
 
             return style;
         },
@@ -206,7 +206,7 @@ define(function (require) {
             featureValue = feature.get(styleField);
             if (!_.isUndefined(featureValue)) {
                 styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
-                return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+                    return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
                 })[0];
             }
 
@@ -275,7 +275,7 @@ define(function (require) {
         */
         createSimpleClusterStyle: function () {
             var src = this.getImagePath() + this.getClusterImageName(),
-                isSVG = src.indexOf(".svg") > -1 ? true : false,
+                isSVG = src.indexOf(".svg") > -1,
                 width = this.getClusterImageWidth(),
                 height = this.getClusterImageHeight(),
                 scale = parseFloat(this.getClusterImageScale()),
@@ -334,7 +334,7 @@ define(function (require) {
             }
             else {
                 src = this.getImagePath() + this.getImageName();
-                isSVG = src.indexOf(".svg") > -1 ? true : false;
+                isSVG = src.indexOf(".svg") > -1;
                 width = this.getImageWidth();
                 height = this.getImageHeight();
                 scale = parseFloat(this.getImageScale());
@@ -389,8 +389,8 @@ define(function (require) {
                 if (_.isUndefined(styleFieldValueObj)) {
                     return style;
                 }
-                src = (!_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName")) ? this.getImagePath() + styleFieldValueObj.imageName : this.getImagePath() + this.getImageName();
-                isSVG = src.indexOf(".svg") > -1 ? true : false;
+                src = !_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName") ? this.getImagePath() + styleFieldValueObj.imageName : this.getImagePath() + this.getImageName();
+                isSVG = src.indexOf(".svg") > -1;
                 width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.getImageWidth();
                 height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.getImageHeight();
                 scale = styleFieldValueObj.imageScale ? styleFieldValueObj.imageScale : parseFloat(this.getImageScale());
@@ -591,7 +591,7 @@ define(function (require) {
                 return r + r + g + g + b + b;
             });
 
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            var result = (/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i).exec(hex);
 
             return result ? [parseFloat(result[1], 16), parseFloat(result[2], 16), parseFloat(result[3], 16)] : null;
         },

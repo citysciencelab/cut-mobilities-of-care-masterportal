@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Backbone = require ("backbone"),
+    var Backbone = require("backbone"),
         RoutingButtonTemplate = require("text!modules/tools/gfi/objects/routingButton/template.html"),
         RoutingButtonModel = require("modules/tools/gfi/objects/routingButton/model"),
         RoutingButtonView;

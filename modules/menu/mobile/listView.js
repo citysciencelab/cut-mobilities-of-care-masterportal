@@ -143,8 +143,9 @@ define(function (require) {
                 else {
                     // Gruppieren nach Folder und Rest
                     var groupedModels = _.groupBy(modelsToShow, function (model) {
-                        return (model.getType() === "folder" ? "folder" : "other");
+                        return model.getType() === "folder" ? "folder" : "other";
                     });
+
                     // Im default-Tree werden folder und layer alphabetisch sortiert
                     if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].getParentId() !== "tree") {
                         groupedModels.folder = _.sortBy(groupedModels.folder, function (item) {

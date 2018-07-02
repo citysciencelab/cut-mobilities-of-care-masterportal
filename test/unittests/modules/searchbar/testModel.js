@@ -1,10 +1,11 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         Radio = require("backbone.radio"),
         Model = require("../../../../modules/searchbar/model.js");
 
     describe("modules/searchbar", function () {
         var model = {};
+
         before(function () {
             model = new Model();
         });

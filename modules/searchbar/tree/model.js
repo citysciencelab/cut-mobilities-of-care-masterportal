@@ -1,7 +1,7 @@
 define([
     "backbone",
     "backbone.radio"
-    ], function (Backbone, Radio) {
+], function (Backbone, Radio) {
     "use strict";
     return Backbone.Model.extend({
         /**
@@ -78,10 +78,8 @@ define([
                         Radio.trigger("Searchbar", "pushHits", "hitList", layer);
                     }
                 }
-                else {
-                    if (layerName.search(searchStringRegExp) !== -1) {
-                        Radio.trigger("Searchbar", "pushHits", "hitList", layer);
-                    }
+                else if (layerName.search(searchStringRegExp) !== -1) {
+                    Radio.trigger("Searchbar", "pushHits", "hitList", layer);
                 }
             }, this);
         },

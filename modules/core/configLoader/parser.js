@@ -130,26 +130,24 @@ define(function (require) {
                     this.addItem(item);
                     this.parseMenu(value.children, key);
                 }
-                else {
-                    if (key.search("staticlinks") !== -1) {
-                        _.each(value, function (staticlink) {
-                            var toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
+                else if (key.search("staticlinks") !== -1) {
+                    _.each(value, function (staticlink) {
+                        var toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
 
-                            this.addItem(toolitem);
-                        }, this);
-                    }
-                    else {
-                        var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
-
-                        // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
-                        if (!_.has(toolitem, "onlyDesktop")) {
-                            // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
-                            if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
-                                toolitem = _.extend(toolitem, {onlyDesktop: true});
-                            }
-                        }
                         this.addItem(toolitem);
+                    }, this);
+                }
+                else {
+                    var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+
+                    // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
+                    if (!_.has(toolitem, "onlyDesktop")) {
+                        // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
+                        if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
+                            toolitem = _.extend(toolitem, {onlyDesktop: true});
+                        }
                     }
+                    this.addItem(toolitem);
                 }
             }, this);
         },
@@ -455,6 +453,7 @@ define(function (require) {
         mergeObjectsByIds: function (ids, layerlist) {
             var objectsByIds = [],
                 newObject;
+
             // Objekte die gruppiert werden
             _.each(ids, function (id) {
                 var lay = _.findWhere(layerlist, {id: id});

@@ -5,25 +5,25 @@ define(function (require) {
     describe("contact/model", function () {
         var model,
             testAttrEmail = {
-                target:{
+                target: {
                     id: "contactEmail",
                     value: "Test.test@test.de"
                 }
             },
             testAttrName = {
-                target:{
+                target: {
                     id: "contactName",
                     value: "LGV Geodatenanwendungen"
                 }
             },
             testAttrTel = {
-                target:{
+                target: {
                     id: "contactTel",
                     value: "123456"
                 }
             },
             testAttrText = {
-                target:{
+                target: {
                     id: "contactText",
                     value: "Hier sollte das Anliegen stehen"
                 }
@@ -71,7 +71,7 @@ define(function (require) {
                 model.setUserAttributes(testAttrName);
                 model.setUserAttributes(testAttrTel);
                 model.setUserAttributes(testAttrText);
-                model.isValid()
+                model.isValid();
                 expect(model.validationError).to.be.true;
             });
         });

@@ -58,7 +58,8 @@ define([
                         }
                         $(selector).append(this.$el.html(this.template(attr)));
                     }
-                    var paddingLeftValue = this.model.getLevel() * 15 +5;
+                    var paddingLeftValue = this.model.getLevel() * 15 + 5;
+
                     $(this.$el).css("padding-left", paddingLeftValue + "px");
                 }
             }

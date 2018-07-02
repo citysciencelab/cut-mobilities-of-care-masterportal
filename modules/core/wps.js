@@ -74,6 +74,7 @@ define(function (require) {
          */
         handleResponse: function (responseText, requestID, status) {
             var obj;
+
             if (status === 200) {
                 obj = this.parseDataString(responseText);
             }
@@ -110,6 +111,7 @@ define(function (require) {
                 _.each(children, function (child) {
                     var localName = $(child)[0].localName,
                         old;
+
                     // if object does not have key create it
                     if (!_.has(obj, localName)) {
                         obj[localName] = this.parseXmlToObject(child);

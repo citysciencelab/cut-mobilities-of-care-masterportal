@@ -64,6 +64,7 @@ define(function (require) {
 
         renderSimpleViews: function () {
             var view;
+
             if (this.model.get("queryCollection").models.length > 1) {
                 _.each(this.model.get("queryCollection").models, function (query) {
                     view = new QuerySimpleView({model: query});

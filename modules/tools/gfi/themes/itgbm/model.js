@@ -18,9 +18,9 @@ define(function (require) {
                 if (typeof val === "string" && val.indexOf("|") !== -1) {
                     return val.replace(/\|/g, ", ");
                 }
-                else {
-                    return val;
-                }
+
+                return val;
+
             });
             this.setTitle(this.getGfiContent()[0].Belegenheit);
             this.setGfiContent(_.omit(this.getGfiContent()[0], "Belegenheit"));

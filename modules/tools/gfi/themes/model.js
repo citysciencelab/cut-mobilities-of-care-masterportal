@@ -241,13 +241,11 @@ define(function (require) {
                             preGfi[key] = value;
                         }
                     }
-                    else {
-                        if (this.isValidKey(key) && this.isValidValue(value)) {
-                            if (_.isArray(value)) {
-                                value = value.toString().replace(/,/g, ", ");
-                            }
-                            preGfi[key] = _.isString(value) ? value.trim() : value;
+                    else if (this.isValidKey(key) && this.isValidValue(value)) {
+                        if (_.isArray(value)) {
+                            value = value.toString().replace(/,/g, ", ");
                         }
+                        preGfi[key] = _.isString(value) ? value.trim() : value;
                     }
                 }, this);
                 if (gfiAttributes === "showAll") {
@@ -259,18 +257,18 @@ define(function (require) {
                         gfi[key] = value;
                     }, this);
                     // im IE müssen die Attribute für WMS umgedreht werden
-                 if (Radio.request("Util", "isInternetExplorer") !== false && this.get("typ") === "WMS") {
+                    if (Radio.request("Util", "isInternetExplorer") !== false && this.get("typ") === "WMS") {
                         var keys = [],
                             values = [];
 
-                        _.each (gfi, function (value, key) {
+                        _.each(gfi, function (value, key) {
                             keys.push(key);
                             values.push(value);
                         }, this);
                         keys.reverse();
                         values.reverse();
                         gfi = _.object(keys, values);
-                     }
+                    }
                 }
                 else {
                     _.each(gfiAttributes, function (value, key) {

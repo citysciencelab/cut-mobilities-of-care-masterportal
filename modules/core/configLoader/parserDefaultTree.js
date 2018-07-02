@@ -89,6 +89,7 @@ define(function (require) {
                 typeGroup = _.groupBy(layerList, function (layer) {
                     return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
                 });
+
             // Models für die Hintergrundkarten erzeugen
             this.createBaselayer(layerList);
             // Models für die Fachdaten erzeugen
@@ -156,11 +157,13 @@ define(function (require) {
                         return layer.datasets[0].kategorie_organisation;
                     }
                 }, this);
+
             // Gruppierung nach MetaName
             _.each(categoryGroups, function (group, name) {
                 var metaNameGroups = _.groupBy(group, function (layer) {
                     return layer.datasets[0].md_name;
                 });
+
                 // in Layer und Ordner unterteilen
                 tree[name] = this.splitIntoFolderAndLayer(metaNameGroups, name);
             }, this);

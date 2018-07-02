@@ -404,16 +404,14 @@ define(function (require) {
                     return this.getResolutions()[index];
                 }
             }
-            else {
-                if (scaleType === "max") {
-                    if (index === 0) {
-                        return this.getResolutions()[index];
-                    }
+            else if (scaleType === "max") {
+                if (index === 0) {
                     return this.getResolutions()[index];
                 }
-                else if (scaleType === "min") {
-                    return this.getResolutions()[index - 1];
-                }
+                return this.getResolutions()[index];
+            }
+            else if (scaleType === "min") {
+                return this.getResolutions()[index - 1];
             }
         },
 

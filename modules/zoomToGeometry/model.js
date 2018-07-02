@@ -67,7 +67,7 @@ define(function (require) {
                 },
                 timeout: 6000,
                 error: function () {
-                   Radio.trigger("Alert", "alert", {
+                    Radio.trigger("Alert", "alert", {
                         text: "<strong>Der parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Ein benötigter Dienst antwortet nicht.</small>",
                         kategorie: "alert-warning"
                     });
@@ -82,17 +82,17 @@ define(function (require) {
             var foundFeature = this.parseFeatures(data, name, attribute),
                 extent;
 
-                if (_.isUndefined(foundFeature)) {
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Leider konnten die Objekte zu denen gezommt werden soll nicht geladen werden</strong> <br> <small>Details: Kein Objekt gefunden, dessen Attribut \"" + attribute + "\" den Wert \"" + name + "\" einnimmt.</small>",
-                        kategorie: "alert-warning"
-                    });
-                }
-                else {
-                    extent = this.calcExtent(foundFeature);
-                    Radio.trigger("Map", "zoomToExtent", extent);
-                }
-                this.setFeatureGeometry(foundFeature.getGeometry());
+            if (_.isUndefined(foundFeature)) {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Leider konnten die Objekte zu denen gezommt werden soll nicht geladen werden</strong> <br> <small>Details: Kein Objekt gefunden, dessen Attribut \"" + attribute + "\" den Wert \"" + name + "\" einnimmt.</small>",
+                    kategorie: "alert-warning"
+                });
+            }
+            else {
+                extent = this.calcExtent(foundFeature);
+                Radio.trigger("Map", "zoomToExtent", extent);
+            }
+            this.setFeatureGeometry(foundFeature.getGeometry());
         },
         /**
         * durchsucht ein GML String nach einem bestimmten Feature
@@ -102,19 +102,20 @@ define(function (require) {
         **/
         parseFeatures: function (data, name, attribute) {
             var format = new ol.format.WFS(),
-            features = format.readFeatures(data),
-            foundFeature = _.filter(features, function (feature) {
-                if (!_.contains(feature.getKeys(), attribute)) {
-                    return false;
-                }
-                return feature.get(attribute).toUpperCase().trim() === name.toUpperCase().trim();
-            });
+                features = format.readFeatures(data),
+                foundFeature = _.filter(features, function (feature) {
+                    if (!_.contains(feature.getKeys(), attribute)) {
+                        return false;
+                    }
+                    return feature.get(attribute).toUpperCase().trim() === name.toUpperCase().trim();
+                });
 
             return foundFeature[0];
         },
         calcExtent: function (feature) {
             var coordLength = 0,
                 polygonIndex = 0;
+
             // feature.getGeometry() = Multipolygon
             // für den Extent wird das größte Polygon genommen
             _.each(feature.getGeometry().getPolygons(), function (polygon, index) {

@@ -8,7 +8,7 @@ define(function (require) {
         SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SelectView;
 
-        SelectView = Backbone.View.extend({
+    SelectView = Backbone.View.extend({
         id: "einwohnerabfrage-tool",
         model: new EinwohnerabfrageModel(),
         className: "win-body",

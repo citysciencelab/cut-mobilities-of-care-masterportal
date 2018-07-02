@@ -33,6 +33,7 @@ define(function (require) {
         // Create a model and parse the test data. Take care that the model is clean (empty) before parsing the data.
         function getCustomModel (options) {
             var model = new CustomTreeParser(options);
+
             model.setItemList([]);
             model.parseTree(testData.Fachdaten);
             return model;

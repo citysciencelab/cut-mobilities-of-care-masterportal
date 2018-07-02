@@ -23,6 +23,7 @@ define(function (require) {
         },
         render: function () {
             var attr = this.model.toJSON();
+
             if (this.model.getIsExpanded() === true && this.model.getParentId() !== "tree") {
                 this.$el.html(this.templateLeaf(attr));
             }

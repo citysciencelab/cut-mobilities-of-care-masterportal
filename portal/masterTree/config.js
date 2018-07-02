@@ -33,7 +33,7 @@ define(function () {
             ]
         },
         gfiWindow: "attached",
-        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         mouseHover: {
             numFeaturesToShow: 2,
@@ -64,7 +64,7 @@ define(function () {
             layerid: "4561",
             WFSid: "4560"
         }
-   };
+    };
 
-   return config;
+    return config;
 });

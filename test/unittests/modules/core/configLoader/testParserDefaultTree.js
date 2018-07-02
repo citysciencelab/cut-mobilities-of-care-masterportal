@@ -49,6 +49,7 @@ define(function (require) {
         // Create a model and parse the test data. Take care that the model is clean (empty) before parsing the data.
         function getDefaultModel (options) {
             var model = new DefaultTreeParser(options);
+
             model.setItemList([]);
             model.parseTree(testLayerList);
             return model;

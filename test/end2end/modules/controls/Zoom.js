@@ -71,4 +71,4 @@ function getResolution () {
     return resolution;
 }
 
-module.exports = ZoomTests
+module.exports = ZoomTests;

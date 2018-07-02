@@ -68,7 +68,7 @@ define(function (require) {
                 this.listenTo(this.getBtnIsActive(), {
                     "valuesChanged": function () {
                         var checkboxModel = this.getBtnIsActive(),
-                        isActive = this.getBtnIsActive().getIsSelected();
+                            isActive = this.getBtnIsActive().getIsSelected();
 
                         checkboxModel.renderView();
                         this.setIsActive(isActive);
@@ -142,19 +142,19 @@ define(function (require) {
          * @param  {object} featureAttributesMap - Mapobject
          * @return {object} featureAttributesMap - gefiltertes Mapobject
          */
-         trimAttributes: function (featureAttributesMap) {
-             var trimmedFeatureAttributesMap = [],
-                 featureAttribute;
+        trimAttributes: function (featureAttributesMap) {
+            var trimmedFeatureAttributesMap = [],
+                featureAttribute;
 
-             _.each(this.getAttributeWhiteList(), function (attr) {
-                 featureAttribute = _.findWhere(featureAttributesMap, {name: attr});
-                 if (featureAttribute !== undefined) {
-                     trimmedFeatureAttributesMap.push(featureAttribute);
-                 }
-             });
+            _.each(this.getAttributeWhiteList(), function (attr) {
+                featureAttribute = _.findWhere(featureAttributesMap, {name: attr});
+                if (featureAttribute !== undefined) {
+                    trimmedFeatureAttributesMap.push(featureAttribute);
+                }
+            });
 
-             return trimmedFeatureAttributesMap;
-         },
+            return trimmedFeatureAttributesMap;
+        },
 
         /**
          * Konfigurierter Labeltext wird den Features zugeordnet

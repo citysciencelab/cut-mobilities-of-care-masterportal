@@ -26,7 +26,7 @@ define(function (require) {
                 t: new Date().getMilliseconds(),
                 zufall: Math.random(),
                 LAYERS: this.getLayers(),
-                FORMAT: (this.getImageFormat() === "nicht vorhanden") ? "image/png" : this.getImageFormat(),
+                FORMAT: this.getImageFormat() === "nicht vorhanden" ? "image/png" : this.getImageFormat(),
                 VERSION: this.getVersion(),
                 TRANSPARENT: this.getTransparent().toString()
             };
@@ -41,32 +41,32 @@ define(function (require) {
                 this.set("tileCountloaderror", 0);
                 this.set("tileCount", 0);
                 var source = new ol.source.TileWMS({
-                    url: this.get("url"),
-                    attributions: this.get("olAttribution"),
-                    gutter: this.get("gutter"),
-                    params: params,
-                    tileGrid: new ol.tilegrid.TileGrid({
-                        resolutions: Radio.request("MapView", "getResolutions"),
-                        origin: [
-                            442800,
-                            5809000
-                        ],
-                        tileSize: parseInt(this.get("tilesize"), 10)
+                        url: this.get("url"),
+                        attributions: this.get("olAttribution"),
+                        gutter: this.get("gutter"),
+                        params: params,
+                        tileGrid: new ol.tilegrid.TileGrid({
+                            resolutions: Radio.request("MapView", "getResolutions"),
+                            origin: [
+                                442800,
+                                5809000
+                            ],
+                            tileSize: parseInt(this.get("tilesize"), 10)
+                        }),
+                        crossOrigin: "anonymous"
                     }),
-                    crossOrigin: "anonymous"
-                }),
-                context = this;
+                    context = this;
 
                 // wms_webatlasde
                 source.on("tileloaderror", function () {
-                  if (context.get("tileloaderror") === false) {
-                    context.set("tileloaderror", true);
-                    if (!navigator.cookieEnabled) {
-                        if (context.get("url").indexOf("wms_webatlasde") !== -1) {
-                            Radio.trigger("Alert", "alert", {text: "<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>", kategorie: "alert-warning"});
+                    if (context.get("tileloaderror") === false) {
+                        context.set("tileloaderror", true);
+                        if (!navigator.cookieEnabled) {
+                            if (context.get("url").indexOf("wms_webatlasde") !== -1) {
+                                Radio.trigger("Alert", "alert", {text: "<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>", kategorie: "alert-warning"});
+                            }
                         }
                     }
-                  }
 
                 });
 
@@ -236,7 +236,7 @@ define(function (require) {
                 projection = Radio.request("MapView", "getProjection"),
                 coordinate = Radio.request("GFI", "getCoordinate");
 
-            return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, { INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
+            return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
         }
     });
 

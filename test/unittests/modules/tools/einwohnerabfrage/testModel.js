@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         testUtil = require("util"),
         Util = require("../../../../../modules/core/util.js"),
@@ -45,7 +45,8 @@ define(function(require) {
                 expect(model.get("circleOverlay").getElement().innerHTML).to.equal("50 m");
             });
             it("should update overlay position on geometry changes", function () {
-                var outerCoord = [556440.777563342, 5935149.148611423]
+                var outerCoord = [556440.777563342, 5935149.148611423];
+
                 model.showOverlayOnSketch(50, outerCoord);
                 expect(outerCoord).to.deep.equal(model.get("circleOverlay").getPosition());
             });

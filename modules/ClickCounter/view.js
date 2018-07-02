@@ -26,7 +26,7 @@ define([
             // fired beim LayerChange, Info-Button, Einstellungen auf dem Layertree
             if (layertree.length > 0) {
                 layertree.click(function () {
-                     this.registerClick();
+                    this.registerClick();
                 }.bind(this));
             }
         },

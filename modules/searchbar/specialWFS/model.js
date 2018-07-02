@@ -96,6 +96,7 @@ define(function (require) {
             var wfsMembers = this.getWfsMembers(),
                 minChars = this.getMinChars(),
                 hits;
+
             if (searchString.length < minChars) {
                 return;
             }

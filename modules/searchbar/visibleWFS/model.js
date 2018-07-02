@@ -75,7 +75,6 @@ define(function (require) {
         },
 
 
-
         /**
          * gets a new feature object
          * @param  {string} searchField
@@ -108,9 +107,9 @@ define(function (require) {
             if (geometry.getType() === "MultiPolygon") {
                 return geometry.getExtent();
             }
-            else {
-                return geometry.getCoordinates();
-            }
+
+            return geometry.getCoordinates();
+
         },
 
         /**
@@ -133,15 +132,15 @@ define(function (require) {
                     return layerStyle[0].getImage().getSrc();
                 }
                 // layerStyle returns stylefunction
-                else {
-                    style = layerStyle(feature);
 
-                    return (layerTyp === "WFS") ? style.getImage().getSrc() : undefined;
-                }
+                style = layerStyle(feature);
+
+                return layerTyp === "WFS" ? style.getImage().getSrc() : undefined;
+
             }
-            else {
-                return undefined;
-            }
+
+            return undefined;
+
         },
 
         getAdditionalInfo: function (model, feature) {

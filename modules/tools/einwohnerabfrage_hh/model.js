@@ -131,7 +131,7 @@ define(function (require) {
          * @param  {String} response received by wps
          */
         handleWPSError: function (response) {
-            Radio.trigger("Alert", "alert", JSON.stringify(response["ergebnis"]));
+            Radio.trigger("Alert", "alert", JSON.stringify(response.ergebnis));
         },
         /**
          * Used when statuscode is 200 and wps did not return an error
@@ -139,7 +139,7 @@ define(function (require) {
          */
         handleSuccess: function (response) {
             try {
-                response = JSON.parse(response["ergebnis"]);
+                response = JSON.parse(response.ergebnis);
                 this.prepareDataForRendering(response);
                 this.setData(response);
                 this.setDataReceived(true);
@@ -342,6 +342,7 @@ define(function (require) {
                         }
                     }
                 });
+
             this.setCurrentValue(value);
             this.toggleOverlay(value, this.get("circleOverlay"));
             Radio.trigger("Map", "addOverlay", this.get("tooltipOverlay"));
@@ -391,6 +392,7 @@ define(function (require) {
          */
         makeRequest: function (geoJson) {
             var requestId = _.uniqueId("wps");
+
             this.setDataReceived(false);
             this.setRequesting(true);
             this.trigger("renderResult");

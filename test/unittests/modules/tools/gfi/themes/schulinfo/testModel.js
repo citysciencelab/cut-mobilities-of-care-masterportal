@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         Util = require("util"),
         Model = require("../../../../../../../modules/tools/gfi/themes/schulinfo/model.js");

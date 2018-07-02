@@ -1,23 +1,24 @@
 define(function (require) {
     var proj = new ol.proj.Projection({
-        code: "EPSG:25832",
-        units: "m",
-        axisOrientation: "enu",
-        global: false
-    }),
-    Backbone = require("backbone"),
-    Util;
+            code: "EPSG:25832",
+            units: "m",
+            axisOrientation: "enu",
+            global: false
+        }),
+        Backbone = require("backbone"),
+        Util;
 
     ol.proj.addProjection(proj);
 
 
     Util = Backbone.Model.extend({
         initialize: function () {},
-        createTestFeatures: function(path) {
+        createTestFeatures: function (path) {
             var format = new ol.format.WFS({
-                featureNS: "http://www.deegree.org/app"
-            }),
-            features;
+                    featureNS: "http://www.deegree.org/app"
+                }),
+                features;
+
             $.ajax({
                 url: path,
                 async: false,
@@ -30,7 +31,7 @@ define(function (require) {
             });
             return features;
         },
-        getGeoJsonTestFeatures: function() {
+        getGeoJsonTestFeatures: function () {
             var geojson;
 
             $.ajax({

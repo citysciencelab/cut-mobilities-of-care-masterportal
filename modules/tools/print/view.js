@@ -42,5 +42,5 @@ define([
         }
     });
 
-        return view;
-    });
+    return view;
+});
