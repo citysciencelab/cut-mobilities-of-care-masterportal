@@ -11,6 +11,8 @@ require.config({
         "backbone.radio": "../../node_modules/backbone.radio/build/backbone.radio.min",
         mocha: "../../node_modules/mocha/mocha",
         chai: "../../node_modules/chai/chai",
+        html2canvas: "../../node_modules/html2canvas/dist/html2canvas.min",
+        "promise-polyfill": "../../node_modules/promise-polyfill/dist/polyfill.min",
         modules: "../../modules",
         util: "util",
         originUtil: "../../modules/core/util",
@@ -80,6 +82,10 @@ define(function (require) {
         "modules/core/configLoader/testParserDefaultTree.js",
         "modules/core/configLoader/testPreparser.js",
         "modules/menu/desktop/folder/testViewTree.js",
+        "modules/menu/mobile/folder/testView.js",
+        "modules/core/testUtil.js",
+        "modules/tools/schulwegrouting_hh/testModel.js",
+        "modules/tools/compareFeatures/testModel.js",
         "modules/menu/mobile/folder/testView.js"
     ], function () {
         Radio = Backbone.Radio;

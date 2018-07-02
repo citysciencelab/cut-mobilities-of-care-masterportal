@@ -27,7 +27,7 @@ define(function (require) {
             routeDescription: [],
             checkBoxHVV: new SnippetCheckboxModel({
                 isSelected: false,
-                label: "HVV Layer einblenden"
+                label: "HVV Verkehrsnetz"
             })
         },
 
@@ -546,7 +546,7 @@ define(function (require) {
                                 width: 3
                             }),
                             fill: new ol.style.Fill({
-                                color: "rgba(255, 255, 255, 0.8)"
+                                color: "rgba(255, 255, 255, 0)"
                             })
                         })
                     }),

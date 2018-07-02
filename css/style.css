@@ -66,6 +66,7 @@
 @import "../modules/tools/filter/query/style.css";
 @import "../modules/controls/freeze/style.css";
 @import "../modules/tools/schulwegRouting_hh/style.css";
+@import "../modules/tools/compareFeatures/style.css";
 @import "../modules/sidebar/style.css";
 @import "../modules/controls/orientation/poi/style.css";
 @import "../modules/controls/totalview/style.css";

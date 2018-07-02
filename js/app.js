@@ -122,6 +122,12 @@ define("app", function (require) {
 
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
+                case "compareFeatures": {
+                    require(["modules/tools/compareFeatures/view"], function (CompareFeaturesView) {
+                        new CompareFeaturesView();
+                    });
+                    break;
+                }
                 case "einwohnerabfrage": {
                     require(["modules/tools/einwohnerabfrage_hh/selectView"], function (EinwohnerabfrageView) {
                         new EinwohnerabfrageView();

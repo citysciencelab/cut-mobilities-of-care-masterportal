@@ -219,7 +219,8 @@ define(function (require) {
                 modelAttributes;
 
             if (_.isUndefined(model) === false) {
-                modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id");
+                modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
                     modelAttributes.feature = featureAtPixel;

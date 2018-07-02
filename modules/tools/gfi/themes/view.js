@@ -23,7 +23,6 @@ define(function (require) {
 
             if (_.isUndefined(this.model.get("gfiContent")) === false) {
                 attr = this.model.toJSON();
-
                 this.$el.html(this.template(attr));
             }
 
