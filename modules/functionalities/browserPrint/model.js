@@ -4,6 +4,7 @@ define(function (require) {
     require("pdfmake");
 
     browserPrintModel = Backbone.Model.extend({
+        defaults: {},
         initialize: function () {
             var channel = Radio.channel("BrowserPrint");
 
@@ -18,9 +19,76 @@ define(function (require) {
             };
         },
         print: function (name, defs, mode) {
+            var completeDefs;
+
+            completeDefs = this.appendFooter(defs);
+            completeDefs = this.appendStyles(completeDefs);
+
             if (mode === "download") {
-                window.pdfMake.createPdf(defs).download(name + ".pdf");
+                window.pdfMake.createPdf(completeDefs).download(name + ".pdf");
             }
+        },
+        appendFooter: function (defs) {
+            defs.footer = function (currentPage, pageCount) {
+                var footer = [
+                    {
+                        text: currentPage.toString() + " / " + pageCount,
+                        style: ["xsmall", "center"]
+                    },
+                    {
+                        text: [
+                            {
+                                text: "Kartographie und Gestaltung: ",
+                                style: ["bold"]
+                            },
+                            {
+                                text: "Freie und Hansestadt Hamburg \nLandesbetrieb Geoinformation und Vermessung"
+                            }
+                        ],
+                        style: ["xsmall", "center"]
+                    }
+                ];
+
+                return footer;
+            };
+
+            return defs;
+        },
+        appendStyles: function (defs) {
+            var styles = {
+                header: {
+                    fontSize: 18
+                },
+                subheader: {
+                    fontSize: 14,
+                    margin: [0, 10]
+                },
+                normal: {
+                    fontSize: 12
+                },
+                bold: {
+                    bold: true
+                },
+                small: {
+                    fontSize: 10
+                },
+                xsmall: {
+                    fontSize: 8
+                },
+                image: {
+                    margin: [0, 10],
+                    alignment: "left"
+                },
+                onGrey: {
+                    margin: [10, 10]
+                },
+                center: {
+                    alignment: "center"
+                }
+            };
+
+            defs.styles = styles;
+            return defs;
         }
     });
     return browserPrintModel;
