@@ -31,9 +31,11 @@ define(function (require) {
             {
                 name: "Schulgröße",
                 attributes: [
-                    "anzahl_schueler",
+                    "anzahl_schueler_gesamt",
                     "zuegigkeit_kl_1",
-                    "zuegigkeit_kl_5"
+                    "standortkl1",
+                    "zuegigkeit_kl_5",
+                    "standortkl5"
                 ]
             },
             {
@@ -80,6 +82,22 @@ define(function (require) {
                     "vegetarisch",
                     "nutzung_kantine_anteil",
                     "kiosk_vorh"
+                ]
+            },
+            {
+                name: "Ansprechpartner",
+                attributes: [
+                    "ansprechp_klasse_1",
+                    "ansprechp_klasse_5",
+                    "name_oberstufenkoordinator",
+                    "name_stellv_schulleiter"
+                ]
+            },
+            {
+                name: "Oberstufenprofil",
+                attributes: [
+                    "oberstufenprofil",
+                    "standort_oberstufe"
                 ]
             }]
         }),
