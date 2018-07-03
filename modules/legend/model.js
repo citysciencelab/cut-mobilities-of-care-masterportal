@@ -1,7 +1,10 @@
-define(["backbone",
-    "backbone.radio"], function (Backbone, Radio) {
+define(function (require) {
 
-    var Legend = Backbone.Model.extend({
+    var Radio = require("backbone.radio"),
+        ol = require("openlayers"),
+        Legend;
+
+    Legend = Backbone.Model.extend({
 
         defaults: {
             getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
@@ -177,7 +180,9 @@ define(["backbone",
                     styleClass,
                     styleSubClass,
                     styleFieldValues,
-                    styleScalingValues;
+                    scalingShape,
+                    styleScalingValues,
+                    scalingAttribute;
 
                 if (typeof layer.get("legendURL") === "string") {
                     this.push("tempArray", {
@@ -210,24 +215,55 @@ define(["backbone",
                         }
                         // Circle Point Style
                         else if (styleSubClass === "CIRCLE") {
+                            var a = this.createCircleSVG(style);
+                            console.log(a);
                             image.push(this.createCircleSVG(style));
                             name.push(layer.get("name"));
                         }
                         else if (styleSubClass === "ADVANCED") {
+                            scalingShape = style.get("scalingShape");
                             styleScalingValues = style.get("scalingValues");
+                            scalingAttribute = style.get("scalingAttribute");
+console.log(scalingShape);
+console.log(styleScalingValues);
+console.log(style);
+// debugger;
+                            if (scalingShape === "CIRCLESEGMENTS") {
+                                // for all attributvalues which define in style.json
+                                _.each(styleScalingValues, function (value, key) {
+                                    var olFeature = new ol.Feature({
+                                            geometry: new ol.geom.Point([100, 100])
+                                        }),
+                                        stylePerValue;
+    
+                                    olFeature.set(scalingAttribute, key);
+                                    stylePerValue = style.createNominalCircleSegments(olFeature);
+    
+                                    // image.push(style.get("imagePath") + style.get("imageName"));
+                                    image.push(stylePerValue);
+                                    
+                                    
+                                    console.log(key);
+                                    console.log(value);
+                                    console.log(olFeature);
+                                    console.log(stylePerValue);
+                                }, this);
+                            }
 
+
+                            // style.createStyle(olFeature, false);
+                            
                             // sclingValues
                             // scalingValueDefaultColor to scalingValues
                             // svg anlegen
                             // Segmente berechnen
                             // Segmente in SVG schreiben
 
-                            console.log("Hier muss noch das Styling hin");
                             // _.each(styleScalingValues, function (value, key) {
                             //     image.push(style.get("imagePath") + key);
                             // }, this);
                             
-                            image.push(style.get("imagePath") + style.get("imageName"));
+                            // image.push(style.get("imagePath") + style.get("imageName"));
                             name.push(layer.get("name"));
                         }
                         else {
@@ -278,7 +314,9 @@ define(["backbone",
                         isVisibleInMap: layer.get("isVisibleInMap")
                     });
                 }
+                console.log(image);
             }, this);
+
         },
         createCircleSVG: function (style) {
             var svg = "",
