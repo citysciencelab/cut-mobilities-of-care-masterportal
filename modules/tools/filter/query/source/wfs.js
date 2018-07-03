@@ -157,19 +157,19 @@ define(function (require) {
 
                     _.each(attributeValues, function (value) {
                         if (this.isValid(value)) {
-                            values.push(value);
+                            values.push(value.trim());
                         }
                     }, this);
                 }
                 else if (_.isArray(attributeValue)) {
                     _.each(attributeValue, function (value) {
                         if (this.isValid(value)) {
-                            values.push(value);
+                            values.push(value.trim());
                         }
                     }, this);
                 }
                 else if (this.isValid(attributeValue)) {
-                    values.push(attributeValue);
+                    values.push(attributeValue.trim());
                 }
             }
             return _.unique(values);
