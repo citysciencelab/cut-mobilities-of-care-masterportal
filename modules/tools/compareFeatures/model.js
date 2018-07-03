@@ -81,12 +81,14 @@ define(function () {
          */
         prepareFeatureListToShow: function (gfiAttributes) {
             var list = [],
-                featureList = this.get("groupedFeatureList")[this.get("layerId")];
+                featureList = this.get("groupedFeatureList")[this.get("layerId")],
+                themeConfig = Radio.request("Schulinfo", "getThemeConfig"),
+                sortedAttributes = this.sortAttributes(gfiAttributes, themeConfig);
 
-            Object.keys(gfiAttributes).forEach(function (key) {
+            Object.keys(sortedAttributes).forEach(function (key) {
                 var row = {};
 
-                row["col-1"] = gfiAttributes[key];
+                row["col-1"] = sortedAttributes[key];
                 featureList.forEach(function (feature, index) {
                     row["col-" + (index + 2)] = feature.get(key);
                 });
@@ -94,7 +96,38 @@ define(function () {
             });
             return list;
         },
+        sortAttributes: function (gfiAttributes, themeConfig) {
+            var sortedAttributes = {};
 
+            if (!_.isUndefined(themeConfig)) {
+
+                _.each(themeConfig, function (kategory) {
+                    _.each(kategory.attributes, function (attribute) {
+                        var isAttributeFound = this.checkForAttribute(gfiAttributes, attribute);
+
+                        if (isAttributeFound) {
+                            sortedAttributes[attribute] = gfiAttributes[attribute];
+                        }
+                    }, this);
+                }, this);
+            }
+            return sortedAttributes;
+        },
+        /**
+         * checks if attribute is in gfiAttributes
+         * @param  {[type]} gfiAttributes [description]
+         * @param  {[type]} attribute  [description]
+         * @return {[type]}            [description]
+         */
+        checkForAttribute: function (gfiAttributes, attribute) {
+            var isAttributeFound = false;
+
+            if (!_.isUndefined(gfiAttributes[attribute])) {
+                isAttributeFound = true;
+            }
+
+            return isAttributeFound;
+        },
         /**
          * splits the features into sets, grouped by the given property
          * @param {ol.feature[]} featureList - the comparable features

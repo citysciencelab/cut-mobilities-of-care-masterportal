@@ -9,7 +9,6 @@ define(function (require) {
                 name: "Grundsätzliche Informationen",
                 isSelected: true,
                 attributes: [
-                    "fremdsprache",
                     "schulname",
                     "schulform",
                     "schultyp",
@@ -91,18 +90,26 @@ define(function (require) {
                     "ansprechp_klasse_1",
                     "ansprechp_klasse_5",
                     "name_oberstufenkoordinator",
-                    "name_stellv_schulleiter"
+                    "name_stellv_schulleiter",
+                    "ansprechp_buero"
                 ]
             },
             {
                 name: "Oberstufenprofil",
                 attributes: [
                     "oberstufenprofil",
-                    "standort_oberstufe"
+                    "standortoberstufe"
                 ]
             }]
         }),
         initialize: function () {
+            var channel = Radio.channel("Schulinfo");
+
+            channel.reply({
+                "getThemeConfig": function () {
+                    return this.get("themeConfig");
+                }
+            }, this);
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
             });
@@ -116,7 +123,6 @@ define(function (require) {
             this.get("feature").set("layerId", this.get("id"));
             this.get("feature").set("layerName", this.get("name"));
         },
-
         getVectorGfi: function () {
             var gfiContent = _.pick(this.get("feature").getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
 
