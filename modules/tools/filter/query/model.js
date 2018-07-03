@@ -122,7 +122,7 @@ define(function (require) {
          */
         createSnippets: function (featureAttributes) {
             var featureAttributesMap = this.trimAttributes(featureAttributes);
-            console.log(featureAttributesMap);
+
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
             featureAttributesMap = this.collectSelectableOptions(this.getFeatures(), [], featureAttributesMap);
             featureAttributesMap = this.mapRules(featureAttributesMap, this.getRules());

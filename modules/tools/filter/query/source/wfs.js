@@ -300,8 +300,10 @@ define(function (require) {
          * @return {Boolean}               true if feature has attribute that contains value
          */
         isValueMatch: function (feature, attribute) {
+            console.log(feature);
+            console.log(attribute);
             var featureMap = _.findWhere(this.get("featureAttributesMap"), {name: attribute.attrName});
-
+console.log(featureMap);
             attribute.matchingMode = featureMap.matchingMode;
             return attribute.matchingMode === "OR" ? this.isORMatch(feature, attribute) : this.isANDMatch(feature, attribute);
         },
