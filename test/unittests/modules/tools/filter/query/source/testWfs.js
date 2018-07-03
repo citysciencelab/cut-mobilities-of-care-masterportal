@@ -14,8 +14,13 @@ define(function (require) {
             testFeatures = utilModel.createTestFeatures("resources/testFeatures.xml");
         });
         describe("isValueMatch", function () {
+            var featureAttributesMap = [{name:"teilnahme_geburtsklinik", matchingMode: "OR"}];
+
+            before(function () {
+                model.setFeatureAttributesMap(featureAttributesMap);
+            });
             it("should match when feature matches at least one attribute value", function () {
-                var attribute = {attrName: "teilnahme_geburtsklinik", values: ["Nein"]};
+                var attribute = {attrName: "teilnahme_geburtsklinik", values: ["Nein"], matchingMode: "OR"};
 
                 expect(model.isValueMatch(testFeatures[0], attribute)).to.be.true;
             });
@@ -60,24 +65,27 @@ define(function (require) {
                 selectedAttributes = [];
 
             before(function () {
-                selectedAttributes.push({attrName: "teilnahme_notversorgung", type: "boolean", values: ["true"]});
-                featureAttributesMap.push({name: "strasse", displayName: undefined, type: "string", values: []});
-                featureAttributesMap.push({name: "name", displayName: undefined, type: "string", values: []});
-                featureAttributesMap.push({name: "teilnahme_notversorgung", displayName: undefined, type: "boolean", values: []});
+                selectedAttributes.push({attrName: "teilnahme_notversorgung", type: "boolean", values: ["true"], matchingMode: "OR"});
+                featureAttributesMap.push({name: "strasse", displayName: undefined, type: "string", values: [], matchingMode: "OR"});
+                featureAttributesMap.push({name: "name", displayName: undefined, type: "string", values: [], matchingMode: "OR"});
+                featureAttributesMap.push({name: "teilnahme_notversorgung", displayName: undefined, type: "boolean", values: [], matchingMode: "OR"});
+
+                model.setFeatureAttributesMap(featureAttributesMap);
+
                 testFeatures.push(utilModel.createTestFeatures("resources/testFeatures.xml")[1]);
                 testFeatures.push(utilModel.createTestFeatures("resources/testFeatures.xml")[2]);
             });
             it("should return all selectable Values for the String Attributes in AttributesMap for given Features", function () {
                 expect(model.collectSelectableOptions(testFeatures, selectedAttributes, featureAttributesMap)[0])
-                    .to.deep.equal({name: "strasse", displayName: undefined, type: "string", values: ["Süntelstraße 11a"]});
+                    .to.deep.equal({name: "strasse", displayName: undefined, type: "string", values: ["Süntelstraße 11a"], matchingMode: "OR"});
             });
             it("should return all values for all Attributes defined in featureAttributesMap if selectedAttributes is empty", function () {
                 expect(model.collectSelectableOptions(testFeatures, [], featureAttributesMap)[0])
-                    .to.deep.equal({name: "strasse", displayName: undefined, type: "string", values: ["Kayhuder Straße 65", "Süntelstraße 11a"]});
+                    .to.deep.equal({name: "strasse", displayName: undefined, type: "string", values: ["Kayhuder Straße 65", "Süntelstraße 11a"], matchingMode: "OR"});
                 expect(model.collectSelectableOptions(testFeatures, [], featureAttributesMap)[1])
-                    .to.deep.equal({name: "name", displayName: undefined, type: "string", values: ["Heinrich Sengelmann Krankenhaus", "Albertinen-Krankenhaus"]});
+                    .to.deep.equal({name: "name", displayName: undefined, type: "string", values: ["Heinrich Sengelmann Krankenhaus", "Albertinen-Krankenhaus"], matchingMode: "OR"});
                 expect(model.collectSelectableOptions(testFeatures, [], featureAttributesMap)[2])
-                    .to.deep.equal({name: "teilnahme_notversorgung", displayName: undefined, type: "boolean", values: ["false", "true"]});
+                    .to.deep.equal({name: "teilnahme_notversorgung", displayName: undefined, type: "boolean", values: ["false", "true"], matchingMode: "OR"});
             });
         });
     });

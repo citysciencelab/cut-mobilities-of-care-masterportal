@@ -9,6 +9,7 @@ define(function (require) {
                 name: "Grundsätzliche Informationen",
                 isSelected: true,
                 attributes: [
+                    "fremdsprache",
                     "schulname",
                     "schulform",
                     "schultyp",

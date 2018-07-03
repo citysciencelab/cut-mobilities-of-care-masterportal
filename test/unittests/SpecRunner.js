@@ -42,7 +42,6 @@ define(function (require) {
     require("openlayers");
     require("backbone");
     require("backbone.radio");
-    require("underscore.string");
 
     mocha.setup("bdd");
 
