@@ -32,7 +32,8 @@ define(function (require) {
         },
 
         initialize: function () {
-            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
+            // var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "11616"}),
                 channel = Radio.channel("SchulwegRouting"),
                 model;
 
@@ -46,7 +47,8 @@ define(function (require) {
 
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
-                    if (layerId === "8712") {
+                    // if (layerId === "8712") {
+                    if (layerId === "11616") {
                         this.setSchoolList(this.sortSchoolsByName(features));
                     }
                 }

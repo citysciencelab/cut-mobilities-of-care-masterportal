@@ -34,6 +34,8 @@ define(function (require) {
             }
         },
         appendFooter: function (defs) {
+            var footerText = this.get("footerText");
+
             defs.footer = function (currentPage, pageCount) {
                 var footer = [
                     {
@@ -41,7 +43,7 @@ define(function (require) {
                         style: ["xsmall", "center"]
                     },
                     {
-                        text: this.get("footerText"),
+                        text: footerText,
                         style: ["xsmall", "center"]
                     }
                 ];
