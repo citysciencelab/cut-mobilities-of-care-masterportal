@@ -11,6 +11,7 @@ define(function (require) {
             legendParams: [],
             wmsLayerList: [],
             wfsLayerList: [],
+            sensorLayerList: [],
             geojsonLayerList: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
@@ -71,9 +72,12 @@ define(function (require) {
 
             _.each(this.get("legendParams"), function (legendParam, i) {
                 _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
+                    var layername,
+                        isVisibleInMap;
+
                     if (legendParam.layername === paramsStyleWMS.styleWMSName) {
-                        var layername = legendParam.layername,
-                            isVisibleInMap = legendParam.isVisibleInMap;
+                        layername = legendParam.layername;
+                        isVisibleInMap = legendParam.isVisibleInMap;
 
                         legendParams.splice(i, 1, {params: paramsStyleWMS,
                             layername: layername,
@@ -146,11 +150,15 @@ define(function (require) {
                 legendURL;
 
             _.each(this.get("wmsLayerList"), function (layer) {
-                paramsStyleWMS = _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
-                    if (layer.get("name") === paramsStyleWMS.styleWMSName) {
-                        return true;
+                paramsStyleWMS = _.find(paramsStyleWMSArray, function (params) {
+                    var bol;
+
+                    if (layer.get("name") === params.styleWMSName) {
+                        bol = true;
                     }
+                    return bol;
                 });
+
                 if (paramsStyleWMS) {
 
                     this.push("tempArray", {
@@ -180,9 +188,7 @@ define(function (require) {
                     styleClass,
                     styleSubClass,
                     styleFieldValues,
-                    scalingShape,
-                    styleScalingValues,
-                    scalingAttribute;
+                    allItems;
 
                 if (typeof layer.get("legendURL") === "string") {
                     this.push("tempArray", {
@@ -215,56 +221,15 @@ define(function (require) {
                         }
                         // Circle Point Style
                         else if (styleSubClass === "CIRCLE") {
-                            var a = this.createCircleSVG(style);
-                            console.log(a);
                             image.push(this.createCircleSVG(style));
                             name.push(layer.get("name"));
                         }
+                        // Advanced Point Styles
                         else if (styleSubClass === "ADVANCED") {
-                            scalingShape = style.get("scalingShape");
-                            styleScalingValues = style.get("scalingValues");
-                            scalingAttribute = style.get("scalingAttribute");
-console.log(scalingShape);
-console.log(styleScalingValues);
-console.log(style);
-// debugger;
-                            if (scalingShape === "CIRCLESEGMENTS") {
-                                // for all attributvalues which define in style.json
-                                _.each(styleScalingValues, function (value, key) {
-                                    var olFeature = new ol.Feature({
-                                            geometry: new ol.geom.Point([100, 100])
-                                        }),
-                                        stylePerValue;
-    
-                                    olFeature.set(scalingAttribute, key);
-                                    stylePerValue = style.createNominalCircleSegments(olFeature);
-    
-                                    // image.push(style.get("imagePath") + style.get("imageName"));
-                                    image.push(stylePerValue);
-                                    
-                                    
-                                    console.log(key);
-                                    console.log(value);
-                                    console.log(olFeature);
-                                    console.log(stylePerValue);
-                                }, this);
-                            }
+                            allItems = this.drawAdvancedStyle(style, layer, image, name);
 
-
-                            // style.createStyle(olFeature, false);
-                            
-                            // sclingValues
-                            // scalingValueDefaultColor to scalingValues
-                            // svg anlegen
-                            // Segmente berechnen
-                            // Segmente in SVG schreiben
-
-                            // _.each(styleScalingValues, function (value, key) {
-                            //     image.push(style.get("imagePath") + key);
-                            // }, this);
-                            
-                            // image.push(style.get("imagePath") + style.get("imageName"));
-                            name.push(layer.get("name"));
+                            image = allItems[0];
+                            name = allItems[1];
                         }
                         else {
                             if (style.get("imageName") !== "blank.png") {
@@ -314,7 +279,6 @@ console.log(style);
                         isVisibleInMap: layer.get("isVisibleInMap")
                     });
                 }
-                console.log(image);
             }, this);
 
         },
@@ -384,6 +348,101 @@ console.log(style);
 
             return svg;
         },
+
+        /**
+         * draw advanced styles in legend
+         * @param {ol.style} style - style from features
+         * @param {ol.layer} layer - layer with features
+         * @param {array} image - should contains the image source for legend elements
+         * @param {array} name - should contains the names for legend elements
+         * @returns {array} allItems
+         */
+        drawAdvancedStyle: function (style, layer, image, name) {
+            var scalingShape = style.get("scalingShape"),
+                scalingAttribute = style.get("scalingAttribute"),
+                scalingValueDefaultColor = style.get("scalingValueDefaultColor"),
+                styleScalingValues = style.get("styleScalingValues"),
+                scaling = style.get("scaling"),
+                advancedStyle = style.clone(),
+                allItems = [];
+
+            // set the background of the SVG transparent
+            // necessary because the image is in the background and the SVG on top of this
+            if (advancedStyle.getImageName() !== "blank.png") {
+                advancedStyle.setCircleSegmentsBackgroundColor([
+                    255, 255, 255, 0
+                ]);
+            }
+
+            // chooses which case should be draw
+            if (scaling === "NOMINAL" && scalingShape === "CIRCLESEGMENTS") {
+                styleScalingValues = advancedStyle.get("scalingValues");
+
+                allItems = this.drawNominalCircleSegmentsStyle(styleScalingValues, scalingValueDefaultColor, scalingAttribute, advancedStyle, image, name);
+            }
+            else if (scaling === "INTERVAL" && scalingShape === "CIRCLE_BAR") {
+                allItems = this.drawIntervalCircleBars(scalingAttribute, advancedStyle, layer, image, name);
+            }
+
+            return allItems;
+        },
+
+        /**
+         * draw advanced styles for nominal circle segments in legend
+         * @param {object} styleScalingValues - contains values to be draw in legend
+         * @param {array} scalingValueDefaultColor - color for default value
+         * @param {String} scalingAttribute - attribute that contains the values of a feature
+         * @param {ol.style} advancedStyle - copy of style
+         * @param {array} image - should contains the image source for legend elements
+         * @param {array} name - should contains the names for legend elements
+         * @returns {array} allItems
+         */
+        drawNominalCircleSegmentsStyle: function (styleScalingValues, scalingValueDefaultColor, scalingAttribute, advancedStyle, image, name) {
+            // add defaultColor
+            _.extend(styleScalingValues, {default: scalingValueDefaultColor});
+
+            // for all values of attribute which define in style.json
+            _.each(styleScalingValues, function (value, key) {
+                var olFeature = new ol.Feature({}),
+                    stylePerValue;
+
+                olFeature.set(scalingAttribute, key);
+                stylePerValue = advancedStyle.createStyle(olFeature, false);
+
+                if (_.isArray(stylePerValue)) {
+                    image.push([stylePerValue[0].getImage().getSrc(), stylePerValue[1].getImage().getSrc()]);
+                }
+                else {
+                    image.push(stylePerValue.getImage().getSrc());
+                }
+                name.push(key);
+            }, this);
+
+            return [image, name];
+        },
+
+        /**
+         * draw advanced styles for interval circle bars in legend
+         * @param {String} scalingAttribute - attribute that contains the values of a feature
+         * @param {ol.style} advancedStyle - copy of style
+         * @param {ol.layer} layer - layer with features
+         * @param {array} image - should contains the image source for legend elements
+         * @param {array} name - should contains the names for legend elements
+         * @returns {array} allItems
+         */
+        drawIntervalCircleBars: function (scalingAttribute, advancedStyle, layer, image, name) {
+            var olFeature = new ol.Feature({}),
+                stylePerValue;
+
+            olFeature.set(scalingAttribute, "20");
+            stylePerValue = advancedStyle.createStyle(olFeature, false);
+
+            image.push(stylePerValue.getImage().getSrc());
+            name.push(layer.get("name"));
+
+            return [image, name];
+        },
+
         /**
          * Übergibt GroupLayer in den tempArray. Für jeden GroupLayer wird der Typ "Group" gesetzt und als legendURL ein Array übergeben.
          * @returns {void}
