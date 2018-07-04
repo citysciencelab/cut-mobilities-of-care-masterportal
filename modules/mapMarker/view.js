@@ -128,7 +128,7 @@ define(function (require) {
                     Radio.trigger("Map", "zoomToExtent", coord);
                     break;
                 }
-                case "Schulinfosystem": {
+                case "Schulstandorte": {
                     this.showMarker(coord);
                     Radio.trigger("MapView", "setCenter", coord, 6);
                     break;

@@ -317,6 +317,7 @@ define(function (require) {
             // 3. Hide das GFI
             Radio.trigger("GFI", "setIsVisible", false);
             // 4. Zoome ggf. auf Ergebnis oder Sonderbehandlung
+            console.log(hit);
             if (_.has(hit, "triggerEvent")) {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit);
             }

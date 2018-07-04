@@ -79,10 +79,9 @@ define(function () {
          * @param {object} gfiAttributes -
          * @returns {object[]} list - one object per row
          */
-        prepareFeatureListToShow: function (gfiAttributes) {
+        prepareFeatureListToShow: function (gfiAttributes, themeConfig) {
             var list = [],
                 featureList = this.get("groupedFeatureList")[this.get("layerId")],
-                themeConfig = Radio.request("Schulinfo", "getThemeConfig"),
                 sortedAttributes = this.sortAttributes(gfiAttributes, themeConfig);
 
             Object.keys(sortedAttributes).forEach(function (key) {
