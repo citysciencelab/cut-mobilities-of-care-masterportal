@@ -619,12 +619,13 @@ define(function (require) {
 
             if (isClustered) {
                 textObj = this.createClusteredTextStyle(feature, labelField);
-                if (_.isUndefined(textObj)) {
-                    return;
+
+                if (!_.isUndefined(textObj)) {
+                    textStyle = this.createTextStyleFromObject(textObj);
                 }
             }
             else if (labelField.length === 0) {
-                return;
+                textStyle = undefined;
             }
             else {
                 textObj.text = feature.get(labelField);
@@ -636,9 +637,14 @@ define(function (require) {
                 textObj.fillcolor = this.returnColor(this.getTextFillColor(), "rgb");
                 textObj.strokecolor = this.returnColor(this.getTextStrokeColor(), "rgb");
                 textObj.strokewidth = parseFloat(this.getTextStrokeWidth(), 10);
+
+                textStyle = this.createTextStyleFromObject(textObj);
             }
 
-            textStyle = new ol.style.Text({
+            return textStyle;
+        },
+        createTextStyleFromObject: function (textObj) {
+            var textStyle = new ol.style.Text({
                 text: textObj.text,
                 textAlign: textObj.textAlign,
                 offsetX: textObj.offsetX,
@@ -676,25 +682,31 @@ define(function (require) {
                 clusterTextObj.strokecolor = this.returnColor(this.getTextStrokeColor(), "rgb");
                 clusterTextObj.strokewidth = parseFloat(this.getTextStrokeWidth(), 10);
             }
-            else {
-                if (this.getClusterText() === "COUNTER") {
-                    clusterTextObj.text = feature.get("features").length.toString();
-                }
-                else if (this.getClusterText() === "NONE") {
-                    return;
-                }
-                else {
-                    clusterTextObj.text = this.getClusterText();
-                }
-                clusterTextObj.textAlign = this.getClusterTextAlign();
-                clusterTextObj.font = this.getClusterTextFont().toString();
-                clusterTextObj.scale = parseFloat(this.getClusterTextScale(), 10);
-                clusterTextObj.offsetX = parseFloat(this.getClusterTextOffsetX(), 10);
-                clusterTextObj.offsetY = parseFloat(this.getClusterTextOffsetY(), 10);
-                clusterTextObj.fillcolor = this.returnColor(this.getClusterTextFillColor(), "rgb");
-                clusterTextObj.strokecolor = this.returnColor(this.getClusterTextStrokeColor(), "rgb");
-                clusterTextObj.strokewidth = parseFloat(this.getClusterTextStrokeWidth(), 10);
+            else if (this.getClusterText() === "COUNTER") {
+                clusterTextObj.text = feature.get("features").length.toString();
+                clusterTextObj = this.extendClusterTextStyle(clusterTextObj);
             }
+            else if (this.getClusterText() === "NONE") {
+                clusterTextObj = undefined;
+            }
+            else {
+                clusterTextObj.text = this.getClusterText();
+                clusterTextObj = this.extendClusterTextStyle(clusterTextObj);
+            }
+
+            return clusterTextObj;
+        },
+
+        extendClusterTextStyle: function (clusterTextObj) {
+            clusterTextObj.textAlign = this.getClusterTextAlign();
+            clusterTextObj.font = this.getClusterTextFont().toString();
+            clusterTextObj.scale = parseFloat(this.getClusterTextScale(), 10);
+            clusterTextObj.offsetX = parseFloat(this.getClusterTextOffsetX(), 10);
+            clusterTextObj.offsetY = parseFloat(this.getClusterTextOffsetY(), 10);
+            clusterTextObj.fillcolor = this.returnColor(this.getClusterTextFillColor(), "rgb");
+            clusterTextObj.strokecolor = this.returnColor(this.getClusterTextStrokeColor(), "rgb");
+            clusterTextObj.strokewidth = parseFloat(this.getClusterTextStrokeWidth(), 10);
+
             return clusterTextObj;
         },
 
@@ -705,30 +717,29 @@ define(function (require) {
         */
         returnColor: function (color, dest) {
             var src,
-                newColor,
+                newColor = color,
                 pArray = [];
 
-            if (_.isArray(color) && !_.isString(color)) {
+            if (_.isArray(newColor) && !_.isString(newColor)) {
                 src = "rgb";
             }
-            else if (_.isString(color) && color.indexOf("#") === 0) {
+            else if (_.isString(newColor) && newColor.indexOf("#") === 0) {
                 src = "hex";
             }
-            else if (_.isString(color) && color.indexOf("#") === -1) {
+            else if (_.isString(newColor) && newColor.indexOf("#") === -1) {
                 src = "rgb";
 
-                pArray = color.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
-                color = [pArray[0], pArray[1], pArray[2], pArray[3]];
+                pArray = newColor.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
+                newColor = [
+                    pArray[0], pArray[1], pArray[2], pArray[3]
+                ];
             }
 
             if (src === "hex" && dest === "rgb") {
-                newColor = this.hexToRgb(color);
+                newColor = this.hexToRgb(newColor);
             }
             else if (src === "rgb" && dest === "hex") {
-                newColor = this.rgbToHex(color[0], color[1], color[2]);
-            }
-            else {
-                newColor = color;
+                newColor = this.rgbToHex(newColor[0], newColor[1], newColor[2]);
             }
 
             return newColor;
@@ -744,13 +755,15 @@ define(function (require) {
         hexToRgb: function (hex) {
             // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
             var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
-                result;
+                result,
+                hexReplace;
 
-            hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+            hexReplace = hex.replace(shorthandRegex, function (m, r, g, b) {
                 return r + r + g + g + b + b;
             });
 
-            result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+            result = result.exec(hexReplace);
 
             return result ? [parseFloat(result[1], 16), parseFloat(result[2], 16), parseFloat(result[3], 16)] : null;
         },
@@ -1081,6 +1094,10 @@ define(function (require) {
                 svg = svg + "</svg>";
 
             return svg;
+        },
+
+        setCircleSegmentsBackgroundColor: function (value) {
+            this.set("circleSegmentsBackgroundColor", value);
         },
 
         setSize: function (size) {
