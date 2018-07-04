@@ -130,10 +130,9 @@ define(function (require) {
                 filename = "Schulweg_zu_" + school.get("schulname"),
                 mapCanvas = document.getElementsByTagName("canvas")[0],
                 screenshotMap = mapCanvas.toDataURL("image/png"),
-                footerText = "Herausgeber: Freie und Hansestadt Hamburg - Behörde für Schule und Berufsbildung\nKartographie und Gestaltung: Landesbetrieb Geoinformation und Vermessung 2018",
                 pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc, date);
 
-            Radio.trigger("BrowserPrint", "print", filename, pdfDef, "download", footerText);
+            Radio.trigger("BrowserPrint", "print", filename, pdfDef, "download");
         },
         createPDFDef: function (screenshotMap, address, school, route, routeDescription, date) {
             var addr = address.street + " " + address.number + address.affix,
