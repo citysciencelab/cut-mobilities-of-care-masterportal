@@ -833,12 +833,11 @@ define(function (require) {
         createLegendURL: function () {
             var style;
 
-            if (!this.getLegendURL().length) {
+            if (!_.isUndefined(this.getLegendURL()) && !this.getLegendURL().length) {
                 style = Radio.request("StyleList", "returnModelById", this.getStyleId());
 
                 if (!_.isUndefined(style)) {
                     this.setLegendURL([style.getImagePath() + style.getImageName()]);
-
                 }
             }
         },
