@@ -40,9 +40,7 @@ define(function (require) {
             this.setMouseHoverInfos(mouseHoverInfos);
         },
 
-        /**
-         * Vernichtet das Popup.
-         */
+        // Vernichtet das Popup.
         destroyPopup: function () {
             this.setTextArray(null);
             this.setTextPosition(null);
@@ -62,14 +60,18 @@ define(function (require) {
             this.get("overlay").setPosition(value);
         },
 
-        getFeaturesAtPixel: function (evt) {
-            var features = [];
+        getFeaturesAtPixel: function (evt, mouseHoverInfos) {
+            var features = [],
+                layerIds = _.pluck(mouseHoverInfos, "id");
 
             evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-                features.push({
-                    feature: feature,
-                    layer: layer
-                });
+                if (_.contains(layerIds, layer.get("id"))) {
+                    features.push({
+                        feature: feature,
+                        layer: layer
+                    });
+                }
+
             });
             return features;
         },
@@ -114,6 +116,7 @@ define(function (require) {
          * Prüft auf Drag-Modus
          * @param  {evt} evt Event-Object
          * @listens "Map:pointermove"
+         * @returns {void}
          */
         checkDragging: function (evt) {
             if (evt.dragging) {
@@ -125,11 +128,12 @@ define(function (require) {
         /**
          * Prüft, welche Features an MousePosition vorhanden sind
          * @param  {evt} evt PointerMoveEvent
+         * @returns {void}
          */
         checkForFeaturesAtPixel: function (evt) {
             var featuresArray = [],
                 featureArray = [],
-                featuresAtPixel = this.getFeaturesAtPixel(evt);
+                featuresAtPixel = this.getFeaturesAtPixel(evt, this.getMouseHoverInfos());
 
             _.each(featuresAtPixel, function (featureAtPixel) {
                 featureArray = this.fillFeatureArray(featureAtPixel);
@@ -142,21 +146,31 @@ define(function (require) {
         /**
          * Prüft anhand der neu darzustellenden Features welche Aktion mit dem MouseHover geschehen soll
          * @param  {Array} featuresArray Array der darzustellenden Features
+         * @param {evt} evt Event-Object
+         * @returns {void}
          */
         checkAction: function (featuresArray, evt) {
             var textArray;
 
-            if (featuresArray.length > 0) {
-                textArray = this.checkTextArray(featuresArray);
-
-                this.setOverlayPosition(evt.coordinate);
-                if (!this.isTextEqual(textArray, this.getTextArray())) {
-                    this.setTextArray(textArray);
-                    this.showPopup();
-                }
-            }
-            else {
+            // keine Features an MousePosition
+            if (featuresArray.length === 0) {
                 this.destroyPopup();
+                return;
+            }
+            textArray = this.checkTextArray(featuresArray);
+
+            // keine darzustellenden Texte an MousePosition
+            if (textArray.length === 0) {
+                this.destroyPopup();
+                return;
+            }
+
+            // Neupositionierung
+            this.setOverlayPosition(evt.coordinate);
+            // Änderung des Textes
+            if (!this.isTextEqual(textArray, this.getTextArray())) {
+                this.setTextArray(textArray);
+                this.showPopup();
             }
         },
 
@@ -179,6 +193,7 @@ define(function (require) {
         /**
          * Prüft ob sich MousePosition signifikant entsprechend Config verschoben hat
          * @param  {evt} evt MouseHove
+         * @returns {void}
          */
         checkTextPosition: function (evt) {
             var lastPixel = this.getTextPosition(),
@@ -214,7 +229,8 @@ define(function (require) {
 
         /**
          * Dies Funktion durchsucht das übergebene pFeatureArray und extrahiert den anzuzeigenden Text
-         * @param  {Array} pFeaturesArray Features at MousePosition
+         * @param  {Array} featureArray Features at MousePosition
+         * @returns {string} darszustellender String
          */
         checkTextArray: function (featureArray) {
             var mouseHoverInfos = this.getMouseHoverInfos(),

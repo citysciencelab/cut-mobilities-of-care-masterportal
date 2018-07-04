@@ -2,10 +2,10 @@ define(function (require) {
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
-        _String = require("underscore.string"),
+        $ = require("jquery"),
         ParcelSearch;
 
-        ParcelSearch = Backbone.Model.extend({
+    ParcelSearch = Backbone.Model.extend({
         defaults: {
             "isCollapsed": undefined,
             "isCurrentWin": undefined,
@@ -40,8 +40,8 @@ define(function (require) {
          */
         setStatus: function (args) {
             if (args[2].getId() === "parcelSearch") {
-                    this.setIsCollapsed(args[1]);
-                    this.setIsCurrentWin(args[0]);
+                this.setIsCollapsed(args[1]);
+                this.setIsCurrentWin(args[0]);
             }
             else {
                 this.setIsCurrentWin(false);
@@ -56,7 +56,7 @@ define(function (require) {
                 this.set(key, val);
             }, this);
 
-            restService = this.getServiceId() ? Radio.request("RestReader", "getServiceById", this.getServiceId()) : null,
+            restService = this.getServiceId() ? Radio.request("RestReader", "getServiceById", this.getServiceId()) : null;
             serviceURL = restService && restService.get("url") ? restService.get("url") : null;
 
             this.setServiceURL(serviceURL);
@@ -65,7 +65,7 @@ define(function (require) {
                 this.loadConfiguration(this.getConfigJSON());
             }
             else {
-                Radio.trigger("Alert", "alert", {text: "<strong>Invalid parcelSearch configuration!</strong>", kategorie: "alert-danger"});
+                console.error("Ungültige oder unvollständige Konfiguration (parcelSearch)");
                 Radio.trigger("Window", "closeWin");
             }
         },
@@ -77,7 +77,7 @@ define(function (require) {
                 url: configJSON,
                 cache: false,
                 error: function () {
-                    Radio.trigger("Alert", "alert", {text: "<strong>Konfiguration der Flurstückssuche konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
+                    console.error(configJSON + " konnte nicht geladen werden (parcelSearch)");
                     Radio.trigger("Window", "closeWin");
                 },
                 complete: function () {
@@ -137,31 +137,43 @@ define(function (require) {
             }
         },
         buildUrl: function (url, params) {
+            var addedUrl = url;
+
             _.each(params, function (val, key) {
                 var andSymbol = "&";
 
-                url += key + "=" + String(val) + andSymbol;
+                addedUrl += key + "=" + String(val) + andSymbol;
             });
             // if params is empty object
-            if (url.charAt(url.length - 1) !== "?") {
-                url = url.slice(0, -1);
+            if (addedUrl.charAt(addedUrl.length - 1) !== "?") {
+                addedUrl = addedUrl.slice(0, -1);
             }
-            return url;
+            return addedUrl;
 
         },
         createFlurstKennz: function () {
             var land = this.getCountryNumber(),
                 gemarkung = this.getDistrictNumber(),
-                flurst_nr = _String.lpad(this.getParcelNumber(), 5, "0");
+                flurst_nr = this.padLeft(this.getParcelNumber(), 5, "0");
 
             return land + gemarkung + "___" + flurst_nr + "______";
+        },
+        /**
+         * Erzeugt einen String bestimmter Länge anhand eines übergebenen String und füllt links mit gewünschtem Zeichen
+         * @param  {number} number      Zahl, die links ergänzt werden soll
+         * @param  {number} length      gewünschte Länge des String
+         * @param  {string} [prefix=0]  Füllzeichen
+         * @return {string}             aufgefüllter String
+         */
+        padLeft: function (number, length, prefix) {
+            return Array(length - String(number).length + 1).join(prefix || "0") + number;
         },
         sendRequest: function () {
             var storedQuery = "&StoredQuery_ID=" + this.getStoredQueryID(),
                 gemarkung = "&gemarkung=" + this.getDistrictNumber(),
                 flur = this.getCadastralDistrictField() === true ? "&flur=" + this.getCadastralDistrictNumber() : "",
-                parcelNumber = "&flurstuecksnummer=" + _String.lpad(this.getParcelNumber(), 5, "0"),
-                parcelDenominatorNumber = this.getParcelDenominatorField() === true ? "&flurstuecksnummernenner=" + _String.lpad(this.getParcelDenominatorNumber(), 3, "0") : "",
+                parcelNumber = "&flurstuecksnummer=" + this.padLeft(this.getParcelNumber(), 5, "0"),
+                parcelDenominatorNumber = this.getParcelDenominatorField() === true ? "&flurstuecksnummernenner=" + this.padLeft(this.getParcelDenominatorNumber(), 3, "0") : "",
                 data = storedQuery + gemarkung + flur + parcelNumber + parcelDenominatorNumber;
 
             $.ajax({
@@ -183,22 +195,27 @@ define(function (require) {
             });
         },
         getParcel: function (data) {
-            var member = $("wfs\\:member,member", data)[0];
+            var member = $("wfs\\:member,member", data)[0],
+                parcelNumber,
+                parcelDenominatorNumber,
+                position,
+                coordinate,
+                geoExtent,
+                attributes;
 
             if (!member || member.length === 0) {
-                var parcelNumber = _String.lpad(this.getParcelNumber(), 5, "0"),
-                    parcelDenominatorNumber = this.getParcelDenominatorField() === true ? " / " + _String.lpad(this.getParcelDenominatorNumber(), 3, "0") : "";
-
+                parcelNumber = this.padLeft(this.getParcelNumber(), 5, "0");
+                parcelDenominatorNumber = this.getParcelDenominatorField() === true ? " / " + this.padLeft(this.getParcelDenominatorNumber(), 3, "0") : "";
                 this.setParcelFound(false);
                 Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
                 Radio.trigger("ParcelSearch", "noParcelFound");
             }
             else {
-                var position = $(member).find("gml\\:pos, pos")[0] ? $(member).find("gml\\:pos, pos")[0].textContent.split(" ") : null,
-                    coordinate = position ? [parseFloat(position[0]), parseFloat(position[1])] : null,
-                    attributes = coordinate ? _.object(["coordinate"], [coordinate]) : {},
-                    geoExtent = $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] ? $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] : null,
-                    attributes = geoExtent ? _.extend(attributes, _.object(["geographicExtent"], [geoExtent])) : attributes;
+                position = $(member).find("gml\\:pos, pos")[0] ? $(member).find("gml\\:pos, pos")[0].textContent.split(" ") : null;
+                coordinate = position ? [parseFloat(position[0]), parseFloat(position[1])] : null;
+                attributes = coordinate ? _.object(["coordinate"], [coordinate]) : {};
+                geoExtent = $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] ? $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] : null;
+                attributes = geoExtent ? _.extend(attributes, _.object(["geographicExtent"], [geoExtent])) : attributes;
 
                 $(member).find("*").filter(function () {
                     return this.nodeName.indexOf("dog") !== -1 || this.nodeName.indexOf("gages") !== -1;

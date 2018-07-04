@@ -1,6 +1,4 @@
-define([
-    "modules/core/configLoader/parser"
-], function () {
+define(function (require) {
 
     var Parser = require("modules/core/configLoader/parser"),
         DefaultTreeParser;
@@ -30,7 +28,11 @@ define([
          */
         filterList: function (layerList) {
             return _.filter(layerList, function (element) {
-                return (element.datasets.length > 0 && element.typ === "WMS") ;
+                if (!_.has(element, "datasets")) {
+                    return false;
+                }
+
+                return element.datasets.length > 0 && element.typ === "WMS";
             });
         },
 
@@ -85,8 +87,9 @@ define([
             var baseLayerIds = _.flatten(_.pluck(this.getBaselayer().Layer, "id")),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
-                    return (_.contains(baseLayerIds, layer.id)) ? "baselayers" : "overlays";
+                    return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
                 });
+
             // Models für die Hintergrundkarten erzeugen
             this.createBaselayer(layerList);
             // Models für die Fachdaten erzeugen
@@ -111,6 +114,7 @@ define([
          * als Layer und nicht als Ordner hinzugefügt werden
         */
         splitIntoFolderAndLayer: function (metaNameGroups, name) {
+
             var folder = [],
                 layer = [],
                 categories = {};
@@ -153,11 +157,13 @@ define([
                         return layer.datasets[0].kategorie_organisation;
                     }
                 }, this);
-           // Gruppierung nach MetaName
+
+            // Gruppierung nach MetaName
             _.each(categoryGroups, function (group, name) {
                 var metaNameGroups = _.groupBy(group, function (layer) {
                     return layer.datasets[0].md_name;
                 });
+
                 // in Layer und Ordner unterteilen
                 tree[name] = this.splitIntoFolderAndLayer(metaNameGroups, name);
             }, this);
@@ -176,10 +182,24 @@ define([
                 sortedCategories.push(tree[key]);
             });
             // Kategorien erzeugen
-            this.addItems(sortedCategories, {type: "folder", parentId: "Overlayer", level: 0, isInThemen: true, isVisibleInTree: "true", glyphicon: "glyphicon-plus-sign"});
+            this.addItems(sortedCategories, {
+                type: "folder",
+                parentId: "Overlayer",
+                level: 0,
+                isInThemen: true,
+                isVisibleInTree: "true",
+                glyphicon: "glyphicon-plus-sign"
+            });
             _.each(tree, function (category) {
                 // Unterordner erzeugen
-                this.addItems(category.folder, {type: "folder", parentId: category.id, isLeafFolder: true, level: 1, isInThemen: true, glyphicon: "glyphicon-plus-sign"});
+                this.addItems(category.folder, {type: "folder",
+                    parentId: category.id,
+                    isLeafFolder: true,
+                    level: 1,
+                    isInThemen: true,
+                    glyphicon: "glyphicon-plus-sign",
+                    isFolderSelectable: this.getIsFolderSelectable()
+                });
                 _.each(category.layer, function (layer) {
                     layer.name = layer.datasets[0].md_name;
                 });

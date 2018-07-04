@@ -4,7 +4,7 @@ define(function (require) {
         Radio = require("backbone.radio"),
         TitleModel;
 
-     TitleModel = Backbone.Model.extend({
+    TitleModel = Backbone.Model.extend({
         defaults: {
             // Abwärtskompatibilität muss beachtet werden
             title: Radio.request("Parser", "getPortalConfig").PortalTitle || "Master",

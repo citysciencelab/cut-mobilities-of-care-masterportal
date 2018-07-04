@@ -6,7 +6,7 @@ define(function (require) {
         Model = require("modules/title/model"),
         TitleView;
 
-     TitleView = Backbone.View.extend({
+    TitleView = Backbone.View.extend({
         className: "visible-lg-block portal-title",
         id: "portalTitle",
         model: Model,
@@ -32,7 +32,7 @@ define(function (require) {
 
         setSize: function () {
             var rootWidth = $("#root").width(),
-                searchbarWidth = $("#searchbar").width() + 20, //20 searchbar padding
+                searchbarWidth = $("#searchbar").width() + 20, // 20 searchbar padding
                 width = $("#navbarRow").width() - rootWidth - searchbarWidth - 140; // 35px toleranz wegen padding und margin von #root, #searchbar , .navbar-collapse und #portalTitle
 
             $("#portalTitle").width(width);

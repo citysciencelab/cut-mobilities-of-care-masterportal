@@ -55,8 +55,8 @@ define([
 
         render: function () {
             var attr = this.model.toJSON(),
-            isOverviewmap = this.model.get("isOverviewmap"),
-            isViewMobile = Radio.request("Util", "isViewMobile");
+                isOverviewmap = this.model.get("isOverviewmap"),
+                isViewMobile = Radio.request("Util", "isViewMobile");
 
             this.$el.html(this.templateShow(attr));
             if (this.model.getIsVisibleInMap() === true) {

@@ -278,7 +278,7 @@ define(function (require) {
                         .attr("style", "background: gray")
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
-                    })
+                })
                 .on("mouseout", function () {
                     tooltipDiv.transition()
                         .duration(500)
@@ -287,7 +287,7 @@ define(function (require) {
                             tooltipDiv.style("left", "0px");
                             tooltipDiv.style("top", "0px");
                         });
-                    })
+                })
                 .on("click", function (d) {
                     tooltipDiv.transition()
                         .duration(200)
@@ -296,7 +296,7 @@ define(function (require) {
                         .attr("style", "background: gray")
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
-                    });
+                });
         },
 
         createSvg: function (selector, marginObj, width, height, svgClass) {

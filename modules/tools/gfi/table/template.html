@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<div class="gfi-header">
+    <p class="buttons pull-right">
+        <span class ="icon-turnarticle" title="drehen"></span>
+        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
+        <!-- <span class="glyphicon glyphicon-minus gfi-toggle" title="Minimieren"></span> -->
+    </p>
+    <p class="title">
+        <span class="gfi-title"></span>
+    </p>
+</div>
+<div class="gfi-content">
+</div>
+
+<% if(numberOfThemes > 1) { %>
+<div class="gfi-footer">
+    <div class="pager-left <% if(themeIndex === 0) {print (' disabled') }%>">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+    </div>
+    <div class="pager-right <% if(themeIndex === numberOfThemes - 1) {print (' disabled') }%>">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </div>
+</div>
+<% } %>

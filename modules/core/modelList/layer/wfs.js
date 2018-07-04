@@ -94,7 +94,7 @@ define(function (require) {
                             featureNS: this.getFeatureNS()
                         }),
                         features = wfsReader.readFeatures(data),
-                        isClustered = this.has("clusterDistance") ? true : false;
+                        isClustered = Boolean(this.has("clusterDistance"));
 
                     // nur die Features verwenden die eine geometrie haben aufgefallen bei KITAs am 05.01.2018 (JW)
                     features = _.filter(features, function (feature) {
@@ -193,11 +193,11 @@ define(function (require) {
             if (_.isFunction(style)) {
                 return style;
             }
-            else {
-                return function () {
-                    return style;
-                };
-            }
+
+            return function () {
+                return style;
+            };
+
         },
 
         // getter for style

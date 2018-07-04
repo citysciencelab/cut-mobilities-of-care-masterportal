@@ -8,7 +8,7 @@ define(function (require) {
         SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SelectView;
 
-        SelectView = Backbone.View.extend({
+    SelectView = Backbone.View.extend({
         id: "einwohnerabfrage-tool",
         model: new EinwohnerabfrageModel(),
         className: "win-body",
@@ -44,7 +44,7 @@ define(function (require) {
         },
         renderResult: function () {
             this.$el.find(".result").html("");
-            this.$el.find(".result").append(new ResultView({ model: this.model}).render());
+            this.$el.find(".result").append(new ResultView({model: this.model}).render());
         },
         createDrawInteraction: function (evt) {
             this.model.getDrawInteraction().setActive(false);

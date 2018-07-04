@@ -46,24 +46,24 @@ define([
                 $(evt.currentTarget).find(".active").removeClass("active");
                 $(evt.target).parent().addClass("active");
                 switch (evt.target.id) {
-                        case "options": {
-                            $(".calc").hide();
-                            $(".address").hide();
-                            $(".options").show();
-                            break;
-                        }
-                        case "calc": {
-                            $(".options").hide();
-                            $(".calc").show();
-                            $(".address").hide();
-                            break;
-                        }
-                        default: {
-                            $(".options").hide();
-                            $(".calc").hide();
-                            $(".address").show();
-                        }
+                    case "options": {
+                        $(".calc").hide();
+                        $(".address").hide();
+                        $(".options").show();
+                        break;
                     }
+                    case "calc": {
+                        $(".options").hide();
+                        $(".calc").show();
+                        $(".address").hide();
+                        break;
+                    }
+                    default: {
+                        $(".options").hide();
+                        $(".calc").hide();
+                        $(".address").show();
+                    }
+                }
             }
         },
         changeStartAdresse: function () {

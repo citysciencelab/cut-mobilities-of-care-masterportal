@@ -15,8 +15,7 @@ define(function (require) {
                 activeTab: "",
                 width: 0,
                 height: 0
-            }
-        ),
+            }),
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
@@ -90,7 +89,7 @@ define(function (require) {
                     r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
                 tempArr.push({
-                    timestamp: new Date (year, month, day, hours, minutes, seconds, 0),
+                    timestamp: new Date(year, month, day, hours, minutes, seconds, 0),
                     total: total,
                     r_in: r_in,
                     r_out: r_out
@@ -120,7 +119,7 @@ define(function (require) {
                     r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
                 tempArr.push({
-                    timestamp: new Date (year, month, day, 0, 0, 0, 0),
+                    timestamp: new Date(year, month, day, 0, 0, 0, 0),
                     total: total,
                     r_in: r_in,
                     r_out: r_out

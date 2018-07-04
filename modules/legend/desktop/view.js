@@ -16,7 +16,7 @@ define([
 
             $(window).resize(function () {
                 if ($(".legend-win-content").height() !== null) {
-                    $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
+                    $(".legend-win-content").css("max-height", $(window).height() * 0.7);
                 }
             });
 
@@ -51,7 +51,7 @@ define([
 
             this.$el.html(this.template(attr));
             $("body").append(this.$el.html(this.template(attr)));
-            $(".legend-win-content").css("max-height", ($(".lgv-container").height() * 0.7));
+            $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);
             this.$el.draggable({
                 containment: "#map",
                 handle: ".legend-win-header"
@@ -71,7 +71,6 @@ define([
             }
             else {
                 legendModel.setIsActive(false);
-                Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
             }
         },
         /**
@@ -88,7 +87,7 @@ define([
          * Derzeit wird die Funktion ausgeführt auf die updateSize Funtkion der Map.
          */
         updateLegendSize: function () {
-            $(".legend-win-content").css("max-height", ($(".lgv-container").height() * 0.7));
+            $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);
         }
     });
 

@@ -24,9 +24,9 @@ define(function (require) {
                 this.$el.html(this.template(attr));
                 return this;
             }
-            else {
-                return "";
-            }
+
+            return "";
+
         },
         checkItem: function () {
             if (this.model.getId() === "legend") {

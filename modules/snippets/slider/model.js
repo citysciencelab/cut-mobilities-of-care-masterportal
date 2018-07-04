@@ -7,6 +7,7 @@ define(function (require) {
     SliderModel = SnippetModel.extend({
         initialize: function (attributes) {
             var parsedValues;
+
             // parent (SnippetModel) initialize
             this.superInitialize();
             parsedValues = this.parseValues(attributes.values);

@@ -95,9 +95,9 @@ define([
                 Radio.trigger("Alert", "alert", {text: "Koordinatentransformation mit ungültigen Eingaben wird abgebrochen.", kategorie: "alert-danger"});
                 return "";
             }
-            else {
-                return Proj4(Proj4(par.fromCRS), Proj4(par.toCRS), par.point);
-            }
+
+            return Proj4(Proj4(par.fromCRS), Proj4(par.toCRS), par.point);
+
         },
 
         // getter for namedProjections

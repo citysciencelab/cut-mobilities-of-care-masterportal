@@ -50,14 +50,14 @@ define([
                 $("#btn_import").prop("disabled", true);
             }
 
-            reader.onload = (function () {
+            reader.onload = function () {
                 var fakeBtnTxt = $("#kmlinput").val(),
-                test = fakeBtnTxt.slice(12);
+                    test = fakeBtnTxt.slice(12);
 
                 this.model.setText(reader.result);
                 $("#fakebutton").html("Datei: " +
                 test);
-            }).bind(this);
+            }.bind(this);
             reader.readAsText(file);
         }
     });

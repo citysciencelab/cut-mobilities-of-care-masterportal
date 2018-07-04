@@ -1,10 +1,7 @@
-define([
-    "modules/core/configLoader/parser",
-    "backbone.radio"
-], function () {
+define(function (require) {
 
-    var Parser = require("modules/core/configLoader/parser"),
-        Radio = require("backbone.radio"),
+    var Radio = require("backbone.radio"),
+        Parser = require("modules/core/configLoader/parser"),
         CustomTreeParser;
 
     CustomTreeParser = Parser.extend({
@@ -62,43 +59,53 @@ define([
                     // HVV :(
                     if (_.has(layer, "styles") && layer.styles.length >= 1) {
                         _.each(layer.styles, function (style, index) {
-                            this.addItem(_.extend(
-                                {
-                                    type: "layer",
-                                    parentId: parentId,
-                                    name: layer.name[index],
-                                    id: layer.id + style,
-                                    styles: layer.styles[index],
-                                    legendURL: layer.legendURL[index],
-                                    level: level,
-                                    isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
-                                }, _.omit(layer, "id", "name", "styles", "legendURL")));
+                            this.addItem(_.extend({
+                                type: "layer",
+                                parentId: parentId,
+                                name: layer.name[index],
+                                id: layer.id + style,
+                                styles: layer.styles[index],
+                                legendURL: layer.legendURL[index],
+                                level: level,
+                                isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
+                            }, _.omit(layer, "id", "name", "styles", "legendURL")));
                         }, this);
                     }
                     else {
-                        this.addItem(_.extend(
-                            {
-                                type: "layer",
-                                parentId: parentId,
-                                level: level,
-                                format: "image/png",
-                                isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
-                            }, layer));
+                        this.addItem(_.extend({
+                            type: "layer",
+                            parentId: parentId,
+                            level: level,
+                            format: "image/png",
+                            isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
+                        }, layer));
                     }
                 }, this);
             }
             if (_.has(object, "Ordner")) {
                 _.each(object.Ordner, function (folder) {
-                    var isLeafFolder = (!_.has(folder, "Ordner")) ? true : false;
+                    var isLeafFolder = !_.has(folder, "Ordner"),
+                        isFolderSelectable;
+
+                    // Visiblity of SelectAll-Box. Use item property first, if not defined use global setting.
+                    if (folder.isFolderSelectable === true) {
+                        isFolderSelectable = true;
+                    }
+                    else if (folder.isFolderSelectable === false) {
+                        isFolderSelectable = false;
+                    }
+                    else {
+                        isFolderSelectable = this.getIsFolderSelectable();
+                    }
 
                     folder.id = this.createUniqId(folder.Titel);
-                    this.addItem(
-                    {
+                    this.addItem({
                         type: "folder",
                         parentId: parentId,
                         name: folder.Titel,
                         id: folder.id,
                         isLeafFolder: isLeafFolder,
+                        isFolderSelectable: isFolderSelectable,
                         level: level,
                         glyphicon: "glyphicon-plus-sign",
                         isVisibleInTree: this.getIsVisibleInTree(level, "folder", true),
@@ -109,6 +116,7 @@ define([
                 }, this);
             }
         },
+
         getIsVisibleInTree: function (level, type, isInThemen) {
             isInThemen = _.isUndefined(isInThemen) ? false : isInThemen;
             return level === 0 && ((type === "layer") || (type === "folder" && isInThemen));

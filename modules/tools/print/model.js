@@ -54,9 +54,9 @@ define([
                 this.set("printurl", printurl);
                 return Config.proxyURL + "?url=" + printurl + "/info.json";
             }
-            else {
-                return "undefined"; // muss String übergeben, sonst Laufzeitfehler
-            }
+
+            return "undefined"; // muss String übergeben, sonst Laufzeitfehler
+
         },
 
         //
@@ -347,11 +347,11 @@ define([
                         // Punkte ohne Text
                         if (style.getText() === null) {
                             featureStyles[index] = {
-                            fillColor: this.getColor(style.getImage().getFill().getColor()).color,
-                            fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
-                            pointRadius: style.getImage().getRadius(),
-                            strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
-                            strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
+                                fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                                fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                                pointRadius: style.getImage().getRadius(),
+                                strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                                strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
                             };
                         }
                         // Texte
@@ -476,7 +476,7 @@ define([
                 gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
                 gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
                 gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
-                //printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
+                // printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
                 printGFI = this.get("gfi"), // soll laut config Parameter gedruckt werden?
                 printurl = this.get("printurl"); // URL des Druckdienstes
 
@@ -549,6 +549,7 @@ define([
             var color = value,
                 opacity = 1,
                 begin;
+
             // color kommt als array--> parsen als String
             color = color.toString();
 
@@ -566,12 +567,12 @@ define([
                     "opacity": opacity
                 };
             }
-            else {
-                return {
-                    "color": color,
-                    "opacity": opacity
-                };
-            }
+
+            return {
+                "color": color,
+                "opacity": opacity
+            };
+
         },
 
         // Setzt den hexadezimal String zusammen und gibt ihn zurück.
@@ -635,8 +636,8 @@ define([
                 w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
                 h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
                 mapSize = Radio.request("Map", "getSize"),
-                center = [mapSize[0] * ol.has.DEVICE_PIXEL_RATIO / 2 ,
-                mapSize[1] * ol.has.DEVICE_PIXEL_RATIO / 2],
+                center = [mapSize[0] * ol.has.DEVICE_PIXEL_RATIO / 2,
+                    mapSize[1] * ol.has.DEVICE_PIXEL_RATIO / 2],
                 minx, miny, maxx, maxy;
 
             minx = center[0] - (w / 2);

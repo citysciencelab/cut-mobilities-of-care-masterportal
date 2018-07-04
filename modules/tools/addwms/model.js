@@ -29,10 +29,10 @@ define([
         },
         // Diese funktion wird benutzt, um Fehlermeldungen im WMSView darzustellen
         displayError: function (text) {
-                if (text === "" || typeof text === "undefined") {
-                    text = "Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!";
-                }
-             $(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
+            if (text === "" || typeof text === "undefined") {
+                text = "Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!";
+            }
+            $(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
         },
 
         // Lädt die Capabillities, parsed sie und extrahiert die Daten-Layer

@@ -45,16 +45,14 @@ define(function (require) {
          * @param  {string} value
          */
         addValueModel: function (value) {
-            this.getValuesCollection().add(
-                new ValueModel({
-                    attr: this.getName(),
-                    value: value,
-                    displayName: this.getDisplayName(value),
-                    isSelected: false,
-                    isSelectable: true,
-                    type: this.getType()
-                })
-            );
+            this.getValuesCollection().add(new ValueModel({
+                attr: this.getName(),
+                value: value,
+                displayName: this.getDisplayName(value),
+                isSelected: false,
+                isSelectable: true,
+                type: this.getType()
+            }));
         },
 
         getDisplayName: function (value) {
@@ -62,13 +60,13 @@ define(function (require) {
                 if (value === "true") {
                     return "Ja";
                 }
-                else {
-                    return "Nein";
-                }
+
+                return "Nein";
+
             }
-            else {
-                return value;
-            }
+
+            return value;
+
         },
 
         /**
@@ -79,7 +77,7 @@ define(function (require) {
             var collection = this.getValuesCollection().models;
 
             _.each(collection.models, function (model) {
-            model.set("isSelectable", true);
+                model.set("isSelectable", true);
             }, this);
         },
 

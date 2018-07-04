@@ -112,9 +112,9 @@ define(function (require) {
                     if (abstractText.length > 1000) {
                         return abstractText.substring(0, 600) + "...";
                     }
-                    else {
-                        return abstractText;
-                    }
+
+                    return abstractText;
+
                 }(),
                 "date": function () {
                     var citation = $("gmd\\:citation,citation", xmlDoc),

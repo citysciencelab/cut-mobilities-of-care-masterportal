@@ -15,7 +15,7 @@ define(function (require) {
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin": this.render,
-                    "change:coordSystem": this.setFocusToCoordSystemInput
+                "change:coordSystem": this.setFocusToCoordSystemInput
             });
         },
 

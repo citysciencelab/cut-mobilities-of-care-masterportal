@@ -1,31 +1,15 @@
 define([
-    "config",
-    "backbone.radio",
     "modules/menu/desktop/listViewLight",
     "modules/menu/desktop/listView",
-    "modules/menu/mobile/listView"
-], function (Config) {
-    var Radio = require("backbone.radio"),
-        MenuLoader;
+    "modules/menu/mobile/listView",
+    "modules/menu/table/view"
+], function () {
+    var MenuLoader;
 
     MenuLoader = function () {
         var channel = Radio.channel("MenuLoader");
 
         this.treeType = Radio.request("Parser", "getTreeType");
-
-        this.setMenuStyle = function () {
-            var styleFromUrl = Radio.request("ParametricURL", "getStyle"),
-                styleFromConf = Config.uiStyle ? Config.uiStyle.toUpperCase() : "",
-                menuStyle = "DEFAULT";
-
-            if (styleFromUrl && (styleFromUrl === "TABLE" || styleFromUrl === "SIMPLE")) {
-                    menuStyle = styleFromUrl;
-            }
-            else if (styleFromConf === "TABLE" || styleFromConf === "SIMPLE") {
-                menuStyle = styleFromConf;
-            }
-            return menuStyle;
-        };
 
         /**
          * Prüft initial und nach jedem Resize, ob und welches Menü geladen werden muss und lädt bzw. entfernt Module.
@@ -33,13 +17,19 @@ define([
          * @return {Object}        this
          */
         this.loadMenu = function (caller) {
-            var menuStyle = this.setMenuStyle(),
-                isMobile = Radio.request("Util", "isViewMobile");
+            var isMobile = Radio.request("Util", "isViewMobile");
 
-            if (menuStyle === "TABLE") {
-                alert("is table!");
+            if (!this.menuStyle) {
+                this.menuStyle = Radio.request("Util", "getUiStyle");
             }
-            else if (menuStyle === "DEFAULT") {
+
+            if (this.menuStyle === "TABLE") {
+                require(["modules/menu/table/view"], function (Menu) {
+                    caller.currentMenu = new Menu();
+                    channel.trigger("ready", caller.currentMenu.id);
+                });
+            }
+            else if (this.menuStyle === "DEFAULT") {
                 $("#map").css("height", "calc(100% - 50px)");
                 $("#main-nav").show();
 
@@ -49,21 +39,19 @@ define([
                         channel.trigger("ready");
                     });
                 }
+                else if (this.treeType === "light") {
+                    require(["modules/menu/desktop/listViewLight"], function (Menu) {
+                        caller.currentMenu = new Menu();
+                        channel.trigger("ready");
+                        Radio.trigger("Map", "updateSize");
+                    });
+                }
                 else {
-                    if (this.treeType === "light") {
-                        require(["modules/menu/desktop/listViewLight"], function (Menu) {
-                            caller.currentMenu = new Menu();
-                            channel.trigger("ready");
-                             Radio.trigger("Map", "updateSize");
-                        });
-                    }
-                    else {
-                        require(["modules/menu/desktop/listView"], function (Menu) {
-                            caller.currentMenu = new Menu();
-                            channel.trigger("ready");
-                            Radio.trigger("Map", "updateSize");
-                        });
-                    }
+                    require(["modules/menu/desktop/listView"], function (Menu) {
+                        caller.currentMenu = new Menu();
+                        channel.trigger("ready");
+                        Radio.trigger("Map", "updateSize");
+                    });
                 }
                 // Nachdem die MapSize geändert wurde, muss die Map aktualisiert werden.
                 Radio.trigger("Map", "updateSize");
@@ -72,9 +60,10 @@ define([
         this.currentMenu = this.loadMenu(this);
         Radio.on("Util", {
             "isViewMobileChanged": function () {
-                this.currentMenu.removeView();
-
-                this.currentMenu = this.loadMenu(this);
+                if (this.menuStyle === "DEFAULT") {
+                    this.currentMenu.removeView();
+                    this.currentMenu = this.loadMenu(this);
+                }
             }
         }, this);
     };

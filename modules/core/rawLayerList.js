@@ -161,6 +161,7 @@ define([
                 _.each(obj.styles, function (style, index) {
                     // Objekt wird kopiert
                     var cloneObj = _.clone(obj);
+
                     // Die Attribute name, Id, etc. werden für das kopierte Objekt gesetzt
                     cloneObj.style = style;
                     cloneObj.legendURL = obj.legendURL[index];
@@ -195,7 +196,7 @@ define([
             return this.findWhere(attributes) ? this.findWhere(attributes).toJSON() : null;
         },
 
-         /**
+        /**
           * Liefert ein Array aller Models zurück, die mit den übergebenen Attributen übereinstimmen
           * @param  {Object} attributes
           * @return {Backbone.Model[]} - Liste der Models

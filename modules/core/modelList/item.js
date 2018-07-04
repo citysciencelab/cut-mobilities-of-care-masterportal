@@ -59,7 +59,7 @@ define([
         setLevel: function (value) {
             this.set("level", value);
         },
-         /**
+        /**
          * Getter für Attribut "isVisibleInTree"
          * @return {boolean}
          */

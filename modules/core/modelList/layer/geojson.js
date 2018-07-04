@@ -1,12 +1,19 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
+        $ = require("jquery"),
         ol = require("openlayers"),
         GeoJSONLayer;
 
     GeoJSONLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
+            this.toggleAutoReload();
+            this.listenTo(this, {
+                "change:isVisibleInMap": function () {
+                    this.toggleAutoReload();
+                }
+            });
             this.setStyleId(this.getStyleId() || this.getId());
             this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.getStyleId()));
         },
@@ -40,7 +47,7 @@ define(function (require) {
                 this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
             }
         },
-        updateData: function () {
+        updateData: function (showLoader) {
             var params = {
                 request: "GetFeature",
                 service: "WFS",
@@ -49,7 +56,9 @@ define(function (require) {
                 version: this.getVersion()
             };
 
-            Radio.trigger("Util", "showLoader");
+            if (!_.isUndefined(showLoader) && showLoader === true) {
+                Radio.trigger("Util", "showLoader");
+            }
 
             $.ajax({
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
@@ -58,6 +67,7 @@ define(function (require) {
                 type: "GET",
                 context: this,
                 success: function (data) {
+                    Radio.trigger("Util", "hideLoader");
                     this.handleData(data, Radio.request("MapView", "getProjection").getCode());
                 },
                 error: function () {
@@ -66,10 +76,9 @@ define(function (require) {
             });
         },
         handleData: function (data, mapCrs) {
-             var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
+            var jsonCrs = _.has(data, "crs") && data.crs.properties.name ? data.crs.properties.name : "EPSG:4326",
                 features = this.parseDataToFeatures(data),
-                newFeatures = [],
-                isClustered;
+                newFeatures = [];
 
             if (jsonCrs !== mapCrs) {
                 features = this.transformFeatures(features, jsonCrs, mapCrs);
@@ -80,16 +89,18 @@ define(function (require) {
 
                 feature.setId(id);
             });
-            isClustered = this.has("clusterDistance") ? true : false;
+            this.getLayerSource().clear(true);
             this.getLayerSource().addFeatures(features);
             this.getLayer().setStyle(this.get("styleFunction"));
 
             // für it-gbm
-            features.forEach(function (feature) {
-                feature.set("extent", feature.getGeometry().getExtent());
-                newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
-            });
-            Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
+            if (!this.has("autoRefresh")) {
+                features.forEach(function (feature) {
+                    feature.set("extent", feature.getGeometry().getExtent());
+                    newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                });
+                Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
+            }
 
             this.featuresLoaded(features);
             Radio.trigger("Util", "hideLoader");
@@ -112,7 +123,8 @@ define(function (require) {
 
         /**
          * sets style function for features or layer
-         * @param  {Backbone.Model} stylelistmodel
+         * @param  {Backbone.Model} stylelistmodel Model für Styles
+         * @returns {undefined}
          */
         setStyleFunction: function (stylelistmodel) {
             if (_.isUndefined(stylelistmodel)) {
@@ -144,7 +156,8 @@ define(function (require) {
         },
         /**
          * Zeigt nur die Features an, deren Id übergeben wird
-         * @param  {string[]} featureIdList
+         * @param  {string[]} featureIdList Liste der FeatureIds
+         * @return {undefined}
          */
         showFeaturesByIds: function (featureIdList) {
             this.hideAllFeatures();
@@ -157,6 +170,7 @@ define(function (require) {
 
         /**
          * sets null style (=no style) for all features
+         * @return {undefined}
          */
         hideAllFeatures: function () {
             var collection = this.getLayerSource().getFeatures();
@@ -168,8 +182,22 @@ define(function (require) {
             }, this);
         },
 
+        toggleAutoReload: function () {
+            if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 500) {
+                if (this.getIsVisibleInMap() === true) {
+                    this.interval = setInterval(function (my) {
+                        my.updateData(false);
+                    }, this.attributes.autoRefresh, this);
+                }
+                else {
+                    clearInterval(this.interval);
+                }
+            }
+        },
+
         /**
          * sets style for all features
+         * @return {undefined}
          */
         showAllFeatures: function () {
             var collection = this.getLayerSource().getFeatures();
@@ -191,6 +219,7 @@ define(function (require) {
         // setter for style
         setStyle: function (value) {
             this.set("style", value);
+
         }
     });
 

@@ -40,7 +40,7 @@ define(function (require) {
 
             this.on("change:isCurrentWin", this.createLayer);
             Radio.trigger("Autostart", "initializedModul", "draw");
-         },
+        },
 
         setStatus: function (args) {
             if (args[2].getId() === "draw" && args[0] === true) {

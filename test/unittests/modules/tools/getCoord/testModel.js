@@ -1,11 +1,11 @@
-define(function(require) {
+define(function (require) {
     require("../../../../../modules/core/mapView.js");
 
 
     var expect = require("chai").expect,
         Model = require("../../../../../modules/tools/getCoord/model.js"),
-        position1 = [564337.37,5935980.05],
-        position2 = [586519.54,5935688.88],
+        position1 = [564337.37, 5935980.05],
+        position2 = [586519.54, 5935688.88],
         model;
 
     before(function () {

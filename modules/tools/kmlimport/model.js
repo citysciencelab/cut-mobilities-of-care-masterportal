@@ -22,6 +22,7 @@ define([
                 "winParams": this.setStatus
             });
             var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+
             this.set("layer", drawLayer);
             this.set("source", drawLayer.getSource());
         },
@@ -110,56 +111,57 @@ define([
                 pointStyleCounter = 0;
 
                 // kml parsen und eigenen pointStyle auf Punkt-Features anwenden
-                $(kml).find("Point").each(function (i, point) {
-                    var placemark = point.parentNode;
+            $(kml).find("Point").each(function (i, point) {
+                var placemark = point.parentNode;
 
-                    // kein Text
-                    if (!$(placemark).find("name")[0]) {
-                        var pointStyle = $(placemark).find("pointstyle")[0];
-                        var color = $(pointStyle).find("color")[0],
-                            transparency = $(pointStyle).find("transparency")[0],
-                            radius = $(pointStyle).find("radius")[0];
+                // kein Text
+                if (!$(placemark).find("name")[0]) {
+                    var pointStyle = $(placemark).find("pointstyle")[0],
+                        color = $(pointStyle).find("color")[0],
+                        transparency = $(pointStyle).find("transparency")[0],
+                        radius = $(pointStyle).find("radius")[0];
 
                         // rgb in array schreiben
-                        color = new XMLSerializer().serializeToString(color);
-                        color = color.split(">")[1].split("<")[0];
-                        pointStyleColors.push(color);
-                        // transparenz in array schreiben
-                        transparency = new XMLSerializer().serializeToString(transparency);
-                        transparency = transparency.split(">")[1].split("<")[0];
-                        pointStyleTransparencies.push(transparency);
-                        // punktradius in array schreiben
-                        radius = new XMLSerializer().serializeToString(radius);
-                        radius = parseInt(radius.split(">")[1].split("<")[0]);
-                        pointStyleRadiuses.push(radius);
+                    color = new XMLSerializer().serializeToString(color);
+                    color = color.split(">")[1].split("<")[0];
+                    pointStyleColors.push(color);
+                    // transparenz in array schreiben
+                    transparency = new XMLSerializer().serializeToString(transparency);
+                    transparency = transparency.split(">")[1].split("<")[0];
+                    pointStyleTransparencies.push(transparency);
+                    // punktradius in array schreiben
+                    radius = new XMLSerializer().serializeToString(radius);
+                    radius = parseInt(radius.split(">")[1].split("<")[0]);
+                    pointStyleRadiuses.push(radius);
+                }
+            });
+
+            _.each(features, function (feature) {
+                var type = feature.getGeometry().getType(),
+                    styles = feature.getStyleFunction().call(feature),
+                    style = styles[0];
+
+                // wenn Punkt-Geometrie
+                if (type === "Point") {
+                    // wenn Text
+                    if (feature.get("name") !== undefined) {
+                        feature.setStyle(this.getTextStyle(feature.get("name"), style));
                     }
-                });
-
-             _.each(features, function (feature) {
-                 var type = feature.getGeometry().getType(),
-                 styles = feature.getStyleFunction().call(feature),
-                 style = styles[0];
-
-                 // wenn Punkt-Geometrie
-                 if (type === "Point") {
-                     // wenn Text
-                     if (feature.get("name") !== undefined) {
-                         feature.setStyle(this.getTextStyle(feature.get("name"), style));
-                     }
-                     // wenn Punkt
-                     else {
-                         var style = new ol.style.Style({
+                    // wenn Punkt
+                    else {
+                        var style = new ol.style.Style({
                             image: new ol.style.Circle({
                                 radius: pointStyleRadiuses[pointStyleCounter],
                                 fill: new ol.style.Fill({
-                                    color: "rgba("+pointStyleColors[pointStyleCounter]+", "+pointStyleTransparencies[pointStyleCounter]+")"
+                                    color: "rgba(" + pointStyleColors[pointStyleCounter] + ", " + pointStyleTransparencies[pointStyleCounter] + ")"
                                 })
                             })
                         });
-                         feature.setStyle(style);
-                         pointStyleCounter ++;
-                     }
-                 }
+
+                        feature.setStyle(style);
+                        pointStyleCounter++;
+                    }
+                }
             }, this);
 
 
@@ -189,7 +191,7 @@ define([
         },
 
         getProjections: function (sourceProj, destProj) {
-//            proj4.defs(sourceProj, "+proj=utm +zone=" + zone + "ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs");
+            //            proj4.defs(sourceProj, "+proj=utm +zone=" + zone + "ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs");
 
             return {
                 sourceProj: proj4(sourceProj),
@@ -233,9 +235,9 @@ define([
             var transCoord = [];
 
             // multiple Points
-                _.each(coords, function (point) {
-                    transCoord.push(context.transformPoint(point, projections));
-                }, this);
+            _.each(coords, function (point) {
+                transCoord.push(context.transformPoint(point, projections));
+            }, this);
             return transCoord;
         },
         transformPoint: function (point, projections) {

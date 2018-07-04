@@ -20,13 +20,15 @@ define(function (require) {
          * @return {[type]} [description]
          */
         createLayerSource: function () {
-            var params;
+            var params,
+                source,
+                context;
 
             params = {
                 t: new Date().getMilliseconds(),
                 zufall: Math.random(),
                 LAYERS: this.getLayers(),
-                FORMAT: (this.getImageFormat() === "nicht vorhanden") ? "image/png" : this.getImageFormat(),
+                FORMAT: this.getImageFormat() === "nicht vorhanden" ? "image/png" : this.getImageFormat(),
                 VERSION: this.getVersion(),
                 TRANSPARENT: this.getTransparent().toString()
             };
@@ -37,10 +39,11 @@ define(function (require) {
                 });
             }
             this.set("tileloaderror", false);
+
             if (this.get("singleTile") !== true) {
                 this.set("tileCountloaderror", 0);
                 this.set("tileCount", 0);
-                var source = new ol.source.TileWMS({
+                source = new ol.source.TileWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
                     gutter: this.get("gutter"),
@@ -52,20 +55,21 @@ define(function (require) {
                             5809000
                         ],
                         tileSize: parseInt(this.get("tilesize"), 10)
-                    })
-                }),
+                    }),
+                    crossOrigin: "anonymous"
+                });
                 context = this;
 
                 // wms_webatlasde
                 source.on("tileloaderror", function () {
-                  if (context.get("tileloaderror") === false) {
-                    context.set("tileloaderror", true);
-                    if (!navigator.cookieEnabled) {
-                        if (context.get("url").indexOf("wms_webatlasde") !== -1) {
-                            Radio.trigger("Alert", "alert", {text: "<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>", kategorie: "alert-warning"});
+                    if (context.get("tileloaderror") === false) {
+                        context.set("tileloaderror", true);
+                        if (!navigator.cookieEnabled) {
+                            if (context.get("url").indexOf("wms_webatlasde") !== -1) {
+                                Radio.trigger("Alert", "alert", {text: "<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>", kategorie: "alert-warning"});
+                            }
                         }
                     }
-                  }
 
                 });
 
@@ -75,7 +79,8 @@ define(function (require) {
                 this.setLayerSource(new ol.source.ImageWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
-                    params: params
+                    params: params,
+                    crossOrigin: "anonymous"
                 }));
             }
             this.registerErrorListener();
@@ -234,7 +239,7 @@ define(function (require) {
                 projection = Radio.request("MapView", "getProjection"),
                 coordinate = Radio.request("GFI", "getCoordinate");
 
-            return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, { INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
+            return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
         }
     });
 

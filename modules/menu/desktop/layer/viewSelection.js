@@ -29,7 +29,7 @@ define([
             "click .glyphicon-picture": "openStyleWMS"
         },
         initialize: function () {
-             this.listenTo(this.model, {
+            this.listenTo(this.model, {
                 "change:isVisibleInMap": this.rerender,
                 "change:isSettingVisible": this.renderSetting,
                 "change:transparency": this.rerender,
@@ -120,22 +120,22 @@ define([
             Radio.trigger("StyleWMS", "openStyleWMS", this.model);
             $(".nav li:first-child").removeClass("open");
         },
-       /**
+        /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {
                 if (value === true) {
                     this.$el.addClass("disabled");
-                    this.$el.find("*").css("pointer-events","none");
-                    this.$el.find("*").css("cursor","not-allowed");
-                    this.$el.attr("title","Layer wird in dieser Zoomstufe nicht angezeigt");
+                    this.$el.find("*").css("pointer-events", "none");
+                    this.$el.find("*").css("cursor", "not-allowed");
+                    this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
                 }
                 else {
                     this.$el.removeClass("disabled");
-                    this.$el.find("*").css("pointer-events","auto");
-                    this.$el.find("*").css("cursor","pointer");
-                    this.$el.attr("title","");
+                    this.$el.find("*").css("pointer-events", "auto");
+                    this.$el.find("*").css("cursor", "pointer");
+                    this.$el.attr("title", "");
                 }
             }
         }

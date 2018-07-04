@@ -33,17 +33,21 @@ define(function () {
             ]
         },
         gfiWindow: "attached",
-        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
+        ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
         mouseHover: {
             numFeaturesToShow: 2,
             infoText: "(weitere Objekte. Bitte zoomen.)"
         },
         namedProjections: [
+            // GK DHDN
+            ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
             // ETRS89 UTM
-            ["EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
-
-            ["EPSG:4326", "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
+            ["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
+            // LS 320: zusammen mit Detlef Koch eingepflegt und geprüft
+            ["EPSG:8395", "+title=ETRS89/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=GRS80 +datum=GRS80 +units=m +no_defs"],
+            // WGS84
+            ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
         ],
         portalConf: "../../portal/master/",
         postMessageUrl: "http://localhost:8080",
@@ -61,7 +65,7 @@ define(function () {
             layerid: "4561",
             WFSid: "4560"
         }
-   };
+    };
 
-   return config;
+    return config;
 });

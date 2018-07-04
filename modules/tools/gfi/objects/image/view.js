@@ -21,6 +21,7 @@ define([
          */
         render: function () {
             var attr = this.model.toJSON();
+
             this.$el.html(this.template(attr));
         },
 

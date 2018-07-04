@@ -12,12 +12,13 @@ define(function (require) {
             isLayerVisible: false,
             activateOnSelection: false,
             // flag for the search in the current map extent
-            searchInMapExtent: false,
+            searchInMapExtent: true,
             liveZoomToFeatures: false
         },
 
         /**
-         * kann von erbenen Objekten augerufen werden
+         * kann von erbenden Objekten augerufen werden
+         * @returns {void}
          */
         superInitialize: function () {
             this.setSnippetCollection(new Backbone.Collection());
@@ -68,7 +69,7 @@ define(function (require) {
                 this.listenTo(this.getBtnIsActive(), {
                     "valuesChanged": function () {
                         var checkboxModel = this.getBtnIsActive(),
-                        isActive = this.getBtnIsActive().getIsSelected();
+                            isActive = this.getBtnIsActive().getIsSelected();
 
                         checkboxModel.renderView();
                         this.setIsActive(isActive);
@@ -89,18 +90,23 @@ define(function (require) {
         },
 
         addSnippet: function (featureAttribute) {
-            featureAttribute.values.sort();
-            if (featureAttribute.type === "string" || featureAttribute.type === "text") {
-                featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
-                this.getSnippetCollection().add(new SnippetDropdownModel(featureAttribute));
+            var snippetAttribute = featureAttribute;
+
+            // snippetAttribute.values.sort();
+            // console.log(Radio.request("Util", "sort", snippetAttribute.values));
+            snippetAttribute.values = Radio.request("Util", "sort", snippetAttribute.values);
+
+            if (snippetAttribute.type === "string" || snippetAttribute.type === "text") {
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "dropdown"});
+                this.getSnippetCollection().add(new SnippetDropdownModel(snippetAttribute));
             }
-            else if (featureAttribute.type === "boolean") {
-                featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
-                this.getSnippetCollection().add(new SnippetDropdownModel(featureAttribute));
+            else if (snippetAttribute.type === "boolean") {
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "dropdown"});
+                this.getSnippetCollection().add(new SnippetDropdownModel(snippetAttribute));
             }
-            else if (featureAttribute.type === "integer" || featureAttribute.type === "decimal") {
-                featureAttribute = _.extend(featureAttribute, {"snippetType": "slider"});
-                this.getSnippetCollection().add(new SnippetSliderModel(featureAttribute));
+            else if (snippetAttribute.type === "integer" || snippetAttribute.type === "decimal") {
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "slider"});
+                this.getSnippetCollection().add(new SnippetSliderModel(snippetAttribute));
             }
         },
 
@@ -118,7 +124,8 @@ define(function (require) {
 
         /**
          * Creates one or more Snippets, where Snippets like DropDowns or Sliders
-         * @param  {object[]} featureAttributes
+         * @param  {object[]} featureAttributes feature attributes
+         * @return {void}
          */
         createSnippets: function (featureAttributes) {
             var featureAttributesMap = this.trimAttributes(featureAttributes);
@@ -142,20 +149,35 @@ define(function (require) {
          * @param  {object} featureAttributesMap - Mapobject
          * @return {object} featureAttributesMap - gefiltertes Mapobject
          */
-         trimAttributes: function (featureAttributesMap) {
-             var trimmedFeatureAttributesMap = [],
-                 featureAttribute;
+        trimAttributes: function (featureAttributesMap) {
+            var trimmedFeatureAttributesMap = [],
+                featureAttribute;
 
-             _.each(this.getAttributeWhiteList(), function (attr) {
-                 featureAttribute = _.findWhere(featureAttributesMap, {name: attr});
-                 if (featureAttribute !== undefined) {
-                     trimmedFeatureAttributesMap.push(featureAttribute);
-                 }
-             });
+            _.each(this.getAttributeWhiteList(), function (attr) {
+                var attrObj = this.createAttrObject(attr);
 
-             return trimmedFeatureAttributesMap;
-         },
+                featureAttribute = _.findWhere(featureAttributesMap, {name: attrObj.name});
+                if (featureAttribute !== undefined) {
+                    featureAttribute.matchingMode = attrObj.matchingMode;
+                    trimmedFeatureAttributesMap.push(featureAttribute);
+                }
+            }, this);
 
+            return trimmedFeatureAttributesMap;
+        },
+
+        createAttrObject: function (attr) {
+            var attrObj = {};
+
+            if (_.isString(attr)) {
+                attrObj.name = attr;
+                attrObj.matchingMode = "OR";
+            }
+            else if (_.has(attr, "name") && _.has(attr, "matchingMode")) {
+                attrObj = attr;
+            }
+            return attrObj;
+        },
         /**
          * Konfigurierter Labeltext wird den Features zugeordnet
          * @param  {object} featureAttributesMap - Mapobject
@@ -195,6 +217,7 @@ define(function (require) {
         /**
          * iterates over the snippet collection and
          * calls in the snippet deselectValueModels
+         * @return {void}
          */
         deselectAllValueModels: function () {
             _.each(this.getSnippetCollection().models, function (snippet) {
@@ -218,6 +241,9 @@ define(function (require) {
                 this.setIsSelected(true);
                 if (this.getIsActive()) {
                     this.runFilter();
+                    if (this.getLiveZoomToFeatures()) {
+                        Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(), this.getLayerId());
+                    }
                 }
             }
         },

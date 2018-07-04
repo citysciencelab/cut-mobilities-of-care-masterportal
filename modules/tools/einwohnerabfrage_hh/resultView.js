@@ -4,7 +4,7 @@ define(function (require) {
         ResultTemplate = require("text!modules/tools/einwohnerabfrage_hh/resultTemplate.html"),
         ResultView;
 
-        ResultView = Backbone.View.extend({
+    ResultView = Backbone.View.extend({
         model: {},
         template: _.template(ResultTemplate),
         render: function () {

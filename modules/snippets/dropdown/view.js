@@ -21,7 +21,7 @@ define(function (require) {
         },
 
         initialize: function () {
-             this.listenTo(this.model, {
+            this.listenTo(this.model, {
                 "render": this.render,
                 "removeView": this.removeView
             });
@@ -49,7 +49,7 @@ define(function (require) {
          */
         initDropdown: function () {
             this.$el.find(".selectpicker").selectpicker({
-                width: (_.isUndefined(this.model.get("infoText"))) ? "100%" : "85%",
+                width: _.isUndefined(this.model.get("infoText")) ? "100%" : "85%",
                 selectedTextFormat: "static",
                 size: this.model.get("numOfOptions")
             });

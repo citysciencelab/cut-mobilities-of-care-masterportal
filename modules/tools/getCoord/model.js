@@ -6,7 +6,7 @@ define([
 ], function (Backbone, Radio, ol) {
 
     var CoordPopup = Backbone.Model.extend({
-         defaults: {
+        defaults: {
             selectPointerMove: null,
             projections: [],
             mapProjection: null,

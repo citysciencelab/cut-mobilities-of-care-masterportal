@@ -1,12 +1,12 @@
-define(function (require){
+define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         Config = require("config"),
         ExtendedFilter;
 
     ExtendedFilter = Backbone.Model.extend({
-        defaults:{
-            currentContent:{
+        defaults: {
+            currentContent: {
                 step: 1,
                 name: "Bitte wählen Sie die Filteroption",
                 layername: undefined,
@@ -16,8 +16,8 @@ define(function (require){
             },
             wfsList: [],
             currentFilterType: "Neuen Filter erstellen",
-            currentFilters:[],
-            ignoredKeys : Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys"),
+            currentFilters: [],
+            ignoredKeys: Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys"),
             filterCounter: 1
         },
         initialize: function () {
@@ -58,7 +58,7 @@ define(function (require){
         setWfsList: function (val) {
             return this.set("wfsList", val);
         },
-        checkStatus: function (args) {   // Fenstermanagement
+        checkStatus: function (args) { // Fenstermanagement
             if (args[2].getId() === "extendedFilter") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
@@ -80,21 +80,21 @@ define(function (require){
                 attributes_with_values = [],
                 values = [];
 
-            _.each (filterLayers, function (layer) {
-                _.each(layer.get("layer").getSource().getFeatures() [0].getKeys(), function(key){
-                    if (!_.contains(this.get("ignoredKeys"),key.toUpperCase())) {
+            _.each(filterLayers, function (layer) {
+                _.each(layer.get("layer").getSource().getFeatures()[0].getKeys(), function (key) {
+                    if (!_.contains(this.get("ignoredKeys"), key.toUpperCase())) {
                         attributes.push(key);
                     }
-                },this);
+                }, this);
                 _.each(attributes, function (attr) {
-                    _.each(layer.get("layer").getSource().getFeatures(), function(feature){
+                    _.each(layer.get("layer").getSource().getFeatures(), function (feature) {
                         values.push(feature.get(attr));
                     });
                     attributes_with_values.push({
-                        attr : attr,
-                        values : _.uniq(values)
+                        attr: attr,
+                        values: _.uniq(values)
                     });
-                    values=[];
+                    values = [];
                 });
                 wfsList.push({
                     id: layer.id,
@@ -105,7 +105,7 @@ define(function (require){
                 attributes = [];
                 attributes_with_values = [];
 
-            },this);
+            }, this);
             this.set("wfsList", wfsList);
         },
 
@@ -116,18 +116,18 @@ define(function (require){
                 currentFilterType = this.getCurrentFilterType(),
                 content;
 
-            if(step === 2){
+            if (step === 2) {
                 content = this.getDefaultContent();
 
             }
-            else if (step === 3){
-                step = step-2;
-                content = this.step2(currentFilterType,step);
+            else if (step === 3) {
+                step = step - 2;
+                content = this.step2(currentFilterType, step);
             }
-            else if (step === 4){
-                step = step-2;
+            else if (step === 4) {
+                step = step - 2;
 
-                content = this.step3(layername,step);
+                content = this.step3(layername, step);
             }
             this.setCurrentContent(content);
         },
@@ -140,7 +140,7 @@ define(function (require){
                 filterToUpdate,
                 attributesArray;
 
-            for (var i=currentFilters.length-1; i>=0; i--) {
+            for (var i = currentFilters.length - 1; i >= 0; i--) {
                 if (currentFilters[i].layername === filtername) {
                     filterToUpdate = currentFilters.splice(i, 1)[0];
                     break;
@@ -149,19 +149,19 @@ define(function (require){
 
             attributesArray = filterToUpdate.attributes;
 
-            for (var i=attributesArray.length-1; i>=0; i--) {
+            for (var i = attributesArray.length - 1; i >= 0; i--) {
                 if (attributesArray[i].attribute === attr && attributesArray[i].value === val) {
                     attributesArray.splice(i, 1)[0];
                     break;
                 }
             }
-            if(attributesArray.length === 0){
+            if (attributesArray.length === 0) {
                 var counter = this.getFilterCounter();
 
                 counter--;
                 this.setFilterCounter(counter);
             }
-            else{
+            else {
                 currentFilters.push({
                     layername: filtername,
                     attributes: attributesArray
@@ -169,7 +169,7 @@ define(function (require){
             }
             this.setCurrentFilters(currentFilters);
 
-            if(currentFilters.length === 0){
+            if (currentFilters.length === 0) {
                 var content = this.getDefaultContent();
 
                 content.options = ["Neuen Filter erstellen"];
@@ -179,25 +179,25 @@ define(function (require){
             this.filterLayers();
         },
 
-        nextStep: function(evt) {
+        nextStep: function (evt) {
             var id = evt.currentTarget.id,
-                val = $("#"+id).val(),
+                val = $("#" + id).val(),
                 currentContent = this.getCurrentContent(),
                 step = currentContent.step,
                 newContent;
 
-            if(step === 1){ //Layer wählen oder Filter wählen
+            if (step === 1) { // Layer wählen oder Filter wählen
                 newContent = this.step2(val, step);
             }
-            else if (step === 2){ //Attribut wählen
+            else if (step === 2) { // Attribut wählen
                 newContent = this.step3(val, step);
             }
-            else if (step === 3){ //Wert wählen
-                newContent = this.step4(val, step, currentContent.layername,currentContent.filtername);
+            else if (step === 3) { // Wert wählen
+                newContent = this.step4(val, step, currentContent.layername, currentContent.filtername);
             }
-            else if (step === 4){ //auf default zurücksetzen
+            else if (step === 4) { // auf default zurücksetzen
                 newContent = this.getDefaultContent();
-                this.setFilter(val, currentContent.layername ,currentContent.attribute,currentContent.filtername);
+                this.setFilter(val, currentContent.layername, currentContent.attribute, currentContent.filtername);
                 this.filterLayers();
             }
 
@@ -208,12 +208,12 @@ define(function (require){
             var content;
 
             content = {step: 1,
-                       name: "Bitte wählen Sie die Filteroption",
-                       layername: undefined,
-                       filtername: undefined,
-                       attribute: undefined,
-                       options: ["Neuen Filter erstellen","Bestehenden Filter verfeinern"]
-                      }
+                name: "Bitte wählen Sie die Filteroption",
+                layername: undefined,
+                filtername: undefined,
+                attribute: undefined,
+                options: ["Neuen Filter erstellen", "Bestehenden Filter verfeinern"]
+            };
             return content;
         },
 
@@ -225,30 +225,30 @@ define(function (require){
                 currentFilters = [];
 
             newStep++;
-            if(val === "Neuen Filter erstellen"){
+            if (val === "Neuen Filter erstellen") {
                 this.setCurrentFilterType("Neuen Filter erstellen");
                 this.getLayers();
                 wfsList = this.getWfsList();
-                _.each(wfsList,function(layer){
+                _.each(wfsList, function (layer) {
                     options.push(layer.name);
                 });
                 content = {step: newStep,
-                          name: "Bitte wählen Sie einen Layer",
-                          layername: undefined,
-                          attribute: undefined,
-                          options: options}
+                    name: "Bitte wählen Sie einen Layer",
+                    layername: undefined,
+                    attribute: undefined,
+                    options: options};
             }
-            else { //Filter erweitern
+            else { // Filter erweitern
                 this.setCurrentFilterType("Bestehenden Filter verfeinern");
                 currentFilters = this.getCurrentFilters();
-                _.each(currentFilters,function(filter){
-                    options.push(filter.layername)
+                _.each(currentFilters, function (filter) {
+                    options.push(filter.layername);
                 });
                 content = {step: newStep,
-                          name: "Bitte wählen Sie einen Filter zum Verfeinern",
-                          layername: undefined,
-                          attribute: undefined,
-                          options: options}
+                    name: "Bitte wählen Sie einen Filter zum Verfeinern",
+                    layername: undefined,
+                    attribute: undefined,
+                    options: options};
 
             }
             return content;
@@ -264,25 +264,25 @@ define(function (require){
             newStep++;
             this.getLayers();
 
-            if(val.split(" ")[0] !== "Filter"){
+            if (val.split(" ")[0] !== "Filter") {
                 this.setCurrentFilterType("Neuen Filter erstellen");
-                layer = _.findWhere(wfsList,{name : val});
+                layer = _.findWhere(wfsList, {name: val});
             }
-            else{
+            else {
                 this.setCurrentFilterType("Bestehenden Filter verfeinern");
-                layer = _.findWhere(wfsList,{name : val.split(" ")[2]});
+                layer = _.findWhere(wfsList, {name: val.split(" ")[2]});
 
             }
 
-            _.each(layer.attributes, function(attribute) {
+            _.each(layer.attributes, function (attribute) {
                 options.push(attribute.attr);
             });
             content = {step: newStep,
-                        name: "Bitte wählen Sie ein Attribut",
-                        layername: layer.name,
-                        filtername: val,
-                        attribute: undefined,
-                        options: options};
+                name: "Bitte wählen Sie ein Attribut",
+                layername: layer.name,
+                filtername: val,
+                attribute: undefined,
+                options: options};
 
             return content;
         },
@@ -297,43 +297,43 @@ define(function (require){
 
             newStep++;
             this.getLayers();
-            layer = _.findWhere(wfsList,{name : layername});
-            attribute = _.findWhere(layer.attributes,{attr: val});
+            layer = _.findWhere(wfsList, {name: layername});
+            attribute = _.findWhere(layer.attributes, {attr: val});
 
-            _.each(attribute.values,function(value){
+            _.each(attribute.values, function (value) {
                 options.push(value);
             });
             content = {step: newStep,
-                        name: "Bitte wählen Sie einen Wert",
-                        layername: layer.name,
-                        filtername: filtername,
-                        attribute: val,
-                        options: options}
+                name: "Bitte wählen Sie einen Wert",
+                layername: layer.name,
+                filtername: filtername,
+                attribute: val,
+                options: options};
 
             return content;
         },
 
-        setFilter: function (val,layername, attribute, filtername) {
+        setFilter: function (val, layername, attribute, filtername) {
             var currentFilters = this.getCurrentFilters(),
                 filterToUpdate,
                 currentFilterType = this.getCurrentFilterType(),
                 filtercounter = this.getFilterCounter(),
                 attributesArray = [];
 
-            if(currentFilterType === "Neuen Filter erstellen"){
+            if (currentFilterType === "Neuen Filter erstellen") {
                 attributesArray = [];
-                attributesArray.push({attribute:attribute,
-                                     value: val});
+                attributesArray.push({attribute: attribute,
+                    value: val});
 
                 currentFilters.push({
-                    layername:"Filter" + " " + filtercounter + " " + layername,
+                    layername: "Filter" + " " + filtercounter + " " + layername,
                     attributes: attributesArray
                 });
 
                 filtercounter++;
             }
             else {
-                for (var i=currentFilters.length-1; i>=0; i--) {
+                for (var i = currentFilters.length - 1; i >= 0; i--) {
                     if (currentFilters[i].layername === filtername) {
                         filterToUpdate = currentFilters.splice(i, 1)[0];
                         break;
@@ -341,8 +341,8 @@ define(function (require){
                 }
 
                 attributesArray = filterToUpdate.attributes;
-                attributesArray.push({attribute:attribute,
-                                     value: val});
+                attributesArray.push({attribute: attribute,
+                    value: val});
 
                 currentFilters.push({
                     layername: filtername,
@@ -355,12 +355,12 @@ define(function (require){
         },
 
         filterLayers: function () {
-            var currentFilters =  this.getCurrentFilters(),
+            var currentFilters = this.getCurrentFilters(),
                 layers = this.getWfsList(),
                 layer,
                 features;
 
-            _.each(layers,function(wfslayer){
+            _.each(layers, function (wfslayer) {
                 layer = wfslayer.layer;
                 features = layer.getSource().getFeatures();
 
@@ -370,37 +370,37 @@ define(function (require){
                 }
 
 
-                features.forEach(function(feature){
+                features.forEach(function (feature) {
                     var featuredarstellen2 = true,
                         preVal2 = false;
 
-                    _.each(currentFilters, function (filter){
+                    _.each(currentFilters, function (filter) {
                         var featuredarstellen = true,
-                        preVal = true;
+                            preVal = true;
 
-                        if(filter.layername.split(" ")[2] === wfslayer.name){
-                            _.each(filter.attributes, function (attribute){
+                        if (filter.layername.split(" ")[2] === wfslayer.name) {
+                            _.each(filter.attributes, function (attribute) {
                                 featuredarstellen = this.checkFeatureForFilter(feature, attribute);
-                                if(preVal === true && featuredarstellen === true){
+                                if (preVal === true && featuredarstellen === true) {
                                     featuredarstellen = true;
                                     preVal = true;
                                 }
-                                else{
+                                else {
                                     featuredarstellen = false;
                                     preVal = false;
                                 }
                             }, this);
 
-                            if(preVal2 === true || featuredarstellen === true){
+                            if (preVal2 === true || featuredarstellen === true) {
                                 featuredarstellen2 = true;
                                 preVal2 = true;
                             }
-                            else{
+                            else {
                                 featuredarstellen2 = false;
                                 preVal2 = false;
                             }
                         }
-                    } ,this);
+                    }, this);
 
                     if (featuredarstellen2 === true) {
                         if (feature.defaultStyle) {
@@ -420,14 +420,14 @@ define(function (require){
 
         },
 
-        checkFeatureForFilter: function(feature, attr){
+        checkFeatureForFilter: function (feature, attr) {
             var featuredarstellen = true,
                 attributname = attr.attribute,
                 attributvalue = attr.value,
                 featurevalue0,
-                featurevalue;
+                featurevalue,
 
-            var featureattribute = _.pick(feature.getProperties(), attributname);
+                featureattribute = _.pick(feature.getProperties(), attributname);
 
             if (featureattribute && !_.isNull(featureattribute)) {
                 featurevalue0 = _.values(featureattribute)[0];

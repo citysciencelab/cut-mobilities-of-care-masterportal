@@ -1,6 +1,6 @@
 define(function (require) {
     var Backbone = require("backbone"),
-        Radio = require ("backbone.radio"),
+        Radio = require("backbone.radio"),
         POIModel;
 
     POIModel = Backbone.Model.extend({
@@ -40,7 +40,7 @@ define(function (require) {
                 sortedFeatures = _.sortBy(featInCircle, function (feature) {
                     return feature.dist2Pos;
                 });
-                poiFeatures.push ({
+                poiFeatures.push({
                     "category": distance,
                     "features": sortedFeatures
                 });
@@ -82,9 +82,9 @@ define(function (require) {
             else if (feature.layerName) {
                 return feature.layerName;
             }
-            else {
-                return feature.getId();
-            }
+
+            return feature.getId();
+
         },
 
         /**
@@ -107,10 +107,8 @@ define(function (require) {
                 if (styleSubClass === "CIRCLE") {
                     imagePath = this.createCircleSVG(style);
                 }
-                else {
-                    if (style.get("imageName") !== "blank.png") {
-                        imagePath = style.get("imagePath") + style.get("imageName");
-                    }
+                else if (style.get("imageName") !== "blank.png") {
+                    imagePath = style.get("imagePath") + style.get("imageName");
                 }
             }
             // Simple Line Style

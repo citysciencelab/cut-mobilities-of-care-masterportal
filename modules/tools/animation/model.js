@@ -79,7 +79,7 @@ define(function (require) {
         },
 
         setDefaults: function () {
-             if (_.has(Config, "animation")) {
+            if (_.has(Config, "animation")) {
                 this.setZoomLevel(Config.animation.zoomlevel || 1);
                 this.setSteps(Config.animation.steps || 50);
                 this.setUrl(Config.animation.url || "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
@@ -229,14 +229,14 @@ define(function (require) {
             }, this);
 
             values.sort(function (a, b) {
-                 return a - b;
-             });
+                return a - b;
+            });
             this.setMinVal(values[0]);
             this.setMaxVal(values[values.length - 1]);
             intermediate = Math.round(intermediate / values.length);
             this.setIntermediate(intermediate);
 
-           ort_kreise = _.uniq(ort_kreise);
+            ort_kreise = _.uniq(ort_kreise);
             _.each(ort_kreise, function (kreis) {
                 var counter = 0;
 
@@ -272,12 +272,12 @@ define(function (require) {
             var pendlerLegend = [],
                 pendlerCountOther = 0;
 
-            _.each (kreise, function (kreis) {
-               if (kreis.color !== null) {
-                   pendlerLegend.push(kreis);
-               }
+            _.each(kreise, function (kreis) {
+                if (kreis.color !== null) {
+                    pendlerLegend.push(kreis);
+                }
                 else {
-                   pendlerCountOther += kreis.anzahl_pendler;
+                    pendlerCountOther += kreis.anzahl_pendler;
                 }
             });
             pendlerLegend.push({
@@ -352,35 +352,34 @@ define(function (require) {
                 frameState = event.frameState,
                 features = this.get("layer").getSource().getFeatures(),
                 elapsedTime = frameState.time - this.get("now"),
-                    // here the trick to increase speed is to jump some indexes
-                    // on lineString coordinates
+                // here the trick to increase speed is to jump some indexes
+                // on lineString coordinates
                 index = Math.round(elapsedTime / 100);
-                    // Bestimmt die Richtung der animation (alle geraden sind rückwärts)
-                    if (this.getAnimationCount() % 2 === 1) {
-                        index = this.get("steps") - index;
-                        if (index <= 0) {
-                            this.repeatAnimation(features, true);
-                            return;
-                        }
-                        else {
-                            if (this.get("animating")) {
-                                this.draw(vectorContext, features, index);
-                                Radio.trigger("Map", "render");
-                            }
-                        }
-                    }
-                    else {
-                        if (index >= this.get("steps")) {
-                            this.repeatAnimation(features);
-                            return;
-                        }
-                        else {
-                            if (this.get("animating")) {
-                                this.draw(vectorContext, features, index);
-                                Radio.trigger("Map", "render");
-                            }
-                        }
-                    }
+
+            // Bestimmt die Richtung der animation (alle geraden sind rückwärts)
+            if (this.getAnimationCount() % 2 === 1) {
+                index = this.get("steps") - index;
+                if (index <= 0) {
+                    this.repeatAnimation(features, true);
+
+                }
+                else if (this.get("animating")) {
+                    this.draw(vectorContext, features, index);
+                    Radio.trigger("Map", "render");
+                }
+            }
+            else {
+                if (index >= this.get("steps")) {
+                    this.repeatAnimation(features);
+                    return;
+                }
+
+                if (this.get("animating")) {
+                    this.draw(vectorContext, features, index);
+                    Radio.trigger("Map", "render");
+                }
+
+            }
         },
         draw: function (vectorContext, features, index) {
             var currentPoint,
@@ -448,8 +447,7 @@ define(function (require) {
                     radius: radius,
                     fill: new ol.style.Fill({color: color})
                 })
-            })
-            );
+            }));
         },
 
         prepareAnimation: function () {
@@ -482,7 +480,7 @@ define(function (require) {
          * @param  {[type]} features werden für das hinzufügen auf die Layer nach der naimation durchgereicht
          */
         repeatAnimation: function (features) {
-             if (this.getAnimationCount() < this.getAnimationLimit()) {
+            if (this.getAnimationCount() < this.getAnimationLimit()) {
                 this.setAnimationCount(this.getAnimationCount() + 1);
                 this.startAnimation();
             }

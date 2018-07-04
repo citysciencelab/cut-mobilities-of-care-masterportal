@@ -30,6 +30,11 @@
 #root .dropdown {
     border-right: 1px solid #e5e5e5;
 }
+
+#root .active{
+    background-color: rgba(227, 227, 227, 0.5);
+}
+
 .navbar-collapse.in {
     position: absolute;
     top: 50px;

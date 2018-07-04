@@ -1,8 +1,8 @@
 define(function (require) {
 
     var proj4 = require("proj4"),
-    Radio = require("backbone.radio"),
-    SearchByCoord;
+        Radio = require("backbone.radio"),
+        SearchByCoord;
 
     SearchByCoord = Backbone.Model.extend({
         defaults: {
@@ -50,8 +50,7 @@ define(function (require) {
                         $(fieldName).parent().removeClass("has-error");
                         Radio.trigger("Alert", "alert:remove");
                     }
-                }
-                );
+                });
             }
 
             else if (attributes.coordSystem === "WGS84") {
@@ -158,7 +157,7 @@ define(function (require) {
 
             if (this.get("coordSystem") === "WGS84") {
                 var resultEasting = easting.split(/[\s]+/),
-                resultNorthing = northing.split(/[\s]+/);
+                    resultNorthing = northing.split(/[\s]+/);
 
                 this.set("eastingCoords", easting.split(/[\s°′″'"]+/));
                 this.set("northingCoords", northing.split(/[\s°′″'"]+/));
@@ -166,11 +165,11 @@ define(function (require) {
             }
             else if (this.get("coordSystem") === "WGS84(Dezimalgrad)") {
                 var resultEasting = easting.split(/[\s]+/),
-                resultNorthing = northing.split(/[\s]+/);
+                    resultNorthing = northing.split(/[\s]+/);
 
                 this.set("eastingCoords", easting.split(/[\s°]+/));
                 this.set("northingCoords", northing.split(/[\s°]+/));
-                coordinateArray = [{"coord": resultEasting, "key": "Wert der Länge", "example": "10.01234°"},{"coord": resultNorthing, "key": "Wert der Breite", "example": "53.55555°"}];
+                coordinateArray = [{"coord": resultEasting, "key": "Wert der Länge", "example": "10.01234°"}, {"coord": resultNorthing, "key": "Wert der Breite", "example": "53.55555°"}];
             }
             else {
                 coordinateArray = [{"coord": easting, "key": "Rechtswert", "example": "564459.13"}, {"coord": northing, "key": "Hochwert", "example": "5935103.67"}];
@@ -185,20 +184,20 @@ define(function (require) {
         },
         getNewCenter: function () {
             if (this.get("coordSystem") === "WGS84") {
-                var easting = (this.get("eastingCoords")[0] * 1) + (this.get("eastingCoords")[1] * 1 / 60) + (this.get("eastingCoords")[2] * 1 / 60 / 60),
-                northing = (this.get("northingCoords")[0] * 1) + ((this.get("northingCoords")[1] * 1) / 60) + ((this.get("northingCoords")[2] * 1) / 60 / 60);
+                var easting = Number(this.get("eastingCoords")[0]) + (Number(this.get("eastingCoords")[1]) / 60) + (Number(this.get("eastingCoords")[2]) / 60 / 60),
+                    northing = Number(this.get("northingCoords")[0]) + (Number(this.get("northingCoords")[1]) / 60) + (Number(this.get("northingCoords")[2]) / 60 / 60);
 
                 this.set("newCenter", proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [easting, northing]));
             }
             else if (this.get("coordSystem") === "WGS84(Dezimalgrad)") {
                 var easting = parseFloat(this.get("eastingCoords")[0]),
-                northing = parseFloat(this.get("northingCoords")[0]);
+                    northing = parseFloat(this.get("northingCoords")[0]);
 
                 this.set("newCenter", proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [easting, northing]));
             }
             else if (this.get("coordSystem") === "ETRS89") {
                 var east = parseFloat(this.get("coordinates")[0].coord),
-                north = parseFloat(this.get("coordinates")[1].coord);
+                    north = parseFloat(this.get("coordinates")[1].coord);
 
                 this.set("newCenter", [east, north]);
             }
@@ -206,5 +205,5 @@ define(function (require) {
         }
     });
 
-return new SearchByCoord();
+    return new SearchByCoord();
 });

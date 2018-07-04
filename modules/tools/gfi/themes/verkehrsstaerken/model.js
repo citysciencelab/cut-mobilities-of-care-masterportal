@@ -16,8 +16,7 @@ define(function (require) {
                 years: [],
                 rowNames: [],
                 dataset: []
-            }
-        ),
+            }),
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
@@ -152,7 +151,7 @@ define(function (require) {
                 }
             }, this);
         },
-         /*
+        /*
         * noData comes as "-" from WMS. turn noData into ""
         * try to parse data to float
         */
@@ -192,34 +191,34 @@ define(function (require) {
                 height = heightGfiContent - heightPegelHeader - heightNavbar - heightBtnGroup,
                 width = $(".gfi-content").css("width").slice(0, -2),
                 graphConfig = {
-                graphType: "Linegraph",
-                selector: ".graph",
-                width: width,
-                height: height,
-                selectorTooltip: ".graph-tooltip-div",
-                scaleTypeX: "ordinal",
-                scaleTypeY: "linear",
-                data: this.getDataset(),
-                xAttr: "year",
-                xAxisLabel: "Jahr",
-                attrToShowArray: this.getAttrToShow(),
-                legendArray: [{
-                    key: "DTV",
-                    value: "DTV (Kfz/24h)"
-                }, {
-                    key: "DTVw",
-                    value: "DTVw (Kfz/24h)"
-                }, {
-                    key: "Schwerverkehrsanteil am DTVw",
-                    value: "SV-Anteil am DTVw (%)"
-                }]
-            };
+                    graphType: "Linegraph",
+                    selector: ".graph",
+                    width: width,
+                    height: height,
+                    selectorTooltip: ".graph-tooltip-div",
+                    scaleTypeX: "ordinal",
+                    scaleTypeY: "linear",
+                    data: this.getDataset(),
+                    xAttr: "year",
+                    xAxisLabel: "Jahr",
+                    attrToShowArray: this.getAttrToShow(),
+                    legendArray: [{
+                        key: "DTV",
+                        value: "DTV (Kfz/24h)"
+                    }, {
+                        key: "DTVw",
+                        value: "DTVw (Kfz/24h)"
+                    }, {
+                        key: "Schwerverkehrsanteil am DTVw",
+                        value: "SV-Anteil am DTVw (%)"
+                    }]
+                };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
             this.manipulateSVG();
         },
         manipulateSVG: function () {
-            var graphParams = Radio.request ("Graph", "getGraphParams"),
+            var graphParams = Radio.request("Graph", "getGraphParams"),
                 data = this.getDataset(),
                 svg = d3.select(".graph-svg"),
                 scaleX = graphParams.scaleX,
@@ -270,7 +269,7 @@ define(function (require) {
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
 
-                    })
+                })
                 .on("mouseout", function () {
                     tooltipDiv.transition()
                         .duration(500)
@@ -284,12 +283,12 @@ define(function (require) {
                         .attr("style", "background: gray")
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
-                    });
+                });
             legendBBox = svg.selectAll(".graph-legend").node().getBBox(),
-                width = legendBBox.width,
-                height = legendBBox.height,
-                x = legendBBox.x,
-                y = legendBBox.y;
+            width = legendBBox.width,
+            height = legendBBox.height,
+            x = legendBBox.x,
+            y = legendBBox.y;
 
             svg.selectAll(".graph-legend").append("g")
                 .append("rect")
@@ -299,10 +298,10 @@ define(function (require) {
                 .attr("transform", "translate(" + (x + width + 10) + "," + (y + 2.5) + ")");
 
             legendBBox = svg.selectAll(".graph-legend").node().getBBox();
-                width = legendBBox.width;
-                height = legendBBox.height;
-                x = legendBBox.x;
-                y = legendBBox.y;
+            width = legendBBox.width;
+            height = legendBBox.height;
+            x = legendBBox.x;
+            y = legendBBox.y;
 
             svg.selectAll(".graph-legend").append("g")
                 .append("text")
@@ -319,9 +318,9 @@ define(function (require) {
             else if (value === "DTVw") {
                 return "DTVw (Kfz/24h) mit Baustelleneinfluss";
             }
-            else {
-                return "SV-Anteil am DTVw (%) mit Baustelleneinfluss";
-            }
+
+            return "SV-Anteil am DTVw (%) mit Baustelleneinfluss";
+
         }
     });
 
