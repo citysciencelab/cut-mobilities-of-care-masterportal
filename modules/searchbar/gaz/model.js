@@ -157,14 +157,7 @@ define(function (require) {
                     affix: $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0] ? $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0].textContent : ""
                 });
             });
-            sortedHouseNumbers = _.chain(houseNumbers)
-                .sortBy(function (houseNumber) {
-                    return houseNumber.affix;
-                })
-                .sortBy(function (houseNumber) {
-                    return parseInt(houseNumber.number, 10);
-                })
-                .value();
+            sortedHouseNumbers = Radio.request("Util", "sort", houseNumbers, "number", "affix");
 
             Radio.trigger("Gaz", "houseNumbers", sortedHouseNumbers);
             return sortedHouseNumbers;
