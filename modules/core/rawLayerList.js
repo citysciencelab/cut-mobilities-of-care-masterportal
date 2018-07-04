@@ -141,9 +141,10 @@ define(function (require) {
                 return _.contains(styleLayerIDs, layer.id);
             });
             _.each(layersByID, function (layer) {
-                var styleLayer = _.findWhere(Config.tree.layerIDsToStyle, {"id": layer.id});
+                var styleLayer = _.findWhere(Config.tree.layerIDsToStyle, {"id": layer.id}),
+                    layerExtended = _.extend(layer, styleLayer);
 
-                _.extend(layer, styleLayer);
+                return layerExtended;
             });
         },
 
@@ -154,10 +155,10 @@ define(function (require) {
          * @return {Object[]} response - Objekte aus der services.json
          */
         cloneByStyle: function (response) {
-            // Layer die mehrere Styles haben
-            var objectsByStyle = _.filter(response, function (model) {
-                return typeof model.styles === "object" && model.typ === "WMS";
-            });
+            var rawLayerArray,
+                objectsByStyle = _.filter(response, function (model) { // Layer die mehrere Styles haben
+                    return typeof model.styles === "object" && model.typ === "WMS";
+                });
 
             // Iteriert über die Objekte
             _.each(objectsByStyle, function (obj) {
@@ -176,15 +177,15 @@ define(function (require) {
                     response.splice(_.indexOf(response, obj), 0, cloneObj);
                 }, this);
                 // Das ursprüngliche Objekt wird gelöscht
-                response = _.without(response, obj);
+                rawLayerArray = _.without(response, obj);
             }, this);
 
-            return response;
+            return rawLayerArray;
         },
 
         /**
          * Liefert das erste Model zurück, das den Attributen entspricht
-         * @param  {Object} attributes
+         * @param  {Object} attributes Objekt mit der Layerid
          * @return {Backbone.Model[]} - Liste der Models
          */
         getLayerWhere: function (attributes) {
@@ -193,7 +194,7 @@ define(function (require) {
 
         /**
          * Liefert das erste Model zurück, das den Attributen entspricht
-         * @param  {Object} attributes
+         * @param  {Object} attributes Objekt mit der Layerid
          * @return {Backbone.Model[]} - Liste der Models
          */
         getLayerAttributesWhere: function (attributes) {
@@ -202,7 +203,7 @@ define(function (require) {
 
         /**
           * Liefert ein Array aller Models zurück, die mit den übergebenen Attributen übereinstimmen
-          * @param  {Object} attributes
+          * @param  {Object} attributes Objekt mit Attribut zum Suchen
           * @return {Backbone.Model[]} - Liste der Models
           */
         getLayerListWhere: function (attributes) {
