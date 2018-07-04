@@ -10,17 +10,17 @@
     top: 0;
 }
 
-.toggleButtonPressed {
-    background-color: rgb(8,88,158)!important;
-}
-
 .controls-view > div > .row > div > .glyphicon {
     color: #f3f3f3;
     background-color: rgb(182, 0, 0);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
 }
 
-.controls-view > div > .row > div > .glyphicon:hover {
+.controls-view > div > .row > div> .toggleButtonPressed:extend(.controls-view > div > .row > div > .glyphicon) {
+    background-color: rgb(8,88,158);
+}
+ 
+ .controls-view > div > .row > div> .glyphicon:hover {
     cursor: pointer;
     opacity: 0.7;
 }
