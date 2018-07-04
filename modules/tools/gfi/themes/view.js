@@ -10,13 +10,13 @@ define(function (require) {
                 channel = Radio.channel("gfiView");
 
             this.listenTo(this.model, {
-                 "change:isVisible": this.appendTheme,
-                 "change:Feature": this.render
+                "change:isVisible": this.appendTheme,
+                "change:Feature": this.render
             });
 
             // render the gfi
             this.listenTo(channel, {
-                 "render": this.render
+                "render": this.render
             });
 
             this.gfiWindow = gfiWindow;

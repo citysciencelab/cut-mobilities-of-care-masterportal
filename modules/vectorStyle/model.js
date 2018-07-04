@@ -1077,21 +1077,21 @@ define(function (require) {
                     " xmlns:xlink='http://www.w3.org/1999/xlink'>";
 
                 // draw bar
-                svg = svg + "<line x1='" + (size / 2) + "'" +
-                    " y1='" + (size / 2) + "'" +
-                    " x2='" + (size / 2) + "'" +
-                    " y2='" + barLength + "'" +
-                    " stroke='" + circleBarLineStrokeColor + "'" +
-                    " stroke-width='" + circleBarLineStroke + "' />";
+            svg = svg + "<line x1='" + (size / 2) + "'" +
+                " y1='" + (size / 2) + "'" +
+                " x2='" + (size / 2) + "'" +
+                " y2='" + barLength + "'" +
+                " stroke='" + circleBarLineStrokeColor + "'" +
+                " stroke-width='" + circleBarLineStroke + "' />";
 
-                // draw circle
-                svg = svg + "<circle cx='" + (size / 2) + "'" +
-                    " cy='" + (size / 2) + "'" +
-                    " r='" + circleBarRadius + "'" +
-                    " stroke='" + circleBarCircleStrokeColor + "'" +
-                    " stroke-width='" + circleBarCircleStrokeWidth + "'" +
-                    " fill='" + circleBarCircleFillColor + "' />",
-                svg = svg + "</svg>";
+            // draw circle
+            svg = svg + "<circle cx='" + (size / 2) + "'" +
+                " cy='" + (size / 2) + "'" +
+                " r='" + circleBarRadius + "'" +
+                " stroke='" + circleBarCircleStrokeColor + "'" +
+                " stroke-width='" + circleBarCircleStrokeWidth + "'" +
+                " fill='" + circleBarCircleFillColor + "' />";
+            svg = svg + "</svg>";
 
             return svg;
         },
