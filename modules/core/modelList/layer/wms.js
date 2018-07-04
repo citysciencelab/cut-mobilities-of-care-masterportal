@@ -22,8 +22,7 @@ define(function (require) {
         createLayerSource: function () {
             var params,
                 source,
-                context,
-                url;
+                context;
 
             params = {
                 t: new Date().getMilliseconds(),
@@ -40,18 +39,12 @@ define(function (require) {
                 });
             }
             this.set("tileloaderror", false);
-            url = this.get("url");
-            // special behaviour for HVV layer. these Layers have to be proxied
-            if (this.get("id").indexOf("1935") !== -1 || this.get("id").indexOf("1933") !== -1) {
-                url = Radio.request("Util", "getProxyURL", url);
-            }
 
             if (this.get("singleTile") !== true) {
                 this.set("tileCountloaderror", 0);
                 this.set("tileCount", 0);
                 source = new ol.source.TileWMS({
-                    url: url,
-                    // url: Radio.request("Util", "getProxyURL", this.get("url")),
+                    url: this.get("url"),
                     attributions: this.get("olAttribution"),
                     gutter: this.get("gutter"),
                     params: params,
