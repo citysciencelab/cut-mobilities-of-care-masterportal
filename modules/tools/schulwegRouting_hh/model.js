@@ -107,6 +107,10 @@ define(function (require) {
                 isSelected: value,
                 isVisibleInMap: value
             });
+            Radio.trigger("ModelList", "setModelAttributesById", "1933geofox_stations", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
         },
 
         setDefaults: function () {
