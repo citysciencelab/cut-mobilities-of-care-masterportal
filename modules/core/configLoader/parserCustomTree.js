@@ -53,7 +53,8 @@ define(function (require) {
                         if (layer.id.length !== layerdefinitions.length) { // Wenn nicht alle LayerIDs des Arrays definiert, dann Abbruch
                             return;
                         }
-                        layer = _.extend(layer, {typ: "GROUP", id: layerdefinitions[0].id, layerdefinitions: layerdefinitions});
+                        layer = _.extend(layer, {typ: "GROUP", id: layerdefinitions[0].id + "_groupLayer", layerdefinitions: layerdefinitions});
+                        Radio.trigger("RawLayerList", "addGroupLayer", layer);
                     }
 
                     // HVV :(
