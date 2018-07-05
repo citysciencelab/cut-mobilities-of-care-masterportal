@@ -90,10 +90,9 @@ define(function (require) {
         },
 
         addSnippet: function (featureAttribute) {
-            var snippetAttribute = featureAttribute;
+            var snippetAttribute = featureAttribute,
+                isSelected = false;
 
-            // snippetAttribute.values.sort();
-            // console.log(Radio.request("Util", "sort", snippetAttribute.values));
             snippetAttribute.values = Radio.request("Util", "sort", snippetAttribute.values);
 
             if (snippetAttribute.type === "string" || snippetAttribute.type === "text") {
@@ -101,8 +100,11 @@ define(function (require) {
                 this.getSnippetCollection().add(new SnippetDropdownModel(snippetAttribute));
             }
             else if (snippetAttribute.type === "boolean") {
-                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "dropdown"});
-                this.getSnippetCollection().add(new SnippetDropdownModel(snippetAttribute));
+                if (_.has(snippetAttribute, "preselectedValues")) {
+                    isSelected = snippetAttribute.preselectedValues[0];
+                }
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "checkbox", "label": snippetAttribute.displayName, "isSelected": isSelected});
+                this.getSnippetCollection().add(new SnippetCheckboxModel(snippetAttribute));
             }
             else if (snippetAttribute.type === "integer" || snippetAttribute.type === "decimal") {
                 snippetAttribute = _.extend(snippetAttribute, {"snippetType": "slider"});

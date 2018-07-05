@@ -2,3 +2,12 @@
     <label><%= label %></label>
 <% } %>
 <input type="checkbox" title="Filter ausschalten" data-toggle="toggle" <% if (valuesCollection.at(0).get("isSelected")) {print("checked");} %>>
+<% if (typeof infoText !== "undefined") { %>
+    <div class="info-icon">
+        <span class="glyphicon glyphicon-info-sign"></span>
+    </div>
+<% } %>
+<% if (!_.isUndefined(this.model.get("infoText"))) { %>
+    <div class="info-text"><%= infoText %></div>
+<% } %>
+

@@ -9,7 +9,9 @@ define(function (require) {
         className: "checkbox-container",
         template: _.template(Template),
         events: {
-            "change input": "setIsSelected"
+            "change input": "setIsSelected",
+            // This event is fired when the info button is clicked
+            "click .info-icon": "toggleInfoText"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -43,7 +45,11 @@ define(function (require) {
          */
         setIsSelected: function (evt) {
             this.model.setIsSelected($(evt.target).prop("checked"));
-        }
+        },
+        toggleInfoText: function () {
+            this.model.trigger("hideAllInfoText");
+            this.$el.find(".info-text").toggle();
+        },
     });
     return CheckboxSnippetView;
 });

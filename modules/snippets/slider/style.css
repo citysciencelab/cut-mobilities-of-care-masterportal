@@ -1,11 +1,11 @@
 .slider-container {
-    padding: 8px 25px;
+    padding: 8px 15px;
 }
 
-.slider-container form {
+/*.slider-container form {
     margin-left: -10px;
     margin-right: -10px;
-}
+}*/
 
 .slider-container .form-group {
     display: inline-block;
@@ -26,8 +26,11 @@
 }
 
 .slider-container .slider {
-    width: 100%;
+    width: 85%;
     margin-top: 6px;
+}
+.slider-container .form-inline {
+    width: 85%;
 }
 
 .slider-container .slider-selection {
@@ -59,7 +62,7 @@
 
 .slider-container .info-icon {
     float: right;
-    padding: 3px 5px;
+    padding: 10px 0 10px 10px;
     font-size: 16px;
     opacity: 0.4;
 }
@@ -74,3 +77,4 @@
     font-size: 10px;
     /*color: rgb(182, 0, 0);*/
 }
+
