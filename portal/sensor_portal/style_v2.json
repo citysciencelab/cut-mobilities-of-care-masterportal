@@ -141,7 +141,7 @@
     "imageScale" : 0.9,
     "clusterClass": "SIMPLE",
     "clusterImageScale" : 0.8,
-    "clusterImageName": "elektro_auto_cluster2.png",
+    "clusterImageName": "elektro_auto_cluster.png",
     "clusterTextFillColor": [220, 0, 0, 1],
     "clusterTextAlign" : "center",
     "clusterTextScale" : 1.1,
