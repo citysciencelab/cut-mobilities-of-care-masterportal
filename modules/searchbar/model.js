@@ -23,7 +23,8 @@ define([
             }
             this.listenTo(Radio.channel("Searchbar"), {
                 "createRecommendedList": this.createRecommendedList,
-                "pushHits": this.pushHits
+                "pushHits": this.pushHits,
+                "removeHits": this.removeHits
             });
 
             if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
@@ -69,6 +70,31 @@ define([
             var tempArray = _.clone(this.get(attribute));
 
             tempArray.push(value);
+            this.set(attribute, _.flatten(tempArray));
+        },
+
+         /**
+         * removes all hits with the given filter
+         */
+        removeHits: function (attribute, filter) {
+            var toRemove, i,
+                tempArray = _.clone(this.get(attribute));
+
+            if (_.isObject(filter)) {
+                toRemove = _.filter(tempArray, function (obj) {
+                    return _.where(obj, filter);
+                });
+                _.each(toRemove, function (item) {
+                    tempArray.splice(tempArray.indexOf(item), 1);
+                });
+            }
+            else {
+                for (i = tempArray.length - 1; i >= 0; i--) {
+                    if (tempArray[i] == filter) {
+                        tempArray.splice(i, 1);
+                    }
+                }
+            }
             this.set(attribute, _.flatten(tempArray));
         },
 

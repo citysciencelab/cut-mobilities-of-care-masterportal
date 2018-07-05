@@ -48,6 +48,12 @@ define([
         * @property {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
         * @property {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
         * @property {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
+        * @property {Object}   osm - Das Konfigurationsobjet der OSM Suche.
+        * @property {integer} [osm.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @property {string}  [osm.osmServiceUrl] - URL für die Suche.
+        * @property {integer} [osm.limit=50] - Anzahl der angefragten Vorschläge.
+        * @property {string}  [osm.states=""] - Liste der Bundesländer für die Trefferauswahl.
+        * @property {string}  [osm.classes=""] - Liste der Werte des Dienstes des Attributes "class", die angezeigt werden sollen.
         */
         initialize: function (config) {
             // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
@@ -140,6 +146,11 @@ define([
             if (_.has(config, "layer") === true) {
                 require(["modules/searchbar/layer/model"], function (LayerSearch) {
                     new LayerSearch(config.layer);
+                });
+            }
+            if (_.has(config, "osm") === true) {
+                require(["modules/searchbar/OSM/model"], function (OSMModel) {
+                    new OSMModel(config.osm);
                 });
             }
 
@@ -245,6 +256,10 @@ define([
                 // IE 11 svg bug -> png
                 hit.imageSrc = this.model.changeFileExtension(hit.imageSrc, ".png");
              }, this);
+        },
+
+        searchAll: function () {
+            Radio.trigger("Searchbar", "searchAll", this.model.get("searchString"));
         },
 
         /**
@@ -478,6 +493,7 @@ define([
                         }
                         else {
                             this.renderHitList();
+                            this.searchAll();
                         }
                     }
                     else {

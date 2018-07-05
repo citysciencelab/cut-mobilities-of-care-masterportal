@@ -1091,7 +1091,30 @@ Die Namen aller sichtbaren WFS-Dienste werden durchsucht.
        }
 ```
 
+******
 
+#### Portalconfig.searchBar.osm ####
+Suche bei OpenStreetMap ueber Stadt, Straße und Hausnummer
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
+|limit|nein|Number|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
+|states|nein|string|kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
+
+**Beispiel osm:**
+
+```
+#!json
+
+"osm": {
+    "minChars": 3,
+    "serviceId": "9",
+    "limit": 60,
+    "states": "Hamburg"
+}
+```
 
 ******
 ******
@@ -1125,6 +1148,7 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
 
+
 **Beispiel Hintergrundkarten:**
 
 
@@ -1154,6 +1178,7 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche Möglichkeit, Layer unterhalb von Fachdaten  in Ordner zusammenzufassen. Ordner können wiederum auch Ordner enthalten, so kann eine beliebig tiefe Verschachtelung entstehen.
 
 ******
+
 
 ### Ordnerkonfiguration Fachdaten ###
 
