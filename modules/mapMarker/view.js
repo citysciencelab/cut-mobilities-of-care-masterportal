@@ -34,6 +34,7 @@ define(function (require) {
         },
         render: function () {
             this.model.get("marker").setElement(this.$el[0]);
+            return this;
         },
 
         /**
@@ -55,8 +56,14 @@ define(function (require) {
             var resolutions = Radio.request("MapView", "getResolutions"),
                 index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105),
                 isMobile,
-                coord = _.isArray(hit.coordinate) ? hit.coordinate : hit.coordinate.split(" ");
+                coord;
 
+            if (_.isUndefined(hit.coordinate) === false && _.isArray(hit.coordinate)) {
+                coord = hit.coordinate;
+            }
+            else if (_.isUndefined(hit.coordinate) === false && _.isArray(hit.coordinate) === false) {
+                coord = hit.coordinate.split(" ");
+            }
             this.clearMarker();
             switch (hit.type) {
                 case "Straße": {
@@ -128,7 +135,7 @@ define(function (require) {
                     Radio.trigger("Map", "zoomToExtent", coord);
                     break;
                 }
-                case "Schulinfosystem": {
+                case "Schulstandorte": {
                     this.showMarker(coord);
                     Radio.trigger("MapView", "setCenter", coord, 6);
                     break;

@@ -20,7 +20,9 @@ define(function (require) {
          * @return {[type]} [description]
          */
         createLayerSource: function () {
-            var params;
+            var params,
+                source,
+                context;
 
             params = {
                 t: new Date().getMilliseconds(),
@@ -37,25 +39,26 @@ define(function (require) {
                 });
             }
             this.set("tileloaderror", false);
+
             if (this.get("singleTile") !== true) {
                 this.set("tileCountloaderror", 0);
                 this.set("tileCount", 0);
-                var source = new ol.source.TileWMS({
-                        url: this.get("url"),
-                        attributions: this.get("olAttribution"),
-                        gutter: this.get("gutter"),
-                        params: params,
-                        tileGrid: new ol.tilegrid.TileGrid({
-                            resolutions: Radio.request("MapView", "getResolutions"),
-                            origin: [
-                                442800,
-                                5809000
-                            ],
-                            tileSize: parseInt(this.get("tilesize"), 10)
-                        }),
-                        crossOrigin: "anonymous"
+                source = new ol.source.TileWMS({
+                    url: this.get("url"),
+                    attributions: this.get("olAttribution"),
+                    gutter: this.get("gutter"),
+                    params: params,
+                    tileGrid: new ol.tilegrid.TileGrid({
+                        resolutions: Radio.request("MapView", "getResolutions"),
+                        origin: [
+                            442800,
+                            5809000
+                        ],
+                        tileSize: parseInt(this.get("tilesize"), 10)
                     }),
-                    context = this;
+                    crossOrigin: "anonymous"
+                });
+                context = this;
 
                 // wms_webatlasde
                 source.on("tileloaderror", function () {
