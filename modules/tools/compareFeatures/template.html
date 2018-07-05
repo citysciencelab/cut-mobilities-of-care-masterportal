@@ -35,14 +35,18 @@
                                         <% } %>
                                         <span>
                                         <% if (_.isArray(obj[key])) {
-                                            obj[key].forEach(function (value) {
-                                                print (value); %>
+                                            obj[key].forEach(function (value) { %>
+                                                <%= value %>
                                                 <br>
                                             <% });
                                         }
                                         else {
-                                            print (obj[key]);
-                                        } %>
+                                            if(String(obj[key]).search("http") !== -1) { %>
+                                                <a href="<%= obj[key] %>" target="_blank"><%= obj[key] %></a>
+                                            <% }
+                                            else { %>
+                                                <%= obj[key] %>
+                                            <% }} %>
                                         </span>
                                     </td>
                                 <% }); %>
