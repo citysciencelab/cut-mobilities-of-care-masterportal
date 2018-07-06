@@ -170,7 +170,7 @@ define([
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
             "click .form-control-feedback": "deleteSearchString",
-            "click .btn-search": "renderHitList",
+            "click .btn-search": "searchAll",
             "click .list-group-item.hit": "hitSelected",
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
