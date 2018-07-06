@@ -26,6 +26,9 @@
     margin: 0;
     color: rgb(182, 0, 0);
 }
+.checkbox-container .title-checkbox {
+    width: 85%;
+}
 .checkbox-container .info-icon {
     float: right;
     padding: 10px 0 10px 10px;

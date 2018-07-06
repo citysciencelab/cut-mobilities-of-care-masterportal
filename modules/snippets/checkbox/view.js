@@ -1,13 +1,11 @@
 define(function (require) {
-    require("bootstrap-toggle");
     var Model = require("modules/snippets/checkbox/model"),
         Template = require("text!modules/snippets/checkbox/template.html"),
         CheckboxSnippetView;
 
+    require("bootstrap-toggle");
+
     CheckboxSnippetView = Backbone.View.extend({
-        // model: new Model(),
-        className: "checkbox-container",
-        template: _.template(Template),
         events: {
             "change input": "setIsSelected",
             // This event is fired when the info button is clicked
@@ -19,6 +17,8 @@ define(function (require) {
                 "removeView": this.remove
             }, this);
         },
+        className: "checkbox-container",
+        template: _.template(Template),
         render: function () {
             var attr = this.model.toJSON();
 
@@ -47,8 +47,12 @@ define(function (require) {
             this.model.setIsSelected($(evt.target).prop("checked"));
         },
         toggleInfoText: function () {
+            var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
+
             this.model.trigger("hideAllInfoText");
-            this.$el.find(".info-text").toggle();
+            if (!isInfoTextVisible) {
+                this.$el.find(".info-text").toggle();
+            }
         },
     });
     return CheckboxSnippetView;
