@@ -63,8 +63,11 @@ define(function (require) {
         },
         appendStyles: function (defs) {
             var styles = {
-                header: {
+                large: {
                     fontSize: 18
+                },
+                header: {
+                    margin: [0, 10]
                 },
                 subheader: {
                     fontSize: 14,

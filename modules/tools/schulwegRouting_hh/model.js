@@ -146,13 +146,14 @@ define(function (require) {
                             text: [
                                 {
                                     text: "Schulwegrouting",
-                                    style: ["header", "bold", "center"]
+                                    style: ["large", "bold", "center"]
                                 },
                                 {
                                     text: " (Stand: " + date + ")",
                                     style: ["normal", "center"]
                                 }
-                            ]
+                            ],
+                            style: "header"
                         },
                         {
                             image: screenshotMap,
