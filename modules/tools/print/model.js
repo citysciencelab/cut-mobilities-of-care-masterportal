@@ -54,9 +54,9 @@ define([
                 this.set("printurl", printurl);
                 return Config.proxyURL + "?url=" + printurl + "/info.json";
             }
-            else {
-                return "undefined"; // muss String übergeben, sonst Laufzeitfehler
-            }
+
+            return "undefined"; // muss String übergeben, sonst Laufzeitfehler
+
         },
 
         //
@@ -313,7 +313,6 @@ define([
          */
         setLayer: function (layer) {
             var features = [],
-                circleFeatures = [], // Kreise können nicht gedruckt werden
                 featureStyles = {},
                 type,
                 styles,
@@ -323,56 +322,54 @@ define([
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
-                        circleFeatures.push(feature);
+                        // creates a regular polygon from a circle with 32(default) sides
+                        feature.setGeometry(ol.geom.Polygon.fromCircle(feature.getGeometry()));
                     }
                 });
 
                 _.each(layer.getSource().getFeatures(), function (feature, index) {
-                    // nur wenn es sich nicht um ein Feature mit Kreis-Geometrie handelt
-                    if (_.contains(circleFeatures, feature) === false) {
-                        features.push({
-                            type: "Feature",
-                            properties: {
-                                _style: index
-                            },
-                            geometry: {
-                                coordinates: feature.getGeometry().getCoordinates(),
-                                type: feature.getGeometry().getType()
-                            }
-                        });
+                    features.push({
+                        type: "Feature",
+                        properties: {
+                            _style: index
+                        },
+                        geometry: {
+                            coordinates: feature.getGeometry().getCoordinates(),
+                            type: feature.getGeometry().getType()
+                        }
+                    });
 
-                        type = feature.getGeometry().getType(),
-                        styles = feature.getStyleFunction().call(feature),
-                        style = styles[0];
-                        // Punkte
-                        if (type === "Point") {
-                            // Punkte ohne Text
-                            if (style.getText() === null) {
-                                featureStyles[index] = {
+                    type = feature.getGeometry().getType(),
+                    styles = feature.getStyleFunction().call(feature),
+                    style = styles[0];
+                    // Punkte
+                    if (type === "Point") {
+                        // Punkte ohne Text
+                        if (style.getText() === null) {
+                            featureStyles[index] = {
                                 fillColor: this.getColor(style.getImage().getFill().getColor()).color,
                                 fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
                                 pointRadius: style.getImage().getRadius(),
                                 strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
                                 strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
-                                };
-                            }
-                            // Texte
-                            else {
-                                featureStyles[index] = {
-                                    label: style.getText().getText(),
-                                    fontColor: this.getColor(style.getText().getFill().getColor()).color
-                                };
-                            }
-                        }
-                        // Polygone oder Linestrings
-                        else {
-                            featureStyles[index] = {
-                                fillColor: this.getColor(style.getFill().getColor()).color,
-                                fillOpacity: this.getColor(style.getFill().getColor()).opacity,
-                                strokeColor: this.getColor(style.getStroke().getColor()).color,
-                                strokeWidth: style.getStroke().getWidth()
                             };
                         }
+                        // Texte
+                        else {
+                            featureStyles[index] = {
+                                label: style.getText().getText(),
+                                fontColor: this.getColor(style.getText().getFill().getColor()).color
+                            };
+                        }
+                    }
+                    // Polygone oder Linestrings
+                    else {
+                        featureStyles[index] = {
+                            fillColor: this.getColor(style.getFill().getColor()).color,
+                            fillOpacity: this.getColor(style.getFill().getColor()).opacity,
+                            strokeColor: this.getColor(style.getStroke().getColor()).color,
+                            strokeWidth: style.getStroke().getWidth()
+                        };
                     }
                 }, this);
                 this.push("layerToPrint", {
@@ -479,7 +476,7 @@ define([
                 gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
                 gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
                 gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
-                //printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
+                // printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
                 printGFI = this.get("gfi"), // soll laut config Parameter gedruckt werden?
                 printurl = this.get("printurl"); // URL des Druckdienstes
 
@@ -552,6 +549,7 @@ define([
             var color = value,
                 opacity = 1,
                 begin;
+
             // color kommt als array--> parsen als String
             color = color.toString();
 
@@ -569,12 +567,12 @@ define([
                     "opacity": opacity
                 };
             }
-            else {
-                return {
-                    "color": color,
-                    "opacity": opacity
-                };
-            }
+
+            return {
+                "color": color,
+                "opacity": opacity
+            };
+
         },
 
         // Setzt den hexadezimal String zusammen und gibt ihn zurück.
@@ -638,8 +636,8 @@ define([
                 w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
                 h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * ol.has.DEVICE_PIXEL_RATIO,
                 mapSize = Radio.request("Map", "getSize"),
-                center = [mapSize[0] * ol.has.DEVICE_PIXEL_RATIO / 2 ,
-                mapSize[1] * ol.has.DEVICE_PIXEL_RATIO / 2],
+                center = [mapSize[0] * ol.has.DEVICE_PIXEL_RATIO / 2,
+                    mapSize[1] * ol.has.DEVICE_PIXEL_RATIO / 2],
                 minx, miny, maxx, maxy;
 
             minx = center[0] - (w / 2);

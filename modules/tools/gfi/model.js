@@ -15,6 +15,8 @@ define(function (require) {
             isVisible: false,
             // mobile Ansicht true | false
             isMobile: Radio.request("Util", "isViewMobile"),
+            // uiStyle DEFAULT | TABLE | SIMPLE
+            uiStyle: Radio.request("Util", "getUiStyle"),
             // ol.Overlay für attached
             overlay: new ol.Overlay({element: undefined}),
             // desktop/attached/view.js | desktop/detached/view.js | mobile/view.js
@@ -26,15 +28,16 @@ define(function (require) {
             // Index für das aktuelle Theme
             themeIndex: 0,
             // Anzahl der Themes
-            numberOfThemes: 0
+            numberOfThemes: 0,
+            rotateAngle: 0
         },
         initialize: function () {
-            var channel = Radio.channel("GFI");
+            var channel = Radio.channel("GFI"),
+                tool;
 
             channel.on({
                 "setIsVisible": this.setIsVisible,
-                "setGfiParams": this.setGfiParamsFromCustomModule,
-                "hideGFI": this.hideGFI
+                "setGfiParams": this.setGfiParamsFromCustomModule
             }, this);
 
             channel.reply({
@@ -100,7 +103,7 @@ define(function (require) {
                 this.setDesktopViewType(Config.gfiWindow);
             }
 
-            var tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+            tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
 
             if (!_.isUndefined(tool)) {
                 this.toggleGFI(tool.id);
@@ -108,19 +111,17 @@ define(function (require) {
             this.initView();
         },
 
-        hideGFI: function () {
-            this.trigger("hideGFI");
-        },
-
         /**
          * Prüft ob GFI aktiviert ist und registriert entsprechend den Listener oder eben nicht
          * @param  {String} id - Tool Id
+         * @param  {String} deaktivateGFI - soll durch aktivierung des Tools das GFI deaktiviert werden?
+         * @return {undefined}
          */
         toggleGFI: function (id, deaktivateGFI) {
             if (id === "gfi") {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
-            else if (deaktivateGFI == true) {
+            else if (deaktivateGFI === true) {
                 Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
             else if (_.isUndefined(deaktivateGFI)) {
@@ -131,6 +132,7 @@ define(function (require) {
         /**
          * Löscht vorhandene View - falls vorhanden - und erstellt eine neue
          * mobile | detached | attached
+         * @return {undefined}
          */
         initView: function () {
             var CurrentView;
@@ -143,20 +145,22 @@ define(function (require) {
             if (this.getIsMobile()) {
                 CurrentView = require("modules/tools/gfi/mobile/view");
             }
+            else if (this.getDesktopViewType() === "attached") {
+                CurrentView = require("modules/tools/gfi/desktop/attached/view");
+            }
+            else if (this.getUiStyle() === "TABLE") {
+                CurrentView = require("modules/tools/gfi/table/view");
+            }
             else {
-                if (this.getDesktopViewType() === "attached") {
-                    CurrentView = require("modules/tools/gfi/desktop/attached/view");
-                }
-                else {
-                    CurrentView = require("modules/tools/gfi/desktop/detached/view");
-                }
+                CurrentView = require("modules/tools/gfi/desktop/detached/view");
             }
             this.setCurrentView(new CurrentView({model: this}));
         },
 
         /**
          *
-         * @param {ol.MapBrowserPointerEvent} evt
+         * @param {ol.MapBrowserPointerEvent} evt Event
+         * @return {undefined}
          */
         setGfiParams: function (evt) {
             var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"}),
@@ -175,15 +179,15 @@ define(function (require) {
 
             // WMS | GROUP
             _.each(visibleLayerList, function (model) {
-                if (model.getGfiAttributes() !== "ignore") {
+                if (model.getGfiAttributes() !== "ignore" || _.isUndefined(model.getGfiAttributes()) === true) {
                     if (model.getTyp() === "WMS") {
                         model.attributes.gfiUrl = model.getGfiUrl();
                         gfiParams.push(model.attributes);
                     }
                     else {
-                        model.get("gfiParams").forEach(function (params, index) {
-                            params.gfiUrl = model.getGfiUrl(index);
-                            gfiParams.push(model.getGfiParams()[index]);
+                        _.each(model.getGfiParams(), function (params) {
+                            params.gfiUrl = model.getGfiUrl(params, evt.coordinate, params.childLayerIndex);
+                            gfiParams.push(params);
                         });
                     }
                 }
@@ -206,14 +210,17 @@ define(function (require) {
         },
         /**
          *
-         * @param  {ol.Feature} featureAtPixel
-         * @param  {ol.layer.Vector} olLayer
+         * @param  {ol.Feature} featureAtPixel getroffenes Feature
+         * @param  {ol.layer.Vector} olLayer Layer
+         * @return {undefined}
          */
         searchModelByFeature: function (featureAtPixel, olLayer) {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")});
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")}),
+                modelAttributes;
 
             if (_.isUndefined(model) === false) {
-                var modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id");
+                modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
                     modelAttributes.feature = featureAtPixel;
@@ -280,6 +287,10 @@ define(function (require) {
             return this.get("isMobile");
         },
 
+        getUiStyle: function () {
+            return this.get("uiStyle");
+        },
+
         getIsVisible: function () {
             return this.get("isVisible");
         },
@@ -319,6 +330,9 @@ define(function (require) {
 
         /**
         * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
+        * @param  {integer} top Pixelwert
+        * @param  {integer} left Pixelwert
+        * @return {undefined}
         */
         checkInsideSearchMarker: function (top, left) {
             var button = Radio.request("MapMarker", "getCloseButtonCorners"),
@@ -330,9 +344,7 @@ define(function (require) {
             if (top <= topSM && top >= bottomSM && left >= leftSM && left <= rightSM) {
                 return true;
             }
-            else {
-                return false;
-            }
+            return false;
         }
 
     });

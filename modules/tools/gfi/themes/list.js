@@ -23,6 +23,9 @@ define(function (require) {
         VerkehrsStaerkenRadThemeView = require("modules/tools/gfi/themes/verkehrsstaerken_rad/view"),
         ItGbmTheme = require("modules/tools/gfi/themes/itgbm/model"),
         ItGbmThemeView = require("modules/tools/gfi/themes/itgbm/view"),
+        DipasThemeView = require("modules/tools/gfi/themes/dipas/view"),
+        FlaecheninfoTheme = require("modules/tools/gfi/themes/flaecheninfo/model"),
+        FlaecheninfoThemeView = require("modules/tools/gfi/themes/flaecheninfo/view"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
@@ -57,9 +60,10 @@ define(function (require) {
             else if (attrs.gfiTheme === "itgbm") {
                 return new ItGbmTheme(attrs, options);
             }
-            else {
-                return new DefaultTheme(attrs, options);
+            else if (attrs.gfiTheme === "flaecheninfo") {
+                return new FlaecheninfoTheme(attrs, options);
             }
+            return new DefaultTheme(attrs, options);
         },
         initialize: function () {
             this.listenTo(this, {
@@ -69,10 +73,12 @@ define(function (require) {
                     });
                 },
                 "change:isReady": function () {
+                    var removeModels;
+
                     if (_.contains(this.pluck("isReady"), false) === false) {
                     // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                         // WMS Layer die beim Klickpunkt keine GFIs haben
-                        var removeModels = this.filter(function (model) {
+                        removeModels = this.filter(function (model) {
                             return model.get("gfiContent") === undefined;
                         });
 
@@ -127,6 +133,14 @@ define(function (require) {
                     new ItGbmThemeView({model: model});
                     break;
                 }
+                case "dipas": {
+                    new DipasThemeView({model: model});
+                    break;
+                }
+                case "flaecheninfo": {
+                    new FlaecheninfoThemeView({model: model});
+                    break;
+                }
                 default: {
                     new DefaultThemeView({model: model});
                 }
@@ -141,6 +155,7 @@ define(function (require) {
 
         /**
          * Setzt visibility aller Themes auf false
+         * @return {undefined}
          */
         setAllInVisible: function () {
             this.forEach(function (model) {

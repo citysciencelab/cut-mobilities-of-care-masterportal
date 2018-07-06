@@ -1,6 +1,6 @@
 define(function () {
 
-var Model = Backbone.Model.extend({
+    var Model = Backbone.Model.extend({
         defaults: {
             value: "",
             type: ""

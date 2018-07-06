@@ -22,10 +22,6 @@
     background-color: rgb(8, 88, 158);
 }
 
-.filter .feature-count {
-    margin-left: 4px;
-}
-
 .filter .detailview-head .btn:hover {
     opacity: 0.8;
 }
@@ -112,4 +108,15 @@
     -ms-transform:rotate(-7deg);
     -o-transform:rotate(-7deg);
     transform:rotate(-7deg);
+}
+
+.filter #filter-loader {
+    height: 200px;
+    width: 100%;
+    position: relative;
+}
+.filter #filter-loader img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
 }

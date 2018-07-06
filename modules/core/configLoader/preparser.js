@@ -1,23 +1,26 @@
-define([
-    "backbone",
-    "modules/core/configLoader/parserDefaultTree",
-    "modules/core/configLoader/parserCustomTree",
-    "config"
-], function () {
-    var Backbone = require("backbone"),
-        DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
+define(function (require) {
+
+    var DefaultTreeParser = require("modules/core/configLoader/parserDefaultTree"),
         CustomTreeParser = require("modules/core/configLoader/parserCustomTree"),
         Config = require("config"),
+        $ = require("jquery"),
         Preparser;
 
     Preparser = Backbone.Model.extend({
+        defaults: {},
         url: function () {
-            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json";
+            var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json",
+                addPath,
+                isAddPathValid;
 
-            if (path.slice(-5) !== ".json") {
-                var addPath = Radio.request("Util", "getConfig"),
-                    isAddPathValid = addPath.length > 1 ? true : false;
+            if (path.slice(-6) === "?noext") {
+                path = Config.portalConf;
+            }
+            else if (path.slice(-5) !== ".json") {
+                addPath = Radio.request("Util", "getConfig");
+                isAddPathValid = addPath.length > 1;
                 // removes trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
+
                 if (isAddPathValid) {
                     if (path.slice(-1) === "/") {
                         path = path.slice(0, -1);
@@ -31,6 +34,7 @@ define([
                     path = "config.json";
                 }
             }
+
             return path;
         },
         initialize: function () {
@@ -45,11 +49,13 @@ define([
             });
         },
         parse: function (response) {
+
             var attributes = {
                 portalConfig: response.Portalconfig,
                 baselayer: response.Themenconfig.Hintergrundkarten,
                 overlayer: response.Themenconfig.Fachdaten,
                 treeType: response.Portalconfig.Baumtyp,
+                isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
                 snippetInfos: this.requestSnippetInfos()
             };
 
@@ -61,9 +67,20 @@ define([
             }
         },
 
+        parseIsFolderSelectable: function (globalFlag) {
+            if (globalFlag === false) {
+                return false;
+            }
+            return true;
+        },
+
         requestSnippetInfos: function () {
             var infos,
-                url = _.has(Config, "infoJson") ? Config.infoJson : undefined;
+                url;
+
+            if (_.has(Config, "infoJson")) {
+                url = Config.infoJson;
+            }
 
             if (!_.isUndefined(url)) {
                 $.ajax({
@@ -73,8 +90,8 @@ define([
                         infos = data;
                     }
                 });
-                return infos;
             }
+            return infos;
         }
     });
 

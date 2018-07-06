@@ -1,6 +1,7 @@
 define(function (require) {
 
     var Backbone = require("backbone"),
+        $ = require("jquery"),
         GFIView;
 
     GFIView = Backbone.View.extend({
@@ -15,8 +16,7 @@ define(function (require) {
                 // wird in den Subclasses aufgerufen
                 "change:isVisible": this.toggle,
                 // wird in gfi/desktop/detached/view.js aufgerufen
-                "change:coordinate": this.setMarker,
-                "hideGFI": this.hideGFI
+                "change:coordinate": this.setMarker
             });
 
             // Die attached View braucht für ol.Overlay noch ein Dom-Element
@@ -26,12 +26,11 @@ define(function (require) {
             }
         },
 
-        /**
-         *
-         */
         renderNext: function () {
+            var preWidth = 0;
+
             if ($(".pager-right").hasClass("disabled") === false) {
-                var preWidth = $(".gfi-attached").width();
+                preWidth = $(".gfi-attached").width();
 
                 this.model.set("themeIndex", this.model.get("themeIndex") + 1);
                 this.replaceArrow(preWidth);
@@ -42,9 +41,10 @@ define(function (require) {
          *
          */
         renderPrevious: function () {
-            if ($(".pager-left").hasClass("disabled") === false) {
-                var preWidth = $(".gfi-attached").width();
+            var preWidth = 0;
 
+            if ($(".pager-left").hasClass("disabled") === false) {
+                preWidth = $(".gfi-attached").width();
                 this.model.set("themeIndex", this.model.get("themeIndex") - 1);
                 this.replaceArrow(preWidth);
             }

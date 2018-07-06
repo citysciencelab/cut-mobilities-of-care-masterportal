@@ -223,7 +223,7 @@ define(function (require) {
                 var mdObj;
 
                 _.each(model.mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge), function (obj) {
-                    var foundMdObj = _.findWhere(obj.datasets, { md_id: "C1AC42B2-C104-45B8-91F9-DA14C3C88A1F" });
+                    var foundMdObj = _.findWhere(obj.datasets, {md_id: "C1AC42B2-C104-45B8-91F9-DA14C3C88A1F"});
 
                     if (_.isUndefined(foundMdObj) === false) {
                         mdObj = foundMdObj;
@@ -235,7 +235,7 @@ define(function (require) {
                 var layerObj;
 
                 _.each(model.mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge), function (obj) {
-                    if (obj.layers.includes("KitaEinrichtungen_Details") && obj.layers.includes("KitaEinrichtungen")) {
+                    if (obj.layers.indexOf("KitaEinrichtungen_Details") >= 0 && obj.layers.indexOf("KitaEinrichtungen") >= 0) {
                         layerObj = obj;
                     }
                 });

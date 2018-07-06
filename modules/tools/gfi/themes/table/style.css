@@ -43,7 +43,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     display: inline-block;
-    height:100%;
+    height: calc(100% - 31px);
     margin-top: -6px
 }
 
@@ -64,6 +64,7 @@
 .table-gfi-headwrapperdiv {
     overflow: hidden;
     display: inline-block;
+    height: 31px;
 }
 
 .table-gfi-headversion{

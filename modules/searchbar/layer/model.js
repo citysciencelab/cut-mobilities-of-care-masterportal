@@ -1,11 +1,5 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function () {
-
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        LayerSearch;
+define(function () {
+    var LayerSearch;
 
     LayerSearch = Backbone.Model.extend({
         /**
@@ -19,6 +13,7 @@ define([
          * @description Initialisierung der wfsFeature Suche
          * @param {Object} config - Das Konfigurationsobjekt der Tree-Suche.
          * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+         * @returns {void}
          */
         initialize: function (config) {
             this.listenTo(this, {
@@ -75,13 +70,12 @@ define([
             }, this);
         },
 
-        /**
-        *
-        */
         search: function (searchString) {
+            var searchStringRegExp;
+
             if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.set("inUse", true);
-                var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
+                searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
 
                 this.searchInLayers(searchStringRegExp);
                 Radio.trigger("Searchbar", "createRecommendedList");
@@ -92,13 +86,15 @@ define([
         /**
          * @description Führt die Suche in der Layervariablen mit Suchstring aus.
          * @param {string} searchStringRegExp - Suchstring als RegExp.
+         * @returns {void}
          */
         searchInLayers: function (searchStringRegExp) {
             _.each(this.get("uniqLayerList"), function (layer) {
-                var layerName = layer.get("name").replace(/ /g, "");
+                var layerName = layer.get("name").replace(/ /g, ""),
+                    object;
 
                 if (layerName.search(searchStringRegExp) !== -1) {
-                    var object = {
+                    object = {
                         name: layer.get("name"),
                         type: "Thema",
                         glyphicon: "glyphicon-list",

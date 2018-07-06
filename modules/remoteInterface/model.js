@@ -20,24 +20,17 @@ define(function (require) {
             channel.on({
                 "showAllFeatures": this.showAllFeatures,
                 "showFeaturesById": this.showFeaturesById,
-                "addFeaturesFromGBM": this.addFeaturesFromGBM,
+                "showPositionByExtent": this.showPositionByExtent,
                 "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
-                "moveMarkerToHit": this.moveMarkerToHit,
-                "zoomToFeatures": this.zoomToFeatures,
                 "resetView": this.resetView,
-                "zoomToFeature": this.zoomToFeature,
                 "setModelAttributesById": this.setModelAttributesById,
                 "postMessage": this.postMessage
             }, this);
             window.addEventListener("message", this.receiveMessage.bind(this));
             Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
-        },
-        getPostMessageHost: function (config) {
-            if (_.has(config, "postMessageUrl") && config.postMessageUrl.length > 0) {
-                return this.setPostMessageUrl(config.postMessageUrl);
-            }
-            else {
-                return this.get("postMessageUrl");
+
+            if (_.has(Config, "postMessageUrl")) {
+                this.setPostMessageUrl(Config.postMessageUrl);
             }
         },
 
@@ -46,11 +39,23 @@ define(function (require) {
          * @param  {MessageEvent} event
          */
         receiveMessage: function (event) {
-            if (event.origin !== this.getPostMessageHost()) {
+            if (event.origin !== this.get("postMessageUrl")) {
                 return;
             }
-            if (event.data.hasOwnProperty("showPositionByFeatureId")) {
-                this.showPositionByFeatureId(event.data.showPositionByFeatureId, event.data.layerId);
+            if (event.data.hasOwnProperty("showPositionByExtent")) {
+                this.showPositionByExtent(event.data.showPositionByExtent);
+            }
+            else if (event.data.hasOwnProperty("showPositionByExtentNoScroll")) {
+                this.showPositionByExtentNoScroll(event.data.showPositionByExtentNoScroll);
+            }
+            else if (event.data.hasOwnProperty("transactFeatureById")) {
+                Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
+            }
+            else if (event.data.hasOwnProperty("zoomToExtent")) {
+                Radio.trigger("Map", "zoomToExtent", event.data.zoomToExtent);
+            }
+            else if (event.data.hasOwnProperty("highlightfeature")) {
+                Radio.trigger("Highlightfeature", "highlightfeature", event.data.highlightfeature);
             }
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
@@ -62,7 +67,7 @@ define(function (require) {
          * @param  {Object} content the Data to be sent
          */
         postMessage: function (content) {
-            parent.postMessage(content, this.getPostMessageHost());
+            parent.postMessage(content, this.get("postMessageUrl"));
         },
         /**
          * gets the center coordinate of the feature geometry and triggers it to MapMarker module
@@ -78,8 +83,16 @@ define(function (require) {
             Radio.trigger("MapMarker", "showMarker", center);
             Radio.trigger("MapView", "setCenter", center);
         },
-        addFeaturesFromGBM: function (hits, id, layerName) {
-            Radio.trigger("AddGeoJSON", "addFeaturesFromGBM", hits, id, layerName);
+        showPositionByExtent: function (extent) {
+            var center = ol.extent.getCenter(extent);
+
+            Radio.trigger("MapMarker", "showMarker", center);
+            Radio.trigger("MapView", "setCenter", center);
+        },
+        showPositionByExtentNoScroll: function (extent) {
+            var center = ol.extent.getCenter(extent);
+
+            Radio.trigger("MapMarker", "showMarker", center);
         },
         showAllFeatures: function (id) {
             Radio.trigger("ModelList", "showAllFeatures", id);
@@ -93,48 +106,9 @@ define(function (require) {
         removeAllFeaturesFromLayer: function () {
             Radio.trigger("Map", "removeAllFeaturesFromLayer", "gewerbeflaechen");
         },
-
-        moveMarkerToHit: function (hit) {
-            var feature = this.getFeatureFromHit(hit),
-                extent = feature.getGeometry().getExtent(),
-                center = ol.extent.getCenter(extent);
-                Radio.trigger("MapMarker", "showMarker", center);
-        },
-        zoomToFeature: function (hit) {
-             var feature = this.getFeatureFromHit(hit),
-                extent = feature.getGeometry().getExtent();
-
-            Radio.trigger("Map", "zoomToExtent", extent);
-
-        },
-        zoomToFeatures: function (hits) {
-            _.each(hits, function (hit, index) {
-                hits[index] = this.getFeatureFromHit(hit);
-            }, this);
-            var extent = hits[0].getGeometry().getExtent().slice(0);
-
-            hits.forEach(function (feature) {
-                ol.extent.extend(extent, feature.getGeometry().getExtent());
-            });
-            Radio.trigger("Map", "zoomToExtent", extent);
-
-        },
         resetView: function () {
             Radio.trigger("MapView", "resetView");
             Radio.trigger("MapMarker", "hideMarker");
-        },
-        getFeatureFromHit: function (hit) {
-            var reader = new ol.format.GeoJSON(),
-                geom = reader.readGeometry(hit.geometry_UTM_EPSG_25832, {
-                    dataProjection: "EPSG:25832"
-                }),
-                feature = new ol.Feature({
-                    geometry: geom,
-                    type: hit.typ
-                });
-                feature.setProperties(_.omit(hit, "geometry_UTM_EPSG_25832"));
-                feature.setId(hit.id);
-                return feature;
         },
         getMapState: function () {
             return Radio.request("SaveSelection", "getMapState");

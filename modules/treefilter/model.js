@@ -14,7 +14,7 @@ define([
             treeCategory: "", // Baumgattung
             treeType: "", // Baumart
             yearMin: "0", // Pflanzjahr von
-            yearMax: "2016", // Pflanzjahr bis
+            yearMax: "2017", // Pflanzjahr bis
             diameterMin: "0", // Kronendurchmesser[m] von
             diameterMax: "50", // Kronendurchmesser[m] bis
             perimeterMin: "0", // Stammumfang[cm] von
@@ -134,7 +134,7 @@ define([
                 return min <= max;
             },
             pattern: function (value, pattern) {
-                return new RegExp(pattern, "gi").test(value) ? true : false;
+                return Boolean(new RegExp(pattern, "gi").test(value));
             },
             hasCharacters: function (value) {
                 return TreeFilter.prototype.validators.pattern(value, TreeFilter.prototype.patterns.digits);
@@ -222,7 +222,7 @@ define([
         },
         setTypeArray: function () {
             var typeArray = [],
-            tree = _.where(this.get("trees"), {displayGattung: this.get("treeCategory")});
+                tree = _.where(this.get("trees"), {displayGattung: this.get("treeCategory")});
 
             if (tree[0] !== undefined) {
                 _.each(tree[0].Arten, function (type) {
@@ -292,7 +292,7 @@ define([
             this.set("treeCategory", "");
             this.set("treeType", "");
             // this.set("yearMax", "2014");
-            this.setYearMax("2016");
+            this.setYearMax("2017");
             this.setYearMin("0");
             // this.set("yearMin", "0");
             this.setDiamterMax("50");
@@ -359,7 +359,8 @@ define([
                 contentType: "text/xml",
                 success: function (data) {
                     var hits;
-                     // Firefox, IE
+
+                    // Firefox, IE
                     if (data.getElementsByTagName("wfs:FeatureCollection")[0] !== undefined) {
                         hits = data.getElementsByTagName("wfs:FeatureCollection")[0].getAttribute("numberOfFeatures");
                     }

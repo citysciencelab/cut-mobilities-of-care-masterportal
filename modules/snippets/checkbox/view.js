@@ -5,7 +5,7 @@ define(function (require) {
         CheckboxSnippetView;
 
     CheckboxSnippetView = Backbone.View.extend({
-        model: new Model(),
+        // model: new Model(),
         className: "checkbox-container",
         template: _.template(Template),
         events: {
@@ -22,6 +22,7 @@ define(function (require) {
 
             this.$el.html(this.template(attr));
             this.initCheckbox();
+            this.delegateEvents();
             return this.$el;
         },
 

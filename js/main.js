@@ -1,4 +1,23 @@
-var Radio;
+var scriptTags = document.getElementsByTagName("script"),
+    scriptTagsArray = Array.prototype.slice.call(scriptTags),
+    configPath = window.location.origin + window.location.pathname + "config",
+    index,
+    strippedLocation;
+
+if (window.location.search !== "") {
+    index = window.location.href.indexOf("?");
+    strippedLocation = window.location.href.slice(0, index);
+
+    configPath = strippedLocation + "config";
+}
+
+scriptTagsArray.forEach(function (scriptTag) {
+    if (scriptTag.getAttribute("data-lgv-config") !== null) {
+        // ?noext notwendig, damit nicht automatisch von Require ein .js an den Pfad angehängt wird!
+        configPath = scriptTag.getAttribute("data-lgv-config") + "?noext";
+    }
+}, this);
+
 
 require.config({
     waitSeconds: 60,
@@ -10,20 +29,22 @@ require.config({
         "bootstrap-select": "../node_modules/bootstrap-select/dist/js/bootstrap-select.min",
         "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.min",
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
-        config: window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
+        templates: "../templates",
+        config: configPath,
         d3: "../node_modules/d3/build/d3.min",
         geoapi: "GeoAPI",
+        html2canvas: "../node_modules/html2canvas/dist/html2canvas.min",
+        "promise-polyfill": "../node_modules/promise-polyfill/dist/polyfill.min",
         jquery: "../node_modules/jquery/dist/jquery.min",
         jqueryui: "../node_modules/jquery-ui/ui",
         modules: "../modules",
         moment: "../node_modules/moment/min/moment.min",
         openlayers: "../node_modules/openlayers/dist/ol",
+        pdfmake: "../node_modules/pdfmake/build/pdfmake",
         proj4: "../node_modules/proj4/dist/proj4",
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
-        templates: "../templates",
         text: "../node_modules/requirejs-text/text",
         underscore: "../node_modules/underscore/underscore-min",
-        "underscore.string": "../node_modules/underscore.string/dist/underscore.string.min",
         videojs: "../node_modules/video.js/dist/video.min",
         videojsflash: "../node_modules/videojs-flash/dist/videojs-flash.min"
     },

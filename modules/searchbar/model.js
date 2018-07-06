@@ -137,35 +137,35 @@ define([
 
             // if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
             //     this.set("isHitListReady", false);
-                if (this.get("hitList").length > max) {
-                    var hitList = this.get("hitList"),
-                        foundTypes = [],
-                        singleTypes = _.reject(hitList, function (hit) {
-                            if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
-                                return true;
-                            }
-                            else {
-                                foundTypes.push(hit.type);
-                            }
-                        }),
-                        usedNumbers = [],
-                        randomNumber;
-
-                    while (singleTypes.length < max) {
-                        randomNumber = _.random(0, hitList.length - 1);
-                        if (_.contains(usedNumbers, randomNumber) === false) {
-                            singleTypes.push(hitList[randomNumber]);
-                            usedNumbers.push(randomNumber);
-                            singleTypes = _.uniq(singleTypes);
+            if (this.get("hitList").length > max) {
+                var hitList = this.get("hitList"),
+                    foundTypes = [],
+                    singleTypes = _.reject(hitList, function (hit) {
+                        if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
+                            return true;
                         }
+
+                        foundTypes.push(hit.type);
+
+                    }),
+                    usedNumbers = [],
+                    randomNumber;
+
+                while (singleTypes.length < max) {
+                    randomNumber = _.random(0, hitList.length - 1);
+                    if (_.contains(usedNumbers, randomNumber) === false) {
+                        singleTypes.push(hitList[randomNumber]);
+                        usedNumbers.push(randomNumber);
+                        singleTypes = _.uniq(singleTypes);
                     }
-                    recommendedList = singleTypes;
                 }
-                else {
-                    recommendedList = this.get("hitList");
-                }
-                this.set("recommendedList", _.sortBy(recommendedList, "name"));
-                // this.set("isHitListReady", true);
+                recommendedList = singleTypes;
+            }
+            else {
+                recommendedList = this.get("hitList");
+            }
+            this.set("recommendedList", _.sortBy(recommendedList, "name"));
+            // this.set("isHitListReady", true);
             // }
         }
     });

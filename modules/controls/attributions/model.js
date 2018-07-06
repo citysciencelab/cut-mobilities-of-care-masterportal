@@ -17,13 +17,13 @@ define([
             isInitOpenMobile: false,
             // Modellist mit Attributions
             modelList: [],
-            isOverviewmap: Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}) ? true : false
+            isOverviewmap: Boolean(Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}))
         },
 
         initialize: function () {
             var config = Radio.request("Parser", "getPortalConfig").controls.attributions;
 
-            if (typeof (config) === "object") {
+            if (typeof config === "object") {
                 if (_.has(config, "isInitOpenDesktop") === true) {
                     this.setIsInitOpenDesktop(config.isInitOpenDesktop);
                 }

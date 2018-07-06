@@ -13,7 +13,7 @@
       "gazetteer":
       {
         "minChars": 3,
-        "serviceId": "6",
+        "serviceId": "8",
         "searchStreets": true,
         "searchHouseNumbers": true,
         "searchDistricts": true,
@@ -33,18 +33,35 @@
       },
       "specialWFS":
       {
-        "minChar": 3,
+        "minChars": 3,
+        "timeout": 10000,
         "definitions": [
-        {
-          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-          "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
-          "name": "bplan"
-        },
-        {
-          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-          "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
-          "name": "bplan"
-        }]
+          {
+            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:mrh_row_bplan&propertyName=name",
+            "name": "B-Plan"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
+            "name": "festgestellt"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
+            "name": "im Verfahren"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
+            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:KitaEinrichtungen&propertyName=app:Name",
+            "name": "Kita"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
+            "data": "service=WFS&request=GetFeature&version=1.1.0&typeName=app:stoerfallbetrieb&propertyName=app:standort",
+            "name": "Störfallbetrieb"
+          }
+        ]
       },
       "visibleWFS":
       {
@@ -66,87 +83,99 @@
         "glyphicon": "glyphicon-list",
         "isInitOpen": false
       },
+      "schulwegrouting": {
+        "name": "Schulweg-Routing",
+        "glyphicon": "glyphicon-filter"
+      },
+      "filter":
+      {
+        "name": "Filter",
+        "glyphicon": "glyphicon-filter",
+        "deaktivateGFI": false,
+        "isGeneric": false,
+        "isInitOpen": false,
+        "allowMultipleQueriesPerLayer": true,
+        "predefinedQueries": [
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Grundschulen",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Grundschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Stadtteilschulen",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Stadtteilschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Gymnasien",
+              "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Gymnasien"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Sonderschulen",
+              "predefinedRules": [
+                {
+                  "attrName": "kapitelbezeichnung",
+                  "values": ["Sonderschulen"]
+                }
+              ],
+              "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
+            },
+            {
+              "layerId": "1711",
+              "isActive": true,
+              "isSelected": true,
+              "name": "Krankenhäuser",
+              "predefinedRules": [],
+              "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
+            }
+          ]
+      },
       "tools":
       {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children":
         {
-          "filter":
-          {
-            "name": "Filter",
-            "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false,
-            "isGeneric": false,
-            "isInitOpen": false,
-            "allowMultipleQueriesPerLayer": true,
-            "predefinedQueries": [
-                {
-                  "layerId": "8712",
-                  "isActive": false,
-                  "isSelected": false,
-                  "name": "Grundschulen",
-                  "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Grundschulen", "Langformschulen"]
-                  }],
-                  "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
-                },
-                {
-                  "layerId": "8712",
-                  "isActive": false,
-                  "isSelected": false,
-                  "name": "Stadtteilschulen",
-                  "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Stadtteilschulen", "Langformschulen"]
-                  }],
-                  "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
-                },
-                {
-                  "layerId": "8712",
-                  "isActive": false,
-                  "isSelected": false,
-                  "name": "Gymnasien",
-                  "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
-                  "predefinedRules": [
-                  {
-                    "attrName": "kapitelbezeichnung",
-                    "values": ["Gymnasien"]
-                  }],
-                  "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
-                },
-                {
-                  "layerId": "8712",
-                  "isActive": false,
-                  "isSelected": false,
-                  "name": "Sonderschulen",
-                  "predefinedRules": [
-                    {
-                      "attrName": "kapitelbezeichnung",
-                      "values": ["Sonderschulen"]
-                    }
-                  ],
-                  "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
-                },
-                {
-                  "layerId": "1711",
-                  "isActive": true,
-                  "isSelected": true,
-                  "name": "Krankenhäuser",
-                  "predefinedRules": [],
-                  "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
-                }
-              ]
+          "einwohnerabfrage": {
+            "name": "Einwohneranzahl abfragen",
+            "glyphicon": "glyphicon-wrench"
+          },
+          "compareFeatures": {
+            "name": "Vergleichsliste",
+            "glyphicon": "glyphicon-th-list"
           },
           "parcelSearch":
           {
             "name": "Flurstückssuche",
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
-            "StoredQueryID": "Flurstueck",
+            "storedQueryID": "Flurstueck",
             "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
@@ -302,7 +331,8 @@
         "resolution": 611.4974492763076,
         "baselayer": "452"
       },
-      "mousePosition": true
+      "mousePosition": true,
+      "freeze": true
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -342,6 +372,9 @@
       },
       {
         "id": "4561"
+      },
+      {
+        "id": "441"
       },
       {
         "id": "1562",
@@ -425,6 +458,7 @@
       },
       {
         "id": "8712",
+        "visibility": true,
         "name": "Schulinfosystem",
         "styleId": "8712",
         "searchField": "schulname",

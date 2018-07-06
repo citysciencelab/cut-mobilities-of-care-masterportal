@@ -15,7 +15,7 @@ define(function (require) {
             channel.reply({
                 "getGraphParams": function () {
                     return this.getGraphParams();
-                    }
+                }
             }, this);
         },
         createGraph: function (graphConfig) {
@@ -79,47 +79,47 @@ define(function (require) {
             values = _.uniq(values);
             // values.sort(); Sortierung nach String funktioniert nicht für timestamp, daher auskommentiert und Daten vorsortiert
             return d3.scaleBand()
-                    .range(rangeArray)
-                    .domain(values);
+                .range(rangeArray)
+                .domain(values);
         },
         createLinearScale: function (minValue, maxValue, rangeArray) {
             return d3.scaleLinear()
-                    .range(rangeArray)
-                    .domain([minValue, maxValue])
-                    .nice();
+                .range(rangeArray)
+                .domain([minValue, maxValue])
+                .nice();
         },
         // create bottomAxis.
         createAxisBottom: function (scale, xThinningFactor) {
             return d3.axisBottom(scale)
-                    .tickValues(scale.domain().filter(function (d, i) {
-                        var val = i % xThinningFactor;
+                .tickValues(scale.domain().filter(function (d, i) {
+                    var val = i % xThinningFactor;
 
-                        return (!val);
-                    }))
-                    .tickFormat(function (d) {
-                        d = d.toString();
-                        return d;
-                    });
+                    return !val;
+                }))
+                .tickFormat(function (d) {
+                    d = d.toString();
+                    return d;
+                });
         },
         // create leftAxis. if separator === true (for yAxis), then set thousands-separator "."
         createAxisLeft: function (scale) {
             return d3.axisLeft(scale)
-                    .tickFormat(function (d) {
-                        return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                    });
-                    // .tickFormat(d3.format("d"));
+                .tickFormat(function (d) {
+                    return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                });
+            // .tickFormat(d3.format("d"));
         },
         createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow, offset) {
             return d3.line()
-                    .x(function (d) {
-                        return scaleX(d[xAttr]) + (offset + scaleX.bandwidth() / 2);
-                    })
-                    .y(function (d) {
-                        return scaleY(d[yAttrToShow]);
-                    })
-                    .defined(function (d) {
-                        return !isNaN(d[yAttrToShow]);
-                    });
+                .x(function (d) {
+                    return scaleX(d[xAttr]) + (offset + scaleX.bandwidth() / 2);
+                })
+                .y(function (d) {
+                    return scaleY(d[yAttrToShow]);
+                })
+                .defined(function (d) {
+                    return !isNaN(d[yAttrToShow]);
+                });
         },
         appendDataToSvg: function (svg, data, className, object) {
             var data = _.filter(data, function (obj) {
@@ -143,23 +143,24 @@ define(function (require) {
 
             // text for xAxis
             xAxis.append("text")
-                .attr("x", (xAxisBBox.width / 2))
-                .attr("y", (xAxisBBox.height + offset + 10))
+                .attr("x", xAxisBBox.width / 2)
+                .attr("y", xAxisBBox.height + offset + 10)
                 .style("text-anchor", "middle")
                 .style("fill", "#000")
                 .text(xAxisLabel);
         },
         appendYAxisToSvg: function (svg, yAxis, yAxisLabel, offset) {
             var yAxis = svg.append("g")
-                .attr("transform", "translate(0, 20)")
-                .attr("class", "yAxis")
-                .call(yAxis),
+                    .attr("transform", "translate(0, 20)")
+                    .attr("class", "yAxis")
+                    .call(yAxis),
                 yAxisBBox = svg.selectAll(".yAxis").node().getBBox();
+
             // text for yAxis
             yAxis.append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("x", (0 - (yAxisBBox.height / 2)))
-                .attr("y", (0 - yAxisBBox.width - (2 * offset)))
+                .attr("x", 0 - (yAxisBBox.height / 2))
+                .attr("y", 0 - yAxisBBox.width - (2 * offset))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .style("fill", "#000")
@@ -190,7 +191,7 @@ define(function (require) {
                         .attr("style", "background: gray")
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
-                    })
+                })
                 .on("mouseout", function () {
                     tooltipDiv.transition()
                         .duration(500)
@@ -199,7 +200,7 @@ define(function (require) {
                             tooltipDiv.style("left", "0px");
                             tooltipDiv.style("top", "0px");
                         });
-                    })
+                })
                 .on("click", function (d) {
                     tooltipDiv.transition()
                         .duration(200)
@@ -208,15 +209,15 @@ define(function (require) {
                         .attr("style", "background: gray")
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
-                    });
+                });
         },
         createSvg: function (selector, marginObj, width, height) {
             return d3.select(selector).append("svg")
-                    .attr("width", width + marginObj.left + marginObj.right)
-                    .attr("height", height + marginObj.top + marginObj.bottom)
-                    .attr("class", "graph-svg")
-                    .append("g")
-                    .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
+                .attr("width", width + marginObj.left + marginObj.right)
+                .attr("height", height + marginObj.top + marginObj.bottom)
+                .attr("class", "graph-svg")
+                .append("g")
+                .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
         },
         appendLegend: function (svg, attrToShowArray, legendArray) {
             var legend = svg.append("g")
@@ -225,9 +226,9 @@ define(function (require) {
                 .data(this.getLegendTextArray(attrToShowArray, legendArray))
                 .enter()
                 .append("g")
-                    .attr("class", "graph-legend-item")
-                    .attr("transform", function () {
-                        return "translate(" + -60 + "," + -20 + ")";
+                .attr("class", "graph-legend-item")
+                .attr("transform", function () {
+                    return "translate(" + -60 + "," + -20 + ")";
                 });
 
             legend.append("circle")

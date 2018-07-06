@@ -5,7 +5,13 @@
 ### Allgemein
 * Alle Dokumente werden in utf-8 gespeichert
 * Jedes Dokument wird mit einer leeren Zeile beendet
-* [***EditorConfig***](http://editorconfig.org/), [***JSCS***](http://jscs.info/) und [***JSHint***](http://jshint.com/docs/options) werden eingesetzt, um die Konventionen leichter einhalten zu können
+* [***EditorConfig***](http://editorconfig.org/) Einstellungen beachten
+
+### ESLint
+* [***ESLint***](https://eslint.org/) wird genutzt, um die syntaktische und sonstige Fehler zu verhindern und den Code lesbar und verständlich zu schreiben. 
+* Wir interpretieren die ESLint Kategorien (warn bzw. error) unterschiedlich.
+* Eine "warning" ist ein Hinweis an den Entwickler um zu prüfen, ob der Code hier besser geschrieben werden kann. Sie ist unabhängig von einem approve. Eine Änderung liegt im Ermessensspielraum des Entwicklers.
+* Ein "error" verhindert ein approven des PullRequest.
 
 ### Whitespace
 * Soft Intends (Spaces) statt Tabs
@@ -14,69 +20,10 @@
 * Keine Whitespaces am Ender der Zeile
 * Keine leeren "Whitespace Zeilen"
 
-### JavaScript
-##### Leerzeichen, geschweifte Klammern und Zeilenumbrüche
-
-* *if / else / for / while / try* enthalten immer Leerzeichen, geschweifte Klammern und erstrecken sich über mehrere Zeilen
-* keine leeren Blöcke
-
-"so nicht" Beispiele:
-```javascript
-if(Bedingung) machWas();
-
-while(Bedingung) iterieren++;
-
-for(var i=0;i<100;i++) machWas();
-```
-
-"so ja" Beispiele:
-```javascript
-if (Bedingung) {
-    // statements
-}
-else {
-    // statements
-}
-
-while (Bedingung) {
-    // statements
-}
-
-for (var i = 0; i < 100; i++) {
-    // statements
-}
-```
-
-#### Zuweisungen, Deklarationen, Funktionen
-* Nur einmal "var" pro Scope (Funktion) verwenden
-```javascript
-// so nicht
-var foo = "";
-var bar = "";
-var foobar;
-// sondern so
-var foo = "",
-      bar = "",
-      foobar;
-```
-* "var" am Anfang der Funktion definieren
+### Funktionen
 * Eine Funktion erfüllt genau eine Aufgabe
-* Object und Array ohne new Operator erzeugen
-* Definierte Variable, Parameter oder Funktionen die nicht genutzt werden vermeiden
 
-"so nicht" Beispiele:
-```javascript
-var car = new Object();
-car.goes = "far";
-var cars = new Array();
-```
-"so ja" Beispiele:
-```javascript
-var car = {goes:"far"};
-var cars = [];
-```
-
-#### Typprüfung
+### Typprüfung
 * Zur Typprüfung wird Underscore JS eingesetzt
 
 String:
@@ -111,33 +58,32 @@ undefined im Template:
 ```
 typeof variable !== "undefined"
 ```
-#### Auswertungen
-* Vergleiche mit **"==="** und **"!=="** anstatt mit **"=="** und **"!="**
-
+### Auswertungen
 Ob ein Array eine Länge hat:
 ```
-if ( array.length ) ...
+if (array.length) ...
 ```
 Ob ein Array leer ist:
 ```
-if ( !array.length ) ...
+if (!array.length) ...
 ```
 Ob ein String nich leer ist:
 ```
-if ( string ) ...
+if (string) ...
 ```
 Ob ein String leer ist:
 ```
-if ( !string ) ...
+if (!string) ...
 ```
 
-#### Bezeichnungen
+### Bezeichnungen
 * Sprechende Namen für Variablen und Funktionen verwenden
-* camelCase für Funktions- und var- Deklarationen
+* *camelCase* für Funktions- und var- Deklarationen
 * Wenn es die String-Variable "dog" gibt, ist "dogList" ein Array bestehend aus "dog" Strings
 * Bezeichnung für Konstanten --> SYMBOLIC_CONSTANTS_LIKE_THIS
+* Von außen zugeladene Abhängigkeiten werden zur Unterscheidung in *PascalCase* geschrieben.
 
-#### Anführungszeichen
+### Anführungszeichen
 * Es werden doppelte Anführungszeichen eingesetzt
 * Beim Einsatz von inneren und äußeren Anführungszeichen, doppelte Anführungszeichen außen und einfache Anführungszeichen innen
 ```javascript
@@ -146,7 +92,7 @@ var html = "<div id='my-id'></div>";
 
 #### Kommentare
 * Mehrzeilige Kommentare sind gut
-* JSDoc Style Kommentare sind gut, aber erfordern mehr Zeit
+* Funktionen werden wenn überhaupt immer im JSDoc Style kommentiert.
 
 #### Backbone spezifische Konventionen
 * "listenTo" anstatt "on" als Eventlistener (nicht Backbone.Radio)
@@ -193,7 +139,7 @@ randomFunc: function () {
 }
 ```
 
-#### Sonstiges
+### Sonstiges
 * Comma-First-Formatierung ist verboten
 * So wenig globale Variablen wie möglich
 
@@ -208,63 +154,6 @@ end_of_line = crlf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
-```
-
-### JSHintConfig
-```ini
-{
-    "asi": true,
-    "bitwise": true,
-    "boss": true,
-    "browser": true,
-    "curly": true,
-    "debug" : false,
-    "devel": true,
-    "eqeqeq": true,
-    "eqnull": true,
-    "es3": true,
-    "es5": false,
-    "esnext": true,
-    "evil": true,
-    "expr": true,
-    "forin": true,
-    "immed": true,
-    "indent": 4,
-    "iterator": true,
-    "jquery": true,
-    "lastsemic": true,
-    "latedef": true,
-    "laxbreak": true,
-    "laxcomma": true,
-    "loopfunc": true,
-    "maxerr": 80,
-    "multistr": true,
-    "newcap": true,
-    "noarg": true,
-    "noempty": true,
-    "nonstandard": true,
-    "onecase": true,
-    "proto": true,
-    "quotmark": "double",
-    "regexdash": true,
-    "regexp": true,
-    "scripturl": true,
-    "shadow": true,
-    "smarttabs": true,
-    "sub": true,
-    "supernew": true,
-    "trailing": true,
-    "undef": true,
-    "unused": true,
-    "validthis": true,
-    "white": true,
-    "withstmt": true,
-    "wsh": true,
-    "predef": [
-        "define",
-        "require"
-    ]
-}
 ```
 
 ### CSS
@@ -288,5 +177,3 @@ insert_final_newline = true
     color: #333;
 }
 ```
-
-

@@ -7,54 +7,58 @@ define(function (require) {
         FilterView;
 
     FilterView = Backbone.View.extend({
+        model: new FilterModel(),
         id: "filter-view",
         template: _.template(template),
         className: "filter",
         events: {
             "click .close": "closeFilter"
         },
-        initialize: function (attr) {
-            this.domTarget = attr.domTarget;
-            this.model = new FilterModel();
+        initialize: function () {
+            if (this.model.getIsInitOpen()) {
+                this.model.set("isActive", true);
+                this.render();
+            }
             this.listenTo(this.model, {
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
                         this.render();
+                        this.renderDetailView();
                     }
                     else {
                         this.$el.remove();
+                        Radio.trigger("Sidebar", "toggle", false);
                     }
                 }
-            }),
+            });
             this.listenTo(this.model.get("queryCollection"), {
                 "change:isSelected": function (model, value) {
                     if (value === true) {
-                        this.renderDetailView(model);
+                        this.renderDetailView();
                     }
                     this.model.closeGFI();
-                }
-             });
-            if (this.model.get("isInitOpen")) {
-                Radio.trigger("Sidebar", "toggle", true);
-                this.model.set("isActive", true);
-                // this.render();
-            }
+                },
+                "renderDetailView": this.renderDetailView
+            });
         },
         render: function () {
             var attr = this.model.toJSON();
 
-            // Target wird in der app.js übergeben
-            this.domTarget.append(this.$el.html(this.template(attr)));
+            this.$el.html(this.template(attr));
+            Radio.trigger("Sidebar", "append", this.el);
+            Radio.trigger("Sidebar", "toggle", true);
             this.renderSimpleViews();
-            this.renderDetailView(this.model.get("queryCollection").findWhere({isSelected: true}));
             this.delegateEvents();
         },
 
-        renderDetailView: function (selectedModel) {
-            if (_.isUndefined(selectedModel) === false) {
-                var view = new QueryDetailView({model: selectedModel});
+        renderDetailView: function () {
+            var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true}),
+                view;
 
-                this.$el.append(view.render());
+            if (_.isUndefined(selectedModel) === false) {
+                view = new QueryDetailView({model: selectedModel});
+
+                this.$el.find(".detail-view-container").html(view.render());
             }
         },
 
@@ -73,8 +77,8 @@ define(function (require) {
         },
         closeFilter: function () {
             this.model.setIsActive(false);
-            this.$el.remove();
             this.model.collapseOpenSnippet();
+            Radio.trigger("Sidebar", "toggle", false);
         }
     });
 

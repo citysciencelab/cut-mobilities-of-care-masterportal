@@ -25,9 +25,9 @@ define(function (require) {
                     if (this.getPosition().top > $("#map").height() / 2) {
                         return "top";
                     }
-                    else {
-                        return "bottom";
-                    }
+
+                    return "bottom";
+
                 }
             });
         },

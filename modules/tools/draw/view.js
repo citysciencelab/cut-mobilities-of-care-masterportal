@@ -1,59 +1,48 @@
-define([
-    "backbone",
-    "text!modules/tools/draw/template.html",
-    "text!modules/tools/draw/templatePoint.html",
-    "text!modules/tools/draw/templateText.html",
-    "text!modules/tools/draw/templateLine.html",
-    "text!modules/tools/draw/templatePolygon.html",
-    "text!modules/tools/draw/templateCircle.html",
-    "modules/tools/draw/model"
-], function (Backbone, DrawTemplate, PointTemplate, TextTemplate, LineTemplate, PolygonTemplate, CircleTemplate, DrawTool) {
+define(function (require) {
+    var DrawTemplate = require("text!modules/tools/draw/template.html"),
+        DrawTool = require("modules/tools/draw/model"),
+        DrawToolView;
 
-    var DrawToolView = Backbone.View.extend({
+    DrawToolView = Backbone.View.extend({
         model: new DrawTool(),
         className: "win-body",
         template: _.template(DrawTemplate),
-        templatePoint: _.template(PointTemplate),
-        templateLine: _.template(LineTemplate),
-        templatePolygon: _.template(PolygonTemplate),
-        templateText: _.template(TextTemplate),
-        templateCircle: _.template(CircleTemplate),
         events: {
-            "change .interaction": "setInteraction",
-            "change .drawFont": "setFont",
-            "change .fontSize": "setFontSize",
-            "change .drawColor": "setColor",
-            "change .drawPointRadius": "setPointRadius",
-            "change .drawStrokeWidth": "setStrokeWidth",
-            "change .drawOpacity": "setOpacity",
+            "change .interaction": "setDrawType",
+            "keyup .text input": "setText",
+            "change .font-size select": "setFontSize",
+            "change .font select": "setFont",
+            "change .radius select": "setRadius",
+            "change .stroke-width select": "setStrokeWidth",
+            "change .opacity select": "setOpacity",
+            "change .color select": "setColor",
+            "change select": "createDrawInteraction",
+            "keyup input": "createDrawInteraction",
             "click .delete": "deleteFeatures",
-            "click .modify": "modifyFeatures",
-            "click .trash": "toggleInteractions",
-            "click .downloadDrawing": "downloadFeatures",
-            "keyup .drawText": "setText"
+            "click .modify.once": "createModifyInteraction",
+            "click .modify": "toggleInteraction",
+            "click .trash.once": "createSelectInteraction",
+            "click .trash": "toggleInteraction",
+            "click .btn-primary": "enableAllElements",
+            "click .downloadDrawing": "downloadFeatures"
         },
         initialize: function () {
             require(["modules/tools/download/view"], function (DownloadView) {
                 new DownloadView();
             });
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render,
-                "change:selectedInteraction": this.renderForm
+                "change:isCollapsed change:isCurrentWin": this.render
             });
         },
 
         render: function () {
-            var attr;
-
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                attr = this.model.toJSON();
+                var attr = this.model.toJSON();
 
-                this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
-                if ($("#cursorGlyph").attr("class") !== "glyphicon glyphicon-pencil") {
-                    this.model.setGlyphToCursor("glyphicon glyphicon-pencil");
-                }
                 this.delegateEvents();
+                this.renderForm();
+                this.renderGlyphicon();
             }
             else if (this.model.get("isCurrentWin") === false) {
                 $("#map").removeClass("no-cursor");
@@ -62,43 +51,107 @@ define([
                 $("#map").off("mousemove");
                 this.undelegateEvents();
             }
-            this.renderForm();
         },
 
         renderForm: function () {
-            var attr = this.model.toJSON(),
-                selector = ".win-body > .form-horizontal.style";
+            var element = this.$el.find(".interaction")[0];
 
-            $(selector).empty();
-            switch (this.model.get("selectedInteraction")){
-                case "drawPoint": {
-                    $(selector).append(this.templatePoint(attr));
+            switch (element.options[element.selectedIndex].text) {
+                case "Punkt zeichnen": {
+                    this.$el.find(".text").toggle(false);
+                    this.$el.find(".font-size").toggle(false);
+                    this.$el.find(".font").toggle(false);
+                    this.$el.find(".radius").toggle(true);
+                    this.$el.find(".stroke-width").toggle(false);
                     break;
                 }
-                case "writeText": {
-                    $(selector).append(this.templateText(attr));
-                    break;
-                }
-                case "drawLine": {
-                    $(selector).append(this.templateLine(attr));
-                    break;
-                }
-                case "drawArea": {
-                    $(selector).append(this.templatePolygon(attr));
-                    break;
-                }
-                case "drawCircle": {
-                    $(selector).append(this.templateCircle(attr));
+                case "Text schreiben": {
+                    this.$el.find(".text").toggle(true);
+                    this.$el.find(".font-size").toggle(true);
+                    this.$el.find(".font").toggle(true);
+                    this.$el.find(".radius").toggle(false);
+                    this.$el.find(".stroke-width").toggle(false);
                     break;
                 }
                 default: {
-                    $(selector).append(this.templatePoint(attr));
+                    this.$el.find(".text").toggle(false);
+                    this.$el.find(".font-size").toggle(false);
+                    this.$el.find(".font").toggle(false);
+                    this.$el.find(".radius").toggle(false);
+                    this.$el.find(".stroke-width").toggle(true);
+                    break;
                 }
             }
         },
 
-        setInteraction: function (evt) {
-            this.model.setInteraction(evt.target.value);
+        renderGlyphicon: function () {
+            $("#map").after("<span id='cursorGlyph' class='glyphicon glyphicon-pencil'></span>");
+
+            $("#map").mousemove(function (e) {
+                $("#cursorGlyph").css("left", e.offsetX + 5);
+                $("#cursorGlyph").css("top", e.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
+            });
+        },
+
+        setDrawType: function (evt) {
+            var element = evt.target,
+                selectedElement = element.options[element.selectedIndex];
+
+            this.model.setDrawType(selectedElement.value, selectedElement.text);
+            this.renderForm();
+        },
+
+        createDrawInteraction: function () {
+            this.model.createDrawInteraction(this.model.get("drawType"), this.model.get("layer"));
+        },
+
+        /**
+         * removes the class 'once' from target and
+         * calls createModifyInteraction in the model
+         * @param evt {MouseEvent}
+         */
+        createModifyInteraction: function (evt) {
+            $(evt.target).removeClass("once");
+            this.model.createModifyInteraction(this.model.get("layer"));
+        },
+
+        /**
+         * removes the class 'once' from target and
+         * calls createSelectInteraction in the model
+         * @param evt {MouseEvent}
+         */
+        createSelectInteraction: function (evt) {
+            $(evt.target).removeClass("once");
+            this.model.createSelectInteraction(this.model.get("layer"));
+        },
+
+        toggleInteraction: function (evt) {
+            $(evt.target).toggleClass("btn-primary");
+            if ($(evt.target).hasClass("btn-primary") === true) {
+                this.disableAllElements();
+                $(evt.target).prop("disabled", false);
+            }
+            this.model.toggleInteraction($(evt.target));
+        },
+
+        enableAllElements: function () {
+            this.$el.find("button:disabled, select:disabled").each(function () {
+                $(this).prop("disabled", false);
+            });
+        },
+
+        disableAllElements: function () {
+            this.$el.find("button, select").each(function () {
+                $(this).prop("disabled", true);
+            });
+        },
+
+        deleteFeatures: function () {
+            this.model.deleteFeatures();
+        },
+
+        downloadFeatures: function () {
+            this.model.downloadFeatures();
         },
 
         setFont: function (evt) {
@@ -117,8 +170,8 @@ define([
             this.model.setColor(evt.target.value);
         },
 
-        setPointRadius: function (evt) {
-            this.model.setPointRadius(evt.target.value);
+        setRadius: function (evt) {
+            this.model.setRadius(evt.target.value);
         },
 
         setStrokeWidth: function (evt) {
@@ -127,55 +180,6 @@ define([
 
         setOpacity: function (evt) {
             this.model.setOpacity(evt.target.value);
-        },
-
-        deleteFeatures: function () {
-            this.model.deleteFeatures();
-        },
-
-        modifyFeatures: function () {
-            $(".modify").toggleClass("btn-primary");
-
-            if ($(".modify").hasClass("btn-primary") === true) {
-                $(".win-body select").prop("disabled", true);
-                $(".win-body input").prop("disabled", true);
-                $(".downloadDrawing").prop("disabled", true);
-                $(".trash").prop("disabled", true);
-                $(".delete").prop("disabled", true);
-            }
-            else {
-                $(".win-body select").prop("disabled", false);
-                $(".win-body input").prop("disabled", false);
-                $(".downloadDrawing").prop("disabled", false);
-                $(".trash").prop("disabled", false);
-                $(".delete").prop("disabled", false);
-            }
-            this.model.modifyFeatures();
-        },
-
-        toggleInteractions: function () {
-            $(".trash").toggleClass("btn-primary");
-
-            if ($(".trash").hasClass("btn-primary") === true) {
-                $(".win-body select").prop("disabled", true);
-                $(".win-body input").prop("disabled", true);
-                $(".downloadDrawing").prop("disabled", true);
-                $(".modify").prop("disabled", true);
-                $(".delete").prop("disabled", true);
-            }
-            else {
-                $(".win-body select").prop("disabled", false);
-                $(".win-body input").prop("disabled", false);
-                $(".downloadDrawing").prop("disabled", false);
-                $(".modify").prop("disabled", false);
-                $(".delete").prop("disabled", false);
-            }
-
-            this.model.toggleInteractions();
-        },
-
-        downloadFeatures: function () {
-            this.model.downloadFeatures();
         }
     });
 

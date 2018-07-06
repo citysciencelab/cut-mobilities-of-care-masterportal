@@ -10,6 +10,7 @@ define([
             legendParams: [],
             wmsLayerList: [],
             wfsLayerList: [],
+            geojsonLayerList: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
             visible: false
@@ -19,14 +20,11 @@ define([
             var channel = Radio.channel("Legend");
 
             channel.reply({
-               "getLegendParams": this.getLegendParams
+                "getLegendParams": this.getLegendParams
             }, this);
 
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
-            });
-            this.listenTo(Radio.channel("WFS"), {
-                "featuresLoaded": this.setLayerList
             });
             this.listenTo(Radio.channel("StyleWMS"), {
                 "updateParamsStyleWMS": this.updateParamsStyleWMSArray
@@ -34,7 +32,8 @@ define([
 
             this.listenTo(this, {
                 "change:wmsLayerList": this.setLegendParamsFromWMS,
-                "change:wfsLayerList": this.setLegendParamsFromWFS,
+                "change:wfsLayerList": this.setLegendParamsFromVector,
+                "change:geojsonLayerList": this.setLegendParamsFromVector,
                 "change:groupLayerList": this.setLegendParamsFromGROUP,
                 "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
             });
@@ -52,9 +51,9 @@ define([
 
         updateParamsStyleWMSArray: function (params) {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-            paramsStyleWMSArray2 = [];
+                paramsStyleWMSArray2 = [];
 
-            _.each (paramsStyleWMSArray, function (paramsStyleWMS) {
+            _.each(paramsStyleWMSArray, function (paramsStyleWMS) {
                 if (params.styleWMSName !== paramsStyleWMS.styleWMSName) {
                     paramsStyleWMSArray2.push(paramsStyleWMS);
                 }
@@ -70,18 +69,18 @@ define([
                 legendParams = this.get("legendParams");
 
             _.each(this.get("legendParams"), function (legendParam, i) {
-                    _.find (paramsStyleWMSArray, function (paramsStyleWMS) {
-                        if (legendParam.layername === paramsStyleWMS.styleWMSName) {
-                            var layername = legendParam.layername,
-                                isVisibleInMap = legendParam.isVisibleInMap;
+                _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
+                    if (legendParam.layername === paramsStyleWMS.styleWMSName) {
+                        var layername = legendParam.layername,
+                            isVisibleInMap = legendParam.isVisibleInMap;
 
-                            legendParams.splice(i, 1, {params: paramsStyleWMS,
-                                               layername: layername,
-                                               typ: "styleWMS",
-                                               isVisibleInMap: isVisibleInMap});
+                        legendParams.splice(i, 1, {params: paramsStyleWMS,
+                            layername: layername,
+                            typ: "styleWMS",
+                            isVisibleInMap: isVisibleInMap});
 
-                        }
-                    });
+                    }
+                });
             });
             this.set("legendParams", legendParams);
         },
@@ -101,7 +100,7 @@ define([
                 groupedLayers,
                 modelList = Radio.request("ModelList", "getCollection");
 
-//            layerlist = modelList.where({type: "layer", isVisibleInMap: true});
+            //            layerlist = modelList.where({type: "layer", isVisibleInMap: true});
             this.unsetLegendParams();
             // Die Layer die in der Legende dargestellt werden sollen
             filteredLayerList = _.filter(modelList.models, function (layer) {
@@ -119,6 +118,9 @@ define([
             if (_.has(groupedLayers, "WFS")) {
                 this.set("wfsLayerList", groupedLayers.WFS);
             }
+            if (_.has(groupedLayers, "GeoJSON")) {
+                this.set("geojsonLayerList", groupedLayers.GeoJSON);
+            }
             if (_.has(groupedLayers, "GROUP")) {
                 this.set("groupLayerList", groupedLayers.GROUP);
             }
@@ -128,13 +130,14 @@ define([
         unsetLegendParams: function () {
             this.set("wfsLayerList", "");
             this.set("wmsLayerList", "");
+            this.set("geojsonLayerList", "");
             this.set("groupLayerList", "");
             this.set("tempArray", []);
         },
 
         setLegendParamsFromWMS: function () {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-            paramsStyleWMS = "";
+                paramsStyleWMS = "";
 
             _.each(this.get("wmsLayerList"), function (layer) {
                 paramsStyleWMS = _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
@@ -163,14 +166,13 @@ define([
                 }
             }, this);
         },
-
-        setLegendParamsFromWFS: function () {
-            _.each(this.get("wfsLayerList"), function (layer) {
+        setLegendParamsFromVector: function (model, layerList) {
+            _.each(layerList, function (layer) {
                 if (typeof layer.get("legendURL") === "string") {
                     this.push("tempArray", {
                         layername: layer.get("name"),
                         img: layer.get("legendURL"),
-                        typ: "WFS",
+                        typ: layer.get("typ"),
                         isVisibleInMap: layer.get("isVisibleInMap")
                     });
                 }
@@ -219,19 +221,32 @@ define([
                     }
                     // Simple Polygon Style
                     if (styleClass === "POLYGON") {
-                        image.push(this.createPolygonSVG(style));
-                        if (style.has("legendValue")) {
-                            name.push(style.get("legendValue"));
+                        if (styleSubClass === "CUSTOM") {
+                            _.each(styleFieldValues, function (styleFieldValue) {
+                                image.push(this.createPolygonSVG(style, styleFieldValue));
+                                if (_.has(styleFieldValue, "legendValue")) {
+                                    name.push(styleFieldValue.legendValue);
+                                }
+                                else {
+                                    name.push(styleFieldValue.styleFieldValue);
+                                }
+                            }, this);
                         }
                         else {
-                            name.push(layer.get("name"));
+                            image.push(this.createPolygonSVG(style));
+                            if (style.has("legendValue")) {
+                                name.push(style.get("legendValue"));
+                            }
+                            else {
+                                name.push(layer.get("name"));
+                            }
                         }
                     }
                     this.push("tempArray", {
                         layername: layer.get("name"),
                         legendname: name,
                         img: image,
-                        typ: "WFS",
+                        typ: layer.get("typ"),
                         isVisibleInMap: layer.get("isVisibleInMap")
                     });
                 }
@@ -279,13 +294,13 @@ define([
 
             return svg;
         },
-        createPolygonSVG: function (style) {
+        createPolygonSVG: function (style, styleFieldValue) {
             var svg = "",
-                fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
-                strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
-                strokeWidth = parseInt(style.get("polygonStrokeWidth"), 10),
-                fillOpacity = style.get("polygonFillColor")[3].toString() || 0,
-                strokeOpacity = style.get("polygonStrokeColor")[3].toString() || 0;
+                fillColor = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonFillColor ? style.returnColor(styleFieldValue.polygonFillColor, "hex") : style.returnColor(style.get("polygonFillColor"), "hex"),
+                strokeColor = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonStrokeColor ? style.returnColor(styleFieldValue.polygonStrokeColor, "hex") : style.returnColor(style.get("polygonStrokeColor"), "hex"),
+                strokeWidth = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonStrokeWidth ? parseInt(styleFieldValue.polygonStrokeWidth, 10) : parseInt(style.get("polygonStrokeWidth"), 10),
+                fillOpacity = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonFillColor ? styleFieldValue.polygonFillColor[3].toString() : style.get("polygonFillColor")[3].toString() || 0,
+                strokeOpacity = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonStrokeColor ? styleFieldValue.polygonStrokeColor[3].toString() : style.get("polygonStrokeColor")[3].toString() || 0;
 
             svg += "<svg height='35' width='35'>";
             svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";

@@ -1,14 +1,13 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "underscore.string",
-    "config"
-], function (Backbone, Radio, _String, Config) {
+define(function (require) {
 
-    var ParametricURL = Backbone.Model.extend({
+    var $ = require("jquery"),
+        Config = require("config"),
+        ParametricURL;
+
+    ParametricURL = Backbone.Model.extend({
         defaults: {
             layerParams: [],
-            isInitOpen: "",
+            isInitOpen: [],
             zoomToGeometry: ""
         },
         initialize: function () {
@@ -23,11 +22,57 @@ define([
                 "getZoomLevel": this.getZoomLevel,
                 "getZoomToGeometry": this.getZoomToGeometry,
                 "getZoomToExtent": this.getZoomToExtent,
-                "getStyle": this.getStyle
+                "getStyle": this.getStyle,
+                "getFilter": this.getFilter,
+                "getHighlightFeature": this.getHighlightFeature
+            }, this);
+
+            channel.on({
+                "updateQueryStringParam": this.updateQueryStringParam,
+                "pushToIsInitOpen": this.pushToIsInitOpen
             }, this);
 
             this.parseURL();
             channel.trigger("ready");
+        },
+
+        /**
+         * Turn strings that can be commonly considered as booleas to real booleans. Such as "true", "false", "1" and "0". This function is case insensitive.
+         * Aus underscore.string
+         * @param  {number|string} value    der zu prüfende Wert
+         * @return {boolean}                Rückgabe eines Boolean
+         */
+        toBoolean: function (value) {
+            var val = typeof value === "string" ? value.toLowerCase() : value;
+
+            switch (val) {
+                case true:
+                case "true":
+                case 1:
+                case "1":
+                case "on":
+                case "yes":
+                    return true;
+                default:
+                    return false;
+            }
+        },
+
+        /**
+         * Parse string to number. Returns NaN if string can't be parsed to number.
+         * Aus underscore.string
+         * @param  {string} num             Text
+         * @param  {[number]} precision   Dezimalstellen
+         * @return {number}                 Zahl
+         */
+        toNumber: function (num, precision) {
+            var factor;
+
+            if (num === null) {
+                return 0;
+            }
+            factor = Math.pow(10, isFinite(precision) ? precision : 0);
+            return Math.round(num * factor) / factor;
         },
 
         setResult: function (value) {
@@ -47,7 +92,33 @@ define([
         },
 
         getIsInitOpen: function () {
+            return this.get("isInitOpen")[0];
+        },
+        getIsInitOpenArray: function () {
             return this.get("isInitOpen");
+        },
+        setIsInitOpenArray: function (value) {
+            this.set("isInitOpen", value);
+        },
+        pushToIsInitOpen: function (value) {
+            var isInitOpenArray = this.getIsInitOpenArray(),
+                msg = "";
+
+            isInitOpenArray.push(value);
+            isInitOpenArray = _.uniq(isInitOpenArray);
+
+            if (isInitOpenArray.length > 1) {
+                msg += "Fehlerhafte Kombination von Portalkonfiguration und parametrisiertem Aufruf.<br>";
+                _.each(isInitOpenArray, function (tool, index) {
+                    msg += tool;
+                    if (index < isInitOpenArray.length - 1) {
+                        msg += " und ";
+                    }
+                });
+                msg += " können nicht gleichzeitig geöffnet sein";
+                Radio.trigger("Alert", "alert", msg);
+            }
+            this.setIsInitOpenArray(isInitOpenArray);
         },
 
         getCenter: function () {
@@ -69,28 +140,28 @@ define([
             // Sichtbarkeit auslesen. Wenn fehlend true
             if (visibilityListString === "") {
                 visibilityList = _.map(layerIdList, function () {
-                   return true;
-               });
+                    return true;
+                });
             }
             else if (visibilityListString.indexOf(",") > -1) {
                 visibilityList = _.map(visibilityListString.split(","), function (val) {
-                     return _String.toBoolean(val);
-                 });
+                    return this.toBoolean(val);
+                }, this);
             }
             else {
-                visibilityList = new Array(_String.toBoolean(visibilityListString));
+                visibilityList = new Array(this.toBoolean(visibilityListString));
             }
 
             // Tranzparenzwert auslesen. Wenn fehlend Null.
             if (transparencyListString === "") {
                 transparencyList = _.map(layerIdList, function () {
-                   return 0;
-               });
+                    return 0;
+                });
             }
             else if (transparencyListString.indexOf(",") > -1) {
                 transparencyList = _.map(transparencyListString.split(","), function (val) {
-                     return _String.toNumber(val);
-                 });
+                    return this.toNumber(val);
+                }, this);
             }
             else {
                 transparencyList = [parseInt(transparencyListString, 0)];
@@ -102,20 +173,20 @@ define([
             }
 
             _.each(layerIdList, function (val, index) {
-                 var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                 layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
-                 treeType = Radio.request("Parser", "getTreeType");
+                var layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: val}),
+                    layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: val}),
+                    treeType = Radio.request("Parser", "getTreeType"),
+                    layerToPush;
 
-                 layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
+                layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
 
-                 if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
-                     var layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
-
-                     Radio.trigger("Parser", "addItemAtTop", layerToPush);
-                 }
-                 else if (_.isUndefined(layerConfigured)) {
-                     Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning" });
-                 }
+                if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
+                    layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
+                    Radio.trigger("Parser", "addItemAtTop", layerToPush);
+                }
+                else if (_.isUndefined(layerConfigured)) {
+                    Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning"});
+                }
             }, this);
 
             this.setLayerParams(layerParams);
@@ -199,23 +270,24 @@ define([
 
             this.set("zoomLevel", value);
         },
-       parseIsInitOpen: function (result) {
-            this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
+        parseIsInitOpen: function (result) {
+            this.get("isInitOpen").push(_.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
         parseStartupModul: function (result) {
-            this.set("isInitOpen", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
+            this.get("isInitOpen").push(_.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
         },
         parseQuery: function (result) {
             var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
-                    initString = "";
+                initString = "",
+                split;
 
             // Bei " " oder "-" im Suchstring
             if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
 
                 // nach " " splitten
-                var split = value.split(" ");
+                split = value.split(" ");
 
-                _.each (split, function (splitpart) {
+                _.each(split, function (splitpart) {
                     initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
                 });
                 initString = initString.substring(0, initString.length - 1);
@@ -224,7 +296,7 @@ define([
                 split = "";
                 split = initString.split("-");
                 initString = "";
-                _.each (split, function (splitpart) {
+                _.each(split, function (splitpart) {
                     initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
                 });
                 initString = initString.substring(0, initString.length - 1);
@@ -237,24 +309,28 @@ define([
         parseStyle: function (result) {
             var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
 
-            if (value === "SIMPLE") {
-                $("#main-nav").hide();
-                $("#map").css("height", "100%");
+            if (value && (value === "TABLE" || value === "SIMPLE")) {
+                Radio.trigger("Util", "setUiStyle", value);
             }
-            this.setStyle(value);
         },
-        parseURL: function (result) {
+        parseURL: function () {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
-                result = {};
+                result = {},
+                value;
 
-            query.split("&").forEach(function (keyValue) {
-                var item = keyValue.split("=");
+            if (query.length > 0) {
+                query.split("&").forEach(function (keyValue) {
+                    var item = keyValue.split("=");
 
-                result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
-            });
+                    result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
+                });
+                this.setResult(result);
+            }
+            else {
+                this.setResult(undefined);
+            }
 
-            this.setResult(result);
             /**
              * Über diesen Parameter wird GeoOnline aus dem Transparenzporal aufgerufen
              * Der entsprechende Datensatz soll angezeigt werden
@@ -331,7 +407,55 @@ define([
             if (_.has(result, "STYLE")) {
                 this.parseStyle(result);
             }
+
+            if (_.has(result, "FILTER")) {
+                value = _.values(_.pick(result, "FILTER"))[0];
+
+                this.set("filter", JSON.parse(value));
+            }
+
+            if (_.has(result, "HIGHLIGHTFEATURE")) {
+                value = _.values(_.pick(result, "HIGHLIGHTFEATURE"))[0];
+
+                this.set("highlightfeature", value);
+            }
         },
+
+        /**
+         * https://gist.github.com/excalq/2961415
+         * @param  {string} key   Key
+         * @param  {string} value Value
+         * @returns {void}
+         */
+        updateQueryStringParam: function (key, value) {
+            var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
+                urlQueryString = document.location.search,
+                newParam = key + "=" + value,
+                params = "?" + newParam,
+                keyRegex;
+
+            // If the "search" string exists, then build params from it
+            if (urlQueryString) {
+                keyRegex = new RegExp("([&])" + key + "[^&]*");
+
+                // If param exists already, update it
+                if (urlQueryString.match(keyRegex) !== null) {
+                    params = urlQueryString.replace(keyRegex, "$1" + newParam);
+                }
+                // Otherwise, add it to end of query string
+                else {
+                    params = urlQueryString + "&" + newParam;
+                }
+            }
+            // iframe
+            if (window !== window.top) {
+                Radio.trigger("RemoteInterface", "postMessage", {"urlParams": params});
+            }
+            else {
+                window.history.replaceState({}, "", baseUrl + params);
+            }
+        },
+
         // getter for zoomToGeometry
         getZoomToGeometry: function () {
             return this.get("zoomToGeometry");
@@ -352,14 +476,11 @@ define([
         getZoomToExtent: function () {
             return this.get("zoomToExtent");
         },
-
-        // getter for style
-        getStyle: function () {
-            return this.get("style");
+        getFilter: function () {
+            return this.get("filter");
         },
-        // setter for style
-        setStyle: function (value) {
-            this.set("style", value);
+        getHighlightFeature: function () {
+            return this.get("highlightfeature");
         }
     });
 

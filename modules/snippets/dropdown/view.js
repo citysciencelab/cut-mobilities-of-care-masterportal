@@ -2,11 +2,10 @@ define(function (require) {
     require("bootstrap-select");
 
     var Template = require("text!modules/snippets/dropdown/template.html"),
-        DropdownModel = require("modules/snippets/dropdown/model"),
         DropdownView;
 
     DropdownView = Backbone.View.extend({
-        model: new DropdownModel(),
+        model: {},
         className: "dropdown-container",
         // className: "container-fluid",
         template: _.template(Template),
@@ -22,7 +21,7 @@ define(function (require) {
         },
 
         initialize: function () {
-             this.listenTo(this.model, {
+            this.listenTo(this.model, {
                 "render": this.render,
                 "removeView": this.removeView
             });
@@ -40,6 +39,7 @@ define(function (require) {
                 this.initDropdown();
                 this.markSelectedValues();
             }
+            this.delegateEvents();
             return this.$el;
         },
 
@@ -49,7 +49,7 @@ define(function (require) {
          */
         initDropdown: function () {
             this.$el.find(".selectpicker").selectpicker({
-                width: (_.isUndefined(this.model.get("infoText"))) ? "100%" : "85%",
+                width: _.isUndefined(this.model.get("infoText")) ? "100%" : "85%",
                 selectedTextFormat: "static",
                 size: this.model.get("numOfOptions")
             });

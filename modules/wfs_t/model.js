@@ -169,10 +169,10 @@ define([
             this.get("interaction").on("select", function (evt) {
                 if (evt.deselected.length) {
                     evt.deselected[0].setProperties(this.get("featureProperties"));
-                    this.transactionWFS('update', evt.deselected[0]);
+                    this.transactionWFS("update", evt.deselected[0]);
                     this.set("showAttrTable", false);
                 }
-                if(evt.selected.length) {
+                if (evt.selected.length) {
                     _.each(this.get("attributions"), function (attribut) {
                         if (_.has(evt.selected[0].getProperties(), attribut) === false) {
                             evt.selected[0].set(attribut, "");
@@ -191,8 +191,8 @@ define([
             this.set("interaction", new ol.interaction.Modify({
                 features: this.get("editInteraction").getFeatures()
             }));
-            this.get("editInteraction").getFeatures().on('remove', function(evt) {
-                this.transactionWFS('update', evt.element);
+            this.get("editInteraction").getFeatures().on("remove", function (evt) {
+                this.transactionWFS("update", evt.element);
             }, this);
         },
 
@@ -208,7 +208,7 @@ define([
                     srsName: "EPSG:25832"
                 };
 
-            switch(todo) {
+            switch (todo) {
                 case "insert": {
                     domNode = this.get("formatWFS").writeTransaction([feature], null, null, writeOptions);
                     xmlString = xmlSerializer.serializeToString(domNode);

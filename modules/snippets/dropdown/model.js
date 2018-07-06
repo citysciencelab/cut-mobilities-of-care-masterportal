@@ -10,20 +10,24 @@ define(function (require) {
             isOpen: false,
             // init dropdown values
             values: [],
+            preselectedValues: [],
             // number of entries displayed
-            numOfOptions: 10
+            numOfOptions: 10,
+            isMultiple: true
         },
 
         initialize: function () {
             this.superInitialize();
-            this.addValueModels(this.get("values"));
-            this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
-            this.listenTo(this.get("valuesCollection"), {
-            "change:isSelected": function (model, value) {
-                this.triggerValuesChanged();
+            this.addValueModels(this.getValues());
+            if (this.getPreselectedValues().length > 0) {
+                this.updateSelectedValues(this.getPreselectedValues());
             }
-        });
-
+            this.setValueModelsToShow(this.getValuesCollection().where({isSelectable: true}));
+            this.listenTo(this.getValuesCollection(), {
+                "change:isSelected": function () {
+                    this.triggerValuesChanged();
+                }
+            });
         },
 
         /**
@@ -41,30 +45,28 @@ define(function (require) {
          * @param  {string} value
          */
         addValueModel: function (value) {
-            this.get("valuesCollection").add(
-                new ValueModel({
-                    attr: this.get("name"),
-                    value: value,
-                    displayName: this.getDisplayName(value),
-                    isSelected: false,
-                    isSelectable: true,
-                    type: this.get("type")
-                })
-            );
+            this.getValuesCollection().add(new ValueModel({
+                attr: this.getName(),
+                value: value,
+                displayName: this.getDisplayName(value),
+                isSelected: false,
+                isSelectable: true,
+                type: this.getType()
+            }));
         },
 
         getDisplayName: function (value) {
-            if (this.get("type") === "boolean") {
+            if (this.getType() === "boolean") {
                 if (value === "true") {
                     return "Ja";
                 }
-                else {
-                    return "Nein";
-                }
+
+                return "Nein";
+
             }
-            else {
-                return value;
-            }
+
+            return value;
+
         },
 
         /**
@@ -72,10 +74,10 @@ define(function (require) {
         * @return {[type]} [description]
         */
         resetValues: function () {
-            var collection = this.get("valuesCollection").models;
+            var collection = this.getValuesCollection().models;
 
             _.each(collection.models, function (model) {
-            model.set("isSelectable", true);
+                model.set("isSelectable", true);
             }, this);
         },
 
@@ -85,9 +87,13 @@ define(function (require) {
          */
         updateSelectedValues: function (values) {
             if (!_.isArray(values)) {
+                if (!this.getIsMultiple()) {
+                    this.setDisplayName(values);
+
+                }
                 values = [values];
             }
-            _.each(this.get("valuesCollection").models, function (valueModel) {
+            _.each(this.getValuesCollection().models, function (valueModel) {
                 if (_.contains(values, valueModel.get("value"))) {
                     valueModel.set("isSelected", true);
                 }
@@ -103,7 +109,7 @@ define(function (require) {
          * @fires DropdownView#render
          */
         updateSelectableValues: function (values) {
-            this.get("valuesCollection").each(function (valueModel) {
+            this.getValuesCollection().each(function (valueModel) {
                 if (!_.contains(values, valueModel.get("value")) && !valueModel.get("isSelected")) {
                     valueModel.set("isSelectable", false);
                 }
@@ -112,7 +118,7 @@ define(function (require) {
                 }
             }, this);
 
-            this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
+            this.setValueModelsToShow(this.getValuesCollection().where({isSelectable: true}));
             this.trigger("render");
         },
 
@@ -133,10 +139,10 @@ define(function (require) {
         },
 
         getSelectedValues: function () {
-            var selectedModels = this.get("valuesCollection").where({isSelected: true}),
+            var selectedModels = this.getValuesCollection().where({isSelected: true}),
                 obj = {
-                    attrName: this.get("name"),
-                    type: this.get("type"),
+                    attrName: this.getName(),
+                    type: this.getType(),
                     values: []
                 };
 
@@ -146,6 +152,18 @@ define(function (require) {
                 });
             }
             return obj;
+        },
+        setIsMultiple: function (value) {
+            this.set("isMultiple", value);
+        },
+        getIsMultiple: function () {
+            return this.get("isMultiple");
+        },
+        setDisplayName: function (value) {
+            this.set("displayName", value);
+        },
+        getPreselectedValues: function () {
+            return this.get("preselectedValues");
         }
     });
 

@@ -1,25 +1,26 @@
 define(function (require) {
     var proj = new ol.proj.Projection({
-        code: "EPSG:25832",
-        units: "m",
-        axisOrientation: "enu",
-        global: false
-    }),
-    Backbone = require("backbone"),
-    Util;
+            code: "EPSG:25832",
+            units: "m",
+            axisOrientation: "enu",
+            global: false
+        }),
+        Backbone = require("backbone"),
+        Util;
 
     ol.proj.addProjection(proj);
 
 
     Util = Backbone.Model.extend({
         initialize: function () {},
-        createTestFeatures: function() {
+        createTestFeatures: function (path) {
             var format = new ol.format.WFS({
-                featureNS: "http://www.deegree.org/app"
-            }),
-            features;
+                    featureNS: "http://www.deegree.org/app"
+                }),
+                features;
+
             $.ajax({
-                url: "resources/testFeatures.xml",
+                url: path,
                 async: false,
                 success: function (data) {
                     features = format.readFeatures(data);
@@ -29,6 +30,33 @@ define(function (require) {
                 }
             });
             return features;
+        },
+        getGeoJsonTestFeatures: function () {
+            var geojson;
+
+            $.ajax({
+                url: "resources/testFeatures.json",
+                async: false,
+                success: function (data) {
+                    geojson = data;
+                },
+                error: function (jqXHR, errorText, error) {
+                    // Radio.trigger("Util", "hideLoader");
+                }
+            });
+            return geojson;
+        },
+        getCswResponse: function () {
+            var xml;
+
+            $.ajax({
+                url: "resources/testCswResponse.xml",
+                async: false,
+                success: function (data) {
+                    xml = data;
+                }
+            });
+            return xml;
         }
     });
 

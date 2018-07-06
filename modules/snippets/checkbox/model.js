@@ -1,8 +1,8 @@
 define(function (require) {
 
-var SnippetModel = require("modules/snippets/model"),
-    ValueModel = require("modules/snippets/value/model"),
-    CheckboxSnippet;
+    var SnippetModel = require("modules/snippets/model"),
+        ValueModel = require("modules/snippets/value/model"),
+        CheckboxSnippet;
 
     CheckboxSnippet = SnippetModel.extend({
         defaults: {
@@ -18,20 +18,18 @@ var SnippetModel = require("modules/snippets/model"),
             this.superInitialize();
             this.addValueModel(this.get("isSelected"));
             this.listenTo(this.get("valuesCollection"), {
-                "change:isSelected": function () {
-                    this.trigger("valuesChanged");
+                "change:isSelected": function (model) {
+                    this.trigger("valuesChanged", model.get("isSelected"));
                     this.renderView();
                 }
             });
         },
         addValueModel: function (value) {
-            this.get("valuesCollection").add(
-                new ValueModel({
-                    attr: this.get("name"),
-                    isSelected: value,
-                    type: this.get("type")
-                })
-            );
+            this.get("valuesCollection").add(new ValueModel({
+                attr: this.get("name"),
+                isSelected: value,
+                type: this.get("type")
+            }));
         },
         renderView: function () {
             this.trigger("renderView");

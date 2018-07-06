@@ -1,12 +1,21 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
+        $ = require("jquery"),
         ol = require("openlayers"),
         GeoJSONLayer;
 
     GeoJSONLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
+            this.toggleAutoReload();
+            this.listenTo(this, {
+                "change:isVisibleInMap": function () {
+                    this.toggleAutoReload();
+                }
+            });
+            this.setStyleId(this.getStyleId() || this.getId());
+            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.getStyleId()));
         },
 
         /**
@@ -24,49 +33,85 @@ define(function (require) {
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
                 source: this.getLayerSource(),
-                name: this.get("name"),
-                typ: this.get("typ"),
-                gfiAttributes: this.get("gfiAttributes"),
-                routable: this.get("routable"),
-                gfiTheme: this.get("gfiTheme"),
+                name: this.getName(),
+                typ: this.getTyp(),
+                gfiAttributes: this.getGfiAttributes(),
+                routable: this.getRoutable(),
+                gfiTheme: this.getGfiTheme(),
                 id: this.getId()
             }));
             if (_.isUndefined(this.get("geojson"))) {
-                this.updateData(this.handleData);
+                this.updateData();
             }
             else {
-                this.handleData(this.get("geojson"));
+                this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
             }
         },
-        updateData: function (callback) {
-            Radio.trigger("Util", "showLoader");
+        updateData: function (showLoader) {
+            var params = {
+                request: "GetFeature",
+                service: "WFS",
+                typeName: this.get("featureType"),
+                outputFormat: "application/geo+json",
+                version: this.getVersion()
+            };
+
+            if (!_.isUndefined(showLoader) && showLoader === true) {
+                Radio.trigger("Util", "showLoader");
+            }
 
             $.ajax({
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
-                async: false,
+                data: params,
+                async: true,
                 type: "GET",
                 context: this,
-                success: callback,
+                success: function (data) {
+                    Radio.trigger("Util", "hideLoader");
+                    this.handleData(data, Radio.request("MapView", "getProjection").getCode());
+                },
                 error: function () {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
         },
-        handleData: function (data) {
-            Radio.trigger("Util", "hideLoader");
-            var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
-                mapCrs = Radio.request("MapView", "getProjection").getCode(),
-                geojsonReader = new ol.format.GeoJSON(),
-                features = geojsonReader.readFeatures(data);
+        handleData: function (data, mapCrs) {
+            var jsonCrs = _.has(data, "crs") && data.crs.properties.name ? data.crs.properties.name : "EPSG:4326",
+                features = this.parseDataToFeatures(data),
+                newFeatures = [];
 
             if (jsonCrs !== mapCrs) {
                 features = this.transformFeatures(features, jsonCrs, mapCrs);
             }
-            this.getLayerSource().addFeatures(features);
-            this.set("loadend", "ready");
 
-            this.getLayer().setStyle(this.get("style"));
+            features.forEach(function (feature) {
+                var id = feature.get("id") || _.uniqueId();
+
+                feature.setId(id);
+            });
+            this.getLayerSource().clear(true);
+            this.getLayerSource().addFeatures(features);
+            this.getLayer().setStyle(this.get("styleFunction"));
+
+            // für it-gbm
+            if (!this.has("autoRefresh")) {
+                features.forEach(function (feature) {
+                    feature.set("extent", feature.getGeometry().getExtent());
+                    newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                });
+                Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
+            }
+
+            this.featuresLoaded(features);
+            Radio.trigger("Util", "hideLoader");
         },
+
+        parseDataToFeatures: function (data) {
+            var geojsonReader = new ol.format.GeoJSON();
+
+            return geojsonReader.readFeatures(data);
+        },
+
         transformFeatures: function (features, crs, mapCrs) {
             _.each(features, function (feature) {
                 var geometry = feature.getGeometry();
@@ -75,39 +120,21 @@ define(function (require) {
             });
             return features;
         },
-        /**
-         * Zeigt alle Features mit dem Default-Style an
-         */
-        showAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures();
-
-            collection.forEach(function (feature) {
-                feature.setStyle(this.getDefaultStyle());
-            }, this);
-        },
 
         /**
-         * Versteckt alle Features mit dem Hidden-Style
+         * sets style function for features or layer
+         * @param  {Backbone.Model} stylelistmodel Model für Styles
+         * @returns {undefined}
          */
-        hideAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures();
-
-            collection.forEach(function (feature) {
-                feature.setStyle(this.getHiddenStyle());
-            }, this);
-        },
-
-        /**
-         * Zeigt nur die Features an, deren Id übergeben wird
-         * @param  {string[]} featureIdList
-         */
-        showFeaturesByIds: function (featureIdList) {
-            this.hideAllFeatures();
-            _.each(featureIdList, function (id) {
-                var feature = this.getLayerSource().getFeatureById(id);
-
-                feature.setStyle(this.getDefaultStyle());
-            }, this);
+        setStyleFunction: function (stylelistmodel) {
+            if (_.isUndefined(stylelistmodel)) {
+                this.set("styleFunction", undefined);
+            }
+            else {
+                this.set("styleFunction", function (feature) {
+                    return stylelistmodel.createStyle(feature);
+                });
+            }
         },
 
         // Getter
@@ -115,27 +142,84 @@ define(function (require) {
             return this.get("features");
         },
 
-        getDefaultStyle: function () {
-            return new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(49, 159, 211, 0.8)"
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(50, 50, 50, 1)",
-                    width: 1
-                })
-            });
+        // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
+        createLegendURL: function () {
+            var style;
+
+            if (_.isUndefined(this.getLegendURL()) === false && this.getLegendURL().length !== 0) {
+                style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
+                if (_.isUndefined(style) === false) {
+                    this.set("legendURL", [style.getImagePath() + style.getImageName()]);
+                }
+            }
+        },
+        /**
+         * Zeigt nur die Features an, deren Id übergeben wird
+         * @param  {string[]} featureIdList Liste der FeatureIds
+         * @return {undefined}
+         */
+        showFeaturesByIds: function (featureIdList) {
+            this.hideAllFeatures();
+            _.each(featureIdList, function (id) {
+                var feature = this.getLayerSource().getFeatureById(id);
+
+                feature.setStyle(undefined);
+            }, this);
         },
 
-        getHiddenStyle: function () {
-            return new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(255, 255, 255, 0)"
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(49, 159, 211, 0)"
-                })
-            });
+        /**
+         * sets null style (=no style) for all features
+         * @return {undefined}
+         */
+        hideAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures();
+
+            collection.forEach(function (feature) {
+                feature.setStyle(function () {
+                    return null;
+                });
+            }, this);
+        },
+
+        toggleAutoReload: function () {
+            if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 500) {
+                if (this.getIsVisibleInMap() === true) {
+                    this.interval = setInterval(function (my) {
+                        my.updateData(false);
+                    }, this.attributes.autoRefresh, this);
+                }
+                else {
+                    clearInterval(this.interval);
+                }
+            }
+        },
+
+        /**
+         * sets style for all features
+         * @return {undefined}
+         */
+        showAllFeatures: function () {
+            var collection = this.getLayerSource().getFeatures();
+
+            collection.forEach(function (feature) {
+                feature.setStyle(undefined);
+            }, this);
+        },
+        getStyleId: function () {
+            return this.get("styleId");
+        },
+        setStyleId: function (value) {
+            this.set("styleId", value);
+        },
+        // getter for style
+        getStyle: function () {
+            return this.get("style");
+        },
+        // setter for style
+        setStyle: function (value) {
+            this.set("style", value);
+
         }
     });
 

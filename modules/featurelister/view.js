@@ -1,5 +1,5 @@
 define(function (require) {
-require("jqueryui/widgets/draggable");
+    require("jqueryui/widgets/draggable");
 
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
@@ -97,7 +97,7 @@ require("jqueryui/widgets/draggable");
             }
 
             $("#featurelist-list-table tbody").empty();
-            this.writeFeaturesToTable (featuresSorted);
+            this.writeFeaturesToTable(featuresSorted);
         },
         /*
         * Ermittelt die Anzahl der derzeit dargestellten Features, erhöht diese und liest diese Features aus. Stellt sie dann dar.
@@ -257,15 +257,15 @@ require("jqueryui/widgets/draggable");
         */
         readFeatures: function (from, to, dropTableFirst) {
             var features = _.filter(this.model.get("layer").features, function (feature) {
-                    return feature.id >= from && feature.id <= to;
-                });
+                return feature.id >= from && feature.id <= to;
+            });
 
             if (dropTableFirst === true) {
                 $("#featurelist-list-table tbody").empty();
             }
             // entferne evtl. Sortierungshinweise aus Überschriften
             $(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
-            this.writeFeaturesToTable (features);
+            this.writeFeaturesToTable(features);
         },
         /*
         * Nimmt die darzustellenden Features entgegen un schreibt sie in tbody. Zeigt ggf. Nachlade-Button.
@@ -282,7 +282,7 @@ require("jqueryui/widgets/draggable");
                 _.each(headers, function (header) {
                     var attvalue = "";
 
-                   _.each(feature.properties, function (value, key) {
+                    _.each(feature.properties, function (value, key) {
                         if (header === key) {
                             attvalue = value;
                         }

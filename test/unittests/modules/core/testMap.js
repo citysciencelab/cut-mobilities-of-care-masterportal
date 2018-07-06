@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         Model = require("../../../../modules/core/map.js"),
         Util = require("util");
@@ -11,7 +11,7 @@ define(function(require) {
         before(function () {
             model = new Model();
             utilModel = new Util();
-            features = utilModel.createTestFeatures();
+            features = utilModel.createTestFeatures("resources/testFeatures.xml");
         });
 
         describe("calculateExtent", function () {
