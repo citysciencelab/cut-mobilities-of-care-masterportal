@@ -119,9 +119,9 @@ define(function (require) {
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("layerId")}),
                 themeConfig = Radio.request("Schulinfo", "getThemeConfig"),
                 features = this.model.prepareFeatureListToShow(layerModel.get("gfiAttributes"), themeConfig),
-                rowsToShow = this.model.get("numberOfAttributesToShow"),
+                rowsToShow = this.$el.find("tr:visible").length,
                 date = momentJS(new Date()).format("DD.MM.YYYY"),
-                tableBody = this.prepareTableBody(features),
+                tableBody = this.prepareTableBody(features, rowsToShow),
                 rowWidth = this.calculateRowWidth(tableBody[0], 30),
                 pdfDef = {
                     pageSize: "A4",
@@ -153,41 +153,44 @@ define(function (require) {
                                 vLineWidth: function (i, node) {
                                     return i === 0 || i === node.table.widths.length ? 2 : 1;
                                 },
-                                fillColor: function (i, node) {
+                                fillColor: function (i) {
                                     return i % 2 === 0 ? "#eeeeee" : "#dddddd";
                                 }
                             }
                         }
                     ]
                 };
+
             Radio.trigger("BrowserPrint", "print", "Vergleichsliste_Schulen", pdfDef, "download");
         },
 
-        prepareTableBody: function (features) {
+        prepareTableBody: function (features, rowsToShow) {
             var tableBody = [];
 
             _.each(features, function (rowFeature, rowIndex) {
                 var row = [];
 
-                _.each(rowFeature, function (val) {
-                    if (_.isUndefined(val)) {
-                        row.push("");
-                    }
-                    // header cells get extra styling
-                    else if (rowIndex === 0) {
-                        row.push({
-                            text: String(val),
-                            style: "bold"
-                        });
-                    }
-                    else if (_.isArray(val)) {
-                        row.push(String(val).replace(/,/g, ",\n"));
-                    }
-                    else {
-                        row.push(String(val));
-                    }
-                });
-                tableBody.push(row);
+                if (rowIndex < rowsToShow) {
+                    _.each(rowFeature, function (val) {
+                        if (_.isUndefined(val)) {
+                            row.push("");
+                        }
+                        // header cells get extra styling
+                        else if (rowIndex === 0) {
+                            row.push({
+                                text: String(val),
+                                style: "bold"
+                            });
+                        }
+                        else if (_.isArray(val)) {
+                            row.push(String(val).replace(/,/g, ",\n"));
+                        }
+                        else {
+                            row.push(String(val));
+                        }
+                    });
+                    tableBody.push(row);
+                }
             });
             tableBody[0][0] = {
                 text: ""
