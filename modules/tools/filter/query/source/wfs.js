@@ -157,19 +157,19 @@ define(function (require) {
 
                     _.each(attributeValues, function (value) {
                         if (this.isValid(value)) {
-                            values.push(value.trim());
+                            values.push(this.trimValue(value));
                         }
                     }, this);
                 }
                 else if (_.isArray(attributeValue)) {
                     _.each(attributeValue, function (value) {
                         if (this.isValid(value)) {
-                            values.push(value.trim());
+                            values.push(this.trimValue(value));
                         }
                     }, this);
                 }
                 else if (this.isValid(attributeValue)) {
-                    values.push(attributeValue.trim());
+                    values.push(this.trimValue(attributeValue));
                 }
             }
             return _.unique(values);
@@ -177,7 +177,14 @@ define(function (require) {
         isValid: function (value) {
             return value !== null && !_.isUndefined(value);
         },
+        trimValue: function (value) {
+            var trimmedValue = value;
 
+            if (_.isString(value)) {
+                trimmedValue = value.trim();
+            }
+            return trimmedValue;
+        },
         /**
          * Collect the feature Ids that match the predefined rules
          * and trigger them to the ModelList

@@ -32,8 +32,10 @@ define(function (require) {
          * @return {jQuery} - this DOM element as a jQuery object
          */
         render: function () {
+            var attr;
+
             if (this.model.get("isOpen") === false) {
-                var attr = this.model.toJSON();
+                attr = this.model.toJSON();
 
                 this.$el.html(this.template(attr));
                 this.initDropdown();
