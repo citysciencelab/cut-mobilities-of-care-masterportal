@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <form class="form-inline">
-    <div>
+    <div class= "title-values pull-left">
         <div class="form-group form-group-sm">
             <label><%= displayName %></label>
         </div>
@@ -10,12 +10,13 @@
             <input type="text" class="form-control" placeholder="<%= valuesCollection.at(1).get('value') %>" readonly>
         </div>
     </div>
+    <% if (typeof infoText !== "undefined") { %>
+    <div>
+        <span class="glyphicon glyphicon-info-sign info-icon"></span>
+    </div>
+    <% } %>
 </form>
-        <% if (typeof infoText !== "undefined") { %>
-        <div class="info-icon">
-            <span class="glyphicon glyphicon-info-sign"></span>
-        </div>
-        <% } %>
+</div>
 <input class="slider" type="text" data-slider-tooltip="hide" />
 <% if (!_.isUndefined(this.model.get("infoText"))) { %>
     <div class="info-text"><%= infoText %></div>
