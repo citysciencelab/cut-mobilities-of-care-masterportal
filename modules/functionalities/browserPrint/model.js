@@ -1,12 +1,14 @@
 define(function (require) {
     var Config = require("config"),
+        momentJS = require("moment"),
         browserPrintModel;
 
     require("pdfmake");
 
     browserPrintModel = Backbone.Model.extend({
         defaults: {
-            footerText: "Kartographie und Gestaltung: Freie und Hansestadt Hamburg \nLandesbetrieb Geoinformation und Vermessung"
+            footerText: "Kartographie und Gestaltung: Freie und Hansestadt Hamburg \nLandesbetrieb Geoinformation und Vermessung",
+            titleText: "PDF ohne Titel"
         },
         initialize: function () {
             var channel = Radio.channel("BrowserPrint");
@@ -31,15 +33,38 @@ define(function (require) {
                 }, this);
             }
         },
-        print: function (name, defs, mode) {
+        print: function (name, defs, title, mode) {
             var completeDefs;
 
+            if (!_.isUndefined(title)) {
+                this.setTitleText(title);
+            }
+            completeDefs = this.appendTitle(defs);
             completeDefs = this.appendFooter(defs);
             completeDefs = this.appendStyles(completeDefs);
 
             if (mode === "download") {
                 window.pdfMake.createPdf(completeDefs).download(name + ".pdf");
             }
+        },
+        appendTitle: function (defs) {
+            var date = momentJS(new Date()).format("DD.MM.YYYY"),
+                defTitle = {
+                    text: [
+                        {
+                            text: this.get("titleText"),
+                            style: ["large", "bold", "center"]
+                        },
+                        {
+                            text: " (Stand: " + date + ")",
+                            style: ["normal", "center"]
+                        }
+                    ],
+                    style: "header"
+                };
+
+            defs.content.unshift(defTitle);
+            return defs;
         },
         appendFooter: function (defs) {
             var footerText = this.get("footerText");
@@ -104,6 +129,10 @@ define(function (require) {
         // setter for footerText
         setFooterText: function (value) {
             this.set("footerText", value);
+        },
+        // setter for titleText
+        setTitleText: function (value) {
+            this.set("titleText", value);
         }
     });
     return browserPrintModel;

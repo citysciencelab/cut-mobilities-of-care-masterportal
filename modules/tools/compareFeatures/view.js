@@ -4,7 +4,6 @@ define(function (require) {
         CompareFeaturesTemplateFeedback = require("text!modules/tools/compareFeatures/templateFeedback.html"),
         CompareFeaturesTemplateNoFeatures = require("text!modules/tools/compareFeatures/templateNoFeatures.html"),
         CompareFeaturesTemplate = require("text!modules/tools/compareFeatures/template.html"),
-        momentJS = require("moment"),
         CompareFeaturesView;
 
     require("bootstrap/modal");
@@ -120,26 +119,13 @@ define(function (require) {
                 themeConfig = Radio.request("Schulinfo", "getThemeConfig"),
                 features = this.model.prepareFeatureListToShow(layerModel.get("gfiAttributes"), themeConfig),
                 rowsToShow = this.$el.find("tr:visible").length,
-                date = momentJS(new Date()).format("DD.MM.YYYY"),
                 tableBody = this.prepareTableBody(features, rowsToShow),
                 rowWidth = this.calculateRowWidth(tableBody[0], 30),
+                title = "Vergleichsliste - Schulen",
                 pdfDef = {
                     pageSize: "A4",
                     pageOrientation: "portrait",
                     content: [
-                        {
-                            text: [
-                                {
-                                    text: "Vergleichsliste - Schulen",
-                                    style: ["large", "bold", "center"]
-                                },
-                                {
-                                    text: " (Stand: " + date + ")",
-                                    style: ["normal", "center"]
-                                }
-                            ],
-                            style: "header"
-                        },
                         {
                             table: {
                                 headerRows: 1,
@@ -161,7 +147,7 @@ define(function (require) {
                     ]
                 };
 
-            Radio.trigger("BrowserPrint", "print", "Vergleichsliste_Schulen", pdfDef, "download");
+            Radio.trigger("BrowserPrint", "print", "Vergleichsliste_Schulen", pdfDef, title, "download");
         },
 
         prepareTableBody: function (features, rowsToShow) {

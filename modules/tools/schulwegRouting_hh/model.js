@@ -1,7 +1,6 @@
 define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
-        momentJS = require("moment"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         SchulwegRouting;
 
@@ -126,15 +125,15 @@ define(function (require) {
                 school = this.get("selectedSchool"),
                 route = this.get("routeResult"),
                 routeDesc = this.get("routeDescription"),
-                date = momentJS(new Date()).format("DD.MM.YYYY"),
                 filename = "Schulweg_zu_" + school.get("schulname"),
                 mapCanvas = document.getElementsByTagName("canvas")[0],
                 screenshotMap = mapCanvas.toDataURL("image/png"),
-                pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc, date);
+                title = "Schulwegrouting",
+                pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc);
 
-            Radio.trigger("BrowserPrint", "print", filename, pdfDef, "download");
+            Radio.trigger("BrowserPrint", "print", filename, pdfDef, title, "download");
         },
-        createPDFDef: function (screenshotMap, address, school, route, routeDescription, date) {
+        createPDFDef: function (screenshotMap, address, school, route, routeDescription) {
             var addr = address.street + " " + address.number + address.affix,
                 schoolname = school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
                 routeDesc = this.createRouteDesc(routeDescription),
@@ -142,19 +141,6 @@ define(function (require) {
                     pageSize: "A4",
                     pageOrientation: "portrait",
                     content: [
-                        {
-                            text: [
-                                {
-                                    text: "Schulwegrouting",
-                                    style: ["large", "bold", "center"]
-                                },
-                                {
-                                    text: " (Stand: " + date + ")",
-                                    style: ["normal", "center"]
-                                }
-                            ],
-                            style: "header"
-                        },
                         {
                             image: screenshotMap,
                             fit: [500, 500],
