@@ -436,7 +436,7 @@ define(function (require) {
 
             // If the "search" string exists, then build params from it
             if (urlQueryString) {
-                keyRegex = new RegExp("([&])" + key + "[^&]*");
+                keyRegex = new RegExp("([?,&])" + key + "[^&]*");
 
                 // If param exists already, update it
                 if (urlQueryString.match(keyRegex) !== null) {
