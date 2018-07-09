@@ -32,7 +32,8 @@ define(function (require) {
         },
 
         initialize: function () {
-            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
+            // var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "11616"}),
                 channel = Radio.channel("SchulwegRouting"),
                 model;
 
@@ -46,7 +47,8 @@ define(function (require) {
 
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
-                    if (layerId === "8712") {
+                    // if (layerId === "8712") {
+                    if (layerId === "11616") {
                         this.setSchoolList(this.sortSchoolsByName(features));
                     }
                 }
@@ -102,6 +104,10 @@ define(function (require) {
                 isVisibleInMap: value
             });
             Radio.trigger("ModelList", "setModelAttributesById", "1935geofox_Faehre", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
+            Radio.trigger("ModelList", "setModelAttributesById", "1933geofox_stations", {
                 isSelected: value,
                 isVisibleInMap: value
             });
@@ -192,60 +198,7 @@ define(function (require) {
                         {
                             ol: routeDesc
                         }
-                    ],
-                    footer: function (currentPage, pageCount) {
-                        var footer = [
-                            {
-                                text: currentPage.toString() + " / " + pageCount,
-                                style: ["xsmall", "center"]
-                            },
-                            {
-                                text: [
-                                    {
-                                        text: "Herausgeber: ",
-                                        style: ["bold"]
-                                    },
-                                    {
-                                        text: "Freie und Hansestadt Hamburg. Landesbetrieb Geoinformation und Vermessung"
-                                    }
-                                ],
-                                style: ["xsmall", "center"]
-                            }
-                        ];
-
-                        return footer;
-                    },
-                    styles: {
-                        header: {
-                            fontSize: 18
-                        },
-                        subheader: {
-                            fontSize: 14,
-                            margin: [0, 10]
-                        },
-                        normal: {
-                            fontSize: 12
-                        },
-                        bold: {
-                            bold: true
-                        },
-                        small: {
-                            fontSize: 10
-                        },
-                        xsmall: {
-                            fontSize: 8
-                        },
-                        image: {
-                            margin: [0, 10],
-                            alignment: "left"
-                        },
-                        onGrey: {
-                            margin: [10, 10]
-                        },
-                        center: {
-                            alignment: "center"
-                        }
-                    }
+                    ]
                 };
 
             return defs;

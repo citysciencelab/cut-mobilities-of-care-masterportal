@@ -92,7 +92,9 @@ define(function (require) {
         addSnippet: function (featureAttribute) {
             var snippetAttribute = featureAttribute;
 
-            snippetAttribute.values.sort();
+            // snippetAttribute.values.sort();
+            // console.log(Radio.request("Util", "sort", snippetAttribute.values));
+            snippetAttribute.values = Radio.request("Util", "sort", snippetAttribute.values);
 
             if (snippetAttribute.type === "string" || snippetAttribute.type === "text") {
                 snippetAttribute = _.extend(snippetAttribute, {"snippetType": "dropdown"});
