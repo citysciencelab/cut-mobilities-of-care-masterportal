@@ -58,8 +58,6 @@ define(function (require) {
          * @returns {void}
          */
         updateValues: function (snippetValues) {
-            console.log(snippetValues);
-            console.log(this.getValuesCollection().at(0));
             // range slider
             if (_.isArray(snippetValues) === true) {
                 this.getValuesCollection().at(0).setValue(snippetValues[0]);

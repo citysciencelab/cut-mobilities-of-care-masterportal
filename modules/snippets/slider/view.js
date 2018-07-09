@@ -5,8 +5,6 @@ define(function (require) {
     require("slider");
 
     SliderView = Backbone.View.extend({
-        className: "slider-container",
-        template: _.template(Template),
         events: {
             // This event fires when the dragging stops or has been clicked on
             "slideStop input.slider": function (evt) {
@@ -18,7 +16,7 @@ define(function (require) {
             // This event is fired when the info button is clicked
             "click .info-icon": "toggleInfoText",
             // This event fires if enter is clicked
-            "keyup .form-control": "toggleSlider"
+            "keyup .form-control": "changeValuesByText"
         },
 
         initialize: function () {
@@ -26,6 +24,9 @@ define(function (require) {
                 "render": this.render
             });
         },
+
+        className: "slider-container",
+        template: _.template(Template),
 
         render: function () {
             var attr = this.model.toJSON();
@@ -68,19 +69,71 @@ define(function (require) {
             this.$el.find(".info-text").toggle();
         },
 
-        toggleSlider: function () {
+        /**
+         * change the values by input from inputfields
+         * render change if enter is pressed
+         * @returns {void}
+         */
+        changeValuesByText: function () {
             var min,
-                max;
+                max,
+                initValues,
+                values;
 
             if (event.keyCode === 13) {
                 min = this.$el.find("input.form-minimum").prop("value");
                 max = this.$el.find("input.form-maximum").prop("value");
-                console.log(min);
-                console.log(max);
+                initValues = this.model.getValuesCollection().pluck("initValue");
+
+                // check if input is allowed
+                if (min === "" && max !== "") {
+                    max = this.checkInvalidInput(parseInt(max, 10), initValues[1]);
+                    min = initValues[0];
+                }
+                else if (min !== "" && max === "") {
+                    min = this.checkInvalidInput(parseInt(min, 10), initValues[0]);
+                    max = initValues[1];
+                }
+                else {
+                    min = this.checkInvalidInput(parseInt(min, 10), initValues[0]);
+                    max = this.checkInvalidInput(parseInt(max, 10), initValues[1]);
+                }
+
+                values = [min, max];
+
+                this.model.updateValues(values);
             }
 
-        }
+        },
 
+        /**
+         * check if value is valid parameter or set value to initValue
+         * @param {number} value - input value
+         * @param {number} initValue - initial value
+         * @returns {number} val
+         */
+        checkInvalidInput: function (value, initValue) {
+            var val = value;
+
+            if (_.isNaN(val)) {
+                val = initValue;
+                this.errorMessage();
+            }
+
+            return val;
+        },
+
+        /**
+         * returns an error message for invalid inputs
+         * @returns {void}
+         */
+        errorMessage: function () {
+            Radio.trigger("Alert", "alert", {
+                text: "<strong>Fehlerhafte Eingabe,"
+                    + " Bitte eine ganze Zahl eingeben!</strong>",
+                kategorie: "alert-danger"
+            });
+        }
     });
 
     return SliderView;
