@@ -1,8 +1,8 @@
 define(function (require) {
-    require("slider");
-
     var Template = require("text!modules/snippets/slider/template.html"),
         SliderView;
+
+    require("slider");
 
     SliderView = Backbone.View.extend({
         className: "slider-container",
@@ -35,6 +35,7 @@ define(function (require) {
 
         /**
          * init the slider
+         * @returns {void}
          */
         initSlider: function () {
             var valueModel = this.model.get("valueCollection").models[0];
@@ -50,6 +51,7 @@ define(function (require) {
         /**
          * set the input value
          * @param {Event} evt - slide
+         * @returns {void}
          */
         setInputControlValue: function (evt) {
             this.$el.find("input.form-control").val(evt.value);
@@ -57,6 +59,7 @@ define(function (require) {
 
         /**
          * toggle the info text
+         * @returns {void}
          */
         toggleInfoText: function () {
             this.model.trigger("hideAllInfoText");

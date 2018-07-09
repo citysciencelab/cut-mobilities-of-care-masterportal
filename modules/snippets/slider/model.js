@@ -28,6 +28,9 @@ define(function (require) {
 
         /**
          * add minValueModel and maxValueModel to valuesCollection
+         * @param {number} min min
+         * @param {number} max max
+         * @returns {void}
          */
         addValueModels: function (min, max) {
             this.getValuesCollection().add([
@@ -51,7 +54,8 @@ define(function (require) {
         /**
          * call the updateValueModel function and/or the updateMaxValueModel
          * trigger the valueChanged event on snippetCollection in queryModel
-         * @param  {number | array} value - depending on slider type
+         * @param  {number | array} snippetValues - depending on slider type
+         * @returns {void}
          */
         updateValues: function (snippetValues) {
             // range slider
@@ -79,17 +83,20 @@ define(function (require) {
 
         /**
          * parse strings into numbers if necessary
-         * @param  {array} valueList
+         * @param  {array} valueList valueList
          * @return {number[]} parsedValueList
          */
         parseValues: function (valueList) {
             var parsedValueList = [];
 
             _.each(valueList, function (value) {
-                if (_.isString(value)) {
-                    value = parseInt(value, 10);
+                var val = value;
+
+
+                if (_.isString(val)) {
+                    val = parseInt(val, 10);
                 }
-                parsedValueList.push(value);
+                parsedValueList.push(val);
             });
 
             return parsedValueList;
