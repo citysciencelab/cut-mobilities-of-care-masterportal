@@ -446,6 +446,7 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 |[routing](#markdown-header-portalconfigmenutoolschildrenrouting)|nein|Object||Routenplaner|
 |[searchByCoord](#markdown-header-portalconfigmenutoolschildrencoord)|nein|Object||Koordinatensuche|
 |[wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter)|nein|Object||WFS Filter|
+|[schulwegrouting](#markdown-header-portalconfigmenutoolschildrenschulwegrouting)|nein|Object||Schulwegrouting|
 
 Werden mehrere Werkzeuge verwendet, so werden die Objekte mit Komma getrennt. Die Reihenfolge der Werkzeuge in der Konfiguration gibt die Reihenfolge der Werkzeuge im Portal wieder.
 
@@ -900,6 +901,17 @@ Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann
 ******
 ******
 
+#### Portalconfig.menu.tools.children.schulwegrouting ######
+Das Schulwegrouting ermöglicht das Routing von einer eingegebenen Addresse zur angegebenen Schule.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|name|nein|String||Name des Werkzeuges im Menüeintrag.|
+|layerId|ja|String|""|Id des Layers der die Schulstandorte enthält.|
+
+******
+******
 
 #### Portalconfig.menu.tree ####
 Unter *tree* wird der Themenbaum konfiguriert.

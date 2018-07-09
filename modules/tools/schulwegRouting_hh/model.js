@@ -7,7 +7,8 @@ define(function (require) {
     SchulwegRouting = Backbone.Model.extend({
 
         defaults: {
-            id: "schulwegrouting",
+            id: "",
+            layerId: "",
             // ol-features of all schools
             schoolList: [],
             // the regional school in charge
@@ -31,8 +32,7 @@ define(function (require) {
         },
 
         initialize: function () {
-            // var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
-            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "11616"}),
+            var layerModel,
                 channel = Radio.channel("SchulwegRouting"),
                 model;
 
@@ -47,7 +47,7 @@ define(function (require) {
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
                     // if (layerId === "8712") {
-                    if (layerId === "11616") {
+                    if (layerId === this.get("layerId")) {
                         this.setSchoolList(this.sortSchoolsByName(features));
                     }
                 }
@@ -84,10 +84,11 @@ define(function (require) {
             this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
             this.addRouteFeatures(this.get("layer").getSource());
             this.get("layer").setStyle(this.routeStyle);
+            this.setDefaults();
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
             if (!_.isUndefined(layerModel)) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
             }
-            this.setDefaults();
         },
         toggleHVVLayer: function (value) {
             Radio.trigger("ModelList", "setModelAttributesById", "1935geofox-bus", {
