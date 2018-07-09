@@ -61,6 +61,16 @@ define(function (require) {
         },
 
         /**
+         * set the input values
+         * @param {array} values - contains minimum and maximum
+         * @returns {void}
+         */
+        setInputMinAndMaxValue: function (values) {
+            this.$el.find("input.form-minimum").val(values[0]);
+            this.$el.find("input.form-maximum").val(values[1]);
+        },
+
+        /**
          * toggle the info text
          * @returns {void}
          */
@@ -78,7 +88,8 @@ define(function (require) {
             var min,
                 max,
                 initValues,
-                values;
+                values,
+                lastValues;
 
             if (event.keyCode === 13) {
                 min = this.$el.find("input.form-minimum").prop("value");
@@ -95,13 +106,16 @@ define(function (require) {
                     max = initValues[1];
                 }
                 else {
-                    min = this.checkInvalidInput(parseInt(min, 10), initValues[0]);
-                    max = this.checkInvalidInput(parseInt(max, 10), initValues[1]);
+                    lastValues = this.model.getValuesCollection().pluck("value");
+
+                    min = this.checkInvalidInput(parseInt(min, 10), lastValues[0]);
+                    max = this.checkInvalidInput(parseInt(max, 10), lastValues[1]);
                 }
 
                 values = [min, max];
 
                 this.model.updateValues(values);
+                this.setInputMinAndMaxValue(values);
             }
 
         },
@@ -109,14 +123,14 @@ define(function (require) {
         /**
          * check if value is valid parameter or set value to initValue
          * @param {number} value - input value
-         * @param {number} initValue - initial value
+         * @param {number} otherValue - value that be set if param value NaN
          * @returns {number} val
          */
-        checkInvalidInput: function (value, initValue) {
+        checkInvalidInput: function (value, otherValue) {
             var val = value;
 
             if (_.isNaN(val)) {
-                val = initValue;
+                val = otherValue;
                 this.errorMessage();
             }
 
