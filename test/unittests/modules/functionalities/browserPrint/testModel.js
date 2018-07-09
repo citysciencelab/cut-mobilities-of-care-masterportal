@@ -17,9 +17,7 @@ define(function (require) {
 
         describe("appendTitle", function () {
             it("should append title", function () {
-                model.setTitleText("MyTitle");
-
-                expect(model.appendTitle(defs, "date")).to.deep.equal({
+                expect(model.appendTitle(defs, "date", "MyTitle")).to.deep.equal({
                     content: [
                         {
                             text: [
@@ -42,7 +40,7 @@ define(function (require) {
             it("should append footer", function () {
                 var defsWithFooter = model.appendFooter(defs);
 
-                defsWithFooter = model.appendFooter(defs);
+                defsWithFooter = model.appendFooter(defs, model.get("footerText"));
 
                 expect(defsWithFooter.footer(1, 2)).to.deep.equal([
                     {

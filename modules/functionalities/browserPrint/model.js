@@ -74,19 +74,19 @@ define(function (require) {
             if (!_.isUndefined(title)) {
                 this.setTitleText(title);
             }
-            completeDefs = this.appendTitle(defs, date);
-            completeDefs = this.appendFooter(defs);
+            completeDefs = this.appendTitle(defs, date, this.get("titleText"));
+            completeDefs = this.appendFooter(completeDefs, this.get("footerText"));
             completeDefs = this.appendStyles(completeDefs);
 
             if (mode === "download") {
                 window.pdfMake.createPdf(completeDefs).download(name + ".pdf");
             }
         },
-        appendTitle: function (defs, date) {
+        appendTitle: function (defs, date, titleText) {
             var defTitle = {
                 text: [
                     {
-                        text: this.get("titleText"),
+                        text: titleText,
                         style: ["large", "bold", "center"]
                     },
                     {
@@ -100,9 +100,7 @@ define(function (require) {
             defs.content.unshift(defTitle);
             return defs;
         },
-        appendFooter: function (defs) {
-            var footerText = this.get("footerText");
-
+        appendFooter: function (defs, footerText) {
             defs.footer = function (currentPage, pageCount) {
                 var footer = [
                     {
