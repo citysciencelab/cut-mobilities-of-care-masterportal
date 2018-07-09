@@ -17,8 +17,7 @@ define(function (require) {
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
             "click .form-control-feedback": "deleteSearchString",
-            "click .btn-search": "renderHitList",
-            "click .btn-table-search": "renderHitList",
+            "click .btn-search": "searchAll",
             "click .list-group-item.hit": "hitSelected",
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
@@ -35,12 +34,12 @@ define(function (require) {
             "keydown": "navigateList",
             "click": function () {
                 this.clearSelection();
-                this.$("#searchInput").focus();
-                Radio.request("TableMenu", "setActiveElement", "Searchbar");
+                $("#searchInput").focus();
             }
         },
+
         /**
-        * @description Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
+        * @description Konfiguration für die Suchfunktion.
         * @param {Object} config - Das Konfigurationsobjet der BKG Suche.
         * @param {Object} [config.visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
         * @param {integer} [config.visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
@@ -69,6 +68,12 @@ define(function (require) {
         * @param {boolean} [config.gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
         * @param {boolean} [config.gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
         * @param {integer} [config.gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
+        * @param {Object} [config.osm] - Das Konfigurationsobjet der OSM Suche.
+        * @param {integer} [config.osm.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+        * @param {string} [config.osm.osmServiceUrl] - URL für die Suche.
+        * @param {integer} [config.osm.limit=50] - Anzahl der angefragten Vorschläge.
+        * @param {string} [config.osm.states=""] - Liste der Bundesländer für die Trefferauswahl.
+        * @param {string} [config.osm.classes=""] - Liste der Werte des Dienstes des Attributes "class", die angezeigt werden sollen.
         * @param {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
         * @param {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
         * @param {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
@@ -177,6 +182,11 @@ define(function (require) {
                     new LayerSearch(config.layer);
                 });
             }
+            if (_.has(config, "osm") === true) {
+                require(["modules/searchbar/OSM/model"], function (OSMModel) {
+                    new OSMModel(config.osm);
+                });
+            }
 
             // Hack für flexible Suchleiste
             $(window).on("resize", function () {
@@ -264,6 +274,10 @@ define(function (require) {
                 // IE 11 svg bug -> png
                 hit.imageSrc = this.model.changeFileExtension(hit.imageSrc, ".png");
             }, this);
+        },
+
+        searchAll: function () {
+            Radio.trigger("Searchbar", "searchAll", this.model.get("searchString"));
         },
 
         renderHitList: function () {
@@ -497,6 +511,7 @@ define(function (require) {
                         }
                         else {
                             this.renderHitList();
+                            this.searchAll();
                         }
                     }
                     else {
