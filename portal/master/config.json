@@ -97,7 +97,7 @@
         "allowMultipleQueriesPerLayer": true,
         "predefinedQueries": [
             {
-              "layerId": "8712",
+              "layerId": "11616",
               "isActive": false,
               "isSelected": false,
               "name": "Grundschulen",
@@ -109,7 +109,7 @@
               "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
             },
             {
-              "layerId": "8712",
+              "layerId": "11616",
               "isActive": false,
               "isSelected": false,
               "name": "Stadtteilschulen",
@@ -121,7 +121,7 @@
               "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
             },
             {
-              "layerId": "8712",
+              "layerId": "11616",
               "isActive": false,
               "isSelected": false,
               "name": "Gymnasien",
@@ -134,7 +134,7 @@
               "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
             },
             {
-              "layerId": "8712",
+              "layerId": "11616",
               "isActive": false,
               "isSelected": false,
               "name": "Sonderschulen",
@@ -457,7 +457,7 @@
         "extendedFilter": true
       },
       {
-        "id": "8712",
+        "id": "11616",
         "visibility": true,
         "name": "Schulinfosystem",
         "styleId": "8712",

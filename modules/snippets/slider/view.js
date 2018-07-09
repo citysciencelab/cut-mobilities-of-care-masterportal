@@ -16,7 +16,9 @@ define(function (require) {
             // This event fires when the slider is dragged
             "slide input.slider": "setInputControlValue",
             // This event is fired when the info button is clicked
-            "click .info-icon": "toggleInfoText"
+            "click .info-icon": "toggleInfoText",
+            // This event fires if enter is clicked
+            "keyup .form-control": "toggleSlider"
         },
 
         initialize: function () {
@@ -64,6 +66,19 @@ define(function (require) {
         toggleInfoText: function () {
             this.model.trigger("hideAllInfoText");
             this.$el.find(".info-text").toggle();
+        },
+
+        toggleSlider: function () {
+            var min,
+                max;
+
+            if (event.keyCode === 13) {
+                min = this.$el.find("input.form-minimum").prop("value");
+                max = this.$el.find("input.form-maximum").prop("value");
+                console.log(min);
+                console.log(max);
+            }
+
         }
 
     });
