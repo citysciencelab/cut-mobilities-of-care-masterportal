@@ -155,7 +155,7 @@ define(function (require) {
          * @return {Object[]} response - Objekte aus der services.json
          */
         cloneByStyle: function (response) {
-            var rawLayerArray,
+            var rawLayerArray = response,
                 objectsByStyle = _.filter(response, function (model) { // Layer die mehrere Styles haben
                     return typeof model.styles === "object" && model.typ === "WMS";
                 });
