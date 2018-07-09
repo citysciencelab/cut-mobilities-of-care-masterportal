@@ -34,6 +34,7 @@ define(function (require) {
         },
         render: function () {
             this.model.get("marker").setElement(this.$el[0]);
+            return this;
         },
 
         /**
@@ -55,8 +56,14 @@ define(function (require) {
             var resolutions = Radio.request("MapView", "getResolutions"),
                 index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105),
                 isMobile,
-                coord = _.isArray(hit.coordinate) ? hit.coordinate : hit.coordinate.split(" ");
+                coord;
 
+            if (_.isUndefined(hit.coordinate) === false && _.isArray(hit.coordinate)) {
+                coord = hit.coordinate;
+            }
+            else if (_.isUndefined(hit.coordinate) === false && _.isArray(hit.coordinate) === false) {
+                coord = hit.coordinate.split(" ");
+            }
             this.clearMarker();
             switch (hit.type) {
                 case "Straße": {
@@ -128,7 +135,7 @@ define(function (require) {
                     Radio.trigger("Map", "zoomToExtent", coord);
                     break;
                 }
-                case "Schulinfosystem": {
+                case "Schulstandorte": {
                     this.showMarker(coord);
                     Radio.trigger("MapView", "setCenter", coord, 6);
                     break;
@@ -161,19 +168,12 @@ define(function (require) {
         * @param {string} data - Die Data-Object des request.
         */
         zoomToBKGSearchResult: function (data) {
-            var coordinates;
-
             if (data.features[0].properties.bbox.type === "Point") {
                 Radio.trigger("MapView", "setCenter", data.features[0].properties.bbox.coordinates, this.model.get("zoomLevel"));
                 this.showMarker(data.features[0].properties.bbox.coordinates);
             }
             else if (data.features[0].properties.bbox.type === "Polygon") {
-                coordinates = "";
-
-                _.each(data.features[0].properties.bbox.coordinates[0], function (point) {
-                    coordinates += point[0] + " " + point[1] + " ";
-                });
-                this.model.setWkt("POLYGON", coordinates.trim());
+                this.model.setWkt("POLYGON", _.flatten(data.features[0].properties.bbox.coordinates[0]));
                 Radio.trigger("Map", "zoomToExtent", this.model.getExtent());
             }
         },

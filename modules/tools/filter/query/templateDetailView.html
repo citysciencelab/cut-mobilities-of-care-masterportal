@@ -9,7 +9,8 @@
         </button>
     <% }
     else { %>
-        <label class="col-xs-12"><%= name %>-Filter</label>
+        <label class="col-xs-8"><%= name %>-Filter</label>
+        <label class="col-xs-4 feature-count"><%= featureIds.length %> Treffer</label>
     <% } %>
     <% if (this.model.has("info")) { %>
         <div class="filter-info"><%= info %></div>

@@ -18,6 +18,7 @@
 
 .compare-feature-modal .modal-lg .modal-body {
     overflow: auto;
+    max-height: calc(100vh - 200px);
 }
 
 .compare-feature-modal .modal-error {
