@@ -74,12 +74,6 @@ define(function (require) {
             this.listenTo(this.get("checkBoxHVV"), {
                 "valuesChanged": this.toggleHVVLayer
             });
-            if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
-                // model in modellist gets activated.
-                // And there the "Tool", "activatedTool" is triggered where this model listens to.
-                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
-                model.setIsActive(true);
-            }
 
             this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
             this.addRouteFeatures(this.get("layer").getSource());
@@ -88,6 +82,12 @@ define(function (require) {
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
             if (!_.isUndefined(layerModel)) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
+            }
+            if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
+                // model in modellist gets activated.
+                // And there the "Tool", "activatedTool" is triggered where this model listens to.
+                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
+                model.setIsActive(true);
             }
         },
         toggleHVVLayer: function (value) {
