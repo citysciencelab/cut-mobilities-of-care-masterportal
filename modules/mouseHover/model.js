@@ -1,6 +1,5 @@
 define(function (require) {
-    var Config = require("config"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         MouseHoverPopup;
 
     MouseHoverPopup = Backbone.Model.extend({
@@ -10,9 +9,9 @@ define(function (require) {
             }),
             textPosition: null,
             textArray: null,
-            minShift: Config.mouseHover.minShift ? Config.mouseHover.minShift : 5,
-            numFeaturesToShow: Config.mouseHover.numFeaturesToShow ? Config.mouseHover.numFeaturesToShow : 2,
-            infoText: Config.mouseHover.infoText ? Config.mouseHover.infoText : "(weitere Objekte. Bitte zoomen.)"
+            minShift: 5,
+            numFeaturesToShow: 2,
+            infoText: "(weitere Objekte. Bitte zoomen.)"
         },
 
         initialize: function () {

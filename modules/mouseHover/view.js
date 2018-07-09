@@ -6,8 +6,8 @@ define(function (require) {
     require("bootstrap/popover");
 
     MouseHoverPopupView = Backbone.View.extend({
-        model: new MouseHoverPopup(),
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new MouseHoverPopup(attr);
             this.listenTo(this.model, {
                 "render": this.render,
                 "destroy": this.destroy
