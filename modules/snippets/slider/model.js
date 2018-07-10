@@ -98,6 +98,10 @@ define(function (require) {
             });
 
             return parsedValueList;
+        },
+
+        setDefaultWidth: function (value) {
+            this.set("defaultWidth", value);
         }
     });
 
