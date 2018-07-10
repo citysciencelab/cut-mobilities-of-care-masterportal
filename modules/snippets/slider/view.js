@@ -195,13 +195,13 @@ define(function (require) {
                 width = padding + fontSize + buffer,
                 targetClass = this.chooseInputFiled(event.target.className);
 
-            // set the default width for input field
+            // get the default width for input field
             if (_.isUndefined(defaultWidth)) {
                 defaultWidth = parseInt(this.$(".form-control").css("width").split("px")[0], 10);
                 this.model.setDefaultWidth(defaultWidth);
             }
 
-            // add a temporary span
+            // add a temporary span to get width from input text
             this.$(".form-inline").append("<span class='hiddenSpan'>" + event.target.value + "</span>");
             this.$(".hiddenSpan").text(this.$(targetClass).val());
             width = this.$(".hiddenSpan").width() + width;
