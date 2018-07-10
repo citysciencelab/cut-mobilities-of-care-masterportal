@@ -112,22 +112,23 @@ define(function (require) {
                 max = maxValue,
                 initValues = this.getValuesCollection().pluck("initValue"),
                 values,
-                lastValues;
+                lastValues,
+                type = this.getSelectedValues().type;
 
             // check if input is allowed
             if (min === "" && max !== "") {
-                max = this.checkInvalidInput(this.parseValue(max), initValues[1]);
+                max = this.checkInvalidInput(this.parseValueToNumber(max, type), initValues[1]);
                 min = initValues[0];
             }
             else if (min !== "" && max === "") {
-                min = this.checkInvalidInput(this.parseValue(min), initValues[0]);
+                min = this.checkInvalidInput(this.parseValueToNumber(min, type), initValues[0]);
                 max = initValues[1];
             }
             else {
                 lastValues = this.getValuesCollection().pluck("value");
 
-                min = this.checkInvalidInput(this.parseValue(min), lastValues[0]);
-                max = this.checkInvalidInput(this.parseValue(max), lastValues[1]);
+                min = this.checkInvalidInput(this.parseValueToNumber(min, type), lastValues[0]);
+                max = this.checkInvalidInput(this.parseValueToNumber(max, type), lastValues[1]);
             }
 
             values = [min, max];
@@ -140,19 +141,23 @@ define(function (require) {
             return values;
         },
 
-        /* converts number to integer or decimal by type
-        * @param {number} inputValue - input value
-        * @returns {void} value
+        /**
+         * converts number to integer or decimal by type
+         * @param {number} inputValue - input value
+         * @param {String} type - input type
+         * @returns {void} value
         */
-        parseValue: function (inputValue) {
-            var value = inputValue,
-                type = this.getSelectedValues().type;
+        parseValueToNumber: function (inputValue, type) {
+            var value = _.isUndefined(inputValue) ? NaN : inputValue;
 
             if (type === "integer") {
                 value = parseInt(value, 10);
             }
             else if (type === "decimal") {
                 value = parseFloat(value);
+            }
+            else {
+                value = NaN;
             }
 
             return value;
