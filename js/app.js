@@ -143,7 +143,7 @@ define("app", function (require) {
                 }
                 case "filter": {
                     require(["modules/tools/filter/view"], function (FilterView) {
-                        new FilterView();
+                        new FilterView(tool);
                     });
                     break;
                 }

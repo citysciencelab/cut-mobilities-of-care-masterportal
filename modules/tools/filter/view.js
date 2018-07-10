@@ -7,14 +7,11 @@ define(function (require) {
         FilterView;
 
     FilterView = Backbone.View.extend({
-        model: new FilterModel(),
-        id: "filter-view",
-        template: _.template(template),
-        className: "filter",
         events: {
             "click .close": "closeFilter"
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new FilterModel(attr);
             if (this.model.getIsInitOpen()) {
                 this.model.set("isActive", true);
                 this.render();
@@ -41,6 +38,9 @@ define(function (require) {
                 "renderDetailView": this.renderDetailView
             });
         },
+        id: "filter-view",
+        template: _.template(template),
+        className: "filter",
         render: function () {
             var attr = this.model.toJSON();
 
@@ -49,6 +49,7 @@ define(function (require) {
             Radio.trigger("Sidebar", "toggle", true);
             this.renderSimpleViews();
             this.delegateEvents();
+            return this;
         },
 
         renderDetailView: function () {

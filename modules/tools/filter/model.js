@@ -205,12 +205,8 @@ define(function (require) {
             }
         },
         setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "filter"}),
-                model;
+            var model;
 
-            _.each(config, function (value, key) {
-                this.set(key, value);
-            }, this);
             if (this.getIsInitOpen()) {
                 Radio.trigger("ParametricURL", "pushToIsInitOpen", this.get("id").toUpperCase());
             }
@@ -227,14 +223,15 @@ define(function (require) {
             var queryObjects = Radio.request("ParametricURL", "getFilter");
 
             _.each(queries, function (query) {
-                var queryObject;
+                var queryObject,
+                    queryExtended = query;
 
                 if (!_.isUndefined(queryObjects)) {
-                    queryObject = _.findWhere(queryObjects, {name: query.name});
+                    queryObject = _.findWhere(queryObjects, {name: queryExtended.name});
 
-                    query = _.extend(query, queryObject);
+                    queryExtended = _.extend(queryExtended, queryObject);
                 }
-                this.createQuery(query);
+                this.createQuery(queryExtended);
             }, this);
         },
 
