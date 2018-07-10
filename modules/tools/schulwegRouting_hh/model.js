@@ -46,9 +46,13 @@ define(function (require) {
 
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
-                    // if (layerId === "8712") {
                     if (layerId === this.get("layerId")) {
                         this.setSchoolList(this.sortSchoolsByName(features));
+                        if (this.get("isActive") === true) {
+                            this.trigger("render");
+                            // this.setIsActive(false);
+                            // this.setIsActive(true);
+                        }
                     }
                 }
             });
