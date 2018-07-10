@@ -27,7 +27,8 @@ define(function (require) {
                 "getConfig": this.getConfig,
                 "getUiStyle": this.getUiStyle,
                 "getIgnoredKeys": this.getIgnoredKeys,
-                "punctuate": this.punctuate
+                "punctuate": this.punctuate,
+                "sort": this.sort
             }, this);
 
             channel.on({
@@ -67,6 +68,75 @@ define(function (require) {
                 predecimals = predecimals.replace(pattern, "$1.$2");
             }
             return predecimals;
+        },
+        /**
+         * Sorting alorithm that distinguishes between array[objects] and other arrays.
+         * arrays[objects] can be sorted by up to 2 object attributes
+         * @param {array} input array that has to be sorted
+         * @param {String} first first attribute an array[objects] has to be sorted by
+         * @param {String} second second attribute an array[objects] has to be sorted by
+         * @returns {array} sorted array
+         */
+        sort: function (input, first, second) {
+            var sorted,
+                isArrayOfObjects = _.every(input, function (element) {
+                    return _.isObject(element);
+                });
+
+            if (_.isUndefined(input)) {
+                sorted = input;
+            }
+            else if (_.isArray(input) && !isArrayOfObjects) {
+                sorted = this.sortArray(input);
+            }
+            else if (_.isArray(input) && isArrayOfObjects) {
+                sorted = this.sortObjects(input, first, second);
+            }
+
+            return sorted;
+        },
+        sortArray: function (input) {
+            return input.sort(this.sortAlphaNum);
+        },
+        sortAlphaNum: function (a, b) {
+            var regExAlpha = /[^a-zA-Z]/g,
+                regExNum = /[^0-9]/g,
+                aAlpha = String(a).replace(regExAlpha, ""),
+                bAlpha = String(b).replace(regExAlpha, ""),
+                aNum,
+                bNum,
+                returnVal = -1;
+
+            if (aAlpha === bAlpha) {
+                aNum = parseInt(String(a).replace(regExNum, ""), 10);
+                bNum = parseInt(String(b).replace(regExNum, ""), 10);
+                if (aNum === bNum) {
+                    returnVal = 0;
+                }
+                else if (aNum > bNum) {
+                    returnVal = 1;
+                }
+            }
+            else {
+                returnVal = aAlpha > bAlpha ? 1 : -1;
+            }
+            return returnVal;
+        },
+        sortObjects: function (input, first, second) {
+            var sortedObj = input;
+
+            // sort last property first in _.chain()
+            // https://stackoverflow.com/questions/16426774/underscore-sortby-based-on-multiple-attributes
+            sortedObj = _.chain(input)
+                .sortBy(function (element) {
+                    return element[second];
+                })
+                .sortBy(function (element) {
+                    return parseInt(element[first], 10);
+                })
+                .value();
+
+            return sortedObj;
         },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);

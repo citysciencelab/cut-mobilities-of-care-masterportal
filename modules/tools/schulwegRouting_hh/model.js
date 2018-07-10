@@ -1,14 +1,14 @@
 define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
-        momentJS = require("moment"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         SchulwegRouting;
 
     SchulwegRouting = Backbone.Model.extend({
 
         defaults: {
-            id: "schulwegrouting",
+            id: "",
+            layerId: "",
             // ol-features of all schools
             schoolList: [],
             // the regional school in charge
@@ -32,7 +32,7 @@ define(function (require) {
         },
 
         initialize: function () {
-            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: "8712"}),
+            var layerModel,
                 channel = Radio.channel("SchulwegRouting"),
                 model;
 
@@ -46,8 +46,13 @@ define(function (require) {
 
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
-                    if (layerId === "8712") {
+                    if (layerId === this.get("layerId")) {
                         this.setSchoolList(this.sortSchoolsByName(features));
+                        if (this.get("isActive") === true) {
+                            this.trigger("render");
+                            // this.setIsActive(false);
+                            // this.setIsActive(true);
+                        }
                     }
                 }
             });
@@ -73,20 +78,21 @@ define(function (require) {
             this.listenTo(this.get("checkBoxHVV"), {
                 "valuesChanged": this.toggleHVVLayer
             });
+
+            this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
+            this.addRouteFeatures(this.get("layer").getSource());
+            this.get("layer").setStyle(this.routeStyle);
+            this.setDefaults();
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
+            if (!_.isUndefined(layerModel)) {
+                this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
+            }
             if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
                 // model in modellist gets activated.
                 // And there the "Tool", "activatedTool" is triggered where this model listens to.
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
                 model.setIsActive(true);
             }
-
-            this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
-            this.addRouteFeatures(this.get("layer").getSource());
-            this.get("layer").setStyle(this.routeStyle);
-            if (!_.isUndefined(layerModel)) {
-                this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
-            }
-            this.setDefaults();
         },
         toggleHVVLayer: function (value) {
             Radio.trigger("ModelList", "setModelAttributesById", "1935geofox-bus", {
@@ -105,6 +111,10 @@ define(function (require) {
                 isSelected: value,
                 isVisibleInMap: value
             });
+            Radio.trigger("ModelList", "setModelAttributesById", "1933geofox_stations", {
+                isSelected: value,
+                isVisibleInMap: value
+            });
         },
 
         setDefaults: function () {
@@ -120,15 +130,15 @@ define(function (require) {
                 school = this.get("selectedSchool"),
                 route = this.get("routeResult"),
                 routeDesc = this.get("routeDescription"),
-                date = momentJS(new Date()).format("DD.MM.YYYY"),
                 filename = "Schulweg_zu_" + school.get("schulname"),
                 mapCanvas = document.getElementsByTagName("canvas")[0],
                 screenshotMap = mapCanvas.toDataURL("image/png"),
-                pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc, date);
+                title = "Schulwegrouting",
+                pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc);
 
-            Radio.trigger("BrowserPrint", "print", filename, pdfDef, "download");
+            Radio.trigger("BrowserPrint", "print", filename, pdfDef, title, "download");
         },
-        createPDFDef: function (screenshotMap, address, school, route, routeDescription, date) {
+        createPDFDef: function (screenshotMap, address, school, route, routeDescription) {
             var addr = address.street + " " + address.number + address.affix,
                 schoolname = school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
                 routeDesc = this.createRouteDesc(routeDescription),
@@ -136,18 +146,6 @@ define(function (require) {
                     pageSize: "A4",
                     pageOrientation: "portrait",
                     content: [
-                        {
-                            text: [
-                                {
-                                    text: "Schulwegrouting",
-                                    style: ["header", "bold", "center"]
-                                },
-                                {
-                                    text: " (Stand: " + date + ")",
-                                    style: ["normal", "center"]
-                                }
-                            ]
-                        },
                         {
                             image: screenshotMap,
                             fit: [500, 500],
@@ -192,60 +190,7 @@ define(function (require) {
                         {
                             ol: routeDesc
                         }
-                    ],
-                    footer: function (currentPage, pageCount) {
-                        var footer = [
-                            {
-                                text: currentPage.toString() + " / " + pageCount,
-                                style: ["xsmall", "center"]
-                            },
-                            {
-                                text: [
-                                    {
-                                        text: "Herausgeber: ",
-                                        style: ["bold"]
-                                    },
-                                    {
-                                        text: "Freie und Hansestadt Hamburg. Landesbetrieb Geoinformation und Vermessung"
-                                    }
-                                ],
-                                style: ["xsmall", "center"]
-                            }
-                        ];
-
-                        return footer;
-                    },
-                    styles: {
-                        header: {
-                            fontSize: 18
-                        },
-                        subheader: {
-                            fontSize: 14,
-                            margin: [0, 10]
-                        },
-                        normal: {
-                            fontSize: 12
-                        },
-                        bold: {
-                            bold: true
-                        },
-                        small: {
-                            fontSize: 10
-                        },
-                        xsmall: {
-                            fontSize: 8
-                        },
-                        image: {
-                            margin: [0, 10],
-                            alignment: "left"
-                        },
-                        onGrey: {
-                            margin: [10, 10]
-                        },
-                        center: {
-                            alignment: "center"
-                        }
-                    }
+                    ]
                 };
 
             return defs;

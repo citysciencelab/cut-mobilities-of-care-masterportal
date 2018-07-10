@@ -7,6 +7,7 @@ define(function (require) {
         var model,
             utilModel,
             gfiAttributes,
+            themeConfig,
             testFeatures;
 
         before(function () {
@@ -24,9 +25,20 @@ define(function (require) {
                 "abschluss": "Abschluss",
                 "adresse_ort": "Ort",
                 "adresse_strasse_hausnr": "Straße",
-                "anzahl_schueler": "Schülerzahl",
                 "bezirk": "Bezirk"
             };
+            themeConfig = [{
+                name: "Grundsätzliche Informationen",
+                isSelected: true,
+                attributes: [
+                    "adresse_strasse_hausnr",
+                    "adresse_ort",
+                    "bezirk"]
+            },
+            {
+                name: "Abschlüsse",
+                attributes: ["abschluss"]
+            }];
         });
 
         describe("isFeatureListFull", function () {
@@ -101,11 +113,11 @@ define(function (require) {
         });
 
         describe("prepareFeatureListToShow", function () {
-            it("expects an array with a length of five", function () {
-                expect(model.prepareFeatureListToShow(gfiAttributes)).to.be.an("array").to.have.lengthOf(5);
+            it("expects an array with a length of four", function () {
+                expect(model.prepareFeatureListToShow(gfiAttributes, themeConfig)).to.be.an("array").to.have.lengthOf(4);
             });
             it("expects an object with the attribute keys 'col-1' and 'col-2'", function () {
-                expect(model.prepareFeatureListToShow(gfiAttributes)[1]).to.have.all.key("col-1", "col-2");
+                expect(model.prepareFeatureListToShow(gfiAttributes, themeConfig)[1]).to.have.all.key("col-1", "col-2");
             });
         });
 

@@ -18,6 +18,7 @@
 
 .compare-feature-modal .modal-lg .modal-body {
     overflow: auto;
+    max-height: calc(100vh - 200px);
 }
 
 .compare-feature-modal .modal-error {
@@ -71,12 +72,23 @@
     opacity: 1;
 }
 
+.compare-feature-modal table > tbody > tr:nth-child(odd),
+.compare-feature-modal table > tbody > tr:nth-child(odd) {
+   background-color: #eee;
+}
+.compare-feature-modal table > tbody > tr:nth-child(even),
+.compare-feature-modal table > tbody > tr:nth-child(even) {
+   background-color: #ddd;
+}
+.compare-feature-modal table > tbody > tr:hover {
+   background-color: #ccc;
+}
+
 .compare-feature-modal tr:first-child td {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     font-size: 16px;
     border-top: 0;
 }
-
 .compare-feature-modal tr:first-child .col-1:first-child {
     color: transparent;
     border: none;

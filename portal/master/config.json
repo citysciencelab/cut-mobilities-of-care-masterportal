@@ -85,7 +85,8 @@
       },
       "schulwegrouting": {
         "name": "Schulweg-Routing",
-        "glyphicon": "glyphicon-filter"
+        "glyphicon": "glyphicon-filter",
+        "layerId": "11616"
       },
       "filter":
       {

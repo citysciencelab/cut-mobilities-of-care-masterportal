@@ -446,6 +446,7 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 |[routing](#markdown-header-portalconfigmenutoolschildrenrouting)|nein|Object||Routenplaner|
 |[searchByCoord](#markdown-header-portalconfigmenutoolschildrencoord)|nein|Object||Koordinatensuche|
 |[wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter)|nein|Object||WFS Filter|
+|[schulwegrouting](#markdown-header-portalconfigmenutoolschildrenschulwegrouting)|nein|Object||Schulwegrouting|
 
 Werden mehrere Werkzeuge verwendet, so werden die Objekte mit Komma getrennt. Die Reihenfolge der Werkzeuge in der Konfiguration gibt die Reihenfolge der Werkzeuge im Portal wieder.
 
@@ -576,8 +577,9 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |name|nein|String||Name des Filters
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
-|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
-|attributeWhiteList|nein|Array||Filterbare Attribute
+|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attributwert(e)
+|attributeWhiteList|nein|Array[String] / Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)]||Filterbare Attribute. Können entweder als Array of Strings (Attributnamen) oder als Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)] übergeben werden. Wird ein Array of Strigns übergeben, so werden bei Mehrfachauswahl die Werte eines Attributes mit ODER verknüpft.
+
 **Beispiel:**
 
 ```
@@ -607,9 +609,27 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
      ]
  }
 ```
+#### Portalconfig.menu.tools.children.filter.predefinedQueries.attributeWhitelist ####
 
-******
-******
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Attribut-Name.|
+|matchingMode|ja|String||Modus wie die Werte eines Attributes bei Mehrfachauswahl verknüpft werden sollen. "AND" für UND-Verknüpfung oder "OR" für ODER-Verknüfpung innerhalb eines Attributes.|
+
+**Beispiel:**
+
+```
+#!json
+
+"attributeWhiteList": [
+  {"name": "bezirk", "matchingMode": "OR"},
+  {"name": "stadtteil", "matchingMode": "OR"},
+  {"name": "abschluss", "matchingMode": "AND"},
+  {"name": "anzahl_schueler", "matchingMode": "AND"},
+  {"name": "fremdsprache", "matchingMode": "AND"}
+]
+```
+
 
 #### Portalconfig.menu.tools.children.gfi ######
 
@@ -881,6 +901,17 @@ Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann
 ******
 ******
 
+#### Portalconfig.menu.tools.children.schulwegrouting ######
+Das Schulwegrouting ermöglicht das Routing von einer eingegebenen Addresse zur angegebenen Schule.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|name|nein|String||Name des Werkzeuges im Menüeintrag.|
+|layerId|ja|String|""|Id des Layers der die Schulstandorte enthält.|
+
+******
+******
 
 #### Portalconfig.menu.tree ####
 Unter *tree* wird der Themenbaum konfiguriert.
@@ -1105,7 +1136,30 @@ Die Namen aller sichtbaren WFS-Dienste werden durchsucht.
        }
 ```
 
+******
 
+#### Portalconfig.searchBar.osm ####
+Suche bei OpenStreetMap ueber Stadt, Straße und Hausnummer
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
+|limit|nein|Number|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
+|states|nein|string|kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
+
+**Beispiel osm:**
+
+```
+#!json
+
+"osm": {
+    "minChars": 3,
+    "serviceId": "9",
+    "limit": 60,
+    "states": "Hamburg"
+}
+```
 
 ******
 ******
@@ -1139,6 +1193,7 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
 
+
 **Beispiel Hintergrundkarten:**
 
 
@@ -1168,6 +1223,7 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche Möglichkeit, Layer unterhalb von Fachdaten  in Ordner zusammenzufassen. Ordner können wiederum auch Ordner enthalten, so kann eine beliebig tiefe Verschachtelung entstehen.
 
 ******
+
 
 ### Ordnerkonfiguration Fachdaten ###
 

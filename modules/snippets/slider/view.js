@@ -18,13 +18,11 @@ define(function (require) {
             // This event fires if key up
             "keyup .form-control": "checkWhichKeyUp"
         },
-
         initialize: function () {
             this.listenTo(this.model, {
                 "render": this.render
             });
         },
-
         className: "slider-container",
         template: _.template(Template),
 
@@ -75,8 +73,13 @@ define(function (require) {
          * @returns {void}
          */
         toggleInfoText: function () {
+            var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
+
             this.model.trigger("hideAllInfoText");
-            this.$el.find(".info-text").toggle();
+
+            if (!isInfoTextVisible) {
+                this.$el.find(".info-text").toggle();
+            }
         },
 
         /**
@@ -88,9 +91,8 @@ define(function (require) {
             if (event.keyCode === 13) {
                 this.changeValuesByText();
             }
-            else {
-                this.changeSizeOfInputFiled(event);
-            }
+
+            // this.changeSizeOfInputFiled(event.target.className, event.target.value);
         },
 
         /**
@@ -184,16 +186,17 @@ define(function (require) {
 
         /**
          * change size from input field
-         * @param {event} event - key up
+         * @param {String} className - class from input field
+         * @param {String} value - value from input field
          * @returns {void}
          */
-        changeSizeOfInputFiled: function (event) {
+        changeSizeOfInputFiled: function (className, value) {
             var defaultWidth = this.model.get("defaultWidth"),
                 padding = parseInt(this.$(".form-control").css("padding").split("px")[1], 10),
                 fontSize = parseInt(this.$(".form-control").css("font-size").split("px")[0], 10),
                 buffer = 3,
                 width = padding + fontSize + buffer,
-                targetClass = this.chooseInputFiled(event.target.className);
+                targetClass = this.chooseInputFiled(className);
 
             // get the default width for input field
             if (_.isUndefined(defaultWidth)) {
@@ -202,7 +205,7 @@ define(function (require) {
             }
 
             // add a temporary span to get width from input text
-            this.$(".form-inline").append("<span class='hiddenSpan'>" + event.target.value + "</span>");
+            this.$(".form-inline").append("<span class='hiddenSpan'>" + value + "</span>");
             this.$(".hiddenSpan").text(this.$(targetClass).val());
             width = this.$(".hiddenSpan").width() + width;
 

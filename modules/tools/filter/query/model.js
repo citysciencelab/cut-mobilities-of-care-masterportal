@@ -17,7 +17,8 @@ define(function (require) {
         },
 
         /**
-         * kann von erbenen Objekten augerufen werden
+         * kann von erbenden Objekten augerufen werden
+         * @returns {void}
          */
         superInitialize: function () {
             this.setSnippetCollection(new Backbone.Collection());
@@ -89,18 +90,25 @@ define(function (require) {
         },
 
         addSnippet: function (featureAttribute) {
-            featureAttribute.values.sort();
-            if (featureAttribute.type === "string" || featureAttribute.type === "text") {
-                featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
-                this.getSnippetCollection().add(new SnippetDropdownModel(featureAttribute));
+            var snippetAttribute = featureAttribute,
+                isSelected = false;
+
+            snippetAttribute.values = Radio.request("Util", "sort", snippetAttribute.values);
+
+            if (snippetAttribute.type === "string" || snippetAttribute.type === "text") {
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "dropdown"});
+                this.getSnippetCollection().add(new SnippetDropdownModel(snippetAttribute));
             }
-            else if (featureAttribute.type === "boolean") {
-                featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
-                this.getSnippetCollection().add(new SnippetDropdownModel(featureAttribute));
+            else if (snippetAttribute.type === "boolean") {
+                if (_.has(snippetAttribute, "preselectedValues")) {
+                    isSelected = snippetAttribute.preselectedValues[0];
+                }
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "checkbox", "label": snippetAttribute.displayName, "isSelected": isSelected});
+                this.getSnippetCollection().add(new SnippetCheckboxModel(snippetAttribute));
             }
-            else if (featureAttribute.type === "integer" || featureAttribute.type === "decimal") {
-                featureAttribute = _.extend(featureAttribute, {"snippetType": "slider"});
-                this.getSnippetCollection().add(new SnippetSliderModel(featureAttribute));
+            else if (snippetAttribute.type === "integer" || snippetAttribute.type === "decimal") {
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "slider"});
+                this.getSnippetCollection().add(new SnippetSliderModel(snippetAttribute));
             }
         },
 
@@ -118,7 +126,8 @@ define(function (require) {
 
         /**
          * Creates one or more Snippets, where Snippets like DropDowns or Sliders
-         * @param  {object[]} featureAttributes
+         * @param  {object[]} featureAttributes feature attributes
+         * @return {void}
          */
         createSnippets: function (featureAttributes) {
             var featureAttributesMap = this.trimAttributes(featureAttributes);
@@ -147,15 +156,30 @@ define(function (require) {
                 featureAttribute;
 
             _.each(this.getAttributeWhiteList(), function (attr) {
-                featureAttribute = _.findWhere(featureAttributesMap, {name: attr});
+                var attrObj = this.createAttrObject(attr);
+
+                featureAttribute = _.findWhere(featureAttributesMap, {name: attrObj.name});
                 if (featureAttribute !== undefined) {
+                    featureAttribute.matchingMode = attrObj.matchingMode;
                     trimmedFeatureAttributesMap.push(featureAttribute);
                 }
-            });
+            }, this);
 
             return trimmedFeatureAttributesMap;
         },
 
+        createAttrObject: function (attr) {
+            var attrObj = {};
+
+            if (_.isString(attr)) {
+                attrObj.name = attr;
+                attrObj.matchingMode = "OR";
+            }
+            else if (_.has(attr, "name") && _.has(attr, "matchingMode")) {
+                attrObj = attr;
+            }
+            return attrObj;
+        },
         /**
          * Konfigurierter Labeltext wird den Features zugeordnet
          * @param  {object} featureAttributesMap - Mapobject
@@ -195,6 +219,7 @@ define(function (require) {
         /**
          * iterates over the snippet collection and
          * calls in the snippet deselectValueModels
+         * @return {void}
          */
         deselectAllValueModels: function () {
             _.each(this.getSnippetCollection().models, function (snippet) {
