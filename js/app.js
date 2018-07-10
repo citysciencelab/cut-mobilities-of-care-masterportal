@@ -96,7 +96,7 @@ define("app", function (require) {
 
     if (Config.mouseHover) {
         require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
-            new MouseHoverPopupView();
+            new MouseHoverPopupView(Config.mouseHover);
         });
     }
 
