@@ -1,9 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
-        Config = require("config"),
+    var ol = require("openlayers"),
         Animation;
 
     Animation = Backbone.Model.extend({
@@ -19,7 +16,24 @@ define(function (require) {
             // Der aktuelle Animation Durchlauf (eine Richtung = ein Durchlauf)
             animationCount: 0,
             // Wie wieviele Durchläufe
-            animationLimit: 0
+            animationLimit: 0,
+            steps: 50,
+            zoomlevel: 1,
+            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            params: {
+                REQUEST: "GetFeature",
+                SERVICE: "WFS",
+                TYPENAME: "app:mrh_kreise",
+                VERSION: "1.1.0",
+                maxFeatures: "10000"
+            },
+            featureType: "mrh_einpendler_gemeinde",
+            minPx: 1,
+            maxPx: 20,
+            num_kreise_to_style: 2,
+            colors: ["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"],
+            attrAnzahl: "anzahl_einpendler",
+            attrKreis: "wohnort_kreis"
         },
         initialize: function () {
             var channel = Radio.channel("Animation");
@@ -70,61 +84,15 @@ define(function (require) {
                     this.createLineString();
                 }
             });
-
-            // Config auslesen oder default
-            this.setDefaults();
-
             this.sendRequest("GET", this.getParams(), this.parseKreise);
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), Radio.request("Map", "getLayers").getArray().length]);
         },
-
-        setDefaults: function () {
-            if (_.has(Config, "animation")) {
-                this.setZoomLevel(Config.animation.zoomlevel || 1);
-                this.setSteps(Config.animation.steps || 50);
-                this.setUrl(Config.animation.url || "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
-                this.setParams(Config.animation.params || {
-                    REQUEST: "GetFeature",
-                    SERVICE: "WFS",
-                    TYPENAME: "app:mrh_kreise",
-                    VERSION: "1.1.0",
-                    maxFeatures: "10000"
-                });
-                this.setFeatureType(Config.animation.featureType || "mrh_einpendler_gemeinde");
-                this.setMinPx(Config.animation.minPx || 1);
-                this.setMaxPx(Config.animation.maxPx || 20);
-                this.setNumKreiseToStyle(Config.animation.num_kreise_to_style || 2);
-                this.setColors(Config.animation.colors || ["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]);
-                this.setAttrAnzahl(Config.animation.attrAnzahl || "anzahl_einpendler");
-                this.setAttrKreis(Config.animation.attrKreis || "wohnort_kreis");
-            }
-            else {
-                this.setZoomLevel(1);
-                this.setSteps(50);
-                this.setUrl("http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
-                this.setParams({
-                    REQUEST: "GetFeature",
-                    SERVICE: "WFS",
-                    TYPENAME: "app:mrh_kreise",
-                    VERSION: "1.1.0",
-                    maxFeatures: "10000"
-                });
-                this.setFeatureType("mrh_einpendler_gemeinde");
-                this.setMinPx(1);
-                this.setMaxPx(20);
-                this.setNumKreiseToStyle(2);
-                this.setColors(["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]);
-                this.setAttrAnzahl("anzahl_einpendler");
-                this.setAttrKreis("wohnort_kreis");
-            }
-        },
-
-        /**
         /**
          * Führt einen HTTP-Request aus
          * @param {String} type - GET oder POST
-         * @param {String} data
+         * @param {String} data data
          * @param {function} successFunction - Wird aufgerufen wenn der Request erfolgreich war
+         * @returns {void}
          */
         sendRequest: function (type, data, successFunction) {
             $.ajax({
@@ -135,6 +103,7 @@ define(function (require) {
                 context: this,
                 success: successFunction,
                 error: function (jqXHR, errorText, error) {
+                    Radio.trigger("Alert", "alert", error);
                 }
             });
         },
@@ -142,6 +111,7 @@ define(function (require) {
         /**
          * Success Funktion für die Landkreise
          * @param  {object} data - Response
+         * @returns {void}
          */
         parseKreise: function (data) {
             var kreise = [],
@@ -158,6 +128,7 @@ define(function (require) {
         /**
          * Success Funktion für die Gemeinden
          * @param  {ojbect} data - Response
+         * @returns {void}
          */
         parseGemeinden: function (data) {
             var gemeinden = [],
@@ -174,6 +145,7 @@ define(function (require) {
         /**
          * Success Funktion für die Features
          * @param  {ojbect} data - Response
+         * @returns {void}
          */
         parseFeatures: function (data) {
             var wfsReader = new ol.format.WFS({
@@ -188,6 +160,7 @@ define(function (require) {
 
         /**
          * Übergibt die Zentrumskoordinate der Gemeinde an die MapView, abhängig der Richtung.
+         * @returns {void}
          */
         centerGemeindeAndSetMarker: function () {
             var coords = [];
@@ -330,14 +303,17 @@ define(function (require) {
                     directionY = (endPoint[1] - startPoint[1]) / this.getSteps(),
                     lineCoords = [],
                     anzahl_pendler = feature.get(this.getAttrAnzahl()),
-                    kreis = feature.get(this.getAttrKreis());
+                    kreis = feature.get(this.getAttrKreis()),
+                    i,
+                    line,
+                    newEndPt;
 
-                for (var i = 0; i <= this.getSteps(); i++) {
-                    var newEndPt = new ol.geom.Point([startPoint[0] + i * directionX, startPoint[1] + i * directionY, 0]);
+                for (i = 0; i <= this.getSteps(); i++) {
+                    newEndPt = new ol.geom.Point([startPoint[0] + (i * directionX), startPoint[1] + (i * directionY), 0]);
 
                     lineCoords.push(newEndPt.getCoordinates());
                 }
-                var line = new ol.Feature({
+                line = new ol.Feature({
                     geometry: new ol.geom.LineString(lineCoords),
                     anzahl_pendler: anzahl_pendler,
                     kreis: kreis
@@ -385,32 +361,36 @@ define(function (require) {
             var currentPoint,
                 newFeature;
 
-            for (var i = 0; i < features.length; i++) {
-                if (this.get("animating")) {
-                    var coordinates = features[i].getGeometry().getCoordinates();
+            _.each(features, function (feature) {
+                var coordinates;
 
-                    this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
+                if (this.get("animating")) {
+                    coordinates = feature.getGeometry().getCoordinates();
+
+                    this.preparePointStyle(feature.get("anzahl_pendler"), feature.get("kreis"));
                     currentPoint = new ol.geom.Point(coordinates[index]);
                     newFeature = new ol.Feature(currentPoint);
                     vectorContext.drawFeature(newFeature, this.getDefaultPointStyle());
                 }
-            }
+            }, this);
         },
         addFeaturesToLayer: function (features, layer) {
             var currentPoint, coordinates,
                 newFeature;
 
-            for (var i = 0; i < features.length; i++) {
-                coordinates = features[i].getGeometry().getCoordinates();
-                this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
+            _.each(features, function (feature) {
+                var drawIndex;
+
+                coordinates = feature.getGeometry().getCoordinates();
+                this.preparePointStyle(feature.get("anzahl_pendler"), feature.get("kreis"));
                 // Ob die Feature bei der Startposition oder der Endposition gezeichnet werden müssen, ist abhängig von der anzahl der Durchgänge
-                var drawIndex = this.getAnimationLimit() % 2 === 1 ? 0 : coordinates.length - 1;
+                drawIndex = this.getAnimationLimit() % 2 === 1 ? 0 : coordinates.length - 1;
 
                 currentPoint = new ol.geom.Point(coordinates[drawIndex]);
                 newFeature = new ol.Feature(currentPoint);
                 newFeature.setStyle(this.getDefaultPointStyle());
                 layer.getSource().addFeature(newFeature);
-            }
+            }, this);
         },
         preparePointStyle: function (val, kreis) {
             var minVal = this.getMinVal(),
@@ -451,6 +431,8 @@ define(function (require) {
         },
 
         prepareAnimation: function () {
+            var animationLayer;
+
             if (this.getDirection() === "wohnort") {
                 this.setAnimationLimit(2);
             }
@@ -458,7 +440,7 @@ define(function (require) {
                 this.setAnimationLimit(1);
             }
             this.setAnimationCount(0);
-            var animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer");
+            animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer");
 
             this.set("animationLayer", animationLayer);
             this.get("animationLayer").getSource().clear();
@@ -478,6 +460,7 @@ define(function (require) {
         /**
          * Wiederholt die animation, wenn AnimationLimit noch nicht erreicht ist
          * @param  {[type]} features werden für das hinzufügen auf die Layer nach der naimation durchgereicht
+         * @returns {void}
          */
         repeatAnimation: function (features) {
             if (this.getAnimationCount() < this.getAnimationLimit()) {
