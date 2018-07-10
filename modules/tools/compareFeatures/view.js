@@ -10,7 +10,6 @@ define(function (require) {
 
     CompareFeaturesView = Backbone.View.extend({
         className: "compare-feature-modal modal fade",
-
         events: {
             // is fired when the modal has finished being hidden
             "hidden.bs.modal": "setIsActivatedToFalse",
@@ -24,8 +23,8 @@ define(function (require) {
             }
         },
 
-        initialize: function () {
-            this.model = new CompareFeaturesModel();
+        initialize: function (attr) {
+            this.model = new CompareFeaturesModel(attr);
             this.template = _.template(CompareFeaturesTemplate);
             this.templateNoFeatures = _.template(CompareFeaturesTemplateNoFeatures);
             this.templateFeedback = _.template(CompareFeaturesTemplateFeedback);

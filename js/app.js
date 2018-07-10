@@ -96,7 +96,7 @@ define("app", function (require) {
 
     if (Config.mouseHover) {
         require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
-            new MouseHoverPopupView(Config.mouseHover);
+            new MouseHoverPopupView();
         });
     }
 
@@ -118,19 +118,19 @@ define("app", function (require) {
     // Module laden
     // Tools
     require(["modules/sidebar/view"], function (SidebarView) {
-        var sidebarView = new SidebarView();
+        new SidebarView();
 
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
                 case "compareFeatures": {
                     require(["modules/tools/compareFeatures/view"], function (CompareFeaturesView) {
-                        new CompareFeaturesView();
+                        new CompareFeaturesView(tool);
                     });
                     break;
                 }
                 case "einwohnerabfrage": {
                     require(["modules/tools/einwohnerabfrage_hh/selectView"], function (EinwohnerabfrageView) {
-                        new EinwohnerabfrageView();
+                        new EinwohnerabfrageView(tool);
                     });
                     break;
                 }
