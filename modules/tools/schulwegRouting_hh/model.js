@@ -82,7 +82,6 @@ define(function (require) {
             this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
             this.addRouteFeatures(this.get("layer").getSource());
             this.get("layer").setStyle(this.routeStyle);
-            this.setDefaults();
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
             if (!_.isUndefined(layerModel)) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
@@ -115,14 +114,6 @@ define(function (require) {
                 isSelected: value,
                 isVisibleInMap: value
             });
-        },
-
-        setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "schulwegrouting"});
-
-            _.each(config, function (value, key) {
-                this.set(key, value);
-            }, this);
         },
 
         printRoute: function () {

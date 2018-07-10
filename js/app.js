@@ -149,7 +149,7 @@ define("app", function (require) {
                 }
                 case "schulwegrouting": {
                     require(["modules/tools/schulwegRouting_hh/view"], function (SchulwegRoutingView) {
-                        new SchulwegRoutingView();
+                        new SchulwegRoutingView(tool);
                     });
                     break;
                 }

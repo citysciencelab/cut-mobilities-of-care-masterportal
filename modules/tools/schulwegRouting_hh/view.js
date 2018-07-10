@@ -11,12 +11,6 @@ define(function (require) {
     require("bootstrap-select");
 
     SchulwegRoutingView = Backbone.View.extend({
-        model: new Model(),
-        className: "schulweg-routing",
-        template: _.template(template),
-        templateHitlist: _.template(templateHitlist),
-        templateRouteResult: _.template(templateRouteResult),
-        templateRouteDescription: _.template(templateRouteDescription),
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
@@ -48,7 +42,8 @@ define(function (require) {
                 this.model.prepareRequest(this.model.get("startAddress"));
             }
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new Model(attr);
             this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
             if (this.model.getIsActive()) {
                 this.render();
@@ -76,8 +71,12 @@ define(function (require) {
                     this.render();
                 }
             });
-
         },
+        className: "schulweg-routing",
+        template: _.template(template),
+        templateHitlist: _.template(templateHitlist),
+        templateRouteResult: _.template(templateRouteResult),
+        templateRouteDescription: _.template(templateRouteDescription),
 
         render: function () {
             var attr = this.model.toJSON();
@@ -89,6 +88,7 @@ define(function (require) {
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
+            return this;
         },
         togglePrintEnabled: function (value) {
             if (value) {
