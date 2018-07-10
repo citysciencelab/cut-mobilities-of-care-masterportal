@@ -16,7 +16,7 @@ define(function (require) {
             // This event is fired when the info button is clicked
             "click .info-icon": "toggleInfoText",
             // This event fires if key up
-            "keyup .form-control": "checkWhichKeyUp"
+            "keyup .form-control": "setValues"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -87,101 +87,17 @@ define(function (require) {
          * @param {event} event - key up
          * @returns {void}
          */
-        checkWhichKeyUp: function (event) {
+        setValues: function (event) {
+            var min = this.$el.find("input.form-minimum").prop("value"),
+                max = this.$el.find("input.form-maximum").prop("value"),
+                values;
+
             if (event.keyCode === 13) {
-                this.changeValuesByText();
+                values = this.model.changeValuesByText(min, max);
+                this.setInputMinAndMaxValue(values);
             }
 
-            // this.changeSizeOfInputFiled(event.target.className, event.target.value);
-        },
-
-        /**
-         * change the values by input from inputfields
-         * render change if enter is pressed
-         * @returns {void}
-         */
-        changeValuesByText: function () {
-            var min,
-                max,
-                initValues,
-                values,
-                lastValues;
-
-            min = this.$el.find("input.form-minimum").prop("value");
-            max = this.$el.find("input.form-maximum").prop("value");
-            initValues = this.model.getValuesCollection().pluck("initValue");
-
-            // check if input is allowed
-            if (min === "" && max !== "") {
-                max = this.checkInvalidInput(this.parseValue(max), initValues[1]);
-                min = initValues[0];
-            }
-            else if (min !== "" && max === "") {
-                min = this.checkInvalidInput(this.parseValue(min), initValues[0]);
-                max = initValues[1];
-            }
-            else {
-                lastValues = this.model.getValuesCollection().pluck("value");
-
-                min = this.checkInvalidInput(this.parseValue(min), lastValues[0]);
-                max = this.checkInvalidInput(this.parseValue(max), lastValues[1]);
-            }
-
-            values = [min, max];
-            values.sort(function (a, b) {
-                return a - b;
-            });
-
-            this.model.updateValues(values);
-            this.setInputMinAndMaxValue(values);
-        },
-
-        /**
-         * converts number to integer or decimal by type
-         * @param {number} inputValue - input value
-         * @returns {void} value
-         */
-        parseValue: function (inputValue) {
-            var value = inputValue,
-                type = this.model.getSelectedValues().type;
-
-            if (type === "integer") {
-                value = parseInt(value, 10);
-            }
-            else if (type === "decimal") {
-                value = parseFloat(value);
-            }
-
-            return value;
-        },
-
-        /**
-         * check if value is valid parameter or set value to initValue
-         * @param {number} value - input value
-         * @param {number} otherValue - value that be set if param value NaN
-         * @returns {number} val
-         */
-        checkInvalidInput: function (value, otherValue) {
-            var val = value;
-
-            if (_.isNaN(val)) {
-                val = otherValue;
-                this.errorMessage();
-            }
-
-            return val;
-        },
-
-        /**
-         * returns an error message for invalid inputs
-         * @returns {void}
-         */
-        errorMessage: function () {
-            Radio.trigger("Alert", "alert", {
-                text: "<strong>Fehlerhafte Eingabe,"
-                    + " Bitte eine ganze Zahl eingeben!</strong>",
-                kategorie: "alert-danger"
-            });
+            this.changeSizeOfInputFiled(event.target.className, event.target.value);
         },
 
         /**

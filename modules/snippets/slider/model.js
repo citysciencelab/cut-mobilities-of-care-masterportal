@@ -100,6 +100,93 @@ define(function (require) {
             return parsedValueList;
         },
 
+        /**
+         * change the values by input from inputfields
+         * render change if enter is pressed
+         * @param {number} minValue - input value min
+         * @param {number} maxValue - input value max
+         * @returns {void}
+         */
+        changeValuesByText: function (minValue, maxValue) {
+            var min = minValue,
+                max = maxValue,
+                initValues = this.getValuesCollection().pluck("initValue"),
+                values,
+                lastValues;
+
+            // check if input is allowed
+            if (min === "" && max !== "") {
+                max = this.checkInvalidInput(this.parseValue(max), initValues[1]);
+                min = initValues[0];
+            }
+            else if (min !== "" && max === "") {
+                min = this.checkInvalidInput(this.parseValue(min), initValues[0]);
+                max = initValues[1];
+            }
+            else {
+                lastValues = this.getValuesCollection().pluck("value");
+
+                min = this.checkInvalidInput(this.parseValue(min), lastValues[0]);
+                max = this.checkInvalidInput(this.parseValue(max), lastValues[1]);
+            }
+
+            values = [min, max];
+            values.sort(function (a, b) {
+                return a - b;
+            });
+
+            this.updateValues(values);
+
+            return values;
+        },
+
+        /* converts number to integer or decimal by type
+        * @param {number} inputValue - input value
+        * @returns {void} value
+        */
+        parseValue: function (inputValue) {
+            var value = inputValue,
+                type = this.getSelectedValues().type;
+
+            if (type === "integer") {
+                value = parseInt(value, 10);
+            }
+            else if (type === "decimal") {
+                value = parseFloat(value);
+            }
+
+            return value;
+        },
+
+        /**
+        * check if value is valid parameter or set value to initValue
+        * @param {number} value - input value
+        * @param {number} otherValue - value that be set if param value NaN
+        * @returns {number} val
+        */
+        checkInvalidInput: function (value, otherValue) {
+            var val = value;
+
+            if (_.isNaN(val)) {
+                val = otherValue;
+                this.errorMessage();
+            }
+
+            return val;
+        },
+
+        /**
+         * returns an error message for invalid inputs
+         * @returns {void}
+         */
+        errorMessage: function () {
+            Radio.trigger("Alert", "alert", {
+                text: "<strong>Fehlerhafte Eingabe,"
+                    + " Bitte eine ganze Zahl eingeben!</strong>",
+                kategorie: "alert-danger"
+            });
+        },
+
         setDefaultWidth: function (value) {
             this.set("defaultWidth", value);
         }
