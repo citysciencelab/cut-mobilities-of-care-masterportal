@@ -132,9 +132,7 @@ define(function (require) {
             }
 
             values = [min, max];
-            values.sort(function (a, b) {
-                return a - b;
-            });
+            values = Radio.request("Util", "sort", values);
 
             this.updateValues(values);
 
