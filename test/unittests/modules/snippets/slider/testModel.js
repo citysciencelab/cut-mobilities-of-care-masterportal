@@ -9,6 +9,7 @@ define(function (require) {
             model = new Model({
                 values: ["123", "542", "2", "6534", "98"],
                 type: "integer"
+            });
         });
         describe("parseValues", function () {
             it("should return an array of numbers", function () {
@@ -51,6 +52,34 @@ define(function (require) {
         describe("changeValuesByText", function () {
             it("should return sorted values for correct input", function () {
                 expect(model.changeValuesByText(1000, 500)).to.be.an("array").includes(500, 1000);
+            });
+            it("should return min from initValue und max from param for min as empty String and max as number input", function () {
+                model.getValuesCollection().at(0).set("initValue", 100);
+                model.getValuesCollection().at(1).set("initValue", 2000);
+
+                expect(model.changeValuesByText("", 500)).to.be.an("array").includes(100, 500);
+            });
+            it("should return min from param und max from initValue for min as number and max as empty String input", function () {
+                model.getValuesCollection().at(0).set("initValue", 100);
+                model.getValuesCollection().at(1).set("initValue", 2000);
+
+                expect(model.changeValuesByText(500, "")).to.be.an("array").includes(500, 2000);
+            });
+            it("should return min and max from initValue for min and max as empty String input", function () {
+                model.getValuesCollection().at(0).set("initValue", 100);
+                model.getValuesCollection().at(1).set("initValue", 2000);
+                model.getValuesCollection().at(0).setValue(100);
+                model.getValuesCollection().at(1).setValue(2000);
+
+                expect(model.changeValuesByText("", "")).to.be.an("array").includes(100, 2000);
+            });
+            it("should return min and max from initValue for undefined input", function () {
+                model.getValuesCollection().at(0).set("initValue", 100);
+                model.getValuesCollection().at(1).set("initValue", 2000);
+                model.getValuesCollection().at(0).setValue(100);
+                model.getValuesCollection().at(1).setValue(2000);
+
+                expect(model.changeValuesByText(undefined, undefined)).to.be.an("array").includes(100, 2000);
             });
         });
     });
