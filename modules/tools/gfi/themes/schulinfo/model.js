@@ -87,11 +87,12 @@ define(function (require) {
             {
                 name: "Ansprechpartner",
                 attributes: [
+                    "name_schulleiter",
+                    "name_stellv_schulleiter",
+                    "ansprechp_buero",
                     "ansprechp_klasse_1",
                     "ansprechp_klasse_5",
-                    "name_oberstufenkoordinator",
-                    "name_stellv_schulleiter",
-                    "ansprechp_buero"
+                    "name_oberstufenkoordinator"
                 ]
             },
             {

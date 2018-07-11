@@ -25,11 +25,17 @@ define(function (require) {
             this.addIsActiveCheckbox();
             this.listenTo(this.getSnippetCollection(), {
                 "valuesChanged": function () {
+                    var options;
+
                     this.setIsActive(true);
                     this.getBtnIsActive().setIsSelected(true);
                     this.runFilter();
                     if (this.getLiveZoomToFeatures()) {
                         Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(), this.getLayerId());
+                        options = Radio.request("MapView", "getOptions");
+                        if (options.scale < 5000) {
+                            Radio.trigger("MapView", "setScale", 5000);
+                        }
                     }
                 }
             }, this);
