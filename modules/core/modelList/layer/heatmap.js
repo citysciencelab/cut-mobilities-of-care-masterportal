@@ -3,6 +3,7 @@ define(function (require) {
     var Layer = require("modules/core/modelList/layer/model"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
+        $ = require("jquery"),
         HeatmapLayer;
 
     HeatmapLayer = Layer.extend({
@@ -18,6 +19,7 @@ define(function (require) {
 
         initialize: function () {
             var channel = Radio.channel("HeatmapLayer");
+
             this.superInitialize();
 
             this.listenTo(channel, {
@@ -125,9 +127,9 @@ define(function (require) {
             cloneFeature.setId(featureId);
 
             // check is feature exist
-            _.each(layerSource.getFeatures(), function (feature) {
-                if (feature.getId() === featureId) {
-                    heatmapFeature = feature;
+            _.each(layerSource.getFeatures(), function (feat) {
+                if (feat.getId() === featureId) {
+                    heatmapFeature = feat;
                 }
             });
 
@@ -155,7 +157,7 @@ define(function (require) {
 
         /**
          * normalizes the values to a scale from 0 to 1
-         * @param  {[ol.Feature]} featuresWithValue
+         * @param  {[ol.Feature]} featuresWithValue - features that have a value
          * @returns {void}
          */
         normalizeWeight: function (featuresWithValue) {
@@ -170,9 +172,9 @@ define(function (require) {
 
         /**
          * count given states of a feature
-         * @param  {String} state
-         * @param  {} heatmapAttribute
-         * @param  {} heatmapValue
+         * @param  {ol.Feature} feature - feature
+         * @param  {string} heatmapAttribute - attribute that contains the value
+         * @param  {string} heatmapValue - value
          * @return {[String]} count
          */
         countStates: function (feature, heatmapAttribute, heatmapValue) {
@@ -188,8 +190,8 @@ define(function (require) {
                 states = [state];
             }
 
-            count = $.grep(states, function (state) {
-                return state === heatmapValue;
+            count = $.grep(states, function (oneState) {
+                return oneState === heatmapValue;
             }).length;
 
             return count;

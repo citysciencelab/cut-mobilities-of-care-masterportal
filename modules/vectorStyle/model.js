@@ -798,7 +798,7 @@ define(function (require) {
 
             // calculate size
             if (((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2) >= size) {
-                size = size + (circleSegmentsRadius + circleSegmentsStrokeWidth) * 2;
+                size = size + ((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2);
             }
 
             // is required for the display in the Internet Explorer,
@@ -957,14 +957,14 @@ define(function (require) {
             }
 
             // convert angle from degree to radiant
-            startAngleRad = (startAngelDegree + gapActual / 2) * rad;
-            endAngleRad = (endAngelDegreeActual - gapActual / 2) * rad;
+            startAngleRad = (startAngelDegree + (gapActual / 2)) * rad;
+            endAngleRad = (endAngelDegreeActual - (gapActual / 2)) * rad;
 
-            xStart = xy + Math.cos(startAngleRad) * circleRadius;
-            yStart = xy - Math.sin(startAngleRad) * circleRadius;
+            xStart = xy + (Math.cos(startAngleRad) * circleRadius);
+            yStart = xy - (Math.sin(startAngleRad) * circleRadius);
 
-            xEnd = xy + Math.cos(endAngleRad) * circleRadius;
-            yEnd = xy - Math.sin(endAngleRad) * circleRadius;
+            xEnd = xy + (Math.cos(endAngleRad) * circleRadius);
+            yEnd = xy - (Math.sin(endAngleRad) * circleRadius);
 
             if (isCircle) {
                 d = [
@@ -1027,8 +1027,8 @@ define(function (require) {
         calculateSizeIntervalCircleBar: function (stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius) {
             var size = circleBarRadius * 2;
 
-            if ((stateValue * circleBarScalingFactor + circleBarLineStroke) >= size) {
-                size = size + stateValue * circleBarScalingFactor + circleBarLineStroke;
+            if (((stateValue * circleBarScalingFactor) + circleBarLineStroke) >= size) {
+                size = size + (stateValue * circleBarScalingFactor) + circleBarLineStroke;
             }
 
             return size;
@@ -1046,10 +1046,10 @@ define(function (require) {
             var barLength;
 
             if (stateValue >= 0) {
-                barLength = size / 2 - circleBarRadius - stateValue * circleBarScalingFactor;
+                barLength = (size / 2) - circleBarRadius - (stateValue * circleBarScalingFactor);
             }
             else if (stateValue < 0) {
-                barLength = size / 2 + circleBarRadius - stateValue * circleBarScalingFactor;
+                barLength = (size / 2) + circleBarRadius - (stateValue * circleBarScalingFactor);
             }
             else {
                 barLength = 0;

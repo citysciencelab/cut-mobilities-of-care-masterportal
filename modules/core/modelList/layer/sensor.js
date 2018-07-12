@@ -230,7 +230,7 @@ define(function (require) {
                 thingsMerge = [],
                 requestURL = this.buildSensorThingsURL(url, version, urlParams),
                 things = this.getResponseFromRequestURL(requestURL),
-                thingsCount = things["@iot.count"], // count of all things
+                thingsCount = _.isUndefined(things["@iot.count"]) ? 0 : things["@iot.count"], // count of all things
                 thingsbyOneRequest = things.value.length, // count of things on one request
                 aggreateArrays,
                 thisRequestURL,

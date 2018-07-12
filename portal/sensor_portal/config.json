@@ -180,16 +180,6 @@
           "visibility": false
         },
         {
-          "id": "45",
-          "styleId": "45",
-          "visibility": false
-        },
-        {
-          "id": "2767",
-          "styleId": "2306",
-          "visibility": false
-        },
-        {
           "id": "888888",
           "name" : "Heatmap der belegten Elektro Ladestandorte (Live)",
           "dataLayerId" : "999999",
