@@ -52,7 +52,7 @@ define(function (require) {
                     gfiAttributes = this.getGfiAttributes();
 
                 gfiAttributes = this.groupGfiAttributes(gfiAttributes, layerGroup);
-                if ((_.isObject(gfiAttributes) && !_.isString(gfiAttributes)) || (_.isString(gfiAttributes) && gfiAttributes.indexOf(",") === -1)) {
+                if (_.isObject(gfiAttributes) && !_.isString(gfiAttributes)) {
                     // get all layers for service
                     newLayerObj.layers = _.pluck(layerGroup, "layers").toString();
                     // calculate maxScale from all Layers
@@ -83,7 +83,7 @@ define(function (require) {
                 attr = _.pluck(layerGroup, "gfiAttributes");
 
                 if (_.isArray(attr)) {
-                    attr = attr[0];
+                    attr = attr.length === 1 ? attr[0] : _.uniq(attr).toString();
                 }
             }
 
