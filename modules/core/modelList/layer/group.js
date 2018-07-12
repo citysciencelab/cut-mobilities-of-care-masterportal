@@ -68,6 +68,7 @@ define(function (require) {
                 }
                 else {
                     _.each(layerGroup, function (layer) {
+                        layer.gfiAttributes = gfiAttributes;
                         newLayerDefs.push(layer);
                     });
                 }
@@ -76,6 +77,13 @@ define(function (require) {
             return newLayerDefs;
         },
 
+        /**
+         * get the attributes from layergroup
+         * is gfiAttributes not undefined then returns the input gfiAttributes
+         * @param {undefined|object} gfiAttributes - default is undefined
+         * @param {array} layerGroup - contains the params from the layers
+         * @returns {string|object} attr
+         */
         groupGfiAttributes: function (gfiAttributes, layerGroup) {
             var attr = gfiAttributes;
 
