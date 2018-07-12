@@ -289,6 +289,7 @@ define(function (require) {
                     pgfi.push(gfi);
                 }
             }, this);
+
             return pgfi;
         },
 
