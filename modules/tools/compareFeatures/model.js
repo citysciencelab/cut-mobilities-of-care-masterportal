@@ -77,6 +77,7 @@ define(function () {
          * creates a JSON where an object matches to a row
          * one object attribute is created for each feature (column)
          * @param {object} gfiAttributes -
+         * @param {object} themeConfig config from gfi theme for schulinfo model
          * @returns {object[]} list - one object per row
          */
         prepareFeatureListToShow: function (gfiAttributes, themeConfig) {

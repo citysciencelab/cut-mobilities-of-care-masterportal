@@ -1,14 +1,10 @@
 define(function (require) {
-    require("bootstrap-select");
-
     var Template = require("text!modules/snippets/dropdown/template.html"),
         DropdownView;
 
+    require("bootstrap-select");
+
     DropdownView = Backbone.View.extend({
-        model: {},
-        className: "dropdown-container",
-        // className: "container-fluid",
-        template: _.template(Template),
         events: {
             // This event fires after the select's value has been changed
             "changed.bs.select": "updateSelectedValues",
@@ -26,14 +22,20 @@ define(function (require) {
                 "removeView": this.removeView
             });
         },
+        model: {},
+        className: "dropdown-container",
+        // className: "container-fluid",
+        template: _.template(Template),
 
         /**
          * renders the view depending on the isOpen attribute
          * @return {jQuery} - this DOM element as a jQuery object
          */
         render: function () {
+            var attr;
+
             if (this.model.get("isOpen") === false) {
-                var attr = this.model.toJSON();
+                attr = this.model.toJSON();
 
                 this.$el.html(this.template(attr));
                 this.initDropdown();
@@ -46,6 +48,7 @@ define(function (require) {
         /**
          * inits the dropdown list
          * @see {@link http://silviomoreto.github.io/bootstrap-select/options/|Bootstrap-Select}
+         * @returns {void}
          */
         initDropdown: function () {
             this.$el.find(".selectpicker").selectpicker({
@@ -73,14 +76,16 @@ define(function (require) {
         /**
          * calls the function "updateSelectedValues" in the model
          * @param {Event} evt - changed
+         * @returns {void}
          */
         updateSelectedValues: function (evt) {
-            this.model.updateSelectedValues($(evt.target).val());
+            this.model.updateSelectedValues(this.$(evt.target).val());
         },
 
         /**
          * calls the function "setIsOpen" in the model depending on the event type
          * @param  {Event} evt - hidden || shown
+         * @returns {void}
          */
         setIsOpen: function (evt) {
             if (evt.type === "shown") {
@@ -92,17 +97,19 @@ define(function (require) {
             }
         },
 
-        /**
-         * toggle the info text
-         */
         toggleInfoText: function () {
+            var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
+
             this.model.trigger("hideAllInfoText");
-            this.$el.find(".info-text").toggle();
+            if (!isInfoTextVisible) {
+                this.$el.find(".info-text").toggle();
+            }
         },
 
         /**
          * calls the function "setIsOpen" in the model with parameter false
          * removes this view and its el from the DOM
+         * @returns {void}
          */
         removeView: function () {
             this.model.setIsOpen(false);

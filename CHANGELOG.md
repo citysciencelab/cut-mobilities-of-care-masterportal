@@ -1,3 +1,14 @@
+# Changelog LGV Master-Portal 2.0.4
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - c128bf6f template layerinformation legendurl
+  - a6d8b6e5 bootstrap-select Version auf 1.12 beschränken, weil 1.13 noch buggy
+
 # Changelog LGV Master-Portal 2.0.3
 
 NEU:

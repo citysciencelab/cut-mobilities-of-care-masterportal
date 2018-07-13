@@ -19,7 +19,7 @@
             </div>
             <% } %>
             <div class="row">
-                <table class="table table-hover table-responsive">
+                <table class="table table-responsive">
                     <tbody>
                         <% list.forEach(function (obj, index) {
                             if (index < rowsToShow) { %>
@@ -35,14 +35,18 @@
                                         <% } %>
                                         <span>
                                         <% if (_.isArray(obj[key])) {
-                                            obj[key].forEach(function (value) {
-                                                print (value); %>
+                                            obj[key].forEach(function (value) { %>
+                                                <%= value %>
                                                 <br>
                                             <% });
                                         }
                                         else {
-                                            print (obj[key]);
-                                        } %>
+                                            if(String(obj[key]).search("http") !== -1) { %>
+                                                <a href="<%= obj[key] %>" target="_blank"><%= obj[key] %></a>
+                                            <% }
+                                            else { %>
+                                                <%= obj[key] %>
+                                            <% }} %>
                                         </span>
                                     </td>
                                 <% }); %>
@@ -54,6 +58,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary btn-infos">mehr Infos</button>
+            <button type="button" class="btn btn-primary btn-print">Export als PDF</button>
         </div>
     </div>
 </div>

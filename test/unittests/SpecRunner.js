@@ -21,7 +21,8 @@ require.config({
         services: "resources/testServices.json",
         bootstrap: "../../node_modules/bootstrap/js",
         mqtt: "../../node_modules/mqtt/dist/mqtt",
-        text: "../../node_modules/requirejs-text/text"
+        text: "../../node_modules/requirejs-text/text",
+        pdfmake: "../../node_modules/pdfmake/build/pdfmake"
     },
     shim: {
         bootstrap: {
@@ -89,7 +90,8 @@ define(function (require) {
         "modules/tools/schulwegrouting_hh/testModel.js",
         "modules/tools/compareFeatures/testModel.js",
         "modules/menu/mobile/folder/testView.js",
-        "modules/tools/graph/testModel.js"
+        "modules/tools/graph/testModel.js",
+        "modules/functionalities/browserPrint/testModel.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();
