@@ -1,8 +1,7 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+        Ol = require("openlayers"),
         $ = require("jquery"),
         HeatmapLayer;
 
@@ -41,11 +40,11 @@ define(function (require) {
         },
 
         /**
-         * creates ol.source.Vector as LayerSource
+         * creates Ol.source.Vector as LayerSource
          * @returns {void}
          */
         createLayerSource: function () {
-            this.setLayerSource(new ol.source.Vector());
+            this.setLayerSource(new Ol.source.Vector());
         },
 
         /**
@@ -53,7 +52,7 @@ define(function (require) {
          * @returns {void}
          */
         createLayer: function () {
-            this.setLayer(new ol.layer.Heatmap({
+            this.setLayer(new Ol.layer.Heatmap({
                 source: this.getLayerSource(),
                 name: this.get("name"),
                 typ: this.get("typ"),
@@ -79,7 +78,7 @@ define(function (require) {
 
         /**
          * draw heatmap with initialize features
-         * @param  {[ol.Feature]} features - all features from associated sensorLayer
+         * @param  {[Ol.Feature]} features - all features from associated sensorLayer
          * @returns {void}
          */
         initializeHeatmap: function (features) {
@@ -95,7 +94,7 @@ define(function (require) {
                 if (!_.isUndefined(attribute || value)) {
                     count = this.countStates(feature, attribute, value);
 
-                    cloneFeature.set("weightForHeatmap", count);
+                    cloneFeature.setWeightForHeatmap(count);
                 }
 
                 cloneFeature.setId(feature.getId());
@@ -112,7 +111,7 @@ define(function (require) {
 
         /**
          * update the heatmap with given feature
-         * @param  {ol.Feature} feature - feature to be update
+         * @param  {Ol.Feature} feature - feature to be update
          * @return {void}
          */
         updateHeatmap: function (feature) {
@@ -137,7 +136,7 @@ define(function (require) {
             if (!_.isUndefined(attribute || value)) {
                 count = this.countStates(feature, attribute, value);
 
-                cloneFeature.set("weightForHeatmap", count);
+                cloneFeature.setWeightForHeatmap(count);
             }
 
             // if the feature is new, then pushes otherwise change it
@@ -157,7 +156,7 @@ define(function (require) {
 
         /**
          * normalizes the values to a scale from 0 to 1
-         * @param  {[ol.Feature]} featuresWithValue - features that have a value
+         * @param  {[Ol.Feature]} featuresWithValue - features that have a value
          * @returns {void}
          */
         normalizeWeight: function (featuresWithValue) {
@@ -166,13 +165,13 @@ define(function (require) {
             }).get("weightForHeatmap");
 
             _.each(featuresWithValue, function (feature) {
-                feature.set("normalizeWeightForHeatmap", feature.get("weightForHeatmap") / max);
+                feature.setNormalizeWeightForHeatmap(feature.get("weightForHeatmap") / max);
             });
         },
 
         /**
          * count given states of a feature
-         * @param  {ol.Feature} feature - feature
+         * @param  {Ol.Feature} feature - feature
          * @param  {string} heatmapAttribute - attribute that contains the value
          * @param  {string} heatmapValue - value
          * @return {[String]} count
@@ -199,7 +198,7 @@ define(function (require) {
 
         /**
          * Setter for attribute "layer"
-         * @param {ol.layer} value - HeatmapLayer
+         * @param {Ol.layer} value - HeatmapLayer
          * @returns {void}
          */
         setLayer: function (value) {
@@ -208,16 +207,24 @@ define(function (require) {
 
         /**
          * Setter for attribute "layerSource"
-         * @param {ol.source} value - HeatmapLayerSource
+         * @param {Ol.source} value - HeatmapLayerSource
          * @returns {void}
          */
         setLayerSource: function (value) {
             this.set("layerSource", value);
         },
 
+        setWeightForHeatmap: function (value) {
+            this.set("weightForHeatmap", value);
+        },
+
+        setNormalizeWeightForHeatmap: function (value) {
+            this.set("normalizeWeightForHeatmap", value);
+        },
+
         /*
          * Getter for attribute "layerSource"
-         * @return {ol.source}
+         * @return {Ol.source}
         */
         getLayerSource: function () {
             return this.get("layerSource");
