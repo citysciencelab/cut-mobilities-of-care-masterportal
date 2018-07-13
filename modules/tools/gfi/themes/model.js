@@ -3,8 +3,8 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         Config = require("config"),
-        moment = require("moment"),
-        ol = require("openlayers"),
+        Moment = require("moment"),
+        Ol = require("openlayers"),
         $ = require("jquery"),
         Theme;
 
@@ -74,7 +74,7 @@ define(function (require) {
         getWmsGfi: function (successFunction) {
             var url = Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
 
-            url = url.replace(/SLD_BODY\=.*?\&/, "");
+            url = url.replace(/SLD_BODY=.*?&/, "");
             $.ajax({
                 url: url,
                 context: this,
@@ -97,14 +97,14 @@ define(function (require) {
                 dat = this.$.parseXML(dat);
             }
 
-            // parse result, try built-in ol-format first
-            gfiFormat = new ol.format.WMSGetFeatureInfo();
+            // parse result, try built-in Ol-format first
+            gfiFormat = new Ol.format.WMSGetFeatureInfo();
             // das reverse wird fürs Planportal gebraucht SD 18.01.2016
             gfiFeatures = gfiFormat.readFeatures(data, {
                 dataProjection: Config.view.proj
             }).reverse();
 
-            // ESRI is not parsed by the ol-format
+            // ESRI is not parsed by the Ol-format
             if (_.isEmpty(gfiFeatures)) {
                 if (data.getElementsByTagName("FIELDS")[0] !== undefined) {
                     _.each(data.getElementsByTagName("FIELDS"), function (element) {
@@ -128,7 +128,7 @@ define(function (require) {
                     }, this);
                 }
             }
-            else { // OS (deegree, UMN, Geoserver) is parsed by ol-format
+            else { // OS (deegree, UMN, Geoserver) is parsed by Ol-format
                 _.each(gfiFeatures, function (feature) {
                     gfiList.push(feature.getProperties());
                 });
@@ -317,8 +317,8 @@ define(function (require) {
         getManipulateDate: function (content) {
             _.each(content, function (element) {
                 _.each(element, function (value, key, list) {
-                    if (moment(value, "DD-MM-YYYY", true).isValid() === true) {
-                        list[key] = moment(value).format("DD.MM.YYYY");
+                    if (Moment(value, "DD-MM-YYYY", true).isValid() === true) {
+                        list[key] = Moment(value).format("DD.MM.YYYY");
                     }
                 });
             });

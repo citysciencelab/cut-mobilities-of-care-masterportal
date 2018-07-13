@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+        Ol = require("openlayers"),
         Layer = require("modules/core/modelList/layer/model"),
         GroupLayer;
 
@@ -111,7 +111,7 @@ define(function (require) {
             var sources = [];
 
             _.each(childlayers, function (child) {
-                var source = new ol.source.TileWMS({
+                var source = new Ol.source.TileWMS({
                     url: child.url,
                     params: {
                         LAYERS: child.layers,
@@ -128,10 +128,10 @@ define(function (require) {
         },
 
         createChildLayers: function (childlayers) {
-            var layer = new ol.Collection();
+            var layer = new Ol.Collection();
 
             _.each(childlayers, function (childLayer, index) {
-                layer.push(new ol.layer.Tile({
+                layer.push(new Ol.layer.Tile({
                     source: this.getChildLayerSources()[index]
                 }));
             }, this);
@@ -139,7 +139,7 @@ define(function (require) {
         },
 
         createLayer: function () {
-            var groupLayer = new ol.layer.Group({
+            var groupLayer = new Ol.layer.Group({
                 layers: this.getChildLayers()
             });
 
@@ -207,7 +207,7 @@ define(function (require) {
 
         /**
          * Setter für das Attribut "childLayerSources"
-         * @param {ol.source[]} value - value
+         * @param {Ol.source[]} value - value
          * @returns {void}
          */
         setChildLayerSources: function (value) {
@@ -216,7 +216,7 @@ define(function (require) {
 
         /**
          * Setter für das Attribut "childlayers"
-         * @param {ol.Collection} value - Eine ol.Collection mit ol.layer Objekten
+         * @param {Ol.Collection} value - Eine Ol.Collection mit Ol.layer Objekten
          * @returns {void}
          */
         setChildLayers: function (value) {
@@ -225,7 +225,7 @@ define(function (require) {
 
         /**
         * Getter für das Attribute "childLayerSources"
-        * @return {ol.source[]} childLayerSources
+        * @return {Ol.source[]} childLayerSources
         */
         getChildLayerSources: function () {
             return this.get("childLayerSources");
@@ -233,7 +233,7 @@ define(function (require) {
 
         /**
          * Getter für das Attribut "childlayers"
-         * @return {ol.Collection} childlayers - Eine ol.Collection mit ol.layer Objekten
+         * @return {Ol.Collection} childlayers - Eine Ol.Collection mit Ol.layer Objekten
          */
         getChildLayers: function () {
             return this.get("childlayers");
