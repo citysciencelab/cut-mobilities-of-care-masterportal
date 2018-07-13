@@ -27,7 +27,7 @@ require.config({
         "backbone.radio": "../node_modules/backbone.radio/build/backbone.radio.min",
         bootstrap: "../node_modules/bootstrap/js",
         "bootstrap-select": "../node_modules/bootstrap-select/dist/js/bootstrap-select.min",
-        "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.mi<n",
+        "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.min",
         colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
         templates: "../templates",
         config: configPath,
