@@ -76,7 +76,8 @@ define(function (require) {
                         view = new SnippetDropdownView({model: snippet});
                     }
                     else if (snippet.get("type") === "boolean") {
-                        view = new SnippetDropdownView({model: snippet});
+                        // view = new SnippetDropdownView({model: snippet});
+                        view = new SnippetCheckBoxView({model: snippet});
                     }
                     else if (snippet.get("snippetType") === "slider") {
                         view = new SnippetSliderView({model: snippet});

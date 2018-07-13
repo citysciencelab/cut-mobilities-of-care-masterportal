@@ -20,7 +20,8 @@ require.config({
         moment: "../../node_modules/moment/min/moment.min",
         services: "resources/testServices.json",
         bootstrap: "../../node_modules/bootstrap/js",
-        text: "../../node_modules/requirejs-text/text"
+        text: "../../node_modules/requirejs-text/text",
+        pdfmake: "../../node_modules/pdfmake/build/pdfmake"
     },
     shim: {
         bootstrap: {
@@ -56,6 +57,7 @@ define(function (require) {
         "modules/tools/filter/query/testModel.js",
         "modules/tools/filter/testFilter.js",
         "modules/snippets/slider/testModel.js",
+        "modules/tools/gfi/themes/testModel.js",
         "modules/tools/gfi/themes/schulinfo/testModel.js",
         "modules/tools/gfi/themes/verkehrsstaerken_rad/testModel.js",
         "modules/core/testMap.js",
@@ -85,7 +87,8 @@ define(function (require) {
         "modules/core/testUtil.js",
         "modules/tools/schulwegrouting_hh/testModel.js",
         "modules/tools/compareFeatures/testModel.js",
-        "modules/menu/mobile/folder/testView.js"
+        "modules/menu/mobile/folder/testView.js",
+        "modules/functionalities/browserPrint/testModel.js"
     ], function () {
         Radio = Backbone.Radio;
         mocha.run();

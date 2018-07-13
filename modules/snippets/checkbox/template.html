@@ -1,4 +1,17 @@
-<% if (this.model.has("label")) { %>
-    <label><%= label %></label>
+<div class="form-inline">
+    <div class="title-checkbox pull-left">
+    <% if (this.model.has("label")) { %>
+        <label><%= label %></label>
+    <% } %>
+        <input type="checkbox" title="Filter ausschalten" data-toggle="toggle" <% if (valuesCollection.at(0).get("isSelected")) {print("checked");} %>>
+    </div>
+<% if (typeof infoText !== "undefined") { %>
+    <div class="info-icon">
+        <span class="glyphicon glyphicon-info-sign info"></span>
+    </div>
 <% } %>
-<input type="checkbox" title="Filter ausschalten" data-toggle="toggle" <% if (valuesCollection.at(0).get("isSelected")) {print("checked");} %>>
+</div>
+<% if (!_.isUndefined(this.model.get("infoText"))) { %>
+    <div class="col-xs-12 info-text"><%= infoText %></div>
+<% } %>
+

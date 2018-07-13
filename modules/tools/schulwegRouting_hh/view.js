@@ -70,7 +70,11 @@ define(function (require) {
                 "updateRegionalSchool": this.updateRegionalSchool,
                 "updateSelectedSchool": this.updateSelectedSchool,
                 "resetRouteResult": this.resetRouteResult,
-                "togglePrintEnabled": this.togglePrintEnabled
+                "togglePrintEnabled": this.togglePrintEnabled,
+                "render": function () {
+                    this.$el.remove();
+                    this.render();
+                }
             });
 
         },

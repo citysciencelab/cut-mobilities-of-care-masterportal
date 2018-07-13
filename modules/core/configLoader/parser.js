@@ -114,11 +114,17 @@ define(function (require) {
 
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
+         * @param {object} items Einzelnen Ebenen der Menüleiste, bsp. contact, legend, tools und tree
+         * @param {string} parentId gibt an wem die items hinzugefügt werden
+         * @return {undefined}
          */
         parseMenu: function (items, parentId) {
             _.each(items, function (value, key) {
+                var item,
+                    toolitem;
+
                 if (_.has(value, "children") || key === "tree") {
-                    var item = {
+                    item = {
                         type: "folder",
                         parentId: parentId,
                         id: key,
@@ -132,13 +138,13 @@ define(function (require) {
                 }
                 else if (key.search("staticlinks") !== -1) {
                     _.each(value, function (staticlink) {
-                        var toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
+                        toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
 
                         this.addItem(toolitem);
                     }, this);
                 }
                 else {
-                    var toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+                    toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
 
                     // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
                     if (!_.has(toolitem, "onlyDesktop")) {
@@ -154,7 +160,7 @@ define(function (require) {
 
         /**
          * [parseSearchBar description]
-         * @param  {[type]} items [description]
+         * @param  {[type]} searchbarConfig [description]
          * @return {[type]}       [description]
          */
         parseSearchBar: function (searchbarConfig) {
@@ -195,7 +201,8 @@ define(function (require) {
 
         /**
          * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Ende hinzu
-         * @param {Object} obj - Item
+         * @param {object} obj - Item
+         * @return {undefined}
          */
         addItem: function (obj) {
             if (!_.isUndefined(obj.visibility)) {
@@ -208,6 +215,9 @@ define(function (require) {
 
         /**
          *  Ermöglicht ein Array von Objekten, die alle attr gemeinsam haben zu erzeugen
+         *  @param {array} objs Array von zusammengehörenden Objekten, bsp. Kategorien im Themenbaum
+         *  @param {object} attr Layerobjekt
+         *  @return {undefined}
          */
         addItems: function (objs, attr) {
             _.each(objs, function (obj) {
@@ -247,7 +257,7 @@ define(function (require) {
                 gutter: "0",
                 featureCount: 3,
                 minScale: "0",
-                maxScale: "350000",
+                maxScale: "2500000",
                 gfiAttributes: "showAll",
                 layerAttribution: "nicht vorhanden",
                 legendURL: "",
@@ -285,6 +295,7 @@ define(function (require) {
         /**
          * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Beginn hinzu
          * @param {Object} obj - Item
+         * @return {undefined}
          */
         addItemAtTop: function (obj) {
             if (!_.isUndefined(obj.visibility)) {
@@ -295,88 +306,56 @@ define(function (require) {
             this.getItemList().unshift(obj);
         },
 
-        /**
-         * Setter für Attribut "itemList"
-         */
+        // Setter für Attribut "itemList"
         setItemList: function (value) {
             this.set("itemList", value);
         },
 
-        /**
-         * Getter für das Attribut "itemList"
-         * @return {Array}
-         */
+        // Getter für das Attribut "itemList"
         getItemList: function () {
             return this.get("itemList");
         },
 
-        /**
-         * Getter für Attribut "baselayer"
-         * @return {Object}
-         */
+        // Getter für Attribut "baselayer"
         getBaselayer: function () {
             return this.get("baselayer");
         },
-        /**
-         * setter für Attribut "baselayer"
-         * @return {Object}
-         */
+        // setter für Attribut "baselayer"
         setBaselayer: function (value) {
-            return this.set("baselayer", value);
+            this.set("baselayer", value);
         },
 
-        /**
-          * Getter für Attribut "overlayer"
-          * @return {Object}
-          */
+        // Getter für Attribut "overlayer"
         getOverlayer: function () {
             return this.get("overlayer");
         },
-        /**
-          * Setter für Attribut "overlayer"
-          * @return {Object}
-          */
+        // Setter für Attribut "overlayer"
         setOverlayer: function (value) {
-            return this.set("overlayer", value);
+            this.set("overlayer", value);
         },
 
-        /**
-          * Getter für Attribut "treeType"
-          * @return {String}
-          */
+        // Getter für Attribut "treeType"
         getTreeType: function () {
             return this.get("treeType");
         },
-        /**
-          * Getter für Attribut "treeType"
-          * @return {String}
-          */
+        // Getter für Attribut "treeType"
         setTreeType: function (value) {
-            return this.set("treeType", value);
+            this.set("treeType", value);
         },
 
-        /**
-          * Getter für Attribut "category"
-          * @return {String}
-          */
+        // Getter für Attribut "category"
         getCategory: function () {
             return this.get("category");
         },
 
-        /**
-          * Getter für Attribut "categories"
-          * @return {String[]}
-          */
+        // Getter für Attribut "categories"
         getCategories: function () {
             return this.get("categories");
         },
 
-        /**
-          * Getter für Attribut "category"
-          * @return {String}
-          */
+        // Getter für Attribut "category"
         setCategory: function (value) {
-            return this.set("category", value);
+            this.set("category", value);
         },
 
         /**
@@ -446,8 +425,8 @@ define(function (require) {
 
         /**
          * Gruppiert Objekte aus der layerlist, die mit den Ids in der übergebenen Liste übereinstimmen
-         * @param  {Object[]} layerlist - Objekte aus der services.json
          * @param  {string[]} ids - Array von Ids deren Objekte gruppiert werden
+         * @param  {Object[]} layerlist - Objekte aus der services.json
          * @return {Object[]} layerlist - Objekte aus der services.json
          */
         mergeObjectsByIds: function (ids, layerlist) {

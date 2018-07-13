@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+        Ol = require("openlayers"),
         Layer = require("modules/core/modelList/layer/model"),
         GroupLayer;
 
@@ -12,9 +12,7 @@ define(function (require) {
             this.setAttributes();
         },
 
-        /**
-         *
-         */
+
         setAttributes: function () {
             var gfiParams = [];
 
@@ -31,6 +29,7 @@ define(function (require) {
                     });
                 }
             }, this);
+
             this.setGfiParams(gfiParams);
         },
         /**
@@ -41,22 +40,19 @@ define(function (require) {
          *
          * If the gfiAttributes of all layers are equal, then the layers can be aggregated.
          * Otherwise the layers can not be grouped by url.
-         *
+         * @param {array} layerDefinitions - definitions from all layers
+         * @returns {array} newLayerDefs
          */
         groupLayerObjectsByUrl: function (layerDefinitions) {
             var groupByUrl = _.groupBy(layerDefinitions, "url"),
-                newLayerDefs = [],
-                gfiAttributes = this.getGfiAttributes();
+                newLayerDefs = [];
 
             _.each(groupByUrl, function (layerGroup) {
                 var newLayerObj = _.clone(layerGroup[0]),
-                    isGroupable = false;
+                    gfiAttributes = this.getGfiAttributes();
 
                 gfiAttributes = this.groupGfiAttributes(gfiAttributes, layerGroup);
-                if ((_.isObject(gfiAttributes) && !_.isString(gfiAttributes)) || (_.isString(gfiAttributes) && gfiAttributes.indexOf(",") === -1)) {
-                    isGroupable = true;
-                }
-                if (isGroupable) {
+                if (_.isObject(gfiAttributes) && !_.isString(gfiAttributes)) {
                     // get all layers for service
                     newLayerObj.layers = _.pluck(layerGroup, "layers").toString();
                     // calculate maxScale from all Layers
@@ -72,25 +68,36 @@ define(function (require) {
                 }
                 else {
                     _.each(layerGroup, function (layer) {
+                        layer.gfiAttributes = gfiAttributes;
                         newLayerDefs.push(layer);
                     });
                 }
             }, this);
+
             return newLayerDefs;
         },
 
+        /**
+         * get the attributes from layergroup
+         * is gfiAttributes not undefined then returns the input gfiAttributes
+         * @param {undefined|object} gfiAttributes - default is undefined
+         * @param {array} layerGroup - contains the params from the layers
+         * @returns {string|object} attr
+         */
         groupGfiAttributes: function (gfiAttributes, layerGroup) {
-            if (_.isUndefined(gfiAttributes)) {
-                gfiAttributes = _.pluck(layerGroup, "gfiAttributes");
-                if (_.isArray(gfiAttributes)) {
-                    gfiAttributes = _.uniq(gfiAttributes).toString();
+            var attr = gfiAttributes;
+
+            if (_.isUndefined(attr)) {
+                attr = _.pluck(layerGroup, "gfiAttributes");
+
+                if (_.isArray(attr)) {
+                    attr = attr.length === 1 ? attr[0] : _.uniq(attr).toString();
                 }
             }
-            return gfiAttributes;
+
+            return attr;
         },
-        /**
-         *
-         */
+
         createLayerSource: function () {
             // TODO noch keine Typ unterscheidung -> nur WMS
             this.createChildLayerSources(this.getLayerdefinitions());
@@ -100,15 +107,11 @@ define(function (require) {
             this.createLayer();
         },
 
-        /**
-         * [createChildLayerSource description]
-         * @return {[type]} [description]
-         */
         createChildLayerSources: function (childlayers) {
             var sources = [];
 
             _.each(childlayers, function (child) {
-                var source = new ol.source.TileWMS({
+                var source = new Ol.source.TileWMS({
                     url: child.url,
                     params: {
                         LAYERS: child.layers,
@@ -124,26 +127,19 @@ define(function (require) {
             this.setChildLayerSources(sources);
         },
 
-        /**
-         * [createChildLayer description]
-         * @return {[type]} [description]
-         */
         createChildLayers: function (childlayers) {
-            var layer = new ol.Collection();
+            var layer = new Ol.Collection();
 
             _.each(childlayers, function (childLayer, index) {
-                layer.push(new ol.layer.Tile({
+                layer.push(new Ol.layer.Tile({
                     source: this.getChildLayerSources()[index]
                 }));
             }, this);
             this.setChildLayers(layer);
         },
 
-        /**
-         *
-         */
         createLayer: function () {
-            var groupLayer = new ol.layer.Group({
+            var groupLayer = new Ol.layer.Group({
                 layers: this.getChildLayers()
             });
 
@@ -158,8 +154,10 @@ define(function (require) {
             var legendURL = [];
 
             _.each(this.getLayerdefinitions(), function (layer) {
+                var layerNames;
+
                 if (layer.legendURL === "" || layer.legendURL === undefined) {
-                    var layerNames = layer.layers.split(",");
+                    layerNames = layer.layers.split(",");
 
                     if (layerNames.length === 1) {
                         legendURL.push(layer.url + "?VERSION=" + layer.version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layer.layers);
@@ -179,6 +177,7 @@ define(function (require) {
 
         /**
          * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
+         * @returns {void}
          */
         showLayerInformation: function () {
             var metaID = [],
@@ -208,7 +207,8 @@ define(function (require) {
 
         /**
          * Setter für das Attribut "childLayerSources"
-         * @param {ol.source[]} value
+         * @param {Ol.source[]} value - value
+         * @returns {void}
          */
         setChildLayerSources: function (value) {
             this.set("childLayerSources", value);
@@ -216,7 +216,8 @@ define(function (require) {
 
         /**
          * Setter für das Attribut "childlayers"
-         * @param {ol.Collection} - Eine ol.Collection mit ol.layer Objekten
+         * @param {Ol.Collection} value - Eine Ol.Collection mit Ol.layer Objekten
+         * @returns {void}
          */
         setChildLayers: function (value) {
             this.set("childlayers", value);
@@ -224,7 +225,7 @@ define(function (require) {
 
         /**
         * Getter für das Attribute "childLayerSources"
-        * @return {ol.source[]}
+        * @return {Ol.source[]} childLayerSources
         */
         getChildLayerSources: function () {
             return this.get("childLayerSources");
@@ -232,26 +233,18 @@ define(function (require) {
 
         /**
          * Getter für das Attribut "childlayers"
-         * @return {ol.Collection} - Eine ol.Collection mit ol.layer Objekten
+         * @return {Ol.Collection} childlayers - Eine Ol.Collection mit Ol.layer Objekten
          */
         getChildLayers: function () {
             return this.get("childlayers");
         },
 
-        /**
-         *
-         *
-         */
         setMaxScale: function (layerId) {
             var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
 
             this.set("maxScale", layer.maxScale);
         },
 
-        /**
-         *
-         *
-         */
         setMinScale: function (layerId) {
             var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
 

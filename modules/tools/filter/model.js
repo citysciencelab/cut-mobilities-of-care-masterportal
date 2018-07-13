@@ -258,7 +258,6 @@ define(function (require) {
                 query.setIsDefault(true);
                 query.setIsActive(true);
             }
-
             this.get("queryCollection").add(query);
         },
 

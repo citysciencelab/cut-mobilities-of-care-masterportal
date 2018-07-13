@@ -1,12 +1,10 @@
 define(function (require) {
-    require("slider");
-
     var Template = require("text!modules/snippets/slider/template.html"),
         SliderView;
 
+    require("slider");
+
     SliderView = Backbone.View.extend({
-        className: "slider-container",
-        template: _.template(Template),
         events: {
             // This event fires when the dragging stops or has been clicked on
             "slideStop input.slider": function (evt) {
@@ -18,12 +16,13 @@ define(function (require) {
             // This event is fired when the info button is clicked
             "click .info-icon": "toggleInfoText"
         },
-
         initialize: function () {
             this.listenTo(this.model, {
                 "render": this.render
             });
         },
+        className: "slider-container",
+        template: _.template(Template),
 
         render: function () {
             var attr = this.model.toJSON();
@@ -33,9 +32,6 @@ define(function (require) {
             return this.$el;
         },
 
-        /**
-         * init the slider
-         */
         initSlider: function () {
             var valueModel = this.model.get("valueCollection").models[0];
 
@@ -50,17 +46,19 @@ define(function (require) {
         /**
          * set the input value
          * @param {Event} evt - slide
+         * @returns {void}
          */
         setInputControlValue: function (evt) {
             this.$el.find("input.form-control").val(evt.value);
         },
 
-        /**
-         * toggle the info text
-         */
         toggleInfoText: function () {
+            var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
+
             this.model.trigger("hideAllInfoText");
-            this.$el.find(".info-text").toggle();
+            if (!isInfoTextVisible) {
+                this.$el.find(".info-text").toggle();
+            }
         }
 
     });
