@@ -1,11 +1,10 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+        Ol = require("openlayers"),
         Config = require("config"),
         mqtt = require("mqtt"),
-        moment = require("moment"),
+        Moment = require("moment"),
         $ = require("jquery"),
         SensorLayer;
 
@@ -22,15 +21,15 @@ define(function (require) {
             this.superInitialize();
 
             // change language from moment.js to german
-            moment.locale("de");
+            Moment.locale("de");
         },
 
         /**
-         * creates ol.source.Vector as LayerSource
+         * creates Ol.source.Vector as LayerSource
          * @returns {void}
          */
         createLayerSource: function () {
-            this.setLayerSource(new ol.source.Vector());
+            this.setLayerSource(new Ol.source.Vector());
         },
 
         /**
@@ -38,7 +37,7 @@ define(function (require) {
          * @returns {void}
          */
         createLayer: function () {
-            this.setLayer(new ol.layer.Vector({
+            this.setLayer(new Ol.layer.Vector({
                 source: this.has("clusterDistance") ? this.getClusterLayerSource() : this.getLayerSource(),
                 name: this.get("name"),
                 typ: this.get("typ"),
@@ -58,7 +57,7 @@ define(function (require) {
          * @returns {void}
          */
         createClusterLayerSource: function () {
-            this.setClusterLayerSource(new ol.source.Cluster({
+            this.setClusterLayerSource(new Ol.source.Cluster({
                 source: this.getLayerSource(),
                 distance: this.get("clusterDistance")
             }));
@@ -145,7 +144,7 @@ define(function (require) {
          * draw points on the map
          * @param  {array} sensorData - sensor with location and properties
          * @param  {Sting} epsg - from Sensortype
-         * @return {ol.Features} feature to draw
+         * @return {Ol.Features} feature to draw
          */
         drawPoints: function (sensorData, epsg) {
             var features = [];
@@ -155,9 +154,9 @@ define(function (require) {
                     feature;
 
                 if (_.has(data, "location") && !_.isUndefined(epsg)) {
-                    xyTransfrom = ol.proj.transform(data.location, epsg, Config.view.epsg);
-                    feature = new ol.Feature({
-                        geometry: new ol.geom.Point(xyTransfrom)
+                    xyTransfrom = Ol.proj.transform(data.location, epsg, Config.view.epsg);
+                    feature = new Ol.Feature({
+                        geometry: new Ol.geom.Point(xyTransfrom)
                     });
                 }
                 else {
@@ -203,16 +202,16 @@ define(function (require) {
                 if (utc.length === 2) {
                     // check for winter- and summertime
                     utcSub = parseInt(utc.substring(1, 2), 10);
-                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                    utcSub = Moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
                     utcNumber = "0" + utcSub + "00";
                 }
                 else if (utc.length > 2) {
                     utcSub = parseInt(utc.substring(1, 3), 10);
-                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                    utcSub = Moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
                     utcNumber = utc.substring(1, 3) + "00";
                 }
 
-                time = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("DD MMMM YYYY, HH:mm:ss");
+                time = Moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("DD MMMM YYYY, HH:mm:ss");
             }
 
             return time;
@@ -532,7 +531,7 @@ define(function (require) {
         drawESRIGeoJson: function (sensorData) {
             var streamId = this.get("streamId"),
                 epsgCode = this.get("epsg"),
-                esriFormat = new ol.format.EsriJSON(),
+                esriFormat = new Ol.format.EsriJSON(),
                 olFeaturesArray = [];
 
             _.each(sensorData, function (data) {
@@ -777,7 +776,7 @@ define(function (require) {
 
             // if the feature does not exist, then draw it otherwise update it
             if (_.isUndefined(existingFeature)) {
-                esriFormat = new ol.format.EsriJSON();
+                esriFormat = new Ol.format.EsriJSON();
                 olFeature = esriFormat.readFeature(esriJson, {
                     dataProjection: epsgCode,
                     featureProjection: Config.view.epsg
@@ -793,7 +792,7 @@ define(function (require) {
             }
             else {
                 location = [esriJson.geometry.x, esriJson.geometry.y];
-                xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg);
+                xyTransform = Ol.proj.transform(location, epsgCode, Config.view.epsg);
 
                 if (!(xyTransform[0] < 0 || xyTransform[1] < 0 || xyTransform[0] === Infinity || xyTransform[1] === Infinity)) {
                     existingFeature.setProperties(esriJson.attributes);
@@ -808,9 +807,9 @@ define(function (require) {
 
         /**
          * returns a feature for a given id, if it exists
-         * @param  {[ol.Feature]} features - features from map
+         * @param  {[Ol.Feature]} features - features from map
          * @param  {String} id - id from Stream-Feature
-         * @return {ol.Feature} feature - feature from map with the same id as Stream-Feature
+         * @return {Ol.Feature} feature - feature from map with the same id as Stream-Feature
          */
         getFeatureById: function (features, id) {
             var feature;
