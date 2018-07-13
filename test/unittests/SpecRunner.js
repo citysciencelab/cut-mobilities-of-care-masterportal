@@ -59,6 +59,7 @@ define(function (require) {
         "modules/tools/filter/testFilter.js",
         "modules/snippets/slider/testModel.js",
         "modules/tools/gfi/themes/elektroladesaeulen/testModel.js",
+        "modules/tools/gfi/themes/testModel.js",
         "modules/tools/gfi/themes/schulinfo/testModel.js",
         "modules/tools/gfi/themes/verkehrsstaerken_rad/testModel.js",
         "modules/core/testMap.js",

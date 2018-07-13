@@ -37,7 +37,7 @@ define([
             channel.on({
                 "ovmShow": this.ovmShow, // Icon auf Karte wird angepast wenn Overviewmap sichtbar
                 "ovmHide": this.ovmHide // Icon auf Karte wird angepast wenn Overviewmap versteckt
-            });
+            }, this);
 
             this.listenTo(Radio.channel("Util"), {
                 "isViewMobileChanged": this.isViewMobileChanged
