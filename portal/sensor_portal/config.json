@@ -3,7 +3,6 @@
   {
     "portalTitle": {
       "title": "Geoportal-Sensor",
-      "logo": "/node_modules/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
