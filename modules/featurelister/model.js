@@ -235,7 +235,7 @@ define(function (require) {
             layerlist.push({
                 id: layer.id,
                 name: layer.get("name"),
-                style: layer.getStyle()
+                style: layer.get("style")
             });
             this.unset("layerlist", {silent: true});
             this.set("layerlist", layerlist);

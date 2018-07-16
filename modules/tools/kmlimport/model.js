@@ -28,7 +28,7 @@ define([
         },
 
         setStatus: function (args) {
-            if (args[2].getId() === "kmlimport") {
+            if (args[2].get("id") === "kmlimport") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

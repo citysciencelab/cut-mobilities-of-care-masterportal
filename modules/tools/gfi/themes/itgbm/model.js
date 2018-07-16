@@ -67,7 +67,7 @@ define(function (require) {
 
             featureProperties.extent = this.getFeature().getGeometry().getExtent();
             featureProperties.id = this.getFeature().getId();
-            Radio.trigger("RemoteInterface", "postMessage", {"featureToDetail": JSON.stringify(featureProperties), "layerId": this.getId(), "layerName": this.getName()});
+            Radio.trigger("RemoteInterface", "postMessage", {"featureToDetail": JSON.stringify(featureProperties), "layerId": this.getId(), "layerName": this.get("name")});
         },
 
         // getter for title

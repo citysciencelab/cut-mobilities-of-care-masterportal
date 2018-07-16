@@ -38,7 +38,7 @@ define(function (require) {
         groupContentByTyp: function (content) {
             var groupByTyp = _.groupBy(content, function (obj) {
                 // WMS || WFS || GeoJSON
-                return obj.model.getTyp();
+                return obj.model.get("typ");
             });
 
             _.each(groupByTyp, function (value, key) {
@@ -120,8 +120,8 @@ define(function (require) {
         pushGFIContent: function (gfiContent, visibleLayer) {
             this.pContent.push({
                 content: gfiContent,
-                name: visibleLayer.getName(),
-                ol_layer: visibleLayer.getLayer()
+                name: visibleLayer.get("name"),
+                ol_layer: visibleLayer.get("layer")
             });
         },
 

@@ -35,9 +35,9 @@ define([
         setParams: function (value) {
             this.setTool(value);
             this.set("title", value.getName());
-            this.set("icon", value.getGlyphicon());
-            this.set("winType", value.getId());
-            if (value.getId() === "gfi") {
+            this.set("icon", value.get("glyphicon"));
+            this.set("winType", value.get("id"));
+            if (value.get("id") === "gfi") {
                 this.set("isVisible", false);
             }
             else {

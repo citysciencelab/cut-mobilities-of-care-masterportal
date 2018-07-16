@@ -184,7 +184,7 @@ define([
         setStatus: function (args) {
             var scaletext;
 
-            if (args[2].getId() === "print") {
+            if (args[2].get("id") === "print") {
                 if (this.get("fetched") === false) {
                     // get print config (info.json)
                     this.fetch({

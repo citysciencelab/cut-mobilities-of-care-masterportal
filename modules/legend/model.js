@@ -179,7 +179,7 @@ define([
                 else {
                     var image = [],
                         name = [],
-                        style = Radio.request("StyleList", "returnModelById", layer.getStyleId()),
+                        style = Radio.request("StyleList", "returnModelById", layer.get("styleId")),
                         styleClass = style.get("class"),
                         styleSubClass = style.get("subClass"),
                         styleFieldValues = style.get("styleFieldValues");

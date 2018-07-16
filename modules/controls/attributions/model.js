@@ -46,7 +46,7 @@ define([
         checkModelsByAttributions: function () {
             var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
                 haveModelsAttributions = _.some(modelList, function (model) {
-                    return model.getAttributions();
+                    return model.get("layerAttribution");
                 });
 
             this.setIsVisibleInMap(haveModelsAttributions);

@@ -21,7 +21,7 @@ define([
             });
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "download") {
+            if (args[2].get("id") === "download") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

@@ -289,7 +289,7 @@ define(function (require) {
         },
 
         setStatus: function (args) {
-            if (args[2].getId() === "animation") {
+            if (args[2].get("id") === "animation") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

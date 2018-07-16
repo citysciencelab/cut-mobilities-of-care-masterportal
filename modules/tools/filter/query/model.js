@@ -62,7 +62,7 @@ define(function (require) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: this.getLayerId()});
 
             if (!_.isUndefined(model)) {
-                this.setIsLayerVisible(model.getIsVisibleInMap());
+                this.setIsLayerVisible(model.get("isVisibleInMap"));
             }
         },
 

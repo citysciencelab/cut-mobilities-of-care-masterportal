@@ -19,7 +19,7 @@ define([
             });
         },
         checkStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "addWMS") {
+            if (args[2].get("id") === "addWMS") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

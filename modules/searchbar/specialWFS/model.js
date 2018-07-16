@@ -217,7 +217,7 @@ define(function (require) {
             var url = element.url,
                 parameter = element.data,
                 name = element.name,
-                glyphicon = element.glyphicon ? element.glyphicon : this.getGlyphicon();
+                glyphicon = element.glyphicon ? element.glyphicon : this.get("glyphicon");
 
             $.ajax({
                 url: url,

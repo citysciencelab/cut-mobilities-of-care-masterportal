@@ -25,8 +25,8 @@ define(function (require) {
          */
         createClusterLayerSource: function () {
             this.setClusterLayerSource(new ol.source.Cluster({
-                source: this.getLayerSource(),
-                distance: this.getClusterDistance()
+                source: this.get("layerSource"),
+                distance: this.get("clusterDistance")
             }));
         },
 
@@ -36,13 +36,13 @@ define(function (require) {
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
-                source: this.has("clusterDistance") ? this.getClusterLayerSource() : this.getLayerSource(),
-                name: this.getName(),
-                typ: this.getTyp(),
-                gfiAttributes: this.getGfiAttributes(),
-                routable: this.getRoutable(),
-                gfiTheme: this.getGfiTheme(),
-                id: this.getId()
+                source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.get("layerSource"),
+                name: this.get("name"),
+                typ: this.get("typ"),
+                gfiAttributes: this.get("gfiAttributes"),
+                routable: this.get("routable"),
+                gfiTheme: this.get("gfiTheme"),
+                id: this.get("id")
             }));
 
             this.updateData();
@@ -56,18 +56,10 @@ define(function (require) {
             this.set("clusterLayerSource", value);
         },
 
-        /**
-         * [getClusterLayerSource description]
-         * @return {[type]}       [description]
-         */
-        getClusterLayerSource: function () {
-            return this.get("clusterLayerSource");
-        },
-
         getWfsFormat: function () {
             return new ol.format.WFS({
-                featureNS: this.getFeatureNS(),
-                featureType: this.getFeatureType()
+                featureNS: this.get("featureNS"),
+                featureType: this.get("featureType")
             });
         },
 
@@ -76,8 +68,8 @@ define(function (require) {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
                 SRSNAME: Radio.request("MapView", "getProjection").getCode(),
-                TYPENAME: this.getFeatureType(),
-                VERSION: this.getVersion()
+                TYPENAME: this.get("featureType"),
+                VERSION: this.get("version")
             };
 
             Radio.trigger("Util", "showLoader");
@@ -91,7 +83,7 @@ define(function (require) {
                 success: function (data) {
                     Radio.trigger("Util", "hideLoader");
                     var wfsReader = new ol.format.WFS({
-                            featureNS: this.getFeatureNS()
+                            featureNS: this.get("featureNS")
                         }),
                         features = wfsReader.readFeatures(data),
                         isClustered = Boolean(this.has("clusterDistance"));
@@ -100,11 +92,11 @@ define(function (require) {
                     features = _.filter(features, function (feature) {
                         return !_.isUndefined(feature.getGeometry());
                     });
-                    this.getLayerSource().addFeatures(features);
+                    this.get("layerSource").addFeatures(features);
                     this.set("loadend", "ready");
-                    Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
+                    Radio.trigger("WFSLayer", "featuresLoaded", this.get("id"), features);
                     this.styling(isClustered);
-                    this.getLayer().setStyle(this.getStyle());
+                    this.get("layer").setStyle(this.get("style"));
                     this.featuresLoaded(features);
                 },
                 error: function () {
@@ -113,7 +105,7 @@ define(function (require) {
             });
         },
         styling: function (isClustered) {
-            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
+            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
             if (!_.isUndefined(stylelistmodel)) {
                 /**
@@ -134,14 +126,10 @@ define(function (require) {
             this.set("projection", proj);
         },
 
-        getStyleId: function () {
-            return this.get("styleId");
-        },
-
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
-            if (!this.getLegendURL().length) {
-                var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+            if (!this.get("legendURL").length) {
+                var style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
                 if (!_.isUndefined(style)) {
                     this.setLegendURL([style.getImagePath() + style.getImageName()]);
@@ -153,7 +141,7 @@ define(function (require) {
          * sets null style (= no style) for all features
          */
         hideAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures();
+            var collection = this.get("layerSource").getFeatures();
 
             collection.forEach(function (feature) {
                 feature.setStyle(function () {
@@ -163,11 +151,11 @@ define(function (require) {
         },
 
         showAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures(),
+            var collection = this.get("layerSource").getFeatures(),
                 style;
 
             collection.forEach(function (feature) {
-                style = this.getStyleAsFunction(this.getStyle());
+                style = this.getStyleAsFunction(this.get("style"));
 
                 feature.setStyle(style(feature));
             }, this);
@@ -179,10 +167,10 @@ define(function (require) {
         showFeaturesByIds: function (featureIdList) {
             this.hideAllFeatures();
             _.each(featureIdList, function (id) {
-                var feature = this.getLayerSource().getFeatureById(id),
+                var feature = this.get("layerSource").getFeatureById(id),
                     style = [];
 
-                style = this.getStyleAsFunction(this.getStyle());
+                style = this.getStyleAsFunction(this.get("style"));
 
                 feature.setStyle(style(feature));
             }, this);
@@ -198,27 +186,9 @@ define(function (require) {
 
         },
 
-        // getter for style
-        getStyle: function () {
-            return this.get("style");
-        },
         // setter for style
         setStyle: function (value) {
             this.set("style", value);
-        },
-
-        // getter for clusterDistance
-        getClusterDistance: function () {
-            return this.get("clusterDistance");
-        },
-
-        // getter for featureNS
-        getFeatureNS: function () {
-            return this.get("featureNS");
-        },
-        // getter for featureType
-        getFeatureType: function () {
-            return this.get("featureType");
         }
     });
 

@@ -179,13 +179,13 @@ define(function (require) {
 
             // WMS | GROUP
             _.each(visibleLayerList, function (model) {
-                if (model.getGfiAttributes() !== "ignore" || _.isUndefined(model.getGfiAttributes()) === true) {
-                    if (model.getTyp() === "WMS") {
+                if (model.get("gfiAttributes") !== "ignore" || _.isUndefined(model.get("gfiAttributes")) === true) {
+                    if (model.get("typ") === "WMS") {
                         model.attributes.gfiUrl = model.getGfiUrl();
                         gfiParams.push(model.attributes);
                     }
                     else {
-                        _.each(model.getGfiParams(), function (params) {
+                        _.each(model.get("gfiParams"), function (params) {
                             params.gfiUrl = model.getGfiUrl(params, evt.coordinate, params.childLayerIndex);
                             gfiParams.push(params);
                         });

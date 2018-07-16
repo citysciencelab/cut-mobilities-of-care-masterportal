@@ -50,8 +50,8 @@ define(function (require) {
 
         traverseTree: function (model) {
 
-            if (model.getIsExpanded()) {
-                if (model.getId() === "SelectedLayer") {
+            if (model.get("isExpanded")) {
+                if (model.get("id") === "SelectedLayer") {
                     this.renderSelection(true);
                 }
                 else {
@@ -71,7 +71,7 @@ define(function (require) {
             models = this.collection.add(lightModels);
 
             models = _.sortBy(models, function (layer) {
-                return layer.getSelectionIDX();
+                return layer.get("selectionIDX");
             }).reverse();
 
             _.each(models, function (model) {
@@ -85,7 +85,7 @@ define(function (require) {
             var models = this.collection.where({isSelected: true, type: "layer"});
 
             models = _.sortBy(models, function (layer) {
-                return layer.getSelectionIDX();
+                return layer.get("selectionIDX");
             }).reverse();
             if (withAnimation) {
                 this.slideModels("descent", models, "tree", "Selection");
@@ -102,21 +102,21 @@ define(function (require) {
 
         descentInTree: function (model) {
             var models = [],
-                lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()});
+                lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")});
 
             models = this.collection.add(lightModels);
 
-            if (model.getIsLeafFolder()) {
+            if (model.get("isLeafFolder")) {
                 models.push(model);
             }
-            this.slideModels("descent", models, model.getParentId());
+            this.slideModels("descent", models, model.get("parentId"));
         },
 
         ascentInTree: function (model) {
             model.setIsVisibleInTree(false);
-            var models = this.collection.where({parentId: model.getParentId()});
+            var models = this.collection.where({parentId: model.get("parentId")});
 
-            this.slideModels("ascent", models, model.getId());
+            this.slideModels("ascent", models, model.get("id"));
         },
 
         slideModels: function (direction, modelsToShow, parentIdOfModelsToHide, currentList) {
@@ -143,16 +143,16 @@ define(function (require) {
                 else {
                     // Gruppieren nach Folder und Rest
                     var groupedModels = _.groupBy(modelsToShow, function (model) {
-                        return model.getType() === "folder" ? "folder" : "other";
+                        return model.get("type") === "folder" ? "folder" : "other";
                     });
 
                     // Im default-Tree werden folder und layer alphabetisch sortiert
-                    if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].getParentId() !== "tree") {
+                    if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].get("parentId") !== "tree") {
                         groupedModels.folder = _.sortBy(groupedModels.folder, function (item) {
-                            return item.getName();
+                            return item.get("name");
                         });
                         groupedModels.other = _.sortBy(groupedModels.other, function (item) {
-                            return item.getName();
+                            return item.get("name");
                         });
                     }
                     // Folder zuerst zeichnen
@@ -181,7 +181,7 @@ define(function (require) {
 
             _.each(models, function (model) {
                 model.setIsVisibleInTree(true);
-                switch (model.getType()) {
+                switch (model.get("type")) {
                     case "folder": {
                         var attr = model.toJSON();
 

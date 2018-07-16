@@ -26,22 +26,22 @@ define([
                 "change:isOutOfRange": this.toggleColor
             });
             this.render();
-            this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleColor(this.model, this.model.get("isOutOfRange"));
         },
 
         render: function () {
             var attr = this.model.toJSON(),
-                selector = $("#" + this.model.getParentId());
+                selector = $("#" + this.model.get("parentId"));
 
             this.$el.html("");
-            if (this.model.getIsVisibleInTree()) {
-                if (this.model.getLevel() === 0) {
+            if (this.model.get("isVisibleInTree")) {
+                if (this.model.get("level") === 0) {
                     selector.prepend(this.$el.html(this.template(attr)));
                 }
                 else {
                     selector.after(this.$el.html(this.template(attr)));
                 }
-                $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
+                $(this.$el).css("padding-left", (this.model.get("level") * 15 + 5) + "px");
             }
         },
         /**
@@ -95,7 +95,7 @@ define([
             this.model.moveUp();
         },
         removeIfNotVisible: function () {
-            if (!this.model.getIsVisibleInTree()) {
+            if (!this.model.get("isVisibleInTree")) {
                 this.remove();
             }
         }

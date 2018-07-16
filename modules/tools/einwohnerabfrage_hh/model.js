@@ -243,7 +243,7 @@ define(function (require) {
         setStatus: function (args) {
             var selectedValues;
 
-            if (args[2].getId() === "einwohnerabfrage" && args[0] === true) {
+            if (args[2].get("id") === "einwohnerabfrage" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 selectedValues = this.getDropDownSnippet().getSelectedValues();

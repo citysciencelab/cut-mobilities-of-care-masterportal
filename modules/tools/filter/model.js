@@ -240,7 +240,7 @@ define(function (require) {
 
         createQuery: function (model) {
             var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
-                query = layer.getTyp() === "WFS" || layer.getTyp() === "GeoJSON" ? new WfsQueryModel(model) : undefined;
+                query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" ? new WfsQueryModel(model) : undefined;
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));

@@ -58,7 +58,7 @@ define([
                 },
                 // Sendet das SLD an die layerlist, sobald es erzeugt wurde
                 "change:setSLD": function () {
-                    Radio.trigger("ModelList", "setModelAttributesById", this.getModel().getId(), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
+                    Radio.trigger("ModelList", "setModelAttributesById", this.getModel().get("id"), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
                 }
             });
         },

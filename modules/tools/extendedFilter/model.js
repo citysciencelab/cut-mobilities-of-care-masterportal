@@ -59,7 +59,7 @@ define(function (require) {
             return this.set("wfsList", val);
         },
         checkStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "extendedFilter") {
+            if (args[2].get("id") === "extendedFilter") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

@@ -36,7 +36,7 @@ define([
                 "change:isOutOfRange": this.toggleColor
             });
             this.render();
-            this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleColor(this.model, this.model.get("isOutOfRange"));
         },
 
         render: function () {
@@ -44,7 +44,7 @@ define([
                 attr = this.model.toJSON();
 
             selector.prepend(this.$el.html(this.template(attr)));
-            if (this.model.getIsSettingVisible() === true) {
+            if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
             }
         },
@@ -52,7 +52,7 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            if (this.model.getIsSettingVisible() === true) {
+            if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
             }
         },
@@ -64,7 +64,7 @@ define([
             var attr = this.model.toJSON();
 
             // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
+            if (this.model.get("isSettingVisible") === false) {
                 // Animation Zahnrad
                 this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
                 this.$el.find(".layer-settings").slideUp("slow", function () {
