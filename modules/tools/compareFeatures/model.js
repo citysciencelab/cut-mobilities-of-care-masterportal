@@ -217,6 +217,87 @@ define(function () {
                 }
             });
         },
+        preparePrint: function (rowsToShow) {
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+                themeConfig = Radio.request("Schulinfo", "getThemeConfig"),
+                features = this.prepareFeatureListToShow(layerModel.get("gfiAttributes"), themeConfig),
+                tableBody = this.prepareTableBody(features, rowsToShow),
+                rowWidth = this.calculateRowWidth(tableBody[0], 30),
+                title = "Vergleichsliste - Schulen",
+                pdfDef = {
+                    pageSize: "A4",
+                    pageOrientation: "portrait",
+                    content: [
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: rowWidth,
+                                body: tableBody
+                            },
+                            layout: {
+                                hLineWidth: function (i, node) {
+                                    return i === 0 || i === node.table.body.length ? 2 : 1;
+                                },
+                                vLineWidth: function (i, node) {
+                                    return i === 0 || i === node.table.widths.length ? 2 : 1;
+                                },
+                                fillColor: function (i) {
+                                    return i % 2 === 0 ? "#eeeeee" : "#dddddd";
+                                }
+                            }
+                        }
+                    ]
+                };
+
+            Radio.trigger("BrowserPrint", "print", "Vergleichsliste_Schulen", pdfDef, title, "download");
+        },
+
+        prepareTableBody: function (features, rowsToShow) {
+            var tableBody = [];
+
+            _.each(features, function (rowFeature, rowIndex) {
+                var row = [];
+
+                if (rowIndex < rowsToShow) {
+                    _.each(rowFeature, function (val) {
+                        if (_.isUndefined(val)) {
+                            row.push("");
+                        }
+                        // header cells get extra styling
+                        else if (rowIndex === 0) {
+                            row.push({
+                                text: String(val),
+                                style: "bold"
+                            });
+                        }
+                        else if (_.isArray(val)) {
+                            row.push(String(val).replace(/,/g, ",\n"));
+                        }
+                        else {
+                            row.push(String(val));
+                        }
+                    });
+                    tableBody.push(row);
+                }
+            });
+            tableBody[0][0] = {
+                text: ""
+            };
+            return tableBody;
+        },
+        calculateRowWidth: function (firstRow, firstRowWidth) {
+            var numDataRows = firstRow.length - 1,
+                rowWidth = [String(firstRowWidth) + "%"],
+                dataRowsWidth = 100 - firstRowWidth,
+                dataRowWidth = String(dataRowsWidth / numDataRows) + "%";
+
+            _.each(firstRow, function (row, index) {
+                if (index > 0) {
+                    rowWidth.push(dataRowWidth);
+                }
+            });
+            return rowWidth;
+        },
 
         /**
          * @param {object} value - features grouped by layerId

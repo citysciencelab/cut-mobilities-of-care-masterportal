@@ -20,6 +20,9 @@
     overflow: auto;
     max-height: calc(100vh - 200px);
 }
+.compare-feature-modal .modal-lg {
+    width: 95%
+}
 
 .compare-feature-modal .modal-error {
     width: 450px;
