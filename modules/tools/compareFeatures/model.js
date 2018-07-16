@@ -242,7 +242,7 @@ define(function () {
                                     return i === 0 || i === node.table.widths.length ? 2 : 1;
                                 },
                                 fillColor: function (i) {
-                                    return i % 2 === 0 ? "#eeeeee" : "#dddddd";
+                                    return i % 2 === 0 ? "#dddddd" : "#ffffff";
                                 }
                             }
                         }

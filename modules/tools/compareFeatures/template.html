@@ -44,9 +44,13 @@
                                             if(String(obj[key]).search("http") !== -1) { %>
                                                 <a href="<%= obj[key] %>" target="_blank"><%= obj[key] %></a>
                                             <% }
-                                            else { %>
+                                            else if (String(obj[key]).search("@") !== -1) { %>
+                                                <a href="mailto:<%= obj[key] %>"><%= obj[key] %></a>
+                                            <% }
+                                            else {%>
                                                 <%= obj[key] %>
-                                            <% }} %>
+                                            <% } %>
+                                        <% } %>
                                         </span>
                                     </td>
                                 <% }); %>
