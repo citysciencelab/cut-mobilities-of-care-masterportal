@@ -212,14 +212,6 @@ define(function (require) {
          */
         setLayerSource: function (value) {
             this.set("layerSource", value);
-        },
-
-        /*
-         * Getter for attribute "layerSource"
-         * @return {Ol.source}
-        */
-        getLayerSource: function () {
-            return this.get("layerSource");
         }
     });
 

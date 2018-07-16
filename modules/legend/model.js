@@ -22,7 +22,7 @@ define(function (require) {
             var channel = Radio.channel("Legend");
 
             channel.reply({
-                "getLegendParams": this.getLegendParams
+                "getLegendParams": this.get("legendParams")
             }, this);
 
             this.listenTo(Radio.channel("ModelList"), {
@@ -90,9 +90,6 @@ define(function (require) {
             this.set("legendParams", legendParams);
         },
 
-        getLegendParams: function () {
-            return this.get("legendParams");
-        },
         createLegend: function () {
             this.set("legendParams", []);
             this.set("legendParams", _.sortBy(this.get("tempArray"), function (obj) {
@@ -201,7 +198,7 @@ define(function (require) {
                 else {
                     image = [];
                     name = [];
-                    style = Radio.request("StyleList", "returnModelById", layer.getStyleId());
+                    style = Radio.request("StyleList", "returnModelById", layer.get("styleId"));
                     styleClass = style.get("class");
                     styleSubClass = style.get("subClass");
                     styleFieldValues = style.get("styleFieldValues");
@@ -368,7 +365,7 @@ define(function (require) {
 
             // set the background of the SVG transparent
             // necessary because the image is in the background and the SVG on top of this
-            if (advancedStyle.getImageName() !== "blank.png") {
+            if (advancedStyle.get("imageName") !== "blank.png") {
                 advancedStyle.setCircleSegmentsBackgroundColor([
                     255, 255, 255, 0
                 ]);

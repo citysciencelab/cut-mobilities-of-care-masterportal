@@ -10,7 +10,6 @@ define(function (require) {
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
-        $ = require("jquery"),
         ModelList;
 
     ModelList = Backbone.Collection.extend({
@@ -56,7 +55,7 @@ define(function (require) {
                     if (model.getId() === "SelectedLayer") {
                         this.trigger("updateSelection", model);
                     }
-                    // Trigger fÃ¼r mobiles Wandern im Baum
+                    // Trigger für mobiles Wandern im Baum
                     this.trigger("traverseTree", model);
                     channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                 },

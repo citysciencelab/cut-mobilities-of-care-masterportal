@@ -204,9 +204,11 @@ define(function (require) {
 
         isValidKey: function (key) {
             var ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+
             if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
                 return false;
             }
+
             return true;
         },
 

@@ -38,7 +38,7 @@ define(function (require) {
          */
         createLayer: function () {
             this.setLayer(new Ol.layer.Vector({
-                source: this.has("clusterDistance") ? this.getClusterLayerSource() : this.getLayerSource(),
+                source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.getLayerSource(),
                 name: this.get("name"),
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
@@ -103,7 +103,7 @@ define(function (require) {
 
             if (!_.isUndefined(features)) {
                 this.styling(isClustered);
-                this.getLayer().setStyle(this.getStyle());
+                this.getLayer().setStyle(this.get("style"));
             }
         },
 
@@ -579,7 +579,7 @@ define(function (require) {
          * @returns {void}
          */
         styling: function (isClustered) {
-            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
+            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
             if (!_.isUndefined(stylelistmodel)) {
                 this.setStyle(function (feature) {
@@ -786,7 +786,7 @@ define(function (require) {
                 olFeature.setId(id);
                 this.getLayerSource().addFeature(olFeature);
                 this.styling(isClustered);
-                this.getLayer().setStyle(this.getStyle());
+                this.getLayer().setStyle(this.get("style"));
 
                 Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), olFeature);
             }
@@ -833,24 +833,12 @@ define(function (require) {
             var style;
 
             if (!_.isUndefined(this.getLegendURL()) && !this.getLegendURL().length) {
-                style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+                style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
                 if (!_.isUndefined(style)) {
-                    this.setLegendURL([style.getImagePath() + style.getImageName()]);
+                    this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
                 }
             }
-        },
-
-        getStyle: function () {
-            return this.get("style");
-        },
-
-        getClusterLayerSource: function () {
-            return this.get("clusterLayerSource");
-        },
-
-        getStyleId: function () {
-            return this.get("styleId");
         },
 
         setStyle: function (value) {
