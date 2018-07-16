@@ -253,6 +253,9 @@ define(function (require) {
             if (!_.isUndefined(this.get("sendToRemote"))) {
                 query.set("sendToRemote", this.get("sendToRemote"));
             }
+            if (!_.isUndefined(this.get("minScale"))) {
+                query.set("minScale", this.get("minScale"));
+            }
 
             if (query.get("isSelected")) {
                 query.setIsDefault(true);

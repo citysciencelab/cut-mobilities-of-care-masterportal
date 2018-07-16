@@ -113,17 +113,23 @@ define(function (require) {
             }, this);
 
             this.listenTo(this, {
-                "change:resolution": function () {
-                    channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                "change:resolution": function (model, resolution) {
+                    // everytime the resolution changes, the scale also has to be changed.
+                    // needs to be refactored because listener triggeres other listener
+                    var params = _.findWhere(this.get("options"), {resolution: resolution});
+
+                    this.get("view").setResolution(resolution);
+                    this.set("scale", params.scale);
+                    channel.trigger("changedOptions", params);
 
                     // triggert das Zoom in / out übers Mausrad / Touch
                     Radio.trigger("ClickCounter", "zoomChanged");
                 },
-                "change:scale": function () {
-                    var params = _.findWhere(this.get("options"), {scale: this.get("scale")});
+                "change:scale": function (model, scale) {
+                    var params = _.findWhere(this.get("options"), {scale: scale});
 
                     this.set("resolution", params.resolution);
-                    this.get("view").setResolution(this.get("resolution"));
+                    this.get("view").setResolution(params.resolution);
                 },
                 "change:background": function (model, value) {
                     if (value === "white") {
