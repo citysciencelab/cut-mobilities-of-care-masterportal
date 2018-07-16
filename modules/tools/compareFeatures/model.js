@@ -206,6 +206,9 @@ define(function () {
          */
         beautifyAttributeValues: function (feature) {
             Object.keys(feature.getProperties()).forEach(function (key) {
+                var array = [],
+                    newVal;
+
                 if (typeof feature.get(key) === "string" && feature.get(key).indexOf("|") !== -1) {
                     feature.set(key, feature.get(key).split("|"));
                 }
@@ -214,6 +217,27 @@ define(function () {
                 }
                 else if (feature.get(key) === "false") {
                     feature.set(key, "nein");
+                }
+                if (key === "oberstufenprofil") {
+                    if (_.isArray(feature.get(key))) {
+                        _.each(feature.get(key), function (value) {
+                            newVal = value;
+
+                            // make part before first "," bold
+                            newVal = newVal.replace(/^/, "<b>");
+                            newVal = newVal.replace(/,/, "</b>,");
+                            array.push(newVal);
+                        });
+                        feature.set(key, array);
+                    }
+                    else {
+                        newVal = feature.get(key);
+                        // make part before first "," bold
+                        newVal = newVal.replace(/^/, "<b>");
+                        newVal = newVal.replace(/,/, "</b>,");
+
+                        feature.set(key, newVal);
+                    }
                 }
             });
         },
