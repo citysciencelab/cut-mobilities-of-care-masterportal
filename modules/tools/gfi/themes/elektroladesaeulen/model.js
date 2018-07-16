@@ -2,7 +2,7 @@ define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
         ElektroladesaeulenTheme,
-        moment = require("moment"),
+        Moment = require("moment"),
         $ = require("jquery");
 
     ElektroladesaeulenTheme = Theme.extend({
@@ -71,8 +71,8 @@ define(function (require) {
                 gfiParams = this.get("gfiParams");
                 historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams);
                 historicalDataClean = this.dataCleaning(historicalData);
-                lastDay = _.isUndefined(this.get("lastDate")) ? "" : moment(this.get("lastDate")).format("YYYY-MM-DD");
-                endDay = moment().format("YYYY-MM-DD");
+                lastDay = _.isUndefined(this.get("lastDate")) ? "" : Moment(this.get("lastDate")).format("YYYY-MM-DD");
+                endDay = Moment().format("YYYY-MM-DD");
                 dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay, endDay);
 
                 this.setDataStreamIds(dataStreamIds);
@@ -269,13 +269,13 @@ define(function (require) {
 
             // handle Dates
             if (!_.isUndefined(startDate)) {
-                lastDate = moment(startDate, "DD.MM.YYYY");
+                lastDate = Moment(startDate, "DD.MM.YYYY");
                 // request 3 more weeks to find the latest status
-                time = moment(startDate, "DD.MM.YYYY").subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
+                time = Moment(startDate, "DD.MM.YYYY").subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
                 workingQuery = workingQuery + ";$filter=phenomenonTime gt " + time;
 
                 if (!_.isUndefined(endDate)) {
-                    endDate = moment(endDate, "DD.MM.YYYY").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
+                    endDate = Moment(endDate, "DD.MM.YYYY").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
                     workingQuery = workingQuery + " and phenomenonTime lt " + endDate;
                 }
             }
@@ -294,9 +294,9 @@ define(function (require) {
                 unit = translateUnit[periodUnit];
 
                 // request 3 more weeks to find the latest status
-                time = moment().subtract(periodTime, unit).subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
+                time = Moment().subtract(periodTime, unit).subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
 
-                lastDate = moment().subtract(periodTime, unit);
+                lastDate = Moment().subtract(periodTime, unit);
                 workingQuery = workingQuery + ";$filter=phenomenonTime gt " + time;
             }
 
@@ -375,7 +375,7 @@ define(function (require) {
                     indexArray = [];
 
                 _.each(observations, function (data, index) {
-                    var time = moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
+                    var time = Moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
                         state = data.result;
 
                     if (index === 0) {
@@ -383,7 +383,7 @@ define(function (require) {
                         lastState = state;
                         return;
                     }
-                    else if (Math.abs(moment(lastTime).diff(time)) < 1000 && state === lastState) {
+                    else if (Math.abs(Moment(lastTime).diff(time)) < 1000 && state === lastState) {
                         indexArray.push(index);
                     }
 
@@ -464,16 +464,16 @@ define(function (require) {
                     if (utcString.length === 2) {
                         // check for winter- and summertime
                         utcSub = parseInt(utcString.substring(1, 2), 10);
-                        utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                        utcSub = Moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
                         utcNumber = "0" + utcSub + "00";
                     }
                     else if (utcString.length > 2) {
                         utcSub = parseInt(utcString.substring(1, 3), 10);
-                        utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                        utcSub = Moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
                         utcNumber = utc.substring(1, 3) + "00";
                     }
 
-                    obs.phenomenonTime = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("YYYY-MM-DDTHH:mm:ss");
+                    obs.phenomenonTime = Moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("YYYY-MM-DDTHH:mm:ss");
 
                 });
             });
@@ -516,15 +516,15 @@ define(function (require) {
                     arrayIndex = 0,
                     booleanLoop = true,
                     thisLastDay,
-                    actualDay = _.isUndefined(endDay) ? moment().format("YYYY-MM-DD") : endDay;
+                    actualDay = _.isUndefined(endDay) ? Moment().format("YYYY-MM-DD") : endDay;
 
                 if (!_.isEmpty(observations)) {
-                    thisLastDay = _.isUndefined(lastDay) || lastDay === "" ? moment(observations[observations.length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay;
+                    thisLastDay = _.isUndefined(lastDay) || lastDay === "" ? Moment(observations[observations.length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay;
                     weekArray[arrayIndex].push([]);
                 }
 
                 _.each(observations, function (data) {
-                    var phenomenonDay = moment(data.phenomenonTime).format("YYYY-MM-DD"),
+                    var phenomenonDay = Moment(data.phenomenonTime).format("YYYY-MM-DD"),
                         zeroTime,
                         zeroResult,
                         weekArrayIndexLength;
@@ -534,7 +534,7 @@ define(function (require) {
                         weekArrayIndexLength = weekArray[arrayIndex].length - 1;
 
                         // when the last date is reached, the loop is no longer needed
-                        if (moment(actualDay) < moment(thisLastDay)) {
+                        if (Moment(actualDay) < Moment(thisLastDay)) {
                             booleanLoop = false;
                             weekArray[arrayIndex].pop();
                             break;
@@ -545,12 +545,12 @@ define(function (require) {
                         }
                         // dd object with 0 o'clock and the status of the current day
                         else {
-                            zeroTime = moment(actualDay).format("YYYY-MM-DDTHH:mm:ss");
+                            zeroTime = Moment(actualDay).format("YYYY-MM-DDTHH:mm:ss");
                             zeroResult = data.result;
                             weekArray[arrayIndex][weekArrayIndexLength].push({phenomenonTime: zeroTime, result: zeroResult});
 
                             // Danach aktuellen Tag auf vorherigen Tag und ArrayIndex auf nächstes Array setzen
-                            actualDay = moment(actualDay).subtract(1, "days").format("YYYY-MM-DD");
+                            actualDay = Moment(actualDay).subtract(1, "days").format("YYYY-MM-DD");
 
                             if (arrayIndex >= 6) {
                                 arrayIndex = 0;
@@ -582,7 +582,7 @@ define(function (require) {
                 dataPerHour,
                 processedData,
                 graphConfig,
-                day = moment().subtract(index, "days").format("dddd");
+                day = Moment().subtract(index, "days").format("dddd");
 
             // need to toggle weekdays
             this.setDayIndex(index);
@@ -646,7 +646,7 @@ define(function (require) {
          * @returns {void}
          */
         drawErrorMessage: function (graphTag, width, height, index) {
-            var today = moment().subtract(index, "days").format("dddd");
+            var today = Moment().subtract(index, "days").format("dddd");
 
             $(".ladesaeulen .day").text(today).css("font-weight", "bold");
             $("<div class='noData' style='height: " + height + "px; width: " + width + "px;'>")
@@ -665,8 +665,8 @@ define(function (require) {
             var allDataArray = [];
 
             _.each(dataByWeekday, function (dayData) {
-                var zeroTime = moment(moment(dayData[0].phenomenonTime).format("YYYY-MM-DD")).format("YYYY-MM-DDTHH:mm:ss"),
-                    firstTimeDayData = moment(dayData[0].phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
+                var zeroTime = Moment(Moment(dayData[0].phenomenonTime).format("YYYY-MM-DD")).format("YYYY-MM-DDTHH:mm:ss"),
+                    firstTimeDayData = Moment(dayData[0].phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
                     emptyDayObj = this.createInitialDayPerHour(),
                     dayObj;
 
@@ -708,17 +708,17 @@ define(function (require) {
             var dataFromDay = _.isUndefined(dayData) ? [] : dayData,
                 actualState = _.has(dataFromDay[0], "result") ? dataFromDay[0].result : "",
                 actualStateAsNumber = targetResult === actualState ? 1 : 0,
-                startDate = _.has(dataFromDay[0], "phenomenonTime") ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
+                startDate = _.has(dataFromDay[0], "phenomenonTime") ? Moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
                 dayObj = _.isUndefined(emptyDayObj) ? {} : emptyDayObj;
 
             _.each(dayObj, function (value, key) {
                 var i = parseFloat(key, 10),
-                    actualTimeStep = moment(startDate).add(i, "hour").format("YYYY-MM-DDTHH:mm:ss"),
-                    nextTimeStep = moment(startDate).add(i + 1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+                    actualTimeStep = Moment(startDate).add(i, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+                    nextTimeStep = Moment(startDate).add(i + 1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
                     dataByActualTimeStep = this.filterDataByActualTimeStep(dataFromDay, actualTimeStep, nextTimeStep);
 
                 // if the requested period is in the future
-                if (moment(nextTimeStep).toDate().getTime() > moment().toDate().getTime()) {
+                if (Moment(nextTimeStep).toDate().getTime() > Moment().toDate().getTime()) {
                     dayObj[i] = undefined;
                 }
                 else if (_.isEmpty(dataByActualTimeStep)) {
@@ -743,7 +743,7 @@ define(function (require) {
          */
         filterDataByActualTimeStep: function (dayData, actualTimeStep, nextTimeStep) {
             return _.filter(dayData, function (data) {
-                var dataToCheck = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
+                var dataToCheck = _.has(data, "phenomenonTime") ? Moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
 
                 return dataToCheck >= actualTimeStep && dataToCheck < nextTimeStep;
             });
@@ -761,8 +761,8 @@ define(function (require) {
          * @return {number} workload
          */
         calculateOneHour: function (dataByActualTimeStep, actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult) {
-            var actualPhenomenonTime = moment(actualTimeStep).toDate().getTime(),
-                endTime = moment(nextTimeStep).toDate().getTime(),
+            var actualPhenomenonTime = Moment(actualTimeStep).toDate().getTime(),
+                endTime = Moment(nextTimeStep).toDate().getTime(),
                 timeDiff = 0,
                 currentState = actualState,
                 currentStateAsNumber = actualStateAsNumber,
@@ -774,7 +774,7 @@ define(function (require) {
                     erg;
 
                 if (state !== currentState) {
-                    phenomenonTime = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).toDate().getTime() : "";
+                    phenomenonTime = _.has(data, "phenomenonTime") ? Moment(data.phenomenonTime).toDate().getTime() : "";
 
                     erg = (phenomenonTime - actualPhenomenonTime) * currentStateAsNumber;
                     timeDiff = timeDiff + erg;

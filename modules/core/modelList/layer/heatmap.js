@@ -214,10 +214,6 @@ define(function (require) {
             this.set("layerSource", value);
         },
 
-        setNormalizeWeightForHeatmap: function (value) {
-            this.set("normalizeWeightForHeatmap", value);
-        },
-
         /*
          * Getter for attribute "layerSource"
          * @return {Ol.source}
