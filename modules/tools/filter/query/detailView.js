@@ -152,6 +152,7 @@ define(function (require) {
          */
         hideAllInfoText: function () {
             this.$el.find(".info-text").hide();
+            this.$el.find(".info-icon").css("opacity", "0.4");
         }
     });
 
