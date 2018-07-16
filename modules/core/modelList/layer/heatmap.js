@@ -94,7 +94,7 @@ define(function (require) {
                 if (!_.isUndefined(attribute || value)) {
                     count = this.countStates(feature, attribute, value);
 
-                    cloneFeature.setWeightForHeatmap(count);
+                    cloneFeature.set("weightForHeatmap", count);
                 }
 
                 cloneFeature.setId(feature.getId());
@@ -136,7 +136,7 @@ define(function (require) {
             if (!_.isUndefined(attribute || value)) {
                 count = this.countStates(feature, attribute, value);
 
-                cloneFeature.setWeightForHeatmap(count);
+                cloneFeature.set("weightForHeatmap", count);
             }
 
             // if the feature is new, then pushes otherwise change it
@@ -165,7 +165,7 @@ define(function (require) {
             }).get("weightForHeatmap");
 
             _.each(featuresWithValue, function (feature) {
-                feature.setNormalizeWeightForHeatmap(feature.get("weightForHeatmap") / max);
+                feature.set("weightForHeatmap", feature.get("weightForHeatmap") / max);
             });
         },
 
@@ -212,10 +212,6 @@ define(function (require) {
          */
         setLayerSource: function (value) {
             this.set("layerSource", value);
-        },
-
-        setWeightForHeatmap: function (value) {
-            this.set("weightForHeatmap", value);
         },
 
         setNormalizeWeightForHeatmap: function (value) {
