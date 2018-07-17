@@ -88,6 +88,8 @@ define(function (require) {
             
             console.log("ja");
             console.log(this.get("searchString"));
+            console.log(pattern);
+            
             this.set("searchString", searchString);
             if (searchString.length >= this.get("minChars")) {
                 if (this.get("searchStreets") === true) {
@@ -251,6 +253,7 @@ define(function (require) {
                 coordinates,
                 hitNames = [],
                 hitName;
+console.log(hits);
 
             _.each(hits, function (hit) {
                 coordinates = $(hit).find("gml\\:posList,posList")[0].textContent.split(" ");
@@ -265,8 +268,12 @@ define(function (require) {
                     id: hitName.replace(/ /g, "") + "Straße"
                 });
             }, this);
+console.log(this.get("searchHouseNumbers"));
 
             if (this.get("searchHouseNumbers") === true) {
+                console.log(hits.length);
+                console.log(hitName);
+
                 if (hits.length === 1) {
                     this.set("onlyOneStreetName", hitName);
                     this.setTypeOfRequest("searchHouseNumbers1");
@@ -322,6 +329,7 @@ define(function (require) {
             var address, number;
 console.log("Texti");
 console.log(this.get("pastedHouseNumber"));
+console.log(this.getHouseNumbers());
 
             // Adressuche über Copy/Paste
             if (this.get("pastedHouseNumber") !== undefined) {
@@ -336,12 +344,14 @@ console.log(this.get("pastedHouseNumber"));
                         console.log(number);
                         console.log("same");
                         
-                        Radio.trigger("Searchbar", "pushHits", "hitList", houseNumber);
+                        Radio.trigger("Searchbar", "pushHits", "hitList", houseNumber, "paste");
                     }
                 }, this);
                 this.unset("pastedHouseNumber");
+                Radio.trigger("ViewZoom", "hitSelected");
             }
             else {
+                console.log("aaaa");
                 _.each(this.getHouseNumbers(), function (houseNumber) {
                     address = houseNumber.name.replace(/ /g, "");
 
@@ -350,9 +360,12 @@ console.log(this.get("pastedHouseNumber"));
                     }
                 }, this);
             }
+
+            console.log("echt am Ende!");
         },
 
         handleHouseNumbers: function (data) {
+            console.log("handle");
             this.createHouseNumbers(data);
             this.searchInHouseNumbers();
             Radio.trigger("Searchbar", "createRecommendedList");

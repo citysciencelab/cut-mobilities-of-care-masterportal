@@ -12,9 +12,8 @@ define(function (require) {
 
     SearchbarView = Backbone.View.extend({
         events: {
-            // "paste input": "setSearchString",
-            "input input": "setSearchString",
-            // "keyup input": "setSearchString",
+            "paste input": "waitForEvent",
+            "keyup input": "waitForEvent",
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
             "click .form-control-feedback": "deleteSearchString",
@@ -146,6 +145,10 @@ define(function (require) {
                 "isViewMobileChanged": function () {
                     this.render();
                 }
+            });
+
+            this.listenTo(Radio.channel("ViewZoom"), {
+                "hitSelected": this.hitSelected
             });
 
 
@@ -310,7 +313,7 @@ define(function (require) {
          * @param  {evt} evt Event
          * @return {void}
          */
-        hitSelected: function (evt) {
+        hitSelected: function (evt) {            
             var hit, hitID;
 
             Radio.trigger("Filter", "resetFilter");
@@ -329,7 +332,7 @@ define(function (require) {
             // 1. Schreibe Text in Searchbar
             this.setSearchbarString(hit.name);
             // 2. Verberge Suchmenü
-            this.hideMenu();
+            // this.hideMenu();
             // 3. Hide das GFI
             Radio.trigger("GFI", "setIsVisible", false);
             // 4. Zoome ggf. auf Ergebnis oder Sonderbehandlung
@@ -491,29 +494,34 @@ define(function (require) {
             return this.$el.find(this.searchbarKeyNavSelector + " li").last();
         },
 
-        setSearchString: function (evt) {
+        /**
+         * wait until event is loaded complete
+         * @param {event} evt - a keyup or pasteevent
+         * @returns {void}
+         */
+        waitForEvent: function (evt) {
             var that = this;
 
-            console.log(evt.target.value);
-            console.log(evt.target.value.length);
-            console.log(evt.type);
-            console.log(evt.keyCode);
-            
+            // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
+            setTimeout(function () {
+                that.setSearchString(evt);
+            }, 0);
+        },
+
+        setSearchString: function (evt) {
             if (evt.target.value.length === 0) {
                 // suche zurücksetzten, wenn der letzte Buchstabe gelöscht wurde
                 this.deleteSearchString();
             }
             else {
-                if (evt.type === "input") {
-                    console.log("Test");
+                if (evt.type === "paste") {
+                    console.log(evt.type);
                     
-                    // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
-                    // setTimeout(function () {
-                        this.model.setSearchString(evt.target.value, evt.type);
-                    // }, 0);
-
+                    this.model.setSearchString(evt.target.value, evt.type);
                 }
                 else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
+                    console.log(evt.type);
+                    
                     if (evt.key === "Enter" || evt.keyCode === 13) {
                         if (this.model.get("hitList").length === 1) {
                             this.hitSelected(); // erster und einziger Eintrag in Liste
@@ -529,8 +537,14 @@ define(function (require) {
                 }
 
                 // Der "x-Button" in der Suchleiste
-                this.$("#searchInput + span").show();
+                if (evt.target.value.length > 0) {
+                    this.$("#searchInput + span").show();
+                }
+                else {
+                    this.$("#searchInput + span").hide();
+                }
             }
+            console.log("finished");
         },
         collapseHits: function (target) {
             this.$(".list-group-item.type + div").hide("slow"); // schließt alle Reiter

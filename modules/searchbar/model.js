@@ -47,18 +47,11 @@ define(function (require) {
             var splitAdress = value.split(" "),
                 houseNumber,
                 streetName;
-console.log(value);
-console.log(eventType);
-console.log(splitAdress[splitAdress.length - 1].match(/\d/));
 
             // für Copy/Paste bei Adressen
-            if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "input") {
-                console.log(eventType);
-                
+            if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
                 houseNumber = splitAdress[splitAdress.length - 1];
                 streetName = value.substr(0, value.length - houseNumber.length - 1);
-console.log(houseNumber);
-console.log(streetName);
 
                 this.set("searchString", streetName);
                 Radio.trigger("Searchbar", "setPastedHouseNumber", houseNumber);
@@ -69,6 +62,8 @@ console.log(streetName);
             this.set("hitList", []);
             Radio.trigger("Searchbar", "search", this.get("searchString"));
             $(".dropdown-menu-search").show();
+            console.log("ende");
+            
         },
 
         /**
@@ -77,18 +72,28 @@ console.log(streetName);
          * {whatever} value - Der Wert des Attributs
          * @param  {[type]} attribute [description]
          * @param  {[type]} value     [description]
+         * @param  {[type]} evtTpye     [description]
          * @return {[type]}         [description]
          */
-        pushHits: function (attribute, value) {
-            console.log(attribute);
-            
-            var tempArray = _.clone(this.get(attribute));
-            console.log(tempArray);
-            
+        pushHits: function (attribute, value, evtTpye) {
+            var tempArray = _.clone(this.get(attribute)),
+                valueWithNumbers;
 
             tempArray.push(value);
+
+            // removes addresses without house number, if more than one exists
+            if (evtTpye === "paste" && !_.isUndefined(tempArray) && tempArray.length > 1) {
+                valueWithNumbers = _.filter(tempArray, function (val) {
+                    var valueArray = val.name.split(" ");
+
+                    return !_.isNaN(parseInt(valueArray[valueArray.length - 1], 10));
+                });
+
+                tempArray = _.isUndefined(valueWithNumbers) ? tempArray : valueWithNumbers;
+            }
+
             this.set(attribute, _.flatten(tempArray));
-            console.log(tempArray);
+
             
         },
 
