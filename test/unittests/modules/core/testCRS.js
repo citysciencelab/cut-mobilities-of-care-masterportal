@@ -11,7 +11,7 @@ define(function (require) {
 
         describe("has correct namedProjections from config", function () {
             it("getNamedProjections", function () {
-                expect(model.getNamedProjections()).to.have.lengthOf(2);
+                expect(model.get("namedProjections")).to.have.lengthOf(2);
             });
         });
         describe("returns correct proj4 format", function () {
