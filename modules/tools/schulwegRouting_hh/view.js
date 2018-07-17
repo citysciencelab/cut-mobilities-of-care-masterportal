@@ -50,7 +50,7 @@ define(function (require) {
         },
         initialize: function () {
             this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
-            if (this.model.getIsActive()) {
+            if (this.model.get("isActive")) {
                 this.render();
             }
             this.listenTo(this.model, {

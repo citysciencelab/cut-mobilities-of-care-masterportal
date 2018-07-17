@@ -15,7 +15,7 @@ define(function (require) {
             "click .close": "closeFilter"
         },
         initialize: function () {
-            if (this.model.getIsInitOpen()) {
+            if (this.model.get("isInitOpen")) {
                 this.model.set("isActive", true);
                 this.render();
             }

@@ -40,33 +40,19 @@ define([
         setText: function (value) {
             this.set("text", value);
         },
-        getText: function () {
-            return this.get("text");
-        },
 
         setFeatures: function (value) {
             this.set("features", value);
         },
-        getFeatures: function () {
-            return this.get("features");
-        },
+
         setSource: function (value) {
             this.set("source", value);
-        },
-        getSource: function () {
-            return this.get("source");
         },
         setLayer: function (value) {
             this.set("layer", value);
         },
-        getLayer: function () {
-            return this.get("layer");
-        },
         setFormat: function (value) {
             this.set("format", value);
-        },
-        getFormat: function () {
-            return this.get("format");
         },
 
         importKML: function () {
@@ -80,7 +66,7 @@ define([
         // nach import:kml input leeren und button-style zurücksetzen
         emptyInput: function () {
             $("#fakebutton").html("Datei auswählen (keine ausgewählt)");
-            if (this.getText() !== "") {
+            if (this.get("text") !== "") {
                 this.setText("");
                 $("#fakebutton").toggleClass("btn-primary");
                 $("#btn_import").prop("disabled", true);
@@ -88,9 +74,9 @@ define([
         },
         // features von KML (in "text" gespeichert) einlesen
         getFeaturesFromKML: function () {
-            if (this.getText() !== "") {
-                var data = this.getText(),
-                    format = this.getFormat(),
+            if (this.get("text") !== "") {
+                var data = this.get("text"),
+                    format = this.get("format"),
                     features = format.readFeatures(data);
 
                 this.setFormat(format);
@@ -103,7 +89,7 @@ define([
 
         // Workaround der Styles für Punkte und Text
         setStyle: function () {
-            var features = this.getFeatures(),
+            var features = this.get("features"),
                 kml = jQuery.parseXML(this.get("text")),
                 pointStyleColors = [],
                 pointStyleTransparencies = [],
@@ -180,7 +166,7 @@ define([
 
         // Koordinatentransformation
         transformFeatures: function () {
-            var features = this.getFeatures();
+            var features = this.get("features");
 
             _.each(features, function (feature) {
                 var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:4326", "EPSG:25832"));
@@ -246,8 +232,8 @@ define([
         },
         // Features in die Karte laden
         featuresToMap: function () {
-            var features = this.getFeatures(),
-                source = this.getSource();
+            var features = this.get("features"),
+                source = this.get("source");
 
             source.addFeatures(features);
         }

@@ -58,7 +58,7 @@ define([
                 },
                 // Sendet das SLD an die layerlist, sobald es erzeugt wurde
                 "change:setSLD": function () {
-                    Radio.trigger("ModelList", "setModelAttributesById", this.getModel().get("id"), {"SLDBody": this.getSLDBody(), paramStyle: "style"});
+                    Radio.trigger("ModelList", "setModelAttributesById", this.get("model").get("id"), {"SLDBody": this.get("setSLD"), paramStyle: "style"});
                 }
             });
         },
@@ -126,7 +126,7 @@ define([
         createSLD: function () {
             if (this.isValid() === true) {
                 this.setSLD(this.createAndGetRootElement());
-                this.updateLegend(this.getStyleClassAtributes());
+                this.updateLegend(this.get("styleClassAttributes"));
             }
         },
 
@@ -153,7 +153,7 @@ define([
          */
         createAndGetNamedLayer: function () {
             return "<sld:NamedLayer>" +
-                       "<sld:Name>" + this.getModel().get("layers") + "</sld:Name>" +
+                       "<sld:Name>" + this.get("model").get("layers") + "</sld:Name>" +
                        this.createAndGetUserStyle() +
                    "</sld:NamedLayer>";
         },
@@ -179,8 +179,8 @@ define([
         createAndGetRule: function () {
             var rule = "";
 
-            if (this.getGeomType() === "Polygon") {
-                _.each(this.getStyleClassAtributes(), function (obj) {
+            if (this.get("geomType") === "Polygon") {
+                _.each(this.get("styleClassAttributes"), function (obj) {
                     rule += "<sld:Rule>" +
                                 this.createAndGetANDFilter(obj.startRange, obj.stopRange) +
                                 this.createAndGetPolygonSymbolizer(obj.color) +
@@ -213,7 +213,7 @@ define([
         createAndGetIsGreaterThanOrEqualTo: function (value) {
             return "<ogc:PropertyIsGreaterThanOrEqualTo>" +
                        "<ogc:PropertyName>" +
-                           this.getAttributeName() +
+                       this.get("attributeName") +
                        "</ogc:PropertyName>" +
                        "<ogc:Literal>" +
                            value +
@@ -229,7 +229,7 @@ define([
         createAndGetIsLessThanOrEqualTo: function (value) {
             return "<ogc:PropertyIsLessThanOrEqualTo>" +
                        "<ogc:PropertyName>" +
-                           this.getAttributeName() +
+                       this.get("attributeName") +
                        "</ogc:PropertyName>" +
                        "<ogc:Literal>" +
                            value +
@@ -331,70 +331,6 @@ define([
          */
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
-        },
-
-        /**
-         * Getter für das Attribut model
-         * @return {Backbone.Model}
-         */
-        getModel: function () {
-            return this.get("model");
-        },
-
-        /**
-         * Getter für das Attribut geomType
-         * @return {string}
-         */
-        getGeomType: function () {
-            return this.get("geomType");
-        },
-
-        /**
-         * Getter für das Attribut attributeName
-         * @return {string}
-         */
-        getAttributeName: function () {
-            return this.get("attributeName");
-        },
-
-        /**
-         * Getter für das Attribut styleClassAttributes
-         * @return {string}
-         */
-        getStyleClassAtributes: function () {
-            return this.get("styleClassAttributes");
-        },
-
-        /**
-         * Getter für das Attribut setSLD
-         * @return {string}
-         */
-        getSLDBody: function () {
-            return this.get("setSLD");
-        },
-
-        /**
-         * Getter für das Attribut errors
-         * @return {string}
-         */
-        getErrors: function () {
-            return this.get("errors");
-        },
-
-        /**
-         * Getter für das Attribut isCurrentWin
-         * @return {string}
-         */
-        getIsCurrentWin: function () {
-            return this.get("isCurrentWin");
-        },
-
-        /**
-         * Getter für das Attribut isCollapsed
-         * @return {string}
-         */
-        getIsCollapsed: function () {
-            return this.get("isCollapsed");
         }
     });
 

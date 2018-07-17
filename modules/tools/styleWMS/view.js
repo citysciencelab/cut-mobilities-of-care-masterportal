@@ -105,7 +105,7 @@ define([
          * zeigt die Error Meldungen im Formular an
          */
         showErrorMessages: function () {
-            _.each(this.model.getErrors(), function (error) {
+            _.each(this.model.get("errors"), function (error) {
                 if (_.has(error, "colorText") === true) {
                     this.$el.find(".selected-color" + error.colorIndex).parent().addClass("has-error");
                     this.$el.find(".selected-color" + error.colorIndex).parent().after("<span class='error'>" + error.colorText + "</span>");

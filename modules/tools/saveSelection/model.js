@@ -92,11 +92,11 @@ define([
             var layerVisibilities = [],
                 layerTrancparence = [];
 
-            _.each(this.getLayerList(), function (model) {
+            _.each(this.get("layerList"), function (model) {
                 layerVisibilities.push(model.get("isVisibleInMap"));
                 layerTrancparence.push(model.get("transparency"));
             });
-            this.setLayerIdList(_.pluck(this.getLayerList(), "id"));
+            this.setLayerIdList(_.pluck(this.get("layerList"), "id"));
             this.setLayerTransparencyList(layerTrancparence);
             this.setLayerVisibilityList(layerVisibilities);
             this.setUrl();
@@ -154,7 +154,7 @@ define([
          * [setUrl description]
          */
         setUrl: function () {
-            this.set("url", location.origin + location.pathname + "?layerIDs=" + this.getLayerIdList() + "&visibility=" + this.getLayerVisibilityList() + "&transparency=" + this.getLayertransparencyList() + "&center=" + this.getCenterCoords() + "&zoomlevel=" + this.getZoomLevel());
+            this.set("url", location.origin + location.pathname + "?layerIDs=" + this.get("layerIdList") + "&visibility=" + this.get("layerVisibilityList") + "&transparency=" + this.get("layerTransparencyList") + "&center=" + this.get("centerCoords") + "&zoomlevel=" + this.get("zoomLevel"));
         },
 
         /**
@@ -166,59 +166,8 @@ define([
             this.set("simpleMapUrl", value + "&style=simple");
         },
 
-        /**
-         * [getLayerList description]
-         * @return {[type]} [description]
-         */
-        getLayerList: function () {
-            return this.get("layerList");
-        },
-
-        /**
-         * [getZoomLevel description]
-         * @return {[type]} [description]
-         */
-        getZoomLevel: function () {
-            return this.get("zoomLevel");
-        },
-
-        /**
-         * [getCenterCoords description]
-         * @return {[type]} [description]
-         */
-        getCenterCoords: function () {
-            return this.get("centerCoords");
-        },
-
-        /**
-         * [getLayerIdList description]
-         * @return {[type]} [description]
-         */
-        getLayerIdList: function () {
-            return this.get("layerIdList");
-        },
-
-        /**
-         * [getLayerVisibilityList description]
-         * @return {[type]} [description]
-         */
-        getLayerVisibilityList: function () {
-            return this.get("layerVisibilityList");
-        },
-
-        /**
-         * [getLayertransparencyList description]
-         * @return {[type]} [description]
-         */
-        getLayertransparencyList: function () {
-            return this.get("layerTransparencyList");
-        },
-
         setSimpleMap: function (value) {
             this.set("simpleMap", value);
-        },
-        getSimpleMap: function () {
-            return this.get("simpleMap");
         },
         getMapState: function () {
             this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));

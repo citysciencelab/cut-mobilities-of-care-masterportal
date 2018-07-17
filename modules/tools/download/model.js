@@ -423,18 +423,6 @@ define([
                 sourceProj: proj4(sourceProj),
                 destProj: proj4(destProj)
             };
-        },
-
-        getId: function () {
-            return this.get("id");
-        },
-
-        getName: function () {
-            return this.get("title");
-        },
-
-        getGlyphicon: function () {
-            return this.get("glyphicon");
         }
     });
 

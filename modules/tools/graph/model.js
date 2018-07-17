@@ -14,7 +14,7 @@ define(function (require) {
             }, this);
             channel.reply({
                 "getGraphParams": function () {
-                    return this.getGraphParams();
+                    return this.get("graphParams");
                 }
             }, this);
         },
@@ -304,10 +304,6 @@ define(function (require) {
             });
         },
 
-        // getter for graphParams
-        getGraphParams: function () {
-            return this.get("graphParams");
-        },
         // setter for graphParams
         setGraphParams: function (value) {
             this.set("graphParams", value);

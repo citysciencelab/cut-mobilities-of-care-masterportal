@@ -27,8 +27,8 @@ define(function (require) {
          */
         parseGfiContent: function () {
             if (_.isUndefined(this.get("gfiContent")) === false) {
-                var gfiContent = this.getGfiContent()[0],
-                    rowNames = _.keys(this.getGfiContent()[0]),
+                var gfiContent = this.get("gfiContent")[0],
+                    rowNames = _.keys(this.get("gfiContent")[0]),
                     newRowNames = [],
                     yearData,
                     dataPerYear = [],
@@ -119,13 +119,6 @@ define(function (require) {
         setDataset: function (value) {
             this.set("dataset", value);
         },
-        getDataset: function () {
-            return this.get("dataset");
-        },
-        // getter for attrToShow
-        getAttrToShow: function () {
-            return this.get("attrToShow");
-        },
         // setter for attrToShow
         setAttrToShow: function (value) {
             this.set("attrToShow", value);
@@ -198,10 +191,10 @@ define(function (require) {
                     selectorTooltip: ".graph-tooltip-div",
                     scaleTypeX: "ordinal",
                     scaleTypeY: "linear",
-                    data: this.getDataset(),
+                    data: this.get("dataset"),
                     xAttr: "year",
                     xAxisLabel: "Jahr",
-                    attrToShowArray: this.getAttrToShow(),
+                    attrToShowArray: this.get("attrToShow"),
                     legendArray: [{
                         key: "DTV",
                         value: "DTV (Kfz/24h)"
@@ -219,7 +212,7 @@ define(function (require) {
         },
         manipulateSVG: function () {
             var graphParams = Radio.request("Graph", "getGraphParams"),
-                data = this.getDataset(),
+                data = this.get("dataset"),
                 svg = d3.select(".graph-svg"),
                 scaleX = graphParams.scaleX,
                 scaleY = graphParams.scaleY,
@@ -227,7 +220,7 @@ define(function (require) {
                 margin = graphParams.margin,
                 offset = graphParams.offset,
                 size = 10,
-                attrToShowArray = this.getAttrToShow(),
+                attrToShowArray = this.get("attrToShow"),
                 width,
                 height,
                 x,

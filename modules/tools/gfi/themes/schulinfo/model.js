@@ -140,8 +140,8 @@ define(function (require) {
             var gfiContent,
                 featureInfos = [];
 
-            if (!_.isUndefined(this.getGfiContent()[0])) {
-                gfiContent = this.getGfiContent()[0];
+            if (!_.isUndefined(this.get("gfiContent")[0])) {
+                gfiContent = this.get("gfiContent")[0];
                 featureInfos = [];
                 featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
                 this.setFeatureInfos(featureInfos);
