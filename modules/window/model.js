@@ -34,7 +34,7 @@ define([
         },
         setParams: function (value) {
             this.setTool(value);
-            this.set("title", value.getName());
+            this.set("title", value.get("name"));
             this.set("icon", value.get("glyphicon"));
             this.set("winType", value.get("id"));
             if (value.get("id") === "gfi") {

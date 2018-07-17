@@ -92,7 +92,6 @@ define([
         },
 
         setStatus: function (args) {
-            console.log(args);
             // Fenstermanagement
             if (args[2].get("id") === "contact") {
                 this.setIsCollapsed(args[1]);
