@@ -48,7 +48,7 @@ define(function (require) {
         },
 
         showPopup: function () {
-            this.trigger("render", this.getTextArray());
+            this.trigger("render", this.get("textArray"));
         },
 
         /**
@@ -133,7 +133,7 @@ define(function (require) {
         checkForFeaturesAtPixel: function (evt) {
             var featuresArray = [],
                 featureArray = [],
-                featuresAtPixel = this.getFeaturesAtPixel(evt, this.getMouseHoverInfos());
+                featuresAtPixel = this.getFeaturesAtPixel(evt, this.get("mouseHoverInfos"));
 
             _.each(featuresAtPixel, function (featureAtPixel) {
                 featureArray = this.fillFeatureArray(featureAtPixel);
@@ -168,7 +168,7 @@ define(function (require) {
             // Neupositionierung
             this.setOverlayPosition(evt.coordinate);
             // Änderung des Textes
-            if (!this.isTextEqual(textArray, this.getTextArray())) {
+            if (!this.isTextEqual(textArray, this.get("textArray"))) {
                 this.setTextArray(textArray);
                 this.showPopup();
             }
@@ -196,9 +196,9 @@ define(function (require) {
          * @returns {void}
          */
         checkTextPosition: function (evt) {
-            var lastPixel = this.getTextPosition(),
+            var lastPixel = this.get("textPosition"),
                 newPixel = evt.pixel,
-                minShift = this.getMinShift();
+                minShift = this.get("minShift");
 
             if (!lastPixel || newPixel[0] < lastPixel[0] - minShift || newPixel[0] > lastPixel[0] + minShift || newPixel[1] < lastPixel[1] - minShift || newPixel[1] > lastPixel[1] + minShift) {
                 this.setTextPosition(evt.pixel);
@@ -233,7 +233,7 @@ define(function (require) {
          * @returns {string} darszustellender String
          */
         checkTextArray: function (featureArray) {
-            var mouseHoverInfos = this.getMouseHoverInfos(),
+            var mouseHoverInfos = this.get("mouseHoverInfos"),
                 textArray = [],
                 textArrayCheckedLength,
                 textArrayBreaked;
@@ -293,37 +293,21 @@ define(function (require) {
             return textArrayBreaked;
         },
 
-        // getter for minShift
-        getMinShift: function () {
-            return this.get("minShift");
-        },
         // setter for minShift
         setMinShift: function (value) {
             this.set("minShift", value);
         },
 
-        // getter for textPosition
-        getTextPosition: function () {
-            return this.get("textPosition");
-        },
         // setter for textPosition
         setTextPosition: function (value) {
             this.set("textPosition", value);
         },
 
-        // getter for textArray
-        getTextArray: function () {
-            return this.get("textArray");
-        },
         // setter for textArray
         setTextArray: function (value) {
             this.set("textArray", value);
         },
 
-        // getter for mouseHoverInfos
-        getMouseHoverInfos: function () {
-            return this.get("mouseHoverInfos");
-        },
         // setter for mouseHoverInfos
         setMouseHoverInfos: function (value) {
             this.set("mouseHoverInfos", value);
