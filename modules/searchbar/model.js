@@ -36,10 +36,6 @@ define([
             this.set("initSearchString", value);
         },
 
-        getInitSearchString: function () {
-            return this.get("initSearchString");
-        },
-
         /**
         * aus View gaufgerufen
         */
