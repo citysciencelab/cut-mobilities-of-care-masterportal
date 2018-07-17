@@ -6,19 +6,18 @@ define(function () {
             },
             initialize: function () {
                 channel.reply({
-                    "getActiveElement": this.getActiveElement,
+                    "getActiveElement": function () {
+                        return this.get("isActiveElement");
+                    },
                     "setActiveElement": this.setActiveElement
                 }, this);
             },
 
             setActiveElement: function (element) {
                 if (this.get("isActiveElement") !== element) {
-                    channel.trigger("hideMenuElement" + this.getActiveElement());
+                    channel.trigger("hideMenuElement" + this.get("isActiveElement"));
                 }
                 this.set("isActiveElement", element);
-            },
-            getActiveElement: function () {
-                return this.get("isActiveElement");
             }
         });
 
