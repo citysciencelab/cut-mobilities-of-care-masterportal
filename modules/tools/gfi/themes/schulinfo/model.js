@@ -186,13 +186,12 @@ define(function (require) {
 
             if (key === "oberstufenprofil") {
                 if (beautifiedAttribute.indexOf("|") !== -1) {
-                    _.each(beautifiedAttribute.split("|"), function (value) {
+                    beautifiedAttribute = [];
+                    _.each(attribute.split("|"), function (value) {
                         newVal = value;
-
                         // make part before first ";" bold
                         newVal = newVal.replace(/^/, "<b>");
                         newVal = newVal.replace(/;/, "</b>;");
-                        beautifiedAttribute = [];
                         beautifiedAttribute.push(newVal);
                     }, this);
                 }
