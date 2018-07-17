@@ -51,7 +51,6 @@ define(function (require) {
             this.listenTo(channel, {
                 "print": this.print
             });
-            console.log(window);
             this.setDefaults();
         },
         setDefaults: function () {

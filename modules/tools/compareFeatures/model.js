@@ -225,7 +225,7 @@ define(function () {
 
                             // make part before first "," bold
                             newVal = newVal.replace(/^/, "<b>");
-                            newVal = newVal.replace(/,/, "</b>,");
+                            newVal = newVal.replace(/;/, "</b>;");
                             array.push(newVal);
                         });
                         feature.set(key, array);
@@ -234,7 +234,7 @@ define(function () {
                         newVal = feature.get(key);
                         // make part before first "," bold
                         newVal = newVal.replace(/^/, "<b>");
-                        newVal = newVal.replace(/,/, "</b>,");
+                        newVal = newVal.replace(/;/, "</b>;");
 
                         feature.set(key, newVal);
                     }

@@ -181,29 +181,30 @@ define(function (require) {
             return featureInfos;
         },
         beautifyAttribute: function (attribute, key) {
-            var newVal;
+            var newVal,
+                beautifiedAttribute = attribute;
 
             if (key === "oberstufenprofil") {
-                if (attribute.indexOf("|") !== -1) {
-                    _.each(attribute.split("|"), function (value) {
+                if (beautifiedAttribute.indexOf("|") !== -1) {
+                    _.each(beautifiedAttribute.split("|"), function (value) {
                         newVal = value;
 
                         // make part before first "," bold
                         newVal = newVal.replace(/^/, "<b>");
-                        newVal = newVal.replace(/,/, "</b>,");
-                        attribute = [];
-                        attribute.push(newVal);
+                        newVal = newVal.replace(/;/, "</b>;");
+                        beautifiedAttribute = [];
+                        beautifiedAttribute.push(newVal);
                     }, this);
                 }
                 else {
                     newVal = attribute;
                     // make part before first "," bold
                     newVal = newVal.replace(/^/, "<b>");
-                    newVal = newVal.replace(/,/, "</b>,");
+                    newVal = newVal.replace(/;/, "</b>;");
 
-                    attribute = newVal;
+                    beautifiedAttribute = newVal;
                 }
-                return attribute;
+                return beautifiedAttribute;
             }
             if (attribute.indexOf("|") !== -1) {
                 return attribute.split("|");
