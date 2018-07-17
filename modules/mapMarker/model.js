@@ -159,8 +159,8 @@ define(function (require) {
         showFeature: function () {
             var feature = this.getFeature();
 
-            this.this.get("polygon").getSource().addFeature(feature);
-            this.this.get("polygon").setVisible(true);
+            this.get("polygon").getSource().addFeature(feature);
+            this.get("polygon").setVisible(true);
         },
 
         /**

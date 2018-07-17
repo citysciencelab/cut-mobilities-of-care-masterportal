@@ -125,7 +125,7 @@ define(function (require) {
 
             if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
                 layerStyle = model.get("layer").getStyle(feature);
-                layerTyp = model.getTyp();
+                layerTyp = model.get("typ");
 
                 // layerStyle returns style
                 if (typeof layerStyle === "object") {
