@@ -1,6 +1,5 @@
 define(function (require) {
     var $ = require("jquery"),
-        ol = require("openlayers"),
         GazetteerModel;
 
     require("modules/searchbar/model");

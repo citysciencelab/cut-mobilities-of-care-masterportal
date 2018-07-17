@@ -1,10 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config"
-], function (Backbone, Radio, Config) {
-    "use strict";
-    var SearchbarModel = Backbone.Model.extend({
+define(function (require) {
+    var $ = require("jquery"),
+        Config = require("config"),
+        SearchbarModel;
+
+    SearchbarModel = Backbone.Model.extend({
         defaults: {
             placeholder: "Suche",
             recommandedListLength: 5,
