@@ -132,7 +132,7 @@ define(function (require) {
                 var style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
                 if (!_.isUndefined(style)) {
-                    this.setLegendURL([style.getImagePath() + style.getImageName()]);
+                    this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
                 }
             }
         },

@@ -45,13 +45,10 @@ define([
             }
         },
         sendParamsToWinCotent: function () {
-            Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);
+            Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("tool")]);
         },
         setTool: function (value) {
             this.set("tool", value);
-        },
-        getTool: function () {
-            return this.get("tool");
         }
     });
 
