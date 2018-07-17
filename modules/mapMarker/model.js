@@ -34,8 +34,8 @@ define(function (require) {
         initialize: function () {
             var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
 
-            Radio.trigger("Map", "addOverlay", this.getMarker());
-            Radio.trigger("Map", "addLayerToIndex", [this.getPolygon(), Radio.request("Map", "getLayers").getArray().length]);
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
+            Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);
 
             if (_.has(searchConf, "zoomLevel")) {
                 this.setZoomLevel(searchConf.zoomLevel);
@@ -45,7 +45,7 @@ define(function (require) {
 
         getFeature: function () {
             var format = new ol.format.WKT(),
-                feature = format.readFeature(this.getWkt());
+                feature = format.readFeature(this.get("wkt"));
 
             return feature;
         },
@@ -143,7 +143,7 @@ define(function (require) {
                     });
 
                     marker.setPosition(center);
-                    markers = this.getMarkers();
+                    markers = this.get("markers");
                     markers.push(marker);
                     this.setMarkers(markers);
                     Radio.trigger("Map", "addOverlay", marker);
@@ -159,8 +159,8 @@ define(function (require) {
         showFeature: function () {
             var feature = this.getFeature();
 
-            this.getPolygon().getSource().addFeature(feature);
-            this.getPolygon().setVisible(true);
+            this.this.get("polygon").getSource().addFeature(feature);
+            this.this.get("polygon").setVisible(true);
         },
 
         /**
@@ -168,22 +168,14 @@ define(function (require) {
          * @return {void}
          */
         hideFeature: function () {
-            this.getPolygon().getSource().clear();
+            this.this.get("polygon").getSource().clear();
         },
 
-        // getter for zoomLevel
-        getZoomLevel: function () {
-            return this.get("zoomLevel");
-        },
         // setter for zoomLevel
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
         },
 
-        // getter for wkt
-        getWkt: function () {
-            return this.get("wkt");
-        },
         // setter for wkt
         setWkt: function (type, geom) {
             var value = this.getWKTGeom(type, geom);
@@ -191,28 +183,16 @@ define(function (require) {
             this.set("wkt", value);
         },
 
-        // getter for marker
-        getMarker: function () {
-            return this.get("marker");
-        },
         // setter for marker
         setMarker: function (value) {
             this.set("marker", value);
         },
 
-        // getter for markers
-        getMarkers: function () {
-            return this.get("markers");
-        },
         // setter for markers
         setMarkers: function (value) {
             this.set("markers", value);
         },
 
-        // getter for polygon
-        getPolygon: function () {
-            return this.get("polygon");
-        },
         // setter for polygon
         setPolygon: function (value) {
             this.set("polygon", value);
