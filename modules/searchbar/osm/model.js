@@ -283,7 +283,7 @@ define(function (require) {
 
         setClasses: function (value) {
             this.set("classes", value.split(","));
-        }
+        },
 
         setMinChars: function (value) {
             this.set("minChars", value);
