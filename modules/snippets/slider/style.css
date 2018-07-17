@@ -75,6 +75,7 @@
 .slider-container .info-text {
     display: none;
     font-size: 10px;
+    padding: 5px 0;
     /*color: rgb(182, 0, 0);*/
 }
 

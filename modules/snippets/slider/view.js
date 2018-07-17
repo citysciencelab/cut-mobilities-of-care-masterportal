@@ -77,9 +77,14 @@ define(function (require) {
             var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
 
             this.model.trigger("hideAllInfoText");
-
             if (!isInfoTextVisible) {
-                this.$el.find(".info-text").toggle();
+                this.model.trigger("hideAllInfoText");
+                this.$el.find(".info-icon").css("opacity", "1");
+                this.$el.find(".info-text").show();
+            }
+            else {
+                this.$el.find(".info-icon").css("opacity", "0.4");
+                this.$el.find(".info-text").hide();
             }
         },
 
