@@ -223,7 +223,7 @@ define(function () {
                         _.each(feature.get(key), function (value) {
                             newVal = value;
 
-                            // make part before first "," bold
+                            // make part before first ";" bold
                             newVal = newVal.replace(/^/, "<b>");
                             newVal = newVal.replace(/;/, "</b>;");
                             array.push(newVal);
@@ -232,7 +232,7 @@ define(function () {
                     }
                     else {
                         newVal = feature.get(key);
-                        // make part before first "," bold
+                        // make part before first ";" bold
                         newVal = newVal.replace(/^/, "<b>");
                         newVal = newVal.replace(/;/, "</b>;");
 

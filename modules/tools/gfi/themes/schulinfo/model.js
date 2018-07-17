@@ -189,7 +189,7 @@ define(function (require) {
                     _.each(beautifiedAttribute.split("|"), function (value) {
                         newVal = value;
 
-                        // make part before first "," bold
+                        // make part before first ";" bold
                         newVal = newVal.replace(/^/, "<b>");
                         newVal = newVal.replace(/;/, "</b>;");
                         beautifiedAttribute = [];
@@ -198,7 +198,7 @@ define(function (require) {
                 }
                 else {
                     newVal = attribute;
-                    // make part before first "," bold
+                    // make part before first ";" bold
                     newVal = newVal.replace(/^/, "<b>");
                     newVal = newVal.replace(/;/, "</b>;");
 
