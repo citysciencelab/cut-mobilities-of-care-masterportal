@@ -14,7 +14,9 @@ define(function (require) {
                 uiStyle = Config.uiStyle ? Config.uiStyle.toUpperCase() : "DEFAULT";
 
             channel.reply({
-                "isViewMobile": this.getIsViewMobile,
+                "isViewMobile": function () {
+                    return this.get("isViewMobile");
+                },
                 "getPath": this.getPath,
                 "getProxyURL": this.getProxyURL,
                 "isApple": this.isApple,
@@ -24,9 +26,15 @@ define(function (require) {
                 "isChrome": this.isChrome,
                 "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny,
-                "getConfig": this.getConfig,
-                "getUiStyle": this.getUiStyle,
-                "getIgnoredKeys": this.getIgnoredKeys,
+                "getConfig": function () {
+                    return this.get("config");
+                },
+                "getUiStyle": function () {
+                    return this.get("uiStyle");
+                },
+                "getIgnoredKeys": function () {
+                    return this.get("ignoredKeys");
+                },
                 "punctuate": this.punctuate,
                 "sort": this.sort
             }, this);
@@ -42,7 +50,7 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isViewMobile": function () {
-                    channel.trigger("isViewMobileChanged", this.getIsViewMobile());
+                    channel.trigger("isViewMobileChanged", this.get("isViewMobile"));
                 }
             });
 
@@ -238,14 +246,6 @@ define(function (require) {
         },
 
         /**
-         * Getter für Attribut isViewMobile
-         * @return {boolean} mobil
-         */
-        getIsViewMobile: function () {
-            return this.get("isViewMobile");
-        },
-
-        /**
          * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
          * @return {undefined}
          */
@@ -284,28 +284,14 @@ define(function (require) {
             }
         },
 
-        // getter for config
-        getConfig: function () {
-            return this.get("config");
-        },
-
         // setter for config
         setConfig: function (value) {
             this.set("config", value);
         },
 
-        // getter for UiStyle
-        getUiStyle: function () {
-            return this.get("uiStyle");
-        },
-
         // setter for UiStyle
         setUiStyle: function (value) {
             this.set("uiStyle", value);
-        },
-
-        getIgnoredKeys: function () {
-            return this.get("ignoredKeys");
         }
     });
 

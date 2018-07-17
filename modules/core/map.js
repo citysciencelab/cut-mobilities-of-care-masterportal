@@ -114,10 +114,6 @@ define(function (require) {
             this.set("vectorLayer", value);
         },
 
-        getVectorLayer: function () {
-            return this.get("vectorLayer");
-        },
-
         getLayers: function () {
             return this.get("map").getLayers();
         },
