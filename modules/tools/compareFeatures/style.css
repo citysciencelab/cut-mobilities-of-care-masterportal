@@ -75,18 +75,18 @@
     opacity: 1;
 }
 
-.compare-feature-modal table > tbody > tr:nth-child(odd),
 .compare-feature-modal table > tbody > tr:nth-child(odd) {
    background-color: #eee;
 }
-.compare-feature-modal table > tbody > tr:nth-child(even),
 .compare-feature-modal table > tbody > tr:nth-child(even) {
    background-color: #ddd;
 }
 .compare-feature-modal table > tbody > tr:hover {
    background-color: #ccc;
 }
-
+.compare-feature-modal table > tbody > tr:hover > td {
+   border-left: 1px solid #bbb;
+}
 .compare-feature-modal tr:first-child td {
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
     font-size: 16px;
