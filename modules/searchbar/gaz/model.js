@@ -86,7 +86,9 @@ define(function (require) {
         search: function (pattern) {
             var gemarkung, flurstuecksnummer,
                 searchString = pattern;
-
+            
+            console.log("ja");
+            console.log(this.get("searchString"));
             this.set("searchString", searchString);
             if (searchString.length >= this.get("minChars")) {
                 if (this.get("searchStreets") === true) {
@@ -244,6 +246,8 @@ define(function (require) {
          * @returns {void}
          */
         getStreets: function (data) {
+            console.log("Streeetsss");
+            
             var hits = $("wfs\\:member,member", data),
                 coordinates,
                 hitNames = [],
@@ -317,13 +321,22 @@ define(function (require) {
 
         searchInHouseNumbers: function () {
             var address, number;
+console.log("Texti");
+console.log(this.get("pastedHouseNumber"));
 
             // Adressuche über Copy/Paste
             if (this.get("pastedHouseNumber") !== undefined) {
                 _.each(this.getHouseNumbers(), function (houseNumber) {
+                    
                     address = houseNumber.name.replace(/ /g, "");
                     number = houseNumber.adress.housenumber + houseNumber.adress.affix;
+                    
                     if (number === this.get("pastedHouseNumber")) {
+                        console.log(houseNumber);
+                        console.log(address);
+                        console.log(number);
+                        console.log("same");
+                        
                         Radio.trigger("Searchbar", "pushHits", "hitList", houseNumber);
                     }
                 }, this);

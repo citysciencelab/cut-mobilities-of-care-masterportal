@@ -20,17 +20,6 @@
         "searchParcels": true,
         "searchStreetKey": true
       },
-      "bkg":
-      {
-        "minChars": 3,
-        "suggestServiceId": "4",
-        "geosearchServiceId": "5",
-        "extent": [454591, 5809000, 700000, 6075769],
-        "suggestCount": 10,
-        "epsg": "EPSG:25832",
-        "filter": "filter=(typ:*)",
-        "score": 0.6
-      },
       "specialWFS":
       {
         "minChars": 3,

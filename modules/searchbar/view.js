@@ -12,8 +12,9 @@ define(function (require) {
 
     SearchbarView = Backbone.View.extend({
         events: {
-            "paste input": "setSearchString",
-            "keyup input": "setSearchString",
+            // "paste input": "setSearchString",
+            "input input": "setSearchString",
+            // "keyup input": "setSearchString",
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
             "click .form-control-feedback": "deleteSearchString",
@@ -23,6 +24,7 @@ define(function (require) {
             "mouseover .list-group-item.hit": "showMarker",
             "mouseleave .list-group-item.hit": "hideMarker",
             "click .list-group-item.type": function (e) {
+
                 // fix für Firefox
                 var event = e || window.event;
 
@@ -492,17 +494,24 @@ define(function (require) {
         setSearchString: function (evt) {
             var that = this;
 
+            console.log(evt.target.value);
+            console.log(evt.target.value.length);
+            console.log(evt.type);
+            console.log(evt.keyCode);
+            
             if (evt.target.value.length === 0) {
-                // suche zurücksetzten, wenn der nletzte Buchstabe gelöscht wurde
+                // suche zurücksetzten, wenn der letzte Buchstabe gelöscht wurde
                 this.deleteSearchString();
             }
             else {
-                if (evt.type === "paste") {
-
+                if (evt.type === "input") {
+                    console.log("Test");
+                    
                     // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
-                    setTimeout(function () {
-                        that.model.setSearchString(evt.target.value, evt.type);
-                    }, 0);
+                    // setTimeout(function () {
+                        this.model.setSearchString(evt.target.value, evt.type);
+                    // }, 0);
+
                 }
                 else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
                     if (evt.key === "Enter" || evt.keyCode === 13) {
@@ -520,12 +529,7 @@ define(function (require) {
                 }
 
                 // Der "x-Button" in der Suchleiste
-                if (evt.target.value.length > 0) {
-                    this.$("#searchInput + span").show();
-                }
-                else {
-                    this.$("#searchInput + span").hide();
-                }
+                this.$("#searchInput + span").show();
             }
         },
         collapseHits: function (target) {

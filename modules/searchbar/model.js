@@ -14,9 +14,7 @@ define([
             minChars: ""
             // isHitListReady: true
         },
-        /**
-        *
-        */
+
         initialize: function () {
             if (Config.quickHelp) {
                 this.set("quickHelp", Config.quickHelp);
@@ -42,14 +40,26 @@ define([
 
         /**
         * aus View gaufgerufen
+        * @param {string} value - value from event
+        * @param {string} eventType - type of the event
+        * @returns {void}
         */
         setSearchString: function (value, eventType) {
-            var splitAdress = value.split(" ");
+            var splitAdress = value.split(" "),
+                houseNumber,
+                streetName;
+console.log(value);
+console.log(eventType);
+console.log(splitAdress[splitAdress.length - 1].match(/\d/));
 
             // für Copy/Paste bei Adressen
-            if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
-                var houseNumber = splitAdress[splitAdress.length - 1],
-                    streetName = value.substr(0, value.length - houseNumber.length - 1);
+            if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "input") {
+                console.log(eventType);
+                
+                houseNumber = splitAdress[splitAdress.length - 1];
+                streetName = value.substr(0, value.length - houseNumber.length - 1);
+console.log(houseNumber);
+console.log(streetName);
 
                 this.set("searchString", streetName);
                 Radio.trigger("Searchbar", "setPastedHouseNumber", houseNumber);
@@ -61,20 +71,33 @@ define([
             Radio.trigger("Searchbar", "search", this.get("searchString"));
             $(".dropdown-menu-search").show();
         },
+
         /**
          * Hilfsmethode um ein Attribut vom Typ Array zu setzen.
          * {String} attribute - Das Attribut das gesetzt werden soll
          * {whatever} value - Der Wert des Attributs
+         * @param  {[type]} attribute [description]
+         * @param  {[type]} value     [description]
+         * @return {[type]}         [description]
          */
         pushHits: function (attribute, value) {
+            console.log(attribute);
+            
             var tempArray = _.clone(this.get(attribute));
+            console.log(tempArray);
+            
 
             tempArray.push(value);
             this.set(attribute, _.flatten(tempArray));
+            console.log(tempArray);
+            
         },
 
-         /**
+        /**
          * removes all hits with the given filter
+         * @param  {[type]} attribute [description]
+         * @param  {[type]} filter     [description]
+         * @return {[type]}         [description]
          */
         removeHits: function (attribute, filter) {
             var toRemove, i,
@@ -90,7 +113,7 @@ define([
             }
             else {
                 for (i = tempArray.length - 1; i >= 0; i--) {
-                    if (tempArray[i] == filter) {
+                    if (tempArray[i] === filter) {
                         tempArray.splice(i, 1);
                     }
                 }
@@ -100,7 +123,7 @@ define([
 
         /**
          * changes the filename extension of given filepath
-         * @param  {[type]} hitlist [description]
+         * @param  {[type]} src [description]
          * @param  {[type]} ext     [description]
          * @return {[type]}         [description]
          */
@@ -113,10 +136,12 @@ define([
             }
             return src;
         },
+
         /**
          * crops names of hits to length zeichen
-         * @param  {[type]} hitlist [the search result]
+         * @param  {[type]} s [the search result]
          * @param  {[type]} length  [name length]
+         * @returns {string} s
          */
         shortenString: function (s, length) {
             if (_.isUndefined(s)) {
@@ -128,28 +153,25 @@ define([
             return s;
         },
 
-        /**
-        *
-        */
         createRecommendedList: function () {
             var max = this.get("recommandedListLength"),
-                recommendedList = [];
+                recommendedList = [],
+                hitList = this.get("hitList"),
+                foundTypes = [],
+                singleTypes,
+                usedNumbers = [],
+                randomNumber;
 
             // if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
             //     this.set("isHitListReady", false);
-            if (this.get("hitList").length > max) {
-                var hitList = this.get("hitList"),
-                    foundTypes = [],
-                    singleTypes = _.reject(hitList, function (hit) {
-                        if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
-                            return true;
-                        }
+            if (hitList.length > max) {
+                singleTypes = _.reject(hitList, function (hit) {
+                    if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
+                        return true;
+                    }
 
-                        foundTypes.push(hit.type);
-
-                    }),
-                    usedNumbers = [],
-                    randomNumber;
+                    foundTypes.push(hit.type);
+                });
 
                 while (singleTypes.length < max) {
                     randomNumber = _.random(0, hitList.length - 1);
@@ -165,8 +187,6 @@ define([
                 recommendedList = this.get("hitList");
             }
             this.set("recommendedList", _.sortBy(recommendedList, "name"));
-            // this.set("isHitListReady", true);
-            // }
         }
     });
 
