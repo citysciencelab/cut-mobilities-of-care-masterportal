@@ -31,7 +31,8 @@ define(function (require) {
 
             this.$el.html(this.template(attr));
             this.initSlider();
-            return this.$el;
+
+            return this;
         },
 
         /**
