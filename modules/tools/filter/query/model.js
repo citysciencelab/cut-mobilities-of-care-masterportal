@@ -25,11 +25,17 @@ define(function (require) {
             this.addIsActiveCheckbox();
             this.listenTo(this.getSnippetCollection(), {
                 "valuesChanged": function () {
+                    var options;
+
                     this.setIsActive(true);
                     this.getBtnIsActive().setIsSelected(true);
                     this.runFilter();
                     if (this.getLiveZoomToFeatures()) {
                         Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(), this.getLayerId());
+                        options = Radio.request("MapView", "getOptions");
+                        if (this.get("minScale") && options.scale < this.get("minScale")) {
+                            Radio.trigger("MapView", "setScale", this.get("minScale"));
+                        }
                     }
                 }
             }, this);
@@ -130,7 +136,8 @@ define(function (require) {
          * @return {void}
          */
         createSnippets: function (featureAttributes) {
-            var featureAttributesMap = this.trimAttributes(featureAttributes);
+            var featureAttributesMap = this.trimAttributes(featureAttributes),
+                options;
 
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
             featureAttributesMap = this.collectSelectableOptions(this.getFeatures(), [], featureAttributesMap);
@@ -141,6 +148,10 @@ define(function (require) {
                 this.runFilter();
                 if (this.getLiveZoomToFeatures()) {
                     Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(), this.getLayerId());
+                    options = Radio.request("MapView", "getOptions");
+                    if (this.get("minScale") && options.scale < this.get("minScale")) {
+                        Radio.trigger("MapView", "setScale", this.get("minScale"));
+                    }
                 }
                 this.trigger("renderDetailView");
             }
@@ -236,6 +247,8 @@ define(function (require) {
             this.set("isDefault", value);
         },
         selectThis: function () {
+            var options;
+
             if (!this.getIsSelected()) {
                 // die Query-Collection hört im Filter-Model auf diesen Trigger
                 this.collection.trigger("deselectAllModels", this);
@@ -245,6 +258,10 @@ define(function (require) {
                     this.runFilter();
                     if (this.getLiveZoomToFeatures()) {
                         Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(), this.getLayerId());
+                        options = Radio.request("MapView", "getOptions");
+                        if (this.get("minScale") && options.scale < this.get("minScale")) {
+                            Radio.trigger("MapView", "setScale", this.get("minScale"));
+                        }
                     }
                 }
             }
