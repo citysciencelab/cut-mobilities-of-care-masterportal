@@ -229,10 +229,7 @@ define([
             this.get("mhpOverlay").setPosition([position[0] + 7, position[1] - 7]);
             Radio.trigger("Map", "addOverlay", this.get("mhpOverlay"));
         },
-        // getter for isGeolocationPossible
-        getIsGeolocationPossible: function () {
-            return this.get("isGeolocationPossible");
-        },
+
         // setter for isGeolocationPossible
         setIsGeolocationPossible: function (value) {
             this.set("isGeolocationPossible", value);
