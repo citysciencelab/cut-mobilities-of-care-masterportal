@@ -118,7 +118,9 @@ define(function (require) {
                     // needs to be refactored because listener triggeres other listener
                     var params = _.findWhere(this.get("options"), {resolution: resolution});
 
-                    this.get("view").setResolution(resolution);
+                    if (!_.isUndefined(this.get("view"))) {
+                        this.get("view").setResolution(resolution);
+                    }
                     this.set("scale", params.scale);
                     channel.trigger("changedOptions", params);
 
@@ -129,7 +131,9 @@ define(function (require) {
                     var params = _.findWhere(this.get("options"), {scale: scale});
 
                     this.set("resolution", params.resolution);
-                    this.get("view").setResolution(params.resolution);
+                    if (!_.isUndefined(this.get("view"))) {
+                        this.get("view").setResolution(params.resolution);
+                    }
                 },
                 "change:background": function (model, value) {
                     if (value === "white") {

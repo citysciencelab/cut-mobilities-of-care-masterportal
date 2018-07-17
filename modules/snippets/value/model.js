@@ -23,6 +23,7 @@ define(function () {
                 }
                 case "searchInMapExtent": {
                     displayString = "Kartenausschnitt";
+                    break;
                 }
                 default: {
                     displayString += this.get("value");

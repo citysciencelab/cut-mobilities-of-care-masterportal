@@ -25,7 +25,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initCheckbox();
             this.delegateEvents();
-            return this.$el;
+            return this;
         },
 
         /**

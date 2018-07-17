@@ -1,8 +1,6 @@
 define(function (require) {
     var Template = require("text!modules/tools/filter/query/templateSimpleView.html"),
         QuerySimpleView = Backbone.View.extend({
-            template: _.template(Template),
-            className: "simple-view",
             events: {
                 "click": "selectModel"
             },
@@ -16,24 +14,27 @@ define(function (require) {
                     }
                 });
                 this.listenTo(this.model, {
-                    "change:isSelected": function (model, value) {
+                    "change:isSelected": function () {
                         this.render();
                     },
                     "change:isLayerVisible": this.render
                 });
             },
+            template: _.template(Template),
+            className: "simple-view",
 
             /**
-         * Zeichnet die SimpleView (Filter-Header) für die Query
-         */
+             * Zeichnet die SimpleView (Filter-Header) für die Query
+             * @returns {void}
+             */
             render: function () {
                 var attr = this.model.toJSON();
 
-                return this.$el.html(this.template(attr));
+                this.$el.html(this.template(attr));
+
+                return this;
             },
-            /**
-         *
-         */
+
             selectModel: function () {
                 this.model.selectThis();
             }

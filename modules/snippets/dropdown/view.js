@@ -42,7 +42,7 @@ define(function (require) {
                 this.markSelectedValues();
             }
             this.delegateEvents();
-            return this.$el;
+            return this;
         },
 
         /**
