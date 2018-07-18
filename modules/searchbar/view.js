@@ -14,6 +14,7 @@ define(function (require) {
         events: {
             "paste input": "waitForEvent",
             "keyup input": "waitForEvent",
+            "contextmenu input": "waitForEvent",
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
             "click .form-control-feedback": "deleteSearchString",
@@ -308,7 +309,7 @@ define(function (require) {
          * @param  {evt} evt Event
          * @return {void}
          */
-        hitSelected: function (evt) {            
+        hitSelected: function (evt) {
             var hit, hitID;
 
             Radio.trigger("Filter", "resetFilter");
@@ -491,7 +492,7 @@ define(function (require) {
 
         /**
          * wait until event is loaded complete
-         * @param {event} evt - a keyup or pasteevent
+         * @param {event} evt - a keyup, paste or contextmenu event
          * @returns {void}
          */
         waitForEvent: function (evt) {
@@ -499,8 +500,37 @@ define(function (require) {
 
             // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
             setTimeout(function () {
-                that.setSearchString(evt);
+                that.controlEvent(evt);
             }, 0);
+        },
+
+        /**
+         * controls the input sequence of events,
+         * so that the paste works with shortcut and with contextmenu
+         * @param {event} evt - a keyup, paste or contextmenu event
+         * @returns {void}
+         */
+        controlEvent: function (evt) {
+            var count = this.model.get("count");
+
+            if (evt.type === "contextmenu") {
+                this.model.setCount(0);
+            }
+            else if (evt.type === "paste") {
+                if (_.isUndefined(count)) {
+                    this.model.setCount(0);
+                }
+                else {
+                    this.model.setCount(undefined);
+                }
+                this.setSearchString(evt);
+            }
+            else if (evt.type === "keyup" && count < 2) {
+                this.model.setCount(++count);
+            }
+            else {
+                this.setSearchString(evt);
+            }
         },
 
         setSearchString: function (evt) {
@@ -510,13 +540,9 @@ define(function (require) {
             }
             else {
                 if (evt.type === "paste") {
-                    console.log(evt.type);
-                    
                     this.model.setSearchString(evt.target.value, evt.type);
                 }
                 else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
-                    console.log(evt.type);
-                    
                     if (evt.key === "Enter" || evt.keyCode === 13) {
                         if (this.model.get("hitList").length === 1) {
                             this.hitSelected(); // erster und einziger Eintrag in Liste
@@ -539,7 +565,6 @@ define(function (require) {
                     this.$("#searchInput + span").hide();
                 }
             }
-            console.log("finished");
         },
         collapseHits: function (target) {
             this.$(".list-group-item.type + div").hide("slow"); // schließt alle Reiter

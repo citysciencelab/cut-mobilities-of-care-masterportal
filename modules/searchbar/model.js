@@ -62,8 +62,6 @@ define(function (require) {
             this.set("hitList", []);
             Radio.trigger("Searchbar", "search", this.get("searchString"));
             $(".dropdown-menu-search").show();
-            console.log("ende");
-            
         },
 
         /**
@@ -93,8 +91,6 @@ define(function (require) {
             }
 
             this.set(attribute, _.flatten(tempArray));
-
-            
         },
 
         /**
@@ -191,6 +187,10 @@ define(function (require) {
                 recommendedList = this.get("hitList");
             }
             this.set("recommendedList", _.sortBy(recommendedList, "name"));
+        },
+
+        setCount: function (value) {
+            this.set("count", value);
         }
     });
 
