@@ -64,9 +64,8 @@ define(function (require) {
          */
         renderListModal: function (model) {
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: model.get("layerId")}),
-                themeConfig = Radio.request("Schulinfo", "getThemeConfig"),
                 attr = {
-                    list: model.prepareFeatureListToShow(layerModel.get("gfiAttributes"), themeConfig),
+                    list: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
                     rowsToShow: model.get("numberOfAttributesToShow"),
                     featureIds: model.getFeatureIds(model.get("groupedFeatureList"), model.get("layerId")),
                     layerSelection: model.getLayerSelection(model.get("groupedFeatureList"))
