@@ -648,7 +648,7 @@ define(function (require) {
         drawErrorMessage: function (graphTag, width, height, index) {
             var today = Moment().subtract(index, "days").format("dddd");
 
-            $(".ladesaeulen .day").text(today).css("font-weight", "bold");
+            $(".ladesaeulen .day").text(today);
             $("<div class='noData' style='height: " + height + "px; width: " + width + "px;'>")
                 .appendTo("div" + graphTag)
                 .text("Zurzeit keine Informationen!");
@@ -899,7 +899,7 @@ define(function (require) {
                 stateLabel = "Durchschnittlich außer Betrieb ";
             }
 
-            $(".ladesaeulen .day").text(day).css("font-weight", "bold");
+            $(".ladesaeulen .day").text(day);
 
             label = _.isUndefined(day) || _.isUndefined(targetResult) || _.isUndefined(stateLabel)
                 ? "" : stateLabel + day + "s";
