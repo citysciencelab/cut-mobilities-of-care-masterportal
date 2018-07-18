@@ -78,12 +78,12 @@ define(function (require) {
             });
         });
 
-        describe("aggreateArrays", function () {
+        describe("aggregateArrays", function () {
             it("should return an object that is empty for undefined input", function () {
-                expect(sensorLayer.aggreateArrays(undefined)).to.be.an("object").that.is.empty;
+                expect(sensorLayer.aggregateArrays(undefined)).to.be.an("object").that.is.empty;
             });
             it("should return an array that is empty for an empty array input", function () {
-                expect(sensorLayer.aggreateArrays([])).to.be.an("object").that.is.empty;
+                expect(sensorLayer.aggregateArrays([])).to.be.an("object").that.is.empty;
             });
         });
 
