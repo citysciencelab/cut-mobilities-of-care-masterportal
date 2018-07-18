@@ -8,6 +8,7 @@
     "url": "https://bitbucket.org/lgv-g12/lgv.git"
   },
   "scripts": {
+    "test": "mocha test/end2end/TestRunner.js",
     "installBrowserMqtt": "cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js"
   },
   "dependencies": {
@@ -42,7 +43,7 @@
     "eslint-plugin-backbone": "^2.1.1",
     "fs": "0.0.1-security",
     "glob": "4.2.1",
-    "grunt": "^1.0.1",
+    "grunt": "^0.4.5",
     "grunt-changelog": "^0.3.2",
     "grunt-connect-proxy": "^0.2.0",
     "grunt-contrib-clean": "^0.6.0",
@@ -57,7 +58,7 @@
     "grunt-jsdoc": "^1.0.0",
     "jaguarjs-jsdoc": "0.0.1",
     "jit-grunt": "^0.9.0",
-    "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config-public.git",
+    "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config.git",
     "mocha": "3.5.0",
     "selenium-webdriver": "^3.5.0",
     "time-grunt": "1.0.0"
