@@ -766,18 +766,18 @@ define(function (require) {
                 timeDiff = 0,
                 currentState = actualState,
                 currentStateAsNumber = actualStateAsNumber,
-                betweenErg;
+                betweenRes;
 
             _.each(dataByActualTimeStep, function (data) {
                 var state = _.has(data, "result") ? data.result : currentState,
                     phenomenonTime,
-                    erg;
+                    res;
 
                 if (state !== currentState) {
                     phenomenonTime = _.has(data, "phenomenonTime") ? Moment(data.phenomenonTime).toDate().getTime() : "";
 
-                    erg = (phenomenonTime - actualPhenomenonTime) * currentStateAsNumber;
-                    timeDiff = timeDiff + erg;
+                    res = (phenomenonTime - actualPhenomenonTime) * currentStateAsNumber;
+                    timeDiff = timeDiff + res;
 
                     // update the current status and time
                     actualPhenomenonTime = phenomenonTime;
@@ -787,8 +787,8 @@ define(function (require) {
             });
 
             // add last difference to next full hour
-            betweenErg = (endTime - actualPhenomenonTime) * currentStateAsNumber;
-            timeDiff = _.isNaN(betweenErg) ? timeDiff : timeDiff + betweenErg;
+            betweenRes = (endTime - actualPhenomenonTime) * currentStateAsNumber;
+            timeDiff = _.isNaN(betweenRes) ? timeDiff : timeDiff + betweenRes;
 
             // result in the unit hour, rounded to 3 decimal places
             return Math.round(timeDiff / 3600) / 1000;
