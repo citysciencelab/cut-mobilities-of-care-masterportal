@@ -446,7 +446,7 @@ define(function (require) {
                 if (_.isUndefined(styleFieldValueObj)) {
                     return style;
                 }
-                src = !_.isUndefined(styleFieldValueObj && _.has(styleFieldValueObj, "imageName")) ? this.getImagePath() + styleFieldValueObj.imageName : this.getImagePath() + this.getImageName();
+                src = !_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName") ? this.getImagePath() + styleFieldValueObj.imageName : this.getImagePath() + this.getImageName();
                 isSVG = src.indexOf(".svg") > -1;
                 width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.getImageWidth();
                 height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.getImageHeight();
