@@ -231,15 +231,15 @@ define(function (require) {
                 things = this.getResponseFromRequestURL(requestURL),
                 thingsCount = _.isUndefined(things["@iot.count"]) ? 0 : things["@iot.count"], // count of all things
                 thingsbyOneRequest = things.value.length, // count of things on one request
-                aggreateArrays,
-                thisRequestURL,
+                aggregateArrays,
+                thingsRequestURL,
                 index;
 
             allThings.push(things.value);
             for (index = thingsbyOneRequest; index < thingsCount; index += thingsbyOneRequest) {
-                thisRequestURL = requestURL + "&$skip=" + index;
+                thingsRequestURL = requestURL + "&$skip=" + index;
 
-                things = this.getResponseFromRequestURL(thisRequestURL);
+                things = this.getResponseFromRequestURL(thingsRequestURL);
                 allThings.push(things.value);
             }
 
@@ -247,9 +247,9 @@ define(function (require) {
             allThings = this.mergeByCoordinates(allThings);
 
             _.each(allThings, function (thing) {
-                aggreateArrays = this.aggreateArrays(thing);
-                if (!_.isUndefined(aggreateArrays.location)) {
-                    thingsMerge.push(this.aggreateArrays(thing));
+                aggregateArrays = this.aggregateArrays(thing);
+                if (!_.isUndefined(aggregateArrays.location)) {
+                    thingsMerge.push(this.aggregateArrays(thing));
                 }
 
             }, this);
@@ -354,7 +354,7 @@ define(function (require) {
          * @param  {array} thingsArray - contain things with the same location
          * @return {object} contains location and properties
          */
-        aggreateArrays: function (thingsArray) {
+        aggregateArrays: function (thingsArray) {
             var obj = {},
                 properties,
                 thingsProperties,
@@ -713,8 +713,8 @@ define(function (require) {
                 if (_.contains(datastreamIds, "|")) {
                     datastreamIds = datastreamIds.split(" | ");
 
-                    _.each(datastreamIds, function (thisId, index) {
-                        if (parseInt(id, 10) === parseInt(thisId, 10)) {
+                    _.each(datastreamIds, function (thingsId, index) {
+                        if (parseInt(id, 10) === parseInt(thingsId, 10)) {
                             featureArray.push(index);
                             featureArray.push(feature);
                         }
