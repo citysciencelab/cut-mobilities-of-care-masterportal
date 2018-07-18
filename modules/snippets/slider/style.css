@@ -18,7 +18,7 @@
 }
 
 .slider-container input.form-control {
-    width: 60px;
+    width: 80px;
     height: 24px;
     text-align: center;
     display: inline-block;
@@ -75,6 +75,14 @@
 .slider-container .info-text {
     display: none;
     font-size: 10px;
+    padding: 5px 0;
     /*color: rgb(182, 0, 0);*/
 }
 
+.hiddenSpan {
+    display: inline-block;
+    visibility: hidden;
+    white-space: pre;
+    font-size: 12px;
+    height: 24px;
+}

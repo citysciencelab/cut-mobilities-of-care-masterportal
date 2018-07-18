@@ -182,11 +182,6 @@ define(function (require) {
                     new TreeModel(config.tree);
                 });
             }
-            if (_.has(config, "layer") === true) {
-                require(["modules/searchbar/layer/model"], function (LayerSearch) {
-                    new LayerSearch(config.layer);
-                });
-            }
             if (_.has(config, "osm") === true) {
                 require(["modules/searchbar/OSM/model"], function (OSMModel) {
                     new OSMModel(config.osm);

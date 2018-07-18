@@ -17,9 +17,10 @@ require.config({
         util: "util",
         originUtil: "../../modules/core/util",
         config: "testConfig",
-        moment: "../../node_modules/moment/min/moment.min",
+        moment: "../../node_modules/moment/min/moment-with-locales.min",
         services: "resources/testServices.json",
         bootstrap: "../../node_modules/bootstrap/js",
+        mqtt: "../../node_modules/mqtt/dist/mqtt",
         text: "../../node_modules/requirejs-text/text",
         pdfmake: "../../node_modules/pdfmake/build/pdfmake"
     },
@@ -57,12 +58,14 @@ define(function (require) {
         "modules/tools/filter/query/testModel.js",
         "modules/tools/filter/testFilter.js",
         "modules/snippets/slider/testModel.js",
+        "modules/tools/gfi/themes/elektroladesaeulen/testModel.js",
         "modules/tools/gfi/themes/testModel.js",
         "modules/tools/gfi/themes/schulinfo/testModel.js",
         "modules/tools/gfi/themes/verkehrsstaerken_rad/testModel.js",
         "modules/core/testMap.js",
         "modules/core/testParametricUrl.js",
         "modules/core/modelList/layer/testGeoJson.js",
+        "modules/core/modelList/layer/testSensor.js",
         "modules/core/modelList/layer/testGroup.js",
         "modules/core/modelList/testList.js",
         "modules/contact/testModel.js",
@@ -88,6 +91,7 @@ define(function (require) {
         "modules/tools/schulwegrouting_hh/testModel.js",
         "modules/tools/compareFeatures/testModel.js",
         "modules/menu/mobile/folder/testView.js",
+        "modules/tools/graph/testModel.js",
         "modules/functionalities/browserPrint/testModel.js"
     ], function () {
         Radio = Backbone.Radio;

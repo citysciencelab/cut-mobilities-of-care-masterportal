@@ -171,7 +171,7 @@ define(function (require) {
                         if (isAttributeFound) {
                             kategoryObj.attributes.push({
                                 attrName: _.isUndefined(this.get("gfiAttributes")[attribute]) ? attribute : this.get("gfiAttributes")[attribute],
-                                attrValue: this.beautifyAttribute(gfiContent[attribute])
+                                attrValue: this.beautifyAttribute(gfiContent[attribute], attribute)
                             });
                         }
                     }, this);
@@ -180,7 +180,31 @@ define(function (require) {
             }
             return featureInfos;
         },
-        beautifyAttribute: function (attribute) {
+        beautifyAttribute: function (attribute, key) {
+            var newVal,
+                beautifiedAttribute = attribute;
+
+            if (key === "oberstufenprofil") {
+                if (beautifiedAttribute.indexOf("|") !== -1) {
+                    beautifiedAttribute = [];
+                    _.each(attribute.split("|"), function (value) {
+                        newVal = value;
+                        // make part before first ";" bold
+                        newVal = newVal.replace(/^/, "<b>");
+                        newVal = newVal.replace(/;/, "</b>;");
+                        beautifiedAttribute.push(newVal);
+                    }, this);
+                }
+                else {
+                    newVal = attribute;
+                    // make part before first ";" bold
+                    newVal = newVal.replace(/^/, "<b>");
+                    newVal = newVal.replace(/;/, "</b>;");
+
+                    beautifiedAttribute = newVal;
+                }
+                return beautifiedAttribute;
+            }
             if (attribute.indexOf("|") !== -1) {
                 return attribute.split("|");
             }

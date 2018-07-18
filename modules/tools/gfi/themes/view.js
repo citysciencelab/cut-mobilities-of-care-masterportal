@@ -6,10 +6,17 @@ define(function (require) {
 
     ThemeView = Backbone.View.extend({
         initialize: function () {
-            var gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached";
+            var gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached",
+                channel = Radio.channel("gfiView");
 
             this.listenTo(this.model, {
-                "change:isVisible": this.appendTheme
+                "change:isVisible": this.appendTheme,
+                "change:Feature": this.render
+            });
+
+            // render the gfi
+            this.listenTo(channel, {
+                "render": this.render
             });
 
             this.gfiWindow = gfiWindow;

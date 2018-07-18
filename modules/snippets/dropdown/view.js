@@ -42,7 +42,7 @@ define(function (require) {
                 this.markSelectedValues();
             }
             this.delegateEvents();
-            return this.$el;
+            return this;
         },
 
         /**
@@ -90,6 +90,7 @@ define(function (require) {
         setIsOpen: function (evt) {
             if (evt.type === "shown") {
                 this.model.setIsOpen(true);
+                this.model.trigger("hideAllInfoText");
             }
             else {
                 this.model.setIsOpen(false);
@@ -100,9 +101,14 @@ define(function (require) {
         toggleInfoText: function () {
             var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
 
-            this.model.trigger("hideAllInfoText");
             if (!isInfoTextVisible) {
-                this.$el.find(".info-text").toggle();
+                this.model.trigger("hideAllInfoText");
+                this.$el.find(".info-icon").css("opacity", "1");
+                this.$el.find(".info-text").show();
+            }
+            else {
+                this.$el.find(".info-icon").css("opacity", "0.4");
+                this.$el.find(".info-text").hide();
             }
         },
 
