@@ -174,7 +174,10 @@ define(function (require) {
 
             gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent);
-            this.setGfiContent(gfiContent);
+
+            this.setGfiContent(_.extend(gfiContent, {
+                allProperties: this.get("feature").getProperties()
+            }));
             this.setIsReady(true);
         },
         // Setter
@@ -196,9 +199,9 @@ define(function (require) {
             if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
                 return false;
             }
+
             return true;
         },
-        /** helper function: check, if str has a valid value */
 
         /**
          * checks if the value is a string or array and if it is a string,

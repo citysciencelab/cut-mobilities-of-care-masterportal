@@ -1,11 +1,6 @@
 define(function () {
 
     var QueryValuesView = Backbone.View.extend({
-        tagName: "span",
-        className: "valueView",
-        attributes: {
-            title: "Auswahl löschen"
-        },
         events: {
             "click": "removeView"
         },
@@ -14,11 +9,17 @@ define(function () {
                 "removeView": this.remove
             });
         },
+        tagName: "span",
+        className: "valueView",
+        attributes: {
+            title: "Auswahl löschen"
+        },
         render: function () {
-            var html = "";
+            var html = "",
+                val;
 
             if (this.model.get("type") === "boolean") {
-                var val = this.model.get("value");
+                val = this.model.get("value");
 
                 if (val === "true") {
                     html = this.model.get("attr") + "<span class='remove'>&#x274C;</span>";
@@ -37,7 +38,7 @@ define(function () {
             }
 
             this.$el.html(html);
-            return this.$el;
+            return this;
         },
 
         removeView: function () {

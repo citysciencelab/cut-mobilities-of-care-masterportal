@@ -21,8 +21,9 @@ define(function (require) {
 
             /**
              * checks if info text is available and sets it
-             * @param {object} snippetInfos
+             * @param {object} snippetInfos [description]
              * @param {string} name [description]
+             * @returns {void}
              */
             checkSnippetInfos: function (snippetInfos, name) {
                 if (_.has(snippetInfos, name)) {
@@ -67,9 +68,10 @@ define(function (require) {
             setValuesCollection: function (value) {
                 this.set("valuesCollection", value);
             },
+
             /**
              * returns true if any of the value models is selected
-             * @return {boolean}
+             * @returns {boolean} isSelected
              */
             hasSelectedValues: function () {
                 return this.get("valuesCollection").some(function (model) {
@@ -84,6 +86,7 @@ define(function (require) {
 
             /**
              * deselects all value models in the values collection
+             * @returns {void}
              */
             deselectValueModels: function () {
                 this.get("valuesCollection").forEach(function (model) {

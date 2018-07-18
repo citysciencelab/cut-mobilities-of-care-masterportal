@@ -1,8 +1,8 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+        Ol = require("openlayers"),
+        $ = require("jquery"),
         WFSLayer;
 
     WFSLayer = Layer.extend({
@@ -16,7 +16,7 @@ define(function (require) {
          * @return {[type]} [description]
          */
         createLayerSource: function () {
-            this.setLayerSource(new ol.source.Vector());
+            this.setLayerSource(new Ol.source.Vector());
         },
 
         /**
@@ -51,6 +51,7 @@ define(function (require) {
         /**
          * [setClusterLayerSource description]
          * @param {[type]} value [description]
+         * @returns {void}
          */
         setClusterLayerSource: function (value) {
             this.set("clusterLayerSource", value);
@@ -65,12 +66,15 @@ define(function (require) {
 
         updateData: function () {
             var params = {
-                REQUEST: "GetFeature",
-                SERVICE: "WFS",
-                SRSNAME: Radio.request("MapView", "getProjection").getCode(),
-                TYPENAME: this.get("featureType"),
-                VERSION: this.get("version")
-            };
+                    REQUEST: "GetFeature",
+                    SERVICE: "WFS",
+                    SRSNAME: Radio.request("MapView", "getProjection").getCode(),
+                    TYPENAME: this.get("featureType"),
+                    VERSION: this.get("version")
+                },
+                wfsReader,
+                features,
+                isClustered;
 
             Radio.trigger("Util", "showLoader");
 
@@ -82,11 +86,11 @@ define(function (require) {
                 context: this,
                 success: function (data) {
                     Radio.trigger("Util", "hideLoader");
-                    var wfsReader = new ol.format.WFS({
-                            featureNS: this.get("featureNS")
-                        }),
-                        features = wfsReader.readFeatures(data),
-                        isClustered = Boolean(this.has("clusterDistance"));
+                    wfsReader = new Ol.format.WFS({
+                        featureNS: this.get("featureNS")
+                    });
+                    features = wfsReader.readFeatures(data);
+                    isClustered = Boolean(this.has("clusterDistance"));
 
                     // nur die Features verwenden die eine geometrie haben aufgefallen bei KITAs am 05.01.2018 (JW)
                     features = _.filter(features, function (feature) {
@@ -128,6 +132,8 @@ define(function (require) {
 
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
+            var style;
+
             if (!this.get("legendURL").length) {
                 var style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
@@ -139,6 +145,7 @@ define(function (require) {
 
         /**
          * sets null style (= no style) for all features
+         * @returns {void}
          */
         hideAllFeatures: function () {
             var collection = this.get("layerSource").getFeatures();
@@ -162,7 +169,8 @@ define(function (require) {
         },
         /**
          * Zeigt nur die Features an, deren Id übergeben wird
-         * @param  {string[]} featureIdList
+         * @param  {string[]} featureIdList - featureIdList
+         * @returns {void}
          */
         showFeaturesByIds: function (featureIdList) {
             this.hideAllFeatures();
@@ -175,6 +183,7 @@ define(function (require) {
                 feature.setStyle(style(feature));
             }, this);
         },
+
         getStyleAsFunction: function (style) {
             if (_.isFunction(style)) {
                 return style;

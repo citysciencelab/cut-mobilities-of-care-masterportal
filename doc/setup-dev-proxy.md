@@ -111,6 +111,13 @@ In der Admin-cmd ausführen:
 
 Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /node_modules, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
 
+```
+# npm run installBrowserMqtt
+```
+
+
+Installiert das Zusatzpackage browserMqtt.js als Erweiterung für MQTT.js. Dies ist zur Live-Aktualisierung des SensorLayers notwendig.
+
 
 ## Grunt Tasks ausführen
 ### grunt server
@@ -182,4 +189,8 @@ für build-config und lgv-config:
 
 Vorsicht: Explizites Aufrufen von npm install build-config installiert ein falsches build-config.
 
+zur Nutzung des SensorLayers
 
+```
+# npm run installBrowserMqtt
+```
