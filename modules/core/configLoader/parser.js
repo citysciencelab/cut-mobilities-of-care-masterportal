@@ -321,12 +321,12 @@ define(function (require) {
             this.set("overlayer", value);
         },
 
-        // Getter für Attribut "treeType"
+        // Setter für Attribut "treeType"
         setTreeType: function (value) {
             this.set("treeType", value);
         },
 
-        // Getter für Attribut "category"
+        // Setter für Attribut "category"
         setCategory: function (value) {
             this.set("category", value);
         },

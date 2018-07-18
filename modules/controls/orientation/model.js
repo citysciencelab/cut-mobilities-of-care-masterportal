@@ -28,7 +28,6 @@ define([
 
             channel.on({
                 "removeOverlay": this.removeOverlay,
-                "getPOI": this.getPOI,
                 "sendPosition": this.sendPosition
             }, this);
 

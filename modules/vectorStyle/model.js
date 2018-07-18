@@ -720,7 +720,6 @@ define(function (require) {
             this.set("clusterClass", value);
         },
         // Für Cluster Class CIRCLE
-        // getter for clusterCircleRadius
         // setter for clusterCircleRadius
         setClusterCircleRadius: function (value) {
             this.set("clusterCircleRadius", value);

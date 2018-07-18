@@ -137,11 +137,6 @@ define(function (require) {
             }
         },
 
-        // Getter
-        getFeatures: function () {
-            return this.get("features");
-        },
-
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
             var style;
