@@ -1,11 +1,11 @@
 define(function (require) {
 
     var d3 = require("d3"),
-        Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
         GraphModel;
 
     GraphModel = Backbone.Model.extend({
+        defaults: {},
+
         initialize: function () {
             var channel = Radio.channel("Graph");
 
@@ -18,6 +18,7 @@ define(function (require) {
                 }
             }, this);
         },
+
         createGraph: function (graphConfig) {
             if (graphConfig.graphType === "Linegraph") {
                 this.createLineGraph(graphConfig);
@@ -168,7 +169,7 @@ define(function (require) {
         createAxisLeft: function (scale, yAxisTicks) {
             var d3Object;
 
-            if (_.isUndefined(yAxisTicks.ticks)) {
+            if (_.isUndefined(yAxisTicks) && !_.has(yAxisTicks, "ticks")) {
                 d3Object = d3.axisLeft(scale)
                     .tickFormat(function (d) {
                         return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -184,7 +185,7 @@ define(function (require) {
         createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow, offset) {
             return d3.line()
                 .x(function (d) {
-                    return scaleX(d[xAttr]) + (offset + scaleX.bandwidth() / 2);
+                    return scaleX(d[xAttr]) + (offset + (scaleX.bandwidth() / 2));
                 })
                 .y(function (d) {
                     return scaleY(d[yAttrToShow]);
@@ -245,8 +246,8 @@ define(function (require) {
             // text for yAxis
             yAxisDraw.append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("x", 0 - yAxisBBox.height / 2)
-                .attr("y", 0 - yAxisBBox.width - 2 * textOffset)
+                .attr("x", 0 - (yAxisBBox.height / 2))
+                .attr("y", 0 - yAxisBBox.width - (2 * textOffset))
                 .attr("dy", "1em")
                 .style("text-anchor", "middle")
                 .style("fill", "#000")
@@ -254,16 +255,16 @@ define(function (require) {
         },
 
         appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset) {
-            var data = _.filter(data, function (obj) {
+            var dat = _.filter(data, function (obj) {
                 return obj[yAttrToShow] !== "-";
             });
 
             svg.selectAll("dot")
-                .data(data)
+                .data(dat)
                 .enter().append("circle")
                 .attr("transform", "translate(0, 20)")
                 .attr("cx", function (d) {
-                    return scaleX(d[xAttr]) + (offset + scaleX.bandwidth() / 2);
+                    return scaleX(d[xAttr]) + (offset + (scaleX.bandwidth() / 2));
                 })
                 .attr("cy", function (d) {
                     return scaleY(d[yAttrToShow]);
@@ -339,9 +340,7 @@ define(function (require) {
 
             _.each(attrArray, function (attr) {
                 var legendObj = _.find(legendArray, function (legend) {
-                    if (legend.key === attr) {
-                        return legend;
-                    }
+                    return legend.key === attr;
                 });
 
                 valueArray.push(legendObj.value);
@@ -424,8 +423,8 @@ define(function (require) {
 
         drawBars: function (svg, data, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
             svg.selectAll(".bar")
-            .data(data)
-            .enter().append("rect")
+                .data(data)
+                .enter().append("rect")
                 .attr("class", "bar" + selector.split(".")[1])
                 .attr("x", function (d) {
                     return x(d[xAttr]);
@@ -437,13 +436,13 @@ define(function (require) {
                 .attr("height", function (d) {
                     return height - y(d[attrToShowArray[0]]);
                 })
-            .on("mouseover", function (d) {
-                d3.select(this);
-            })
-            .append("title")
+                .on("mouseover", function () {
+                    d3.select(this);
+                })
+                .append("title")
                 .text(function (d) {
-                    return Math.round(d[attrToShowArray[0]] * 1000) / 10 + " %";
-            });
+                    return (Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %";
+                });
         },
 
         // getter for graphParams

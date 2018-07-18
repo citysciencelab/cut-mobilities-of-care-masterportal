@@ -115,16 +115,17 @@ define(function (require) {
         /**
          * if the displayed feature changes, the model is recreated and the gfi adjusted
          * @param  {ol.Feature} feature - the feature which has been changed
+         * @returns {void}
          */
         changeFeature: function (feature) {
             var gfiFeature,
                 gfiTheme;
 
             if (this.get("isVisible")) {
-                gfiFeature = this.attributes.themeList.models[0].attributes.feature;
+                gfiFeature = this.get("attributes").themeList.models[0].attributes.feature;
 
                 if (gfiFeature === feature) {
-                    gfiTheme = this.attributes.themeList.models[0].attributes.gfiTheme;
+                    gfiTheme = this.get("attributes").themeList.models[0].attributes.gfiTheme;
 
                     Radio.trigger("gfiList", "redraw");
                     Radio.trigger(gfiTheme + "Theme", "changeGfi");
