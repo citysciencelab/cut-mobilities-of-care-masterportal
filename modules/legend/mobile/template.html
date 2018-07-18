@@ -20,7 +20,7 @@
                     <div id="collapseEins<%=index%>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="überschriftEins<%=index%>">
                         <div class="panel-body panel-legend">
                             <%
-                            if (element.typ === "WFS") {
+                            if (element.typ === "WFS" || element.typ === "Sensor") {
                             %>
                                 <table>
                                 <%
@@ -38,13 +38,19 @@
                                     _.each(element.img, function (image, index2) {
                                     %>
                                         <tr>
-                                           <td class="tdLegend">
-                                               <img src="<%= image %>">
-                                           </td>
-                                           <td class="tdLegend">
-                                               <span><%= element.legendname[index2] %></span>
-                                           </td>
-                                       </tr>
+                                            <td class="tdLegend">
+                                                <% if (_.isArray(image)){%>
+                                                    <div class="imageArray" style="background:url('<%= image[1] %>');  background-size:35px;">
+                                                        <img src="<%= image[0] %>">
+                                                    </div>
+                                                <%} else {%>
+                                                    <img src="<%= image %>">
+                                                <%}%>
+                                            </td>
+                                            <td class="tdLegend">
+                                                <span><%= element.legendname[index2] %></span>
+                                            </td>
+                                        </tr>
                                     <%
                                     });
                                 }
