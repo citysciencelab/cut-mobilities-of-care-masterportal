@@ -33,6 +33,7 @@ define(function (require) {
         /**
          * calls addValueModel for each value
          * @param {string[]} valueList - init dropdown values
+         * @returns {void}
          */
         addValueModels: function (valueList) {
             _.each(valueList, function (value) {
@@ -42,7 +43,8 @@ define(function (require) {
 
         /**
          * creates a model value and adds it to the value collection
-         * @param  {string} value
+         * @param  {string} value - value
+         * @returns {void}
          */
         addValueModel: function (value) {
             this.getValuesCollection().add(new ValueModel({
@@ -84,17 +86,20 @@ define(function (require) {
         /**
          * checks the value models if they are selected or not
          * @param {string|string[]} values - selected value(s) in the dropdown list
+         * @returns {void}
          */
         updateSelectedValues: function (values) {
-            if (!_.isArray(values)) {
+            var vals = values;
+
+            if (!_.isArray(vals)) {
                 if (!this.getIsMultiple()) {
-                    this.setDisplayName(values);
+                    this.setDisplayName(vals);
 
                 }
-                values = [values];
+                vals = [vals];
             }
             _.each(this.getValuesCollection().models, function (valueModel) {
-                if (_.contains(values, valueModel.get("value"))) {
+                if (_.contains(vals, valueModel.get("value"))) {
                     valueModel.set("isSelected", true);
                 }
                 else {
@@ -107,6 +112,7 @@ define(function (require) {
          * checks the value models if they are selectable or not
          * @param {string[]} values - filtered values
          * @fires DropdownView#render
+         * @returns {void}
          */
         updateSelectableValues: function (values) {
             this.getValuesCollection().each(function (valueModel) {
@@ -124,7 +130,8 @@ define(function (require) {
 
         /**
          * sets the isOpen attribute
-         * @param  {boolean} value
+         * @param  {boolean} value - value
+         * @returns {void}
          */
         setIsOpen: function (value) {
             this.set("isOpen", value);
@@ -133,6 +140,7 @@ define(function (require) {
         /**
          * sets the valueModelsToShow attribute
          * @param  {Backbone.Model[]} value - all value models that can be selected
+         * @returns {void}
          */
         setValueModelsToShow: function (value) {
             this.set("valueModelsToShow", value);

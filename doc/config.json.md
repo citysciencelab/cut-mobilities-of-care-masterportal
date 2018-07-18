@@ -558,6 +558,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |isGeneric|nein|String|false||
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
+|minScale|nein|Integer||Gibt den kleinsten Maßstab an auf den die Suche zoomt|
 |predefinedQueries|nein|Object||Vordefinierter Filter der beim Aktivieren automatisch ausgeführt wird
 
 

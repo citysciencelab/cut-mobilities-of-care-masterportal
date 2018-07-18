@@ -9,6 +9,7 @@ define(function (require) {
 
         /**
          * init the slider
+         * @returns {void}
          */
         initSlider: function () {
             var valueModels = this.model.get("valuesCollection").models;
@@ -25,12 +26,13 @@ define(function (require) {
         /**
          * set the inputs value
          * @param  {Event} evt - slide
+         * @returns {void}
          */
         setInputControlValue: function (evt) {
             var inputControls = this.$el.find("input.form-control");
 
-            $(inputControls[0]).val(evt.value[0]);
-            $(inputControls[1]).val(evt.value[1]);
+            this.$(inputControls[0]).val(evt.value[0]);
+            this.$(inputControls[1]).val(evt.value[1]);
         }
     });
 
