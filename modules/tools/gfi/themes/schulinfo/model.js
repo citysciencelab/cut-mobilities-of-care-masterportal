@@ -106,11 +106,6 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("Schulinfo");
 
-            channel.reply({
-                "getThemeConfig": function () {
-                    return this.get("themeConfig");
-                }
-            }, this);
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
             });
