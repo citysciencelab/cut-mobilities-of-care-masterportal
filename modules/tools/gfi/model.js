@@ -122,10 +122,10 @@ define(function (require) {
                 gfiTheme;
 
             if (this.get("isVisible")) {
-                gfiFeature = this.get("attributes").themeList.models[0].attributes.feature;
+                gfiFeature = this.get("themeList").models[0].attributes.feature;
 
                 if (gfiFeature === feature) {
-                    gfiTheme = this.get("attributes").themeList.models[0].attributes.gfiTheme;
+                    gfiTheme = this.get("themeList").models[0].attributes.gfiTheme;
 
                     Radio.trigger("gfiList", "redraw");
                     Radio.trigger(gfiTheme + "Theme", "changeGfi");

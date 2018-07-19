@@ -81,9 +81,11 @@ define(function (require) {
 
             // get new feature data
             this.listenTo(channel, {
-                redraw: this.forEach(function (model) {
-                    model.requestFeatureInfos();
-                })
+                redraw: function () {
+                    this.forEach(function (model) {
+                        model.requestFeatureInfos();
+                    });
+                }
             });
 
             this.listenTo(this, {
