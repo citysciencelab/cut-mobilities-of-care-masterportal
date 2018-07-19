@@ -12,8 +12,8 @@
                 <div class="col-xs-4">
                     <select class="form-control">
                         <% layerSelection.forEach(function (layer) { %>
-                            <option value="<%= layer.id %>"><%= layer.name %></option>
-                        <% }); %>
+                            <option value="<%= layer.id %>" <%if(layer.id === layerId) {print("selected");}%>><%= layer.name %></option>
+                        <% }, this); %>
                     </select>
                 </div>
             </div>

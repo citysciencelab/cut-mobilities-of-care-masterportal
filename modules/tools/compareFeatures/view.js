@@ -68,7 +68,8 @@ define(function (require) {
                     list: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
                     rowsToShow: model.get("numberOfAttributesToShow"),
                     featureIds: model.getFeatureIds(model.get("groupedFeatureList"), model.get("layerId")),
-                    layerSelection: model.getLayerSelection(model.get("groupedFeatureList"))
+                    layerSelection: model.getLayerSelection(model.get("groupedFeatureList")),
+                    layerId: model.get("layerId")
                 };
 
             this.$el.html(this.template(attr));
