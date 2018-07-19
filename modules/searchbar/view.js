@@ -507,6 +507,8 @@ define(function (require) {
         /**
          * controls the input sequence of events,
          * so that the paste works with shortcut and with contextmenu
+         * because with ctrl + c comes 1 paste and 2 keyup events,
+         * but with right-click and paste comes 1 contextmenu and 1 paste event
          * @param {event} evt - a keyup, paste or contextmenu event
          * @returns {void}
          */
@@ -517,13 +519,7 @@ define(function (require) {
                 this.model.setTempCounter(0);
             }
             else if (evt.type === "paste") {
-                if (_.isUndefined(count)) {
-                    this.model.setTempCounter(0);
-                }
-                else {
-                    this.model.setTempCounter(undefined);
-                }
-                this.setSearchString(evt);
+                this.handlePasteEvent(evt, count);
             }
             else if (evt.type === "keyup" && count < 2) {
                 this.model.setTempCounter(++count);
@@ -531,6 +527,22 @@ define(function (require) {
             else {
                 this.setSearchString(evt);
             }
+        },
+
+        /**
+         * handle paste event
+         * @param {event} evt - a keyup, paste or contextmenu event
+         * @param {number} count - temporary counter to control input events
+         * @returns {void}
+         */
+        handlePasteEvent: function (evt, count) {
+            if (_.isUndefined(count)) {
+                this.model.setTempCounter(0);
+            }
+            else {
+                this.model.setTempCounter(undefined);
+            }
+            this.setSearchString(evt);
         },
 
         setSearchString: function (evt) {
