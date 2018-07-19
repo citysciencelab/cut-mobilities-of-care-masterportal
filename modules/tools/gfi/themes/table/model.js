@@ -16,7 +16,7 @@ define(function (require) {
          */
         identifyColNames: function () {
             if (_.isUndefined(this.get("gfiContent")) === false) {
-                var colNames = _.keys(this.getGfiContent()[0]);
+                var colNames = _.keys(this.get("gfiContent")[0]);
 
                 this.setColNames(colNames);
             }

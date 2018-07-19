@@ -38,7 +38,7 @@ define([
         },
 
         assumeProjections: function () {
-            var namedProjections = this.getNamedProjections();
+            var namedProjections = this.get("namedProjections");
 
             Proj4.defs(namedProjections);
             ol.proj.setProj4(Proj4);
@@ -55,7 +55,7 @@ define([
         },
 
         getProjections: function () {
-            var namedProjections = this.getNamedProjections(),
+            var namedProjections = this.get("namedProjections"),
                 projections = [];
 
             _.each(namedProjections, function (namedProjection) {
@@ -100,10 +100,6 @@ define([
 
         },
 
-        // getter for namedProjections
-        getNamedProjections: function () {
-            return this.get("namedProjections");
-        },
         // setter for namedProjections
         setNamedProjections: function (value) {
             this.set("namedProjections", value);

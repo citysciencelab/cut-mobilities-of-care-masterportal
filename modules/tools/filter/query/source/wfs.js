@@ -65,7 +65,7 @@ define(function (require) {
                 features = [];
 
             if (!_.isUndefined(model)) {
-                features = model.getLayerSource().getFeatures();
+                features = model.get("layerSource").getFeatures();
             }
             return features;
         },
@@ -252,12 +252,12 @@ define(function (require) {
                 feature;
 
             _.each(this.get("featureIds"), function (id) {
-                feature = model.getLayerSource().getFeatureById(id);
+                feature = model.get("layerSource").getFeatureById(id);
                 feature.set("extent", feature.getGeometry().getExtent());
                 features.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
             });
 
-            Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.getId(), "layerName": model.getName()});
+            Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.get("id"), "layerName": model.get("name")});
         },
         /**
          * determines the attributes and their values that are still selectable

@@ -34,7 +34,7 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            if (this.model.getIsSettingVisible() === true) {
+            if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
             }
             return this.$el;
@@ -45,7 +45,7 @@ define(function (require) {
             // Animation Zahnrad
             this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
+            if (this.model.get("isSettingVisible") === false) {
                 this.$el.find(".layer-settings").slideUp("slow", function () {
                     $(this).remove();
                 });

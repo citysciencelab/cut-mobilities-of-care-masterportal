@@ -26,7 +26,7 @@ define(function (require) {
          * Blendet das Modal ein oder aus
          */
         toggle: function () {
-            if (this.model.getIsVisible() === true) {
+            if (this.model.get("isVisible") === true) {
                 this.$el.modal("show");
                 Radio.trigger("GFI", "afterRender");
             }

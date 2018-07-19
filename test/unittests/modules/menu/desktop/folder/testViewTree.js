@@ -7,6 +7,9 @@ define(function (require) {
 
         before(function () {
             var fakeModel = {
+                get: function () {
+                    return true;
+                },
                 getIsVisibleInTree: function () {
                     return true;
                 },

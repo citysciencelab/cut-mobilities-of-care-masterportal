@@ -193,15 +193,6 @@ define(function (require) {
             this.set("isReady", value);
         },
 
-        // Getter
-        getName: function () {
-            return this.get("name");
-        },
-
-        getGfiContent: function () {
-            return this.get("gfiContent");
-        },
-
         isValidKey: function (key) {
             var ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
 

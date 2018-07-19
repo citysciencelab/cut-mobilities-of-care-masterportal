@@ -36,7 +36,7 @@ define([
             this.set("startAdresse", "aktueller Standpunkt");
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "routing") {
+            if (args[2].get("id") === "routing") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 var viomRoutingID = Radio.request("RestReader", "getServiceById", args[2].get("viomRoutingID")),
@@ -229,10 +229,7 @@ define([
             this.get("mhpOverlay").setPosition([position[0] + 7, position[1] - 7]);
             Radio.trigger("Map", "addOverlay", this.get("mhpOverlay"));
         },
-        // getter for isGeolocationPossible
-        getIsGeolocationPossible: function () {
-            return this.get("isGeolocationPossible");
-        },
+
         // setter for isGeolocationPossible
         setIsGeolocationPossible: function (value) {
             this.set("isGeolocationPossible", value);

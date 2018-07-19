@@ -84,7 +84,7 @@ define(function (require) {
          */
         parseLayerList: function (layerList) {
 
-            var baseLayerIds = _.flatten(_.pluck(this.getBaselayer().Layer, "id")),
+            var baseLayerIds = _.flatten(_.pluck(this.get("baselayer").Layer, "id")),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
                     return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
@@ -97,7 +97,7 @@ define(function (require) {
         },
 
         createBaselayer: function (layerList) {
-            _.each(this.getBaselayer().Layer, function (layer) {
+            _.each(this.get("baselayer").Layer, function (layer) {
                 if (_.isArray(layer.id)) {
                     layer = _.extend(this.mergeObjectsByIds(layer.id, layerList), _.omit(layer, "id"));
                 }
@@ -198,7 +198,7 @@ define(function (require) {
                     level: 1,
                     isInThemen: true,
                     glyphicon: "glyphicon-plus-sign",
-                    isFolderSelectable: this.getIsFolderSelectable()
+                    isFolderSelectable: this.get("isFolderSelectable")
                 });
                 _.each(category.layer, function (layer) {
                     layer.name = layer.datasets[0].md_name;

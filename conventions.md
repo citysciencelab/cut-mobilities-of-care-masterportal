@@ -8,7 +8,7 @@
 * [***EditorConfig***](http://editorconfig.org/) Einstellungen beachten
 
 ### ESLint
-* [***ESLint***](https://eslint.org/) wird genutzt, um die syntaktische und sonstige Fehler zu verhindern und den Code lesbar und verständlich zu schreiben. 
+* [***ESLint***](https://eslint.org/) wird genutzt, um die syntaktische und sonstige Fehler zu verhindern und den Code lesbar und verständlich zu schreiben.
 * Wir interpretieren die ESLint Kategorien (warn bzw. error) unterschiedlich.
 * Eine "warning" ist ein Hinweis an den Entwickler um zu prüfen, ob der Code hier besser geschrieben werden kann. Sie ist unabhängig von einem approve. Eine Änderung liegt im Ermessensspielraum des Entwicklers.
 * Ein "error" verhindert ein approven des PullRequest.
@@ -109,33 +109,13 @@ defaults: {
     ...
 }
 ```
-* Model-weite Variablen werden nur durch Setter- und Getter-Funktionen geholt oder gesetzt, die paarweise am Ende des Models stehen.
+* Model-weite Variablen werden nur durch Setter-Funktionen gesetzt die am Ende des Models stehen.
 ```javascript
 setVariable1: function (value) {
     this.set("variable1", value);
 },
-getVariable1: function () {
-    return this.get("variable1");
-},
 setVariable2: function (value) {
     this.set("variable2", value);
-},
-getVariable2: function () {
-    return this.get("variable2");
-}
-```
-"so nicht" Beispiele:
-```javascript
-randomFunc: function () {
-    var modelVar1 = this.get("variable1");
-    ...
-}
-```
-"so ja" Beispiele:
-```javascript
-randomFunc: function () {
-    var modelVar1 = this.getVariable1();
-    ...
 }
 ```
 
