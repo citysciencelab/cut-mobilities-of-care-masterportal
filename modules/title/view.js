@@ -4,12 +4,13 @@ define(function (require) {
         Radio = require("backbone.radio"),
         Template = require("text!modules/title/template.html"),
         Model = require("modules/title/model"),
+        $ = require("jquery"),
         TitleView;
 
     TitleView = Backbone.View.extend({
-        className: "visible-lg-block portal-title",
+        className: "portal-title",
         id: "portalTitle",
-        model: Model,
+        model: new Model(),
         template: _.template(Template),
         initialize: function () {
             this.listenTo(Radio.channel("Title"), {
@@ -18,7 +19,7 @@ define(function (require) {
                 }
             });
 
-            $(window).on("resize", this.setSize);
+            window.addEventListener("resize", _.bind(this.setSize, this));
 
             this.listenTo(Radio.channel("Util"), {
                 "isViewMobileChanged": function () {
@@ -26,23 +27,36 @@ define(function (require) {
                 }
             });
 
-            this.render();
             this.setSize();
-        },
-
-        setSize: function () {
-            var rootWidth = $("#root").width(),
-                searchbarWidth = $("#searchbar").width() + 20, // 20 searchbar padding
-                width = $("#navbarRow").width() - rootWidth - searchbarWidth - 140; // 35px toleranz wegen padding und margin von #root, #searchbar , .navbar-collapse und #portalTitle
-
-            $("#portalTitle").width(width);
         },
 
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            $(".navbar-collapse").append(this.$el);
+            $(".nav-menu").after(this.$el);
+
+            return this;
+        },
+
+        setSize: function () {
+            var rootWidth,
+                searchbarWidth,
+                width;
+
+            if (!_.isNull(document.getElementById("searchbar"))) {
+                rootWidth = document.getElementById("root").offsetWidth;
+                searchbarWidth = document.getElementById("searchbar").offsetWidth;
+                width = document.getElementById("navbarRow").offsetWidth - rootWidth - searchbarWidth - 100; // 50px toleranz wegen padding und margin von #root, #searchbar , .navbar-collapse und #portalTitle
+
+                this.$el.width(width);
+                if (width > 100) {
+                    this.render();
+                }
+                else {
+                    this.$el.empty();
+                }
+            }
         }
     });
 

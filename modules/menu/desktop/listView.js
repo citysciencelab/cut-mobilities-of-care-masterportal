@@ -43,7 +43,6 @@ define([
             $("ul#tree ul#Overlayer").addClass("LayerListMaxHeight");
             $("ul#tree ul#SelectedLayer").addClass("LayerListMaxHeight");
             $("ul#tree ul#Baselayer").addClass("LayerListMaxHeight");
-            Radio.trigger("Title", "setSize");
         },
         /**
              * Rendert die  Auswahlliste

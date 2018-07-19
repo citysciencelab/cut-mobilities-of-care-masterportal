@@ -133,9 +133,9 @@ define(function (require) {
                         this.$("#searchInput").val(this.model.getInitSearchString());
                         this.model.unset("initSearchString", true);
                     }
-
                     if (window.innerWidth >= 768) {
                         this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                        Radio.trigger("Title", "setSize");
                     }
                 }
             });
@@ -214,7 +214,6 @@ define(function (require) {
                     this.$("#searchInput:focus").css("border-right-width", "0");
                 }
                 this.delegateEvents(this.events);
-                Radio.trigger("Title", "setSize");
             }
             else {
                 this.$el.html(this.templateTable(attr));

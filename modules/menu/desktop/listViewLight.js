@@ -27,7 +27,6 @@ define(function (require) {
             });
 
             this.addViews(models);
-            Radio.trigger("Title", "setSize");
             $("ul#tree.light").css("max-height", $("#map").height() - 160);
         },
         addViews: function (models) {
