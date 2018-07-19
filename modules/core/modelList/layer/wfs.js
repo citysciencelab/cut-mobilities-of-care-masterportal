@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Ol = require("openlayers"),
+        ol = require("openlayers"),
         $ = require("jquery"),
         WFSLayer;
 
@@ -16,7 +16,7 @@ define(function (require) {
          * @return {[type]} [description]
          */
         createLayerSource: function () {
-            this.setLayerSource(new Ol.source.Vector());
+            this.setLayerSource(new ol.source.Vector());
         },
 
         /**
@@ -86,7 +86,7 @@ define(function (require) {
                 context: this,
                 success: function (data) {
                     Radio.trigger("Util", "hideLoader");
-                    wfsReader = new Ol.format.WFS({
+                    wfsReader = new ol.format.WFS({
                         featureNS: this.get("featureNS")
                     });
                     features = wfsReader.readFeatures(data);
