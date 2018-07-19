@@ -189,8 +189,8 @@ define(function (require) {
             this.set("recommendedList", _.sortBy(recommendedList, "name"));
         },
 
-        setCount: function (value) {
-            this.set("count", value);
+        setTempCounter: function (value) {
+            this.set("tempCounter", value);
         }
     });
 

@@ -498,7 +498,7 @@ define(function (require) {
         waitForEvent: function (evt) {
             var that = this;
 
-            // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
+            // The paste event occurs before the value is inserted into the element
             setTimeout(function () {
                 that.controlEvent(evt);
             }, 0);
@@ -511,22 +511,22 @@ define(function (require) {
          * @returns {void}
          */
         controlEvent: function (evt) {
-            var count = this.model.get("count");
+            var count = this.model.get("tempCounter");
 
             if (evt.type === "contextmenu") {
-                this.model.setCount(0);
+                this.model.setTempCounter(0);
             }
             else if (evt.type === "paste") {
                 if (_.isUndefined(count)) {
-                    this.model.setCount(0);
+                    this.model.setTempCounter(0);
                 }
                 else {
-                    this.model.setCount(undefined);
+                    this.model.setTempCounter(undefined);
                 }
                 this.setSearchString(evt);
             }
             else if (evt.type === "keyup" && count < 2) {
-                this.model.setCount(++count);
+                this.model.setTempCounter(++count);
             }
             else {
                 this.setSearchString(evt);
