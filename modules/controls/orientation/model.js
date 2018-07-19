@@ -28,23 +28,22 @@ define([
 
             channel.on({
                 "removeOverlay": this.removeOverlay,
-                "getPOI": this.getPOI,
                 "sendPosition": this.sendPosition
             }, this);
 
             channel.reply({
                 "isGeoLocationPossible": function () {
-                    return this.getIsGeoLocationPossible();
+                    return this.get("isGeoLocationPossible");
                 },
                 "getPoiDistances": function () {
-                    return this.getPoiDistances();
+                    return this.get("poiDistances");
                 },
                 "getFeaturesInCircle": this.getVectorFeaturesInCircle
             }, this);
 
             this.listenTo(this, {
                 "change:isGeoLocationPossible": function () {
-                    channel.trigger("changedGeoLocationPossible", this.getIsGeoLocationPossible());
+                    channel.trigger("changedGeoLocationPossible", this.get("isGeoLocationPossible"));
                 }
             }, this);
 
@@ -60,7 +59,7 @@ define([
          * Fügt das Element der ol.Overview hinzu. Erst nach render kann auf document.getElementById zugegriffen werden.
          */
         addElement: function () {
-            this.getMarker().setElement(document.getElementById("geolocation_marker"));
+            this.get("marker").setElement(document.getElementById("geolocation_marker"));
         },
 
         /**
@@ -100,7 +99,7 @@ define([
             }
         },
         removeOverlay: function () {
-            Radio.trigger("Map", "removeOverlay", this.getMarker());
+            Radio.trigger("Map", "removeOverlay", this.get("marker"));
         },
         untrack: function () {
             var geolocation = this.get("geolocation");
@@ -114,8 +113,8 @@ define([
         track: function () {
             var geolocation;
 
-            if (this.getIsGeolocationDenied() === false) {
-                Radio.trigger("Map", "addOverlay", this.getMarker());
+            if (this.get("isGeolocationDenied") === false) {
+                Radio.trigger("Map", "addOverlay", this.get("marker"));
                 if (this.get("geolocation") === null) {
                     geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                     this.set("geolocation", geolocation);
@@ -134,7 +133,7 @@ define([
         },
         positionMarker: function (position) {
             try {
-                this.getMarker().setPosition(position);
+                this.get("marker").setPosition(position);
             }
             catch (e) {
             }
@@ -187,7 +186,7 @@ define([
         trackPOI: function () {
             var geolocation;
 
-            Radio.trigger("Map", "addOverlay", this.getMarker());
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
             if (this.get("geolocation") === null) {
                 geolocation = new ol.Geolocation({tracking: true, projection: ol.proj.get("EPSG:4326")});
                 this.set("geolocation", geolocation);
@@ -266,40 +265,21 @@ define([
         setShowPoi: function (value) {
             this.set("showPoi", value);
         },
-        // getter für showPoi
-        getShowPoi: function () {
-            return this.get("showPoi");
-        },
 
         setIsGeolocationDenied: function (value) {
             this.set("isGeolocationDenied", value);
             this.set("isGeoLocationPossible", false);
         },
 
-        getIsGeolocationDenied: function () {
-            return this.get("isGeolocationDenied");
-        },
-
-        getIsGeoLocationPossible: function () {
-            return this.get("isGeoLocationPossible");
-        },
         setIsGeoLocationPossible: function () {
             this.set("isGeoLocationPossible", window.location.protocol === "https:" || _.contains(["localhost","127.0.0.1"], window.location.hostname));
         },
 
-        // getter for poiDistances
-        getPoiDistances: function () {
-            return this.get("poiDistances");
-        },
         // setter for poiDistances
         setPoiDistances: function (value) {
             this.set("poiDistances", value);
         },
 
-        // getter for marker
-        getMarker: function () {
-            return this.get("marker");
-        },
         // setter for marker
         setMarker: function (value) {
             this.set("marker", value);

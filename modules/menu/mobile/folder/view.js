@@ -24,7 +24,7 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsExpanded() === true && this.model.getParentId() !== "tree") {
+            if (this.model.get("isExpanded") === true && this.model.get("parentId") !== "tree") {
                 this.$el.html(this.templateLeaf(attr));
             }
             else {
@@ -41,7 +41,7 @@ define(function (require) {
             this.model.setIsExpanded(true);
         },
         removeIfNotVisible: function () {
-            if (!this.model.getIsVisibleInTree()) {
+            if (!this.model.get("isVisibleInTree")) {
                 this.remove();
             }
         }

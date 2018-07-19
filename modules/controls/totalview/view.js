@@ -41,8 +41,8 @@ define(function (require) {
             this.$el.prepend(this.tabletemplate());
         },
         setTotalView: function () {
-            var center = this.model.getStartCenter(),
-                zoomlevel = this.model.getZoomLevel();
+            var center = this.model.get("startCenter"),
+                zoomlevel = this.model.get("zoomLevel");
 
             Radio.trigger("MapView", "setCenter", center, zoomlevel);
         }

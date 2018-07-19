@@ -31,26 +31,16 @@ define(function (require) {
                 }
             },
 
-            // getter for id
-            getId: function () {
-                return this.get("id");
-            },
             // setter for id
             setId: function (value) {
                 this.set("id", value);
             },
-            // getter for name
-            getName: function () {
-                return this.get("name");
-            },
+
             // setter for name
             setName: function (value) {
                 this.set("name", value);
             },
-            // getter for attr
-            getAttr: function () {
-                return this.get("attr");
-            },
+
             // setter for attr
             setAttr: function (value) {
                 this.set("attr", value);
@@ -59,37 +49,21 @@ define(function (require) {
                 this.trigger("removeView");
             },
 
-            // getter for initPreectedValues
-            getPreselectedValues: function () {
-                return this.get("preselectedValues");
-            },
             // setter for initPreectedValues
             setPreselectedValues: function (value) {
                 this.set("preselectedValues", value);
             },
 
-            // getter for type
-            getType: function () {
-                return this.get("type");
-            },
             // setter for type
             setType: function (value) {
                 this.set("type", value);
             },
 
-            // getter for displayName
-            getDisplayName: function () {
-                return this.get("displayName");
-            },
             // setter for displayName
             setDisplayName: function (value) {
                 this.set("displayName", value);
             },
 
-            // getter for valuesCollection
-            getValuesCollection: function () {
-                return this.get("valuesCollection");
-            },
             // setter for valuesCollection
             setValuesCollection: function (value) {
                 this.set("valuesCollection", value);
@@ -105,10 +79,6 @@ define(function (require) {
                 });
             },
 
-            // getter for values
-            getValues: function () {
-                return this.get("values");
-            },
             // setter for values
             setValues: function (value) {
                 this.set("values", value);

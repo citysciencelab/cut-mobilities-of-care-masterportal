@@ -18,7 +18,7 @@ define(function (require) {
          * @return {String} - CSW GetRecordById Request-String
          */
         url: function () {
-            var cswService = Radio.request("RestReader", "getServiceById", this.getCswId());
+            var cswService = Radio.request("RestReader", "getServiceById", this.get("cswId"));
 
             if (_.isUndefined(cswService) === false) {
                 return Radio.request("Util", "getProxyURL", cswService.get("url"));
@@ -57,7 +57,7 @@ define(function (require) {
             else {
                 currentView = new View({model: this});
             }
-            if (this.getIsVisible() === true) {
+            if (this.get("isVisible") === true) {
                 currentView.render();
             }
         },
@@ -199,16 +199,8 @@ define(function (require) {
             this.set("isVisible", value);
         },
 
-        getIsVisible: function () {
-            return this.get("isVisible");
-        },
-
         setCswId: function (value) {
             this.set("cswId", value);
-        },
-
-        getCswId: function () {
-            return this.get("cswId");
         }
     });
 

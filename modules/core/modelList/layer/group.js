@@ -8,7 +8,7 @@ define(function (require) {
     GroupLayer = Layer.extend({
         initialize: function () {
             this.superInitialize();
-            this.setLayerdefinitions(this.groupLayerObjectsByUrl(this.getLayerdefinitions()));
+            this.setLayerdefinitions(this.groupLayerObjectsByUrl(this.get("layerdefinitions")));
             this.setAttributes();
         },
 
@@ -16,7 +16,7 @@ define(function (require) {
         setAttributes: function () {
             var gfiParams = [];
 
-            _.each(this.getLayerdefinitions(), function (layerdef, index) {
+            _.each(this.get("layerdefinitions"), function (layerdef, index) {
                 if (layerdef.gfiAttributes !== "ignore") {
                     gfiParams.push({
                         featureCount: layerdef.featureCount ? layerdef.featureCount : 1,
@@ -49,7 +49,7 @@ define(function (require) {
 
             _.each(groupByUrl, function (layerGroup) {
                 var newLayerObj = _.clone(layerGroup[0]),
-                    gfiAttributes = this.getGfiAttributes();
+                    gfiAttributes = this.get("gfiAttributes");
 
                 gfiAttributes = this.groupGfiAttributes(gfiAttributes, layerGroup);
                 if (_.isObject(gfiAttributes) && !_.isString(gfiAttributes)) {
@@ -100,8 +100,8 @@ define(function (require) {
 
         createLayerSource: function () {
             // TODO noch keine Typ unterscheidung -> nur WMS
-            this.createChildLayerSources(this.getLayerdefinitions());
-            this.createChildLayers(this.getLayerdefinitions());
+            this.createChildLayerSources(this.get("layerdefinitions"));
+            this.createChildLayers(this.get("layerdefinitions"));
             this.setMaxScale(this.get("id"));
             this.setMinScale(this.get("id"));
             this.createLayer();
@@ -132,7 +132,7 @@ define(function (require) {
 
             _.each(childlayers, function (childLayer, index) {
                 layer.push(new Ol.layer.Tile({
-                    source: this.getChildLayerSources()[index]
+                    source: this.get("childLayerSources")[index]
                 }));
             }, this);
             this.setChildLayers(layer);
@@ -140,7 +140,7 @@ define(function (require) {
 
         createLayer: function () {
             var groupLayer = new Ol.layer.Group({
-                layers: this.getChildLayers()
+                layers: this.get("childlayers")
             });
 
             this.setLayer(groupLayer);
@@ -153,7 +153,7 @@ define(function (require) {
         createLegendURL: function () {
             var legendURL = [];
 
-            _.each(this.getLayerdefinitions(), function (layer) {
+            _.each(this.get("layerdefinitions"), function (layer) {
                 var layerNames;
 
                 if (layer.legendURL === "" || layer.legendURL === undefined) {
@@ -185,7 +185,7 @@ define(function (require) {
                 name = this.get("name"),
                 legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null;
 
-            _.each(this.getLayerdefinitions(), function (layer) {
+            _.each(this.get("layerdefinitions"), function (layer) {
                 var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
 
                 if (layerMetaId) {
@@ -194,7 +194,7 @@ define(function (require) {
             });
 
             Radio.trigger("LayerInformation", "add", {
-                "id": this.getId(),
+                "id": this.get("id"),
                 "legendURL": legendURL,
                 "metaID": metaID,
                 "layername": name,
@@ -223,22 +223,6 @@ define(function (require) {
             this.set("childlayers", value);
         },
 
-        /**
-        * Getter für das Attribute "childLayerSources"
-        * @return {Ol.source[]} childLayerSources
-        */
-        getChildLayerSources: function () {
-            return this.get("childLayerSources");
-        },
-
-        /**
-         * Getter für das Attribut "childlayers"
-         * @return {Ol.Collection} childlayers - Eine Ol.Collection mit Ol.layer Objekten
-         */
-        getChildLayers: function () {
-            return this.get("childlayers");
-        },
-
         setMaxScale: function (layerId) {
             var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
 
@@ -255,21 +239,14 @@ define(function (require) {
             this.set("gfiParams", value);
         },
 
-        getGfiParams: function () {
-            return this.get("gfiParams");
-        },
-
         getGfiUrl: function (gfiParams, coordinate, index) {
             var resolution = Radio.request("MapView", "getResolution").resolution,
                 projection = Radio.request("MapView", "getProjection"),
-                childLayer = this.getChildLayers().item(index);
+                childLayer = this.get("childlayers").item(index);
 
             return childLayer.getSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: gfiParams.infoFormat, FEATURE_COUNT: gfiParams.featureCount});
         },
-        // getter for layerdefinitions
-        getLayerdefinitions: function () {
-            return this.get("layerdefinitions");
-        },
+
         // setter for layerdefinitions
         setLayerdefinitions: function (value) {
             this.set("layerdefinitions", value);

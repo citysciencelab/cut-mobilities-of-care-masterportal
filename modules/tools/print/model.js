@@ -44,12 +44,12 @@ define([
          * Ermittelt die URL zum Fetchen in setStatus durch Abfrage der ServiceId
          */
         url: function () {
-            var resp = Radio.request("RestReader", "getServiceById", this.getPrintID()),
+            var resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
                 url = resp && resp.get("url") ? resp.get("url") : null,
                 printurl;
 
             if (url) {
-                printurl = url + this.getConfigYAML();
+                printurl = url + this.get("configYAML");
 
                 this.set("printurl", printurl);
                 return Config.proxyURL + "?url=" + printurl + "/info.json";
@@ -106,9 +106,6 @@ define([
             this.set("configYAML", "/" + name);
         },
 
-        getConfigYAML: function () {
-            return this.get("configYAML");
-        },
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
         setTitleFromForm: function () {
@@ -122,39 +119,21 @@ define([
             this.set("layout", this.get("layouts")[index]);
         },
 
-        getLayout: function () {
-            return this.get("layout");
-        },
-
-        // getter for printID
-        getPrintID: function () {
-            return this.get("printID");
-        },
         // setter for printID
         setPrintID: function (value) {
             this.set("printID", value);
         },
-        // getter for title
-        getTitle: function () {
-            return this.get("title");
-        },
+
         // setter for title
         setTitle: function (value) {
             this.set("title", value);
         },
-        // getter for gfi
-        getGfi: function () {
-            return this.get("gfi");
-        },
+
         // setter for gfi
         setGfi: function (value) {
             this.set("gfi", value);
         },
 
-        // getter for outputFilename
-        getOutputFilename: function () {
-            return this.get("outputFilename");
-        },
         // setter for outputFilename
         setOutputFilename: function (value) {
             this.set("outputFilename", value);
@@ -184,7 +163,7 @@ define([
         setStatus: function (args) {
             var scaletext;
 
-            if (args[2].getId() === "print") {
+            if (args[2].get("id") === "print") {
                 if (this.get("fetched") === false) {
                     // get print config (info.json)
                     this.fetch({
@@ -399,11 +378,11 @@ define([
 
             specification = {
                 // layout: $("#layoutField option:selected").html(),
-                layout: this.getLayout().name,
+                layout: this.get("layout").name,
                 srs: Config.view.epsg,
                 units: "m",
                 outputFilename: this.get("outputFilename"),
-                outputFormat: this.getOutputFormat(),
+                outputFormat: this.get("outputFormat"),
                 layers: this.get("layerToPrint"),
                 pages: [
                     {
@@ -435,8 +414,8 @@ define([
                     type: "Vector",
                     styleProperty: "styleId",
                     styles: {
-                        0: this.getGfiMarker().outerCircle,
-                        1: this.getGfiMarker().point
+                        0: this.get("gfiMarker").outerCircle,
+                        1: this.get("gfiMarker").point
                     },
                     geoJson: {
                         type: "FeatureCollection",
@@ -586,9 +565,6 @@ define([
 
             return hex.length === 1 ? "0" + hex : hex;
         },
-        getOutputFormat: function () {
-            return this.get("outputFormat");
-        },
 
         handlePreCompose: function (evt) {
             var ctx = evt.context;
@@ -656,17 +632,10 @@ define([
         },
 
         /**
-         * Gibt die Parameter für den GFI Marker im Druck zurück
-         */
-        getGfiMarker: function () {
-            return this.get("gfiMarker");
-        },
-
-        /**
          * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Kreis des GFI Markers im Druck
          */
         setOuterCircle: function (outerCircle) {
-            var gfiMarker = this.getGfiMarker();
+            var gfiMarker = this.get("gfiMarker");
 
             outerCircle.fill ? gfiMarker.outerCircle.fill = outerCircle.fill : null;
             outerCircle.pointRadius ? gfiMarker.outerCircle.pointRadius = outerCircle.pointRadius : null;
@@ -679,7 +648,7 @@ define([
          * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Punkt im Kreis des GFI Markers im Druck
          */
         setPoint: function (point) {
-            var gfiMarker = this.getGfiMarker();
+            var gfiMarker = this.get("gfiMarker");
 
             point.fill ? gfiMarker.point.fill = point.fill : null;
             point.pointRadius ? gfiMarker.point.pointRadius = point.pointRadius : null;

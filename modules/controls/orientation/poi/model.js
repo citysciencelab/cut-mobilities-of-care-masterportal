@@ -30,7 +30,7 @@ define(function (require) {
          * Ermittelt die Features für POI, indem es für das Array an Distanzen die Features ermittelt und abspeichert.
          */
         getFeatures: function () {
-            var poiDistances = this.getPoiDistances(),
+            var poiDistances = this.get("poiDistances"),
                 poiFeatures = [],
                 featInCircle = [],
                 sortedFeatures = [];
@@ -62,7 +62,7 @@ define(function (require) {
          * Geht das Array an POI-Features durch und gibt ersten Eintrag zurück, der Features enthält und setzt diese Kategorie (Distanz)
          */
         calcActiveCategory: function () {
-            var poi = this.getPoiFeatures(),
+            var poi = this.get("poiFeatures"),
                 first = _.find(poi, function (dist) {
                     return dist.features.length > 0;
                 });
@@ -146,8 +146,8 @@ define(function (require) {
          * @param  {string} id featureId
          */
         zoomFeature: function (id) {
-            var poiFeatures = this.getPoiFeatures(),
-                activeCategory = this.getActiveCategory(),
+            var poiFeatures = this.get("poiFeatures"),
+                activeCategory = this.get("activeCategory"),
                 selectedPoiFeatures = _.find(poiFeatures, function (poi) {
                     return poi.category === activeCategory;
                 }),
@@ -246,28 +246,16 @@ define(function (require) {
             return svg;
         },
 
-        // getter for poiDistances
-        getPoiDistances: function () {
-            return this.get("poiDistances");
-        },
         // setter for poiDistances
         setPoiDistances: function (value) {
             this.set("poiDistances", value);
         },
 
-        // getter for poiFeatures
-        getPoiFeatures: function () {
-            return this.get("poiFeatures");
-        },
         // setter for poiFeatures
         setPoiFeatures: function (value) {
             this.set("poiFeatures", value);
         },
 
-        // getter for activeCategory
-        getActiveCategory: function () {
-            return this.get("activeCategory");
-        },
         // setter for activeCategory
         setActiveCategory: function (value) {
             this.set("activeCategory", value);

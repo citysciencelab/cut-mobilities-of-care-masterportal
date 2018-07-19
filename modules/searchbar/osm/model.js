@@ -58,7 +58,7 @@ define(function (require) {
         * Wird von der Searchbar getriggert.
         */
         search: function (searchString) {
-            if (searchString.length >= this.getMinChars()) {
+            if (searchString.length >= this.get("minChars")) {
                 Radio.trigger("Searchbar", "removeHits", "hitList", {type: "OpenStreetMap"});
                 this.suggestByOSM(searchString);
             }
@@ -86,10 +86,10 @@ define(function (require) {
 
             this.setSearchParams(searchStrings);
 
-            request = "countrycodes=de&format=json&polygon=0&addressdetails=1&extratags=1&limit=" + this.getLimit();
+            request = "countrycodes=de&format=json&polygon=0&addressdetails=1&extratags=1&limit=" + this.get("limit");
             request = request + "&q=" + encodeURIComponent(searchString);
 
-            this.sendRequest(this.getOsmServiceUrl(), request, this.pushSuggestions);
+            this.sendRequest(this.get("osmServiceUrl"), request, this.pushSuggestions);
         },
 
         /**
@@ -108,7 +108,7 @@ define(function (require) {
                 weg;
 
             _.each(data, function (hit) {
-                if (this.getStates().length === 0 || this.getStates().includes(hit.address.state)) {
+                if (this.get("states").length === 0 || this.get("states").includes(hit.address.state)) {
                     if (this.isSearched(hit)) {
                         weg = hit.address.road || hit.address.pedestrian;
                         display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
@@ -157,7 +157,7 @@ define(function (require) {
         isSearched: function (searched) {
             var hits = [],
                 address = searched.address,
-                params = this.getSearchParams();
+                params = this.get("searchParams");
 
             if (this.canShowHit(searched)) {
 
@@ -185,7 +185,7 @@ define(function (require) {
          */
         canShowHit: function (hit) {
             var result = false,
-                classesToShow = this.getClasses();
+                classesToShow = this.get("classes");
 
             if (classesToShow.length === 0) {
                 return true;
@@ -207,7 +207,7 @@ define(function (require) {
          * @param {function} successFunction - A function to be called if the request succeeds
          */
         sendRequest: function (url, data, successFunction) {
-            var ajax = this.getAjaxRequest();
+            var ajax = this.get("ajaxRequest");
 
             if (!_.isNull(ajax)) {
                 ajax.abort();
@@ -260,63 +260,35 @@ define(function (require) {
         setInUse: function (value) {
             this.set("inUse", value);
         },
-        getInUse: function () {
-            return this.get("inUse");
-        },
 
         setOsmServiceUrl: function (value) {
             this.set("osmServiceUrl", value);
-        },
-        getOsmServiceUrl: function () {
-            return this.get("osmServiceUrl");
         },
 
         setLimit: function (value) {
             this.set("limit", value);
         },
-        getLimit: function () {
-            return this.get("limit");
-        },
 
         setStates: function (value) {
             this.set("states", value);
-        },
-        getStates: function () {
-            return this.get("states");
         },
 
         setStreet: function (value) {
             this.set("street", value);
         },
-        getStreet: function () {
-            return this.get("street");
-        },
 
         setSearchParams: function (value) {
             this.set("searchParams", value);
-        },
-        getSearchParams: function () {
-            return this.get("searchParams");
         },
 
         setClasses: function (value) {
             this.set("classes", value.split(","));
         },
-        getClasses: function () {
-            return this.get("classes");
-        },
 
         setMinChars: function (value) {
             this.set("minChars", value);
         },
-        getMinChars: function () {
-            return this.get("minChars");
-        },
 
-        // getter for ajaxRequest
-        getAjaxRequest: function () {
-            return this.get("ajaxRequest");
-        },
         // setter for ajaxRequest
         setAjaxRequest: function (value) {
             this.set("ajaxRequest", value);

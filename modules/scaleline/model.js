@@ -48,7 +48,7 @@ define([
         */
         createScaleLineValue: function () {
             var scaleLineValue,
-                scaleNumber = Math.round(0.02 * this.getScaleNumber().replace(" ", ""));
+                scaleNumber = Math.round(0.02 * this.get("scaleNumber").replace(" ", ""));
 
             if (scaleNumber >= 1000) {
                 scaleLineValue = (scaleNumber / 1000).toString() + " km";
@@ -74,22 +74,6 @@ define([
          */
         setScaleLineValue: function (value) {
             this.set("scaleLineValue", value);
-        },
-
-        /**
-         * Getter für das Attribut "scaleNumber"
-         * @return {String}
-         */
-        getScaleNumber: function () {
-            return this.get("scaleNumber");
-        },
-
-        /**
-         * Getter für das Attribut "scaleLineValue"
-         * @return {String}
-         */
-        getScaleLineValue: function () {
-            return this.get("scaleLineValue");
         }
 
     });

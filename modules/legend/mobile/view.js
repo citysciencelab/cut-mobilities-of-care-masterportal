@@ -25,7 +25,7 @@ define([
 
             this.render();
 
-            if (this.model.getVisible()) {
+            if (this.model.get("visible")) {
                 this.toggle();
             }
         },

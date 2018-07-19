@@ -29,8 +29,8 @@ define([
 
         initialize: function () {
             // Wenn alle Layer in einem Folder selektiert sind, wird der Folder auch selektiert
-            if (this.getParentId() === "Overlayer") {
-                var items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.getId()}),
+            if (this.get("parentId") === "Overlayer") {
+                var items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.get("id")}),
                     isEveryLayerSelected = _.every(items, function (item) {
                         return item.isSelected === true;
                     });
@@ -50,14 +50,6 @@ define([
         },
 
         /**
-         * Getter für Attribut "isExpanded"
-         * @return {boolean} true | false
-         */
-        getIsExpanded: function () {
-            return this.get("isExpanded");
-        },
-
-        /**
          * Setter für Attribut "isChecked"
          * @param {boolean} value - true | false
          */
@@ -69,18 +61,10 @@ define([
         },
 
         /**
-         * Getter für Attribut "isChecked"
-         * @return {boolean} true | false
-         */
-        getIsSelected: function () {
-            return this.get("isSelected");
-        },
-
-        /**
          * "Toggled" das Attribut "isChecked"
          */
         toggleIsSelected: function () {
-            if (this.getIsSelected() === true) {
+            if (this.get("isSelected") === true) {
                 this.setIsSelected(false);
             }
             else {
@@ -88,27 +72,19 @@ define([
             }
             // this.collection.toggleIsSelectedLayers(this);
         },
-        /**
-         * Getter für Attribut "isLeafFolder"
-         * @return {boolean} true | false
-         */
-        getIsLeafFolder: function () {
-            return this.get("isLeafFolder");
-        },
+
         toggleIsExpanded: function () {
-            if (this.getIsExpanded() === true) {
+            if (this.get("isExpanded") === true) {
                 this.setIsExpanded(false);
             }
             else {
                 this.setIsExpanded(true);
             }
-            if (this.getParentId() === "tree") {
-                this.collection.toggleCatalogs(this.getId());
+            if (this.get("parentId") === "tree") {
+                this.collection.toggleCatalogs(this.get("id"));
             }
         },
-        getIsInitiallyExpanded: function () {
-            return this.get("isInitiallyExpanded");
-        },
+
         setSelectAllGlyphicon: function (value) {
             this.set("selectAllGlyphicon", value);
         }

@@ -128,9 +128,9 @@ define(function (require) {
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function (parentElementId) {
                     this.render(parentElementId);
-                    if (!_.isUndefined(this.model.getInitSearchString())) {
+                    if (!_.isUndefined(this.model.get("initSearchString"))) {
                         this.renderRecommendedList();
-                        this.$("#searchInput").val(this.model.getInitSearchString());
+                        this.$("#searchInput").val(this.model.get("initSearchString"));
                         this.model.unset("initSearchString", true);
                     }
 
@@ -252,7 +252,7 @@ define(function (require) {
             this.$("ul.dropdown-menu-search").html(template(attr));
             // }
             // bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
-            if (!_.isUndefined(this.model.getInitSearchString()) && this.model.get("hitList").length === 1) {
+            if (!_.isUndefined(this.model.get("initSearchString")) && this.model.get("hitList").length === 1) {
                 this.hitSelected();
             }
             this.$("#searchInput + span").show();

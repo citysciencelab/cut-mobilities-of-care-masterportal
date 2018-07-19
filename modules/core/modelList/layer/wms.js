@@ -10,7 +10,7 @@ define(function (require) {
             this.setAttributes();
         },
         setAttributes: function () {
-            if (_.isUndefined(this.getInfoFormat()) === true) {
+            if (_.isUndefined(this.get("infoFormat")) === true) {
                 this.setInfoFormat("text/xml");
             }
         },
@@ -27,10 +27,10 @@ define(function (require) {
             params = {
                 t: new Date().getMilliseconds(),
                 zufall: Math.random(),
-                LAYERS: this.getLayers(),
-                FORMAT: this.getImageFormat() === "nicht vorhanden" ? "image/png" : this.getImageFormat(),
-                VERSION: this.getVersion(),
-                TRANSPARENT: this.getTransparent().toString()
+                LAYERS: this.get("layers"),
+                FORMAT: this.get("format") === "nicht vorhanden" ? "image/png" : this.get("format"),
+                VERSION: this.get("version"),
+                TRANSPARENT: this.get("transparent").toString()
             };
 
             if (this.get("styles") && this.get("styles") !== "" && this.get("styles") !== "nicht vorhanden") {
@@ -93,8 +93,8 @@ define(function (require) {
          */
         createLayer: function () {
             var layerobjects = {
-                id: this.getId(),
-                source: this.getLayerSource(),
+                id: this.get("id"),
+                source: this.get("layerSource"),
                 name: this.get("name"),
                 typ: this.get("typ"),
                 legendURL: this.get("legendURL"),
@@ -103,7 +103,7 @@ define(function (require) {
                 infoFormat: this.get("infoFormat")
             };
 
-            if (this.getSingleTile() !== true) {
+            if (this.get("singleTile") !== true) {
                 this.setLayer(new ol.layer.Tile(layerobjects));
             }
             else {
@@ -136,26 +136,26 @@ define(function (require) {
          * Register LayerLoad-Events
          */
         registerLoadingListeners: function () {
-            if (this.getLayerSource() instanceof ol.source.TileWMS) {
+            if (this.get("layerSource") instanceof ol.source.TileWMS) {
                 this.registerTileWMSLoadEvents();
             }
-            else if (this.getLayerSource() instanceof ol.source.ImageWMS) {
+            else if (this.get("layerSource") instanceof ol.source.ImageWMS) {
                 this.registerImageLoadEvents();
             }
         },
 
         registerImageLoadEvents: function () {
-            this.getLayerSource().on("imageloadend", function () {
+            this.get("layerSource").on("imageloadend", function () {
                 this.set("loadingParts", this.get("loadingParts") - 1);
             });
 
-            this.getLayerSource().on("imageloadstart", function () {
+            this.get("layerSource").on("imageloadstart", function () {
                 var startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
 
                 this.set("loadingParts", startval + 1);
             });
 
-            this.getLayerSource().on("change:loadingParts", function (obj) {
+            this.get("layerSource").on("change:loadingParts", function (obj) {
                 if (obj.oldValue > 0 && this.get("loadingParts") === 0) {
                     this.dispatchEvent("wmsloadend");
                     this.unset("loadingParts", {silent: true});
@@ -167,17 +167,17 @@ define(function (require) {
         },
 
         registerTileWMSLoadEvents: function () {
-            this.getLayerSource().on("tileloadend", function () {
+            this.get("layerSource").on("tileloadend", function () {
                 this.set("loadingParts", this.get("loadingParts") - 1);
             });
 
-            this.getLayerSource().on("tileloadstart", function () {
+            this.get("layerSource").on("tileloadstart", function () {
                 var startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
 
                 this.set("loadingParts", startval + 1);
             });
 
-            this.getLayerSource().on("change:loadingParts", function (obj) {
+            this.get("layerSource").on("change:loadingParts", function (obj) {
                 if (obj.oldValue > 0 && this.get("loadingParts") === 0) {
                     this.dispatchEvent("wmsloadend");
                     this.unset("loadingParts", {silent: true});
@@ -192,26 +192,26 @@ define(function (require) {
          * Register LayerLoad-Events
          */
         registerErrorListener: function () {
-            if (this.getLayerSource() instanceof ol.source.TileWMS) {
+            if (this.get("layerSource") instanceof ol.source.TileWMS) {
                 this.registerTileloadError();
             }
-            else if (this.getLayerSource() instanceof ol.source.ImageWMS) {
+            else if (this.get("layerSource") instanceof ol.source.ImageWMS) {
                 this.registerImageloadError();
             }
         },
 
         registerTileloadError: function () {
-            this.getLayerSource().on("tileloaderror", function () {
+            this.get("layerSource").on("tileloaderror", function () {
             }, this);
         },
 
         registerImageloadError: function () {
-            this.getLayerSource().on("imageloaderror", function () {
+            this.get("layerSource").on("imageloaderror", function () {
             }, this);
         },
 
         updateSourceSLDBody: function () {
-            this.getLayer().getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
+            this.get("layer").getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
         },
 
         setInfoFormat: function (value) {
@@ -226,20 +226,12 @@ define(function (require) {
             return this.get("layers");
         },
 
-        getSingleTile: function () {
-            return this.get("singleTile");
-        },
-
-        getInfoFormat: function () {
-            return this.get("infoFormat");
-        },
-
         getGfiUrl: function () {
             var resolution = Radio.request("MapView", "getResolution").resolution,
                 projection = Radio.request("MapView", "getProjection"),
                 coordinate = Radio.request("GFI", "getCoordinate");
 
-            return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
+            return this.get("layerSource").getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")});
         }
     });
 

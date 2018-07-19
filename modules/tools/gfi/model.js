@@ -42,46 +42,52 @@ define(function (require) {
             }, this);
 
             channel.reply({
-                "getIsVisible": this.getIsVisible,
+                "getIsVisible": function () {
+                    return this.get("isVisible");
+                },
                 "getGFIForPrint": this.getGFIForPrint,
-                "getCoordinate": this.getCoordinate,
-                "getCurrentView": this.getCurrentView,
+                "getCoordinate": function () {
+                    return this.get("coordinate");
+                },
+                "getCurrentView": function () {
+                    return this.get("currentView");
+                },
                 "getVisibleTheme": this.getVisibleTheme
             }, this);
 
             this.listenTo(this, {
                 "change:isVisible": function (model, value) {
                     channel.trigger("isVisible", value);
-                    if (value === false && this.getNumberOfThemes() > 0) {
-                        this.getThemeList().setAllInVisible();
+                    if (value === false && this.get("numberOfThemes") > 0) {
+                        this.get("themeList").setAllInVisible();
                     }
                 },
                 "change:isMobile": function () {
                     this.initView();
-                    if (this.getIsVisible() === true) {
-                        this.getCurrentView().render();
-                        this.getThemeList().appendTheme(this.getThemeIndex());
-                        this.getCurrentView().toggle();
+                    if (this.get("isVisible") === true) {
+                        this.get("currentView").render();
+                        this.get("themeList").appendTheme(this.get("themeIndex"));
+                        this.get("currentView").toggle();
                     }
                 },
                 "change:coordinate": function (model, value) {
                     this.setIsVisible(false);
-                    this.getOverlay().setPosition(value);
+                    this.get("overlay").setPosition(value);
                 },
                 "change:themeIndex": function (model, value) {
-                    this.getThemeList().appendTheme(value);
+                    this.get("themeList").appendTheme(value);
                 },
                 "change:desktopViewType": function () {
-                    Radio.trigger("Map", "addOverlay", this.getOverlay());
+                    Radio.trigger("Map", "addOverlay", this.get("overlay"));
                 }
             });
 
-            this.listenTo(this.getThemeList(), {
+            this.listenTo(this.get("themeList"), {
                 "isReady": function () {
-                    if (this.getThemeList().length > 0) {
-                        this.setNumberOfThemes(this.getThemeList().length);
-                        this.getCurrentView().render();
-                        this.getThemeList().appendTheme(0);
+                    if (this.get("themeList").length > 0) {
+                        this.setNumberOfThemes(this.get("themeList").length);
+                        this.get("currentView").render();
+                        this.get("themeList").appendTheme(0);
                         this.setIsVisible(true);
                     }
                     else {
@@ -160,17 +166,17 @@ define(function (require) {
             var CurrentView;
 
             // Beim ersten Initialisieren ist CurrentView noch undefined
-            if (_.isUndefined(this.getCurrentView()) === false) {
-                this.getCurrentView().removeView();
+            if (_.isUndefined(this.get("currentView")) === false) {
+                this.get("currentView").removeView();
             }
 
-            if (this.getIsMobile()) {
+            if (this.get("isMobile")) {
                 CurrentView = require("modules/tools/gfi/mobile/view");
             }
-            else if (this.getDesktopViewType() === "attached") {
+            else if (this.get("desktopViewType") === "attached") {
                 CurrentView = require("modules/tools/gfi/desktop/attached/view");
             }
-            else if (this.getUiStyle() === "TABLE") {
+            else if (this.get("uiStyle") === "TABLE") {
                 CurrentView = require("modules/tools/gfi/table/view");
             }
             else {
@@ -201,13 +207,13 @@ define(function (require) {
 
             // WMS | GROUP
             _.each(visibleLayerList, function (model) {
-                if (model.getGfiAttributes() !== "ignore" || _.isUndefined(model.getGfiAttributes()) === true) {
-                    if (model.getTyp() === "WMS") {
+                if (model.get("gfiAttributes") !== "ignore" || _.isUndefined(model.get("gfiAttributes")) === true) {
+                    if (model.get("typ") === "WMS") {
                         model.attributes.gfiUrl = model.getGfiUrl();
                         gfiParams.push(model.attributes);
                     }
                     else {
-                        _.each(model.getGfiParams(), function (params) {
+                        _.each(model.get("gfiParams"), function (params) {
                             params.gfiUrl = model.getGfiUrl(params, evt.coordinate, params.childLayerIndex);
                             gfiParams.push(params);
                         });
@@ -215,7 +221,7 @@ define(function (require) {
                 }
             }, this);
             this.setThemeIndex(0);
-            this.getThemeList().reset(gfiParams);
+            this.get("themeList").reset(gfiParams);
             gfiParams = [];
         },
         setGfiParamsFromCustomModule: function (params) {
@@ -227,7 +233,7 @@ define(function (require) {
                 feature: params.feature,
                 gfiTheme: params.gfiTheme
             }];
-            this.getThemeList().reset(gfiParams);
+            this.get("themeList").reset(gfiParams);
             gfiParams = [];
         },
         /**
@@ -285,69 +291,28 @@ define(function (require) {
         },
 
         setOverlayElement: function (value) {
-            this.getOverlay().setElement(value);
+            this.get("overlay").setElement(value);
         },
 
         setThemeIndex: function (value) {
             this.set("themeIndex", value);
         },
 
-        // Getter
-        getCoordinate: function () {
-            return this.get("coordinate");
-        },
-
-        getCurrentView: function () {
-            return this.get("currentView");
-        },
-
-        getDesktopViewType: function () {
-            return this.get("desktopViewType");
-        },
-
-        getIsMobile: function () {
-            return this.get("isMobile");
-        },
-
-        getUiStyle: function () {
-            return this.get("uiStyle");
-        },
-
-        getIsVisible: function () {
-            return this.get("isVisible");
-        },
-
-        getNumberOfThemes: function () {
-            return this.get("numberOfThemes");
-        },
-
-        getOverlay: function () {
-            return this.get("overlay");
-        },
-
         getOverlayElement: function () {
-            return this.getOverlay().getElement();
-        },
-
-        getThemeIndex: function () {
-            return this.get("themeIndex");
-        },
-
-        getThemeList: function () {
-            return this.get("themeList");
+            return this.get("overlay").getElement();
         },
 
         /*
         * @description Liefert die GFI-Infos ans Print-Modul.
         */
         getGFIForPrint: function () {
-            var theme = this.getThemeList().at(this.getThemeIndex());
+            var theme = this.get("themeList").at(this.get("themeIndex"));
 
-            return [theme.getGfiContent()[0], theme.get("name"), this.getCoordinate()];
+            return [theme.getGfiContent()[0], theme.get("name"), this.get("coordinate")];
         },
 
         getVisibleTheme: function () {
-            return this.getThemeList().findWhere({isVisible: true});
+            return this.get("themeList").findWhere({isVisible: true});
         },
 
         /**

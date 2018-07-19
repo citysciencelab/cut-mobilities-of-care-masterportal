@@ -24,7 +24,7 @@ define(function (require) {
             }, this);
 
             if (name.length > 0 && name !== "ALL") {
-                this.zoomToGeometry(name, this.getWfsParams());
+                this.zoomToGeometry(name, this.get("wfsParams"));
             }
 
             Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
@@ -35,7 +35,7 @@ define(function (require) {
         * wfsParams string optional die Parameter, des WFS, von dem die Featurs geladen werden sollen, wenn nicht angegeben, dann werden standardwerte des Moduls genommen.
         **/
         zoomToGeometry: function (name, wfsParams) {
-            var wfsParams = wfsParams || this.getWfsParams();
+            var wfsParams = wfsParams || this.get("wfsParams");
 
             if (!this.validateWfsParams(wfsParams)) {
                 return;
@@ -44,7 +44,7 @@ define(function (require) {
             this.getGeometryFromWFS(name, wfsParams);
         },
         validateWfsParams: function (wfsParams) {
-            var keysArray = _.keys(this.getWfsParams());
+            var keysArray = _.keys(this.get("wfsParams"));
 
             _.each(keysArray, function (key) {
                 if (!_.contains(wfsParams, key) || _.isUndefined(wfsParams[key])) {
@@ -131,7 +131,7 @@ define(function (require) {
         handlePostCompose: function (evt) {
             var canvas = evt.context;
 
-            if (this.getIsRender() === true && _.isUndefined(this.getFeatureGeometry()) === false) {
+            if (this.get("isRender") === true && _.isUndefined(this.get("featureGeometry")) === false) {
                 canvas.beginPath();
                 this.drawOutsidePolygon(canvas);
                 this.drawInsidePolygon(canvas);
@@ -156,7 +156,7 @@ define(function (require) {
 
         drawInsidePolygon: function (canvas) {
 
-            _.each(this.getFeatureGeometry().getPolygons(), function (polygon) {
+            _.each(this.get("featureGeometry").getPolygons(), function (polygon) {
                 // Damit es als inneres Polygon erkannt wird, muss es gegen die Uhrzeigerrichtung gezeichnet werden
                 var coordinates = polygon.getCoordinates()[0].reverse();
 
@@ -169,10 +169,6 @@ define(function (require) {
             });
         },
 
-        // getter for wfsParams
-        getWfsParams: function () {
-            return this.get("wfsParams");
-        },
         // setter for wfsParams
         setWfsParams: function (value) {
             this.set("wfsParams", value);
@@ -181,15 +177,8 @@ define(function (require) {
         setFeatureGeometry: function (value) {
             this.set("featureGeometry", value);
         },
-        // getter for bezirk Geometry
-        getFeatureGeometry: function () {
-            return this.get("featureGeometry");
-        },
         setIsRender: function (value) {
             this.set("isRender", value);
-        },
-        getIsRender: function () {
-            return this.get("isRender");
         }
     });
     return ZoomToGeometry;

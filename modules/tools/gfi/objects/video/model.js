@@ -39,7 +39,7 @@ define(function (require) {
          * @param  {Function} callback Callback-Funktion wird gerufen, nachdem das Video gestaret ist
          */
         startStreaming: function (callback) {
-            var videoEle = document.getElementById(this.getId());
+            var videoEle = document.getElementById(this.get("id"));
 
             VideoJS(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
         },
@@ -63,7 +63,7 @@ define(function (require) {
          * remove View
          */
         destroy: function () {
-            var videoEle = document.getElementById(this.getId());
+            var videoEle = document.getElementById(this.get("id"));
 
             VideoJS(videoEle).dispose();
             this.stopListening();
@@ -72,28 +72,16 @@ define(function (require) {
             this.trigger("removeView");
         },
 
-        // getter for id
-        getId: function () {
-            return this.get("id");
-        },
         // setter for id
         setId: function (value) {
             this.set("id", value);
         },
 
-        // getter for url
-        getUrl: function () {
-            return this.get("url");
-        },
         // setter for url
         setUrl: function (value) {
             this.set("url", value);
         },
 
-        // getter for poster
-        getPoster: function () {
-            return this.get("poster");
-        },
         // setter for poster
         setPoster: function (value) {
             this.set("poster", value);
