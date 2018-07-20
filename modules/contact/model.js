@@ -41,7 +41,7 @@ define(function (require) {
         },
         setAttributes: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
-                portalConfig = _.has(this.getPortalConfig(), "portalTitle") ? this.get("portalConfig") : "",
+                portalConfig = _.has(this.get("portalConfig"), "portalTitle") ? this.get("portalConfig") : "",
                 portalTitle = _.has(portalConfig.portalTitle, "title") ? portalConfig.portalTitle.title : document.title,
                 hrefString = "<br>==================<br>Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
                 platformString = "<br>Platform: " + navigator.platform + "<br>",
