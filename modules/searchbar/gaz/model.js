@@ -329,7 +329,6 @@ define(function (require) {
                     }
                 }, this);
                 this.unset("pastedHouseNumber");
-                Radio.trigger("ViewZoom", "hitSelected");
             }
             else {
                 _.each(this.get("houseNumbers"), function (houseNumber) {

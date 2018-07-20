@@ -310,7 +310,9 @@ define(function (require) {
          * @return {void}
          */
         hitSelected: function (evt) {
-            var hit, hitID;
+            var hit,
+                hitID,
+                modelHitList = this.model.get("hitList");
 
             Radio.trigger("Filter", "resetFilter");
 
@@ -322,8 +324,11 @@ define(function (require) {
                 hitID = evt.currentTarget.id;
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
             }
+            else if (modelHitList.length > 1) {
+                return;
+            }
             else {
-                hit = this.model.get("hitList")[0];
+                hit = modelHitList[0];
             }
             // 1. Schreibe Text in Searchbar
             this.setSearchbarString(hit.name);

@@ -49,6 +49,7 @@ define(function (require) {
                 houseNumber = splitAdress[splitAdress.length - 1];
                 streetName = value.substr(0, value.length - houseNumber.length - 1);
 
+                this.setEventType(eventType);
                 this.set("searchString", streetName);
                 Radio.trigger("Searchbar", "setPastedHouseNumber", houseNumber);
             }
@@ -78,7 +79,7 @@ define(function (require) {
             // removes addresses without house number, if more than one exists
             if (evtTpye === "paste" && !_.isUndefined(tempArray) && tempArray.length > 1) {
                 valueWithNumbers = _.filter(tempArray, function (val) {
-                    var valueArray = val.name.split(" ");
+                    var valueArray = val.name.split(",")[0].split(" ");
 
                     return !_.isNaN(parseInt(valueArray[valueArray.length - 1], 10));
                 });
@@ -87,6 +88,10 @@ define(function (require) {
             }
 
             this.set(attribute, _.flatten(tempArray));
+
+            if (!_.isUndefined(valueWithNumbers) && this.get("eventType") === "paste") {
+                Radio.trigger("ViewZoom", "hitSelected");
+            }
         },
 
         /**
@@ -189,6 +194,10 @@ define(function (require) {
 
         setTempCounter: function (value) {
             this.set("tempCounter", value);
+        },
+
+        setEventType: function (value) {
+            this.set("eventType", value);
         }
     });
 
