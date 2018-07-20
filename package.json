@@ -10,7 +10,9 @@
   "scripts": {
     "test": "mocha test/end2end/TestRunner.js",
     "installBrowserMqtt": "cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js",
-    "installMasterportal": "npm install --verbose && cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js"
+    "installBrowserMqttWebPack": "cd node_modules/mqtt && npm install . && webpack mqtt.js ./browserMqtt.js --output-library mqtt",
+    "installMasterportal": "npm install --verbose && cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js",
+    "installMasterportalWebPack": "npm install --verbose && cd node_modules/mqtt && npm install . && webpack mqtt.js ./browserMqtt.js --output-library mqtt"
   },
   "dependencies": {
     "backbone": "1.x",
@@ -33,7 +35,8 @@
     "requirejs-text": "2.x",
     "underscore": "1.x",
     "video.js": "6.x",
-    "videojs-flash": "^2.1.0"
+    "videojs-flash": "^2.1.0",
+    "webpack": "^4.16.1"
   },
   "devDependencies": {
     "build-config": "git+https://bitbucket.org/lgv-g12/build-config-public.git",
