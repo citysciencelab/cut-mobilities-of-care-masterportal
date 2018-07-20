@@ -1,8 +1,8 @@
 define(function (require) {
-    require("modules/core/mapView");
-
     var Radio = require("backbone.radio"),
         TotalviewmapModel;
+
+    require("modules/core/mapView");
 
     TotalviewmapModel = Backbone.Model.extend({
         defaults: {

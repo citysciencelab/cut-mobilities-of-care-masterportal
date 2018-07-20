@@ -1,6 +1,7 @@
 define(function (require) {
     var OverviewmapModel = require("modules/controls/overviewmap/model"),
         template = require("text!modules/controls/overviewmap/template.html"),
+        $ = require("jquery"),
         OverviewmapView;
 
     OverviewmapView = Backbone.View.extend({
@@ -16,25 +17,26 @@ define(function (require) {
 
         render: function () {
             this.$el.html(this.template());
-
+            return this;
         },
 
         /**
          * Beim Klick auf den Ovierviewmap Button wird hier der title des buttons angepasst
          * und getriggert, ob die map gezeigt oder versteckt wird, derzeit hört attributions darauf
          * um seine Position anzupassen
+         * @returns {void}
          */
         toggle: function () {
-            $(".overviewmap > div").toggle("slow");
+            this.$(".overviewmap > div").toggle("slow");
 
             $(".overviewmap > .glyphicon").toggleClass("glyphicon-globe glyphicon-globe");
-            if ($(".overviewmap > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden") {
+            if (this.$(".overviewmap > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden") {
                 $(".ol-custom-overviewmap").hide();
-                $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte einblenden");
+                this.$(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte einblenden");
                 Radio.trigger("AttributionsView", "ovmHide");
             }
             else {
-                $(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte ausblenden");
+                this.$(".overviewmap > .glyphicon-globe").attr("title", "Übersichtskarte ausblenden");
                 $(".ol-custom-overviewmap").show();
                 Radio.trigger("AttributionsView", "ovmShow");
             }
