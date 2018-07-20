@@ -2,7 +2,7 @@ define(function (require) {
 
     var listView = require("modules/menu/desktop/listViewMain"),
         DesktopLayerViewLight = require("modules/menu/desktop/layer/viewLight"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         Menu;
 
     Menu = listView.extend({
@@ -19,9 +19,9 @@ define(function (require) {
             Radio.trigger("Autostart", "initializedModul", "tree");
         },
         render: function () {
-            $("#" + "tree").html("");
             var models = this.collection.where({type: "layer"});
 
+            $("#tree").html("");
             models = _.sortBy(models, function (model) {
                 return model.get("selectionIDX");
             });

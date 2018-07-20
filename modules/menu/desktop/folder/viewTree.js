@@ -1,11 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "jquery",
-    "text!modules/menu/desktop/folder/templateTree.html"
-], function (Backbone, Radio, $, FolderTemplate) {
+define(function (require) {
+    var $ = require("jquery"),
+        FolderTemplate = require("text!modules/menu/desktop/folder/templateTree.html"),
+        FolderView;
 
-    var FolderView = Backbone.View.extend({
+    FolderView = Backbone.View.extend({
         tagName: "li",
         className: "themen-folder",
         id: "",
@@ -29,13 +27,14 @@ define([
             this.render();
         },
         render: function () {
+            var attr = this.model.toJSON(),
+                paddingLeftValue = 0,
+                selector = "";
+
             this.$el.html("");
 
             if (this.model.get("isVisibleInTree")) {
-                var attr = this.model.toJSON();
-
                 this.$el.attr("id", this.model.get("id"));
-
 
                 // external Folder
                 if (this.model.get("parentId") === "ExternalLayer") {
@@ -48,8 +47,6 @@ define([
                     }
                     else {
                         // Folder ist auf der Höchsten Ebene (direkt unter Themen)
-                        var selector = "";
-
                         if (this.model.get("parentId") === "Baselayer") {
                             selector = "#Baselayer";
                         }
@@ -58,12 +55,12 @@ define([
                         }
                         $(selector).append(this.$el.html(this.template(attr)));
                     }
-                    var paddingLeftValue = this.model.get("level") * 15 + 5;
+                    paddingLeftValue = (this.model.get("level") * 15) + 5;
 
                     $(this.$el).css("padding-left", paddingLeftValue + "px");
                 }
             }
-
+            return this;
         },
         rerender: function () {
             var attr = this.model.toJSON();

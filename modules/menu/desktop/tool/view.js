@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         ItemTemplate = require("text!modules/menu/desktop/tool/template.html"),
         ItemView;
 
@@ -26,11 +25,13 @@ define(function (require) {
             if (this.model.get("isVisibleInMenu") !== false) {
                 $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
             }
+            return this;
         },
 
         /**
          * Abhängig davon ob ein Tool in die Menüleiste oder unter dem Punkt Werkzeuge gezeichnet wird,
          * bekommt die View eine andere CSS-Klasse zugeordent
+         * @returns {void}
          */
         setCssClass: function () {
             if (this.model.get("parentId") === "root") {
