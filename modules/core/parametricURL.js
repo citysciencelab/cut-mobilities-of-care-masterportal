@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var $ = require("jquery"),
-        Config = require("config"),
+    var Config = require("config"),
         ParametricURL;
 
     ParametricURL = Backbone.Model.extend({
