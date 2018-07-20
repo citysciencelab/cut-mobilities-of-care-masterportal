@@ -46,7 +46,7 @@ define([
         checkModelsByAttributions: function () {
             var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
                 haveModelsAttributions = _.some(modelList, function (model) {
-                    return model.getAttributions();
+                    return model.get("layerAttribution");
                 });
 
             this.setIsVisibleInMap(haveModelsAttributions);
@@ -94,45 +94,21 @@ define([
             this.set("modelList", value);
         },
 
-        // getter for isInitOpenDesktop
-        getIsInitOpenDesktop: function () {
-            return this.get("isInitOpenDesktop");
-        },
         // setter for isInitOpenDesktop
         setIsInitOpenDesktop: function (value) {
             this.set("isInitOpenDesktop", value);
         },
 
-        // getter for isInitOpenMobile
-        getIsInitOpenMobile: function () {
-            return this.get("isInitOpenMobile");
-        },
         // setter for isInitOpenMobile
         setIsInitOpenMobile: function (value) {
             this.set("isInitOpenMobile", value);
         },
 
         /**
-         * Getter für Attribut "isContentVisible"
-         * @return {boolean}
-         */
-        getIsContentVisible: function () {
-            return this.get("isContentVisible");
-        },
-
-        /**
-         * Getter für Attribut "isVisibleInMap"
-         * @return {boolean}
-         */
-        getIsVisibleInMap: function () {
-            return this.get("isVisibleInMap");
-        },
-
-        /**
          * Toggle für Attribut "isContentVisible"
          */
         toggleIsContentVisible: function () {
-            if (this.getIsContentVisible() === true) {
+            if (this.get("isContentVisible") === true) {
                 this.setIsContentVisible(false);
             }
             else {

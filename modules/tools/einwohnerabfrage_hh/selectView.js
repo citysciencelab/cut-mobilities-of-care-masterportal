@@ -23,9 +23,9 @@ define(function (require) {
                 "change:isCollapsed change:isCurrentWin": this.render,
                 "renderResult": this.renderResult
             });
-            this.snippetDropdownView = new SnippetDropdownView({model: this.model.getDropDownSnippet()});
-            this.checkBoxRaster = new SnippetCheckBoxView({model: this.model.getCheckboxRaster()});
-            this.checkBoxAddress = new SnippetCheckBoxView({model: this.model.getCheckboxAddress()});
+            this.snippetDropdownView = new SnippetDropdownView({model: this.model.get("snippetDropdownModel")});
+            this.checkBoxRaster = new SnippetCheckBoxView({model: this.model.get("checkBoxRaster")});
+            this.checkBoxAddress = new SnippetCheckBoxView({model: this.model.get("checkBoxAddress")});
         },
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
@@ -47,7 +47,7 @@ define(function (require) {
             this.$el.find(".result").append(new ResultView({model: this.model}).render());
         },
         createDrawInteraction: function (evt) {
-            this.model.getDrawInteraction().setActive(false);
+            this.model.get("drawInteraction").setActive(false);
             this.model.createDrawInteraction(evt.target.value);
         }
     });

@@ -52,7 +52,7 @@ define(function (require) {
         render2Window: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsCurrentWin() === true && this.model.getIsCollapsed() === false) {
+            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
             }
@@ -69,11 +69,11 @@ define(function (require) {
             this.$el.html(this.template(attr));
         },
         checkInput: function () {
-            if (this.model.getDistrictNumber() !== "0" &&
-                (this.model.getCadastralDistrictField() === false || this.model.getCadastralDistrictNumber() !== "0") &&
-                this.model.getParcelNumber() !== "" &&
-                _.isNumber(parseInt(this.model.getParcelNumber(), 10)) &&
-                (this.model.getParcelDenominatorField() === false || this.model.getParcelDenominatorNumber() !== "")) {
+            if (this.model.get("districtNumber") !== "0" &&
+                (this.model.get("cadastralDistrictField") === false || this.model.getCadastralDistrictNumber() !== "0") &&
+                this.model.get("parcelNumber") !== "" &&
+                _.isNumber(parseInt(this.model.get("parcelNumber"), 10)) &&
+                (this.model.get("parcelDenominatorField") === false || this.model.getParcelDenominatorNumber() !== "")) {
                 $("#submitbutton").attr("disabled", false);
                 $("#reportbutton").attr("disabled", false);
             }
@@ -99,7 +99,7 @@ define(function (require) {
             var value = $("#districtField").val();
 
             if (value !== "0") {
-                if (this.model.getCadastralDistrictField() === true) {
+                if (this.model.get("cadastralDistrictField") === true) {
                     this.insertCadastralDistricts($("#districtField").val());
                     $("#cadastralDistrictFieldSet").attr("disabled", false);
                     $("#parcelField").attr("disabled", true);
@@ -123,7 +123,7 @@ define(function (require) {
          * Setzt die gültigen Fluren für die ausgewählte Gemarkung in select.
          */
         insertCadastralDistricts: function (districtNumber) {
-            var cadastralDistricts = this.model.getCadastralDistricts();
+            var cadastralDistricts = this.model.get("cadastralDistricts");
 
             this.model.setCadastralDistrictNumber("0");
             $("#cadastralDistrictField").empty();

@@ -29,7 +29,7 @@ define(function (require) {
                 dom;
 
             if (!_.isUndefined(model)) {
-                feature = model.getLayer().getSource().getFeatureById(featureId);
+                feature = model.get("layer").getSource().getFeatureById(featureId);
                 feature.setProperties(attributes);
                 feature.unset("extent");
                 dom = this.writeTransaction(mode, [feature], this.getWriteOptions(model));

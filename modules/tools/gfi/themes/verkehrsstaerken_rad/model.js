@@ -28,8 +28,8 @@ define(function (require) {
         parseGfiContent: function () {
             var gfiContent, name, tageslinie, wochenlinie, jahrgangslinie;
 
-            if (!_.isUndefined(this.getGfiContent())) {
-                gfiContent = this.getGfiContent()[0];
+            if (!_.isUndefined(this.get("gfiContent"))) {
+                gfiContent = this.get("gfiContent")[0];
                 name = _.has(gfiContent, "Name") ? gfiContent.Name : "unbekannt";
                 tageslinie = _.has(gfiContent, "Tageslinie") ? gfiContent.Tageslinie : null;
                 wochenlinie = _.has(gfiContent, "Wochenlinie") ? gfiContent.Wochenlinie : null;
@@ -56,13 +56,13 @@ define(function (require) {
          * Prüft die verfügbaren Werte des Features und setzt eine Variable, die im Template ausgewertet wird.
          */
         setInitialActiveTab: function () {
-            if (!_.isNull(this.getTageslinieDataset())) {
+            if (!_.isNull(this.get("tageslinieDataset"))) {
                 this.setActiveTab("tag");
             }
-            else if (!_.isNull(this.getWochenlinieDataset())) {
+            else if (!_.isNull(this.get("wochenlinieDataset"))) {
                 this.setActiveTab("woche");
             }
-            else if (!_.isNull(this.getJahreslinieDataset())) {
+            else if (!_.isNull(this.get("jahreslinieDataset"))) {
                 this.setActiveTab("jahr");
             }
         },
@@ -173,37 +173,21 @@ define(function (require) {
             this.createD3Document();
         },
 
-        // getter for width
-        getWidth: function () {
-            return this.get("width");
-        },
         // setter for width
         setWidth: function (value) {
             this.set("width", value);
         },
 
-        // getter for height
-        getHeight: function () {
-            return this.get("height");
-        },
         // setter for height
         setHeight: function (value) {
             this.set("height", value);
         },
 
-        // getter for activeTab
-        getActiveTab: function () {
-            return this.get("activeTab");
-        },
         // setter for activeTab
         setActiveTab: function (value) {
             this.set("activeTab", value);
         },
 
-        // getter for tageslinieDataset
-        getTageslinieDataset: function () {
-            return this.get("tageslinieDataset");
-        },
         // setter for tageslinieDataset
         setTageslinieDataset: function (data) {
             var datum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
@@ -223,10 +207,6 @@ define(function (require) {
             });
         },
 
-        // getter for wochenlinieDataset
-        getWochenlinieDataset: function () {
-            return this.get("wochenlinieDataset");
-        },
         // setter for WochenlinieDataset
         setWochenlinieDataset: function (data) {
             var startDatum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
@@ -247,10 +227,6 @@ define(function (require) {
             });
         },
 
-        // getter for jahreslinieDataset
-        getJahreslinieDataset: function () {
-            return this.get("jahreslinieDataset");
-        },
         // setter for JahrgangslinieDataset
         setJahreslinieDataset: function (data) {
             var year = Moment(data[0].timestamp).format("YYYY"),
@@ -280,16 +256,16 @@ define(function (require) {
          * @return {object} Dataset-Objekt
          */
         getDataset: function () {
-            var activeTab = this.getActiveTab();
+            var activeTab = this.get("activeTab");
 
             if (activeTab === "tag") {
-                return this.getTageslinieDataset();
+                return this.get("tageslinieDataset");
             }
             else if (activeTab === "woche") {
-                return this.getWochenlinieDataset();
+                return this.get("wochenlinieDataset");
             }
             else if (activeTab === "jahr") {
-                return this.getJahreslinieDataset();
+                return this.get("jahreslinieDataset");
             }
         },
 
@@ -345,8 +321,8 @@ define(function (require) {
                 graphConfig = {
                     graphType: "Linegraph",
                     selector: ".graph",
-                    width: this.getWidth(),
-                    height: this.getHeight(),
+                    width: this.get("width"),
+                    height: this.get("height"),
                     selectorTooltip: ".graph-tooltip-div",
                     scaleTypeX: "ordinal",
                     scaleTypeY: "linear",

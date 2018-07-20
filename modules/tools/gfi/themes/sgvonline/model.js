@@ -96,13 +96,13 @@ define(function (require) {
             var key = "Amtlich vergebene Adresse",
                 val;
 
-            if (this.getGfiContent()[0].hasOwnProperty(key)) {
-                val = this.getGfiContent()[0][key];
+            if (this.get("gfiContent")[0].hasOwnProperty(key)) {
+                val = this.get("gfiContent")[0][key];
                 if (val === "S" || val === "B" || val === "Ja") {
-                    this.getGfiContent()[0][key] = "Ja";
+                    this.get("gfiContent")[0][key] = "Ja";
                 }
                 else {
-                    this.getGfiContent()[0][key] = "Nein";
+                    this.get("gfiContent")[0][key] = "Nein";
                 }
             }
         }

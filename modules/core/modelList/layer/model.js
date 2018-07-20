@@ -26,7 +26,7 @@ define(function (require) {
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
-                    if (this.has("childLayerSources") === false && _.isUndefined(this.getLayerSource())) {
+                    if (this.has("childLayerSources") === false && _.isUndefined(this.get("layerSource"))) {
                         this.createLayerSource();
                     }
                 },
@@ -44,7 +44,7 @@ define(function (require) {
             });
             this.listenTo(channel, {
                 "updateLayerInfo": function (name) {
-                    if (this.getName() === name && this.getLayerInfoChecked() === true) {
+                    if (this.get("name") === name && this.get("layerInfoChecked") === true) {
                         this.showLayerInformation();
                     }
                 },
@@ -57,7 +57,7 @@ define(function (require) {
                 "change:isVisibleInMap": function () {
                     // triggert das Ein- und Ausschalten von Layern
                     Radio.trigger("ClickCounter", "layerVisibleChanged");
-                    Radio.trigger("Layer", "layerVisibleChanged", this.getId(), this.getIsVisibleInMap());
+                    Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"));
                     this.toggleLayerOnMap();
                     this.toggleAttributionsInterval();
                 },
@@ -72,14 +72,14 @@ define(function (require) {
             });
 
             // Default min/max Resolutions für WFS setzen
-            if (this.getTyp() === "WFS") {
+            if (this.get("typ") === "WFS") {
                 this.setDefaultResolutions();
             }
 
             //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
             //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
             //  selectionIDX benötigen, um verschoben werden zu können
-            if (this.getIsSelected() === true || Radio.request("Parser", "getTreeType") === "light") {
+            if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
                 if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
                     this.collection.appendToSelectionIDX(this);
                 }
@@ -87,15 +87,15 @@ define(function (require) {
                     this.collection.insertIntoSelectionIDX(this);
                 }
                 this.createLayerSource();
-                Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
-                this.setIsVisibleInMap(this.getIsSelected());
+                Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
+                this.setIsVisibleInMap(this.get("isSelected"));
             }
             this.checkForScale(Radio.request("MapView", "getOptions"));
             this.createLegendURL();
         },
 
         featuresLoaded: function (features) {
-            Radio.trigger("Layer", "featuresLoaded", this.getId(), features);
+            Radio.trigger("Layer", "featuresLoaded", this.get("id"), features);
         },
 
         setDefaultResolutions: function () {
@@ -109,10 +109,6 @@ define(function (require) {
                     this.attributes.maxScale = resolutions[0];
                 }
             }
-        },
-
-        getLayerInfoChecked: function () {
-            return this.get("layerInfoChecked");
         },
 
         setLayerInfoChecked: function (value) {
@@ -168,7 +164,7 @@ define(function (require) {
          */
         setIsVisibleInMap: function (value) {
             this.set("isVisibleInMap", value);
-            this.getLayer().setVisible(value);
+            this.get("layer").setVisible(value);
         },
 
         /**
@@ -194,72 +190,17 @@ define(function (require) {
         setTransparency: function (value) {
             this.set("transparency", value);
         },
-        getTransparency: function () {
-            return this.get("transparency");
-        },
 
         setIsOutOfRange: function (value) {
             this.set("isOutOfRange", value);
         },
 
         setMaxResolution: function (value) {
-            this.getLayer().setMaxResolution(value);
+            this.get("layer").setMaxResolution(value);
         },
 
         setMinResolution: function (value) {
-            this.getLayer().setMinResolution(value);
-        },
-
-        /**
-         * Getter für Attribut "layerSource"
-         * @return {ol.source}
-         */
-        getLayerSource: function () {
-            return this.get("layerSource");
-        },
-
-        /**
-         * Getter für Attribut "layer"
-         * @return {ol.layer}
-         */
-        getLayer: function () {
-            return this.get("layer");
-        },
-
-        /**
-         * Getter für Attribut "isVisibleInMap"
-         * @return {boolean}
-         */
-        getIsVisibleInMap: function () {
-            return this.get("isVisibleInMap");
-        },
-
-        /**
-         * Getter für Attribut "isSelected"
-         * @return {boolean}
-         */
-        getIsSelected: function () {
-            return this.get("isSelected");
-        },
-
-        /**
-         * Getter für Attribut "isSettingVisible"
-         * @return {boolean}
-         */
-        getIsSettingVisible: function () {
-            return this.get("isSettingVisible");
-        },
-
-        /**
-         * Getter für Attribut "attributions"
-         * @return {String|Object}
-         */
-        getAttributions: function () {
-            return this.get("layerAttribution");
-        },
-
-        getIsOutOfRange: function () {
-            return this.get("isOutOfRange");
+            this.get("layer").setMinResolution(value);
         },
 
         getMaxScale: function () {
@@ -270,42 +211,19 @@ define(function (require) {
             return parseFloat(this.get("minScale"));
         },
 
-        getTyp: function () {
-            return this.get("typ");
-        },
-
-        getGfiAttributes: function () {
-            return this.get("gfiAttributes");
-        },
-
-        getGfiTheme: function () {
-            return this.get("gfiTheme");
-        },
-
         incTransparency: function () {
-            if (this.getTransparency() <= 90) {
-                this.setTransparency(this.getTransparency() + 10);
+            if (this.get("transparency") <= 90) {
+                this.setTransparency(this.get("transparency") + 10);
             }
         },
         decTransparency: function () {
-            if (this.getTransparency() >= 10) {
-                this.setTransparency(this.getTransparency() - 10);
+            if (this.get("transparency") >= 10) {
+                this.setTransparency(this.get("transparency") - 10);
             }
-        },
-        getVersion: function () {
-            return this.get("version");
-        },
-
-        getImageFormat: function () {
-            return this.get("format");
-        },
-
-        getTransparent: function () {
-            return this.get("transparent");
         },
 
         toggleIsSelected: function () {
-            if (this.getIsSelected() === true) {
+            if (this.get("isSelected") === true) {
                 this.setIsSelected(false);
             }
             else {
@@ -314,7 +232,7 @@ define(function (require) {
         },
 
         toggleIsVisibleInMap: function () {
-            if (this.getIsVisibleInMap() === true) {
+            if (this.get("isVisibleInMap") === true) {
                 this.setIsVisibleInMap(false);
             }
             else {
@@ -323,7 +241,7 @@ define(function (require) {
         },
 
         toggleIsSettingVisible: function () {
-            if (this.getIsSettingVisible() === true) {
+            if (this.get("isSettingVisible") === true) {
                 this.setIsSettingVisible(false);
             }
             else {
@@ -338,12 +256,12 @@ define(function (require) {
          */
         toggleLayerOnMap: function () {
             if (Radio.request("Parser", "getTreeType") !== "light") {
-                if (this.getIsSelected() === true) {
-                    Radio.trigger("Map", "addLayerToIndex", [this.getLayer(), this.getSelectionIDX()]);
+                if (this.get("isSelected") === true) {
+                    Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
                 }
                 else {
                     // model.collection besser?!
-                    Radio.trigger("Map", "removeLayer", this.getLayer());
+                    Radio.trigger("Map", "removeLayer", this.get("layer"));
                 }
             }
         },
@@ -356,19 +274,19 @@ define(function (require) {
         toggleAttributionsInterval: function () {
             var channelName, eventName, timeout;
 
-            if (this.has("layerAttribution") && _.isObject(this.getAttributions())) {
-                channelName = this.getAttributions().channel;
-                eventName = this.getAttributions().eventname;
-                timeout = this.getAttributions().timeout;
+            if (this.has("layerAttribution") && _.isObject(this.get("layerAttribution"))) {
+                channelName = this.get("layerAttribution").channel;
+                eventName = this.get("layerAttribution").eventname;
+                timeout = this.get("layerAttribution").timeout;
 
-                if (this.getIsVisibleInMap() === true) {
+                if (this.get("isVisibleInMap") === true) {
                     Radio.trigger(channelName, eventName, this);
-                    this.getAttributions().interval = setInterval(function (model) {
+                    this.get("layerAttribution").interval = setInterval(function (model) {
                         Radio.trigger(channelName, eventName, model);
                     }, timeout, this);
                 }
                 else {
-                    clearInterval(this.getAttributions().interval);
+                    clearInterval(this.get("layerAttribution").interval);
                 }
             }
         },
@@ -377,12 +295,12 @@ define(function (require) {
          *
          */
         updateLayerTransparency: function () {
-            var opacity = (100 - this.getTransparency()) / 100;
+            var opacity = (100 - this.get("transparency")) / 100;
 
             // Auch wenn die Layer im simple Tree noch nicht selected wurde können
             // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
-            if (!_.isUndefined(this.getLayer())) {
-                this.getLayer().setOpacity(opacity);
+            if (!_.isUndefined(this.get("layer"))) {
+                this.get("layer").setOpacity(opacity);
             }
         },
         /**
@@ -392,19 +310,19 @@ define(function (require) {
         showLayerInformation: function () {
             var metaID = [],
                 legendParams = Radio.request("Legend", "getLegendParams"),
-                name = this.getName(),
+                name = this.get("name"),
                 legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null,
                 layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
             metaID.push(layerMetaId);
 
             Radio.trigger("LayerInformation", "add", {
-                "id": this.getId(),
+                "id": this.get("id"),
                 "legendURL": legendURL,
                 "metaID": metaID,
                 "layername": name,
-                "url": this.getUrl(),
-                "typ": this.getTyp()
+                "url": this.get("url"),
+                "typ": this.get("typ")
             });
 
             this.setLayerInfoChecked(true);
@@ -412,9 +330,7 @@ define(function (require) {
         setSelectionIDX: function (idx) {
             this.set("selectionIDX", idx);
         },
-        getSelectionIDX: function () {
-            return this.get("selectionIDX");
-        },
+
         moveDown: function () {
             this.collection.moveModelDown(this);
         },
@@ -443,31 +359,13 @@ define(function (require) {
             }
 
             return undefined;
-
         },
 
-        getUrl: function () {
-            return this.get("url");
-        },
-
-        // getter for name
-        getName: function () {
-            return this.get("name");
-        },
         // setter for name
         setName: function (value) {
             this.set("name", value);
         },
 
-        // getter for routable
-        getRoutable: function () {
-            return this.get("routable");
-        },
-
-        // getter for legendURL
-        getLegendURL: function () {
-            return this.get("legendURL");
-        },
         // setter for legendURL
         setLegendURL: function (value) {
             this.set("legendURL", value);

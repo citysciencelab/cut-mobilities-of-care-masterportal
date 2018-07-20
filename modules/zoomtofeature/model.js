@@ -25,7 +25,7 @@ define([
                 }, this);
                 channel.reply({
                     "getCenterList": function () {
-                        return this.getCenterList();
+                        return this.get("centerList");
                     }
                 }, this);
 
@@ -34,24 +34,16 @@ define([
                 this.createCenterList();
             },
             getFeaturesFromWFS: function () {
-                var prefs = this.getPrefs();
+                var prefs = this.get("prefs");
 
                 if (!_.isUndefined(prefs.ids)) {
                     this.requestFeaturesFromWFS(prefs);
                 }
             },
 
-            // getter for features
-            getFeatures: function () {
-                return this.get("features");
-            },
             // setter for features
             setFeatures: function (value) {
                 this.set("features", value);
-            },
-            // getter for format
-            getFormat: function () {
-                return this.get("format");
             },
             // setter for format
             setFormat: function (value) {
@@ -60,22 +52,16 @@ define([
             setPrefs: function (value) {
                 this.set("prefs", value);
             },
-            getPrefs: function () {
-                return this.get("prefs");
-            },
             setCenterList: function (value) {
                 this.set("centerList", value);
-            },
-            getCenterList: function () {
-                return this.get("centerList");
             },
 
             // holt sich "zoomtofeature" aus der Config, prüft ob ID vorhanden ist
             createCenterList: function () {
-                var prefs = this.getPrefs(),
+                var prefs = this.get("prefs"),
                     ids = prefs.ids ? prefs.ids : null,
                     attribute = prefs.attribute ? prefs.attribute : null,
-                    features = this.getFeatures();
+                    features = this.get("features");
 
                 if (_.isNull(ids) === false) {
                     _.each(ids, function (id) {
@@ -92,7 +78,7 @@ define([
                             deltaY = extent[3] - extent[1],
                             center = [extent[0] + (deltaX / 2), extent[1] + (deltaY / 2)];
 
-                        this.getCenterList().push(center);
+                            this.get("centerList").push(center);
                     }, this);
                 }
             },
@@ -129,7 +115,7 @@ define([
 
             // holt sich aus der AJAX response die Daten und speichert sie als ol.Features
             parseFeatures: function (data) {
-                var format = this.getFormat(),
+                var format = this.get("format"),
                     features = format.readFeatures(data);
 
                 this.setFeatures(features);
@@ -138,10 +124,10 @@ define([
             // holt sich das "bboxes"-array, berechnet aus allen bboxes die finale bbox und sendet diese an die map
             zoomtofeatures: function () {
                 var bbox = [],
-                    prefs = this.getPrefs(),
+                    prefs = this.get("prefs"),
                     ids = prefs.ids ? prefs.ids : null,
                     attribute = prefs.attribute ? prefs.attribute : null,
-                    features = this.getFeatures();
+                    features = this.get("features");
 
                 if (_.isNull(ids) === false) {
                     _.each(ids, function (id, index) {

@@ -46,8 +46,8 @@ define([
          */
         addItem: function (model) {
             this.add({
-                id: model.getId(),
-                name: model.getName()
+                id: model.get("id"),
+                name: model.get("name")
             });
         },
 
@@ -64,7 +64,7 @@ define([
 
             if (hasModels) {
                 this.remove(models);
-                Radio.trigger("ModelList", "setAllDescendantsInvisible", models[0].getId());
+                Radio.trigger("ModelList", "setAllDescendantsInvisible", models[0].get("id"));
                 Radio.trigger("ModelList", "setModelAttributesById", models[0], {isExpanded: false});
             }
             else if (modelIndex === 0) {
@@ -77,7 +77,7 @@ define([
          */
         removeLastItem: function () {
             if (this.length > 1) {
-                Radio.trigger("ModelList", "setModelAttributesById", this.pop().getId(), {isExpanded: false});
+                Radio.trigger("ModelList", "setModelAttributesById", this.pop().get("id"), {isExpanded: false});
             }
         },
 

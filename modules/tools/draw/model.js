@@ -43,7 +43,7 @@ define(function (require) {
         },
 
         setStatus: function (args) {
-            if (args[2].getId() === "draw" && args[0] === true) {
+            if (args[2].get("id") === "draw" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.createDrawInteraction(this.get("drawType"), this.get("layer"));

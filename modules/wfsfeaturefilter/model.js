@@ -13,7 +13,7 @@ define([
             });
         },
         checkStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "wfsFeatureFilter") {
+            if (args[2].get("id") === "wfsFeatureFilter") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }

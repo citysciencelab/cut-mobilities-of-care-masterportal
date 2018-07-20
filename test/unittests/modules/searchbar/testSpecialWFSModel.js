@@ -63,10 +63,10 @@ define(function (require) {
 
         describe("config", function () {
             it("should set timeout", function () {
-                expect(model.getTimeout()).to.equal(10000);
+                expect(model.get("timeout")).to.equal(10000);
             });
             it("should set minchar", function () {
-                expect(model.getMinChars()).to.equal(5);
+                expect(model.get("minChars")).to.equal(5);
             });
         });
 

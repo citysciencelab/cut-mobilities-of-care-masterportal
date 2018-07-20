@@ -64,10 +64,10 @@ define(function (require) {
             this.listenTo(this.snippetDropdownModel, {
                 "valuesChanged": this.createDrawInteraction
             });
-            this.listenTo(this.getCheckboxRaster(), {
+            this.listenTo(this.get("checkBoxRaster"), {
                 "valuesChanged": this.toggleRasterLayer
             });
-            this.listenTo(this.getCheckboxAddress(), {
+            this.listenTo(this.get("checkBoxAddress"), {
                 "valuesChanged": this.toggleAlkisAddressLayer
             });
             this.on("change:isCurrentWin", this.handleCswRequests);
@@ -77,10 +77,10 @@ define(function (require) {
                 name: "Geometrie",
                 type: "string",
                 displayName: "Geometrie auswählen",
-                values: _.allKeys(this.getValues()),
+                values: _.allKeys(this.get("values")),
                 snippetType: "dropdown",
                 isMultiple: false,
-                preselectedValues: _.allKeys(this.getValues())[0]
+                preselectedValues: _.allKeys(this.get("values"))[0]
             }));
         },
         /**
@@ -243,16 +243,16 @@ define(function (require) {
         setStatus: function (args) {
             var selectedValues;
 
-            if (args[2].getId() === "einwohnerabfrage" && args[0] === true) {
+            if (args[2].get("id") === "einwohnerabfrage" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
-                selectedValues = this.getDropDownSnippet().getSelectedValues();
-                this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.getValues())[0]);
+                selectedValues = this.get("snippetDropdownModel").getSelectedValues();
+                this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
             }
             else {
                 this.setIsCurrentWin(false);
-                if (!_.isUndefined(this.getDrawInteraction())) {
-                    this.getDrawInteraction().setActive(false);
+                if (!_.isUndefined(this.get("drawInteraction"))) {
+                    this.get("drawInteraction").setActive(false);
                 }
                 Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
                 Radio.trigger("Map", "removeOverlay", this.get("tooltipOverlay"));
@@ -323,7 +323,7 @@ define(function (require) {
          */
         createDrawInteraction: function (drawType) {
             var that = this,
-                value = this.getValues()[drawType],
+                value = this.get("values")[drawType],
                 layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
                 createBoxFunc = ol.interaction.Draw.createBox(),
                 drawInteraction = new ol.interaction.Draw({
@@ -423,7 +423,7 @@ define(function (require) {
         showTooltipOverlay: function (evt) {
             var coords = evt.coordinate,
                 tooltipOverlay = this.get("tooltipOverlay"),
-                currentValue = this.getCurrentValue();
+                currentValue = this.get("currentValue");
 
             if (currentValue === "Polygon") {
                 tooltipOverlay.getElement().innerHTML = this.get("tooltipMessagePolygon");
@@ -526,12 +526,6 @@ define(function (require) {
         setDropDownSnippet: function (value) {
             this.set("snippetDropdownModel", value);
         },
-        getDropDownSnippet: function () {
-            return this.get("snippetDropdownModel");
-        },
-        getValues: function () {
-            return this.get("values");
-        },
 
         /**
          * sets the attribute fhhDate
@@ -558,27 +552,11 @@ define(function (require) {
         },
 
         /**
-         * gets the attribute drawInteraction
-         * @return {ol.interaction.Draw}
-         */
-        getDrawInteraction: function () {
-            return this.get("drawInteraction");
-        },
-
-        /**
          * sets the attribute isCollapsed
          * @param {boolean} value
          */
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
-        },
-
-        /**
-         * gets the attribute isCollapsed
-         * @return {boolean}
-         */
-        getIsCollapsed: function () {
-            return this.get("isCollapsed");
         },
 
         /**
@@ -589,34 +567,6 @@ define(function (require) {
             this.set("isCurrentWin", value);
         },
 
-        /**
-         * gets the attribute isCurrentWin
-         * @return {boolean}
-         */
-        getIsCurrentWin: function () {
-            return this.get("isCurrentWin");
-        },
-
-        /**
-         * gets the attribute checkBox
-         * @returns {Backbone.Model}
-         */
-        getCheckboxRaster: function () {
-            return this.get("checkBoxRaster");
-        },
-
-        /**
-         * gets the attribute checkBox
-         * @returns {Backbone.Model}
-         */
-        getCheckboxAddress: function () {
-            return this.get("checkBoxAddress");
-        },
-
-        // getter for currentValue
-        getCurrentValue: function () {
-            return this.get("currentValue");
-        },
         // setter for currentValue
         setCurrentValue: function (value) {
             this.set("currentValue", value);

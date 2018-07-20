@@ -23,7 +23,7 @@ define([
 
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.$el.html("");
-                if (this.model.getSimpleMap() === true) {
+                if (this.model.get("simpleMap") === true) {
                     $(".win-heading").after(this.$el.html(this.templateSimpleMap(attr)));
                 }
                 else {

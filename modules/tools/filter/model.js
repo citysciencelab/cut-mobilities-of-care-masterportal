@@ -44,7 +44,7 @@ define(function (require) {
             }, this);
             this.setDefaults();
 
-            this.createQueries(this.getConfiguredQueries());
+            this.createQueries(this.get("predefinedQueries"));
         },
 
         resetFilter: function () {
@@ -211,13 +211,13 @@ define(function (require) {
             _.each(config, function (value, key) {
                 this.set(key, value);
             }, this);
-            if (this.getIsInitOpen()) {
+            if (this.get("isInitOpen")) {
                 Radio.trigger("ParametricURL", "pushToIsInitOpen", this.get("id").toUpperCase());
             }
             if (Radio.request("ParametricURL", "getIsInitOpen") === "FILTER") {
                 this.setIsInitOpen(true);
             }
-            if (this.getIsInitOpen()) {
+            if (this.get("isInitOpen")) {
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
                 model.setIsActive(true);
             }
@@ -241,7 +241,7 @@ define(function (require) {
 
         createQuery: function (model) {
             var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
-                query = layer.getTyp() === "WFS" || layer.getTyp() === "GeoJSON" ? new WfsQueryModel(model) : undefined;
+                query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" ? new WfsQueryModel(model) : undefined;
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
@@ -263,10 +263,6 @@ define(function (require) {
                 query.setIsActive(true);
             }
             this.get("queryCollection").add(query);
-        },
-
-        getConfiguredQueries: function () {
-            return this.get("predefinedQueries");
         },
 
         setIsActive: function (value) {
@@ -298,10 +294,7 @@ define(function (require) {
                 }
             }
         },
-        // getter for isInitOpen
-        getIsInitOpen: function () {
-            return this.get("isInitOpen");
-        },
+
         // setter for isInitOpen
         setIsInitOpen: function (value) {
             this.set("isInitOpen", value);

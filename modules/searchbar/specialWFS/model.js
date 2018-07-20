@@ -93,8 +93,8 @@ define(function (require) {
          * @returns {void}
          */
         search: function (searchString) {
-            var wfsMembers = this.getWfsMembers(),
-                minChars = this.getMinChars(),
+            var wfsMembers = this.get("wfsMembers"),
+                minChars = this.get("minChars"),
                 hits;
 
             if (searchString.length < minChars) {
@@ -132,7 +132,7 @@ define(function (require) {
                 context: this,
                 type: "POST",
                 success: this.zoomTo,
-                timeout: this.getTimeout(),
+                timeout: this.get("timeout"),
                 contentType: "text/xml",
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error(textStatus + ": " + errorThrown);
@@ -217,7 +217,7 @@ define(function (require) {
             var url = element.url,
                 parameter = element.data,
                 name = element.name,
-                glyphicon = element.glyphicon ? element.glyphicon : this.getGlyphicon();
+                glyphicon = element.glyphicon ? element.glyphicon : this.get("glyphicon");
 
             $.ajax({
                 url: url,
@@ -229,7 +229,7 @@ define(function (require) {
 
                     this.setWfsMembers(name, features);
                 },
-                timeout: this.getTimeout(),
+                timeout: this.get("timeout"),
                 contentType: "text/xml",
                 error: function (jqXHR, textStatus) {
                     console.error(textStatus + ": " + url);
@@ -265,33 +265,16 @@ define(function (require) {
             return master;
         },
 
-        // getter for minChars
-        getMinChars: function () {
-            return this.get("minChars");
-        },
         // setter for minChars
         setMinChars: function (value) {
             this.set("minChars", value);
         },
 
-        // getter for RequestInfo
-        getRequestInfo: function () {
-            return this.get("requestInfo");
-        },
         // setter for RequestInfo
         setRequestInfo: function (value) {
             this.set("requestInfo", value);
         },
 
-        // getter for Glyphicon
-        getGlyphicon: function () {
-            return this.get("glyphicon");
-        },
-
-        // getter for wfsMembers
-        getWfsMembers: function () {
-            return this.get("wfsMembers");
-        },
         // setter for wfsMembers
         setWfsMembers: function (key, values) {
             var wfsMembers = this.get("wfsMembers"),
@@ -300,10 +283,6 @@ define(function (require) {
             this.set("wfsMembers", newWfsMembers);
         },
 
-        // getter for timeout
-        getTimeout: function () {
-            return this.get("timeout");
-        },
         // setter for timeout
         setTimeout: function (value) {
             this.set("timeout", value);

@@ -61,7 +61,7 @@ define([
             });
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "treeFilter" && args[0] === true) {
+            if (args[2].get("id") === "treeFilter" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 $("#window").css("max-width", "420px");

@@ -31,7 +31,9 @@ define(function (require) {
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
                 "getSize": this.getSize,
                 "getPixelFromCoordinate": this.getPixelFromCoordinate,
-                "getMap": this.getMap
+                "getMap": function () {
+                    return this.get("map");
+                }
             }, this);
 
             channel.on({
@@ -54,7 +56,7 @@ define(function (require) {
                 "unregisterListener": this.unregisterListener,
                 "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
                 "updateSize": function () {
-                    this.getMap().updateSize();
+                    this.get("map").updateSize();
                 }
             }, this);
 
@@ -114,10 +116,6 @@ define(function (require) {
             this.set("vectorLayer", value);
         },
 
-        getVectorLayer: function () {
-            return this.get("vectorLayer");
-        },
-
         getLayers: function () {
             return this.get("map").getLayers();
         },
@@ -146,10 +144,6 @@ define(function (require) {
             return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
         },
 
-        getMap: function () {
-            return this.get("map");
-        },
-
         /**
          * Registriert Listener für bestimmte Events auf der Karte
          * Siehe http://openlayers.org/en/latest/apidoc/ol.Map.html
@@ -158,7 +152,7 @@ define(function (require) {
          * @param {Object} context
          */
         registerListener: function (event, callback, context) {
-            this.getMap().on(event, callback, context);
+            this.get("map").on(event, callback, context);
         },
 
         /**
@@ -168,7 +162,7 @@ define(function (require) {
          * @param {Object} context
          */
         unregisterListener: function (event, callback, context) {
-            this.getMap().un(event, callback, context);
+            this.get("map").un(event, callback, context);
         },
 
         /**
@@ -177,7 +171,7 @@ define(function (require) {
          * @return {ol.Pixel}
          */
         getEventPixel: function (evt) {
-            return this.getMap().getEventPixel(evt);
+            return this.get("map").getEventPixel(evt);
         },
 
         /**
@@ -186,7 +180,7 @@ define(function (require) {
          * @return {ol.Pixel}
          */
         getPixelFromCoordinate: function (value) {
-            return this.getMap().getPixelFromCoordinate(value);
+            return this.get("map").getPixelFromCoordinate(value);
         },
 
         /**
@@ -195,7 +189,7 @@ define(function (require) {
          * @return {Boolean}
          */
         hasFeatureAtPixel: function (pixel) {
-            return this.getMap().hasFeatureAtPixel(pixel);
+            return this.get("map").hasFeatureAtPixel(pixel);
         },
 
         /**
@@ -204,7 +198,7 @@ define(function (require) {
          * @param  {Function} callback - Die Feature Callback Funktion
          */
         forEachFeatureAtPixel: function (pixel, callback) {
-            this.getMap().forEachFeatureAtPixel(pixel, callback);
+            this.get("map").forEachFeatureAtPixel(pixel, callback);
         },
 
         /**
@@ -356,7 +350,7 @@ define(function (require) {
          * @return {ol.Size} - Ein Array mit zwei Zahlen [width, height]
          */
         getSize: function () {
-            return this.getMap().getSize();
+            return this.get("map").getSize();
         },
 
         addLoadingLayer: function () {

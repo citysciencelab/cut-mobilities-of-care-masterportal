@@ -21,17 +21,17 @@ define(function (require) {
         render: function () {
             var collection = Radio.request("ModelList", "getCollection"),
                 models = _.filter(collection.models, function (model) {
-                    return model.getType() === "tool" || model.getType() === "folder";
+                    return model.get("type") === "tool" || model.get("type") === "folder";
                 });
 
             _.each(models, function (model) {
-                switch (model.getType()) {
+                switch (model.get("type")) {
                     case "tool": {
                         this.addToolView(model);
                         break;
                     }
                     case "folder": {
-                        if (model.getId() === "tools") {
+                        if (model.get("id") === "tools") {
                             this.addToolsMenuView();
                         }
                         break;

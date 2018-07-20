@@ -62,7 +62,7 @@ define([
             }
         },
         setStatus: function (args) {
-            if (args[2].getId() === "measure" && args[0] === true) {
+            if (args[2].get("id") === "measure" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.createInteraction();

@@ -46,10 +46,10 @@ define([
             this.render();
 
             if (isViewMobile === true) {
-                this.model.setIsContentVisible(this.model.getIsInitOpenMobile());
+                this.model.setIsContentVisible(this.model.get("isInitOpenMobile"));
             }
             else {
-                this.model.setIsContentVisible(this.model.getIsInitOpenDesktop());
+                this.model.setIsContentVisible(this.model.get("isInitOpenDesktop"));
             }
         },
 
@@ -59,7 +59,7 @@ define([
                 isViewMobile = Radio.request("Util", "isViewMobile");
 
             this.$el.html(this.templateShow(attr));
-            if (this.model.getIsVisibleInMap() === true) {
+            if (this.model.get("isVisibleInMap") === true) {
                 this.$el.show();
                 this.$el.addClass("attributions-view attributions-background-color");
             }
@@ -77,7 +77,7 @@ define([
         renderAttributions: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsContentVisible() === true) {
+            if (this.model.get("isContentVisible") === true) {
                 this.$el.html(this.templateShow(attr));
                 this.$el.addClass("attributions-background-color");
             }

@@ -103,7 +103,7 @@ define(function (require) {
                         isFolderSelectable = false;
                     }
                     else {
-                        isFolderSelectable = this.getIsFolderSelectable();
+                        isFolderSelectable = this.get("isFolderSelectable");
                     }
 
                     folder.id = this.createUniqId(folder.Titel);

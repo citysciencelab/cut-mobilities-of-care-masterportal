@@ -20,7 +20,7 @@ define(function (require) {
             });
 
             // Die attached View braucht für ol.Overlay noch ein Dom-Element
-            if (this.model.getDesktopViewType() === "attached" && this.model.getIsMobile() === false) {
+            if (this.model.get("desktopViewType") === "attached" && this.model.get("isMobile") === false) {
                 this.renderDomElementToBody();
                 this.model.setOverlayElement(document.getElementById("gfipopup"));
             }

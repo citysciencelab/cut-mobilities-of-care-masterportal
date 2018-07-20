@@ -33,7 +33,7 @@ define([
 
             Radio.trigger("Autostart", "initializedModul", "legend");
 
-            if (this.model.getVisible()) {
+            if (this.model.get("visible")) {
                 this.toggle();
             }
 

@@ -44,7 +44,7 @@ define(function (require) {
          * Blendet das Popover ein oder aus
          */
         toggle: function () {
-            if (this.model.getIsVisible() === true) {
+            if (this.model.get("isVisible") === true) {
                 $(this.model.getOverlayElement()).popover("show");
                 Radio.trigger("GFI", "afterRender");
             }

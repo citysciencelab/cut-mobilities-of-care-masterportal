@@ -33,10 +33,6 @@ define(function (require) {
             this.set("initSearchString", value);
         },
 
-        getInitSearchString: function () {
-            return this.get("initSearchString");
-        },
-
         /**
         * aus View gaufgerufen
         * @param {string} value - value from event

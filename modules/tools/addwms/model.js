@@ -19,7 +19,7 @@ define([
             });
         },
         checkStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "addWMS") {
+            if (args[2].get("id") === "addWMS") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -88,7 +88,7 @@ define([
                 Radio.trigger("Parser", "addFolder", object.Title, object.Title, parentId, level);
             }
             else {
-                Radio.trigger("Parser", "addLayer", object.Title, object.Title, parentId, level, object.Name, this.getWMSUrl(), this.getWMSVersion());
+                Radio.trigger("Parser", "addLayer", object.Title, object.Title, parentId, level, object.Name, this.get("wmsUrl"), this.get("version"));
             }
         },
 
@@ -98,14 +98,6 @@ define([
 
         setWMSUrl: function (value) {
             this.set("wmsUrl", value);
-        },
-
-        getWMSVersion: function () {
-            return this.get("version");
-        },
-
-        getWMSUrl: function () {
-            return this.get("wmsUrl");
         }
 
     });
