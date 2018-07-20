@@ -1,10 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config"
-], function (Backbone, Radio, Config) {
-    "use strict";
-    var SearchbarModel = Backbone.Model.extend({
+define(function (require) {
+    var Config = require("config"),
+        $ = require("jquery"),
+        SearchbarModel;
+
+    SearchbarModel = Backbone.Model.extend({
         defaults: {
             placeholder: "Suche",
             recommandedListLength: 5,
@@ -14,9 +13,7 @@ define([
             minChars: ""
             // isHitListReady: true
         },
-        /**
-        *
-        */
+
         initialize: function () {
             if (Config.quickHelp) {
                 this.set("quickHelp", Config.quickHelp);
@@ -36,16 +33,15 @@ define([
             this.set("initSearchString", value);
         },
 
-        /**
-        * aus View gaufgerufen
-        */
         setSearchString: function (value, eventType) {
-            var splitAdress = value.split(" ");
+            var splitAdress = value.split(" "),
+                streetName,
+                houseNumber;
 
             // für Copy/Paste bei Adressen
             if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
-                var houseNumber = splitAdress[splitAdress.length - 1],
-                    streetName = value.substr(0, value.length - houseNumber.length - 1);
+                houseNumber = splitAdress[splitAdress.length - 1];
+                streetName = value.substr(0, value.length - houseNumber.length - 1);
 
                 this.set("searchString", streetName);
                 Radio.trigger("Searchbar", "setPastedHouseNumber", houseNumber);
@@ -59,8 +55,9 @@ define([
         },
         /**
          * Hilfsmethode um ein Attribut vom Typ Array zu setzen.
-         * {String} attribute - Das Attribut das gesetzt werden soll
-         * {whatever} value - Der Wert des Attributs
+         * @param {String} attribute - Das Attribut das gesetzt werden soll
+         * @param {whatever} value - Der Wert des Attributs
+         * @returns {void}
          */
         pushHits: function (attribute, value) {
             var tempArray = _.clone(this.get(attribute));
@@ -69,8 +66,11 @@ define([
             this.set(attribute, _.flatten(tempArray));
         },
 
-         /**
+        /**
          * removes all hits with the given filter
+         * @param {object} attribute -
+         * @param {object} filter -
+         * @returns {void}
          */
         removeHits: function (attribute, filter) {
             var toRemove, i,
@@ -86,7 +86,7 @@ define([
             }
             else {
                 for (i = tempArray.length - 1; i >= 0; i--) {
-                    if (tempArray[i] == filter) {
+                    if (tempArray[i] === filter) {
                         tempArray.splice(i, 1);
                     }
                 }
@@ -96,7 +96,7 @@ define([
 
         /**
          * changes the filename extension of given filepath
-         * @param  {[type]} hitlist [description]
+         * @param  {[type]} src [description]
          * @param  {[type]} ext     [description]
          * @return {[type]}         [description]
          */
@@ -111,8 +111,9 @@ define([
         },
         /**
          * crops names of hits to length zeichen
-         * @param  {[type]} hitlist [the search result]
+         * @param  {[type]} s [the search result]
          * @param  {[type]} length  [name length]
+         * @returns {string} s
          */
         shortenString: function (s, length) {
             if (_.isUndefined(s)) {
@@ -124,28 +125,27 @@ define([
             return s;
         },
 
-        /**
-        *
-        */
         createRecommendedList: function () {
             var max = this.get("recommandedListLength"),
+                hitList,
+                foundTypes,
+                singleTypes,
+                usedNumbers,
+                randomNumber,
                 recommendedList = [];
 
             // if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
             //     this.set("isHitListReady", false);
             if (this.get("hitList").length > max) {
-                var hitList = this.get("hitList"),
-                    foundTypes = [],
-                    singleTypes = _.reject(hitList, function (hit) {
-                        if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
-                            return true;
-                        }
-
-                        foundTypes.push(hit.type);
-
-                    }),
-                    usedNumbers = [],
-                    randomNumber;
+                hitList = this.get("hitList");
+                foundTypes = [];
+                singleTypes = _.reject(hitList, function (hit) {
+                    if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
+                        return true;
+                    }
+                    foundTypes.push(hit.type);
+                });
+                usedNumbers = [];
 
                 while (singleTypes.length < max) {
                     randomNumber = _.random(0, hitList.length - 1);
