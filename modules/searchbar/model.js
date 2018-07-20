@@ -162,15 +162,17 @@ define(function (require) {
                 usedNumbers = [],
                 randomNumber;
 
-            // if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
-            //     this.set("isHitListReady", false);
             if (hitList.length > max) {
                 singleTypes = _.reject(hitList, function (hit) {
-                    if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
-                        return true;
-                    }
+                    var res;
 
-                    foundTypes.push(hit.type);
+                    if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
+                        res = true;
+                    }
+                    else {
+                        foundTypes.push(hit.type);
+                    }
+                    return res;
                 });
 
                 while (singleTypes.length < max) {
