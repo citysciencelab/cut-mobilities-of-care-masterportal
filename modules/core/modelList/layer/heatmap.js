@@ -53,10 +53,10 @@ define(function (require) {
          */
         createLayer: function () {
             this.setLayer(new Ol.layer.Heatmap({
-                source: this.getLayerSource(),
+                source: this.get("layerSource"),
                 name: this.get("name"),
                 typ: this.get("typ"),
-                id: this.getId(),
+                id: this.get("id"),
                 weight: function (feature) {
                     return feature.get("normalizeWeightForHeatmap");
                 },
@@ -84,7 +84,7 @@ define(function (require) {
         initializeHeatmap: function (features) {
             var attribute = this.get("attribute"),
                 value = this.get("value"),
-                layerSource = this.getLayerSource(),
+                layerSource = this.get("layerSource"),
                 cloneFeatures = [];
 
             _.each(features, function (feature) {
@@ -117,7 +117,7 @@ define(function (require) {
         updateHeatmap: function (feature) {
             var attribute = this.get("attribute"),
                 value = this.get("value"),
-                layerSource = this.getLayerSource(),
+                layerSource = this.get("layerSource"),
                 featureId = feature.getId(),
                 cloneFeature = feature.clone(),
                 heatmapFeature,
