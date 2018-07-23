@@ -16,10 +16,7 @@ define(function (require) {
             var channel = Radio.channel("StyleList");
 
             channel.reply({
-                "returnModelById": this.returnModelById,
-                "returnModels": function () {
-                    return this.models;
-                }
+                "returnModelById": this.returnModelById
             }, this);
 
             if (this.url() !== "keine Style JSON") {
@@ -31,17 +28,13 @@ define(function (require) {
                             text: "Fehler beim Laden von: " + Radio.request("Util", "getPath", Config.styleConf),
                             kategorie: "alert-warning"
                         });
-                    },
-                    success: function () {
                     }
                 });
             }
         },
         returnModelById: function (layerId) {
-            return _.find(this.models, function (slmodel) {
-                if (slmodel.attributes.layerId === layerId) {
-                    return slmodel;
-                }
+            return this.find(function (slmodel) {
+                return slmodel.attributes.layerId === layerId;
             });
         }
     });

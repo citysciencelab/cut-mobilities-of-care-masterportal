@@ -1,11 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config",
-    "modules/core/util"
-], function (Backbone, Radio, Config, Util) {
+define(function (require) {
+    var Config = require("config"),
+        $ = require("jquery"),
+        TreeFilter;
 
-    var TreeFilter = Backbone.Model.extend({
+    TreeFilter = Backbone.Model.extend({
         defaults: {
             filter: "",
             filterHits: "", // Filtertreffer
@@ -26,10 +24,11 @@ define([
             return Radio.request("Util", "getPath", Config.treeConf);
         },
         initialize: function () {
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
+
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
 
             if (!_.isUndefined(model)) {
                 this.setListenerForVisibility(model);
@@ -46,17 +45,15 @@ define([
             this.fetch({
                 cache: false,
                 async: false,
-                error: function () {
-                },
-                success: function (model) {
+                success: function (treeModel) {
                     // speichert alle Baumgattung in ein Array
                     var catArray = [];
 
-                    _.each(model.get("trees"), function (tree) {
+                    _.each(treeModel.get("trees"), function (tree) {
                         catArray.push(tree.displayGattung);
-                    }, model);
-                    model.set("categoryArray", catArray);
-                    model.set("typeArray", []); // speichert später jeweils zur Category die Types
+                    });
+                    treeModel.set("categoryArray", catArray);
+                    treeModel.set("typeArray", []); // speichert später jeweils zur Category die Types
                 }
             });
         },
@@ -81,6 +78,7 @@ define([
             // macht aus "Ailanthus / Götterbaum" = Götterbaum(Ailanthus)
             _.each(this.get("trees"), function (tree) {
                 var split = tree.Gattung.split("/"),
+                    treeArray = [],
                     categorySplit;
 
                 if (split[1] !== undefined) {
@@ -90,11 +88,10 @@ define([
                     categorySplit = split[0].trim();
                 }
                 tree.displayGattung = categorySplit;
-                var treeArray = [],
-                    split,
-                    typeSplit;
 
                 _.each(tree.Arten, function (type) {
+                    var typeSplit;
+
                     split = type.split("/");
                     if (split[1] !== undefined) {
                         typeSplit = split[1].trim() + " (" + split[0].trim() + ")";
@@ -226,12 +223,13 @@ define([
 
             if (tree[0] !== undefined) {
                 _.each(tree[0].Arten, function (type) {
+                    var myRegExp;
+
                     if (this.get("searchTypeString").length === 0) {
                         typeArray.push(type.display);
                     }
                     else {
-                        var myRegExp = new RegExp(this.get("searchTypeString"), "i");
-
+                        myRegExp = new RegExp(this.get("searchTypeString"), "i");
                         if (type.display.search(myRegExp) !== -1) {
                             typeArray.push(type.display);
                         }
@@ -241,7 +239,8 @@ define([
             this.set("typeArray", typeArray);
         },
         setFilterParams: function () { // NOTE aufbröseln in einzelMethoden...irgendwann
-            var tree = _.where(this.get("trees"), {displayGattung: $("#categoryInput").val()});
+            var tree = _.where(this.get("trees"), {displayGattung: $("#categoryInput").val()}),
+                treeType;
 
             if (tree[0] === undefined) {
                 this.set("treeFilterCategory", "");
@@ -249,8 +248,7 @@ define([
             }
             else {
                 this.set("treeFilterCategory", tree[0].Gattung);
-                var treeType = _.where(tree[0].Arten, {display: $("#typeInput").val()});
-
+                treeType = _.where(tree[0].Arten, {display: $("#typeInput").val()});
                 if (treeType[0] !== undefined) {
                     this.set("treeFilterType", treeType[0].species);
                 }
@@ -311,7 +309,7 @@ define([
             // $("#perimeterMin > input").val("0");
         },
         createFilter: function () {
-            var filter, filter2, symbolizer, header, footer, filterwfs, filterCategory, filterType, filterYear, filterDiameter, filterPerimeter;
+            var filter, symbolizer, header, footer, filterwfs, filterCategory, filterType, filterYear, filterDiameter, filterPerimeter;
 
             // Filter Gattung und Art
             if (this.get("treeFilterCategory").length !== 0) {
@@ -340,7 +338,7 @@ define([
             filter = "<se:Rule><ogc:Filter><ogc:And>" + filterCategory + filterType + filterYear + filterDiameter + filterPerimeter + "</ogc:And></ogc:Filter>";
             symbolizer = "<se:PointSymbolizer><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#55c61d</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.78</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#36a002</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>12</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
 
-            filter2 = "<se:Rule><se:PointSymbolizer><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#cdcdcd</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.4</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#cdcdcd</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>8</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
+            // filter2 = "<se:Rule><se:PointSymbolizer><se:Graphic><se:Mark><se:WellKnownName>circle</se:WellKnownName><se:Fill><se:SvgParameter name='fill'>#cdcdcd</se:SvgParameter><se:SvgParameter name='fill-opacity'>0.4</se:SvgParameter></se:Fill><se:Stroke><se:SvgParameter name='stroke'>#cdcdcd</se:SvgParameter><se:SvgParameter name='stroke-width'>1</se:SvgParameter></se:Stroke></se:Mark><se:Size>8</se:Size></se:Graphic></se:PointSymbolizer></se:Rule>";
 
             footer = "</se:FeatureTypeStyle></sld:UserStyle></sld:NamedLayer></sld:StyledLayerDescriptor>";
 

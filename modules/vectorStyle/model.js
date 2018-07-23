@@ -334,7 +334,7 @@ define(function (require) {
             var src = this.get("imagePath") + this.get("clusterImageName"),
                 isSVG = src.indexOf(".svg") > -1,
                 width = this.get("clusterImageWidth"),
-                height =this.get("clusterImageHeight"),
+                height = this.get("clusterImageHeight"),
                 scale = this.get("clusterImageScale"),
                 offset = [parseFloat(this.get("clusterImageOffsetX")), parseFloat(this.get("clusterImageOffsetY"))],
                 clusterStyle = new ol.style.Icon({
@@ -487,10 +487,10 @@ define(function (require) {
                 circleStyle = this.createClusterStyle();
             }
             else {
-                radius = parseFloat(this.get("circleRadius"), 10),
-                fillcolor = this.returnColor(this.get("circleFillColor"), "rgb"),
-                strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb"),
-                strokewidth = parseFloat(this.get("circleStrokeWidth"), 10),
+                radius = parseFloat(this.get("circleRadius"), 10);
+                fillcolor = this.returnColor(this.get("circleFillColor"), "rgb");
+                strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb");
+                strokewidth = parseFloat(this.get("circleStrokeWidth"), 10);
                 circleStyle = new ol.style.Circle({
                     radius: radius,
                     fill: new ol.style.Fill({
@@ -1188,7 +1188,7 @@ define(function (require) {
             this.set("textAlign", value);
         },
 
-         // setter for textFont
+        // setter for textFont
         setTextFont: function (value) {
             this.set("textFont", value);
         },
