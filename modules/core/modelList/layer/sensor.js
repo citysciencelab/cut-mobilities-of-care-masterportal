@@ -38,18 +38,18 @@ define(function (require) {
          */
         createLayer: function () {
             this.setLayer(new Ol.layer.Vector({
-                source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.getLayerSource(),
+                source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.get("layerSource"),
                 name: this.get("name"),
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
                 gfiTheme: this.get("gfiTheme"),
                 routable: this.get("routable"),
-                id: this.getId()
+                id: this.get("id")
             }));
 
             this.updateData();
 
-            Radio.trigger("HeatmapLayer", "loadInitialData", this.getId(), this.getLayerSource().getFeatures());
+            Radio.trigger("HeatmapLayer", "loadInitialData", this.get("id"), this.get("layerSource").getFeatures());
         },
 
         /**
@@ -58,7 +58,7 @@ define(function (require) {
          */
         createClusterLayerSource: function () {
             this.setClusterLayerSource(new Ol.source.Cluster({
-                source: this.getLayerSource(),
+                source: this.get("layerSource"),
                 distance: this.get("clusterDistance")
             }));
         },
@@ -85,7 +85,7 @@ define(function (require) {
 
                 // Add features to vectorlayer
                 if (!_.isEmpty(features)) {
-                    this.getLayerSource().addFeatures(features);
+                    this.get("layerSource").addFeatures(features);
                 }
 
                 // connection to live update
@@ -103,7 +103,7 @@ define(function (require) {
 
             if (!_.isUndefined(features)) {
                 this.styling(isClustered);
-                this.getLayer().setStyle(this.get("style"));
+                this.get("layer").setStyle(this.get("style"));
             }
         },
 
@@ -548,7 +548,7 @@ define(function (require) {
                 olFeaturesArray.push(olFeature);
             }, this);
 
-            this.getLayerSource().addFeatures(olFeaturesArray);
+            this.get("layerSource").addFeatures(olFeaturesArray);
 
             return olFeaturesArray;
         },
@@ -630,7 +630,7 @@ define(function (require) {
         updateFromMqtt: function (thing) {
             var thingToUpdate = !_.isUndefined(thing) ? thing : {},
                 dataStreamId = thingToUpdate.dataStreamId,
-                features = this.getLayerSource().getFeatures(),
+                features = this.get("layerSource").getFeatures(),
                 featureArray = this.getFeatureByDataStreamId(dataStreamId, features),
                 thingResult = this.convertScaling(thingToUpdate.result),
                 utc = this.get("utc"),
@@ -668,7 +668,7 @@ define(function (require) {
             }
 
             // trigger the heatmap and gfi to update them
-            Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), feature);
+            Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.get("id"), feature);
             Radio.trigger("GFI", "changeFeature", feature);
         },
 
@@ -765,7 +765,7 @@ define(function (require) {
         updateFromWebSocketStreamLayer: function (esriJson) {
             var streamId = this.get("streamId"),
                 id = esriJson.attributes[streamId],
-                features = this.getLayerSource().getFeatures(),
+                features = this.get("layerSource").getFeatures(),
                 existingFeature = this.getFeatureById(features, id),
                 epsgCode = this.get("epsg"),
                 esriFormat,
@@ -784,11 +784,11 @@ define(function (require) {
                 isClustered = this.has("clusterDistance");
 
                 olFeature.setId(id);
-                this.getLayerSource().addFeature(olFeature);
+                this.get("layerSource").addFeature(olFeature);
                 this.styling(isClustered);
-                this.getLayer().setStyle(this.get("style"));
+                this.get("layer").setStyle(this.get("style"));
 
-                Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), olFeature);
+                Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.get("id"), olFeature);
             }
             else {
                 location = [esriJson.geometry.x, esriJson.geometry.y];
@@ -799,7 +799,7 @@ define(function (require) {
                     existingFeature.getGeometry().setCoordinates(xyTransform);
 
                     // trigger the heatmap and gfi to update them
-                    Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.getId(), existingFeature);
+                    Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.get("id"), existingFeature);
                     Radio.trigger("GFI", "changeFeature", existingFeature);
                 }
             }
@@ -815,7 +815,7 @@ define(function (require) {
             var feature;
 
             _.each(features, function (feat) {
-                var featureId = feat.getId();
+                var featureId = feat.get("id");
 
                 if (featureId === id) {
                     feature = feat;
@@ -832,7 +832,7 @@ define(function (require) {
         createLegendURL: function () {
             var style;
 
-            if (!_.isUndefined(this.getLegendURL()) && !this.getLegendURL().length) {
+            if (!_.isUndefined(this.get("LegendURL")) && !this.get("LegendURL").length) {
                 style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
                 if (!_.isUndefined(style)) {

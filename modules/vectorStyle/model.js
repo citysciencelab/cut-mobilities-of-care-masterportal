@@ -334,7 +334,7 @@ define(function (require) {
             var src = this.get("imagePath") + this.get("clusterImageName"),
                 isSVG = src.indexOf(".svg") > -1,
                 width = this.get("clusterImageWidth"),
-                height =this.get("clusterImageHeight"),
+                height = this.get("clusterImageHeight"),
                 scale = this.get("clusterImageScale"),
                 offset = [parseFloat(this.get("clusterImageOffsetX")), parseFloat(this.get("clusterImageOffsetY"))],
                 clusterStyle = new ol.style.Icon({
@@ -487,10 +487,10 @@ define(function (require) {
                 circleStyle = this.createClusterStyle();
             }
             else {
-                radius = parseFloat(this.get("circleRadius"), 10),
-                fillcolor = this.returnColor(this.get("circleFillColor"), "rgb"),
-                strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb"),
-                strokewidth = parseFloat(this.get("circleStrokeWidth"), 10),
+                radius = parseFloat(this.get("circleRadius"), 10);
+                fillcolor = this.returnColor(this.get("circleFillColor"), "rgb");
+                strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb");
+                strokewidth = parseFloat(this.get("circleStrokeWidth"), 10);
                 circleStyle = new ol.style.Circle({
                     radius: radius,
                     fill: new ol.style.Fill({
@@ -682,11 +682,11 @@ define(function (require) {
                 clusterTextObj.strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
                 clusterTextObj.strokewidth = parseFloat(this.get("textStrokeWidth"), 10);
             }
-            else if (this.getClusterText() === "COUNTER") {
+            else if (this.get("clusterText") === "COUNTER") {
                 clusterTextObj.text = feature.get("features").length.toString();
                 clusterTextObj = this.extendClusterTextStyle(clusterTextObj);
             }
-            else if (this.getClusterText() === "NONE") {
+            else if (this.get("clusterText") === "NONE") {
                 clusterTextObj = undefined;
             }
             else {
@@ -698,14 +698,14 @@ define(function (require) {
         },
 
         extendClusterTextStyle: function (clusterTextObj) {
-            clusterTextObj.textAlign = this.getClusterTextAlign();
-            clusterTextObj.font = this.getClusterTextFont().toString();
-            clusterTextObj.scale = parseFloat(this.getClusterTextScale(), 10);
-            clusterTextObj.offsetX = parseFloat(this.getClusterTextOffsetX(), 10);
-            clusterTextObj.offsetY = parseFloat(this.getClusterTextOffsetY(), 10);
-            clusterTextObj.fillcolor = this.returnColor(this.getClusterTextFillColor(), "rgb");
-            clusterTextObj.strokecolor = this.returnColor(this.getClusterTextStrokeColor(), "rgb");
-            clusterTextObj.strokewidth = parseFloat(this.getClusterTextStrokeWidth(), 10);
+            clusterTextObj.textAlign = this.get("clusterTextAlign");
+            clusterTextObj.font = this.get("clusterTextFont").toString();
+            clusterTextObj.scale = parseFloat(this.get("clusterTextScale"), 10);
+            clusterTextObj.offsetX = parseFloat(this.get("clusterTextOffsetX"), 10);
+            clusterTextObj.offsetY = parseFloat(this.get("clusterTextOffsetY"), 10);
+            clusterTextObj.fillcolor = this.returnColor(this.get("clusterTextFillColor"), "rgb");
+            clusterTextObj.strokecolor = this.returnColor(this.get("clusterTextStrokeColor"), "rgb");
+            clusterTextObj.strokewidth = parseFloat(this.get("clusterTextStrokeWidth"), 10);
 
             return clusterTextObj;
         },
@@ -1188,7 +1188,7 @@ define(function (require) {
             this.set("textAlign", value);
         },
 
-         // setter for textFont
+        // setter for textFont
         setTextFont: function (value) {
             this.set("textFont", value);
         },
