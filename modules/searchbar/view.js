@@ -318,11 +318,11 @@ define(function (require) {
 
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
-                hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
+                hit = _.values(_.pick(modelHitList, "0"))[0];
             }
             else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
                 hitID = evt.currentTarget.id;
-                hit = _.findWhere(this.model.get("hitList"), {id: hitID});
+                hit = _.findWhere(modelHitList, {id: hitID});
             }
             else if (modelHitList.length > 1) {
                 return;
@@ -333,7 +333,7 @@ define(function (require) {
             // 1. Schreibe Text in Searchbar
             this.setSearchbarString(hit.name);
             // 2. Verberge Suchmenü
-            // this.hideMenu();
+            this.hideMenu();
             // 3. Hide das GFI
             Radio.trigger("GFI", "setIsVisible", false);
             // 4. Zoome ggf. auf Ergebnis oder Sonderbehandlung

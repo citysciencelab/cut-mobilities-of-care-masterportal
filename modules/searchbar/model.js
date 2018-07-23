@@ -67,17 +67,17 @@ define(function (require) {
          * {whatever} value - Der Wert des Attributs
          * @param  {[type]} attribute [description]
          * @param  {[type]} value     [description]
-         * @param  {[type]} evtTpye     [description]
+         * @param  {[type]} evtType     [description]
          * @return {[type]}         [description]
          */
-        pushHits: function (attribute, value, evtTpye) {
+        pushHits: function (attribute, value, evtType) {
             var tempArray = _.clone(this.get(attribute)),
                 valueWithNumbers;
 
             tempArray.push(value);
 
             // removes addresses without house number, if more than one exists
-            if (evtTpye === "paste" && !_.isUndefined(tempArray) && tempArray.length > 1) {
+            if (evtType === "paste" && !_.isUndefined(tempArray) && tempArray.length > 1) {
                 valueWithNumbers = _.filter(tempArray, function (val) {
                     var valueArray = val.name.split(",")[0].split(" ");
 
