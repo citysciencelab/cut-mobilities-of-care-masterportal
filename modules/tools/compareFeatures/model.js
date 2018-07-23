@@ -77,41 +77,22 @@ define(function () {
          * creates a JSON where an object matches to a row
          * one object attribute is created for each feature (column)
          * @param {object} gfiAttributes -
-         * @param {object} themeConfig config from gfi theme for schulinfo model
          * @returns {object[]} list - one object per row
          */
-        prepareFeatureListToShow: function (gfiAttributes, themeConfig) {
+        prepareFeatureListToShow: function (gfiAttributes) {
             var list = [],
-                featureList = this.get("groupedFeatureList")[this.get("layerId")],
-                sortedAttributes = this.sortAttributes(gfiAttributes, themeConfig);
+                featureList = this.get("groupedFeatureList")[this.get("layerId")];
 
-            Object.keys(sortedAttributes).forEach(function (key) {
+            Object.keys(gfiAttributes).forEach(function (key) {
                 var row = {};
 
-                row["col-1"] = sortedAttributes[key];
+                row["col-1"] = gfiAttributes[key];
                 featureList.forEach(function (feature, index) {
                     row["col-" + (index + 2)] = feature.get(key);
                 });
                 list.push(row);
             });
             return list;
-        },
-        sortAttributes: function (gfiAttributes, themeConfig) {
-            var sortedAttributes = {};
-
-            if (!_.isUndefined(themeConfig)) {
-
-                _.each(themeConfig, function (kategory) {
-                    _.each(kategory.attributes, function (attribute) {
-                        var isAttributeFound = this.checkForAttribute(gfiAttributes, attribute);
-
-                        if (isAttributeFound) {
-                            sortedAttributes[attribute] = gfiAttributes[attribute];
-                        }
-                    }, this);
-                }, this);
-            }
-            return sortedAttributes;
         },
         /**
          * checks if attribute is in gfiAttributes
@@ -243,8 +224,7 @@ define(function () {
         },
         preparePrint: function (rowsToShow) {
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
-                themeConfig = Radio.request("Schulinfo", "getThemeConfig"),
-                features = this.prepareFeatureListToShow(layerModel.get("gfiAttributes"), themeConfig),
+                features = this.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
                 tableBody = this.prepareTableBody(features, rowsToShow),
                 rowWidth = this.calculateRowWidth(tableBody[0], 30),
                 title = "Vergleichsliste - Schulen",
