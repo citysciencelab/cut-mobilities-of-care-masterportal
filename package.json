@@ -9,10 +9,10 @@
   },
   "scripts": {
     "test": "mocha test/end2end/TestRunner.js",
+    "installDependencies": "npm install --verbose",
     "installBrowserMqtt": "cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js",
-    "installBrowserMqttWebPack": "cd node_modules/mqtt && npm install . && webpack mqtt.js ./browserMqtt.js --output-library mqtt",
-    "installMasterportal": "npm install --verbose && cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js",
-    "installMasterportalWebPack": "npm install --verbose && cd node_modules/mqtt && npm install . && webpack mqtt.js ./browserMqtt.js --output-library mqtt"
+    "installGrunt": "npm install -g grunt-cli",
+    "installMasterportal": "npm run installDependencies && npm run installBrowserMqtt && npm run installGrunt"
   },
   "dependencies": {
     "backbone": "1.x",
@@ -39,7 +39,7 @@
     "webpack": "^4.16.1"
   },
   "devDependencies": {
-    "build-config": "git+https://bitbucket.org/lgv-g12/build-config-public.git",
+    "build-config": "git+https://bitbucket.org/lgv-g12/build-config.git",
     "chai": "4.1.1",
     "deep-extend": "^0.3.2",
     "eslint": "^4.14.0",
@@ -62,7 +62,7 @@
     "grunt-jsdoc": "^1.0.0",
     "jaguarjs-jsdoc": "0.0.1",
     "jit-grunt": "^0.9.0",
-    "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config-public.git",
+    "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config.git",
     "mocha": "3.5.0",
     "selenium-webdriver": "^3.5.0",
     "time-grunt": "1.0.0"
