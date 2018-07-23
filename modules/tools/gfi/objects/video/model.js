@@ -1,15 +1,13 @@
 define(function (require) {
+    var Backbone = require("backbone"),
+        VideoJS = require("videojs"),
+        VideoModel;
 
     /**
      * Disable Google Analytics that tracks a random percentage (currently 1%) of players loaded from the CDN.
      * @link https://videojs.com/getting-started/
      */
     window.HELP_IMPROVE_VIDEOJS = false;
-
-    var Backbone = require("backbone"),
-        VideoJS = require("videojs"),
-        VideoModel;
-
     require("videojsflash");
 
     VideoModel = Backbone.Model.extend({
@@ -37,6 +35,7 @@ define(function (require) {
         /**
          * Startet das Streaming
          * @param  {Function} callback Callback-Funktion wird gerufen, nachdem das Video gestaret ist
+         * @returns {void}
          */
         startStreaming: function (callback) {
             var videoEle = document.getElementById(this.get("id"));
@@ -47,6 +46,7 @@ define(function (require) {
         /**
          * Prüft, ob das GFI ausgeschaltet wurde
          * @param  {boolean} value Visibility des GFI
+         * @returns {void}
          */
         changedGFI: function (value) {
             if (value === false) {
@@ -61,6 +61,7 @@ define(function (require) {
          * remove Backbone-Listener
          * clear Attributes
          * remove View
+         * @returns {void}
          */
         destroy: function () {
             var videoEle = document.getElementById(this.get("id"));

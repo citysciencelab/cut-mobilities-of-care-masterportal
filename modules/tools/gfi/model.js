@@ -308,7 +308,7 @@ define(function (require) {
         getGFIForPrint: function () {
             var theme = this.get("themeList").at(this.get("themeIndex"));
 
-            return [theme.getGfiContent()[0], theme.get("name"), this.get("coordinate")];
+            return [theme.get("gfiContent")[0], theme.get("name"), this.get("coordinate")];
         },
 
         getVisibleTheme: function () {

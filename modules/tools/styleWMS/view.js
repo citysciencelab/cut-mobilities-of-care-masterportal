@@ -1,15 +1,10 @@
-define([
-    "backbone",
-    "text!modules/tools/styleWMS/template.html",
-    "modules/tools/styleWMS/model",
-    "colorpicker"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        StyleWMS = require("modules/tools/styleWMS/model"),
+    var StyleWMS = require("modules/tools/styleWMS/model"),
         StyleWMSTemplate = require("text!modules/tools/styleWMS/template.html"),
         StyleWMSView;
 
+    require("colorpicker");
     StyleWMSView = Backbone.View.extend({
         model: new StyleWMS(),
         className: "style-wms-win",
@@ -28,10 +23,6 @@ define([
             "click .glyphicon-remove": "hide"
         },
 
-        /**
-        * Wird aufgerufen wenn die View erzeugt wird
-        * Registriert Listener auf das Model
-        */
         initialize: function () {
             this.listenTo(this.model, {
                 // ändert sich der Fensterstatus wird neu gezeichnet
@@ -50,7 +41,8 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            $("body").append(this.$el.html(this.template(attr)));
+            this.$el.html(this.template(attr));
+            document.getElementsByTagName("body")[0].appendChild(this.el);
             this.$el.draggable({
                 containment: "#map",
                 handle: ".header > .title"
@@ -58,11 +50,13 @@ define([
             this.$el.show();
             // aktiviert den/die colorpicker
             this.$el.find("[class*=selected-color]").parent().colorpicker({format: "hex"});
+            return this;
         },
 
         /**
          * Ruft setAttributeName im Model auf und übergibt den Attributnamen
-         * @param {ChangeEvent} evt
+         * @param {ChangeEvent} evt -
+         * @returns {void}
          */
         setAttributeName: function (evt) {
             this.model.setAttributeName(evt.target.value);
@@ -71,7 +65,8 @@ define([
         /**
          * Ruft setNumberOfClasses im Model auf und übergibt die Anzahl der Klassen
          * Alle Colorpicker werden scharf geschaltet
-         * @param {ChangeEvent} evt
+         * @param {ChangeEvent} evt -
+         * @returns {void}
          */
         setNumberOfClasses: function (evt) {
             this.model.setNumberOfClasses(evt.target.value);
@@ -79,30 +74,30 @@ define([
 
         /**
          * Erstellt die Style-Klassen und übergibt sie an die Setter Methode im Model
+         * @returns {void}
          */
         setStyleClassAttributes: function () {
-            var styleClassAttributes = [];
+            var styleClassAttributes = [],
+                i;
 
             this.removeErrorMessages();
-            for (var i = 0; i < this.model.get("numberOfClasses"); i++) {
+            for (i = 0; i < this.model.get("numberOfClasses"); i++) {
                 styleClassAttributes.push({
-                    startRange: $(".start-range" + i).val(),
-                    stopRange: $(".stop-range" + i).val(),
-                    color: $(".selected-color" + i).val()
+                    startRange: this.$(".start-range" + i).val(),
+                    stopRange: this.$(".stop-range" + i).val(),
+                    color: this.$(".selected-color" + i).val()
                 });
             }
             this.model.setStyleClassAttributes(styleClassAttributes);
         },
 
-        /**
-         * Ruft createSLD im Model auf
-         */
         createSLD: function () {
             this.model.createSLD();
         },
 
         /**
          * zeigt die Error Meldungen im Formular an
+         * @returns {void}
          */
         showErrorMessages: function () {
             _.each(this.model.get("errors"), function (error) {
@@ -134,15 +129,13 @@ define([
 
         /**
          * löscht die Error Meldungen aus dem Formular
+         * @returns {void}
          */
         removeErrorMessages: function () {
             this.$el.find(".error").remove();
             this.$el.find("[class*=selected-color], [class*=start-range], [class*=stop-range]").parent().removeClass("has-error");
         },
 
-        /**
-         * Versteckt das Fenster
-         */
         hide: function () {
             this.$el.hide();
         }
