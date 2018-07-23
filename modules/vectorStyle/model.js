@@ -682,11 +682,11 @@ define(function (require) {
                 clusterTextObj.strokecolor = this.returnColor(this.get("textStrokeColor"), "rgb");
                 clusterTextObj.strokewidth = parseFloat(this.get("textStrokeWidth"), 10);
             }
-            else if (this.getClusterText() === "COUNTER") {
+            else if (this.get("clusterText") === "COUNTER") {
                 clusterTextObj.text = feature.get("features").length.toString();
                 clusterTextObj = this.extendClusterTextStyle(clusterTextObj);
             }
-            else if (this.getClusterText() === "NONE") {
+            else if (this.get("clusterText") === "NONE") {
                 clusterTextObj = undefined;
             }
             else {
@@ -698,14 +698,14 @@ define(function (require) {
         },
 
         extendClusterTextStyle: function (clusterTextObj) {
-            clusterTextObj.textAlign = this.getClusterTextAlign();
-            clusterTextObj.font = this.getClusterTextFont().toString();
-            clusterTextObj.scale = parseFloat(this.getClusterTextScale(), 10);
-            clusterTextObj.offsetX = parseFloat(this.getClusterTextOffsetX(), 10);
-            clusterTextObj.offsetY = parseFloat(this.getClusterTextOffsetY(), 10);
-            clusterTextObj.fillcolor = this.returnColor(this.getClusterTextFillColor(), "rgb");
-            clusterTextObj.strokecolor = this.returnColor(this.getClusterTextStrokeColor(), "rgb");
-            clusterTextObj.strokewidth = parseFloat(this.getClusterTextStrokeWidth(), 10);
+            clusterTextObj.textAlign = this.get("clusterTextAlign");
+            clusterTextObj.font = this.get("clusterTextFont").toString();
+            clusterTextObj.scale = parseFloat(this.get("clusterTextScale"), 10);
+            clusterTextObj.offsetX = parseFloat(this.get("clusterTextOffsetX"), 10);
+            clusterTextObj.offsetY = parseFloat(this.get("clusterTextOffsetY"), 10);
+            clusterTextObj.fillcolor = this.returnColor(this.get("clusterTextFillColor"), "rgb");
+            clusterTextObj.strokecolor = this.returnColor(this.get("clusterTextStrokeColor"), "rgb");
+            clusterTextObj.strokewidth = parseFloat(this.get("clusterTextStrokeWidth"), 10);
 
             return clusterTextObj;
         },
