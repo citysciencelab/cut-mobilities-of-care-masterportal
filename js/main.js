@@ -4,10 +4,18 @@ var scriptTags = document.getElementsByTagName("script"),
     index,
     strippedLocation;
 
-if (window.location.search !== "") {
-    index = window.location.href.indexOf("?");
-    strippedLocation = window.location.href.slice(0, index);
+    console.log(scriptTags);
+    console.log(scriptTagsArray);
+    console.log(configPath);
+    console.log(window.location.origin);
+    console.log(window.location.pathname);
+    
 
+    if (window.location.search !== "") {
+        index = window.location.href.indexOf("?");
+        strippedLocation = window.location.href.slice(0, index);
+        console.log(strippedLocation);
+    
     configPath = strippedLocation + "config";
 }
 
