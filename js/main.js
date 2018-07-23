@@ -1,14 +1,15 @@
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
-    configPath = window.location.origin + window.location.pathname + "config",
+    configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
     index,
     strippedLocation;
 
-    console.log(scriptTags);
-    console.log(scriptTagsArray);
-    console.log(configPath);
+    console.log(window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config");
+    
     console.log(window.location.origin);
     console.log(window.location.pathname);
+    console.log(window.location.pathname.lastIndexOf("/"));
+    console.log(window.location.pathname.lastIndexOf("/") + 1);
     
 
     if (window.location.search !== "") {
