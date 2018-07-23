@@ -4,19 +4,10 @@ var scriptTags = document.getElementsByTagName("script"),
     index,
     strippedLocation;
 
-    console.log(window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config");
-    
-    console.log(window.location.origin);
-    console.log(window.location.pathname);
-    console.log(window.location.pathname.lastIndexOf("/"));
-    console.log(window.location.pathname.lastIndexOf("/") + 1);
-    
+if (window.location.search !== "") {
+    index = window.location.href.indexOf("?");
+    strippedLocation = window.location.href.slice(0, index);
 
-    if (window.location.search !== "") {
-        index = window.location.href.indexOf("?");
-        strippedLocation = window.location.href.slice(0, index);
-        console.log(strippedLocation);
-    
     configPath = strippedLocation + "config";
 }
 
