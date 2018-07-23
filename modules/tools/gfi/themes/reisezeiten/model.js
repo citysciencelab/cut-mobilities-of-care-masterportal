@@ -19,7 +19,7 @@ define(function (require) {
             if (_.isUndefined(this.get("gfiContent")) === false) {
                 this.set("routenLayer", Radio.request("RawLayerList", "getLayerWhere", {id: "2713"}));
                 this.set("verkehrslagelayer", Radio.request("RawLayerList", "getLayerWhere", {id: "2715"}));
-                this.set("standort", this.getGfiContent()[0].Standort);
+                this.set("standort", this.get("gfiContent")[0].Standort);
                 if (this.get("standort") !== "" && this.get("routenLayer") !== "" && this.get("verkehrslagelayer") !== "") {
                     this.requestRouten();
                     this.sortRouten();

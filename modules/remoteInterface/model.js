@@ -76,7 +76,7 @@ define(function (require) {
          */
         showPositionByFeatureId: function (featureId, layerId) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-                feature = model.getLayerSource().getFeatureById(featureId),
+                feature = model.get("layerSource").getFeatureById(featureId),
                 extent = feature.getGeometry().getExtent(),
                 center = ol.extent.getCenter(extent);
 

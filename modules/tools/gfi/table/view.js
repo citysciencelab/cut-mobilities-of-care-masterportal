@@ -42,9 +42,9 @@ define(function (require) {
         },
 
         toggle: function () {
-            if (this.model.getIsVisible() === true) {
+            if (this.model.get("isVisible") === true) {
                 this.$el.show();
-                Radio.trigger("MapMarker", "showMarker", this.model.getCoordinate());
+                Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
                 Radio.trigger("GFI", "afterRender");
             }
             else {
@@ -54,9 +54,9 @@ define(function (require) {
         },
 
         setMarker: function () {
-            if (this.model.getIsVisible() === true) {
-                Radio.trigger("MapMarker", "showMarker", this.model.getCoordinate());
-                Radio.trigger("MapView", "setCenter", this.model.getCoordinate());
+            if (this.model.get("isVisible") === true) {
+                Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
+                Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
             }
         },
 

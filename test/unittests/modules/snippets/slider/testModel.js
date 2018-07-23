@@ -1,9 +1,12 @@
 define(function (require) {
     var expect = require("chai").expect,
-        Model = require("../../../../../../../modules/snippets/slider/model.js");
+        Model = require("../../../../../../../modules/snippets/slider/model.js"),
+        Util = require("../../../../../modules/core/util.js");
 
     describe("snippets/slider/model", function () {
         var model;
+
+        new Util();
 
         beforeEach(function () {
             model = new Model({

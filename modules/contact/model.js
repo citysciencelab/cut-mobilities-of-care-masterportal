@@ -42,7 +42,7 @@ define([
         },
         setAttributes: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
-                portalConfig = _.has(this.getPortalConfig(), "portalTitle") ? this.getPortalConfig() : "",
+                portalConfig = _.has(this.get("portalConfig"), "portalTitle") ? this.get("portalConfig") : "",
                 portalTitle = _.has(portalConfig.portalTitle, "title") ? portalConfig.portalTitle.title : _.isString(portalConfig.PortalTitle) ? portalConfig.PortalTitle : document.title,
                 hrefString = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
                 platformString = "<br>Platform: " + navigator.platform + "<br>",
@@ -63,7 +63,7 @@ define([
             if (_.isUndefined(resp) === false && resp.get("url")) {
                 this.setUrl(resp.get("url"));
                 this.setTicketID(ticketID);
-                this.setSystemInfo(this.getIncludeSystemInfo() === true ? systemInfo : "");
+                this.setSystemInfo(this.get("includeSystemInfo") === true ? systemInfo : "");
                 this.setSubject(subject, {validate: true});
             }
         },
@@ -93,7 +93,7 @@ define([
 
         setStatus: function (args) {
             // Fenstermanagement
-            if (args[2].getId() === "contact") {
+            if (args[2].get("id") === "contact") {
                 this.setIsCollapsed(args[1]);
                 this.setIsCurrentWin(args[0]);
             }
@@ -123,29 +123,29 @@ define([
         },
 
         send: function () {
-            var cc = _.map(this.getCc(), _.clone), // deep copy instead of passing object by reference
+            var cc = _.map(this.get("cc"), _.clone), // deep copy instead of passing object by reference
                 text,
                 dataToSend;
 
-            if (this.getCcToUser() === true) {
+            if (this.get("ccToUser") === true) {
                 cc.push({
-                    email: this.getUserEmail(),
-                    name: this.getUserName()
+                    email: this.get("userEmail"),
+                    name: this.get("userName")
                 });
             }
-            text = "Name: " + this.getUserName() + "<br>Email: " + this.getUserEmail() + "<br>Tel: " + this.getUserTel() + "<br>==================<br>" + this.getText() + this.getSystemInfo();
+            text = "Name: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo");
             dataToSend = {
-                from: this.getFrom(),
-                to: this.getTo(),
+                from: this.get("from"),
+                to: this.get("to"),
                 cc: cc,
-                bcc: this.getBcc(),
-                subject: this.getTicketID() + ": " + this.getSubject(),
+                bcc: this.get("bcc"),
+                subject: this.get("ticketID") + ": " + this.get("subject"),
                 text: text
             };
 
             Radio.trigger("Util", "showLoader");
             $.ajax({
-                url: this.getUrl(),
+                url: this.get("url"),
                 data: dataToSend,
                 async: true,
                 type: "POST",
@@ -169,19 +169,9 @@ define([
             });
         },
 
-        // getter for url
-        getUrl: function () {
-            return this.get("url");
-        },
-
         // setter for url
         setUrl: function (value) {
             this.set("url", value);
-        },
-
-        // getter for ticketID
-        getTicketID: function () {
-            return this.get("ticketID");
         },
 
         // setter for ticketID
@@ -189,28 +179,14 @@ define([
             this.set("ticketID", value);
         },
 
-        // getter for systemInfo
-        getSystemInfo: function () {
-            return this.get("systemInfo");
-        },
-
         // setter for systemInfo
         setSystemInfo: function (value) {
             this.set("systemInfo", value);
         },
 
-        // getter for includeSystemInfo
-        getIncludeSystemInfo: function () {
-            return this.get("includeSystemInfo");
-        },
         // setter for includeSystemInfo
         setIncludeSystemInfo: function (value) {
             this.set("includeSystemInfo", value);
-        },
-
-        // getter for subject
-        getSubject: function () {
-            return this.get("subject");
         },
 
         // setter for subject
@@ -218,19 +194,9 @@ define([
             this.set("subject", value);
         },
 
-        // getter for isCollapsed
-        getIsCollapsed: function () {
-            return this.get("isCollapsed");
-        },
-
         // setter for isCollapsed
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
-        },
-
-        // getter for isCurrentWin
-        getIsCurrentWin: function () {
-            return this.get("isCurrentWin");
         },
 
         // setter for isCurrentWin
@@ -238,19 +204,9 @@ define([
             this.set("isCurrentWin", value);
         },
 
-        // getter for userName
-        getUserName: function () {
-            return this.get("userName");
-        },
-
         // setter for userName
         setUserName: function (value) {
             this.set("userName", value);
-        },
-
-        // getter for userEmail
-        getUserEmail: function () {
-            return this.get("userEmail");
         },
 
         // setter for userEmail
@@ -258,19 +214,9 @@ define([
             this.set("userEmail", value);
         },
 
-        // getter for userTel
-        getUserTel: function () {
-            return this.get("userTel");
-        },
-
         // setter for userTel
         setUserTel: function (value) {
             this.set("userTel", value);
-        },
-
-        // getter for text
-        getText: function () {
-            return this.get("text");
         },
 
         // setter for text
@@ -278,19 +224,9 @@ define([
             this.set("text", value);
         },
 
-        // getter for cc
-        getCc: function () {
-            return this.get("cc");
-        },
-
         // setter for cc
         setCc: function (value) {
             this.set("cc", value);
-        },
-
-        // getter for ccToUser
-        getCcToUser: function () {
-            return this.get("ccToUser");
         },
 
         // setter for ccToUser
@@ -298,18 +234,9 @@ define([
             this.set("ccToUser", value);
         },
 
-        // getter for from
-        getFrom: function () {
-            return this.get("from");
-        },
         // setter for from
         setFrom: function (value) {
             this.set("from", value);
-        },
-
-        // getter for to
-        getTo: function () {
-            return this.get("to");
         },
 
         // setter for to
@@ -317,19 +244,9 @@ define([
             this.set("to", value);
         },
 
-        // getter for bcc
-        getBcc: function () {
-            return this.get("bcc");
-        },
-
         // setter for bcc
         setBcc: function (value) {
             this.set("bcc", value);
-        },
-
-        // getter for portalConfig
-        getPortalConfig: function () {
-            return this.get("portalConfig");
         },
 
         // setter for portalConfig

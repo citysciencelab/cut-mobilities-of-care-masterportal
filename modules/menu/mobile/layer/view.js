@@ -37,7 +37,7 @@ define([
                 "change:isVisibleInTree": this.removeIfNotVisible,
                 "change:isOutOfRange": this.toggleColor
             });
-            this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleColor(this.model, this.model.get("isOutOfRange"));
         },
 
         /**
@@ -58,9 +58,9 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            if (Radio.request("BreadCrumb", "getLastItem").getId() === "SelectedLayer") {
+            if (Radio.request("BreadCrumb", "getLastItem").get("id") === "SelectedLayer") {
                 this.$el.html(this.templateSelected(attr));
-                if (this.model.getIsSettingVisible() === true) {
+                if (this.model.get("isSettingVisible") === true) {
                     this.renderSetting();
                 }
             }
@@ -80,7 +80,7 @@ define([
             // Animation Zahnrad
             this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
+            if (this.model.get("isSettingVisible") === false) {
                 this.$el.find(".item-settings").slideUp("slow", function () {
                     this.remove();
                 });
@@ -130,7 +130,7 @@ define([
             this.model.moveUp();
         },
         removeIfNotVisible: function () {
-            if (!this.model.getIsVisibleInTree()) {
+            if (!this.model.get("isVisibleInTree")) {
                 this.remove();
             }
         },

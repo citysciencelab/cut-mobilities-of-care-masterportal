@@ -14,14 +14,6 @@ define([
         },
 
         /**
-         * Gibt die Id zurück
-         * @return {String} id
-         */
-        getId: function () {
-            return this.get("id");
-        },
-
-        /**
          * Ruft removeItems in der Collection auf
          */
         removeItems: function () {

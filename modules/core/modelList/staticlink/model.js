@@ -25,7 +25,7 @@ define(function (require) {
             inSubMenue: false
         },
         triggerRadioEvent: function () {
-            _.each(this.getOnClickTrigger(), function (trigger) {
+            _.each(this.get("onClickTrigger"), function (trigger) {
                 this.triggerEvent(trigger);
             }, this);
         },
@@ -39,10 +39,7 @@ define(function (require) {
                 Radio.trigger(triggerParams.channel, triggerParams.event, data);
             }
         },
-        // getter for onClickTrigger
-        getOnClickTrigger: function () {
-            return this.get("onClickTrigger");
-        },
+
         // setter for onClickTrigger
         setOnClickTrigger: function (value) {
             this.set("onClickTrigger", value);

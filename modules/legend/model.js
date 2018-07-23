@@ -22,7 +22,9 @@ define(function (require) {
             var channel = Radio.channel("Legend");
 
             channel.reply({
-                "getLegendParams": this.get("legendParams")
+                "getLegendParams": function () {
+                    return this.get("legendParams");
+                }
             }, this);
 
             this.listenTo(Radio.channel("ModelList"), {
@@ -45,10 +47,6 @@ define(function (require) {
 
         setVisible: function (val) {
             this.set("visible", val);
-        },
-
-        getVisible: function () {
-            return this.get("visible");
         },
 
         updateParamsStyleWMSArray: function (params) {

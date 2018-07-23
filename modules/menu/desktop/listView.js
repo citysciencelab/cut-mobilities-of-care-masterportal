@@ -52,11 +52,11 @@ define([
             $("#" + "SelectedLayer").html("");
             var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"});
 
-            if (selectedLayerModel.getIsExpanded()) {
+            if (selectedLayerModel.get("isExpanded")) {
                 var selectedModels = this.collection.where({isSelected: true, type: "layer"});
 
                 selectedModels = _.sortBy(selectedModels, function (model) {
-                    return model.getSelectionIDX();
+                    return model.get("selectionIDX");
                 });
                 this.addSelectionView(selectedModels);
             }
@@ -75,7 +75,7 @@ define([
                 // Ordner öffnen, die initial geöffnet sein sollen
             if (parentId === "tree") {
                 _.each(models, function (model) {
-                    if (model.getType() === "folder" && model.getIsInitiallyExpanded()) {
+                    if (model.get("type") === "folder" && model.get("isInitiallyExpanded")) {
                         model.setIsExpanded(true);
                     }
                 });
@@ -86,13 +86,13 @@ define([
             }
 
             var layer = _.filter(models, function (model) {
-                return model.getType() === "layer";
+                return model.get("type") === "layer";
             });
 
                 // Layer Atlas sortieren
             if (Radio.request("Parser", "getTreeType") === "default") {
                 layer = _.sortBy(layer, function (item) {
-                    return item.getName();
+                    return item.get("name");
                 });
             }
             // Notwendig, da jQuery.after() benutzt werden muss wenn die Layer in den Baum gezeichnet werden, um den Layern auf allen Ebenen die volle Breite des Baumes zu geben
@@ -102,12 +102,12 @@ define([
             this.addOverlayViews(layer);
 
             var folder = _.filter(models, function (model) {
-                return model.getType() === "folder";
+                return model.get("type") === "folder";
             });
 
             if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Overlayer" && parentId !== "tree") {
                 folder = _.sortBy(folder, function (item) {
-                    return item.getName();
+                    return item.get("name");
                 });
             }
 
@@ -118,7 +118,7 @@ define([
             this.addOverlayViews(folder);
 
             _.each(folder, function (folder) {
-                this.renderSubTree(folder.getId(), level + 1, levelLimit, false);
+                this.renderSubTree(folder.get("id"), level + 1, levelLimit, false);
             }, this);
         },
         updateOverlayer: function (parentId) {
@@ -126,12 +126,12 @@ define([
         },
         addViewsToItemsOfType: function (type, items, parentId) {
             items = _.filter(items, function (model) {
-                return model.getType() === type;
+                return model.get("type") === type;
             });
 
             if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "tree") {
                 items = _.sortBy(items, function (item) {
-                    return item.getName();
+                    return item.get("name");
                 });
                 if (parentId !== "Overlayer") {
                     items.reverse();
@@ -143,9 +143,9 @@ define([
         },
         addOverlayViews: function (models) {
             _.each(models, function (model) {
-                if (model.getType() === "folder") {
+                if (model.get("type") === "folder") {
                     // Oberste ebene im Themenbaum?
-                    if (model.getParentId() === "tree") {
+                    if (model.get("parentId") === "tree") {
                         new CatalogFolderView({model: model});
                     }
                     else {

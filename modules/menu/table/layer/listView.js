@@ -47,7 +47,7 @@ define(function (require) {
             var models = this.collection.where({type: "layer"});
 
             models = _.sortBy(models, function (model) {
-                return model.getSelectionIDX();
+                return model.get("selectionIDX");
             });
             this.addViews(models);
         },

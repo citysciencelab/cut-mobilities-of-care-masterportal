@@ -18,7 +18,7 @@ define(function (require) {
                     mikrobioContent = {},
                     chemContent = {};
 
-                _.each(this.getGfiContent(), function (element) {
+                _.each(this.get("gfiContent"), function (element) {
                     _.each(element, function (value, key) {
                         if (_.contains(["Entnahmedatum", "Bezirk", "Stadtteil", "Versorgungsgebiet"], key)) {
                             allgemContent[key] = value;

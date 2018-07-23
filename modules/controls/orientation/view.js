@@ -15,9 +15,9 @@ define([
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
-            var showGeolocation = this.model.getIsGeoLocationPossible(),
-                showPoi = this.model.getShowPoi(),
-                poiDistances = this.model.getPoiDistances(),
+            var showGeolocation = this.model.get("isGeoLocationPossible"),
+                showPoi = this.model.get("showPoi"),
+                poiDistances = this.model.get("poiDistances"),
                 channel;
 
             if (showGeolocation) { // Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
@@ -62,7 +62,7 @@ define([
          * und der POI-Button verschwindet.
          */
         toggleBackground: function () {
-            if (this.model.getIsGeolocationDenied() === true) {
+            if (this.model.get("isGeolocationDenied") === true) {
                 this.$el.find(".glyphicon-map-marker").css("background-color", "rgb(221, 221, 221)");
                 this.$el.find(".glyphicon-record").css("display", "none");
             }

@@ -42,15 +42,15 @@ define([
             });
             this.render();
 
-            this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleColor(this.model, this.model.get("isOutOfRange"));
         },
 
         render: function () {
             var attr = this.model.toJSON(),
-                selector = $("#" + this.model.getParentId());
+                selector = $("#" + this.model.get("parentId"));
 
             selector.prepend(this.$el.html(this.template(attr)));
-            if (this.model.getIsSettingVisible() === true) {
+            if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
             }
         },
@@ -59,7 +59,7 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            if (this.model.getIsSettingVisible() === true) {
+            if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
             }
         },
@@ -73,7 +73,7 @@ define([
             // Animation Zahnrad
             this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
+            if (this.model.get("isSettingVisible") === false) {
                 this.$el.find(".layer-settings").slideUp("slow", function () {
                     $(this).remove();
                 });

@@ -21,7 +21,7 @@ define([
             });
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "download") {
+            if (args[2].get("id") === "download") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -423,18 +423,6 @@ define([
                 sourceProj: proj4(sourceProj),
                 destProj: proj4(destProj)
             };
-        },
-
-        getId: function () {
-            return this.get("id");
-        },
-
-        getName: function () {
-            return this.get("title");
-        },
-
-        getGlyphicon: function () {
-            return this.get("glyphicon");
         }
     });
 

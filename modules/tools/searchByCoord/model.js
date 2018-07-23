@@ -141,7 +141,7 @@ define(function (require) {
             }
         },
         setStatus: function (args) {
-            if (args[2].getId() === "searchByCoord") {
+            if (args[2].get("id") === "searchByCoord") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
