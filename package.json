@@ -11,8 +11,7 @@
     "test": "mocha test/end2end/TestRunner.js",
     "installDependencies": "npm install --verbose",
     "installBrowserMqtt": "cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js",
-    "installGrunt": "npm install -g grunt-cli",
-    "installMasterportal": "npm run installDependencies && npm run installBrowserMqtt && npm run installGrunt"
+    "installMasterportal": "npm run installDependencies && npm run installBrowserMqtt"
   },
   "dependencies": {
     "backbone": "1.x",
@@ -35,8 +34,7 @@
     "requirejs-text": "2.x",
     "underscore": "1.x",
     "video.js": "6.x",
-    "videojs-flash": "^2.1.0",
-    "webpack": "^4.16.1"
+    "videojs-flash": "^2.1.0"
   },
   "devDependencies": {
     "build-config": "git+https://bitbucket.org/lgv-g12/build-config.git",
