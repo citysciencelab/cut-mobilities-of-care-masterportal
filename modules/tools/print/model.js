@@ -287,15 +287,13 @@ define([
             }, this);
         },
 
-        /**
-         *
-         */
         setLayer: function (layer) {
             var features = [],
                 featureStyles = {},
                 type,
                 styles,
-                style;
+                style,
+                printStyleObj = {};
 
             if (!_.isUndefined(layer)) {
                 // Alle features die eine Kreis-Geometrie haben
@@ -318,28 +316,17 @@ define([
                         }
                     });
 
-                    type = feature.getGeometry().getType(),
-                    styles = feature.getStyleFunction().call(feature),
-                    style = styles[0];
+
+                    type = feature.getGeometry().getType();
+                    styles = !_.isUndefined(feature.getStyleFunction()) ? feature.getStyleFunction().call(feature) : layer.getStyleFunction().call(feature);
+                    style = _.isArray(styles) ? styles[0] : styles;
+                    console.log(layer.get("name"));
+                    console.log(styles);
+                    console.log(type);
                     // Punkte
-                    if (type === "Point") {
-                        // Punkte ohne Text
-                        if (style.getText() === null) {
-                            featureStyles[index] = {
-                                fillColor: this.getColor(style.getImage().getFill().getColor()).color,
-                                fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
-                                pointRadius: style.getImage().getRadius(),
-                                strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
-                                strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
-                            };
-                        }
-                        // Texte
-                        else {
-                            featureStyles[index] = {
-                                label: style.getText().getText(),
-                                fontColor: this.getColor(style.getText().getFill().getColor()).color
-                            };
-                        }
+                    if (type === "Point" || type === "MultiPoint") {
+                        printStyleObj = this.createPointStyleForPrint(style, layer);
+                        featureStyles[index] = printStyleObj;
                     }
                     // Polygone oder Linestrings
                     else {
@@ -350,7 +337,9 @@ define([
                             strokeWidth: style.getStroke().getWidth()
                         };
                     }
+
                 }, this);
+
                 this.push("layerToPrint", {
                     type: "Vector",
                     styles: featureStyles,
@@ -361,20 +350,73 @@ define([
                 });
             }
         },
+        createPointStyleForPrint: function (style, layer) {
+            var pointStyleObject = {},
+                imgPath = this.createImagePath(),
+                imgName = style.getImage() instanceof ol.style.Icon ? style.getImage().getSrc() : undefined;
 
-        /**
-         *
-         */
+            // Punkte ohne Text
+            if (_.isNull(style.getText()) || _.isUndefined(style.getText())) {
+                // style image is an Icon
+                if (!_.isUndefined(imgName)) {
+                    // get imagename from src path
+                    imgName = imgName.match(/(?:[^/]+)$/g)[0];
+                    imgPath += imgName;
+                    pointStyleObject = {
+                        externalGraphic: imgPath,
+                        graphicWidth: style.getImage().getImageSize()[0] * style.getImage().getScale(),
+                        graphicHeight: style.getImage().getImageSize()[1] * style.getImage().getScale(),
+                        graphicXOffset: -style.getImage().getAnchor()[0],
+                        graphicYOffset: -style.getImage().getAnchor()[1]
+                    };
+                }
+                // style is an
+                else {
+                    pointStyleObject = {
+                        fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                        fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                        pointRadius: style.getImage().getRadius(),
+                        strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                        strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
+                    };
+                }
+            }
+            // Texte
+            else {
+                pointStyleObject = {
+                    label: style.getText().getText(),
+                    fontColor: this.getColor(style.getText().getFill().getColor()).color
+                };
+            }
+            return pointStyleObject;
+        },
+        createImagePath: function () {
+            var imgPath = window.location.origin + "/lgv-config/img/";
+
+            // for local IDE take path to
+            if (imgPath.indexOf("localhost") !== -1) {
+                imgPath = "http://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/";
+            }
+            return imgPath;
+        },
+
         setSpecification: function (gfiPosition) {
             var layers = Radio.request("Map", "getLayers").getArray(),
                 animationLayer = _.filter(layers, function (lay) {
                     return lay.get("name") === "animationLayer";
+                }),
+                wfsLayer = _.filter(layers, function (lay) {
+                    return lay.get("typ") === "WFS" && lay.get("visible") === true;
                 }),
                 specification;
 
             if (animationLayer.length > 0) {
                 this.setLayer(animationLayer[0]);
             }
+            console.log(wfsLayer);
+            _.each(wfsLayer, function (layer) {
+                this.setLayer(layer);
+            }, this);
 
             specification = {
                 // layout: $("#layoutField option:selected").html(),
