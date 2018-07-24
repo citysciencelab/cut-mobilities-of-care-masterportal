@@ -8,7 +8,7 @@ if (window.location.search !== "") {
     index = window.location.href.indexOf("?");
     strippedLocation = window.location.href.slice(0, index);
 
-    configPath = strippedLocation + "config";
+    configPath = strippedLocation.substring(0, strippedLocation.lastIndexOf("/") + 1) + "config";
 }
 
 scriptTagsArray.forEach(function (scriptTag) {
