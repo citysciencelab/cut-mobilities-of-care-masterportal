@@ -52,15 +52,12 @@ define(function (require) {
                 this.set("printurl", printurl);
                 return Config.proxyURL + "?url=" + printurl + "/info.json";
             }
-
             return "undefined"; // muss String übergeben, sonst Laufzeitfehler
-
         },
 
         //
         initialize: function () {
             this.setConfigParams();
-
             this.listenTo(this, {
                 "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
                 "change:specification": this.getPDFURL
@@ -285,12 +282,18 @@ define(function (require) {
         setLayer: function (layer) {
             var features = [],
                 featureStyles = {},
-                type,
-                styles,
-                style,
-                printStyleObj = {};
+                printStyleObj = {},
+                layerId = layer.get("id"),
+                layerModel,
+                isClustered,
+                styleModel;
 
             if (!_.isUndefined(layer)) {
+                if (!_.isUndefined(layerId)) {
+                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+                    isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
+                    styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+                }
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
@@ -300,23 +303,41 @@ define(function (require) {
                 });
 
                 _.each(layer.getSource().getFeatures(), function (feature, index) {
+                    var type = feature.getGeometry().getType(),
+                        styles = !_.isUndefined(feature.getStyleFunction()) ? feature.getStyleFunction().call(feature) : styleModel.createStyle(feature, isClustered),
+                        style = _.isArray(styles) ? styles[0] : styles,
+                        coordinates = feature.getGeometry().getCoordinates();
+
+                    // make MultiPoint to Point
+                    if (type === "MultiPoint") {
+                        type = "Point";
+                        coordinates = coordinates[0];
+                    }
+                    console.log({
+                        type: "Feature",
+                        properties: {
+                            _style: index
+                        },
+                        geometry: {
+                            coordinates: coordinates,
+                            type: type
+                        }
+                    });
+                    // coordinates = this.coordinatesToInt(coordinates);
                     features.push({
                         type: "Feature",
                         properties: {
                             _style: index
                         },
                         geometry: {
-                            coordinates: feature.getGeometry().getCoordinates(),
-                            type: feature.getGeometry().getType()
+                            coordinates: coordinates,
+                            type: type
                         }
                     });
 
 
-                    type = feature.getGeometry().getType();
-                    styles = !_.isUndefined(feature.getStyleFunction()) ? feature.getStyleFunction().call(feature) : layer.getStyleFunction().call(feature);
-                    style = _.isArray(styles) ? styles[0] : styles;
                     // Punkte
-                    if (type === "Point" || type === "MultiPoint") {
+                    if (type === "Point") {
                         printStyleObj = this.createPointStyleForPrint(style);
                         featureStyles[index] = printStyleObj;
                     }
@@ -342,6 +363,14 @@ define(function (require) {
                 });
             }
         },
+        coordinatesToInt: function (coords) {
+            var intCoords = [];
+
+            _.each(coords, function (coord) {
+                intCoords.push(parseInt(coord, 10));
+            });
+            return intCoords;
+        },
         createPointStyleForPrint: function (style) {
             var pointStyleObject = {},
                 imgPath = this.createImagePath(),
@@ -356,10 +385,10 @@ define(function (require) {
                     imgPath += imgName;
                     pointStyleObject = {
                         externalGraphic: imgPath,
-                        graphicWidth: style.getImage().getImageSize()[0] * style.getImage().getScale(),
-                        graphicHeight: style.getImage().getImageSize()[1] * style.getImage().getScale(),
-                        graphicXOffset: -style.getImage().getAnchor()[0],
-                        graphicYOffset: -style.getImage().getAnchor()[1]
+                        graphicWidth: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[0] * style.getImage().getScale() : 10,
+                        graphicHeight: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[1] * style.getImage().getScale() : 10,
+                        graphicXOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[0] : 0,
+                        graphicYOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[1] : 0
                     };
                 }
                 // style is an Circle or Point without Icon
@@ -380,6 +409,7 @@ define(function (require) {
                     fontColor: this.getColor(style.getText().getFill().getColor()).color
                 };
             }
+            console.log(pointStyleObject);
             return pointStyleObject;
         },
         createImagePath: function () {
@@ -394,11 +424,11 @@ define(function (require) {
 
         setSpecification: function (gfiPosition) {
             var layers = Radio.request("Map", "getLayers").getArray(),
-                animationLayer = _.filter(layers, function (lay) {
-                    return lay.get("name") === "animationLayer";
+                animationLayer = _.filter(layers, function (layer) {
+                    return layer.get("name") === "animationLayer";
                 }),
-                wfsLayer = _.filter(layers, function (lay) {
-                    return lay.get("typ") === "WFS" && lay.get("visible") === true;
+                wfsLayer = _.filter(layers, function (layer) {
+                    return layer.get("typ") === "WFS" && layer.get("visible") === true;
                 }),
                 specification;
 
