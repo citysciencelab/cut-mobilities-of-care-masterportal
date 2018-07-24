@@ -1,6 +1,5 @@
 define(function (require) {
     var $ = require("jquery"),
-        ol = require("openlayers"),
         GazetteerModel;
 
     require("modules/searchbar/model");
@@ -253,6 +252,7 @@ define(function (require) {
                 coordinates = $(hit).find("gml\\:posList,posList")[0].textContent.split(" ");
                 hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
                 hitNames.push(hitName);
+
                 // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: hitName,
@@ -323,8 +323,9 @@ define(function (require) {
                 _.each(this.get("houseNumbers"), function (houseNumber) {
                     address = houseNumber.name.replace(/ /g, "");
                     number = houseNumber.adress.housenumber + houseNumber.adress.affix;
+
                     if (number === this.get("pastedHouseNumber")) {
-                        Radio.trigger("Searchbar", "pushHits", "hitList", houseNumber);
+                        Radio.trigger("Searchbar", "pushHits", "hitList", houseNumber, "paste");
                     }
                 }, this);
                 this.unset("pastedHouseNumber");
