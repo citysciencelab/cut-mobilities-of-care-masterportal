@@ -38,7 +38,7 @@ require.config({
         modules: "../modules",
         moment: "../node_modules/moment/min/moment-with-locales.min",
         mqtt: "../node_modules/mqtt/browserMqtt",
-        openlayers: "../node_modules/openlayers/dist/ol",
+        openlayers: "../node_modules/openlayers/dist/ol-debug",
         pdfmake: "../node_modules/pdfmake/build/pdfmake",
         proj4: "../node_modules/proj4/dist/proj4",
         slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
