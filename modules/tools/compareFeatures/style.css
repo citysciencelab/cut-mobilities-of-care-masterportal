@@ -105,6 +105,7 @@
     table-layout: fixed;
     width: 100%;
     overflow:hidden;
+    word-wrap: break-word;
 }
 .compare-feature-modal td,
 .compare-feature-modal thead th {

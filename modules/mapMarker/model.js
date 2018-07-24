@@ -168,7 +168,7 @@ define(function (require) {
          * @return {void}
          */
         hideFeature: function () {
-            this.this.get("polygon").getSource().clear();
+            this.get("polygon").getSource().clear();
         },
 
         // setter for zoomLevel

@@ -1,5 +1,5 @@
 .portal-title {
-    margin-left: 10px;
+    padding-left: 10px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -9,6 +9,7 @@
     font-family: 'UniversNextW01-Regular','Arial Narrow',Arial,sans-serif;
     vertical-align: middle;
     line-height: 50px;
+    float: left;
 }
 
 .portal-title > a > img {
