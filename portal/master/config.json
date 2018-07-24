@@ -83,11 +83,6 @@
         "glyphicon": "glyphicon-list",
         "isInitOpen": false
       },
-      "schulwegrouting": {
-        "name": "Schulweg-Routing",
-        "glyphicon": "glyphicon-filter",
-        "layerId": "11616"
-      },
       "filter":
       {
         "name": "Filter",
@@ -163,6 +158,11 @@
         "glyphicon": "glyphicon-wrench",
         "children":
         {
+          "schulwegrouting": {
+            "name": "Schulweg-Routing",
+            "glyphicon": "glyphicon-filter",
+            "layerId": "11616"
+          },
           "einwohnerabfrage": {
             "name": "Einwohneranzahl abfragen",
             "glyphicon": "glyphicon-wrench"
