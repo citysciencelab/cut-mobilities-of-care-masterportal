@@ -2,7 +2,7 @@ define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
         Radio = require("backbone.radio"),
-        Moment = require("moment"),
+        moment = require("moment"),
         VerkehrsStaerkenRadTheme;
 
     VerkehrsStaerkenRadTheme = Theme.extend({
@@ -147,7 +147,7 @@ define(function (require) {
                     r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
                 tempArr.push({
-                    timestamp: Moment().day("Monday").year(year).week(weeknumber).toDate(),
+                    timestamp: moment().day("Monday").year(year).week(weeknumber).toDate(),
                     total: total,
                     r_in: r_in,
                     r_out: r_out
@@ -190,10 +190,10 @@ define(function (require) {
 
         // setter for tageslinieDataset
         setTageslinieDataset: function (data) {
-            var datum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
+            var datum = moment(data[0].timestamp).format("DD.MM.YYYY"),
                 graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
-                    val.timestamp = Moment(val.timestamp).format("HH:mm") + " Uhr";
+                    val.timestamp = moment(val.timestamp).format("HH:mm") + " Uhr";
                     return val;
                 }),
                 legendArray = this.getLegendAttributes(data[0]);
@@ -209,11 +209,11 @@ define(function (require) {
 
         // setter for WochenlinieDataset
         setWochenlinieDataset: function (data) {
-            var startDatum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
-                endeDatum = Moment(_.last(data).timestamp).format("DD.MM.YYYY"),
+            var startDatum = moment(data[0].timestamp).format("DD.MM.YYYY"),
+                endeDatum = moment(_.last(data).timestamp).format("DD.MM.YYYY"),
                 graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
-                    val.timestamp = Moment(val.timestamp).format("DD.MM.YYYY");
+                    val.timestamp = moment(val.timestamp).format("DD.MM.YYYY");
                     return val;
                 }),
                 legendArray = this.getLegendAttributes(data[0]);
@@ -229,10 +229,10 @@ define(function (require) {
 
         // setter for JahrgangslinieDataset
         setJahreslinieDataset: function (data) {
-            var year = Moment(data[0].timestamp).format("YYYY"),
+            var year = moment(data[0].timestamp).format("YYYY"),
                 graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
-                    val.timestamp = Moment(val.timestamp).format("w");
+                    val.timestamp = moment(val.timestamp).format("w");
                     return val;
                 }),
                 legendArray = this.getLegendAttributes(data[0]);

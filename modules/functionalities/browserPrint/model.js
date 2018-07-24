@@ -1,6 +1,6 @@
 define(function (require) {
     var Config = require("config"),
-        momentJS = require("moment"),
+        moment = require("moment"),
         pdfMake = require("pdfmake"),
         browserPrintModel;
 
@@ -68,7 +68,7 @@ define(function (require) {
         },
         print: function (name, defs, title, mode) {
             var completeDefs,
-                date = momentJS(new Date()).format("DD.MM.YYYY");
+                date = moment(new Date()).format("DD.MM.YYYY");
 
             if (!_.isUndefined(title)) {
                 this.setTitleText(title);

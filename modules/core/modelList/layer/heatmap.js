@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Ol = require("openlayers"),
+        ol = require("openlayers"),
         $ = require("jquery"),
         HeatmapLayer;
 
@@ -40,11 +40,11 @@ define(function (require) {
         },
 
         /**
-         * creates Ol.source.Vector as LayerSource
+         * creates ol.source.Vector as LayerSource
          * @returns {void}
          */
         createLayerSource: function () {
-            this.setLayerSource(new Ol.source.Vector());
+            this.setLayerSource(new ol.source.Vector());
         },
 
         /**
@@ -52,7 +52,7 @@ define(function (require) {
          * @returns {void}
          */
         createLayer: function () {
-            this.setLayer(new Ol.layer.Heatmap({
+            this.setLayer(new ol.layer.Heatmap({
                 source: this.get("layerSource"),
                 name: this.get("name"),
                 typ: this.get("typ"),
