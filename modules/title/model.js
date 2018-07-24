@@ -52,5 +52,5 @@ define(function (require) {
         }
     });
 
-    return new TitleModel();
+    return TitleModel;
 });
