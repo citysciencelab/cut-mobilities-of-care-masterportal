@@ -45,7 +45,7 @@ define(function (require) {
                     url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
                     context: this,
                     success: function (data) {
-                        var domNodes = this.$.parseHTML(data);
+                        var domNodes = $.parseHTML(data);
 
                         // bei domNodes.length < 3 = nur der xml-header (?xml version='1.0' encoding='UTF-8'?) ohne html
                         if (domNodes.length > 3) {
