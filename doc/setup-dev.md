@@ -40,18 +40,11 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 
 Dann in der Admin-cmd ausführen:
 ```
-# npm install
+# npm run installMasterportal
 ```
 
 
-Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /node_modules, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
-
-```
-# npm run installBrowserMqtt
-```
-
-
-Installiert das Zusatzpackage browserMqtt.js als Erweiterung für MQTT.js. Dies ist zur Live-Aktualisierung des SensorLayers notwendig.
+Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /node_modules, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json. Außerdem wird das Zusatzpackage browserMqtt.js als Erweiterung für MQTT.js installiert, das zur Live-Aktualisierung des SensorLayers notwendig ist.
 
 ## Grunt
 [Grunt](http://gruntjs.com/) in der Admin-cmd global installieren:
@@ -131,15 +124,8 @@ für alle npm-Pakete:
 für build-config und lgv-config:
 
 ```
-# npm install
+# npm run installMasterportal
 ```
 
 Vorsicht: Explizites Aufrufen von npm install build-config installiert ein falsches build-config.
-
-zur Nutzung des SensorLayers
-
-```
-# npm run installBrowserMqtt
-```
-
 
