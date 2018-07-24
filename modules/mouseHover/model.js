@@ -65,7 +65,7 @@ define(function (require) {
                 layerIds = _.pluck(mouseHoverInfos, "id");
 
             evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-                if (_.contains(layerIds, layer.get("id"))) {
+                if (layer !== null && _.contains(layerIds, layer.get("id"))) {
                     features.push({
                         feature: feature,
                         layer: layer
