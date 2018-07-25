@@ -3,7 +3,7 @@ define(function (require) {
         View = require("modules/layerinformation/view"),
         $ = require("jquery"),
         Config = require("config"),
-        Moment = require("moment"),
+        moment = require("moment"),
         LayerInformation;
 
     LayerInformation = Backbone.Model.extend({
@@ -140,7 +140,7 @@ define(function (require) {
                     else if (publicationDateTime) {
                         dateTime = publicationDateTime;
                     }
-                    return Moment(dateTime).format("DD.MM.YYYY");
+                    return moment(dateTime).format("DD.MM.YYYY");
                 }(),
                 "title": function () {
                     var ci_Citation = $("gmd\\:CI_Citation,CI_Citation", xmlDoc)[0],

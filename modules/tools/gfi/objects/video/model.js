@@ -1,6 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        VideoJS = require("videojs"),
+    var videojs = require("videojs"),
         VideoModel;
 
     /**
@@ -40,7 +39,7 @@ define(function (require) {
         startStreaming: function (callback) {
             var videoEle = document.getElementById(this.get("id"));
 
-            VideoJS(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
+            videojs(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
         },
 
         /**
@@ -56,7 +55,7 @@ define(function (require) {
 
         /**
          * Zerstört das Modul vollständig
-         * stop VideoJS
+         * stop videojs
          * remove Radio-Listener
          * remove Backbone-Listener
          * clear Attributes
@@ -66,7 +65,7 @@ define(function (require) {
         destroy: function () {
             var videoEle = document.getElementById(this.get("id"));
 
-            VideoJS(videoEle).dispose();
+            videojs(videoEle).dispose();
             this.stopListening();
             this.off();
             this.clear();

@@ -3,7 +3,7 @@ define(function (require) {
     var $ = require("jquery"),
         ol = require("openlayers"),
         SnippetDropdownModel = require("modules/snippets/dropdown/model"),
-        Moment = require("moment"),
+        moment = require("moment"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         Einwohnerabfrage;
 
@@ -331,7 +331,7 @@ define(function (require) {
                     dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                 }
             });
-            return Moment(dateTime).format("DD.MM.YYYY");
+            return moment(dateTime).format("DD.MM.YYYY");
         },
 
         /**
