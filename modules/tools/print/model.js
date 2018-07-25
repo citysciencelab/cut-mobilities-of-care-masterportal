@@ -51,15 +51,12 @@ define(function (require) {
                 this.set("printurl", printurl);
                 return Config.proxyURL + "?url=" + printurl + "/info.json";
             }
-
             return "undefined"; // muss String übergeben, sonst Laufzeitfehler
-
         },
 
         //
         initialize: function () {
             this.setConfigParams();
-
             this.listenTo(this, {
                 "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
                 "change:specification": this.getPDFURL
@@ -215,9 +212,13 @@ define(function (require) {
         },
 
         getLayersForPrint: function () {
+            var drawLayer = Radio.request("Draw", "getLayer");
+
             this.set("layerToPrint", []);
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            this.setLayer(Radio.request("Draw", "getLayer"));
+            if (drawLayer.getSource().getFeatures().length > 0) {
+                this.setLayer(drawLayer);
+            }
             this.getGFIForPrint();
         },
 
@@ -283,11 +284,16 @@ define(function (require) {
         setLayer: function (layer) {
             var features = [],
                 featureStyles = {},
-                type,
-                styles,
-                style;
+                printStyleObj = {},
+                layerId = layer.get("id"),
+                layerModel,
+                isClustered,
+                styleModel;
 
-            if (!_.isUndefined(layer)) {
+            if (!_.isUndefined(layer) && !_.isUndefined(layerId)) {
+                layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+                isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
+                styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
@@ -297,39 +303,26 @@ define(function (require) {
                 });
 
                 _.each(layer.getSource().getFeatures(), function (feature, index) {
+                    var type = feature.getGeometry().getType(),
+                        styles = !_.isUndefined(feature.getStyleFunction()) ? feature.getStyleFunction().call(feature) : styleModel.createStyle(feature, isClustered),
+                        style = _.isArray(styles) ? styles[0] : styles,
+                        coordinates = feature.getGeometry().getCoordinates();
+
                     features.push({
                         type: "Feature",
                         properties: {
                             _style: index
                         },
                         geometry: {
-                            coordinates: feature.getGeometry().getCoordinates(),
-                            type: feature.getGeometry().getType()
+                            coordinates: coordinates,
+                            type: type
                         }
                     });
 
-                    type = feature.getGeometry().getType();
-                    styles = feature.getStyleFunction().call(feature);
-                    style = styles[0];
                     // Punkte
-                    if (type === "Point") {
-                        // Punkte ohne Text
-                        if (style.getText() === null) {
-                            featureStyles[index] = {
-                                fillColor: this.getColor(style.getImage().getFill().getColor()).color,
-                                fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
-                                pointRadius: style.getImage().getRadius(),
-                                strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
-                                strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
-                            };
-                        }
-                        // Texte
-                        else {
-                            featureStyles[index] = {
-                                label: style.getText().getText(),
-                                fontColor: this.getColor(style.getText().getFill().getColor()).color
-                            };
-                        }
+                    if (type === "Point" || type === "MultiPoint") {
+                        printStyleObj = this.createPointStyleForPrint(style);
+                        featureStyles[index] = printStyleObj;
                     }
                     // Polygone oder Linestrings
                     else {
@@ -340,7 +333,9 @@ define(function (require) {
                             strokeWidth: style.getStroke().getWidth()
                         };
                     }
+
                 }, this);
+
                 this.push("layerToPrint", {
                     type: "Vector",
                     styles: featureStyles,
@@ -351,18 +346,73 @@ define(function (require) {
                 });
             }
         },
+        createPointStyleForPrint: function (style) {
+            var pointStyleObject = {},
+                imgPath = this.createImagePath(),
+                imgName = style.getImage() instanceof ol.style.Icon ? style.getImage().getSrc() : undefined;
+
+            // Punkte ohne Text
+            if (_.isNull(style.getText()) || _.isUndefined(style.getText())) {
+                // style image is an Icon
+                if (!_.isUndefined(imgName)) {
+                    // get imagename from src path
+                    imgName = imgName.match(/(?:[^/]+)$/g)[0];
+                    imgPath += imgName;
+                    imgPath = encodeURI(imgPath);
+                    pointStyleObject = {
+                        externalGraphic: imgPath,
+                        graphicWidth: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[0] * style.getImage().getScale() : 20,
+                        graphicHeight: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[1] * style.getImage().getScale() : 20,
+                        graphicXOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[0] : 0,
+                        graphicYOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[1] : 0
+                    };
+                }
+                // style is an Circle or Point without Icon
+                else {
+                    pointStyleObject = {
+                        fillColor: this.getColor(style.getImage().getFill().getColor()).color,
+                        fillOpacity: this.getColor(style.getImage().getFill().getColor()).opacity,
+                        pointRadius: style.getImage().getRadius(),
+                        strokeColor: this.getColor(style.getImage().getFill().getColor()).color,
+                        strokeOpacity: this.getColor(style.getImage().getFill().getColor()).opacity
+                    };
+                }
+            }
+            // Texte
+            else {
+                pointStyleObject = {
+                    label: style.getText().getText(),
+                    fontColor: this.getColor(style.getText().getFill().getColor()).color
+                };
+            }
+            return pointStyleObject;
+        },
+        createImagePath: function () {
+            var imgPath = window.location.origin + "/lgv-config/img/";
+
+            // for local IDE take path to
+            if (imgPath.indexOf("localhost") !== -1) {
+                imgPath = "http://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/";
+            }
+            return imgPath;
+        },
 
         setSpecification: function (gfiPosition) {
             var layers = Radio.request("Map", "getLayers").getArray(),
-                animationLayer = _.filter(layers, function (lay) {
-                    return lay.get("name") === "animationLayer";
+                animationLayer = _.filter(layers, function (layer) {
+                    return layer.get("name") === "animationLayer";
+                }),
+                wfsLayer = _.filter(layers, function (layer) {
+                    return layer.get("typ") === "WFS" && layer.get("visible") === true && layer.getSource().getFeatures().length > 0;
                 }),
                 specification;
 
             if (animationLayer.length > 0) {
                 this.setLayer(animationLayer[0]);
             }
-
+            _.each(wfsLayer, function (layer) {
+                this.setLayer(layer);
+            }, this);
             specification = {
                 // layout: $("#layoutField option:selected").html(),
                 layout: this.get("layout").name,
@@ -466,6 +516,7 @@ define(function (require) {
          * @returns {void}
          */
         getPDFURL: function () {
+
             $.ajax({
                 url: Config.proxyURL + "?url=" + this.get("createURL"),
                 type: "POST",

@@ -5,19 +5,19 @@ define(function (require) {
         PrintView;
 
     PrintView = Backbone.View.extend({
-        model: new Print(),
-        className: "win-body",
-        template: _.template(PrintWinTemplate),
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:scale": this.render
-            });
-        },
         events: {
             "change #layoutField": "setLayout",
             "change #scaleField": "setScale",
             "click button": "createPDF"
         },
+        initialize: function () {
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin change:scale": this.render
+            });
+        },
+        model: new Print(),
+        className: "win-body",
+        template: _.template(PrintWinTemplate),
         setLayout: function (evt) {
             this.model.setLayout(evt.target.selectedIndex);
         },
@@ -42,6 +42,5 @@ define(function (require) {
             return this;
         }
     });
-
     return PrintView;
 });
