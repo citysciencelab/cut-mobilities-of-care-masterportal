@@ -1,8 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Template = require("text!modules/title/template.html"),
+    var Template = require("text!modules/title/template.html"),
         Model = require("modules/title/model"),
         $ = require("jquery"),
         TitleView;

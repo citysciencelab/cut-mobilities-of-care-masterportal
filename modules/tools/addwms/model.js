@@ -6,13 +6,13 @@
 @Autor: RL
 **/
 
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers"
-], function (Backbone, Radio, ol) {
+define(function (require) {
+    var ol = require("openlayers"),
+        $ = require("jquery"),
+        AddWMSModel;
 
-    var AddWMSModel = Backbone.Model.extend({
+    AddWMSModel = Backbone.Model.extend({
+        defaults: {},
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.checkStatus
@@ -30,16 +30,16 @@ define([
         // Diese funktion wird benutzt, um Fehlermeldungen im WMSView darzustellen
         displayError: function (text) {
             if (text === "" || typeof text === "undefined") {
-                text = "Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!";
+                $(".addWMS.win-body").prepend("<div class=\"addwms_error\">Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!</div>");
             }
             $(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
         },
 
         // Lädt die Capabillities, parsed sie und extrahiert die Daten-Layer
         loadAndAddLayers: function () {
-            $(".addwms_error").remove();
             var url = $("#wmsUrl").val();
 
+            $(".addwms_error").remove();
             if (url === "") {
                 this.displayError("Bitte die URL eines WMS in das Textfeld eingeben!");
                 return;
@@ -50,11 +50,15 @@ define([
                 context: this,
                 url: Radio.request("Util", "getProxyURL", url) + "?request=GetCapabilities&service=WMS",
                 success: function (data) {
+                    var parser,
+                        uniqId,
+                        capability;
+
                     Radio.trigger("Util", "hideLoader");
                     try {
-                        var parser = new ol.format.WMSCapabilities(),
-                            uniqId = _.uniqueId("external_"),
-                            capability = parser.read(data);
+                        parser = new ol.format.WMSCapabilities();
+                        uniqId = _.uniqueId("external_");
+                        capability = parser.read(data);
 
                         this.setWMSVersion(capability.version);
                         this.setWMSUrl(Radio.request("Util", "getProxyURL", url));
@@ -102,6 +106,6 @@ define([
 
     });
 
-    return new AddWMSModel();
+    return AddWMSModel;
 
 });

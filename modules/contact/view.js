@@ -1,10 +1,10 @@
-define([
-    "backbone",
-    "modules/contact/model",
-    "text!modules/contact/template.html"
-], function (Backbone, ContactModel, Template) {
+define(function (require) {
+    var ContactModel = require("modules/contact/model"),
+        Template = require("text!modules/contact/template.html"),
+        $ = require("jquery"),
+        formularView;
 
-    var formularView = Backbone.View.extend({
+    formularView = Backbone.View.extend({
         className: "win-body",
         model: new ContactModel(),
         template: _.template(Template),
@@ -22,20 +22,21 @@ define([
             "click .contactButton": "send"
         },
         render: function () {
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
+            var attr = this.model.toJSON();
 
+            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.setMaxHeight();
                 this.delegateEvents();
             }
+            return this;
         },
         setMaxHeight: function () {
-            var height = $(window).height() - 130;
+            var height = window.offsetHeight - 130;
 
-            $(".win-body").css("max-height", height);
-            $(".win-body").css("max-width", 400);
+            this.$el.css("max-height", height);
+            this.$el.css("max-width", 400);
         },
         setUserAttributes: function (evt) {
             this.model.setUserAttributes(evt);
@@ -44,8 +45,9 @@ define([
             this.model.send();
         },
         showValidity: function () {
+            var errors = this.model.validationError;
+
             if (_.isObject(this.model.validationError)) {
-                var errors = this.model.validationError;
 
                 this.toggleUserNameValid(errors.userName);
                 this.toggleUserEmailValid(errors.userEmail);
@@ -63,64 +65,64 @@ define([
         },
         toggleSendButton: function (val) {
             if (val === true) {
-                $(".contactButton").removeClass("disabled");
+                this.$(".contactButton").removeClass("disabled");
             }
             else {
-                $(".contactButton").addClass("disabled");
+                this.$(".contactButton").addClass("disabled");
             }
         },
         toggleUserNameValid: function (val) {
             if (val === true) {
-                $("#contactNameDiv").addClass("has-success");
-                $("#contactNameDiv").removeClass("has-error");
-                $("#contactNameFeedback").removeClass("contactHide");
-                $("#contactNameLabel").addClass("contactHide");
+                this.$("#contactNameDiv").addClass("has-success");
+                this.$("#contactNameDiv").removeClass("has-error");
+                this.$("#contactNameFeedback").removeClass("contactHide");
+                this.$("#contactNameLabel").addClass("contactHide");
             }
             else {
-                $("#contactNameDiv").removeClass("has-success");
-                $("#contactNameDiv").addClass("has-error");
-                $("#contactNameFeedback").addClass("contactHide");
-                $("#contactNameLabel").removeClass("contactHide");
+                this.$("#contactNameDiv").removeClass("has-success");
+                this.$("#contactNameDiv").addClass("has-error");
+                this.$("#contactNameFeedback").addClass("contactHide");
+                this.$("#contactNameLabel").removeClass("contactHide");
             }
         },
         toggleUserEmailValid: function (val) {
             if (val === true) {
-                $("#contactEmailDiv").addClass("has-success");
-                $("#contactEmailDiv").removeClass("has-error");
-                $("#contactEmailFeedback").removeClass("contactHide");
-                $("#contactEmailLabel").addClass("contactHide");
+                this.$("#contactEmailDiv").addClass("has-success");
+                this.$("#contactEmailDiv").removeClass("has-error");
+                this.$("#contactEmailFeedback").removeClass("contactHide");
+                this.$("#contactEmailLabel").addClass("contactHide");
             }
             else {
-                $("#contactEmailDiv").removeClass("has-success");
-                $("#contactEmailDiv").addClass("has-error");
-                $("#contactEmailFeedback").addClass("contactHide");
-                $("#contactEmailLabel").removeClass("contactHide");
+                this.$("#contactEmailDiv").removeClass("has-success");
+                this.$("#contactEmailDiv").addClass("has-error");
+                this.$("#contactEmailFeedback").addClass("contactHide");
+                this.$("#contactEmailLabel").removeClass("contactHide");
             }
         },
         toggleUserTelValid: function (val) {
             if (val === true) {
-                $("#contactTelDiv").addClass("has-success");
-                $("#contactTelDiv").removeClass("has-error");
-                $("#contactTelFeedback").removeClass("contactHide");
-                $("#contactTelLabel").addClass("contactHide");
+                this.$("#contactTelDiv").addClass("has-success");
+                this.$("#contactTelDiv").removeClass("has-error");
+                this.$("#contactTelFeedback").removeClass("contactHide");
+                this.$("#contactTelLabel").addClass("contactHide");
             }
             else {
-                $("#contactTelDiv").removeClass("has-success");
-                $("#contactTelDiv").addClass("has-error");
-                $("#contactTelFeedback").addClass("contactHide");
-                $("#contactTelLabel").removeClass("contactHide");
+                this.$("#contactTelDiv").removeClass("has-success");
+                this.$("#contactTelDiv").addClass("has-error");
+                this.$("#contactTelFeedback").addClass("contactHide");
+                this.$("#contactTelLabel").removeClass("contactHide");
             }
         },
         toggleTextValid: function (val) {
             if (val === true) {
-                $("#textDiv").addClass("has-success");
-                $("#textDiv").removeClass("has-error");
-                $("#contactTextFeedback").removeClass("contactHide");
+                this.$("#textDiv").addClass("has-success");
+                this.$("#textDiv").removeClass("has-error");
+                this.$("#contactTextFeedback").removeClass("contactHide");
             }
             else {
-                $("#textDiv").removeClass("has-success");
-                $("#textDiv").addClass("has-error");
-                $("#contactTextFeedback").addClass("contactHide");
+                this.$("#textDiv").removeClass("has-success");
+                this.$("#textDiv").addClass("has-error");
+                this.$("#contactTextFeedback").addClass("contactHide");
             }
         }
     });

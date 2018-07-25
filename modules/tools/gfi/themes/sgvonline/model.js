@@ -23,6 +23,7 @@ define(function (require) {
 
         /**
          * Prüft, ob der Button zum Routen angezeigt werden soll
+         * @returns {void}
          */
         checkRoutable: function () {
             if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
@@ -36,6 +37,7 @@ define(function (require) {
          * gesteuert werden. Im Template werden diese Keywords mit # ersetzt und rausgefiltert. Im view.render() werden diese Objekte attached.
          * Eine leidige Ausnahme bildet z.Z. das Routing, da hier zwei features des Reisezeitenlayers benötigt werden. (1. Ziel(key) mit Dauer (val) und 2. Route mit ol.geom (val).
          * Das Auswählen der richtigen Werte für die Übergabe erfolgt hier.
+         * @returns {void}
          */
         replaceValuesWithChildObjects: function () {
             var element = this.get("gfiContent"),
@@ -47,8 +49,11 @@ define(function (require) {
             else {
                 _.each(element, function (ele) {
                     _.each(ele, function (val, key) {
+                        var imgView,
+                            videoView;
+
                         if (key === "Bild") {
-                            var imgView = new ImgView(val);
+                            imgView = new ImgView(val);
 
                             element[key] = "#";
                             children.push({
@@ -57,7 +62,7 @@ define(function (require) {
                             });
                         }
                         else if (key === "video" && Radio.request("Util", "isAny") === null) {
-                            var videoView = new VideoView(val);
+                            videoView = new VideoView(val);
 
                             element[key] = "#";
                             children.push({
@@ -69,7 +74,7 @@ define(function (require) {
                             }
                         }
                         else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
-                            var videoView = new VideoView(val);
+                            videoView = new VideoView(val);
 
                             element[key] = "#";
                             children.push({

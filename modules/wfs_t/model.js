@@ -1,10 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers"
-], function (Backbone, Radio, ol) {
+define(function (require) {
+    var ol = require("openlayers"),
+        $ = require("jquery"),
+        WFS_T;
 
-    var WFS_T = Backbone.Model.extend({
+    WFS_T = Backbone.Model.extend({
 
         // activeButton --> Aktuell aktvivierte Funktion.
         // formatWFS --> Zum Lesen und Schreiben von WFS-Features.
@@ -199,6 +198,7 @@ define([
         // Erstellt das Transaction-XML für "insert", "delete" und "update".
         transactionWFS: function (todo, feature) {
             var domNode,
+                xmlDoc,
                 xmlSerializer = new XMLSerializer(),
                 xmlString,
                 writeOptions = {
@@ -220,8 +220,6 @@ define([
                     break;
                 }
                 case "update": {
-                    var xmlDoc;
-
                     domNode = this.get("formatWFS").writeTransaction(null, [feature], null, writeOptions);
                     xmlString = xmlSerializer.serializeToString(domNode);
 
@@ -266,5 +264,5 @@ define([
         }
     });
 
-    return new WFS_T();
+    return WFS_T;
 });

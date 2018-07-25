@@ -1,13 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/menu/mobile/breadCrumb/list",
-    "modules/menu/mobile/breadCrumb/view",
-    "text!modules/menu/mobile/breadCrumb/templateListView.html"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         List = require("modules/menu/mobile/breadCrumb/list"),
         View = require("modules/menu/mobile/breadCrumb/view"),
         Template = require("text!modules/menu/mobile/breadCrumb/templateListView.html"),
@@ -22,9 +15,6 @@ define([
             "click ul.back-item": "removeLastItem"
         },
 
-        /**
-         * Registriert die Listener und ruft die render-Funktion auf
-         */
         initialize: function () {
             this.collection = new List();
             this.listenTo(Radio.channel("MenuBar"), {
@@ -40,35 +30,29 @@ define([
             this.render();
         },
 
-        /**
-         * Zeichnet das Breadcrumb
-         */
         render: function () {
             this.delegateEvents(this.events);
             $(this.targetElement).prepend(this.$el.html(this.template()));
             this.collection.forEach(this.addViews, this);
+            return this;
         },
 
         /**
          * Weist jedem Model aus der Collection eine View zu und zeichnet die einzelnen "Breadcrumb-Items"
-         * @param {Backbone.Model} model
+         * @param {Backbone.Model} model -
+         * @returns {void}
          */
         addViews: function (model) {
             var breadCrumbView = new View({model: model});
 
-            $(".breadcrumb-mobile > .breadcrumb").append(breadCrumbView.render().el);
+            this.$el.find(".breadcrumb").append(breadCrumbView.render().el);
         },
 
-        /**
-         * Ruft removeLastItem in der Collection auf
-         * Wird beim Klicken auf den "Zurück-Button" ausgeführt
-         */
         removeLastItem: function () {
             this.collection.removeLastItem();
         },
         removeView: function () {
             this.collection = {};
-
             this.remove();
         }
     });

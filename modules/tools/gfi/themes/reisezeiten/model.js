@@ -1,15 +1,12 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         ol = require("openlayers"),
         ReisezeitenTheme;
 
     ReisezeitenTheme = Theme.extend({
 
-        /**
-         *
-         */
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.setDefaults
@@ -31,12 +28,14 @@ define(function (require) {
         },
         /**
          * Sortiert das Array der übermittelten Routen in die Reihenfolge, wie sie im GFI angezeigt werden sollen.
+         * @returns {void}
          */
         sortRouten: function () {
             this.set("ziele", _.sortBy(this.get("ziele"), "zielort"));
         },
         /**
          * Fragt Layer mit Routeninformationen ab, um Template rendern zu können
+         * @returns {void}
          */
         requestRouten: function () {
             var layer = this.get("routenLayer"),
@@ -84,6 +83,7 @@ define(function (require) {
         },
         /**
          * Erzeugt einen leeren VactorLayer mit default-style
+         * @returns {void}
          */
         createRouteLayer: function () {
             this.set("routeLayer", new ol.layer.Vector({
@@ -100,6 +100,7 @@ define(function (require) {
         },
         /**
          * Enfernt den "Route-Layer" von der Karte.
+         * @returns {void}
          */
         removeRouteLayer: function () {
             if (this.get("routeLayer")) {
@@ -151,7 +152,8 @@ define(function (require) {
         },
         /**
          * Zeigt die ausgewählte Route.
-         * @param  {String} target - Ziel der Route
+         * @param  {String} routeId - Id der Route
+         * @returns {void}
          */
         showRoute: function (routeId) {
             var strokestyle,

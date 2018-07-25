@@ -32,10 +32,7 @@ define(function (require) {
         triggerEvent: function (triggerParams) {
             var data = triggerParams.data;
 
-            if (triggerParams.event === "" || triggerParams.channel === "") {
-                return;
-            }
-            else {
+            if (triggerParams.event !== "" && triggerParams.channel !== "") {
                 Radio.trigger(triggerParams.channel, triggerParams.event, data);
             }
         },

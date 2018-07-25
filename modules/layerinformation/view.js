@@ -1,9 +1,10 @@
 define(function (require) {
+    var Template = require("text!modules/layerinformation/template.html"),
+        $ = require("jquery"),
+        LayerInformationView;
+
     require("jqueryui/widgets/draggable");
     require("bootstrap/tab");
-
-    var Template = require("text!modules/layerinformation/template.html"),
-        LayerInformationView;
 
     LayerInformationView = Backbone.View.extend({
         id: "layerinformation-desktop",
@@ -30,6 +31,7 @@ define(function (require) {
                 handle: ".header"
             });
             this.$el.show();
+            return this;
         },
 
         hide: function () {

@@ -1,12 +1,6 @@
-define([
-    "backbone",
-    "openlayers",
-    "backbone.radio",
-    "proj4"
-], function () {
-    var Backbone = require("backbone"),
-        ol = require("openlayers"),
-        Radio = require("backbone.radio"),
+define(function (require) {
+    var ol = require("openlayers"),
+        $ = require("jquery"),
         proj4 = require("proj4"),
         ImportTool;
 
@@ -18,10 +12,11 @@ define([
         },
 
         initialize: function () {
+            var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-            var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
 
             this.set("layer", drawLayer);
             this.set("source", drawLayer.getSource());
@@ -74,12 +69,12 @@ define([
         },
         // features von KML (in "text" gespeichert) einlesen
         getFeaturesFromKML: function () {
-            if (this.get("text") !== "") {
-                var data = this.get("text"),
-                    format = this.get("format"),
-                    features = format.readFeatures(data);
+            var features;
 
-                this.setFormat(format);
+            if (this.get("text") !== "") {
+                features = this.get("format").readFeatures(this.get("text"));
+
+                this.setFormat(this.get("format"));
                 this.setFeatures(features);
             }
             else {
@@ -90,7 +85,7 @@ define([
         // Workaround der Styles für Punkte und Text
         setStyle: function () {
             var features = this.get("features"),
-                kml = jQuery.parseXML(this.get("text")),
+                kml = $.parseXML(this.get("text")),
                 pointStyleColors = [],
                 pointStyleTransparencies = [],
                 pointStyleRadiuses = [],
@@ -98,16 +93,20 @@ define([
 
                 // kml parsen und eigenen pointStyle auf Punkt-Features anwenden
             $(kml).find("Point").each(function (i, point) {
-                var placemark = point.parentNode;
+                var placemark = point.parentNode,
+                    pointStyle,
+                    color,
+                    transparency,
+                    radius;
 
                 // kein Text
                 if (!$(placemark).find("name")[0]) {
-                    var pointStyle = $(placemark).find("pointstyle")[0],
-                        color = $(pointStyle).find("color")[0],
-                        transparency = $(pointStyle).find("transparency")[0],
-                        radius = $(pointStyle).find("radius")[0];
+                    pointStyle = $(placemark).find("pointstyle")[0];
+                    color = $(pointStyle).find("color")[0];
+                    transparency = $(pointStyle).find("transparency")[0];
+                    radius = $(pointStyle).find("radius")[0];
 
-                        // rgb in array schreiben
+                    // rgb in array schreiben
                     color = new XMLSerializer().serializeToString(color);
                     color = color.split(">")[1].split("<")[0];
                     pointStyleColors.push(color);
@@ -117,7 +116,7 @@ define([
                     pointStyleTransparencies.push(transparency);
                     // punktradius in array schreiben
                     radius = new XMLSerializer().serializeToString(radius);
-                    radius = parseInt(radius.split(">")[1].split("<")[0]);
+                    radius = parseInt(radius.split(">")[1].split("<")[0], 10);
                     pointStyleRadiuses.push(radius);
                 }
             });
@@ -135,7 +134,7 @@ define([
                     }
                     // wenn Punkt
                     else {
-                        var style = new ol.style.Style({
+                        style = new ol.style.Style({
                             image: new ol.style.Circle({
                                 radius: pointStyleRadiuses[pointStyleCounter],
                                 fill: new ol.style.Fill({

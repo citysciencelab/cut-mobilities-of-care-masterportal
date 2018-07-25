@@ -1,10 +1,10 @@
-define([
-    "backbone",
-    "text!modules/tools/kmlimport/template.html",
-    "modules/tools/kmlimport/model"
-], function (Backbone, ImportTemplate, ImportTool) {
+define(function (require) {
+    var ImportTemplate = require("text!modules/tools/kmlimport/template.html"),
+        ImportTool = require("modules/tools/kmlimport/model"),
+        $ = require("jquery"),
+        ImportView;
 
-    var ImportView = Backbone.View.extend({
+    ImportView = Backbone.View.extend({
         model: new ImportTool(),
         className: "win-body",
         template: _.template(ImportTemplate),
@@ -19,8 +19,9 @@ define([
         },
 
         render: function () {
+            var attr = this.model.toJSON();
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
@@ -29,7 +30,7 @@ define([
             else {
                 this.undelegateEvents();
             }
-
+            return this;
         },
 
         importKML: function () {
@@ -37,25 +38,24 @@ define([
         },
 
         setText: function (evt) {
-            var reader = null,
-                file = evt.target.files[0],
+            var file = evt.target.files[0],
                 reader = new FileReader();
 
-            $("#fakebutton").toggleClass("btn-primary");
+            this.$("#fakebutton").toggleClass("btn-primary");
 
-            if ($("#fakebutton").hasClass("btn-primary") === true) {
-                $("#btn_import").prop("disabled", false);
+            if (this.$("#fakebutton").hasClass("btn-primary") === true) {
+                this.$("#btn_import").prop("disabled", false);
             }
             else {
-                $("#btn_import").prop("disabled", true);
+                this.$("#btn_import").prop("disabled", true);
             }
 
             reader.onload = function () {
-                var fakeBtnTxt = $("#kmlinput").val(),
+                var fakeBtnTxt = this.$("#kmlinput").val(),
                     test = fakeBtnTxt.slice(12);
 
                 this.model.setText(reader.result);
-                $("#fakebutton").html("Datei: " +
+                this.$("#fakebutton").html("Datei: " +
                 test);
             }.bind(this);
             reader.readAsText(file);

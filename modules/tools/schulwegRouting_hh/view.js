@@ -89,6 +89,7 @@ define(function (require) {
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
+            return this;
         },
         togglePrintEnabled: function (value) {
             if (value) {

@@ -1,5 +1,6 @@
 define(function (require) {
     var ThemeView = require("modules/tools/gfi/themes/view"),
+        $ = require("jquery"),
         VerkehrsStaerkenThemeTemplate = require("text!modules/tools/gfi/themes/verkehrsstaerken/template.html"),
         VerkehrsStaerkenThemeView;
 
@@ -12,9 +13,9 @@ define(function (require) {
             "click .tab-toggle": "toggleTab"
         },
         changeKat: function (evt) {
-            $(".graph svg").remove();
+            this.$(".graph svg").remove();
             this.model.setAttrToShow([evt.currentTarget.id]);
-            $(".btn-group").children("button").each(function () {
+            this.$(".btn-group").children("button").each(function () {
                 if ($(this)[0].id === evt.currentTarget.id) {
                     $(this).addClass("active");
                 }
@@ -25,17 +26,17 @@ define(function (require) {
             this.model.createD3Document();
         },
         loadDiagramm: function () {
-            var attr = $("#diagramm").find(".active")[0].value;
+            var attr = this.$("#diagramm").find(".active")[0].value;
 
-            $(".graph svg").remove();
+            this.$(".graph svg").remove();
             this.model.setAttrToShow([attr]);
             this.model.createD3Document();
         },
         toggleTab: function (evt) {
-            var contentId = $(evt.currentTarget).attr("value");
+            var contentId = this.$(evt.currentTarget).attr("value");
 
             // deactivate all tabs and their contents
-            $(evt.currentTarget).parent().find("li").each(function (index, li) {
+            this.$(evt.currentTarget).parent().find("li").each(function (index, li) {
                 var tabContentId = $(li).attr("value");
 
                 $(li).removeClass("active");
@@ -43,9 +44,9 @@ define(function (require) {
                 $("#" + tabContentId).removeClass("in");
             });
             // activate selected tab and its content
-            $(evt.currentTarget).addClass("active");
-            $("#" + contentId).addClass("active");
-            $("#" + contentId).addClass("in");
+            this.$(evt.currentTarget).addClass("active");
+            this.$("#" + contentId).addClass("active");
+            this.$("#" + contentId).addClass("in");
             if (contentId === "diagramm") {
                 this.loadDiagramm();
             }

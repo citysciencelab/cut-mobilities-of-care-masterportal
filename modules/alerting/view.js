@@ -1,11 +1,10 @@
 define(function (require) {
-    require("bootstrap/alert");
-
-    var Backbone = require("backbone"),
-        AlertingModel = require("modules/alerting/model"),
+    var AlertingModel = require("modules/alerting/model"),
         AlertingTemplate = require("text!modules/alerting/template.html"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         AlertingView;
+
+    require("bootstrap/alert");
 
     AlertingView = Backbone.View.extend({
         id: "messages",
@@ -28,6 +27,8 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.append(this.template(attr));
+
+            return this;
         },
 
         alertClosed: function (evt) {
@@ -44,6 +45,7 @@ define(function (require) {
          * Positioniert der Alerts über css-Klassen
          * @param  {Backbone.Model} model - this.model
          * @param  {String} value - this.model.get("position")
+         * @returns {void}
          */
         positionAlerts: function (model, value) {
             var currentClassName = this.$el.attr("class");
@@ -54,6 +56,7 @@ define(function (require) {
 
         /**
          * Entfernt alle Meldungen
+         * @returns {void}
          */
         removeAll: function () {
             this.$el.find(".alert").remove();

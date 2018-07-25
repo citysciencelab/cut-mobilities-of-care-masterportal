@@ -1,11 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/menu/desktop/layer/template.html"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         Template = require("text!modules/menu/desktop/layer/template.html"),
         LayerView;
 
@@ -41,11 +36,15 @@ define([
                 else {
                     selector.after(this.$el.html(this.template(attr)));
                 }
-                $(this.$el).css("padding-left", (this.model.get("level") * 15 + 5) + "px");
+                this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
             }
+            return this;
         },
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
+         * @param {Backbone.Model} model -
+         * @param {boolean} value -
+         * @returns {void}
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {

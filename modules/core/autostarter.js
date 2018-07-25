@@ -1,7 +1,4 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function (Backbone, Radio) {
+define(function () {
 
     var Autostarter = Backbone.Model.extend({
         defaults: {
@@ -71,9 +68,12 @@ define([
          * Parameter werden vor der config gelesen.
          */
         check: function () {
+            var autostartModuls,
+                initializedModuls;
+
             if (this.get("parametersAnalysed") === true && this.get("configAnalysed") === true) {
-                var autostartModuls = this.get("autostartModuls"),
-                    initializedModuls = this.get("initializedModuls");
+                autostartModuls = this.get("autostartModuls");
+                initializedModuls = this.get("initializedModuls");
 
                 if (autostartModuls.length === 0) {
                     // es werden keine Module automatisch gestartet. Autostarter wird nicht benötigt.

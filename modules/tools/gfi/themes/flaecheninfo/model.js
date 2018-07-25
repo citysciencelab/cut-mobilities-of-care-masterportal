@@ -9,9 +9,6 @@ define(function (require) {
                 "change:isReady": this.parseGfiContent
             });
         },
-        /**
-         * sets title and gfiContent attributes
-         */
         parseGfiContent: function () {
             this.setGfiContent(this.get("gfiContent")[0]);
         },

@@ -1,13 +1,10 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config",
-    "openlayers"
-], function (Backbone, Radio, Config, ol) {
-    "use strict";
-    var model = Backbone.Model.extend({
+define(function (require) {
+    var Config = require("config"),
+        $ = require("jquery"),
+        ol = require("openlayers"),
+        PrintModel;
 
-        //
+    PrintModel = Backbone.Model.extend({
         defaults: {
             printID: "99999",
             MM_PER_INCHES: 25.4,
@@ -147,11 +144,11 @@ define([
 
         // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
         setScaleByMapView: function () {
-            var scale = _.find(this.get("scales"), function (scale) {
+            var newScale = _.find(this.get("scales"), function (scale) {
                 return scale.valueInt === Radio.request("MapView", "getOptions").scale;
             });
 
-            this.set("scale", scale);
+            this.set("scale", newScale);
         },
 
         // Setzt die Zentrumskoordinate.
@@ -217,31 +214,27 @@ define([
             }
         },
 
-        /**
-         *
-         */
         getLayersForPrint: function () {
             this.set("layerToPrint", []);
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
             this.setLayer(Radio.request("Draw", "getLayer"));
             this.getGFIForPrint();
         },
-        /**
-        *
-        */
-        setLayerToPrint: function (layers) {
-            var params,
-                style,
-                layerURL;
 
-            layers = _.sortBy(layers, function (layer) {
+        setLayerToPrint: function (layers) {
+            var sortedLayers;
+
+            sortedLayers = _.sortBy(layers, function (layer) {
                 return layer.get("selectionIDX");
             });
-            _.each(layers, function (layer) {
+            _.each(sortedLayers, function (layer) {
                 // nur wichtig für treeFilter
-                params = {},
-                style = [],
-                layerURL = layer.get("url");
+                var params = {},
+                    style = [],
+                    layerURL = layer.get("url"),
+                    numberOfLayer,
+                    i,
+                    defaultStyle;
 
                 if (layer.has("SLDBody")) {
                     params.SLD_BODY = layer.get("SLDBody");
@@ -256,10 +249,10 @@ define([
                 // Wenn ein Style mit einem Blank angegeben wird,
                 // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
                 else {
-                    var numberOfLayer = layer.get("layers").split(",").length,
-                        defaultStyle = "";
+                    numberOfLayer = layer.get("layers").split(",").length;
+                    defaultStyle = "";
 
-                    for (var i = 1; i < numberOfLayer; i++) {
+                    for (i = 1; i < numberOfLayer; i++) {
                         defaultStyle += ",";
                     }
                     style.push(defaultStyle);
@@ -287,9 +280,6 @@ define([
             }, this);
         },
 
-        /**
-         *
-         */
         setLayer: function (layer) {
             var features = [],
                 featureStyles = {},
@@ -318,8 +308,8 @@ define([
                         }
                     });
 
-                    type = feature.getGeometry().getType(),
-                    styles = feature.getStyleFunction().call(feature),
+                    type = feature.getGeometry().getType();
+                    styles = feature.getStyleFunction().call(feature);
                     style = styles[0];
                     // Punkte
                     if (type === "Point") {
@@ -362,9 +352,6 @@ define([
             }
         },
 
-        /**
-         *
-         */
         setSpecification: function (gfiPosition) {
             var layers = Radio.request("Map", "getLayers").getArray(),
                 animationLayer = _.filter(layers, function (lay) {
@@ -406,6 +393,8 @@ define([
         },
         /**
          * Checkt, ob Kreis an GFI-Position gezeichnet werden soll und fügt ggf. Layer ein.
+         * @param {number[]} gfiPosition -
+         * @returns {void}
          */
         setGFIPos: function (gfiPosition) {
             if (gfiPosition !== null) {
@@ -449,6 +438,7 @@ define([
 
         /**
         * Setzt die createURL in Abhängigkeit der GFI
+        * @returns {void}
         */
         getGFIForPrint: function () {
             var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGFIForPrint") : null,
@@ -473,6 +463,7 @@ define([
 
         /**
          * @desc Führt einen HTTP-Post-Request aus.
+         * @returns {void}
          */
         getPDFURL: function () {
             $.ajax({
@@ -503,6 +494,7 @@ define([
         /**
          * @desc Öffnet das erzeugte PDF im Browser.
          * @param {Object} data - Antwort vom Druckdienst. Enthält die URL zur erzeugten PDF.
+         * @returns {void}
          */
         openPDF: function (data) {
             window.open(data.getURL);
@@ -512,6 +504,7 @@ define([
          * @desc Hilfsmethode um ein Attribut vom Typ Array zu setzen.
          * @param {String} attribute - Das Attribut das gesetzt werden soll.
          * @param {whatever} value - Der Wert des Attributs.
+         * @returns {void}
          */
         push: function (attribute, value) {
             var tempArray = _.clone(this.get(attribute));
@@ -577,7 +570,6 @@ define([
                 size = Radio.request("Map", "getSize"),
                 height = size[1] * ol.has.DEVICE_PIXEL_RATIO,
                 width = size[0] * ol.has.DEVICE_PIXEL_RATIO,
-                minx, miny, maxx, maxy,
                 printPageRectangle = this.calculatePageBoundsPixels(),
                 minx = printPageRectangle[0],
                 miny = printPageRectangle[1],
@@ -625,37 +617,42 @@ define([
 
         /**
          * Setzt die Parameter aus der config.js für den GFI Marker im Druck, wenn vorhanden
+         * @param {obj} gfiMarker -
+         * @returns {void}
          */
         setGfiMarker: function (gfiMarker) {
-            gfiMarker.outerCircle ? this.setOuterCircle(gfiMarker.outerCircle) : null;
-            gfiMarker.point ? this.setPoint(gfiMarker.point) : null;
+            gfiMarker.outerCircle = gfiMarker.outerCircle ? this.setOuterCircle(gfiMarker.outerCircle) : null;
+            gfiMarker.point = gfiMarker.point ? this.setPoint(gfiMarker.point) : null;
         },
 
         /**
          * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Kreis des GFI Markers im Druck
+         * @param {object} outerCircle -
+         * @returns {void}
          */
         setOuterCircle: function (outerCircle) {
             var gfiMarker = this.get("gfiMarker");
 
-            outerCircle.fill ? gfiMarker.outerCircle.fill = outerCircle.fill : null;
-            outerCircle.pointRadius ? gfiMarker.outerCircle.pointRadius = outerCircle.pointRadius : null;
-            outerCircle.stroke ? gfiMarker.outerCircle.stroke = outerCircle.stroke : null;
-            outerCircle.strokeColor ? gfiMarker.outerCircle.strokeColor = outerCircle.strokeColor : null;
-            outerCircle.strokeWidth ? gfiMarker.outerCircle.strokeWidth = outerCircle.strokeWidth : null;
+            gfiMarker.outerCircle.pointRadius = outerCircle.pointRadius ? outerCircle.pointRadius : null;
+            gfiMarker.outerCircle.stroke = outerCircle.stroke ? outerCircle.stroke : null;
+            gfiMarker.outerCircle.strokeColor = outerCircle.strokeColor ? outerCircle.strokeColor : null;
+            gfiMarker.outerCircle.strokeWidth = outerCircle.strokeWidth ? outerCircle.strokeWidth : null;
         },
 
         /**
          * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Punkt im Kreis des GFI Markers im Druck
+         * @param {object} point -
+         * @returns {void}
          */
         setPoint: function (point) {
             var gfiMarker = this.get("gfiMarker");
 
-            point.fill ? gfiMarker.point.fill = point.fill : null;
-            point.pointRadius ? gfiMarker.point.pointRadius = point.pointRadius : null;
-            point.fillColor ? gfiMarker.point.fillColor = point.fillColor : null;
-            point.stroke ? gfiMarker.point.stroke = point.stroke : null;
+            gfiMarker.point.fill = point.fill ? point.fill : null;
+            gfiMarker.point.pointRadius = point.pointRadius ? point.pointRadius : null;
+            gfiMarker.point.fillColor = point.fillColor ? point.fillColor : null;
+            gfiMarker.point.stroke = point.stroke ? point.stroke : null;
         }
     });
 
-    return model;
+    return PrintModel;
 });

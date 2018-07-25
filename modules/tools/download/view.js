@@ -13,17 +13,18 @@ define(function (require) {
             "change .file-endings": "prepareData"
         },
         initialize: function () {
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
             var channel = Radio.channel("download");
+
+            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
 
             channel.on({
                 "start": this.start
             }, this);
         },
         /**
-     * Startet das Download modul
-     * @param  {ol.feature} features die Features die heruntergeladen werden sollen
-     */
+         * Startet das Download modul
+         * @param  {ol.feature} features die Features die heruntergeladen werden sollen
+         */
         start: function (features) {
             if (features.data.length === 0) {
                 Radio.trigger("Alert", "alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
@@ -46,15 +47,15 @@ define(function (require) {
             Radio.trigger("Window", "toggleWin", this.model);
         },
         /**
-     * Ruft das Tool auf, das den Download gestartet hat
-     */
+         * Ruft das Tool auf, das den Download gestartet hat
+         */
         back: function () {
             Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "draw"}));
         },
         /**
-     *
-     * @return {[type]} [description]
-     */
+         *
+         * @return {[type]} [description]
+         */
         prepareDownloadButton: function () {
             this.model.setSelectedFormat();
             if (this.model.prepareData() !== "invalid Format") {
@@ -68,14 +69,15 @@ define(function (require) {
             }
         },
         /**
-     * startet den Download, wenn auf den Button geklickt wird
-     */
+         * startet den Download, wenn auf den Button geklickt wird
+         */
         triggerDownload: function () {
             this.model.download();
         },
         render: function () {
+            var attr = this.model.toJSON();
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
@@ -85,10 +87,11 @@ define(function (require) {
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
         /**
-     * Hängt die wählbaren Dateiformate als Option an das Formate-Dropdown
-     */
+         * Hängt die wählbaren Dateiformate als Option an das Formate-Dropdown
+         */
         appendOptions: function () {
             var options = this.model.getFormats();
 

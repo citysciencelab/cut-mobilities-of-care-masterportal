@@ -21,8 +21,7 @@ define(function (require) {
          */
         createLayerSource: function () {
             var params,
-                source,
-                context;
+                source;
 
             params = {
                 t: new Date().getMilliseconds(),
@@ -58,20 +57,18 @@ define(function (require) {
                     }),
                     crossOrigin: "anonymous"
                 });
-                context = this;
 
                 // wms_webatlasde
-                source.on("tileloaderror", function () {
-                    if (context.get("tileloaderror") === false) {
-                        context.set("tileloaderror", true);
-                        if (!navigator.cookieEnabled) {
-                            if (context.get("url").indexOf("wms_webatlasde") !== -1) {
+                if (this.get("url").indexOf("wms_webatlasde") !== -1) {
+                    if (this.get("tileloaderror") === false) {
+                        this.set("tileloaderror", true);
+                        source.on("tileloaderror", function () {
+                            if (!navigator.cookieEnabled) {
                                 Radio.trigger("Alert", "alert", {text: "<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>", kategorie: "alert-warning"});
                             }
-                        }
+                        });
                     }
-
-                });
+                }
 
                 this.setLayerSource(source);
             }
@@ -83,8 +80,8 @@ define(function (require) {
                     crossOrigin: "anonymous"
                 }));
             }
-            this.registerErrorListener();
-            this.registerLoadingListeners();
+            // this.registerErrorListener();
+            // this.registerLoadingListeners();
         },
 
         /**
@@ -116,9 +113,12 @@ define(function (require) {
          * @return {[type]} [description]
          */
         createLegendURL: function () {
+            var layerNames,
+                legendURL;
+
             if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
-                var layerNames = this.get("layers").split(","),
-                    legendURL = [];
+                layerNames = this.get("layers").split(",");
+                legendURL = [];
 
                 if (layerNames.length === 1) {
                     legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
@@ -134,6 +134,7 @@ define(function (require) {
 
         /**
          * Register LayerLoad-Events
+         * @returns {void}
          */
         registerLoadingListeners: function () {
             if (this.get("layerSource") instanceof ol.source.TileWMS) {
@@ -190,6 +191,7 @@ define(function (require) {
 
         /**
          * Register LayerLoad-Events
+         * @returns {void}
          */
         registerErrorListener: function () {
             if (this.get("layerSource") instanceof ol.source.TileWMS) {
@@ -200,15 +202,15 @@ define(function (require) {
             }
         },
 
-        registerTileloadError: function () {
-            this.get("layerSource").on("tileloaderror", function () {
-            }, this);
-        },
+        // registerTileloadError: function () {
+        //     this.get("layerSource").on("tileloaderror", function () {
+        //     }, this);
+        // },
 
-        registerImageloadError: function () {
-            this.get("layerSource").on("imageloaderror", function () {
-            }, this);
-        },
+        // registerImageloadError: function () {
+        //     this.get("layerSource").on("imageloaderror", function () {
+        //     }, this);
+        // },
 
         updateSourceSLDBody: function () {
             this.get("layer").getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
