@@ -81,7 +81,7 @@ if (!string) ...
 * *camelCase* für Funktions- und var- Deklarationen
 * Wenn es die String-Variable "dog" gibt, ist "dogList" ein Array bestehend aus "dog" Strings
 * Bezeichnung für Konstanten --> SYMBOLIC_CONSTANTS_LIKE_THIS
-* Von außen zugeladene Abhängigkeiten werden in der innerhalb der Bibliothek verwendeten Schreibweise geschrieben.
+* Von außen zugeladene Abhängigkeiten werden zur Unterscheidung in *PascalCase* geschrieben, es sei denn die Schreibweise wird innerhalb der Bibliothek anders verwendet
 
 ### Anführungszeichen
 * Es werden doppelte Anführungszeichen eingesetzt
