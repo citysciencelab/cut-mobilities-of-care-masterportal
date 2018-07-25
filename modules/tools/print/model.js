@@ -317,7 +317,6 @@ define(function (require) {
                         type = "Point";
                         coordinates = coordinates[0];
                     }
-                    coordinates = this.coordinatesToInt(coordinates);
                     features.push({
                         type: "Feature",
                         properties: {
@@ -356,14 +355,6 @@ define(function (require) {
                     }
                 });
             }
-        },
-        coordinatesToInt: function (coords) {
-            var intCoords = [];
-
-            _.each(coords, function (coord) {
-                intCoords.push(parseInt(coord, 10));
-            });
-            return intCoords;
         },
         createPointStyleForPrint: function (style) {
             var pointStyleObject = {},
