@@ -50,8 +50,6 @@ define(function (require) {
                 "zoomToExtent": this.zoomToExtent,
                 "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
                 "createVectorLayer": this.createVectorLayer,
-                "addLoadingLayer": this.addLoadingLayer,
-                "removeLoadingLayer": this.removeLoadingLayer,
                 "registerListener": this.registerListener,
                 "unregisterListener": this.unregisterListener,
                 "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
@@ -277,21 +275,13 @@ define(function (require) {
             // Laden des Layers überwachen
             if (layer instanceof ol.layer.Group) {
                 layer.getLayers().forEach(function (singleLayer) {
-                    singleLayer.getSource().on("wmsloadend", function () {
-                        Radio.trigger("Map", "removeLoadingLayer");
-                    });
-                    singleLayer.getSource().on("wmsloadstart", function () {
-                        Radio.trigger("Map", "addLoadingLayer");
-                    });
+                    singleLayer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
+                    singleLayer.getSource().on("wmsloadstart", this.addLoadingLayer, this);
                 });
             }
             else {
-                layer.getSource().on("wmsloadend", function () {
-                    Radio.trigger("Map", "removeLoadingLayer");
-                });
-                layer.getSource().on("wmsloadstart", function () {
-                    Radio.trigger("Map", "addLoadingLayer");
-                });
+                layer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
+                layer.getSource().on("wmsloadstart", this.addLoadingLayer, this);
             }
         },
 
