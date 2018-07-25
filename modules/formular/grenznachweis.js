@@ -1,6 +1,6 @@
 define(function (require) {
     var Config = require("config"),
-        ol = require("openlayer"),
+        ol = require("openlayers"),
         cookie = require("modules/cookie/view"),
         $ = require("jquery"),
         GrenznachweisModel;
