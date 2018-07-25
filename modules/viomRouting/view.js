@@ -1,16 +1,17 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/viomRouting/template.html",
-    "modules/viomRouting/model"
-], function (Backbone, Radio, RoutingWin, RoutingModel) {
+define(function (require) {
+    var RoutingWin = require("text!modules/viomRouting/template.html"),
+        RoutingModel = require("modules/viomRouting/model"),
+        $ = require("jquery"),
+        RoutingView;
 
-    var RoutingView = Backbone.View.extend({
+    RoutingView = Backbone.View.extend({
         model: RoutingModel,
         id: "routingWin",
         className: "win-body routingWin",
         template: _.template(RoutingWin),
         initialize: function () {
+            var channel = Radio.channel("ViomRouting");
+
             this.listenTo(this.model, "change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
             this.listenTo(this.model, "change:fromCoord", this.toggleRoutingButton);
             this.listenTo(this.model, "change:toCoord", this.toggleRoutingButton);
@@ -20,9 +21,6 @@ define([
             this.listenTo(this.model, "change:startAdresse", this.changeStartAdresse);
             this.listenTo(this.model, "change:zielAdresse", this.changeZielAdresse);
             this.listenTo(this.model, "change:isGeolocationPossible", this.changeGeolocationPossible, this);
-
-            var channel = Radio.channel("ViomRouting");
-
             channel.on({
                 "setRoutingDestination": this.setRoutingDestination
             }, this);
@@ -47,65 +45,65 @@ define([
                 $(evt.target).parent().addClass("active");
                 switch (evt.target.id) {
                     case "options": {
-                        $(".calc").hide();
-                        $(".address").hide();
-                        $(".options").show();
+                        this.$(".calc").hide();
+                        this.$(".address").hide();
+                        this.$(".options").show();
                         break;
                     }
                     case "calc": {
-                        $(".options").hide();
-                        $(".calc").show();
-                        $(".address").hide();
+                        this.$(".options").hide();
+                        this.$(".calc").show();
+                        this.$(".address").hide();
                         break;
                     }
                     default: {
-                        $(".options").hide();
-                        $(".calc").hide();
-                        $(".address").show();
+                        this.$(".options").hide();
+                        this.$(".calc").hide();
+                        this.$(".address").show();
                     }
                 }
             }
         },
         changeStartAdresse: function () {
-            $("#startAdresse").val(this.model.get("startAdresse"));
-            $("#startAdresse").attr("title", this.model.get("startAdresse"));
-            $("#startAdresse").focus();
+            this.$("#startAdresse").val(this.model.get("startAdresse"));
+            this.$("#startAdresse").attr("title", this.model.get("startAdresse"));
+            this.$("#startAdresse").focus();
         },
         changeZielAdresse: function () {
-            $("#zielAdresse").val(this.model.get("zielAdresse"));
-            $("#zielAdresse").attr("title", this.model.get("zielAdresse"));
-            $("#zielAdresse").focus();
+            this.$("#zielAdresse").val(this.model.get("zielAdresse"));
+            this.$("#zielAdresse").attr("title", this.model.get("zielAdresse"));
+            this.$("#zielAdresse").focus();
         },
         fromListChanged: function () {
             var fromList = this.model.get("fromList");
 
             if (fromList.length > 0) {
-                $("#input-group-start ul").empty();
+                this.$("#input-group-start ul").empty();
                 _.each(fromList, function (value) {
-                    $("#input-group-start ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
+                    this.$("#input-group-start ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
                 });
-                $("#input-group-start ul").show();
-                $("#startAdresse").focus();
+                this.$("#input-group-start ul").show();
+                this.$("#startAdresse").focus();
             }
             else {
-                $("#input-group-start ul").empty();
-                $("#input-group-start ul").hide();
+                this.$("#input-group-start ul").empty();
+                this.$("#input-group-start ul").hide();
             }
         },
         toListChanged: function () {
             var toList = this.model.get("toList");
 
             if (toList.length > 0) {
-                $("#input-group-ziel ul").empty();
+                this.$("#input-group-ziel ul").empty();
                 _.each(toList, function (value) {
-                    $("#input-group-ziel ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
+                    this.$("#input-group-ziel ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
                 });
-                $("#input-group-ziel ul").show();
-                $("#zielAdresse").focus();
+                this.$("#input-group-ziel ul").show();
+                this.$("#zielAdresse").focus();
             }
             else {
-                $("#input-group-ziel ul").empty();
-                $("#input-group-ziel ul").hide();
+                this.$("#input-group-ziel ul").empty();
+                this.$("#input-group-ziel ul").hide();
             }
         },
 
@@ -120,17 +118,17 @@ define([
             this.renderWin(); // Template schreibt Ergebnisse in Div
         },
         routeBerechnen: function () {
-            if ($("#calc").parent().hasClass("disabled") === false) {
+            if (this.$("#calc").parent().hasClass("disabled") === false) {
                 this.model.deleteRouteFromMap();
                 this.model.requestRoute();
             }
         },
         toggleRoutingButton: function () {
             if (this.model.get("fromCoord") !== "" && this.model.get("toCoord") !== "") {
-                $("#calcLi").removeClass("disabled");
+                this.$("#calcLi").removeClass("disabled");
             }
             else {
-                $("#calcLi").addClass("disabled");
+                this.$("#calcLi").addClass("disabled");
             }
         },
         addressSelected: function (evt) {
@@ -206,12 +204,14 @@ define([
                     this.model.set("toCoord", "");
                     this.model.set("zielAdresse", value);
                 }
-                this.model.suggestByBKG(value, target);
+                if (value.length > 3) {
+                    this.model.suggestByBKG(value, target);
+                }
             }
         },
         changedRoutingTime: function () {
-            var rt = $("#timeButton").val(),
-                rd = $("#dayOfWeekButton").val();
+            var rt = this.$("#timeButton").val(),
+                rd = this.$("#dayOfWeekButton").val();
 
             if (rt && rt !== "" && rd && rd !== "") {
                 this.model.set("routingtime", rt);
@@ -231,6 +231,7 @@ define([
                 this.model.deleteRouteFromMap();
                 this.undelegateEvents();
             }
+            return this;
         },
         renderWin: function () {
             var attr = this.model.toJSON();
@@ -238,12 +239,12 @@ define([
             this.$el.html("");
             $(".win-heading").after(this.$el.html(this.template(attr)));
         },
-        changeGeolocationPossible: function (that, val) {
+        changeGeolocationPossible: function (val) {
             if (val === true) {
-                $("#startAdressePositionSpan").removeClass("hidden");
+                this.$("#startAdressePositionSpan").removeClass("hidden");
             }
             else {
-                $("#startAdressePositionSpan").addClass("hidden");
+                this.$("#startAdressePositionSpan").addClass("hidden");
             }
         }
     });

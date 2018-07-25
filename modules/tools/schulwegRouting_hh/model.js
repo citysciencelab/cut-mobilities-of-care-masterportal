@@ -50,8 +50,6 @@ define(function (require) {
                         this.setSchoolList(this.sortSchoolsByName(features));
                         if (this.get("isActive") === true) {
                             this.trigger("render");
-                            // this.setIsActive(false);
-                            // this.setIsActive(true);
                         }
                     }
                 }

@@ -45,7 +45,7 @@ define(function (require) {
         initialize: function (attr) {
             this.model = new Model(attr);
             this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
-            if (this.model.getIsActive()) {
+            if (this.model.get("isActive")) {
                 this.render();
             }
             this.listenTo(this.model, {
@@ -84,7 +84,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initSelectpicker();
             this.setPresetValues();
-            this.$el.find(".checkbox").append(this.checkBoxHVV.render());
+            this.$el.find(".checkbox").append(this.checkBoxHVV.render().$el);
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();

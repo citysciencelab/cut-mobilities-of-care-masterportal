@@ -15,10 +15,10 @@ define(function (require) {
          */
         requestFeatures: function (params) {
             this.groupContentByTyp(params);
-            this.pContent = [];
+            this.pEContent = [];
 
             if (this.has("gfiWMSContent")) {
-                _.each(this.getGFIWMSContent(), function (visibleLayer) {
+                _.each(this.get("gfiWMSContent"), function (visibleLayer) {
                     if (visibleLayer.infoFormat === "text/html") {
                         this.openHTMLContent(visibleLayer);
                     }
@@ -38,7 +38,7 @@ define(function (require) {
         groupContentByTyp: function (content) {
             var groupByTyp = _.groupBy(content, function (obj) {
                 // WMS || WFS || GeoJSON
-                return obj.model.getTyp();
+                return obj.model.get("typ");
             });
 
             _.each(groupByTyp, function (value, key) {
@@ -102,14 +102,14 @@ define(function (require) {
             var gfiContent;
 
             if (this.has("gfiWFSContent")) {
-                _.each(this.getGFIWFSContent(), function (visibleLayer) {
+                _.each(this.get("gfiWFSContent"), function (visibleLayer) {
                     gfiContent = this.translateGFI([visibleLayer.feature.getProperties()], visibleLayer.model.get("gfiAttributes"));
                     this.pushGFIContent(gfiContent, visibleLayer.model);
                 }, this);
                 this.unset("gfiWFSContent");
             }
             if (this.has("gfiGeoJSONContent")) {
-                _.each(this.getGFIGeoJSONContent(), function (visibleLayer) {
+                _.each(this.get("gfiGeoJSONContent"), function (visibleLayer) {
                     gfiContent = this.setGeoJSONPopupContent(visibleLayer.feature);
                     this.pushGFIContent(gfiContent, visibleLayer);
                 }, this);
@@ -120,8 +120,8 @@ define(function (require) {
         pushGFIContent: function (gfiContent, visibleLayer) {
             this.pContent.push({
                 content: gfiContent,
-                name: visibleLayer.getName(),
-                ol_layer: visibleLayer.getLayer()
+                name: visibleLayer.get("name"),
+                ol_layer: visibleLayer.get("layer")
             });
         },
 
@@ -239,18 +239,6 @@ define(function (require) {
 
         setGFIGeoJSONContent: function (value) {
             this.set("gfiGeoJSONContent", value);
-        },
-
-        getGFIWMSContent: function () {
-            return this.get("gfiWMSContent");
-        },
-
-        getGFIWFSContent: function () {
-            return this.get("gfiWFSContent");
-        },
-
-        getGFIGeoJSONContent: function () {
-            return this.get("gfiGeoJSONContent");
         },
 
         isValidKey: function (key) {

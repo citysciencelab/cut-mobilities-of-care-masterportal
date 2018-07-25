@@ -2,7 +2,6 @@ define(function (require) {
     var $ = require("jquery"),
         ControlsView;
 
-
     ControlsView = Backbone.View.extend({
         className: "controls-view",
         initialize: function () {

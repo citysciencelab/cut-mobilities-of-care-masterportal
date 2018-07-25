@@ -1,7 +1,7 @@
 define(function (require) {
-
-    var Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         OsmModel;
+
     require("modules/searchbar/model");
 
     OsmModel = Backbone.Model.extend({
@@ -22,6 +22,7 @@ define(function (require) {
          * @param {string} config.osmServiceUrl - ID aus rest-services für URL.
          * @param {integer} [config.limit=50] - Anzahl der über angefragten Vorschläge.
          * @param {string}  [osm.states=""] - Liste der Bundesländer für die Trefferauswahl.
+         * @returns {void}
          */
         initialize: function (config) {
             var service = Radio.request("RestReader", "getServiceById", config.serviceId);
@@ -54,17 +55,21 @@ define(function (require) {
             });
         },
         /**
-        * Einstieg fuer die Suche...
-        * Wird von der Searchbar getriggert.
-        */
+         * Einstieg fuer die Suche...
+         * Wird von der Searchbar getriggert.
+         * @param {string} searchString -
+         * @returns {void}
+         */
         search: function (searchString) {
-            if (searchString.length >= this.getMinChars()) {
+            if (searchString.length >= this.get("minChars")) {
                 Radio.trigger("Searchbar", "removeHits", "hitList", {type: "OpenStreetMap"});
                 this.suggestByOSM(searchString);
             }
         },
         /**
          * Suchstring (Strasse HsNr) durch Anwender aufgebaut...
+         * @param {string} searchString -
+         * @returns {void}
          */
         suggestByOSM: function (searchString) {
             var request,
@@ -86,16 +91,17 @@ define(function (require) {
 
             this.setSearchParams(searchStrings);
 
-            request = "countrycodes=de&format=json&polygon=0&addressdetails=1&extratags=1&limit=" + this.getLimit();
+            request = "countrycodes=de&format=json&polygon=0&addressdetails=1&extratags=1&limit=" + this.get("limit");
             request = request + "&q=" + encodeURIComponent(searchString);
 
-            this.sendRequest(this.getOsmServiceUrl(), request, this.pushSuggestions);
+            this.sendRequest(this.get("osmServiceUrl"), request, this.pushSuggestions);
         },
 
         /**
          * Treffer der ersten Suche auswerten; Angebotsliste erstellen
          * [pushSuggestions description]
          * @param  {[type]} data [description]
+         * @returns {void}
          */
         pushSuggestions: function (data) {
             var display,
@@ -108,7 +114,7 @@ define(function (require) {
                 weg;
 
             _.each(data, function (hit) {
-                if (this.getStates().length === 0 || this.getStates().includes(hit.address.state)) {
+                if (this.get("states").length === 0 || this.get("states").includes(hit.address.state)) {
                     if (this.isSearched(hit)) {
                         weg = hit.address.road || hit.address.pedestrian;
                         display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
@@ -153,23 +159,24 @@ define(function (require) {
         /**
          * stellt fest, ob Das Ergebnis alle eingegebenen Parameter enthält
          * @param  {[type]} searched [description] Das zu untersuchende Suchergebnis
+         * @returns {boolean} true | false
          */
         isSearched: function (searched) {
             var hits = [],
                 address = searched.address,
-                params = this.getSearchParams();
+                params = this.get("searchParams");
 
             if (this.canShowHit(searched)) {
 
                 _.each(params, function (param) {
-                    if ((address.house_number != null && address.house_number.toLowerCase() === param.toLowerCase()) ||
-                        (address.road != null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.pedestrian != null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.city != null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.city_district != null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.town != null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.village != null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.suburb != null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
+                    if ((address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
+                        (address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
                     ) {
                         this.push(param);
                     }
@@ -182,10 +189,11 @@ define(function (require) {
         /**
          * stellt fest ob der Treffer von den Parametern angezeigt wird oder nicht
          * @param  {[type]} hit [description] Suchtreffer
+         * @returns {boolean} true | false
          */
         canShowHit: function (hit) {
             var result = false,
-                classesToShow = this.getClasses();
+                classesToShow = this.get("classes");
 
             if (classesToShow.length === 0) {
                 return true;
@@ -205,9 +213,10 @@ define(function (require) {
          * @param {String} url - URL the request is sent to.
          * @param {String} data - Data to be sent to the server
          * @param {function} successFunction - A function to be called if the request succeeds
+         * @returns {void}
          */
         sendRequest: function (url, data, successFunction) {
-            var ajax = this.getAjaxRequest();
+            var ajax = this.get("ajaxRequest");
 
             if (!_.isNull(ajax)) {
                 ajax.abort();
@@ -246,6 +255,7 @@ define(function (require) {
         /**
          * Triggert die Darstellung einer Fehlermeldung
          * @param {object} err Fehlerobjekt aus Ajax-Request
+         * @returns {void}
          */
         showError: function (err) {
             var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
@@ -260,63 +270,35 @@ define(function (require) {
         setInUse: function (value) {
             this.set("inUse", value);
         },
-        getInUse: function () {
-            return this.get("inUse");
-        },
 
         setOsmServiceUrl: function (value) {
             this.set("osmServiceUrl", value);
-        },
-        getOsmServiceUrl: function () {
-            return this.get("osmServiceUrl");
         },
 
         setLimit: function (value) {
             this.set("limit", value);
         },
-        getLimit: function () {
-            return this.get("limit");
-        },
 
         setStates: function (value) {
             this.set("states", value);
-        },
-        getStates: function () {
-            return this.get("states");
         },
 
         setStreet: function (value) {
             this.set("street", value);
         },
-        getStreet: function () {
-            return this.get("street");
-        },
 
         setSearchParams: function (value) {
             this.set("searchParams", value);
-        },
-        getSearchParams: function () {
-            return this.get("searchParams");
         },
 
         setClasses: function (value) {
             this.set("classes", value.split(","));
         },
-        getClasses: function () {
-            return this.get("classes");
-        },
 
         setMinChars: function (value) {
             this.set("minChars", value);
         },
-        getMinChars: function () {
-            return this.get("minChars");
-        },
 
-        // getter for ajaxRequest
-        getAjaxRequest: function () {
-            return this.get("ajaxRequest");
-        },
         // setter for ajaxRequest
         setAjaxRequest: function (value) {
             this.set("ajaxRequest", value);

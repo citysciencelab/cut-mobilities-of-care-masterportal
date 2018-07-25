@@ -1,11 +1,9 @@
-define([
-    "backbone",
-    "text!modules/legend/desktop/template.html",
-    "backbone.radio",
-    "jqueryui/widgets/draggable"
-], function (Backbone, LegendTemplate, Radio) {
+define(function (require) {
+    var $ = require("jquery"),
+        LegendTemplate = require("text!modules/legend/desktop/template.html"),
+        LegendView;
 
-    var LegendView = Backbone.View.extend({
+    LegendView = Backbone.View.extend({
         className: "legend-win",
         template: _.template(LegendTemplate),
         events: {
@@ -33,7 +31,7 @@ define([
 
             Radio.trigger("Autostart", "initializedModul", "legend");
 
-            if (this.model.getVisible()) {
+            if (this.model.get("visible")) {
                 this.toggle();
             }
 
@@ -56,6 +54,7 @@ define([
                 containment: "#map",
                 handle: ".legend-win-header"
             });
+            return this;
         },
 
         toggle: function () {
@@ -73,18 +72,16 @@ define([
                 legendModel.setIsActive(false);
             }
         },
-        /**
-         * Entfernt diese view
-         */
+
         removeView: function () {
             this.$el.hide();
-
             this.remove();
         },
 
         /**
          * Passt die Höhe der Legende an die Klasse lgv-container an.
          * Derzeit wird die Funktion ausgeführt auf die updateSize Funtkion der Map.
+         * @returns {void}
          */
         updateLegendSize: function () {
             $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);

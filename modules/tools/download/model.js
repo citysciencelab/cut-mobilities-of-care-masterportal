@@ -1,10 +1,11 @@
-define([
-    "openlayers",
-    "backbone",
-    "backbone.radio",
-    "proj4"
-], function (ol, Backbone, Radio, proj4) {
-    var Download = Backbone.Model.extend({
+define(function (require) {
+    var ol = require("openlayers"),
+        $ = require("jquery"),
+        proj4 = require("proj4"),
+        Download;
+
+    Download = Backbone.Model.extend({
+        defaults: {},
         // Die Features
         data: {},
         // das ausgewählte Format
@@ -21,7 +22,7 @@ define([
             });
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "download") {
+            if (args[2].get("id") === "download") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -32,8 +33,9 @@ define([
             }
         },
         /**
-             * Setzt das Model und den View zurück
-             */
+         * Setzt das Model und den View zurück
+         * @returns {void}
+         */
         cleanUp: function () {
             this.data = {};
             this.formats = {};
@@ -41,73 +43,76 @@ define([
             this.removeDom();
         },
         /**
-             * setter für Data
-             * @param {Ol.Feature} data Vektor Objekt das heruntergeladen werden kann
-             */
+         * setter für Data
+         * @param {Ol.Feature} data Vektor Objekt das heruntergeladen werden kann
+         * @returns {void}
+         */
         setData: function (data) {
             this.data = data;
         },
         /**
-             * setter für Data
-             * @param {Ol.Feature} data Vektor Objekt das heruntergeladen werden kann
-             */
+         * getter für Data
+         * @param {Ol.Feature} data Vektor Objekt das heruntergeladen werden kann
+         * @returns {void}
+         */
         getData: function () {
             return this.data;
         },
-        /**
-             * getter für Format
-             */
+
         getSelectedFormat: function () {
             return $(".file-endings").val();
         },
+
         /**
-             * setter für Format
-             * @param {String} formats die möglich Formate in die die Features umgewandelt werden können
-             */
+         * setter für Format
+         * @param {String} selectedFormat formats die möglich Formate in die die Features umgewandelt werden können
+         * @returns {void}
+         */
         setSelectedFormat: function (selectedFormat) {
             this.selectedFormat = selectedFormat;
         },
-        /**
-             * getter für Format
-             */
+
         getFormats: function () {
             return this.formats;
         },
         /**
-             * setter für Format
-             * @param {String} formats die möglich Formate in die die Features umgewandelt werden können
-             */
+         * setter für Format
+         * @param {String} formats die möglich Formate in die die Features umgewandelt werden können
+         * @returns {void}
+         */
         setFormats: function (formats) {
             this.formats = formats;
         },
-        /**
-             * getter für Caller
-             */
+
         getCaller: function () {
             return this.caller;
         },
         /**
-             * setter für das Tool, dass den Download aufgerufen hat
-             */
+         * setter für das Tool, dass den Download aufgerufen hat
+         * @param {obj} caller -
+         * @returns {void}
+         */
         setCaller: function (caller) {
             this.caller = caller;
         },
-        /**
-             * getter für den Selector des Download Buttons
-             */
+
         getDlBtnSel: function () {
             return this.dlBtnSel;
         },
 
         /**
-             * validates Filename
-             */
+         * validates Filename
+         * @param {string} filename -
+         * @returns {void}
+         */
         validateFilename: function (filename) {
+            var result;
+
             if (_.isUndefined(filename) || _.isNull(filename)) {
                 return false;
             }
             filename.trim();
-            var result = filename.match(/^[0-9a-zA-Z]+(\.[0-9a-zA-Z]+)?$/);
+            result = filename.match(/^[0-9a-zA-Z]+(\.[0-9a-zA-Z]+)?$/);
 
             if (_.isUndefined(result) && _.isNull(result)) {
                 Radio.trigger("Alert", "alert", "Bitte geben Sie einen gültigen Dateinamen ein! (Erlaubt sind Klein-,Großbuchstaben und Zahlen.)");
@@ -115,18 +120,17 @@ define([
             return !_.isUndefined(result) && !_.isNull(result);
         },
         appendFileExtension: function (filename, format) {
-
             var suffix = "." + format;
 
             if (filename.indexOf(suffix, filename.length - suffix.length) === -1) {
-                filename += "." + format;
+                return filename + "." + format;
             }
             return filename;
         },
         /**
-              * Überprüft, ob im Format Selectfeld ein Format ausgewählt wurde.
-              * @return {[type]} [description]
-              */
+         * Überprüft, ob im Format Selectfeld ein Format ausgewählt wurde.
+         * @return {[type]} [description]
+         */
         validateFileExtension: function () {
             var format = this.getSelectedFormat();
 
@@ -138,9 +142,10 @@ define([
         },
 
         /**
-             * prepare Convertiert die Übergebenen Daten für den Download und setzt sie hinterher wieder zurück,
-             * damit sie weiterhin korrekt angezeigt werden.
-             */
+         * prepare Convertiert die Übergebenen Daten für den Download und setzt sie hinterher wieder zurück,
+         * damit sie weiterhin korrekt angezeigt werden.
+         * @returns {converted} converted
+         */
         prepareData: function () {
 
             var backup = this.backupCoords(this.getData()),
@@ -153,17 +158,18 @@ define([
             return converted;
         },
         /**
-             * Gibt zurück, ob der Browser die Microsoft File API unterstützt
-             * @return {Boolean}
-             */
+         * Gibt zurück, ob der Browser die Microsoft File API unterstützt
+         * @return {Boolean} true | false
+         */
         isInternetExplorer: function () {
             return window.navigator.msSaveOrOpenBlob;
         },
 
         /**
-             * Stand: 26.04.16 Der IE unterstüzt das HTML5 downlaod Attribut nicht deswegen wird
-             * Ein die nur von IE unterstütze File Api verwendet
-             */
+         * Stand: 26.04.16 Der IE unterstüzt das HTML5 downlaod Attribut nicht deswegen wird
+         * Ein die nur von IE unterstütze File Api verwendet
+         * @returns {void}
+         */
         prepareDownloadButtonIE: function () {
             var fileData = [this.getData()],
                 blobObject = new Blob(fileData),
@@ -185,12 +191,10 @@ define([
              * @return {[type]} [description]
              */
         prepareDownloadButtonNonIE: function () {
-            var url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.getData());
+            var url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.getData()),
+                that = this;
 
             $(this.getDlBtnSel()).attr("href", url);
-
-            var that = this;
-
             $(this.getDlBtnSel()).on("click", function (e) {
                 var filename = $("input.file-name").val();
 
@@ -217,34 +221,30 @@ define([
             });
         },
         /**
-             * Erzeugt ein unsichtbares <a> mit Hilfe dessen ein download getriggert werden kann
-             * @param  {String} data     Das Objekt, das heruntergeladen werden soll
-             * @param  {String} filename Der Dateiname, der herunterzuladenen Daten
-             * @return {a-tag}  Ein <a>-Tag das die herunterzuladenen Daten enthält
-             */
+         * Erzeugt ein unsichtbares <a> mit Hilfe dessen ein download getriggert werden kann
+         * @param  {String} data     Das Objekt, das heruntergeladen werden soll
+         * @param  {String} filename Der Dateiname, der herunterzuladenen Daten
+         * @return {a-tag}  Ein <a>-Tag das die herunterzuladenen Daten enthält
+         */
         createDOM: function (data, filename) {
             var a = document.createElement("a");
 
-            data = "text/json;charset=utf-8," + data;
-
-            a.href = "data:" + data;
+            a.href = "data:text/json;charset=utf-8," + data;
             a.downloadFile = filename;
             $(a).hide();
             $(".win-body").append(a);
             return a;
         },
-        /**
-             * Löscht das erzeugt <a> Element
-             */
+
         removeDom: function () {
             $(".win-body a").remove();
         },
         /**
-             * Konvertiert ein Feature Objekt in ein Format
-             * @param  {string} format das Fromat in das Konvertiert werden soll
-             * @param  {ol.Feature} data das Vector Object, dass nach kml konvertiert werden soll
-             * @return {Format} das konvertierte Objekt
-             */
+         * Konvertiert ein Feature Objekt in ein Format
+         * @param  {string} format das Fromat in das Konvertiert werden soll
+         * @param  {ol.Feature} data das Vector Object, dass nach kml konvertiert werden soll
+         * @return {Format} das konvertierte Objekt
+         */
         convert: function (format, data) {
             var converter = this.getConverter(format);
 
@@ -274,11 +274,11 @@ define([
             }
         },
         /**
-             * Transfomiert Geometrische Objekte
-             * @param  {Object} geometry    Die geometrie die konvertiert werden soll
-             * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
-             * @return {Array or array[array]}  Die transformierten Koordinaten der Geometry
-             */
+         * Transfomiert Geometrische Objekte
+         * @param  {object} geometry    Die geometrie die konvertiert werden soll
+         * @param  {object} projections Ein Object, dass ausgangs und ziel Projection enthält
+         * @return {nubmer[]} transCoord Die transformierten Koordinaten der Geometry
+         */
         transformCoords: function (geometry, projections) {
 
             var transCoord = [];
@@ -303,12 +303,12 @@ define([
             return transCoord;
         },
         /**
-             * Transformiert ein Polygon
-             * @param  {array[array]} coords      Alle Punkte des Polygons
-             * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
-             * @param  {Object} context     das Download Model
-             * @return {array[array]}             [description]
-             */
+         * Transformiert ein Polygon
+         * @param  {number[]} coords      Alle Punkte des Polygons
+         * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
+         * @param  {Object} context     das Download Model
+         * @return {number[]}             [description]
+         */
         transformPolygon: function (coords, projections, context) {
 
             var transCoord = [];
@@ -322,12 +322,12 @@ define([
             return [transCoord];
         },
         /**
-             * Transformiert eine Linie
-             * @param  {array} coords      Alle Punkte der Linie
-             * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
-             * @param  {Object} context     das Download Model
-             * @return {array}             Die Transformierten Punkte
-             */
+         * Transformiert eine Linie
+         * @param  {array} coords      Alle Punkte der Linie
+         * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
+         * @param  {Object} context     das Download Model
+         * @return {array}             Die Transformierten Punkte
+         */
         transformLine: function (coords, projections, context) {
 
             var transCoord = [];
@@ -339,27 +339,33 @@ define([
             return transCoord;
         },
         /**
-             * Transformiert einen Punkt in eine andere Projektion
-             * @param  {array} point       Der zu tranformierende Punkt
-             * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
-             * @return {array}             Der transformierte Punkt
-             */
+         * Transformiert einen Punkt in eine andere Projektion
+         * @param  {array} point       Der zu tranformierende Punkt
+         * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
+         * @return {array}             Der transformierte Punkt
+         */
         transformPoint: function (point, projections) {
             return proj4(projections.sourceProj, projections.destProj, point);
         },
         /**
-             * Konvertiert Features nach KML, benötigt min. OpenLayers 3.12
-             * @param  {ol.Feature} data das Vector Object, dass nach kml konvertiert werden soll
-             * @return {KML-String} das Resultierende KML
-             */
+         * Konvertiert Features nach KML, benötigt min. OpenLayers 3.12
+         * @param  {ol.Feature} features das Vector Object, dass nach kml konvertiert werden soll
+         * @param {object} context -
+         * @return {KML-String} das Resultierende KML
+         */
         convertFeaturesToKML: function (features, context) {
             var format = new ol.format.KML({extractStyles: true}),
                 pointOpacities = [],
                 pointColors = [],
+                featuresWithPointStyle,
                 pointRadiuses = [];
 
             _.each(features, function (feature) {
-                var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
+                var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32")),
+                    type,
+                    styles,
+                    color,
+                    style;
 
                 // für den Download nach einem Import! Z-Koordinate absägen
                 if (transCoord.length === 3) {
@@ -367,15 +373,15 @@ define([
                 }
 
                 feature.getGeometry().setCoordinates(transCoord, "XY");
-                var type = feature.getGeometry().getType(),
-                    styles = feature.getStyleFunction().call(feature),
-                    style = styles[0];
+                type = feature.getGeometry().getType();
+                styles = feature.getStyleFunction().call(feature);
+                style = styles[0];
 
                 // wenn Punkt-Geometrie
                 if (type === "Point") {
                     // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
                     if (!feature.getStyle().getText()) {
-                        var color = style.getFill().getColor().split("(")[1].split(",");
+                        color = style.getFill().getColor().split("(")[1].split(",");
 
                         pointOpacities.push(style.getFill().getColor().split(",")[3].split(")")[0]);
                         pointColors.push(color[0] + "," + color[1] + "," + color[2]);
@@ -383,18 +389,19 @@ define([
                     }
                 }
             }, context);
-            features = format.writeFeatures(features);
 
             // KML zerlegen und die Punktstyles einfügen
-            var featuresWithPointStyle = jQuery.parseXML(features);
+            featuresWithPointStyle = $.parseXML(format.writeFeatures(features));
 
             $(featuresWithPointStyle).find("Point").each(function (i, point) {
-                var placemark = point.parentNode;
+                var placemark = point.parentNode,
+                    style,
+                    pointStyle;
 
                 // kein Text, muss also Punkt sein
                 if (!$(placemark).find("name")[0]) {
-                    var style = $(placemark).find("Style")[0],
-                        pointStyle = "<pointstyle>";
+                    style = $(placemark).find("Style")[0];
+                    pointStyle = "<pointstyle>";
 
                     pointStyle += "<color>" + pointColors[i] + "</color>";
                     pointStyle += "<transparency>" + pointOpacities[i] + "</transparency>";
@@ -405,8 +412,7 @@ define([
                 }
 
             });
-            features = new XMLSerializer().serializeToString(featuresWithPointStyle);
-            return features;
+            return new XMLSerializer().serializeToString(featuresWithPointStyle);
         },
 
         /**
@@ -423,18 +429,6 @@ define([
                 sourceProj: proj4(sourceProj),
                 destProj: proj4(destProj)
             };
-        },
-
-        getId: function () {
-            return this.get("id");
-        },
-
-        getName: function () {
-            return this.get("title");
-        },
-
-        getGlyphicon: function () {
-            return this.get("glyphicon");
         }
     });
 

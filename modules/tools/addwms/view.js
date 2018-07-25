@@ -3,19 +3,21 @@
 @Author: RL
 **/
 
-define([
-    "jquery",
-    "backbone",
-    "text!modules/tools/addwms/template.html",
-    "modules/tools/addwms/model"
-], function ($, Backbone, AddWMSWin, AddWMSModel) {
+define(function (require) {
+    var $ = require("jquery"),
+        AddWMSWin = require("text!modules/tools/addwms/template.html"),
+        AddWMSModel = require("modules/tools/addwms/model"),
+        AddWMSView;
 
-    var AddWMSView = Backbone.View.extend({
-        model: AddWMSModel,
+    AddWMSView = Backbone.View.extend({
+        model: new AddWMSModel(),
         template: _.template(AddWMSWin),
         initialize: function () {
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
-            this.listenTo(this.model, "change:wmsURL", this.urlChange);
+            this.listenTo(this.model, {
+                "change:wmsURL": this.urlChange,
+                "change:isCollapsed": this.render,
+                "change:isCurrentWin": this.render
+            });
         },
         events: {
             "click #addWMSButton": "loadAndAddLayers",
@@ -35,9 +37,9 @@ define([
         },
         // Rendert das Tool-Fenster
         render: function () {
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
+            var attr = this.model.toJSON();
 
+            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
@@ -45,6 +47,7 @@ define([
             else {
                 this.undelegateEvents();
             }
+            return this;
         }
     });
 

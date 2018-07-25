@@ -1,10 +1,6 @@
-define([
-    "modules/menu/desktop/listViewLight",
-    "modules/menu/desktop/listView",
-    "modules/menu/mobile/listView",
-    "modules/menu/table/view"
-], function () {
-    var MenuLoader;
+define(function (require) {
+    var MenuLoader,
+        $ = require("jquery");
 
     MenuLoader = function () {
         var channel = Radio.channel("MenuLoader");

@@ -1,12 +1,6 @@
-define([
-    "backbone",
-    "openlayers",
-    "backbone.radio",
-    "proj4"
-], function () {
-    var Backbone = require("backbone"),
-        ol = require("openlayers"),
-        Radio = require("backbone.radio"),
+define(function (require) {
+    var ol = require("openlayers"),
+        $ = require("jquery"),
         proj4 = require("proj4"),
         ImportTool;
 
@@ -18,17 +12,18 @@ define([
         },
 
         initialize: function () {
+            var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-            var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
 
             this.set("layer", drawLayer);
             this.set("source", drawLayer.getSource());
         },
 
         setStatus: function (args) {
-            if (args[2].getId() === "kmlimport") {
+            if (args[2].get("id") === "kmlimport") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -40,33 +35,19 @@ define([
         setText: function (value) {
             this.set("text", value);
         },
-        getText: function () {
-            return this.get("text");
-        },
 
         setFeatures: function (value) {
             this.set("features", value);
         },
-        getFeatures: function () {
-            return this.get("features");
-        },
+
         setSource: function (value) {
             this.set("source", value);
-        },
-        getSource: function () {
-            return this.get("source");
         },
         setLayer: function (value) {
             this.set("layer", value);
         },
-        getLayer: function () {
-            return this.get("layer");
-        },
         setFormat: function (value) {
             this.set("format", value);
-        },
-        getFormat: function () {
-            return this.get("format");
         },
 
         importKML: function () {
@@ -80,7 +61,7 @@ define([
         // nach import:kml input leeren und button-style zurücksetzen
         emptyInput: function () {
             $("#fakebutton").html("Datei auswählen (keine ausgewählt)");
-            if (this.getText() !== "") {
+            if (this.get("text") !== "") {
                 this.setText("");
                 $("#fakebutton").toggleClass("btn-primary");
                 $("#btn_import").prop("disabled", true);
@@ -88,12 +69,12 @@ define([
         },
         // features von KML (in "text" gespeichert) einlesen
         getFeaturesFromKML: function () {
-            if (this.getText() !== "") {
-                var data = this.getText(),
-                    format = this.getFormat(),
-                    features = format.readFeatures(data);
+            var features;
 
-                this.setFormat(format);
+            if (this.get("text") !== "") {
+                features = this.get("format").readFeatures(this.get("text"));
+
+                this.setFormat(this.get("format"));
                 this.setFeatures(features);
             }
             else {
@@ -103,8 +84,8 @@ define([
 
         // Workaround der Styles für Punkte und Text
         setStyle: function () {
-            var features = this.getFeatures(),
-                kml = jQuery.parseXML(this.get("text")),
+            var features = this.get("features"),
+                kml = $.parseXML(this.get("text")),
                 pointStyleColors = [],
                 pointStyleTransparencies = [],
                 pointStyleRadiuses = [],
@@ -112,16 +93,20 @@ define([
 
                 // kml parsen und eigenen pointStyle auf Punkt-Features anwenden
             $(kml).find("Point").each(function (i, point) {
-                var placemark = point.parentNode;
+                var placemark = point.parentNode,
+                    pointStyle,
+                    color,
+                    transparency,
+                    radius;
 
                 // kein Text
                 if (!$(placemark).find("name")[0]) {
-                    var pointStyle = $(placemark).find("pointstyle")[0],
-                        color = $(pointStyle).find("color")[0],
-                        transparency = $(pointStyle).find("transparency")[0],
-                        radius = $(pointStyle).find("radius")[0];
+                    pointStyle = $(placemark).find("pointstyle")[0];
+                    color = $(pointStyle).find("color")[0];
+                    transparency = $(pointStyle).find("transparency")[0];
+                    radius = $(pointStyle).find("radius")[0];
 
-                        // rgb in array schreiben
+                    // rgb in array schreiben
                     color = new XMLSerializer().serializeToString(color);
                     color = color.split(">")[1].split("<")[0];
                     pointStyleColors.push(color);
@@ -131,7 +116,7 @@ define([
                     pointStyleTransparencies.push(transparency);
                     // punktradius in array schreiben
                     radius = new XMLSerializer().serializeToString(radius);
-                    radius = parseInt(radius.split(">")[1].split("<")[0]);
+                    radius = parseInt(radius.split(">")[1].split("<")[0], 10);
                     pointStyleRadiuses.push(radius);
                 }
             });
@@ -149,7 +134,7 @@ define([
                     }
                     // wenn Punkt
                     else {
-                        var style = new ol.style.Style({
+                        style = new ol.style.Style({
                             image: new ol.style.Circle({
                                 radius: pointStyleRadiuses[pointStyleCounter],
                                 fill: new ol.style.Fill({
@@ -180,7 +165,7 @@ define([
 
         // Koordinatentransformation
         transformFeatures: function () {
-            var features = this.getFeatures();
+            var features = this.get("features");
 
             _.each(features, function (feature) {
                 var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:4326", "EPSG:25832"));
@@ -246,8 +231,8 @@ define([
         },
         // Features in die Karte laden
         featuresToMap: function () {
-            var features = this.getFeatures(),
-                source = this.getSource();
+            var features = this.get("features"),
+                source = this.get("source");
 
             source.addFeatures(features);
         }

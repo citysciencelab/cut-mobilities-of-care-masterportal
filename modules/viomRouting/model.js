@@ -1,10 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers"
-], function (Backbone, Radio, ol) {
+define(function (require) {
+    var ol = require("openlayers"),
+        $ = require("jquery"),
+        RoutingModel;
 
-    var RoutingModel = Backbone.Model.extend({
+    RoutingModel = Backbone.Model.extend({
         defaults: {
             bkgSuggestURL: "",
             bkgGeosearchURL: "",
@@ -36,14 +35,20 @@ define([
             this.set("startAdresse", "aktueller Standpunkt");
         },
         setStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "routing") {
+            var viomRoutingID = Radio.request("RestReader", "getServiceById", args[2].get("viomRoutingID")),
+                bkgSuggestID,
+                bkgGeosearchID,
+                epsgCode,
+                bbox;
+
+            if (args[2].get("id") === "routing") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
-                var viomRoutingID = Radio.request("RestReader", "getServiceById", args[2].get("viomRoutingID")),
-                    bkgSuggestID = Radio.request("RestReader", "getServiceById", args[2].get("bkgSuggestID")),
-                    bkgGeosearchID = Radio.request("RestReader", "getServiceById", args[2].get("bkgGeosearchID")),
-                    epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "",
-                    bbox = args[2].get("bbox") && epsgCode !== "" ? "&bbox=" + args[2].get("bbox") + epsgCode : null;
+                viomRoutingID = Radio.request("RestReader", "getServiceById", args[2].get("viomRoutingID"));
+                bkgSuggestID = Radio.request("RestReader", "getServiceById", args[2].get("bkgSuggestID"));
+                bkgGeosearchID = Radio.request("RestReader", "getServiceById", args[2].get("bkgGeosearchID"));
+                epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "";
+                bbox = args[2].get("bbox") && epsgCode !== "" ? "&bbox=" + args[2].get("bbox") + epsgCode : null;
 
                 this.set("bkgSuggestURL", bkgSuggestID.get("url"));
                 this.set("bkgGeosearchURL", bkgGeosearchID.get("url"));
@@ -68,18 +73,15 @@ define([
             }
         },
         suggestByBKG: function (value, target) {
-            if (value.length < 3) {
-                return;
-            }
             var arr = value.split(/,| /),
                 plz = _.filter(arr, function (val) {
                     return val.match(/^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$/);
                 }),
-                hsnr = _.filter(arr, function (val, index, arr) {
-                    if (index >= 1) {
-                        var patt = /^\D*$/,
-                            preString = patt.test(arr[index - 1]);
+                hsnr = _.filter(arr, function (val, index, list) {
+                    var patt = /^\D*$/,
+                        preString = patt.test(list[index - 1]);
 
+                    if (index >= 1) {
                         if (preString) { // vorher ein String
                             return val.match(/^[0-9]{1,4}\D?$/);
                         }
@@ -98,9 +100,9 @@ define([
                 async: true,
                 type: "GET",
                 success: function (data) {
-                    try {
-                        var treffer = [];
+                    var treffer = [];
 
+                    try {
                         _.each(data, function (strasse) {
                             treffer.push([strasse.suggestion, strasse.highlighted]);
                         });
@@ -155,19 +157,23 @@ define([
             }
         },
         requestRoute: function () {
+            var request = "PROVIDERID=" + this.get("viomProviderID") + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE",
+                splitter,
+                utcHour,
+                utcMinute;
+
             // zählt das Anfordern einer Routenberechnung
             Radio.trigger("ClickCounter", "calcRoute");
 
-            var request = "PROVIDERID=" + this.get("viomProviderID") + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE";
 
             /* Erwartete Übergabeparameter:
             *  routingtime [hh:mm]
             *  routingdate [yyyy-mm-dd]
             */
             if (this.get("routingtime") !== "" && this.get("routingdate") !== "") {
-                var splitter = this.get("routingtime").split(":"),
-                    utcHour = (parseFloat(splitter[0]) + new Date().getTimezoneOffset() / 60).toString(),
-                    utcMinute = parseFloat(splitter[1]);
+                splitter = this.get("routingtime").split(":");
+                utcHour = (parseFloat(splitter[0]) + (new Date().getTimezoneOffset() / 60)).toString();
+                utcMinute = parseFloat(splitter[1]);
 
                 request = request + "&STARTTIME=" + this.get("routingdate") + "T" + utcHour + ":" + utcMinute + ":00.000Z";
             }
@@ -178,7 +184,6 @@ define([
                 async: true,
                 context: this,
                 success: function (data) {
-                    $("#loader").hide();
                     var geoJsonFormat = new ol.format.GeoJSON(),
                         olFeature = geoJsonFormat.readFeature(data),
                         vectorlayer = new ol.layer.Vector({
@@ -193,6 +198,7 @@ define([
                             })
                         });
 
+                    $("#loader").hide();
                     vectorlayer.id = "routenplanerroute";
                     this.set("routelayer", vectorlayer);
                     Radio.trigger("Map", "addLayer", vectorlayer);
@@ -219,20 +225,18 @@ define([
         },
         addOverlay: function (olFeature) {
             var html = "<div id='routingoverlay' class=''>",
-                position = olFeature.getGeometry().getLastCoordinate(),
-                html = html + "<span class='glyphicon glyphicon-flag'></span>",
-                html = html + "<span>" + olFeature.get("EndDescription").substr(olFeature.get("EndDescription").indexOf(". ") + 1) + "</span>",
-                html = html + "</div>";
+                position = olFeature.getGeometry().getLastCoordinate();
+
+            html += "<span class='glyphicon glyphicon-flag'></span>";
+            html += "<span>" + olFeature.get("EndDescription").substr(olFeature.get("EndDescription").indexOf(". ") + 1) + "</span>";
+            html += "</div>";
 
             $("#map").append(html);
             this.set("mhpOverlay", new ol.Overlay({element: $("#routingoverlay")[0]}));
             this.get("mhpOverlay").setPosition([position[0] + 7, position[1] - 7]);
             Radio.trigger("Map", "addOverlay", this.get("mhpOverlay"));
         },
-        // getter for isGeolocationPossible
-        getIsGeolocationPossible: function () {
-            return this.get("isGeolocationPossible");
-        },
+
         // setter for isGeolocationPossible
         setIsGeolocationPossible: function (value) {
             this.set("isGeolocationPossible", value);

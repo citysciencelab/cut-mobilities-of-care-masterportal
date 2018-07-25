@@ -1,8 +1,5 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function (Backbone, Radio) {
-    "use strict";
+define(function () {
+
     return Backbone.Model.extend({
         /**
         *
@@ -13,11 +10,7 @@ define([
             layers: [],
             nodes: []
         },
-        /**
-         * @description Initialisierung der wfsFeature Suche
-         * @param {Object} config - Das Konfigurationsobjekt der Tree-Suche.
-         * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-         */
+
         initialize: function (config) {
             if (config.minChars) {
                 this.set("minChars", config.minChars);
@@ -26,17 +19,16 @@ define([
                 "search": this.search
             });
         },
-        /**
-        *
-        */
+
         search: function (searchString) {
+            var searchStringRegExp;
+
             if (this.get("layers").length === 0) {
                 this.getLayerForSearch();
             }
             if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.set("inUse", true);
-                var searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
-
+                searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
                 this.searchInLayers(searchStringRegExp);
                 this.searchInNodes(searchStringRegExp);
                 Radio.trigger("Searchbar", "createRecommendedList");
@@ -45,7 +37,8 @@ define([
         },
         /**
          * @description Führt die Suche in der Nodesvariablen aus.
-         * @param {string} Suchstring als RegExp
+         * @param {string} searchStringRegExp - Suchstring als RegExp
+         * @returns {void}
          */
         searchInNodes: function (searchStringRegExp) {
             var nodes = _.uniq(this.get("nodes"), function (node) {
@@ -61,9 +54,10 @@ define([
             }, this);
         },
         /**
-        * @description Führt die Suche in der Layervariablen mit Suchstring aus.
+         * @description Führt die Suche in der Layervariablen mit Suchstring aus.
          * @param {string} searchStringRegExp - Suchstring als RegExp.
-        */
+         * @returns {void}
+         */
         searchInLayers: function (searchStringRegExp) {
             _.each(this.get("layers"), function (layer) {
                 var layerName = layer.name.replace(/ /g, ""),
@@ -84,9 +78,6 @@ define([
             }, this);
         },
 
-        /**
-         *
-         */
         getLayerForSearch: function () {
             // lightModels aus der itemList im Parser
             var layerModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});

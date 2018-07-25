@@ -87,11 +87,12 @@ define(function (require) {
             {
                 name: "Ansprechpartner",
                 attributes: [
+                    "name_schulleiter",
+                    "name_stellv_schulleiter",
+                    "ansprechp_buero",
                     "ansprechp_klasse_1",
                     "ansprechp_klasse_5",
-                    "name_oberstufenkoordinator",
-                    "name_stellv_schulleiter",
-                    "ansprechp_buero"
+                    "name_oberstufenkoordinator"
                 ]
             },
             {
@@ -105,11 +106,6 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("Schulinfo");
 
-            channel.reply({
-                "getThemeConfig": function () {
-                    return this.get("themeConfig");
-                }
-            }, this);
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
             });
@@ -139,8 +135,8 @@ define(function (require) {
             var gfiContent,
                 featureInfos = [];
 
-            if (!_.isUndefined(this.getGfiContent()[0])) {
-                gfiContent = this.getGfiContent()[0];
+            if (!_.isUndefined(this.get("gfiContent")[0])) {
+                gfiContent = this.get("gfiContent")[0];
                 featureInfos = [];
                 featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
                 this.setFeatureInfos(featureInfos);
@@ -170,7 +166,7 @@ define(function (require) {
                         if (isAttributeFound) {
                             kategoryObj.attributes.push({
                                 attrName: _.isUndefined(this.get("gfiAttributes")[attribute]) ? attribute : this.get("gfiAttributes")[attribute],
-                                attrValue: this.beautifyAttribute(gfiContent[attribute])
+                                attrValue: this.beautifyAttribute(gfiContent[attribute], attribute)
                             });
                         }
                     }, this);
@@ -179,7 +175,31 @@ define(function (require) {
             }
             return featureInfos;
         },
-        beautifyAttribute: function (attribute) {
+        beautifyAttribute: function (attribute, key) {
+            var newVal,
+                beautifiedAttribute = attribute;
+
+            if (key === "oberstufenprofil") {
+                if (beautifiedAttribute.indexOf("|") !== -1) {
+                    beautifiedAttribute = [];
+                    _.each(attribute.split("|"), function (value) {
+                        newVal = value;
+                        // make part before first ";" bold
+                        newVal = newVal.replace(/^/, "<b>");
+                        newVal = newVal.replace(/;/, "</b>;");
+                        beautifiedAttribute.push(newVal);
+                    }, this);
+                }
+                else {
+                    newVal = attribute;
+                    // make part before first ";" bold
+                    newVal = newVal.replace(/^/, "<b>");
+                    newVal = newVal.replace(/;/, "</b>;");
+
+                    beautifiedAttribute = newVal;
+                }
+                return beautifiedAttribute;
+            }
             if (attribute.indexOf("|") !== -1) {
                 return attribute.split("|");
             }

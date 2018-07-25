@@ -64,7 +64,8 @@ define(function (require) {
                         "isLeafFolder": true,
                         "isSelected": false,
                         "name": "testFolder",
-                        "isExpanded": true
+                        "isExpanded": true,
+                        "glyphicon": "test"
                     };
                 },
 
@@ -83,6 +84,9 @@ define(function (require) {
                 get: function (value) {
                     if (value === "onlyDesktop") {
                         return false;
+                    }
+                    if (value === "type") {
+                        return "folder";
                     }
 
                     return "invalid";
@@ -108,8 +112,6 @@ define(function (require) {
 
                 fakeModel.setIsFolderSelectable(true);
                 fakeListView.addViews([fakeModel]);
-
-                expect(fakeListView.wasCheckboxFound()).to.be.equal(true);
                 expect(fakeListView.wasAppendCalled()).to.be.equal(true);
             });
         });

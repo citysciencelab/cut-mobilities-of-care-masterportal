@@ -1,9 +1,6 @@
-define([
-    "backbone",
-    "text!modules/menu/desktop/folder/templateMenu.html"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         Template = require("text!modules/menu/desktop/folder/templateMenu.html"),
         FolderView;
 
@@ -20,8 +17,8 @@ define([
         render: function () {
             var attr = this.model.toJSON();
 
-            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
-
+            $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+            return this;
         }
         // toggleIsChecked: function () {
         //     this.model.toggleIsChecked();

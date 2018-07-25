@@ -1,7 +1,5 @@
 define(function (require) {
-    var Radio = require("backbone.radio"),
-        Backbone = require("backbone"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         Config = require("config"),
         RemoteInterface;
 
@@ -36,7 +34,8 @@ define(function (require) {
 
         /**
          * handles the postMessage events
-         * @param  {MessageEvent} event
+         * @param  {MessageEvent} event -
+         * @returns {void}
          */
         receiveMessage: function (event) {
             if (event.origin !== this.get("postMessageUrl")) {
@@ -63,20 +62,21 @@ define(function (require) {
         },
         /**
          * sends Message to remotehost via postMessage Api
-         *
          * @param  {Object} content the Data to be sent
+         * @returns {void}
          */
         postMessage: function (content) {
             parent.postMessage(content, this.get("postMessageUrl"));
         },
         /**
          * gets the center coordinate of the feature geometry and triggers it to MapMarker module
-         * @param  {String} featureId
-         * @param  {String} layerId
+         * @param  {String} featureId -
+         * @param  {String} layerId -
+         * @returns {void}
          */
         showPositionByFeatureId: function (featureId, layerId) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-                feature = model.getLayerSource().getFeatureById(featureId),
+                feature = model.get("layerSource").getFeatureById(featureId),
                 extent = feature.getGeometry().getExtent(),
                 center = ol.extent.getCenter(extent);
 

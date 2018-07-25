@@ -4,12 +4,6 @@ define(function (require) {
         View;
 
     View = Backbone.View.extend({
-        tagName: "span",
-        className: "valueView value-text",
-        template: _.template(Template),
-        attributes: {
-            title: "Auswahl löschen"
-        },
         events: {
             "click": "deselect"
         },
@@ -23,11 +17,17 @@ define(function (require) {
                 }
             });
         },
+        tagName: "span",
+        className: "valueView value-text",
+        template: _.template(Template),
+        attributes: {
+            title: "Auswahl löschen"
+        },
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            return this.$el;
+            return this;
         },
         deselect: function () {
             this.model.setIsSelected(false);

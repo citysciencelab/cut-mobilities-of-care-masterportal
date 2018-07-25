@@ -4,7 +4,8 @@ define(function (require) {
         Radio = require("backbone.radio"),
         Config = require("config"),
         Moment = require("moment"),
-        ol = require("openlayers"),
+        Ol = require("openlayers"),
+        $ = require("jquery"),
         Theme;
 
     Theme = Backbone.Model.extend({
@@ -21,9 +22,6 @@ define(function (require) {
             gfiContent: undefined
         },
 
-        /**
-         *
-         */
         requestFeatureInfos: function () {
             if (this.get("typ") === "WMS" || this.get("typ") === "GROUP") {
                 if (this.get("infoFormat") === "text/html") {
@@ -39,6 +37,8 @@ define(function (require) {
         },
 
         getWmsHtmlGfi: function () {
+            var gfiFeatures;
+
             // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
             if (this.get("id") === "2407" || this.get("id") === "4423") {
                 $.ajax({
@@ -56,13 +56,13 @@ define(function (require) {
                 });
             }
             else {
-                var gfiFeatures = {"html": this.get("gfiUrl")};
+                gfiFeatures = {"html": this.get("gfiUrl")};
 
                 $.ajax({
                     url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
                     context: this,
                     success: function (data) {
-                        if ($(data).find("tbody").children().length > 1 === true) {
+                        if (this.$(data).find("tbody").children().length > 1) {
                             this.set("gfiContent", [gfiFeatures]);
                         }
                         this.setIsReady(true);
@@ -74,13 +74,13 @@ define(function (require) {
         getWmsGfi: function (successFunction) {
             var url = Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
 
-            url = url.replace(/SLD_BODY\=.*?\&/, "");
+            url = url.replace(/SLD_BODY=.*?&/, "");
             $.ajax({
                 url: url,
                 context: this,
                 success: successFunction,
                 error: function (jqXHR, textStatus) {
-                    alert("Ajax-Request " + textStatus);
+                    Radio.trigger("Alert", "alert", "Ajax-Request " + textStatus);
                 }
             });
         },
@@ -89,21 +89,22 @@ define(function (require) {
             var gfiList = [],
                 gfiFormat,
                 pgfi = [],
-                gfiFeatures;
+                gfiFeatures,
+                dat = data;
 
             // handle non text/xml responses arriving as string
-            if (_.isString(data)) {
-                data = $.parseXML(data);
+            if (_.isString(dat)) {
+                dat = this.$.parseXML(dat);
             }
 
-            // parse result, try built-in ol-format first
-            gfiFormat = new ol.format.WMSGetFeatureInfo();
+            // parse result, try built-in Ol-format first
+            gfiFormat = new Ol.format.WMSGetFeatureInfo();
             // das reverse wird fürs Planportal gebraucht SD 18.01.2016
             gfiFeatures = gfiFormat.readFeatures(data, {
                 dataProjection: Config.view.proj
             }).reverse();
 
-            // ESRI is not parsed by the ol-format
+            // ESRI is not parsed by the Ol-format
             if (_.isEmpty(gfiFeatures)) {
                 if (data.getElementsByTagName("FIELDS")[0] !== undefined) {
                     _.each(data.getElementsByTagName("FIELDS"), function (element) {
@@ -127,7 +128,7 @@ define(function (require) {
                     }, this);
                 }
             }
-            else { // OS (deegree, UMN, Geoserver) is parsed by ol-format
+            else { // OS (deegree, UMN, Geoserver) is parsed by Ol-format
                 _.each(gfiFeatures, function (feature) {
                     gfiList.push(feature.getProperties());
                 });
@@ -147,11 +148,15 @@ define(function (require) {
         },
         /**
          * Klont die Models in der Collection, wenn ein Dienst mehr als ein Feature bei der GFI-Abfrage zurückliefert.
+         * @param {object} pgfi - pgfi
+         * @returns {void}
          */
         cloneCollModels: function (pgfi) {
+            var clone;
+
             _.each(pgfi, function (singlePgfi, index) {
                 if (index > 0) {
-                    var clone = this.clone();
+                    clone = this.clone();
 
                     clone.set("gfiContent", [singlePgfi]);
                     clone.set("id", _.uniqueId());
@@ -169,7 +174,10 @@ define(function (require) {
 
             gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent);
-            this.setGfiContent(gfiContent);
+
+            this.setGfiContent(_.extend(gfiContent, {
+                allProperties: this.get("feature").getProperties()
+            }));
             this.setIsReady(true);
         },
         // Setter
@@ -185,30 +193,21 @@ define(function (require) {
             this.set("isReady", value);
         },
 
-        // Getter
-        getName: function () {
-            return this.get("name");
-        },
-
-        getGfiContent: function () {
-            return this.get("gfiContent");
-        },
-
         isValidKey: function (key) {
             var ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
 
             if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
                 return false;
             }
+
             return true;
         },
-        /** helper function: check, if str has a valid value */
 
         /**
          * checks if the value is a string or array and if it is a string,
          * whether the value is unequal to NULL or an empty string
-         * @param  {String || Array} value
-         * @return {Boolean}
+         * @param {String|Array} value - value
+         * @returns {boolean} true or false
          */
         isValidValue: function (value) {
             if (value && _.isString(value) && value !== "" && value.toUpperCase() !== "NULL") {
@@ -223,7 +222,7 @@ define(function (require) {
             return false;
         },
 
-        /** helper function: first letter upperCase, _ becomes " " */
+        // helper function: first letter upperCase, _ becomes " "
         beautifyString: function (str) {
             return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
         },
@@ -232,35 +231,35 @@ define(function (require) {
 
             _.each(gfiList, function (element) {
                 var preGfi = {},
-                    gfi = {};
+                    gfi = {},
+                    keys = [],
+                    values = [];
 
                 // get rid of invalid keys and keys with invalid values; trim values
                 _.each(element, function (value, key) {
+                    var valueName = value;
+
                     if (this.get("gfiTheme") === "table") {
                         if (this.isValidKey(key)) {
-                            preGfi[key] = value;
+                            preGfi[key] = valueName;
                         }
                     }
-                    else if (this.isValidKey(key) && this.isValidValue(value)) {
-                        if (_.isArray(value)) {
-                            value = value.toString().replace(/,/g, ", ");
+                    else if (this.isValidKey(key) && this.isValidValue(valueName)) {
+                        if (_.isArray(valueName)) {
+                            valueName = valueName.toString().replace(/,/g, ", ");
                         }
-                        preGfi[key] = _.isString(value) ? value.trim() : value;
+                        preGfi[key] = _.isString(valueName) ? valueName.trim() : valueName;
                     }
                 }, this);
                 if (gfiAttributes === "showAll") {
                     // beautify keys
                     _.each(preGfi, function (value, key) {
-                        var key;
+                        var keyName = this.beautifyString(key);
 
-                        key = this.beautifyString(key);
-                        gfi[key] = value;
+                        gfi[keyName] = value;
                     }, this);
                     // im IE müssen die Attribute für WMS umgedreht werden
                     if (Radio.request("Util", "isInternetExplorer") !== false && this.get("typ") === "WMS") {
-                        var keys = [],
-                            values = [];
-
                         _.each(gfi, function (value, key) {
                             keys.push(key);
                             values.push(value);
@@ -271,11 +270,12 @@ define(function (require) {
                     }
                 }
                 else {
+                    preGfi = this.allKeysToLowerCase(preGfi);
                     _.each(gfiAttributes, function (value, key) {
-                        key = preGfi[key];
+                        var name = preGfi[key.toLowerCase()];
 
-                        if (key) {
-                            gfi[value] = key;
+                        if (name) {
+                            gfi[value] = name;
                         }
                     });
                 }
@@ -283,7 +283,23 @@ define(function (require) {
                     pgfi.push(gfi);
                 }
             }, this);
+
             return pgfi;
+        },
+
+        /**
+         * set all keys from object to lowercase
+         * @param {object} obj - key value pairs
+         * @returns {object} obj with lowercase keys
+         */
+        allKeysToLowerCase: function (obj) {
+            var lowerObj = {};
+
+            _.each(obj, function (value, key) {
+                lowerObj[key.toLowerCase()] = value;
+            });
+
+            return lowerObj;
         },
 
         /**

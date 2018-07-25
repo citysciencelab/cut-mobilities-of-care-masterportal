@@ -1,14 +1,8 @@
-define([
-    "backbone",
-    "text!modules/menu/desktop/layer/templateSelection.html",
-    "text!modules/menu/desktop/layer/templateSettings.html",
-    "backbone.radio"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         Template = require("text!modules/menu/desktop/layer/templateSelection.html"),
         TemplateSettings = require("text!modules/menu/desktop/layer/templateSettings.html"),
-        Radio = require("backbone.radio"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -36,7 +30,7 @@ define([
                 "change:isOutOfRange": this.toggleColor
             });
             this.render();
-            this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleColor(this.model, this.model.get("isOutOfRange"));
         },
 
         render: function () {
@@ -44,27 +38,29 @@ define([
                 attr = this.model.toJSON();
 
             selector.prepend(this.$el.html(this.template(attr)));
-            if (this.model.getIsSettingVisible() === true) {
+            if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
             }
+            return this;
         },
         rerender: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            if (this.model.getIsSettingVisible() === true) {
+            if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
             }
         },
 
         /**
          * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
+         * @returns {void}
          */
         renderSetting: function () {
             var attr = this.model.toJSON();
 
             // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
+            if (this.model.get("isSettingVisible") === false) {
                 // Animation Zahnrad
                 this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
                 this.$el.find(".layer-settings").slideUp("slow", function () {
@@ -122,6 +118,9 @@ define([
         },
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
+         * @param {Backbone.Model} model -
+         * @param {boolean} value -
+         * @returns {void}
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {

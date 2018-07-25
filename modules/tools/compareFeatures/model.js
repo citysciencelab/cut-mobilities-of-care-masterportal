@@ -69,38 +69,20 @@ define(function () {
          *@param {object} themeConfig attribute configuration from schulinfo theme
          * @returns {object[]} list - one object per row
          */
-        prepareFeatureListToShow: function (gfiAttributes, themeConfig) {
+        prepareFeatureListToShow: function (gfiAttributes) {
             var list = [],
-                featureList = this.get("groupedFeatureList")[this.get("layerId")],
-                sortedAttributes = this.sortAttributes(gfiAttributes, themeConfig);
+                featureList = this.get("groupedFeatureList")[this.get("layerId")];
 
-            Object.keys(sortedAttributes).forEach(function (key) {
+            Object.keys(gfiAttributes).forEach(function (key) {
                 var row = {};
 
-                row["col-1"] = sortedAttributes[key];
+                row["col-1"] = gfiAttributes[key];
                 featureList.forEach(function (feature, index) {
                     row["col-" + (index + 2)] = feature.get(key);
                 });
                 list.push(row);
             });
             return list;
-        },
-        sortAttributes: function (gfiAttributes, themeConfig) {
-            var sortedAttributes = {};
-
-            if (!_.isUndefined(themeConfig)) {
-
-                _.each(themeConfig, function (kategory) {
-                    _.each(kategory.attributes, function (attribute) {
-                        var isAttributeFound = this.checkForAttribute(gfiAttributes, attribute);
-
-                        if (isAttributeFound) {
-                            sortedAttributes[attribute] = gfiAttributes[attribute];
-                        }
-                    }, this);
-                }, this);
-            }
-            return sortedAttributes;
         },
         /**
          * checks if attribute is in gfiAttributes
@@ -195,6 +177,9 @@ define(function () {
          */
         beautifyAttributeValues: function (feature) {
             Object.keys(feature.getProperties()).forEach(function (key) {
+                var array = [],
+                    newVal;
+
                 if (typeof feature.get(key) === "string" && feature.get(key).indexOf("|") !== -1) {
                     feature.set(key, feature.get(key).split("|"));
                 }
@@ -204,7 +189,108 @@ define(function () {
                 else if (feature.get(key) === "false") {
                     feature.set(key, "nein");
                 }
+                if (key === "oberstufenprofil") {
+                    if (_.isArray(feature.get(key))) {
+                        _.each(feature.get(key), function (value) {
+                            newVal = value;
+
+                            // make part before first ";" bold
+                            newVal = newVal.replace(/^/, "<b>");
+                            newVal = newVal.replace(/;/, "</b>;");
+                            array.push(newVal);
+                        });
+                        feature.set(key, array);
+                    }
+                    else {
+                        newVal = feature.get(key);
+                        // make part before first ";" bold
+                        newVal = newVal.replace(/^/, "<b>");
+                        newVal = newVal.replace(/;/, "</b>;");
+
+                        feature.set(key, newVal);
+                    }
+                }
             });
+        },
+        preparePrint: function (rowsToShow) {
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+                features = this.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
+                tableBody = this.prepareTableBody(features, rowsToShow),
+                rowWidth = this.calculateRowWidth(tableBody[0], 30),
+                title = "Vergleichsliste - Schulen",
+                pdfDef = {
+                    pageSize: "A4",
+                    pageOrientation: "portrait",
+                    content: [
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: rowWidth,
+                                body: tableBody
+                            },
+                            layout: {
+                                hLineWidth: function (i, node) {
+                                    return i === 0 || i === node.table.body.length ? 2 : 1;
+                                },
+                                vLineWidth: function (i, node) {
+                                    return i === 0 || i === node.table.widths.length ? 2 : 1;
+                                },
+                                fillColor: function (i) {
+                                    return i % 2 === 0 ? "#dddddd" : "#ffffff";
+                                }
+                            }
+                        }
+                    ]
+                };
+
+            Radio.trigger("BrowserPrint", "print", "Vergleichsliste_Schulen", pdfDef, title, "download");
+        },
+
+        prepareTableBody: function (features, rowsToShow) {
+            var tableBody = [];
+
+            _.each(features, function (rowFeature, rowIndex) {
+                var row = [];
+
+                if (rowIndex < rowsToShow) {
+                    _.each(rowFeature, function (val) {
+                        if (_.isUndefined(val)) {
+                            row.push("");
+                        }
+                        // header cells get extra styling
+                        else if (rowIndex === 0) {
+                            row.push({
+                                text: String(val),
+                                style: "bold"
+                            });
+                        }
+                        else if (_.isArray(val)) {
+                            row.push(String(val).replace(/,/g, ",\n"));
+                        }
+                        else {
+                            row.push(String(val));
+                        }
+                    });
+                    tableBody.push(row);
+                }
+            });
+            tableBody[0][0] = {
+                text: ""
+            };
+            return tableBody;
+        },
+        calculateRowWidth: function (firstRow, firstRowWidth) {
+            var numDataRows = firstRow.length - 1,
+                rowWidth = [String(firstRowWidth) + "%"],
+                dataRowsWidth = 100 - firstRowWidth,
+                dataRowWidth = String(dataRowsWidth / numDataRows) + "%";
+
+            _.each(firstRow, function (row, index) {
+                if (index > 0) {
+                    rowWidth.push(dataRowWidth);
+                }
+            });
+            return rowWidth;
         },
 
         /**

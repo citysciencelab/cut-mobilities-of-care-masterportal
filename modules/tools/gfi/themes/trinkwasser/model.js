@@ -4,21 +4,19 @@ define(function (require) {
         TrinkwasserTheme;
 
     TrinkwasserTheme = Theme.extend({
-        /**
-         *
-         */
+
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.splitContent
             });
         },
         splitContent: function () {
-            if (_.isUndefined(this.get("gfiContent")) === false) {
-                var allgemContent = {},
-                    mikrobioContent = {},
-                    chemContent = {};
+            var allgemContent = {},
+                mikrobioContent = {},
+                chemContent = {};
 
-                _.each(this.getGfiContent(), function (element) {
+            if (_.isUndefined(this.get("gfiContent")) === false) {
+                _.each(this.get("gfiContent"), function (element) {
                     _.each(element, function (value, key) {
                         if (_.contains(["Entnahmedatum", "Bezirk", "Stadtteil", "Versorgungsgebiet"], key)) {
                             allgemContent[key] = value;

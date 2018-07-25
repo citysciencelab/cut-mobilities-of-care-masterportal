@@ -2,6 +2,7 @@ define(function (require) {
 
     var Radio = require("backbone.radio"),
         ol = require("openlayers"),
+        $ = require("jquery"),
         OverviewmapModel;
 
     OverviewmapModel = Backbone.Model.extend({
@@ -28,7 +29,7 @@ define(function (require) {
             });
             this.setNewOvmView(newOlView);
             this.setBaselayer(ovmConfigRes.baselayer ? this.getBaseLayerFromCollection(layers, ovmConfigRes.baselayer) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
-            if (_.isUndefined(this.getBaselayer()) === false) {
+            if (_.isUndefined(this.get("baselayer")) === false) {
                 Radio.trigger("Map", "addControl", this.newOverviewmap());
             }
             else {
@@ -41,9 +42,9 @@ define(function (require) {
                 collapsible: false,
                 className: "overviewmap ol-overviewmap ol-custom-overviewmap hidden-xs",
                 layers: [
-                    this.getOvmLayer(this.getBaselayer())
+                    this.getOvmLayer(this.get("baselayer"))
                 ],
-                view: this.getNewOvmView()
+                view: this.get("newOvmView")
             });
 
             return overviewmap;
@@ -92,19 +93,9 @@ define(function (require) {
             return imageLayer;
         },
 
-        // getter for baselayer
-        getBaselayer: function () {
-            return this.get("baselayer");
-        },
-
         // setter for baselayer
         setBaselayer: function (value) {
             this.set("baselayer", value);
-        },
-
-        // getter for newOvmView
-        getNewOvmView: function () {
-            return this.get("newOvmView");
         },
 
         // setter for newOvmView

@@ -1,15 +1,12 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Config = require("config"),
+    var Config = require("config"),
         RawLayerList;
 
     RawLayerList = Backbone.Collection.extend({
+        model: function (attrs) {
+            return new Backbone.Model(attrs);
+        },
         // URL zur services.json
         url: function () {
             return Radio.request("Util", "getPath", Config.layerConf);
@@ -29,6 +26,9 @@ define([
                 "getDisplayNamesOfFeatureAttributes": this.getDisplayNamesOfFeatureAttributes
             }, this);
 
+            channel.on({
+                "addGroupLayer": this.addGroupLayer
+            }, this);
             this.fetch({async: false});
         },
 
@@ -38,26 +38,28 @@ define([
          * @return {Object[]} response - Objekte aus der services.json
          */
         parse: function (response) {
+            var rawLayerArray = response;
+
             // Es gibt Layer in einem Dienst, die für unterschiedliche Portale unterschiedliche Daten/GFIs liefern --> z.B. Hochwasserrisikomanagement
-            // Da alle Layer demselben Metadtaensatz zugordnet sind, werden sie über die Id gelöscht
+            // Da alle Layer demselben Metadatensatz zugordnet sind, werden sie über die Id gelöscht
             if (_.has(Config.tree, "layerIDsToIgnore")) {
-                response = this.deleteLayersByIds(response, Config.tree.layerIDsToIgnore);
+                rawLayerArray = this.deleteLayersByIds(rawLayerArray, Config.tree.layerIDsToIgnore);
             }
             // Alle Layer eines Metadatensatzes die nicht dargestellt werden sollen --> z.B. MRH Fachdaten im FHH-Atlas
             if (_.has(Config.tree, "metaIDsToIgnore")) {
-                response = this.deleteLayersByMetaIds(response, Config.tree.metaIDsToIgnore);
+                rawLayerArray = this.deleteLayersByMetaIds(rawLayerArray, Config.tree.metaIDsToIgnore);
             }
             // Alle Layer eines Metadatensatzes die gruppiert dargestellt werden sollen --> z.B. Bauschutzbereich § 12 LuftVG Hamburg im FHH-Atlas
             if (_.has(Config.tree, "metaIDsToMerge")) {
-                response = this.mergeLayersByMetaIds(response, Config.tree.metaIDsToMerge);
+                rawLayerArray = this.mergeLayersByMetaIds(rawLayerArray, Config.tree.metaIDsToMerge);
             }
             // Die HVV Layer bekommen Ihre Styles zugeordnet
             // Pro Style wird eine neuer Layer erzeugt
             if (_.has(Config.tree, "layerIDsToStyle")) {
-                this.setStyleForHVVLayer(response);
-                response = this.cloneByStyle(response);
+                this.setStyleForHVVLayer(rawLayerArray);
+                rawLayerArray = this.cloneByStyle(rawLayerArray);
             }
-            return response;
+            return rawLayerArray;
         },
 
         /**
@@ -91,12 +93,13 @@ define([
          * @return {Object[]} response - Objekte aus der services.json
          */
         mergeLayersByMetaIds: function (response, metaIds) {
-            var objectsById,
+            var rawLayerArray = response,
+                objectsById,
                 newObject;
 
             _.each(metaIds, function (metaID) {
                 // Objekte mit derselben Metadaten-Id
-                objectsById = _.filter(response, function (layer) {
+                objectsById = _.filter(rawLayerArray, function (layer) {
                     return layer.typ === "WMS" && layer.datasets.length > 0 && layer.datasets[0].md_id === metaID;
                 });
                 // Das erste Objekt wird kopiert
@@ -115,19 +118,20 @@ define([
                         return parseInt(scale, 10);
                     });
                     // Entfernt alle zu "gruppierenden" Objekte aus der response
-                    response = _.difference(response, objectsById);
+                    rawLayerArray = _.difference(response, objectsById);
                     // Fügt das kopierte (gruppierte) Objekt der response hinzu
-                    response.push(newObject);
+                    rawLayerArray.push(newObject);
                 }
             });
 
-            return response;
+            return rawLayerArray;
         },
 
         /**
          * Holt sich die HVV-Objekte aus der services.json
          * Fügt den Objekten konfigurierte Attribute aus der config.js über die Id hinzu
          * @param {Object[]} response - Objekte aus der services.json
+         * @return {undefined}
          */
         setStyleForHVVLayer: function (response) {
             var styleLayerIDs = _.pluck(Config.tree.layerIDsToStyle, "id"),
@@ -137,9 +141,10 @@ define([
                 return _.contains(styleLayerIDs, layer.id);
             });
             _.each(layersByID, function (layer) {
-                var styleLayer = _.findWhere(Config.tree.layerIDsToStyle, {"id": layer.id});
+                var styleLayer = _.findWhere(Config.tree.layerIDsToStyle, {"id": layer.id}),
+                    layerExtended = _.extend(layer, styleLayer);
 
-                layer = _.extend(layer, styleLayer);
+                return layerExtended;
             });
         },
 
@@ -150,10 +155,10 @@ define([
          * @return {Object[]} response - Objekte aus der services.json
          */
         cloneByStyle: function (response) {
-            // Layer die mehrere Styles haben
-            var objectsByStyle = _.filter(response, function (model) {
-                return typeof model.styles === "object" && model.typ === "WMS";
-            });
+            var rawLayerArray = response,
+                objectsByStyle = _.filter(response, function (model) { // Layer die mehrere Styles haben
+                    return typeof model.styles === "object" && model.typ === "WMS";
+                });
 
             // Iteriert über die Objekte
             _.each(objectsByStyle, function (obj) {
@@ -172,15 +177,15 @@ define([
                     response.splice(_.indexOf(response, obj), 0, cloneObj);
                 }, this);
                 // Das ursprüngliche Objekt wird gelöscht
-                response = _.without(response, obj);
+                rawLayerArray = _.without(response, obj);
             }, this);
 
-            return response;
+            return rawLayerArray;
         },
 
         /**
          * Liefert das erste Model zurück, das den Attributen entspricht
-         * @param  {Object} attributes
+         * @param  {Object} attributes Objekt mit der Layerid
          * @return {Backbone.Model[]} - Liste der Models
          */
         getLayerWhere: function (attributes) {
@@ -189,7 +194,7 @@ define([
 
         /**
          * Liefert das erste Model zurück, das den Attributen entspricht
-         * @param  {Object} attributes
+         * @param  {Object} attributes Objekt mit der Layerid
          * @return {Backbone.Model[]} - Liste der Models
          */
         getLayerAttributesWhere: function (attributes) {
@@ -198,7 +203,7 @@ define([
 
         /**
           * Liefert ein Array aller Models zurück, die mit den übergebenen Attributen übereinstimmen
-          * @param  {Object} attributes
+          * @param  {Object} attributes Objekt mit Attribut zum Suchen
           * @return {Backbone.Model[]} - Liste der Models
           */
         getLayerListWhere: function (attributes) {
@@ -215,6 +220,19 @@ define([
 
         getDisplayNamesOfFeatureAttributes: function (layerId) {
             return this.get(layerId).get("gfiAttributes");
+        },
+        /**
+         * Fügt der Collection eine Kopie des Backbone Models hinzu.
+         * Es wird das Model geklont, welches zuerst im Gruppenlayer angegeben ist.
+         * @param {object} groupLayer  Layerobjekt des Gruppenlayers
+         * @return {Object[]} - Liste der Modelattribute
+         */
+        addGroupLayer: function (groupLayer) {
+            var modelById = this.getLayerWhere({id: groupLayer.id.split("_groupLayer")[0]}),
+                cloneObj = modelById.clone();
+
+            cloneObj.set("id", groupLayer.id);
+            this.add(cloneObj);
         }
     });
 

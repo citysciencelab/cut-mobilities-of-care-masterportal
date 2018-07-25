@@ -1,12 +1,10 @@
 define(function (require) {
-    require("jqueryui/widgets/draggable");
-
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Template = require("text!modules/featurelister/template.html"),
+    var Template = require("text!modules/featurelister/template.html"),
+        $ = require("jquery"),
         Model = require("modules/featurelister/model"),
         FeatureLister;
 
+    require("jqueryui/widgets/draggable");
     FeatureLister = Backbone.View.extend({
         model: Model,
         className: "featurelist-win",
@@ -47,8 +45,8 @@ define(function (require) {
         * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.
         */
         deselectGFIHit: function () {
-            $("#featurelist-list-table tr").each(function (inte, tr) {
-                $(tr).removeClass("info");
+            this.$("#featurelist-list-table tr").each(function (inte, tr) {
+                this.$(tr).removeClass("info");
             });
         },
         /*
@@ -58,11 +56,11 @@ define(function (require) {
             var gesuchteId = evt.id;
 
             this.deselectGFIHit();
-            $("#featurelist-list-table tr").each(function (inte, tr) {
-                var trId = parseInt($(tr).attr("id"), 10);
+            this.$("#featurelist-list-table tr").each(function (inte, tr) {
+                var trId = parseInt(this.$(tr).attr("id"), 10);
 
                 if (trId === gesuchteId) {
-                    $(tr).addClass("info");
+                    this.$(tr).addClass("info");
                 }
             });
         },
@@ -71,39 +69,39 @@ define(function (require) {
         * und überschreibt sie mit den sortierten Features.
         */
         orderList: function (evt) {
-            var spanTarget = $(evt.target).find("span")[0] ? $(evt.target).find("span")[0] : evt.target,
-                sortOrder = $(spanTarget).hasClass("glyphicon-sort-by-alphabet-alt") ? "ascending" : "descending",
+            var spanTarget = this.$(evt.target).find("span")[0] ? this.$(evt.target).find("span")[0] : evt.target,
+                sortOrder = this.$(spanTarget).hasClass("glyphicon-sort-by-alphabet-alt") ? "ascending" : "descending",
                 sortColumn = spanTarget.parentElement.textContent,
-                tableLength = $("#featurelist-list-table tr").length - 1,
+                tableLength = this.$("#featurelist-list-table tr").length - 1,
                 features = _.filter(this.model.get("layer").features, function (feature) {
                     return feature.id >= 0 && feature.id <= tableLength;
                 }),
                 featuresExtended = _.each(features, function (feature) {
-                    feature = _.extend(feature, feature.properties);
+                    _.extend(feature, feature.properties);
                 }),
                 featuresSorted = _.sortBy(featuresExtended, sortColumn);
 
-            $(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
+            this.$(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
             if (sortOrder === "ascending") {
-                $(spanTarget).removeClass("glyphicon-sort-by-alphabet-alt");
-                $(spanTarget).addClass("glyphicon-sort-by-alphabet");
-                $(spanTarget).addClass("featurelist-list-table-th-sorted");
+                this.$(spanTarget).removeClass("glyphicon-sort-by-alphabet-alt");
+                this.$(spanTarget).addClass("glyphicon-sort-by-alphabet");
+                this.$(spanTarget).addClass("featurelist-list-table-th-sorted");
             }
             else {
                 featuresSorted = featuresSorted.reverse();
-                $(spanTarget).removeClass("glyphicon-sort-by-alphabet");
-                $(spanTarget).addClass("glyphicon-sort-by-alphabet-alt");
-                $(spanTarget).addClass("featurelist-list-table-th-sorted");
+                this.$(spanTarget).removeClass("glyphicon-sort-by-alphabet");
+                this.$(spanTarget).addClass("glyphicon-sort-by-alphabet-alt");
+                this.$(spanTarget).addClass("featurelist-list-table-th-sorted");
             }
 
-            $("#featurelist-list-table tbody").empty();
+            this.$("#featurelist-list-table tbody").empty();
             this.writeFeaturesToTable(featuresSorted);
         },
         /*
         * Ermittelt die Anzahl der derzeit dargestellten Features, erhöht diese und liest diese Features aus. Stellt sie dann dar.
         */
         moreFeatures: function () {
-            var countFeatures = $("#featurelist-list-table tbody").children().length,
+            var countFeatures = this.$("#featurelist-list-table tbody").children().length,
                 maxFeatures = this.model.get("maxFeatures"),
                 toFeatures = countFeatures + maxFeatures - 1;
 
@@ -116,55 +114,55 @@ define(function (require) {
             var props = this.model.get("featureProps");
 
             if (_.keys(props).length > 0) {
-                $("#featurelistFeaturedetails").removeClass("disabled");
-                $(".featurelist-details-li").remove();
+                this.$("#featurelistFeaturedetails").removeClass("disabled");
+                this.$(".featurelist-details-li").remove();
                 _.each(props, function (value, key) {
-                    $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'><strong>" + key + "</strong></li>");
-                    $(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
+                    this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'><strong>" + key + "</strong></li>");
+                    this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
                 });
                 this.switchTabToDetails();
             }
             else {
-                $(".featurelist-details-li").remove();
-                $("#featurelistFeaturedetails").addClass("disabled");
+                this.$(".featurelist-details-li").remove();
+                this.$("#featurelistFeaturedetails").addClass("disabled");
             }
         },
         /*
         * Wechselt den Tab
         */
         switchTabToListe: function (evt) {
-            if (evt && $("#featurelistFeaturelist").hasClass("disabled")) {
+            if (evt && this.$("#featurelistFeaturelist").hasClass("disabled")) {
                 return;
             }
-            _.each($(".featurelist-navtabs").children(), function (child) {
+            _.each(this.$(".featurelist-navtabs").children(), function (child) {
                 if (child.id === "featurelistFeaturelist") {
-                    $(child).removeClass("disabled");
-                    $(child).addClass("active");
+                    this.$(child).removeClass("disabled");
+                    this.$(child).addClass("active");
                 }
                 else {
-                    $(child).removeClass("active");
+                    this.$(child).removeClass("active");
                 }
             });
-            $("#featurelist-themes").hide();
-            $("#featurelist-list").show();
-            $("#featurelist-details").hide();
+            this.$("#featurelist-themes").hide();
+            this.$("#featurelist-list").show();
+            this.$("#featurelist-details").hide();
         },
         /*
         * Wechselt den Tab
         */
         switchTabToTheme: function () {
-            _.each($(".featurelist-navtabs").children(), function (child) {
+            _.each(this.$(".featurelist-navtabs").children(), function (child) {
                 if (child.id === "featurelistThemeChooser") {
-                    $(child).removeClass("disabled");
-                    $(child).addClass("active");
+                    this.$(child).removeClass("disabled");
+                    this.$(child).addClass("active");
                 }
                 else {
-                    $(child).removeClass("active");
+                    this.$(child).removeClass("active");
                 }
             });
-            $("#featurelist-themes").show();
-            $("#featurelist-list").hide();
-            $("#featurelist-details").hide();
+            this.$("#featurelist-themes").show();
+            this.$("#featurelist-list").hide();
+            this.$("#featurelist-details").hide();
             this.model.downlightFeature();
             this.model.set("layerid", {});
         },
@@ -172,21 +170,21 @@ define(function (require) {
         * Wechselt den Tab
         */
         switchTabToDetails: function (evt) {
-            if (evt && $("#featurelistFeaturedetails").hasClass("disabled")) {
+            if (evt && this.$("#featurelistFeaturedetails").hasClass("disabled")) {
                 return;
             }
-            _.each($(".featurelist-navtabs").children(), function (child) {
+            _.each(this.$(".featurelist-navtabs").children(), function (child) {
                 if (child.id === "featurelistFeaturedetails") {
-                    $(child).removeClass("disabled");
-                    $(child).addClass("active");
+                    this.$(child).removeClass("disabled");
+                    this.$(child).addClass("active");
                 }
                 else {
-                    $(child).removeClass("active");
+                    this.$(child).removeClass("active");
                 }
             });
-            $("#featurelist-themes").hide();
-            $("#featurelist-list").hide();
-            $("#featurelist-details").show();
+            this.$("#featurelist-themes").hide();
+            this.$("#featurelist-list").hide();
+            this.$("#featurelist-details").show();
         },
         /*
         * Setted FeatureId bei Klick auf Feature in Tabelle
@@ -211,10 +209,10 @@ define(function (require) {
         newTheme: function (evt) {
             this.model.set("layerid", evt.currentTarget.id);
             // setze active Class
-            _.each($(evt.currentTarget.parentElement.children), function (li) {
-                $(li).removeClass("active");
+            _.each(this.$(evt.currentTarget.parentElement.children), function (li) {
+                this.$(li).removeClass("active");
             });
-            $(evt.currentTarget).addClass("active");
+            this.$(evt.currentTarget).addClass("active");
         },
         /*
         * Wird ein neuer Layer ausgewählt, werden aus allen Features mögliche Keys ermittelt und daraus Überschriften thead gebildet. Anschließend wird Funktion
@@ -237,19 +235,19 @@ define(function (require) {
                     }, this);
                 }, this);
                 this.model.set("headers", keyslist);
-                $("#featurelist-list-table thead").remove(); // leere Tabelle
-                $("#featurelist-list-table tbody").remove(); // leere Tabelle
-                $("#featurelist-list-table").prepend("<thead><tr><th class='featurelist-list-table-th'>" + keyslist.toString().replace(/,/g, "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th><th class='featurelist-list-table-th'>") + "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th></tr></thead>");
-                $("#featurelist-list-table").append("<tbody>");
+                this.$("#featurelist-list-table thead").remove(); // leere Tabelle
+                this.$("#featurelist-list-table tbody").remove(); // leere Tabelle
+                this.$("#featurelist-list-table").prepend("<thead><tr><th class='featurelist-list-table-th'>" + keyslist.toString().replace(/,/g, "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th><th class='featurelist-list-table-th'>") + "<span class='glyphicon glyphicon-sort-by-alphabet'></span></th></tr></thead>");
+                this.$("#featurelist-list-table").append("<tbody>");
                 this.readFeatures(0, maxFeatures, true);
-                $("#featurelist-list-table").append("</tbody>");
+                this.$("#featurelist-list-table").append("</tbody>");
                 this.switchTabToListe();
             }
             else {
-                $("#featurelist-list-table tr").remove();
-                $(".featurelist-list-footer").hide();
+                this.$("#featurelist-list-table tr").remove();
+                this.$(".featurelist-list-footer").hide();
                 this.switchTabToTheme();
-                $("#featurelistFeaturelist").addClass("disabled");
+                this.$("#featurelistFeaturelist").addClass("disabled");
             }
         },
         /*
@@ -261,10 +259,10 @@ define(function (require) {
             });
 
             if (dropTableFirst === true) {
-                $("#featurelist-list-table tbody").empty();
+                this.$("#featurelist-list-table tbody").empty();
             }
             // entferne evtl. Sortierungshinweise aus Überschriften
-            $(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
+            this.$(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
             this.writeFeaturesToTable(features);
         },
         /*
@@ -272,6 +270,7 @@ define(function (require) {
         */
         writeFeaturesToTable: function (features) {
             var totalFeaturesCount = this.model.get("layer").features.length,
+                shownFeaturesCount,
                 properties = "",
                 headers = this.model.get("headers");
 
@@ -293,19 +292,19 @@ define(function (require) {
                 }, this);
                 properties += "</tr>";
             }, this);
-            $("#featurelist-list-table tbody").append(properties);
+            this.$("#featurelist-list-table tbody").append(properties);
 
             // Prüfe, ob alle Features geladen sind, falls nicht, zeige Button zum Erweitern
-            var shownFeaturesCount = $("#featurelist-list-table tr").length - 1;
+            shownFeaturesCount = this.$("#featurelist-list-table tr").length - 1;
 
             if (shownFeaturesCount < totalFeaturesCount) {
-                $(".featurelist-list-footer").show(0, function () {
+                this.$(".featurelist-list-footer").show(0, function () {
                     this.setMaxHeight();
                 }.bind(this));
-                $(".featurelist-list-message").text(shownFeaturesCount + " von " + totalFeaturesCount + " Features gelistet.");
+                this.$(".featurelist-list-message").text(shownFeaturesCount + " von " + totalFeaturesCount + " Features gelistet.");
             }
             else {
-                $(".featurelist-list-footer").hide();
+                this.$(".featurelist-list-footer").hide();
             }
         },
         /*
@@ -314,7 +313,7 @@ define(function (require) {
         updateLayerHeader: function () {
             var name = this.model.get("layer").name ? this.model.get("layer").name : "";
 
-            $("#featurelist-list-header").text(name);
+            this.$("#featurelist-list-header").text(name);
         },
         /*
         * Erzeugt Auflistung der selektierbaren Layer.
@@ -322,9 +321,9 @@ define(function (require) {
         updateVisibleLayer: function () {
             var ll = this.model.get("layerlist");
 
-            $("#featurelist-themes-ul").empty();
+            this.$("#featurelist-themes-ul").empty();
             _.each(ll, function (layer) {
-                $("#featurelist-themes-ul").append("<li id='" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
+                this.$("#featurelist-themes-ul").append("<li id='" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
             });
         },
         render: function () {
@@ -339,10 +338,11 @@ define(function (require) {
                     this.setMaxHeight();
                 }.bind(this)
             });
+            return this;
         },
         toggle: function () {
             this.$el.toggle();
-            if ($(this.$el).is(":visible") === true) {
+            if (this.$el.is(":visible") === true) {
                 this.updateVisibleLayer();
                 this.model.checkVisibleLayer();
                 // wenn nur ein Layer gefunden, lade diesen sofort
@@ -368,10 +368,10 @@ define(function (require) {
                 maxHeight = winHeight - posY - marginTop - marginBottom - header - footer - 5,
                 maxWidth = $(window).width() * 0.4;
 
-            $(".featurelist-list-table").css("max-height", maxHeight);
-            $(".featurelist-list-table").css("max-width", maxWidth);
-            $(".featurelist-details-ul").css("max-height", maxHeight);
-            $(".featurelist-details-ul").css("max-width", maxWidth);
+            this.$(".featurelist-list-table").css("max-height", maxHeight);
+            this.$(".featurelist-list-table").css("max-width", maxWidth);
+            this.$(".featurelist-details-ul").css("max-height", maxHeight);
+            this.$(".featurelist-details-ul").css("max-width", maxWidth);
         }
     });
 

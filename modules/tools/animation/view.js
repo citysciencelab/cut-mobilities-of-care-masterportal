@@ -1,5 +1,4 @@
 define(function (require) {
-
     var Animation = require("modules/tools/animation/model"),
         AnimationTemplate = require("text!modules/tools/animation/template.html"),
         AnimationView;

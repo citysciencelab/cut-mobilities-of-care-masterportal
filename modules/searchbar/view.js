@@ -12,8 +12,9 @@ define(function (require) {
 
     SearchbarView = Backbone.View.extend({
         events: {
-            "paste input": "setSearchString",
-            "keyup input": "setSearchString",
+            "paste input": "waitForEvent",
+            "keyup input": "waitForEvent",
+            "contextmenu input": "waitForEvent",
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
             "click .form-control-feedback": "deleteSearchString",
@@ -23,6 +24,7 @@ define(function (require) {
             "mouseover .list-group-item.hit": "showMarker",
             "mouseleave .list-group-item.hit": "hideMarker",
             "click .list-group-item.type": function (e) {
+
                 // fix für Firefox
                 var event = e || window.event;
 
@@ -128,14 +130,14 @@ define(function (require) {
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function (parentElementId) {
                     this.render(parentElementId);
-                    if (!_.isUndefined(this.model.getInitSearchString())) {
+                    if (!_.isUndefined(this.model.get("initSearchString"))) {
                         this.renderRecommendedList();
-                        this.$("#searchInput").val(this.model.getInitSearchString());
+                        this.$("#searchInput").val(this.model.get("initSearchString"));
                         this.model.unset("initSearchString", true);
                     }
-
                     if (window.innerWidth >= 768) {
                         this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                        Radio.trigger("Title", "setSize");
                     }
                 }
             });
@@ -144,6 +146,10 @@ define(function (require) {
                 "isViewMobileChanged": function () {
                     this.render();
                 }
+            });
+
+            this.listenTo(Radio.channel("ViewZoom"), {
+                "hitSelected": this.hitSelected
             });
 
 
@@ -177,11 +183,6 @@ define(function (require) {
                     new TreeModel(config.tree);
                 });
             }
-            if (_.has(config, "layer") === true) {
-                require(["modules/searchbar/layer/model"], function (LayerSearch) {
-                    new LayerSearch(config.layer);
-                });
-            }
             if (_.has(config, "osm") === true) {
                 require(["modules/searchbar/OSM/model"], function (OSMModel) {
                     new OSMModel(config.osm);
@@ -191,11 +192,11 @@ define(function (require) {
             // Hack für flexible Suchleiste
             $(window).on("resize", function () {
                 if (window.innerWidth >= 768) {
-                    this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                    this.$("#searchInput").width(window.innerWidth - this.$(".desktop").width() - 160);
                 }
             });
             if (window.innerWidth >= 768) {
-                this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                this.$("#searchInput").width(window.innerWidth - this.$(".desktop").width() - 160);
             }
         },
         model: new Searchbar(),
@@ -219,7 +220,6 @@ define(function (require) {
                     this.$("#searchInput:focus").css("border-right-width", "0");
                 }
                 this.delegateEvents(this.events);
-                Radio.trigger("Title", "setSize");
             }
             else {
                 this.$el.html(this.templateTable(attr));
@@ -257,7 +257,7 @@ define(function (require) {
             this.$("ul.dropdown-menu-search").html(template(attr));
             // }
             // bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
-            if (!_.isUndefined(this.model.getInitSearchString()) && this.model.get("hitList").length === 1) {
+            if (!_.isUndefined(this.model.get("initSearchString")) && this.model.get("hitList").length === 1) {
                 this.hitSelected();
             }
             this.$("#searchInput + span").show();
@@ -309,20 +309,25 @@ define(function (require) {
          * @return {void}
          */
         hitSelected: function (evt) {
-            var hit, hitID;
+            var hit,
+                hitID,
+                modelHitList = this.model.get("hitList");
 
             Radio.trigger("Filter", "resetFilter");
 
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
-                hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
+                hit = _.values(_.pick(modelHitList, "0"))[0];
             }
             else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
                 hitID = evt.currentTarget.id;
-                hit = _.findWhere(this.model.get("hitList"), {id: hitID});
+                hit = _.findWhere(modelHitList, {id: hitID});
+            }
+            else if (modelHitList.length > 1) {
+                return;
             }
             else {
-                hit = this.model.get("hitList")[0];
+                hit = modelHitList[0];
             }
             // 1. Schreibe Text in Searchbar
             this.setSearchbarString(hit.name);
@@ -489,20 +494,69 @@ define(function (require) {
             return this.$el.find(this.searchbarKeyNavSelector + " li").last();
         },
 
-        setSearchString: function (evt) {
+        /**
+         * wait until event is loaded complete
+         * @param {event} evt - a keyup, paste or contextmenu event
+         * @returns {void}
+         */
+        waitForEvent: function (evt) {
             var that = this;
 
+            // The paste event occurs before the value is inserted into the element
+            setTimeout(function () {
+                that.controlEvent(evt);
+            }, 0);
+        },
+
+        /**
+         * controls the input sequence of events,
+         * so that the paste works with shortcut and with contextmenu
+         * because with ctrl + c comes 1 paste and 2 keyup events,
+         * but with right-click and paste comes 1 contextmenu and 1 paste event
+         * @param {event} evt - a keyup, paste or contextmenu event
+         * @returns {void}
+         */
+        controlEvent: function (evt) {
+            var count = this.model.get("tempCounter");
+
+            if (evt.type === "contextmenu") {
+                this.model.setTempCounter(0);
+            }
+            else if (evt.type === "paste") {
+                this.handlePasteEvent(evt, count);
+            }
+            else if (evt.type === "keyup" && count < 2) {
+                this.model.setTempCounter(++count);
+            }
+            else {
+                this.setSearchString(evt);
+            }
+        },
+
+        /**
+         * handle paste event
+         * @param {event} evt - a keyup, paste or contextmenu event
+         * @param {number} count - temporary counter to control input events
+         * @returns {void}
+         */
+        handlePasteEvent: function (evt, count) {
+            if (_.isUndefined(count)) {
+                this.model.setTempCounter(0);
+            }
+            else {
+                this.model.setTempCounter(undefined);
+            }
+            this.setSearchString(evt);
+        },
+
+        setSearchString: function (evt) {
             if (evt.target.value.length === 0) {
-                // suche zurücksetzten, wenn der nletzte Buchstabe gelöscht wurde
+                // suche zurücksetzten, wenn der letzte Buchstabe gelöscht wurde
                 this.deleteSearchString();
             }
             else {
                 if (evt.type === "paste") {
-
-                    // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
-                    setTimeout(function () {
-                        that.model.setSearchString(evt.target.value, evt.type);
-                    }, 0);
+                    this.model.setSearchString(evt.target.value, evt.type);
                 }
                 else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
                     if (evt.key === "Enter" || evt.keyCode === 13) {

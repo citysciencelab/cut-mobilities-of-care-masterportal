@@ -1,11 +1,10 @@
 define(function (require) {
-    require("bootstrap/tab");
-    require("bootstrap/modal");
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Template = require("text!modules/controls/orientation/poi/template.html"),
+    var Template = require("text!modules/controls/orientation/poi/template.html"),
         POIModel = require("modules/controls/orientation/poi/model"),
         POIView;
+
+    require("bootstrap/tab");
+    require("bootstrap/modal");
 
     POIView = Backbone.View.extend({
         model: POIModel,
@@ -30,6 +29,7 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            return this;
         },
 
         show: function () {
@@ -41,9 +41,7 @@ define(function (require) {
                 backdrop: true,
                 show: true
             });
-            $(function () {
-                Radio.trigger("Util", "hideLoader");
-            });
+            Radio.trigger("Util", "hideLoader");
         },
 
         hide: function () {
@@ -58,8 +56,8 @@ define(function (require) {
         },
 
         changedCategory: function (evt) {
-            var a = $(evt.currentTarget).children("a")[0],
-                cat = $(a).attr("aria-controls");
+            var a = this.$(evt.currentTarget).children("a")[0],
+                cat = this.$(a).attr("aria-controls");
 
             this.model.setActiveCategory(parseFloat(cat));
         }

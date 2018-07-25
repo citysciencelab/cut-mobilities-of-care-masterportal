@@ -1,14 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "proj4",
-    "openlayers",
-    "config"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Proj4 = require("proj4"),
+    var Proj4 = require("proj4"),
         ol = require("openlayers"),
         Config = require("config"),
         CRS;
@@ -38,7 +30,7 @@ define([
         },
 
         assumeProjections: function () {
-            var namedProjections = this.getNamedProjections();
+            var namedProjections = this.get("namedProjections");
 
             Proj4.defs(namedProjections);
             ol.proj.setProj4(Proj4);
@@ -55,7 +47,7 @@ define([
         },
 
         getProjections: function () {
-            var namedProjections = this.getNamedProjections(),
+            var namedProjections = this.get("namedProjections"),
                 projections = [];
 
             _.each(namedProjections, function (namedProjection) {
@@ -78,6 +70,7 @@ define([
                 targetProjection = this.getProjection(mapProjection.getCode());
                 return Proj4(sourceProjection, targetProjection, point);
             }
+            return undefined;
         },
 
         transformFromMapProjection: function (targetProjection, point) {
@@ -88,6 +81,7 @@ define([
                 sourceProjection = this.getProjection(mapProjection.getCode());
                 return Proj4(sourceProjection, targetProjection, point);
             }
+            return undefined;
         },
 
         transform: function (par) {
@@ -100,10 +94,6 @@ define([
 
         },
 
-        // getter for namedProjections
-        getNamedProjections: function () {
-            return this.get("namedProjections");
-        },
         // setter for namedProjections
         setNamedProjections: function (value) {
             this.set("namedProjections", value);

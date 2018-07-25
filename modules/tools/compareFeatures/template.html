@@ -12,8 +12,8 @@
                 <div class="col-xs-4">
                     <select class="form-control">
                         <% layerSelection.forEach(function (layer) { %>
-                            <option value="<%= layer.id %>"><%= layer.name %></option>
-                        <% }); %>
+                            <option value="<%= layer.id %>" <%if(layer.id === layerId) {print("selected");}%>><%= layer.name %></option>
+                        <% }, this); %>
                     </select>
                 </div>
             </div>
@@ -44,9 +44,13 @@
                                             if(String(obj[key]).search("http") !== -1) { %>
                                                 <a href="<%= obj[key] %>" target="_blank"><%= obj[key] %></a>
                                             <% }
-                                            else { %>
+                                            else if (String(obj[key]).search("@") !== -1) { %>
+                                                <a href="mailto:<%= obj[key] %>"><%= obj[key] %></a>
+                                            <% }
+                                            else {%>
                                                 <%= obj[key] %>
-                                            <% }} %>
+                                            <% } %>
+                                        <% } %>
                                         </span>
                                     </td>
                                 <% }); %>

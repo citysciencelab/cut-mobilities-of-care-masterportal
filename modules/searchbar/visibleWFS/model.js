@@ -29,7 +29,7 @@ define(function (require) {
                 wfsModels,
                 filteredModels;
 
-            if (this.getInUse() === false && searchString.length >= this.getMinChars()) {
+            if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
                 this.setInUse(true);
                 prepSearchString = searchString.replace(" ", "");
                 wfsModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
@@ -125,7 +125,7 @@ define(function (require) {
 
             if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
                 layerStyle = model.get("layer").getStyle(feature);
-                layerTyp = model.getTyp();
+                layerTyp = model.get("typ");
 
                 // layerStyle returns style
                 if (typeof layerStyle === "object") {
@@ -153,19 +153,11 @@ define(function (require) {
             return additionalInfo;
         },
 
-        // getter for minChars
-        getMinChars: function () {
-            return this.get("minChars");
-        },
         // setter for minChars
         setMinChars: function (value) {
             this.set("minChars", value);
         },
 
-        // getter for inUse
-        getInUse: function () {
-            return this.get("inUse");
-        },
         // setter for inUse
         setInUse: function (value) {
             this.set("inUse", value);
