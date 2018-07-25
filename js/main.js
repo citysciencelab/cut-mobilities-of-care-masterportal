@@ -1,6 +1,6 @@
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
-    configPath = window.location.origin + window.location.pathname + "config",
+    configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
     index,
     strippedLocation;
 
@@ -8,7 +8,7 @@ if (window.location.search !== "") {
     index = window.location.href.indexOf("?");
     strippedLocation = window.location.href.slice(0, index);
 
-    configPath = strippedLocation + "config";
+    configPath = strippedLocation.substring(0, strippedLocation.lastIndexOf("/") + 1) + "config";
 }
 
 scriptTagsArray.forEach(function (scriptTag) {
@@ -67,9 +67,9 @@ require.config({
 });
 
 // Überschreibt das Errorhandling von Require so,
-// dass der ursprüngliche Fehler sammt Stacjtrace ausgegeben wird.
+// dass der ursprüngliche Fehler sammt Stacktrace ausgegeben wird.
 // funktioniert obwohl der Linter meckert
-requirejs.onError = function (err) {
+require.onError = function (err) {
     if (err.requireType === "timeout") {
         alert("error: " + err);
     }
