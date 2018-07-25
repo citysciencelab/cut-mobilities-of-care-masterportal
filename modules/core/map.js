@@ -46,7 +46,6 @@ define(function (require) {
                 "render": this.render,
                 "zoomToExtent": this.zoomToExtent,
                 "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
-                "createVectorLayer": this.createVectorLayer,
                 "registerListener": this.registerListener,
                 "unregisterListener": this.unregisterListener,
                 "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
@@ -91,21 +90,6 @@ define(function (require) {
             return _.find(layers, function (layer) {
                 return layer.get("name") === layerName;
             });
-        },
-
-        /**
-         * Erstellt einen Vectorlayer
-         * @param {string} layerName - Name des Vectorlayers
-         * @returns {void}
-         */
-        createVectorLayer: function (layerName) {
-            var layer = new ol.layer.Vector({
-                source: new ol.source.Vector({useSpatialIndex: false}),
-                alwaysOnTop: true,
-                name: layerName
-            });
-
-            this.setVectorLayer(layer);
         },
 
         setVectorLayer: function (value) {

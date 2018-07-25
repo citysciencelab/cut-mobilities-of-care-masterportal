@@ -25,7 +25,6 @@ define(function (require) {
                 "postMessage": this.postMessage
             }, this);
             window.addEventListener("message", this.receiveMessage.bind(this));
-            Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
 
             if (_.has(Config, "postMessageUrl")) {
                 this.setPostMessageUrl(Config.postMessageUrl);
