@@ -290,12 +290,10 @@ define(function (require) {
                 isClustered,
                 styleModel;
 
-            if (!_.isUndefined(layer)) {
-                if (!_.isUndefined(layerId)) {
-                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
-                    isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
-                    styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
-                }
+            if (!_.isUndefined(layer) && !_.isUndefined(layerId)) {
+                layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+                isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
+                styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
