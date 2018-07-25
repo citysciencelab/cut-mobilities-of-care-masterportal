@@ -213,9 +213,13 @@ define(function (require) {
         },
 
         getLayersForPrint: function () {
+            var drawLayer = Radio.request("Draw", "getLayer");
+
             this.set("layerToPrint", []);
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            this.setLayer(Radio.request("Draw", "getLayer"));
+            if (drawLayer.getSource().getFeatures().length > 0) {
+                this.setLayer(drawLayer);
+            }
             this.getGFIForPrint();
         },
 
@@ -313,17 +317,7 @@ define(function (require) {
                         type = "Point";
                         coordinates = coordinates[0];
                     }
-                    console.log({
-                        type: "Feature",
-                        properties: {
-                            _style: index
-                        },
-                        geometry: {
-                            coordinates: coordinates,
-                            type: type
-                        }
-                    });
-                    // coordinates = this.coordinatesToInt(coordinates);
+                    coordinates = this.coordinatesToInt(coordinates);
                     features.push({
                         type: "Feature",
                         properties: {
@@ -383,10 +377,11 @@ define(function (require) {
                     // get imagename from src path
                     imgName = imgName.match(/(?:[^/]+)$/g)[0];
                     imgPath += imgName;
+                    imgPath = encodeURI(imgPath);
                     pointStyleObject = {
                         externalGraphic: imgPath,
-                        graphicWidth: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[0] * style.getImage().getScale() : 10,
-                        graphicHeight: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[1] * style.getImage().getScale() : 10,
+                        graphicWidth: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[0] * style.getImage().getScale() : 20,
+                        graphicHeight: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[1] * style.getImage().getScale() : 20,
                         graphicXOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[0] : 0,
                         graphicYOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[1] : 0
                     };
@@ -409,7 +404,6 @@ define(function (require) {
                     fontColor: this.getColor(style.getText().getFill().getColor()).color
                 };
             }
-            console.log(pointStyleObject);
             return pointStyleObject;
         },
         createImagePath: function () {
@@ -428,7 +422,7 @@ define(function (require) {
                     return layer.get("name") === "animationLayer";
                 }),
                 wfsLayer = _.filter(layers, function (layer) {
-                    return layer.get("typ") === "WFS" && layer.get("visible") === true;
+                    return layer.get("typ") === "WFS" && layer.get("visible") === true && layer.getSource().getFeatures().length > 0;
                 }),
                 specification;
 
@@ -438,7 +432,6 @@ define(function (require) {
             _.each(wfsLayer, function (layer) {
                 this.setLayer(layer);
             }, this);
-
             specification = {
                 // layout: $("#layoutField option:selected").html(),
                 layout: this.get("layout").name,
@@ -542,6 +535,7 @@ define(function (require) {
          * @returns {void}
          */
         getPDFURL: function () {
+
             $.ajax({
                 url: Config.proxyURL + "?url=" + this.get("createURL"),
                 type: "POST",
