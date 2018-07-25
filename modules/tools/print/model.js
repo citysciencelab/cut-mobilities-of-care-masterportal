@@ -312,11 +312,6 @@ define(function (require) {
                         style = _.isArray(styles) ? styles[0] : styles,
                         coordinates = feature.getGeometry().getCoordinates();
 
-                    // make MultiPoint to Point
-                    if (type === "MultiPoint") {
-                        type = "Point";
-                        coordinates = coordinates[0];
-                    }
                     features.push({
                         type: "Feature",
                         properties: {
@@ -330,7 +325,7 @@ define(function (require) {
 
 
                     // Punkte
-                    if (type === "Point") {
+                    if (type === "Point" || type === "MultiPoint") {
                         printStyleObj = this.createPointStyleForPrint(style);
                         featureStyles[index] = printStyleObj;
                     }
