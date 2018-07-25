@@ -1,10 +1,8 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/controls/zoom/template.html"
-], function (Backbone, Radio, ZoomControlTemplate) {
+define(function (require) {
+    var ZoomControlTemplate = require("text!modules/controls/zoom/template.html"),
+        ZoomControlView;
 
-    var ZoomControlView = Backbone.View.extend({
+    ZoomControlView = Backbone.View.extend({
         template: _.template(ZoomControlTemplate),
         events: {
             "click .glyphicon-plus": "setZoomLevelUp",
@@ -15,6 +13,7 @@ define([
         },
         render: function () {
             this.$el.html(this.template);
+            return this;
         },
         setZoomLevelUp: function () {
             Radio.trigger("MapView", "setZoomLevelUp");

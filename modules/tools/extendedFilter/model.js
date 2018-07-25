@@ -1,6 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         Config = require("config"),
         ExtendedFilter;
 
@@ -25,9 +24,9 @@ define(function (require) {
                 "winParams": this.checkStatus
             });
         },
-        getDefaultContent: function () {
-            return this.get("defaultContent");
-        },
+        // getDefaultContent: function () {
+        //     return this.get("defaultContent");
+        // },
         setCurrentContent: function (val) {
             this.set("currentContent", val);
         },
@@ -123,9 +122,12 @@ define(function (require) {
                 val = id.split("__")[2],
                 currentFilters = this.get("currentFilters"),
                 filterToUpdate,
+                i,
+                counter,
+                content,
                 attributesArray;
 
-            for (var i = currentFilters.length - 1; i >= 0; i--) {
+            for (i = currentFilters.length - 1; i >= 0; i--) {
                 if (currentFilters[i].layername === filtername) {
                     filterToUpdate = currentFilters.splice(i, 1)[0];
                     break;
@@ -134,14 +136,14 @@ define(function (require) {
 
             attributesArray = filterToUpdate.attributes;
 
-            for (var i = attributesArray.length - 1; i >= 0; i--) {
+            for (i = attributesArray.length - 1; i >= 0; i--) {
                 if (attributesArray[i].attribute === attr && attributesArray[i].value === val) {
                     attributesArray.splice(i, 1)[0];
                     break;
                 }
             }
             if (attributesArray.length === 0) {
-                var counter = this.get("filterCounter");
+                counter = this.get("filterCounter");
 
                 counter--;
                 this.setFilterCounter(counter);
@@ -155,7 +157,7 @@ define(function (require) {
             this.setCurrentFilters(currentFilters);
 
             if (currentFilters.length === 0) {
-                var content = this.getDefaultContent();
+                content = this.getDefaultContent();
 
                 content.options = ["Neuen Filter erstellen"];
                 this.setCurrentContent(content);
@@ -301,6 +303,7 @@ define(function (require) {
         setFilter: function (val, layername, attribute, filtername) {
             var currentFilters = this.get("currentFilters"),
                 filterToUpdate,
+                i,
                 currentFilterType = this.get("currentFilterType"),
                 filtercounter = this.get("filterCounter"),
                 attributesArray = [];
@@ -311,14 +314,14 @@ define(function (require) {
                     value: val});
 
                 currentFilters.push({
-                    layername: "Filter" + " " + filtercounter + " " + layername,
+                    layername: "Filter " + filtercounter + " " + layername,
                     attributes: attributesArray
                 });
 
                 filtercounter++;
             }
             else {
-                for (var i = currentFilters.length - 1; i >= 0; i--) {
+                for (i = currentFilters.length - 1; i >= 0; i--) {
                     if (currentFilters[i].layername === filtername) {
                         filterToUpdate = currentFilters.splice(i, 1)[0];
                         break;

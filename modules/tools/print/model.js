@@ -1,11 +1,10 @@
 define(function (require) {
-    "use strict";
     var Config = require("config"),
-        ol = require("openlayers"),
         $ = require("jquery"),
-        Model;
+        ol = require("openlayers"),
+        PrintModel;
 
-    Model = Backbone.Model.extend({
+    PrintModel = Backbone.Model.extend({
         defaults: {
             printID: "99999",
             MM_PER_INCHES: 25.4,
@@ -142,11 +141,11 @@ define(function (require) {
 
         // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
         setScaleByMapView: function () {
-            var currentScale = _.find(this.get("scales"), function (scale) {
+            var newScale = _.find(this.get("scales"), function (scale) {
                 return scale.valueInt === Radio.request("MapView", "getOptions").scale;
             });
 
-            this.set("scale", currentScale);
+            this.set("scale", newScale);
         },
 
         // Setzt die Zentrumskoordinate.
@@ -224,20 +223,19 @@ define(function (require) {
         },
 
         setLayerToPrint: function (layers) {
-            var params = {},
-                style = [],
-                layerURL,
-                printLayers = _.sortBy(layers, function (layer) {
-                    return layer.get("selectionIDX");
-                });
+            var sortedLayers;
 
-            _.each(printLayers, function (layer) {
-                var numberOfLayer,
-                    defaultStyle,
-                    i;
-
+            sortedLayers = _.sortBy(layers, function (layer) {
+                return layer.get("selectionIDX");
+            });
+            _.each(sortedLayers, function (layer) {
                 // nur wichtig für treeFilter
-                layerURL = layer.get("url");
+                var params = {},
+                    style = [],
+                    layerURL = layer.get("url"),
+                    numberOfLayer,
+                    i,
+                    defaultStyle;
 
                 if (layer.has("SLDBody")) {
                     params.SLD_BODY = layer.get("SLDBody");
@@ -322,7 +320,6 @@ define(function (require) {
                             type: type
                         }
                     });
-
 
                     // Punkte
                     if (type === "Point" || type === "MultiPoint") {
@@ -448,7 +445,7 @@ define(function (require) {
         },
         /**
          * Checkt, ob Kreis an GFI-Position gezeichnet werden soll und fügt ggf. Layer ein.
-         * @param {array} gfiPosition coordinate of gfi
+         * @param {number[]} gfiPosition -
          * @returns {void}
          */
         setGFIPos: function (gfiPosition) {
@@ -673,65 +670,42 @@ define(function (require) {
 
         /**
          * Setzt die Parameter aus der config.js für den GFI Marker im Druck, wenn vorhanden
-         * @param {object} gfiMarker markerobject for gfi
+         * @param {obj} gfiMarker -
          * @returns {void}
          */
         setGfiMarker: function (gfiMarker) {
-            if (_.has(gfiMarker, "outerCircle")) {
-                this.setOuterCircle(gfiMarker.outerCircle);
-            }
-            if (_.has(gfiMarker, "point")) {
-                this.setPoint(gfiMarker.point);
-            }
+            gfiMarker.outerCircle = gfiMarker.outerCircle ? this.setOuterCircle(gfiMarker.outerCircle) : null;
+            gfiMarker.point = gfiMarker.point ? this.setPoint(gfiMarker.point) : null;
         },
 
         /**
          * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Kreis des GFI Markers im Druck
-         * @param {object} outerCircle  configuration of markerobject
+         * @param {object} outerCircle -
          * @returns {void}
          */
         setOuterCircle: function (outerCircle) {
             var gfiMarker = this.get("gfiMarker");
 
-            if (_.has(outerCircle, "fill")) {
-                gfiMarker.outerCircle.fill = outerCircle.fill;
-            }
-            if (_.has(outerCircle, "pointRadius")) {
-                gfiMarker.outerCircle.pointRadius = outerCircle.pointRadius;
-            }
-            if (_.has(outerCircle, "stroke")) {
-                gfiMarker.outerCircle.stroke = outerCircle.stroke;
-            }
-            if (_.has(outerCircle, "strokeColor")) {
-                gfiMarker.outerCircle.strokeColor = outerCircle.strokeColor;
-            }
-            if (_.has(outerCircle, "strokeWidth")) {
-                gfiMarker.outerCircle.strokeWidth = outerCircle.strokeWidth;
-            }
+            gfiMarker.outerCircle.pointRadius = outerCircle.pointRadius ? outerCircle.pointRadius : null;
+            gfiMarker.outerCircle.stroke = outerCircle.stroke ? outerCircle.stroke : null;
+            gfiMarker.outerCircle.strokeColor = outerCircle.strokeColor ? outerCircle.strokeColor : null;
+            gfiMarker.outerCircle.strokeWidth = outerCircle.strokeWidth ? outerCircle.strokeWidth : null;
         },
 
         /**
          * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Punkt im Kreis des GFI Markers im Druck
-         * @param {object} point configuration of point
+         * @param {object} point -
          * @returns {void}
          */
         setPoint: function (point) {
             var gfiMarker = this.get("gfiMarker");
 
-            if (_.has(point, "fill")) {
-                gfiMarker.point.fill = point.fill;
-            }
-            if (_.has(point, "pointRadius")) {
-                gfiMarker.point.pointRadius = point.pointRadius;
-            }
-            if (_.has(point, "fillColor")) {
-                gfiMarker.point.fillColor = point.fillColor;
-            }
-            if (_.has(point, "stroke")) {
-                gfiMarker.point.stroke = point.stroke;
-            }
+            gfiMarker.point.fill = point.fill ? point.fill : null;
+            gfiMarker.point.pointRadius = point.pointRadius ? point.pointRadius : null;
+            gfiMarker.point.fillColor = point.fillColor ? point.fillColor : null;
+            gfiMarker.point.stroke = point.stroke ? point.stroke : null;
         }
     });
 
-    return Model;
+    return PrintModel;
 });

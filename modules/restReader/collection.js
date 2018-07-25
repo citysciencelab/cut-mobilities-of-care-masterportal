@@ -1,10 +1,8 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config"
-], function (Backbone, Radio, Config) {
-    "use strict";
-    var RestList = Backbone.Collection.extend({
+define(function (require) {
+    var Config = require("config"),
+        RestList;
+
+    RestList = Backbone.Collection.extend({
         url: function () {
             return Radio.request("Util", "getPath", Config.restConf);
         },
@@ -31,7 +29,7 @@ define([
             });
         },
         getAllServices: function () {
-            return this.models;
+            return this;
         },
         getServiceById: function (id) {
             return this.findWhere({id: id});

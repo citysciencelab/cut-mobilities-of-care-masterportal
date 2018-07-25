@@ -1,14 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "proj4",
-    "openlayers",
-    "config"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Proj4 = require("proj4"),
+    var Proj4 = require("proj4"),
         ol = require("openlayers"),
         Config = require("config"),
         CRS;
@@ -78,6 +70,7 @@ define([
                 targetProjection = this.getProjection(mapProjection.getCode());
                 return Proj4(sourceProjection, targetProjection, point);
             }
+            return undefined;
         },
 
         transformFromMapProjection: function (targetProjection, point) {
@@ -88,6 +81,7 @@ define([
                 sourceProjection = this.getProjection(mapProjection.getCode());
                 return Proj4(sourceProjection, targetProjection, point);
             }
+            return undefined;
         },
 
         transform: function (par) {

@@ -1,8 +1,7 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
+        $ = require("jquery"),
         Config = require("config"),
         Animation;
 
@@ -125,8 +124,9 @@ define(function (require) {
         /**
          * Führt einen HTTP-Request aus
          * @param {String} type - GET oder POST
-         * @param {String} data
+         * @param {String} data -
          * @param {function} successFunction - Wird aufgerufen wenn der Request erfolgreich war
+         * @returns {void}
          */
         sendRequest: function (type, data, successFunction) {
             $.ajax({
@@ -135,15 +135,14 @@ define(function (require) {
                 contentType: "text/xml",
                 type: type,
                 context: this,
-                success: successFunction,
-                error: function (jqXHR, errorText, error) {
-                }
+                success: successFunction
             });
         },
 
         /**
          * Success Funktion für die Landkreise
          * @param  {object} data - Response
+         * @returns {void}
          */
         parseKreise: function (data) {
             var kreise = [],
@@ -160,6 +159,7 @@ define(function (require) {
         /**
          * Success Funktion für die Gemeinden
          * @param  {ojbect} data - Response
+         * @returns {void}
          */
         parseGemeinden: function (data) {
             var gemeinden = [],
@@ -176,6 +176,7 @@ define(function (require) {
         /**
          * Success Funktion für die Features
          * @param  {ojbect} data - Response
+         * @returns {void}
          */
         parseFeatures: function (data) {
             var wfsReader = new ol.format.WFS({
@@ -190,6 +191,7 @@ define(function (require) {
 
         /**
          * Übergibt die Zentrumskoordinate der Gemeinde an die MapView, abhängig der Richtung.
+         * @returns {void}
          */
         centerGemeindeAndSetMarker: function () {
             var coords = [];
@@ -327,15 +329,18 @@ define(function (require) {
                     directionX = (endPoint[0] - startPoint[0]) / this.get("steps"),
                     directionY = (endPoint[1] - startPoint[1]) / this.get("steps"),
                     lineCoords = [],
+                    line,
+                    newEndPt,
+                    i,
                     anzahl_pendler = feature.get(this.get("attrAnzahl")),
                     kreis = feature.get(this.get("attrKreis"));
 
-                for (var i = 0; i <= this.get("steps"); i++) {
-                    var newEndPt = new ol.geom.Point([startPoint[0] + i * directionX, startPoint[1] + i * directionY, 0]);
+                for (i = 0; i <= this.get("steps"); i++) {
+                    newEndPt = new ol.geom.Point([startPoint[0] + (i * directionX), startPoint[1] + (i * directionY), 0]);
 
                     lineCoords.push(newEndPt.getCoordinates());
                 }
-                var line = new ol.Feature({
+                line = new ol.Feature({
                     geometry: new ol.geom.LineString(lineCoords),
                     anzahl_pendler: anzahl_pendler,
                     kreis: kreis
@@ -381,11 +386,13 @@ define(function (require) {
         },
         draw: function (vectorContext, features, index) {
             var currentPoint,
+                i,
+                coordinates,
                 newFeature;
 
-            for (var i = 0; i < features.length; i++) {
+            for (i = 0; i < features.length; i++) {
                 if (this.get("animating")) {
-                    var coordinates = features[i].getGeometry().getCoordinates();
+                    coordinates = features[i].getGeometry().getCoordinates();
 
                     this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
                     currentPoint = new ol.geom.Point(coordinates[index]);
@@ -396,13 +403,15 @@ define(function (require) {
         },
         addFeaturesToLayer: function (features, layer) {
             var currentPoint, coordinates,
+                i,
+                drawIndex,
                 newFeature;
 
-            for (var i = 0; i < features.length; i++) {
+            for (i = 0; i < features.length; i++) {
                 coordinates = features[i].getGeometry().getCoordinates();
                 this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
                 // Ob die Feature bei der Startposition oder der Endposition gezeichnet werden müssen, ist abhängig von der anzahl der Durchgänge
-                var drawIndex = this.get("animationLimit") % 2 === 1 ? 0 : coordinates.length - 1;
+                drawIndex = this.get("animationLimit") % 2 === 1 ? 0 : coordinates.length - 1;
 
                 currentPoint = new ol.geom.Point(coordinates[drawIndex]);
                 newFeature = new ol.Feature(currentPoint);
@@ -449,6 +458,8 @@ define(function (require) {
         },
 
         prepareAnimation: function () {
+            var animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer");
+
             if (this.get("direction") === "wohnort") {
                 this.setAnimationLimit(2);
             }
@@ -456,8 +467,6 @@ define(function (require) {
                 this.setAnimationLimit(1);
             }
             this.setAnimationCount(0);
-            var animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer");
-
             this.set("animationLayer", animationLayer);
             this.get("animationLayer").getSource().clear();
             Radio.trigger("Map", "registerListener", "postcompose", this.moveFeature, this);
@@ -476,6 +485,7 @@ define(function (require) {
         /**
          * Wiederholt die animation, wenn AnimationLimit noch nicht erreicht ist
          * @param  {[type]} features werden für das hinzufügen auf die Layer nach der naimation durchgereicht
+         * @returns {void}
          */
         repeatAnimation: function (features) {
             if (this.get("animationCount") < this.get("animationLimit")) {

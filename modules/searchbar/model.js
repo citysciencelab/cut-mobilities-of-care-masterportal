@@ -1,6 +1,6 @@
 define(function (require) {
-    var $ = require("jquery"),
-        Config = require("config"),
+    var Config = require("config"),
+        $ = require("jquery"),
         SearchbarModel;
 
     SearchbarModel = Backbone.Model.extend({

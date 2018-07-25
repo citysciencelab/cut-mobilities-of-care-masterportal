@@ -1,14 +1,8 @@
-define([
-    "backbone",
-    "text!modules/menu/mobile/layer/templateLight.html",
-    "backbone.radio",
-    "text!modules/menu/mobile/layer/templateSettings.html"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         Template = require("text!modules/menu/mobile/layer/templateLight.html"),
         SettingTemplate = require("text!modules/menu/mobile/layer/templateSettings.html"),
-        Radio = require("backbone.radio"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -38,6 +32,9 @@ define([
 
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
+         * @param {Backbone.Model} model -
+         * @param {boolean} value -
+         * @returns {void}
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {
@@ -65,6 +62,7 @@ define([
 
         /**
          * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
+         * @returns {void}
          */
         renderSetting: function () {
             var attr = this.model.toJSON();

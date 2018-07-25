@@ -1,7 +1,7 @@
 define(function (require) {
 
     var proj4 = require("proj4"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         SearchByCoord;
 
     SearchByCoord = Backbone.Model.extend({
@@ -153,19 +153,21 @@ define(function (require) {
             this.set("coordSystem", value);
         },
         setCoordinates: function (easting, northing) {
-            var coordinateArray = [];
+            var coordinateArray = [],
+                resultEasting,
+                resultNorthing;
 
             if (this.get("coordSystem") === "WGS84") {
-                var resultEasting = easting.split(/[\s]+/),
-                    resultNorthing = northing.split(/[\s]+/);
+                resultEasting = easting.split(/[\s]+/);
+                resultNorthing = northing.split(/[\s]+/);
 
                 this.set("eastingCoords", easting.split(/[\s°′″'"]+/));
                 this.set("northingCoords", northing.split(/[\s°′″'"]+/));
                 coordinateArray = [{"coord": resultEasting, "key": "Wert der Länge", "example": "9° 59′ 50″"}, {"coord": resultNorthing, "key": "Wert der Breite", "example": "53° 33′ 25″"}];
             }
             else if (this.get("coordSystem") === "WGS84(Dezimalgrad)") {
-                var resultEasting = easting.split(/[\s]+/),
-                    resultNorthing = northing.split(/[\s]+/);
+                resultEasting = easting.split(/[\s]+/);
+                resultNorthing = northing.split(/[\s]+/);
 
                 this.set("eastingCoords", easting.split(/[\s°]+/));
                 this.set("northingCoords", northing.split(/[\s°]+/));
@@ -183,23 +185,26 @@ define(function (require) {
             }
         },
         getNewCenter: function () {
+            var easting,
+                northing;
+
             if (this.get("coordSystem") === "WGS84") {
-                var easting = Number(this.get("eastingCoords")[0]) + (Number(this.get("eastingCoords")[1]) / 60) + (Number(this.get("eastingCoords")[2]) / 60 / 60),
-                    northing = Number(this.get("northingCoords")[0]) + (Number(this.get("northingCoords")[1]) / 60) + (Number(this.get("northingCoords")[2]) / 60 / 60);
+                easting = Number(this.get("eastingCoords")[0]) + (Number(this.get("eastingCoords")[1]) / 60) + (Number(this.get("eastingCoords")[2]) / 60 / 60);
+                northing = Number(this.get("northingCoords")[0]) + (Number(this.get("northingCoords")[1]) / 60) + (Number(this.get("northingCoords")[2]) / 60 / 60);
 
                 this.set("newCenter", proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [easting, northing]));
             }
             else if (this.get("coordSystem") === "WGS84(Dezimalgrad)") {
-                var easting = parseFloat(this.get("eastingCoords")[0]),
-                    northing = parseFloat(this.get("northingCoords")[0]);
+                easting = parseFloat(this.get("eastingCoords")[0]);
+                northing = parseFloat(this.get("northingCoords")[0]);
 
                 this.set("newCenter", proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [easting, northing]));
             }
             else if (this.get("coordSystem") === "ETRS89") {
-                var east = parseFloat(this.get("coordinates")[0].coord),
-                    north = parseFloat(this.get("coordinates")[1].coord);
+                easting = parseFloat(this.get("coordinates")[0].coord);
+                northing = parseFloat(this.get("coordinates")[1].coord);
 
-                this.set("newCenter", [east, north]);
+                this.set("newCenter", [easting, northing]);
             }
             Radio.trigger("MapMarker", "zoomTo", {type: "SearchByCoord", coordinate: this.get("newCenter")});
         }

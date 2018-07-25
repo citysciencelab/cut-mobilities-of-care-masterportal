@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         EinwohnerabfrageModel = require("modules/tools/einwohnerabfrage_hh/model"),
         SnippetDropdownView = require("modules/snippets/dropdown/view"),
         ResultView = require("modules/tools/einwohnerabfrage_hh/resultView"),
@@ -31,9 +31,9 @@ define(function (require) {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template));
-                this.$el.find(".dropdown").append(this.snippetDropdownView.render());
-                this.$el.find(".checkbox").append(this.checkBoxRaster.render());
-                this.$el.find(".checkbox").append(this.checkBoxAddress.render());
+                this.$el.find(".dropdown").append(this.snippetDropdownView.render().el);
+                this.$el.find(".checkbox").append(this.checkBoxRaster.render().el);
+                this.$el.find(".checkbox").append(this.checkBoxAddress.render().el);
 
                 this.delegateEvents();
             }
@@ -41,10 +41,11 @@ define(function (require) {
                 this.model.reset();
                 this.undelegateEvents();
             }
+            return this;
         },
         renderResult: function () {
             this.$el.find(".result").html("");
-            this.$el.find(".result").append(new ResultView({model: this.model}).render());
+            this.$el.find(".result").append(new ResultView({model: this.model}).render().el);
         },
         createDrawInteraction: function (evt) {
             this.model.get("drawInteraction").setActive(false);

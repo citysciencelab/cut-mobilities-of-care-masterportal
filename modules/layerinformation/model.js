@@ -1,6 +1,7 @@
 define(function (require) {
     var ViewMobile = require("modules/layerinformation/viewMobile"),
         View = require("modules/layerinformation/view"),
+        $ = require("jquery"),
         Config = require("config"),
         Moment = require("moment"),
         LayerInformation;
@@ -66,6 +67,7 @@ define(function (require) {
          * Wird über Trigger vom Layer gestartet und übernimmt die Attribute zur Darstellung
          * @param {object} attrs Objekt mit Attributen zur Darstellung
          * @fires sync#render-Funktion
+         * @returns {void}
          */
         setAttributes: function (attrs) {
             this.set(attrs);
@@ -102,8 +104,7 @@ define(function (require) {
         },
 
         parse: function (xmlDoc) {
-            var layername = this.get("layername"),
-                layerid = this.get("id"); // CI_Citation fall-back-level
+            var layername = this.get("layername");
 
             return {
                 "abstractText": function () {
@@ -173,6 +174,7 @@ define(function (require) {
 
         /**
          * Wertet das Array der der metaIDs aus und erzeugt Array metaURL mit vollständiger URL für Template, ohne Doppelte Einträge zuzulassen
+         * @returns {void}
          */
         setMetadataURL: function () {
             var metaURLs = [],

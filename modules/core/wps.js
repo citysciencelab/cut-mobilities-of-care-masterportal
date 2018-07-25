@@ -1,7 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         WPS;
 
     WPS = Backbone.Model.extend({

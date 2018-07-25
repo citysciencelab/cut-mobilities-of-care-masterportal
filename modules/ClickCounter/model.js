@@ -1,9 +1,8 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function (Backbone, Radio) {
+define(function (require) {
+    var $ = require("jquery"),
+        ClickCounter;
 
-    var ClickCounter = Backbone.Model.extend({
+    ClickCounter = Backbone.Model.extend({
         defaults: {
             countframeid: _.uniqueId("countframe"),
             usedURL: "", // beutzte iFrame-URL, kann desktop oder mobile sein

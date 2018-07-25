@@ -1,7 +1,7 @@
 define(function (require) {
 
     var DesktopView = require("modules/tools/gfi/view"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         Template = require("text!modules/tools/gfi/desktop/template.html"),
         GFIDetachedView;
 
@@ -9,9 +9,6 @@ define(function (require) {
         className: "gfi gfi-detached",
         template: _.template(Template),
 
-        /**
-         * Zeichnet das Template und macht es "draggable"
-         */
         render: function () {
             var attr = this.model.toJSON();
 
@@ -28,9 +25,6 @@ define(function (require) {
             });
         },
 
-        /**
-         * Blendet das Popover ein oder aus
-         */
         toggle: function () {
             if (this.model.get("isVisible") === true) {
                 this.$el.show();

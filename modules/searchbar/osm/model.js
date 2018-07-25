@@ -1,7 +1,7 @@
 define(function (require) {
-
-    var Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         OsmModel;
+
     require("modules/searchbar/model");
 
     OsmModel = Backbone.Model.extend({
@@ -22,6 +22,7 @@ define(function (require) {
          * @param {string} config.osmServiceUrl - ID aus rest-services für URL.
          * @param {integer} [config.limit=50] - Anzahl der über angefragten Vorschläge.
          * @param {string}  [osm.states=""] - Liste der Bundesländer für die Trefferauswahl.
+         * @returns {void}
          */
         initialize: function (config) {
             var service = Radio.request("RestReader", "getServiceById", config.serviceId);
@@ -54,9 +55,11 @@ define(function (require) {
             });
         },
         /**
-        * Einstieg fuer die Suche...
-        * Wird von der Searchbar getriggert.
-        */
+         * Einstieg fuer die Suche...
+         * Wird von der Searchbar getriggert.
+         * @param {string} searchString -
+         * @returns {void}
+         */
         search: function (searchString) {
             if (searchString.length >= this.get("minChars")) {
                 Radio.trigger("Searchbar", "removeHits", "hitList", {type: "OpenStreetMap"});
@@ -65,6 +68,8 @@ define(function (require) {
         },
         /**
          * Suchstring (Strasse HsNr) durch Anwender aufgebaut...
+         * @param {string} searchString -
+         * @returns {void}
          */
         suggestByOSM: function (searchString) {
             var request,
@@ -96,6 +101,7 @@ define(function (require) {
          * Treffer der ersten Suche auswerten; Angebotsliste erstellen
          * [pushSuggestions description]
          * @param  {[type]} data [description]
+         * @returns {void}
          */
         pushSuggestions: function (data) {
             var display,
@@ -153,6 +159,7 @@ define(function (require) {
         /**
          * stellt fest, ob Das Ergebnis alle eingegebenen Parameter enthält
          * @param  {[type]} searched [description] Das zu untersuchende Suchergebnis
+         * @returns {boolean} true | false
          */
         isSearched: function (searched) {
             var hits = [],
@@ -162,14 +169,14 @@ define(function (require) {
             if (this.canShowHit(searched)) {
 
                 _.each(params, function (param) {
-                    if ((address.house_number != null && address.house_number.toLowerCase() === param.toLowerCase()) ||
-                        (address.road != null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.pedestrian != null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.city != null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.city_district != null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.town != null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.village != null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.suburb != null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
+                    if ((address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
+                        (address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
                     ) {
                         this.push(param);
                     }
@@ -182,6 +189,7 @@ define(function (require) {
         /**
          * stellt fest ob der Treffer von den Parametern angezeigt wird oder nicht
          * @param  {[type]} hit [description] Suchtreffer
+         * @returns {boolean} true | false
          */
         canShowHit: function (hit) {
             var result = false,
@@ -205,6 +213,7 @@ define(function (require) {
          * @param {String} url - URL the request is sent to.
          * @param {String} data - Data to be sent to the server
          * @param {function} successFunction - A function to be called if the request succeeds
+         * @returns {void}
          */
         sendRequest: function (url, data, successFunction) {
             var ajax = this.get("ajaxRequest");
@@ -246,6 +255,7 @@ define(function (require) {
         /**
          * Triggert die Darstellung einer Fehlermeldung
          * @param {object} err Fehlerobjekt aus Ajax-Request
+         * @returns {void}
          */
         showError: function (err) {
             var detail = err.statusText && err.statusText !== "" ? err.statusText : "";

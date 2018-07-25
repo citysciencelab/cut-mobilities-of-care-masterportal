@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         Moment = require("moment"),
         VerkehrsStaerkenRadTheme;
 
@@ -24,6 +24,7 @@ define(function (require) {
 
         /**
          * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
+         * @returns {void}
          */
         parseGfiContent: function () {
             var gfiContent, name, tageslinie, wochenlinie, jahrgangslinie;
@@ -54,6 +55,7 @@ define(function (require) {
 
         /**
          * Prüft die verfügbaren Werte des Features und setzt eine Variable, die im Template ausgewertet wird.
+         * @returns {void}
          */
         setInitialActiveTab: function () {
             if (!_.isNull(this.get("tageslinieDataset"))) {
@@ -159,6 +161,7 @@ define(function (require) {
 
         /**
          * Ermittelt die Größe des gfiContent und speichert die Werte
+         * @returns {void}
          */
         setSize: function () {
             var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
@@ -264,9 +267,8 @@ define(function (require) {
             else if (activeTab === "woche") {
                 return this.get("wochenlinieDataset");
             }
-            else if (activeTab === "jahr") {
-                return this.get("jahreslinieDataset");
-            }
+            // activeTab === "jahr"
+            return this.get("jahreslinieDataset");
         },
 
         /**
@@ -340,12 +342,14 @@ define(function (require) {
 
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
+         * @returns {void}
          */
         destroy: function () {
             _.each(this.get("gfiContent"), function (element) {
-                if (_.has(element, "children")) {
-                    var children = _.values(_.pick(element, "children"))[0];
+                var children;
 
+                if (_.has(element, "children")) {
+                    children = _.values(_.pick(element, "children"))[0];
                     _.each(children, function (child) {
                         child.val.remove();
                     }, this);

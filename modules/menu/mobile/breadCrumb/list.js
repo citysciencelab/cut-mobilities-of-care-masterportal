@@ -1,21 +1,13 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/menu/mobile/breadCrumb/model",
-    "bootstrap/collapse"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        BreadCrumbItem = require("modules/menu/mobile/breadCrumb/model"),
+    var BreadCrumbItem = require("modules/menu/mobile/breadCrumb/model"),
+        $ = require("jquery"),
         BreadCrumbList;
+
+    require("bootstrap/collapse");
 
     BreadCrumbList = Backbone.Collection.extend({
         model: BreadCrumbItem,
-
-        /**
-         * Registriert die Listener und fügt das erste "Breadcrumb-Item" hinzu
-         */
         initialize: function () {
             var channel = Radio.channel("BreadCrumb");
 
@@ -30,9 +22,6 @@ define([
             this.addMainItem();
         },
 
-        /**
-         * Fügt der Liste das erste "Breadcrumb-Item" (Main-Item) hinzu.
-         */
         addMainItem: function () {
             this.add({
                 id: "root",
@@ -43,6 +32,7 @@ define([
         /**
          * Fügt der Liste ein neues Model hinzu
          * @param {Backbone.Model} model - Model aus der TreeList
+         * @returns {void}
          */
         addItem: function (model) {
             this.add({
@@ -54,10 +44,11 @@ define([
         /**
          * Löscht alle Models ab einen bestimmten Index aus der Collection
          * @param  {Backbone.Model} model - Ab diesem Model aufwärts, werden alle Models gelöscht
+         * @returns {void}
          */
         removeItems: function (model) {
             var modelIndex = this.indexOf(model),
-                models = this.filter(function (model, index) {
+                models = this.filter(function (element, index) {
                     return index > modelIndex;
                 }),
                 hasModels = models.length > 0;
@@ -72,9 +63,6 @@ define([
             }
         },
 
-        /**
-         * Löscht das letzte Model aus der Collection
-         */
         removeLastItem: function () {
             if (this.length > 1) {
                 Radio.trigger("ModelList", "setModelAttributesById", this.pop().get("id"), {isExpanded: false});
@@ -83,7 +71,7 @@ define([
 
         /**
          * Gibt das letzte Model aus der Collection zurück
-         * @return {Backbone.Model}
+         * @return {Backbone.Model} model
          */
         getLastItem: function () {
             return this.at(this.length - 1);

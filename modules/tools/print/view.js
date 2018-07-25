@@ -1,9 +1,10 @@
 define(function (require) {
     var PrintWinTemplate = require("text!modules/tools/print/template.html"),
         Print = require("modules/tools/print/model"),
-        View;
+        $ = require("jquery"),
+        PrintView;
 
-    View = Backbone.View.extend({
+    PrintView = Backbone.View.extend({
         events: {
             "change #layoutField": "setLayout",
             "change #scaleField": "setScale",
@@ -41,6 +42,5 @@ define(function (require) {
             return this;
         }
     });
-
-    return View;
+    return PrintView;
 });

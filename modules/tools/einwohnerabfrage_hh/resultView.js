@@ -11,7 +11,7 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            return this.$el;
+            return this;
         }
     });
 

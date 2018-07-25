@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         ItemTemplate = require("text!modules/menu/mobile/tool/template.html"),
         ItemView;
 
@@ -22,11 +21,8 @@ define(function (require) {
 
             if (this.model.get("isVisibleInMenu") !== false) {
                 this.$el.html(this.template(attr));
-                return this;
             }
-
-            return "";
-
+            return this;
         },
         checkItem: function () {
             if (this.model.get("id") === "legend") {

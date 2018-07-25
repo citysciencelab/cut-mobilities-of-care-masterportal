@@ -3,6 +3,8 @@ define(function (require) {
         ol = require("openlayers");
 
     HighlightFeature = Backbone.Model.extend({
+        defaults: {
+        },
         initialize: function () {
             var featureToAdd = Radio.request("ParametricURL", "getHighlightFeature"),
                 channel = Radio.channel("Highlightfeature"),

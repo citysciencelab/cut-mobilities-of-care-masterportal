@@ -18,15 +18,12 @@ define(function (require) {
         initialize: function () {
             this.render();
         },
-        /**
-        *
-        */
+
         render: function () {
             this.$el.html(this.template());
+            return this;
         },
-        /**
-         * Fire Event zum setzen des Zielpunkts
-         */
+
         setZielpunkt: function () {
             this.model.setRoutingDestination();
         }
