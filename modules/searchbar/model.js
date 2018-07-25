@@ -33,16 +33,23 @@ define(function (require) {
             this.set("initSearchString", value);
         },
 
+        /**
+        * aus View gaufgerufen
+        * @param {string} value - value from event
+        * @param {string} eventType - type of the event
+        * @returns {void}
+        */
         setSearchString: function (value, eventType) {
             var splitAdress = value.split(" "),
-                streetName,
-                houseNumber;
+                houseNumber,
+                streetName;
 
             // für Copy/Paste bei Adressen
             if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
                 houseNumber = splitAdress[splitAdress.length - 1];
                 streetName = value.substr(0, value.length - houseNumber.length - 1);
 
+                this.setEventType(eventType);
                 this.set("searchString", streetName);
                 Radio.trigger("Searchbar", "setPastedHouseNumber", houseNumber);
             }
@@ -53,24 +60,45 @@ define(function (require) {
             Radio.trigger("Searchbar", "search", this.get("searchString"));
             $(".dropdown-menu-search").show();
         },
+
         /**
          * Hilfsmethode um ein Attribut vom Typ Array zu setzen.
-         * @param {String} attribute - Das Attribut das gesetzt werden soll
-         * @param {whatever} value - Der Wert des Attributs
-         * @returns {void}
+         * {String} attribute - Das Attribut das gesetzt werden soll
+         * {whatever} value - Der Wert des Attributs
+         * @param  {[type]} attribute [description]
+         * @param  {[type]} value     [description]
+         * @param  {[type]} evtType     [description]
+         * @return {[type]}         [description]
          */
-        pushHits: function (attribute, value) {
-            var tempArray = _.clone(this.get(attribute));
+        pushHits: function (attribute, value, evtType) {
+            var tempArray = _.clone(this.get(attribute)),
+                valueWithNumbers;
 
             tempArray.push(value);
+
+            // removes addresses without house number, if more than one exists
+            if (evtType === "paste" && !_.isUndefined(tempArray) && tempArray.length > 1) {
+                valueWithNumbers = _.filter(tempArray, function (val) {
+                    var valueArray = val.name.split(",")[0].split(" ");
+
+                    return !_.isNaN(parseInt(valueArray[valueArray.length - 1], 10));
+                });
+
+                tempArray = _.isUndefined(valueWithNumbers) ? tempArray : valueWithNumbers;
+            }
+
             this.set(attribute, _.flatten(tempArray));
+
+            if (!_.isUndefined(valueWithNumbers) && this.get("eventType") === "paste") {
+                Radio.trigger("ViewZoom", "hitSelected");
+            }
         },
 
         /**
          * removes all hits with the given filter
-         * @param {object} attribute -
-         * @param {object} filter -
-         * @returns {void}
+         * @param  {[type]} attribute [description]
+         * @param  {[type]} filter     [description]
+         * @return {[type]}         [description]
          */
         removeHits: function (attribute, filter) {
             var toRemove, i,
@@ -109,6 +137,7 @@ define(function (require) {
             }
             return src;
         },
+
         /**
          * crops names of hits to length zeichen
          * @param  {[type]} s [the search result]
@@ -127,25 +156,25 @@ define(function (require) {
 
         createRecommendedList: function () {
             var max = this.get("recommandedListLength"),
-                hitList,
-                foundTypes,
+                recommendedList = [],
+                hitList = this.get("hitList"),
+                foundTypes = [],
                 singleTypes,
-                usedNumbers,
-                randomNumber,
-                recommendedList = [];
+                usedNumbers = [],
+                randomNumber;
 
-            // if (this.get("hitList").length > 0 && this.get("isHitListReady") === true) {
-            //     this.set("isHitListReady", false);
-            if (this.get("hitList").length > max) {
-                hitList = this.get("hitList");
-                foundTypes = [];
+            if (hitList.length > max) {
                 singleTypes = _.reject(hitList, function (hit) {
+                    var res;
+
                     if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
-                        return true;
+                        res = true;
                     }
-                    foundTypes.push(hit.type);
+                    else {
+                        foundTypes.push(hit.type);
+                    }
+                    return res;
                 });
-                usedNumbers = [];
 
                 while (singleTypes.length < max) {
                     randomNumber = _.random(0, hitList.length - 1);
@@ -161,8 +190,14 @@ define(function (require) {
                 recommendedList = this.get("hitList");
             }
             this.set("recommendedList", _.sortBy(recommendedList, "name"));
-            // this.set("isHitListReady", true);
-            // }
+        },
+
+        setTempCounter: function (value) {
+            this.set("tempCounter", value);
+        },
+
+        setEventType: function (value) {
+            this.set("eventType", value);
         }
     });
 

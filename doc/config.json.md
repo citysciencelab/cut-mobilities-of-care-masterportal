@@ -447,6 +447,7 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 |[searchByCoord](#markdown-header-portalconfigmenutoolschildrencoord)|nein|Object||Koordinatensuche|
 |[wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter)|nein|Object||WFS Filter|
 |[schulwegrouting](#markdown-header-portalconfigmenutoolschildrenschulwegrouting)|nein|Object||Schulwegrouting|
+|[compareFeatures](#markdown-header-portalconfigmenutoolschildrencomparefeatures)|nein|Object||Feature-Vergleichsliste|
 
 Werden mehrere Werkzeuge verwendet, so werden die Objekte mit Komma getrennt. Die Reihenfolge der Werkzeuge in der Konfiguration gibt die Reihenfolge der Werkzeuge im Portal wieder.
 
@@ -910,6 +911,21 @@ Das Schulwegrouting ermöglicht das Routing von einer eingegebenen Addresse zur 
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |layerId|ja|String|""|Id des Layers der die Schulstandorte enthält.|
+
+******
+******
+#### Portalconfig.menu.tools.children.compareFeatures ######
+Die Vergleichsliste ermöglicht einen Vergleich zwischen mehrerer Features eines Vektor-Layers. Über ein Radio.trigger() können features zugefügt werden. Werden Features aus unterschiedlichen Layern zugefügt, so werden die Features nach Layer sortiert.
+Es werden nur die Attribute in der gegebenen Reihenfolge angezeigt, die in der services.json am Layerobjekt konfiguriert sind.
+Auch gibt es eine Möglichkeit die Vergleichsliste zu exportieren
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|name|nein|String||Name des Werkzeuges im Menüeintrag.|
+|numberOfFeaturesToShow|nein|integer|3|Anzahl der Features, die maximal pro Layer vergleichen werden kann|
+|numberOfAttributesToShow|nein|integer|12|Anzahl der Attribute die beim öffnen der Vergleichsliste angezeigt wird. Über einen Button ("mehr Infos") können dann alle Attribute angezeigt werden.|
+
 
 ******
 ******

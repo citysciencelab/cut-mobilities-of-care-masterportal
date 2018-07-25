@@ -110,7 +110,7 @@ define(function (require) {
         changeValuesByText: function (minValue, maxValue) {
             var min = minValue,
                 max = maxValue,
-                initValues = this.getValuesCollection().pluck("initValue"),
+                initValues = this.get("valuesCollection").pluck("initValue"),
                 values,
                 lastValues,
                 type = this.getSelectedValues().type;
@@ -125,7 +125,7 @@ define(function (require) {
                 max = initValues[1];
             }
             else {
-                lastValues = this.getValuesCollection().pluck("value");
+                lastValues = this.get("valuesCollection").pluck("value");
 
                 min = this.checkInvalidInput(this.parseValueToNumber(min, type), lastValues[0]);
                 max = this.checkInvalidInput(this.parseValueToNumber(max, type), lastValues[1]);
