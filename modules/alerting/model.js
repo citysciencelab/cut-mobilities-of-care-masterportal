@@ -1,7 +1,5 @@
-define(function (require) {
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        AlertingModel;
+define(function () {
+    var AlertingModel;
 
     AlertingModel = Backbone.Model.extend({
         defaults: {
@@ -28,7 +26,8 @@ define(function (require) {
         /**
          * Wird ein String übergeben, handelt es sich dabei um die Alert Message
          * Ist es ein Objekt, werden die entsprechenden Attribute gesetzt
-         * @param {String|Object} val
+         * @param {String|Object} val -
+         * @returns {void}
          */
         setParams: function (val) {
             if (_.isString(val)) {

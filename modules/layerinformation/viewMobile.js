@@ -1,9 +1,9 @@
 define(function (require) {
-    require("bootstrap/tab");
-    require("bootstrap/modal");
-
     var TemplateMobile = require("text!modules/layerinformation/templateMobile.html"),
         LayerInformationViewMobile;
+
+    require("bootstrap/tab");
+    require("bootstrap/modal");
 
     LayerInformationViewMobile = Backbone.View.extend({
         className: "modal fade layerinformation",
@@ -26,6 +26,7 @@ define(function (require) {
 
             this.$el.html(this.template(attr));
             this.$el.modal("show");
+            return this;
         },
 
         setIsVisibleToFalse: function () {

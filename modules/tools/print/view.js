@@ -1,10 +1,10 @@
-define([
-    "backbone",
-    "text!modules/tools/print/template.html",
-    "modules/tools/print/model"
-], function (Backbone, PrintWinTemplate, Print) {
+define(function (require) {
+    var PrintWinTemplate = require("text!modules/tools/print/template.html"),
+        Print = require("modules/tools/print/model"),
+        $ = require("jquery"),
+        PrintView;
 
-    var view = Backbone.View.extend({
+    PrintView = Backbone.View.extend({
         model: new Print(),
         className: "win-body",
         template: _.template(PrintWinTemplate),
@@ -39,8 +39,9 @@ define([
             else {
                 this.undelegateEvents();
             }
+            return this;
         }
     });
 
-    return view;
+    return PrintView;
 });

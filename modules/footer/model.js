@@ -1,8 +1,8 @@
-define([
-    "backbone",
-    "config"
-], function (Backbone, Config) {
-    var FooterModel = Backbone.Model.extend({
+define(function (require) {
+    var Config = require("config"),
+        FooterModel;
+
+    FooterModel = Backbone.Model.extend({
         defaults: {
             urls: [
                 {
@@ -14,8 +14,10 @@ define([
             ]
         },
         initialize: function () {
+            var urls;
+
             if (!_.isUndefined(Config.footer.urls)) {
-                var urls = Config.footer.urls;
+                urls = Config.footer.urls;
 
                 if (!_.isUndefined(urls[0].bezeichnung) &&
                 !_.isUndefined(urls[0].url) &&
@@ -27,6 +29,5 @@ define([
         }
     });
 
-    return new FooterModel();
-
+    return FooterModel;
 });

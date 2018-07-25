@@ -1,13 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function () {
+define(function () {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        StyleWMS;
-
-    StyleWMS = Backbone.Model.extend({
+    var StyleWMS = Backbone.Model.extend({
         defaults: {
             // true wenn dieses Tool im Fenster angezeigt wird und damit aktiv ist
             isCurrentWin: false,
@@ -30,10 +23,6 @@ define([
             styleWMSName: ""
         },
 
-        /**
-         * Wird aufgerufen wenn das Model erzeugt wird
-         * Registriert Listener auf sich selbst und den Radio
-         */
         initialize: function () {
             var channel = Radio.channel("StyleWMS");
 
@@ -122,6 +111,7 @@ define([
 
         /**
          * Prüft ob die Style-Klassen valide sind. Wenn ja, wird das SLD erstellt und gesetzt
+         * @returns {void}
          */
         createSLD: function () {
             if (this.isValid() === true) {
@@ -149,7 +139,7 @@ define([
 
         /**
          * Erzeugt ein NamedLayer Element und liefert es zurück
-         * @return {string}
+         * @return {string} sld
          */
         createAndGetNamedLayer: function () {
             return "<sld:NamedLayer>" +
@@ -160,7 +150,7 @@ define([
 
         /**
          * Erzeugt ein UserStyle Element und liefert es zurück
-         * @return {string}
+         * @return {string} sld
          */
         createAndGetUserStyle: function () {
             return "<sld:UserStyle>" +
@@ -174,7 +164,7 @@ define([
         /**
          * Erzeugt 1-n Rule Elemente und liefert sie zurück
          * Abhängig von der Anzahl der Style Klassen
-         * @return {string}
+         * @return {string} sld
          */
         createAndGetRule: function () {
             var rule = "";
@@ -194,7 +184,7 @@ define([
          * Erzeugt ein AND-Filter Element und liefert es zurück
          * @param  {string} startRange - Anfang des Wertebereichs
          * @param  {string} stopRange - Ende des Wertebereichs
-         * @return {string}
+         * @return {string} sld
          */
         createAndGetANDFilter: function (startRange, stopRange) {
             return "<ogc:Filter>" +
@@ -208,7 +198,7 @@ define([
         /**
          * Erzeugt ein PropertyIsGreaterThanOrEqualTo Element und liefert es zurück
          * @param  {string} value - Anfang des Wertebereichs
-         * @return {string}
+         * @return {string} sld
          */
         createAndGetIsGreaterThanOrEqualTo: function (value) {
             return "<ogc:PropertyIsGreaterThanOrEqualTo>" +
@@ -224,7 +214,7 @@ define([
         /**
          * Erzeugt ein PropertyIsLessThanOrEqualTo Element und liefert es zurück
          * @param  {string} value - Ende des Wertebereichs
-         * @return {string}
+         * @return {string} sld
          */
         createAndGetIsLessThanOrEqualTo: function (value) {
             return "<ogc:PropertyIsLessThanOrEqualTo>" +
@@ -240,7 +230,7 @@ define([
         /**
          * Erzeugt ein PolygonSymbolizer Element und liefert es zurück
          * @param  {string} value - Style Farbe
-         * @return {string}
+         * @return {string} sld
          */
         createAndGetPolygonSymbolizer: function (value) {
             return "<sld:PolygonSymbolizer>" +
@@ -251,7 +241,7 @@ define([
         /**
          * Erzeugt ein Fill Element und liefert es zurück
          * @param  {string} value - Style Farbe
-         * @return {string}
+         * @return {string} sld
          */
         createAndGetFillParams: function (value) {
             return "<sld:Fill>" +
@@ -261,74 +251,38 @@ define([
                    "</sld:Fill>";
         },
 
-        /**
-         * Setter für das Attribut model
-         * @param {Backbone.Model} value
-         */
         setModel: function (value) {
             this.set("model", value);
         },
 
-        /**
-         * Setter für das Attribut geomType
-         * @param {string} value
-         */
         setGeomType: function (value) {
             this.set("geomType", value);
         },
 
-        /**
-         * Setter für das Attribut attributeName
-         * @param {string} value
-         */
         setAttributeName: function (value) {
             this.set("attributeName", value);
         },
 
-        /**
-         * Setter für das Attribut numberOfClasses
-         * @param {string} value
-         */
         setNumberOfClasses: function (value) {
             this.set("numberOfClasses", value);
         },
 
-        /**
-         * Setter für das Attribut styleClassAttributes
-         * @param {Object[]} value
-         */
         setStyleClassAttributes: function (value) {
             this.set("styleClassAttributes", value);
         },
 
-        /**
-         * Setter für das Attribut setSLD
-         * @param {string} value
-         */
         setSLD: function (value) {
             this.set("setSLD", value);
         },
 
-        /**
-         * Setter für das Attribut errors
-         * @param {Object[]} value
-         */
         setErrors: function (value) {
             this.set("errors", value);
         },
 
-        /**
-         * Setter für das Attribut isCurrentWin
-         * @param {boolean} value
-         */
         setIsCurrentWin: function (value) {
             this.set("isCurrentWin", value);
         },
 
-        /**
-         * Setter für das Attribut isCollapsed
-         * @param {boolean} value
-         */
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
         }

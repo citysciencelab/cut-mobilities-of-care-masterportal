@@ -1,11 +1,11 @@
-define([
-    "backbone",
-    "text!modules/tools/saveSelection/template.html",
-    "text!modules/tools/saveSelection/templateSimpleMap.html",
-    "modules/tools/saveSelection/model"
-], function (Backbone, SaveSelectionTemplate, SaveSelectionSimpleMapTemplate, SaveSelection) {
+define(function (require) {
+    var SaveSelectionSimpleMapTemplate = require("text!modules/tools/saveSelection/templateSimpleMap.html"),
+        SaveSelectionTemplate = require("text!modules/tools/saveSelection/template.html"),
+        SaveSelection = require("modules/tools/saveSelection/model"),
+        $ = require("jquery"),
+        SaveSelectionView;
 
-    var SaveSelectionView = Backbone.View.extend({
+    SaveSelectionView = Backbone.View.extend({
         model: new SaveSelection(),
         className: "win-body",
         template: _.template(SaveSelectionTemplate),
@@ -34,17 +34,17 @@ define([
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
 
         /**
          * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
          * @param  {evt} evt Evt-Button
+         * @returns {void}
          */
         copyToClipboard: function (evt) {
-            var textField = evt.currentTarget;
-
             try {
-                $(textField).select();
+                this.$(evt.currentTarget).select();
                 document.execCommand("copy");
                 Radio.trigger("Alert", "alert", {
                     text: "Die Url wurde in die Zwischenablage kopiert.",

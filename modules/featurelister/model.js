@@ -1,8 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Requestor = require("modules/core/requestor"),
+    var Requestor = require("modules/core/requestor"),
         FeatureListerModel;
 
     FeatureListerModel = Backbone.Model.extend({
@@ -199,12 +197,12 @@ define(function (require) {
                 var props, geom;
 
                 if (feature.get("features")) {
-                    _.each(feature.get("features"), function (feat, index) {
+                    _.each(feature.get("features"), function (feat, idx) {
                         props = Requestor.translateGFI([feat.getProperties()], gfiAttributes)[0];
                         geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
                         ll.push({
-                            id: index,
+                            id: idx,
                             properties: props,
                             geometry: geom,
                             feature: feat

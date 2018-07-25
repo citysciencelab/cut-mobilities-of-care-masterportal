@@ -9,9 +9,7 @@ define(function (require) {
                 "change:isReady": this.parseGfiContent
             });
         },
-        /**
-         * sets title and gfiContent attributes
-         */
+
         parseGfiContent: function () {
 
             this.get("gfiContent")[0] = _.mapObject(this.get("gfiContent")[0], function (val) {
@@ -28,17 +26,19 @@ define(function (require) {
         },
         /**
         * adds " ha" on Gewerbliche Standorte and " m²" on Flurstücke where key is inside attrArray
+        * @param {object} gfiContent -
+        * @param {string[]} attrArray -
+        * @returns {object} gfiContent
         */
         addUnits: function (gfiContent, attrArray) {
             _.each(gfiContent, function (value, key) {
-                value = this.punctuate(value);
                 // Gewerbliche Standorte
                 if (this.get("id") === "10319" && _.contains(attrArray, key)) {
-                    gfiContent[key] = value + " ha";
+                    gfiContent[key] = this.punctuate(value) + " ha";
                 }
                 // Flurstücke
                 if (this.get("id") === "10320" && _.contains(attrArray, key)) {
-                    gfiContent[key] = value + " m²";
+                    gfiContent[key] = this.punctuate(value) + " m²";
                 }
             }, this);
 
@@ -61,6 +61,7 @@ define(function (require) {
         },
         /**
          * triggers feature properties via postMessage
+         * @returns {void}
          */
         postMessageToItGbm: function () {
             var featureProperties = _.omit(this.get("feature").getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]);

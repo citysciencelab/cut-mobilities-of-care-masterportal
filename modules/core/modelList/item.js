@@ -1,11 +1,6 @@
-define([
-    "backbone"
-], function () {
+define(function () {
 
-    var Backbone = require("backbone"),
-        Item;
-
-    Item = Backbone.Model.extend({
+    var Item = Backbone.Model.extend({
         defaults: {
             name: "",
             id: "",
@@ -45,10 +40,6 @@ define([
             this.set("level", value);
         },
 
-        /**
-         * Setter für Attribut "isVisibleInTree"
-         * @return {boolean}
-         */
         setIsVisibleInTree: function (value) {
             this.set("isVisibleInTree", value);
         }

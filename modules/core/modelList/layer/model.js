@@ -116,6 +116,8 @@ define(function (require) {
         },
         /**
         * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
         **/
         checkForScale: function (options) {
             if (parseFloat(options.scale, 10) <= this.getMaxScale() && parseFloat(options.scale, 10) >= this.getMinScale()) {
@@ -126,13 +128,6 @@ define(function (require) {
             }
         },
 
-        /**
-         * abstrakte Funktionen die in den Subclasses überschrieben werden
-         */
-        createLegendURL: function () {},
-        createLayerSource: function () {},
-        createLayer: function () {},
-
         getResolutions: function () {
             var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
                 resoByMinScale = Radio.request("MapView", "getResoByScale", this.getMinScale(), "min");
@@ -141,52 +136,27 @@ define(function (require) {
             this.setMinResolution(resoByMinScale);
         },
 
-        /**
-         * Setter für Attribut "layerSource"
-         * @param {ol.source} value
-         */
         setLayerSource: function (value) {
             this.set("layerSource", value);
         },
 
-        /**
-         * Setter für Attribut "layer"
-         * @param {ol.layer} value
-         */
         setLayer: function (value) {
             this.set("layer", value);
         },
 
-        /**
-         * Setter für Attribut "isVisibleInMap"
-         * Zusätzlich wird das "visible-Attribut" vom Layer auf den gleichen Wert gesetzt
-         * @param {boolean} value
-         */
         setIsVisibleInMap: function (value) {
             this.set("isVisibleInMap", value);
             this.get("layer").setVisible(value);
         },
 
-        /**
-         * Setter für Attribut "isSelected"
-         * @param {boolean} value
-         */
         setIsSelected: function (value) {
             this.set("isSelected", value);
         },
 
-        /**
-         * Setter für Attribut "isSettingVisible"
-         * @param {boolean} value
-         */
         setIsSettingVisible: function (value) {
             this.set("isSettingVisible", value);
         },
 
-        /**
-         * Setter für Attribut "transparency"
-         * @param {number} value
-         */
         setTransparency: function (value) {
             this.set("transparency", value);
         },
@@ -253,6 +223,7 @@ define(function (require) {
         /**
          * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
          * Abhängig vom Attribut "isSelected"
+         * @returns {void}
          */
         toggleLayerOnMap: function () {
             if (Radio.request("Parser", "getTreeType") !== "light") {
@@ -270,6 +241,7 @@ define(function (require) {
          * Wenn die Attributions als Objekt definiert ist,
          * wird in einem bestimmten Intervall die Attributions angefragt, solange "isVisibleInMap" true ist
          * Wird für die Verkehrslage auf den Autobahnen genutzt
+         * @returns {void}
          */
         toggleAttributionsInterval: function () {
             var channelName, eventName, timeout;
@@ -291,9 +263,6 @@ define(function (require) {
             }
         },
 
-        /**
-         *
-         */
         updateLayerTransparency: function () {
             var opacity = (100 - this.get("transparency")) / 100;
 
@@ -306,6 +275,7 @@ define(function (require) {
         /**
          * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
          * In layerinformation/model wird bei Layern ohne LegendURL auf null getestet.
+         * @returns {void}
          */
         showLayerInformation: function () {
             var metaID = [],
@@ -340,6 +310,7 @@ define(function (require) {
         /**
          * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt die metaID wieder.
          * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
+         * @returns {undefined|string} metadata id
          */
         getmetaID: function () {
             if (this.get("datasets")[0]) {
@@ -352,6 +323,7 @@ define(function (require) {
         /**
          * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt den Metanamen wieder
          * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
+         * @returns {undefined|string} metadata name
          */
         getmetaName: function () {
             if (this.get("datasets")[0]) {

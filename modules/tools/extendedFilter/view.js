@@ -1,5 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         Model = require("modules/tools/extendedFilter/model"),
         Template = require("text!modules/tools/extendedFilter/template.html"),
         ExtendedFilterView;
@@ -33,9 +33,10 @@ define(function (require) {
         },
 
         render: function () {
+            var attr = this.model.toJSON();
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
 
-                var attr = this.model.toJSON();
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
@@ -45,6 +46,7 @@ define(function (require) {
             else {
                 this.undelegateEvents();
             }
+            return this;
         }
     });
     return ExtendedFilterView;

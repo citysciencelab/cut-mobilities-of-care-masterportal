@@ -1,12 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Config = require("config"),
+    var Config = require("config"),
         SaveSelection;
 
     SaveSelection = Backbone.Model.extend({
@@ -71,6 +65,7 @@ define([
         /**
          * externe Layer werden rausgefiltert
          * @param  {[type]} layerList [description]
+         * @returns {void}
          */
         filterExternalLayer: function (layerList) {
             var filteredLayerList = _.filter(layerList, function (model) {
@@ -102,66 +97,34 @@ define([
             this.setUrl();
         },
 
-        /**
-         * [setLayerList description]
-         * @param {[type]} value [description]
-         */
         setLayerList: function (value) {
             this.set("layerList", value);
         },
 
-        /**
-         * [setZoomLevel description]
-         * @param {[type]} zoomLevel [description]
-         */
         setZoomLevel: function (zoomLevel) {
             this.set("zoomLevel", Math.round(zoomLevel));
         },
 
-        /**
-         * [setCenterCoords description]
-         * @param {[type]} coords [description]
-         */
         setCenterCoords: function (coords) {
             this.set("centerCoords", coords);
         },
 
-        /**
-         * [setLayerIdList description]
-         * @param {[type]} list [description]
-         */
         setLayerIdList: function (list) {
             this.set("layerIdList", list);
         },
 
-        /**
-         * [setLayerVisibilityList description]
-         * @param {[type]} list [description]
-         */
         setLayerVisibilityList: function (list) {
             this.set("layerVisibilityList", list);
         },
 
-        /**
-         * [setLayerTransparencyList description]
-         * @param {[type]} list [description]
-         */
         setLayerTransparencyList: function (list) {
             this.set("layerTransparencyList", list);
         },
 
-        /**
-         * [setUrl description]
-         */
         setUrl: function () {
             this.set("url", location.origin + location.pathname + "?layerIDs=" + this.get("layerIdList") + "&visibility=" + this.get("layerVisibilityList") + "&transparency=" + this.get("layerTransparencyList") + "&center=" + this.get("centerCoords") + "&zoomlevel=" + this.get("zoomLevel"));
         },
 
-        /**
-         * [setSimpleMapUrl description]
-         * @param {[type]} model [description]
-         * @param {[type]} value [description]
-         */
         setSimpleMapUrl: function (model, value) {
             this.set("simpleMapUrl", value + "&style=simple");
         },

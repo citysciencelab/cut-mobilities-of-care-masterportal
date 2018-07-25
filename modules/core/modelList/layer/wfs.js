@@ -135,7 +135,7 @@ define(function (require) {
             var style;
 
             if (!this.get("legendURL").length) {
-                var style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+                style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
                 if (!_.isUndefined(style)) {
                     this.setLegendURL([style.get("imagePath") + style.get("imageName")]);

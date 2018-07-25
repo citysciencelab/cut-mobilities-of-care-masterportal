@@ -1,13 +1,11 @@
-define([
-    "backbone"
-], function (Backbone, Config, ol) {
+define(function () {
 
-    var cookieModel = Backbone.Model.extend({
+    var CookieModel = Backbone.Model.extend({
         defaults: {
             approved: false
         },
         initialize: function () {
-            var pathname = window.location.pathname.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "");
+            var pathname = window.location.pathname.replace(/([.*+?^=!:${}()|[\]/\\])/g, "");
 
             this.set("sKey", "lgv_" + pathname);
             this.set("cookieEnabled", navigator.cookieEnabled);
@@ -21,25 +19,26 @@ define([
             this.set("approved", false);
         },
         getItem: function () {
+            var sKey = this.get("sKey");
+
             if (this.get("cookieEnabled") === false || this.get("approved" === false)) {
                 return null;
             }
 
-            var sKey = this.get("sKey");
-
-            return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+            return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
 
         },
         setItem: function (sValue, vEnd, sPath, sDomain, bSecure) {
+            var sKey = this.get("sKey"),
+                sExpires = "";
+
             if (this.get("cookieEnabled") === false || this.get("approved" === false)) {
                 return false;
             }
-            var sKey = this.get("sKey");
 
-            if (/^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
+            if (/^(?:expires|max-age|path|domain|secure)$/i.test(sKey)) {
                 return false;
             }
-            var sExpires = "";
 
             if (vEnd) {
                 switch (vEnd.constructor) {
@@ -52,16 +51,19 @@ define([
                     case Date:
                         sExpires = "; expires=" + vEnd.toUTCString();
                         break;
+                    default:
+                        break;
                 }
             }
             document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
             return true;
         },
         removeItem: function (sPath, sDomain) {
+            var sKey = this.get("sKey");
+
             if (this.get("cookieEnabled") === false || this.get("approved" === false)) {
                 return false;
             }
-            var sKey = this.get("sKey");
 
             if (!this.hasItem(sKey)) {
                 return false;
@@ -72,20 +74,23 @@ define([
         hasItem: function () {
             var sKey = this.get("sKey");
 
-            return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+            return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
         },
         keys: function () {
+            var aKeys = document.cookie.replace(/((?:^|\s*;)[^=]+)(?=;|$)|^\s*|\s*(?:=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:=[^;]*)?;\s*/),
+                nLen,
+                nIdx;
+
             if (this.get("cookieEnabled") === false || this.get("approved" === false)) {
                 return null;
             }
-            var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
 
-            for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) {
+            for (nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) {
                 aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]);
             }
             return aKeys;
         }
     });
 
-    return new cookieModel();
+    return CookieModel;
 });

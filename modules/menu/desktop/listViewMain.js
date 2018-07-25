@@ -1,19 +1,13 @@
-define([
-    "backbone",
-    "modules/menu/desktop/tool/view",
-    "modules/menu/desktop/folder/viewMenu",
-    "modules/menu/desktop/folder/viewCatalog",
-    "modules/menu/desktop/staticlink/view",
-    "bootstrap/dropdown",
-    "bootstrap/collapse"
-],
-function () {
-    var Backbone = require("backbone"),
+define(function (require) {
+    var $ = require("jquery"),
         DesktopToolView = require("modules/menu/desktop/tool/view"),
         DesktopFolderView = require("modules/menu/desktop/folder/viewMenu"),
         CatalogFolderView = require("modules/menu/desktop/folder/viewCatalog"),
         DesktopStaticLinkView = require("modules/menu/desktop/staticlink/view"),
         Menu;
+
+    require("bootstrap/dropdown");
+    require("bootstrap/collapse");
 
     Menu = Backbone.View.extend({
         collection: {},
@@ -29,7 +23,7 @@ function () {
             this.renderTopMenu();
         },
         renderTopMenu: function () {
-            var models = _.filter(this.collection.models, function (model) {
+            var models = this.collection.filter(function (model) {
                 return model.get("type") === "tool" || model.get("type") === "staticlink" || model.get("type") === "folder";
             });
 
@@ -54,6 +48,9 @@ function () {
                         else {
                             this.addDesktopFolderView(model);
                         }
+                        break;
+                    }
+                    default: {
                         break;
                     }
                 }

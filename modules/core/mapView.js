@@ -75,6 +75,7 @@ define(function (require) {
         /**
          * Die initiale Größe der #map beträgt 100%.
          * Der MenuLoader wird zu einem späteren Zeitpunkt required und verkleinert ggf. die Menüleiste.
+         * @returns {void}
          */
         initialize: function () {
             var channel = Radio.channel("MapView");
@@ -186,7 +187,8 @@ define(function (require) {
                 mapViewStartCenter = _.find(mapViewSettings, {"id": "startCenter"}),
                 mapViewExtent = _.find(mapViewSettings, {"id": "extent"}),
                 mapViewResolution = _.find(mapViewSettings, {"id": "resolution"}),
-                mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"});
+                mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"}),
+                res;
 
             if (_.isUndefined(mapViewOptions) === false) {
                 this.set("options", []);
@@ -217,7 +219,7 @@ define(function (require) {
                 this.setStartResolution(mapViewResolution.attr);
             }
             else if (_.isUndefined(mapViewZoomLevel) === false) {
-                var res = this.get("options")[mapViewZoomLevel.attr].resolution;
+                res = this.get("options")[mapViewZoomLevel.attr].resolution;
 
                 this.setResolution(res);
                 this.setStartResolution(res);
@@ -283,10 +285,6 @@ define(function (require) {
             this.set("zoomLevels", _.pluck(this.get("options"), "zoomLevel"));
         },
 
-        /**
-         * Setzt die Resolution auf den Wert val
-         * @param {float} val Resolution
-         */
         setResolution: function (val) {
             this.set("resolution", val);
         },
@@ -303,6 +301,7 @@ define(function (require) {
 
         /**
          * Setzt die ol Projektion anhand des epsg-Codes
+         * @returns {void}
          */
         setProjection: function () {
             var epsgCode = this.get("epsg"),
@@ -313,7 +312,7 @@ define(function (require) {
                 return;
             }
 
-            var proj = new ol.proj.Projection({
+            proj = new ol.proj.Projection({
                 code: epsgCode,
                 units: this.get("units"),
                 extent: this.get("extent"),
@@ -332,9 +331,6 @@ define(function (require) {
             this.set("projection", proj);
         },
 
-        /**
-         *
-         */
         setView: function () {
             var view = new ol.View({
                 projection: this.get("projection"),
@@ -347,9 +343,6 @@ define(function (require) {
             this.set("view", view);
         },
 
-        /**
-         *
-         */
         setCenter: function (coords, zoomLevel) {
             this.get("view").setCenter(coords);
             if (!_.isUndefined(zoomLevel)) {
@@ -357,23 +350,17 @@ define(function (require) {
             }
         },
 
-        /**
-         *
-         */
         setZoomLevelUp: function () {
             this.get("view").setZoom(this.getZoom() + 1);
         },
 
-        /**
-         *
-         */
         setZoomLevelDown: function () {
             this.get("view").setZoom(this.getZoom() - 1);
         },
 
         /**
          * Gibt zur Scale die entsprechende Resolution zurück.
-         * @param  {String|number} scale
+         * @param  {String|number} scale -
          * @param  {String} scaleType - min oder max
          * @return {number} resolution
          */
@@ -402,6 +389,7 @@ define(function (require) {
             else if (scaleType === "min") {
                 return this.get("resolutions")[index - 1];
             }
+            return null;
         },
 
         getCenter: function () {
@@ -427,7 +415,7 @@ define(function (require) {
 
         /**
          * calculate the extent for the current view state and the passed size
-         * @return {ol.extent}
+         * @return {ol.extent} extent
          */
         getCurrentExtent: function () {
             var mapSize = Radio.request("Map", "getSize");

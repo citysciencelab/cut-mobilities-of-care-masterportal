@@ -1,9 +1,8 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function (Backbone, Radio) {
-    "use strict";
-    var ContactModel = Backbone.Model.extend({
+define(function (require) {
+    var $ = require("jquery"),
+        ContactModel;
+
+    ContactModel = Backbone.Model.extend({
         defaults: {
             maxLines: Radio.request("Util", "isAny") ? "5" : "10",
             from: [{
@@ -43,8 +42,8 @@ define([
         setAttributes: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
                 portalConfig = _.has(this.get("portalConfig"), "portalTitle") ? this.get("portalConfig") : "",
-                portalTitle = _.has(portalConfig.portalTitle, "title") ? portalConfig.portalTitle.title : _.isString(portalConfig.PortalTitle) ? portalConfig.PortalTitle : document.title,
-                hrefString = "<br>==================<br>" + "Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
+                portalTitle = _.has(portalConfig.portalTitle, "title") ? portalConfig.portalTitle.title : document.title,
+                hrefString = "<br>==================<br>Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
                 platformString = "<br>Platform: " + navigator.platform + "<br>",
                 cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
                 userAgentString = "UserAgent: " + navigator.userAgent,
@@ -87,6 +86,9 @@ define([
                     this.setText(evt.target.value);
                     break;
                 }
+                default: {
+                    break;
+                }
             }
             this.isValid();
         },
@@ -105,8 +107,8 @@ define([
         validate: function (attributes) {
             var userNameValid = _.isUndefined(attributes.userName) === false ? attributes.userName.length >= 3 : false,
                 userEmailValid1 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.length >= 1 : false,
-                userEmailValid2 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.match(/^[A-Z0-9\.\_\%\+\-]+@{1}[A-Z0-9\.\-]+\.{1}[A-Z]{2,4}$/igm) !== null : false,
-                userTelValid = _.isUndefined(attributes.userTel) === false ? attributes.userTel.match(/^[0-9]{1}[0-9\-\+\(\)]*[0-9]$/ig) !== null : false,
+                userEmailValid2 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.match(/^[A-Z0-9._%+-]+@{1}[A-Z0-9.-]+\.{1}[A-Z]{2,4}$/igm) !== null : false,
+                userTelValid = _.isUndefined(attributes.userTel) === false ? attributes.userTel.match(/^[0-9]{1}[0-9\-+()]*[0-9]$/ig) !== null : false,
                 textValid = _.isUndefined(attributes.text) === false ? attributes.text.length >= 10 : false;
 
             if (userNameValid === false || userEmailValid1 === false || userEmailValid2 === false || userTelValid === false || textValid === false) {
