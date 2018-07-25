@@ -71,7 +71,7 @@ define(function (require) {
         updateData: function () {
             var sensorData,
                 features,
-                subTyp = this.get("subTyp").toUpperCase(),
+                typ = this.get("typ").toUpperCase(),
                 isClustered = this.has("clusterDistance"),
                 url = this.get("url"),
                 version = this.get("version"),
@@ -79,7 +79,7 @@ define(function (require) {
                 epsg = this.get("epsg");
 
             // check for subtypes
-            if (subTyp === "SENSORTHINGS") {
+            if (typ === "SENSORTHINGS") {
                 sensorData = this.loadSensorThings(url, version, urlParams);
                 features = this.drawPoints(sensorData, epsg);
 
@@ -91,7 +91,7 @@ define(function (require) {
                 // connection to live update
                 this.createMqttConnectionToSensorThings(features);
             }
-            else if (subTyp === "ESRISTREAMLAYER") {
+            else if (typ === "ESRISTREAMLAYER") {
                 sensorData = this.loadStreamLayer();
                 if (!_.isUndefined(sensorData)) {
                     features = this.drawESRIGeoJson(sensorData);

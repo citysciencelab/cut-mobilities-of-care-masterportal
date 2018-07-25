@@ -108,6 +108,9 @@ define(function (require) {
                 this.normalizeWeight(layerSource.getFeatures());
             }
         },
+        createLegendURL: function () {
+            console.error("legendURL for heatmap not yet implemented");
+        },
 
         /**
          * update the heatmap with given feature

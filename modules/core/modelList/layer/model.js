@@ -21,7 +21,7 @@ define(function (require) {
             maxScale: "1000000"
         },
         superInitialize: function () {
-            var channel = Radio.Channel("Layer");
+            var channel = Radio.channel("Layer");
 
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt

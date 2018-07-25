@@ -94,7 +94,7 @@ define(function (require) {
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
                 }
-                else if (attrs.typ === "Sensor") {
+                else if (attrs.typ === "SensorThings" || attrs.typ === "ESRIStreamLayer") {
                     return new SensorLayer(attrs, options);
                 }
                 else if (attrs.typ === "Heatmap") {
