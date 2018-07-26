@@ -42,7 +42,7 @@ define(function (require) {
                 return;
             }
 
-            this.getGeometryFromWFS(name, wfsParams);
+            this.getGeometryFromWFS(name, params);
         },
         validateWfsParams: function (wfsParams) {
             var keysArray = _.keys(this.get("wfsParams"));
