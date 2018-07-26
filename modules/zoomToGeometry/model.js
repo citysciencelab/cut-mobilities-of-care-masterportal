@@ -48,7 +48,7 @@ define(function (require) {
             var keysArray = _.keys(this.get("wfsParams"));
 
             return _.every(keysArray, function (key) {
-                return _.contains(wfsParams, key) && !_.isUndefined(wfsParams[key]);
+                return _.has(wfsParams, key) && !_.isUndefined(wfsParams[key]);
             });
         },
         getGeometryFromWFS: function (name, wfsParams) {
