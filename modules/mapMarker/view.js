@@ -77,10 +77,6 @@ define(function (require) {
                     this.showMarker(coord);
                     break;
                 }
-                case "Krankenhaus": {
-                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
-                    break;
-                }
                 case "Adresse": {
                     this.showMarker(coord);
                     Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
@@ -112,16 +108,6 @@ define(function (require) {
                     }
                     break;
                 }
-                case "Olympiastandort": {
-                    this.showMarker(coord);
-                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
-                    break;
-                }
-                case "Paralympiastandort": {
-                    this.showMarker(coord);
-                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
-                    break;
-                }
                 case "SearchByCoord": {
                     Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                     this.showMarker(coord);
@@ -147,6 +133,10 @@ define(function (require) {
                 default: {
                     if (coord.length === 2) {
                         Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                        this.showMarker(coord);
+                    }
+                    else if (coord.length === 3) {
+                        Radio.trigger("MapView", "setCenter", [coord[0], coord[1]], this.model.get("zoomLevel"));
                         this.showMarker(coord);
                     }
                     else if (coord.length === 4) {
