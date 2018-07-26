@@ -241,28 +241,32 @@ define(function (require) {
 
         createQuery: function (model) {
             var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
+                query;
+
+            if (!_.isUndefined(layer)) {
                 query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" ? new WfsQueryModel(model) : undefined;
 
-            if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
-                _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
-            }
+                if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
+                    _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+                }
 
-            if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
-                query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
-            }
+                if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
+                    query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
+                }
 
-            if (!_.isUndefined(this.get("sendToRemote"))) {
-                query.set("sendToRemote", this.get("sendToRemote"));
-            }
-            if (!_.isUndefined(this.get("minScale"))) {
-                query.set("minScale", this.get("minScale"));
-            }
+                if (!_.isUndefined(this.get("sendToRemote"))) {
+                    query.set("sendToRemote", this.get("sendToRemote"));
+                }
+                if (!_.isUndefined(this.get("minScale"))) {
+                    query.set("minScale", this.get("minScale"));
+                }
 
-            if (query.get("isSelected")) {
-                query.setIsDefault(true);
-                query.setIsActive(true);
+                if (query.get("isSelected")) {
+                    query.setIsDefault(true);
+                    query.setIsActive(true);
+                }
+                this.get("queryCollection").add(query);
             }
-            this.get("queryCollection").add(query);
         },
 
         setIsActive: function (value) {
