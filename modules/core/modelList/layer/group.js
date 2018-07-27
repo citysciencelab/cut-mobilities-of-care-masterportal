@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Radio = require("backbone.radio"),
-        Ol = require("openlayers"),
+        ol = require("openlayers"),
         Layer = require("modules/core/modelList/layer/model"),
         GroupLayer;
 
@@ -111,7 +111,7 @@ define(function (require) {
             var sources = [];
 
             _.each(childlayers, function (child) {
-                var source = new Ol.source.TileWMS({
+                var source = new ol.source.TileWMS({
                     url: child.url,
                     params: {
                         LAYERS: child.layers,
@@ -128,10 +128,10 @@ define(function (require) {
         },
 
         createChildLayers: function (childlayers) {
-            var layer = new Ol.Collection();
+            var layer = new ol.Collection();
 
             _.each(childlayers, function (childLayer, index) {
-                layer.push(new Ol.layer.Tile({
+                layer.push(new ol.layer.Tile({
                     source: this.get("childLayerSources")[index]
                 }));
             }, this);
@@ -139,7 +139,7 @@ define(function (require) {
         },
 
         createLayer: function () {
-            var groupLayer = new Ol.layer.Group({
+            var groupLayer = new ol.layer.Group({
                 layers: this.get("childlayers")
             });
 
