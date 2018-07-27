@@ -88,7 +88,7 @@ define(function (require) {
                 layer.getSource().removeFeature(evt.selected[0]);
                 // remove feature from interaction
                 this.getFeatures().clear();
-            }, this);
+            });
             this.setSelectInteraction(selectInteraction);
         },
 
