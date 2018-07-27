@@ -121,15 +121,11 @@ define(function (require) {
                     Radio.trigger("Map", "zoomToExtent", coord);
                     break;
                 }
-                case "Schulstandorte": {
-                    this.showMarker(coord);
-                    Radio.trigger("MapView", "setCenter", coord, 6);
-                    break;
-                }
                 case "POI": {
                     Radio.trigger("Map", "zoomToExtent", coord, {maxZoom: index});
                     break;
                 }
+                // Features
                 default: {
                     if (coord.length === 2) {
                         Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
@@ -147,7 +143,7 @@ define(function (require) {
                         this.model.showFeature(); // bei Flächen soll diese sichtbar sein
                         Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
                     }
-
+                    Radio.trigger("Filter", "resetFilter", hit.feature);
                     break;
                 }
             }

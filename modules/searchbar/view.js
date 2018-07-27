@@ -313,8 +313,6 @@ define(function (require) {
                 hitID,
                 modelHitList = this.model.get("hitList");
 
-            Radio.trigger("Filter", "resetFilter");
-
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
                 hit = _.values(_.pick(modelHitList, "0"))[0];

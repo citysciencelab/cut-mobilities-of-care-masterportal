@@ -92,7 +92,8 @@ define(function (require) {
                     coordinate: this.getCentroidPoint(feature.getGeometry()),
                     imageSrc: this.getImageSource(feature, model),
                     id: _.uniqueId(model.get("name")),
-                    additionalInfo: this.getAdditionalInfo(model, feature)
+                    additionalInfo: this.getAdditionalInfo(model, feature),
+                    feature: feature
                 });
             }, this);
             return featureArray;

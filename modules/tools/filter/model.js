@@ -47,11 +47,13 @@ define(function (require) {
             this.createQueries(this.get("predefinedQueries"));
         },
 
-        resetFilter: function () {
-            this.deselectAllModels();
-            this.deactivateAllModels();
-            this.resetAllQueries();
-            this.activateDefaultQuery();
+        resetFilter: function (feature) {
+            if (feature.getStyleFunction()() === null) {
+                this.deselectAllModels();
+                this.deactivateAllModels();
+                this.resetAllQueries();
+                this.activateDefaultQuery();
+            }
         },
         activateDefaultQuery: function () {
             var defaultQuery = this.get("queryCollection").findWhere({isDefault: true});
