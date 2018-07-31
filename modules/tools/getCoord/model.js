@@ -1,11 +1,8 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function (Backbone, Radio, ol) {
+define(function (require) {
+    var ol = require("openlayers"),
+        CoordPopup;
 
-    var CoordPopup = Backbone.Model.extend({
+    CoordPopup = Backbone.Model.extend({
         defaults: {
             selectPointerMove: null,
             projections: [],

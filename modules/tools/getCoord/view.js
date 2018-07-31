@@ -6,9 +6,6 @@ define(function (require) {
         GetCoord;
 
     GetCoord = Backbone.View.extend({
-        model: new GetCoordModel(),
-        className: "win-body",
-        template: _.template(GetCoordTemplate),
         events: {
             "click .glyphicon-remove": "destroy",
             "change #coordSystemField": "changedPosition",
@@ -21,6 +18,9 @@ define(function (require) {
                 "change:positionMapProjection": this.changedPosition
             });
         },
+        model: new GetCoordModel(),
+        className: "win-body",
+        template: _.template(GetCoordTemplate),
 
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
