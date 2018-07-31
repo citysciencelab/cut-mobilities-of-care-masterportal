@@ -11,7 +11,8 @@ define([
             projections: [],
             mapProjection: null,
             positionMapProjection: [],
-            updatePosition: true
+            updatePosition: true,
+            currentProjectionName: ""
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -20,6 +21,7 @@ define([
 
             this.setProjections(Radio.request("CRS", "getProjections"));
             this.setMapProjection(Radio.request("MapView", "getProjection"));
+            this.setCurrentProjectionName(this.get("mapProjection").getCode());
         },
 
         setStatus: function (args) { // Fenstermanagement
@@ -65,7 +67,11 @@ define([
 
         returnTransformedPosition: function (targetProjection) {
             var positionMapProjection = this.get("positionMapProjection"),
+                positionTargetProjection = [0, 0];
+
+            if (positionMapProjection.length > 0) {
                 positionTargetProjection = Radio.request("CRS", "transformFromMapProjection", targetProjection, positionMapProjection);
+            }
 
             return positionTargetProjection;
         },
@@ -109,6 +115,10 @@ define([
         // setter for updatePosition
         setUpdatePosition: function (value) {
             this.set("updatePosition", value);
+        },
+        // setter for currentProjection
+        setCurrentProjectionName: function (value) {
+            this.set("currentProjectionName", value);
         }
     });
 

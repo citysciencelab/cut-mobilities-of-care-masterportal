@@ -27,6 +27,7 @@ define(function (require) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(this.model.toJSON())));
                 this.model.createInteraction();
+                this.changedPosition();
                 this.delegateEvents();
             }
             else {
@@ -42,6 +43,7 @@ define(function (require) {
                 position = this.model.returnTransformedPosition(targetProjectionName),
                 targetProjection = this.model.returnProjectionByName(targetProjectionName);
 
+            this.model.setCurrentProjectionName(targetProjectionName);
             if (position) {
                 this.adjustPosition(position, targetProjection);
                 this.adjustWindow(targetProjection);

@@ -4,10 +4,10 @@
         <label for="coordSystemField" class="col-md-5 col-sm-5 control-label">Koordinatensystem</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm pull-left" id="coordSystemField">
-                <% _.each(this.model.get("projections"), function(projection) {
+                <% _.each(projections, function(projection) {
                     var title = projection.title ? projection.title : projection.name;
 
-                    if (projection.name === this.model.get("mapProjection").getCode()) {%>
+                    if (projection.name === currentProjectionName) {%>
                         <option value=<%= projection.name %> SELECTED><%= title %></option>
                     <%} else { %>
                         <option value=<%= projection.name %>><%= title %></option>
