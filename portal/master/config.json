@@ -235,7 +235,7 @@
           },
           "wfsFeatureFilter":
           {
-            "name": "Filter",
+            "name": "Feature Filter",
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false
           },
