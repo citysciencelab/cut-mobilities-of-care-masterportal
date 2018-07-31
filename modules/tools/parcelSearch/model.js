@@ -39,7 +39,6 @@ define(function (require) {
          * wird getriggert, wenn ein Tool in der Menüleiste geklickt wird. Übergibt die Konfiguration der parcelSearch aus args an readConfig().
          */
         setStatus: function (args) {
-            console.log(args);
             if (args[2].get("id") === "parcelSearch") {
                 this.setIsCollapsed(args[1]);
                 this.setIsCurrentWin(args[0]);
