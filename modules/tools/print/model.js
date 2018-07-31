@@ -290,10 +290,15 @@ define(function (require) {
                 isClustered,
                 styleModel;
 
-            if (!_.isUndefined(layer) && !_.isUndefined(layerId)) {
-                layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
-                isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
-                styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+            if (!_.isUndefined(layer)) {
+                // get styleModel if layerId is defined.
+                // layer id is not defined for portal-internal layer like animationLayer and import_draw_layer
+                // then the style is located directly at the feature, see line 312
+                if (!_.isUndefined(layerId)) {
+                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+                    isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
+                    styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+                }
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
@@ -333,9 +338,7 @@ define(function (require) {
                             strokeWidth: style.getStroke().getWidth()
                         };
                     }
-
                 }, this);
-
                 this.push("layerToPrint", {
                     type: "Vector",
                     styles: featureStyles,
