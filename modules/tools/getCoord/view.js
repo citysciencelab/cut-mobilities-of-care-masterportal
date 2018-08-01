@@ -85,13 +85,28 @@ define(function (require) {
 
         /**
          * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
+         * behaviour of ios strange used solution from :
+         * https://stackoverflow.com/questions/34045777/copy-to-clipboard-using-javascript-in-ios
          * @param  {evt} evt Evt-Button
          * @returns {void}
          */
         copyToClipboard: function (evt) {
-            var textField = evt.currentTarget;
+            var el = evt.currentTarget,
+                oldReadOnly = el.readOnly,
+                oldContentEditable = el.contentEditable,
+                range = document.createRange(),
+                selection = window.getSelection();
 
-            this.$(textField).select();
+            el.readOnly = false;
+            el.contentEditable = true;
+
+            range.selectNodeContents(el);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            el.setSelectionRange(0, 999999); // A big number, to cover anything that could be inside the element.
+
+            el.readOnly = oldReadOnly;
+            el.contentEditable = oldContentEditable;
 
             try {
                 document.execCommand("copy");
