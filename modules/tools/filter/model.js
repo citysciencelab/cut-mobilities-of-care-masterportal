@@ -48,7 +48,7 @@ define(function (require) {
         },
 
         resetFilter: function (feature) {
-            if (feature.getStyleFunction()() === null) {
+            if (feature && feature.getStyleFunction()() === null) {
                 this.deselectAllModels();
                 this.deactivateAllModels();
                 this.resetAllQueries();
