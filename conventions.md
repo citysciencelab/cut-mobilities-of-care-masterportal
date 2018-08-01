@@ -76,6 +76,12 @@ Ob ein String leer ist:
 if (!string) ...
 ```
 
+### Meldungen im Fehlerfall
+Wir unterscheiden Fehlermeldungen in:
+
+* Meldung zur Fehlersuche für Experten / Entwickler: Erlaubt sind console.error bzw. console.warn zum loggen von Fehlerzuständen.
+* Meldungen zur Information des Nutzers in Form von Alerts sollen nur erfolgen, wenn der Nutzer eine Aktion manuell angestoßen hat und diese erfolglos beendet wurde. 
+
 ### Bezeichnungen
 * Sprechende Namen für Variablen und Funktionen verwenden
 * *camelCase* für Funktions- und var- Deklarationen
@@ -92,7 +98,7 @@ var html = "<div id='my-id'></div>";
 
 #### Kommentare
 * Mehrzeilige Kommentare sind gut
-* Funktionen werden wenn überhaupt immer im JSDoc Style kommentiert.
+* Funktionen werden, wenn überhaupt, immer im JSDoc Style kommentiert.
 
 #### Backbone spezifische Konventionen
 * "listenTo" anstatt "on" als Eventlistener (nicht Backbone.Radio)
