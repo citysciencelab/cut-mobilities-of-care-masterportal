@@ -190,6 +190,7 @@ define(function (require) {
                 recommendedList = this.get("hitList");
             }
             this.set("recommendedList", _.sortBy(recommendedList, "name"));
+            this.trigger("renderRecommendedList");
         },
 
         setTempCounter: function (value) {
