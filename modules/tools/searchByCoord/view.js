@@ -6,7 +6,7 @@ define(function (require) {
         SearchByCoordView;
 
     SearchByCoordView = Backbone.View.extend({
-        model: SearchByCoord,
+        model: new SearchByCoord(),
         className: "win-body",
         template: _.template(SearchByCoordTemplate),
         events: {

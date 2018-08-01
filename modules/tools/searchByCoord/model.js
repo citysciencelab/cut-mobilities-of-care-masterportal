@@ -32,7 +32,7 @@ define(function (require) {
                     else {
                         fieldName = "#coordinatesNorthingField";
                     }
-                    if (value.coord.length < 1) {
+                    if (_.isUndefined(value.coord) || value.coord.length < 1) {
                         value.ErrorMsg = "Bitte geben Sie ihren " + value.key + " ein";
                         $(fieldName + "+ .text-danger").html("");
                         $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
@@ -52,13 +52,13 @@ define(function (require) {
                 });
             }
             else if (attributes.coordSystem === "WGS84") {
-                if (attributes.coordinates[0].coord.length < 1) {
+                if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[0].coord.length < 1) {
                     attributes.coordinates[0].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[0].key + " vollständig ein";
                     $("#coordinatesEastingField + .text-danger").html("");
                     $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                     $("#coordinatesEastingField").parent().addClass("has-error");
                 }
-                else if (!attributes.coordinates[0].coord.match(validWGS84)) {
+                else if (_.isNull(attributes.coordinates[0].coord.match(validWGS84))) {
                     attributes.coordinates[0].ErrorMsg = "Die Eingabe für den " + attributes.coordinates[0].key + " ist nicht korrekt! (Beispiel: " + attributes.coordinates[0].example + ")";
                     $("#coordinatesEastingField + .text-danger").html("");
                     $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
@@ -70,13 +70,13 @@ define(function (require) {
                     Radio.trigger("Alert", "alert:remove");
                 }
 
-                if (attributes.coordinates[1].coord.length < 1) {
+                if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[1].coord.length < 1) {
                     attributes.coordinates[1].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[1].key + " vollständig ein";
                     $("#coordinatesNorthingField + .text-danger").html("");
                     $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                     $("#coordinatesNorthingField").parent().addClass("has-error");
                 }
-                else if (!attributes.coordinates[1].coord.match(validWGS84)) {
+                else if (_.isNull(attributes.coordinates[1].coord.match(validWGS84))) {
                     attributes.coordinates[1].ErrorMsg = "Die Eingabe für den " + attributes.coordinates[1].key + " ist nicht korrekt! (Beispiel: " + attributes.coordinates[1].example + ")";
                     $("#coordinatesNorthingField + .text-danger").html("");
                     $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
@@ -89,13 +89,13 @@ define(function (require) {
                 }
             }
             else if (attributes.coordSystem === "WGS84(Dezimalgrad)") {
-                if (attributes.coordinates[0].coord.length < 1) {
+                if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[0].coord.length < 1) {
                     attributes.coordinates[0].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[0].key + " ein";
                     $("#coordinatesEastingField + .text-danger").html("");
                     $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                     $("#coordinatesEastingField").parent().addClass("has-error");
                 }
-                else if (!attributes.coordinates[0].coord.match(validWGS84_dez)) {
+                else if (_.isNull(attributes.coordinates[0].coord.match(validWGS84_dez))) {
                     attributes.coordinates[0].ErrorMsg = "Die Eingabe für den " + attributes.coordinates[0].key + " ist nicht korrekt! (Beispiel: " + attributes.coordinates[0].example + ")";
                     $("#coordinatesEastingField + .text-danger").html("");
                     $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
@@ -106,13 +106,13 @@ define(function (require) {
                     $("#coordinatesEastingField").parent().removeClass("has-error");
                     Radio.trigger("Alert", "alert:remove");
                 }
-                if (attributes.coordinates[1].coord.length < 1) {
+                if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[1].coord.length < 1) {
                     attributes.coordinates[1].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[1].key + " ein";
                     $("#coordinatesNorthingField + .text-danger").html("");
                     $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                     $("#coordinatesNorthingField").parent().addClass("has-error");
                 }
-                else if (!attributes.coordinates[1].coord.match(validWGS84_dez)) {
+                else if (_.isNull(attributes.coordinates[1].coord.match(validWGS84_dez))) {
                     attributes.coordinates[1].ErrorMsg = "Die Eingabe für den " + attributes.coordinates[1].key + " ist nicht korrekt! (Beispiel: " + attributes.coordinates[1].example + ")";
                     $("#coordinatesNorthingField + .text-danger").html("");
                     $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
@@ -197,5 +197,5 @@ define(function (require) {
         }
     });
 
-    return new SearchByCoord();
+    return SearchByCoord;
 });
