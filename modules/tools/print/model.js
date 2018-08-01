@@ -157,7 +157,7 @@ define(function (require) {
         setStatus: function (args) {
             var scaletext;
 
-            if (args[2].get("id") === "print") {
+            if (args[2].get("id") === "print" && args[0] === true) {
                 if (this.get("fetched") === false) {
                     // get print config (info.json)
                     this.fetch({
@@ -177,7 +177,7 @@ define(function (require) {
                         },
                         error: function () {
                             Radio.trigger("Alert", "alert", {text: "<strong>Druckkonfiguration konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
-                            Radio.trigger("Window", "closeWin");
+                            Radio.trigger("Window", "closeWin", false);
                         },
                         complete: function () {
                             Radio.trigger("Util", "hideLoader");
