@@ -31,6 +31,9 @@ define([
         },
         setVisible: function (value) {
             this.set("isVisible", value);
+            if (!value) {
+                this.setCollapse(value);
+            }
         },
         setParams: function (value) {
             this.setTool(value);
