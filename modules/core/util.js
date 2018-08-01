@@ -176,7 +176,8 @@ define(function (require) {
                 Radio.trigger("Alert", "alert", {
                     text: "Inhalt wurde in die Zwischenablage kopiert.",
                     kategorie: "alert-info",
-                    position: "top-center"
+                    position: "top-center",
+                    animation: 2000
                 });
             }
             catch (e) {

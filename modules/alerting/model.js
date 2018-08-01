@@ -10,7 +10,8 @@ define(function () {
             // Position der Messages [top-center | center-center]
             position: "top-center",
             // letzte/aktuelle Alert Message
-            message: ""
+            message: "",
+            animation: false
         },
         initialize: function () {
             var channel = Radio.channel("Alert");
@@ -51,6 +52,12 @@ define(function () {
                 if (_.has(val, "position") === true) {
                     this.setPosition(val.position);
                 }
+                if (_.has(val, "animation")) {
+                    this.setAnimation(val.animation);
+                }
+                if (!_.has(val, "animation")) {
+                    this.setAnimation(false);
+                }
             }
             this.trigger("render");
         },
@@ -73,6 +80,9 @@ define(function () {
 
         setPosition: function (value) {
             this.set("position", value);
+        },
+        setAnimation: function (value) {
+            this.set("animation", value);
         }
     });
 
