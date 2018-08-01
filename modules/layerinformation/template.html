@@ -56,7 +56,7 @@
                             _.each(legendURL.img, function (image, index2) {
                         %>
                                 <tr>
-                                   <% if (image.indexOf(".png") === -1 && image.indexOf(".svg") === -1){%>
+                                   <% if (image.indexOf(".png") === -1 && image.indexOf(".svg") === -1 && image.indexOf(".gif") === -1){%>
                                 <td class="tdLegend">
                                    <div class="tdLegend-no-image"><%= image %></div>
                                 </td>
