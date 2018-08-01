@@ -159,6 +159,8 @@ define(function (require) {
             else {
                 coordinateArray = [{"coord": easting, "key": "Rechtswert", "example": "564459.13"}, {"coord": northing, "key": "Hochwert", "example": "5935103.67"}];
             }
+            this.setCoordinatesEasting(easting);
+            this.setCoordinatesNorthing(northing);
             this.set("coordinates", coordinateArray);
             this.validateCoordinates();
         },
@@ -194,6 +196,14 @@ define(function (require) {
                 this.set("newCenter", [easting, northing]);
             }
             Radio.trigger("MapMarker", "zoomTo", {type: "SearchByCoord", coordinate: this.get("newCenter")});
+        },
+        // setter for coordinatesEasting
+        setCoordinatesEasting: function (value) {
+            this.set("coordinatesEasting", value);
+        },
+        // setter for coordinatesNorthing
+        setCoordinatesNorthing: function (value) {
+            this.set("coordinatesNorthing", value);
         }
     });
 
