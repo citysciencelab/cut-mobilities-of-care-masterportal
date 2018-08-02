@@ -26,13 +26,13 @@
     width: 75%;
 }
 
-.schulweg-routing .content .checkbox {
-    clear: both;
-    margin-top: 0;
+.schulweg-routing .content .checkbox-container {
+    /* clear: both; */
+    /* margin-top: 0; */
     margin-bottom: 20px;
 }
 
-.schulweg-routing .content .checkbox-container > label {
+.schulweg-routing .title-checkbox > label {
     padding-left: 0;
 }
 
