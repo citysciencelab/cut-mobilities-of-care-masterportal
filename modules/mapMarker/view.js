@@ -154,11 +154,12 @@ define(function (require) {
         * @param {string} data - Die Data-Object des request.
         */
         zoomToBKGSearchResult: function (data) {
-            if (data.features[0].properties.bbox.type === "Point") {
-                Radio.trigger("MapView", "setCenter", data.features[0].properties.bbox.coordinates, this.model.get("zoomLevel"));
-                this.showMarker(data.features[0].properties.bbox.coordinates);
+            if (data.features.length !== 0 && !_.isNull(data.features[0].geometry) && data.features[0].geometry.type === "Point") {
+                Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, this.model.get("zoomLevel"));
+                this.showMarker(data.features[0].geometry.coordinates);
             }
-            else if (data.features[0].properties.bbox.type === "Polygon") {
+            else if (data.features.length !== 0 && !_.isNull(data.features[0].properties) && !_.isNull(data.features[0].properties.bbox) &&
+                !_.isNull(data.features[0].properties.bbox.type) && data.features[0].properties.bbox.type === "Polygon") {
                 this.model.setWkt("POLYGON", _.flatten(data.features[0].properties.bbox.coordinates[0]));
                 Radio.trigger("Map", "zoomToExtent", this.model.getExtent());
             }
