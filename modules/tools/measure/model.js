@@ -1,11 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function (Backbone, Radio, ol, Config) {
+define(function (require) {
+    var ol = require("openlayers"),
+        Config = require("config"),
+        Measure;
 
-    var Measure = Backbone.Model.extend({
+    Measure = Backbone.Model.extend({
         defaults: {
             source: new ol.source.Vector(),
             style: new ol.style.Style({
@@ -82,6 +80,8 @@ define([
             }));
             this.get("draw").on("drawstart", function (evt) {
                 Radio.trigger("Map", "registerListener", "pointermove", this.placeMeasureTooltip, this);
+                // "click" needed for touch devices
+                Radio.trigger("Map", "registerListener", "click", this.placeMeasureTooltip, this);
                 this.set("sketch", evt.feature);
                 this.createMeasureTooltip();
             }, this);
@@ -93,6 +93,8 @@ define([
                 // unset tooltip so that a new one can be created
                 this.set("measureTooltipElement", null);
                 Radio.trigger("Map", "unregisterListener", "pointermove", this.placeMeasureTooltip, this);
+                // "click" needed for touch devices
+                Radio.trigger("Map", "unregisterListener", "click", this.placeMeasureTooltip, this);
             }, this);
             Radio.trigger("Map", "addInteraction", this.get("draw"));
         },
