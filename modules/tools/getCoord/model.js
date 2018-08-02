@@ -9,7 +9,7 @@ define(function (require) {
             mapProjection: null,
             positionMapProjection: [],
             updatePosition: true,
-            currentProjectionName: ""
+            currentProjectionName: "EPSG:25832"
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -18,7 +18,9 @@ define(function (require) {
 
             this.setProjections(Radio.request("CRS", "getProjections"));
             this.setMapProjection(Radio.request("MapView", "getProjection"));
-            this.setCurrentProjectionName(this.get("mapProjection").getCode());
+            if (!_.isUndefined(this.get("mapProjection"))) {
+                this.setCurrentProjectionName(this.get("mapProjection").getCode());
+            }
         },
 
         setStatus: function (args) { // Fenstermanagement
