@@ -1,11 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config",
-    "require"
-], function (Backbone, Radio, Config, Require) {
+define(function (require) {
+    var Config = require("config"),
+        $ = require("jquery"),
+        Util;
 
-    var Util = Backbone.Model.extend({
+    Util = Backbone.Model.extend({
         defaults: {
             // isViewMobile: false,
             config: "",
@@ -16,7 +14,9 @@ define([
                 uiStyle = Config.uiStyle ? Config.uiStyle.toUpperCase() : "DEFAULT";
 
             channel.reply({
-                "isViewMobile": this.getIsViewMobile,
+                "isViewMobile": function () {
+                    return this.get("isViewMobile");
+                },
                 "getPath": this.getPath,
                 "getProxyURL": this.getProxyURL,
                 "isApple": this.isApple,
@@ -26,9 +26,17 @@ define([
                 "isChrome": this.isChrome,
                 "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny,
-                "getConfig": this.getConfig,
-                "getUiStyle": this.getUiStyle,
-                "getIgnoredKeys": this.getIgnoredKeys
+                "getConfig": function () {
+                    return this.get("config");
+                },
+                "getUiStyle": function () {
+                    return this.get("uiStyle");
+                },
+                "getIgnoredKeys": function () {
+                    return this.get("ignoredKeys");
+                },
+                "punctuate": this.punctuate,
+                "sort": this.sort
             }, this);
 
             channel.on({
@@ -42,7 +50,7 @@ define([
 
             this.listenTo(this, {
                 "change:isViewMobile": function () {
-                    channel.trigger("isViewMobileChanged", this.getIsViewMobile());
+                    channel.trigger("isViewMobileChanged", this.get("isViewMobile"));
                 }
             });
 
@@ -51,9 +59,92 @@ define([
             this.setUiStyle(uiStyle);
             this.parseConfigFromURL();
         },
-        updateMapHeight: function () {
-            var navHeight = $("#main-nav").is(":visible") ? $("#main-nav").height() : 0,
-                mapHeight = $(".lgv-container").height() - navHeight;
+        /**
+         * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
+         * @param  {[type]} value - feature attribute values
+         * @returns {string} punctuated value
+         */
+        punctuate: function (value) {
+            var pattern = /(-?\d+)(\d{3})/,
+                stringValue = value.toString(),
+                predecimals = stringValue;
+
+            if (stringValue.indexOf(".") !== -1) {
+                predecimals = stringValue.split(".")[0];
+            }
+            while (pattern.test(predecimals)) {
+                predecimals = predecimals.replace(pattern, "$1.$2");
+            }
+            return predecimals;
+        },
+        /**
+         * Sorting alorithm that distinguishes between array[objects] and other arrays.
+         * arrays[objects] can be sorted by up to 2 object attributes
+         * @param {array} input array that has to be sorted
+         * @param {String} first first attribute an array[objects] has to be sorted by
+         * @param {String} second second attribute an array[objects] has to be sorted by
+         * @returns {array} sorted array
+         */
+        sort: function (input, first, second) {
+            var sorted,
+                isArrayOfObjects = _.every(input, function (element) {
+                    return _.isObject(element);
+                });
+
+            if (_.isUndefined(input)) {
+                sorted = input;
+            }
+            else if (_.isArray(input) && !isArrayOfObjects) {
+                sorted = this.sortArray(input);
+            }
+            else if (_.isArray(input) && isArrayOfObjects) {
+                sorted = this.sortObjects(input, first, second);
+            }
+
+            return sorted;
+        },
+        sortArray: function (input) {
+            return input.sort(this.sortAlphaNum);
+        },
+        sortAlphaNum: function (a, b) {
+            var regExAlpha = /[^a-zA-Z]/g,
+                regExNum = /[^0-9]/g,
+                aAlpha = String(a).replace(regExAlpha, ""),
+                bAlpha = String(b).replace(regExAlpha, ""),
+                aNum,
+                bNum,
+                returnVal = -1;
+
+            if (aAlpha === bAlpha) {
+                aNum = parseInt(String(a).replace(regExNum, ""), 10);
+                bNum = parseInt(String(b).replace(regExNum, ""), 10);
+                if (aNum === bNum) {
+                    returnVal = 0;
+                }
+                else if (aNum > bNum) {
+                    returnVal = 1;
+                }
+            }
+            else {
+                returnVal = aAlpha > bAlpha ? 1 : -1;
+            }
+            return returnVal;
+        },
+        sortObjects: function (input, first, second) {
+            var sortedObj = input;
+
+            // sort last property first in _.chain()
+            // https://stackoverflow.com/questions/16426774/underscore-sortby-based-on-multiple-attributes
+            sortedObj = _.chain(input)
+                .sortBy(function (element) {
+                    return element[second];
+                })
+                .sortBy(function (element) {
+                    return parseInt(element[first], 10);
+                })
+                .value();
+
+            return sortedObj;
         },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);
@@ -72,32 +163,32 @@ define([
             return navigator.userAgent.match(/IEMobile/i);
         },
         isChrome: function () {
+            var isChrome = false;
+
             if (/Chrome/i.test(navigator.userAgent)) {
-                return true;
+                isChrome = true;
             }
-            else {
-                return false;
-            }
+            return isChrome;
         },
         isAny: function () {
-            return (this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows());
+            return this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows();
         },
         isInternetExplorer: function () {
+            var ie = false;
+
             if (/MSIE 9/i.test(navigator.userAgent)) {
-                return "IE9";
+                ie = "IE9";
             }
             else if (/MSIE 10/i.test(navigator.userAgent)) {
-                return "IE10";
+                ie = "IE10";
             }
             else if (/rv:11.0/i.test(navigator.userAgent)) {
-                return "IE11";
+                ie = "IE11";
             }
-            else {
-                return false;
-            }
+            return ie;
         },
         getPath: function (path) {
-            var baseUrl = Require.toUrl("").split("?")[0];
+            var baseUrl = require.toUrl("").split("?")[0];
 
             if (path) {
                 if (path.indexOf("/") === 0) {
@@ -108,9 +199,9 @@ define([
                 }
                 return baseUrl + path;
             }
-            else {
-                return "";
-            }
+
+            return "";
+
         },
         showLoader: function () {
             $("#loader").show();
@@ -118,12 +209,12 @@ define([
         hideLoader: function () {
             $("#loader").hide();
         },
-       getProxyURL: function (url) {
+        getProxyURL: function (url) {
             var parser = document.createElement("a"),
-            protocol = "",
-            result = "",
-            hostname = "",
-            port = "";
+                protocol = "",
+                result = "",
+                hostname = "",
+                port = "";
 
             parser.href = url;
             protocol = parser.protocol;
@@ -147,22 +238,16 @@ define([
 
         /**
          * Setter für Attribut isViewMobile
-         * @param {boolean} value
+         * @param {boolean} value sichtbar
+         * @return {undefined}
          */
         setIsViewMobile: function (value) {
             this.set("isViewMobile", value);
         },
 
         /**
-         * Getter für Attribut isViewMobile
-         * @return {boolean}
-         */
-        getIsViewMobile: function () {
-            return this.get("isViewMobile");
-        },
-
-        /**
          * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
+         * @return {undefined}
          */
         toggleIsViewMobile: function () {
             if (window.innerWidth >= 768) {
@@ -173,7 +258,7 @@ define([
             }
         },
 
-        parseConfigFromURL: function (result) {
+        parseConfigFromURL: function () {
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {},
                 config;
@@ -199,28 +284,14 @@ define([
             }
         },
 
-        // getter for config
-        getConfig: function () {
-            return this.get("config");
-        },
-
         // setter for config
         setConfig: function (value) {
             this.set("config", value);
         },
 
-        // getter for UiStyle
-        getUiStyle: function () {
-            return this.get("uiStyle");
-        },
-
         // setter for UiStyle
         setUiStyle: function (value) {
             this.set("uiStyle", value);
-        },
-
-        getIgnoredKeys: function () {
-            return this.get("ignoredKeys");
         }
     });
 

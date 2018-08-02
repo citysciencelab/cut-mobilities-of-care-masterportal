@@ -25,24 +25,18 @@ define(function (require) {
             inSubMenue: false
         },
         triggerRadioEvent: function () {
-            _.each(this.getOnClickTrigger(), function (trigger) {
+            _.each(this.get("onClickTrigger"), function (trigger) {
                 this.triggerEvent(trigger);
             }, this);
         },
         triggerEvent: function (triggerParams) {
             var data = triggerParams.data;
 
-            if (triggerParams.event === "" || triggerParams.channel === "") {
-                return;
-            }
-            else {
+            if (triggerParams.event !== "" && triggerParams.channel !== "") {
                 Radio.trigger(triggerParams.channel, triggerParams.event, data);
             }
         },
-        // getter for onClickTrigger
-        getOnClickTrigger: function () {
-            return this.get("onClickTrigger");
-        },
+
         // setter for onClickTrigger
         setOnClickTrigger: function (value) {
             this.set("onClickTrigger", value);

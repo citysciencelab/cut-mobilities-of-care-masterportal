@@ -1,15 +1,12 @@
 define(function (require) {
+    var videojs = require("videojs"),
+        VideoModel;
 
     /**
      * Disable Google Analytics that tracks a random percentage (currently 1%) of players loaded from the CDN.
      * @link https://videojs.com/getting-started/
      */
     window.HELP_IMPROVE_VIDEOJS = false;
-
-    var Backbone = require("backbone"),
-        VideoJS = require("videojs"),
-        VideoModel;
-
     require("videojsflash");
 
     VideoModel = Backbone.Model.extend({
@@ -37,16 +34,18 @@ define(function (require) {
         /**
          * Startet das Streaming
          * @param  {Function} callback Callback-Funktion wird gerufen, nachdem das Video gestaret ist
+         * @returns {void}
          */
         startStreaming: function (callback) {
-            var videoEle = document.getElementById(this.getId());
+            var videoEle = document.getElementById(this.get("id"));
 
-            VideoJS(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
+            videojs(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
         },
 
         /**
          * Prüft, ob das GFI ausgeschaltet wurde
          * @param  {boolean} value Visibility des GFI
+         * @returns {void}
          */
         changedGFI: function (value) {
             if (value === false) {
@@ -56,44 +55,33 @@ define(function (require) {
 
         /**
          * Zerstört das Modul vollständig
-         * stop VideoJS
+         * stop videojs
          * remove Radio-Listener
          * remove Backbone-Listener
          * clear Attributes
          * remove View
+         * @returns {void}
          */
         destroy: function () {
-            var videoEle = document.getElementById(this.getId());
+            var videoEle = document.getElementById(this.get("id"));
 
-            VideoJS(videoEle).dispose();
+            videojs(videoEle).dispose();
             this.stopListening();
             this.off();
             this.clear();
             this.trigger("removeView");
         },
 
-        // getter for id
-        getId: function () {
-            return this.get("id");
-        },
         // setter for id
         setId: function (value) {
             this.set("id", value);
         },
 
-        // getter for url
-        getUrl: function () {
-            return this.get("url");
-        },
         // setter for url
         setUrl: function (value) {
             this.set("url", value);
         },
 
-        // getter for poster
-        getPoster: function () {
-            return this.get("poster");
-        },
         // setter for poster
         setPoster: function (value) {
             this.set("poster", value);

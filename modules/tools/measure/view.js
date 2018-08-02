@@ -1,14 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/tools/measure/default/template.html",
-    "text!modules/tools/measure/table/template.html",
-    "modules/tools/measure/model"
-], function (Backbone, Radio, DefaultTemplate, TableTemplate, Measure) {
+define(function (require) {
+    var DefaultTemplate = require("text!modules/tools/measure/default/template.html"),
+        TableTemplate = require("text!modules/tools/measure/table/template.html"),
+        Measure = require("modules/tools/measure/model"),
+        $ = require("jquery"),
+        MeasureView;
 
-    var MeasureView = Backbone.View.extend({
-        model: new Measure(),
-        className: "win-body",
+    MeasureView = Backbone.View.extend({
         events: {
             "change select#geomField": "setGeometryType",
             "change select#unitField": "setUnit",
@@ -17,17 +14,20 @@ define([
                 Radio.trigger("Quickhelp", "showWindowHelp", "measure");
             }
         },
-
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin change:type": this.render
             });
         },
-
+        model: new Measure(),
+        className: "win-body",
         render: function () {
+            var attr,
+                template;
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON(),
-                    template = Radio.request("Util", "getUiStyle") === "TABLE" ? _.template(TableTemplate) : _.template(DefaultTemplate);
+                attr = this.model.toJSON();
+                template = Radio.request("Util", "getUiStyle") === "TABLE" ? _.template(TableTemplate) : _.template(DefaultTemplate);
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(template(attr)));
@@ -36,6 +36,7 @@ define([
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
 
         setGeometryType: function (evt) {

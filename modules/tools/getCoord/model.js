@@ -6,7 +6,7 @@ define([
 ], function (Backbone, Radio, ol) {
 
     var CoordPopup = Backbone.Model.extend({
-         defaults: {
+        defaults: {
             selectPointerMove: null,
             projections: [],
             mapProjection: null,
@@ -23,7 +23,7 @@ define([
         },
 
         setStatus: function (args) { // Fenstermanagement
-            if (args[2].getId() === "coord") {
+            if (args[2].get("id") === "coord") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -44,34 +44,34 @@ define([
                 }.bind(this)
             }, this));
 
-            Radio.trigger("Map", "addInteraction", this.getSelectPointerMove());
+            Radio.trigger("Map", "addInteraction", this.get("selectPointerMove"));
         },
 
         removeInteraction: function () {
-            Radio.trigger("Map", "removeInteraction", this.getSelectPointerMove());
+            Radio.trigger("Map", "removeInteraction", this.get("selectPointerMove"));
             this.set("selectPointerMove", null);
         },
 
         checkPosition: function (position) {
-            if (this.getUpdatePosition() === true) {
+            if (this.get("updatePosition") === true) {
                 this.setPositionMapProjection(position);
             }
         },
 
         positionClicked: function (position) {
             this.setPositionMapProjection(position);
-            this.setUpdatePosition(!this.getUpdatePosition());
+            this.setUpdatePosition(!this.get("updatePosition"));
         },
 
         returnTransformedPosition: function (targetProjection) {
-            var positionMapProjection = this.getPositionMapProjection(),
+            var positionMapProjection = this.get("positionMapProjection"),
                 positionTargetProjection = Radio.request("CRS", "transformFromMapProjection", targetProjection, positionMapProjection);
 
             return positionTargetProjection;
         },
 
         returnProjectionByName: function (name) {
-            var projections = this.getProjections();
+            var projections = this.get("projections");
 
             return _.find(projections, function (projection) {
                 return projection.name === name;
@@ -86,46 +86,26 @@ define([
             return ol.coordinate.toStringXY(coord, 2);
         },
 
-        // getter for selectPointerMove
-        getSelectPointerMove: function () {
-            return this.get("selectPointerMove");
-        },
         // setter for selectPointerMove
         setSelectPointerMove: function (value) {
             this.set("selectPointerMove", value);
         },
 
-        // getter for mapProjection
-        getMapProjection: function () {
-            return this.get("mapProjection");
-        },
         // setter for mapProjection
         setMapProjection: function (value) {
             this.set("mapProjection", value);
         },
 
-        // getter for projections
-        getProjections: function () {
-            return this.get("projections");
-        },
         // setter for projections
         setProjections: function (value) {
             this.set("projections", value);
         },
 
-        // getter for positionMapProjection
-        getPositionMapProjection: function () {
-            return this.get("positionMapProjection");
-        },
         // setter for positionMapProjection
         setPositionMapProjection: function (value) {
             this.set("positionMapProjection", value);
         },
 
-        // getter for updatePosition
-        getUpdatePosition: function () {
-            return this.get("updatePosition");
-        },
         // setter for updatePosition
         setUpdatePosition: function (value) {
             this.set("updatePosition", value);

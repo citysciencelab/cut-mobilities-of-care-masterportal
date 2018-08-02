@@ -1,12 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/controls/freeze/freezewindowview",
-    "modules/controls/freeze/freezetoolmenuview",
-    "modules/controls/freeze/freezecontrolmenuview"
-], function (Backbone, Radio, FreezeView, FreezeToolMenuView, FreezeControlMenuView) {
+define(function (require) {
+    var FreezeView = require("modules/controls/freeze/freezewindowview"),
+        FreezeToolMenuView = require("modules/controls/freeze/freezetoolmenuview"),
+        FreezeControlMenuView = require("modules/controls/freeze/freezecontrolmenuview"),
+        FreezeModel;
 
-    var FreezeModel = Backbone.Model.extend({
+
+    FreezeModel = Backbone.Model.extend({
 
         defaults: {
 
@@ -15,11 +14,11 @@ define([
         initialize: function () {
             this.setView(new FreezeView({model: this}));
 
-            if (this.getStyle() === "TABLE") {
+            if (this.get("uiStyle") === "TABLE") {
                 new FreezeToolMenuView({model: this});
             }
             else {
-                new FreezeControlMenuView({model: this, el: this.getElement()});
+                new FreezeControlMenuView({model: this, el: this.get("el")});
             }
         },
 
@@ -27,28 +26,16 @@ define([
             this.set("uiStyle", val);
         },
 
-        getStyle: function () {
-            return this.get("uiStyle");
-        },
-
         setView: function (val) {
             this.set("view", val);
-        },
-
-        getView: function () {
-            return this.get("view");
         },
 
         setElement: function (val) {
             this.set("el", val);
         },
 
-        getElement: function () {
-            return this.get("el");
-        },
-
         startFreezeWin: function () {
-            this.getView().showFreezeWin();
+            this.get("view").showFreezeWin();
         }
     });
 

@@ -1,5 +1,6 @@
 define(function (require) {
     var DrawTemplate = require("text!modules/tools/draw/template.html"),
+        $ = require("jquery"),
         DrawTool = require("modules/tools/draw/model"),
         DrawToolView;
 
@@ -36,8 +37,9 @@ define(function (require) {
         },
 
         render: function () {
+            var attr = this.model.toJSON();
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
 
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
@@ -51,12 +53,13 @@ define(function (require) {
                 $("#map").off("mousemove");
                 this.undelegateEvents();
             }
+            return this;
         },
 
         renderForm: function () {
             var element = this.$el.find(".interaction")[0];
 
-            switch (element.options[element.selectedIndex].text){
+            switch (element.options[element.selectedIndex].text) {
                 case "Punkt zeichnen": {
                     this.$el.find(".text").toggle(false);
                     this.$el.find(".font-size").toggle(false);
@@ -108,7 +111,8 @@ define(function (require) {
         /**
          * removes the class 'once' from target and
          * calls createModifyInteraction in the model
-         * @param evt {MouseEvent}
+         * @param {MouseEvent} evt -
+         * @returns {void}
          */
         createModifyInteraction: function (evt) {
             $(evt.target).removeClass("once");
@@ -118,7 +122,8 @@ define(function (require) {
         /**
          * removes the class 'once' from target and
          * calls createSelectInteraction in the model
-         * @param evt {MouseEvent}
+         * @param {MouseEvent} evt -
+         * @returns {void}
          */
         createSelectInteraction: function (evt) {
             $(evt.target).removeClass("once");

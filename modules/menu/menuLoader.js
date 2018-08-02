@@ -1,13 +1,6 @@
-define([
-    "config",
-    "backbone.radio",
-    "modules/menu/desktop/listViewLight",
-    "modules/menu/desktop/listView",
-    "modules/menu/mobile/listView",
-    "modules/menu/table/view"
-], function (Config) {
-    var Radio = require("backbone.radio"),
-        MenuLoader;
+define(function (require) {
+    var MenuLoader,
+        $ = require("jquery");
 
     MenuLoader = function () {
         var channel = Radio.channel("MenuLoader");
@@ -42,19 +35,19 @@ define([
                         channel.trigger("ready");
                     });
                 }
+                else if (this.treeType === "light") {
+                    require(["modules/menu/desktop/listViewLight"], function (Menu) {
+                        caller.currentMenu = new Menu();
+                        channel.trigger("ready");
+                        Radio.trigger("Map", "updateSize");
+                    });
+                }
                 else {
-                    if (this.treeType === "light") {
-                        require(["modules/menu/desktop/listViewLight"], function (Menu) {
-                            caller.currentMenu = new Menu();
-                            channel.trigger("ready");
-                        });
-                    }
-                    else {
-                        require(["modules/menu/desktop/listView"], function (Menu) {
-                            caller.currentMenu = new Menu();
-                            channel.trigger("ready");
-                        });
-                    }
+                    require(["modules/menu/desktop/listView"], function (Menu) {
+                        caller.currentMenu = new Menu();
+                        channel.trigger("ready");
+                        Radio.trigger("Map", "updateSize");
+                    });
                 }
                 // Nachdem die MapSize geändert wurde, muss die Map aktualisiert werden.
                 Radio.trigger("Map", "updateSize");

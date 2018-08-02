@@ -24,6 +24,7 @@ define(function (require) {
         /**
          * Removed das Routing-Objekt vollständig.
          * Wird beim destroy des GFI für alle Child-Objekte aufgerufen.
+         * @returns {void}
          */
         destroy: function () {
             this.model.removeRouteLayer();

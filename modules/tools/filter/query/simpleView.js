@@ -1,43 +1,44 @@
 define(function (require) {
     var Template = require("text!modules/tools/filter/query/templateSimpleView.html"),
         QuerySimpleView = Backbone.View.extend({
-        template: _.template(Template),
-        className: "simple-view",
-        events: {
-            "click": "selectModel"
-        },
-        initialize: function () {
-            this.listenToOnce(this.model, {
-                "change:isSelected": function (model, value) {
-                    if (value) {
-                        this.model.setIsActive(value);
-                        this.model.get("btnIsActive").setIsSelected(value);
+            events: {
+                "click": "selectModel"
+            },
+            initialize: function () {
+                this.listenToOnce(this.model, {
+                    "change:isSelected": function (model, value) {
+                        if (value) {
+                            this.model.setIsActive(value);
+                            this.model.get("btnIsActive").setIsSelected(value);
+                        }
                     }
-                }
-            });
-            this.listenTo(this.model, {
-                "change:isSelected": function (model, value) {
-                    this.render();
-                },
-                "change:isLayerVisible": this.render
-            });
-        },
+                });
+                this.listenTo(this.model, {
+                    "change:isSelected": function () {
+                        this.render();
+                    },
+                    "change:isLayerVisible": this.render
+                });
+            },
+            template: _.template(Template),
+            className: "simple-view",
 
-        /**
-         * Zeichnet die SimpleView (Filter-Header) für die Query
-         */
-        render: function () {
-            var attr = this.model.toJSON();
+            /**
+             * Zeichnet die SimpleView (Filter-Header) für die Query
+             * @returns {void}
+             */
+            render: function () {
+                var attr = this.model.toJSON();
 
-            return this.$el.html(this.template(attr));
-        },
-        /**
-         *
-         */
-        selectModel: function () {
-            this.model.selectThis();
-        }
-    });
+                this.$el.html(this.template(attr));
+
+                return this;
+            },
+
+            selectModel: function () {
+                this.model.selectThis();
+            }
+        });
 
     return QuerySimpleView;
 });

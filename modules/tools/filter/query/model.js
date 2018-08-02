@@ -12,30 +12,37 @@ define(function (require) {
             isLayerVisible: false,
             activateOnSelection: false,
             // flag for the search in the current map extent
-            searchInMapExtent: false,
+            searchInMapExtent: true,
             liveZoomToFeatures: false
         },
 
         /**
-         * kann von erbenen Objekten augerufen werden
+         * kann von erbenden Objekten augerufen werden
+         * @returns {void}
          */
         superInitialize: function () {
             this.setSnippetCollection(new Backbone.Collection());
             this.addIsActiveCheckbox();
-            this.listenTo(this.getSnippetCollection(), {
+            this.listenTo(this.get("snippetCollection"), {
                 "valuesChanged": function () {
+                    var options;
+
                     this.setIsActive(true);
-                    this.getBtnIsActive().setIsSelected(true);
+                    this.get("btnIsActive").setIsSelected(true);
                     this.runFilter();
-                    if (this.getLiveZoomToFeatures()) {
-                        Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(), this.getLayerId());
+                    if (this.get("liveZoomToFeatures")) {
+                        Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+                        options = Radio.request("MapView", "getOptions");
+                        if (this.get("minScale") && options.scale < this.get("minScale")) {
+                            Radio.trigger("MapView", "setScale", this.get("minScale"));
+                        }
                     }
                 }
             }, this);
             this.checkLayerVisibility();
             this.listenTo(Radio.channel("Layer"), {
                 "layerVisibleChanged": function (layerId, visible) {
-                    if (layerId === this.getLayerId()) {
+                    if (layerId === this.get("layerId")) {
                         this.setIsLayerVisible(visible);
                     }
                 }
@@ -44,7 +51,7 @@ define(function (require) {
         },
 
         isSearchInMapExtentActive: function () {
-            var model = this.getSnippetCollection().findWhere({type: "searchInMapExtent"});
+            var model = this.get("snippetCollection").findWhere({type: "searchInMapExtent"});
 
             if (!_.isUndefined(model) && model.getIsSelected() === true) {
                 this.runFilter();
@@ -52,23 +59,23 @@ define(function (require) {
         },
 
         checkLayerVisibility: function () {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.getLayerId()});
+            var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
 
             if (!_.isUndefined(model)) {
-                this.setIsLayerVisible(model.getIsVisibleInMap());
+                this.setIsLayerVisible(model.get("isVisibleInMap"));
             }
         },
 
         addIsActiveCheckbox: function () {
-            if (!this.getActivateOnSelection()) {
+            if (!this.get("activateOnSelection")) {
                 this.setBtnIsActive(new SnippetCheckboxModel({
-                    isSelected: this.getIsActive()
+                    isSelected: this.get("isActive")
                 }));
 
-                this.listenTo(this.getBtnIsActive(), {
+                this.listenTo(this.get("btnIsActive"), {
                     "valuesChanged": function () {
-                        var checkboxModel = this.getBtnIsActive(),
-                        isActive = this.getBtnIsActive().getIsSelected();
+                        var checkboxModel = this.get("btnIsActive"),
+                            isActive = this.get("btnIsActive").getIsSelected();
 
                         checkboxModel.renderView();
                         this.setIsActive(isActive);
@@ -89,18 +96,25 @@ define(function (require) {
         },
 
         addSnippet: function (featureAttribute) {
-            featureAttribute.values.sort();
-            if (featureAttribute.type === "string" || featureAttribute.type === "text") {
-                featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
-                this.getSnippetCollection().add(new SnippetDropdownModel(featureAttribute));
+            var snippetAttribute = featureAttribute,
+                isSelected = false;
+
+            snippetAttribute.values = Radio.request("Util", "sort", snippetAttribute.values);
+
+            if (snippetAttribute.type === "string" || snippetAttribute.type === "text") {
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "dropdown"});
+                this.get("snippetCollection").add(new SnippetDropdownModel(snippetAttribute));
             }
-            else if (featureAttribute.type === "boolean") {
-                featureAttribute = _.extend(featureAttribute, {"snippetType": "dropdown"});
-                this.getSnippetCollection().add(new SnippetDropdownModel(featureAttribute));
+            else if (snippetAttribute.type === "boolean") {
+                if (_.has(snippetAttribute, "preselectedValues")) {
+                    isSelected = snippetAttribute.preselectedValues[0];
+                }
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "checkbox", "label": snippetAttribute.displayName, "isSelected": isSelected});
+                this.get("snippetCollection").add(new SnippetCheckboxModel(snippetAttribute));
             }
-            else if (featureAttribute.type === "integer" || featureAttribute.type === "decimal") {
-                featureAttribute = _.extend(featureAttribute, {"snippetType": "slider"});
-                this.getSnippetCollection().add(new SnippetSliderModel(featureAttribute));
+            else if (snippetAttribute.type === "integer" || snippetAttribute.type === "decimal") {
+                snippetAttribute = _.extend(snippetAttribute, {"snippetType": "slider"});
+                this.get("snippetCollection").add(new SnippetSliderModel(snippetAttribute));
             }
         },
 
@@ -109,7 +123,7 @@ define(function (require) {
          * @return {[type]} [description]
          */
         addSearchInMapExtentSnippet: function () {
-            this.getSnippetCollection().add(new SnippetCheckboxModel({
+            this.get("snippetCollection").add(new SnippetCheckboxModel({
                 type: "searchInMapExtent",
                 isSelected: false,
                 label: "Suche im aktuellen Kartenausschnitt"
@@ -118,20 +132,26 @@ define(function (require) {
 
         /**
          * Creates one or more Snippets, where Snippets like DropDowns or Sliders
-         * @param  {object[]} featureAttributes
+         * @param  {object[]} featureAttributes feature attributes
+         * @return {void}
          */
         createSnippets: function (featureAttributes) {
-            var featureAttributesMap = this.trimAttributes(featureAttributes);
+            var featureAttributesMap = this.trimAttributes(featureAttributes),
+                options;
 
             featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
-            featureAttributesMap = this.collectSelectableOptions(this.getFeatures(), [], featureAttributesMap);
-            featureAttributesMap = this.mapRules(featureAttributesMap, this.getRules());
+            featureAttributesMap = this.collectSelectableOptions(this.get("features"), [], featureAttributesMap);
+            featureAttributesMap = this.mapRules(featureAttributesMap, this.get("rules"));
             this.setFeatureAttributesMap(featureAttributesMap);
             this.addSnippets(featureAttributesMap);
-            if (this.getIsSelected() === true) {
+            if (this.get("isSelected") === true) {
                 this.runFilter();
-                if (this.getLiveZoomToFeatures()) {
-                    Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(), this.getLayerId());
+                if (this.get("liveZoomToFeatures")) {
+                    Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+                    options = Radio.request("MapView", "getOptions");
+                    if (this.get("minScale") && options.scale < this.get("minScale")) {
+                        Radio.trigger("MapView", "setScale", this.get("minScale"));
+                    }
                 }
                 this.trigger("renderDetailView");
             }
@@ -142,27 +162,42 @@ define(function (require) {
          * @param  {object} featureAttributesMap - Mapobject
          * @return {object} featureAttributesMap - gefiltertes Mapobject
          */
-         trimAttributes: function (featureAttributesMap) {
-             var trimmedFeatureAttributesMap = [],
-                 featureAttribute;
+        trimAttributes: function (featureAttributesMap) {
+            var trimmedFeatureAttributesMap = [],
+                featureAttribute;
 
-             _.each(this.getAttributeWhiteList(), function (attr) {
-                 featureAttribute = _.findWhere(featureAttributesMap, {name: attr});
-                 if (featureAttribute !== undefined) {
-                     trimmedFeatureAttributesMap.push(featureAttribute);
-                 }
-             });
+            _.each(this.get("attributeWhiteList"), function (attr) {
+                var attrObj = this.createAttrObject(attr);
 
-             return trimmedFeatureAttributesMap;
-         },
+                featureAttribute = _.findWhere(featureAttributesMap, {name: attrObj.name});
+                if (featureAttribute !== undefined) {
+                    featureAttribute.matchingMode = attrObj.matchingMode;
+                    trimmedFeatureAttributesMap.push(featureAttribute);
+                }
+            }, this);
 
+            return trimmedFeatureAttributesMap;
+        },
+
+        createAttrObject: function (attr) {
+            var attrObj = {};
+
+            if (_.isString(attr)) {
+                attrObj.name = attr;
+                attrObj.matchingMode = "OR";
+            }
+            else if (_.has(attr, "name") && _.has(attr, "matchingMode")) {
+                attrObj = attr;
+            }
+            return attrObj;
+        },
         /**
          * Konfigurierter Labeltext wird den Features zugeordnet
          * @param  {object} featureAttributesMap - Mapobject
          * @return {object} featureAttributesMap - gefiltertes Mapobject
          */
         mapDisplayNames: function (featureAttributesMap) {
-            var displayNames = Radio.request("RawLayerList", "getDisplayNamesOfFeatureAttributes", this.getLayerId());
+            var displayNames = Radio.request("RawLayerList", "getDisplayNamesOfFeatureAttributes", this.get("layerId"));
 
             _.each(featureAttributesMap, function (featureAttribute) {
                 if (_.isObject(displayNames) === true && _.has(displayNames, featureAttribute.name) === true) {
@@ -186,7 +221,7 @@ define(function (require) {
             _.each(rules, function (rule) {
                 var attrMap = _.findWhere(featureAttributesMap, {name: rule.attrName});
 
-                attrMap.initSelectedValues = rule.values;
+                attrMap.preselectedValues = rule.values;
             });
 
             return featureAttributesMap;
@@ -195,9 +230,10 @@ define(function (require) {
         /**
          * iterates over the snippet collection and
          * calls in the snippet deselectValueModels
+         * @return {void}
          */
         deselectAllValueModels: function () {
-            _.each(this.getSnippetCollection().models, function (snippet) {
+            _.each(this.get("snippetCollection").models, function (snippet) {
                 snippet.deselectValueModels();
             }, this);
         },
@@ -211,39 +247,39 @@ define(function (require) {
             this.set("isDefault", value);
         },
         selectThis: function () {
-            if (!this.getIsSelected()) {
+            var options;
+
+            if (!this.get("isSelected")) {
                 // die Query-Collection hört im Filter-Model auf diesen Trigger
                 this.collection.trigger("deselectAllModels", this);
                 this.collection.trigger("deactivateAllModels", this);
                 this.setIsSelected(true);
-                if (this.getIsActive()) {
+                if (this.get("isActive")) {
                     this.runFilter();
+                    if (this.get("liveZoomToFeatures")) {
+                        Radio.trigger("Map", "zoomToFilteredFeatures", this.get("featureIds"), this.get("layerId"));
+                        options = Radio.request("MapView", "getOptions");
+                        if (this.get("minScale") && options.scale < this.get("minScale")) {
+                            Radio.trigger("MapView", "setScale", this.get("minScale"));
+                        }
+                    }
                 }
             }
         },
 
         setIsSelected: function (value) {
-            if (this.getActivateOnSelection()) {
+            if (this.get("activateOnSelection")) {
                 this.setIsActive(value);
             }
             this.set("isSelected", value);
-        },
-        getIsSelected: function () {
-            return this.get("isSelected");
         },
 
         setIsActive: function (value) {
             this.set("isActive", value);
         },
-        getIsActive: function () {
-            return this.get("isActive");
-        },
 
         setFeatureIds: function (value) {
             this.set("featureIds", value);
-        },
-        getFeatureIds: function () {
-            return this.get("featureIds");
         },
         setIsNoValueSelected: function (value) {
             this.set("isNoValueSelected", value);
@@ -255,68 +291,37 @@ define(function (require) {
         setActivateOnSelection: function (value) {
             this.set("activateOnSelection", value);
         },
-        getActivateOnSelection: function () {
-            return this.get("activateOnSelection");
-        },
 
-        // getter for snippetCollection
-        getSnippetCollection: function () {
-            return this.get("snippetCollection");
-        },
         // setter for snippetCollection
         setSnippetCollection: function (value) {
             this.set("snippetCollection", value);
         },
 
-        // getter for btnIsActive
-        getBtnIsActive: function () {
-            return this.get("btnIsActive");
-        },
         // setter for btnIsActive
         setBtnIsActive: function (value) {
             this.set("btnIsActive", value);
         },
 
-        // getter for liveZoomToFeatures
-        getLiveZoomToFeatures: function () {
-            return this.get("liveZoomToFeatures");
-        },
         // setter for liveZoomToFeatures
         setLiveZoomToFeatures: function (value) {
             this.set("liveZoomToFeatures", value);
         },
 
-        // getter for layerId
-        getLayerId: function () {
-            return this.get("layerId");
-        },
         // setter for layerId
         setLayerId: function (value) {
             this.set("layerId", value);
         },
 
-        // getter for features
-        getFeatures: function () {
-            return this.get("features");
-        },
         // setter for features
         setFeatures: function (value) {
             this.set("features", value);
         },
 
-        // getter for rules
-        getRules: function () {
-            return this.get("rules");
-        },
         // setter for rules
         setRules: function (value) {
             this.set("rules", value);
         },
 
-        // getter for attributeWhiteList
-        getAttributeWhiteList: function () {
-            return this.get("attributeWhiteList");
-        },
         // setter for attributeWhiteList
         setAttributeWhiteList: function (value) {
             this.set("attributeWhiteList", value);

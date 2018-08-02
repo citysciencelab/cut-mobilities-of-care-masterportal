@@ -26,7 +26,7 @@
                 <div class="panel-body panel-legend">
                     <%
 
-                    if (element.typ === "WFS") {
+                    if (element.typ === "WFS" || element.typ === "Sensor") {
                     %>
                         <table>
                         <%
@@ -47,8 +47,12 @@
                                 <td class="tdLegend">
                                 <% if (image.indexOf("<svg") !== -1){%>
                                    <div class="tdLegend-no-image"><%= image %></div>
+                                <%} else if (_.isArray(image)){%>
+                                    <div class="imageArray" style="background:url('<%= image[1] %>');  background-size:35px;">
+                                            <img src="<%= image[0] %>">
+                                    </div>
                                 <%} else {%>
-                            <img src="<%= image %>">
+                                    <img src="<%= image %>">
                             <%}%>
                                 </td>
                                 <td class="tdLegend">

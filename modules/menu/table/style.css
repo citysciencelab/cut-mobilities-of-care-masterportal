@@ -27,6 +27,11 @@
     background-color: #fff;
 }
 
+#table-category-list .icon-categories {
+     font-size: 27.5px;
+     color: #000;
+}
+
 #table-category-list {
     position: relative;
     left: calc(50% + 252px);

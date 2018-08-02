@@ -31,20 +31,16 @@ define(function (require) {
             {
                 name: "Schulgröße",
                 attributes: [
-                    "anzahl_schueler",
+                    "anzahl_schueler_gesamt",
                     "zuegigkeit_kl_1",
-                    "zuegigkeit_kl_5"
+                    "standortkl1",
+                    "zuegigkeit_kl_5",
+                    "standortkl5"
                 ]
             },
             {
                 name: "Abschlüsse",
-                attributes: [
-                    "abschluss"/*,
-                    "schulentlassene_oa_anteil",
-                    "schulentlassene_mit_esa_anteil",
-                    "schulentlassene_mit_msa_anteil",
-                    "schulentlassenen_mit_fhr_anteil"*/
-                    ]
+                attributes: ["abschluss"]
             },
             {
                 name: "weitere Informationen",
@@ -58,14 +54,15 @@ define(function (require) {
                     "schulportrait",
                     "einzugsgebiet",
                     "schulwahl_wohnort"
-                    ]
+                ]
             },
             {
                 name: "Sprachen",
                 attributes: [
                     "fremdsprache_mit_klasse",
                     "bilingual",
-                    "sprachzertifikat"]
+                    "sprachzertifikat"
+                ]
             },
             {
                 name: "Ganztag",
@@ -73,7 +70,8 @@ define(function (require) {
                     "ganztagsform",
                     "kernzeitbetreuung",
                     "ferienbetreuung_anteil",
-                    "kernunterricht"]
+                    "kernunterricht"
+                ]
             },
             {
                 name: "Mittagsversorgung",
@@ -83,15 +81,44 @@ define(function (require) {
                     "wahlmoeglichkeit_essen",
                     "vegetarisch",
                     "nutzung_kantine_anteil",
-                    "kiosk_vorh"]
+                    "kiosk_vorh"
+                ]
+            },
+            {
+                name: "Ansprechpartner",
+                attributes: [
+                    "name_schulleiter",
+                    "name_stellv_schulleiter",
+                    "ansprechp_buero",
+                    "ansprechp_klasse_1",
+                    "ansprechp_klasse_5",
+                    "name_oberstufenkoordinator"
+                ]
+            },
+            {
+                name: "Oberstufenprofil",
+                attributes: [
+                    "oberstufenprofil",
+                    "standortoberstufe"
+                ]
             }]
         }),
         initialize: function () {
+            var channel = Radio.channel("Schulinfo");
+
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
             });
-        },
 
+            this.get("feature").on("propertychange", function (evt) {
+                if (evt.key === "isOnCompareList") {
+                    this.trigger("toggleStarGlyphicon", evt.target);
+                }
+            }, this);
+
+            this.get("feature").set("layerId", this.get("id"));
+            this.get("feature").set("layerName", this.get("name"));
+        },
         getVectorGfi: function () {
             var gfiContent = _.pick(this.get("feature").getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
 
@@ -102,13 +129,15 @@ define(function (require) {
 
         /**
          * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
+         * @returns {void}
          */
         parseGfiContent: function () {
-            if (!_.isUndefined(this.getGfiContent()[0])) {
+            var gfiContent,
+                featureInfos = [];
 
-                var gfiContent = this.getGfiContent()[0],
-                    featureInfos = [];
-
+            if (!_.isUndefined(this.get("gfiContent")[0])) {
+                gfiContent = this.get("gfiContent")[0];
+                featureInfos = [];
                 featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
                 this.setFeatureInfos(featureInfos);
                 this.determineSelectedContent(featureInfos);
@@ -125,7 +154,7 @@ define(function (require) {
 
             if (!_.isUndefined(themeConfig)) {
 
-            _.each(themeConfig, function (kategory) {
+                _.each(themeConfig, function (kategory) {
                     var kategoryObj = {
                         name: kategory.name,
                         isSelected: kategory.isSelected ? kategory.isSelected : false,
@@ -135,10 +164,10 @@ define(function (require) {
                         var isAttributeFound = this.checkForAttribute(gfiContent, attribute);
 
                         if (isAttributeFound) {
-                                kategoryObj.attributes.push({
-                                    attrName: _.isUndefined(this.get("gfiAttributes")[attribute]) ? attribute : this.get("gfiAttributes")[attribute],
-                                    attrValue: this.beautifyAttribute(gfiContent[attribute])
-                                });
+                            kategoryObj.attributes.push({
+                                attrName: _.isUndefined(this.get("gfiAttributes")[attribute]) ? attribute : this.get("gfiAttributes")[attribute],
+                                attrValue: this.beautifyAttribute(gfiContent[attribute], attribute)
+                            });
                         }
                     }, this);
                     featureInfos.push(kategoryObj);
@@ -146,15 +175,39 @@ define(function (require) {
             }
             return featureInfos;
         },
-        beautifyAttribute: function (attribute) {
+        beautifyAttribute: function (attribute, key) {
+            var newVal,
+                beautifiedAttribute = attribute;
+
+            if (key === "oberstufenprofil") {
+                if (beautifiedAttribute.indexOf("|") !== -1) {
+                    beautifiedAttribute = [];
+                    _.each(attribute.split("|"), function (value) {
+                        newVal = value;
+                        // make part before first ";" bold
+                        newVal = newVal.replace(/^/, "<b>");
+                        newVal = newVal.replace(/;/, "</b>;");
+                        beautifiedAttribute.push(newVal);
+                    }, this);
+                }
+                else {
+                    newVal = attribute;
+                    // make part before first ";" bold
+                    newVal = newVal.replace(/^/, "<b>");
+                    newVal = newVal.replace(/;/, "</b>;");
+
+                    beautifiedAttribute = newVal;
+                }
+                return beautifiedAttribute;
+            }
             if (attribute.indexOf("|") !== -1) {
-                attribute = attribute.split("|");
+                return attribute.split("|");
             }
             if (attribute === "true" || attribute === "ja") {
-                attribute = "Ja";
+                return "Ja";
             }
             if (attribute === "false" || attribute === "nein") {
-                attribute = "Nein";
+                return "Nein";
             }
             return attribute;
         },
@@ -199,8 +252,9 @@ define(function (require) {
         },
         /**
          * setsFeature selected where feature.name === newName
-         * @param {[type]} newName      [description]
-         * @param {[type]} featureInfos [description]
+         * @param {[type]} newName -
+         * @param {[type]} featureInfos -
+         * @returns {object} featureInfos
          */
         setIsSelected: function (newName, featureInfos) {
             var newNameFound = false;
@@ -232,9 +286,7 @@ define(function (require) {
                 if (featureObject.name === newName) {
                     return true;
                 }
-                else {
-                    return false;
-                }
+                return false;
             });
             if (filterArray.length > 0) {
                 newNameFound = true;

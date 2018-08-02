@@ -1,5 +1,6 @@
 html, body {
     height: 100%;
+    width: 100%;
 }
 
 .lgv-container {
@@ -92,8 +93,8 @@ label {
     position: absolute;
     left: 50%;
     top: 50%;
-    margin-left: -50px;
-    margin-top: -50px;
+    margin-left: -21px;
+    margin-top: -5px;
 }
 
 .cluster{

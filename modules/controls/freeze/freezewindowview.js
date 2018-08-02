@@ -1,29 +1,27 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        _ = require("underscore"),
-        FreezeTemplate = require("text!modules/controls/freeze/template.html"),
+    var FreezeTemplate = require("text!modules/controls/freeze/template.html"),
         $ = require("jquery"),
         FreezeView;
 
     FreezeView = Backbone.View.extend({
-        collection: {},
-        id: "freeze-view",
-        className: "freeze-view",
-        template: _.template(FreezeTemplate),
         events: {
             "click .freeze-view-close": "hideFreezeWin"
-
         },
         initialize: function () {
             this.render();
         },
+        collection: {},
+        id: "freeze-view",
+        className: "freeze-view freeze-deactivated",
+        template: _.template(FreezeTemplate),
         render: function () {
             $(this.$el).html(this.template());
             $(".lgv-container").append(this.$el);
+
+            return this;
         },
         showFreezeWin: function () {
-            $("div.freeze-view").css("height", $(".lgv-container").height());
-            $("div.freeze-view").css("width", $(".lgv-container").width());
+            $("div.freeze-view").removeClass("freeze-deactivated");
             $("div.freeze-view").addClass("freeze-activated");
             if ($(".table-nav-main").length === 0) {
                 $("p.freeze-view-close").css("left", "30px");
@@ -35,11 +33,8 @@ define(function (require) {
             }
         },
         hideFreezeWin: function () {
-            $("div.freeze-view").css("height", "10px");
-            $("div.freeze-view").css("width", "10px");
             $("div.freeze-view").removeClass("freeze-activated");
-            $("p.freeze-view-close").css("left", "0px");
-            $("p.freeze-view-close").css("top", "0px");
+            $("div.freeze-view").addClass("freeze-deactivated");
         }
     });
     return FreezeView;

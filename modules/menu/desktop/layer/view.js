@@ -1,11 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/menu/desktop/layer/template.html"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         Template = require("text!modules/menu/desktop/layer/template.html"),
         LayerView;
 
@@ -26,40 +21,44 @@ define([
                 "change:isOutOfRange": this.toggleColor
             });
             this.render();
-            this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleColor(this.model, this.model.get("isOutOfRange"));
         },
 
         render: function () {
             var attr = this.model.toJSON(),
-                selector = $("#" + this.model.getParentId());
+                selector = $("#" + this.model.get("parentId"));
 
             this.$el.html("");
-            if (this.model.getIsVisibleInTree()) {
-                if (this.model.getLevel() === 0) {
+            if (this.model.get("isVisibleInTree")) {
+                if (this.model.get("level") === 0) {
                     selector.prepend(this.$el.html(this.template(attr)));
                 }
                 else {
                     selector.after(this.$el.html(this.template(attr)));
                 }
-                $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
+                this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
             }
+            return this;
         },
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
+         * @param {Backbone.Model} model -
+         * @param {boolean} value -
+         * @returns {void}
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {
                 if (value === true) {
                     this.$el.addClass("disabled");
-                    this.$el.find("*").css("pointer-events","none");
-                    this.$el.find("*").css("cursor","not-allowed");
-                    this.$el.attr("title","Layer wird in dieser Zoomstufe nicht angezeigt");
+                    this.$el.find("*").css("pointer-events", "none");
+                    this.$el.find("*").css("cursor", "not-allowed");
+                    this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
                 }
                 else {
                     this.$el.removeClass("disabled");
-                    this.$el.find("*").css("pointer-events","auto");
-                    this.$el.find("*").css("cursor","pointer");
-                    this.$el.attr("title","");
+                    this.$el.find("*").css("pointer-events", "auto");
+                    this.$el.find("*").css("cursor", "pointer");
+                    this.$el.attr("title", "");
                 }
             }
         },
@@ -95,7 +94,7 @@ define([
             this.model.moveUp();
         },
         removeIfNotVisible: function () {
-            if (!this.model.getIsVisibleInTree()) {
+            if (!this.model.get("isVisibleInTree")) {
                 this.remove();
             }
         }

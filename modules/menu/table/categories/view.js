@@ -2,13 +2,9 @@
 define(function (require) {
 
     var Template = require("text!modules/menu/table/categories/Templates/template.html"),
-        $ = require("jquery"),
         CategoryView;
 
     CategoryView = Backbone.View.extend({
-        id: "table-category-list",
-        className: "table-category-list table-nav",
-        template: _.template(Template),
         events: {
             "click": "toggleCategoryMenu"
         },
@@ -20,9 +16,21 @@ define(function (require) {
             this.$el.on("show.bs.collapse", function () {
                 Radio.request("TableMenu", "setActiveElement", "Category");
             });
+
+            this.render();
         },
+        render: function () {
+            this.$el.html(this.template());
+            if (Radio.request("TableMenu", "getActiveElement") === "Category") {
+                this.$(".table-nav-cat-panel").collapse("show");
+            }
+            return this;
+        },
+        id: "table-category-list",
+        className: "table-category-list table-nav",
+        template: _.template(Template),
         toggleCategoryMenu: function () {
-            if ($(".table-nav-cat-panel").hasClass("in")) {
+            if (this.$(".table-nav-cat-panel").hasClass("in")) {
                 this.hideCategoryMenu();
             }
             else {
@@ -30,20 +38,13 @@ define(function (require) {
             }
         },
         hideCategoryMenu: function () {
-            $(".table-nav-cat-panel").removeClass("in");
-            $(".table-category-list").removeClass("table-category-active");
+            this.$(".table-nav-cat-panel").removeClass("in");
+            this.$(".table-category-list").removeClass("table-category-active");
         },
         showCategoryMenu: function () {
-            $(".table-category-list").addClass("table-category-active");
-            $(".table-nav-cat-panel").addClass("in");
+            this.$(".table-category-list").addClass("table-category-active");
+            this.$(".table-nav-cat-panel").addClass("in");
             Radio.request("TableMenu", "setActiveElement", "Category");
-        },
-        render: function () {
-            this.$el.html(this.template());
-            if (Radio.request("TableMenu", "getActiveElement") === "Category") {
-                $(".table-nav-cat-panel").collapse("show");
-            }
-            return this.$el;
         }
     });
 

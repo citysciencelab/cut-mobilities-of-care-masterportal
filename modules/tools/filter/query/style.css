@@ -22,10 +22,6 @@
     background-color: rgb(8, 88, 158);
 }
 
-.filter .feature-count {
-    margin-left: 4px;
-}
-
 .filter .detailview-head .btn:hover {
     opacity: 0.8;
 }

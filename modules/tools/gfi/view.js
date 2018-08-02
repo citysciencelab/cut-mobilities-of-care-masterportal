@@ -1,14 +1,14 @@
 define(function (require) {
 
     var Backbone = require("backbone"),
-        $ = require("jquery"),
         GFIView;
 
     GFIView = Backbone.View.extend({
         events: {
             "click .glyphicon-remove": "hideGFI",
             "click .pager-right": "renderNext",
-            "click .pager-left": "renderPrevious"
+            "click .pager-left": "renderPrevious",
+            "mouseenter": "hideMouseHover"
         },
         initialize: function () {
             this.listenTo(this.model, {
@@ -20,7 +20,7 @@ define(function (require) {
             });
 
             // Die attached View braucht für ol.Overlay noch ein Dom-Element
-            if (this.model.getDesktopViewType() === "attached" && this.model.getIsMobile() === false) {
+            if (this.model.get("desktopViewType") === "attached" && this.model.get("isMobile") === false) {
                 this.renderDomElementToBody();
                 this.model.setOverlayElement(document.getElementById("gfipopup"));
             }
@@ -29,22 +29,26 @@ define(function (require) {
         renderNext: function () {
             var preWidth = 0;
 
-            if ($(".pager-right").hasClass("disabled") === false) {
-                preWidth = $(".gfi-attached").width();
+            if (this.$(".pager-right").hasClass("disabled") === false) {
+                preWidth = this.$(".gfi-attached").width();
 
                 this.model.set("themeIndex", this.model.get("themeIndex") + 1);
                 this.replaceArrow(preWidth);
             }
         },
-
         /**
-         *
-         */
+        * hides mousehover if mouse enters gfi
+        * necessary in case that gfi is open and mousehover overlays gfi
+        * @returns {void}
+        */
+        hideMouseHover: function () {
+            Radio.trigger("MouseHover", "hide");
+        },
         renderPrevious: function () {
             var preWidth = 0;
 
-            if ($(".pager-left").hasClass("disabled") === false) {
-                preWidth = $(".gfi-attached").width();
+            if (this.$(".pager-left").hasClass("disabled") === false) {
+                preWidth = this.$(".gfi-attached").width();
                 this.model.set("themeIndex", this.model.get("themeIndex") - 1);
                 this.replaceArrow(preWidth);
             }
@@ -54,36 +58,39 @@ define(function (require) {
          * Pager css wird angepasst
          * @param  {Backbone.Model} model - this
          * @param  {number} value - themeIndex
+         * @returns {void}
          */
         updatePager: function (model, value) {
             if (value === 0) {
-                $(".pager-left").addClass("disabled");
+                this.$(".pager-left").addClass("disabled");
             }
             else {
-                $(".pager-left").removeClass("disabled");
+                this.$(".pager-left").removeClass("disabled");
             }
             if (value === this.model.get("numberOfThemes") - 1) {
-                $(".pager-right").addClass("disabled");
+                this.$(".pager-right").addClass("disabled");
             }
             else {
-                $(".pager-right").removeClass("disabled");
+                this.$(".pager-right").removeClass("disabled");
             }
         },
 
         /**
          * Ein bisschen jQuery-Magie, damit der Arrow von der detached View an der richtigen Stelle bleibt
          * @param  {number} preWidth - vorherige Breite der detached View
+         * @returns {void}
          */
         replaceArrow: function (preWidth) {
-            $(".popover.bottom > .arrow").css({
+            this.$(".popover.bottom > .arrow").css({
                 "margin-left": function (index, value) {
-                    return parseFloat(value, 10) - (($(".gfi-attached").width() - preWidth) / 2);
+                    return parseFloat(value, 10) - ((this.$(".gfi-attached").width() - preWidth) / 2);
                 }
             });
         },
 
         /**
          * Ruft die Funktion setIsVisible im Model auf
+         * @returns {void}
          */
         hideGFI: function () {
             this.model.setIsVisible(false);

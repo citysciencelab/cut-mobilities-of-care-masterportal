@@ -446,6 +446,8 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 |[routing](#markdown-header-portalconfigmenutoolschildrenrouting)|nein|Object||Routenplaner|
 |[searchByCoord](#markdown-header-portalconfigmenutoolschildrencoord)|nein|Object||Koordinatensuche|
 |[wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter)|nein|Object||WFS Filter|
+|[schulwegrouting](#markdown-header-portalconfigmenutoolschildrenschulwegrouting)|nein|Object||Schulwegrouting|
+|[compareFeatures](#markdown-header-portalconfigmenutoolschildrencomparefeatures)|nein|Object||Feature-Vergleichsliste|
 
 Werden mehrere Werkzeuge verwendet, so werden die Objekte mit Komma getrennt. Die Reihenfolge der Werkzeuge in der Konfiguration gibt die Reihenfolge der Werkzeuge im Portal wieder.
 
@@ -557,6 +559,7 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |isGeneric|nein|String|false||
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
+|minScale|nein|Integer||Gibt den kleinsten Maßstab an auf den die Suche zoomt|
 |predefinedQueries|nein|Object||Vordefinierter Filter der beim Aktivieren automatisch ausgeführt wird
 
 
@@ -576,8 +579,9 @@ Dazu muss für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug erlaubt w
 liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |name|nein|String||Name des Filters
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
-|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attrbiutwert(e)
-|attributeWhiteList|nein|Array||Filterbare Attribute
+|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attributwert(e)
+|attributeWhiteList|nein|Array[String] / Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)]||Filterbare Attribute. Können entweder als Array of Strings (Attributnamen) oder als Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)] übergeben werden. Wird ein Array of Strigns übergeben, so werden bei Mehrfachauswahl die Werte eines Attributes mit ODER verknüpft.
+
 **Beispiel:**
 
 ```
@@ -607,9 +611,27 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
      ]
  }
 ```
+#### Portalconfig.menu.tools.children.filter.predefinedQueries.attributeWhitelist ####
 
-******
-******
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Attribut-Name.|
+|matchingMode|ja|String||Modus wie die Werte eines Attributes bei Mehrfachauswahl verknüpft werden sollen. "AND" für UND-Verknüpfung oder "OR" für ODER-Verknüfpung innerhalb eines Attributes.|
+
+**Beispiel:**
+
+```
+#!json
+
+"attributeWhiteList": [
+  {"name": "bezirk", "matchingMode": "OR"},
+  {"name": "stadtteil", "matchingMode": "OR"},
+  {"name": "abschluss", "matchingMode": "AND"},
+  {"name": "anzahl_schueler", "matchingMode": "AND"},
+  {"name": "fremdsprache", "matchingMode": "AND"}
+]
+```
+
 
 #### Portalconfig.menu.tools.children.gfi ######
 
@@ -881,6 +903,32 @@ Der WFS-Featurefilter ermöglicht das Filtern innerhalb eines Layers. Dabei kann
 ******
 ******
 
+#### Portalconfig.menu.tools.children.schulwegrouting ######
+Das Schulwegrouting ermöglicht das Routing von einer eingegebenen Addresse zur angegebenen Schule.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|name|nein|String||Name des Werkzeuges im Menüeintrag.|
+|layerId|ja|String|""|Id des Layers der die Schulstandorte enthält.|
+
+******
+******
+#### Portalconfig.menu.tools.children.compareFeatures ######
+Die Vergleichsliste ermöglicht einen Vergleich zwischen mehrerer Features eines Vektor-Layers. Über ein Radio.trigger() können features zugefügt werden. Werden Features aus unterschiedlichen Layern zugefügt, so werden die Features nach Layer sortiert.
+Es werden nur die Attribute in der gegebenen Reihenfolge angezeigt, die in der services.json am Layerobjekt konfiguriert sind.
+Auch gibt es eine Möglichkeit die Vergleichsliste zu exportieren
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|name|nein|String||Name des Werkzeuges im Menüeintrag.|
+|numberOfFeaturesToShow|nein|integer|3|Anzahl der Features, die maximal pro Layer vergleichen werden kann|
+|numberOfAttributesToShow|nein|integer|12|Anzahl der Attribute die beim öffnen der Vergleichsliste angezeigt wird. Über einen Button ("mehr Infos") können dann alle Attribute angezeigt werden.|
+
+
+******
+******
 
 #### Portalconfig.menu.tree ####
 Unter *tree* wird der Themenbaum konfiguriert.
@@ -1026,17 +1074,19 @@ Die definierten WFS-Dienste werden angefragt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|[definitions](#markdown-header-portalconfigsearchbarspecialwfsdefinitions)|ja|Array[Object]||Ein Array von Dienst-Objekten die angefragt werden (**url**: URL des WFS-Dienstes, **data**: String des WFS-Requests, **name**: Name der speziellen Filterfunktion (bplan, olympia, paralympia)). Bei mehreren Diensten, kommasepariert.|
+|[definitions](#markdown-header-portalconfigsearchbarspecialwfsdefinitions)|ja|Array[Object]||Ein Array von Dienst-Objekten die initial ausgelesen werden (**url**: URL des WFS-Dienstes, **data**: Parameter des WFS-Requests, **name**: MetaName in Suche, **glyphicon**: Glyphicon in Suche.|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|timeout|nein|Number|6000|Timeout der Ajax-Requests im Millisekunden.|
 
 
 ##### Portalconfig.searchBar.specialWFS.definitions #####
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|data|ja|String||String des WFS-Requests|
-|name|ja|String||Name der speziellen Filterfunktion (bplan, Olympia, paralympia)|
 |url|ja|String||URL des WFS-Dienstes|
+|data|ja|String||Parameter des WFS-Requests zum Filtern der featureMember auf Suchstring (erstes Element des featureMember).|
+|name|ja|String||MetaName der Kategorie. Wird nur zur Anzeige in der Vorschlagssuche verwendet.|
+|glyphicon|nein|String|"glyphicon-home"|Bezeichnung des Glyphicons. Wird nur zur Anzeige in der Vorschlagssuche verwendet.|
 
 **Beispiel specialWFS:**
 
@@ -1046,6 +1096,7 @@ Die definierten WFS-Dienste werden angefragt.
 
   "specialWFS": {
             "minChar": 3,
+            "timeout": 2000,
             "definitions": [
                 {
                     "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
@@ -1102,7 +1153,30 @@ Die Namen aller sichtbaren WFS-Dienste werden durchsucht.
        }
 ```
 
+******
 
+#### Portalconfig.searchBar.osm ####
+Suche bei OpenStreetMap ueber Stadt, Straße und Hausnummer
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
+|limit|nein|Number|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
+|states|nein|string|kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
+
+**Beispiel osm:**
+
+```
+#!json
+
+"osm": {
+    "minChars": 3,
+    "serviceId": "9",
+    "limit": 60,
+    "states": "Hamburg"
+}
+```
 
 ******
 ******
@@ -1136,6 +1210,7 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
 
+
 **Beispiel Hintergrundkarten:**
 
 
@@ -1166,6 +1241,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
 
 ******
 
+
 ### Ordnerkonfiguration Fachdaten ###
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1173,6 +1249,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
 |Layer|nein|Array||Layerobjekte|
 |Ordner|nein|Array||Ordnerobjekte|
 |Titel|nein|String||Ordnername|
+|isFolderSelectable|nein|Boolean|[globaler Wert](config.js.md#tree)|Legt fest, ob eine Auswahlbox zur Selektierung aller Layer eines Ordners angezeigt werden soll. Diese Eigenschaft ist nur für Blatt-Ordner (die ausschließlich Layer enthalten) relevant.|
 
 **Beispiel Ordnerkonfiguration Fachdaten:**
 
@@ -1191,6 +1268,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
                   "Ordner": [
                     {
                       "Titel": "Überschwemmungsgebiete",
+                      "isFolderSelectable": true,
                       "Layer": [
                         {
                           "id": "1103",
@@ -1207,7 +1285,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
                     {
                       "id": "684",
                       "visibility": false
-                    },
+                    }
                   ]
                 }
               ],

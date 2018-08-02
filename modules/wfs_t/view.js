@@ -1,11 +1,11 @@
-define([
-    "backbone",
-    "text!modules/wfs_t/template.html",
-    "modules/wfs_t/model"
-], function (Backbone, WFS_TTemplate, WFS_T) {
+define(function (require) {
+    var WFS_TTemplate = require("text!modules/wfs_t/template.html"),
+        WFS_TModel = require("modules/wfs_t/model"),
+        $ = require("jquery"),
+        WFS_TView;
 
-    var WFS_TView = Backbone.View.extend({
-        model: WFS_T,
+    WFS_TView = Backbone.View.extend({
+        model: new WFS_TModel(),
         className: "win-body",
         template: _.template(WFS_TTemplate),
         initialize: function () {
@@ -22,8 +22,9 @@ define([
 
         //
         render: function () {
+            var attr = this.model.toJSON();
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
@@ -32,6 +33,7 @@ define([
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
 
         // Ruft im Model die Methode "setActive" auf um den entsprechenden Button/Interaction zu aktivieren.

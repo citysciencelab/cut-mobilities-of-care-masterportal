@@ -1,15 +1,12 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/ClickCounter/model"
-], function (Backbone, Radio, ClickCounterModel) {
+define(function (require) {
+    var ClickCounterModel = require("modules/ClickCounter/model"),
+        ClickCounterView;
 
-    var ClickCounterView = Backbone.View.extend({
+    ClickCounterView = Backbone.View.extend({
         initialize: function (desktopURL, mobileURL) {
-            this.model = new ClickCounterModel(desktopURL, mobileURL);
-
-            // Radio Events
             var channel = Radio.channel("ClickCounter");
+
+            this.model = new ClickCounterModel(desktopURL, mobileURL);
 
             channel.on({
                 "toolChanged": this.registerClick,
@@ -26,7 +23,7 @@ define([
             // fired beim LayerChange, Info-Button, Einstellungen auf dem Layertree
             if (layertree.length > 0) {
                 layertree.click(function () {
-                     this.registerClick();
+                    this.registerClick();
                 }.bind(this));
             }
         },

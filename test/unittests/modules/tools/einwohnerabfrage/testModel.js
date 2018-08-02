@@ -1,17 +1,19 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
-        Util = require("util"),
-        Model = require("../../../../../modules/tools/einwohnerabfrage/model.js");
+        testUtil = require("util"),
+        Util = require("../../../../../modules/core/util.js"),
+        Model = require("../../../../../modules/tools/einwohnerabfrage_hh/model.js");
 
     describe("tools/einwohnerabfrageModel", function () {
         var model,
-            utilModel,
+            testUtilModel,
             cswResponseXml;
 
         before(function () {
             model = new Model();
-            utilModel = new Util();
-            cswResponseXml = utilModel.getCswResponse();
+            testUtilModel = new testUtil();
+            new Util();
+            cswResponseXml = testUtilModel.getCswResponse();
         });
 
         describe("roundRadius", function () {
@@ -39,18 +41,14 @@ define(function(require) {
 
         describe("showOverlayOnSketch", function () {
             it("should update overlay innerHTML on geometry changes", function () {
-                var geometry = new ol.geom.Circle([556440.777563342, 5935149.148611423]);
-
-                model.showOverlayOnSketch(geometry, model.get("circleOverlay"));
-                geometry.setRadius(50);
+                model.showOverlayOnSketch(50, []);
                 expect(model.get("circleOverlay").getElement().innerHTML).to.equal("50 m");
             });
             it("should update overlay position on geometry changes", function () {
-                var geometry = new ol.geom.Circle([556440.777563342, 5935149.148611423]);
+                var outerCoord = [556440.777563342, 5935149.148611423];
 
-                model.showOverlayOnSketch(geometry, model.get("circleOverlay"));
-                geometry.setRadius(50);
-                expect(geometry.getLastCoordinate()).to.deep.equal(model.get("circleOverlay").getPosition());
+                model.showOverlayOnSketch(50, outerCoord);
+                expect(outerCoord).to.deep.equal(model.get("circleOverlay").getPosition());
             });
         });
 
@@ -64,6 +62,43 @@ define(function(require) {
         describe("parseDate", function () {
             it("should return '31.12.2013'", function () {
                 expect(model.parseDate(cswResponseXml)).to.equal("31.12.2013");
+            });
+        });
+        describe("getFormattedDecimalString", function () {
+            it("should return empty String for number without decimals", function () {
+                expect(model.getFormattedDecimalString(1234567, 5)).to.equal("");
+            });
+            it("should return correct decimals with devider when maxlength < numder of decimals", function () {
+                expect(model.getFormattedDecimalString(1234.567, 1)).to.equal(",5");
+            });
+            it("should return correct decimals with devider when maxlength > numder of decimals", function () {
+                expect(model.getFormattedDecimalString(123456.7, 5)).to.equal(",7");
+            });
+            it("should return correct decimals without devider when maxlength === 0", function () {
+                expect(model.getFormattedDecimalString(123456.7, 0)).to.equal("");
+            });
+        });
+        describe("chooseUnitAndPunctuate", function () {
+            it("should return correct unit for value < 250000", function () {
+                expect(model.chooseUnitAndPunctuate(567, 0)).to.have.string("m²");
+            });
+            it("should return correct unit for value > 250000 and value < 10000000", function () {
+                expect(model.chooseUnitAndPunctuate(250000.1, 1)).to.have.string("ha");
+            });
+            it("should return correct unit for value >  250000", function () {
+                expect(model.chooseUnitAndPunctuate(99999999, 0)).to.have.string("km²");
+            });
+            it("should return correctly formatted number with unit", function () {
+                expect(model.chooseUnitAndPunctuate(1234567.123, 3)).to.equal("123,456 ha");
+            });
+            it("should return correctly formatted number with unit when number > 250000 and value < 10000000 maxlength === 0", function () {
+                expect(model.chooseUnitAndPunctuate(1234567.123, 0)).to.equal("123 ha");
+            });
+            it("should return correctly formatted number with unit when value < 250000 && maxlength === 0", function () {
+                expect(model.chooseUnitAndPunctuate(14567.123, 0)).to.equal("14.567 m²");
+            });
+            it("should return correctly formatted number with unit when value > 10000000 &&  maxlength === 1", function () {
+                expect(model.chooseUnitAndPunctuate(99999999.999, 1)).to.equal("99,9 km²");
             });
         });
     });

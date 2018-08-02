@@ -1,7 +1,7 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        ItemTemplate = require("text!modules/menu/desktop/staticlink/template.html"),
+    var ItemTemplate = require("text!modules/menu/desktop/staticlink/template.html"),
+        $ = require("jquery"),
         ItemView;
 
     ItemView = Backbone.View.extend({
@@ -21,7 +21,8 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+            $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+            return this;
         }
     });
 

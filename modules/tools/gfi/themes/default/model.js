@@ -10,16 +10,26 @@ define(function (require) {
     DefaultTheme = Theme.extend({
 
         initialize: function () {
+            var channel = Radio.channel("defaultTheme");
+
             this.listenTo(this, {
                 "change:isReady": function () {
                     this.replaceValuesWithChildObjects();
                     this.checkRoutable();
                 }
             });
+
+            // render gfi new when changing properties of the associated features
+            this.listenTo(channel, {
+                "changeGfi": function () {
+                    Radio.trigger("gfiView", "render");
+                }
+            });
         },
 
         /**
          * Prüft, ob der Button zum Routen angezeigt werden soll
+         * @returns {void}
          */
         checkRoutable: function () {
             if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
@@ -33,6 +43,7 @@ define(function (require) {
          * gesteuert werden. Im Template werden diese Keywords mit # ersetzt und rausgefiltert. Im view.render() werden diese Objekte attached.
          * Eine leidige Ausnahme bildet z.Z. das Routing, da hier zwei features des Reisezeitenlayers benötigt werden. (1. Ziel(key) mit Dauer (val) und 2. Route mit ol.geom (val).
          * Das Auswählen der richtigen Werte für die Übergabe erfolgt hier.
+         * @returns {void}
          */
         replaceValuesWithChildObjects: function () {
             var element = this.get("gfiContent"),
@@ -44,19 +55,24 @@ define(function (require) {
             else {
                 _.each(element, function (ele, index) {
                     _.each(ele, function (val, key) {
-                        if (val.substr(0, 7) == "http://" && (val.search(/\.jpg/i) !== -1 || val.search(/\.png/i) !== -1)) {
+                        var copyright,
+                            imgView,
+                            videoView;
+
+                        if (val.substr(0, 7) === "http://" && (val.search(/\.jpg/i) !== -1 || val.search(/\.png/i) !== -1)) {
                             // Prüfen, ob es auch ein Copyright für das Bild gibt, dann dieses ebenfalls an ImgView übergeben, damit es im Bild dargestellt wird
-                            var copyright = "";
-                            if(element[index]["Copyright"] != null){
-                                copyright = element[index]["Copyright"];
-                                element[index]["Copyright"] = "#";
+                            copyright = "";
+
+                            if (element[index].Copyright !== null) {
+                                copyright = element[index].Copyright;
+                                element[index].Copyright = "#";
                             }
-                            else if(element[index]["copyright"] != null){
-                                copyright = element[index]["copyright"];
-                                element[index]["copyright"] = "#";
+                            else if (element[index].copyright !== null) {
+                                copyright = element[index].copyright;
+                                element[index].copyright = "#";
                             }
-                            
-                            var imgView = new ImgView(val, copyright);
+
+                            imgView = new ImgView(val, copyright);
 
                             element[index][key] = "#";
 
@@ -67,7 +83,7 @@ define(function (require) {
                             });
                         }
                         else if (key === "video" && Radio.request("Util", "isAny") === null) {
-                            var videoView = new VideoView(val);
+                            videoView = new VideoView(val);
 
                             element[index][key] = "#";
                             children.push({
@@ -80,7 +96,7 @@ define(function (require) {
                             }
                         }
                         else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
-                            var videoView = new VideoView(val);
+                            videoView = new VideoView(val);
 
                             element[index][key] = "#";
                             children.push({

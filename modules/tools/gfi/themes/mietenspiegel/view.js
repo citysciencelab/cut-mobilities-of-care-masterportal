@@ -2,8 +2,8 @@ define(function (require) {
 
     var ThemeView = require("modules/tools/gfi/themes/view"),
         MietenspiegelTemplate = require("text!modules/tools/gfi/themes/mietenspiegel/template.html"),
-        MietenspiegelFormularTemplate = ("text!modules/tools/gfi/themes/mietenspiegel/template-formular.html"),
-        Radio = require("backbone.radio"),
+        MietenspiegelFormularTemplate = "text!modules/tools/gfi/themes/mietenspiegel/template-formular.html",
+        $ = require("jquery"),
         MietenspiegelThemeView;
 
     MietenspiegelThemeView = ThemeView.extend({
@@ -17,7 +17,7 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isVisible": this.appendTheme
+                "change:isVisible": this.appendTheme
             });
 
             this.init();
@@ -25,6 +25,11 @@ define(function (require) {
         /**
         * Wird aufgerufen wenn die View erzeugt wird.
         * Unterscheide anhand isMietenspiegelFormular, ob Aufruf in mietenspiegel oder mietenspiegel-formular.
+        * @param {ol.layer} layer -
+        * @param {object} response -
+        * @param {number[]} coordinate -
+        * @param {boolean} isMietenspiegelFormular -
+        * @returns {void}
         */
         init: function (layer, response, coordinate, isMietenspiegelFormular) {
             if (isMietenspiegelFormular === true) {
@@ -42,7 +47,7 @@ define(function (require) {
             }, this);
 
             this.listenToOnce(this.model, "change:readyState", function () { // Beim ersten Abfragen läuft initialize durch, bevor das Model fertig ist. Daher wird change:readyState getriggert
-                this.model.newWindow (layer, response, coordinate);
+                this.model.newWindow(layer, response, coordinate);
                 $(".gfi-content").append(this.$el.html(this.template(this.model.toJSON())));
                 this.focusNextMerkmal(0);
             });
@@ -51,7 +56,7 @@ define(function (require) {
             this.listenTo(this.model, "change:msSpanneMax", this.changedSpanneMax);
             this.listenTo(this.model, "change:msDatensaetze", this.changedDatensaetze);
             if (this.model.get("readyState") === true) {
-                this.model.newWindow (layer, response, coordinate);
+                this.model.newWindow(layer, response, coordinate);
                 this.render();
             }
         },
@@ -64,12 +69,14 @@ define(function (require) {
         },
         /**
          * Hier muss eine Reihenfolge abgearbeitet werden, bevor die Berechnung gestartet wird.
+         * @param {ChangeEvent} evt -
+         * @returns {void}
          */
         changedMerkmal: function (evt) {
             var id;
 
             if (evt) {
-                $(".msmerkmal").each(function (index) {
+                this.$(".msmerkmal").each(function (index) {
                     if ($(this).attr("id") === evt.target.id) {
                         id = index + 1;
                     }
@@ -83,9 +90,9 @@ define(function (require) {
          * Erzeugt eine Liste mit gewählten Merkmalen
          */
         returnMerkmaleListe: function () {
-            var merkmale = _.object(["Wohnlage"], [$(".mswohnlage").text()]);
+            var merkmale = _.object(["Wohnlage"], [this.$(".mswohnlage").text()]);
 
-            $(".msmerkmal").each(function () {
+            this.$(".msmerkmal").each(function () {
                 if (this.value !== "-1") { // = bitte wählen
                     merkmale = _.extend(merkmale, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
                 }
@@ -98,8 +105,9 @@ define(function (require) {
         fillMerkmaleInCombobox: function (comboboxId) {
             var merkmale = this.returnMerkmaleListe(),
                 validMerkmale = this.model.returnValidMerkmale(comboboxId, merkmale);
+
             // Combobox erst leeren
-            $(".msmerkmal").each(function () {
+            this.$(".msmerkmal").each(function () {
                 if ($(this).attr("id") === comboboxId) {
                     $(this).find("option").each(function () {
                         if (this.value !== "-1") { // = bitte wählen
@@ -121,7 +129,7 @@ define(function (require) {
             var id,
                 merkmale;
 
-            $(".msmerkmal").each (function (index) {
+            this.$(".msmerkmal").each(function (index) {
                 if (activateIndex === index) {
                     $(this).removeAttr("disabled");
                     id = $(this).attr("id");
@@ -153,32 +161,30 @@ define(function (require) {
             }
         },
         changedMittelwert: function () {
-            $(".msmittelwert").text(this.model.get("msMittelwert").toString());
+            this.$(".msmittelwert").text(this.model.get("msMittelwert").toString());
         },
         changedSpanneMin: function () {
-            $(".msspannemin").text(this.model.get("msSpanneMin").toString());
+            this.$(".msspannemin").text(this.model.get("msSpanneMin").toString());
         },
         changedSpanneMax: function () {
-            $(".msspannemax").text(this.model.get("msSpanneMax").toString());
+            this.$(".msspannemax").text(this.model.get("msSpanneMax").toString());
         },
         changedDatensaetze: function () {
-            $(".msdatensaetze").text(this.model.get("msDatensaetze").toString());
+            this.$(".msdatensaetze").text(this.model.get("msDatensaetze").toString());
         },
         showErgebnisse: function () {
-            $("#msergdiv").show();
-            $("#msmetadaten").hide();
+            this.$("#msergdiv").show();
+            this.$("#msmetadaten").hide();
         },
         hideErgebnisse: function () {
-            $("#msergdiv").hide();
-            $("#msmetadaten").show();
+            this.$("#msergdiv").hide();
+            this.$("#msmetadaten").show();
 
         },
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-        },
-        destroy: function () {
         }
     });
 

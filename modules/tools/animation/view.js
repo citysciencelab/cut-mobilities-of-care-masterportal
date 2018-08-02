@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         Animation = require("modules/tools/animation/model"),
         AnimationTemplate = require("text!modules/tools/animation/template.html"),
         AnimationView;
@@ -37,6 +37,7 @@ define(function (require) {
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
         start: function () {
             this.model.prepareAnimation();

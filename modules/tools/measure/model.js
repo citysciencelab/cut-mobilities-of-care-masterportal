@@ -53,7 +53,7 @@ define([
                 alwaysOnTop: true
             }));
 
-            this.set("uiStyle", Radio.request("Util", "getUiStyle"));
+            this.setUiStyle(Radio.request("Util", "getUiStyle"));
 
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
 
@@ -62,7 +62,7 @@ define([
             }
         },
         setStatus: function (args) {
-            if (args[2].getId() === "measure" && args[0] === true) {
+            if (args[2].get("id") === "measure" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.createInteraction();
@@ -147,6 +147,7 @@ define([
         /**
          * Setzt den Typ der Geometrie (LineString oder Polygon).
          * @param {String} value - Typ der Geometrie
+         * @return {undefined}
          */
         setGeometryType: function (value) {
             this.set("type", value);
@@ -162,12 +163,17 @@ define([
             this.set("unit", value);
         },
 
+        setUiStyle: function (value) {
+            this.set("uiStyle", value);
+        },
+
         setDecimal: function (value) {
             this.set("decimal", parseInt(value, 10));
         },
 
         /**
          * Löscht alle Geometrien und die dazugehörigen MeasureTooltips.
+         * @return {undefined}
          */
         deleteFeatures: function () {
             // lösche alle Geometrien
@@ -184,9 +190,10 @@ define([
 
         /** Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
         * @param {number} scale - Maßstabszahl
+        * @return {undefined}
         */
         getScaleError: function (scale) {
-            var scaleError = 0;
+            var scaleError;
 
             switch (scale) {
                 case 500: {
@@ -229,19 +236,24 @@ define([
                     scaleError = 250;
                     break;
                 }
+                default: {
+                    scaleError = 0;
+                    break;
+                }
             }
             return scaleError;
         },
 
         /** Berechnet das Quadrat der deltas (für x und y) von zwei Koordinaten
-        * @param {Array[n][2]} coordinates - Koordinatenliste der Geometrie
+        * @param {Array} coordinates - Koordinatenliste der Geometrie
         * @param {number} pos0 - 1. Koordinate
         * @param {number} pos1 - 2. Koordinate
+        * @return {undefined}
         */
         calcDeltaPow: function (coordinates, pos0, pos1) {
             var dx = coordinates[pos0][0] - coordinates[pos1][0],
-            dy = coordinates[pos0][1] - coordinates[pos1][1],
-            deltaPow = (Math.pow(dx, 2) + Math.pow(dy, 2));
+                dy = coordinates[pos0][1] - coordinates[pos1][1],
+                deltaPow = Math.pow(dx, 2) + Math.pow(dy, 2);
 
             return deltaPow;
         },
@@ -249,6 +261,7 @@ define([
         /**
          * Berechnet die Länge der Strecke.
          * @param {ol.geom.LineString} line - Linestring geometry
+         * @return {undefined}
          */
         formatLength: function (line) {
             var length = line.getLength(),
@@ -258,9 +271,10 @@ define([
                 lengthRed,
                 fehler = 0,
                 scale = parseInt(this.get("scale"), 10),
-                scaleError = this.getScaleError(scale);
+                scaleError = this.getScaleError(scale),
+                i;
 
-            for (var i = 0; i < coords.length; i++) {
+            for (i = 0; i < coords.length; i++) {
                 rechtswertMittel += coords[i][0];
                 if (i < coords.length - 1) {
                     // http://www.physik.uni-erlangen.de/lehre/daten/NebenfachPraktikum/Anleitung%20zur%20Fehlerrechnung.pdf
@@ -269,12 +283,12 @@ define([
                 }
             }
             fehler = Math.sqrt(fehler);
-            rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
-            lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2))) - (0.0004 * length));
+            rechtswertMittel = rechtswertMittel / coords.length / 1000;
+            lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2)))) - (0.0004 * length);
 
             if (this.get("uiStyle") === "TABLE") {
                 if (this.get("unit") === "km") {
-                     output = (lengthRed / 1000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                    output = (lengthRed / 1000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 }
                 else {
                     output = lengthRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
@@ -282,11 +296,9 @@ define([
             }
             else {
                 if (this.get("unit") === "km") {
-                     output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
+                    output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
                 }
-                else {
-                    output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
-                }
+                output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
             }
             return output;
         },
@@ -294,6 +306,7 @@ define([
         /**
          * Berechnet die Größe der Fläche.
          * @param {ol.geom.Polygon} polygon - Polygon geometry
+         * @return {undefined}
          */
         formatArea: function (polygon) {
             var area = polygon.getArea(),
@@ -303,9 +316,10 @@ define([
                 areaRed,
                 fehler = 0,
                 scale = parseInt(this.get("scale"), 10),
-                scaleError = this.getScaleError(scale);
+                scaleError = this.getScaleError(scale),
+                i;
 
-            for (var i = 0;i < coords.length;i++) {
+            for (i = 0; i < coords.length; i++) {
                 rechtswertMittel += parseInt(coords[i][0], 10);
                 if (i === coords.length - 1) {
                     fehler += this.calcDeltaPow(coords, i, 0);
@@ -316,22 +330,20 @@ define([
             }
             fehler = 0.5 * scaleError * Math.sqrt(fehler);
             rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
-            areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2)) - (0.0008 * area));
+            areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2))) - (0.0008 * area);
             if (this.get("uiStyle") === "TABLE") {
                 if (this.get("unit") === "km<sup>2</sup>") {
-                    output = (areaRed / 1000000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>" ;
+                    output = (areaRed / 1000000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 }
                 else {
-                     output = areaRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                    output = areaRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 }
             }
             else {
                 if (this.get("unit") === "km<sup>2</sup>") {
                     output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
                 }
-                else {
-                     output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
-                }
+                output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
             }
             return output;
         }

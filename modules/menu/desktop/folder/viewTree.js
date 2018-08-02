@@ -1,11 +1,5 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/menu/desktop/folder/templateTree.html"
-], function () {
-
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+define(function (require) {
+    var $ = require("jquery"),
         FolderTemplate = require("text!modules/menu/desktop/folder/templateTree.html"),
         FolderView;
 
@@ -22,7 +16,7 @@ define([
             // Verhindert, dass sich der Themenbaum wg Bootstrap schließt
             this.$el.on({
                 click: function (e) {
-                   e.stopPropagation();
+                    e.stopPropagation();
                 }
             });
             this.listenTo(this.model, {
@@ -33,40 +27,40 @@ define([
             this.render();
         },
         render: function () {
+            var attr = this.model.toJSON(),
+                paddingLeftValue = 0,
+                selector = "";
+
             this.$el.html("");
 
-            if (this.model.getIsVisibleInTree()) {
-
-                this.$el.attr("id", this.model.getId());
-
-
-                var attr = this.model.toJSON();
+            if (this.model.get("isVisibleInTree")) {
+                this.$el.attr("id", this.model.get("id"));
 
                 // external Folder
-                if (this.model.getParentId() === "ExternalLayer") {
-                        $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+                if (this.model.get("parentId") === "ExternalLayer") {
+                    $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
                 }
                 else {
                     // Folder ab der ersten Ebene
-                    if (this.model.getLevel() > 0) {
-                        $("#" + this.model.getParentId()).after(this.$el.html(this.template(attr)));
+                    if (this.model.get("level") > 0) {
+                        $("#" + this.model.get("parentId")).after(this.$el.html(this.template(attr)));
                     }
                     else {
                         // Folder ist auf der Höchsten Ebene (direkt unter Themen)
-                        var selector = "";
-
-                        if (this.model.getParentId() === "Baselayer") {
+                        if (this.model.get("parentId") === "Baselayer") {
                             selector = "#Baselayer";
                         }
                         else {
-                           selector = "#Overlayer";
+                            selector = "#Overlayer";
                         }
                         $(selector).append(this.$el.html(this.template(attr)));
                     }
-                    $(this.$el).css("padding-left", (this.model.getLevel() * 15 + 5) + "px");
+                    paddingLeftValue = (this.model.get("level") * 15) + 5;
+
+                    $(this.$el).css("padding-left", paddingLeftValue + "px");
                 }
             }
-
+            return this;
         },
         rerender: function () {
             var attr = this.model.toJSON();
@@ -82,7 +76,7 @@ define([
             this.model.setIsExpanded(true);
         },
         removeIfNotVisible: function () {
-            if (!this.model.getIsVisibleInTree()) {
+            if (!this.model.get("isVisibleInTree")) {
                 this.remove();
             }
         }

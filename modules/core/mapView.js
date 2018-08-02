@@ -1,14 +1,8 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         Config = require("config"),
+        $ = require("jquery"),
         MapView;
 
     MapView = Backbone.Model.extend({
@@ -81,6 +75,7 @@ define([
         /**
          * Die initiale Größe der #map beträgt 100%.
          * Der MenuLoader wird zu einem späteren Zeitpunkt required und verkleinert ggf. die Menüleiste.
+         * @returns {void}
          */
         initialize: function () {
             var channel = Radio.channel("MapView");
@@ -90,7 +85,7 @@ define([
                     return this.get("projection");
                 },
                 "getOptions": function () {
-                    return (_.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                    return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
                 },
                 "getCenter": function () {
                     return this.getCenter();
@@ -99,13 +94,15 @@ define([
                     return this.getZoom();
                 },
                 "getResolutions": function () {
-                    return this.getResolutions();
+                    return this.get("resolutions");
                 },
                 "getResolution": function () {
                     return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
                 },
                 "getResoByScale": this.getResoByScale,
-                "getScales": this.getScales,
+                "getScales": function () {
+                    return this.get("scales");
+                },
                 "getCurrentExtent": this.getCurrentExtent
             }, this);
 
@@ -119,20 +116,27 @@ define([
             }, this);
 
             this.listenTo(this, {
-                "change:resolution": function () {
-                    channel.trigger("changedOptions", _.findWhere(this.get("options"), {resolution: this.get("resolution")}));
+                "change:resolution": function (model, resolution) {
+                    // everytime the resolution changes, the scale also has to be changed.
+                    // needs to be refactored because listener triggeres other listener
+                    var params = _.findWhere(this.get("options"), {resolution: resolution});
+
+                    if (!_.isUndefined(this.get("view"))) {
+                        this.get("view").setResolution(resolution);
+                    }
+                    this.set("scale", params.scale);
+                    channel.trigger("changedOptions", params);
 
                     // triggert das Zoom in / out übers Mausrad / Touch
                     Radio.trigger("ClickCounter", "zoomChanged");
                 },
-                "change:center": function () {
-                    channel.trigger("changedCenter", this.getCenter());
-                },
-                "change:scale": function () {
-                    var params = _.findWhere(this.get("options"), {scale: this.get("scale")});
+                "change:scale": function (model, scale) {
+                    var params = _.findWhere(this.get("options"), {scale: scale});
 
                     this.set("resolution", params.resolution);
-                    this.get("view").setResolution(this.get("resolution"));
+                    if (!_.isUndefined(this.get("view"))) {
+                        this.get("view").setResolution(params.resolution);
+                    }
                 },
                 "change:background": function (model, value) {
                     if (value === "white") {
@@ -154,17 +158,18 @@ define([
 
             // Listener für ol.View
             this.get("view").on("change:resolution", function () {
-                 this.set("resolution", this.get("view").constrainResolution(this.get("view").getResolution()));
+                this.set("resolution", this.get("view").constrainResolution(this.get("view").getResolution()));
                 // this.set("resolution", this.get("view").getResolution());
                 channel.trigger("changedZoomLevel", this.getZoom());
             }, this);
             this.get("view").on("change:center", function () {
                 this.set("center", this.get("view").getCenter());
+                channel.trigger("changedCenter", this.getCenter());
             }, this);
         },
         resetView: function () {
-            this.get("view").setCenter(this.getStartCenter());
-            this.get("view").setResolution(this.getStartResolution());
+            this.get("view").setCenter(this.get("startCenter"));
+            this.get("view").setResolution(this.get("startResolution"));
             Radio.trigger("MapMarker", "hideMarker");
         },
 
@@ -182,7 +187,8 @@ define([
                 mapViewStartCenter = _.find(mapViewSettings, {"id": "startCenter"}),
                 mapViewExtent = _.find(mapViewSettings, {"id": "extent"}),
                 mapViewResolution = _.find(mapViewSettings, {"id": "resolution"}),
-                mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"});
+                mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"}),
+                res;
 
             if (_.isUndefined(mapViewOptions) === false) {
                 this.set("options", []);
@@ -213,7 +219,7 @@ define([
                 this.setStartResolution(mapViewResolution.attr);
             }
             else if (_.isUndefined(mapViewZoomLevel) === false) {
-                var res = this.get("options")[mapViewZoomLevel.attr].resolution;
+                res = this.get("options")[mapViewZoomLevel.attr].resolution;
 
                 this.setResolution(res);
                 this.setStartResolution(res);
@@ -237,10 +243,6 @@ define([
             }
         },
 
-        // getter for epsg
-        getEpsg: function () {
-            return this.get("epsg");
-        },
         // setter for epsg
         setEpsg: function (value) {
             this.set("epsg", value);
@@ -262,20 +264,8 @@ define([
             this.set("startResolution", value);
         },
 
-        getBackground: function () {
-            return this.get("background");
-        },
-
-        getStartCenter: function () {
-            return this.get("startCenter");
-        },
-
-        getStartResolution: function () {
-            return this.get("startResolution");
-        },
-
         toggleBackground: function () {
-            if (this.getBackground() === "white") {
+            if (this.get("background") === "white") {
                 this.setBackground(this.get("backgroundImage"));
             }
             else {
@@ -287,10 +277,6 @@ define([
             this.set("scales", _.pluck(this.get("options"), "scale"));
         },
 
-        getScales: function () {
-            return this.get("scales");
-        },
-
         setResolutions: function () {
             this.set("resolutions", _.pluck(this.get("options"), "resolution"));
         },
@@ -299,10 +285,6 @@ define([
             this.set("zoomLevels", _.pluck(this.get("options"), "zoomLevel"));
         },
 
-        /**
-         * Setzt die Resolution auf den Wert val
-         * @param {float} val Resolution
-         */
         setResolution: function (val) {
             this.set("resolution", val);
         },
@@ -311,10 +293,7 @@ define([
         setScale: function (scale) {
             this.set("scale", scale);
         },
-        // getter for extent
-        getExtent: function () {
-            return this.get("extent");
-        },
+
         // setter for extent
         setExtent: function (value) {
             this.set("extent", value);
@@ -322,9 +301,10 @@ define([
 
         /**
          * Setzt die ol Projektion anhand des epsg-Codes
+         * @returns {void}
          */
         setProjection: function () {
-            var epsgCode = this.getEpsg(),
+            var epsgCode = this.get("epsg"),
                 proj = Radio.request("CRS", "getProjection", epsgCode);
 
             if (!proj) {
@@ -332,10 +312,10 @@ define([
                 return;
             }
 
-            var proj = new ol.proj.Projection({
+            proj = new ol.proj.Projection({
                 code: epsgCode,
                 units: this.get("units"),
-                extent: this.getExtent(),
+                extent: this.get("extent"),
                 axisOrientation: "enu",
                 global: false
             });
@@ -351,14 +331,11 @@ define([
             this.set("projection", proj);
         },
 
-        /**
-         *
-         */
         setView: function () {
             var view = new ol.View({
                 projection: this.get("projection"),
-                center: this.getStartCenter(),
-                extent: this.getExtent(),
+                center: this.get("startCenter"),
+                extent: this.get("extent"),
                 resolution: this.get("resolution"),
                 resolutions: this.get("resolutions")
             });
@@ -366,9 +343,6 @@ define([
             this.set("view", view);
         },
 
-        /**
-         *
-         */
         setCenter: function (coords, zoomLevel) {
             this.get("view").setCenter(coords);
             if (!_.isUndefined(zoomLevel)) {
@@ -376,55 +350,46 @@ define([
             }
         },
 
-        /**
-         *
-         */
         setZoomLevelUp: function () {
             this.get("view").setZoom(this.getZoom() + 1);
         },
 
-        /**
-         *
-         */
         setZoomLevelDown: function () {
             this.get("view").setZoom(this.getZoom() - 1);
         },
 
         /**
          * Gibt zur Scale die entsprechende Resolution zurück.
-         * @param  {String|number} scale
+         * @param  {String|number} scale -
          * @param  {String} scaleType - min oder max
          * @return {number} resolution
          */
         getResoByScale: function (scale, scaleType) {
-            var mapViewScales = _.union(this.getScales(), [parseInt(scale, 10)]),
+            var mapViewScales = _.union(this.get("scales"), [parseInt(scale, 10)]),
                 index;
 
             mapViewScales = _.sortBy(mapViewScales, function (num) {
                 return -num;
             });
             index = _.indexOf(mapViewScales, parseInt(scale, 10));
-            if (mapViewScales.length === this.getScales().length) {
+            if (mapViewScales.length === this.get("scales").length) {
                 if (scaleType === "max") {
-                    return this.getResolutions()[index];
+                    return this.get("resolutions")[index];
                 }
                 else if (scaleType === "min") {
-                    return this.getResolutions()[index];
+                    return this.get("resolutions")[index];
                 }
             }
-            else {
-                if (scaleType === "max") {
-                    if (index === 0) {
-                        return this.getResolutions()[index];
-                    }
-                    else {
-                        return this.getResolutions()[index];
-                    }
+            else if (scaleType === "max") {
+                if (index === 0) {
+                    return this.get("resolutions")[index];
                 }
-                else if (scaleType === "min") {
-                    return this.getResolutions()[index - 1];
-                }
+                return this.get("resolutions")[index];
             }
+            else if (scaleType === "min") {
+                return this.get("resolutions")[index - 1];
+            }
+            return null;
         },
 
         getCenter: function () {
@@ -440,10 +405,6 @@ define([
             return resolution;
         },
 
-        getResolutions: function () {
-            return this.get("resolutions");
-        },
-
         /**
          *
          * @return {[type]} [description]
@@ -454,7 +415,7 @@ define([
 
         /**
          * calculate the extent for the current view state and the passed size
-         * @return {ol.extent}
+         * @return {ol.extent} extent
          */
         getCurrentExtent: function () {
             var mapSize = Radio.request("Map", "getSize");

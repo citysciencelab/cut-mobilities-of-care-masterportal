@@ -39,7 +39,7 @@ function Tests (driver) {
         test.after(function () {
             driver.quit();
         });
-  });
+    });
 }
 
 module.exports = Tests;

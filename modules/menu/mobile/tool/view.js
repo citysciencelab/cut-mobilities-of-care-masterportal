@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         ItemTemplate = require("text!modules/menu/mobile/tool/template.html"),
         ItemView;
 
@@ -20,16 +19,13 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsVisibleInMenu() !== false) {
+            if (this.model.get("isVisibleInMenu") !== false) {
                 this.$el.html(this.template(attr));
-                return this;
             }
-            else {
-                return "";
-            }
+            return this;
         },
         checkItem: function () {
-            if (this.model.getId() === "legend") {
+            if (this.model.get("id") === "legend") {
                 Radio.trigger("Legend", "toggleLegendWin");
             }
             else {
@@ -39,7 +35,7 @@ define(function (require) {
             $("div.collapse.navbar-collapse").removeClass("in");
         },
         removeIfNotVisible: function () {
-            if (!this.model.getIsVisibleInTree()) {
+            if (!this.model.get("isVisibleInTree")) {
                 this.remove();
             }
         }

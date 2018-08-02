@@ -1,22 +1,23 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "modules/window/model",
-    "text!modules/window/templateMax.html",
-    "text!modules/window/templateMin.html",
-    "text!modules/window/templateTable.html",
-    "jqueryui/widgets/draggable"
-], function (Backbone, Radio, Window, templateMax, templateMin, templateTable) {
+define(function (require) {
+    var Window = require("modules/window/model"),
+        templateMax = require("text!modules/window/templateMax.html"),
+        templateMin = require("text!modules/window/templateMin.html"),
+        templateTable = require("text!modules/window/templateTable.html"),
+        $ = require("jquery"),
+        WindowView;
 
-    var WindowView = Backbone.View.extend({
-        id: "window",
-        className: "tool-window ui-widget-content",
-        model: Window,
-        templateMax: _.template(templateMax),
-        templateMin: _.template(templateMin),
-        templateTable: _.template(templateTable),
+    require("jqueryui/widgets/draggable");
+
+    WindowView = Backbone.View.extend({
+        events: {
+            "click .glyphicon-minus": "minimize",
+            "click .header-min > .title": "maximize",
+            "click .glyphicon-remove": "hide"
+        },
         initialize: function () {
-            this.model.on("change:isVisible change:isCollapsed change:winType", this.render, this);
+            this.listenTo(this.model, {
+                "change:isVisible change:isCollapsed change:winType": this.render
+            });
             this.$el.draggable({
                 containment: "#map",
                 handle: ".move",
@@ -34,11 +35,12 @@ define([
                 });
             }, this));
         },
-        events: {
-            "click .glyphicon-minus": "minimize",
-            "click .header-min > .title": "maximize",
-            "click .glyphicon-remove": "hide"
-        },
+        id: "window",
+        className: "tool-window ui-widget-content",
+        model: Window,
+        templateMax: _.template(templateMax),
+        templateMin: _.template(templateMin),
+        templateTable: _.template(templateTable),
         render: function () {
             var attr = this.model.toJSON();
 
@@ -59,8 +61,9 @@ define([
                 this.$el.show("slow");
             }
             else {
-                this.$el.hide("slow");
+                this.hide();
             }
+            return this;
         },
         minimize: function () {
             this.model.set("maxPosTop", this.$el.css("top"));
@@ -82,9 +85,9 @@ define([
             this.$el.hide("slow");
             this.model.setVisible(false);
             this.model.sendParamsToWinCotent();
-            Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
+            Radio.channel("Tool").trigger("activatedTool", "gfi", false);
         }
     });
 
     return WindowView;
-    });
+});

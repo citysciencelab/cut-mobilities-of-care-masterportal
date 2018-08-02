@@ -2,7 +2,7 @@ define(function (require) {
 
     var listView = require("modules/menu/desktop/listViewMain"),
         DesktopLayerViewLight = require("modules/menu/desktop/layer/viewLight"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         Menu;
 
     Menu = listView.extend({
@@ -19,20 +19,19 @@ define(function (require) {
             Radio.trigger("Autostart", "initializedModul", "tree");
         },
         render: function () {
-            $("#" + "tree").html("");
             var models = this.collection.where({type: "layer"});
 
+            $("#tree").html("");
             models = _.sortBy(models, function (model) {
-                return model.getSelectionIDX();
+                return model.get("selectionIDX");
             });
 
             this.addViews(models);
-            Radio.trigger("Title", "setSize");
             $("ul#tree.light").css("max-height", $("#map").height() - 160);
         },
         addViews: function (models) {
             _.each(models, function (model) {
-                 new DesktopLayerViewLight({model: model});
+                new DesktopLayerViewLight({model: model});
             }, this);
         },
         startModul: function (modulId) {

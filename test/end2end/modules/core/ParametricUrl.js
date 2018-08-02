@@ -47,10 +47,10 @@ function ParametricUrlTests (driver) {
 
             });
         });
-   /*
+        /*
   *  ------------------- query -----------------------------------------------------------------------------
   */
-    test.describe("query", function () {
+        test.describe("query", function () {
             test.it("should find \"Neuenfelder Straße,19\" in Searchbar input", function () {
                 var hit, value;
 

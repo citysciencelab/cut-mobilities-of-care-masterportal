@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         Model = require("../../../../modules/mouseHover/model.js");
 
@@ -55,13 +55,13 @@ define(function(require) {
             });
         });
         describe("reduces array to numFeaturesToShow", function () {
-            it ("should return simple text", function () {
+            it("should return simple text", function () {
                 var textArray = ["text1", "text2", "text3", "text4"];
 
                 model.set("numFeaturesToShow", 4);
                 expect(model.checkMaxFeaturesToShow(textArray)).to.have.lengthOf(4);
             });
-            it ("should return breakes text", function () {
+            it("should return breakes text", function () {
                 var textArray = ["text1", "text2", "text3", "text4"];
 
                 model.set("numFeaturesToShow", 2);
@@ -70,7 +70,7 @@ define(function(require) {
             });
         });
         describe("adds break", function () {
-            it ("should insert <br> into array", function () {
+            it("should insert <br> into array", function () {
                 var textArray = ["text1", "text2"];
 
                 expect(model.addBreak(textArray)).to.have.lengthOf(3);

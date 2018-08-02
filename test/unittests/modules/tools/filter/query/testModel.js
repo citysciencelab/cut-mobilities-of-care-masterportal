@@ -5,34 +5,34 @@ define(function (require) {
     describe("modules/tools/filter/query/model", function () {
         var model,
             featureAttributesMap = [
-              {
-                "displayName": "Bezirk",
-                "name": "bezirk",
-                "snippetType": "dropdown",
-                "type": "text",
-                "values": ["Altona", "Bergedorf", "Eimsbüttel", "Hamburg-Mitte", "Hamburg-Nord", "Harburg", "Wandsbek"]
-              },
-              {
-                "displayName": "Stadtteil",
-                "name": "stadtteil",
-                "snippetType": "dropdown",
-                "type": "text",
-                "values": ["Allermöhe", "Alsterdorf", "Altona-Altstadt", "Altona-Nord", "Bahrenfeld", "Barmbek-Nord"]
-              },
-              {
-                "displayName": "Gemarkung",
-                "name": "gemarkung",
-                "snippetType": "dropdown",
-                "type": "text",
-                "values": ["Allermöhe", "Alt-Rahlstedt", "Altona-Nord", "Altona-Südwest", "Bahrenfeld", "Barmbek", "Bergedorf", "Bergstedt"]
-              }
-          ],
-          rules = [
-              {
-                  "attrName": "bezirk",
-                  "values": ["Altona"]
-              }
-          ];
+                {
+                    "displayName": "Bezirk",
+                    "name": "bezirk",
+                    "snippetType": "dropdown",
+                    "type": "text",
+                    "values": ["Altona", "Bergedorf", "Eimsbüttel", "Hamburg-Mitte", "Hamburg-Nord", "Harburg", "Wandsbek"]
+                },
+                {
+                    "displayName": "Stadtteil",
+                    "name": "stadtteil",
+                    "snippetType": "dropdown",
+                    "type": "text",
+                    "values": ["Allermöhe", "Alsterdorf", "Altona-Altstadt", "Altona-Nord", "Bahrenfeld", "Barmbek-Nord"]
+                },
+                {
+                    "displayName": "Gemarkung",
+                    "name": "gemarkung",
+                    "snippetType": "dropdown",
+                    "type": "text",
+                    "values": ["Allermöhe", "Alt-Rahlstedt", "Altona-Nord", "Altona-Südwest", "Bahrenfeld", "Barmbek", "Bergedorf", "Bergstedt"]
+                }
+            ],
+            rules = [
+                {
+                    "attrName": "bezirk",
+                    "values": ["Altona"]
+                }
+            ];
 
         before(function () {
             model = new Model();
@@ -51,16 +51,16 @@ define(function (require) {
                 expect(returnedFeatureAttributesMap).to.have.lengthOf(3);
             });
 
-            it("should have 'initSelectedValues' with the value 'Altona'", function () {
+            it("should have 'preselectedValues' with the value 'Altona'", function () {
                 var returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
 
-                expect(returnedFeatureAttributesMap[0].initSelectedValues).to.have.members(["Altona"]);
+                expect(returnedFeatureAttributesMap[0].preselectedValues).to.have.members(["Altona"]);
             });
 
-            it("should be undefined for 'initSelectedValues'", function () {
+            it("should be undefined for 'preselectedValues'", function () {
                 var returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
 
-                expect(returnedFeatureAttributesMap[1].initSelectedValues).to.be.an("undefined");
+                expect(returnedFeatureAttributesMap[1].preselectedValues).to.be.an("undefined");
             });
         });
 

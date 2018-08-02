@@ -1,10 +1,7 @@
-define(function (require) {
+define(function () {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        RoutingButton;
-
-    RoutingButton = Backbone.Model.extend({
+    var RoutingButton = Backbone.Model.extend({
+        defaults: {},
         setRoutingDestination: function () {
             var routingTool = Radio.request("ModelList", "getModelByAttributes", {id: "routing"});
 
@@ -12,5 +9,6 @@ define(function (require) {
             Radio.trigger("ViomRouting", "setRoutingDestination", Radio.request("GFI", "getCoordinate"));
         }
     });
+
     return RoutingButton;
 });

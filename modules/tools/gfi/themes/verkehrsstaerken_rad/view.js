@@ -1,5 +1,6 @@
 define(function (require) {
     var ThemeView = require("modules/tools/gfi/themes/view"),
+        $ = require("jquery"),
         VerkehrsStaerkenThemeRadTemplate = require("text!modules/tools/gfi/themes/verkehrsstaerken_rad/template.html"),
         VerkehrsStaerkenThemeRadView;
 
@@ -12,6 +13,7 @@ define(function (require) {
         },
         /**
          * Überschreibt die Render-Funktion des Parent, da hier ein afterRender-Event wegen d3 genutzt werden muss.
+         * @returns {void}
          */
         render: function () {
             var channel = Radio.channel("GFI"),
@@ -36,15 +38,15 @@ define(function (require) {
             }
         },
         loadDiagramm: function (attr) {
-            $(".graph svg").remove();
+            this.$(".graph svg").remove();
             this.model.setActiveTab(attr);
             this.model.setSize();
         },
         toggleTab: function (evt) {
-            var contentId = $(evt.currentTarget).attr("value");
+            var contentId = this.$(evt.currentTarget).attr("value");
 
             // deactivate all tabs and their contents
-            $(evt.currentTarget).parent().find("li").each(function (index, li) {
+            this.$(evt.currentTarget).parent().find("li").each(function (index, li) {
                 var tabContentId = $(li).attr("value");
 
                 $(li).removeClass("active");

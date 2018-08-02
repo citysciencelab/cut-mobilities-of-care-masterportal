@@ -1,14 +1,8 @@
 define(function (require) {
-    var Radio = require("backbone.radio"),
-        Backbone = require("backbone"),
-        Model = require("modules/controls/totalview/model"),
+    var Model = require("modules/controls/totalview/model"),
         TotalView;
 
     TotalView = Backbone.View.extend({
-        template: _.template("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
-        tabletemplate: _.template("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>"),
-        model: new Model(),
-        id: "totalview",
         events: {
             "click div#start-totalview": "setTotalView"
         },
@@ -33,17 +27,22 @@ define(function (require) {
                 this.setElement("#table-tools-menu");
                 this.renderToToolbar();
             }
-
         },
+        template: _.template("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
+        tabletemplate: _.template("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>"),
+        model: new Model(),
+        id: "totalview",
         render: function () {
             this.$el.html(this.template());
+
+            return this;
         },
         renderToToolbar: function () {
             this.$el.prepend(this.tabletemplate());
         },
         setTotalView: function () {
-            var center = this.model.getStartCenter(),
-                zoomlevel = this.model.getZoomLevel();
+            var center = this.model.get("startCenter"),
+                zoomlevel = this.model.get("zoomLevel");
 
             Radio.trigger("MapView", "setCenter", center, zoomlevel);
         }

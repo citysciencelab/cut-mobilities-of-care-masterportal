@@ -1,3 +1,25 @@
+# Changelog LGV Master-Portal 2.0.4
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - c128bf6f template layerinformation legendurl
+  - a6d8b6e5 bootstrap-select Version auf 1.12 beschränken, weil 1.13 noch buggy
+
+# Changelog LGV Master-Portal 2.0.3
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 817a2f0 bkg search triggers searchbar to render recommended list
+  - 69342d6 Flurstückssuche löscht default Flurstücksnenner beim Wechsel der Gemarkung bei parcelDenominator = true
+
 # Changelog LGV Master-Portal 2.0.2
 
 NEU:

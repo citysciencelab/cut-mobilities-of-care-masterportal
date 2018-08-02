@@ -24,7 +24,8 @@ define(function (require) {
                 "resetFilter": this.resetFilter
             });
             this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": this.activate
+                "activatedTool": this.activate,
+                "deactivatedTool": this.deactivate
             });
             this.set("queryCollection", new Backbone.Collection());
             this.listenTo(this.get("queryCollection"), {
@@ -43,7 +44,7 @@ define(function (require) {
             }, this);
             this.setDefaults();
 
-            this.createQueries(this.getConfiguredQueries());
+            this.createQueries(this.get("predefinedQueries"));
         },
 
         resetFilter: function () {
@@ -73,7 +74,7 @@ define(function (require) {
         },
         deactivateAllModels: function () {
             _.each(this.get("queryCollection").models, function (model) {
-                    model.setIsActive(false);
+                model.setIsActive(false);
             }, this);
         },
 
@@ -198,15 +199,27 @@ define(function (require) {
                 this.setIsActive(true);
             }
         },
+        deactivate: function (id) {
+            if (this.get("id") === id) {
+                this.setIsActive(false);
+            }
+        },
         setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "filter"});
+            var config = Radio.request("Parser", "getItemByAttributes", {id: "filter"}),
+                model;
 
             _.each(config, function (value, key) {
                 this.set(key, value);
             }, this);
-
+            if (this.get("isInitOpen")) {
+                Radio.trigger("ParametricURL", "pushToIsInitOpen", this.get("id").toUpperCase());
+            }
             if (Radio.request("ParametricURL", "getIsInitOpen") === "FILTER") {
-                this.set("isInitOpen", true);
+                this.setIsInitOpen(true);
+            }
+            if (this.get("isInitOpen")) {
+                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
+                model.setIsActive(true);
             }
         },
 
@@ -214,20 +227,21 @@ define(function (require) {
             var queryObjects = Radio.request("ParametricURL", "getFilter");
 
             _.each(queries, function (query) {
-                var queryObject;
+                var queryObject,
+                    oneQuery = query;
 
                 if (!_.isUndefined(queryObjects)) {
-                    queryObject = _.findWhere(queryObjects, {name: query.name});
+                    queryObject = _.findWhere(queryObjects, {name: oneQuery.name});
 
-                    query = _.extend(query, queryObject);
+                    oneQuery = _.extend(oneQuery, queryObject);
                 }
-                this.createQuery(query);
+                this.createQuery(oneQuery);
             }, this);
         },
 
         createQuery: function (model) {
             var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
-                query = (layer.getTyp() === "WFS" || layer.getTyp() === "GeoJSON") ? new WfsQueryModel(model): undefined;
+                query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" ? new WfsQueryModel(model) : undefined;
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
@@ -240,17 +254,15 @@ define(function (require) {
             if (!_.isUndefined(this.get("sendToRemote"))) {
                 query.set("sendToRemote", this.get("sendToRemote"));
             }
+            if (!_.isUndefined(this.get("minScale"))) {
+                query.set("minScale", this.get("minScale"));
+            }
 
             if (query.get("isSelected")) {
                 query.setIsDefault(true);
                 query.setIsActive(true);
             }
-
             this.get("queryCollection").add(query);
-        },
-
-        getConfiguredQueries: function () {
-            return this.get("predefinedQueries");
         },
 
         setIsActive: function (value) {
@@ -258,10 +270,10 @@ define(function (require) {
 
             this.set("isActive", value);
             if (!value) {
+                // tool model aus modellist auf inactive setzen
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
 
                 model.setIsActive(false);
-                Radio.trigger("Sidebar", "toggle", false);
             }
         },
         closeGFI: function () {
@@ -281,6 +293,11 @@ define(function (require) {
                     openSnippet.setIsOpen(false);
                 }
             }
+        },
+
+        // setter for isInitOpen
+        setIsInitOpen: function (value) {
+            this.set("isInitOpen", value);
         }
     });
 

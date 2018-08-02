@@ -1,9 +1,6 @@
-define([
-    "modules/core/modelList/item"
-], function () {
+define(function (require) {
 
     var Item = require("modules/core/modelList/item"),
-        Radio = require("backbone.radio"),
         Folder;
 
     Folder = Item.extend({
@@ -28,12 +25,15 @@ define([
         }),
 
         initialize: function () {
+            var items,
+                isEveryLayerSelected;
+
             // Wenn alle Layer in einem Folder selektiert sind, wird der Folder auch selektiert
-            if (this.getParentId() === "Overlayer") {
-                var items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.getId()}),
-                    isEveryLayerSelected = _.every(items, function (item) {
-                        return item.isSelected === true;
-                    });
+            if (this.get("parentId") === "Overlayer") {
+                items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.get("id")});
+                isEveryLayerSelected = _.every(items, function (item) {
+                    return item.isSelected === true;
+                });
 
                 if (isEveryLayerSelected === true) {
                     this.setIsSelected(true);
@@ -41,46 +41,23 @@ define([
             }
         },
 
-        /**
-         * Setter für Attribut "isExpanded"
-         * @param {boolean} value - true | false
-         */
         setIsExpanded: function (value, options) {
             this.set("isExpanded", value, options);
         },
 
-        /**
-         * Getter für Attribut "isExpanded"
-         * @return {boolean} true | false
-         */
-        getIsExpanded: function () {
-            return this.get("isExpanded");
-        },
-
-        /**
-         * Setter für Attribut "isChecked"
-         * @param {boolean} value - true | false
-         */
         setIsSelected: function (value, silent) {
             if (_.isUndefined(silent)) {
-                silent = false;
+                this.set("isSelected", value);
             }
             this.set("isSelected", value, {silent: silent});
         },
 
         /**
-         * Getter für Attribut "isChecked"
-         * @return {boolean} true | false
-         */
-        getIsSelected: function () {
-            return this.get("isSelected");
-        },
-
-        /**
          * "Toggled" das Attribut "isChecked"
+         * @returns {void}
          */
         toggleIsSelected: function () {
-            if (this.getIsSelected() === true) {
+            if (this.get("isSelected") === true) {
                 this.setIsSelected(false);
             }
             else {
@@ -88,27 +65,19 @@ define([
             }
             // this.collection.toggleIsSelectedLayers(this);
         },
-        /**
-         * Getter für Attribut "isLeafFolder"
-         * @return {boolean} true | false
-         */
-        getIsLeafFolder: function () {
-            return this.get("isLeafFolder");
-        },
+
         toggleIsExpanded: function () {
-            if (this.getIsExpanded() === true) {
+            if (this.get("isExpanded") === true) {
                 this.setIsExpanded(false);
             }
             else {
                 this.setIsExpanded(true);
             }
-            if (this.getParentId() === "tree") {
-                this.collection.toggleCatalogs(this.getId());
+            if (this.get("parentId") === "tree") {
+                this.collection.toggleCatalogs(this.get("id"));
             }
         },
-        getIsInitiallyExpanded: function () {
-            return this.get("isInitiallyExpanded");
-        },
+
         setSelectAllGlyphicon: function (value) {
             this.set("selectAllGlyphicon", value);
         }

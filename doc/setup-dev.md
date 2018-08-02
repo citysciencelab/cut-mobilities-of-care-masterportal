@@ -2,13 +2,13 @@
 
 [TOC]
 
-## Systemvoraussetzungen
+# Systemvoraussetzungen
 
-###git
+##git
 [git](http://git-scm.com/) installieren.
 
-### Node.js
-[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: node-v6.11.4-x64 mit NPM 3.10.10
+## Node.js
+[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: node-v8.11.2-x64 mit NPM 5.6.0
 
 Test in cmd:
 
@@ -24,7 +24,11 @@ Test in cmd:
 # npm -v
 ```
 
-## Installation des Masterportals
+**Known Issue**: Auf Windows 10 wurde mit genannter node-Version *PATH* nicht erweitert. Dies hat zur Folge, dass *grunt server* die Fehlermeldung *command not found* in der Konsole ausgab. 
+* *Path* muss um *%USERPROFILE%\AppData\Roaming\npm* ergänzt sein
+* *grunt.cmd* befindet sich unter *%USERPROFILE%\AppData\Roaming\npm*
+
+# Installation des Masterportals
 Mit der Git-Bash (als Admin ausführen) in den Ordner navigieren, in den das Repo geklont werden soll.
 Repository klonen und in das erstellte Verzeichnis wechseln:
 ```
@@ -36,13 +40,13 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 
 Dann in der Admin-cmd ausführen:
 ```
-# npm install
+# npm run installMasterportal
 ```
 
 
-Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /node_modules, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
+Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /node_modules, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json. Außerdem wird das Zusatzpackage browserMqtt.js als Erweiterung für MQTT.js installiert, das zur Live-Aktualisierung des SensorLayers notwendig ist.
 
-### Grunt
+## Grunt
 [Grunt](http://gruntjs.com/) in der Admin-cmd global installieren:
 ```
 # npm install -g grunt-cli
@@ -120,9 +124,8 @@ für alle npm-Pakete:
 für build-config und lgv-config:
 
 ```
-# npm install
+# npm run installMasterportal
 ```
 
 Vorsicht: Explizites Aufrufen von npm install build-config installiert ein falsches build-config.
-
 

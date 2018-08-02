@@ -9,15 +9,12 @@ define(function (require) {
                 "change:isReady": this.parseGfiContent
             });
         },
-        /**
-         * sets title and gfiContent attributes
-         */
         parseGfiContent: function () {
-            this.setGfiContent(this.getGfiContent()[0]);
+            this.setGfiContent(this.get("gfiContent")[0]);
         },
         createReport: function () {
-            var flurst = this.getGfiContent().Flurstück,
-                gemarkung = this.getGfiContent().Gemarkung;
+            var flurst = this.get("gfiContent").Flurstück,
+                gemarkung = this.get("gfiContent").Gemarkung;
 
             Radio.trigger("ParcelSearch", "createReport", flurst, gemarkung);
         }

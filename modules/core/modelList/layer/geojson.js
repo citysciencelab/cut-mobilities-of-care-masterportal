@@ -1,6 +1,7 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
+        $ = require("jquery"),
         ol = require("openlayers"),
         GeoJSONLayer;
 
@@ -13,8 +14,8 @@ define(function (require) {
                     this.toggleAutoReload();
                 }
             });
-            this.setStyleId(this.getStyleId() || this.getId());
-            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.getStyleId()));
+            this.setStyleId(this.get("styleId") || this.get("id"));
+            this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         },
 
         /**
@@ -31,13 +32,13 @@ define(function (require) {
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
-                source: this.getLayerSource(),
-                name: this.getName(),
-                typ: this.getTyp(),
-                gfiAttributes: this.getGfiAttributes(),
-                routable: this.getRoutable(),
-                gfiTheme: this.getGfiTheme(),
-                id: this.getId()
+                source: this.get("layerSource"),
+                name: this.get("name"),
+                typ: this.get("typ"),
+                gfiAttributes: this.get("gfiAttributes"),
+                routable: this.get("routable"),
+                gfiTheme: this.get("gfiTheme"),
+                id: this.get("id")
             }));
             if (_.isUndefined(this.get("geojson"))) {
                 this.updateData();
@@ -52,7 +53,7 @@ define(function (require) {
                 service: "WFS",
                 typeName: this.get("featureType"),
                 outputFormat: "application/geo+json",
-                version: this.getVersion()
+                version: this.get("version")
             };
 
             if (!_.isUndefined(showLoader) && showLoader === true) {
@@ -75,10 +76,9 @@ define(function (require) {
             });
         },
         handleData: function (data, mapCrs) {
-             var jsonCrs = (_.has(data, "crs") && data.crs.properties.name) ? data.crs.properties.name : "EPSG:4326",
+            var jsonCrs = _.has(data, "crs") && data.crs.properties.name ? data.crs.properties.name : "EPSG:4326",
                 features = this.parseDataToFeatures(data),
-                newFeatures = [],
-                isClustered;
+                newFeatures = [];
 
             if (jsonCrs !== mapCrs) {
                 features = this.transformFeatures(features, jsonCrs, mapCrs);
@@ -89,18 +89,17 @@ define(function (require) {
 
                 feature.setId(id);
             });
-            isClustered = this.has("clusterDistance") ? true : false;
-            this.getLayerSource().clear(true);
-            this.getLayerSource().addFeatures(features);
-            this.getLayer().setStyle(this.get("styleFunction"));
+            this.get("layerSource").clear(true);
+            this.get("layerSource").addFeatures(features);
+            this.get("layer").setStyle(this.get("styleFunction"));
 
             // für it-gbm
-            if(!this.has("autoRefresh")){
+            if (!this.has("autoRefresh")) {
                 features.forEach(function (feature) {
                     feature.set("extent", feature.getGeometry().getExtent());
                     newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
                 });
-                Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.getId()});
+                Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.get("id")});
             }
 
             this.featuresLoaded(features);
@@ -124,7 +123,8 @@ define(function (require) {
 
         /**
          * sets style function for features or layer
-         * @param  {Backbone.Model} stylelistmodel
+         * @param  {Backbone.Model} stylelistmodel Model für Styles
+         * @returns {undefined}
          */
         setStyleFunction: function (stylelistmodel) {
             if (_.isUndefined(stylelistmodel)) {
@@ -137,31 +137,27 @@ define(function (require) {
             }
         },
 
-        // Getter
-        getFeatures: function () {
-            return this.get("features");
-        },
-
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
             var style;
 
-            if (_.isUndefined(this.getLegendURL()) === false && this.getLegendURL().length !== 0) {
-                style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+            if (_.isUndefined(this.get("legendURL")) === false && this.get("legendURL").length !== 0) {
+                style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
                 if (_.isUndefined(style) === false) {
-                    this.set("legendURL", [style.getImagePath() + style.getImageName()]);
+                    this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
                 }
             }
         },
         /**
          * Zeigt nur die Features an, deren Id übergeben wird
-         * @param  {string[]} featureIdList
+         * @param  {string[]} featureIdList Liste der FeatureIds
+         * @return {undefined}
          */
         showFeaturesByIds: function (featureIdList) {
             this.hideAllFeatures();
             _.each(featureIdList, function (id) {
-                var feature = this.getLayerSource().getFeatureById(id);
+                var feature = this.get("layerSource").getFeatureById(id);
 
                 feature.setStyle(undefined);
             }, this);
@@ -169,9 +165,10 @@ define(function (require) {
 
         /**
          * sets null style (=no style) for all features
+         * @return {undefined}
          */
         hideAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures();
+            var collection = this.get("layerSource").getFeatures();
 
             collection.forEach(function (feature) {
                 feature.setStyle(function () {
@@ -182,9 +179,9 @@ define(function (require) {
 
         toggleAutoReload: function () {
             if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 500) {
-                if (this.getIsVisibleInMap() === true) {
-                    this.interval = setInterval (function (my) {
-                       my.updateData(false);
+                if (this.get("isVisibleInMap") === true) {
+                    this.interval = setInterval(function (my) {
+                        my.updateData(false);
                     }, this.attributes.autoRefresh, this);
                 }
                 else {
@@ -195,24 +192,20 @@ define(function (require) {
 
         /**
          * sets style for all features
+         * @return {undefined}
          */
         showAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures();
+            var collection = this.get("layerSource").getFeatures();
 
             collection.forEach(function (feature) {
                 feature.setStyle(undefined);
             }, this);
         },
-        getStyleId: function () {
-            return this.get("styleId");
-        },
+
         setStyleId: function (value) {
             this.set("styleId", value);
         },
-        // getter for style
-        getStyle: function () {
-            return this.get("style");
-        },
+
         // setter for style
         setStyle: function (value) {
             this.set("style", value);

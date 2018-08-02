@@ -4,7 +4,7 @@ define(function (require) {
         Radio = require("backbone.radio"),
         TitleModel;
 
-     TitleModel = Backbone.Model.extend({
+    TitleModel = Backbone.Model.extend({
         defaults: {
             // Abwärtskompatibilität muss beachtet werden
             title: Radio.request("Parser", "getPortalConfig").PortalTitle || "Master",
@@ -31,42 +31,26 @@ define(function (require) {
             }
         },
 
-        // getter for title
-        getTitle: function () {
-            return this.get("title");
-        },
         // setter for title
         setTitle: function (value) {
             this.set("title", value);
         },
 
-        // getter for logo
-        getLogo: function () {
-            return this.get("logo");
-        },
         // setter for logo
         setLogo: function (value) {
             this.set("logo", value);
         },
 
-        // getter for link
-        getLink: function () {
-            return this.get("link");
-        },
         // setter for link
         setLink: function (value) {
             this.set("link", value);
         },
 
-        // getter for tooltip
-        getTooltip: function () {
-            return this.get("tooltip");
-        },
         // setter for tooltip
         setTooltip: function (value) {
             this.set("tooltip", value);
         }
     });
 
-    return new TitleModel();
+    return TitleModel;
 });

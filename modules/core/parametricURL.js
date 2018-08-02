@@ -1,39 +1,98 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "underscore.string",
-    "config"
-], function (Backbone, Radio, _String, Config) {
+define(function (require) {
 
-    var ParametricURL = Backbone.Model.extend({
+    var Config = require("config"),
+        ParametricURL;
+
+    ParametricURL = Backbone.Model.extend({
         defaults: {
             layerParams: [],
-            isInitOpen: "",
+            isInitOpen: [],
             zoomToGeometry: ""
         },
+
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
 
             channel.reply({
-                "getResult": this.getResult,
-                "getLayerParams": this.getLayerParams,
-                "getIsInitOpen": this.getIsInitOpen,
-                "getInitString": this.getInitString,
-                "getCenter": this.getCenter,
-                "getZoomLevel": this.getZoomLevel,
-                "getZoomToGeometry": this.getZoomToGeometry,
-                "getZoomToExtent": this.getZoomToExtent,
+                "getResult": function () {
+                    return this.get("result");
+                },
+                "getLayerParams": function () {
+                    return this.get("layerParams");
+                },
+                "getIsInitOpen": function () {
+                    return this.get("isInitOpen")[0];
+                },
+                "getInitString": function () {
+                    return this.get("initString");
+                },
+                "getCenter": function () {
+                    return this.get("center");
+                },
+                "getZoomLevel": function () {
+                    return this.get("zoomLevel");
+                },
+                "getZoomToGeometry": function () {
+                    return this.get("zoomToGeometry");
+                },
+                "getZoomToExtent": function () {
+                    return this.get("zoomToExtent");
+                },
                 "getStyle": this.getStyle,
-                "getFilter": this.getFilter,
-                "getHighlightFeature": this.getHighlightFeature
+                "getFilter": function () {
+                    return this.get("filter");
+                },
+                "getHighlightFeature": function () {
+                    return this.get("highlightfeature");
+                }
             }, this);
 
             channel.on({
-                "updateQueryStringParam": this.updateQueryStringParam
+                "updateQueryStringParam": this.updateQueryStringParam,
+                "pushToIsInitOpen": this.pushToIsInitOpen
             }, this);
 
             this.parseURL();
             channel.trigger("ready");
+        },
+
+        /**
+         * Turn strings that can be commonly considered as booleas to real booleans. Such as "true", "false", "1" and "0". This function is case insensitive.
+         * Aus underscore.string
+         * @param  {number|string} value    der zu prüfende Wert
+         * @return {boolean}                Rückgabe eines Boolean
+         */
+        toBoolean: function (value) {
+            var val = typeof value === "string" ? value.toLowerCase() : value;
+
+            switch (val) {
+                case true:
+                case "true":
+                case 1:
+                case "1":
+                case "on":
+                case "yes":
+                    return true;
+                default:
+                    return false;
+            }
+        },
+
+        /**
+         * Parse string to number. Returns NaN if string can't be parsed to number.
+         * Aus underscore.string
+         * @param  {string} num             Text
+         * @param  {[number]} precision   Dezimalstellen
+         * @return {number}                 Zahl
+         */
+        toNumber: function (num, precision) {
+            var factor;
+
+            if (num === null) {
+                return 0;
+            }
+            factor = Math.pow(10, isFinite(precision) ? precision : 0);
+            return Math.round(num * factor) / factor;
         },
 
         setResult: function (value) {
@@ -44,29 +103,34 @@ define([
             this.set("layerParams", value);
         },
 
-        getResult: function () {
-            return this.get("result");
+        setIsInitOpenArray: function (value) {
+            this.set("isInitOpen", value);
+        },
+        pushToIsInitOpen: function (value) {
+            var isInitOpenArray = this.get("isInitOpen"),
+                msg = "";
+
+            isInitOpenArray.push(value);
+            isInitOpenArray = _.uniq(isInitOpenArray);
+
+            if (isInitOpenArray.length > 1) {
+                msg += "Fehlerhafte Kombination von Portalkonfiguration und parametrisiertem Aufruf.<br>";
+                _.each(isInitOpenArray, function (tool, index) {
+                    msg += tool;
+                    if (index < isInitOpenArray.length - 1) {
+                        msg += " und ";
+                    }
+                });
+                msg += " können nicht gleichzeitig geöffnet sein";
+                Radio.trigger("Alert", "alert", msg);
+            }
+            this.setIsInitOpenArray(isInitOpenArray);
         },
 
-        getLayerParams: function () {
-            return this.get("layerParams");
-        },
-
-        getIsInitOpen: function () {
-            return this.get("isInitOpen");
-        },
-
-        getCenter: function () {
-            return this.get("center");
-        },
-
-        getInitString: function () {
-            return this.get("initString");
-        },
         createLayerParams: function () {
-            var layerIdString = _.values(_.pick(this.getResult(), "LAYERIDS"))[0],
-                visibilityListString = _.has(this.getResult(), "VISIBILITY") ? _.values(_.pick(this.getResult(), "VISIBILITY"))[0] : "",
-                transparencyListString = _.has(this.getResult(), "TRANSPARENCY") ? _.values(_.pick(this.getResult(), "TRANSPARENCY"))[0] : "",
+            var layerIdString = _.values(_.pick(this.get("result"), "LAYERIDS"))[0],
+                visibilityListString = _.has(this.get("result"), "VISIBILITY") ? _.values(_.pick(this.get("result"), "VISIBILITY"))[0] : "",
+                transparencyListString = _.has(this.get("result"), "TRANSPARENCY") ? _.values(_.pick(this.get("result"), "TRANSPARENCY"))[0] : "",
                 layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
                 visibilityList,
                 transparencyList,
@@ -75,28 +139,28 @@ define([
             // Sichtbarkeit auslesen. Wenn fehlend true
             if (visibilityListString === "") {
                 visibilityList = _.map(layerIdList, function () {
-                   return true;
-               });
+                    return true;
+                });
             }
             else if (visibilityListString.indexOf(",") > -1) {
                 visibilityList = _.map(visibilityListString.split(","), function (val) {
-                     return _String.toBoolean(val);
-                 });
+                    return this.toBoolean(val);
+                }, this);
             }
             else {
-                visibilityList = new Array(_String.toBoolean(visibilityListString));
+                visibilityList = new Array(this.toBoolean(visibilityListString));
             }
 
             // Tranzparenzwert auslesen. Wenn fehlend Null.
             if (transparencyListString === "") {
                 transparencyList = _.map(layerIdList, function () {
-                   return 0;
-               });
+                    return 0;
+                });
             }
             else if (transparencyListString.indexOf(",") > -1) {
                 transparencyList = _.map(transparencyListString.split(","), function (val) {
-                     return _String.toNumber(val);
-                 });
+                    return this.toNumber(val);
+                }, this);
             }
             else {
                 transparencyList = [parseInt(transparencyListString, 0)];
@@ -108,19 +172,19 @@ define([
             }
 
             _.each(layerIdList, function (val, index) {
-                var layerConfigured = Radio.request("Parser", "getItemByAttributes", { id: val }),
-                    layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", { id: val}),
+                var layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: val}),
+                    layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: val}),
                     treeType = Radio.request("Parser", "getTreeType"),
                     layerToPush;
 
-                layerParams.push({ id: val, visibility: visibilityList[index], transparency: transparencyList[index] });
+                layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
 
                 if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
                     layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
                     Radio.trigger("Parser", "addItemAtTop", layerToPush);
                 }
                 else if (_.isUndefined(layerConfigured)) {
-                    Radio.trigger("Alert", "alert", { text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning" });
+                    Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning"});
                 }
             }, this);
 
@@ -205,11 +269,11 @@ define([
 
             this.set("zoomLevel", value);
         },
-       parseIsInitOpen: function (result) {
-            this.set("isInitOpen", _.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
+        parseIsInitOpen: function (result) {
+            this.get("isInitOpen").push(_.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
         },
         parseStartupModul: function (result) {
-            this.set("isInitOpen", _.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
+            this.get("isInitOpen").push(_.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
         },
         parseQuery: function (result) {
             var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
@@ -222,7 +286,7 @@ define([
                 // nach " " splitten
                 split = value.split(" ");
 
-                _.each (split, function (splitpart) {
+                _.each(split, function (splitpart) {
                     initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
                 });
                 initString = initString.substring(0, initString.length - 1);
@@ -231,7 +295,7 @@ define([
                 split = "";
                 split = initString.split("-");
                 initString = "";
-                _.each (split, function (splitpart) {
+                _.each(split, function (splitpart) {
                     initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
                 });
                 initString = initString.substring(0, initString.length - 1);
@@ -248,7 +312,7 @@ define([
                 Radio.trigger("Util", "setUiStyle", value);
             }
         },
-        parseURL: function (result) {
+        parseURL: function () {
             // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
             var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
                 result = {},
@@ -260,12 +324,12 @@ define([
 
                     result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
                 });
+                this.setResult(result);
             }
             else {
-                result = undefined;
+                this.setResult(undefined);
             }
 
-            this.setResult(result);
             /**
              * Über diesen Parameter wird GeoOnline aus dem Transparenzporal aufgerufen
              * Der entsprechende Datensatz soll angezeigt werden
@@ -358,9 +422,9 @@ define([
 
         /**
          * https://gist.github.com/excalq/2961415
-         * @param  {string} key
-         * @param  {string} value
-         * @return {void}
+         * @param  {string} key   Key
+         * @param  {string} value Value
+         * @returns {void}
          */
         updateQueryStringParam: function (key, value) {
             var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
@@ -371,13 +435,13 @@ define([
 
             // If the "search" string exists, then build params from it
             if (urlQueryString) {
-                keyRegex = new RegExp("([\?&])" + key + "[^&]*");
+                keyRegex = new RegExp("([?,&])" + key + "[^&]*");
 
                 // If param exists already, update it
                 if (urlQueryString.match(keyRegex) !== null) {
                     params = urlQueryString.replace(keyRegex, "$1" + newParam);
                 }
-                 // Otherwise, add it to end of query string
+                // Otherwise, add it to end of query string
                 else {
                     params = urlQueryString + "&" + newParam;
                 }
@@ -391,31 +455,14 @@ define([
             }
         },
 
-        // getter for zoomToGeometry
-        getZoomToGeometry: function () {
-            return this.get("zoomToGeometry");
-        },
         // setter for zoomToGeometry
         setZoomToGeometry: function (value) {
             this.set("zoomToGeometry", value);
         },
-        // getter for zoomToLevel
-        getZoomLevel: function () {
-            return this.get("zoomLevel");
-        },
+
         // setter for zoomLevel
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
-        },
-
-        getZoomToExtent: function () {
-            return this.get("zoomToExtent");
-        },
-        getFilter: function () {
-            return this.get("filter");
-        },
-        getHighlightFeature: function () {
-            return this.get("highlightfeature");
         }
     });
 

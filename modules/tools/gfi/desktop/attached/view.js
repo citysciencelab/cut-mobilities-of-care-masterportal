@@ -1,18 +1,16 @@
 define(function (require) {
-    require("bootstrap/popover");
-
     var DesktopView = require("modules/tools/gfi/view"),
+        $ = require("jquery"),
         Template = require("text!modules/tools/gfi/desktop/template.html"),
         Radio = require("backbone.radio"),
         GFIAttachedView;
+
+    require("bootstrap/popover");
 
     GFIAttachedView = DesktopView.extend({
         className: "gfi gfi-attached",
         template: _.template(Template),
 
-        /**
-         * Zeichnet das Template und erstellt das Bootstrap Popover
-         */
         render: function () {
             var attr = this.model.toJSON();
 
@@ -25,9 +23,9 @@ define(function (require) {
                     if (this.getPosition().top > $("#map").height() / 2) {
                         return "top";
                     }
-                    else {
-                        return "bottom";
-                    }
+
+                    return "bottom";
+
                 }
             });
         },
@@ -35,6 +33,7 @@ define(function (require) {
         /**
          * Hängt ein DOM-Element an den body
          * Wird für das ol.Overlay benötigt
+         * @returns {void}
          */
         renderDomElementToBody: function () {
             $("body").append("<div id='gfipopup'></div>");
@@ -42,9 +41,10 @@ define(function (require) {
 
         /**
          * Blendet das Popover ein oder aus
+         * @returns {void}
          */
         toggle: function () {
-            if (this.model.getIsVisible() === true) {
+            if (this.model.get("isVisible") === true) {
                 $(this.model.getOverlayElement()).popover("show");
                 Radio.trigger("GFI", "afterRender");
             }

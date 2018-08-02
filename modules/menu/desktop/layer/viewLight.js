@@ -1,14 +1,8 @@
-define([
-    "backbone",
-    "text!modules/menu/desktop/layer/templateSettings.html",
-    "text!modules/menu/desktop/layer/templateLight.html",
-    "backbone.radio"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         TemplateSettings = require("text!modules/menu/desktop/layer/templateSettings.html"),
         Template = require("text!modules/menu/desktop/layer/templateLight.html"),
-        Radio = require("backbone.radio"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -42,30 +36,32 @@ define([
             });
             this.render();
 
-            this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleColor(this.model, this.model.get("isOutOfRange"));
         },
 
         render: function () {
             var attr = this.model.toJSON(),
-                selector = $("#" + this.model.getParentId());
+                selector = $("#" + this.model.get("parentId"));
 
             selector.prepend(this.$el.html(this.template(attr)));
-            if (this.model.getIsSettingVisible() === true) {
-                 this.$el.append(this.templateSettings(attr));
+            if (this.model.get("isSettingVisible") === true) {
+                this.$el.append(this.templateSettings(attr));
             }
+            return this;
         },
 
         rerender: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            if (this.model.getIsSettingVisible() === true) {
+            if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
             }
         },
 
         /**
          * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
+         * @return {void}
          */
         renderSetting: function () {
             var attr = this.model.toJSON();
@@ -73,7 +69,7 @@ define([
             // Animation Zahnrad
             this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
+            if (this.model.get("isSettingVisible") === false) {
                 this.$el.find(".layer-settings").slideUp("slow", function () {
                     $(this).remove();
                 });
@@ -122,20 +118,23 @@ define([
 
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
+         * @param {Backbone.Model} model -
+         * @param {boolean} value -
+         * @returns {void}
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {
                 if (value === true) {
                     this.$el.addClass("disabled");
-                    this.$el.find("*").css("pointer-events","none");
-                    this.$el.find("*").css("cursor","not-allowed");
-                    this.$el.attr("title","Layer wird in dieser Zoomstufe nicht angezeigt");
+                    this.$el.find("*").css("pointer-events", "none");
+                    this.$el.find("*").css("cursor", "not-allowed");
+                    this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
                 }
                 else {
                     this.$el.removeClass("disabled");
-                    this.$el.find("*").css("pointer-events","auto");
-                    this.$el.find("*").css("cursor","pointer");
-                    this.$el.attr("title","");
+                    this.$el.find("*").css("pointer-events", "auto");
+                    this.$el.find("*").css("cursor", "pointer");
+                    this.$el.attr("title", "");
                 }
             }
         }

@@ -1,14 +1,8 @@
 define(function (require) {
-
-    var Backbone = require("backbone"),
-        _ = require("underscore"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         FullScreenView;
 
     FullScreenView = Backbone.View.extend({
-        id: "full-screen-button",
-        template: _.template("<div class='full-screen-button' title='Vollbild aktivieren'><span class='glyphicon glyphicon-fullscreen'></span></div>"),
-        tabletemplate: _.template("<div id='full-screen-view' class='table-tool'><a href='#'><span class='glyphicon icon-fullscreen'></span> Vollbild umschalten</a> </div>"),
         events: {
             "click .full-screen-button": "toggleFullScreen",
             "click div#full-screen-view": "toggleFullScreen"
@@ -33,8 +27,13 @@ define(function (require) {
                 this.renderToToolbar();
             }
         },
+        id: "full-screen-button",
+        template: _.template("<div class='full-screen-button' title='Vollbild aktivieren'><span class='glyphicon glyphicon-fullscreen'></span></div>"),
+        tabletemplate: _.template("<div id='full-screen-view' class='table-tool'><a href='#'><span class='glyphicon icon-fullscreen'></span> Vollbild umschalten</a> </div>"),
         render: function () {
             this.$el.html(this.template);
+
+            return this;
         },
         renderToToolbar: function () {
             this.$el.append(this.tabletemplate);
@@ -70,7 +69,7 @@ define(function (require) {
                     document.webkitExitFullscreen();
                 }
             }
-            // wenn "window" ein iframe ist --> Weiterleitung auf geoportale-hamburg.de
+            // wenn "window" ein iframe ist --> Weiterleitung URL of the current page
             else {
                 window.open(window.location.href, "_blank");
             }

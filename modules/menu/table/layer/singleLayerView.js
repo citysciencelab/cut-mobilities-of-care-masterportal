@@ -1,15 +1,10 @@
-define([
-    "backbone",
-    "text!modules/menu/table/layer/templates/templateSettings.html",
-    "text!modules/menu/table/layer/templates/templateSingleLayer.html",
-    "jquery"
-], function (Backbone, TemplateSettings, Template, $) {
+define(function (require) {
+    var TemplateSettings = require("text!modules/menu/table/layer/templates/templateSettings.html"),
+        Template = require("text!modules/menu/table/layer/templates/templateSingleLayer.html"),
+        $ = require("jquery"),
+        LayerView;
 
-    var LayerView = Backbone.View.extend({
-        tagName: "li",
-        className: "burgermenu-layer-list list-group-item",
-        template: _.template(Template),
-        templateSettings: _.template(TemplateSettings),
+    LayerView = Backbone.View.extend({
         events: {
             "click .icon-checkbox, .icon-checkbox2, .title": "toggleIsSelected",
             "click .icon-info": "showLayerInformation",
@@ -31,11 +26,15 @@ define([
                 }
             });
         },
+        tagName: "li",
+        className: "burgermenu-layer-list list-group-item",
+        template: _.template(Template),
+        templateSettings: _.template(TemplateSettings),
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
-            if (this.model.getIsSettingVisible() === true) {
+            if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
                 this.$el.addClass("layer-settings-activated");
             }
@@ -47,8 +46,8 @@ define([
             // Animation Zahnrad
             this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
-                this.$el.removeClass("layer-settings-activated");
+            debugger;
+            if (this.model.get("isSettingVisible") === false) {
                 this.$el.find(".layer-settings").slideUp("slow", function () {
                     $(this).remove();
                 });
