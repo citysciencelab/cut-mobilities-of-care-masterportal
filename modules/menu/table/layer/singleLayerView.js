@@ -46,7 +46,6 @@ define(function (require) {
             // Animation Zahnrad
             this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
-            debugger;
             if (this.model.get("isSettingVisible") === false) {
                 this.$el.find(".layer-settings").slideUp("slow", function () {
                     $(this).remove();
