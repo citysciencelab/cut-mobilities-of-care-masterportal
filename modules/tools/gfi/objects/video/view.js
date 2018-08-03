@@ -6,7 +6,6 @@ define(function (require) {
         VideoView;
 
     VideoView = Backbone.View.extend({
-        template: _.template(VideoTemplate),
         initialize: function (url, type) {
             this.model = new VideoModel(url, type);
             this.listenTo(this.model, {
@@ -14,6 +13,7 @@ define(function (require) {
             });
             this.render();
         },
+        template: _.template(VideoTemplate),
 
         render: function () {
             var attr = this.model.toJSON();

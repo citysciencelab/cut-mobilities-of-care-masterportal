@@ -8,7 +8,7 @@ define(function (require) {
      */
     window.HELP_IMPROVE_VIDEOJS = false;
     require("videojsflash");
-    
+
     VideoModel = Backbone.Model.extend({
         defaults: {
             id: "",
