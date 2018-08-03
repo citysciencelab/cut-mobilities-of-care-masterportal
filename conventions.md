@@ -76,12 +76,18 @@ Ob ein String leer ist:
 if (!string) ...
 ```
 
+### Meldungen im Fehlerfall
+Wir unterscheiden Fehlermeldungen in:
+
+* Meldung zur Fehlersuche für Experten / Entwickler: Erlaubt sind console.error bzw. console.warn zum loggen von Fehlerzuständen.
+* Meldungen zur Information des Nutzers in Form von Alerts sollen nur erfolgen, wenn der Nutzer eine Aktion manuell angestoßen hat und diese erfolglos beendet wurde. 
+
 ### Bezeichnungen
 * Sprechende Namen für Variablen und Funktionen verwenden
 * *camelCase* für Funktions- und var- Deklarationen
 * Wenn es die String-Variable "dog" gibt, ist "dogList" ein Array bestehend aus "dog" Strings
 * Bezeichnung für Konstanten --> SYMBOLIC_CONSTANTS_LIKE_THIS
-* Von außen zugeladene Abhängigkeiten werden zur Unterscheidung in *PascalCase* geschrieben.
+* Von außen zugeladene Abhängigkeiten werden zur Unterscheidung in *PascalCase* geschrieben, es sei denn die Schreibweise wird innerhalb der Bibliothek anders verwendet
 
 ### Anführungszeichen
 * Es werden doppelte Anführungszeichen eingesetzt
@@ -92,7 +98,7 @@ var html = "<div id='my-id'></div>";
 
 #### Kommentare
 * Mehrzeilige Kommentare sind gut
-* Funktionen werden wenn überhaupt immer im JSDoc Style kommentiert.
+* Funktionen werden, wenn überhaupt, immer im JSDoc Style kommentiert.
 
 #### Backbone spezifische Konventionen
 * "listenTo" anstatt "on" als Eventlistener (nicht Backbone.Radio)

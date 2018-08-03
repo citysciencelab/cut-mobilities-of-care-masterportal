@@ -75,12 +75,12 @@ define(function (require) {
             }
         },
         toggleStyle: function () {
-            this.$(".full-screen-button > span").toggleClass("glyphicon-fullscreen glyphicon-remove");
-            if (this.$(".full-screen-button").attr("title") === "Vollbild aktivieren") {
-                this.$(".full-screen-button").attr("title", "Vollbild deaktivieren");
+            $(".full-screen-button > span").toggleClass("glyphicon-fullscreen glyphicon-remove");
+            if ($(".full-screen-button").attr("title") === "Vollbild aktivieren") {
+                $(".full-screen-button").attr("title", "Vollbild deaktivieren");
             }
             else {
-                this.$(".full-screen-button").attr("title", "Vollbild aktivieren");
+                $(".full-screen-button").attr("title", "Vollbild aktivieren");
             }
         }
     });

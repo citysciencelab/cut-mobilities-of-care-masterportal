@@ -36,6 +36,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             if (this.model.get("isSettingVisible") === true) {
                 this.$el.append(this.templateSettings(attr));
+                this.$el.addClass("layer-settings-activated");
             }
             return this.$el;
         },
@@ -51,6 +52,7 @@ define(function (require) {
                 });
             }
             else {
+                this.$el.addClass("layer-settings-activated");
                 this.$el.append(this.templateSettings(attr));
                 this.$el.find(".layer-settings").hide();
                 this.$el.find(".layer-settings").slideDown();

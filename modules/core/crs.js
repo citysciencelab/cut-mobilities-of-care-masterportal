@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Proj4 = require("proj4"),
+    var proj4 = require("proj4"),
         ol = require("openlayers"),
         Config = require("config"),
         CRS;
@@ -32,8 +32,8 @@ define(function (require) {
         assumeProjections: function () {
             var namedProjections = this.get("namedProjections");
 
-            Proj4.defs(namedProjections);
-            ol.proj.setProj4(Proj4);
+            proj4.defs(namedProjections);
+            ol.proj.setProj4(proj4);
 
             _.each(namedProjections, function (namedProjection) {
                 var projection = ol.proj.get(namedProjection[0]);
@@ -43,7 +43,7 @@ define(function (require) {
         },
 
         getProjection: function (name) {
-            return Proj4.defs(name);
+            return proj4.defs(name);
         },
 
         getProjections: function () {
@@ -51,7 +51,7 @@ define(function (require) {
                 projections = [];
 
             _.each(namedProjections, function (namedProjection) {
-                var projection = Proj4.defs(namedProjection[0]);
+                var projection = proj4.defs(namedProjection[0]);
 
                 _.extend(projection, {
                     name: namedProjection[0]
@@ -68,7 +68,7 @@ define(function (require) {
 
             if (mapProjection && sourceProjection && point) {
                 targetProjection = this.getProjection(mapProjection.getCode());
-                return Proj4(sourceProjection, targetProjection, point);
+                return proj4(sourceProjection, targetProjection, point);
             }
             return undefined;
         },
@@ -79,7 +79,7 @@ define(function (require) {
 
             if (mapProjection && targetProjection && point) {
                 sourceProjection = this.getProjection(mapProjection.getCode());
-                return Proj4(sourceProjection, targetProjection, point);
+                return proj4(sourceProjection, targetProjection, point);
             }
             return undefined;
         },
@@ -90,7 +90,7 @@ define(function (require) {
                 return "";
             }
 
-            return Proj4(Proj4(par.fromCRS), Proj4(par.toCRS), par.point);
+            return proj4(proj4(par.fromCRS), proj4(par.toCRS), par.point);
 
         },
 

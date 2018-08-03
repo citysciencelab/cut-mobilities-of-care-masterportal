@@ -28,3 +28,7 @@
     position: relative;
     left: 40%;
 }
+
+#einwohnerabfrage-tool .title-checkbox > label {
+    padding-left: 0;
+}

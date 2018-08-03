@@ -3,8 +3,8 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         Config = require("config"),
-        Moment = require("moment"),
-        Ol = require("openlayers"),
+        moment = require("moment"),
+        ol = require("openlayers"),
         $ = require("jquery"),
         Theme;
 
@@ -98,7 +98,7 @@ define(function (require) {
             }
 
             // parse result, try built-in Ol-format first
-            gfiFormat = new Ol.format.WMSGetFeatureInfo();
+            gfiFormat = new ol.format.WMSGetFeatureInfo();
             // das reverse wird fürs Planportal gebraucht SD 18.01.2016
             gfiFeatures = gfiFormat.readFeatures(data, {
                 dataProjection: Config.view.proj
@@ -311,8 +311,8 @@ define(function (require) {
         getManipulateDate: function (content) {
             _.each(content, function (element) {
                 _.each(element, function (value, key, list) {
-                    if (Moment(value, "DD-MM-YYYY", true).isValid() === true) {
-                        list[key] = Moment(value).format("DD.MM.YYYY");
+                    if (moment(value, "DD-MM-YYYY", true).isValid() === true) {
+                        list[key] = moment(value).format("DD.MM.YYYY");
                     }
                 });
             });

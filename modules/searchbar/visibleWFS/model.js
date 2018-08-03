@@ -52,7 +52,7 @@ define(function (require) {
                 if (_.isArray(model.get("searchField"))) {
                     _.each(model.get("searchField"), function (field) {
                         filteredFeatures = _.filter(features, function (feature) {
-                            var value = feature.get(field).toUpperCase();
+                            var value = feature.get(field).toString().toUpperCase();
 
                             return value.indexOf(searchString.toUpperCase()) !== -1;
                         });

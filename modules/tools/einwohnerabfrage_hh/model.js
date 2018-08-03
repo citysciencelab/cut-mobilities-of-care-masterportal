@@ -3,7 +3,7 @@ define(function (require) {
     var $ = require("jquery"),
         ol = require("openlayers"),
         SnippetDropdownModel = require("modules/snippets/dropdown/model"),
-        Moment = require("moment"),
+        moment = require("moment"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         Einwohnerabfrage;
 
@@ -277,13 +277,12 @@ define(function (require) {
         /**
          * runs the csw requests once and removes this callback from the change:isCurrentWin event
          * because both requests only need to be executed once
-         * @param {boolean} value - is tool active
          * @returns {void}
          */
-        handleCswRequests: function (value) {
+        handleCswRequests: function () {
             var cswUrl = Radio.request("RestReader", "getServiceById", "1").get("url");
 
-            if (value) {
+            if (this.get("isCurrentWin")) {
                 this.sendRequest(cswUrl, {id: this.get("fhhId")}, this.setFhhDate);
                 this.sendRequest(cswUrl, {id: this.get("mrhId")}, this.setMrhDate);
                 this.off("change:isCurrentWin", this.handleCswRequests);
@@ -331,7 +330,7 @@ define(function (require) {
                     dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                 }
             });
-            return Moment(dateTime).format("DD.MM.YYYY");
+            return moment(dateTime).format("DD.MM.YYYY");
         },
 
         /**

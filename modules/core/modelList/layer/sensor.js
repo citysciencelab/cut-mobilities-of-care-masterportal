@@ -1,10 +1,10 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Ol = require("openlayers"),
+        ol = require("openlayers"),
         Config = require("config"),
-        Mqtt = require("mqtt"),
-        Moment = require("moment"),
+        mqtt = require("mqtt"),
+        moment = require("moment"),
         $ = require("jquery"),
         SensorLayer;
 
@@ -21,15 +21,15 @@ define(function (require) {
             this.superInitialize();
 
             // change language from moment.js to german
-            Moment.locale("de");
+            moment.locale("de");
         },
 
         /**
-         * creates Ol.source.Vector as LayerSource
+         * creates ol.source.Vector as LayerSource
          * @returns {void}
          */
         createLayerSource: function () {
-            this.setLayerSource(new Ol.source.Vector());
+            this.setLayerSource(new ol.source.Vector());
         },
 
         /**
@@ -37,7 +37,7 @@ define(function (require) {
          * @returns {void}
          */
         createLayer: function () {
-            this.setLayer(new Ol.layer.Vector({
+            this.setLayer(new ol.layer.Vector({
                 source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.get("layerSource"),
                 name: this.get("name"),
                 typ: this.get("typ"),
@@ -57,7 +57,7 @@ define(function (require) {
          * @returns {void}
          */
         createClusterLayerSource: function () {
-            this.setClusterLayerSource(new Ol.source.Cluster({
+            this.setClusterLayerSource(new ol.source.Cluster({
                 source: this.get("layerSource"),
                 distance: this.get("clusterDistance")
             }));
@@ -71,7 +71,7 @@ define(function (require) {
         updateData: function () {
             var sensorData,
                 features,
-                subTyp = this.get("subTyp").toUpperCase(),
+                typ = this.get("typ").toUpperCase(),
                 isClustered = this.has("clusterDistance"),
                 url = this.get("url"),
                 version = this.get("version"),
@@ -79,7 +79,7 @@ define(function (require) {
                 epsg = this.get("epsg");
 
             // check for subtypes
-            if (subTyp === "SENSORTHINGS") {
+            if (typ === "SENSORTHINGS") {
                 sensorData = this.loadSensorThings(url, version, urlParams);
                 features = this.drawPoints(sensorData, epsg);
 
@@ -91,7 +91,7 @@ define(function (require) {
                 // connection to live update
                 this.createMqttConnectionToSensorThings(features);
             }
-            else if (subTyp === "ESRISTREAMLAYER") {
+            else if (typ === "ESRISTREAMLAYER") {
                 sensorData = this.loadStreamLayer();
                 if (!_.isUndefined(sensorData)) {
                     features = this.drawESRIGeoJson(sensorData);
@@ -154,9 +154,9 @@ define(function (require) {
                     feature;
 
                 if (_.has(data, "location") && !_.isUndefined(epsg)) {
-                    xyTransfrom = Ol.proj.transform(data.location, epsg, Config.view.epsg);
-                    feature = new Ol.Feature({
-                        geometry: new Ol.geom.Point(xyTransfrom)
+                    xyTransfrom = ol.proj.transform(data.location, epsg, Config.view.epsg);
+                    feature = new ol.Feature({
+                        geometry: new ol.geom.Point(xyTransfrom)
                     });
                 }
                 else {
@@ -202,16 +202,16 @@ define(function (require) {
                 if (utc.length === 2) {
                     // check for winter- and summertime
                     utcSub = parseInt(utc.substring(1, 2), 10);
-                    utcSub = Moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
                     utcNumber = "0" + utcSub + "00";
                 }
                 else if (utc.length > 2) {
                     utcSub = parseInt(utc.substring(1, 3), 10);
-                    utcSub = Moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
                     utcNumber = utc.substring(1, 3) + "00";
                 }
 
-                time = Moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("DD MMMM YYYY, HH:mm:ss");
+                time = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("DD MMMM YYYY, HH:mm:ss");
             }
 
             return time;
@@ -531,7 +531,7 @@ define(function (require) {
         drawESRIGeoJson: function (sensorData) {
             var streamId = this.get("streamId"),
                 epsgCode = this.get("epsg"),
-                esriFormat = new Ol.format.EsriJSON(),
+                esriFormat = new ol.format.EsriJSON(),
                 olFeaturesArray = [];
 
             _.each(sensorData, function (data) {
@@ -596,7 +596,7 @@ define(function (require) {
          */
         createMqttConnectionToSensorThings: function (features) {
             var dataStreamIds = this.getDataStreamIds(features),
-                client = Mqtt.connect({
+                client = mqtt.connect({
                     host: this.get("url").split("/")[2],
                     protocol: "wss",
                     path: "/mqtt",
@@ -776,7 +776,7 @@ define(function (require) {
 
             // if the feature does not exist, then draw it otherwise update it
             if (_.isUndefined(existingFeature)) {
-                esriFormat = new Ol.format.EsriJSON();
+                esriFormat = new ol.format.EsriJSON();
                 olFeature = esriFormat.readFeature(esriJson, {
                     dataProjection: epsgCode,
                     featureProjection: Config.view.epsg
@@ -792,7 +792,7 @@ define(function (require) {
             }
             else {
                 location = [esriJson.geometry.x, esriJson.geometry.y];
-                xyTransform = Ol.proj.transform(location, epsgCode, Config.view.epsg);
+                xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg);
 
                 if (!(xyTransform[0] < 0 || xyTransform[1] < 0 || xyTransform[0] === Infinity || xyTransform[1] === Infinity)) {
                     existingFeature.setProperties(esriJson.attributes);
