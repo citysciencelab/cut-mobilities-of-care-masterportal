@@ -60,11 +60,11 @@ define(function () {
         simpleMap: false,
         styleConf: "../node_modules/lgv-config/style_v2.json",
         wfsImgPath: "../node_modules/lgv-config/img",
-        zoomtofeature: {
+        zoomToFeature: {
             attribute: "flaechenid",
-            imglink: "../img/location_eventlotse.svg",
-            layerid: "4561",
-            WFSid: "4560"
+            imgLink: "../img/location_eventlotse.svg",
+            layerId: "4561",
+            wfsId: "4560"
         }
     };
 

@@ -58,9 +58,9 @@ define("app", function (require) {
         new ZoomToGeometry();
     });
 
-    if (Config.zoomtofeature) {
+    if (Config.zoomToFeature) {
         require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
-            new ZoomToFeature();
+            new ZoomToFeature(Config.zoomToFeature);
         });
     }
 

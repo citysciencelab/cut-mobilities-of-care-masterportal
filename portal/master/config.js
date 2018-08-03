@@ -24,11 +24,11 @@ define(function () {
         simpleMap: false,
         wfsImgPath: "../node_modules/lgv-config/img/",
         allowParametricURL: true,
-        zoomtofeature: {
+        zoomToFeature: {
             attribute: "flaechenid",
-            imglink: "../img/location_eventlotse.svg",
-            layerid: "4561",
-            WFSid: "4560"
+            imgLink: "../img/location_eventlotse.svg",
+            layerId: "4561",
+            wfsId: "4560"
         },
         namedProjections: [
             // GK DHDN

@@ -122,9 +122,9 @@ define(function (require) {
             var centers,
                 imglink;
 
-            if (_.has(Config, "zoomtofeature")) {
+            if (_.has(Config, "zoomToFeature")) {
                 centers = Radio.request("ZoomToFeature", "getCenterList");
-                imglink = Config.zoomtofeature.imglink;
+                imglink = Config.zoomToFeature.imgLink;
 
                 _.each(centers, function (center, i) {
                     var id = "featureMarker" + i,
