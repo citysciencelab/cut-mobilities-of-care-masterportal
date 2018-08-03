@@ -41,7 +41,6 @@ define(function () {
             ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
         ],
         footer: {
-            visibility: true,
             urls: [
                 {
                     "bezeichnung": "Kartographie und Gestaltung: ",

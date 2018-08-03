@@ -155,7 +155,6 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |[urls](#markdown-header-footerurls)|nein|Array[Object]||Array von URL-Konfigurationsobjekten. Auch hier existieren wiederum mehrere Konfigurationsmöglichkeiten, welche in der folgenden Tabelle aufgezeigt werden.|
-|visibility|nein|Boolean|false|Schaltet den Footer sichtbar.|
 
 ******
 ### footer.urls ###
@@ -171,31 +170,28 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 
 ```
 #!json
-
 footer: {
-            visibility: true,
-            urls: [
-                {
-                    "bezeichnung": "Kartographie und Gestaltung: ",
-                    "url": "http://www.geoinfo.hamburg.de/",
-                    "alias": "Landesbetrieb Geoniformation und Vermessung",
-                    "alias_mobil": "LGV"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-                    "alias": "SDP Download",
-                    "alias_mobil": "SDP"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://www.hamburg.de/bsu/timonline",
-                    "alias": "Kartenunstimmigkeit"
-                }
-            ]
+    urls: [
+        {
+            "bezeichnung": "Kartographie und Gestaltung: ",
+            "url": "http://www.geoinfo.hamburg.de/",
+            "alias": "Landesbetrieb Geoniformation und Vermessung",
+            "alias_mobil": "LGV"
+        },
+        {
+            "bezeichnung": "",
+            "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+            "alias": "SDP Download",
+            "alias_mobil": "SDP"
+        },
+        {
+            "bezeichnung": "",
+            "url": "http://www.hamburg.de/bsu/timonline",
+            "alias": "Kartenunstimmigkeit"
         }
+    ]
+}
 ```
-
 *********
 
 ## tree ##

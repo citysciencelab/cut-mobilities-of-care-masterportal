@@ -82,9 +82,9 @@ define("app", function (require) {
         new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
     });
 
-    if (Config.footer && Config.footer.visibility === true) {
+    if (_.has(Config, "footer")) {
         require(["modules/footer/view"], function (FooterView) {
-            new FooterView();
+            new FooterView(Config.footer);
         });
     }
 
