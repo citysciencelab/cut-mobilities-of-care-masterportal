@@ -6,6 +6,7 @@ define(function (require) {
     SearchbarModel = Backbone.Model.extend({
         defaults: {
             placeholder: "Suche",
+            recommendedList: "",
             recommandedListLength: 5,
             quickHelp: false,
             searchString: "", // der aktuelle String in der Suchmaske
