@@ -34,7 +34,7 @@
     "requirejs-text": "2.x",
     "underscore": "1.x",
     "video.js": "6.x",
-    "videojs-flash": "^2.1.0"
+    "videojs-hlsjs-plugin": "^0.3.1"
   },
   "devDependencies": {
     "build-config": "git+https://bitbucket.org/lgv-g12/build-config.git",

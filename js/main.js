@@ -45,7 +45,7 @@ require.config({
         text: "../node_modules/requirejs-text/text",
         underscore: "../node_modules/underscore/underscore-min",
         videojs: "../node_modules/video.js/dist/video.min",
-        videojsflash: "../node_modules/videojs-flash/dist/videojs-flash.min"
+        "videojs-hlsjs-plugin": "../node_modules/videojs-hlsjs-plugin/videojs-hlsjs-plugin"
     },
     shim: {
         bootstrap: {
@@ -56,11 +56,6 @@ require.config({
         },
         openlayers: {
             exports: "ol"
-        }
-    },
-    map: {
-        "videojsflash": {
-            "video.js": "videojs"
         }
     },
     urlArgs: "bust=" + (new Date()).getTime()
