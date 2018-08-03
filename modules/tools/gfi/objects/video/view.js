@@ -14,7 +14,6 @@ define(function (require) {
             this.render();
         },
         template: _.template(VideoTemplate),
-
         render: function () {
             var attr = this.model.toJSON();
 
