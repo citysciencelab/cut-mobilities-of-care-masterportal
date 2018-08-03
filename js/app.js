@@ -58,7 +58,7 @@ define("app", function (require) {
         new ZoomToGeometry();
     });
 
-    if (Config.zoomToFeature) {
+    if (_.has(Config, "zoomToFeature")) {
         require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
             new ZoomToFeature(Config.zoomToFeature);
         });

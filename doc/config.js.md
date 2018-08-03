@@ -247,23 +247,20 @@ tree: {
 ## zoomToFeature ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|imglink|ja|String||Link für den Marker.|
-|layerid|ja|String||ID des Layers an den die Marker gekoppelt werden.|
-|WFSid|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
+|imgLink|ja|String||Link für den Marker.|
+|layerId|ja|String||ID des Layers an den die Marker gekoppelt werden.|
+|wfsId|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
 |attribute|ja|String||Attributname. Entspricht Attribut nach dem der WFS gefiltert wird.|
 
 **Beispiel:**
-
 ```
 #!json
-
 zoomtofeature: {
-            attribute: "flaechenid",
-            imglink: "../img/location_eventlotse.svg",
-            WFSid: "4560",
-            layerid: "4561"
-        }
-
+    attribute: "flaechenid",
+    imgLink: "../img/location_eventlotse.svg",
+    wfsId: "4560",
+    layerId: "4561"
+}
 ```
 
 >Zurück zur [Dokumentation Masterportal](doc.md).
