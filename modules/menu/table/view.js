@@ -13,6 +13,7 @@ define(function (require) {
             this.renderLayerList();
             this.renderCategoryList();
             this.renderTools();
+            this.hideContextMenu();
         },
         model: new TableNavModel(),
         id: "table-nav",
@@ -32,6 +33,9 @@ define(function (require) {
         },
         renderTools: function () {
             new ToolView();
+        },
+        hideContextMenu: function () {
+            $("body").attr("oncontextmenu", "return false;");
         }
     });
     return Menu;
