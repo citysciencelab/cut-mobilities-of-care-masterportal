@@ -7,8 +7,8 @@ define(function (require) {
 
     VideoView = Backbone.View.extend({
         template: _.template(VideoTemplate),
-        initialize: function (url) {
-            this.model = new VideoModel(url);
+        initialize: function (url, type) {
+            this.model = new VideoModel(url, type);
             this.listenTo(this.model, {
                 "removeView": this.remove
             });

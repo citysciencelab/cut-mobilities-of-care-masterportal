@@ -1,6 +1,5 @@
 define(function (require) {
     var videojs = require("videojs"),
-        videojsHlsjsSourceHandler = require("videojs-hlsjs-plugin"),
         VideoModel;
 
     /**
@@ -8,16 +7,17 @@ define(function (require) {
      * @link https://videojs.com/getting-started/
      */
     window.HELP_IMPROVE_VIDEOJS = false;
-    videojsHlsjsSourceHandler.register(videojs);
-
+    require("videojsflash");
+    
     VideoModel = Backbone.Model.extend({
         defaults: {
             id: "",
             url: "",
+            type: "",
             poster: ""
         },
 
-        initialize: function (url) {
+        initialize: function (url, type) {
             var portalConfig = Radio.request("Parser", "getPortalConfig");
 
             this.listenTo(Radio.channel("GFI"), {
@@ -29,8 +29,8 @@ define(function (require) {
                 this.setPoster(portalConfig.portalTitle.logo);
             }
             this.setId(_.uniqueId("video"));
-            // this.setUrl(url);
-            this.setUrl("http://10.61.35.51:1935/live/BAB1-AK_Sued.sdp_240p50/playlist.m3u8");
+            this.setUrl(url);
+            this.setType(type);
         },
 
         /**
@@ -87,6 +87,15 @@ define(function (require) {
         // setter for poster
         setPoster: function (value) {
             this.set("poster", value);
+        },
+
+        // getter for type
+        getType: function () {
+            return this.get("type");
+        },
+        // setter for type
+        setType: function (value) {
+            this.set("type", value);
         }
     });
     return VideoModel;
