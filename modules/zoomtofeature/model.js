@@ -12,23 +12,36 @@ define(function (require) {
             wfsId: "4560",
             centerList: [],
             format: new ol.format.WFS(),
-            features: []
+            features: [],
+            markers: []
         },
         initialize: function () {
-            var channel = Radio.channel("ZoomToFeature");
-
-            channel.on({
-                "zoomtofeatures": this.zoomToFeatures
-            }, this);
-            channel.reply({
-                "getCenterList": function () {
-                    return this.get("centerList");
-                }
-            }, this);
-
             this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
             this.getFeaturesFromWFS();
             this.createCenterList();
+            this.setMarkerForFeatureIds();
+            this.zoomToFeatures();
+        },
+        setMarkerForFeatureIds: function () {
+            _.each(this.get("centerList"), function (center, i) {
+                var id = "featureMarker" + i,
+                    marker;
+
+                // lokaler Pfad zum IMG-Ordner ist anders
+                $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Radio.request("Util", "getPath", this.get("imgLink")) + "'></div>");
+
+                marker = new ol.Overlay({
+                    id: id,
+                    offset: [-12, 0],
+                    positioning: "bottom-center",
+                    element: document.getElementById(id),
+                    stopEvent: false
+                });
+
+                marker.setPosition(center);
+                this.get("markers").push(marker);
+                Radio.trigger("Map", "addOverlay", marker);
+            }, this);
         },
         getFeaturesFromWFS: function () {
             if (!_.isUndefined(this.get("ids"))) {
@@ -112,11 +125,11 @@ define(function (require) {
         // holt sich das "bboxes"-array, berechnet aus allen bboxes die finale bbox und sendet diese an die map
         zoomToFeatures: function () {
             var bbox = [],
-                ids = this.get("ids") || null,
+                ids = this.get("ids"),
                 attribute = this.get("attribute") || null,
                 features = this.get("features");
 
-            if (_.isNull(ids) === false) {
+            if (ids.length > 0) {
                 _.each(ids, function (id, index) {
                     var feature = _.filter(features, function (feat) {
                             return feat.get(attribute) === id ? 1 : 0;

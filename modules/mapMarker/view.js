@@ -30,13 +30,11 @@ define(function (require) {
             if (markerPosition) {
                 this.showMarker(markerPosition);
             }
-            this.model.askForMarkers();
         },
         render: function () {
             this.model.get("marker").setElement(this.$el[0]);
             return this;
         },
-
         /**
         * @description Entfernt den searchVector
         * @returns {void}
