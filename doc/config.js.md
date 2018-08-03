@@ -32,6 +32,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`""`|
 |[zoomToFeature](#markdown-header-zoomtofeature)|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe [URL-Parameter](URL-Parameter.md).||
 |[remoteInterface](#markdown-header-remoteInterface)|nein|object||Optionale Konfiguration für das remoteInterface.||
+|[browserPrint](#markdown-header-browserPrint)|nein|object||Optionale Konfiguration für das clientseitige Druckmodul.||
 
 ******
 ## mouseHover ##
@@ -93,7 +94,6 @@ animation: {
         }
 ```
 ******
-
 ## remoteInterface ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -107,8 +107,26 @@ remoteInterface:{
 }
 
 ```
-
 *********
+
+******
+## browserPrint ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|footerText|nein|String|"Kartographie und Gestaltung: Freie und Hansestadt Hamburg \nLandesbetrieb Geoinformation und Vermessung"|Text der in der Fußleiste angezeigt werden soll|
+|titleText|nein|String|"PDF ohne Titel"|Text der im Titel-Element angezeigt werden soll|
+
+**Beispiel:**
+```
+#!json
+browserPrint:{
+    footerText: "Mein Fußleisten-Text",
+    titleText: "Mein Titel"
+}
+
+```
+*********
+
 ******
 
 ## clickCounter ##

@@ -68,7 +68,8 @@ define(function () {
         clickCounter: {},
         remoteInterface: {
             postMessageUrl: "http://localhost:8080"
-        }
+        },
+        browserPrint: {}
     };
 
     return config;

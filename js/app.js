@@ -39,7 +39,7 @@ define("app", function (require) {
 
     // Browser Druck Modul
     require(["modules/functionalities/browserPrint/model"], function (BrowserPrintModel) {
-        new BrowserPrintModel();
+        new BrowserPrintModel(_.has(Config, "browserPrint") ? Config.browserPrint : {});
     });
     // Graph laden
     require(["modules/tools/graph/model"], function (GraphModel) {
