@@ -14,12 +14,20 @@ define(function (require) {
             id: "",
             url: "",
             type: "",
-            poster: ""
+            poster: "",
+            width: "400px",
+            height: "300px"
         },
 
-        initialize: function (url, type) {
+        initialize: function (url, type, width, height) {
             var portalConfig = Radio.request("Parser", "getPortalConfig");
 
+            this.setId(_.uniqueId("video"));
+            this.setUrl(url);
+            this.setType(type);
+            this.setWidth(width);
+            this.setHeight(height);
+            
             this.listenTo(Radio.channel("GFI"), {
                 "afterRender": this.startStreaming,
                 "isVisible": this.changedGFI
@@ -28,9 +36,6 @@ define(function (require) {
             if (_.has(portalConfig, "portalTitle") && _.has(portalConfig.portalTitle, "logo")) {
                 this.setPoster(portalConfig.portalTitle.logo);
             }
-            this.setId(_.uniqueId("video"));
-            this.setUrl(url);
-            this.setType(type);
         },
 
         /**
@@ -40,7 +45,7 @@ define(function (require) {
          */
         startStreaming: function (callback) {
             var videoEle = document.getElementById(this.get("id"));
-
+            
             videojs(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
         },
 
@@ -96,6 +101,24 @@ define(function (require) {
         // setter for type
         setType: function (value) {
             this.set("type", value);
+        },
+
+        // getter for width
+        getWidth: function () {
+            return this.get("width");
+        },
+        // setter for width
+        setWidth: function (value) {
+            this.set("width", value);
+        },
+
+        // getter for height
+        getHeight: function () {
+            return this.get("height");
+        },
+        // setter for height
+        setHeight: function (value) {
+            this.set("height", value);
         }
     });
     return VideoModel;

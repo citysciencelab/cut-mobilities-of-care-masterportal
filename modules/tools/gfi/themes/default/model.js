@@ -84,7 +84,7 @@ define(function (require) {
                             });
                         }
                         else if (key === "video" && Radio.request("Util", "isAny") === null) {
-                            videoView = new VideoView(valString, "rtmp/mp4");
+                            videoView = new VideoView(valString, "rtmp/mp4", "400px", "300px");
 
                             element[index][key] = "#";
                             children.push({
@@ -97,7 +97,7 @@ define(function (require) {
                             }
                         }
                         else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
-                            videoView = new VideoView(valString, "application/x-mpegURL");
+                            videoView = new VideoView(valString, "application/x-mpegURL", "300px", "300px");
 
                             element[index][key] = "#";
                             children.push({
