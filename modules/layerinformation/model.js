@@ -2,7 +2,6 @@ define(function (require) {
     var ViewMobile = require("modules/layerinformation/viewMobile"),
         View = require("modules/layerinformation/view"),
         $ = require("jquery"),
-        Config = require("config"),
         moment = require("moment"),
         LayerInformation;
 
@@ -42,10 +41,6 @@ define(function (require) {
                     this.bindView(isMobile);
                 }
             });
-
-            if (_.has(Config, "csw")) {
-                this.setCswId(Config.csw);
-            }
             this.bindView(Radio.request("Util", "isViewMobile"));
         },
 
@@ -199,10 +194,6 @@ define(function (require) {
 
         setIsVisible: function (value) {
             this.set("isVisible", value);
-        },
-
-        setCswId: function (value) {
-            this.set("cswId", value);
         }
     });
 

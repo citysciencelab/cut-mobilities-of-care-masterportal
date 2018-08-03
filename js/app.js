@@ -79,7 +79,7 @@ define("app", function (require) {
         new DropdownView();
     });
     require(["modules/layerinformation/model"], function (LayerinformationModel) {
-        new LayerinformationModel();
+        new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
     });
 
     if (Config.footer && Config.footer.visibility === true) {
