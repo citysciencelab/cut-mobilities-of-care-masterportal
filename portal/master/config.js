@@ -30,7 +30,6 @@ define(function () {
             layerid: "4561",
             WFSid: "4560"
         },
-        postMessageUrl: "http://localhost:8080",
         namedProjections: [
             // GK DHDN
             ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -67,7 +66,9 @@ define(function () {
         isMenubarVisible: true,
         geoAPI: false,
         clickCounter: {},
-        remoteInterface: true
+        remoteInterface: {
+            postMessageUrl: "http://localhost:8080"
+        }
     };
 
     return config;

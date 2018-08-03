@@ -16,9 +16,9 @@ define("app", function (require) {
         sbconfig;
 
     // RemoteInterface laden
-    if (Config.remoteInterface && Config.remoteInterface === true) {
+    if (Config.remoteInterface) {
         require(["modules/remoteInterface/model"], function (RemoteInterface) {
-            new RemoteInterface();
+            new RemoteInterface(Config.remoteInterface);
         });
     }
     // Core laden

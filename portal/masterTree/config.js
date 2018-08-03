@@ -50,7 +50,9 @@ define(function () {
             ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
         ],
         portalConf: "../../portal/master/",
-        postMessageUrl: "http://localhost:8080",
+        remoteInterface: {
+            postMessageUrl: "http://localhost:8080"
+        },
         proxyURL: "/cgi-bin/proxy.cgi",
         quickHelp: true,
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
