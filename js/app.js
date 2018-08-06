@@ -65,7 +65,7 @@ define("app", function (require) {
     }
 
     // load customModules from config
-    if (Config.customModules) {
+    if (_.has(Config, "customModules") && Config.customModules.length > 0) {
         _.each(Config.customModules, function (module) {
             require([module], function (CustomModule) {
                 new CustomModule();
@@ -88,7 +88,7 @@ define("app", function (require) {
         });
     }
 
-    if (Config.clickCounter && Config.clickCounter.desktop && Config.clickCounter.desktop !== "" && Config.clickCounter.mobile && Config.clickCounter.mobile !== "") {
+    if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
         require(["modules/ClickCounter/view"], function (ClickCounterView) {
             new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
         });
@@ -100,13 +100,13 @@ define("app", function (require) {
         });
     }
 
-    if (Config.quickHelp && Config.quickHelp === true) {
+    if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
         require(["modules/quickhelp/view"], function (QuickHelpView) {
             new QuickHelpView();
         });
     }
 
-    if (Config.scaleLine && Config.scaleLine === true) {
+    if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
         require(["modules/scaleline/view"], function (ScaleLineView) {
             new ScaleLineView();
         });
