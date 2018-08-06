@@ -232,25 +232,25 @@ define("app", function (require) {
                 }
                 case "routing": {
                     require(["modules/viomRouting/view"], function (RoutingView) {
-                        new RoutingView();
+                        new RoutingView(tool);
                     });
                     break;
                 }
                 case "contact": {
                     require(["modules/contact/view"], function (Contact) {
-                        new Contact();
+                        new Contact(tool);
                     });
                     break;
                 }
                 case "addWMS": {
                     require(["modules/tools/addwms/view"], function (AddWMSView) {
-                        new AddWMSView();
+                        new AddWMSView(tool);
                     });
                     break;
                 }
                 case "featureLister": {
                     require(["modules/featurelister/view"], function (FeatureLister) {
-                        new FeatureLister();
+                        new FeatureLister(tool);
                     });
                     break;
                 }
@@ -281,7 +281,6 @@ define("app", function (require) {
             var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
                 controlsView = new ControlsView();
 
-
             _.each(controls, function (control) {
                 var element;
 
@@ -302,7 +301,7 @@ define("app", function (require) {
                         element = controlsView.addRowTR(control.id);
 
                         require(["modules/controls/orientation/view"], function (OrientationView) {
-                            new OrientationView({el: element});
+                            new OrientationView({el: element, attr: {config: {epsg: Radio.request("MapView", "getProjection").getCode()}}});
                         });
                         break;
                     }
