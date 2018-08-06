@@ -376,7 +376,7 @@ define("app", function (require) {
     });
 
     sbconfig = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
-
+    sbconfig = _.extend(sbconfig, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
     if (sbconfig) {
         require(["modules/searchbar/view"], function (SearchbarView) {
             new SearchbarView(sbconfig);

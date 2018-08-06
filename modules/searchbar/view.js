@@ -1,8 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        SearchbarTemplate = require("text!modules/searchbar/template.html"),
+    var SearchbarTemplate = require("text!modules/searchbar/template.html"),
         TemplateTable = require("text!modules/searchbar/templateTable.html"),
         SearchbarRecommendedListTemplate = require("text!modules/searchbar/templateRecommendedList.html"),
         SearchbarHitListTemplate = require("text!modules/searchbar/templateHitList.html"),
@@ -40,79 +38,21 @@ define(function (require) {
             }
         },
 
-        /**
-        * @description Konfiguration für die Suchfunktion.
-        * @param {Object} config - Das Konfigurationsobjet der BKG Suche.
-        * @param {Object} [config.visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
-        * @param {integer} [config.visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {Object} [config.tree] - Das Konfigurationsobjekt der Tree-Suche, wenn Treesuche gewünscht.
-        * @param {integer} [config.tree.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {Objekt} [config.specialWFS] - Das Konfigurationsarray für die specialWFS-Suche
-        * @param {integer} [config.specialWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {Object[]} config.specialWFS.definitions - Definitionen der SpecialWFS.
-        * @param {Object} config.specialWFS.definitions[].definition - Definition eines SpecialWFS.
-        * @param {string} config.specialWFS.definitions[].definition.url - Die URL, des WFS
-        * @param {string} config.specialWFS.definitions[].definition.data - Query string des WFS-Request
-        * @param {string} config.specialWFS.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
-        * @param {Object} config.bkg - Das Konfigurationsobjet der BKG Suche.
-        * @param {integer} [config.bkg.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {string} config.bkg.bkgSuggestURL - URL für schnelles Suggest.
-        * @param {string} [config.bkg.bkgSearchURL] - URL für ausführliche Search.
-        * @param {float} [config.bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
-        * @param {integer} [config.bkg.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
-        * @param {string} [config.bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
-        * @param {string} [config.bkg.filter=filter=(typ:*)] - Filterstring
-        * @param {float} [config.bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
-        * @param {Object} [config.gazetteer] - Das Konfigurationsobjekt für die Gazetteer-Suche.
-        * @param {string} config.gazetteer.url - Die URL.
-        * @param {boolean} [config.gazetteer.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
-        * @param {boolean} [config.gazetteer.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
-        * @param {boolean} [config.gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
-        * @param {boolean} [config.gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
-        * @param {integer} [config.gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
-        * @param {Object} [config.osm] - Das Konfigurationsobjet der OSM Suche.
-        * @param {integer} [config.osm.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {string} [config.osm.osmServiceUrl] - URL für die Suche.
-        * @param {integer} [config.osm.limit=50] - Anzahl der angefragten Vorschläge.
-        * @param {string} [config.osm.states=""] - Liste der Bundesländer für die Trefferauswahl.
-        * @param {string} [config.osm.classes=""] - Liste der Werte des Dienstes des Attributes "class", die angezeigt werden sollen.
-        * @param {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
-        * @param {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
-        * @param {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
-        * @param {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
-        * @returns {void}
-        */
         initialize: function (config) {
-            // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
-            // var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
-            //     mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
-            //     mediaQueryMaxWidth = window.matchMedia("(max-width: 767px)"),
-            //     that = this;
-            //
-            // // Beim Wechsel der orientation landscape/portrait wird die Suchleiste neu gezeichnet
-            // mediaQueryOrientation.addListener(function () {
-            //     that.render();
-            // });
-            // // Beim Wechsel der Navigation(Burger-Button) wird die Suchleiste neu gezeichnet
-            // mediaQueryMinWidth.addListener(function () {
-            //     that.render();
-            // });
-            // mediaQueryMaxWidth.addListener(function () {
-            //     that.render();
-            // });
-
+            this.model = new Searchbar(config);
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
             }
-            if (config.recommandedListLength) {
-                this.model.set("recommandedListLength", config.recommandedListLength);
-            }
-            if (config.quickHelp) {
-                this.model.set("quickHelp", config.quickHelp);
-            }
-            if (config.placeholder) {
-                this.model.set("placeholder", config.placeholder);
-            }
+            // if (config.recommandedListLength) {
+            //     this.model.set("recommandedListLength", config.recommandedListLength);
+            // }
+            // if (config.quickHelp) {
+            //     this.model.set("quickHelp", config.quickHelp);
+            // }
+            // if (config.placeholder) {
+            //     this.model.set("placeholder", config.placeholder);
+            // }
+
             this.className = "navbar-form col-xs-9";
 
             this.listenTo(this.model, "change:recommendedList", function () {
@@ -199,7 +139,6 @@ define(function (require) {
                 this.$("#searchInput").width(window.innerWidth - this.$(".desktop").width() - 160);
             }
         },
-        model: new Searchbar(),
         id: "searchbar", // wird ignoriert, bei renderToDOM
         className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
         searchbarKeyNavSelector: "#searchInputUL",
