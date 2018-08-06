@@ -11,7 +11,7 @@ define(function (require) {
             legendParams: [],
             wmsLayerList: [],
             wfsLayerList: [],
-            sensorLayerList: [],
+            sensorThingsLayerList: [],
             geojsonLayerList: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
@@ -36,7 +36,7 @@ define(function (require) {
             this.listenTo(this, {
                 "change:wmsLayerList": this.setLegendParamsFromWMS,
                 "change:wfsLayerList": this.setLegendParamsFromVector,
-                "change:sensorLayerList": this.setLegendParamsFromVector,
+                "change:sensorThingsLayerList": this.setLegendParamsFromVector,
                 "change:geojsonLayerList": this.setLegendParamsFromVector,
                 "change:groupLayerList": this.setLegendParamsFromGROUP,
                 "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
@@ -118,8 +118,8 @@ define(function (require) {
             if (_.has(groupedLayers, "WFS")) {
                 this.set("wfsLayerList", groupedLayers.WFS);
             }
-            if (_.has(groupedLayers, "Sensor")) {
-                this.set("sensorLayerList", groupedLayers.Sensor);
+            if (_.has(groupedLayers, "SensorThings")) {
+                this.set("sensorThingsLayerList", groupedLayers.SensorThings);
             }
             if (_.has(groupedLayers, "GeoJSON")) {
                 this.set("geojsonLayerList", groupedLayers.GeoJSON);
@@ -132,7 +132,7 @@ define(function (require) {
 
         unsetLegendParams: function () {
             this.set("wfsLayerList", "");
-            this.set("sensorLayerList", "");
+            this.set("sensorThingsLayerList", "");
             this.set("wmsLayerList", "");
             this.set("geojsonLayerList", "");
             this.set("groupLayerList", "");
@@ -183,12 +183,13 @@ define(function (require) {
                     styleClass,
                     styleSubClass,
                     styleFieldValues,
-                    allItems;
+                    allItems,
+                    legendURL = layer.get("legendURL");
 
-                if (typeof layer.get("legendURL") === "string") {
+                if (typeof legendURL === "string" && legendURL !== "") {
                     this.push("tempArray", {
                         layername: layer.get("name"),
-                        img: layer.get("legendURL"),
+                        img: legendURL,
                         typ: layer.get("typ"),
                         isVisibleInMap: layer.get("isVisibleInMap")
                     });
@@ -427,9 +428,11 @@ define(function (require) {
          */
         drawIntervalCircleBars: function (scalingAttribute, advancedStyle, layer, image, name) {
             var olFeature = new ol.Feature({}),
-                stylePerValue;
+                stylePerValue,
+                circleBarScalingFactor = advancedStyle.get("circleBarScalingFactor"),
+                barHeight = String(20 / circleBarScalingFactor);
 
-            olFeature.set(scalingAttribute, "20");
+            olFeature.set(scalingAttribute, barHeight);
             stylePerValue = advancedStyle.createStyle(olFeature, false);
 
             image.push(stylePerValue.getImage().getSrc());
