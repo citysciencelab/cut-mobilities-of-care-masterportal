@@ -42,7 +42,7 @@ define(function (require) {
                 name: this.get("name"),
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
-                gfiTheme: this.get("gfiTheme"),
+                gfiTheme: _.isObject(this.get("gfiTheme")) ? this.get("gfiTheme").name : this.get("gfiTheme"),
                 routable: this.get("routable"),
                 id: this.get("id")
             }));
@@ -167,8 +167,10 @@ define(function (require) {
                 feature.setProperties(data.properties);
 
                 // for a special theme
-                feature.set("gfiParams", this.get("gfiParams"));
-                feature.set("utc", this.get("utc"));
+                if (_.isObject(this.get("gfiTheme"))) {
+                    feature.set("gfiParams", this.get("gfiTheme").params);
+                    feature.set("utc", this.get("utc"));
+                }
 
                 features.push(feature);
             }, this);
