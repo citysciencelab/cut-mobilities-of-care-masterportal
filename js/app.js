@@ -196,31 +196,31 @@ define("app", function (require) {
                 }
                 case "searchByCoord": {
                     require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
-                        new SearchByCoordView();
+                        new SearchByCoordView(tool);
                     });
                     break;
                 }
                 case "saveSelection": {
                     require(["modules/tools/saveSelection/view"], function (SaveSelectionView) {
-                        new SaveSelectionView();
+                        new SaveSelectionView(_.extend(tool, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}));
                     });
                     break;
                 }
                 case "kmlimport": {
                     require(["modules/tools/kmlimport/view"], function (ImportView) {
-                        new ImportView();
+                        new ImportView(tool);
                     });
                     break;
                 }
                 case "wfsFeatureFilter": {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
-                        new WFSFeatureFilterView();
+                        new WFSFeatureFilterView(tool);
                     });
                     break;
                 }
                 case "extendedFilter": {
                     require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
-                        new ExtendedFilterView();
+                        new ExtendedFilterView(_.extend(tool, _.has(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}));
                     });
                     break;
                 }

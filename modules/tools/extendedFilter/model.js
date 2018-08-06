@@ -1,6 +1,5 @@
 define(function (require) {
     var $ = require("jquery"),
-        Config = require("config"),
         ExtendedFilter;
 
     ExtendedFilter = Backbone.Model.extend({
@@ -16,7 +15,7 @@ define(function (require) {
             wfsList: [],
             currentFilterType: "Neuen Filter erstellen",
             currentFilters: [],
-            ignoredKeys: Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys"),
+            ignoredKeys: [],
             filterCounter: 1
         },
         initialize: function () {

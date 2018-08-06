@@ -5,9 +5,9 @@ define(function (require) {
         ExtendedFilterView;
 
     ExtendedFilterView = Backbone.View.extend({
-        model: new Model(),
         template: _.template(Template),
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new Model(attr);
             this.listenTo(this.model, {
                 "change:isCurrentWin": this.render,
                 "change:isCollapsed": this.render
