@@ -8,7 +8,7 @@ define(function (require) {
             this.listenTo(this.model, "change:scaleLineValue", this.render);
             this.render();
         },
-        model: ScaleLine,
+        model: new ScaleLine(),
         className: "scale-line",
         template: _.template(ScaleLineTemplate),
         render: function () {

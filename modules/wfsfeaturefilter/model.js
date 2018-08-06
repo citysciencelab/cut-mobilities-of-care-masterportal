@@ -1,5 +1,4 @@
 define(function () {
-
     var WfsFeatureFilter = Backbone.Model.extend({
         defaults: {
             wfsList: []
@@ -41,5 +40,5 @@ define(function () {
         }
     });
 
-    return new WfsFeatureFilter();
+    return WfsFeatureFilter;
 });

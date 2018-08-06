@@ -6,21 +6,21 @@ define(function (require) {
         GetCoord;
 
     GetCoord = Backbone.View.extend({
-        model: new GetCoordModel(),
-        className: "win-body",
-        template: _.template(GetCoordTemplate),
         events: {
             "click .glyphicon-remove": "destroy",
             "change #coordSystemField": "changedPosition",
             "click #coordinatesEastingField": "copyToClipboard",
             "click #coordinatesNorthingField": "copyToClipboard"
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new GetCoordModel(attr);
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin change:url": this.render,
                 "change:positionMapProjection": this.changedPosition
             });
         },
+        className: "win-body",
+        template: _.template(GetCoordTemplate),
 
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {

@@ -1,6 +1,5 @@
 define(function (require) {
-    var Config = require("config"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         ThemeList = require("modules/tools/gfi/themes/list"),
         gfiParams = [],
         Gfi;

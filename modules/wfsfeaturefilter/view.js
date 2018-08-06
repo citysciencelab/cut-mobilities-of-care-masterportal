@@ -1,23 +1,23 @@
 define(function (require) {
-    var wfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
+    var WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
         $ = require("jquery"),
         wfsFeatureFilterTemplate = require("text!modules/wfsfeaturefilter/template.html"),
         wfsFeatureFilterView;
 
     wfsFeatureFilterView = Backbone.View.extend({
-        model: wfsFeatureFilter,
-        id: "wfsFilterWin",
-        className: "win-body",
-        template: _.template(wfsFeatureFilterTemplate),
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render
-            }, this);
-        },
         events: {
             "click #filterbutton": "getFilterInfos",
             "click .panel-heading": "toggleHeading"
         },
+        initialize: function (attr) {
+            this.model = new WfsFeatureFilter(attr);
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin": this.render
+            }, this);
+        },
+        id: "wfsFilterWin",
+        className: "win-body",
+        template: _.template(wfsFeatureFilterTemplate),
         toggleHeading: function (evt) {
             var id = this.$(evt.currentTarget)[0].id;
 

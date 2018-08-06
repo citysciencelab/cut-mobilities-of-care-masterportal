@@ -94,7 +94,7 @@ define("app", function (require) {
         });
     }
 
-    if (Config.mouseHover) {
+    if (_.has(Config, "mouseHover")) {
         require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
             new MouseHoverPopupView(Config.mouseHover);
         });
@@ -174,17 +174,17 @@ define("app", function (require) {
                 }
                 case "draw": {
                     require(["modules/tools/draw/view"], function (DrawView) {
-                        new DrawView();
+                        new DrawView(tool);
                     });
                     break;
                 }
                 case "print": {
-                    printConf = Radio.request("ModelList", "getModelByAttributes", {id: "print"}).attributes;
+                    printConf = tool;
                     printConf = _.extend(printConf, {center: Radio.request("MapView", "getCenter")});
                     printConf = _.extend(printConf, {proxyURL: Config.proxyURL});
                     printConf = _.extend(printConf, {srs: Radio.request("MapView", "getProjection").getCode()});
                     require(["modules/tools/print/view"], function (PrintView) {
-                        new PrintView(_.extend(tool, printConf));
+                        new PrintView(printConf);
                     });
                     break;
                 }
@@ -256,7 +256,7 @@ define("app", function (require) {
                 }
                 case "formular": {
                     require(["modules/formular/view"], function (Formular) {
-                        new Formular(tool.modelname);
+                        new Formular(tool);
                     });
                     break;
                 }

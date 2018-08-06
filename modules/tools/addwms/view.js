@@ -10,19 +10,19 @@ define(function (require) {
         AddWMSView;
 
     AddWMSView = Backbone.View.extend({
-        model: new AddWMSModel(),
-        template: _.template(AddWMSWin),
-        initialize: function () {
+        events: {
+            "click #addWMSButton": "loadAndAddLayers",
+            "keydown": "keydown"
+        },
+        initialize: function (attr) {
+            this.model = new AddWMSModel(attr);
             this.listenTo(this.model, {
                 "change:wmsURL": this.urlChange,
                 "change:isCollapsed": this.render,
                 "change:isCurrentWin": this.render
             });
         },
-        events: {
-            "click #addWMSButton": "loadAndAddLayers",
-            "keydown": "keydown"
-        },
+        template: _.template(AddWMSWin),
         // Löst das laden und einfügen der Layer in den Baum aus
         loadAndAddLayers: function () {
             this.model.loadAndAddLayers();

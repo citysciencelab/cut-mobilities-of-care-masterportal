@@ -243,5 +243,5 @@ define(function (require) {
         }
     });
 
-    return new RoutingModel();
+    return RoutingModel;
 });

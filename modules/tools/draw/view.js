@@ -5,9 +5,6 @@ define(function (require) {
         DrawToolView;
 
     DrawToolView = Backbone.View.extend({
-        model: new DrawTool(),
-        className: "win-body",
-        template: _.template(DrawTemplate),
         events: {
             "change .interaction": "setDrawType",
             "keyup .text input": "setText",
@@ -27,7 +24,8 @@ define(function (require) {
             "click .btn-primary": "enableAllElements",
             "click .downloadDrawing": "downloadFeatures"
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new DrawTool(attr);
             require(["modules/tools/download/view"], function (DownloadView) {
                 new DownloadView();
             });
@@ -35,6 +33,8 @@ define(function (require) {
                 "change:isCollapsed change:isCurrentWin": this.render
             });
         },
+        className: "win-body",
+        template: _.template(DrawTemplate),
 
         render: function () {
             var attr = this.model.toJSON();

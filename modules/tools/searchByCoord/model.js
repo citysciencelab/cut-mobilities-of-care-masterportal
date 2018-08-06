@@ -210,5 +210,5 @@ define(function (require) {
         }
     });
 
-    return new SearchByCoord();
+    return SearchByCoord;
 });

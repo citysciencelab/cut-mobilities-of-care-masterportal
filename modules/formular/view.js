@@ -6,18 +6,6 @@ define(function (require) {
         FormularView;
 
     FormularView = Backbone.View.extend({
-        id: "formularWin",
-        initialize: function (modelname) {
-            if (modelname === "grenznachweis") {
-                this.model = new Grenznachweismodel();
-                this.template = _.template(Grenznachweistemplate);
-                $("head").prepend("<style>" + Grenznachweiscss + "</style>");
-            }
-            this.listenTo(this.model, {
-                "change:isCollapsed render invalid change:isCurrentWin": this.render
-            });
-            Radio.trigger("Autostart", "initializedModul", "formular");
-        },
         events: {
             // anonymisierte Events
             "keyup input[type=text]": "keyup",
@@ -28,6 +16,16 @@ define(function (require) {
             "click a": "click",
             "focusout": "focusout"
         },
+        initialize: function (attr) {
+            this.model = new Grenznachweismodel(attr);
+            this.template = _.template(Grenznachweistemplate);
+            $("head").prepend("<style>" + Grenznachweiscss + "</style>");
+            this.listenTo(this.model, {
+                "change:isCollapsed render invalid change:isCurrentWin": this.render
+            });
+            Radio.trigger("Autostart", "initializedModul", "formular");
+        },
+        id: "formularWin",
         render: function () {
             var attr = this.model.toJSON();
 

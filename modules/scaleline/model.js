@@ -64,5 +64,5 @@ define(function () {
 
     });
 
-    return new ScaleLine();
+    return ScaleLine;
 });

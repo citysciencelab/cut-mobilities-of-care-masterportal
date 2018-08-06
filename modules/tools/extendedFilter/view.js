@@ -5,7 +5,11 @@ define(function (require) {
         ExtendedFilterView;
 
     ExtendedFilterView = Backbone.View.extend({
-        template: _.template(Template),
+        events: {
+            "change #dropdown": "nextStep",
+            "click .btn_remove": "removeAttrFromFilter",
+            "click #btn_back": "previousStep"
+        },
         initialize: function (attr) {
             this.model = new Model(attr);
             this.listenTo(this.model, {
@@ -13,11 +17,7 @@ define(function (require) {
                 "change:isCollapsed": this.render
             }, this); // Fenstermanagement
         },
-        events: {
-            "change #dropdown": "nextStep",
-            "click .btn_remove": "removeAttrFromFilter",
-            "click #btn_back": "previousStep"
-        },
+        template: _.template(Template),
         removeAttrFromFilter: function (evt) {
             this.model.removeAttrFromFilter(evt);
             this.render();
