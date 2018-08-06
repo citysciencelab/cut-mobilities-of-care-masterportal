@@ -421,8 +421,6 @@ define(function (require) {
                     thing.properties.phenomenonTime = "undefined";
                 }
 
-                thing.properties.state = this.convertScaling(thing.properties.state);
-
                 thing.properties.dataStreamId = thing.Datastreams[0]["@iot.id"];
                 thingsProperties.push(thing.properties);
             }, this);
@@ -448,35 +446,6 @@ define(function (require) {
             }, this);
 
             return properties;
-        },
-
-        /**
-         * convert Scaling with given factor and adds a unit
-         * @param  {String} state - contains the state from observation
-         * @return {String} state with converted value
-         */
-        convertScaling: function (state) {
-            var conversionFactor = this.get("conversionFactor"),
-                scalingUnit = this.get("scalingUnit"),
-                scalingDecimal = this.get("scalingDecimal"),
-                conversionState = !_.isNaN(parseFloat(state, 10)) ? parseFloat(state, 10) : state;
-
-            if (!_.isUndefined(conversionState) && !_.isString(conversionState)) {
-                if (!_.isUndefined(conversionFactor)) {
-                    conversionState = conversionState * conversionFactor;
-                }
-                if (!_.isUndefined(scalingDecimal)) {
-                    conversionState = parseFloat(conversionState);
-                    conversionState = conversionState.toFixed(scalingDecimal);
-                }
-                if (!_.isUndefined(scalingUnit)) {
-                    conversionState = conversionState + " " + scalingUnit;
-                }
-
-                conversionState = String(conversionState);
-            }
-
-            return conversionState;
         },
 
         /**
@@ -632,7 +601,7 @@ define(function (require) {
                 dataStreamId = thingToUpdate.dataStreamId,
                 features = this.get("layerSource").getFeatures(),
                 featureArray = this.getFeatureByDataStreamId(dataStreamId, features),
-                thingResult = this.convertScaling(thingToUpdate.result),
+                thingResult = String(thingToUpdate.result),
                 utc = this.get("utc"),
                 thingPhenomenonTime = this.changeTimeZone(thingToUpdate.phenomenonTime, utc);
 
