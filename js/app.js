@@ -226,7 +226,7 @@ define("app", function (require) {
                 }
                 case "treeFilter": {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
-                        new TreeFilterView();
+                        new TreeFilterView(_.extend(tool, _.has(Config, "treeConf") ? {treeConf: Config.treeConf} : {}));
                     });
                     break;
                 }

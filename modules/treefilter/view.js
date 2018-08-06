@@ -5,11 +5,11 @@ define(function (require) {
         TreeFilterView;
 
     TreeFilterView = Backbone.View.extend({
-        model: TreeFilter,
         // id: "treeFilterWin",
         className: "win-body",
         template: _.template(TreeFilterTemplate),
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new TreeFilter(attr),
             // this.render();
             this.listenTo(this.model, {
                 "change:isCurrentWin": this.render,
