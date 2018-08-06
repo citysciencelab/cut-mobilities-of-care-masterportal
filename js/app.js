@@ -162,13 +162,13 @@ define("app", function (require) {
                 }
                 case "coord": {
                     require(["modules/tools/getCoord/view"], function (CoordPopupView) {
-                        new CoordPopupView();
+                        new CoordPopupView(tool);
                     });
                     break;
                 }
                 case "measure": {
                     require(["modules/tools/measure/view"], function (MeasureView) {
-                        new MeasureView(_.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
+                        new MeasureView(_.extend(tool, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}));
                     });
                     break;
                 }
@@ -184,13 +184,13 @@ define("app", function (require) {
                     printConf = _.extend(printConf, {proxyURL: Config.proxyURL});
                     printConf = _.extend(printConf, {srs: Radio.request("MapView", "getProjection").getCode()});
                     require(["modules/tools/print/view"], function (PrintView) {
-                        new PrintView(printConf);
+                        new PrintView(_.extend(tool, printConf));
                     });
                     break;
                 }
                 case "parcelSearch": {
                     require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
-                        new ParcelSearchView();
+                        new ParcelSearchView(_.extend(tool, Radio.request("Parser", "getItemByAttributes", {id: "parcelSearch"})));
                     });
                     break;
                 }

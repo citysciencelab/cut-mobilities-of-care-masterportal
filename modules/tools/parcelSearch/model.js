@@ -1,8 +1,5 @@
 define(function (require) {
-
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         ParcelSearch;
 
     ParcelSearch = Backbone.Model.extend({
@@ -48,13 +45,8 @@ define(function (require) {
             }
         },
         setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "parcelSearch"}),
-                restService,
+            var restService,
                 serviceURL;
-
-            _.each(config, function (val, key) {
-                this.set(key, val);
-            }, this);
 
             restService = this.get("serviceId") ? Radio.request("RestReader", "getServiceById", this.get("serviceId")) : null;
             serviceURL = restService && restService.get("url") ? restService.get("url") : null;

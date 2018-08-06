@@ -5,7 +5,6 @@ define(function (require) {
         ParcelSearchView;
 
     ParcelSearchView = Backbone.View.extend({
-        model: new ParcelSearch(),
         className: "win-body",
         template: _.template(ParcelSearchTemplate),
         events: {
@@ -25,6 +24,7 @@ define(function (require) {
         initialize: function (psconfig) {
             var renderToDOM = psconfig && psconfig.renderToDOM ? psconfig.renderToDOM : null;
 
+            this.model = new ParcelSearch(psconfig);
             this.listenTo(this.model, {
                 "change:parcelNumber": this.checkInput,
                 "change:parcelDenominatorNumber": this.checkInput,
