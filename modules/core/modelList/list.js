@@ -9,6 +9,7 @@ define(function (require) {
         HeatmapLayer = require("modules/core/modelList/layer/heatmap"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
+        PrintModel = require("modules/tools/print_/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
         ModelList;
 
@@ -105,6 +106,9 @@ define(function (require) {
                 return new Folder(attrs, options);
             }
             else if (attrs.type === "tool") {
+                if (attrs.id === "print") {
+                    return new PrintModel(attrs, options);
+                }
                 return new Tool(attrs, options);
             }
             else if (attrs.type === "staticlink") {

@@ -176,12 +176,16 @@ define("app", function (require) {
                     });
                     break;
                 }
-                case "print": {
-                    require(["modules/tools/print/view"], function (PrintView) {
-                        new PrintView();
-                    });
-                    break;
-                }
+                // case "print": {
+
+                //     // require(["modules/tools/print/view"], function (PrintView) {
+                //     //     new PrintView();
+                //     // });
+                //     require(["modules/tools/print_/model"], function (PrintModel) {
+                //         new PrintModel(Radio.request("ModelList", "getModelByAttributes", {id: "print"}).attributes);
+                //     });
+                //     break;
+                // }
                 case "parcelSearch": {
                     require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
                         new ParcelSearchView();

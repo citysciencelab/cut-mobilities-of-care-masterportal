@@ -46,6 +46,24 @@ define(function (require) {
                 }
             });
         },
+        superInitialize: function () {
+            var channel = Radio.channel("Tool");
+
+            this.listenTo(this, {
+                "change:isActive": function (model, value) {
+                    if (value) {
+                        this.activateTool();
+                        channel.trigger("activatedTool", this.get("id"), this.get("deaktivateGFI"));
+                    }
+                    else {
+                        channel.trigger("deactivatedTool", this.get("id"), this.get("deaktivateGFI"));
+                    }
+                    if (_.contains(this.get("toolsToRenderInSidebar"), this.get("id")) || this.get("id") === "legend" || this.get("id") === "compareFeatures") {
+                        channel.trigger("activatedTool", "gfi", false);
+                    }
+                }
+            });
+        },
 
         activateTool: function () {
             if (this.get("isActive") === true) {
