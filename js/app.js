@@ -136,7 +136,6 @@ define("app", function (require) {
                 }
                 case "animation": {
                     require(["modules/tools/animation/view"], function (AnimationView) {
-                        _.extend(tool, _.has(Config, tool.id) ? Config[tool.id] : {});
                         new AnimationView(tool);
                     });
                     break;

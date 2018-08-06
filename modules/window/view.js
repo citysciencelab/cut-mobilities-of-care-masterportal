@@ -37,7 +37,7 @@ define(function (require) {
         },
         id: "window",
         className: "tool-window ui-widget-content",
-        model: Window,
+        model: new Window(),
         templateMax: _.template(templateMax),
         templateMin: _.template(templateMin),
         templateTable: _.template(templateTable),

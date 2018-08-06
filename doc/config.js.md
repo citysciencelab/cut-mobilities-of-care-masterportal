@@ -8,7 +8,6 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|[animation](#markdown-header-animation)|nein|Object||Modul, das einen WFS-Dienst animiert darstellt.||
 |[clickCounter](#markdown-header-clickcounter)|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
 |cswId|nein|String|"1"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`"1"`|
 |customModules|nein|Array[String]||Pfad zu portalspezifischen Modulen. Der Pfad ist relativ zu *js/main.js*.| `["../portal/master/verkehrsfunctions"]`|
@@ -41,58 +40,6 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |minShift|nein|Integer|5|Gibt an, wieviele Pixel sich die Position gegenüber vorher verändert haben muss, um ein neues Tooltip zu rendern.|
 |numFeaturesToShow|nein|Integer|2|Maximale Anzahl an Elementinformationen im Tooltip, bevor ein InfoText die Anzahl limitiert.|
 |infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
-******
-## animation ##
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|attrAnzahl|nein|String|"anzahl_einpendler"|Aus diesem Attribut des featureTypes wird die Anzahl der Pendler ausgelesen.|
-|attrKreis|nein|String|"wohnort_kreis"|Aus diesem Attribut werden die zur Auswahl stehenden Kreise ausgelesen.|
-|colors|nein|Array[String]|["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]|Angabe der verschiedenen Farben, die für die Animation verschiedener Kreise genutzt werden sollen in [rgba()-Notation](https://www.w3.org/TR/css3-color/#rgba-color) ([siehe auch hier](https://developer.mozilla.org/de/docs/Web/CSS/Farben#rgba)). Anzahl der Farben muss mit "num_kreise_to_style" übereinstimmen.|
-|featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType, der animiert werden soll.|
-|maxPx|nein|Number|20|Größe des größten Punkts in px.|
-|minPx|nein|Number|1|Größe des kleinsten Punkts in px.|
-|num_kreise_to_style|nein|Number|2|Anzahl, der mit verschiedenen Farben darzustellenden Kreise. Muss mit der Anzahl der Farben in "colors" übereinstimmen.|
-|[params](#markdown-header-animationparams)|nein|Object||Hier gibt es verschiedene Konfigurationsmöglichkeiten.|
-|steps|nein|Number|50|Anzahl der Schritte, die pro Animation durchlaufen werden.|
-|url|nein|String|"http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"|Die URL des zu animierenden Dienstes.|
-|zoomlevel|nein|Number|1|Zoomlevel, auf das nach Auswahl eines Kreises gezoomt wird.|
-
-### animation.params ###
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|REQUEST|nein|String|"GetFeature"|WFS-Request|
-|SERVICE|nein|String|"WFS"|Service-Typ|
-|TYPENAME|nein|String|"app:mrh_kreise"|FeatureType des WFS|
-|VERSION|nein|String|"1.1.0"|Version des Dienstes|
-|maxFeatures|nein|String|"10000"|maximale Anzahl an zu ladenden Features|
-
-**Beispiel animation:**
-
-```
-#!json
-
-
-animation: {
-            steps: 30,
-            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
-            params: {
-                REQUEST: "GetFeature",
-                SERVICE: "WFS",
-                TYPENAME: "app:mrh_kreise",
-                VERSION: "1.1.0",
-                maxFeatures: "10000"
-            },
-            featureType: "mrh_einpendler_gemeinde",
-            attrAnzahl: "anzahl_einpendler",
-            attrKreis: "wohnort_kreis",
-            minPx: 5,
-            maxPx: 30,
-            num_kreise_to_style: 4,
-            zoomlevel: 1,
-            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
-        }
-```
 ******
 ## remoteInterface ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|

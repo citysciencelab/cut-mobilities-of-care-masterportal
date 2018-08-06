@@ -1,24 +1,5 @@
 define(function () {
     var config = {
-        animation: {
-            steps: 30,
-            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
-            params: {
-                REQUEST: "GetFeature",
-                SERVICE: "WFS",
-                TYPENAME: "app:mrh_kreise",
-                VERSION: "1.1.0",
-                maxFeatures: "10000"
-            },
-            featureType: "mrh_einpendler_gemeinde",
-            attrAnzahl: "anzahl_einpendler",
-            attrKreis: "wohnort_kreis",
-            minPx: 5,
-            maxPx: 30,
-            num_kreise_to_style: 4,
-            zoomlevel: 1,
-            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
-        },
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         gfiWindow: "attached",
         simpleMap: false,

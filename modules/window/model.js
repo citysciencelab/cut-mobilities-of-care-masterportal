@@ -1,8 +1,4 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function (Backbone, Radio) {
-
+define(function () {
     var Window = Backbone.Model.extend({
         defaults: {
             isCollapsed: false,
@@ -52,5 +48,5 @@ define([
         }
     });
 
-    return new Window();
+    return Window;
 });
