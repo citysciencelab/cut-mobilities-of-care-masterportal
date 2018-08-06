@@ -132,20 +132,15 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|conversionFactor|nein|Float||Faktor um den Attributwert umzurechnen (z.B. von Meter auf Zentimeter). Funktioniert nur bei Zahlenwerten|`0.01`|
 |epsg|nein|String|"EPSG:4326"|Koordinatensystem der SensorThings-API|`"EPSG:4326"`|
 |gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"showAll"`|
 |gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht default gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |id|ja|String||Frei wählbare Layer-ID|`"999999"`|
 |legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Elektro Ladestandorte"`|
-|scalingDecimal|nein|Integer||Anzahl der Nachkommastellen des Attributwertes die angezeigt werden sollen. Funktioniert nur bei Zahlenwerten|`2`|
-|scalingUnit|nein|String||Einheit um die hinter den Attributwert geschrieben wird.|`"°C"`|
-|subtyp|ja|String||Diensttyp, in diesem Fall SensorThings-API ([WMS siehe oben](#markdown-header-wms-layer) und [WFS siehe oben](#markdown-header-wfs-layer))|`"SensorThings"`|
-|typ|ja|String||Abstrakter Diensttyp der durch "subTyp" zu einem konkreten Dienst spezifiziert wird|`"Sensor"`|
+|typ|ja|String||Diensttyp, in diesem Fall SensorThings-API ([WMS siehe oben](#markdown-header-wms-layer) und [WFS siehe oben](#markdown-header-wfs-layer))|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
 |urlParameter|nein|String||Anagbe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). |`{"filter" : "startswith(Things/name,'Charging')", "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"}`|
-|utc|nein|String|"+1"|Zeitzone. Sommer und- Winterzeit wird berücksichtigt|`"+1"`|
 |version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 
 **Beispiel Sensor:**
@@ -157,8 +152,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
    {
       "id" : "999999",
       "name" : "Live - Elektro Ladestandorte",
-      "typ" : "Sensor",
-      "subTyp" : "SensorThings",
+      "typ" : "SensorThings",
       "version" : "1.0",
       "url" : "https://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
@@ -166,7 +160,6 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
          "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
       },
       "epsg": "EPSG:4326",
-      "utc" : "+1",
       "gfiTheme" : "default",
       "gfiAttributes" : {
          "phenomenonTime" : "Letze Zustandsänderung",
