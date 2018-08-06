@@ -7,10 +7,9 @@ define(function (require) {
     require("bootstrap/alert");
 
     AlertingView = Backbone.View.extend({
-        id: "messages",
-        className: "top-center",
-        model: new AlertingModel(),
-        template: _.template(AlertingTemplate),
+        events: {
+            "click .close": "alertClosed"
+        },
         initialize: function () {
             this.listenTo(this.model, {
                 "render": this.render,
@@ -20,9 +19,10 @@ define(function (require) {
 
             $("body").prepend(this.$el);
         },
-        events: {
-            "click .close": "alertClosed"
-        },
+        id: "messages",
+        className: "top-center",
+        model: new AlertingModel(),
+        template: _.template(AlertingTemplate),
         render: function () {
             var attr = this.model.toJSON();
 
