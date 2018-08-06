@@ -1,11 +1,8 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function (Backbone, Radio, ol, Config) {
+define(function (require) {
+    var ol = require("openlayers"),
+        Measure;
 
-    var Measure = Backbone.Model.extend({
+    Measure = Backbone.Model.extend({
         defaults: {
             source: new ol.source.Vector(),
             style: new ol.style.Style({
@@ -56,10 +53,6 @@ define([
             this.setUiStyle(Radio.request("Util", "getUiStyle"));
 
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
-
-            if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
-                this.set("quickHelp", true);
-            }
         },
         setStatus: function (args) {
             if (args[2].get("id") === "measure" && args[0] === true) {

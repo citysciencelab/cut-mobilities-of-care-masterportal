@@ -166,7 +166,7 @@ define("app", function (require) {
                 }
                 case "measure": {
                     require(["modules/tools/measure/view"], function (MeasureView) {
-                        new MeasureView();
+                        new MeasureView(_.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
                     });
                     break;
                 }

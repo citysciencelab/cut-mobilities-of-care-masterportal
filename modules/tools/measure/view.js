@@ -14,12 +14,12 @@ define(function (require) {
                 Radio.trigger("Quickhelp", "showWindowHelp", "measure");
             }
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new Measure(attr);
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin change:type": this.render
             });
         },
-        model: new Measure(),
         className: "win-body",
         render: function () {
             var attr,
