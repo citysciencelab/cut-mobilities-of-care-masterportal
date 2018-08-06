@@ -154,7 +154,7 @@ define("app", function (require) {
                 }
                 case "gfi": {
                     require(["modules/tools/gfi/model"], function (GfiModel) {
-                        new GfiModel();
+                        new GfiModel(_.extend(tool, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}));
                     });
                     break;
                 }

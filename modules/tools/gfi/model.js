@@ -1,7 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Config = require("config"),
+    var Config = require("config"),
         ol = require("openlayers"),
         ThemeList = require("modules/tools/gfi/themes/list"),
         gfiParams = [],
@@ -76,9 +74,6 @@ define(function (require) {
                 },
                 "change:themeIndex": function (model, value) {
                     this.get("themeList").appendTheme(value);
-                },
-                "change:desktopViewType": function () {
-                    Radio.trigger("Map", "addOverlay", this.get("overlay"));
                 }
             });
 
@@ -106,16 +101,13 @@ define(function (require) {
                 }
             });
 
-            if (_.has(Config, "gfiWindow")) {
-                this.setDesktopViewType(Config.gfiWindow);
-            }
-
             tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
 
             if (!_.isUndefined(tool)) {
                 this.toggleGFI(tool.id);
             }
             this.initView();
+            Radio.trigger("Map", "addOverlay", this.get("overlay"));
         },
 
         /**
@@ -272,10 +264,6 @@ define(function (require) {
 
         setCurrentView: function (value) {
             this.set("currentView", value);
-        },
-
-        setDesktopViewType: function (value) {
-            this.set("desktopViewType", value);
         },
 
         setIsMobile: function (value) {
