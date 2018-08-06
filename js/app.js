@@ -121,6 +121,8 @@ define("app", function (require) {
         new SidebarView();
 
         _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
+            var printConf = {};
+
             switch (tool.id) {
                 case "compareFeatures": {
                     require(["modules/tools/compareFeatures/view"], function (CompareFeaturesView) {
@@ -177,8 +179,12 @@ define("app", function (require) {
                     break;
                 }
                 case "print": {
+                    printConf = Radio.request("ModelList", "getModelByAttributes", {id: "print"}).attributes;
+                    printConf = _.extend(printConf, {center: Radio.request("MapView", "getCenter")});
+                    printConf = _.extend(printConf, {proxyURL: Config.proxyURL});
+                    printConf = _.extend(printConf, {srs: Radio.request("MapView", "getProjection").getCode()});
                     require(["modules/tools/print/view"], function (PrintView) {
-                        new PrintView();
+                        new PrintView(printConf);
                     });
                     break;
                 }

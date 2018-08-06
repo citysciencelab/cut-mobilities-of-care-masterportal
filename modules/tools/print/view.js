@@ -10,12 +10,12 @@ define(function (require) {
             "change #scaleField": "setScale",
             "click button": "createPDF"
         },
-        initialize: function () {
+        initialize: function (attrs) {
+            this.model = new Print(attrs);
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin change:scale": this.render
             });
         },
-        model: new Print(),
         className: "win-body",
         template: _.template(PrintWinTemplate),
         setLayout: function (evt) {
