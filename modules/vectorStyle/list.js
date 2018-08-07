@@ -50,7 +50,7 @@ define(function (require) {
                 filteredData = [];
 
             _.each(layers, function (layer) {
-                if (layer.typ === "WFS" || layer.typ === "GeoJSON") {
+                if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings") {
                     if (_.has(layer, "styleId")) {
                         styleIds.push(layer.styleId);
                     }
