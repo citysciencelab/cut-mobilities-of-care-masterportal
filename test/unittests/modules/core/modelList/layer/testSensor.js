@@ -135,34 +135,6 @@ define(function (require) {
             });
         });
 
-        describe("convertScaling", function () {
-            it("should return a string that equal to input string", function () {
-                expect(sensorLayer.convertScaling("2000")).to.have.string("2000");
-            });
-            it("should return undefined for undefined input", function () {
-                sensorLayer.set("conversionFactor", 1.1);
-                sensorLayer.set("scalingUnit", "C");
-                sensorLayer.set("scalingDecimal", 5);
-
-                expect(sensorLayer.convertScaling(undefined)).that.is.undefined;
-            });
-
-            it("should return a string by given values", function () {
-                sensorLayer.set("conversionFactor", 2.0);
-                sensorLayer.set("scalingUnit", 10);
-                sensorLayer.set("scalingDecimal", 2);
-
-                expect(sensorLayer.convertScaling("2000")).to.have.string("4000.00 10");
-            });
-            it("should return a string", function () {
-                sensorLayer.set("conversionFactor", 2.0);
-                sensorLayer.set("scalingUnit", 10);
-                sensorLayer.set("scalingDecimal", 2);
-
-                expect(sensorLayer.convertScaling("available")).to.have.string("available");
-            });
-        });
-
         describe("drawPoints", function () {
             it("should return a empty array for empty array input", function () {
                 expect(sensorLayer.drawPoints(undefined, undefined)).to.be.an("array").that.is.empty;
