@@ -1,7 +1,6 @@
 define(function (require) {
     var Tool = require("modules/core/modelList/tool/model"),
         $ = require("jquery"),
-        PrintView = require("modules/tools/print_/view"),
         PrintModel;
 
     PrintModel = Tool.extend({
@@ -10,29 +9,34 @@ define(function (require) {
             mapfishServiceId: undefined,
             // the identifier of one of the available mapfish print configurations
             printAppId: "default",
+            // title for the printout
+            title: "",
+            layoutList: [],
+            layoutNameList: [],
             // the id from the rest services json for the plot app
-            plotServiceId: undefined
+            plotServiceId: undefined,
+            deaktivateGFI: false
         }),
 
         initialize: function () {
             this.superInitialize();
 
-            // listen until the tool is activated for the first time
             this.listenTo(this, {
                 "change:isActive": this.getCapabilites
             });
-            new PrintView({model: this});
         },
 
         /**
          * Gets the capabilities for a specific print configuration
-         * @param {boolean} isActive - is this tool activated or not
+         * or firing 'render' at the view
+         * @param {Backbone.Model} model - this
+         * @param {boolean} value - is this tool activated or not
          * @returns {void}
          */
-        getCapabilites: function (isActive) {
+        getCapabilites: function (model, value) {
             var serviceUrl;
 
-            if (isActive) {
+            if (value) {
                 if (this.get("mapfishServiceId") !== undefined) {
                     serviceUrl = Radio.request("RestReader", "getServiceById", this.get("mapfishServiceId")).get("url") + this.get("printAppId") + "/capabilities.json";
                     this.sendRequest(serviceUrl, "GET", this.parseMapfishCapabilities);
@@ -41,14 +45,19 @@ define(function (require) {
                 //     serviceUrl = Radio.request("RestReader", "getServiceById", this.get("plotServiceId")).get("url");
                 //     this.sendRequest();
                 // }
-                this.stopListening();
+                // this.stopListening();
             }
         },
 
         parseMapfishCapabilities: function (response) {
-            // console.log(response);
-            // this.parseScaleList();
-            // this.parseLayoutNames();
+            this.setLayoutList(response.layouts);
+            this.parseLayoutNames(this.get("layoutNameList"), response.layouts);
+        },
+
+        parseLayoutNames: function (layoutNameList, layoutList) {
+            layoutList.forEach(function (layout) {
+                layoutNameList.push(layout.name);
+            });
         },
 
         /**
@@ -62,8 +71,17 @@ define(function (require) {
             $.ajax({
                 url: serviceUrl,
                 type: requestType,
+                context: this,
                 success: successCallback
             });
+        },
+
+        /**
+         * @param {object[]} value - available layouts of the specified print configuration
+         * @returns {void}
+         */
+        setLayoutList: function (value) {
+            this.set("layoutList", value);
         }
     });
 

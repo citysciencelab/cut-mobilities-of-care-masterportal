@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<form class="form-horizontal">
+    <div class="form-group form-group-sm">
+        <label class="col-sm-3 control-label">Titel</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label class="col-sm-3 control-label">Layout</label>
+        <div class="col-sm-9">
+            <select class="form-control input-sm">
+                <% _.each(layoutNameList, function(layoutName) { %>
+                    <option><%= layoutName %></option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+</form>

@@ -57,12 +57,12 @@ define(function (require) {
                     $("body").append(this.$el.html(this.templateMax(attr)));
                     this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
                 }
-                this.model.sendParamsToWinCotent();
+                // this.model.sendParamsToWinCotent();
                 this.$el.show("slow");
             }
-            else {
-                this.hide();
-            }
+            // else {
+            //     this.hide();
+            // }
             return this;
         },
         minimize: function () {
@@ -76,16 +76,19 @@ define(function (require) {
         hide: function () {
             var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
 
+            // debugger;
             if (toolModel) {
+                // console.log(toolModel);
+                console.log(toolModel.get("isActive"));
                 toolModel.setIsActive(false);
             }
-            if (this.model.get("winType") === "download") {
-                Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).setIsActive(false);
-            }
+            // if (this.model.get("winType") === "download") {
+            //     Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).setIsActive(false);
+            // }
             this.$el.hide("slow");
             this.model.setVisible(false);
-            this.model.sendParamsToWinCotent();
-            Radio.channel("Tool").trigger("activatedTool", "gfi", false);
+            // this.model.sendParamsToWinCotent();
+            // Radio.channel("Tool").trigger("activatedTool", "gfi", false);
         }
     });
 

@@ -57,6 +57,7 @@ define(function (require) {
                 Radio.trigger("Legend", "toggleLegendWin");
             }
             else {
+                this.model.collection.setActiveToolToFalse(this.model);
                 this.model.setIsActive(true);
             }
             // Navigation wird geschlossen

@@ -13,6 +13,11 @@ define([
         initialize: function () {
             var channel = Radio.channel("Window");
 
+            this.listenTo(channel, {
+                "setIsVisible": this.setVisible,
+                "showTool": this.setParams
+            }, this);
+
             channel.on({
                 "toggleWin": this.setParams,
                 "closeWin": this.setVisible,
@@ -33,16 +38,17 @@ define([
             this.set("isVisible", value);
         },
         setParams: function (value) {
-            this.setTool(value);
+            // this.setTool(value);
+
             this.set("title", value.get("name"));
             this.set("icon", value.get("glyphicon"));
             this.set("winType", value.get("id"));
-            if (value.get("id") === "gfi") {
-                this.set("isVisible", false);
-            }
-            else {
-                this.set("isVisible", true);
-            }
+            // if (value.get("id") === "gfi") {
+            //     this.set("isVisible", false);
+            // }
+            // else {
+            //     this.set("isVisible", true);
+            // }
         },
         sendParamsToWinCotent: function () {
             Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("tool")]);

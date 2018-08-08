@@ -1,12 +1,8 @@
 define(function (require) {
-    var $ = require("jquery"),
-        ParcelSearchTemplate = require("text!modules/tools/parcelSearch/template.html"),
-        ParcelSearch = require("modules/tools/parcelSearch/model"),
+    var ParcelSearchTemplate = require("text!modules/tools/parcelSearch/template.html"),
         ParcelSearchView;
 
     ParcelSearchView = Backbone.View.extend({
-        model: new ParcelSearch(),
-        className: "win-body",
         template: _.template(ParcelSearchTemplate),
         events: {
             "change #districtField": "districtFieldChanged",
@@ -42,23 +38,24 @@ define(function (require) {
             }
             else {
                 this.listenTo(this.model, {
-                    "change:isCollapsed change:isCurrentWin": this.render2Window
+                    "change:isActive change:isCollapsed change:isCurrentWin": this.render2Window
                 });
             }
         },
         /*
          * Standard-Renderer, wenn parcelSearch in Window über Menubar angezeigt wird.
          */
-        render2Window: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+        render2Window: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();
             }
             else {
-                this.undelegateEvents();
+                this.$el.empty();
             }
+
+            return this;
         },
         /*
          * Renderer, wenn parcelSearch ohne Menubar angezeigt wird, z.B. in IDA

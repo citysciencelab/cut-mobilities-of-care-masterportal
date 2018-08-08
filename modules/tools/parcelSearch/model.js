@@ -1,12 +1,12 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var Tool = require("modules/core/modelList/tool/model"),
         $ = require("jquery"),
         ParcelSearch;
 
-    ParcelSearch = Backbone.Model.extend({
-        defaults: {
+    ParcelSearch = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
+            "deaktivateGFI": false,
             "isCollapsed": undefined,
             "isCurrentWin": undefined,
             "countryNumber": "02", // Kennzeichen des Landes. Wird für den Report benötigt um das Flurstückskennzeichen zusammmenzubauen
@@ -25,15 +25,17 @@ define(function (require) {
             "parcelDenominatorNumber": "0", // default Flurstücksnenner,
             "createReport": false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
             "parcelFound": false // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
-        },
+        }),
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
+            this.superInitialize();
+            // this.listenTo(Radio.channel("Window"), {
+            //     "winParams": this.setStatus
+            // });
             this.listenTo(Radio.channel("ParcelSearch"), {
                 "createReport": this.createReport
             });
             this.setDefaults();
+            console.log(this);
         },
         /*
          * wird getriggert, wenn ein Tool in der Menüleiste geklickt wird. Übergibt die Konfiguration der parcelSearch aus args an readConfig().
@@ -48,13 +50,8 @@ define(function (require) {
             }
         },
         setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "parcelSearch"}),
-                restService,
+            var restService,
                 serviceURL;
-
-            _.each(config, function (val, key) {
-                this.set(key, val);
-            }, this);
 
             restService = this.get("serviceId") ? Radio.request("RestReader", "getServiceById", this.get("serviceId")) : null;
             serviceURL = restService && restService.get("url") ? restService.get("url") : null;
