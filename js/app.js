@@ -360,22 +360,23 @@ define("app", function (require) {
                     }
                     case "button3d": {
                         if (control.attr === true) {
-                            el = controlsView.addRowTR(control.id);
+                            element = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/button3d/view"], function (Button3dView) {
-                                new Button3dView({el: el});
+                                new Button3dView({el: element});
                             });
                         }
                         break;
                     }
                     case "orientation3d": {
                         if (control.attr === true) {
-                            el = controlsView.addRowTR(control.id);
+                            element = controlsView.addRowTR(control.id);
 
                             require(["modules/controls/orientation3d/view"], function (Orientation3DView) {
-                                new Orientation3DView({ el: el });
+                                new Orientation3DView({el: element});
                             });
                         }
+                        break;
                     }
                     default: {
                         break;

@@ -42,7 +42,7 @@ define(function (require) {
             //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
             //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
             //  selectionIDX benötigen, um verschoben werden zu können
-            if (this.getIsSelected() === true || Radio.request("Parser", "getTreeType") === "light") {
+            if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
                 if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
                     this.collection.appendToSelectionIDX(this);
                 }
@@ -51,11 +51,11 @@ define(function (require) {
                 }
 
                 this.createTerrainProvider();
-                if (this.getIsSelected()) {
+                if (this.get("isSelected")) {
                     this.listenToOnce(Radio.channel("Map"), {
                         // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                         "activateMap3d": function () {
-                            this.toggleLayerOnMap(this.getIsSelected());
+                            this.toggleLayerOnMap(this.get("isSelected"));
                         }
                     });
                 }
@@ -72,8 +72,8 @@ define(function (require) {
 
             if (Radio.request("Map", "isMap3d") === true) {
                 map3d = Radio.request("Map", "getMap3d");
-                if (this.getIsVisibleInMap() === true) {
-                    map3d.getCesiumScene().terrainProvider = this.getTerrainProvider();
+                if (this.get("isVisibleInMap") === true) {
+                    map3d.getCesiumScene().terrainProvider = this.get("terrainProvider");
                 }
                 else {
                     map3d.getCesiumScene().terrainProvider = new Cesium.EllipsoidTerrainProvider({});
@@ -109,12 +109,6 @@ define(function (require) {
          */
         setTerrainProvider: function (value) {
             this.set("terrainProvider", value);
-        },
-        /**
-         * @return {Cesium.TerrainProvider}
-         */
-        getTerrainProvider: function () {
-            return this.get("terrainProvider");
         }
     });
 

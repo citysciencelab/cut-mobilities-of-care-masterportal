@@ -42,7 +42,7 @@ define(function (require) {
             //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
             //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
             //  selectionIDX benötigen, um verschoben werden zu können
-            if (this.getIsSelected() === true || Radio.request("Parser", "getTreeType") === "light") {
+            if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
                 if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
                     this.collection.appendToSelectionIDX(this);
                 }
@@ -51,11 +51,11 @@ define(function (require) {
                 }
 
                 this.createTileSet();
-                if (this.getIsSelected()) {
+                if (this.get("isSelected")) {
                     this.listenToOnce(Radio.channel("Map"), {
                         // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                         "activateMap3d": function () {
-                            this.toggleLayerOnMap(this.getIsSelected());
+                            this.toggleLayerOnMap(this.get("isSelected"));
                         }
                     });
                 }
@@ -73,9 +73,9 @@ define(function (require) {
 
             if (Radio.request("Map", "isMap3d") === true) {
                 map3d = Radio.request("Map", "getMap3d");
-                tileset = this.getTileSet();
+                tileset = this.get("tileSet");
 
-                if (this.getIsVisibleInMap() === true) {
+                if (this.get("isVisibleInMap") === true) {
                     if (!map3d.getCesiumScene().primitives.contains(tileset)) {
                         map3d.getCesiumScene().primitives.add(tileset);
                     }
@@ -116,12 +116,6 @@ define(function (require) {
          */
         setTileSet: function (value) {
             this.set("tileSet", value);
-        },
-        /**
-         * @return {Cesium.Cesium3DTileset}
-         */
-        getTileSet: function () {
-            return this.get("tileSet");
         }
     });
 
