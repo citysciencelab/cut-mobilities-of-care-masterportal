@@ -146,12 +146,12 @@ define("app", function (require) {
                 //     });
                 //     break;
                 // }
-                // case "schulwegrouting": {
-                //     require(["modules/tools/schulwegRouting_hh/view"], function (SchulwegRoutingView) {
-                //         new SchulwegRoutingView();
-                //     });
-                //     break;
-                // }
+                case "schulwegrouting": {
+                    require(["modules/tools/schulwegRouting_hh/view"], function (SchulwegRoutingView) {
+                        new SchulwegRoutingView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                    });
+                    break;
+                }
                 case "gfi": {
                     require(["modules/tools/gfi/model"], function (GfiModel) {
                         new GfiModel();

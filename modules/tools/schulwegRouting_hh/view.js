@@ -3,7 +3,6 @@ define(function (require) {
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
         templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
         templateRouteDescription = require("text!modules/tools/schulwegRouting_hh/templateRouteDescription.html"),
-        Model = require("modules/tools/schulwegRouting_hh/model"),
         SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SchulwegRoutingView;
 
@@ -11,7 +10,6 @@ define(function (require) {
     require("bootstrap-select");
 
     SchulwegRoutingView = Backbone.View.extend({
-        model: new Model(),
         className: "schulweg-routing",
         template: _.template(template),
         templateHitlist: _.template(templateHitlist),

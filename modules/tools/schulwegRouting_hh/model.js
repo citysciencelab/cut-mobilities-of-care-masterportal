@@ -1,12 +1,13 @@
 define(function (require) {
     var ol = require("openlayers"),
+        Tool = require("modules/core/modelList/tool/model"),
         $ = require("jquery"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         SchulwegRouting;
 
-    SchulwegRouting = Backbone.Model.extend({
+    SchulwegRouting = Tool.extend({
 
-        defaults: {
+        defaults: _.extend({}, Tool.prototype.Tool, {
             id: "",
             layerId: "",
             // ol-features of all schools
@@ -29,7 +30,7 @@ define(function (require) {
                 isSelected: false,
                 label: "HVV Verkehrsnetz"
             })
-        },
+        }),
 
         initialize: function () {
             var layerModel,
@@ -47,20 +48,17 @@ define(function (require) {
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
                     if (layerId === this.get("layerId")) {
+                        this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
+                        this.addRouteFeatures(this.get("layer").getSource());
+                        this.get("layer").setStyle(this.routeStyle);
                         this.setSchoolList(this.sortSchoolsByName(features));
                         if (this.get("isActive") === true) {
                             this.trigger("render");
-                            // this.setIsActive(false);
-                            // this.setIsActive(true);
                         }
                     }
                 }
             });
 
-            this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": this.activate,
-                "deactivatedTool": this.deactivate
-            });
             this.listenTo(Radio.channel("WPS"), {
                 "response": this.handleResponse
             });
@@ -79,10 +77,6 @@ define(function (require) {
                 "valuesChanged": this.toggleHVVLayer
             });
 
-            this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
-            this.addRouteFeatures(this.get("layer").getSource());
-            this.get("layer").setStyle(this.routeStyle);
-            this.setDefaults();
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
             if (!_.isUndefined(layerModel)) {
                 this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
@@ -115,14 +109,6 @@ define(function (require) {
                 isSelected: value,
                 isVisibleInMap: value
             });
-        },
-
-        setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "schulwegrouting"});
-
-            _.each(config, function (value, key) {
-                this.set(key, value);
-            }, this);
         },
 
         printRoute: function () {
@@ -531,20 +517,7 @@ define(function (require) {
         setSchoolList: function (value) {
             this.set("schoolList", value);
         },
-        getIsActive: function () {
-            return this.get("isActive");
-        },
-        setIsActive: function (value) {
-            var model;
 
-            this.set("isActive", value);
-            if (!value) {
-                // tool model aus modellist auf inactive setzen
-                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
-
-                model.setIsActive(false);
-            }
-        },
         setStreetNameList: function (value) {
             this.set("streetNameList", value);
         },

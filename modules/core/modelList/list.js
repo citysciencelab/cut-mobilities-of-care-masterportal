@@ -11,6 +11,7 @@ define(function (require) {
         Tool = require("modules/core/modelList/tool/model"),
         Legend = require("modules/legend/model"),
         PrintModel = require("modules/tools/print_/model"),
+        Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
         CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
         Einwohnerabfrage_HH = require("modules/tools/einwohnerabfrage_hh/model"),
         ParcelSearch = require("modules/tools/parcelSearch/model"),
@@ -124,6 +125,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "legend") {
                     return new Legend(attrs, options);
+                }
+                else if (attrs.id === "schulwegrouting") {
+                    return new Schulwegrouting(attrs, options);
                 }
                 return new Tool(attrs, options);
             }
