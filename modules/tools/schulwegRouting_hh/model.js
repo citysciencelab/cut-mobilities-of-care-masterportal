@@ -243,11 +243,19 @@ define(function (require) {
             }
         },
         parseRegionalSchool: function (xml) {
-            var schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0",
-                school = this.filterSchoolById(this.get("schoolList"), schoolId);
+            var schoolId,
+                school;
 
-            this.setRegionalSchool(school);
-            this.trigger("updateRegionalSchool", school.get("schulname"));
+            if ($(xml).find("gages\\:grundschulnr").length > 0) {
+                schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
+                school = this.filterSchoolById(this.get("schoolList"), schoolId);
+                this.setRegionalSchool(school);
+                this.trigger("updateRegionalSchool", school.get("schulname"));
+            }
+            else {
+                this.setRegionalSchool({});
+                this.trigger("updateRegionalSchool", "Keine Schule gefunden!");
+            }
         },
 
         /**

@@ -43,9 +43,11 @@ define(function (require) {
             "click .print-route": "printRoute",
             "click .description button": "toggleRouteDesc",
             "click #regional-school": function () {
-                this.updateSelectedSchool(this.model.get("regionalSchool").get("schul_id"));
-                this.model.selectSchool(this.model.get("schoolList"), this.model.get("regionalSchool").get("schul_id"));
-                this.model.prepareRequest(this.model.get("startAddress"));
+                if (!_.isEmpty(this.model.get("regionalSchool"))) {
+                    this.updateSelectedSchool(this.model.get("regionalSchool").get("schul_id"));
+                    this.model.selectSchool(this.model.get("schoolList"), this.model.get("regionalSchool").get("schul_id"));
+                    this.model.prepareRequest(this.model.get("startAddress"));
+                }
             }
         },
         initialize: function () {
@@ -85,7 +87,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initSelectpicker();
             this.setPresetValues();
-            this.$el.find(".checkbox").append(this.checkBoxHVV.render().$el);
+            this.$el.find(".routing-checkbox").append(this.checkBoxHVV.render().$el);
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
