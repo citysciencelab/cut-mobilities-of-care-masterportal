@@ -85,7 +85,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initSelectpicker();
             this.setPresetValues();
-            this.$el.find(".checkbox").append(this.checkBoxHVV.render().$el);
+            this.$el.find(".routing-checkbox").append(this.checkBoxHVV.render().$el);
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
