@@ -1,8 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Config = require("config"),
+    var Config = require("config"),
         moment = require("moment"),
         ol = require("openlayers"),
         $ = require("jquery"),
@@ -94,7 +92,7 @@ define(function (require) {
 
             // handle non text/xml responses arriving as string
             if (_.isString(dat)) {
-                dat = this.$.parseXML(dat);
+                dat = $.parseXML(dat);
             }
 
             // parse result, try built-in Ol-format first
