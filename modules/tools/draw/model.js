@@ -1,5 +1,6 @@
 define(function (require) {
     var ol = require("openlayers"),
+        $ = require("jquery"),
         DrawTool;
 
     DrawTool = Backbone.Model.extend({
@@ -38,12 +39,12 @@ define(function (require) {
                 "winParams": this.setStatus
             });
 
-            this.on("change:isCurrentWin", this.createLayer);
+            this.on("change:isCurrentWin", this.createLayer, this);
             Radio.trigger("Autostart", "initializedModul", "draw");
-         },
+        },
 
         setStatus: function (args) {
-            if (args[2].getId() === "draw" && args[0] === true) {
+            if (args[2].get("id") === "draw" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.createDrawInteraction(this.get("drawType"), this.get("layer"));
@@ -60,10 +61,12 @@ define(function (require) {
          * creates a vector layer for drawn features and removes this callback from the change:isCurrentWin event
          * because only one layer to be needed
          * @param {boolean} value - is tool active
+         * @returns {void}
          */
         createLayer: function (value) {
+            var layer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+
             if (value) {
-                var layer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
 
                 this.setLayer(layer);
                 this.off("change:isCurrentWin", this.createLayer);
@@ -73,6 +76,7 @@ define(function (require) {
         /**
          * creates and sets a interaction for selecting vector features
          * @param {ol.layer.Vector} layer - for the selected(deleted) features
+         * @returns {void}
          */
         createSelectInteraction: function (layer) {
             var selectInteraction = new ol.interaction.Select({
@@ -91,6 +95,7 @@ define(function (require) {
         /**
          * creates and sets a interaction for modify vector features
          * @param {ol.layer.Vector} layer - for the selected(deleted) features
+         * @returns {void}
          */
         createModifyInteraction: function (layer) {
             this.set("modifyInteraction", new ol.interaction.Modify({
@@ -98,9 +103,6 @@ define(function (require) {
             }));
         },
 
-        /**
-         *
-         */
         createDrawInteraction: function (drawType, layer) {
             Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
             this.set("drawInteraction", new ol.interaction.Draw({
@@ -123,7 +125,10 @@ define(function (require) {
 
         /**
          * Erstellt ein Feature Style für Punkte, Linien oder Flächen und gibt ihn zurück.
-         * @return {ol.style.Style}
+         * @param {number} color -
+         * @param {number} opacity -
+         * @param {string} type -
+         * @return {ol.style.Style} style
          */
         getDrawStyle: function (color, opacity, type) {
             return new ol.style.Style({
@@ -145,7 +150,9 @@ define(function (require) {
 
         /**
          * Erstellt ein Feature Style für Texte und gibt ihn zurück.
-         * @return {ol.style.Style}
+         * @param {number} color -
+         * @param {number} opacity -
+         * @return {ol.style.Style} style
          */
         getTextStyle: function (color, opacity) {
             return new ol.style.Style({
@@ -216,6 +223,7 @@ define(function (require) {
 
         /**
          * Startet das Downloadmodul
+         * @returns {void}
          */
         downloadFeatures: function () {
             var features = this.get("layer").getSource().getFeatures();
@@ -232,58 +240,32 @@ define(function (require) {
         setDrawType: function (value1, value2) {
             this.set("drawType", {geometry: value1, text: value2});
         },
-        /**
-         * Setzt die Schriftart.
-         * @param {string} value - Arial | Times New Roman | Calibri
-         */
+
         setFont: function (value) {
             this.set("font", value);
         },
 
-        /**
-         * Setzt die Schriftgröße.
-         * @param {number} value - 8 | 10 | 12 | 14 | 16 | 18 | 20 | 24 | 28 | 32
-         */
+
         setFontSize: function (value) {
             this.set("fontSize", value);
         },
 
-        /**
-         * Setzt die Farbe für Schrift und Geometrie.
-         * @param {string} value - Farbe
-         */
         setColor: function (value) {
             this.set("color", value);
         },
 
-        /**
-         * Setzt die Transparenz.
-         * @param {string} value - 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1.0
-         */
         setOpacity: function (value) {
             this.set("opacity", parseFloat(value, 10).toFixed(1));
         },
 
-        /**
-         * Setzt den Text.
-         * @param {string} value - Text von $(".drawText")
-         */
         setText: function (value) {
             this.set("text", value);
         },
 
-        /**
-         * Setzt den Radius.
-         * @param {string} value - 6 | 8 | 10 | 12 | 14 | 16
-         */
         setRadius: function (value) {
             this.set("radius", parseInt(value, 10));
         },
 
-        /**
-         * Setzt die Strichstärke.
-         * @param {string} value - 1 | 2 | 3 | 4 | 5 | 6
-         */
         setStrokeWidth: function (value) {
             this.set("strokeWidth", parseInt(value, 10));
         },

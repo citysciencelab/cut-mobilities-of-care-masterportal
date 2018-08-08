@@ -1,38 +1,32 @@
 define(function (require) {
-    require("bootstrap/popover");
-    var MouseHoverPopup = require ("modules/mouseHover/model"),
-        ol = require("openlayers"),
+    var MouseHoverPopup = require("modules/mouseHover/model"),
+        $ = require("jquery"),
         MouseHoverPopupView;
+
+    require("bootstrap/popover");
 
     MouseHoverPopupView = Backbone.View.extend({
         model: new MouseHoverPopup(),
-        id: "mousehoverpopup",
         initialize: function () {
-            $("#map").append("<div id='mousehoverpopup' class='col-md-offset-4 col-xs-offset-3 col-md-2 col-xs-5'></div>");
-
-            this.model.setMhpOverlay (new ol.Overlay({
-                id: "mousehoveroverlay",
-                element: $("#mousehoverpopup")[0]
-            }));
-
             this.listenTo(this.model, {
                 "render": this.render,
-                "move": this.move,
                 "destroy": this.destroy
             });
+
+            this.createOverlayElement();
         },
 
         /**
          * Rendert den Bootstrap-Toolip ins mousehoverpopup.
          * html: true - Damit <br> ausgewertet wird
          * trigger: manual - lösst Bug mit verschwindendem Tooltip
+         * @param {string} text -
+         * @returns {void}
          */
-        render: function (text, position) {
-            var overlay = this.model.getMhpOverlay(),
-                element = overlay.getElement();
+        render: function (text) {
+            var element = this.model.get("overlay").getElement();
 
-            this.destroy();
-
+            $(element).tooltip("destroy");
             $(element).tooltip({
                 html: true,
                 title: text,
@@ -42,21 +36,19 @@ define(function (require) {
                 trigger: "manual",
                 viewport: "#map"
             }, this);
-
-            overlay.setPosition(position);
             $(element).tooltip("show");
+            return this;
         },
 
-        move: function (position) {
-            var overlay = this.model.getMhpOverlay();
+        /**
+         * creates the overlay element and appends it to the map element
+         * @returns {void}
+         */
+        createOverlayElement: function () {
+            var element = document.createElement("DIV");
 
-            overlay.setPosition(position);
-        },
-
-        destroy: function () {
-            var element = this.model.getMhpOverlay().getElement();
-
-            $(element).tooltip("destroy");
+            document.getElementById("map").appendChild(element);
+            this.model.get("overlay").setElement(element);
         }
     });
 

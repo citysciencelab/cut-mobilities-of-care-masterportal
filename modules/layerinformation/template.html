@@ -42,27 +42,39 @@
                       %>
                         <table>
                         <%
-                        _.each(legendURL.img, function (image, index2) {
+                        if (typeof legendURL.img === "string") {
+                            if (new RegExp(/(\.pdf)$/i).test(legendURL.img) === true) { %>
+                                <a href=<%= legendURL.img %> target="_blank">weitere Informationen</a>
+                            <% }
+                            else { %>
+                                <p>
+                                    <img src=<%= legendURL.img %>>
+                                </p>
+                            <% }
+                        }
+                        else {
+                            _.each(legendURL.img, function (image, index2) {
                         %>
-                            <tr>
-                               <% if (image.indexOf(".png") === -1 && image.indexOf(".svg") === -1){%>
-                            <td class="tdLegend">
-                               <div class="tdLegend-no-image"><%= image %></div>
-                            </td>
-                            <td class="tdLegend">
-                               <span><%= legendURL.legendname[index2] %></span>
-                            </td>
-                            <%} else {%>
-                               <td class="tdLegend">
-                                   <img src="<%= image %>">
-                               </td>
-                               <td class="tdLegend">
+                                <tr>
+                                   <% if (image.indexOf(".png") === -1 && image.indexOf(".svg") === -1 && image.indexOf(".gif") === -1){%>
+                                <td class="tdLegend">
+                                   <div class="tdLegend-no-image"><%= image %></div>
+                                </td>
+                                <td class="tdLegend">
                                    <span><%= legendURL.legendname[index2] %></span>
-                               </td>
-                            <%}%>
-                           </tr>
-                        <%
-                        });
+                                </td>
+                                <%} else {%>
+                                   <td class="tdLegend">
+                                       <img src="<%= image %>">
+                                   </td>
+                                   <td class="tdLegend">
+                                       <span><%= legendURL.legendname[index2] %></span>
+                                   </td>
+                               </tr>
+                            <%
+                                }
+                            });
+                        };
                         %>
                         </table>
 

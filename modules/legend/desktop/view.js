@@ -1,11 +1,9 @@
-define([
-    "backbone",
-    "text!modules/legend/desktop/template.html",
-    "backbone.radio",
-    "jqueryui/widgets/draggable"
-], function (Backbone, LegendTemplate, Radio) {
+define(function (require) {
+    var $ = require("jquery"),
+        LegendTemplate = require("text!modules/legend/desktop/template.html"),
+        LegendView;
 
-    var LegendView = Backbone.View.extend({
+    LegendView = Backbone.View.extend({
         className: "legend-win",
         template: _.template(LegendTemplate),
         events: {
@@ -16,7 +14,7 @@ define([
 
             $(window).resize(function () {
                 if ($(".legend-win-content").height() !== null) {
-                    $(".legend-win-content").css("max-height", ($(window).height() * 0.7));
+                    $(".legend-win-content").css("max-height", $(window).height() * 0.7);
                 }
             });
 
@@ -33,7 +31,7 @@ define([
 
             Radio.trigger("Autostart", "initializedModul", "legend");
 
-            if (this.model.getVisible()) {
+            if (this.model.get("visible")) {
                 this.toggle();
             }
 
@@ -51,11 +49,12 @@ define([
 
             this.$el.html(this.template(attr));
             $("body").append(this.$el.html(this.template(attr)));
-            $(".legend-win-content").css("max-height", ($(".lgv-container").height() * 0.7));
+            $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);
             this.$el.draggable({
                 containment: "#map",
                 handle: ".legend-win-header"
             });
+            return this;
         },
 
         toggle: function () {
@@ -71,24 +70,21 @@ define([
             }
             else {
                 legendModel.setIsActive(false);
-                Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
             }
         },
-        /**
-         * Entfernt diese view
-         */
+
         removeView: function () {
             this.$el.hide();
-
             this.remove();
         },
 
         /**
          * Passt die Höhe der Legende an die Klasse lgv-container an.
          * Derzeit wird die Funktion ausgeführt auf die updateSize Funtkion der Map.
+         * @returns {void}
          */
         updateLegendSize: function () {
-            $(".legend-win-content").css("max-height", ($(".lgv-container").height() * 0.7));
+            $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);
         }
     });
 

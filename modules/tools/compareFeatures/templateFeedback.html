@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+        <% if (feature.get("isOnCompareList")) { %>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><%= feature.get("schulname") %> wurde zur Vergleichsliste hinzugefügt</h4>
+            </div>
+        <% }
+        else { %>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><%= feature.get("schulname") %> konnte nicht zur Vergleichsliste hinzugefügt werden</h4>
+            </div>
+            <div class="modal-body">
+                <p>Die maximale Anzahl an Objekten in der Vergleichsliste wurde erreicht.</p>
+                <p>Bitte entfernen Sie zuerst mindestens ein Objekt bevor Sie fortfahren.</p>
+            </div>
+        <% } %>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary pull-left" data-dismiss="modal" aria-label="Close">Zurück</button>
+            <button type="button" class="btn btn-primary btn-open-list">Zur Vergleichsliste</button>
+        </div>
+    </div>
+</div>
+

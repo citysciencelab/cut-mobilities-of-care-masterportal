@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
 
     var assert = require("chai").assert,
         expect = require("chai").expect,
@@ -7,30 +7,32 @@ define(function(require) {
     describe("testModul", function () {
         describe("getEmployeesByName", function () {
             var model;
-             before(function () {
+
+            before(function () {
                 /* runs before the first it() is executed */
                 console.log("before getEmployeesByName");
                 model = new Model();
                 model.setEmployees([{name: "Robin", coffeeCount: 0}, {name: "Jonas", coffeeCount: 1}]);
             });
-             // type test using expect
+            // type test using expect
             it("getEmployeesByName('Jonas') should return an array of length one", function () {
                 expect(model.getEmployeesByName("Jonas")).to.be.a("array").with.lengthOf(1);
             });
             it("getEmployeesByName return an array containing ", function () {
                 expect(model.getEmployeesByName("Jonas")).to.deep.include({name: "Jonas", coffeeCount: 1});
             });
-             // type test using expect
+            // type test using expect
             it("getEmployeesByName('') should return an array of length zero", function () {
                 expect(model.getEmployeesByName("")).to.be.a("array").with.lengthOf(0);
             });
-             // type test using expect
+            // type test using expect
             it("getEmployeesByName(undefined) should return an array of length zero", function () {
                 expect(model.getEmployeesByName()).to.be.a("array").with.lengthOf(0);
             });
         });
         describe("giveCoffee", function () {
             var model;
+
             before(function () {
                 /* runs before the first it() is executed */
                 console.log("before givecoffee");
@@ -51,6 +53,7 @@ define(function(require) {
         });
         describe("getIsAwake", function () {
             var model;
+
             before(function () {
                 /* runs before the first it() is executed */
                 console.log("before getAlertness");
@@ -71,6 +74,7 @@ define(function(require) {
         });
         describe("getSleepingEmployeeNames", function () {
             var model;
+
             before(function () {
                 /* runs before the first it() is executed */
                 console.log("before getAlertness");

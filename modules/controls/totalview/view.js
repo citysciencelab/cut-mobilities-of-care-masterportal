@@ -1,30 +1,53 @@
 define(function (require) {
+    var Model = require("modules/controls/totalview/model"),
+        TotalView;
 
-  var Radio = require("backbone.radio"),
-      Backbone = require("backbone"),
-      Model = require("modules/controls/totalview/model"),
-      TotalView;
+    TotalView = Backbone.View.extend({
+        events: {
+            "click div#start-totalview": "setTotalView"
+        },
+        initialize: function () {
+            var style = Radio.request("Util", "getUiStyle"),
+                el;
 
-  TotalView = Backbone.View.extend({
-      template: _.template("<div class='total-view-button'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
-      model: new Model(),
-      id: "totalview",
-      events: {
-          "click .glyphicon-fast-backward": "setTotalView"
-      },
-      initialize: function () {
-          this.render();
-      },
-      render: function () {
-          this.$el.html(this.template());
-      },
-      setTotalView: function () {
-        var center = this.model.getStartCenter(),
-            zoomlevel = this.model.getZoomLevel();
+            if (style === "DEFAULT") {
+                el = Radio.request("ControlsView", "addRowTR", "totalview");
+                this.setElement(el[0]);
+                this.render();
+            }
+            else if (style === "TABLE") {
+                this.listenTo(Radio.channel("MenuLoader"), {
+                    "ready": function () {
+                        this.setElement("#table-tools-menu");
+                        this.renderToToolbar();
+                    }
+                });
+                // Hier unschön gehackt, da in gebauter Version der MenuLoader schon fertig ist und sein ready lange gesendet hat
+                // bis hier der Listener enabled wird. Muss noch mal generell überarbeitet werden ToDo! Christa Becker 05.06.2018
+                this.setElement("#table-tools-menu");
+                this.renderToToolbar();
+            }
+        },
+        template: _.template("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
+        tabletemplate: _.template("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>"),
+        model: new Model(),
+        id: "totalview",
+        render: function () {
+            this.$el.html(this.template());
 
-        Radio.trigger("MapView", "setCenter", center, zoomlevel);
-      }
-  });
+            return this;
+        },
+        renderToToolbar: function () {
+            this.$el.prepend(this.tabletemplate());
+        },
+        setTotalView: function () {
+            var center = this.model.get("startCenter"),
+                zoomlevel = this.model.get("zoomLevel");
+
+            Radio.trigger("MapView", "setCenter", center, zoomlevel);
+        }
+
+    });
 
     return TotalView;
 });

@@ -1,11 +1,11 @@
-define([
-    "backbone",
-    "text!modules/tools/saveSelection/template.html",
-    "text!modules/tools/saveSelection/templateSimpleMap.html",
-    "modules/tools/saveSelection/model"
-], function (Backbone, SaveSelectionTemplate, SaveSelectionSimpleMapTemplate, SaveSelection) {
+define(function (require) {
+    var SaveSelectionSimpleMapTemplate = require("text!modules/tools/saveSelection/templateSimpleMap.html"),
+        SaveSelectionTemplate = require("text!modules/tools/saveSelection/template.html"),
+        SaveSelection = require("modules/tools/saveSelection/model"),
+        $ = require("jquery"),
+        SaveSelectionView;
 
-    var SaveSelectionView = Backbone.View.extend({
+    SaveSelectionView = Backbone.View.extend({
         model: new SaveSelection(),
         className: "win-body",
         template: _.template(SaveSelectionTemplate),
@@ -23,7 +23,7 @@ define([
 
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.$el.html("");
-                if (this.model.getSimpleMap() === true) {
+                if (this.model.get("simpleMap") === true) {
                     $(".win-heading").after(this.$el.html(this.templateSimpleMap(attr)));
                 }
                 else {
@@ -34,27 +34,16 @@ define([
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
 
         /**
          * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
          * @param  {evt} evt Evt-Button
+         * @returns {void}
          */
         copyToClipboard: function (evt) {
-            var textField = evt.currentTarget;
-
-            try {
-                $(textField).select();
-                document.execCommand("copy");
-                Radio.trigger("Alert", "alert", {
-                    text: "Die Url wurde in die Zwischenablage kopiert.",
-                    kategorie: "alert-info",
-                    position: "top-center"
-                });
-            }
-            catch (e) {
-                console.warn("Unable to copy text to clipboard.");
-            }
+            Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
         }
     });
 

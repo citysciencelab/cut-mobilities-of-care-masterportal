@@ -1,5 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         ParcelSearchTemplate = require("text!modules/tools/parcelSearch/template.html"),
         ParcelSearch = require("modules/tools/parcelSearch/model"),
         ParcelSearchView;
@@ -52,7 +52,7 @@ define(function (require) {
         render2Window: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsCurrentWin() === true && this.model.getIsCollapsed() === false) {
+            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
             }
@@ -69,73 +69,73 @@ define(function (require) {
             this.$el.html(this.template(attr));
         },
         checkInput: function () {
-            if (this.model.getDistrictNumber() !== "0" &&
-                (this.model.getCadastralDistrictField() === false || this.model.getCadastralDistrictNumber() !== "0") &&
-                this.model.getParcelNumber() !== "" &&
-                _.isNumber(parseInt(this.model.getParcelNumber(), 10)) &&
-                (this.model.getParcelDenominatorField() === false || this.model.getParcelDenominatorNumber() !== "")) {
-                $("#submitbutton").attr("disabled", false);
-                $("#reportbutton").attr("disabled", false);
+            if (this.model.get("districtNumber") !== "0" &&
+                (this.model.get("cadastralDistrictField") === false || this.model.getCadastralDistrictNumber() !== "0") &&
+                this.model.get("parcelNumber") !== "" &&
+                _.isNumber(parseInt(this.model.get("parcelNumber"), 10)) &&
+                (this.model.get("parcelDenominatorField") === false || this.model.getParcelDenominatorNumber() !== "")) {
+                this.$("#submitbutton").attr("disabled", false);
+                this.$("#reportbutton").attr("disabled", false);
             }
             else {
-                $("#submitbutton").attr("disabled", true);
-                $("#reportbutton").attr("disabled", true);
+                this.$("#submitbutton").attr("disabled", true);
+                this.$("#reportbutton").attr("disabled", true);
             }
         },
         cadastralDistrictFieldChanged: function () {
-            var value = $("#cadastralDistrictField").val();
+            var value = this.$("#cadastralDistrictField").val();
 
             if (value !== "0") {
-                this.model.setCadastralDistrictNumber($("#cadastralDistrictField").val());
-                $("#parcelFieldDenominator").attr("disabled", false);
-                $("#parcelField").attr("disabled", false);
+                this.model.setCadastralDistrictNumber(this.$("#cadastralDistrictField").val());
+                this.$("#parcelFieldDenominator").attr("disabled", false);
+                this.$("#parcelField").attr("disabled", false);
             }
             else {
-                $("#parcelFieldDenominator").attr("disabled", true);
-                $("#parcelField").attr("disabled", true);
+                this.$("#parcelFieldDenominator").attr("disabled", true);
+                this.$("#parcelField").attr("disabled", true);
             }
         },
         districtFieldChanged: function () {
-            var value = $("#districtField").val();
+            var value = this.$("#districtField").val();
 
             if (value !== "0") {
-                if (this.model.getCadastralDistrictField() === true) {
-                    this.insertCadastralDistricts($("#districtField").val());
-                    $("#cadastralDistrictFieldSet").attr("disabled", false);
-                    $("#parcelField").attr("disabled", true);
-                    $("#parcelFieldDenominator").attr("disabled", true);
-                    $("#parcelField").val("").trigger("change");
-                    $("#parcelFieldDenominator").val("0").trigger("change");
+                if (this.model.get("cadastralDistrictField") === true) {
+                    this.insertCadastralDistricts(this.$("#districtField").val());
+                    this.$("#cadastralDistrictFieldSet").attr("disabled", false);
+                    this.$("#parcelField").attr("disabled", true);
+                    this.$("#parcelFieldDenominator").attr("disabled", true);
+                    this.$("#parcelField").val("").trigger("change");
+                    this.$("#parcelFieldDenominator").val("0").trigger("change");
                 }
                 else {
-                    $("#parcelField").attr("disabled", false);
-                    $("#parcelFieldDenominator").attr("disabled", false);
+                    this.$("#parcelField").attr("disabled", false);
+                    this.$("#parcelFieldDenominator").attr("disabled", false);
                 }
-                this.model.setDistrictNumber($("#districtField").val());
+                this.model.setDistrictNumber(this.$("#districtField").val());
             }
             else {
-                $("#cadastralDistrictFieldSet").attr("disabled", true);
-                $("#parcelField").attr("disabled", true);
-                $("#parcelFieldDenominator").attr("disabled", true);
+                this.$("#cadastralDistrictFieldSet").attr("disabled", true);
+                this.$("#parcelField").attr("disabled", true);
+                this.$("#parcelFieldDenominator").attr("disabled", true);
             }
         },
         /*
          * Setzt die gültigen Fluren für die ausgewählte Gemarkung in select.
          */
         insertCadastralDistricts: function (districtNumber) {
-            var cadastralDistricts = this.model.getCadastralDistricts();
+            var cadastralDistricts = this.model.get("cadastralDistricts");
 
             this.model.setCadastralDistrictNumber("0");
-            $("#cadastralDistrictField").empty();
-            $("#cadastralDistrictField").append("<option selected disabled value='0'>bitte wählen</option>");
-            _.each((_.values(_.pick(cadastralDistricts, districtNumber))[0]), function (cadastralDistrict) {
-                $("#cadastralDistrictField").append("<option value=" + cadastralDistrict + ">" + cadastralDistrict + "</option>");
+            this.$("#cadastralDistrictField").empty();
+            this.$("#cadastralDistrictField").append("<option selected disabled value='0'>bitte wählen</option>");
+            _.each(_.values(_.pick(cadastralDistricts, districtNumber))[0], function (cadastralDistrict) {
+                this.$("#cadastralDistrictField").append("<option value=" + cadastralDistrict + ">" + cadastralDistrict + "</option>");
             });
-            $("#cadastralDistrictField").focus();
+            this.$("#cadastralDistrictField").focus();
         },
         setParcelNumber: function (evt) {
-            if ($("#parcelField")[0].checkValidity() === false) {
-                $("input#parcelField").val("");
+            if (this.$("#parcelField")[0].checkValidity() === false) {
+                this.$("input#parcelField").val("");
                 this.model.setParcelNumber("");
                 this.checkInput();
             }

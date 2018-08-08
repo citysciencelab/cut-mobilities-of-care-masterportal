@@ -1,9 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function (Backbone, Radio) {
-    "use strict";
-    var wfsFeatureFilter = Backbone.Model.extend({
+define(function () {
+
+    var WfsFeatureFilter = Backbone.Model.extend({
         defaults: {
             wfsList: []
         },
@@ -12,8 +9,8 @@ define([
                 "winParams": this.checkStatus
             });
         },
-        checkStatus: function (args) {   // Fenstermanagement
-            if (args[2].getId() === "wfsFeatureFilter") {
+        checkStatus: function (args) { // Fenstermanagement
+            if (args[2].get("id") === "wfsFeatureFilter") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -31,7 +28,7 @@ define([
                 }),
                 wfsList = [];
 
-            _.each (filterLayers, function (layer) {
+            _.each(filterLayers, function (layer) {
                 wfsList.push({
                     id: layer.id,
                     name: layer.get("name"),
@@ -43,5 +40,6 @@ define([
             this.set("wfsList", wfsList);
         }
     });
-    return new wfsFeatureFilter();
+
+    return new WfsFeatureFilter();
 });

@@ -1,7 +1,5 @@
 define(function (require) {
-    var Radio = require("backbone.radio"),
-        Backbone = require("backbone"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         Config = require("config"),
         RemoteInterface;
 
@@ -21,17 +19,12 @@ define(function (require) {
                 "showAllFeatures": this.showAllFeatures,
                 "showFeaturesById": this.showFeaturesById,
                 "showPositionByExtent": this.showPositionByExtent,
-                "addFeaturesFromGBM": this.addFeaturesFromGBM,
                 "removeAllFeaturesFromLayer": this.removeAllFeaturesFromLayer,
-                "moveMarkerToHit": this.moveMarkerToHit,
-                "zoomToFeatures": this.zoomToFeatures,
                 "resetView": this.resetView,
-                "zoomToFeature": this.zoomToFeature,
                 "setModelAttributesById": this.setModelAttributesById,
                 "postMessage": this.postMessage
             }, this);
             window.addEventListener("message", this.receiveMessage.bind(this));
-            Radio.trigger("Map", "createVectorLayer", "gewerbeflaechen");
 
             if (_.has(Config, "postMessageUrl")) {
                 this.setPostMessageUrl(Config.postMessageUrl);
@@ -40,7 +33,8 @@ define(function (require) {
 
         /**
          * handles the postMessage events
-         * @param  {MessageEvent} event
+         * @param  {MessageEvent} event -
+         * @returns {void}
          */
         receiveMessage: function (event) {
             if (event.origin !== this.get("postMessageUrl")) {
@@ -53,7 +47,7 @@ define(function (require) {
                 this.showPositionByExtentNoScroll(event.data.showPositionByExtentNoScroll);
             }
             else if (event.data.hasOwnProperty("transactFeatureById")) {
-                 Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
+                Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
             }
             else if (event.data.hasOwnProperty("zoomToExtent")) {
                 Radio.trigger("Map", "zoomToExtent", event.data.zoomToExtent);
@@ -67,20 +61,21 @@ define(function (require) {
         },
         /**
          * sends Message to remotehost via postMessage Api
-         *
          * @param  {Object} content the Data to be sent
+         * @returns {void}
          */
         postMessage: function (content) {
             parent.postMessage(content, this.get("postMessageUrl"));
         },
         /**
          * gets the center coordinate of the feature geometry and triggers it to MapMarker module
-         * @param  {String} featureId
-         * @param  {String} layerId
+         * @param  {String} featureId -
+         * @param  {String} layerId -
+         * @returns {void}
          */
         showPositionByFeatureId: function (featureId, layerId) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-                feature = model.getLayerSource().getFeatureById(featureId),
+                feature = model.get("layerSource").getFeatureById(featureId),
                 extent = feature.getGeometry().getExtent(),
                 center = ol.extent.getCenter(extent);
 
@@ -98,9 +93,6 @@ define(function (require) {
 
             Radio.trigger("MapMarker", "showMarker", center);
         },
-        addFeaturesFromGBM: function (hits, id, layerName) {
-            Radio.trigger("AddGeoJSON", "addFeaturesFromGBM", hits, id, layerName);
-        },
         showAllFeatures: function (id) {
             Radio.trigger("ModelList", "showAllFeatures", id);
         },
@@ -113,53 +105,9 @@ define(function (require) {
         removeAllFeaturesFromLayer: function () {
             Radio.trigger("Map", "removeAllFeaturesFromLayer", "gewerbeflaechen");
         },
-
-        moveMarkerToHit: function (hit) {
-            var feature = this.getFeatureFromHit(hit),
-                extent = feature.getGeometry().getExtent(),
-                center = ol.extent.getCenter(extent);
-
-                Radio.trigger("MapMarker", "showMarker", center);
-        },
-
-        zoomToFeature: function (hit) {
-             var feature = this.getFeatureFromHit(hit),
-                extent = feature.getGeometry().getExtent();
-
-            Radio.trigger("Map", "zoomToExtent", extent);
-
-        },
-        zoomToFeatures: function (hits) {
-            var extent;
-
-            _.each(hits, function (hit, index) {
-                hits[index] = this.getFeatureFromHit(hit);
-            }, this);
-            extent = hits[0].getGeometry().getExtent().slice(0);
-
-            hits.forEach(function (feature) {
-                ol.extent.extend(extent, feature.getGeometry().getExtent());
-            });
-            Radio.trigger("Map", "zoomToExtent", extent);
-
-        },
         resetView: function () {
             Radio.trigger("MapView", "resetView");
             Radio.trigger("MapMarker", "hideMarker");
-        },
-        getFeatureFromHit: function (hit) {
-            var reader = new ol.format.GeoJSON(),
-                geom = reader.readGeometry(hit.geometry_UTM_EPSG_25832, {
-                    dataProjection: "EPSG:25832"
-                }),
-                feature = new ol.Feature({
-                    geometry: geom,
-                    type: hit.typ
-                });
-
-                feature.setProperties(_.omit(hit, "geometry_UTM_EPSG_25832"));
-                feature.setId(hit.id);
-                return feature;
         },
         getMapState: function () {
             return Radio.request("SaveSelection", "getMapState");

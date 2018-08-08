@@ -1,12 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config",
-    "openlayers",
-    "modules/cookie/view"
-], function (Backbone, Radio, Config, ol, cookie) {
-    "use strict";
-    var GrenznachweisModel = Backbone.Model.extend({
+define(function (require) {
+    var Config = require("config"),
+        ol = require("openlayers"),
+        cookie = require("modules/cookie/view"),
+        $ = require("jquery"),
+        GrenznachweisModel;
+
+    GrenznachweisModel = Backbone.Model.extend({
         defaults: {
             nutzungsbedingungakzeptiert: false,
             gebuehrenordnungakzeptiert: false,
@@ -66,7 +65,7 @@ define([
         },
         setStatus: function (args) {
             // Fenstermanagement
-            if (args[2].getId() === "formular") {
+            if (args[2].get("id") === "formular") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -80,8 +79,8 @@ define([
                 this.set("lage", $("#searchInput").val());
             }
         },
-        resetWindow: function () {
-        },
+        // resetWindow: function () {
+        // },
         // Validation
         validators: {
             minLength: function (value, minLength) {
@@ -100,7 +99,7 @@ define([
                 return min <= max;
             },
             pattern: function (value, pattern) {
-                return new RegExp(pattern, "gi").test(value) ? true : false;
+                return Boolean(new RegExp(pattern, "gi").test(value));
             }
         },
         validate: function (attributes, identifier) {
@@ -115,26 +114,26 @@ define([
                         errors.gebuehrenordnungakzeptiert = "Kenntnisnahme ist obligatorisch.";
                     }
                     if (attributes.kundennummer !== "") {
-                        if (this.validators.pattern(attributes.kundennummer, "[^0-9\]") === true || attributes.kundennummer.length !== 6) {
+                        if (this.validators.pattern(attributes.kundennummer, "[^0-9]") === true || attributes.kundennummer.length !== 6) {
                             errors.kundennummer = "Numerischer Wert der Länge 6 erwartet.";
                         }
                     }
                     if (this.validators.minLength(attributes.kundenname, 3) === false) {
                         errors.kundenname = "Name notwendig.";
                     }
-                    if (this.validators.pattern(attributes.kundenname, "[0-9\]") === true) {
+                    if (this.validators.pattern(attributes.kundenname, "[0-9]") === true) {
                         errors.kundenname = "Alphanumerischer Wert erwartet.";
                     }
                     if (this.validators.minLength(attributes.kundenadresse, 3) === false) {
                         errors.kundenadresse = "Adressangabe notwendig.";
                     }
-                    if (this.validators.pattern(attributes.kundenplz, "[^0-9\]") === true || attributes.kundenplz.length !== 5) {
+                    if (this.validators.pattern(attributes.kundenplz, "[^0-9]") === true || attributes.kundenplz.length !== 5) {
                         errors.kundenplz = "Numerischer Wert der Länge 5 erwartet.";
                     }
                     if (this.validators.minLength(attributes.kundenemail, 1) === false || attributes.kundenemail.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm) === null) {
                         errors.kundenemail = "Syntax inkorrekt.";
                     }
-                    if (this.validators.pattern(attributes.kundenort, "[0-9\]") === true || this.validators.minLength(attributes.kundenort, 3) === false) {
+                    if (this.validators.pattern(attributes.kundenort, "[0-9]") === true || this.validators.minLength(attributes.kundenort, 3) === false) {
                         errors.kundenort = "Alphanumerischer Wert erwartet.";
                     }
                     if (this.get("kundenanrede") === "Firma") {
@@ -143,12 +142,12 @@ define([
                         }
                     }
                     if (identifier.validate === "kundenfestnetz" || identifier.validate === true) {
-                        if (this.validators.pattern(attributes.kundenfestnetz, "[^0-9\-/]") === true) {
+                        if (this.validators.pattern(attributes.kundenfestnetz, "[^0-9-/]") === true) {
                             errors.kundenfestnetz = "Numerischer Wert erwartet.";
                         }
                     }
                     if (identifier.validate === "kundenmobilfunk" || identifier.validate === true) {
-                        if (this.validators.pattern(attributes.kundenmobilfunk, "[^0-9\-/]") === true) {
+                        if (this.validators.pattern(attributes.kundenmobilfunk, "[^0-9-/]") === true) {
                             errors.kundenmobilfunk = "Numerischer Wert erwartet.";
                         }
                     }
@@ -287,28 +286,28 @@ define([
                 this.removeAllGeometries();
             }
             else if (evt.target.id === "anredeherr" || evt.target.id === "anredefrau" || evt.target.id === "anredefirma") {
-                $("#anrede1").removeClass("active");
-                $("#anrede2").removeClass("active");
-                $("#anrede3").removeClass("active");
-                $("#" + evt.target.parentElement.id).addClass("active");
+                this.$("#anrede1").removeClass("active");
+                this.$("#anrede2").removeClass("active");
+                this.$("#anrede3").removeClass("active");
+                this.$("#" + evt.target.parentElement.id).addClass("active");
                 this.set("kundenanrede", evt.target.textContent);
                 this.trigger("render");
             }
             else if (evt.target.id === "nutzungsbedingungen") {
                 if (evt.target.checked === true) {
-                    $("#nutzungsbedingungentext").removeClass("alert-danger");
+                    this.$("#nutzungsbedingungentext").removeClass("alert-danger");
                 }
                 else {
-                    $("#nutzungsbedingungentext").addClass("alert-danger");
+                    this.$("#nutzungsbedingungentext").addClass("alert-danger");
                 }
                 this.set("nutzungsbedingungakzeptiert", evt.target.checked);
             }
             else if (evt.target.id === "gebuehrenordnung") {
                 if (evt.target.checked === true) {
-                    $("#gebuehrenordnungtext").removeClass("alert-danger");
+                    this.$("#gebuehrenordnungtext").removeClass("alert-danger");
                 }
                 else {
-                    $("#gebuehrenordnungtext").addClass("alert-danger");
+                    this.$("#gebuehrenordnungtext").addClass("alert-danger");
                 }
                 this.set("gebuehrenordnungakzeptiert", evt.target.checked);
             }
@@ -498,15 +497,15 @@ define([
                         this.removeAllGeometries();
                     }
                     Radio.trigger("Window", "collapseWin", this);
-                    $("#loader").hide();
+                    Radio.trigger("Util", "hideLoader");
                 },
                 error: function () {
-                    $("#loader").hide();
+                    Radio.trigger("Util", "hideLoader");
                     Radio.trigger("Window", "collapseWin", this);
                     this.showErrorMessage();
                 }
             });
-            $("#loader").show();
+            Radio.trigger("Util", "showLoader");
         },
         showErrorMessage: function () {
             Radio.trigger("Alert", "alert", {
@@ -561,10 +560,10 @@ define([
             }
         },
         writeCookie: function () {
+            var newCookie = {};
+
             if (cookie.model.get("approved") === true) {
                 // schreibe cookie
-                var newCookie = {};
-
                 newCookie.kundennummer = this.get("kundennummer");
                 newCookie.kundenanrede = this.get("kundenanrede");
                 newCookie.kundenname = this.get("kundenname");
@@ -615,14 +614,14 @@ define([
         },
         sourcechanged: function () {
             if (this.get("source").getFeatures().length > 0) {
-                $("#removegeometrie").removeAttr("disabled");
-                $("#setgeometrie").removeClass("btn-primary");
-                $("#setgeometrie").addClass("btn-default");
+                this.$("#removegeometrie").removeAttr("disabled");
+                this.$("#setgeometrie").removeClass("btn-primary");
+                this.$("#setgeometrie").addClass("btn-default");
             }
             else {
-                $("#removegeometrie").prop("disabled", true);
-                $("#setgeometrie").removeClass("btn-default");
-                $("#setgeometrie").addClass("btn-primary");
+                this.$("#removegeometrie").prop("disabled", true);
+                this.$("#setgeometrie").removeClass("btn-default");
+                this.$("#setgeometrie").addClass("btn-primary");
             }
         }
     });

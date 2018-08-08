@@ -1,7 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         Config = require("config"),
         Cesium = require("cesium"),
         Measure;
@@ -34,7 +32,8 @@ define(function (require) {
             measureTooltips: [],
             hits3d: [],
             quickHelp: false,
-            isMap3d: false
+            isMap3d: false,
+            uiStyle: "DEFAULT"
         },
 
         initialize: function () {
@@ -45,7 +44,7 @@ define(function (require) {
             });
 
             this.listenTo(Radio.channel("Map"), {
-                "change": this.changeMap,
+                "change": this.changeMap
             });
 
             this.listenTo(this, {
@@ -59,6 +58,8 @@ define(function (require) {
                 alwaysOnTop: true
             }));
 
+            this.setUiStyle(Radio.request("Util", "getUiStyle"));
+
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
 
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
@@ -66,7 +67,7 @@ define(function (require) {
             }
         },
 
-        changeMap: function(map) {
+        changeMap: function (map) {
             this.deleteFeatures();
             if (map === "3D") {
                 this.set("isMap3d", true);
@@ -79,7 +80,7 @@ define(function (require) {
             this.createInteraction();
         },
         setStatus: function (args) {
-            if (args[2].getId() === "measure" && args[0] === true) {
+            if (args[2].get("id") === "measure" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.createInteraction();
@@ -140,7 +141,7 @@ define(function (require) {
                 this.set("measureTooltip", null);
                 feature = this.createLineFeature(firstHit.coords, coords);
                 source.addFeature(feature);
-                this.place3dMeasureTooltip(distance, heightDiff, coords)
+                this.place3dMeasureTooltip(distance, heightDiff, coords);
                 this.set("hits3d", []);
 
                 firstPoint = source.getFeatureById(pointId);
@@ -176,7 +177,8 @@ define(function (require) {
             if (Radio.request("Map", "isMap3d")) {
                 this.listenTo(Radio.channel("Map"), "clickedWindowPosition", this.handle3DClicked.bind(this));
                 this.set("hits3d", []);
-            } else {
+            }
+            else {
                 this.set("draw", new ol.interaction.Draw({
                     source: this.get("source"),
                     type: this.get("type"),
@@ -184,6 +186,8 @@ define(function (require) {
                 }));
                 this.get("draw").on("drawstart", function (evt) {
                     Radio.trigger("Map", "registerListener", "pointermove", this.placeMeasureTooltip, this);
+                    // "click" needed for touch devices
+                    Radio.trigger("Map", "registerListener", "click", this.placeMeasureTooltip, this);
                     this.set("sketch", evt.feature);
                     this.createMeasureTooltip();
                 }, this);
@@ -195,6 +199,8 @@ define(function (require) {
                     // unset tooltip so that a new one can be created
                     this.set("measureTooltipElement", null);
                     Radio.trigger("Map", "unregisterListener", "pointermove", this.placeMeasureTooltip, this);
+                    // "click" needed for touch devices
+                    Radio.trigger("Map", "unregisterListener", "click", this.placeMeasureTooltip, this);
                 }, this);
                 Radio.trigger("Map", "addInteraction", this.get("draw"));
             }
@@ -268,6 +274,7 @@ define(function (require) {
         /**
          * Setzt den Typ der Geometrie (LineString oder Polygon).
          * @param {String} value - Typ der Geometrie
+         * @return {undefined}
          */
         setGeometryType: function (value) {
             this.set("type", value);
@@ -283,12 +290,17 @@ define(function (require) {
             this.set("unit", value);
         },
 
+        setUiStyle: function (value) {
+            this.set("uiStyle", value);
+        },
+
         setDecimal: function (value) {
             this.set("decimal", parseInt(value, 10));
         },
 
         /**
          * Löscht alle Geometrien und die dazugehörigen MeasureTooltips.
+         * @return {undefined}
          */
         deleteFeatures: function () {
             // lösche alle Geometrien
@@ -305,9 +317,10 @@ define(function (require) {
 
         /** Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
         * @param {number} scale - Maßstabszahl
+        * @return {undefined}
         */
         getScaleError: function (scale) {
-            var scaleError = 0;
+            var scaleError;
 
             switch (scale) {
                 case 500: {
@@ -350,19 +363,24 @@ define(function (require) {
                     scaleError = 250;
                     break;
                 }
+                default: {
+                    scaleError = 0;
+                    break;
+                }
             }
             return scaleError;
         },
 
         /** Berechnet das Quadrat der deltas (für x und y) von zwei Koordinaten
-        * @param {Array[n][2]} coordinates - Koordinatenliste der Geometrie
+        * @param {Array} coordinates - Koordinatenliste der Geometrie
         * @param {number} pos0 - 1. Koordinate
         * @param {number} pos1 - 2. Koordinate
+        * @return {undefined}
         */
         calcDeltaPow: function (coordinates, pos0, pos1) {
             var dx = coordinates[pos0][0] - coordinates[pos1][0],
-            dy = coordinates[pos0][1] - coordinates[pos1][1],
-            deltaPow = (Math.pow(dx, 2) + Math.pow(dy, 2));
+                dy = coordinates[pos0][1] - coordinates[pos1][1],
+                deltaPow = Math.pow(dx, 2) + Math.pow(dy, 2);
 
             return deltaPow;
         },
@@ -370,6 +388,7 @@ define(function (require) {
         /**
          * Berechnet die Länge der Strecke.
          * @param {ol.geom.LineString} line - Linestring geometry
+         * @return {undefined}
          */
         formatLength: function (line) {
             var length = line.getLength(),
@@ -379,9 +398,10 @@ define(function (require) {
                 lengthRed,
                 fehler = 0,
                 scale = parseInt(this.get("scale"), 10),
-                scaleError = this.getScaleError(scale);
+                scaleError = this.getScaleError(scale),
+                i;
 
-            for (var i = 0; i < coords.length; i++) {
+            for (i = 0; i < coords.length; i++) {
                 rechtswertMittel += coords[i][0];
                 if (i < coords.length - 1) {
                     // http://www.physik.uni-erlangen.de/lehre/daten/NebenfachPraktikum/Anleitung%20zur%20Fehlerrechnung.pdf
@@ -390,11 +410,19 @@ define(function (require) {
                 }
             }
             fehler = Math.sqrt(fehler);
-            rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
-            lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2))) - (0.0004 * length));
+            rechtswertMittel = rechtswertMittel / coords.length / 1000;
+            lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2)))) - (0.0004 * length);
 
-            if (this.get("unit") === "km") {
-                 output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
+            if (this.get("uiStyle") === "TABLE") {
+                if (this.get("unit") === "km") {
+                    output = (lengthRed / 1000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                }
+                else {
+                    output = lengthRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                }
+            }
+            else if (this.get("unit") === "km") {
+                output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
             }
             else {
                 output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
@@ -405,6 +433,7 @@ define(function (require) {
         /**
          * Berechnet die Größe der Fläche.
          * @param {ol.geom.Polygon} polygon - Polygon geometry
+         * @return {undefined}
          */
         formatArea: function (polygon) {
             var area = polygon.getArea(),
@@ -414,9 +443,10 @@ define(function (require) {
                 areaRed,
                 fehler = 0,
                 scale = parseInt(this.get("scale"), 10),
-                scaleError = this.getScaleError(scale);
+                scaleError = this.getScaleError(scale),
+                i;
 
-            for (var i = 0;i < coords.length;i++) {
+            for (i = 0; i < coords.length; i++) {
                 rechtswertMittel += parseInt(coords[i][0], 10);
                 if (i === coords.length - 1) {
                     fehler += this.calcDeltaPow(coords, i, 0);
@@ -427,12 +457,20 @@ define(function (require) {
             }
             fehler = 0.5 * scaleError * Math.sqrt(fehler);
             rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
-            areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2)) - (0.0008 * area));
-            if (this.get("unit") === "km<sup>2</sup>") {
+            areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2))) - (0.0008 * area);
+            if (this.get("uiStyle") === "TABLE") {
+                if (this.get("unit") === "km<sup>2</sup>") {
+                    output = (areaRed / 1000000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                }
+                else {
+                    output = areaRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
+                }
+            }
+            else if (this.get("unit") === "km<sup>2</sup>") {
                 output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
             }
             else {
-                 output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
+                output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
             }
             return output;
         }

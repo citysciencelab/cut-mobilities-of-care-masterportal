@@ -1,6 +1,6 @@
 define(function (require) {
     var Backbone = require("backbone"),
-        Radio = require ("backbone.radio"),
+        Radio = require("backbone.radio"),
         POIModel;
 
     POIModel = Backbone.Model.extend({
@@ -12,6 +12,7 @@ define(function (require) {
 
         /**
          * Leert die Attribute
+         * @returns {void}
          */
         reset: function () {
             this.setPoiFeatures([]);
@@ -20,6 +21,7 @@ define(function (require) {
 
         /**
          * Ermittelt die Informationen, die fürs Fenster notwendig sind und speichert sie in diesem Model
+         * @returns {void}
          */
         calcInfos: function () {
             this.getFeatures();
@@ -28,9 +30,10 @@ define(function (require) {
 
         /**
          * Ermittelt die Features für POI, indem es für das Array an Distanzen die Features ermittelt und abspeichert.
+         * @returns {void}
          */
         getFeatures: function () {
-            var poiDistances = this.getPoiDistances(),
+            var poiDistances = this.get("poiDistances"),
                 poiFeatures = [],
                 featInCircle = [],
                 sortedFeatures = [];
@@ -40,7 +43,7 @@ define(function (require) {
                 sortedFeatures = _.sortBy(featInCircle, function (feature) {
                     return feature.dist2Pos;
                 });
-                poiFeatures.push ({
+                poiFeatures.push({
                     "category": distance,
                     "features": sortedFeatures
                 });
@@ -48,7 +51,7 @@ define(function (require) {
 
             _.each(poiFeatures, function (category) {
                 _.each(category.features, function (feat) {
-                    feat = _.extend(feat, {
+                    _.extend(feat, {
                         imgPath: this.getImgPath(feat),
                         name: this.getFeatureTitle(feat)
                     });
@@ -60,9 +63,10 @@ define(function (require) {
 
         /**
          * Geht das Array an POI-Features durch und gibt ersten Eintrag zurück, der Features enthält und setzt diese Kategorie (Distanz)
+         * @returns {void}
          */
         calcActiveCategory: function () {
-            var poi = this.getPoiFeatures(),
+            var poi = this.get("poiFeatures"),
                 first = _.find(poi, function (dist) {
                     return dist.features.length > 0;
                 });
@@ -82,9 +86,9 @@ define(function (require) {
             else if (feature.layerName) {
                 return feature.layerName;
             }
-            else {
-                return feature.getId();
-            }
+
+            return feature.getId();
+
         },
 
         /**
@@ -107,10 +111,8 @@ define(function (require) {
                 if (styleSubClass === "CIRCLE") {
                     imagePath = this.createCircleSVG(style);
                 }
-                else {
-                    if (style.get("imageName") !== "blank.png") {
-                        imagePath = style.get("imagePath") + style.get("imageName");
-                    }
+                else if (style.get("imageName") !== "blank.png") {
+                    imagePath = style.get("imagePath") + style.get("imageName");
                 }
             }
             // Simple Line Style
@@ -128,33 +130,33 @@ define(function (require) {
         /**
          * Sucht nach dem ImageName bei styleField-Angaben im Style
          * @param  {ol.feature} feature      Feature mit allen Angaben
-         * @param  {object} styleField       Style des Features
+         * @param  {object} style       Style des Features
          * @return {string}                  Name des Bildes
          */
         createStyleFieldImageName: function (feature, style) {
             var styleField = style.get("styleField"),
                 styleFields = style.get("styleFieldValues"),
                 value = feature.get(styleField),
-                image = _.find(styleFields, function (style) {
-                    return style.styleFieldValue === value;
-                }),
-                value = image.imageName;
+                image = _.find(styleFields, function (field) {
+                    return field.styleFieldValue === value;
+                });
 
-            return value;
+            return image.imageName;
         },
 
         /**
          * Triggert das Zommen auf das geklickte Feature
          * @param  {string} id featureId
+         * @returns {void}
          */
         zoomFeature: function (id) {
-            var poiFeatures = this.getPoiFeatures(),
-                activeCategory = this.getActiveCategory(),
+            var poiFeatures = this.get("poiFeatures"),
+                activeCategory = this.get("activeCategory"),
                 selectedPoiFeatures = _.find(poiFeatures, function (poi) {
                     return poi.category === activeCategory;
                 }),
-                feature = _.find(selectedPoiFeatures.features, function (feature) {
-                    return feature.getId() === id;
+                feature = _.find(selectedPoiFeatures.features, function (feat) {
+                    return feat.getId() === id;
                 }),
                 extent = feature.getGeometry().getExtent();
 
@@ -248,28 +250,16 @@ define(function (require) {
             return svg;
         },
 
-        // getter for poiDistances
-        getPoiDistances: function () {
-            return this.get("poiDistances");
-        },
         // setter for poiDistances
         setPoiDistances: function (value) {
             this.set("poiDistances", value);
         },
 
-        // getter for poiFeatures
-        getPoiFeatures: function () {
-            return this.get("poiFeatures");
-        },
         // setter for poiFeatures
         setPoiFeatures: function (value) {
             this.set("poiFeatures", value);
         },
 
-        // getter for activeCategory
-        getActiveCategory: function () {
-            return this.get("activeCategory");
-        },
         // setter for activeCategory
         setActiveCategory: function (value) {
             this.set("activeCategory", value);

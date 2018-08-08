@@ -1,6 +1,6 @@
 define(function () {
 
-var Model = Backbone.Model.extend({
+    var Model = Backbone.Model.extend({
         defaults: {
             value: "",
             type: ""
@@ -23,6 +23,7 @@ var Model = Backbone.Model.extend({
                 }
                 case "searchInMapExtent": {
                     displayString = "Kartenausschnitt";
+                    break;
                 }
                 default: {
                     displayString += this.get("value");

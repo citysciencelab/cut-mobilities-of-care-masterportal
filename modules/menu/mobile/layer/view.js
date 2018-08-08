@@ -1,16 +1,9 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "text!modules/menu/mobile/layer/template.html",
-    "text!modules/menu/mobile/layer/templateSelection.html",
-    "text!modules/menu/mobile/layer/templateSettings.html"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         Template = require("text!modules/menu/mobile/layer/template.html"),
         SelectionTemplate = require("text!modules/menu/mobile/layer/templateSelection.html"),
         SettingsTemplate = require("text!modules/menu/mobile/layer/templateSettings.html"),
-        Radio = require("backbone.radio"),
         LayerView;
 
     LayerView = Backbone.View.extend({
@@ -32,12 +25,12 @@ define([
         },
         initialize: function () {
             this.listenTo(this.model, {
-                 "change:isSelected change:isVisibleInMap": this.render,
-                 "change:isSettingVisible": this.renderSetting,
-                 "change:isVisibleInTree": this.removeIfNotVisible,
+                "change:isSelected change:isVisibleInMap": this.render,
+                "change:isSettingVisible": this.renderSetting,
+                "change:isVisibleInTree": this.removeIfNotVisible,
                 "change:isOutOfRange": this.toggleColor
             });
-            if(this.model.attributes.supported) {
+            if (this.model.attributes.supported) {
                 this.listenTo(Radio.channel("Map"), {
                     "change": function (mode) {
                         this.toggleSupportedVisibility(mode);
@@ -46,38 +39,42 @@ define([
             }
             this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
 
-            this.toggleColor(this.model, this.model.getIsOutOfRange());
+            this.toggleColor(this.model, this.model.get("isOutOfRange"));
         },
 
         /**
          * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
+         * @param {Backbone.Model} model -
+         * @param {boolean} value -
+         * @returns {void}
          */
         toggleColor: function (model, value) {
             if (model.has("minScale") === true) {
                 if (value === true) {
                     this.$el.addClass("disabled");
-                    this.$el.find("*").css("pointer-events","none");
+                    this.$el.find("*").css("pointer-events", "none");
                 }
                 else {
                     this.$el.removeClass("disabled");
-                    this.$el.find("*").css("pointer-events","auto");
+                    this.$el.find("*").css("pointer-events", "auto");
                 }
             }
         },
-        toggleSupportedVisibility: function(mode) {
+        toggleSupportedVisibility: function (mode) {
 
-            if(this.model.attributes.supported.indexOf(mode) >= 0) {
+            if (this.model.attributes.supported.indexOf(mode) >= 0) {
                 this.$el.show();
-            }else{
+            }
+            else {
                 this.$el.hide();
             }
         },
         render: function () {
             var attr = this.model.toJSON();
 
-            if (Radio.request("BreadCrumb", "getLastItem").getId() === "SelectedLayer") {
+            if (Radio.request("BreadCrumb", "getLastItem").get("id") === "SelectedLayer") {
                 this.$el.html(this.templateSelected(attr));
-                if (this.model.getIsSettingVisible() === true) {
+                if (this.model.get("isSettingVisible") === true) {
                     this.renderSetting();
                 }
             }
@@ -90,6 +87,7 @@ define([
 
         /**
          * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
+         * @returns {void}
          */
         renderSetting: function () {
             var attr = this.model.toJSON();
@@ -97,7 +95,7 @@ define([
             // Animation Zahnrad
             this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
             // Slide-Animation templateSetting
-            if (this.model.getIsSettingVisible() === false) {
+            if (this.model.get("isSettingVisible") === false) {
                 this.$el.find(".item-settings").slideUp("slow", function () {
                     this.remove();
                 });
@@ -147,7 +145,7 @@ define([
             this.model.moveUp();
         },
         removeIfNotVisible: function () {
-            if (!this.model.getIsVisibleInTree()) {
+            if (!this.model.get("isVisibleInTree")) {
                 this.remove();
             }
         },

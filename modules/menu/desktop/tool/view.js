@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var $ = require("jquery"),
         ItemTemplate = require("text!modules/menu/desktop/tool/template.html"),
         ItemView;
 
@@ -31,9 +30,10 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.getIsVisibleInMenu() !== false) {
-                $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+            if (this.model.get("isVisibleInMenu") !== false) {
+                $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
             }
+            return this;
         },
 
         toggleSupportedVisibility: function(mode) {
@@ -49,9 +49,10 @@ define(function (require) {
         /**
          * Abhängig davon ob ein Tool in die Menüleiste oder unter dem Punkt Werkzeuge gezeichnet wird,
          * bekommt die View eine andere CSS-Klasse zugeordent
+         * @returns {void}
          */
         setCssClass: function () {
-            if (this.model.getParentId() === "root") {
+            if (this.model.get("parentId") === "root") {
                 this.$el.addClass("menu-style");
                 this.$el.find("span").addClass("hidden-sm");
             }
@@ -61,7 +62,7 @@ define(function (require) {
         },
 
         toggleIsActiveClass: function () {
-            if (this.model.getIsActive() === true && this.model.getParentId() === "Werkzeuge") {
+            if (this.model.get("isActive") === true) {
                 this.$el.addClass("active");
             }
             else {
@@ -70,7 +71,7 @@ define(function (require) {
         },
 
         checkItem: function () {
-            if (this.model.getName() === "legend") {
+            if (this.model.get("name") === "legend") {
                 Radio.trigger("Legend", "toggleLegendWin");
             }
             else {

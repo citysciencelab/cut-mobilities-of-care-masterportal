@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var Backbone = require ("backbone"),
+    var Backbone = require("backbone"),
         RoutingButtonTemplate = require("text!modules/tools/gfi/objects/routingButton/template.html"),
         RoutingButtonModel = require("modules/tools/gfi/objects/routingButton/model"),
         RoutingButtonView;
@@ -18,15 +18,12 @@ define(function (require) {
         initialize: function () {
             this.render();
         },
-        /**
-        *
-        */
+
         render: function () {
             this.$el.html(this.template());
+            return this;
         },
-        /**
-         * Fire Event zum setzen des Zielpunkts
-         */
+
         setZielpunkt: function () {
             this.model.setRoutingDestination();
         }

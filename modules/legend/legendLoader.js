@@ -1,11 +1,5 @@
-define([
-    "backbone.radio",
-    "modules/legend/mobile/view",
-    "modules/legend/desktop/view",
-    "modules/legend/model"
-], function () {
-    var Radio = require("backbone.radio"),
-        Model = require("modules/legend/model"),
+define(function (require) {
+    var Model = require("modules/legend/model"),
         LegendLoader;
 
     LegendLoader = function () {

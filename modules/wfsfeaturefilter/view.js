@@ -1,34 +1,36 @@
-define([
-    "backbone",
-    "text!modules/wfsfeaturefilter/template.html",
-    "modules/wfsfeaturefilter/model"
-], function (Backbone, wfsFeatureFilterTemplate, wfsFeatureFilter) {
-    "use strict";
-    var wfsFeatureFilterView = Backbone.View.extend({
+define(function (require) {
+    var wfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
+        $ = require("jquery"),
+        wfsFeatureFilterTemplate = require("text!modules/wfsfeaturefilter/template.html"),
+        wfsFeatureFilterView;
+
+    wfsFeatureFilterView = Backbone.View.extend({
         model: wfsFeatureFilter,
         id: "wfsFilterWin",
         className: "win-body",
         template: _.template(wfsFeatureFilterTemplate),
         initialize: function () {
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin": this.render
+            }, this);
         },
         events: {
             "click #filterbutton": "getFilterInfos",
             "click .panel-heading": "toggleHeading"
         },
         toggleHeading: function (evt) {
-            var id = $(evt.currentTarget)[0].id;
+            var id = this.$(evt.currentTarget)[0].id;
 
-            $("." + id + "_wfs_panel").each(function (index, ele) {
+            this.$("." + id + "_wfs_panel").each(function (index, ele) {
                 $(ele).toggle();
             });
-            if ($("#wfsfeaturefilter_resizemarker").hasClass("glyphicon-resize-small")) {
-                $("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-small");
-                $("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-full");
+            if (this.$("#wfsfeaturefilter_resizemarker").hasClass("glyphicon-resize-small")) {
+                this.$("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-small");
+                this.$("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-full");
             }
             else {
-                $("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-small");
-                $("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-full");
+                this.$("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-small");
+                this.$("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-full");
             }
         },
         getFilterInfos: function () {
@@ -42,21 +44,17 @@ define([
                 _.each(layer.filterOptions, function (filter) {
                     id = "#" + layer.id + "_" + filter.fieldName;
                     value = $(id).val();
-                    filters.push(
-                        {
-                            id: id,
-                            filtertype: filter.filterType,
-                            fieldName: filter.fieldName,
-                            fieldValue: value
-                        }
-                    );
+                    filters.push({
+                        id: id,
+                        filtertype: filter.filterType,
+                        fieldName: filter.fieldName,
+                        fieldValue: value
+                    });
                 });
-                layerfilters.push(
-                    {
-                        layerId: layer.id,
-                        filter: filters
-                    }
-                );
+                layerfilters.push({
+                    layerId: layer.id,
+                    filter: filters
+                });
             });
             if (layerfilters.length > 0) {
                 this.filterLayers(layerfilters);
@@ -98,13 +96,16 @@ define([
                     }
 
                     features.forEach(function (feature) {
-                        var featuredarstellen = true, attributname, attributvalue, featurevalue0, featurevalue;
+                        var featuredarstellen = true,
+                            featureattribute,
+                            attributname, attributvalue, featurevalue0, featurevalue;
+
                         // Prüfung, ob Feature dargestellt werden soll
                         _.each(layerfilter.filter, function (elementfilter) {
                             attributname = elementfilter.fieldName;
                             attributvalue = elementfilter.fieldValue;
                             if (attributvalue !== "*") {
-                                var featureattribute = _.pick(feature.getProperties(), attributname);
+                                featureattribute = _.pick(feature.getProperties(), attributname);
                                 if (featureattribute && !_.isNull(featureattribute)) {
                                     featurevalue0 = _.values(featureattribute)[0];
                                     if (featurevalue0) {
@@ -121,13 +122,11 @@ define([
                                 feature.setStyle(feature.defaultStyle);
                                 delete feature.defaultStyle;
                             }
+                            else if (layers[0].styleField) {
+                                feature.setStyle(layer.defaultStyle(feature));
+                            }
                             else {
-                                if (layers[0].styleField){
-                                    feature.setStyle(layer.defaultStyle(feature));
-                                }
-                                else {
-                                    feature.setStyle(layer.defaultStyle);
-                                }
+                                feature.setStyle(layer.defaultStyle);
                             }
                         }
                         else if (featuredarstellen === false) {
@@ -140,7 +139,7 @@ define([
         },
         render: function () {
             var attr,
-                layerfilters=this.model.get("layerfilters");
+                layerfilters = this.model.get("layerfilters");
 
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.model.getLayers();
@@ -167,12 +166,14 @@ define([
                     this.filterLayers(layerfilters);
                 }
             }
+            return this;
         },
         setMaxHeight: function () {
             var maxHeight = $(window).height() - 160;
 
-            $("#wfsFilterWin").css("max-height", maxHeight);
+            this.$el.css("max-height", maxHeight);
         }
     });
+
     return wfsFeatureFilterView;
 });

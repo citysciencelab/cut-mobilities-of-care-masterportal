@@ -1,12 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Config = require("config"),
+    var Config = require("config"),
         SaveSelection;
 
     SaveSelection = Backbone.Model.extend({
@@ -21,6 +15,7 @@ define([
         },
         initialize: function () {
             var channel = Radio.channel("SaveSelection");
+
             channel.reply({
                 "getMapState": this.getMapState
             }, this);
@@ -29,17 +24,17 @@ define([
             });
 
             this.listenTo(Radio.channel("ModelList"), {
-                 "updatedSelectedLayerList": this.filterExternalLayer
+                "updatedSelectedLayerList": this.filterExternalLayer
             });
 
             this.listenTo(Radio.channel("MapView"), {
-                 "changedZoomLevel": this.setZoomLevel,
-                 "changedCenter": this.setCenterCoords
+                "changedZoomLevel": this.setZoomLevel,
+                "changedCenter": this.setCenterCoords
             });
 
             this.listenTo(Radio.channel("Map"), {
                 "change": this.setMapMode,
-                "cameraChanged" : this.setCameraParameter,
+                "cameraChanged": this.setCameraParameter
             });
 
             this.listenTo(this, {
@@ -64,7 +59,7 @@ define([
          * @return {[type]}      [description]
          */
         checkStatus: function (args) {
-            if (args[2].getId() === "saveSelection") {
+            if (args[2].get("id") === "saveSelection") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -76,6 +71,7 @@ define([
         /**
          * externe Layer werden rausgefiltert
          * @param  {[type]} layerList [description]
+         * @returns {void}
          */
         filterExternalLayer: function (layerList) {
             var filteredLayerList = _.filter(layerList, function (model) {
@@ -83,7 +79,7 @@ define([
             });
 
             filteredLayerList = _.sortBy(filteredLayerList, function (model) {
-                return model.getSelectionIDX();
+                return model.get("selectionIDX");
             });
             this.setLayerList(filteredLayerList);
             this.createParamsValues();
@@ -97,60 +93,36 @@ define([
             var layerVisibilities = [],
                 layerTrancparence = [];
 
-            _.each(this.getLayerList(), function (model) {
-                layerVisibilities.push(model.getIsVisibleInMap());
-                layerTrancparence.push(model.getTransparency());
+            _.each(this.get("layerList"), function (model) {
+                layerVisibilities.push(model.get("isVisibleInMap"));
+                layerTrancparence.push(model.get("transparency"));
             });
-            this.setLayerIdList(_.pluck(this.getLayerList(), "id"));
+            this.setLayerIdList(_.pluck(this.get("layerList"), "id"));
             this.setLayerTransparencyList(layerTrancparence);
             this.setLayerVisibilityList(layerVisibilities);
             this.setUrl();
         },
 
-        /**
-         * [setLayerList description]
-         * @param {[type]} value [description]
-         */
         setLayerList: function (value) {
             this.set("layerList", value);
         },
 
-        /**
-         * [setZoomLevel description]
-         * @param {[type]} zoomLevel [description]
-         */
         setZoomLevel: function (zoomLevel) {
             this.set("zoomLevel", Math.round(zoomLevel));
         },
 
-        /**
-         * [setCenterCoords description]
-         * @param {[type]} coords [description]
-         */
         setCenterCoords: function (coords) {
             this.set("centerCoords", coords);
         },
 
-        /**
-         * [setLayerIdList description]
-         * @param {[type]} list [description]
-         */
         setLayerIdList: function (list) {
             this.set("layerIdList", list);
         },
 
-        /**
-         * [setLayerVisibilityList description]
-         * @param {[type]} list [description]
-         */
         setLayerVisibilityList: function (list) {
             this.set("layerVisibilityList", list);
         },
 
-        /**
-         * [setLayerTransparencyList description]
-         * @param {[type]} list [description]
-         */
         setLayerTransparencyList: function (list) {
             this.set("layerTransparencyList", list);
         },
@@ -158,6 +130,7 @@ define([
         /**
          * [setMapMode description]
          * @param {[type]} mode [description]
+         * @returns {void}
          */
         setMapMode: function (mode) {
             this.set("mapMode", mode);
@@ -165,98 +138,36 @@ define([
         /**
          * [setCamera description]
          * @param {[type]} cameraParameter [description]
+         * @returns {void}
          */
         setCameraParameter: function (cameraParameter) {
             this.set("cameraParameter", cameraParameter);
         },
 
-        /**
-         * [setUrl description]
-         */
+
         setUrl: function () {
             var url = location.origin + location.pathname;
-            url += "?layerIDs=" + this.getLayerIdList();
-            url += "&visibility=" + this.getLayerVisibilityList();
-            url += "&transparency=" + this.getLayertransparencyList();
-            url += "&center=" + this.getCenterCoords();
-            url += "&zoomlevel=" + this.getZoomLevel();
-            url += "&map=" + this.getMapMode();
-            if(this.getMapMode() === "3D" && this.getCameraParameter()){
-                url += "&heading=" + this.getCameraParameter().heading;
-                url += "&tilt=" + this.getCameraParameter().tilt;
-                url += "&altitude=" + this.getCameraParameter().altitude;
+
+            url += "?layerIDs=" + this.get("layerIdList");
+            url += "&visibility=" + this.get("layerVisibilityList");
+            url += "&transparency=" + this.get("layertransparencyList");
+            url += "&center=" + this.get("centerCoords");
+            url += "&zoomlevel=" + this.get("zoomLevel");
+            url += "&map=" + this.get("mapMode");
+            if (this.getMapMode() === "3D" && this.get("cameraParameter")) {
+                url += "&heading=" + this.get("cameraParameter").heading;
+                url += "&tilt=" + this.get("cameraParameter").tilt;
+                url += "&altitude=" + this.get("cameraParameter").altitude;
             }
             this.set("url", url);
         },
 
-        /**
-         * [setSimpleMapUrl description]
-         * @param {[type]} model [description]
-         * @param {[type]} value [description]
-         */
         setSimpleMapUrl: function (model, value) {
             this.set("simpleMapUrl", value + "&style=simple");
         },
 
-        /**
-         * [getLayerList description]
-         * @return {[type]} [description]
-         */
-        getLayerList: function () {
-            return this.get("layerList");
-        },
-
-        /**
-         * [getZoomLevel description]
-         * @return {[type]} [description]
-         */
-        getZoomLevel: function () {
-            return this.get("zoomLevel");
-        },
-
-        /**
-         * [getCenterCoords description]
-         * @return {[type]} [description]
-         */
-        getCenterCoords: function () {
-            return this.get("centerCoords");
-        },
-
-        /**
-         * [getLayerIdList description]
-         * @return {[type]} [description]
-         */
-        getLayerIdList: function () {
-            return this.get("layerIdList");
-        },
-
-        /**
-         * [getLayerVisibilityList description]
-         * @return {[type]} [description]
-         */
-        getLayerVisibilityList: function () {
-            return this.get("layerVisibilityList");
-        },
-
-        /**
-         * [getLayertransparencyList description]
-         * @return {[type]} [description]
-         */
-        getLayertransparencyList: function () {
-            return this.get("layerTransparencyList");
-        },
-
         setSimpleMap: function (value) {
             this.set("simpleMap", value);
-        },
-        getSimpleMap: function () {
-            return this.get("simpleMap");
-        },
-        getMapMode: function() {
-            return this.get("mapMode");
-        },
-        getCameraParameter: function() {
-            return this.get("cameraParameter");
         },
         getMapState: function () {
             this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));

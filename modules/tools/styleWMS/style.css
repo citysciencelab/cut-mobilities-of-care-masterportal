@@ -1,9 +1,9 @@
 .style-wms-win {
     position: absolute;
-    top: 20px;
-    right: 60px;
+    top: 60px;
+    left: 10px;
     width: 500px;
-    margin: 60px 10px 30px 10px;
+    margin: 10px 10px 30px 10px;
     display: none;
     z-index: 1010;
     background-color: rgb(255, 255, 255);

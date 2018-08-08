@@ -1,8 +1,8 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        Radio = require("backbone.radio"),
-        Moment = require("moment"),
+        $ = require("jquery"),
+        moment = require("moment"),
         VerkehrsStaerkenRadTheme;
 
     VerkehrsStaerkenRadTheme = Theme.extend({
@@ -15,8 +15,7 @@ define(function (require) {
                 activeTab: "",
                 width: 0,
                 height: 0
-            }
-        ),
+            }),
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
@@ -25,12 +24,13 @@ define(function (require) {
 
         /**
          * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
+         * @returns {void}
          */
         parseGfiContent: function () {
             var gfiContent, name, tageslinie, wochenlinie, jahrgangslinie;
 
-            if (!_.isUndefined(this.getGfiContent())) {
-                gfiContent = this.getGfiContent()[0];
+            if (!_.isUndefined(this.get("gfiContent"))) {
+                gfiContent = this.get("gfiContent")[0];
                 name = _.has(gfiContent, "Name") ? gfiContent.Name : "unbekannt";
                 tageslinie = _.has(gfiContent, "Tageslinie") ? gfiContent.Tageslinie : null;
                 wochenlinie = _.has(gfiContent, "Wochenlinie") ? gfiContent.Wochenlinie : null;
@@ -55,15 +55,16 @@ define(function (require) {
 
         /**
          * Prüft die verfügbaren Werte des Features und setzt eine Variable, die im Template ausgewertet wird.
+         * @returns {void}
          */
         setInitialActiveTab: function () {
-            if (!_.isNull(this.getTageslinieDataset())) {
+            if (!_.isNull(this.get("tageslinieDataset"))) {
                 this.setActiveTab("tag");
             }
-            else if (!_.isNull(this.getWochenlinieDataset())) {
+            else if (!_.isNull(this.get("wochenlinieDataset"))) {
                 this.setActiveTab("woche");
             }
-            else if (!_.isNull(this.getJahreslinieDataset())) {
+            else if (!_.isNull(this.get("jahreslinieDataset"))) {
                 this.setActiveTab("jahr");
             }
         },
@@ -90,7 +91,7 @@ define(function (require) {
                     r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
                 tempArr.push({
-                    timestamp: new Date (year, month, day, hours, minutes, seconds, 0),
+                    timestamp: new Date(year, month, day, hours, minutes, seconds, 0),
                     total: total,
                     r_in: r_in,
                     r_out: r_out
@@ -120,7 +121,7 @@ define(function (require) {
                     r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
                 tempArr.push({
-                    timestamp: new Date (year, month, day, 0, 0, 0, 0),
+                    timestamp: new Date(year, month, day, 0, 0, 0, 0),
                     total: total,
                     r_in: r_in,
                     r_out: r_out
@@ -148,7 +149,7 @@ define(function (require) {
                     r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
                 tempArr.push({
-                    timestamp: Moment().day("Monday").year(year).week(weeknumber).toDate(),
+                    timestamp: moment().day("Monday").year(year).week(weeknumber).toDate(),
                     total: total,
                     r_in: r_in,
                     r_out: r_out
@@ -160,6 +161,7 @@ define(function (require) {
 
         /**
          * Ermittelt die Größe des gfiContent und speichert die Werte
+         * @returns {void}
          */
         setSize: function () {
             var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
@@ -174,43 +176,27 @@ define(function (require) {
             this.createD3Document();
         },
 
-        // getter for width
-        getWidth: function () {
-            return this.get("width");
-        },
         // setter for width
         setWidth: function (value) {
             this.set("width", value);
         },
 
-        // getter for height
-        getHeight: function () {
-            return this.get("height");
-        },
         // setter for height
         setHeight: function (value) {
             this.set("height", value);
         },
 
-        // getter for activeTab
-        getActiveTab: function () {
-            return this.get("activeTab");
-        },
         // setter for activeTab
         setActiveTab: function (value) {
             this.set("activeTab", value);
         },
 
-        // getter for tageslinieDataset
-        getTageslinieDataset: function () {
-            return this.get("tageslinieDataset");
-        },
         // setter for tageslinieDataset
         setTageslinieDataset: function (data) {
-            var datum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
+            var datum = moment(data[0].timestamp).format("DD.MM.YYYY"),
                 graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
-                    val.timestamp = Moment(val.timestamp).format("HH:mm") + " Uhr";
+                    val.timestamp = moment(val.timestamp).format("HH:mm") + " Uhr";
                     return val;
                 }),
                 legendArray = this.getLegendAttributes(data[0]);
@@ -224,17 +210,13 @@ define(function (require) {
             });
         },
 
-        // getter for wochenlinieDataset
-        getWochenlinieDataset: function () {
-            return this.get("wochenlinieDataset");
-        },
         // setter for WochenlinieDataset
         setWochenlinieDataset: function (data) {
-            var startDatum = Moment(data[0].timestamp).format("DD.MM.YYYY"),
-                endeDatum = Moment(_.last(data).timestamp).format("DD.MM.YYYY"),
+            var startDatum = moment(data[0].timestamp).format("DD.MM.YYYY"),
+                endeDatum = moment(_.last(data).timestamp).format("DD.MM.YYYY"),
                 graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
-                    val.timestamp = Moment(val.timestamp).format("DD.MM.YYYY");
+                    val.timestamp = moment(val.timestamp).format("DD.MM.YYYY");
                     return val;
                 }),
                 legendArray = this.getLegendAttributes(data[0]);
@@ -248,16 +230,12 @@ define(function (require) {
             });
         },
 
-        // getter for jahreslinieDataset
-        getJahreslinieDataset: function () {
-            return this.get("jahreslinieDataset");
-        },
         // setter for JahrgangslinieDataset
         setJahreslinieDataset: function (data) {
-            var year = Moment(data[0].timestamp).format("YYYY"),
+            var year = moment(data[0].timestamp).format("YYYY"),
                 graphArray = this.getDataAttributes(data[0]),
                 newData = _.map(data, function (val) {
-                    val.timestamp = Moment(val.timestamp).format("w");
+                    val.timestamp = moment(val.timestamp).format("w");
                     return val;
                 }),
                 legendArray = this.getLegendAttributes(data[0]);
@@ -281,17 +259,16 @@ define(function (require) {
          * @return {object} Dataset-Objekt
          */
         getDataset: function () {
-            var activeTab = this.getActiveTab();
+            var activeTab = this.get("activeTab");
 
             if (activeTab === "tag") {
-                return this.getTageslinieDataset();
+                return this.get("tageslinieDataset");
             }
             else if (activeTab === "woche") {
-                return this.getWochenlinieDataset();
+                return this.get("wochenlinieDataset");
             }
-            else if (activeTab === "jahr") {
-                return this.getJahreslinieDataset();
-            }
+            // activeTab === "jahr"
+            return this.get("jahreslinieDataset");
         },
 
         /**
@@ -346,8 +323,8 @@ define(function (require) {
                 graphConfig = {
                     graphType: "Linegraph",
                     selector: ".graph",
-                    width: this.getWidth(),
-                    height: this.getHeight(),
+                    width: this.get("width"),
+                    height: this.get("height"),
                     selectorTooltip: ".graph-tooltip-div",
                     scaleTypeX: "ordinal",
                     scaleTypeY: "linear",
@@ -365,12 +342,14 @@ define(function (require) {
 
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
+         * @returns {void}
          */
         destroy: function () {
             _.each(this.get("gfiContent"), function (element) {
-                if (_.has(element, "children")) {
-                    var children = _.values(_.pick(element, "children"))[0];
+                var children;
 
+                if (_.has(element, "children")) {
+                    children = _.values(_.pick(element, "children"))[0];
                     _.each(children, function (child) {
                         child.val.remove();
                     }, this);

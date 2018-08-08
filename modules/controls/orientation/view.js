@@ -1,12 +1,9 @@
-define([
-    "backbone",
-    "text!modules/controls/orientation/template.html",
-    "modules/controls/orientation/model",
-    "config",
-    "backbone.radio"
-], function (Backbone, OrientationTemplate, OrientationModel, Config, Radio) {
-    "use strict";
-    var OrientationView = Backbone.View.extend({
+define(function (require) {
+    var OrientationTemplate = require("text!modules/controls/orientation/template.html"),
+        OrientationModel = require("modules/controls/orientation/model"),
+        OrientationView;
+
+    OrientationView = Backbone.View.extend({
         className: "row",
         template: _.template(OrientationTemplate),
         model: OrientationModel,
@@ -15,12 +12,12 @@ define([
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
         initialize: function () {
-            var showGeolocation = this.model.getIsGeoLocationPossible(),
-                showPoi = this.model.getShowPoi(),
-                poiDistances = this.model.getPoiDistances(),
+            var showGeolocation = this.model.get("isGeoLocationPossible"),
+                showPoi = this.model.get("showPoi"),
+                poiDistances = this.model.get("poiDistances"),
                 channel;
 
-            if (showGeolocation) {// Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
+            if (showGeolocation) { // Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
                 channel = Radio.channel("orientation");
 
                 channel.on({
@@ -55,14 +52,16 @@ define([
             this.$el.html(this.template(attr));
             // fügt dem ol.Overlay das Element hinzu, welches erst nach render existiert.
             this.model.addElement();
+            return this;
         },
 
         /**
          * Ist die Lokalisierung deaktiviert, wird der Button ausgegraut
          * und der POI-Button verschwindet.
+         * @returns {void}
          */
         toggleBackground: function () {
-            if (this.model.getIsGeolocationDenied() === true) {
+            if (this.model.get("isGeolocationDenied") === true) {
                 this.$el.find(".glyphicon-map-marker").css("background-color", "rgb(221, 221, 221)");
                 this.$el.find(".glyphicon-record").css("display", "none");
             }
@@ -72,17 +71,17 @@ define([
         },
 
         toggleLocateRemoveClass: function () {
-            $("#geolocate").removeClass("toggleButtonPressed");
+            this.$("#geolocate").removeClass("toggleButtonPressed");
         },
         /*
         * Steuert die Darstellung des Geolocate-buttons
         */
         trackingChanged: function () {
             if (this.model.get("tracking") === true) {
-                $("#geolocate").addClass("toggleButtonPressed");
+                this.$("#geolocate").addClass("toggleButtonPressed");
             }
             else {
-                $("#geolocate").removeClass("toggleButtonPressed");
+                this.$("#geolocate").removeClass("toggleButtonPressed");
             }
         },
         /*
@@ -92,10 +91,10 @@ define([
             var visibleWFSModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
 
             if (visibleWFSModels.length === 0) {
-                $("#geolocatePOI").hide();
+                this.$("#geolocatePOI").hide();
             }
             else {
-                $("#geolocatePOI").show();
+                this.$("#geolocatePOI").show();
             }
         },
         /*
@@ -113,9 +112,7 @@ define([
         * ButtonCall
         */
         getPOI: function () {
-            $(function () {
-                $("#loader").show();
-            });
+            Radio.trigger("Util", "showLoader");
             this.model.trackPOI();
         }
     });

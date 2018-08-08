@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     var expect = require("chai").expect,
         Model = require("../../../../../../../modules/tools/gfi/themes/verkehrsstaerken_rad/model.js"),
         model;

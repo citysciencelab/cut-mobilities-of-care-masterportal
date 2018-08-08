@@ -1,12 +1,15 @@
 .sidebar {
-    /*height: 100%;*/
+    height: calc(100% - 50px);
     width: 30%;
     float: left;
     overflow: auto;
+    display: none;
+    position: relative;
 }
 
 .sidebar-mobile {
     position: fixed;
+    display: none;
     background-color: rgb(255, 255, 255);
     top: 0;
     left: 0;

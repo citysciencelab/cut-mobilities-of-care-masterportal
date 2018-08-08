@@ -1,13 +1,10 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         MietenspiegelTheme;
 
     MietenspiegelTheme = Theme.extend({
-        /**
-         *
-         */
         initialize: function () {
             this.listenTo(this, {
                 "change:isReady": this.setDefaults
@@ -39,6 +36,7 @@ define(function (require) {
 
         /**
          * Gibt den Print-Content ans popup-Model zurück. Wird als Funktion aufgerufen. Liefert ein Objekt aus.
+         * @returns {object} print content
          */
         returnPrintContent: function () {
             var ms = {
@@ -48,7 +46,7 @@ define(function (require) {
                 "Kategorie": this.get("msWohnlage")
             };
 
-            $(".msmerkmal").each(function (element) {
+            $(".msmerkmal").each(function () {
                 if (this.value !== "-1") { // = bitte wählen
                     ms = _.extend(ms, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
                 }
@@ -74,19 +72,19 @@ define(function (require) {
             // var layerList = Radio.request("LayerList", "getLayerList");
 
             // if (layerList.length > 0) {
-                // lade Layerinformationen aus Config
-                // this.set("msLayerDaten", _.find(layerList, function (layer) {
-                    // return layer.id === "2730" || layer.id === "2830";
-                // }));
-                // this.set("msLayerMetaDaten", _.find(layerList, function (layer) {
-                    // return layer.id === "2731" || layer.id === "2831";
-                // }));
-                // if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
-                    this.ladeMetaDaten();
-                // }
-                // else {
-                    // Radio.trigger("Alert", "alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
-                // }
+            // lade Layerinformationen aus Config
+            // this.set("msLayerDaten", _.find(layerList, function (layer) {
+            // return layer.id === "2730" || layer.id === "2830";
+            // }));
+            // this.set("msLayerMetaDaten", _.find(layerList, function (layer) {
+            // return layer.id === "2731" || layer.id === "2831";
+            // }));
+            // if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
+            this.ladeMetaDaten();
+            // }
+            // else {
+            // Radio.trigger("Alert", "alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
+            // }
             // }
         },
         /*
@@ -100,10 +98,10 @@ define(function (require) {
                 uniqueValues,
                 sortedValues;
 
-            merkmale = _.map(daten, function (value, key) {
+            merkmale = _.map(daten, function (value) {
                 return value.merkmale;
             });
-            merkmaleReduced = _.filter(merkmale, function (value, index, list) {
+            merkmaleReduced = _.filter(merkmale, function (value) {
                 return _.isMatch(value, setted);
             });
             possibleValues = _.map(merkmaleReduced, function (merkmal) {
@@ -129,10 +127,10 @@ define(function (require) {
          * Lese Mietenspiegel-Daten aus msLayerMetaDaten und msLayerDaten. REQUESTOR kann nicht verwendet werden, weil es geometrielose Dienste sind.
          */
         ladeMetaDaten: function () {
-            Radio.trigger("Util", "showLoader");
             var urlMetaDaten = "http://geodienste.hamburg.de/HH_WFS_Mietenspiegel",
                 featureTypeMetaDaten = "app:mietenspiegel_metadaten";
 
+            Radio.trigger("Util", "showLoader");
             $.ajax({
                 url: Radio.request("Util", "getProxyURL", urlMetaDaten),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=" + featureTypeMetaDaten,
@@ -166,10 +164,10 @@ define(function (require) {
         },
         ladeDaten: function () {
             // Lade Mietenspiegel-Daten
-            Radio.trigger("Util", "showLoader");
             var urlDaten = "http://geodienste.hamburg.de/HH_WFS_Mietenspiegel",
                 featureTypeDaten = "app:mietenspiegel_daten";
 
+            Radio.trigger("Util", "showLoader");
             $.ajax({
                 url: Radio.request("Util", "getProxyURL", urlDaten),
                 data: "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.1.0&TYPENAME=" + featureTypeDaten,
@@ -195,7 +193,7 @@ define(function (require) {
                             mittelwert: parseFloat($(value).find("app\\:mittelwert,mittelwert").text()),
                             spanne_min: parseFloat($(value).find("app\\:spanne_min,spanne_min").text()),
                             spanne_max: parseFloat($(value).find("app\\:spanne_max,spanne_max").text()),
-                            datensaetze: parseInt($(value).find("app\\:datensaetze,datensaetze").text()),
+                            datensaetze: parseInt($(value).find("app\\:datensaetze,datensaetze").text(), 10),
                             merkmale: _.object(keys, $(value).find("app\\:merkmale,merkmale").text().split("|"))
                         });
                     });
@@ -217,7 +215,7 @@ define(function (require) {
         calculateMerkmale: function () {
             var daten = this.get("msDaten"),
                 merkmalnamen = _.object(_.keys(daten[0].merkmale), []),
-                merkmale = _.map(daten, function (value, key) {
+                merkmale = _.map(daten, function (value) {
                     return value.merkmale;
                 }),
                 merkmaleReduced = _.mapObject(merkmalnamen, function (value, key) {
@@ -234,7 +232,7 @@ define(function (require) {
             var daten = this.get("msDaten"),
                 vergleichsmiete;
 
-            vergleichsmiete = _.filter(daten, function (value, index, list) {
+            vergleichsmiete = _.filter(daten, function (value) {
                 return _.isMatch(value.merkmale, merkmale);
             });
             if (vergleichsmiete.length !== 1) {

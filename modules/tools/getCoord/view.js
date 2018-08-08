@@ -1,13 +1,11 @@
 define(function (require) {
 
     var GetCoordTemplate = require("text!modules/tools/getCoord/template.html"),
+        $ = require("jquery"),
         GetCoordModel = require("modules/tools/getCoord/model"),
         GetCoord;
 
     GetCoord = Backbone.View.extend({
-        model: new GetCoordModel(),
-        className: "win-body",
-        template: _.template(GetCoordTemplate),
         events: {
             "click .glyphicon-remove": "destroy",
             "change #coordSystemField": "changedPosition",
@@ -20,12 +18,16 @@ define(function (require) {
                 "change:positionMapProjection": this.changedPosition
             });
         },
+        model: new GetCoordModel(),
+        className: "win-body",
+        template: _.template(GetCoordTemplate),
 
         render: function () {
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(this.model.toJSON())));
                 this.model.createInteraction();
+                this.changedPosition();
                 this.delegateEvents();
             }
             else {
@@ -33,13 +35,15 @@ define(function (require) {
                 this.model.removeInteraction();
                 this.undelegateEvents();
             }
+            return this;
         },
 
         changedPosition: function () {
-            var targetProjectionName = $("#coordSystemField option:selected").val(),
+            var targetProjectionName = this.$("#coordSystemField option:selected").val(),
                 position = this.model.returnTransformedPosition(targetProjectionName),
                 targetProjection = this.model.returnProjectionByName(targetProjectionName);
 
+            this.model.setCurrentProjectionName(targetProjectionName);
             if (position) {
                 this.adjustPosition(position, targetProjection);
                 this.adjustWindow(targetProjection);
@@ -62,38 +66,25 @@ define(function (require) {
                 northing = coord.split(",")[1].trim();
             }
 
-            $("#coordinatesEastingField").val(easting);
-            $("#coordinatesNorthingField").val(northing);
+            this.$("#coordinatesEastingField").val(easting);
+            this.$("#coordinatesNorthingField").val(northing);
         },
 
         adjustWindow: function (targetProjection) {
             // geographische Koordinaten
             if (targetProjection.projName === "longlat") {
-                $("#coordinatesEastingLabel").text("Breite");
-                $("#coordinatesNorthingLabel").text("Länge");
+                this.$("#coordinatesEastingLabel").text("Breite");
+                this.$("#coordinatesNorthingLabel").text("Länge");
             }
             // kartesische Koordinaten
             else {
-                $("#coordinatesEastingLabel").text("Rechtswert");
-                $("#coordinatesNorthingLabel").text("Hochwert");
+                this.$("#coordinatesEastingLabel").text("Rechtswert");
+                this.$("#coordinatesNorthingLabel").text("Hochwert");
             }
         },
 
-        /**
-         * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
-         * @param  {evt} evt Evt-Button
-         */
         copyToClipboard: function (evt) {
-            var textField = evt.currentTarget;
-
-            $(textField).select();
-
-            try {
-                document.execCommand("copy");
-            }
-            catch (e) {
-                console.warn("Unable to copy text to clipboard.");
-            }
+            Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
         }
     });
 

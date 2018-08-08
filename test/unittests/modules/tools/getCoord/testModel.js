@@ -1,11 +1,11 @@
-define(function(require) {
+define(function (require) {
     require("../../../../../modules/core/mapView.js");
 
 
     var expect = require("chai").expect,
         Model = require("../../../../../modules/tools/getCoord/model.js"),
-        position1 = [564337.37,5935980.05],
-        position2 = [586519.54,5935688.88],
+        position1 = [564337.37, 5935980.05],
+        position2 = [586519.54, 5935688.88],
         model;
 
     before(function () {
@@ -16,19 +16,19 @@ define(function(require) {
         describe("functions for positioning", function () {
             it("checkPosition sets attributes", function () {
                 model.checkPosition(position1);
-                expect(model.getPositionMapProjection()[0]).to.equal(564337.37);
-                expect(model.getPositionMapProjection()[1]).to.equal(5935980.05);
+                expect(model.get("positionMapProjection")[0]).to.equal(564337.37);
+                expect(model.get("positionMapProjection")[1]).to.equal(5935980.05);
             });
             it("positionClicked sets attributes", function () {
                 model.positionClicked(position2);
-                expect(model.getPositionMapProjection()[0]).to.equal(586519.54);
-                expect(model.getPositionMapProjection()[1]).to.equal(5935688.88);
-                expect(model.getUpdatePosition()).to.equal(false);
+                expect(model.get("positionMapProjection")[0]).to.equal(586519.54);
+                expect(model.get("positionMapProjection")[1]).to.equal(5935688.88);
+                expect(model.get("updatePosition")).to.equal(false);
             });
             it("after positionClicked checkPosition does not set attributes", function () {
                 model.checkPosition(position1);
-                expect(model.getPositionMapProjection()[0]).to.equal(586519.54);
-                expect(model.getPositionMapProjection()[1]).to.equal(5935688.88);
+                expect(model.get("positionMapProjection")[0]).to.equal(586519.54);
+                expect(model.get("positionMapProjection")[1]).to.equal(5935688.88);
             });
         });
         describe("functions for formating coordinates", function () {

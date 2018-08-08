@@ -1,7 +1,5 @@
-define(function (require) {
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        AlertingModel;
+define(function () {
+    var AlertingModel;
 
     AlertingModel = Backbone.Model.extend({
         defaults: {
@@ -12,7 +10,8 @@ define(function (require) {
             // Position der Messages [top-center | center-center]
             position: "top-center",
             // letzte/aktuelle Alert Message
-            message: ""
+            message: "",
+            animation: false
         },
         initialize: function () {
             var channel = Radio.channel("Alert");
@@ -28,7 +27,8 @@ define(function (require) {
         /**
          * Wird ein String übergeben, handelt es sich dabei um die Alert Message
          * Ist es ein Objekt, werden die entsprechenden Attribute gesetzt
-         * @param {String|Object} val
+         * @param {String|Object} val -
+         * @returns {void}
          */
         setParams: function (val) {
             if (_.isString(val)) {
@@ -52,6 +52,12 @@ define(function (require) {
                 if (_.has(val, "position") === true) {
                     this.setPosition(val.position);
                 }
+                if (_.has(val, "animation")) {
+                    this.setAnimation(val.animation);
+                }
+                if (!_.has(val, "animation")) {
+                    this.setAnimation(false);
+                }
             }
             this.trigger("render");
         },
@@ -74,6 +80,9 @@ define(function (require) {
 
         setPosition: function (value) {
             this.set("position", value);
+        },
+        setAnimation: function (value) {
+            this.set("animation", value);
         }
     });
 

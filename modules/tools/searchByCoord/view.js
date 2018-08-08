@@ -2,10 +2,11 @@ define(function (require) {
 
     var SearchByCoordTemplate = require("text!modules/tools/searchByCoord/template.html"),
         SearchByCoord = require("modules/tools/searchByCoord/model"),
+        $ = require("jquery"),
         SearchByCoordView;
 
     SearchByCoordView = Backbone.View.extend({
-        model: SearchByCoord,
+        model: new SearchByCoord(),
         className: "win-body",
         template: _.template(SearchByCoordTemplate),
         events: {
@@ -15,7 +16,7 @@ define(function (require) {
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin": this.render,
-                    "change:coordSystem": this.setFocusToCoordSystemInput
+                "change:coordSystem": this.setFocusToCoordSystemInput
             });
         },
 
@@ -30,18 +31,19 @@ define(function (require) {
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
         setCoordSystem: function () {
-            this.model.setCoordSystem($("#coordSystemField").val());
+            this.model.setCoordSystem(this.$("#coordSystemField").val());
         },
         setCoordinates: function (evt) {
             if (evt.keyCode === 13) {
                 this.model.validateCoordinates();
             }
-            this.model.setCoordinates($("#coordinatesEastingField").val(), $("#coordinatesNorthingField").val());
+            this.model.setCoordinates(this.$("#coordinatesEastingField").val().replace(",", "."), this.$("#coordinatesNorthingField").val().replace(",", "."));
         },
         setFocusToCoordSystemInput: function () {
-            $("#coordSystemField").focus();
+            this.$("#coordSystemField").focus();
             this.render();
         },
         validateCoords: function () {

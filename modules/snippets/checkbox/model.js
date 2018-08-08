@@ -1,8 +1,8 @@
 define(function (require) {
 
-var SnippetModel = require("modules/snippets/model"),
-    ValueModel = require("modules/snippets/value/model"),
-    CheckboxSnippet;
+    var SnippetModel = require("modules/snippets/model"),
+        ValueModel = require("modules/snippets/value/model"),
+        CheckboxSnippet;
 
     CheckboxSnippet = SnippetModel.extend({
         defaults: {
@@ -25,13 +25,11 @@ var SnippetModel = require("modules/snippets/model"),
             });
         },
         addValueModel: function (value) {
-            this.get("valuesCollection").add(
-                new ValueModel({
-                    attr: this.get("name"),
-                    isSelected: value,
-                    type: this.get("type")
-                })
-            );
+            this.get("valuesCollection").add(new ValueModel({
+                attr: this.get("name"),
+                isSelected: value,
+                type: this.get("type")
+            }));
         },
         renderView: function () {
             this.trigger("renderView");

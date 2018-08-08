@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         $ = require("jquery"),
         OverviewmapModel;
 
@@ -48,27 +47,20 @@ define(function (require) {
                 resolution: mapView.getResolution(),
                 resolutions: [ovmConfigRes.resolution ? ovmConfigRes.resolution : maxResolution]
             });
-            // if (_.isUndefined(value) === false && value === "3D") {
-            //     newOlView = new ol.View({
-            //         projection: new ol.proj.Projection({
-            //             code: "EPSG:4326",
-            //             extent: [
-            //                 -180.0000, -90.0000, 180.0000, 90.0000
-            //             ],
-            //             axisOrientation: "enu"
-            //         }),
-            //         extent: [9, 53, 10, 54],
-            //         resolution: mapView.getResolution(),
-            //         resolutions: [ovmConfigRes.resolution ? ovmConfigRes.resolution : maxResolution]
-            //     });
-            // }
-            return newOlView;
+
+            this.setBaselayer(ovmConfigRes.baselayer ? this.getBaseLayerFromCollection(layers, ovmConfigRes.baselayer) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
+            if (_.isUndefined(this.get("baselayer")) === false) {
+                Radio.trigger("Map", "addControl", this.newOverviewmap(newOlView));
+            }
+            else {
+                $("#overviewmap").remove();
+            }
         },
         mapChanged: function (value) {
             var view = this.createOlView(value),
                 ovMap = this.newOverviewmap(view);
 
-            Radio.trigger("Map", "removeControl", this.getOvMap());
+            Radio.trigger("Map", "removeControl", this.get("ovMap"));
             this.setOvMap(ovMap);
             Radio.trigger("Map", "addControl", ovMap);
 
@@ -77,7 +69,9 @@ define(function (require) {
             var overviewmap = new ol.control.OverviewMap({
                 collapsible: false,
                 className: "overviewmap ol-overviewmap ol-custom-overviewmap hidden-xs",
-                layers: [this.getOvmLayer(this.getBaselayer())],
+                layers: [
+                    this.getOvmLayer(this.get("baselayer"))
+                ],
                 view: view
             });
 
@@ -123,25 +117,15 @@ define(function (require) {
             return imageLayer;
         },
 
-        // getter for baselayer
-        getBaselayer: function () {
-            return this.get("baselayer");
-        },
-
         // setter for baselayer
         setBaselayer: function (value) {
             this.set("baselayer", value);
         },
 
-        // getter for ovMap
-        getOvMap: function () {
-            return this.get("ovMap");
-        },
         // setter for ovMap
         setOvMap: function (value) {
             this.set("ovMap", value);
         }
-
     });
 
     return OverviewmapModel;

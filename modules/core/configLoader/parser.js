@@ -22,19 +22,36 @@ define(function (require) {
             // Nur für Lighttree: Index der zuletzt eingefügten Layer,
             // wird für die Sortierung/das Verschieben benötigt
             selectionIDX: -1,
-            onlyDesktopTools: ["measure", "print", "kmlimport", "draw", "featureLister", "animation", "addWMS"]
+            onlyDesktopTools: [
+                "measure",
+                "print",
+                "kmlimport",
+                "draw",
+                "featureLister",
+                "animation",
+                "addWMS"
+            ]
         },
 
         initialize: function () {
+
             var channel = Radio.channel("Parser");
 
             channel.reply({
                 "getItemByAttributes": this.getItemByAttributes,
                 "getItemsByAttributes": this.getItemsByAttributes,
-                "getTreeType": this.getTreeType,
-                "getCategory": this.getCategory,
-                "getCategories": this.getCategories,
-                "getPortalConfig": this.getPortalConfig,
+                "getTreeType": function () {
+                    return this.get("treeType");
+                },
+                "getCategory": function () {
+                    return this.get("category");
+                },
+                "getCategories": function () {
+                    return this.get("categories");
+                },
+                "getPortalConfig": function () {
+                    return this.get("portalConfig");
+                },
                 "getItemsByMetaID": this.getItemsByMetaID,
                 "getSnippetInfos": function () {
                     return this.get("snippetInfos");
@@ -72,19 +89,19 @@ define(function (require) {
                     Radio.trigger("ModelList", "setModelAttributesById", "Overlayer", {isExpanded: true});
                 }
             });
-            this.parseMenu(this.getPortalConfig().menu, "root");
-            this.parseControls(this.getPortalConfig().controls);
-            this.parseSearchBar(this.getPortalConfig().searchBar);
-            this.parseMapView(this.getPortalConfig().mapView);
+            this.parseMenu(this.get("portalConfig").menu, "root");
+            this.parseControls(this.get("portalConfig").controls);
+            this.parseSearchBar(this.get("portalConfig").searchBar);
+            this.parseMapView(this.get("portalConfig").mapView);
 
-            if (this.getTreeType() === "light") {
-                this.parseTree(this.getOverlayer(), "tree", 0);
-                this.parseTree(this.getBaselayer(), "tree", 0);
+            if (this.get("treeType") === "light") {
+                this.parseTree(this.get("overlayer"), "tree", 0);
+                this.parseTree(this.get("baselayer"), "tree", 0);
             }
-            else if (this.getTreeType() === "custom") {
+            else if (this.get("treeType") === "custom") {
                 this.addTreeMenuItems("custom", this.get("overlayer_3d"));
-                this.parseTree(this.getBaselayer(), "Baselayer", 0);
-                this.parseTree(this.getOverlayer(), "Overlayer", 0);
+                this.parseTree(this.get("baselayer"), "Baselayer", 0);
+                this.parseTree(this.get("overlayer"), "Overlayer", 0);
                 this.parseTree(this.get("overlayer_3d"), "3d_daten", 0);
             }
             else {
@@ -94,12 +111,11 @@ define(function (require) {
             this.createModelList();
         },
 
-        getPortalConfig: function () {
-            return this.get("portalConfig");
-        },
-
         /**
          * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
+         * @param {object} items Einzelnen Ebenen der Menüleiste, bsp. contact, legend, tools und tree
+         * @param {string} parentId gibt an wem die items hinzugefügt werden
+         * @return {undefined}
          */
         parseMenu: function (items, parentId) {
             _.each(items, function (value, key) {
@@ -112,24 +128,18 @@ define(function (require) {
                         type: "folder",
                         parentId: parentId,
                         id: key,
-                        treeType: this.getTreeType()
+                        treeType: this.get("treeType")
                     };
 
                     // Attribute aus der config.json werden von item geerbt
                     _.extend(item, value);
-                    // folder Themen bekommt noch den Baumtyp als Attribut
-                    if (key === "tree") {
-                        this.addItem(_.extend(item, {treeType: this.getTreeType()}));
-                    }
-                    else {
-                        this.addItem(item);
-                    }
+                    this.addItem(item);
                     this.parseMenu(value.children, key);
                 }
-                // else {
                 else if (key.search("staticlinks") !== -1) {
                     _.each(value, function (staticlink) {
                         toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
+
                         this.addItem(toolitem);
                     }, this);
                 }
@@ -139,6 +149,7 @@ define(function (require) {
                 }
                 else {
                     toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+
                     // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
                     if (!_.has(toolitem, "onlyDesktop")) {
                         // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
@@ -154,7 +165,7 @@ define(function (require) {
 
         /**
          * [parseSearchBar description]
-         * @param  {[type]} items [description]
+         * @param  {[type]} searchbarConfig [description]
          * @return {[type]}       [description]
          */
         parseSearchBar: function (searchbarConfig) {
@@ -195,7 +206,8 @@ define(function (require) {
 
         /**
          * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Ende hinzu
-         * @param {Object} obj - Item
+         * @param {object} obj - Item
+         * @return {undefined}
          */
         addItem: function (obj) {
             if (!_.isUndefined(obj.visibility)) {
@@ -203,11 +215,14 @@ define(function (require) {
                 obj.isVisibleInMap = obj.visibility;
                 delete obj.visibility;
             }
-            this.getItemList().push(obj);
+            this.get("itemList").push(obj);
         },
 
         /**
          *  Ermöglicht ein Array von Objekten, die alle attr gemeinsam haben zu erzeugen
+         *  @param {array} objs Array von zusammengehörenden Objekten, bsp. Kategorien im Themenbaum
+         *  @param {object} attr Layerobjekt
+         *  @return {undefined}
          */
         addItems: function (objs, attr) {
             _.each(objs, function (obj) {
@@ -247,7 +262,7 @@ define(function (require) {
                 gutter: "0",
                 featureCount: 3,
                 minScale: "0",
-                maxScale: "350000",
+                maxScale: "2500000",
                 gfiAttributes: "showAll",
                 layerAttribution: "nicht vorhanden",
                 legendURL: "",
@@ -287,6 +302,7 @@ define(function (require) {
         /**
          * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Beginn hinzu
          * @param {Object} obj - Item
+         * @return {undefined}
          */
         addItemAtTop: function (obj) {
             if (!_.isUndefined(obj.visibility)) {
@@ -294,91 +310,32 @@ define(function (require) {
                 obj.isVisibleInMap = obj.visibility;
                 delete obj.visibility;
             }
-            this.getItemList().unshift(obj);
+            this.get("itemList").unshift(obj);
         },
 
-        /**
-         * Setter für Attribut "itemList"
-         */
+        // Setter für Attribut "itemList"
         setItemList: function (value) {
             this.set("itemList", value);
         },
 
-        /**
-         * Getter für das Attribut "itemList"
-         * @return {Array}
-         */
-        getItemList: function () {
-            return this.get("itemList");
-        },
-
-        /**
-         * Getter für Attribut "baselayer"
-         * @return {Object}
-         */
-        getBaselayer: function () {
-            return this.get("baselayer");
-        },
-        /**
-         * setter für Attribut "baselayer"
-         * @return {Object}
-         */
+        // setter für Attribut "baselayer"
         setBaselayer: function (value) {
-            return this.set("baselayer", value);
+            this.set("baselayer", value);
         },
 
-        /**
-          * Getter für Attribut "overlayer"
-          * @return {Object}
-          */
-        getOverlayer: function () {
-            return this.get("overlayer");
-        },
-        /**
-          * Setter für Attribut "overlayer"
-          * @return {Object}
-          */
+        // Setter für Attribut "overlayer"
         setOverlayer: function (value) {
-            return this.set("overlayer", value);
+            this.set("overlayer", value);
         },
 
-        /**
-          * Getter für Attribut "treeType"
-          * @return {String}
-          */
-        getTreeType: function () {
-            return this.get("treeType");
-        },
-        /**
-          * Getter für Attribut "treeType"
-          * @return {String}
-          */
+        // Setter für Attribut "treeType"
         setTreeType: function (value) {
-            return this.set("treeType", value);
+            this.set("treeType", value);
         },
 
-        /**
-          * Getter für Attribut "category"
-          * @return {String}
-          */
-        getCategory: function () {
-            return this.get("category");
-        },
-
-        /**
-          * Getter für Attribut "categories"
-          * @return {String[]}
-          */
-        getCategories: function () {
-            return this.get("categories");
-        },
-
-        /**
-          * Getter für Attribut "category"
-          * @return {String}
-          */
+        // Setter für Attribut "category"
         setCategory: function (value) {
-            return this.set("category", value);
+            this.set("category", value);
         },
 
         /**
@@ -387,7 +344,7 @@ define(function (require) {
          * @return {[type]}       [description]
          */
         getItemByAttributes: function (value) {
-            return _.findWhere(this.getItemList(), value);
+            return _.findWhere(this.get("itemList"), value);
         },
 
         /**
@@ -396,7 +353,7 @@ define(function (require) {
          * @return {[type]}       [description]
          */
         getItemsByAttributes: function (value) {
-            return _.where(this.getItemList(), value);
+            return _.where(this.get("itemList"), value);
         },
 
         /**
@@ -404,7 +361,7 @@ define(function (require) {
          * @return {[type]} [description]
          */
         createModelList: function () {
-            new ModelList(_.filter(this.getItemList(), function (model) {
+            new ModelList(_.filter(this.get("itemList"), function (model) {
                 return model.parentId === "root" ||
                     model.parentId === "tools" ||
                     model.parentId === "info" ||
@@ -461,13 +418,14 @@ define(function (require) {
 
         /**
          * Gruppiert Objekte aus der layerlist, die mit den Ids in der übergebenen Liste übereinstimmen
-         * @param  {Object[]} layerlist - Objekte aus der services.json
          * @param  {string[]} ids - Array von Ids deren Objekte gruppiert werden
+         * @param  {Object[]} layerlist - Objekte aus der services.json
          * @return {Object[]} layerlist - Objekte aus der services.json
          */
         mergeObjectsByIds: function (ids, layerlist) {
             var objectsByIds = [],
                 newObject;
+
             // Objekte die gruppiert werden
             _.each(ids, function (id) {
                 var lay = _.findWhere(layerlist, {id: id});
@@ -501,15 +459,20 @@ define(function (require) {
          * @return {String} value - Uniq-Id
          */
         createUniqId: function (value) {
-            var uniqueId = value.replace(/[^a-zA-Z0-9]/g, "");
+            var trimmedValue = value.replace(/[^a-zA-Z0-9]/g, "");
 
-            return _.uniqueId(uniqueId);
+            return _.uniqueId(trimmedValue);
         },
 
         getItemsByMetaID: function (metaID) {
-            var layers = _.filter(this.getItemList(), function (item) {
-                return item.type === "layer" && item.datasets.length > 0 && item.datasets[0].md_id === metaID;
-            });
+            var layers = _.filter(this.get("itemList"), function (item) {
+                if (item.type === "layer") {
+                    if (item.datasets.length > 0) {
+                        return item.datasets[0].md_id === metaID;
+                    }
+                }
+                return false;
+            }, this);
 
             return layers;
         },
@@ -520,12 +483,12 @@ define(function (require) {
          * @return {String} layer - inital sichtbarer Baselayer
          */
         getInitVisibBaselayer: function () {
-            var layer = _.findWhere(this.getBaselayer().Layer, {visibility: true});
+            var layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
 
             if (_.isArray(layer.id)) {
                 layer.id = layer.id[0];
-            };
-            return layer
+            }
+            return layer;
         }
     });
 

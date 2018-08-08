@@ -1,14 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "proj4",
-    "openlayers",
-    "config"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Proj4 = require("proj4"),
+    var proj4 = require("proj4"),
         ol = require("openlayers"),
         Config = require("config"),
         CRS;
@@ -21,21 +13,26 @@ define([
         },
 
         initialize: function () {
-            Proj4.defs(Config.namedProjections);
-            ol.proj.setProj4(Proj4);
-            for(var i = 0; i < Config.namedProjections.length; i++){
-                var projection =ol.proj.get(Config.namedProjections[i][0]);
+            var i,
+                projection,
+                channel;
+
+            proj4.defs(Config.namedProjections);
+            ol.proj.setProj4(proj4);
+
+            for (i = 0; i < Config.namedProjections.length; i++) {
+                projection = ol.proj.get(Config.namedProjections[i][0]);
                 ol.proj.addProjection(projection);
             }
-            var channel = Radio.channel("CRS");
+            channel = Radio.channel("CRS");
 
             channel.reply({
                 "getProjection": function (name) {
                     return this.getProjection(name);
                 },
                 "getProjections": this.getProjections,
-                 "transformToMapProjection": this.transformToMapProjection,
-                 "transformFromMapProjection": this.transformFromMapProjection,
+                "transformToMapProjection": this.transformToMapProjection,
+                "transformFromMapProjection": this.transformFromMapProjection,
                 "transform": function (par) {
                     return this.transform(par);
                 }
@@ -48,10 +45,10 @@ define([
         },
 
         assumeProjections: function () {
-            var namedProjections = this.getNamedProjections();
+            var namedProjections = this.get("namedProjections");
 
-            Proj4.defs(namedProjections);
-            ol.proj.setProj4(Proj4);
+            proj4.defs(namedProjections);
+            ol.proj.setProj4(proj4);
 
             _.each(namedProjections, function (namedProjection) {
                 var projection = ol.proj.get(namedProjection[0]);
@@ -61,15 +58,15 @@ define([
         },
 
         getProjection: function (name) {
-            return Proj4.defs(name);
+            return proj4.defs(name);
         },
 
         getProjections: function () {
-            var namedProjections = this.getNamedProjections(),
+            var namedProjections = this.get("namedProjections"),
                 projections = [];
 
             _.each(namedProjections, function (namedProjection) {
-                var projection = Proj4.defs(namedProjection[0]);
+                var projection = proj4.defs(namedProjection[0]);
 
                 _.extend(projection, {
                     name: namedProjection[0]
@@ -86,8 +83,9 @@ define([
 
             if (mapProjection && sourceProjection && point) {
                 targetProjection = this.getProjection(mapProjection.getCode());
-                return Proj4(sourceProjection, targetProjection, point);
+                return proj4(sourceProjection, targetProjection, point);
             }
+            return undefined;
         },
 
         transformFromMapProjection: function (targetProjection, point) {
@@ -96,23 +94,20 @@ define([
 
             if (mapProjection && targetProjection && point) {
                 sourceProjection = this.getProjection(mapProjection.getCode());
-                return Proj4(sourceProjection, targetProjection, point);
+                return proj4(sourceProjection, targetProjection, point);
             }
+            return undefined;
         },
         transform: function (par) {
             if (!this.getProjection(par.fromCRS) || !this.getProjection(par.toCRS) || !par.point) {
                 Radio.trigger("Alert", "alert", {text: "Koordinatentransformation mit ungültigen Eingaben wird abgebrochen.", kategorie: "alert-danger"});
                 return "";
             }
-            else {
-                return Proj4(Proj4(par.fromCRS), Proj4(par.toCRS), par.point);
-            }
+
+            return proj4(proj4(par.fromCRS), proj4(par.toCRS), par.point);
+
         },
 
-        // getter for namedProjections
-        getNamedProjections: function () {
-            return this.get("namedProjections");
-        },
         // setter for namedProjections
         setNamedProjections: function (value) {
             this.set("namedProjections", value);

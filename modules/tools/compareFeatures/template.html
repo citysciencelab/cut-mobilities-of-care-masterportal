@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Vergleichsliste</h4>
+        </div>
+        <div class="modal-body">
+            <% if (layerSelection.length > 1) { %>
+            <div class="modal-sub-header row">
+                <label class="col-xs-3">Themen Auswahl</label>
+                <div class="col-xs-4">
+                    <select class="form-control">
+                        <% layerSelection.forEach(function (layer) { %>
+                            <option value="<%= layer.id %>" <%if(layer.id === layerId) {print("selected");}%>><%= layer.name %></option>
+                        <% }, this); %>
+                    </select>
+                </div>
+            </div>
+            <% } %>
+            <div class="row">
+                <table class="table table-responsive">
+                    <tbody>
+                        <% list.forEach(function (obj, index) {
+                            if (index < rowsToShow) { %>
+                                <tr>
+                            <% }
+                            else { %>
+                                <tr class="toggle-row">
+                            <% } %>
+                                <% Object.keys(obj).forEach(function (key, idx) {  %>
+                                    <td class="<%= key %>">
+                                        <% if (index === 0 && idx !== 0) { %>
+                                            <span class="<%= key %> glyphicon glyphicon-remove pull-right" id="<%= featureIds[idx - 1] %>"></span>
+                                        <% } %>
+                                        <span>
+                                        <% if (_.isArray(obj[key])) {
+                                            obj[key].forEach(function (value) { %>
+                                                <%= value %>
+                                                <br>
+                                            <% });
+                                        }
+                                        else {
+                                            if(String(obj[key]).search("http") !== -1) { %>
+                                                <a href="<%= obj[key] %>" target="_blank"><%= obj[key] %></a>
+                                            <% }
+                                            else if (String(obj[key]).search("@") !== -1) { %>
+                                                <a href="mailto:<%= obj[key] %>"><%= obj[key] %></a>
+                                            <% }
+                                            else {%>
+                                                <%= obj[key] %>
+                                            <% } %>
+                                        <% } %>
+                                        </span>
+                                    </td>
+                                <% }); %>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-infos">mehr Infos</button>
+            <button type="button" class="btn btn-primary btn-print">Export als PDF</button>
+        </div>
+    </div>
+</div>

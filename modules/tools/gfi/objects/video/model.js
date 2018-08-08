@@ -1,52 +1,50 @@
 define(function (require) {
+    var videojs = require("videojs"),
+        VideoModel;
 
     /**
      * Disable Google Analytics that tracks a random percentage (currently 1%) of players loaded from the CDN.
      * @link https://videojs.com/getting-started/
      */
     window.HELP_IMPROVE_VIDEOJS = false;
-
-    var Backbone = require("backbone"),
-        VideoJS = require("videojs"),
-        VideoModel;
-
     require("videojsflash");
 
     VideoModel = Backbone.Model.extend({
         defaults: {
-            id: "",
+            id: _.uniqueId("video"),
             url: "",
-            poster: ""
+            type: "",
+            width: "400px",
+            height: "300px"
         },
 
-        initialize: function (url) {
-            var portalConfig = Radio.request("Parser", "getPortalConfig");
+        initialize: function (url, type, width, height) {
+            this.setUrl(url);
+            this.setType(type);
+            this.setWidth(width);
+            this.setHeight(height);
 
             this.listenTo(Radio.channel("GFI"), {
                 "afterRender": this.startStreaming,
                 "isVisible": this.changedGFI
             }, this);
-
-            if (_.has(portalConfig, "portalTitle") && _.has(portalConfig.portalTitle, "logo")) {
-                this.setPoster(portalConfig.portalTitle.logo);
-            }
-            this.setId(_.uniqueId("video"));
-            this.setUrl(url);
         },
 
         /**
          * Startet das Streaming
          * @param  {Function} callback Callback-Funktion wird gerufen, nachdem das Video gestaret ist
+         * @returns {void}
          */
         startStreaming: function (callback) {
-            var videoEle = document.getElementById(this.getId());
+            var videoEle = document.getElementById(this.get("id"));
 
-            VideoJS(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
+            videojs(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
         },
 
         /**
          * Prüft, ob das GFI ausgeschaltet wurde
          * @param  {boolean} value Visibility des GFI
+         * @returns {void}
          */
         changedGFI: function (value) {
             if (value === false) {
@@ -56,47 +54,46 @@ define(function (require) {
 
         /**
          * Zerstört das Modul vollständig
-         * stop VideoJS
+         * stop videojs
          * remove Radio-Listener
          * remove Backbone-Listener
          * clear Attributes
          * remove View
+         * @returns {void}
          */
         destroy: function () {
-            var videoEle = document.getElementById(this.getId());
+            var videoEle = document.getElementById(this.get("id"));
 
-            VideoJS(videoEle).dispose();
+            videojs(videoEle).dispose();
             this.stopListening();
             this.off();
             this.clear();
             this.trigger("removeView");
         },
 
-        // getter for id
-        getId: function () {
-            return this.get("id");
-        },
         // setter for id
         setId: function (value) {
             this.set("id", value);
         },
 
-        // getter for url
-        getUrl: function () {
-            return this.get("url");
-        },
         // setter for url
         setUrl: function (value) {
             this.set("url", value);
         },
 
-        // getter for poster
-        getPoster: function () {
-            return this.get("poster");
+        // setter for type
+        setType: function (value) {
+            this.set("type", value);
         },
-        // setter for poster
-        setPoster: function (value) {
-            this.set("poster", value);
+
+        // setter for width
+        setWidth: function (value) {
+            this.set("width", value);
+        },
+
+        // setter for height
+        setHeight: function (value) {
+            this.set("height", value);
         }
     });
     return VideoModel;

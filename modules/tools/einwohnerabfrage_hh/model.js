@@ -3,7 +3,7 @@ define(function (require) {
     var $ = require("jquery"),
         ol = require("openlayers"),
         SnippetDropdownModel = require("modules/snippets/dropdown/model"),
-        Moment = require("moment"),
+        moment = require("moment"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         Einwohnerabfrage;
 
@@ -27,22 +27,29 @@ define(function (require) {
                 offset: [15, 0],
                 positioning: "center-left"
             }),
+            tooltipOverlay: new ol.Overlay({
+                offset: [15, 20],
+                positioning: "top-left"
+            }),
             requests: [],
             data: {},
-            receivedData: false,
+            dataReceived: false,
             requesting: false,
             snippetDropdownModel: {},
             values: {
-                "Rechteck": "Box",
-                "Kreis": "Circle",
-                "Polygon": "Polygon"
+                "Rechteck aufziehen": "Box",
+                "Kreis aufziehen": "Circle",
+                "Fläche zeichnen": "Polygon"
             },
+            currentValue: "",
             // mrh meta data id
             mrhId: "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
             mrhDate: undefined,
             // fhh meta data id
             fhhId: "D3DDBBA3-7329-475C-BB07-14D539ED6B1E",
-            fhhDate: undefined
+            fhhDate: undefined,
+            tooltipMessage: "Klicken zum Starten und Beenden",
+            tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen"
             // hmdk/metaver link
             // metaDataLink: Radio.request("RestReader", "getServiceById", "2").get("url")
         },
@@ -57,26 +64,28 @@ define(function (require) {
             this.listenTo(this.snippetDropdownModel, {
                 "valuesChanged": this.createDrawInteraction
             });
-            this.listenTo(this.getCheckboxRaster(), {
+            this.listenTo(this.get("checkBoxRaster"), {
                 "valuesChanged": this.toggleRasterLayer
             });
-            this.listenTo(this.getCheckboxAddress(), {
+            this.listenTo(this.get("checkBoxAddress"), {
                 "valuesChanged": this.toggleAlkisAddressLayer
             });
-            this.on("change:isCurrentWin", this.handleCswRequests);
-            this.createDomOverlay(this.get("circleOverlay"));
+            this.on("change:isCurrentWin", this.handleCswRequests, this);
+            this.createDomOverlay("circle-overlay", this.get("circleOverlay"));
+            this.createDomOverlay("tooltip-overlay", this.get("tooltipOverlay"));
             this.setDropDownSnippet(new SnippetDropdownModel({
                 name: "Geometrie",
                 type: "string",
                 displayName: "Geometrie auswählen",
-                values: _.allKeys(this.getValues()),
+                values: _.allKeys(this.get("values")),
                 snippetType: "dropdown",
                 isMultiple: false,
-                preselectedValues: _.allKeys(this.getValues())[0]
+                preselectedValues: _.allKeys(this.get("values"))[0]
             }));
         },
         /**
          * Reset State when tool becomes active/inactive
+         * @returns {void}
          */
         reset: function () {
             this.setData({});
@@ -85,20 +94,24 @@ define(function (require) {
         },
         /**
          * Called when the wps modules returns a request
-         * @param  {string} requestId uniqueId used to identfy if request was sent by this model
-         * @param  {string} response the response xml of the wps
-         * @param  {} status the HTTPStatusCode
+         * @param  {string} requestId - uniqueId used to identfy if request was sent by this model
+         * @param  {string} response - the response xml of the wps
+         * @param  {number} status - the HTTPStatusCode
+         * @returns {void}
          */
         handleResponse: function (requestId, response, status) {
+            var parsedData;
+
             this.setRequesting(false);
             if (this.isEinwohnerRequest(this.get("requests"), requestId)) {
+                parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.einwohner;
                 this.removeId(this.get("requests"), requestId);
                 if (status === 200) {
-                    if (response["wps:erroroccured"] === "yes") {
-                        this.handleWPSError(response);
+                    if (parsedData.ErrorOccured === "yes") {
+                        this.handleWPSError(parsedData);
                     }
                     else {
-                        this.handleSuccess(response);
+                        this.handleSuccess(parsedData);
                     }
                 }
                 else {
@@ -109,8 +122,9 @@ define(function (require) {
         },
         /**
          * Check if this request id is known by this model
-         * @param  {[String]} ownRequests contains all ids of requests triggered by this module
-         * @param  {} requestId the id returned by the wps
+         * @param  {string[]} ownRequests - contains all ids of requests triggered by this module
+         * @param  {string} requestId - the id returned by the wps
+         * @returns {boolean} true | false
          */
         isEinwohnerRequest: function (ownRequests, requestId) {
             return _.contains(ownRequests, requestId);
@@ -118,30 +132,35 @@ define(function (require) {
         /**
          * Displays Errortext if the WPS returns an Error
          * @param  {String} response received by wps
+         * @returns {void}
          */
         handleWPSError: function (response) {
-            Radio.trigger("Alert", "alert", JSON.stringify(response["wps:ergebnis"]));
+            Radio.trigger("Alert", "alert", JSON.stringify(response.ergebnis));
         },
         /**
          * Used when statuscode is 200 and wps did not return an error
          * @param  {String} response received by wps
+         * @returns {void}
          */
         handleSuccess: function (response) {
+            var obj;
+
             try {
-                response = JSON.parse(response["wps:ergebnis"]);
-                this.prepareDataForRendering(response);
-                this.setData(response);
+                obj = JSON.parse(response.ergebnis);
+                this.prepareDataForRendering(obj);
+                this.setData(obj);
                 this.setDataReceived(true);
             }
             catch (e) {
                 Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + JSON.stringify(response));
                 this.resetView();
-                (console.error || console.log).call(console, e.stack || e);
+                (console.error || console.warn).call(console, e.stack || e);
             }
         },
         /**
          * Iterates ofer response properties
-         * @param  {} response
+         * @param  {object} response -
+         * @returns {void}
          */
         prepareDataForRendering: function (response) {
             _.each(response, function (value, key, list) {
@@ -152,67 +171,54 @@ define(function (require) {
                         stringVal = this.chooseUnitAndPunctuate(value);
                     }
                     else {
-                        stringVal = this.punctuate(value) + this.getFormattedDecimalString(value, 3);
+                        stringVal = Radio.request("Util", "punctuate", value) + this.getFormattedDecimalString(value, 3);
                     }
-                    value = stringVal;
+                    list[key] = stringVal;
+                }
+                else {
+                    list[key] = value;
                 }
 
-                list[key] = value;
             }, this);
         },
         /**
          * Chooses unit based on value, calls panctuate and converts to unit and appends unit
-         * @param  {number} value
-         * @param  {number} maxLength decimals are cut after maxlength chars
+         * @param  {number} value -
+         * @param  {number} maxDecimals - decimals are cut after maxlength chars
+         * @returns {string} unit
          */
         chooseUnitAndPunctuate: function (value, maxDecimals) {
-            var decimals = "";
+            var decimals = "",
+                newValue;
 
             if (value < 250000) {
                 decimals = this.getFormattedDecimalString(value, maxDecimals);
-                return this.punctuate(value) + decimals + " m²";
+                return Radio.request("Util", "punctuate", value) + decimals + " m²";
             }
             if (value < 10000000) {
-                value = value / 10000.0;
-                decimals = this.getFormattedDecimalString(value, maxDecimals);
+                newValue = value / 10000.0;
+                decimals = this.getFormattedDecimalString(newValue, maxDecimals);
 
-                return this.punctuate(value) + decimals + " ha";
+                return Radio.request("Util", "punctuate", newValue) + decimals + " ha";
             }
-            value = value / 1000000.0;
-            decimals = this.getFormattedDecimalString(value, maxDecimals);
+            newValue = value / 1000000.0;
+            decimals = this.getFormattedDecimalString(newValue, maxDecimals);
 
-            return this.punctuate(value) + decimals + " km²";
-        },
-        /**
-         * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
-         * @param  {[type]} value - feature attribute values
-         */
-        punctuate: function (value) {
-            var pattern = /(-?\d+)(\d{3})/,
-                stringValue = value.toString(),
-                predecimals = stringValue;
-
-            if (stringValue.indexOf(".") !== -1) {
-                predecimals = stringValue.split(".")[0];
-            }
-            while (pattern.test(predecimals)) {
-                predecimals = predecimals.replace(pattern, "$1.$2");
-            }
-            return predecimals;
+            return Radio.request("Util", "punctuate", newValue) + decimals + " km²";
         },
         /**
          * Returns the pecimal part cut aftera  max length of number represented as string
          * adds "," in front of decimals if applicable
          * @param  {string} number input number
          * @param  {num} maxLength decimals are cut after maxlength chars
-         * @return {String} decimals string with leading with ',' is not empty
+         * @returns {String} decimals string with leading with ',' is not empty
          */
         getFormattedDecimalString: function (number, maxLength) {
-            var decimals = "";
+            var decimals = "",
+                formattedString = number.toString();
 
-            number = number.toString();
-            if (number.indexOf(".") !== -1) {
-                decimals = number.split(".")[1];
+            if (formattedString.indexOf(".") !== -1) {
+                decimals = formattedString.split(".")[1];
                 if (maxLength > 0 && decimals.length > 0) {
                     return "," + decimals.substring(0, maxLength);
                 }
@@ -221,6 +227,7 @@ define(function (require) {
         },
         /**
          * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
+         * @returns {void}
          */
         resetView: function () {
             var layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer");
@@ -232,8 +239,9 @@ define(function (require) {
         },
         /**
          * Removes an ID from an array of ID
-         * @param  {} requests All IDs
-         * @param  {} requestId Id to remove
+         * @param  {string[]} requests - All IDs
+         * @param  {string} requestId - Id to remove
+         * @returns {void}
          */
         removeId: function (requests, requestId) {
             var index = requests.indexOf(requestId);
@@ -244,35 +252,37 @@ define(function (require) {
         },
         /**
          * Handles (de-)activation of this Tool
-         * @param  {} args
+         * @param {object} args -
+         * @returns {void}
          */
         setStatus: function (args) {
             var selectedValues;
 
-            if (args[2].getId() === "einwohnerabfrage" && args[0] === true) {
+            if (args[2].get("id") === "einwohnerabfrage" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
-                selectedValues = this.getDropDownSnippet().getSelectedValues();
-                this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.getValues())[0]);
+                selectedValues = this.get("snippetDropdownModel").getSelectedValues();
+                this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
             }
             else {
                 this.setIsCurrentWin(false);
-                if (!_.isUndefined(this.getDrawInteraction())) {
-                    this.getDrawInteraction().setActive(false);
+                if (!_.isUndefined(this.get("drawInteraction"))) {
+                    this.get("drawInteraction").setActive(false);
                 }
                 Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
+                Radio.trigger("Map", "removeOverlay", this.get("tooltipOverlay"));
             }
         },
 
         /**
          * runs the csw requests once and removes this callback from the change:isCurrentWin event
          * because both requests only need to be executed once
-         * @param {boolean} value - is tool active
+         * @returns {void}
          */
-        handleCswRequests: function (value) {
-            if (value) {
-                var cswUrl = Radio.request("RestReader", "getServiceById", "1").get("url");
+        handleCswRequests: function () {
+            var cswUrl = Radio.request("RestReader", "getServiceById", "1").get("url");
 
+            if (this.get("isCurrentWin")) {
                 this.sendRequest(cswUrl, {id: this.get("fhhId")}, this.setFhhDate);
                 this.sendRequest(cswUrl, {id: this.get("mrhId")}, this.setMrhDate);
                 this.off("change:isCurrentWin", this.handleCswRequests);
@@ -284,6 +294,7 @@ define(function (require) {
          * @param {string} url - the url for the request
          * @param {object} data - data to be sent
          * @param {function} callback - success function
+         * @returns {void}
          */
         sendRequest: function (url, data, callback) {
             $.ajax({
@@ -299,7 +310,7 @@ define(function (require) {
 
         /**
          * parse and returns the date of the GetRecordById response
-         * @param {xml} response
+         * @param {xml} response -
          * @return {string} date
          */
         parseDate: function (response) {
@@ -319,16 +330,17 @@ define(function (require) {
                     dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                 }
             });
-            return Moment(dateTime).format("DD.MM.YYYY");
+            return moment(dateTime).format("DD.MM.YYYY");
         },
 
         /**
          * creates a draw interaction and adds it to the map.
-         * @param {string} value - drawing type (Box | Circle | Polygon)
+         * @param {string} drawType - drawing type (Box | Circle | Polygon)
+         * @returns {void}
          */
         createDrawInteraction: function (drawType) {
             var that = this,
-                value = this.getValues()[drawType],
+                value = this.get("values")[drawType],
                 layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
                 createBoxFunc = ol.interaction.Draw.createBox(),
                 drawInteraction = new ol.interaction.Draw({
@@ -342,15 +354,18 @@ define(function (require) {
                         if (value === "Box") {
                             return createBoxFunc(coordinates, opt_geom);
                         }
-                        else if (value === "Circle") {
-                            return that.snapRadiusToInterval(coordinates, opt_geom);
-                        }
+                        // value === "Circle"
+                        return that.snapRadiusToInterval(coordinates, opt_geom);
                     }
                 });
 
+            this.setCurrentValue(value);
             this.toggleOverlay(value, this.get("circleOverlay"));
+            Radio.trigger("Map", "addOverlay", this.get("tooltipOverlay"));
+
             this.setDrawInteractionListener(drawInteraction, layer);
             this.setDrawInteraction(drawInteraction);
+            Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay, this);
             Radio.trigger("Map", "addInteraction", drawInteraction);
         },
         snapRadiusToInterval: function (coordinates, opt_geom) {
@@ -366,11 +381,12 @@ define(function (require) {
         },
         /**
          * sets listeners for draw interaction events
-         * @param {ol.interaction.Draw} interaction
-         * @param {ol.layer.Vector} layer
+         * @param {ol.interaction.Draw} interaction -
+         * @param {ol.layer.Vector} layer -
+         * @returns {void}
          */
         setDrawInteractionListener: function (interaction, layer) {
-            interaction.on("drawstart", function (evt) {
+            interaction.on("drawstart", function () {
                 layer.getSource().clear();
             }, this);
 
@@ -388,18 +404,19 @@ define(function (require) {
             });
         },
         /**
-         *
-         * @param  {} geoJson
+         * @param  {object} geoJson -
+         * @returns {void}
          */
         makeRequest: function (geoJson) {
             var requestId = _.uniqueId("wps");
+
             this.setDataReceived(false);
             this.setRequesting(true);
             this.trigger("renderResult");
 
             this.get("requests").push(requestId);
             Radio.trigger("WPS", "request", "1001", requestId, "einwohner_ermitteln.fmw", {
-                "such_flaeche": geoJson
+                "such_flaeche": JSON.stringify(geoJson)
             });
         },
         prepareData: function (geoJson) {
@@ -410,15 +427,28 @@ define(function (require) {
         },
         /**
          * calculates the circle radius and places the circle overlay on geometry change
-         * @param {ol.Geometry} geometry - circle geometry
-         * @param {ol.Overlay} circleOverlay
+         * @param {number} radius - circle radius
+         * @param {number[]} coords - point coordinate
+         * @returns {void}
          */
         showOverlayOnSketch: function (radius, coords) {
-            var radius = this.roundRadius(radius),
-                circleOverlay = this.get("circleOverlay");
+            var circleOverlay = this.get("circleOverlay");
 
-            circleOverlay.getElement().innerHTML = radius;
+            circleOverlay.getElement().innerHTML = this.roundRadius(radius);
             circleOverlay.setPosition(coords);
+        },
+        showTooltipOverlay: function (evt) {
+            var coords = evt.coordinate,
+                tooltipOverlay = this.get("tooltipOverlay"),
+                currentValue = this.get("currentValue");
+
+            if (currentValue === "Polygon") {
+                tooltipOverlay.getElement().innerHTML = this.get("tooltipMessagePolygon");
+            }
+            else {
+                tooltipOverlay.getElement().innerHTML = this.get("tooltipMessage");
+            }
+            tooltipOverlay.setPosition(coords);
         },
 
         precisionRound: function (number, precision) {
@@ -430,6 +460,7 @@ define(function (require) {
          * converts a feature to a geojson
          * if the feature geometry is a circle, it is converted to a polygon
          * @param {ol.Feature} feature - drawn feature
+         * @returns {object} GeoJSON
          */
         featureToGeoJson: function (feature) {
             var reader = new ol.format.GeoJSON(),
@@ -444,14 +475,15 @@ define(function (require) {
         /**
          * adds or removes the circle overlay from the map
          * @param {string} type - geometry type
-         * @param {ol.Overlay} circleOverlay
+         * @param {ol.Overlay} overlay - circleOverlay
+         * @returns {void}
          */
-        toggleOverlay: function (type, circleOverlay) {
+        toggleOverlay: function (type, overlay) {
             if (type === "Circle") {
-                Radio.trigger("Map", "addOverlay", circleOverlay);
+                Radio.trigger("Map", "addOverlay", overlay);
             }
             else {
-                Radio.trigger("Map", "removeOverlay", circleOverlay);
+                Radio.trigger("Map", "removeOverlay", overlay);
             }
         },
 
@@ -470,18 +502,21 @@ define(function (require) {
         /**
          * creates a div element for the circle overlay
          * and adds it to the overlay
-         * @param {ol.Overlay} circleOverlay
+         * @param {string} id -
+         * @param {ol.Overlay} overlay - circleOverlay
+         * @returns {void}
          */
-        createDomOverlay: function (circleOverlay) {
+        createDomOverlay: function (id, overlay) {
             var element = document.createElement("div");
 
-            element.setAttribute("id", "circle-overlay");
-            circleOverlay.setElement(element);
+            element.setAttribute("id", id);
+            overlay.setElement(element);
         },
 
         /**
          * show or hide the zensus raster layer
-         * @param {boolean} value
+         * @param {boolean} value - true | false
+         * @returns {void}
          */
         toggleRasterLayer: function (value) {
             Radio.trigger("ModelList", "setModelAttributesById", "8712", {
@@ -492,7 +527,8 @@ define(function (require) {
 
         /**
          * show or hide the alkis adressen layer
-         * @param {boolean} value
+         * @param {boolean} value - true | false
+         * @returns {void}
          */
         toggleAlkisAddressLayer: function (value) {
             Radio.trigger("ModelList", "setModelAttributesById", "441", {
@@ -513,91 +549,29 @@ define(function (require) {
         setDropDownSnippet: function (value) {
             this.set("snippetDropdownModel", value);
         },
-        getDropDownSnippet: function () {
-            return this.get("snippetDropdownModel");
-        },
-        getValues: function () {
-            return this.get("values");
-        },
 
-        /**
-         * sets the attribute fhhDate
-         * @param {xml} response
-         */
         setFhhDate: function (response) {
             this.set("fhhDate", this.parseDate(response));
         },
 
-        /**
-         * sets the attribute mrhDate
-         * @param {xml} response
-         */
         setMrhDate: function (response) {
             this.set("mrhDate", this.parseDate(response));
         },
 
-        /**
-         * sets the attribute drawInteraction
-         * @param {ol.interaction.Draw}
-         */
         setDrawInteraction: function (value) {
             this.set("drawInteraction", value);
         },
 
-        /**
-         * gets the attribute drawInteraction
-         * @return {ol.interaction.Draw}
-         */
-        getDrawInteraction: function () {
-            return this.get("drawInteraction");
-        },
-
-        /**
-         * sets the attribute isCollapsed
-         * @param {boolean} value
-         */
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
         },
 
-        /**
-         * gets the attribute isCollapsed
-         * @return {boolean}
-         */
-        getIsCollapsed: function () {
-            return this.get("isCollapsed");
-        },
-
-        /**
-         * sets the attribute isCurrentWin
-         * @param {boolean} value
-         */
         setIsCurrentWin: function (value) {
             this.set("isCurrentWin", value);
         },
 
-        /**
-         * gets the attribute isCurrentWin
-         * @return {boolean}
-         */
-        getIsCurrentWin: function () {
-            return this.get("isCurrentWin");
-        },
-
-        /**
-         * gets the attribute checkBox
-         * @returns {Backbone.Model}
-         */
-        getCheckboxRaster: function () {
-            return this.get("checkBoxRaster");
-        },
-
-        /**
-         * gets the attribute checkBox
-         * @returns {Backbone.Model}
-         */
-        getCheckboxAddress: function () {
-            return this.get("checkBoxAddress");
+        setCurrentValue: function (value) {
+            this.set("currentValue", value);
         }
     });
 

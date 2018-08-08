@@ -6,15 +6,20 @@ define(function (require) {
         Preparser;
 
     Preparser = Backbone.Model.extend({
+        defaults: {},
         url: function () {
             var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json",
                 addPath,
                 isAddPathValid;
 
-            if (path.slice(-5) !== ".json") {
+            if (path.slice(-6) === "?noext") {
+                path = Config.portalConf;
+            }
+            else if (path.slice(-5) !== ".json") {
                 addPath = Radio.request("Util", "getConfig");
                 isAddPathValid = addPath.length > 1;
                 // removes trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
+
                 if (isAddPathValid) {
                     if (path.slice(-1) === "/") {
                         path = path.slice(0, -1);
@@ -28,6 +33,7 @@ define(function (require) {
                     path = "config.json";
                 }
             }
+
             return path;
         },
         initialize: function () {
@@ -42,14 +48,17 @@ define(function (require) {
             });
         },
         parse: function (response) {
+
             var attributes = {
                 portalConfig: response.Portalconfig,
                 baselayer: response.Themenconfig.Hintergrundkarten,
                 overlayer: response.Themenconfig.Fachdaten,
                 overlayer_3d: response.Themenconfig.Fachdaten_3D,
                 treeType: response.Portalconfig.Baumtyp,
+                isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
                 snippetInfos: this.requestSnippetInfos()
             };
+
             if (attributes.treeType === "default") {
                 new DefaultTreeParser(attributes);
             }
@@ -58,9 +67,20 @@ define(function (require) {
             }
         },
 
+        parseIsFolderSelectable: function (globalFlag) {
+            if (globalFlag === false) {
+                return false;
+            }
+            return true;
+        },
+
         requestSnippetInfos: function () {
             var infos,
-                url = _.has(Config, "infoJson") ? Config.infoJson : undefined;
+                url;
+
+            if (_.has(Config, "infoJson")) {
+                url = Config.infoJson;
+            }
 
             if (!_.isUndefined(url)) {
                 $.ajax({
@@ -70,8 +90,8 @@ define(function (require) {
                         infos = data;
                     }
                 });
-                return infos;
             }
+            return infos;
         }
     });
 

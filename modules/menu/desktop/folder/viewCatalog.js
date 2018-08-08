@@ -38,7 +38,6 @@ define(function (require) {
                     e.stopPropagation();
                 }
             });
-
             this.render();
         },
         render: function () {
@@ -49,15 +48,16 @@ define(function (require) {
             attr.categories = Radio.request("Parser", "getCategories");
             attr.backgroundImage = Radio.request("Parser", "getItemByAttributes", {id: "backgroundImage"});
             this.$el.find(".header").toggleClass("closed");
-            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+            $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+            return this;
         },
         toggleIsExpanded: function () {
             this.model.toggleIsExpanded();
         },
         toggleGlyphicon: function () {
-            var elem = $("ul#" + this.model.getId()).prev().find(".glyphicon:first");
+            var elem = $("ul#" + this.model.get("id")).prev().find(".glyphicon:first");
 
-            if (!this.model.getIsExpanded()) {
+            if (!this.model.get("isExpanded")) {
                 elem.removeClass("glyphicon-minus-sign");
                 elem.addClass("glyphicon-plus-sign");
             }
@@ -66,7 +66,7 @@ define(function (require) {
                 elem.addClass("glyphicon-minus-sign");
             }
             // Hässlicher IE Bugfix, weil IE 11 mit overflow: auto und remove probleme macht (leerer Katalog wird sehr hoch und bekommt die Höhe -0.01)
-            if (!this.model.getIsExpanded()) {
+            if (!this.model.get("isExpanded")) {
                 this.$el.find(".LayerListMaxHeight").css("overflow", "visible");
             }
             else {

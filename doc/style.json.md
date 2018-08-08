@@ -3,17 +3,17 @@
 [TOC]
 
 # style.json #
-Die *style.json* beinhaltet die Parameter für die WFS-Features. Die Verbindung zwischen den Layern und der *style.json* erfolgt über die Angabe der *Layer-ID* in der *style.json* und entsprechendem Verweis in der [config.json](config.json.md) im Bereich *Themenconfig --> Fachdaten*. Sollten in der *style.json* nicht alle notwendigen Parameter angegeben sein, wird auf die Default-Werte zurückgegriffen. Bei Farbwerten muss der Parameter entsprechend der Vorgabe von *OpenLayers* für *ol.style* aussehen.
+Die *style.json* beinhaltet die Parameter für die Vektor-Features (WFS und Sensor). Die Verbindung zwischen den Layern und der *style.json* erfolgt über die Angabe der *Layer-ID* in der *style.json* und entsprechendem Verweis in der [config.json](config.json.md) im Bereich *Themenconfig --> Fachdaten*. Sollten in der *style.json* nicht alle notwendigen Parameter angegeben sein, wird auf die Default-Werte zurückgegriffen. Bei Farbwerten muss der Parameter entsprechend der Vorgabe von *OpenLayers* für *ol.style* aussehen.
 
 ## Allgemeine Style Parameter ##
-Beim Stylen der WFS-Features gibt es verschiedene Klassen nach denen wir den Style in der *style.json* unterscheiden.
+Beim Stylen der Vektor-Features (WFS und Sensor) gibt es verschiedene Klassen nach denen wir den Style in der *style.json* unterscheiden.
 Wird in der [config.json](config.json.md) in der Layerconfiguration der Parameter "clusterDistance" gesetzt, so wird ein ClusterStyle erzeugt. Der ClusterStyle ist abhängig vom Parameter "clusterClass".
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |layerId|ja|String||ID des Styles, der in der [config.json](config.json.md) angegeben wird, um entsprechend zugeordnet zu werden. In der Regel gleiche ID, wie die des Layers.|
 |class|ja|String|"POINT"|Angabe der entsprechenden Klasse, entspricht dem Geometrietyp. Mögliche Werte: "POINT", "LINE",  "POLYGON".|
-|subClass|ja|String|"SIMPLE"|Angabe der entsprechenden SubKlasse, nach der die Style-Information verwendet werden soll. Mögliche Werte bei "POINT": "SIMPLE", "CUSTOM", "CIRCLE". Mögliche Werte bei "LINE": "SIMPLE". Mögliche Werte bei "POLYGON": "SIMPLE", "CUSTOM"|
+|subClass|ja|String|"SIMPLE"|Angabe der entsprechenden SubKlasse, nach der die Style-Information verwendet werden soll. Mögliche Werte bei "POINT": "SIMPLE", "CUSTOM", "CIRCLE", "ADVANCED". Mögliche Werte bei "LINE": "SIMPLE". Mögliche Werte bei "POLYGON": "SIMPLE", "CUSTOM"|
 |labelField|nein|String||Attribut des Features, nach dessen Wert das Label angezeigt werden soll.|
 |textAlign|nein|String|"left"|Ausrichtung des Textes am Feature. Mögliche Werte "left", "center", "right"|
 |textFont|nein|String|"Courier"|Font des Textes am Feature.|
@@ -53,6 +53,8 @@ So gibt es folgende Kombinationen:
 [POINT CUSTOM](#markdown-header-point-custom)
 
 [POINT CIRCLE](#markdown-header-point-circle)
+
+[POINT ADVANCED](#markdown-header-point-advanced)
 
 [LINE SIMPLE](#markdown-header-line-simple)
 
@@ -141,6 +143,63 @@ Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle 
 |circleStrokeWidth|nein|Integer|2|Breite des Kreisrandes.|
 |circleFillColor|nein|Array [Integer]|[0, 153, 255, 1]|Farbe der Kreisfüllung in rgba.|
 
+### POINT ADVANCED ###
+Bei "class"=== "POINT" und "subClass" === "ADVANCED" wird für jedes Feature ein dynamischer Style gesetzt. Diese werden mit den Parametern "scaling" und "scalingShape" in konkrete Styles unterschieden. Dieser Style unterstützt die automatisierte Aktualisierung von Sensor-Features.
+Cluster-Attribute können gesetzt werden wie in [POINT SIMPLE](#markdown-header-point-simple) zu sehen. Label-Attribute können gesetzt werden wie in [Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter) zu sehen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|scaling|ja|String||Angabe welchem Skalenniveau die Daten entsprechen. Mögliche Werte sind "INTERVAL" für Zahlendaten die eine natürliche Reihenfolge haben (z.B. in der Einheit Meter, oder Grad Celsius) oder "NOMINAL" für Daten die sich nicht in eine reihenfolge bringen lassen (z.B. Farben oder Formen)|
+|scalingShape|ja|String||Angabe der Darstellungsart. Möglicher Wert bei "INTERVAL": "[CIRCLE_BAR](#markdown-header-CIRCLE_BAR)". Möglicher Wert bei "NOMINAL": "[CIRCLESEGMENTS](#markdown-header-CIRCLESEGMENTS)".|
+
+```json
+{
+    "layerId" : "999999",
+    "class": "POINT",
+    "subClass" : "ADVANCED",
+    "scaling" : "NOMINAL",
+    "scalingShape" : "CIRCLESEGMENTS",
+    "scalingAttribute" : "state",
+    "scalingValues" : {
+       "charging" : [220, 0, 0, 1],
+       "available" : [0, 220, 0, 1],
+       "outoforder" : [175, 175, 175, 1]
+    },
+    "scalingValueDefaultColor" : [0, 0, 0, 1],
+    "circleSegmentsRadius" : 21,
+    "circleSegmentsStrokeWidth" : 3,
+    "circleSegmentsGap" : 10,
+    "circleSegmentsBackgroundColor" : [255, 255, 255, 1]
+  }
+```
+
+### CIRCLE_BAR ###
+Bei "class"=== "POINT", "subClass" === "ADVANCED", "scaling"="INTERVAL" und "scalingShape"="CIRCLE_BAR" wird für jedes Feature ein Punkt von dem aus ein Balken in vertikale Richtung abgeht. Der Punkt stellt den Ort des Features dar. Die Länge des Balkens repräsentiert den Attributwert.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|scalingAttribute|ja|String||Attribut das zur Darstellung verwendet werden soll|
+|circleBarScalingFactor|nein|Float|1|Faktor um den Attributwert zu überhöhen. Notwenidg bei sehr großen (positiven oder negativen Werten) und bei Werten nahe 0.|
+|circleBarRadius|nein|Float|6|Radius des Punktes.|
+|circleBarLineStroke|nein|Float|5|Breite des Balkens.|
+|circleBarCircleFillColor|nein|Array[Integer]|[0, 0, 0, 1]|Füllfarbe des Punktes.|
+|circleBarCircleStrokeColor|nein|Array[Integer]|[0, 0, 0, 1]|Farbe des Kreisrandes|
+|circleBarCircleStrokeWidth|nein||1|Breite des Kreisrandes|
+|circleBarLineStrokeColor|nein|Array[Integer]|[0, 0, 0, 1]|Farbe des Balkens.|
+
+### CIRCLESEGMENTS ###
+Bei "class"=== "POINT", "subClass" === "ADVANCED", "scaling"="NOMINAL" und "scalingShape"="CIRCLESEGMENTS" wird für jedes Feature ein Kreis der aus einem oder mehreren Kreissegmenten besteht gesetzt. Innerhalb der Kreissegmente kann ein Image platziert werden. Dazu können  alle Parameter die mit "image" beginnen aus [styleFieldValue](#markdown-header-styleFieldValue) verwendet werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|scalingAttribute|ja|String||Attribut das zur Darstellung verwendet werden soll|
+|scalingValues|nein|Array[Object]||Attributwerte denen eine Farbe zugeordnet ist, z.B. {"charging" : [220, 0, 0, 1]}. Innerhalb des Objektes können beliebig viele Attributwerte angegeben werden.|
+|scalingValueDefaultColor|nein|Array[Integer]|[0, 0, 0, 1]|Standardfarbe für alle Attributwerte die nicht in "scalingValues" definiert sind|
+|circleSegmentsRadius|nein|Float|10|Radius der Kreissegmente|
+|circleSegmentsStrokeWidth|nein|Float|4|Breite der Kreissegmente|
+|circleSegmentsGap|nein|Float|10|Abstand zwischen den Kreissegmenten|
+|circleSegmentsBackgroundColor|nein|Array[Integer]|[255, 255, 255, 0]|Farbe des Kreises|
+
 ### LINE SIMPLE ###
 Bei "class"=== "LINE" und "subClass" === "SIMPLE" wird ein linienhafter Style definiert.
 
@@ -174,7 +233,7 @@ Darstellung eines Attributwertes auf die Auswirkungen des Polygons. Werden hier 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|styleFieldValue|ja|String||Attributwert.|
+|styleFieldValue|ja|String||Attributwert. Wert des Attributes wie ihn der WFS-Dienst liefert (Case-Insensitive).|
 |polygonFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Polygon. |
 |polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
 |polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|

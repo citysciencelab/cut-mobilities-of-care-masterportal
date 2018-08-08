@@ -6,7 +6,7 @@
     margin-top: 10px;
     margin-bottom: 30px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-    z-index: 1032;
+    z-index: 999;
     max-width: 500px;
 }
 
@@ -84,7 +84,25 @@
     background-color: rgb(255, 255, 255);
 }
 
-.win-body .checkbox-container {
-    padding-left: 0;
-    padding-right: 0;
+.table-tool-window {
+    font-family: "HamburgSans",sans-serif;
+    border-radius: 12px !important;
+    background-color: #F2F2F2;
+    top: 70%;
+    left: calc(50% + 560px);
+    margin-bottom: 30px;
+}
+
+.table-tool-window .header{
+    font-family: "HamburgSans",sans-serif;
+}
+
+.table-tool-window .win-body {
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    background-color: #F2F2F2;
+}
+
+.table-tool-window .win-body * {
+    border-radius: 12px !important;
 }

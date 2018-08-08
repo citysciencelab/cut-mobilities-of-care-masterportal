@@ -1,16 +1,20 @@
 define(function (require) {
 
-    require("modules/searchbar/model");
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
+        $ = require("jquery"),
         BKGSearchModel;
+
+    require("modules/searchbar/model");
 
     BKGSearchModel = Backbone.Model.extend({
         defaults: {
             minChars: 3,
             bkgSuggestURL: "",
             bkgSearchURL: "",
-            extent: [454591, 5809000, 700000, 6075769],
+            extent: [
+                454591, 5809000, 700000, 6075769
+            ],
             suggestCount: 20,
             epsg: "EPSG:25832",
             filter: "filter=(typ:*)",
@@ -29,6 +33,7 @@ define(function (require) {
          * @param {string} [config.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
          * @param {string} [config.filter=filter=(typ:*)] - Filterstring
          * @param {float} [config.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
+         * @returns {void}
          */
         initialize: function (config) {
             var suggestService = Radio.request("RestReader", "getServiceById", config.suggestServiceId),
@@ -72,21 +77,24 @@ define(function (require) {
         /**
         * @description Veränderte Suchabfolge bei initialer Suche z.B. furch URL-Parameter query
         * @param {string} searchString - Suchstring
+        * @returns {void}
         */
         directSearch: function (searchString) {
             var request;
 
             if (searchString.length >= this.get("minChars")) {
                 $("#searchInput").val(searchString);
-                request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
+                request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
                 this.setTypeOfRequest("direct");
-                this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false, this.getTypeOfRequest());
+                this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false, this.get("typeOfRequest"));
                 Radio.trigger("Searchbar", "createRecommendedList");
             }
         },
         directPushSuggestions: function (data) {
             if (data.length === 1) {
-                this.bkgSearch(data[0].suggestion);
+                this.bkgSearch({
+                    name: data[0].suggestion
+                });
             }
             else {
                 _.each(data, function (hit) {
@@ -96,32 +104,39 @@ define(function (require) {
                             type: "Ort",
                             bkg: true,
                             glyphicon: "glyphicon-road",
-                            id: _.uniqueId("bkgSuggest")
+                            id: _.uniqueId("bkgSuggest"),
+                            triggerEvent: {
+                                channel: "Searchbar",
+                                event: "bkgSearch"
+                            }
                         });
                     }
                 }, this);
             }
         },
+
         /**
-        * Wird von der Searchbar getriggert.
-        */
+         * Startet die Suche
+         * @param  {string} searchString Suchpattern
+         * @return {void}
+         */
         search: function (searchString) {
             if (searchString.length >= this.get("minChars")) {
                 this.suggestByBKG(searchString);
             }
         },
-        /**
-         *
-         */
+
         suggestByBKG: function (searchString) {
-            var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
+            var request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
 
             this.setTypeOfRequest("suggest");
-            this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, true, this.getTypeOfRequest());
+            this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, true, this.get("typeOfRequest"));
         },
+
         /**
-         * [pushSuggestions description]
-         * @param  {[type]} data [description]
+         * Fügt die Vorschläge den Suchtreffern hinzu
+         * @param  {[object]} data Array der Treffer
+         * @return {void}
          */
         pushSuggestions: function (data) {
             _.each(data, function (hit) {
@@ -131,37 +146,45 @@ define(function (require) {
                         type: "Ort",
                         bkg: true,
                         glyphicon: "glyphicon-road",
-                        id: _.uniqueId("bkgSuggest")
+                        id: _.uniqueId("bkgSuggest"),
+                        triggerEvent: {
+                            channel: "Searchbar",
+                            event: "bkgSearch"
+                        }
                     });
                 }
             }, this);
             Radio.trigger("Searchbar", "createRecommendedList");
         },
+
         /**
-         * [bkgSearch description]
-         * @param  {string} name - Gesuchter String
+         * Startet die präzise Suche eines ausgewählten BKG-Vorschlags
+         * @param  {object} hit Objekt des BKG-Vorschlags
+         * @return {void}
          */
-        bkgSearch: function (name) {
-            var request = "bbox=" + this.get("extent") + "&outputformat=json" + "&srsName=" + this.get("epsg") + "&count=1" + "&query=" + encodeURIComponent(name);
+        bkgSearch: function (hit) {
+            var name = hit.name,
+                request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&count=1&query=" + encodeURIComponent(name);
 
             this.setTypeOfRequest("search");
-            this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.getTypeOfRequest());
+            this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.get("typeOfRequest"));
         },
         /**
          * @description Triggert das Zoomen auf den Eintrag
          * @param  {string} data - Data-XML des request
+         * @returns {void}
          */
         handleBKGSearchResult: function (data) {
             Radio.trigger("MapMarker", "zoomToBKGSearchResult", data);
         },
         /**
          * @description Führt einen HTTP-GET-Request aus.
-         *
          * @param {String} url - URL the request is sent to.
          * @param {String} data - Data to be sent to the server
          * @param {function} successFunction - A function to be called if the request succeeds
          * @param {boolean} asyncBool - asynchroner oder synchroner Request
          * @param {String} type - Typ des Requests
+         * @returns {void}
          */
         sendRequest: function (url, data, successFunction, asyncBool, type) {
             var ajax = this.get("ajaxRequests");
@@ -174,7 +197,7 @@ define(function (require) {
         },
 
         ajaxSend: function (url, data, successFunction, asyncBool, typeRequest) {
-            this.get("ajaxRequests")[typeRequest] = ($.ajax({
+            this.get("ajaxRequests")[typeRequest] = $.ajax({
                 url: url,
                 data: data,
                 dataType: "json",
@@ -192,12 +215,13 @@ define(function (require) {
                 complete: function () {
                     this.polishAjax(typeRequest);
                 }
-            }, this));
+            }, this);
         },
 
         /**
          * Triggert die Darstellung einer Fehlermeldung
          * @param {object} err Fehlerobjekt aus Ajax-Request
+         * @returns {void}
          */
         showError: function (err) {
             var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
@@ -208,6 +232,7 @@ define(function (require) {
         /**
          * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
          * @param {string} type Bezeichnung des Typs
+         * @returns {void}
          */
         polishAjax: function (type) {
             var ajax = this.get("ajaxRequests"),
@@ -217,15 +242,10 @@ define(function (require) {
         },
 
         /**
-        * Holt den jeweiligen Typ der gesendet wird
-        */
-        getTypeOfRequest: function () {
-            return this.get("typeOfRequest");
-        },
-
-        /**
-        * Setzt den jeweiligen Typ der gesendet wird
-        */
+         * Setzt den RequestTyp
+         * @param {string} value neuer Wert
+         * @returns {void}
+         */
         setTypeOfRequest: function (value) {
             this.set("typeOfRequest", value);
         }
