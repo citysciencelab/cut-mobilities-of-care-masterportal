@@ -29,14 +29,11 @@ define(function (require) {
         }),
         initialize: function () {
             this.superInitialize();
-            // this.listenTo(Radio.channel("Window"), {
-            //     "winParams": this.setStatus
-            // });
+
             this.listenTo(Radio.channel("ParcelSearch"), {
                 "createReport": this.createReport
             });
             this.setDefaults();
-            console.log(this);
         },
         /*
          * wird getriggert, wenn ein Tool in der Menüleiste geklickt wird. Übergibt die Konfiguration der parcelSearch aus args an readConfig().

@@ -101,9 +101,7 @@ define(function (require) {
             }, this);
 
             this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": function (id, deaktivateGFI) {
-                    this.toggleGFI(id, deaktivateGFI);
-                }
+                "activatedTool": this.toggleGFI
             });
 
             if (_.has(Config, "gfiWindow")) {
@@ -113,7 +111,7 @@ define(function (require) {
             tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
 
             if (!_.isUndefined(tool)) {
-                this.toggleGFI(tool.id);
+                this.toggleGFI(tool.id, !tool.isActive);
             }
             this.initView();
         },
@@ -146,7 +144,7 @@ define(function (require) {
          * @return {undefined}
          */
         toggleGFI: function (id, deaktivateGFI) {
-            if (id === "gfi") {
+            if (id === "gfi" && deaktivateGFI === false) {
                 Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
             else if (deaktivateGFI === true) {

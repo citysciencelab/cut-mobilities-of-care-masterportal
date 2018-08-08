@@ -33,7 +33,6 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isActive": function (model, value) {
-                    console.log("tool");
                     // console.log(model);
                     // console.log(model.get("renderInWindow"));
                     if (value && model.get("renderToWindow")) {
@@ -50,6 +49,12 @@ define(function (require) {
                         Radio.trigger("Window", "setIsVisible", false);
                         // channel.trigger("deactivatedTool", this.get("id"), this.get("deaktivateGFI"));
                     }
+                    if (model.get("deactivateGFI") && value) {
+                        channel.trigger("activatedTool", "gfi", true);
+                    }
+                    else {
+                        channel.trigger("activatedTool", "gfi", false);
+                    }
                     // if (_.contains(this.get("toolsToRenderInSidebar"), this.get("id")) || this.get("id") === "legend" || this.get("id") === "compareFeatures") {
                     //     channel.trigger("activatedTool", "gfi", false);
                     // }
@@ -62,7 +67,7 @@ define(function (require) {
         //         // triggert das Ändern eines Tools
         //         Radio.trigger("ClickCounter", "toolChanged");
         //         if (this.get("id") !== "legend" && this.get("id") !== "compareFeatures") {
-        //             // this.collection.setActiveToolToFalse(this, this.get("deaktivateGFI"));
+        //             // this.collection.ToolToFalse(this, this.get("deaktivateGFI"));
         //         }
 
         //         if (this.get("id") === "legend") {

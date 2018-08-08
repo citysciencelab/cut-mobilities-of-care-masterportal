@@ -12,6 +12,7 @@ define(function (require) {
         Legend = require("modules/legend/model"),
         PrintModel = require("modules/tools/print_/model"),
         CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
+        Einwohnerabfrage_HH = require("modules/tools/einwohnerabfrage_hh/model"),
         ParcelSearch = require("modules/tools/parcelSearch/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
         ModelList;
@@ -117,6 +118,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "compareFeatures") {
                     return new CompareFeaturesModel(attrs, options);
+                }
+                else if (attrs.id === "einwohnerabfrage") {
+                    return new Einwohnerabfrage_HH(attrs, options);
                 }
                 else if (attrs.id === "legend") {
                     return new Legend(attrs, options);

@@ -128,12 +128,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "einwohnerabfrage": {
-                //     require(["modules/tools/einwohnerabfrage_hh/selectView"], function (EinwohnerabfrageView) {
-                //         new EinwohnerabfrageView();
-                //     });
-                //     break;
-                // }
+                case "einwohnerabfrage": {
+                    require(["modules/tools/einwohnerabfrage_hh/selectView"], function (EinwohnerabfrageView) {
+                        new EinwohnerabfrageView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                    });
+                    break;
+                }
                 // case "animation": {
                 //     require(["modules/tools/animation/view"], function (AnimationView) {
                 //         new AnimationView();
