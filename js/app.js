@@ -124,7 +124,7 @@ define("app", function (require) {
             switch (tool.id) {
                 case "compareFeatures": {
                     require(["modules/tools/compareFeatures/view"], function (CompareFeaturesView) {
-                        new CompareFeaturesView();
+                        new CompareFeaturesView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
                     });
                     break;
                 }

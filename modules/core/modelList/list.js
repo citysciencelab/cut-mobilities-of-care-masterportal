@@ -10,6 +10,7 @@ define(function (require) {
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         PrintModel = require("modules/tools/print_/model"),
+        CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
         ParcelSearch = require("modules/tools/parcelSearch/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
         ModelList;
@@ -112,6 +113,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "parcelSearch") {
                     return new ParcelSearch(attrs, options);
+                }
+                else if (attrs.id === "compareFeatures") {
+                    return new CompareFeaturesModel(attrs, options);
                 }
                 return new Tool(attrs, options);
             }

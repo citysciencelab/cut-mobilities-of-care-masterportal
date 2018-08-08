@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
-        CompareFeaturesTemplateFeedback = require("text!modules/tools/compareFeatures/templateFeedback.html"),
+    var CompareFeaturesTemplateFeedback = require("text!modules/tools/compareFeatures/templateFeedback.html"),
         CompareFeaturesTemplateNoFeatures = require("text!modules/tools/compareFeatures/templateNoFeatures.html"),
         CompareFeaturesTemplate = require("text!modules/tools/compareFeatures/template.html"),
         CompareFeaturesView;
@@ -25,13 +24,13 @@ define(function (require) {
         },
 
         initialize: function () {
-            this.model = new CompareFeaturesModel();
+            // this.model = new CompareFeaturesModel();
             this.template = _.template(CompareFeaturesTemplate);
             this.templateNoFeatures = _.template(CompareFeaturesTemplateNoFeatures);
             this.templateFeedback = _.template(CompareFeaturesTemplateFeedback);
 
             this.listenTo(this.model, {
-                "change:isActivated": this.render,
+                "change:isActive": this.render,
                 "renderFeedbackModal": this.renderFeedbackModal
             });
             document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
@@ -39,7 +38,7 @@ define(function (require) {
 
         /**
          * @param {Backbone.Model} model - CompareFeaturesModel
-         * @param {boolean} value - isActivated
+         * @param {boolean} value - isActive
          * @returns {void}
          */
         render: function (model, value) {
@@ -139,16 +138,14 @@ define(function (require) {
          * @returns {void}
          */
         setIsActivatedToFalse: function () {
-            this.model.setIsActivated(false);
-            Radio.trigger("ModelList", "setModelAttributesById", "compareFeatures", {isActive: false});
+            this.model.setIsActive(false);
         },
 
         /**
          * @returns {void}
          */
         setIsActivatedToTrue: function () {
-            this.model.setIsActivated(true);
-            Radio.trigger("ModelList", "setModelAttributesById", "compareFeatures", {isActive: true});
+            this.model.setIsActive(true);
         }
     });
 
