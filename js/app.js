@@ -25,9 +25,9 @@ define("app", function (require) {
     new Alert();
     new Autostarter();
     new Util();
-    new StyleList();
     new RawLayerList();
     new Preparser();
+    new StyleList();
     new ParametricURL();
     new CRS();
     new Map();
