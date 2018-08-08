@@ -7,6 +7,7 @@ define(function (require) {
     ParcelSearch = Tool.extend({
         defaults: _.extend({}, Tool.prototype.defaults, {
             "deaktivateGFI": false,
+            "renderToWindow": true,
             "isCollapsed": undefined,
             "isCurrentWin": undefined,
             "countryNumber": "02", // Kennzeichen des Landes. Wird für den Report benötigt um das Flurstückskennzeichen zusammmenzubauen

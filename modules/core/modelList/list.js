@@ -9,6 +9,7 @@ define(function (require) {
         HeatmapLayer = require("modules/core/modelList/layer/heatmap"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
+        Legend = require("modules/legend/model"),
         PrintModel = require("modules/tools/print_/model"),
         CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
         ParcelSearch = require("modules/tools/parcelSearch/model"),
@@ -116,6 +117,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "compareFeatures") {
                     return new CompareFeaturesModel(attrs, options);
+                }
+                else if (attrs.id === "legend") {
+                    return new Legend(attrs, options);
                 }
                 return new Tool(attrs, options);
             }

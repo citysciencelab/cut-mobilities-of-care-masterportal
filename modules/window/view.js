@@ -60,9 +60,10 @@ define(function (require) {
                 // this.model.sendParamsToWinCotent();
                 this.$el.show("slow");
             }
-            // else {
-            //     this.hide();
-            // }
+            else {
+                this.$el.hide("slow");
+                // this.hide();
+            }
             return this;
         },
         minimize: function () {

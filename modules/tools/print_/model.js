@@ -15,7 +15,8 @@ define(function (require) {
             layoutNameList: [],
             // the id from the rest services json for the plot app
             plotServiceId: undefined,
-            deaktivateGFI: false
+            deaktivateGFI: false,
+            renderToWindow: true
         }),
 
         initialize: function () {

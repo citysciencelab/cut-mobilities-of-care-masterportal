@@ -10,7 +10,7 @@ define(function (require) {
             "click .glyphicon-remove": "toggle"
         },
         initialize: function (Model) {
-            this.model = Model;
+            // this.model = Model;
 
             $(window).resize(function () {
                 if ($(".legend-win-content").height() !== null) {
@@ -31,7 +31,7 @@ define(function (require) {
 
             Radio.trigger("Autostart", "initializedModul", "legend");
 
-            if (this.model.get("visible")) {
+            if (this.model.get("isActive")) {
                 this.toggle();
             }
 
@@ -58,18 +58,11 @@ define(function (require) {
         },
 
         toggle: function () {
-            var legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"}),
-                visible = !this.$el.is(":visible");
-
-            this.model.setVisible(visible); // speichere neuen Status
             this.render();
             this.$el.toggle();
 
             if (this.$el.css("display") === "block") {
-                legendModel.setIsActive(true);
-            }
-            else {
-                legendModel.setIsActive(false);
+                this.model.setLayerList();
             }
         },
 

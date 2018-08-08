@@ -1,12 +1,11 @@
 define(function (require) {
 
-    var Radio = require("backbone.radio"),
+    var Tool = require("modules/core/modelList/tool/model"),
         ol = require("openlayers"),
         Legend;
 
-    Legend = Backbone.Model.extend({
-
-        defaults: {
+    Legend = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
             legendParams: [],
             wmsLayerList: [],
@@ -14,13 +13,12 @@ define(function (require) {
             sensorLayerList: [],
             geojsonLayerList: [],
             paramsStyleWMS: [],
-            paramsStyleWMSArray: [],
-            visible: false
-        },
-
+            paramsStyleWMSArray: []
+        }),
         initialize: function () {
             var channel = Radio.channel("Legend");
 
+            this.superInitialize();
             channel.reply({
                 "getLegendParams": function () {
                     return this.get("legendParams");
@@ -41,12 +39,6 @@ define(function (require) {
                 "change:groupLayerList": this.setLegendParamsFromGROUP,
                 "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
             });
-
-            this.setLayerList();
-        },
-
-        setVisible: function (val) {
-            this.set("visible", val);
         },
 
         updateParamsStyleWMSArray: function (params) {
@@ -473,5 +465,5 @@ define(function (require) {
         }
     });
 
-    return new Legend();
+    return Legend;
 });

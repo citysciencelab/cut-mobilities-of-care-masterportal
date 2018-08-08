@@ -12,9 +12,7 @@ define([
         events: {
             "click .glyphicon-remove": "toggle"
         },
-        initialize: function (Model) {
-            this.model = Model;
-
+        initialize: function () {
             this.listenTo(this.model, {
                 "change:legendParams": this.render
             });
@@ -25,7 +23,7 @@ define([
 
             this.render();
 
-            if (this.model.get("visible")) {
+            if (this.model.get("isActive")) {
                 this.toggle();
             }
         },
@@ -34,23 +32,20 @@ define([
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            return this;
         },
 
         toggle: function () {
-            var visible = !this.$el.is(":visible");
-
-            this.model.setVisible(visible); // speichere neuen Status
-            this.$el.modal({
-                backdrop: true,
-                show: true
-            });
+            if (this.model.get("isActive") === true) {
+                this.$el.modal("show");
+            }
+            else {
+                this.$el.modal("hide");
+            }
         },
-        /**
-         * Entfernt diese view
-         */
-        removeView: function () {
-            this.$el.hide();
 
+        removeView: function () {
+            this.$el.modal("hide");
             this.remove();
         }
     });
