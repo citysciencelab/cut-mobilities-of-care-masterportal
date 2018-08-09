@@ -1,40 +1,25 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function (Backbone, Radio, ol) {
+define(function (require) {
+    var Tool = require("modules/core/modelList/tool/model"),
+        ol = require("openlayers"),
+        CoordPopup;
 
-    var CoordPopup = Backbone.Model.extend({
-        defaults: {
+    CoordPopup = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             selectPointerMove: null,
             projections: [],
             mapProjection: null,
             positionMapProjection: [],
-            updatePosition: true
-        },
+            updatePosition: true,
+            deactivateGFI: true,
+            renderToWindow: true
+        }),
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
-
-            this.setProjections(Radio.request("CRS", "getProjections"));
-            this.setMapProjection(Radio.request("MapView", "getProjection"));
-        },
-
-        setStatus: function (args) { // Fenstermanagement
-            if (args[2].get("id") === "coord") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
-                this.data = {};
-                this.formats = {};
-            }
+            this.superInitialize();
         },
 
         createInteraction: function () {
+            this.setProjections(Radio.request("CRS", "getProjections"));
+            this.setMapProjection(Radio.request("MapView", "getProjection"));
             this.setSelectPointerMove(new ol.interaction.Pointer({
                 handleMoveEvent: function (evt) {
                     this.checkPosition(evt.coordinate);

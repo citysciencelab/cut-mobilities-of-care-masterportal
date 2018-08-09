@@ -158,12 +158,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "coord": {
-                //     require(["modules/tools/getCoord/view"], function (CoordPopupView) {
-                //         new CoordPopupView();
-                //     });
-                //     break;
-                // }
+                case "coord": {
+                    require(["modules/tools/getCoord/view"], function (CoordPopupView) {
+                        new CoordPopupView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                    });
+                    break;
+                }
                 // case "measure": {
                 //     require(["modules/tools/measure/view"], function (MeasureView) {
                 //         new MeasureView();
