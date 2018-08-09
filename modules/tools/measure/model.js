@@ -1,12 +1,12 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function (Backbone, Radio, ol, Config) {
+define(function (require) {
 
-    var Measure = Backbone.Model.extend({
-        defaults: {
+    var ol = require("openlayers"),
+        Config = require("config"),
+        Tool = require("modules/core/modelList/tool/model"),
+        Measure;
+
+    Measure = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             source: new ol.source.Vector(),
             style: new ol.style.Style({
                 fill: new ol.style.Fill({
@@ -27,23 +27,27 @@ define([
                     })
                 })
             }),
-            type: "LineString",
+            geomtype: "LineString",
             unit: "m",
             decimal: 1,
             measureTooltips: [],
             uiStyle: "DEFAULT",
-            quickHelp: false
-        },
+            quickHelp: false,
+            renderToWindow: true,
+            deactivateGFI: true
+        }),
 
         initialize: function () {
-            var layers = Radio.request("Map", "getLayers");
 
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
+
+            this.superInitialize();
+            // this.listenTo(Radio.channel("Window"), {
+            //     "winParams": this.setStatus
+            // });
 
             this.listenTo(this, {
-                "change:type": this.createInteraction
+                "change:geomtype": this.createInteraction,
+                "change:isActive": this.setStatus
             });
 
             this.set("layer", new ol.layer.Vector({
@@ -55,20 +59,24 @@ define([
 
             this.setUiStyle(Radio.request("Util", "getUiStyle"));
 
-            Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
-
             if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
                 this.set("quickHelp", true);
             }
         },
-        setStatus: function (args) {
-            if (args[2].get("id") === "measure" && args[0] === true) {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
+        setStatus: function (model, value) {
+            var layers = Radio.request("Map", "getLayers"),
+                measureLayer;
+
+            if (value) {
+                measureLayer = _.find(layers.getArray(), function (layer) {
+                    return layer.get("name") === "measure_layer";
+                });
+                if (measureLayer === undefined) {
+                    Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
+                }
                 this.createInteraction();
             }
             else {
-                this.set("isCurrentWin", false);
                 Radio.trigger("Map", "removeInteraction", this.get("draw"));
             }
         },
@@ -77,7 +85,7 @@ define([
             Radio.trigger("Map", "removeInteraction", this.get("draw"));
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
-                type: this.get("type"),
+                type: this.get("geomtype"),
                 style: this.get("style")
             }));
             this.get("draw").on("drawstart", function (evt) {
@@ -150,8 +158,8 @@ define([
          * @return {undefined}
          */
         setGeometryType: function (value) {
-            this.set("type", value);
-            if (this.get("type") === "LineString") {
+            this.set("geomtype", value);
+            if (this.get("geomtype") === "LineString") {
                 this.setUnit("m");
             }
             else {

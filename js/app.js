@@ -164,12 +164,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "measure": {
-                //     require(["modules/tools/measure/view"], function (MeasureView) {
-                //         new MeasureView();
-                //     });
-                //     break;
-                // }
+                case "measure": {
+                    require(["modules/tools/measure/view"], function (MeasureView) {
+                        new MeasureView({model: tool});
+                    });
+                    break;
+                }
                 // case "draw": {
                 //     require(["modules/tools/draw/view"], function (DrawView) {
                 //         new DrawView();

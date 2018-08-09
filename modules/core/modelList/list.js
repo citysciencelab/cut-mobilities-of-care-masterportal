@@ -12,6 +12,7 @@ define(function (require) {
         Legend = require("modules/legend/model"),
         Filter = require("modules/tools/filter/model"),
         PrintModel = require("modules/tools/print_/model"),
+        Measure = require("modules/tools/measure/model"),
         GetCoordModel = require("modules/tools/getCoord/model"),
         Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
         CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
@@ -136,6 +137,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "coord") {
                     return new GetCoordModel(attrs, options);
+                }
+                else if (attrs.id === "measure") {
+                    return new Measure(attrs, options);
                 }
                 return new Tool(attrs, options);
             }
