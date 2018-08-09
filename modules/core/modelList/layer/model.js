@@ -23,6 +23,8 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("Layer");
 
+            // Diese Listener beschäftigen sich mit dem einmaligen Laden der
+            // ol.layer über alle children
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
@@ -42,6 +44,7 @@ define(function (require) {
                     this.getResolutions();
                 }
             });
+            // Dieses Radio kümmert sich um die Darstellung der layerInformation
             this.listenTo(channel, {
                 "updateLayerInfo": function (name) {
                     if (this.get("name") === name && this.get("layerInfoChecked") === true) {
@@ -52,7 +55,7 @@ define(function (require) {
                     this.setLayerInfoChecked(layerInfoChecked);
                 }
             });
-
+            // Diese Listener kümmern sich um die Sichtbarkeit der Layer
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
                     // triggert das Ein- und Ausschalten von Layern
@@ -64,7 +67,7 @@ define(function (require) {
                 "change:transparency": this.updateLayerTransparency,
                 "change:SLDBody": this.updateSourceSLDBody
             });
-
+            // Dieser Listener um eine Veränderung des angezeigten Maßstabs
             this.listenTo(Radio.channel("MapView"), {
                 "changedOptions": function (options) {
                     this.checkForScale(options);

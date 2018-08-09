@@ -7,13 +7,12 @@ define(function (require) {
     WMSLayer = Layer.extend({
         initialize: function () {
             Layer.prototype.initialize.apply(this, arguments);
-            this.setAttributes();
         },
-        setAttributes: function () {
-            if (_.isUndefined(this.get("infoFormat")) === true) {
-                this.setInfoFormat("text/xml");
+        defaults: _.extend({}, Layer.prototype.defaults,
+            {
+                infoFormat: "text/xml"
             }
-        },
+        ),
 
         /**
          * [createLayerSource description]
