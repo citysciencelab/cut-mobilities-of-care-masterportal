@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var FilterModel = require("modules/tools/filter/model"),
-        QueryDetailView = require("modules/tools/filter/query/detailView"),
+    var QueryDetailView = require("modules/tools/filter/query/detailView"),
         QuerySimpleView = require("modules/tools/filter/query/simpleView"),
         Template = require("text!modules/tools/filter/template.html"),
         FilterView;
@@ -18,6 +17,9 @@ define(function (require) {
             this.listenTo(this.model, {
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
+                        if (model.get("queryCollection").length < 1) {
+                            model.createQueries(model.get("predefinedQueries"));
+                        }
                         this.render();
                         this.renderDetailView();
                     }
@@ -37,7 +39,6 @@ define(function (require) {
                 "renderDetailView": this.renderDetailView
             });
         },
-        model: new FilterModel(),
         id: "filter-view",
         template: _.template(Template),
         className: "filter",
@@ -80,7 +81,6 @@ define(function (require) {
         closeFilter: function () {
             this.model.setIsActive(false);
             this.model.collapseOpenSnippet();
-            Radio.trigger("Sidebar", "toggle", false);
         }
     });
 

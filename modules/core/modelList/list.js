@@ -10,6 +10,7 @@ define(function (require) {
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         Legend = require("modules/legend/model"),
+        Filter = require("modules/tools/filter/model"),
         PrintModel = require("modules/tools/print_/model"),
         Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
         CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
@@ -128,6 +129,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "schulwegrouting") {
                     return new Schulwegrouting(attrs, options);
+                }
+                else if (attrs.id === "filter") {
+                    return new Filter(attrs, options);
                 }
                 return new Tool(attrs, options);
             }

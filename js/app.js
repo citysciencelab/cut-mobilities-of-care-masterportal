@@ -140,12 +140,12 @@ define("app", function (require) {
                 //     });
                 //     break;
                 // }
-                // case "filter": {
-                //     require(["modules/tools/filter/view"], function (FilterView) {
-                //         new FilterView();
-                //     });
-                //     break;
-                // }
+                case "filter": {
+                    require(["modules/tools/filter/view"], function (FilterView) {
+                        new FilterView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                    });
+                    break;
+                }
                 case "schulwegrouting": {
                     require(["modules/tools/schulwegRouting_hh/view"], function (SchulwegRoutingView) {
                         new SchulwegRoutingView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
