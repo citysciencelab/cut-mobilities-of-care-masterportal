@@ -224,24 +224,24 @@ define("app", function (require) {
                 //     });
                 //     break;
                 // }
-                // case "routing": {
-                //     require(["modules/viomRouting/view"], function (RoutingView) {
-                //         new RoutingView();
-                //     });
-                //     break;
-                // }
+                case "routing": {
+                    require(["modules/viomRouting/view"], function (RoutingView) {
+                        new RoutingView({model: tool});
+                    });
+                    break;
+                }
                 // case "contact": {
                 //     require(["modules/contact/view"], function (Contact) {
                 //         new Contact();
                 //     });
                 //     break;
                 // }
-                // case "addWMS": {
-                //     require(["modules/tools/addwms/view"], function (AddWMSView) {
-                //         new AddWMSView();
-                //     });
-                //     break;
-                // }
+                case "addWMS": {
+                    require(["modules/tools/addwms/view"], function (AddWMSView) {
+                        new AddWMSView({model: tool});
+                    });
+                    break;
+                }
                 // case "featureLister": {
                 //     require(["modules/featurelister/view"], function (FeatureLister) {
                 //         new FeatureLister();

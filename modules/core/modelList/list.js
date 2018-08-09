@@ -17,6 +17,8 @@ define(function (require) {
         Animation = require("modules/tools/animation/model"),
         SearchByCoord = require("modules/tools/searchByCoord/model"),
         SaveSelection = require("modules/tools/saveSelection/model"),
+        Routing = require("modules/viomRouting/model"),
+        AddWms = require("modules/tools/addwms/model"),
         GetCoordModel = require("modules/tools/getCoord/model"),
         Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
         CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
@@ -156,6 +158,12 @@ define(function (require) {
                 }
                 else if (attrs.id === "animation") {
                     return new Animation(attrs, options);
+                }
+                else if (attrs.id === "routing") {
+                    return new Routing(attrs, options);
+                }
+                else if (attrs.id === "addWMS") {
+                    return new AddWms(attrs, options);
                 }
                 return new Tool(attrs, options);
             }

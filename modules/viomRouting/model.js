@@ -1,10 +1,11 @@
 define(function (require) {
     var ol = require("openlayers"),
+        Tool = require("modules/core/modelList/Tool/model"),
         $ = require("jquery"),
         RoutingModel;
 
-    RoutingModel = Backbone.Model.extend({
-        defaults: {
+    RoutingModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             bkgSuggestURL: "",
             bkgGeosearchURL: "",
             viomRoutingURL: "",
@@ -22,10 +23,14 @@ define(function (require) {
             bbox: "",
             routelayer: "",
             mhpOverlay: "",
-            isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true
-        },
+            isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true,
+            renderToWindow: true
+        }),
         initialize: function () {
-            Radio.on("Window", "winParams", this.setStatus, this);
+            this.superInitialize();
+            this.listenTo(this, {
+                "change:isActive": this.setStatus
+            });
             Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
             Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
         },
@@ -34,21 +39,19 @@ define(function (require) {
             this.setCenter(geoloc);
             this.set("startAdresse", "aktueller Standpunkt");
         },
-        setStatus: function (args) { // Fenstermanagement
-            var viomRoutingID = Radio.request("RestReader", "getServiceById", args[2].get("viomRoutingID")),
+        setStatus: function (model, value) { // Fenstermanagement
+            var viomRoutingID,
                 bkgSuggestID,
                 bkgGeosearchID,
                 epsgCode,
                 bbox;
 
-            if (args[2].get("id") === "routing") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-                viomRoutingID = Radio.request("RestReader", "getServiceById", args[2].get("viomRoutingID"));
-                bkgSuggestID = Radio.request("RestReader", "getServiceById", args[2].get("bkgSuggestID"));
-                bkgGeosearchID = Radio.request("RestReader", "getServiceById", args[2].get("bkgGeosearchID"));
+            if (value) {
+                viomRoutingID = Radio.request("RestReader", "getServiceById", model.get("viomRoutingID"));
+                bkgSuggestID = Radio.request("RestReader", "getServiceById", model.get("bkgSuggestID"));
+                bkgGeosearchID = Radio.request("RestReader", "getServiceById", model.get("bkgGeosearchID"));
                 epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "";
-                bbox = args[2].get("bbox") && epsgCode !== "" ? "&bbox=" + args[2].get("bbox") + epsgCode : null;
+                bbox = model.get("bbox") && epsgCode !== "" ? "&bbox=" + model.get("bbox") + epsgCode : null;
 
                 this.set("bkgSuggestURL", bkgSuggestID.get("url"));
                 this.set("bkgGeosearchURL", bkgGeosearchID.get("url"));
@@ -56,9 +59,6 @@ define(function (require) {
                 this.set("viomProviderID", viomRoutingID.get("providerID"));
                 this.set("bbox", bbox);
                 this.set("epsgCode", epsgCode);
-            }
-            else {
-                this.set("isCurrentWin", false);
             }
         },
         deleteRouteFromMap: function () {
@@ -243,5 +243,5 @@ define(function (require) {
         }
     });
 
-    return new RoutingModel();
+    return RoutingModel;
 });

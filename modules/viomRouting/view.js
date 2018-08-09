@@ -1,18 +1,14 @@
 define(function (require) {
     var RoutingWin = require("text!modules/viomRouting/template.html"),
-        RoutingModel = require("modules/viomRouting/model"),
         $ = require("jquery"),
         RoutingView;
 
     RoutingView = Backbone.View.extend({
-        model: RoutingModel,
-        id: "routingWin",
-        className: "win-body routingWin",
         template: _.template(RoutingWin),
         initialize: function () {
             var channel = Radio.channel("ViomRouting");
 
-            this.listenTo(this.model, "change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
+            this.listenTo(this.model, "change:isActive", this.render, this); // Fenstermanagement
             this.listenTo(this.model, "change:fromCoord", this.toggleRoutingButton);
             this.listenTo(this.model, "change:toCoord", this.toggleRoutingButton);
             this.listenTo(this.model, "change:description", this.addDescription);
@@ -222,22 +218,22 @@ define(function (require) {
                 this.model.set("routingdate", "");
             }
         },
-        render: function () {
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+        render: function (model, value) {
+            if (value) {
                 this.renderWin();
                 this.delegateEvents();
+                this.$el.addClass("routingWin");
             }
-            else if (this.model.get("isCurrentWin") === false) {
+            else {
+                this.$el.removeClass("routingWin");
                 this.model.deleteRouteFromMap();
                 this.undelegateEvents();
             }
             return this;
         },
         renderWin: function () {
-            var attr = this.model.toJSON();
-
-            this.$el.html("");
-            $(".win-heading").after(this.$el.html(this.template(attr)));
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template(this.model.toJSON()));
         },
         changeGeolocationPossible: function (val) {
             if (val === true) {
