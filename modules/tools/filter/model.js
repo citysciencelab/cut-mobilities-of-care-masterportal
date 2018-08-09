@@ -15,11 +15,13 @@ define(function (require) {
             isActive: false,
             allowMultipleQueriesPerLayer: true,
             liveZoomToFeatures: false,
-            sendToRemote: false
+            sendToRemote: false,
+            renderToSidebar: true
         }),
         initialize: function () {
             var channel = Radio.channel("Filter");
 
+            this.superInitialize();
             this.listenTo(channel, {
                 "resetFilter": this.resetFilter
             });

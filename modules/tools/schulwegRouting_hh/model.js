@@ -29,7 +29,8 @@ define(function (require) {
             checkBoxHVV: new SnippetCheckboxModel({
                 isSelected: false,
                 label: "HVV Verkehrsnetz"
-            })
+            }),
+            renderToSidebar: true
         }),
 
         initialize: function () {
@@ -37,6 +38,7 @@ define(function (require) {
                 channel = Radio.channel("SchulwegRouting"),
                 model;
 
+            this.superInitialize();
             this.listenTo(channel, {
                 "selectSchool": function (schoolId) {
                     this.trigger("updateSelectedSchool", schoolId);
@@ -85,7 +87,7 @@ define(function (require) {
                 // model in modellist gets activated.
                 // And there the "Tool", "activatedTool" is triggered where this model listens to.
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
-                model.setIsActive(true);
+                // model.setIsActive(true);
             }
         },
         toggleHVVLayer: function (value) {
@@ -298,16 +300,16 @@ define(function (require) {
         isRoutingRequest: function (ownRequests, requestID) {
             return _.contains(ownRequests, requestID);
         },
-        activate: function (id) {
-            if (this.get("id") === id) {
-                this.setIsActive(true);
-            }
-        },
-        deactivate: function (id) {
-            if (this.get("id") === id) {
-                this.setIsActive(false);
-            }
-        },
+        // activate: function (id) {
+        //     if (this.get("id") === id) {
+        //         this.setIsActive(true);
+        //     }
+        // },
+        // deactivate: function (id) {
+        //     if (this.get("id") === id) {
+        //         this.setIsActive(false);
+        //     }
+        // },
 
         /**
          * sorts the school features by name

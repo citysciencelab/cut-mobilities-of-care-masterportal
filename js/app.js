@@ -120,17 +120,17 @@ define("app", function (require) {
     require(["modules/sidebar/view"], function (SidebarView) {
         var sidebarView = new SidebarView();
 
-        _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
+        _.each(Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
                 case "compareFeatures": {
                     require(["modules/tools/compareFeatures/view"], function (CompareFeaturesView) {
-                        new CompareFeaturesView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                        new CompareFeaturesView({model: tool});
                     });
                     break;
                 }
                 case "einwohnerabfrage": {
                     require(["modules/tools/einwohnerabfrage_hh/selectView"], function (EinwohnerabfrageView) {
-                        new EinwohnerabfrageView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                        new EinwohnerabfrageView({model: tool});
                     });
                     break;
                 }
@@ -142,13 +142,13 @@ define("app", function (require) {
                 // }
                 case "filter": {
                     require(["modules/tools/filter/view"], function (FilterView) {
-                        new FilterView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                        new FilterView({model: tool});
                     });
                     break;
                 }
                 case "schulwegrouting": {
                     require(["modules/tools/schulwegRouting_hh/view"], function (SchulwegRoutingView) {
-                        new SchulwegRoutingView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                        new SchulwegRoutingView({model: tool});
                     });
                     break;
                 }
@@ -160,7 +160,7 @@ define("app", function (require) {
                 }
                 case "coord": {
                     require(["modules/tools/getCoord/view"], function (CoordPopupView) {
-                        new CoordPopupView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                        new CoordPopupView({model: tool});
                     });
                     break;
                 }
@@ -178,13 +178,13 @@ define("app", function (require) {
                 // }
                 case "print": {
                     require(["modules/tools/print_/view"], function (PrintView) {
-                        new PrintView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                        new PrintView({model: tool});
                     });
                     break;
                 }
                 case "parcelSearch": {
                     require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
-                        new ParcelSearchView({model: Radio.request("ModelList", "getModelByAttributes", {id: tool.id})});
+                        new ParcelSearchView({model: tool});
                     });
                     break;
                 }
