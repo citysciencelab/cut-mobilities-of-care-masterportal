@@ -8,7 +8,7 @@ define(function (require) {
     WFSLayer = Layer.extend({
 
         initialize: function () {
-            this.superInitialize();
+            Layer.prototype.initialize.apply(this, arguments);
         },
 
         /**

@@ -19,7 +19,7 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("HeatmapLayer");
 
-            this.superInitialize();
+            Layer.prototype.initialize.apply(this, arguments);
 
             this.listenTo(channel, {
                 "loadInitialData": this.loadInitialData,

@@ -6,7 +6,7 @@ define(function (require) {
 
     WMSLayer = Layer.extend({
         initialize: function () {
-            this.superInitialize();
+            Layer.prototype.initialize.apply(this, arguments);
             this.setAttributes();
         },
         setAttributes: function () {

@@ -20,7 +20,7 @@ define(function (require) {
             minScale: "0",
             maxScale: "1000000"
         },
-        superInitialize: function () {
+        initialize: function () {
             var channel = Radio.channel("Layer");
 
             this.listenToOnce(this, {

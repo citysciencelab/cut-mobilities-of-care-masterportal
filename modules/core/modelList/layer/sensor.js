@@ -18,7 +18,7 @@ define(function (require) {
             }),
 
         initialize: function () {
-            this.superInitialize();
+            Layer.prototype.initialize.apply(this, arguments);
 
             // change language from moment.js to german
             moment.locale("de");
