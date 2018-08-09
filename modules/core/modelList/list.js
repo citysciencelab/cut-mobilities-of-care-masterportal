@@ -13,6 +13,7 @@ define(function (require) {
         Filter = require("modules/tools/filter/model"),
         PrintModel = require("modules/tools/print_/model"),
         Measure = require("modules/tools/measure/model"),
+        Draw = require("modules/tools/draw/model"),
         GetCoordModel = require("modules/tools/getCoord/model"),
         Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
         CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
@@ -140,6 +141,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "measure") {
                     return new Measure(attrs, options);
+                }
+                else if (attrs.id === "draw") {
+                    return new Draw(attrs, options);
                 }
                 return new Tool(attrs, options);
             }

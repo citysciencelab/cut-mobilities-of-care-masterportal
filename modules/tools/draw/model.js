@@ -1,10 +1,11 @@
 define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
+        Tool = require("modules/core/modelList/tool/model"),
         DrawTool;
 
-    DrawTool = Backbone.Model.extend({
-        defaults: {
+    DrawTool = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defautls, {
             // ol.interaction.Draw
             drawInteraction: undefined,
             // ol.interaction.Select for the deleted features
@@ -23,12 +24,15 @@ define(function (require) {
             drawType: {
                 geometry: "Point",
                 text: "Punkt zeichnen"
-            }
-        },
+            },
+            renderToWindow: true,
+            deactivateGFI: true
+        }),
 
         initialize: function () {
             var channel = Radio.channel("Draw");
 
+            this.superInitialize();
             channel.reply({
                 "getLayer": function () {
                     return this.get("layer");
@@ -39,18 +43,18 @@ define(function (require) {
                 "winParams": this.setStatus
             });
 
-            this.on("change:isCurrentWin", this.createLayer, this);
+            this.on("change:isActive", this.setStatus, this);
             Radio.trigger("Autostart", "initializedModul", "draw");
         },
 
-        setStatus: function (args) {
-            if (args[2].get("id") === "draw" && args[0] === true) {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
+        setStatus: function (model, value) {
+            if (value) {
+                if (this.get("layer") === undefined) {
+                    this.createLayer();
+                }
                 this.createDrawInteraction(this.get("drawType"), this.get("layer"));
             }
             else {
-                this.set("isCurrentWin", false);
                 Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
                 Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
                 Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
@@ -63,14 +67,10 @@ define(function (require) {
          * @param {boolean} value - is tool active
          * @returns {void}
          */
-        createLayer: function (value) {
+        createLayer: function () {
             var layer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
 
-            if (value) {
-
-                this.setLayer(layer);
-                this.off("change:isCurrentWin", this.createLayer);
-            }
+            this.setLayer(layer);
         },
 
         /**

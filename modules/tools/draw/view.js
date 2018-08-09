@@ -1,12 +1,9 @@
 define(function (require) {
     var DrawTemplate = require("text!modules/tools/draw/template.html"),
         $ = require("jquery"),
-        DrawTool = require("modules/tools/draw/model"),
         DrawToolView;
 
     DrawToolView = Backbone.View.extend({
-        model: new DrawTool(),
-        className: "win-body",
         template: _.template(DrawTemplate),
         events: {
             "change .interaction": "setDrawType",
@@ -32,21 +29,20 @@ define(function (require) {
                 new DownloadView();
             });
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render
+                "change:isActive": this.render
             });
         },
 
-        render: function () {
-            var attr = this.model.toJSON();
+        render: function (model, value) {
+            if (value) {
 
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();
                 this.renderForm();
                 this.renderGlyphicon();
             }
-            else if (this.model.get("isCurrentWin") === false) {
+            else  {
                 $("#map").removeClass("no-cursor");
                 $("#map").removeClass("cursor-crosshair");
                 $("#cursorGlyph").remove();

@@ -170,12 +170,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "draw": {
-                //     require(["modules/tools/draw/view"], function (DrawView) {
-                //         new DrawView();
-                //     });
-                //     break;
-                // }
+                case "draw": {
+                    require(["modules/tools/draw/view"], function (DrawView) {
+                        new DrawView({model: tool});
+                    });
+                    break;
+                }
                 case "print": {
                     require(["modules/tools/print_/view"], function (PrintView) {
                         new PrintView({model: tool});
