@@ -206,12 +206,12 @@ define("app", function (require) {
                 //     });
                 //     break;
                 // }
-                // case "wfsFeatureFilter": {
-                //     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
-                //         new WFSFeatureFilterView();
-                //     });
-                //     break;
-                // }
+                case "wfsFeatureFilter": {
+                    require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
+                        new WFSFeatureFilterView({model: tool});
+                    });
+                    break;
+                }
                 // case "extendedFilter": {
                 //     require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
                 //         new ExtendedFilterView();
@@ -230,12 +230,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "contact": {
-                //     require(["modules/contact/view"], function (Contact) {
-                //         new Contact();
-                //     });
-                //     break;
-                // }
+                case "contact": {
+                    require(["modules/contact/view"], function (Contact) {
+                        new Contact({model: tool});
+                    });
+                    break;
+                }
                 case "addWMS": {
                     require(["modules/tools/addwms/view"], function (AddWMSView) {
                         new AddWMSView({model: tool});

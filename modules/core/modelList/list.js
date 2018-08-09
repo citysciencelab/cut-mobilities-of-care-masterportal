@@ -15,9 +15,11 @@ define(function (require) {
         Measure = require("modules/tools/measure/model"),
         Draw = require("modules/tools/draw/model"),
         Animation = require("modules/tools/animation/model"),
+        Contact = require("modules/contact/model"),
         SearchByCoord = require("modules/tools/searchByCoord/model"),
         SaveSelection = require("modules/tools/saveSelection/model"),
         Routing = require("modules/viomRouting/model"),
+        WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
         AddWms = require("modules/tools/addwms/model"),
         GetCoordModel = require("modules/tools/getCoord/model"),
         Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
@@ -164,6 +166,12 @@ define(function (require) {
                 }
                 else if (attrs.id === "addWMS") {
                     return new AddWms(attrs, options);
+                }
+                else if (attrs.id === "contact") {
+                    return new Contact(attrs, options);
+                }
+                else if (attrs.id === "wfsFeatureFilter") {
+                    return new WfsFeatureFilter(attrs, options);
                 }
                 return new Tool(attrs, options);
             }

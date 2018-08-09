@@ -16,8 +16,6 @@ define(function (require) {
             parentId: "",
             // Bootstrap Glyphicon Class
             glyphicon: "",
-            // Email Adresse
-            email: undefined,
             // Name (Überschrift) der Funktion
             name: "",
             // true wenn das Tool aktiviert ist
