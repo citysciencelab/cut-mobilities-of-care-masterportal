@@ -14,6 +14,7 @@ define(function (require) {
         PrintModel = require("modules/tools/print_/model"),
         Measure = require("modules/tools/measure/model"),
         Draw = require("modules/tools/draw/model"),
+        Animation = require("modules/tools/animation/model"),
         SearchByCoord = require("modules/tools/searchByCoord/model"),
         SaveSelection = require("modules/tools/saveSelection/model"),
         GetCoordModel = require("modules/tools/getCoord/model"),
@@ -152,6 +153,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "saveSelection") {
                     return new SaveSelection(attrs, options);
+                }
+                else if (attrs.id === "animation") {
+                    return new Animation(attrs, options);
                 }
                 return new Tool(attrs, options);
             }

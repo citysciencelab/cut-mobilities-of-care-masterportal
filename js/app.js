@@ -134,12 +134,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "animation": {
-                //     require(["modules/tools/animation/view"], function (AnimationView) {
-                //         new AnimationView();
-                //     });
-                //     break;
-                // }
+                case "animation": {
+                    require(["modules/tools/animation/view"], function (AnimationView) {
+                        new AnimationView({model: tool});
+                    });
+                    break;
+                }
                 case "filter": {
                     require(["modules/tools/filter/view"], function (FilterView) {
                         new FilterView({model: tool});

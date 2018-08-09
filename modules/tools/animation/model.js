@@ -3,36 +3,48 @@ define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
         Config = require("config"),
+        Tool = require("modules/core/modelList/tool/model"),
         Animation;
 
-    Animation = Backbone.Model.extend({
-        defaults: {
+    Animation = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             kreis: "",
             animating: false,
             layer: new ol.layer.Vector({
                 source: new ol.source.Vector(),
                 alwaysOnTop: true,
-                style: null
+                style: null,
+                name: "animation_layer"
             }),
             pendlerLegend: [],
             // Der aktuelle Animation Durchlauf (eine Richtung = ein Durchlauf)
             animationCount: 0,
             // Wie wieviele Durchläufe
-            animationLimit: 0
-        },
+            animationLimit: 0,
+            renderToWindow: true
+        }),
         initialize: function () {
             var channel = Radio.channel("Animation");
 
+            this.superInitialize();
             channel.reply({
                 "getLayer": function () {
                     return this.get("layer");
                 }
             }, this);
 
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": function (args) {
-                    this.setStatus(args);
-                    if (args[0] === false) {
+            this.listenTo(this, {
+                "change:isActive": function (model, value) {
+                    var layers = Radio.request("Map", "getLayers"),
+                        animationLayer;
+
+                    if (value) {
+                        animationLayer = _.find(layers.getArray(), function (layer) {
+                            return layer.get("name") === "animation_layer";
+                        });
+                        if (animationLayer === undefined) {
+                            Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
+                        }
                         this.hideMapContent();
                         this.resetAnimationWindow();
                     }
@@ -61,6 +73,7 @@ define(function (require) {
                     else {
                         this.setAttrKreis("arbeitsort_kreis");
                     }
+                    console.log(44);
                     this.createPostBody(value);
                 },
                 "change:postBody": function (model, value) {
@@ -76,7 +89,6 @@ define(function (require) {
             this.setDefaults();
 
             this.sendRequest("GET", this.get("params"), this.parseKreise);
-            Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), Radio.request("Map", "getLayers").getArray().length]);
         },
 
         setDefaults: function () {
@@ -290,16 +302,6 @@ define(function (require) {
                 kreis: "Andere"
             });
             this.set("pendlerLegend", pendlerLegend);
-        },
-
-        setStatus: function (args) {
-            if (args[2].get("id") === "animation") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
-            }
         },
 
         createPostBody: function (value) {

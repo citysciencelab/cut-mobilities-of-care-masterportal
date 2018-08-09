@@ -11,7 +11,8 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isActive change:url": this.render
+                "change:isActive": this.render,
+                "change:url": this.setUrlValue
             });
         },
         render: function (model, value) {
@@ -31,6 +32,9 @@ define(function (require) {
             return this;
         },
 
+        setUrlValue: function (model, value) {
+            this.$("input").val(value);
+        },
         /**
          * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
          * @param  {evt} evt Evt-Button
