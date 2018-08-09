@@ -188,18 +188,18 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "searchByCoord": {
-                //     require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
-                //         new SearchByCoordView();
-                //     });
-                //     break;
-                // }
-                // case "saveSelection": {
-                //     require(["modules/tools/saveSelection/view"], function (SaveSelectionView) {
-                //         new SaveSelectionView();
-                //     });
-                //     break;
-                // }
+                case "searchByCoord": {
+                    require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
+                        new SearchByCoordView({model: tool});
+                    });
+                    break;
+                }
+                case "saveSelection": {
+                    require(["modules/tools/saveSelection/view"], function (SaveSelectionView) {
+                        new SaveSelectionView({model: tool});
+                    });
+                    break;
+                }
                 // case "kmlimport": {
                 //     require(["modules/tools/kmlimport/view"], function (ImportView) {
                 //         new ImportView();

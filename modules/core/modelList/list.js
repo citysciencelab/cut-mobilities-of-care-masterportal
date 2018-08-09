@@ -14,6 +14,8 @@ define(function (require) {
         PrintModel = require("modules/tools/print_/model"),
         Measure = require("modules/tools/measure/model"),
         Draw = require("modules/tools/draw/model"),
+        SearchByCoord = require("modules/tools/searchByCoord/model"),
+        SaveSelection = require("modules/tools/saveSelection/model"),
         GetCoordModel = require("modules/tools/getCoord/model"),
         Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
         CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
@@ -144,6 +146,12 @@ define(function (require) {
                 }
                 else if (attrs.id === "draw") {
                     return new Draw(attrs, options);
+                }
+                else if (attrs.id === "searchByCoord") {
+                    return new SearchByCoord(attrs, options);
+                }
+                else if (attrs.id === "saveSelection") {
+                    return new SaveSelection(attrs, options);
                 }
                 return new Tool(attrs, options);
             }

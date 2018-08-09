@@ -1,27 +1,27 @@
 define(function (require) {
 
     var Config = require("config"),
+        Tool = require("modules/core/modelList/tool/model"),
         SaveSelection;
 
-    SaveSelection = Backbone.Model.extend({
-        defaults: {
+    SaveSelection = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             zoomLevel: "",
             centerCoords: [],
             layerIDList: [],
             layerVisibilityList: [],
             layerTranseparenceList: [],
             url: "",
-            simpleMap: false
-        },
+            simpleMap: false,
+            renderToWindow: true
+        }),
         initialize: function () {
             var channel = Radio.channel("SaveSelection");
 
+            this.superInitialize();
             channel.reply({
                 "getMapState": this.getMapState
             }, this);
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.checkStatus
-            });
 
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.filterExternalLayer
@@ -33,10 +33,12 @@ define(function (require) {
             });
 
             this.listenTo(this, {
-                "change:isCurrentWin": function () {
-                    this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));
-                    this.setCenterCoords(Radio.request("MapView", "getCenter"));
-                    this.filterExternalLayer(Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
+                "change:isActive": function (model, value) {
+                    if (value) {
+                        this.setZoomLevel(Radio.request("MapView", "getZoomLevel"));
+                        this.setCenterCoords(Radio.request("MapView", "getCenter"));
+                        this.filterExternalLayer(Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
+                    }
                 },
                 "change:zoomLevel change:centerCoords": this.setUrl,
                 "change:url": this.setSimpleMapUrl
@@ -44,21 +46,6 @@ define(function (require) {
 
             if (_.has(Config, "simpleMap")) {
                 this.setSimpleMap(Config.simpleMap);
-            }
-        },
-
-        /**
-         * [checkStatus description]
-         * @param  {[type]} args [description]
-         * @return {[type]}      [description]
-         */
-        checkStatus: function (args) {
-            if (args[2].get("id") === "saveSelection") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
             }
         },
 

@@ -2,19 +2,19 @@ define(function (require) {
 
     var proj4 = require("proj4"),
         $ = require("jquery"),
+        Tool = require("modules/core/modelList/tool/model"),
         SearchByCoord;
 
-    SearchByCoord = Backbone.Model.extend({
-        defaults: {
+    SearchByCoord = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             "coordSystem": "ETRS89",
             "coordSystems": ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
             "coordinatesEasting": "",
-            "coordinatesNorthing": ""
-        },
+            "coordinatesNorthing": "",
+            renderToWindow: true
+        }),
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
+            this.superInitialize();
         },
         validate: function (attributes) {
             var validETRS89 = /^[0-9]{6,7}[.]{0,1}[0-9]{0,3}$/,
@@ -140,15 +140,6 @@ define(function (require) {
                 return "Fehlerhafte Eingabe!";
             }
         },
-        setStatus: function (args) {
-            if (args[2].get("id") === "searchByCoord") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
-            }
-        },
         setCoordSystem: function (value) {
             this.set("coordSystem", value);
         },
@@ -210,5 +201,5 @@ define(function (require) {
         }
     });
 
-    return new SearchByCoord();
+    return SearchByCoord;
 });
