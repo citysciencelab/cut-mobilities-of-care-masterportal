@@ -1,12 +1,10 @@
 define(function (require) {
     var Template = require("text!modules/featurelister/template.html"),
         $ = require("jquery"),
-        Model = require("modules/featurelister/model"),
         FeatureLister;
 
     require("jqueryui/widgets/draggable");
     FeatureLister = Backbone.View.extend({
-        model: Model,
         className: "featurelist-win",
         template: _.template(Template),
         events: {
@@ -21,13 +19,8 @@ define(function (require) {
             "click .featurelist-list-table-th": "orderList" // Klick auf Sortiersymbol in thead
         },
         initialize: function () {
-            var channel = Radio.channel("FeatureListerView");
-
-            this.listenTo(channel, {
-                "toggle": this.toggle
-            }, this);
-
             this.listenTo(this.model, {
+                "change:isActive": this.toggle,
                 "change:layerlist": this.updateVisibleLayer,
                 "change:layer": function () {
                     this.updateLayerList();

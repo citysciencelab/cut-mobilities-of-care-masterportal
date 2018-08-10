@@ -1,16 +1,12 @@
 define(function (require) {
-    var $ = require("jquery"),
-        Model = require("modules/tools/extendedFilter/model"),
-        Template = require("text!modules/tools/extendedFilter/template.html"),
+    var Template = require("text!modules/tools/extendedFilter/template.html"),
         ExtendedFilterView;
 
     ExtendedFilterView = Backbone.View.extend({
-        model: new Model(),
         template: _.template(Template),
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isCurrentWin": this.render,
-                "change:isCollapsed": this.render
+                "change:isActive": this.render
             }, this); // Fenstermanagement
         },
         events: {
@@ -20,27 +16,22 @@ define(function (require) {
         },
         removeAttrFromFilter: function (evt) {
             this.model.removeAttrFromFilter(evt);
-            this.render();
+            this.render(this.model, this.model.get("isActive"));
         },
 
         nextStep: function (evt) {
             this.model.nextStep(evt);
-            this.render();
+            this.render(this.model, this.model.get("isActive"));
         },
         previousStep: function (evt) {
             this.model.previousStep(evt);
-            this.render();
+            this.render(this.model, this.model.get("isActive"));
         },
 
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-
-
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
-
+        render: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();
             }
             else {

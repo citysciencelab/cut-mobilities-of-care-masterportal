@@ -212,12 +212,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "extendedFilter": {
-                //     require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
-                //         new ExtendedFilterView();
-                //     });
-                //     break;
-                // }
+                case "extendedFilter": {
+                    require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
+                        new ExtendedFilterView({model: tool});
+                    });
+                    break;
+                }
                 // case "treeFilter": {
                 //     require(["modules/treefilter/view"], function (TreeFilterView) {
                 //         new TreeFilterView();
@@ -242,12 +242,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "featureLister": {
-                //     require(["modules/featurelister/view"], function (FeatureLister) {
-                //         new FeatureLister();
-                //     });
-                //     break;
-                // }
+                case "featureLister": {
+                    require(["modules/featurelister/view"], function (FeatureLister) {
+                        new FeatureLister({model: tool});
+                    });
+                    break;
+                }
                 // case "formular": {
                 //     require(["modules/formular/view"], function (Formular) {
                 //         new Formular(tool.modelname);

@@ -20,6 +20,8 @@ define(function (require) {
         SaveSelection = require("modules/tools/saveSelection/model"),
         Routing = require("modules/viomRouting/model"),
         WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
+        ExtendedFilter = require("modules/tools/extendedFilter/model"),
+        FeatureLister = require("modules/featureLister/model"),
         AddWms = require("modules/tools/addwms/model"),
         GetCoordModel = require("modules/tools/getCoord/model"),
         Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
@@ -173,6 +175,12 @@ define(function (require) {
                 else if (attrs.id === "wfsFeatureFilter") {
                     return new WfsFeatureFilter(attrs, options);
                 }
+                else if (attrs.id === "extendedFilter") {
+                    return new ExtendedFilter(attrs, options);
+                }
+                else if (attrs.id === "featureLister") {
+                    return new FeatureLister(attrs, options);
+                }
                 return new Tool(attrs, options);
             }
             else if (attrs.type === "staticlink") {
@@ -310,7 +318,7 @@ define(function (require) {
 
             _.each(tools, function (tool) {
                 if (!_.isUndefined(tool)) {
-                    if (model.get("id") !== "gfi" || deactivateGFI) {
+                    if (model.get("id") !== "gfi" || model.get("id") !== "compareFeatures" || deactivateGFI) {
                         tool.setIsActive(false);
                     }
                 }

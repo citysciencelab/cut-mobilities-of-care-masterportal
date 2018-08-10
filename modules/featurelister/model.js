@@ -1,10 +1,11 @@
 define(function (require) {
 
     var Requestor = require("modules/core/requestor"),
+        Tool = require("modules/core/modelList/tool/model"),
         FeatureListerModel;
 
-    FeatureListerModel = Backbone.Model.extend({
-        defaults: {
+    FeatureListerModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             maxFeatures: 20, // über Config konfigurierbare Max-Anzahl an pro Layer geladenen Features
             isActive: false,
             layerlist: [], // Array aus {id, name, features}
@@ -15,12 +16,13 @@ define(function (require) {
             featureProps: {}, // Properties des Features mit gesuchter featureid
             highlightedFeature: null,
             highlightedFeatureStyle: null
-        },
+        }),
         initialize: function () {
-            var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "featureLister"});
+            console.log(this);
+            // var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "featureLister"});
 
-            if (toolModel.has("lister") === true) {
-                this.set("maxFeatures", toolModel.get("lister"));
+            if (this.has("lister") === true) {
+                this.set("maxFeatures", this.get("lister"));
             }
             Radio.on("ModelList", "updateVisibleInMapList", this.checkVisibleLayer, this);
             Radio.on("Map", "setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
@@ -251,5 +253,5 @@ define(function (require) {
         }
     });
 
-    return new FeatureListerModel();
+    return FeatureListerModel;
 });
