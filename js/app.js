@@ -248,12 +248,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "formular": {
-                //     require(["modules/formular/view"], function (Formular) {
-                //         new Formular(tool.modelname);
-                //     });
-                //     break;
-                // }
+                case "formular": {
+                    require(["modules/formular/view"], function (Formular) {
+                        new Formular({model: tool});
+                    });
+                    break;
+                }
                 case "legend": {
                     require(["modules/legend/legendLoader"], function (LegendLoader) {
                         new LegendLoader(Radio.request("ModelList", "getModelByAttributes", {id: tool.id}));

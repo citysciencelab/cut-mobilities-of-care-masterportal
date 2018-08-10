@@ -21,6 +21,7 @@ define(function (require) {
         Routing = require("modules/viomRouting/model"),
         WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
         ExtendedFilter = require("modules/tools/extendedFilter/model"),
+        Formular = require("modules/formular/grenznachweis"),
         FeatureLister = require("modules/featureLister/model"),
         AddWms = require("modules/tools/addwms/model"),
         GetCoordModel = require("modules/tools/getCoord/model"),
@@ -180,6 +181,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "featureLister") {
                     return new FeatureLister(attrs, options);
+                }
+                else if (attrs.id === "formular") {
+                    return new Formular(attrs, options);
                 }
                 return new Tool(attrs, options);
             }

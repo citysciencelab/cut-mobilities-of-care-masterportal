@@ -18,8 +18,7 @@ define(function (require) {
             highlightedFeatureStyle: null
         }),
         initialize: function () {
-            console.log(this);
-            // var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "featureLister"});
+            this.superInitialize();
 
             if (this.has("lister") === true) {
                 this.set("maxFeatures", this.get("lister"));
