@@ -20,28 +20,16 @@ define(function (require) {
             minScale: "0",
             maxScale: "1000000"
         },
+
         initialize: function () {
             var channel = Radio.channel("Layer");
 
-            // Diese Listener beschäftigen sich mit dem einmaligen Laden der
-            // ol.layer über alle children
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
                     if (this.has("childLayerSources") === false && _.isUndefined(this.get("layerSource"))) {
-                        this.createLayerSource();
+                        this.prepareLayerObject();
                     }
-                },
-                // Anschließend evt. die ClusterSource und der Layer
-                "change:layerSource": function () {
-                    if (this.has("clusterDistance") === true) {
-                        this.createClusterLayerSource();
-                    }
-                    this.createLayer();
-                },
-                "change:layer": function () {
-                    this.updateLayerTransparency();
-                    this.getResolutions();
                 }
             });
             // Dieses Radio kümmert sich um die Darstellung der layerInformation
@@ -89,7 +77,7 @@ define(function (require) {
                 else {
                     this.collection.insertIntoSelectionIDX(this);
                 }
-                this.createLayerSource();
+                this.prepareLayerObject();
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
                 this.setIsVisibleInMap(this.get("isSelected"));
             }
@@ -99,6 +87,13 @@ define(function (require) {
 
         featuresLoaded: function (features) {
             Radio.trigger("Layer", "featuresLoaded", this.get("id"), features);
+        },
+
+        prepareLayerObject: function () {
+            this.createLayerSource()
+            this.createLayer();
+            this.updateLayerTransparency();
+            this.getResolutions();
         },
 
         setDefaultResolutions: function () {

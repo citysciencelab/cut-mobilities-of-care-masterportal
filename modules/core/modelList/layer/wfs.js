@@ -12,11 +12,16 @@ define(function (require) {
         },
 
         /**
-         * [createLayerSource description]
+         * Wird vom Model getriggert und erzeugt eine vectorSource.
+         * Ggf. auch eine clusterSource
          * @return {[type]} [description]
+         * @uses this createClusterLayerSource
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
+            if (this.has("clusterDistance")) {
+                this.createClusterLayerSource();
+            }
         },
 
         /**
