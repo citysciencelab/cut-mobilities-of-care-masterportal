@@ -226,9 +226,11 @@ define(function (require) {
             $("#map").before(this.el);
         },
         startModul: function (modulId) {
-            var modul = this.collection.findWhere({id: modulId});
+            var modul = this.collection.find(function (model) {
+                return model.get("id").toLowerCase() === modulId;
+            });
 
-            if (modul.attributes.type === "tool") {
+            if (modul.get("type") === "tool") {
                 modul.setIsActive(true);
             }
             else {
