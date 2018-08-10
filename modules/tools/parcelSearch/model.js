@@ -61,7 +61,7 @@ define(function (require) {
             }
             else {
                 console.error("Ungültige oder unvollständige Konfiguration (parcelSearch)");
-                Radio.trigger("Window", "closeWin");
+                Radio.trigger("Window", "setIsVisible", false);
             }
         },
         /*
@@ -73,7 +73,7 @@ define(function (require) {
                 cache: false,
                 error: function () {
                     console.error(configJSON + " konnte nicht geladen werden (parcelSearch)");
-                    Radio.trigger("Window", "closeWin");
+                    Radio.trigger("Window", "setIsVisible", false);
                 },
                 complete: function () {
                     Radio.trigger("Util", "hideLoader");

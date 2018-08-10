@@ -17,14 +17,16 @@
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
 }
 
-.tool-window > .header-min {
-    padding-left: 10px;
-    background-color: rgb(182, 0, 0);
-    min-width: 120px;
-    box-shadow: 6px -6px 12px rgba(0, 0, 0, 0.176);
+.tool-window > .header > .move {
+    cursor: move;
 }
 
-.tool-window > .header-min:hover {
+.tool-window > .header-min {
+    background-color: rgb(182, 0, 0);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+}
+
+.tool-window > .header-min > .move {
     cursor: pointer;
 }
 
@@ -39,15 +41,13 @@
     margin: 0;
 }
 
-.tool-window > .header > .move {
-    cursor: move;
-}
-
 .tool-window > .header-min > .title {
-    font-size: 12px;
-    padding-top: 5px;
-    padding-bottom: 5px;
     color: rgb(255, 255, 255);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 120px;
+    min-width: 0;
 }
 
 .tool-window > .header > .buttons {
@@ -58,7 +58,6 @@
 
 .tool-window > .header-min > .buttons {
     color: rgb(255, 255, 255);
-    font-size: 12px;
 }
 
 .tool-window > .header > .buttons > .glyphicon-minus {
@@ -67,10 +66,6 @@
 
 .tool-window > .header > .buttons > span {
     padding: 8px 8px 8px 0px;
-}
-
-.tool-window > .header-min > .buttons > span {
-    padding: 6px 4px;
 }
 
 .tool-window > .header > .buttons > span:hover:not(.win-icon) {

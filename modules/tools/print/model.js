@@ -177,7 +177,7 @@ define(function (require) {
                         },
                         error: function () {
                             Radio.trigger("Alert", "alert", {text: "<strong>Druckkonfiguration konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
-                            Radio.trigger("Window", "closeWin");
+                            Radio.trigger("Window", "setIsVisible", false);
                         },
                         complete: function () {
                             Radio.trigger("Util", "hideLoader");

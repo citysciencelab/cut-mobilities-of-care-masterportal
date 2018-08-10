@@ -103,7 +103,7 @@ define(function (require) {
 
         setRoutingDestination: function (coordinate) {
             Radio.trigger("GFIPopup", "closeGFIParams");
-            Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "routing"}));
+            Radio.trigger("Window", "showTool", Radio.request("ModelList", "getModelByAttributes", {id: "routing"}));
             this.model.set("toStrassenname", coordinate.toString());
             this.model.set("toCoord", coordinate);
             this.model.set("zielAdresse", "gewähltes Ziel");
