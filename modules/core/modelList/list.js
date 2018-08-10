@@ -21,6 +21,7 @@ define(function (require) {
         KmlImport = require("modules/tools/kmlimport/model"),
         Routing = require("modules/viomRouting/model"),
         WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
+        TreeFilter = require("modules/treefilter/model"),
         ExtendedFilter = require("modules/tools/extendedFilter/model"),
         Formular = require("modules/formular/grenznachweis"),
         FeatureLister = require("modules/featureLister/model"),
@@ -170,6 +171,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "addWMS") {
                     return new AddWms(attrs, options);
+                }
+                else if (attrs.id === "treeFilter") {
+                    return new TreeFilter(attrs, options);
                 }
                 else if (attrs.id === "contact") {
                     return new Contact(attrs, options);

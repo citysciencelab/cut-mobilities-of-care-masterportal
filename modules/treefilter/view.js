@@ -1,19 +1,14 @@
 define(function (require) {
     var TreeFilterTemplate = require("text!modules/treefilter/template.html"),
-        TreeFilter = require("modules/treefilter/model"),
         $ = require("jquery"),
         TreeFilterView;
 
     TreeFilterView = Backbone.View.extend({
-        model: TreeFilter,
-        // id: "treeFilterWin",
-        className: "win-body",
         template: _.template(TreeFilterTemplate),
         initialize: function () {
             // this.render();
             this.listenTo(this.model, {
-                "change:isCurrentWin": this.render,
-                "change:isCollapsed ": this.render,
+                "change:isActive": this.render,
                 "change:categoryArray": this.render,
                 "change:filterHits invalid change:errors change:treeType": this.render,
                 "change:typeArray": this.render
@@ -73,9 +68,9 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+            if (this.model.get("isActive")) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(attr));
                 this.delegateEvents();
             }
             else {

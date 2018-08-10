@@ -218,12 +218,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "treeFilter": {
-                //     require(["modules/treefilter/view"], function (TreeFilterView) {
-                //         new TreeFilterView();
-                //     });
-                //     break;
-                // }
+                case "treeFilter": {
+                    require(["modules/treefilter/view"], function (TreeFilterView) {
+                        new TreeFilterView({model: tool});
+                    });
+                    break;
+                }
                 case "routing": {
                     require(["modules/viomRouting/view"], function (RoutingView) {
                         new RoutingView({model: tool});
