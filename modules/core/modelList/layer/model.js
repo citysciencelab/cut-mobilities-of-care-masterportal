@@ -52,8 +52,7 @@ define(function (require) {
                     this.toggleLayerOnMap();
                     this.toggleAttributionsInterval();
                 },
-                "change:transparency": this.updateLayerTransparency,
-                "change:SLDBody": this.updateSourceSLDBody
+                "change:transparency": this.updateLayerTransparency
             });
             // Dieser Listener um eine Veränderung des angezeigten Maßstabs
             this.listenTo(Radio.channel("MapView"), {

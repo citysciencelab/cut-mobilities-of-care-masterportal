@@ -7,6 +7,9 @@ define(function (require) {
     WMSLayer = Layer.extend({
         initialize: function () {
             Layer.prototype.initialize.apply(this, arguments);
+            this.listenTo(this, {
+                "change:SLDBody": this.updateSourceSLDBody
+            });
         },
         defaults: _.extend({}, Layer.prototype.defaults,
             {
