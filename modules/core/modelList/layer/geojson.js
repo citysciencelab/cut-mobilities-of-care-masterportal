@@ -7,7 +7,7 @@ define(function (require) {
 
     GeoJSONLayer = Layer.extend({
         initialize: function () {
-            Layer.prototype.initialize.apply(this, arguments);
+            Layer.prototype.initialize.apply(this);
             this.toggleAutoReload();
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {

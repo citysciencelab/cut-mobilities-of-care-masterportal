@@ -7,7 +7,7 @@ define(function (require) {
 
     GroupLayer = Layer.extend({
         initialize: function () {
-            Layer.prototype.initialize.apply(this, arguments);
+            Layer.prototype.initialize.apply(this);
             this.setLayerdefinitions(this.groupLayerObjectsByUrl(this.get("layerdefinitions")));
             this.setAttributes();
         },

@@ -5,17 +5,17 @@ define(function (require) {
         WMSLayer;
 
     WMSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            isChildLayer: false,
+            infoFormat: "text/xml"
+        }),
+
         initialize: function () {
-            Layer.prototype.initialize.apply(this, arguments);
+            Layer.prototype.initialize.apply(this);
             this.listenTo(this, {
                 "change:SLDBody": this.updateSourceSLDBody
             });
         },
-        defaults: _.extend({}, Layer.prototype.defaults,
-            {
-                infoFormat: "text/xml"
-            }
-        ),
 
         /**
          * [createLayerSource description]

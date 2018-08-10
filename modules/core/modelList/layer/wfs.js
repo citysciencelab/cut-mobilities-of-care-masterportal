@@ -6,9 +6,12 @@ define(function (require) {
         WFSLayer;
 
     WFSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            isChildLayer: false
+        }),
 
         initialize: function () {
-            Layer.prototype.initialize.apply(this, arguments);
+            Layer.prototype.initialize.apply(this);
         },
 
         /**
