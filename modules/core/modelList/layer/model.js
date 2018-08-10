@@ -6,6 +6,8 @@ define(function (require) {
 
     Layer = Item.extend({
         defaults: {
+            // channel des Layer-Radios
+            channel: Radio.channel("Layer"),
             // ist der Layer (ol.layer) in der Karte sichtbar
             isVisibleInMap: false,
             // ist das Model im Baum selektiert
@@ -22,8 +24,54 @@ define(function (require) {
         },
 
         initialize: function () {
-            var channel = Radio.channel("Layer");
+            this.registerInteractionTreeListeners(this.get("channel"));
+            this.registerInteractionMapViewListeners();
 
+            //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
+            //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
+            //  selectionIDX benötigen, um verschoben werden zu können
+            if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
+                if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
+                    this.collection.appendToSelectionIDX(this);
+                }
+                else {
+                    this.collection.insertIntoSelectionIDX(this);
+                }
+                this.prepareLayerObject();
+                Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
+                this.setIsVisibleInMap(this.get("isSelected"));
+            }
+            this.checkForScale(Radio.request("MapView", "getOptions"));
+            this.createLegendURL();
+        },
+
+        featuresLoaded: function (features) {
+            Radio.trigger("Layer", "featuresLoaded", this.get("id"), features);
+        },
+
+        /**
+         * Ruft die Einzelfunktionen zur Layererstellung auf.
+         * 
+         * @returns {void}
+         */
+        prepareLayerObject: function () {
+            this.createLayerSource();
+            this.createLayer();
+            this.updateLayerTransparency();
+            this.getResolutions();
+        },
+
+        /**
+         * Hier wird die Schnittstelle zur Interaktion mit dem Tree registriert.
+         * 
+         * @return {void}
+         * @listens this~change:isSelected
+         * @listens Layer~updateLayerInfo
+         * @listens Layer~setLayerInfoChecked
+         * @listens this~change:isVisibleInMap
+         * @listens this~change:transparency
+         */
+        registerInteractionTreeListeners: function (channel) {
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
@@ -54,40 +102,20 @@ define(function (require) {
                 },
                 "change:transparency": this.updateLayerTransparency
             });
+        },
+
+        /**
+         * Hier wird die Schnitttstelle zur Interaktion mit der MapView registriert.
+         * @listens Radio:MapView~changedOptions
+         * @returns {void}
+         */
+        registerInteractionMapViewListeners: function () {
             // Dieser Listener um eine Veränderung des angezeigten Maßstabs
             this.listenTo(Radio.channel("MapView"), {
                 "changedOptions": function (options) {
                     this.checkForScale(options);
                 }
             });
-
-            //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
-            //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
-            //  selectionIDX benötigen, um verschoben werden zu können
-            if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
-                if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
-                    this.collection.appendToSelectionIDX(this);
-                }
-                else {
-                    this.collection.insertIntoSelectionIDX(this);
-                }
-                this.prepareLayerObject();
-                Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
-                this.setIsVisibleInMap(this.get("isSelected"));
-            }
-            this.checkForScale(Radio.request("MapView", "getOptions"));
-            this.createLegendURL();
-        },
-
-        featuresLoaded: function (features) {
-            Radio.trigger("Layer", "featuresLoaded", this.get("id"), features);
-        },
-
-        prepareLayerObject: function () {
-            this.createLayerSource();
-            this.createLayer();
-            this.updateLayerTransparency();
-            this.getResolutions();
         },
 
         setLayerInfoChecked: function (value) {
