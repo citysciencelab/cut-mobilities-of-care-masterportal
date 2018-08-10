@@ -61,11 +61,6 @@ define(function (require) {
                 }
             });
 
-            // Default min/max Resolutions für WFS setzen
-            if (this.get("typ") === "WFS") {
-                this.setDefaultResolutions();
-            }
-
             //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
             //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
             //  selectionIDX benötigen, um verschoben werden zu können
@@ -89,23 +84,10 @@ define(function (require) {
         },
 
         prepareLayerObject: function () {
-            this.createLayerSource()
+            this.createLayerSource();
             this.createLayer();
             this.updateLayerTransparency();
             this.getResolutions();
-        },
-
-        setDefaultResolutions: function () {
-            var resolutions = Radio.request("MapView", "getScales");
-
-            if (!_.isUndefined(resolutions) && resolutions.length > 0) {
-                if (_.isUndefined(this.attributes.minScale)) {
-                    this.attributes.minScale = resolutions[resolutions.length - 1];
-                }
-                if (_.isUndefined(this.attributes.maxScale)) {
-                    this.attributes.maxScale = resolutions[0];
-                }
-            }
         },
 
         setLayerInfoChecked: function (value) {
