@@ -11,7 +11,10 @@ define(function (require) {
         }),
 
         initialize: function () {
-            Layer.prototype.initialize.apply(this);
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
+            }
+
             this.listenTo(this, {
                 "change:SLDBody": this.updateSourceSLDBody
             });
@@ -116,11 +119,10 @@ define(function (require) {
          */
         createLegendURL: function () {
             var layerNames,
-                legendURL;
+                legendURL = [];
 
             if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
                 layerNames = this.get("layers").split(",");
-                legendURL = [];
 
                 if (layerNames.length === 1) {
                     legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
@@ -220,6 +222,20 @@ define(function (require) {
 
         setInfoFormat: function (value) {
             this.set("infoFormat", value);
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
+            }
         },
 
         /**

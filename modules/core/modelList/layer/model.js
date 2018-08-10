@@ -39,10 +39,8 @@ define(function (require) {
                 }
                 this.prepareLayerObject();
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
-                this.setIsVisibleInMap(this.get("isSelected"));
+                this.setIsVisibleInMap(this.get("isSelected"));                
             }
-            this.checkForScale(Radio.request("MapView", "getOptions"));
-            this.createLegendURL();
         },
 
         featuresLoaded: function (features) {
@@ -59,6 +57,8 @@ define(function (require) {
             this.createLayer();
             this.updateLayerTransparency();
             this.getResolutions();
+            this.createLegendURL();
+            this.checkForScale(Radio.request("MapView", "getOptions"));
         },
 
         /**
@@ -75,7 +75,7 @@ define(function (require) {
             this.listenToOnce(this, {
                 // Die LayerSource wird beim ersten Selektieren einmalig erstellt
                 "change:isSelected": function () {
-                    if (this.has("childLayerSources") === false && _.isUndefined(this.get("layerSource"))) {
+                    if (_.isUndefined(this.get("layerSource"))) {
                         this.prepareLayerObject();
                     }
                 }
@@ -120,19 +120,6 @@ define(function (require) {
 
         setLayerInfoChecked: function (value) {
             this.set("layerInfoChecked", value);
-        },
-        /**
-        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-        * @param {object} options -
-        * @returns {void}
-        **/
-        checkForScale: function (options) {
-            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
-                this.setIsOutOfRange(false);
-            }
-            else {
-                this.setIsOutOfRange(true);
-            }
         },
 
         /**
