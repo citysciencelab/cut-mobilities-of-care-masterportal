@@ -182,12 +182,10 @@ define(function (require) {
             return value;
         },
         createD3Document: function () {
-            var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
-                heightPegelHeader = $(".pegelHeader").css("height").slice(0, -2),
-                heightNavbar = $(".verkehrsstaerken .nav").css("height").slice(0, -2),
-                heightBtnGroup = $(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2),
-                height = heightGfiContent - heightPegelHeader - heightNavbar - heightBtnGroup,
-                width = $(".gfi-content").css("width").slice(0, -2),
+            var heightTabContent = parseInt($(".verkehrsstaerken .tab-content").css("height").slice(0, -2), 10),
+                heightBtnGroup = parseInt($(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-top").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-bottom").slice(0, -2), 10),
+                height = heightTabContent - heightBtnGroup,
+                width = parseInt($(".verkehrsstaerken .tab-content").css("width").slice(0, -2), 10),
                 graphConfig = {
                     graphType: "Linegraph",
                     selector: ".graph",

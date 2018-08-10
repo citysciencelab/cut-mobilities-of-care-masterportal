@@ -6,6 +6,7 @@ define(function (require) {
     SearchbarModel = Backbone.Model.extend({
         defaults: {
             placeholder: "Suche",
+            recommendedList: "",
             recommandedListLength: 5,
             quickHelp: false,
             searchString: "", // der aktuelle String in der Suchmaske
@@ -190,6 +191,7 @@ define(function (require) {
                 recommendedList = this.get("hitList");
             }
             this.set("recommendedList", _.sortBy(recommendedList, "name"));
+            this.trigger("renderRecommendedList");
         },
 
         setTempCounter: function (value) {

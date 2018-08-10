@@ -75,6 +75,8 @@ define(function (require) {
             }));
             this.get("draw").on("drawstart", function (evt) {
                 Radio.trigger("Map", "registerListener", "pointermove", this.placeMeasureTooltip, this);
+                // "click" needed for touch devices
+                Radio.trigger("Map", "registerListener", "click", this.placeMeasureTooltip, this);
                 this.set("sketch", evt.feature);
                 this.createMeasureTooltip();
             }, this);
@@ -86,6 +88,8 @@ define(function (require) {
                 // unset tooltip so that a new one can be created
                 this.set("measureTooltipElement", null);
                 Radio.trigger("Map", "unregisterListener", "pointermove", this.placeMeasureTooltip, this);
+                // "click" needed for touch devices
+                Radio.trigger("Map", "unregisterListener", "click", this.placeMeasureTooltip, this);
             }, this);
             Radio.trigger("Map", "addInteraction", this.get("draw"));
         },
@@ -287,10 +291,10 @@ define(function (require) {
                     output = lengthRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 }
             }
+            else if (this.get("unit") === "km") {
+                output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
+            }
             else {
-                if (this.get("unit") === "km") {
-                    output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
-                }
                 output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
             }
             return output;
@@ -332,10 +336,10 @@ define(function (require) {
                     output = areaRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 }
             }
+            else if (this.get("unit") === "km<sup>2</sup>") {
+                output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
+            }
             else {
-                if (this.get("unit") === "km<sup>2</sup>") {
-                    output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
-                }
                 output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
             }
             return output;

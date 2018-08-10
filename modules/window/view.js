@@ -83,7 +83,7 @@ define(function (require) {
                 Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).setIsActive(false);
             }
             this.$el.hide("slow");
-            this.model.setVisible(false);
+            this.model.setIsVisible(false);
             this.model.sendParamsToWinCotent();
             Radio.channel("Tool").trigger("activatedTool", "gfi", false);
         }

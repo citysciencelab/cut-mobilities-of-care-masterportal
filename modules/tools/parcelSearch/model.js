@@ -57,8 +57,7 @@ define(function (require) {
                 this.loadConfiguration(this.get("configJSON"));
             }
             else {
-                console.error("Ungültige oder unvollständige Konfiguration (parcelSearch)");
-                Radio.trigger("Window", "closeWin");
+                Radio.trigger("Alert", "alert", "Ungültige oder unvollständige Konfiguration (" + this.get("name") + ")");
             }
         },
         /*
@@ -68,9 +67,9 @@ define(function (require) {
             this.fetch({
                 url: configJSON,
                 cache: false,
+                context: this,
                 error: function () {
-                    console.error(configJSON + " konnte nicht geladen werden (parcelSearch)");
-                    Radio.trigger("Window", "closeWin");
+                    Radio.trigger("Alert", "alert", "Gemarkungen konnten nicht geladen werden (" + this.get("name") + ")");
                 },
                 complete: function () {
                     Radio.trigger("Util", "hideLoader");

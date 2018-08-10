@@ -55,7 +55,7 @@ define(function (require) {
 
             this.className = "navbar-form col-xs-9";
 
-            this.listenTo(this.model, "change:recommendedList", function () {
+            this.listenTo(this.model, "renderRecommendedList", function () {
                 this.renderRecommendedList();
             });
 
@@ -251,8 +251,6 @@ define(function (require) {
             var hit,
                 hitID,
                 modelHitList = this.model.get("hitList");
-
-            Radio.trigger("Filter", "resetFilter");
 
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
@@ -511,7 +509,6 @@ define(function (require) {
                         this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                     }
                 }
-
                 // Der "x-Button" in der Suchleiste
                 if (evt.target.value.length > 0) {
                     this.$("#searchInput + span").show();

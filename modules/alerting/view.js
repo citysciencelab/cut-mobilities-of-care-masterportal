@@ -27,7 +27,11 @@ define(function (require) {
             var attr = this.model.toJSON();
 
             this.$el.append(this.template(attr));
-
+            if (_.has(attr, "animation") && attr.animation !== false) {
+                this.$el.find(".alert").last().fadeOut(attr.animation, function () {
+                    $(this).remove();
+                });
+            }
             return this;
         },
 

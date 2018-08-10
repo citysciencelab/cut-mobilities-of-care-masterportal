@@ -24,8 +24,6 @@
 }
 .graph {
     position: relative;
-    width: 500px;
-    height: 250px;
 }
 .line {
   fill: none;

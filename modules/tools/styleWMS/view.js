@@ -7,7 +7,7 @@ define(function (require) {
     require("colorpicker");
     StyleWMSView = Backbone.View.extend({
         model: new StyleWMS(),
-        className: "style-wms-win",
+        className: "style-wms-win ui-widget-content",
         template: _.template(StyleWMSTemplate),
         events: {
             // Auswahl der Attribute

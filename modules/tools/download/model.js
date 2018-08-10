@@ -6,6 +6,11 @@ define(function (require) {
 
     Download = Backbone.Model.extend({
         defaults: {},
+        initialize: function () {
+            this.listenTo(Radio.channel("Window"), {
+                "winParams": this.setStatus
+            });
+        },
         // Die Features
         data: {},
         // das ausgewählte Format
@@ -16,11 +21,6 @@ define(function (require) {
         caller: {},
         // download button selector
         dlBtnSel: "a.downloadFile",
-        initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
-        },
         setStatus: function (args) { // Fenstermanagement
             if (args[2].get("id") === "download") {
                 this.set("isCollapsed", args[1]);
@@ -114,7 +114,7 @@ define(function (require) {
             filename.trim();
             result = filename.match(/^[0-9a-zA-Z]+(\.[0-9a-zA-Z]+)?$/);
 
-            if (_.isUndefined(result) && _.isNull(result)) {
+            if (_.isUndefined(result) || _.isNull(result)) {
                 Radio.trigger("Alert", "alert", "Bitte geben Sie einen gültigen Dateinamen ein! (Erlaubt sind Klein-,Großbuchstaben und Zahlen.)");
             }
             return !_.isUndefined(result) && !_.isNull(result);
@@ -432,5 +432,5 @@ define(function (require) {
         }
     });
 
-    return new Download();
+    return Download;
 });

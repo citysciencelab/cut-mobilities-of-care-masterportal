@@ -11,7 +11,7 @@ define(function () {
 
             channel.on({
                 "toggleWin": this.setParams,
-                "closeWin": this.setVisible,
+                "closeWin": this.setIsVisible,
                 "collapseWin": this.collapseWindow,
                 "uncollapseWin": this.uncollapseWindow
             }, this);
@@ -25,8 +25,11 @@ define(function () {
         setCollapse: function (value) {
             this.set("isCollapsed", value);
         },
-        setVisible: function (value) {
+        setIsVisible: function (value) {
             this.set("isVisible", value);
+            if (!value) {
+                this.setCollapse(value);
+            }
         },
         setParams: function (value) {
             this.setTool(value);
