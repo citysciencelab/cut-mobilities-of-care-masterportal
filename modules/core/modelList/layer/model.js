@@ -127,7 +127,7 @@ define(function (require) {
         * @returns {void}
         **/
         checkForScale: function (options) {
-            if (parseFloat(options.scale, 10) <= this.getMaxScale() && parseFloat(options.scale, 10) >= this.getMinScale()) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
                 this.setIsOutOfRange(false);
             }
             else {
@@ -135,9 +135,14 @@ define(function (require) {
             }
         },
 
+        /**
+         * Setzt die sichtbaren Resolution an den ol.layer.
+         * 
+         * @returns {void}
+         */
         getResolutions: function () {
-            var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
-                resoByMinScale = Radio.request("MapView", "getResoByScale", this.getMinScale(), "min");
+            var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
+                resoByMinScale = Radio.request("MapView", "getResoByScale", this.get("minScale"), "min");
 
             this.setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
             this.setMinResolution(resoByMinScale);
@@ -178,14 +183,6 @@ define(function (require) {
 
         setMinResolution: function (value) {
             this.get("layer").setMinResolution(value);
-        },
-
-        getMaxScale: function () {
-            return parseFloat(this.get("maxScale"));
-        },
-
-        getMinScale: function () {
-            return parseFloat(this.get("minScale"));
         },
 
         incTransparency: function () {
