@@ -42,7 +42,7 @@ define(function (require) {
                 this.renderForm();
                 this.renderGlyphicon();
             }
-            else  {
+            else {
                 $("#map").removeClass("no-cursor");
                 $("#map").removeClass("cursor-crosshair");
                 $("#cursorGlyph").remove();

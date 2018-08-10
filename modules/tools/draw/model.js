@@ -39,10 +39,6 @@ define(function (require) {
                 }
             }, this);
 
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
-
             this.on("change:isActive", this.setStatus, this);
             Radio.trigger("Autostart", "initializedModul", "draw");
         },

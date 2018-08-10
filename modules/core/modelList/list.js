@@ -18,6 +18,7 @@ define(function (require) {
         Contact = require("modules/contact/model"),
         SearchByCoord = require("modules/tools/searchByCoord/model"),
         SaveSelection = require("modules/tools/saveSelection/model"),
+        KmlImport = require("modules/tools/kmlimport/model"),
         Routing = require("modules/viomRouting/model"),
         WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
         ExtendedFilter = require("modules/tools/extendedFilter/model"),
@@ -181,6 +182,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "featureLister") {
                     return new FeatureLister(attrs, options);
+                }
+                else if (attrs.id === "kmlimport") {
+                    return new KmlImport(attrs, options);
                 }
                 else if (attrs.id === "formular") {
                     return new Formular(attrs, options);

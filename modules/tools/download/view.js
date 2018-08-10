@@ -6,7 +6,7 @@ define(function (require) {
         DownloadView;
 
     DownloadView = Backbone.View.extend({
-        model: DownloadModel,
+        model: new DownloadModel(),
         template: _.template(DownloadWin),
         events: {
             "click button.back": "back",
@@ -15,7 +15,9 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("download");
 
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
+            this.listenTo(this.model, {
+                "change:isActive": this.render
+            });
 
             channel.on({
                 "start": this.start
@@ -41,16 +43,18 @@ define(function (require) {
             this.model.setFormats(features.formats);
             this.model.setCaller(features.caller);
             this.model.set("id", "download");
-            this.model.set("title", "Download");
+            this.model.set("name", "Download");
             this.model.set("glyphicon", "glyphicon-plus");
-
-            Radio.trigger("Window", "toggleWin", this.model);
+            // $(".win-heading .title").text("Download");
+            Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", false);
+            this.model.set("isActive", true);
         },
         /**
          * Ruft das Tool auf, das den Download gestartet hat
          */
         back: function () {
-            Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "draw"}));
+            this.model.set("isActive", false);
+            Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", true);
         },
         /**
          *
@@ -74,13 +78,10 @@ define(function (require) {
         triggerDownload: function () {
             this.model.download();
         },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+        render: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.appendOptions();
                 this.delegateEvents();
             }

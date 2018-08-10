@@ -2,10 +2,13 @@ define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
         proj4 = require("proj4"),
+        Tool = require("modules/core/modelList/tool/model"),
         Download;
 
-    Download = Backbone.Model.extend({
-        defaults: {},
+    Download = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defautls, {
+            renderToWindow: true
+        }),
         // Die Features
         data: {},
         // das ausgewählte Format
@@ -17,17 +20,13 @@ define(function (require) {
         // download button selector
         dlBtnSel: "a.downloadFile",
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
+            this.superInitialize();
+            this.listenTo(this, {
+                "change:isActive": this.setStatus
             });
         },
-        setStatus: function (args) { // Fenstermanagement
-            if (args[2].get("id") === "download") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
+        setStatus: function (model, value) { // Fenstermanagement
+            if (!value) {
                 this.data = {};
                 this.formats = {};
             }
@@ -432,5 +431,5 @@ define(function (require) {
         }
     });
 
-    return new Download();
+    return Download;
 });

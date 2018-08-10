@@ -200,12 +200,12 @@ define("app", function (require) {
                     });
                     break;
                 }
-                // case "kmlimport": {
-                //     require(["modules/tools/kmlimport/view"], function (ImportView) {
-                //         new ImportView();
-                //     });
-                //     break;
-                // }
+                case "kmlimport": {
+                    require(["modules/tools/kmlimport/view"], function (ImportView) {
+                        new ImportView({model: tool});
+                    });
+                    break;
+                }
                 case "wfsFeatureFilter": {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
                         new WFSFeatureFilterView({model: tool});
