@@ -10,13 +10,10 @@ define(function (require) {
             "click .close": "closeFilter"
         },
         initialize: function () {
-            if (this.model.get("isInitOpen")) {
-                this.model.set("isActive", true);
-                this.render();
-            }
             this.listenTo(this.model, {
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
+
                         if (model.get("queryCollection").length < 1) {
                             model.createQueries(model.get("predefinedQueries"));
                         }
@@ -38,6 +35,14 @@ define(function (require) {
                 },
                 "renderDetailView": this.renderDetailView
             });
+
+            if (this.model.get("isActive")) {
+                if (this.model.get("queryCollection").length < 1) {
+                    this.model.createQueries(this.model.get("predefinedQueries"));
+                }
+                this.render();
+                this.renderDetailView();
+            }
         },
         id: "filter-view",
         template: _.template(Template),

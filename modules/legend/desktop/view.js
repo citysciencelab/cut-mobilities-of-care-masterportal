@@ -9,9 +9,7 @@ define(function (require) {
         events: {
             "click .glyphicon-remove": "toggle"
         },
-        initialize: function (Model) {
-            // this.model = Model;
-
+        initialize: function () {
             $(window).resize(function () {
                 if ($(".legend-win-content").height() !== null) {
                     $(".legend-win-content").css("max-height", $(window).height() * 0.7);
@@ -28,8 +26,6 @@ define(function (require) {
             });
 
             this.render();
-
-            Radio.trigger("Autostart", "initializedModul", "legend");
 
             if (this.model.get("isActive")) {
                 this.toggle();

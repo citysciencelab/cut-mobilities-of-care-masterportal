@@ -13,7 +13,6 @@ define(function (require) {
             this.listenTo(this.model, {
                 "change:isActive render invalid": this.render
             });
-            Radio.trigger("Autostart", "initializedModul", "formular");
         },
         events: {
             // anonymisierte Events

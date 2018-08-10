@@ -36,7 +36,6 @@ define(function (require) {
             this.superInitialize();
             this.setPortalConfig(Radio.request("Parser", "getPortalConfig"));
             this.setAttributes();
-            Radio.trigger("Autostart", "initializedModul", "contact");
         },
         setAttributes: function () {
             var portalConfig = _.has(this.get("portalConfig"), "portalTitle") ? this.get("portalConfig") : "",

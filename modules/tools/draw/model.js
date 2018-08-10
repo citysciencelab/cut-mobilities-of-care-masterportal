@@ -40,7 +40,6 @@ define(function (require) {
             }, this);
 
             this.on("change:isActive", this.setStatus, this);
-            Radio.trigger("Autostart", "initializedModul", "draw");
         },
 
         setStatus: function (model, value) {

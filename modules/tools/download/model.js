@@ -7,6 +7,7 @@ define(function (require) {
 
     Download = Tool.extend({
         defaults: _.extend({}, Tool.prototype.defautls, {
+            id: "download",
             renderToWindow: true
         }),
         // Die Features

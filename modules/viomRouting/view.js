@@ -20,8 +20,6 @@ define(function (require) {
             channel.on({
                 "setRoutingDestination": this.setRoutingDestination
             }, this);
-
-            Radio.trigger("Autostart", "initializedModul", "routing");
         },
         events: {
             "click #calc": "routeBerechnen",
