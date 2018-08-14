@@ -12,7 +12,6 @@ define(function (require) {
             // title for the printout
             title: "",
             layoutList: [],
-            layoutNameList: [],
             // the id from the rest services json for the plot app
             plotServiceId: undefined,
             deaktivateGFI: false,
@@ -46,19 +45,15 @@ define(function (require) {
                 //     serviceUrl = Radio.request("RestReader", "getServiceById", this.get("plotServiceId")).get("url");
                 //     this.sendRequest();
                 // }
-                // this.stopListening();
+                this.stopListening(this, "change:isActive", this.getCapabilites);
             }
         },
 
         parseMapfishCapabilities: function (response) {
             this.setLayoutList(response.layouts);
-            this.parseLayoutNames(this.get("layoutNameList"), response.layouts);
-        },
-
-        parseLayoutNames: function (layoutNameList, layoutList) {
-            layoutList.forEach(function (layout) {
-                layoutNameList.push(layout.name);
-            });
+            this.setFormatList(response.formats);
+            // this.setMapSize(response.layouts[0]);
+            this.trigger("render", this, this.get("isActive"));
         },
 
         /**
@@ -83,6 +78,14 @@ define(function (require) {
          */
         setLayoutList: function (value) {
             this.set("layoutList", value);
+        },
+
+        /**
+         * @param {object[]} value - available formats of the specified print configuration
+         * @returns {void}
+         */
+        setFormatList: function (value) {
+            this.set("formatList", value);
         }
     });
 

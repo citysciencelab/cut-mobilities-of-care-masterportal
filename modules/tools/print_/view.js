@@ -12,7 +12,8 @@ define(function (require) {
         initialize: function () {
             this.template = _.template(PrintTemplate);
             this.listenTo(this.model, {
-                "change:isActive": this.render
+                "change:isActive": this.render,
+                "render": this.render
             });
         },
 
