@@ -13,6 +13,7 @@ define(function (require) {
             wfsLayerList: [],
             sensorLayerList: [],
             geojsonLayerList: [],
+            heatmapLayerList: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
             visible: false
@@ -96,38 +97,86 @@ define(function (require) {
         },
 
         setLayerList: function () {
-            var filteredLayerList,
-                groupedLayers,
-                modelList = Radio.request("ModelList", "getCollection");
+            var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
+                layerlist = this.filterLayerList(modelList),
+                wmsLayer = [],
+                wfsLayer = [],
+                sensorLayer = [],
+                geojsonLayer = [],
+                heatmapLayer = [];
 
-            // layerlist = modelList.where({type: "layer", isVisibleInMap: true});
             this.unsetLegendParams();
-            // Die Layer die in der Legende dargestellt werden sollen
-            filteredLayerList = _.filter(modelList.models, function (layer) {
+
+            _.each(layerlist, function (layer) {
+                var typ = layer.typ ? layer.typ : layer.get("typ");
+
+                if (typ === "WMS") {
+                    wmsLayer.push(layer);
+                }
+                else if (typ === "WFS") {
+                    wfsLayer.push(layer);
+                }
+                else if (typ === "SensorThings" || typ === "ESRIStreamLayer") {
+                    sensorLayer.push(layer);
+                }
+                else if (typ === "GeoJSON") {
+                    geojsonLayer.push(layer);
+                }
+                else if (typ === "Heatmap") {
+                    heatmapLayer.push(layer);
+                }
+            });
+
+            // Setze layer einmalig, weil auf change listener registirert sind
+            if (wmsLayer.length > 0) {
+                this.set("wmsLayerList", wmsLayer);
+            }
+            if (wfsLayer.length > 0) {
+                this.set("wfsLayerList", wfsLayer);
+            }
+            if (sensorLayer.length > 0) {
+                this.set("sensorLayerList", sensorLayer);
+            }
+            if (geojsonLayer.length > 0) {
+                this.set("geojsonLayerList", geojsonLayer);
+            }
+            if (heatmapLayer.length > 0) {
+                this.set("heatmapLayerList", heatmapLayer);
+            }
+
+            this.createLegend();
+        },
+
+        /**
+         * Filtert die Layerliste und löst Group-Layer auf
+         * @param  {layer[]} layerlist sichtbare Layer
+         * @return {layer[]}           Layer mit Legenden-Infos
+         */
+        filterLayerList: function (layerlist) {
+            var filteredLayerList,
+                ungroupedLayers = [];
+
+            // Die Layer die in der Legende dargestellt werden sollen. 
+            // Auch Group-Layer können "ignored" werden.
+            filteredLayerList = _.filter(layerlist, function (layer) {
                 return layer.get("legendURL") !== "ignore";
             });
 
-            // Liste wird nach Typen(WMS, WFS,...) gruppiert
-            groupedLayers = _.groupBy(filteredLayerList, function (layer) {
-                return layer.get("typ");
-            });
-            // this.set("tempArray", []);
-            if (_.has(groupedLayers, "WMS")) {
-                this.set("wmsLayerList", groupedLayers.WMS);
-            }
-            if (_.has(groupedLayers, "WFS")) {
-                this.set("wfsLayerList", groupedLayers.WFS);
-            }
-            if (_.has(groupedLayers, "Sensor")) {
-                this.set("sensorLayerList", groupedLayers.Sensor);
-            }
-            if (_.has(groupedLayers, "GeoJSON")) {
-                this.set("geojsonLayerList", groupedLayers.GeoJSON);
-            }
-            if (_.has(groupedLayers, "GROUP")) {
-                this.set("groupLayerList", groupedLayers.GROUP);
-            }
-            this.createLegend();
+            // Group-Layer werden durch die layerdefinitions ersetzt
+            _.each(filteredLayerList, function (layer) {
+                if (layer.get("typ") !== "GROUP") {
+                    ungroupedLayers.push(layer);
+                }
+                else {
+                    _.each(layer.get("layerdefinitions"), function (childLayer) {
+                        if (childLayer.legendURL !== "ignore") {
+                            ungroupedLayers.push(childLayer);
+                        }
+                    }, this);
+                }
+            }, this);
+
+            return ungroupedLayers;
         },
 
         unsetLegendParams: function () {
