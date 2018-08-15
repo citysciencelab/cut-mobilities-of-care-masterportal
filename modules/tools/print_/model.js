@@ -8,6 +8,7 @@ define(function (require) {
         defaults: _.extend({}, Tool.prototype.defaults, {
             // the id from the rest services json for the mapfish app
             mapfishServiceId: undefined,
+            // mapfishServiceUrl
             // the identifier of one of the available mapfish print configurations
             printAppId: "default",
             // title for the printout
@@ -58,8 +59,9 @@ define(function (require) {
 
             if (value) {
                 if (this.get("mapfishServiceId") !== undefined) {
-                    serviceUrl = Radio.request("RestReader", "getServiceById", this.get("mapfishServiceId")).get("url") + this.get("printAppId") + "/capabilities.json";
-                    this.sendRequest(serviceUrl, "GET", this.parseMapfishCapabilities);
+                    serviceUrl = Radio.request("RestReader", "getServiceById", this.get("mapfishServiceId")).get("url");
+                    this.setMapfishServiceUrl(serviceUrl);
+                    this.sendRequest(serviceUrl + this.get("printAppId") + "/capabilities.json", "GET", this.parseMapfishCapabilities);
                 }
                 // if (this.get("plotServiceId") !== undefined) {
                 //     serviceUrl = Radio.request("RestReader", "getServiceById", this.get("plotServiceId")).get("url");
@@ -76,6 +78,37 @@ define(function (require) {
             this.setScaleList(this.createScaleList(Radio.request("MapView", "getScales")));
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
             this.togglePostcomposeListener(this, true);
+        },
+
+        print: function () {
+            var t = {
+                "layout": "A4 Hochformat",
+                "outputFormat": "pdf",
+                "attributes": {
+                    "title": "Ttest",
+                    "map": {
+                        "projection": "EPSG:25832",
+                        "dpi": 96,
+                        "rotation": 0,
+                        "center": [561210, 5932600],
+                        "scale": 25000,
+                        "layers": [{
+                            "baseURL": "https://geodienste.hamburg.de/wms_hamburgde",
+                            "opacity": 1,
+                            "type": "WMS",
+                            "layers": [
+                                "geobasisdaten"
+                            ],
+                            "imageFormat": "image/png",
+                            "customParams": {
+                                "TRANSPARENT": "true"
+                            }
+                        }]
+                    }
+                }
+            };
+
+            this.createPrintJob(this.get("printAppId"), JSON.stringify(t), this.get("currentFormat"));
         },
 
         /**
@@ -122,16 +155,51 @@ define(function (require) {
         },
 
         /**
+         * sends a request to create a print job
+         * @param {string} printAppId - id of the print configuration
+         * @param {string} payload - POST body
+         * @param {string} format - print job output format
+         * @returns {void}
+         */
+        createPrintJob: function (printAppId, payload, format) {
+            var url = this.get("mapfishServiceUrl") + printAppId + "/report." + format;
+
+            this.sendRequest(url, "POST", this.waitForPrintJob, payload);
+        },
+
+        /**
+         * sends a request to get the status for a print job until it is finished
+         * @param {JSON} response -
+         * @returns {void}
+         */
+        waitForPrintJob: function (response) {
+            var url = this.get("mapfishServiceUrl") + "/status/" + response.ref + ".json";
+
+            this.sendRequest(url, "GET", function (status) {
+                // Fehlerverarbeitung...
+                if (!status.done) {
+                    this.waitForPrintJob(response);
+                }
+                else {
+                    window.open(this.get("mapfishServiceUrl") + "/report/" + response.ref);
+                }
+            });
+        },
+
+        /**
          * Performs an asynchronous HTTP request
          * @param {string} serviceUrl - the url of the print service
          * @param {string} requestType - GET || POST
          * @param {function} successCallback -
+         * @param {JSON} data - payload
          * @returns {void}
          */
-        sendRequest: function (serviceUrl, requestType, successCallback) {
+        sendRequest: function (serviceUrl, requestType, successCallback, data) {
             $.ajax({
                 url: serviceUrl,
                 type: requestType,
+                contentType: "application/json; charset=UTF-8",
+                data: data,
                 context: this,
                 success: successCallback
             });
@@ -274,6 +342,14 @@ define(function (require) {
          */
         setTitle: function (value) {
             this.set("title", value);
+        },
+
+        /**
+         * @param {string} value - mapfish print service url
+         * @returns {void}
+         */
+        setMapfishServiceUrl: function (value) {
+            this.set("mapfishServiceUrl", value);
         }
     });
 

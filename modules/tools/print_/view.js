@@ -7,7 +7,8 @@ define(function (require) {
             "change #printLayout": "setCurrentLayout",
             "change #printFormat": "setCurrentFormat",
             "change #printScale": "setCurrentScale",
-            "keyup input[type='text']": "setTitle"
+            "keyup input[type='text']": "setTitle",
+            "click button": "print"
         },
         initialize: function () {
             this.template = _.template(PrintTemplate);
@@ -49,6 +50,10 @@ define(function (require) {
 
         setTitle: function (evt) {
             this.model.setTitle(evt.target.value);
+        },
+
+        print: function () {
+            this.model.print();
         }
     });
 
