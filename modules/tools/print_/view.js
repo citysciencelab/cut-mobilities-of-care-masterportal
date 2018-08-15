@@ -36,6 +36,7 @@ define(function (require) {
 
             this.model.setCurrentLayout(newLayout);
             this.model.setIsLegendAvailable(this.model.isLegendAvailable(newLayout));
+            Radio.trigger("Map", "render");
         },
 
         setCurrentFormat: function (evt) {
@@ -43,7 +44,7 @@ define(function (require) {
         },
 
         setCurrentScale: function (evt) {
-            this.model.setCurrentScale(parseInt(evt.target.value, 10));
+            Radio.trigger("MapView", "setScale", parseInt(evt.target.value, 10));
         },
 
         setTitle: function (evt) {

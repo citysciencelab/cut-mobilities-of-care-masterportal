@@ -1,5 +1,6 @@
 define(function (require) {
     var Tool = require("modules/core/modelList/tool/model"),
+        ol = require("openlayers"),
         $ = require("jquery"),
         PrintModel;
 
@@ -22,15 +23,21 @@ define(function (require) {
             // the id from the rest services json for the plot app
             plotServiceId: undefined,
             deaktivateGFI: false,
-            renderToWindow: true
+            renderToWindow: true,
+            MM_PER_INCHES: 25.4,
+            POINTS_PER_INCH: 72 // PostScript points 1/72"
         }),
 
         initialize: function () {
             this.superInitialize();
 
-            // listen until the tool is activated for the first time
             this.listenTo(this, {
-                "change:isActive": this.getCapabilites
+                "change:isActive": function (model, value) {
+                    if (model.get("layoutList").length === 0) {
+                        this.getCapabilites(model, value);
+                    }
+                    this.togglePostcomposeListener(model, value);
+                }
             });
 
             this.listenTo(Radio.channel("MapView"), {
@@ -58,7 +65,6 @@ define(function (require) {
                 //     serviceUrl = Radio.request("RestReader", "getServiceById", this.get("plotServiceId")).get("url");
                 //     this.sendRequest();
                 // }
-                this.stopListening(this, "change:isActive", this.getCapabilites);
             }
         },
 
@@ -69,6 +75,7 @@ define(function (require) {
             this.setFormatList(response.formats);
             this.setScaleList(this.createScaleList(Radio.request("MapView", "getScales")));
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
+            this.togglePostcomposeListener(this, true);
         },
 
         /**
@@ -128,6 +135,81 @@ define(function (require) {
                 context: this,
                 success: successCallback
             });
+        },
+
+        togglePostcomposeListener: function (model, value) {
+            if (value && model.get("layoutList").length !== 0) {
+                Radio.trigger("Map", "registerListener", "postcompose", this.renderPrintPage, this);
+            }
+            else {
+                Radio.trigger("Map", "unregisterListener", "postcompose", this.renderPrintPage, this);
+            }
+            Radio.trigger("Map", "render");
+        },
+
+        /**
+         * draws the print page rectangle onto the canvas
+         * @param {ol.render.Event} evt -
+         * @returns {void}
+         */
+        renderPrintPage: function (evt) {
+            var map = evt.target,
+                ctx = evt.context, // Canvas context
+                resolution = map.getView().getResolution(),
+                printPageRectangle = this.calculatePageBoundsPixels(map, resolution, this.get("currentScale"), this.get("currentLayout")),
+                mapWidth = map.getSize()[0] * ol.has.DEVICE_PIXEL_RATIO,
+                mapHeight = map.getSize()[1] * ol.has.DEVICE_PIXEL_RATIO,
+                minx = printPageRectangle[0],
+                miny = printPageRectangle[1],
+                maxx = printPageRectangle[2],
+                maxy = printPageRectangle[3];
+
+            ctx.beginPath();
+            // Outside polygon, must be clockwise
+            ctx.moveTo(0, 0);
+            ctx.lineTo(mapWidth, 0);
+            ctx.lineTo(mapWidth, mapHeight);
+            ctx.lineTo(0, mapHeight);
+            ctx.lineTo(0, 0);
+            ctx.closePath();
+            // Inner polygon,must be counter-clockwise
+            ctx.moveTo(minx, miny);
+            ctx.lineTo(minx, maxy);
+            ctx.lineTo(maxx, maxy);
+            ctx.lineTo(maxx, miny);
+            ctx.lineTo(minx, miny);
+            ctx.closePath();
+            ctx.fillStyle = "rgba(0, 5, 25, 0.55)";
+            ctx.fill();
+        },
+
+        /**
+         * @param {ol.map} map -
+         * @param {number} resolution - print resolution
+         * @param {number} scale -
+         * @param {object} layout - current print layout
+         * @returns {number[]} page bounds
+         */
+        calculatePageBoundsPixels: function (map, resolution, scale, layout) {
+            var resolutions = map.getView().getResolutions(),
+                indexResolution = resolutions.indexOf(resolution),
+                centerCoordinate = map.getView().getCenter(),
+                centerPixel = map.getPixelFromCoordinate(centerCoordinate),
+                pageWidth = layout.attributes[1].clientInfo.width, // Pixel??
+                pageHeight = layout.attributes[1].clientInfo.height,
+                boundWidth = pageWidth / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                boundHeight = pageHeight / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                minx, miny, maxx, maxy;
+
+            if (boundWidth >= map.getSize()[0] || boundHeight >= map.getSize()[1]) {
+                return this.calculatePageBoundsPixels(map, resolutions[indexResolution - 1], scale, layout);
+            }
+            minx = centerPixel[0] - (boundWidth / 2);
+            miny = centerPixel[1] - (boundHeight / 2);
+            maxx = centerPixel[0] + (boundWidth / 2);
+            maxy = centerPixel[1] + (boundHeight / 2);
+
+            return [minx, miny, maxx, maxy];
         },
 
         /**
