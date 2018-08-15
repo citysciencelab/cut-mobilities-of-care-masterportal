@@ -78,6 +78,9 @@ define(function (require) {
             this.set("legendParams", legendParams);
         },
 
+        /**
+         * Setzt die Legendeninformationen aller sichtbaren Layer
+         */
         setLayerList: function () {
             var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
                 sortedModelList = _.sortBy(modelList, function (layer) {
@@ -86,62 +89,66 @@ define(function (require) {
                 visibleLayer = _.filter(sortedModelList, function (layer) {
                     return layer.get("legendURL") !== "ignore";
                 }),
-                ungroupedLayer = this.replaceChildLayerInLayerlist(visibleLayer),
                 tempArray = [];
 
             this.unsetLegendParams();
 
-            _.each(ungroupedLayer, function (layer) {
-                var typ = layer.get("typ"),
-                    layername = layer.get("name"),
-                    legendURL = layer.get("legendURL"),
-                    isVisibleInMap = layer.get("isVisibleInMap"),
-                    typ = layer.get("typ"),
-                    styleId = layer.get("styleId");
-
-                if (typ === "WMS") {
-                    tempArray.push(this.setLegendParamsFromWMS(layername, legendURL));
-                }
-                else if (typ === "WFS") {
-                    tempArray.push(this.setLegendParamsFromVector(layername, legendURL, typ, styleId));
-                }
-                else if (typ === "SensorThings" || typ === "ESRIStreamLayer") {
-                    tempArray.push(this.setLegendParamsFromVector(layername, legendURL, typ, styleId));
-                }
-                else if (typ === "GeoJSON") {
-                    tempArray.push(this.setLegendParamsFromVector(layername, legendURL, typ, styleId));
-                }
+            _.each(visibleLayer, function (layer) {
+                tempArray.push(this.getLegendDefinition(layer));
             }, this);
 
             this.set("legendParams", tempArray );
         },
 
         /**
-         * Ersetzt in der layerlist alle Gruppenlayer durch ihre childLayer
-         * @param  {layer[]} layerlist layerList mit Group-Layern
-         * @return {layer[]}           layerlist mit childLayern
+         * Wertet den Layer aus und gibt dessen Legendendefinition zurück
+         * @param  {layer} layer
+         * @return {object}       Legendendefinition
          */
-        replaceChildLayerInLayerlist: function (layerlist) {
-            var groupLayer = [];
+        getLegendDefinition: function (layer) {
+            var typ = layer.get("typ"),
+                layername = layer.get("name"),
+                legendURL = layer.get("legendURL"),
+                isVisibleInMap = layer.get("isVisibleInMap"),
+                typ = layer.get("typ"),
+                styleId = layer.get("styleId");
 
-            _.each(layerlist, function (layer) {
-                if (layer.get("typ") === "GROUP") {
-                    _.each(layer.get("childLayer"), function (childLayer) {
-                        groupLayer.push(childLayer);
-                    });
+            if (typ === "WMS") {
+                return this.getLegendParamsFromWMS(layername, legendURL);
+            }
+            else if (typ === "WFS") {
+                return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+            }
+            else if (typ === "SensorThings" || typ === "ESRIStreamLayer") {
+                return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+            }
+            else if (typ === "GeoJSON") {
+                return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+            }
+            else if (typ === "GROUP") {
+                var defs = [];
+
+                _.each(layer.get("childLayer"), function (childLayer) {
+                    if (childLayer.get("legendURL") !== "ignore") {
+                        // childLayer-Abfragen haben immer nur legend[0]
+                        defs.push(this.getLegendDefinition(childLayer).legend[0]);
+                    }
+                }, this);
+
+                if (defs.length > 0) {
+                    return {
+                        layername: layer.get("name"),
+                        legend: defs
+                    }
                 }
-            }, this);
-            layerlist = _.union(layerlist, groupLayer);
-            return _.reject (layerlist, function (layer) {
-                return layer.get("typ") === "GROUP";
-            });
+            }
         },
 
         unsetLegendParams: function () {
             this.set("tempArray", []);
         },
 
-        setLegendParamsFromWMS: function (layername, legendURL) {
+        getLegendParamsFromWMS: function (layername, legendURL) {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
                 paramsStyleWMS = "";
 
@@ -157,20 +164,24 @@ define(function (require) {
             if (paramsStyleWMS) {
                 return {
                     layername: layername,
-                    typ: "styleWMS",
-                    params: paramsStyleWMS
+                    legend: [{
+                        typ: "styleWMS",
+                        params: paramsStyleWMS
+                    }]
                 };
             }
             else {
                 return {
                     layername: layername,
-                    img: legendURL,
-                    typ: "WMS"
+                    legend: [{
+                        img: legendURL,
+                        typ: "WMS"
+                    }]
                 };
             }
         },
 
-        setLegendParamsFromVector: function (layername, legendURL, typ, styleId) {
+        getLegendParamsFromVector: function (layername, legendURL, typ, styleId) {
             var image,
                 name,
                 style,
@@ -182,8 +193,10 @@ define(function (require) {
             if (typeof legendURL === "string") {
                 return {
                     layername: layername,
-                    img: legendURL,
-                    typ: typ
+                    legend: [{
+                        img: legendURL,
+                        typ: typ
+                    }]
                 };
             }
             else {
@@ -261,9 +274,11 @@ define(function (require) {
                 }
                 return {
                     layername: layername,
-                    legendname: name,
-                    img: image,
-                    typ: typ
+                    legend: [{
+                        legendname: name,
+                        img: image,
+                        typ: typ
+                    }]
                 };
             }
         },

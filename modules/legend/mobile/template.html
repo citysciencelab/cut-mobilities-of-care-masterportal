@@ -16,25 +16,26 @@
                             <%= element.layername %>
                         </h4>
                     </div>
+                    <% _.each(element.legend, function (layerdefinition) { %>
                     <div id="collapseEins<%=index%>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="überschriftEins<%=index%>">
                         <div class="panel-body panel-legend">
                             <%
-                            if (element.typ === "WFS" || element.typ === "Sensor") {
+                            if (layerdefinition.typ === "WFS" || layerdefinition.typ === "Sensor") {
                             %>
                                 <table>
                                 <%
-                                if (typeof element.img === "string") {
-                                    if (new RegExp(/(\.pdf)$/i).test(element.img) === true) { %>
-                                        <a href=<%= element.img %> target="_blank">weitere Informationen</a>
+                                if (typeof layerdefinition.img === "string") {
+                                    if (new RegExp(/(\.pdf)$/i).test(layerdefinition.img) === true) { %>
+                                        <a href=<%= layerdefinition.img %> target="_blank">weitere Informationen</a>
                                     <% }
                                     else { %>
                                         <p>
-                                            <img src=<%= element.img %>>
+                                            <img src=<%= layerdefinition.img %>>
                                         </p>
                                     <% }
                                 }
                                 else {
-                                    _.each(element.img, function (image, index2) {
+                                    _.each(layerdefinition.img, function (image, index2) {
                                     %>
                                         <tr>
                                             <td class="tdLegend">
@@ -47,7 +48,7 @@
                                                 <%}%>
                                             </td>
                                             <td class="tdLegend">
-                                                <span><%= element.legendname[index2] %></span>
+                                                <span><%= layerdefinition.legendname[index2] %></span>
                                             </td>
                                         </tr>
                                     <%
@@ -58,20 +59,20 @@
                             <%
                             }
                             else {
-                                if (typeof element.img === "string") {
-                                    if (new RegExp(/(\.pdf)$/i).test(element.img) === true) { %>
-                                        <a href=<%= element.img %> target="_blank">weitere Informationen</a>
+                                if (typeof layerdefinition.img === "string") {
+                                    if (new RegExp(/(\.pdf)$/i).test(layerdefinition.img) === true) { %>
+                                        <a href=<%= layerdefinition.img %> target="_blank">weitere Informationen</a>
                                     <% }
                                     else { %>
                                         <p>
-                                            <img src=<%= element.img %>>
+                                            <img src=<%= layerdefinition.img %>>
                                         </p>
                                     <% }
                                 }
                                 else {
                                 %>
-                                <% if (element.img.length > 1) {
-                                    _.each(element.img, function (image) { %>
+                                <% if (layerdefinition.img.length > 1) {
+                                    _.each(layerdefinition.img, function (image) { %>
                                         <p>
                                             <img src=<%= image %>>
                                         </p>
@@ -79,7 +80,7 @@
                                 }
                                 else { %>
                                     <p>
-                                        <img src=<%= element.img[0] %>>
+                                        <img src=<%= layerdefinition.img[0] %>>
                                     </p>
                                 <% }
                                 }
@@ -87,6 +88,7 @@
                             %>
                         </div>
                     </div>
+                    <% }); %>
                 </div>
             <%
                 });
