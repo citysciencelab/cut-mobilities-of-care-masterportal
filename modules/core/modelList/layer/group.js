@@ -213,14 +213,9 @@ define(function (require) {
          * @return {void}
          */
         createLegendURL: function () {
-            var legendURL = [];
-
             _.each(this.get("childLayer"), function (childLayer) {
                 childLayer.createLegendURL();
-                legendURL.push(childLayer.get("legendURL"));
             }, this);
-
-            this.set("legendURL", legendURL);
         },
 
         /**

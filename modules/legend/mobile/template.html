@@ -9,7 +9,6 @@
             <div class="panel-group" role="tablist" aria-multiselectable="true">
             <%
             _.each(legendParams, function(element, index) {
-                 if(element.isVisibleInMap === true) {
             %>
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="überschriftEins<%=index%>" data-toggle="collapse" href="#collapseEins<%=index%>" aria-expanded="true" aria-controls"collapseEins<%=index%>">
@@ -90,7 +89,7 @@
                     </div>
                 </div>
             <%
-                }});
+                });
             %>
             </div>
         </div>
