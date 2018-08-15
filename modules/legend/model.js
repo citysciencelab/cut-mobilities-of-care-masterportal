@@ -98,12 +98,15 @@ define(function (require) {
 
         setLayerList: function () {
             var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-                layerlist = this.filterLayerList(modelList),
+                layerlist = _.filter(modelList, function (layer) {
+                    return layer.get("legendURL") !== "ignore";
+                }),
                 wmsLayer = [],
                 wfsLayer = [],
                 sensorLayer = [],
                 geojsonLayer = [],
-                heatmapLayer = [];
+                heatmapLayer = [],
+                groupLayer = [];
 
             this.unsetLegendParams();
 
@@ -125,6 +128,9 @@ define(function (require) {
                 else if (typ === "Heatmap") {
                     heatmapLayer.push(layer);
                 }
+                else if (typ === "GROUP") {
+                    groupLayer.push(layer);
+                }
             });
 
             // Setze layer einmalig, weil auf change listener registirert sind
@@ -143,40 +149,11 @@ define(function (require) {
             if (heatmapLayer.length > 0) {
                 this.set("heatmapLayerList", heatmapLayer);
             }
+            if (groupLayer.length > 0) {
+                this.set("groupLayerList", groupLayer);
+            }
 
             this.createLegend();
-        },
-
-        /**
-         * Filtert die Layerliste und löst Group-Layer auf
-         * @param  {layer[]} layerlist sichtbare Layer
-         * @return {layer[]}           Layer mit Legenden-Infos
-         */
-        filterLayerList: function (layerlist) {
-            var filteredLayerList,
-                ungroupedLayers = [];
-
-            // Die Layer die in der Legende dargestellt werden sollen. 
-            // Auch Group-Layer können "ignored" werden.
-            filteredLayerList = _.filter(layerlist, function (layer) {
-                return layer.get("legendURL") !== "ignore";
-            });
-
-            // Group-Layer werden durch die layerdefinitions ersetzt
-            _.each(filteredLayerList, function (layer) {
-                if (layer.get("typ") !== "GROUP") {
-                    ungroupedLayers.push(layer);
-                }
-                else {
-                    _.each(layer.get("layerdefinitions"), function (childLayer) {
-                        if (childLayer.legendURL !== "ignore") {
-                            ungroupedLayers.push(childLayer);
-                        }
-                    }, this);
-                }
-            }, this);
-
-            return ungroupedLayers;
         },
 
         unsetLegendParams: function () {

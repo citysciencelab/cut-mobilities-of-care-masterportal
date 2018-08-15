@@ -54,8 +54,7 @@ define(function (require) {
                     this.get("childLayer").push(new HeatmapLayer(childLayerDefinition));
                 }
 
-                _.last(this.get("childLayer")).createLayerSource();
-                _.last(this.get("childLayer")).createLayer();
+                _.last(this.get("childLayer")).prepareLayerObject();
             }, this);
         },
 
