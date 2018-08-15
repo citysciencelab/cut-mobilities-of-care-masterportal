@@ -1,14 +1,15 @@
-define([
-    "backbone",
-    "text!modules/legend/mobile/template.html",
-    "backbone.radio",
-    "bootstrap/modal"
-], function (Backbone, LegendTemplate, Radio) {
+define(function (require) {
+    var $ = require("jquery"),
+        LegendTemplate = require("text!modules/legend/desktop/template.html"),
+        Radio = require("backbone.radio"),
+        ContentTemplate = require("text!modules/legend/content.html"),
+        LegendView;
 
-    var MobileLegendView = Backbone.View.extend({
+    MobileLegendView = Backbone.View.extend({
         id: "base-modal-legend",
         className: "modal bs-example-modal-sm legend fade in",
         template: _.template(LegendTemplate),
+        contentTemplate: _.template(ContentTemplate),
         events: {
             "click .glyphicon-remove": "toggle"
         },
@@ -16,7 +17,7 @@ define([
             this.model = Model;
 
             this.listenTo(this.model, {
-                "change:legendParams": this.render
+                "change:legendParams": this.paramsChanged
             });
 
             this.listenTo(Radio.channel("Legend"), {
@@ -32,8 +33,24 @@ define([
 
         render: function () {
             var attr = this.model.toJSON();
+            this.addContentHTML();
 
             this.$el.html(this.template(attr));
+        },
+
+        paramsChanged: function () {
+            this.addContentHTML();
+            this.render();
+        },
+
+        addContentHTML: function () {
+            var legendParams = this.model.get("legendParams");
+
+            _.each(legendParams, function (legendDefinition) {
+                _.each(legendDefinition.legend, function (legend) {
+                    legend.html = this.contentTemplate(legend)
+                }, this);
+            }, this);
         },
 
         toggle: function () {

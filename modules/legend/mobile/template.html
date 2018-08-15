@@ -19,73 +19,7 @@
                     <% _.each(element.legend, function (layerdefinition) { %>
                     <div id="collapseEins<%=index%>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="überschriftEins<%=index%>">
                         <div class="panel-body panel-legend">
-                            <%
-                            if (layerdefinition.typ === "WFS" || layerdefinition.typ === "Sensor") {
-                            %>
-                                <table>
-                                <%
-                                if (typeof layerdefinition.img === "string") {
-                                    if (new RegExp(/(\.pdf)$/i).test(layerdefinition.img) === true) { %>
-                                        <a href=<%= layerdefinition.img %> target="_blank">weitere Informationen</a>
-                                    <% }
-                                    else { %>
-                                        <p>
-                                            <img src=<%= layerdefinition.img %>>
-                                        </p>
-                                    <% }
-                                }
-                                else {
-                                    _.each(layerdefinition.img, function (image, index2) {
-                                    %>
-                                        <tr>
-                                            <td class="tdLegend">
-                                                <% if (_.isArray(image)){%>
-                                                    <div class="imageArray" style="background:url('<%= image[1] %>');  background-size:35px;">
-                                                        <img src="<%= image[0] %>">
-                                                    </div>
-                                                <%} else {%>
-                                                    <img src="<%= image %>">
-                                                <%}%>
-                                            </td>
-                                            <td class="tdLegend">
-                                                <span><%= layerdefinition.legendname[index2] %></span>
-                                            </td>
-                                        </tr>
-                                    <%
-                                    });
-                                }
-                                    %>
-                                </table>
-                            <%
-                            }
-                            else {
-                                if (typeof layerdefinition.img === "string") {
-                                    if (new RegExp(/(\.pdf)$/i).test(layerdefinition.img) === true) { %>
-                                        <a href=<%= layerdefinition.img %> target="_blank">weitere Informationen</a>
-                                    <% }
-                                    else { %>
-                                        <p>
-                                            <img src=<%= layerdefinition.img %>>
-                                        </p>
-                                    <% }
-                                }
-                                else {
-                                %>
-                                <% if (layerdefinition.img.length > 1) {
-                                    _.each(layerdefinition.img, function (image) { %>
-                                        <p>
-                                            <img src=<%= image %>>
-                                        </p>
-                                <%    });
-                                }
-                                else { %>
-                                    <p>
-                                        <img src=<%= layerdefinition.img[0] %>>
-                                    </p>
-                                <% }
-                                }
-                            }
-                            %>
+                            <%= layerdefinition.html %>
                         </div>
                     </div>
                     <% }); %>
