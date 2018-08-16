@@ -33,7 +33,6 @@ define(function (require) {
 
         render: function () {
             var attr = this.model.toJSON();
-            this.addContentHTML();
 
             this.$el.html(this.template(attr));
         },
@@ -43,6 +42,10 @@ define(function (require) {
             this.render();
         },
 
+        /**
+         * Fügt den Legendendefinitionen das gerenderte HTML hinzu. 
+         * Dieses wird im template benötigt.
+         */
         addContentHTML: function () {
             var legendParams = this.model.get("legendParams");
 

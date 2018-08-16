@@ -48,6 +48,10 @@ define(function (require) {
             this.render();
         },
 
+        /**
+         * Fügt den Legendendefinitionen das gerenderte HTML hinzu. 
+         * Dieses wird im template benötigt.
+         */
         addContentHTML: function () {
             var legendParams = this.model.get("legendParams");
 
