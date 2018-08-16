@@ -18,11 +18,13 @@ define(function (require) {
          * @return {String} - CSW GetRecordById Request-String
          */
         url: function () {
-            var cswService = Radio.request("RestReader", "getServiceById", this.get("cswId"));
+            var cswService = Radio.request("RestReader", "getServiceById", this.get("cswId")),
+                url = "undefined";
 
             if (_.isUndefined(cswService) === false) {
-                return Radio.request("Util", "getProxyURL", cswService.get("url"));
+                url = Radio.request("Util", "getProxyURL", cswService.get("url"));
             }
+            return url;
         },
 
         initialize: function () {
