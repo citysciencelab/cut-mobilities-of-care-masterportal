@@ -191,40 +191,109 @@ define(function (require) {
          * @return {undefined}
          */
         setGfiParams: function (evt) {
-            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"}),
-                visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"}),
+            var visibleLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
+                visibleWMSLayerList = [],
+                visibleVectorLayerList = [],
                 eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
-                isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel);
+                vectorGFIParams,
+                wmsGFIParams,
+                gfiParams = [];
 
-            // Adde die child-WMS-Layer dem WMS-Array zur Einzelabfrage jedes Layers
-            _.each(visibleGroupLayerList, function (groupLayer) {
-                _.each(groupLayer.get("childLayer"), function (childLayer) {
-                    if (childLayer.get("typ") === "WMS") {
-                        visibleWMSLayerList.push(childLayer);
-                    }
-                }, this);
-            }, this);
+            Radio.trigger("ClickCounter", "gfi");
+
+            // Zuordnen von Layertypen zur Abfrage
+            _.each(visibleLayerList, function (layer) {
+                var typ = layer.get("typ");
+
+                if (typ === "WMS") {
+                    visibleWMSLayerList.push(layer);
+                }
+                else if (typ === "GROUP") {
+                    _.each(layer.get("childLayer"), function (childLayer) {
+                        if (childLayer.get("typ") === "WMS") {
+                            visibleWMSLayerList.push(childLayer);
+                        }
+                        else {
+                            visibleVectorLayerList.push(childLayer);
+                        }
+                    }, this);
+                }
+                else {
+                    visibleVectorLayerList.push(layer);
+                }
+            });
 
             this.setCoordinate(evt.coordinate);
 
             // Vector
-            Radio.trigger("ClickCounter", "gfi");
-            if (isFeatureAtPixel === true) {
-                Radio.trigger("Map", "forEachFeatureAtPixel", eventPixel, this.searchModelByFeature);
-            }
-
+            vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, eventPixel);
             // WMS
-            _.each(visibleWMSLayerList, function (model) {
-                if (model.get("gfiAttributes") !== "ignore" || _.isUndefined(model.get("gfiAttributes")) === true) {
-                    model.attributes.gfiUrl = model.getGfiUrl();
-                    gfiParams.push(model.attributes);
-                }
-            }, this);
+            wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
+            gfiParams = _.union(vectorGFIParams, wmsGFIParams);
 
             this.setThemeIndex(0);
             this.get("themeList").reset(gfiParams);
             gfiParams = [];
         },
+
+        /**
+         * Ermittelt die GFIParameter zur Abfrage von Vectorlayern
+         * @param  {layer[]} layerlist  Liste der abzufragenden Vectorlayer
+         * @param  {pixel} eventPixel   Pixelkoordinate
+         * @return {object[]}           GFI-Parameter von Vektorlayern
+         */
+        getVectorGFIParams: function (layerlist, eventPixel) {
+            var gfiParams = [];
+
+            _.each(layerlist, function (vectorLayer) {
+                var features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
+                        layerFilter: function (layer) {
+                            return layer.get("name") === vectorLayer.get("name");
+                        },
+                        hitTolerance: 0
+                    }),
+                    modelAttributes;
+
+                _.each(features, function (featureAtPixel) {
+                    modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+
+                    // Feature
+                    if (_.has(featureAtPixel.getProperties(), "features") === false) {
+                        modelAttributes.feature = featureAtPixel;
+                        gfiParams.push(modelAttributes);
+                    }
+                    // Cluster Feature
+                    else {
+                        _.each(featureAtPixel.get("features"), function (feature) {
+                            modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
+                            modelAttributes.feature = feature;
+                            gfiParams.push(modelAttributes);
+                        });
+                    }
+                }, this);
+            }, this);
+
+            return gfiParams;
+        },
+
+        /**
+         * Ermittelt die GFIParameter zur Abfrage von WMSlayern
+         * @param  {layer[]} layerlist  Liste der abzufragenden WMSlayer
+         * @return {object[]}           GFI-Parameter vom WMS-Layern
+         */
+        getWMSGFIParams: function (layerlist) {
+            var gfiParams = [];
+
+            _.each(layerlist, function (layer) {
+                if (layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true) {
+                    layer.attributes.gfiUrl = layer.getGfiUrl();
+                    gfiParams.push(layer.attributes);
+                }
+            }, this);
+
+            return gfiParams;
+        },
+
         setGfiParamsFromCustomModule: function (params) {
             this.setCoordinate(params.coordinates);
             gfiParams = [{
@@ -236,35 +305,6 @@ define(function (require) {
             }];
             this.get("themeList").reset(gfiParams);
             gfiParams = [];
-        },
-        /**
-         *
-         * @param  {ol.Feature} featureAtPixel getroffenes Feature
-         * @param  {ol.layer.Vector} olLayer Layer
-         * @return {undefined}
-         */
-        searchModelByFeature: function (featureAtPixel, olLayer) {
-            debugger;
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")}),
-                modelAttributes;
-
-            if (_.isUndefined(model) === false) {
-                modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
-
-                // Feature
-                if (_.has(featureAtPixel.getProperties(), "features") === false) {
-                    modelAttributes.feature = featureAtPixel;
-                    gfiParams.push(modelAttributes);
-                }
-                // Cluster Feature
-                else {
-                    _.each(featureAtPixel.get("features"), function (feature) {
-                        modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
-                        modelAttributes.feature = feature;
-                        gfiParams.push(modelAttributes);
-                    });
-                }
-            }
         },
 
         // Setter
