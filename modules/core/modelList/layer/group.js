@@ -111,30 +111,6 @@ define(function (require) {
             this.setLayerInfoChecked(true);
         },
 
-        setMaxScale: function (layerId) {
-            var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
-
-            this.set("maxScale", layer.maxScale);
-        },
-
-        setMinScale: function (layerId) {
-            var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
-
-            this.set("minScale", layer.minScale);
-        },
-
-        setGfiParams: function (value) {
-            this.set("gfiParams", value);
-        },
-
-        getGfiUrl: function (gfiParams, coordinate, index) {
-            var resolution = Radio.request("MapView", "getResolution").resolution,
-                projection = Radio.request("MapView", "getProjection"),
-                childLayer = this.get("childlayers").item(index);
-
-            return childLayer.getSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: gfiParams.infoFormat, FEATURE_COUNT: gfiParams.featureCount});
-        },
-
         /**
         * Prüft anhand der Scale aller childLayer, ob der Layer sichtbar ist oder nicht
         * @param {object} options
