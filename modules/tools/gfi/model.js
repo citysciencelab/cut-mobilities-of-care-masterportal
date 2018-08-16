@@ -193,9 +193,17 @@ define(function (require) {
         setGfiParams: function (evt) {
             var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"}),
                 visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"}),
-                visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList),
                 eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
                 isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel);
+
+            // Adde die child-WMS-Layer dem WMS-Array zur Einzelabfrage jedes Layers
+            _.each(visibleGroupLayerList, function (groupLayer) {
+                _.each(groupLayer.get("childLayer"), function (childLayer) {
+                    if (childLayer.get("typ") === "WMS") {
+                        visibleWMSLayerList.push(childLayer);
+                    }
+                }, this);
+            }, this);
 
             this.setCoordinate(evt.coordinate);
 
@@ -205,21 +213,14 @@ define(function (require) {
                 Radio.trigger("Map", "forEachFeatureAtPixel", eventPixel, this.searchModelByFeature);
             }
 
-            // WMS | GROUP
-            _.each(visibleLayerList, function (model) {
+            // WMS
+            _.each(visibleWMSLayerList, function (model) {
                 if (model.get("gfiAttributes") !== "ignore" || _.isUndefined(model.get("gfiAttributes")) === true) {
-                    if (model.get("typ") === "WMS") {
-                        model.attributes.gfiUrl = model.getGfiUrl();
-                        gfiParams.push(model.attributes);
-                    }
-                    else {
-                        _.each(model.get("gfiParams"), function (params) {
-                            params.gfiUrl = model.getGfiUrl(params, evt.coordinate, params.childLayerIndex);
-                            gfiParams.push(params);
-                        });
-                    }
+                    model.attributes.gfiUrl = model.getGfiUrl();
+                    gfiParams.push(model.attributes);
                 }
             }, this);
+
             this.setThemeIndex(0);
             this.get("themeList").reset(gfiParams);
             gfiParams = [];
@@ -243,6 +244,7 @@ define(function (require) {
          * @return {undefined}
          */
         searchModelByFeature: function (featureAtPixel, olLayer) {
+            debugger;
             var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")}),
                 modelAttributes;
 
