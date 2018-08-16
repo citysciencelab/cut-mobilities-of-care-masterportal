@@ -224,9 +224,8 @@ define(function (require) {
          */
         showLayerInformation: function () {
             var metaID = [],
-                legendParams = Radio.request("Legend", "getLegendParams"),
-                name = this.get("name"),
-                legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null;
+                legend = Radio.request("Legend", "getLegend", this),
+                name = this.get("name");
 
             _.each(this.get("layerdefinitions"), function (layer) {
                 var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
@@ -238,7 +237,7 @@ define(function (require) {
 
             Radio.trigger("LayerInformation", "add", {
                 "id": this.get("id"),
-                "legendURL": legendURL,
+                "legend": legend,
                 "metaID": metaID,
                 "layername": name,
                 "url": null,
