@@ -126,7 +126,7 @@ define(function (require) {
                                 feature.setStyle(layer.defaultStyle(feature));
                             }
                             else {
-                                feature.setStyle(layer.defaultStyle);
+                                feature.setStyle(layer.defaultStyle(feature));
                             }
                         }
                         else if (featuredarstellen === false) {

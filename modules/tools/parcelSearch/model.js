@@ -48,6 +48,10 @@ define(function (require) {
             var restService,
                 serviceURL;
 
+            if (this.get("parcelDenominator") === true) {
+                this.setParcelDenominatorField(true);
+            }
+
             restService = this.get("serviceId") ? Radio.request("RestReader", "getServiceById", this.get("serviceId")) : null;
             serviceURL = restService && restService.get("url") ? restService.get("url") : null;
 
@@ -162,9 +166,9 @@ define(function (require) {
         sendRequest: function () {
             var storedQuery = "&StoredQuery_ID=" + this.get("storedQueryID"),
                 gemarkung = "&gemarkung=" + this.get("districtNumber"),
-                flur = this.get("cadastralDistrictField") === true ? "&flur=" + this.getCadastralDistrictNumber() : "",
+                flur = this.get("cadastralDistrictField") === true ? "&flur=" + this.get("cadastralDistrictNumber") : "",
                 parcelNumber = "&flurstuecksnummer=" + this.padLeft(this.get("parcelNumber"), 5, "0"),
-                parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? "&flurstuecksnummernenner=" + this.padLeft(this.getParcelDenominatorNumber(), 3, "0") : "",
+                parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? "&flurstuecksnummernenner=" + this.padLeft(this.get("parcelDenominatorNumber"), 3, "0") : "",
                 data = storedQuery + gemarkung + flur + parcelNumber + parcelDenominatorNumber;
 
             $.ajax({
@@ -196,7 +200,7 @@ define(function (require) {
 
             if (!member || member.length === 0) {
                 parcelNumber = this.padLeft(this.get("parcelNumber"), 5, "0");
-                parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? " / " + this.padLeft(this.getParcelDenominatorNumber(), 3, "0") : "";
+                parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? " / " + this.padLeft(this.get("parcelDenominatorNumber"), 3, "0") : "";
                 this.setParcelFound(false);
                 Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
                 Radio.trigger("ParcelSearch", "noParcelFound");
@@ -231,6 +235,10 @@ define(function (require) {
             this.set("parcelDenominatorNumber", value);
         },
 
+        setParcelDenominatorField: function (value) {
+            this.set("parcelDenominatorField", value);
+        },
+
         // setter for isCollapsed
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
@@ -261,7 +269,7 @@ define(function (require) {
             this.set("fetched", value);
         },
 
-        // setter for getCadastralDi
+        // setter for cadastralDistrictField
         setCadastralDistrictField: function (value) {
             this.set("cadastralDistrictField", value);
         },

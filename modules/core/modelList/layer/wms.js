@@ -54,8 +54,9 @@ define(function (require) {
                             5809000
                         ],
                         tileSize: parseInt(this.get("tilesize"), 10)
-                    }),
-                    crossOrigin: "anonymous"
+                    })
+                    // Nur für Schulwegrouting, führte zu Problemen mit  diensten die dies nicht zulassen.
+                    // crossOrigin: "anonymous"
                 });
 
                 // wms_webatlasde
@@ -76,8 +77,9 @@ define(function (require) {
                 this.setLayerSource(new ol.source.ImageWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
-                    params: params,
-                    crossOrigin: "anonymous"
+                    params: params
+                    // Nur für Schulwegrouting, führte zu Problemen mit  diensten die dies nicht zulassen.
+                    // crossOrigin: "anonymous"
                 }));
             }
             // this.registerErrorListener();
