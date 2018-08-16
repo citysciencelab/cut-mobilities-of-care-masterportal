@@ -1,6 +1,6 @@
 define(function (require) {
     var $ = require("jquery"),
-        LegendTemplate = require("text!modules/legend/desktop/template.html"),
+        LegendTemplate = require("text!modules/legend/mobile/template.html"),
         Radio = require("backbone.radio"),
         ContentTemplate = require("text!modules/legend/content.html"),
         LegendView;
