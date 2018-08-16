@@ -18,9 +18,7 @@ define(function (require) {
             var channel = Radio.channel("Legend");
 
             channel.reply({
-                "getLegendParams": function () {
-                    return this.get("legendParams");
-                }
+                "getLegend": this.getLegend
             }, this);
 
             this.listenTo(Radio.channel("ModelList"), {
@@ -38,6 +36,23 @@ define(function (require) {
 
         setVisible: function (val) {
             this.set("visible", val);
+        },
+
+        /**
+         * Erstellt die Legendeninformation zu einem Layer und liefert diese zurück
+         * @param  {object} layer gesuchter Layer
+         * @return {object}       Legendeninformation
+         */
+        getLegend: function (layer) {
+            if (layer.get("isVisibleInMap")) {
+                return this.getLegendDefinition(layer);
+            }
+            else {
+                return {
+                    layername: layer.get("name"),
+                    legend: null
+                }
+            }
         },
 
         updateParamsStyleWMSArray: function (params) {
@@ -109,11 +124,16 @@ define(function (require) {
             var typ = layer.get("typ"),
                 layername = layer.get("name"),
                 legendURL = layer.get("legendURL"),
-                isVisibleInMap = layer.get("isVisibleInMap"),
                 typ = layer.get("typ"),
                 styleId = layer.get("styleId");
 
-            if (typ === "WMS") {
+            if (legendURL === "ignore") {
+                return {
+                    layername: layername,
+                    legend: null
+                };
+            }
+            else if (typ === "WMS") {
                 return this.getLegendParamsFromWMS(layername, legendURL);
             }
             else if (typ === "WFS") {
@@ -129,9 +149,11 @@ define(function (require) {
                 var defs = [];
 
                 _.each(layer.get("childLayer"), function (childLayer) {
-                    if (childLayer.get("legendURL") !== "ignore") {
+                    var childLegend = this.getLegendDefinition(childLayer);
+
+                    if (childLegend.legend) {
                         // childLayer-Abfragen haben immer nur legend[0]
-                        defs.push(this.getLegendDefinition(childLayer).legend[0]);
+                        defs.push(childLegend.legend[0]);
                     }
                 }, this);
 
