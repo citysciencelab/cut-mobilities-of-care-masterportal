@@ -65,7 +65,6 @@ define(function (require) {
             "modules/core/testParametricUrl.js",
             "modules/core/modelList/layer/testGeoJson.js",
             "modules/core/modelList/layer/testSensor.js",
-            "modules/core/modelList/layer/testGroup.js",
             "modules/core/modelList/testList.js",
             "modules/contact/testModel.js",
             "modules/core/testRawLayerList.js",
