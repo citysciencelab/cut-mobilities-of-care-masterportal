@@ -118,7 +118,7 @@ define(function (require) {
                         return parseInt(scale, 10);
                     });
                     // Entfernt alle zu "gruppierenden" Objekte aus der response
-                    rawLayerArray = _.difference(response, objectsById);
+                    rawLayerArray = _.difference(rawLayerArray, objectsById);
                     // Fügt das kopierte (gruppierte) Objekt der response hinzu
                     rawLayerArray.push(newObject);
                 }

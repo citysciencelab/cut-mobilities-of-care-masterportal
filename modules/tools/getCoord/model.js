@@ -1,17 +1,15 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function (Backbone, Radio, ol) {
+define(function (require) {
+    var ol = require("openlayers"),
+        CoordPopup;
 
-    var CoordPopup = Backbone.Model.extend({
+    CoordPopup = Backbone.Model.extend({
         defaults: {
             selectPointerMove: null,
             projections: [],
             mapProjection: null,
             positionMapProjection: [],
-            updatePosition: true
+            updatePosition: true,
+            currentProjectionName: "EPSG:25832"
         },
         initialize: function () {
             this.listenTo(Radio.channel("Window"), {
@@ -20,6 +18,9 @@ define([
 
             this.setProjections(Radio.request("CRS", "getProjections"));
             this.setMapProjection(Radio.request("MapView", "getProjection"));
+            if (!_.isUndefined(this.get("mapProjection"))) {
+                this.setCurrentProjectionName(this.get("mapProjection").getCode());
+            }
         },
 
         setStatus: function (args) { // Fenstermanagement
@@ -65,7 +66,11 @@ define([
 
         returnTransformedPosition: function (targetProjection) {
             var positionMapProjection = this.get("positionMapProjection"),
+                positionTargetProjection = [0, 0];
+
+            if (positionMapProjection.length > 0) {
                 positionTargetProjection = Radio.request("CRS", "transformFromMapProjection", targetProjection, positionMapProjection);
+            }
 
             return positionTargetProjection;
         },
@@ -109,6 +114,10 @@ define([
         // setter for updatePosition
         setUpdatePosition: function (value) {
             this.set("updatePosition", value);
+        },
+        // setter for currentProjection
+        setCurrentProjectionName: function (value) {
+            this.set("currentProjectionName", value);
         }
     });
 

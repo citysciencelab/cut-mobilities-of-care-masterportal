@@ -6,7 +6,7 @@ define(function (require) {
         SearchByCoordView;
 
     SearchByCoordView = Backbone.View.extend({
-        model: SearchByCoord,
+        model: new SearchByCoord(),
         className: "win-body",
         template: _.template(SearchByCoordTemplate),
         events: {
@@ -40,7 +40,7 @@ define(function (require) {
             if (evt.keyCode === 13) {
                 this.model.validateCoordinates();
             }
-            this.model.setCoordinates(this.$("#coordinatesEastingField").val(), this.$("#coordinatesNorthingField").val());
+            this.model.setCoordinates(this.$("#coordinatesEastingField").val().replace(",", "."), this.$("#coordinatesNorthingField").val().replace(",", "."));
         },
         setFocusToCoordSystemInput: function () {
             this.$("#coordSystemField").focus();

@@ -77,10 +77,6 @@ define(function (require) {
                     this.showMarker(coord);
                     break;
                 }
-                case "Krankenhaus": {
-                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
-                    break;
-                }
                 case "Adresse": {
                     this.showMarker(coord);
                     Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
@@ -112,16 +108,6 @@ define(function (require) {
                     }
                     break;
                 }
-                case "Olympiastandort": {
-                    this.showMarker(coord);
-                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
-                    break;
-                }
-                case "Paralympiastandort": {
-                    this.showMarker(coord);
-                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
-                    break;
-                }
                 case "SearchByCoord": {
                     Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                     this.showMarker(coord);
@@ -135,18 +121,23 @@ define(function (require) {
                     Radio.trigger("Map", "zoomToExtent", coord);
                     break;
                 }
+                case "POI": {
+                    Radio.trigger("Map", "zoomToExtent", coord, {maxZoom: index});
+                    break;
+                }
                 case "Schulstandorte": {
                     this.showMarker(coord);
                     Radio.trigger("MapView", "setCenter", coord, 6);
                     break;
                 }
-                case "POI": {
-                    Radio.trigger("Map", "zoomToExtent", coord, {maxZoom: index});
-                    break;
-                }
+                // Features
                 default: {
                     if (coord.length === 2) {
                         Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                        this.showMarker(coord);
+                    }
+                    else if (coord.length === 3) {
+                        Radio.trigger("MapView", "setCenter", [coord[0], coord[1]], this.model.get("zoomLevel"));
                         this.showMarker(coord);
                     }
                     else if (coord.length === 4) {
@@ -157,7 +148,7 @@ define(function (require) {
                         this.model.showFeature(); // bei Flächen soll diese sichtbar sein
                         Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
                     }
-
+                    Radio.trigger("Filter", "resetFilter", hit.feature);
                     break;
                 }
             }
@@ -168,11 +159,12 @@ define(function (require) {
         * @param {string} data - Die Data-Object des request.
         */
         zoomToBKGSearchResult: function (data) {
-            if (data.features[0].properties.bbox.type === "Point") {
-                Radio.trigger("MapView", "setCenter", data.features[0].properties.bbox.coordinates, this.model.get("zoomLevel"));
-                this.showMarker(data.features[0].properties.bbox.coordinates);
+            if (data.features.length !== 0 && !_.isNull(data.features[0].geometry) && data.features[0].geometry.type === "Point") {
+                Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, this.model.get("zoomLevel"));
+                this.showMarker(data.features[0].geometry.coordinates);
             }
-            else if (data.features[0].properties.bbox.type === "Polygon") {
+            else if (data.features.length !== 0 && !_.isNull(data.features[0].properties) && !_.isNull(data.features[0].properties.bbox) &&
+                !_.isNull(data.features[0].properties.bbox.type) && data.features[0].properties.bbox.type === "Polygon") {
                 this.model.setWkt("POLYGON", _.flatten(data.features[0].properties.bbox.coordinates[0]));
                 Radio.trigger("Map", "zoomToExtent", this.model.getExtent());
             }

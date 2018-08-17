@@ -25,9 +25,9 @@ define("app", function (require) {
     new Alert();
     new Autostarter();
     new Util();
-    new StyleList();
     new RawLayerList();
     new Preparser();
+    new StyleList();
     new ParametricURL();
     new CRS();
     new Map();
@@ -293,7 +293,7 @@ define("app", function (require) {
                         break;
                     }
                     case "orientation": {
-                        element = controlsView.addRowTR(control.id);
+                        element = controlsView.addRowTR(control.id, true);
 
                         require(["modules/controls/orientation/view"], function (OrientationView) {
                             new OrientationView({el: element});

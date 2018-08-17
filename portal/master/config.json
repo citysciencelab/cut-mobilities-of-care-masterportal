@@ -86,7 +86,7 @@
       "schulwegrouting": {
         "name": "Schulweg-Routing",
         "glyphicon": "glyphicon-filter",
-        "layerId": "11616"
+        "layerId": "8712"
       },
       "filter":
       {
@@ -98,7 +98,7 @@
         "allowMultipleQueriesPerLayer": true,
         "predefinedQueries": [
             {
-              "layerId": "11616",
+              "layerId": "8712",
               "isActive": false,
               "isSelected": false,
               "name": "Grundschulen",
@@ -110,7 +110,7 @@
               "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
             },
             {
-              "layerId": "11616",
+              "layerId": "8712",
               "isActive": false,
               "isSelected": false,
               "name": "Stadtteilschulen",
@@ -122,7 +122,7 @@
               "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
             },
             {
-              "layerId": "11616",
+              "layerId": "8712",
               "isActive": false,
               "isSelected": false,
               "name": "Gymnasien",
@@ -135,7 +135,7 @@
               "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
             },
             {
-              "layerId": "11616",
+              "layerId": "8712",
               "isActive": false,
               "isSelected": false,
               "name": "Sonderschulen",
@@ -235,7 +235,7 @@
           },
           "wfsFeatureFilter":
           {
-            "name": "Filter",
+            "name": "Feature Filter",
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false
           },
@@ -458,7 +458,7 @@
         "extendedFilter": true
       },
       {
-        "id": "11616",
+        "id": "8712",
         "visibility": true,
         "name": "Schulinfosystem",
         "styleId": "8712",

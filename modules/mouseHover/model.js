@@ -29,7 +29,8 @@ define(function (require) {
         getMouseHoverInfosFromConfig: function () {
             var wfsLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),
                 geoJsonLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "GeoJSON"}),
-                vectorLayers = _.union(wfsLayers, geoJsonLayers),
+                sensorThingsLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "SensorThings"}),
+                vectorLayers = _.union(wfsLayers, geoJsonLayers, sensorThingsLayers),
                 mouseHoverLayers = _.filter(vectorLayers, function (layer) {
                     return _.has(layer, "mouseHoverField") && layer.mouseHoverField !== "";
                 }),

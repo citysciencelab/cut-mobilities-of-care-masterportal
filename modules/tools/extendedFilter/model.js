@@ -138,10 +138,11 @@ define(function (require) {
 
             for (i = attributesArray.length - 1; i >= 0; i--) {
                 if (attributesArray[i].attribute === attr && attributesArray[i].value === val) {
-                    attributesArray.splice(i, 1)[0];
+                    attributesArray.splice(i, 1);
                     break;
                 }
             }
+
             if (attributesArray.length === 0) {
                 counter = this.get("filterCounter");
 
@@ -339,7 +340,6 @@ define(function (require) {
             }
             this.setFilterCounter(filtercounter);
             this.setCurrentFilters(currentFilters);
-            this.filterLayers();
         },
 
         filterLayers: function () {
@@ -357,8 +357,7 @@ define(function (require) {
                     layer.setStyle(null);
                 }
 
-
-                features.forEach(function (feature) {
+                _.each(features, function (feature) {
                     var featuredarstellen2 = true,
                         preVal2 = false;
 
@@ -396,7 +395,7 @@ define(function (require) {
                             delete feature.defaultStyle;
                         }
                         else {
-                            feature.setStyle(layer.defaultStyle);
+                            feature.setStyle(layer.defaultStyle(feature));
                         }
                     }
                     else if (featuredarstellen2 === false) {

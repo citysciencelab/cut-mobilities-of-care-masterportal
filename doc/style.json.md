@@ -233,7 +233,7 @@ Darstellung eines Attributwertes auf die Auswirkungen des Polygons. Werden hier 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|styleFieldValue|ja|String||Attributwert.|
+|styleFieldValue|ja|String||Attributwert. Wert des Attributes wie ihn der WFS-Dienst liefert (Case-Insensitive).|
 |polygonFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Polygon. |
 |polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
 |polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|

@@ -6,8 +6,6 @@ define(function (require) {
         DownloadView;
 
     DownloadView = Backbone.View.extend({
-        model: DownloadModel,
-        template: _.template(DownloadWin),
         events: {
             "click button.back": "back",
             "change .file-endings": "prepareData"
@@ -15,15 +13,21 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("download");
 
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin": this.render
+            }); // Fenstermanagement
 
             channel.on({
                 "start": this.start
             }, this);
         },
+        model: new DownloadModel(),
+        className: "win-body",
+        template: _.template(DownloadWin),
         /**
          * Startet das Download modul
          * @param  {ol.feature} features die Features die heruntergeladen werden sollen
+         * @returns {void}
          */
         start: function (features) {
             if (features.data.length === 0) {
@@ -41,13 +45,13 @@ define(function (require) {
             this.model.setFormats(features.formats);
             this.model.setCaller(features.caller);
             this.model.set("id", "download");
-            this.model.set("title", "Download");
+            this.model.set("name", "Download");
             this.model.set("glyphicon", "glyphicon-plus");
-
             Radio.trigger("Window", "toggleWin", this.model);
         },
         /**
          * Ruft das Tool auf, das den Download gestartet hat
+         * @returns {void}
          */
         back: function () {
             Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "draw"}));
@@ -70,6 +74,7 @@ define(function (require) {
         },
         /**
          * startet den Download, wenn auf den Button geklickt wird
+         * @returns {void}
          */
         triggerDownload: function () {
             this.model.download();
@@ -91,18 +96,19 @@ define(function (require) {
         },
         /**
          * Hängt die wählbaren Dateiformate als Option an das Formate-Dropdown
+         * @returns {void}
          */
         appendOptions: function () {
             var options = this.model.getFormats();
 
             _.each(options, function (option) {
-                $(".file-endings").append($("<option>", {
+                this.$(".file-endings").append($("<option>", {
                     value: option,
                     text: option
                 }));
             });
             if (options.length === 1) {
-                $(".file-endings").val(options[0]);
+                this.$(".file-endings").val(options[0]);
                 this.prepareDownloadButton();
             }
         }

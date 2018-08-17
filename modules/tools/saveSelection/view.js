@@ -43,18 +43,7 @@ define(function (require) {
          * @returns {void}
          */
         copyToClipboard: function (evt) {
-            try {
-                this.$(evt.currentTarget).select();
-                document.execCommand("copy");
-                Radio.trigger("Alert", "alert", {
-                    text: "Die Url wurde in die Zwischenablage kopiert.",
-                    kategorie: "alert-info",
-                    position: "top-center"
-                });
-            }
-            catch (e) {
-                console.warn("Unable to copy text to clipboard.");
-            }
+            Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
         }
     });
 

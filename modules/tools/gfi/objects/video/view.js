@@ -6,15 +6,14 @@ define(function (require) {
         VideoView;
 
     VideoView = Backbone.View.extend({
-        template: _.template(VideoTemplate),
-        initialize: function (url) {
-            this.model = new VideoModel(url);
+        initialize: function (url, type, width, height) {
+            this.model = new VideoModel(url, type, width, height);
             this.listenTo(this.model, {
                 "removeView": this.remove
             });
             this.render();
         },
-
+        template: _.template(VideoTemplate),
         render: function () {
             var attr = this.model.toJSON();
 
