@@ -212,7 +212,7 @@ define(function (require) {
                 styleFieldValues,
                 allItems;
 
-            if (typeof legendURL === "string") {
+            if (typeof legendURL === "string" && legendURL !== "") {
                 return {
                     layername: layername,
                     legend: [{
@@ -454,9 +454,11 @@ define(function (require) {
          */
         drawIntervalCircleBars: function (scalingAttribute, advancedStyle, layername, image, name) {
             var olFeature = new ol.Feature({}),
-                stylePerValue;
+                stylePerValue,
+                circleBarScalingFactor = advancedStyle.get("circleBarScalingFactor"),
+                barHeight = String(20 / circleBarScalingFactor);
 
-            olFeature.set(scalingAttribute, "20");
+            olFeature.set(scalingAttribute, barHeight);
             stylePerValue = advancedStyle.createStyle(olFeature, false);
 
             image.push(stylePerValue.getImage().getSrc());
