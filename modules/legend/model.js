@@ -47,12 +47,10 @@ define(function (require) {
             if (layer.get("isVisibleInMap")) {
                 return this.getLegendDefinition(layer);
             }
-            else {
-                return {
-                    layername: layer.get("name"),
-                    legend: null
-                }
-            }
+            return {
+                layername: layer.get("name"),
+                legend: null
+            };
         },
 
         updateParamsStyleWMSArray: function (params) {
@@ -95,6 +93,7 @@ define(function (require) {
 
         /**
          * Setzt die Legendeninformationen aller sichtbaren Layer
+         * @returns {void}
          */
         setLayerList: function () {
             var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
@@ -112,20 +111,20 @@ define(function (require) {
                 tempArray.push(this.getLegendDefinition(layer));
             }, this);
 
-            this.set("legendParams", tempArray );
+            this.set("legendParams", tempArray);
         },
 
         /**
          * Wertet den Layer aus und gibt dessen Legendendefinition zurück
-         * @param  {layer} layer
+         * @param  {layer} layer  Layerobjekt
          * @return {object}       Legendendefinition
          */
         getLegendDefinition: function (layer) {
             var typ = layer.get("typ"),
                 layername = layer.get("name"),
                 legendURL = layer.get("legendURL"),
-                typ = layer.get("typ"),
-                styleId = layer.get("styleId");
+                styleId = layer.get("styleId"),
+                defs = [];
 
             if (legendURL === "ignore") {
                 return {
@@ -146,8 +145,6 @@ define(function (require) {
                 return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
             }
             else if (typ === "GROUP") {
-                var defs = [];
-
                 _.each(layer.get("childLayer"), function (childLayer) {
                     var childLegend = this.getLegendDefinition(childLayer);
 
@@ -161,9 +158,13 @@ define(function (require) {
                     return {
                         layername: layer.get("name"),
                         legend: defs
-                    }
+                    };
                 }
             }
+            return {
+                layername: layername,
+                legend: null
+            };
         },
 
         unsetLegendParams: function () {
@@ -192,15 +193,13 @@ define(function (require) {
                     }]
                 };
             }
-            else {
-                return {
-                    layername: layername,
-                    legend: [{
-                        img: legendURL,
-                        typ: "WMS"
-                    }]
-                };
-            }
+            return {
+                layername: layername,
+                legend: [{
+                    img: legendURL,
+                    typ: "WMS"
+                }]
+            };
         },
 
         getLegendParamsFromVector: function (layername, legendURL, typ, styleId) {
@@ -221,49 +220,71 @@ define(function (require) {
                     }]
                 };
             }
-            else {
-                image = [];
-                name = [];
-                style = Radio.request("StyleList", "returnModelById", styleId);
-                styleClass = style.get("class");
-                styleSubClass = style.get("subClass");
-                styleFieldValues = style.get("styleFieldValues");
 
-                if (styleClass === "POINT") {
-                    // Custom Point Styles
-                    if (styleSubClass === "CUSTOM") {
-                        _.each(styleFieldValues, function (styleFieldValue) {
-                            image.push(style.get("imagePath") + styleFieldValue.imageName);
-                            if (_.has(styleFieldValue, "legendValue")) {
-                                name.push(styleFieldValue.legendValue);
-                            }
-                            else {
-                                name.push(styleFieldValue.styleFieldValue);
-                            }
-                        });
-                    }
-                    // Circle Point Style
-                    else if (styleSubClass === "CIRCLE") {
-                        image.push(this.createCircleSVG(style));
-                        name.push(layername);
-                    }
-                    // Advanced Point Styles
-                    else if (styleSubClass === "ADVANCED") {
-                        allItems = this.drawAdvancedStyle(style, layername, image, name);
+            image = [];
+            name = [];
+            style = Radio.request("StyleList", "returnModelById", styleId);
+            styleClass = style.get("class");
+            styleSubClass = style.get("subClass");
+            styleFieldValues = style.get("styleFieldValues");
 
-                        image = allItems[0];
-                        name = allItems[1];
-                    }
-                    else {
-                        if (style.get("imageName") !== "blank.png") {
-                            image.push(style.get("imagePath") + style.get("imageName"));
+            if (styleClass === "POINT") {
+                // Custom Point Styles
+                if (styleSubClass === "CUSTOM") {
+                    _.each(styleFieldValues, function (styleFieldValue) {
+                        image.push(style.get("imagePath") + styleFieldValue.imageName);
+                        if (_.has(styleFieldValue, "legendValue")) {
+                            name.push(styleFieldValue.legendValue);
                         }
-                        name.push(layername);
-                    }
+                        else {
+                            name.push(styleFieldValue.styleFieldValue);
+                        }
+                    });
                 }
-                // Simple Line Style
-                if (styleClass === "LINE") {
-                    image.push(this.createLineSVG(style));
+                // Circle Point Style
+                else if (styleSubClass === "CIRCLE") {
+                    image.push(this.createCircleSVG(style));
+                    name.push(layername);
+                }
+                // Advanced Point Styles
+                else if (styleSubClass === "ADVANCED") {
+                    allItems = this.drawAdvancedStyle(style, layername, image, name);
+
+                    image = allItems[0];
+                    name = allItems[1];
+                }
+                else {
+                    if (style.get("imageName") !== "blank.png") {
+                        image.push(style.get("imagePath") + style.get("imageName"));
+                    }
+                    name.push(layername);
+                }
+            }
+            // Simple Line Style
+            if (styleClass === "LINE") {
+                image.push(this.createLineSVG(style));
+                if (style.has("legendValue")) {
+                    name.push(style.get("legendValue"));
+                }
+                else {
+                    name.push(layername);
+                }
+            }
+            // Simple Polygon Style
+            if (styleClass === "POLYGON") {
+                if (styleSubClass === "CUSTOM") {
+                    _.each(styleFieldValues, function (styleFieldValue) {
+                        image.push(this.createPolygonSVG(style, styleFieldValue));
+                        if (_.has(styleFieldValue, "legendValue")) {
+                            name.push(styleFieldValue.legendValue);
+                        }
+                        else {
+                            name.push(styleFieldValue.styleFieldValue);
+                        }
+                    }, this);
+                }
+                else {
+                    image.push(this.createPolygonSVG(style));
                     if (style.has("legendValue")) {
                         name.push(style.get("legendValue"));
                     }
@@ -271,38 +292,15 @@ define(function (require) {
                         name.push(layername);
                     }
                 }
-                // Simple Polygon Style
-                if (styleClass === "POLYGON") {
-                    if (styleSubClass === "CUSTOM") {
-                        _.each(styleFieldValues, function (styleFieldValue) {
-                            image.push(this.createPolygonSVG(style, styleFieldValue));
-                            if (_.has(styleFieldValue, "legendValue")) {
-                                name.push(styleFieldValue.legendValue);
-                            }
-                            else {
-                                name.push(styleFieldValue.styleFieldValue);
-                            }
-                        }, this);
-                    }
-                    else {
-                        image.push(this.createPolygonSVG(style));
-                        if (style.has("legendValue")) {
-                            name.push(style.get("legendValue"));
-                        }
-                        else {
-                            name.push(layername);
-                        }
-                    }
-                }
-                return {
-                    layername: layername,
-                    legend: [{
-                        legendname: name,
-                        img: image,
-                        typ: typ
-                    }]
-                };
             }
+            return {
+                layername: layername,
+                legend: [{
+                    legendname: name,
+                    img: image,
+                    typ: typ
+                }]
+            };
         },
         createCircleSVG: function (style) {
             var svg = "",

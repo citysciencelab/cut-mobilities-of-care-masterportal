@@ -23,11 +23,10 @@ define(function (require) {
          * Bei GruppenLayern sind die LayerSource die childLayers.
          * Damit die childLayer nicht die layer.initialize() durchlaufen,
          * wird isChildLayer: true gesetzt.
-         * 
          * @return {void}
          */
         createLayerSource: function () {
-            _.each(this.get("layerdefinitions"), function(childLayerDefinition) {
+            _.each(this.get("layerdefinitions"), function (childLayerDefinition) {
                 // ergänze isChildLayer für initialize
                 _.extend(childLayerDefinition, {
                     isChildLayer: true
@@ -58,7 +57,6 @@ define(function (require) {
 
         /**
          * Erzeugt einen Gruppenlayer mit den childLayern
-         * 
          * @return {void}
          */
         createLayer: function () {
@@ -113,7 +111,7 @@ define(function (require) {
 
         /**
         * Prüft anhand der Scale aller childLayer, ob der Layer sichtbar ist oder nicht
-        * @param {object} options
+        * @param {object} options   Object mit zu prüfender .scale
         * @returns {void}
         **/
         checkForScale: function (options) {
@@ -121,7 +119,7 @@ define(function (require) {
 
             _.each(this.get("childLayer"), function (childLayer) {
                 if (parseFloat(options.scale, 10) >= childLayer.get("maxScale") || parseFloat(options.scale, 10) <= childLayer.get("minScale")) {
-                    isOutOfRange = true                    
+                    isOutOfRange = true;
                 }
             });
             this.setIsOutOfRange(isOutOfRange);

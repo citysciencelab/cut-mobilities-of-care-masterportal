@@ -1,15 +1,10 @@
 define(function (require) {
-    var $ = require("jquery"),
-        LegendTemplate = require("text!modules/legend/mobile/template.html"),
+    var LegendTemplate = require("text!modules/legend/mobile/template.html"),
         Radio = require("backbone.radio"),
         ContentTemplate = require("text!modules/legend/content.html"),
-        LegendView;
+        MobileLegendView;
 
     MobileLegendView = Backbone.View.extend({
-        id: "base-modal-legend",
-        className: "modal bs-example-modal-sm legend fade in",
-        template: _.template(LegendTemplate),
-        contentTemplate: _.template(ContentTemplate),
         events: {
             "click .glyphicon-remove": "toggle"
         },
@@ -30,11 +25,15 @@ define(function (require) {
                 this.toggle();
             }
         },
-
+        id: "base-modal-legend",
+        className: "modal bs-example-modal-sm legend fade in",
+        template: _.template(LegendTemplate),
+        contentTemplate: _.template(ContentTemplate),
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            return this;
         },
 
         paramsChanged: function () {
@@ -43,15 +42,16 @@ define(function (require) {
         },
 
         /**
-         * Fügt den Legendendefinitionen das gerenderte HTML hinzu. 
+         * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
          * Dieses wird im template benötigt.
+         * @returns {void}
          */
         addContentHTML: function () {
             var legendParams = this.model.get("legendParams");
 
             _.each(legendParams, function (legendDefinition) {
                 _.each(legendDefinition.legend, function (legend) {
-                    legend.html = this.contentTemplate(legend)
+                    legend.html = this.contentTemplate(legend);
                 }, this);
             }, this);
         },
@@ -67,6 +67,7 @@ define(function (require) {
         },
         /**
          * Entfernt diese view
+         * @returns {void}
          */
         removeView: function () {
             this.$el.hide();

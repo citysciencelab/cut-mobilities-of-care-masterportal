@@ -196,8 +196,7 @@ define(function (require) {
                 visibleVectorLayerList = [],
                 eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
                 vectorGFIParams,
-                wmsGFIParams,
-                gfiParams = [];
+                wmsGFIParams;
 
             Radio.trigger("ClickCounter", "gfi");
 
@@ -229,11 +228,9 @@ define(function (require) {
             vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, eventPixel);
             // WMS
             wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
-            gfiParams = _.union(vectorGFIParams, wmsGFIParams);
 
             this.setThemeIndex(0);
-            this.get("themeList").reset(gfiParams);
-            gfiParams = [];
+            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
         },
 
         /**
@@ -243,7 +240,7 @@ define(function (require) {
          * @return {object[]}           GFI-Parameter von Vektorlayern
          */
         getVectorGFIParams: function (layerlist, eventPixel) {
-            var gfiParams = [];
+            var vectorGfiParams = [];
 
             _.each(layerlist, function (vectorLayer) {
                 var features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
@@ -260,20 +257,20 @@ define(function (require) {
                     // Feature
                     if (_.has(featureAtPixel.getProperties(), "features") === false) {
                         modelAttributes.feature = featureAtPixel;
-                        gfiParams.push(modelAttributes);
+                        vectorGfiParams.push(modelAttributes);
                     }
                     // Cluster Feature
                     else {
                         _.each(featureAtPixel.get("features"), function (feature) {
-                            modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
+                            modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
                             modelAttributes.feature = feature;
-                            gfiParams.push(modelAttributes);
+                            vectorGfiParams.push(modelAttributes);
                         });
                     }
                 }, this);
             }, this);
 
-            return gfiParams;
+            return vectorGfiParams;
         },
 
         /**
@@ -282,16 +279,16 @@ define(function (require) {
          * @return {object[]}           GFI-Parameter vom WMS-Layern
          */
         getWMSGFIParams: function (layerlist) {
-            var gfiParams = [];
+            var wmsGfiParams = [];
 
             _.each(layerlist, function (layer) {
                 if (layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true) {
                     layer.attributes.gfiUrl = layer.getGfiUrl();
-                    gfiParams.push(layer.attributes);
+                    wmsGfiParams.push(layer.attributes);
                 }
             }, this);
 
-            return gfiParams;
+            return wmsGfiParams;
         },
 
         setGfiParamsFromCustomModule: function (params) {

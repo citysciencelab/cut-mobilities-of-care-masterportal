@@ -5,9 +5,6 @@ define(function (require) {
         LegendView;
 
     LegendView = Backbone.View.extend({
-        className: "legend-win",
-        template: _.template(LegendTemplate),
-        contentTemplate: _.template(ContentTemplate),
         events: {
             "click .glyphicon-remove": "toggle"
         },
@@ -41,7 +38,9 @@ define(function (require) {
                 "updateSize": this.updateLegendSize
             });
         },
-
+        className: "legend-win",
+        template: _.template(LegendTemplate),
+        contentTemplate: _.template(ContentTemplate),
         paramsChanged: function () {
             Radio.trigger("Layer", "updateLayerInfo", this.model.get("paramsStyleWMS").styleWMSName);
             this.addContentHTML();
@@ -49,15 +48,16 @@ define(function (require) {
         },
 
         /**
-         * Fügt den Legendendefinitionen das gerenderte HTML hinzu. 
+         * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
          * Dieses wird im template benötigt.
+         * @returns {void}
          */
         addContentHTML: function () {
             var legendParams = this.model.get("legendParams");
 
             _.each(legendParams, function (legendDefinition) {
                 _.each(legendDefinition.legend, function (legend) {
-                    legend.html = this.contentTemplate(legend)
+                    legend.html = this.contentTemplate(legend);
                 }, this);
             }, this);
         },

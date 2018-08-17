@@ -39,7 +39,7 @@ define(function (require) {
                 }
                 this.prepareLayerObject();
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
-                this.setIsVisibleInMap(this.get("isSelected"));                
+                this.setIsVisibleInMap(this.get("isSelected"));
             }
         },
 
@@ -49,7 +49,6 @@ define(function (require) {
 
         /**
          * Ruft die Einzelfunktionen zur Layererstellung auf.
-         * 
          * @returns {void}
          */
         prepareLayerObject: function () {
@@ -63,8 +62,8 @@ define(function (require) {
 
         /**
          * Hier wird die Schnittstelle zur Interaktion mit dem Tree registriert.
-         * 
          * @return {void}
+         * @param {Radio.channel} channel Kanal dieses Moduls
          * @listens this~change:isSelected
          * @listens Layer~updateLayerInfo
          * @listens Layer~setLayerInfoChecked
@@ -124,7 +123,6 @@ define(function (require) {
 
         /**
          * Setzt die sichtbaren Resolution an den ol.layer.
-         * 
          * @returns {void}
          */
         getResolutions: function () {
