@@ -91,7 +91,8 @@ define(function (require) {
             "modules/menu/mobile/folder/testView.js",
             "modules/tools/graph/testModel.js",
             "modules/functionalities/browserPrint/testModel.js",
-            "modules/tools/searchByCoord/testModel.js"
+            "modules/tools/searchByCoord/testModel.js",
+            "modules/legend/legendModel.js"
         ], function () {
             mocha.run();
         });
