@@ -26,6 +26,8 @@ define(function (require) {
          * @return {void}
          */
         createLayerSource: function () {
+            var childLayer = [];
+
             _.each(this.get("layerdefinitions"), function (childLayerDefinition) {
                 // ergänze isChildLayer für initialize
                 _.extend(childLayerDefinition, {
@@ -33,26 +35,28 @@ define(function (require) {
                 });
 
                 if (childLayerDefinition.typ === "WMS") {
-                    this.get("childLayer").push(new WMSLayer(childLayerDefinition));
+                    childLayer.push(new WMSLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "WFS") {
                     if (childLayerDefinition.outputFormat === "GeoJSON") {
-                        this.get("childLayer").push(new GeoJSONLayer(childLayerDefinition));
+                        childLayer.push(new GeoJSONLayer(childLayerDefinition));
                     }
-                    this.get("childLayer").push(new WFSLayer(childLayerDefinition));
+                    childLayer.push(new WFSLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "GeoJSON") {
-                    this.get("childLayer").push(new GeoJSONLayer(childLayerDefinition));
+                    childLayer.push(new GeoJSONLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "SensorThings" || childLayerDefinition.typ === "ESRIStreamLayer") {
-                    this.get("childLayer").push(new SensorLayer(childLayerDefinition));
+                    childLayer.push(new SensorLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "Heatmap") {
-                    this.get("childLayer").push(new HeatmapLayer(childLayerDefinition));
+                    childLayer.push(new HeatmapLayer(childLayerDefinition));
                 }
 
-                _.last(this.get("childLayer")).prepareLayerObject();
+                _.last(childLayer).prepareLayerObject();
             }, this);
+
+            this.set("childLayer", childLayer);
         },
 
         /**
