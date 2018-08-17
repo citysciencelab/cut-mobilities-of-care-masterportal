@@ -25,7 +25,7 @@ define(function (require) {
 
                     // Für Singel-Layer (ol.layer.Layer)
                     // z.B.: {id: "5181", visible: false}
-                    if (_.isString(layerExtended.id)) {
+                    if (!_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
                         objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerExtended.id});
 
                         if (_.isNull(objFromRawList)) { // Wenn LayerID nicht definiert, dann Abbruch
@@ -45,11 +45,11 @@ define(function (require) {
                         layerExtended = _.extend(mergedObjsFromRawList, _.omit(layerExtended, "id"));
                     }
                     // Für Gruppen-Layer (ol.layer.Group)
-                    // z.B.: {id: [{ id: "1364" }, { id: "1365" }], visible: false }
-                    else if (_.isArray(layerExtended.id) && _.isObject(layerExtended.id[0])) {
+                    // z.B.: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
+                    else if (_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
                         layerdefinitions = [];
 
-                        _.each(layerExtended.id, function (childLayer) {
+                        _.each(layerExtended.children, function (childLayer) {
                             objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: childLayer.id});
 
                             if (!_.isNull(objFromRawList)) {
@@ -57,11 +57,10 @@ define(function (require) {
                                 layerdefinitions.push(objFromRawList);
                             }
                         });
-                        if (layerExtended.id.length !== layerdefinitions.length) { // Wenn nicht alle LayerIDs des Arrays definiert, dann Abbruch
-                            return;
+
+                        if (layerdefinitions.length > 0) {
+                            layerExtended = _.extend(layerExtended, {typ: "GROUP", id: layerExtended.id, layerdefinitions: layerdefinitions});
                         }
-                        layerExtended = _.extend(layerExtended, {typ: "GROUP", id: layerdefinitions[0].id + "_groupLayer", layerdefinitions: layerdefinitions});
-                        Radio.trigger("RawLayerList", "addGroupLayer", layerExtended);
                     }
 
                     // HVV :(
