@@ -32,7 +32,15 @@ define(function (require) {
             channel.reply({
                 "getLayer": function () {
                     return this.get("layer");
-                }
+                },
+                "downloadWithoutGUI": this.downloadFeaturesWithoutGUI
+            }, this);
+
+            channel.on({
+                "initWithoutGUI": this.inititalizeWithoutGUI,
+                "deleteAllFeatures": this.deleteFeatures,
+                "editWithoutGUI": this.editFeaturesWithoutGUI,
+
             }, this);
 
             this.listenTo(Radio.channel("Window"), {
@@ -42,7 +50,51 @@ define(function (require) {
             this.on("change:isCurrentWin", this.createLayer, this);
             Radio.trigger("Autostart", "initializedModul", "draw");
         },
+        /**
+         * initialisiert die Zeichenfunktionalität ohne eine Oberfläche dafür bereit zu stellen
+         * sinnvoll zum Beispiel für die Nutzung über RemoteInterface
+         * @param {String} drawType - welcher Typ soll gezeichet werden ["Point", "LineString", "Polygon", "Circle"]
+         * @param {String} color - Farbe, in rgb (default: "55, 126, 184")
+         * @param {Float} opacity - Transparenz (default: 1.0)
+         * @param {Integer} maxFeatures - wie viele FEatures dürfen maximal auf dem Layer gezeichnet werden (default: unbegrenzt)
+         * @returns {String} GeoJSON aller Features als String
+         */
+        inititalizeWithoutGUI: function (drawType, color, opacity, maxFeatures) {
+            if ($.inArray(drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
+                this.set("isCurrentWin", true);
+                this.setDrawType(drawType, drawType + " zeichnen");
+                if (color) {
+                    this.set("color", color);
+                }
+                if (opacity) {
+                    this.set("opacity", opacity);
+                }
+                this.createDrawInteraction(this.get("drawType"), this.get("layer"), maxFeatures);
+            }
+        },
 
+        /**
+         * ermöglicht das Editieren von gezeichneten Features, ohne eine Oberfläche zu benötigen
+         * sinnvoll zum Beispiel für die Nutzung über RemoteInterface
+         * @returns {void}
+         */
+        editFeaturesWithoutGUI: function () {
+            Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
+            this.createModifyInteraction(this.get("layer"));
+            Radio.trigger("Map", "addInteraction", this.get("modifyInteraction"));
+        },
+
+        /**
+         * erzeugt ein GeoJSON von allen Featues und gibt es zurück
+         * @returns {String} GeoJSON aller Features als String
+         */
+        downloadFeaturesWithoutGUI: function () {
+            var features = this.get("layer").getSource().getFeatures(),
+                format = new ol.format.GeoJSON(),
+                featuresKonverted = format.writeFeaturesObject(features);
+
+            return JSON.stringify(featuresKonverted);
+        },
         setStatus: function (args) {
             if (args[2].get("id") === "draw" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
@@ -103,7 +155,7 @@ define(function (require) {
             }));
         },
 
-        createDrawInteraction: function (drawType, layer) {
+        createDrawInteraction: function (drawType, layer, maxFeatures) {
             Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
             this.set("drawInteraction", new ol.interaction.Draw({
                 source: layer.getSource(),
@@ -113,6 +165,23 @@ define(function (require) {
             this.get("drawInteraction").on("drawend", function (evt) {
                 evt.feature.setStyle(this.getStyle(drawType.text));
             }, this);
+
+            if (maxFeatures && maxFeatures > 0) {
+                this.get("drawInteraction").on("drawstart", function (evt) {
+                    const count = layer.getSource().getFeatures().length;
+                    let text = "";
+
+                    if (count > maxFeatures - 1) {
+                        text = "Sie haben bereits " + maxFeatures + " Objekte gezeichnet, bitte löschen Sie erst eines, bevor Sie fortfahren!";
+                        if (maxFeatures === 1) {
+                            text = "Sie haben bereits " + maxFeatures + " Objekt gezeichnet, bitte löschen Sie dieses, bevor Sie fortfahren!";
+                        }
+
+                        Radio.trigger("Alert", "alert", text);
+                        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
+                    }
+                }, this);
+            }
             Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
         },
 
