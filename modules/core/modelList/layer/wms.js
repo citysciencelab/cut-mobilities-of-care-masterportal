@@ -6,7 +6,6 @@ define(function (require) {
 
     WMSLayer = Layer.extend({
         defaults: _.extend({}, Layer.prototype.defaults, {
-            isChildLayer: false,
             infoFormat: "text/xml"
         }),
 

@@ -30,7 +30,7 @@ define(function (require) {
                         if (_.isNull(objFromRawList)) { // Wenn LayerID nicht definiert, dann Abbruch
                             return;
                         }
-                        layerExtended = _.extend(objFromRawList, layerExtended);
+                        layerExtended = _.extend(objFromRawList, layerExtended, {"isChildLayer": false});
                     }
                     // Für Single-Layer (ol.layer.Layer) mit mehreren Layern(FNP, LAPRO, Geobasisdaten (farbig), etc.)
                     // z.B.: {id: ["550,551,552,...,559"], visible: false}
@@ -41,7 +41,7 @@ define(function (require) {
                         if (layerExtended.id.length !== mergedObjsFromRawList.layers.split(",").length) { // Wenn nicht alle LayerIDs des Arrays definiert, dann Abbruch
                             return;
                         }
-                        layerExtended = _.extend(mergedObjsFromRawList, _.omit(layerExtended, "id"));
+                        layerExtended = _.extend(mergedObjsFromRawList, _.omit(layerExtended, "id"), {"isChildLayer": false});
                     }
                     // Für Gruppen-Layer (ol.layer.Group)
                     // z.B.: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
@@ -59,7 +59,7 @@ define(function (require) {
                         });
 
                         if (layerExtended.children.length > 0) {
-                            layerExtended = _.extend(layerExtended, {typ: "GROUP", id: layerExtended.id});
+                            layerExtended = _.extend(layerExtended, {typ: "GROUP", isChildLayer: false});
                         }
                     }
 
