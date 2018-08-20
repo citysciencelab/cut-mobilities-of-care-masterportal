@@ -52,6 +52,8 @@ define(function (require) {
                             if (!_.isNull(objFromRawList)) {
                                 return _.extend(objFromRawList, childLayer, {"isChildLayer": true});
                             }
+
+                            return undefined;
                         }, this);
 
                         layerExtended.children = _.filter(layerExtended.children, function (childLayer) {
