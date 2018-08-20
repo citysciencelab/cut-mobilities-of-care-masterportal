@@ -5,15 +5,6 @@ define(function (require) {
         formularView;
 
     formularView = Backbone.View.extend({
-        className: "win-body",
-        model: new ContactModel(),
-        template: _.template(Template),
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render,
-                "invalid": this.showValidity
-            });
-        },
         events: {
             "keyup #contactName": "setUserAttributes",
             "keyup #contactEmail": "setUserAttributes",
@@ -21,6 +12,15 @@ define(function (require) {
             "keyup #contactText": "setUserAttributes",
             "click .contactButton": "send"
         },
+        initialize: function (attr) {
+            this.model = new ContactModel(attr);
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin": this.render,
+                "invalid": this.showValidity
+            });
+        },
+        className: "win-body",
+        template: _.template(Template),
         render: function () {
             var attr = this.model.toJSON();
 

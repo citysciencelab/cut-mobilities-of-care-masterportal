@@ -8,9 +8,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|[animation](#markdown-header-animation)|nein|Object||Modul, das einen WFS-Dienst animiert darstellt.||
 |[clickCounter](#markdown-header-clickcounter)|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
-|csw|nein|String|"1"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`"1"`|
+|cswId|nein|String|"1"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`"1"`|
 |customModules|nein|Array[String]||Pfad zu portalspezifischen Modulen. Der Pfad ist relativ zu *js/main.js*.| `["../portal/master/verkehrsfunctions"]`|
 |[footer](#markdown-header-footer)|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
 |gfiWindow|nein|String|"detached"|Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
@@ -31,7 +30,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/img/"`|
 |wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`""`|
 |[zoomToFeature](#markdown-header-zoomtofeature)|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe [URL-Parameter](URL-Parameter.md).||
-|postMessageUrl|nein|String|"http://localhost:8080"|Url auf die das Portal per post-Message agieren und reagieren kann.| "http://localhost:8080"|
+|[remoteInterface](#markdown-header-remoteInterface)|nein|object||Optionale Konfiguration für das remoteInterface.||
+|[browserPrint](#markdown-header-browserPrint)|nein|object||Optionale Konfiguration für das clientseitige Druckmodul.||
 
 ******
 ## mouseHover ##
@@ -41,57 +41,38 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |numFeaturesToShow|nein|Integer|2|Maximale Anzahl an Elementinformationen im Tooltip, bevor ein InfoText die Anzahl limitiert.|
 |infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
 ******
-## animation ##
-
+## remoteInterface ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|attrAnzahl|nein|String|"anzahl_einpendler"|Aus diesem Attribut des featureTypes wird die Anzahl der Pendler ausgelesen.|
-|attrKreis|nein|String|"wohnort_kreis"|Aus diesem Attribut werden die zur Auswahl stehenden Kreise ausgelesen.|
-|colors|nein|Array[String]|["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]|Angabe der verschiedenen Farben, die für die Animation verschiedener Kreise genutzt werden sollen in [rgba()-Notation](https://www.w3.org/TR/css3-color/#rgba-color) ([siehe auch hier](https://developer.mozilla.org/de/docs/Web/CSS/Farben#rgba)). Anzahl der Farben muss mit "num_kreise_to_style" übereinstimmen.|
-|featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType, der animiert werden soll.|
-|maxPx|nein|Number|20|Größe des größten Punkts in px.|
-|minPx|nein|Number|1|Größe des kleinsten Punkts in px.|
-|num_kreise_to_style|nein|Number|2|Anzahl, der mit verschiedenen Farben darzustellenden Kreise. Muss mit der Anzahl der Farben in "colors" übereinstimmen.|
-|[params](#markdown-header-animationparams)|nein|Object||Hier gibt es verschiedene Konfigurationsmöglichkeiten.|
-|steps|nein|Number|50|Anzahl der Schritte, die pro Animation durchlaufen werden.|
-|url|nein|String|"http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"|Die URL des zu animierenden Dienstes.|
-|zoomlevel|nein|Number|1|Zoomlevel, auf das nach Auswahl eines Kreises gezoomt wird.|
+|postMessageUrl|nein|String|"http://localhost:8080"|Url auf die das Portal per post-Message agieren und reagieren kann.
 
-### animation.params ###
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|REQUEST|nein|String|"GetFeature"|WFS-Request|
-|SERVICE|nein|String|"WFS"|Service-Typ|
-|TYPENAME|nein|String|"app:mrh_kreise"|FeatureType des WFS|
-|VERSION|nein|String|"1.1.0"|Version des Dienstes|
-|maxFeatures|nein|String|"10000"|maximale Anzahl an zu ladenden Features|
-
-**Beispiel animation:**
-
+**Beispiel:**
 ```
 #!json
+remoteInterface:{
+    postMessageUrl: "http://localhost:8080"
+}
 
-
-animation: {
-            steps: 30,
-            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
-            params: {
-                REQUEST: "GetFeature",
-                SERVICE: "WFS",
-                TYPENAME: "app:mrh_kreise",
-                VERSION: "1.1.0",
-                maxFeatures: "10000"
-            },
-            featureType: "mrh_einpendler_gemeinde",
-            attrAnzahl: "anzahl_einpendler",
-            attrKreis: "wohnort_kreis",
-            minPx: 5,
-            maxPx: 30,
-            num_kreise_to_style: 4,
-            zoomlevel: 1,
-            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
-        }
 ```
+*********
+
+******
+## browserPrint ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|footerText|nein|String|"Kartographie und Gestaltung: Freie und Hansestadt Hamburg \nLandesbetrieb Geoinformation und Vermessung"|Text der in der Fußleiste angezeigt werden soll|
+|titleText|nein|String|"PDF ohne Titel"|Text der im Titel-Element angezeigt werden soll|
+
+**Beispiel:**
+```
+#!json
+browserPrint:{
+    footerText: "Mein Fußleisten-Text",
+    titleText: "Mein Titel"
+}
+
+```
+*********
 
 ******
 
@@ -121,7 +102,6 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |[urls](#markdown-header-footerurls)|nein|Array[Object]||Array von URL-Konfigurationsobjekten. Auch hier existieren wiederum mehrere Konfigurationsmöglichkeiten, welche in der folgenden Tabelle aufgezeigt werden.|
-|visibility|nein|Boolean|false|Schaltet den Footer sichtbar.|
 
 ******
 ### footer.urls ###
@@ -137,31 +117,28 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 
 ```
 #!json
-
 footer: {
-            visibility: true,
-            urls: [
-                {
-                    "bezeichnung": "Kartographie und Gestaltung: ",
-                    "url": "http://www.geoinfo.hamburg.de/",
-                    "alias": "Landesbetrieb Geoniformation und Vermessung",
-                    "alias_mobil": "LGV"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-                    "alias": "SDP Download",
-                    "alias_mobil": "SDP"
-                },
-                {
-                    "bezeichnung": "",
-                    "url": "http://www.hamburg.de/bsu/timonline",
-                    "alias": "Kartenunstimmigkeit"
-                }
-            ]
+    urls: [
+        {
+            "bezeichnung": "Kartographie und Gestaltung: ",
+            "url": "http://www.geoinfo.hamburg.de/",
+            "alias": "Landesbetrieb Geoniformation und Vermessung",
+            "alias_mobil": "LGV"
+        },
+        {
+            "bezeichnung": "",
+            "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+            "alias": "SDP Download",
+            "alias_mobil": "SDP"
+        },
+        {
+            "bezeichnung": "",
+            "url": "http://www.hamburg.de/bsu/timonline",
+            "alias": "Kartenunstimmigkeit"
         }
+    ]
+}
 ```
-
 *********
 
 ## tree ##
@@ -213,23 +190,20 @@ tree: {
 ## zoomToFeature ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|imglink|ja|String||Link für den Marker.|
-|layerid|ja|String||ID des Layers an den die Marker gekoppelt werden.|
-|WFSid|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
+|imgLink|ja|String||Link für den Marker.|
+|layerId|ja|String||ID des Layers an den die Marker gekoppelt werden.|
+|wfsId|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
 |attribute|ja|String||Attributname. Entspricht Attribut nach dem der WFS gefiltert wird.|
 
 **Beispiel:**
-
 ```
 #!json
-
 zoomtofeature: {
-            attribute: "flaechenid",
-            imglink: "../img/location_eventlotse.svg",
-            WFSid: "4560",
-            layerid: "4561"
-        }
-
+    attribute: "flaechenid",
+    imgLink: "../img/location_eventlotse.svg",
+    wfsId: "4560",
+    layerId: "4561"
+}
 ```
 
 >Zurück zur [Dokumentation Masterportal](doc.md).

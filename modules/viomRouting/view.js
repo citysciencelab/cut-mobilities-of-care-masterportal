@@ -5,13 +5,19 @@ define(function (require) {
         RoutingView;
 
     RoutingView = Backbone.View.extend({
-        model: RoutingModel,
-        id: "routingWin",
-        className: "win-body routingWin",
-        template: _.template(RoutingWin),
-        initialize: function () {
+        events: {
+            "click #calc": "routeBerechnen",
+            "change .changedWochentag": "changedRoutingTime",
+            "change .changedUhrzeit": "changedRoutingTime",
+            "click .startAdressePosition": "startAdressePosition", // eigene Positionsbestimmung auf aktueller Standpunkt
+            "keyup .adresse": "adresseKeyup",
+            "click .addressLi": "addressSelected",
+            "click .pagination": "paginationSwitcher"
+        },
+        initialize: function (attr) {
             var channel = Radio.channel("ViomRouting");
 
+            this.model = new RoutingModel(attr);
             this.listenTo(this.model, "change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
             this.listenTo(this.model, "change:fromCoord", this.toggleRoutingButton);
             this.listenTo(this.model, "change:toCoord", this.toggleRoutingButton);
@@ -27,15 +33,9 @@ define(function (require) {
 
             Radio.trigger("Autostart", "initializedModul", "routing");
         },
-        events: {
-            "click #calc": "routeBerechnen",
-            "change .changedWochentag": "changedRoutingTime",
-            "change .changedUhrzeit": "changedRoutingTime",
-            "click .startAdressePosition": "startAdressePosition", // eigene Positionsbestimmung auf aktueller Standpunkt
-            "keyup .adresse": "adresseKeyup",
-            "click .addressLi": "addressSelected",
-            "click .pagination": "paginationSwitcher"
-        },
+        id: "routingWin",
+        className: "win-body routingWin",
+        template: _.template(RoutingWin),
         startAdressePosition: function () {
             Radio.trigger("geolocation", "sendPosition");
         },

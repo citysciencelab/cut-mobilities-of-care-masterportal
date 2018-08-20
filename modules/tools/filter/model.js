@@ -207,12 +207,8 @@ define(function (require) {
             }
         },
         setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "filter"}),
-                model;
+            var model;
 
-            _.each(config, function (value, key) {
-                this.set(key, value);
-            }, this);
             if (this.get("isInitOpen")) {
                 Radio.trigger("ParametricURL", "pushToIsInitOpen", this.get("id").toUpperCase());
             }

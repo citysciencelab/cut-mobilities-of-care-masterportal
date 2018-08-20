@@ -18,10 +18,11 @@ define(function (require) {
             perimeterMin: "0", // Stammumfang[cm] von
             perimeterMax: "1000", // Stammumfang[cm] bis
             searchCategoryString: "", // Treffer für die Vorschalgsuche der Baumgattung
-            searchTypeString: "" // Treffer für die Vorschalgsuche der Baumart
+            searchTypeString: "", // Treffer für die Vorschalgsuche der Baumart
+            treeConf: ""
         },
         url: function () {
-            return Radio.request("Util", "getPath", Config.treeConf);
+            return Radio.request("Util", "getPath", this.get("treeConf"));
         },
         initialize: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
@@ -394,5 +395,5 @@ define(function (require) {
         }
     });
 
-    return new TreeFilter();
+    return TreeFilter;
 });

@@ -5,19 +5,19 @@ define(function (require) {
         ExtendedFilterView;
 
     ExtendedFilterView = Backbone.View.extend({
-        model: new Model(),
-        template: _.template(Template),
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isCurrentWin": this.render,
-                "change:isCollapsed": this.render
-            }, this); // Fenstermanagement
-        },
         events: {
             "change #dropdown": "nextStep",
             "click .btn_remove": "removeAttrFromFilter",
             "click #btn_back": "previousStep"
         },
+        initialize: function (attr) {
+            this.model = new Model(attr);
+            this.listenTo(this.model, {
+                "change:isCurrentWin": this.render,
+                "change:isCollapsed": this.render
+            }, this); // Fenstermanagement
+        },
+        template: _.template(Template),
         removeAttrFromFilter: function (evt) {
             this.model.removeAttrFromFilter(evt);
             this.render();

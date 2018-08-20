@@ -5,14 +5,14 @@ define(function (require) {
         ImportView;
 
     ImportView = Backbone.View.extend({
-        model: new ImportTool(),
         className: "win-body",
         template: _.template(ImportTemplate),
         events: {
             "click .import": "importKML",
             "change .file": "setText"
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new ImportTool(attr);
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin": this.render
             });

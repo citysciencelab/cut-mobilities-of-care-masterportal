@@ -1,7 +1,5 @@
-define(function (require) {
-
-    var Config = require("config"),
-        SaveSelection;
+define(function () {
+    var SaveSelection;
 
     SaveSelection = Backbone.Model.extend({
         defaults: {
@@ -41,10 +39,6 @@ define(function (require) {
                 "change:zoomLevel change:centerCoords": this.setUrl,
                 "change:url": this.setSimpleMapUrl
             });
-
-            if (_.has(Config, "simpleMap")) {
-                this.setSimpleMap(Config.simpleMap);
-            }
         },
 
         /**

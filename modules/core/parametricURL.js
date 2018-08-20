@@ -7,7 +7,8 @@ define(function (require) {
         defaults: {
             layerParams: [],
             isInitOpen: [],
-            zoomToGeometry: ""
+            zoomToGeometry: "",
+            zoomToFeatureIds: []
         },
 
         initialize: function () {
@@ -44,6 +45,9 @@ define(function (require) {
                 },
                 "getHighlightFeature": function () {
                     return this.get("highlightfeature");
+                },
+                "getZoomToFeatureIds": function () {
+                    return this.get("zoomToFeatureIds");
                 }
             }, this);
 
@@ -262,7 +266,7 @@ define(function (require) {
         parseFeatureId: function (result) {
             var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
-            Config.zoomtofeature.ids = ids.split(",");
+            this.setZoomToFeatureIds(ids.split(","));
         },
         parseZoomLevel: function (result) {
             var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
@@ -463,6 +467,9 @@ define(function (require) {
         // setter for zoomLevel
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
+        },
+        setZoomToFeatureIds: function (value) {
+            this.set("zoomToFeatureIds", value);
         }
     });
 

@@ -1,6 +1,5 @@
 define(function (require) {
     var ol = require("openlayers"),
-        Config = require("config"),
         RemoteInterface;
 
     RemoteInterface = Backbone.Model.extend({
@@ -25,10 +24,6 @@ define(function (require) {
                 "postMessage": this.postMessage
             }, this);
             window.addEventListener("message", this.receiveMessage.bind(this));
-
-            if (_.has(Config, "postMessageUrl")) {
-                this.setPostMessageUrl(Config.postMessageUrl);
-            }
         },
 
         /**

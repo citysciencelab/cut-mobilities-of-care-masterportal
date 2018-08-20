@@ -1,5 +1,4 @@
 define(function () {
-
     var CompareFeaturesModel;
 
     CompareFeaturesModel = Backbone.Model.extend({
@@ -24,16 +23,6 @@ define(function () {
                 "setIsActivated": this.setIsActivated,
                 "addFeatureToList": this.addFeatureToList,
                 "removeFeatureFromList": this.removeFeatureFromList
-            }, this);
-
-            this.overwriteDefaults();
-        },
-
-        overwriteDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "compareFeatures"});
-
-            _.each(config, function (value, key) {
-                this.set(key, value);
             }, this);
         },
 
@@ -77,6 +66,7 @@ define(function () {
          * creates a JSON where an object matches to a row
          * one object attribute is created for each feature (column)
          * @param {object} gfiAttributes -
+         *@param {object} themeConfig attribute configuration from schulinfo theme
          * @returns {object[]} list - one object per row
          */
         prepareFeatureListToShow: function (gfiAttributes) {

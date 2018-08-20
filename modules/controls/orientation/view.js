@@ -6,17 +6,20 @@ define(function (require) {
     OrientationView = Backbone.View.extend({
         className: "row",
         template: _.template(OrientationTemplate),
-        model: OrientationModel,
         events: {
             "click .orientationButtons > .glyphicon-map-marker": "getOrientation",
             "click .orientationButtons > .glyphicon-record": "getPOI"
         },
-        initialize: function () {
-            var showGeolocation = this.model.get("isGeoLocationPossible"),
-                showPoi = this.model.get("showPoi"),
-                poiDistances = this.model.get("poiDistances"),
+        initialize: function (attr) {
+            var showGeolocation,
+                showPoi,
+                poiDistances,
                 channel;
 
+            this.model = new OrientationModel(attr.config);
+            showGeolocation = this.model.get("isGeoLocationPossible");
+            showPoi = this.model.get("showPoi");
+            poiDistances = this.model.get("poiDistances");
             if (showGeolocation) { // Wenn erlaubt, Lokalisierung und InMeinerNähe initialisieren
                 channel = Radio.channel("orientation");
 
