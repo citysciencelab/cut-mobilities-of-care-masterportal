@@ -1035,7 +1035,9 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |[bkg](#markdown-header-portalconfigsearchbarbkg)|nein|Object||Ein deutschlandweites Ortsverzeichnis.|
 |[gazetteer](#markdown-header-portalconfigsearchbargazetteer)|nein|Object||Das Ortsverzeichnis von Hamburg.|
 |minChars||Number||Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-|placeholder|nein|String|"Suche"|Gibt an welche Themen gesucht werden können.|
+|placeholder|nein|String|"Suche"|Platzhaltertext in der Suchleiste. Gibt dem Nutzer an welche Themen gesucht werden können.|
+|recommendedListLength|nein|Integer|5|Anzahl der Suchvorschläge.|
+|quickHelp|nein|Boolean|false|Gibt an ob eine portalseitige Hilfe angezeigt werden soll. Wenn sie nicht gesetzt ist, wird der globale Wert aus der config.js verwendet.|
 |[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)|nein|Object||Durchsuchen von speziell definierten WFS-Layern.|
 |[tree](#markdown-header-portalconfigsearchbartree)|nein|Object||Themensuche. Durchsucht den Themenbaum des Portals.|
 |[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)|nein|Object||Durchsuchen von sichtbar geschalteten WFS-Layern.|

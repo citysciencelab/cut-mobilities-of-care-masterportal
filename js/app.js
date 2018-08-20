@@ -375,8 +375,8 @@ define("app", function (require) {
         new MapMarkerView();
     });
 
-    sbconfig = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
-    sbconfig = _.extend(sbconfig, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
+    sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
+    sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         require(["modules/searchbar/view"], function (SearchbarView) {
             new SearchbarView(sbconfig);

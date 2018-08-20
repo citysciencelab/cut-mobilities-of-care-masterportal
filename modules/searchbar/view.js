@@ -43,15 +43,6 @@ define(function (require) {
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
             }
-            // if (config.recommandedListLength) {
-            //     this.model.set("recommandedListLength", config.recommandedListLength);
-            // }
-            // if (config.quickHelp) {
-            //     this.model.set("quickHelp", config.quickHelp);
-            // }
-            // if (config.placeholder) {
-            //     this.model.set("placeholder", config.placeholder);
-            // }
 
             this.className = "navbar-form col-xs-9";
 
