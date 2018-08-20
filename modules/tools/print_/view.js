@@ -14,13 +14,13 @@ define(function (require) {
             this.template = _.template(PrintTemplate);
             this.listenTo(this.model, {
                 "change:isActive": this.render,
-                "change:currentScale": this.render,
-                "change:isLegendAvailable": this.render
+                "change:currentScale": this.render
+                // "change:isLegendAvailable": this.render
             });
         },
 
         render: function (model) {
-            if (model.get("isActive")) {
+            if (model.get("isActive") && model.get("currentLayout")) {
                 this.setElement(document.getElementsByClassName("win-body")[0]);
                 this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();

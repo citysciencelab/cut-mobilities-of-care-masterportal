@@ -17,7 +17,6 @@ define(function (require) {
             currentLayout: undefined,
             formatList: [],
             currentFormat: "pdf",
-            scaleList: [],
             currentScale: undefined,
             // does the current layout have a legend
             isLegendAvailable: true,
@@ -25,8 +24,8 @@ define(function (require) {
             plotServiceId: undefined,
             deaktivateGFI: false,
             renderToWindow: true,
-            MM_PER_INCHES: 25.4,
-            POINTS_PER_INCH: 72 // PostScript points 1/72"
+            DOTS_PER_INCH: 72,
+            INCHES_PER_METER: 39.37
         }),
 
         initialize: function () {
@@ -43,7 +42,7 @@ define(function (require) {
 
             this.listenTo(Radio.channel("MapView"), {
                 "changedOptions": function (options) {
-                    this.setCurrentScale(options.scale);
+                    // this.setCurrentScale(options.scale);
                 }
             });
         },
@@ -75,7 +74,6 @@ define(function (require) {
             this.setCurrentLayout(response.layouts[0]);
             this.setIsLegendAvailable(this.isLegendAvailable(response.layouts[0]));
             this.setFormatList(response.formats);
-            this.setScaleList(this.createScaleList(Radio.request("MapView", "getScales")));
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
             this.togglePostcomposeListener(this, true);
         },
@@ -88,10 +86,10 @@ define(function (require) {
                     "title": "Ttest",
                     "map": {
                         "projection": "EPSG:25832",
-                        "dpi": 96,
+                        "dpi": 150,
                         "rotation": 0,
                         "center": [561210, 5932600],
-                        "scale": 25000,
+                        "scale": 60000,
                         "layers": [{
                             "baseURL": "https://geodienste.hamburg.de/wms_hamburgde",
                             "opacity": 1,
@@ -119,38 +117,6 @@ define(function (require) {
         isLegendAvailable: function (layout) {
             return layout.attributes.some(function (attribute) {
                 return attribute.name === "legend";
-            });
-        },
-
-        /**
-         * creates the scale objects with display name and value
-         * is needed for the template
-         * @param {number[]} scales - scales from the map view
-         * @returns {object[]} scaleList
-         */
-        createScaleList: function (scales) {
-            var scaleList = [];
-
-            scales.forEach(function (scale) {
-                var scaleText = scale.toString();
-
-                if (scale >= 10000) {
-                    scaleText = scaleText.substring(0, scaleText.length - 3) + " " + scaleText.substring(scaleText.length - 3);
-                }
-                scaleList.push({value: scale, displayText: scaleText});
-            });
-            return scaleList;
-        },
-
-        /**
-         * returns the layout for the given layout name
-         * @param {object[]} layoutList - available layouts of the specified print configuration
-         * @param {string} layoutName - name for the layout to be found
-         * @returns {object} layout
-         */
-        getLayoutByName: function (layoutList, layoutName) {
-            return _.find(layoutList, function (layout) {
-                return layout.name === layoutName;
             });
         },
 
@@ -187,10 +153,150 @@ define(function (require) {
         },
 
         /**
+         * if the tool is activated and there is a layout,
+         * a callback function is registered to the postcompose event of the map
+         * @param {Backbone.Model} model - this
+         * @param {boolean} value - is this tool activated or not
+         * @returns {void}
+         */
+        togglePostcomposeListener: function (model, value) {
+            if (value && model.get("layoutList").length !== 0) {
+                Radio.trigger("Map", "registerListener", "postcompose", this.createPrintMask, this);
+            }
+            else {
+                Radio.trigger("Map", "unregisterListener", "postcompose", this.createPrintMask, this);
+            }
+            Radio.trigger("Map", "render");
+        },
+
+        /**
+         * draws the print page rectangle onto the canvas
+         * @param {ol.render.Event} evt - postcompose
+         * @returns {void}
+         */
+        createPrintMask: function (evt) {
+            var frameState = evt.frameState, // representing the current render frame state
+                layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo,
+                context = evt.context, // CanvasRenderingContext2D
+                scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, [layoutMapInfo.width, layoutMapInfo.height], layoutMapInfo.scales.sort(this.sortNumbers));
+
+            this.drawMask(frameState, context);
+            this.drawPrintPage(frameState.size, frameState.viewState.resolution, scale, context);
+            context.fillStyle = "rgba(0, 5, 25, 0.55)";
+            context.fill();
+        },
+
+        /**
+         * draws a mask on the whole map
+         * @param {object} frameState - representing the current render frame state
+         * @param {CanvasRenderingContext2D} context - context of the postcompose event
+         * @returns {void}
+         */
+        drawMask: function (frameState, context) {
+            var mapWidth = frameState.size[0] * ol.has.DEVICE_PIXEL_RATIO,
+                mapHeight = frameState.size[1] * ol.has.DEVICE_PIXEL_RATIO;
+
+            context.beginPath();
+            // Outside polygon, must be clockwise
+            context.moveTo(0, 0);
+            context.lineTo(mapWidth, 0);
+            context.lineTo(mapWidth, mapHeight);
+            context.lineTo(0, mapHeight);
+            context.lineTo(0, 0);
+            context.closePath();
+        },
+
+        /**
+         * draws the print page
+         * @param {ol.Size} mapSize - size of the map in px
+         * @param {number} resolution - resolution of the map in m/px
+         * @param {number} scale - the optimal print scale
+         * @param {CanvasRenderingContext2D} context - context of the postcompose event
+         * @returns {void}
+         */
+        drawPrintPage: function (mapSize, resolution, scale, context) {
+            var center = [mapSize[0] / 2, mapSize[1] / 2],
+                printMapWidth = this.getAttributeInLayoutByName("map").clientInfo.width,
+                printMapHeight = this.getAttributeInLayoutByName("map").clientInfo.height,
+                boundWidth = printMapWidth / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                boundHeight = printMapHeight / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                minx = center[0] - (boundWidth / 2),
+                miny = center[1] - (boundHeight / 2),
+                maxx = center[0] + (boundWidth / 2),
+                maxy = center[1] + (boundHeight / 2);
+
+            // Inner polygon,must be counter-clockwise
+            context.moveTo(minx, miny);
+            context.lineTo(minx, maxy);
+            context.lineTo(maxx, maxy);
+            context.lineTo(maxx, miny);
+            context.lineTo(minx, miny);
+            context.closePath();
+        },
+
+        /**
+         * gets the optimal print scale for a map
+         * @param {ol.Size} mapSize - size of the map in px
+         * @param {number} resolution - resolution of the map in m/px
+         * @param {ol.Size} printMapSize - size of the map on the paper in dots
+         * @param {object[]} scaleList - supported print scales, sorted in ascending order
+         * @returns {number} the optimal scale
+         */
+        getOptimalScale: function (mapSize, resolution, printMapSize, scaleList) {
+            var mapWidth = mapSize[0] * resolution,
+                mapHeight = mapSize[1] * resolution,
+                scaleWidth = mapWidth * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[0],
+                scaleHeight = mapHeight * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[1],
+                scale = Math.min(scaleWidth, scaleHeight),
+                optimalScale = scaleList[0];
+
+            scaleList.forEach(function (printMapScale) {
+                if (scale > printMapScale) {
+                    optimalScale = printMapScale;
+                }
+            });
+
+            return optimalScale;
+        },
+
+        /**
+         * returns a capabilities attribute object of the current layout, corresponding to the given name
+         * @param {string} name - name of the attribute to get
+         * @returns {object|undefined} corresponding attribute or null
+         */
+        getAttributeInLayoutByName: function (name) {
+            return _.find(this.get("currentLayout").attributes, function (attribute) {
+                return attribute.name === name;
+            });
+        },
+
+        /**
+         * returns the layout for the given layout name
+         * @param {object[]} layoutList - available layouts of the specified print configuration
+         * @param {string} layoutName - name for the layout to be found
+         * @returns {object} layout
+         */
+        getLayoutByName: function (layoutList, layoutName) {
+            return _.find(layoutList, function (layout) {
+                return layout.name === layoutName;
+            });
+        },
+
+        /**
+         * sorts an array numerically and ascending
+         * @param {number} a - first value
+         * @param {number} b - next value
+         * @returns {number} a negative, zero, or positive value
+         */
+        sortNumbers: function (a, b) {
+            return a - b;
+        },
+
+        /**
          * Performs an asynchronous HTTP request
          * @param {string} serviceUrl - the url of the print service
          * @param {string} requestType - GET || POST
-         * @param {function} successCallback -
+         * @param {function} successCallback - called if the request succeeds
          * @param {JSON} data - payload
          * @returns {void}
          */
@@ -203,81 +309,6 @@ define(function (require) {
                 context: this,
                 success: successCallback
             });
-        },
-
-        togglePostcomposeListener: function (model, value) {
-            if (value && model.get("layoutList").length !== 0) {
-                Radio.trigger("Map", "registerListener", "postcompose", this.renderPrintPage, this);
-            }
-            else {
-                Radio.trigger("Map", "unregisterListener", "postcompose", this.renderPrintPage, this);
-            }
-            Radio.trigger("Map", "render");
-        },
-
-        /**
-         * draws the print page rectangle onto the canvas
-         * @param {ol.render.Event} evt -
-         * @returns {void}
-         */
-        renderPrintPage: function (evt) {
-            var map = evt.target,
-                ctx = evt.context, // Canvas context
-                resolution = map.getView().getResolution(),
-                printPageRectangle = this.calculatePageBoundsPixels(map, resolution, this.get("currentScale"), this.get("currentLayout")),
-                mapWidth = map.getSize()[0] * ol.has.DEVICE_PIXEL_RATIO,
-                mapHeight = map.getSize()[1] * ol.has.DEVICE_PIXEL_RATIO,
-                minx = printPageRectangle[0],
-                miny = printPageRectangle[1],
-                maxx = printPageRectangle[2],
-                maxy = printPageRectangle[3];
-
-            ctx.beginPath();
-            // Outside polygon, must be clockwise
-            ctx.moveTo(0, 0);
-            ctx.lineTo(mapWidth, 0);
-            ctx.lineTo(mapWidth, mapHeight);
-            ctx.lineTo(0, mapHeight);
-            ctx.lineTo(0, 0);
-            ctx.closePath();
-            // Inner polygon,must be counter-clockwise
-            ctx.moveTo(minx, miny);
-            ctx.lineTo(minx, maxy);
-            ctx.lineTo(maxx, maxy);
-            ctx.lineTo(maxx, miny);
-            ctx.lineTo(minx, miny);
-            ctx.closePath();
-            ctx.fillStyle = "rgba(0, 5, 25, 0.55)";
-            ctx.fill();
-        },
-
-        /**
-         * @param {ol.map} map -
-         * @param {number} resolution - print resolution
-         * @param {number} scale -
-         * @param {object} layout - current print layout
-         * @returns {number[]} page bounds
-         */
-        calculatePageBoundsPixels: function (map, resolution, scale, layout) {
-            var resolutions = map.getView().getResolutions(),
-                indexResolution = resolutions.indexOf(resolution),
-                centerCoordinate = map.getView().getCenter(),
-                centerPixel = map.getPixelFromCoordinate(centerCoordinate),
-                pageWidth = layout.attributes[1].clientInfo.width, // Pixel??
-                pageHeight = layout.attributes[1].clientInfo.height,
-                boundWidth = pageWidth / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
-                boundHeight = pageHeight / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
-                minx, miny, maxx, maxy;
-
-            if (boundWidth >= map.getSize()[0] || boundHeight >= map.getSize()[1]) {
-                return this.calculatePageBoundsPixels(map, resolutions[indexResolution - 1], scale, layout);
-            }
-            minx = centerPixel[0] - (boundWidth / 2);
-            miny = centerPixel[1] - (boundHeight / 2);
-            maxx = centerPixel[0] + (boundWidth / 2);
-            maxy = centerPixel[1] + (boundHeight / 2);
-
-            return [minx, miny, maxx, maxy];
         },
 
         /**
@@ -310,14 +341,6 @@ define(function (require) {
          */
         setCurrentFormat: function (value) {
             this.set("currentFormat", value);
-        },
-
-        /**
-         * @param {number[]} value - available scales of the map
-         * @returns {void}
-         */
-        setScaleList: function (value) {
-            this.set("scaleList", value);
         },
 
         /**
