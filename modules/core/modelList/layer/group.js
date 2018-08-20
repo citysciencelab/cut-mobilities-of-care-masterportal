@@ -89,7 +89,7 @@ define(function (require) {
                 legend = Radio.request("Legend", "getLegend", this),
                 name = this.get("name");
 
-            _.each(this.get("layerdefinitions"), function (layer) {
+            _.each(this.get("children"), function (layer) {
                 var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
 
                 if (layerMetaId) {
