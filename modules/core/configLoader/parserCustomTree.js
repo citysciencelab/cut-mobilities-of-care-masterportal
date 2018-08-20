@@ -20,7 +20,6 @@ define(function (require) {
                     var objFromRawList,
                         objsFromRawList,
                         layerExtended = layer,
-                        layerdefinitions,
                         mergedObjsFromRawList;
 
                     // Für Singel-Layer (ol.layer.Layer)
@@ -47,19 +46,20 @@ define(function (require) {
                     // Für Gruppen-Layer (ol.layer.Group)
                     // z.B.: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
                     else if (_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
-                        layerdefinitions = [];
-
-                        _.each(layerExtended.children, function (childLayer) {
+                        layerExtended.children = _.map(layerExtended.children, function (childLayer) {
                             objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: childLayer.id});
 
                             if (!_.isNull(objFromRawList)) {
-                                objFromRawList = _.extend(objFromRawList, childLayer);
-                                layerdefinitions.push(objFromRawList);
+                                return _.extend(objFromRawList, childLayer, {"isChildLayer": true});
                             }
+                        }, this);
+
+                        layerExtended.children = _.filter(layerExtended.children, function (childLayer) {
+                            return !_.isUndefined(childLayer);
                         });
 
-                        if (layerdefinitions.length > 0) {
-                            layerExtended = _.extend(layerExtended, {typ: "GROUP", id: layerExtended.id, layerdefinitions: layerdefinitions});
+                        if (layerExtended.children.length > 0) {
+                            layerExtended = _.extend(layerExtended, {typ: "GROUP", id: layerExtended.id});
                         }
                     }
 

@@ -16,24 +16,20 @@ define(function (require) {
         }),
 
         initialize: function () {
+            console.log(this);
             Layer.prototype.initialize.apply(this);
         },
 
         /**
          * Bei GruppenLayern sind die LayerSource die childLayers.
          * Damit die childLayer nicht die layer.initialize() durchlaufen,
-         * wird isChildLayer: true gesetzt.
+         * wurde isChildLayer: true im parser gesetzt.
          * @return {void}
          */
         createLayerSource: function () {
             var childLayer = [];
 
-            _.each(this.get("layerdefinitions"), function (childLayerDefinition) {
-                // ergänze isChildLayer für initialize
-                _.extend(childLayerDefinition, {
-                    isChildLayer: true
-                });
-
+            _.each(this.get("children"), function (childLayerDefinition) {
                 if (childLayerDefinition.typ === "WMS") {
                     childLayer.push(new WMSLayer(childLayerDefinition));
                 }
