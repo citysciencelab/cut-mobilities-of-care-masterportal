@@ -265,8 +265,8 @@ define(function (require) {
                 else if (layer.get("url").indexOf("gdi_mrh") >= 0) {
                     layerURL = layer.get("url").replace("gdi_mrh", "gdi_mrh_print");
                 }
-                else if (layer.get("url").indexOf("http://geoportal.metropolregion.hamburg.de") >= 0 ||
-                         layer.get("url").indexOf("http://87.106.16.168") >= 0) {
+                else if (layer.get("url").indexOf("geoportal.metropolregion.hamburg.de") >= 0 ||
+                         layer.get("url").indexOf("geoportaltest.metropolregion.hamburg.de") >= 0) {
                     layerURL = layer.get("url") + "_print";
                 }
                 this.push("layerToPrint", {
