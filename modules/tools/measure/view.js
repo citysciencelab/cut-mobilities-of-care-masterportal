@@ -17,7 +17,7 @@ define(function (require) {
         initialize: function (attr) {
             this.model = new Measure(attr);
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:type": this.render
+                "change:isCollapsed change:isCurrentWin change:geometryType": this.render
             });
         },
         className: "win-body",
@@ -41,7 +41,6 @@ define(function (require) {
 
         setGeometryType: function (evt) {
             this.model.setGeometryType(evt.target.value);
-            Radio.trigger("Map", "activateClick", "measure");
         },
 
         setUnit: function (evt) {
