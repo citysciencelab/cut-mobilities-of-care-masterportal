@@ -16,7 +16,6 @@ define(function (require) {
         }),
 
         initialize: function () {
-            console.log(this);
             Layer.prototype.initialize.apply(this);
         },
 
