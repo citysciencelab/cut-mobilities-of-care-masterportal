@@ -11,22 +11,20 @@ define(function (require) {
         GroupLayer;
 
     GroupLayer = Layer.extend({
-        defaults: _.extend({}, Layer.prototype.defaults, {
-            childLayer: []
-        }),
+        defaults: _.extend({}, Layer.prototype.defaults),
 
         initialize: function () {
             Layer.prototype.initialize.apply(this);
         },
 
         /**
-         * Bei GruppenLayern sind die LayerSource die childLayers.
-         * Damit die childLayer nicht die layer.initialize() durchlaufen,
+         * Bei GruppenLayern sind die LayerSources deren childLayer.
+         * Damit die layerSources nicht die layer.initialize() durchlaufen,
          * wird isChildLayer: true gesetzt.
          * @return {void}
          */
         createLayerSource: function () {
-            var childLayer = [];
+            var layerSource = [];
 
             _.each(this.get("layerdefinitions"), function (childLayerDefinition) {
                 // ergänze isChildLayer für initialize
@@ -35,28 +33,28 @@ define(function (require) {
                 });
 
                 if (childLayerDefinition.typ === "WMS") {
-                    childLayer.push(new WMSLayer(childLayerDefinition));
+                    layerSource.push(new WMSLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "WFS") {
                     if (childLayerDefinition.outputFormat === "GeoJSON") {
-                        childLayer.push(new GeoJSONLayer(childLayerDefinition));
+                        layerSource.push(new GeoJSONLayer(childLayerDefinition));
                     }
-                    childLayer.push(new WFSLayer(childLayerDefinition));
+                    layerSource.push(new WFSLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "GeoJSON") {
-                    childLayer.push(new GeoJSONLayer(childLayerDefinition));
+                    layerSource.push(new GeoJSONLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "SensorThings" || childLayerDefinition.typ === "ESRIStreamLayer") {
-                    childLayer.push(new SensorLayer(childLayerDefinition));
+                    layerSource.push(new SensorLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "Heatmap") {
-                    childLayer.push(new HeatmapLayer(childLayerDefinition));
+                    layerSource.push(new HeatmapLayer(childLayerDefinition));
                 }
 
-                _.last(childLayer).prepareLayerObject();
+                _.last(layerSource).prepareLayerObject();
             }, this);
 
-            this.set("childLayer", childLayer);
+            this.setLayerSource(layerSource);
         },
 
         /**
@@ -64,7 +62,7 @@ define(function (require) {
          * @return {void}
          */
         createLayer: function () {
-            var layers = _.map(this.get("childLayer"), function (layer) {
+            var layers = _.map(this.get("layerSource"), function (layer) {
                     return layer.get("layer");
                 }),
                 groupLayer = new ol.layer.Group({
