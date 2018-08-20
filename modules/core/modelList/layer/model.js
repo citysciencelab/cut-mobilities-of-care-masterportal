@@ -71,14 +71,17 @@ define(function (require) {
          * @listens this~change:transparency
          */
         registerInteractionTreeListeners: function (channel) {
-            this.listenToOnce(this, {
-                // Die LayerSource wird beim ersten Selektieren einmalig erstellt
-                "change:isSelected": function () {
-                    if (_.isUndefined(this.get("layerSource"))) {
-                        this.prepareLayerObject();
+            // beim treetype: "light" werden alle Layer initial geladen
+            if (Radio.request("Parser", "getTreeType") !== "light") {
+                this.listenToOnce(this, {
+                    // Die LayerSource wird beim ersten Selektieren einmalig erstellt
+                    "change:isSelected": function () {
+                        if (_.isUndefined(this.get("layerSource"))) {
+                            this.prepareLayerObject();
+                        }
                     }
-                }
-            });
+                });
+            }
             // Dieses Radio kümmert sich um die Darstellung der layerInformation
             this.listenTo(channel, {
                 "updateLayerInfo": function (name) {
