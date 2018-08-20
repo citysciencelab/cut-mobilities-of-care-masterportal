@@ -11,55 +11,53 @@ define(function (require) {
         GroupLayer;
 
     GroupLayer = Layer.extend({
-        defaults: _.extend({}, Layer.prototype.defaults, {
-            childLayer: []
-        }),
+        defaults: _.extend({}, Layer.prototype.defaults),
 
         initialize: function () {
             Layer.prototype.initialize.apply(this);
         },
 
         /**
-         * Bei GruppenLayern sind die LayerSource die childLayers.
-         * Damit die childLayer nicht die layer.initialize() durchlaufen,
+         * Bei GruppenLayern sind die LayerSources deren childLayer.
+         * Damit die layerSources nicht die layer.initialize() durchlaufen,
          * wurde isChildLayer: true im parser gesetzt.
          * @return {void}
          */
         createLayerSource: function () {
-            var childLayer = [];
+            var layerSource = [];
 
             _.each(this.get("children"), function (childLayerDefinition) {
                 if (childLayerDefinition.typ === "WMS") {
-                    childLayer.push(new WMSLayer(childLayerDefinition));
+                    layerSource.push(new WMSLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "WFS") {
                     if (childLayerDefinition.outputFormat === "GeoJSON") {
-                        childLayer.push(new GeoJSONLayer(childLayerDefinition));
+                        layerSource.push(new GeoJSONLayer(childLayerDefinition));
                     }
-                    childLayer.push(new WFSLayer(childLayerDefinition));
+                    layerSource.push(new WFSLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "GeoJSON") {
-                    childLayer.push(new GeoJSONLayer(childLayerDefinition));
+                    layerSource.push(new GeoJSONLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "SensorThings" || childLayerDefinition.typ === "ESRIStreamLayer") {
-                    childLayer.push(new SensorLayer(childLayerDefinition));
+                    layerSource.push(new SensorLayer(childLayerDefinition));
                 }
                 else if (childLayerDefinition.typ === "Heatmap") {
-                    childLayer.push(new HeatmapLayer(childLayerDefinition));
+                    layerSource.push(new HeatmapLayer(childLayerDefinition));
                 }
 
-                _.last(childLayer).prepareLayerObject();
+                _.last(layerSource).prepareLayerObject();
             }, this);
 
-            this.set("childLayer", childLayer);
+            this.setLayerSource(layerSource);
         },
 
         /**
-         * Erzeugt einen Gruppenlayer mit den childLayern
+         * Erzeugt einen Gruppenlayer mit den layerSources
          * @return {void}
          */
         createLayer: function () {
-            var layers = _.map(this.get("childLayer"), function (layer) {
+            var layers = _.map(this.get("layerSource"), function (layer) {
                     return layer.get("layer");
                 }),
                 groupLayer = new ol.layer.Group({
@@ -75,8 +73,8 @@ define(function (require) {
          * @return {void}
          */
         createLegendURL: function () {
-            _.each(this.get("childLayer"), function (childLayer) {
-                childLayer.createLegendURL();
+            _.each(this.get("layerSource"), function (layerSource) {
+                layerSource.createLegendURL();
             }, this);
         },
 
@@ -110,15 +108,15 @@ define(function (require) {
         },
 
         /**
-        * Prüft anhand der Scale aller childLayer, ob der Layer sichtbar ist oder nicht
+        * Prüft anhand der Scale aller layerSources, ob der Layer sichtbar ist oder nicht
         * @param {object} options   Object mit zu prüfender .scale
         * @returns {void}
         **/
         checkForScale: function (options) {
             var isOutOfRange = false;
 
-            _.each(this.get("childLayer"), function (childLayer) {
-                if (parseFloat(options.scale, 10) >= childLayer.get("maxScale") || parseFloat(options.scale, 10) <= childLayer.get("minScale")) {
+            _.each(this.get("layerSource"), function (layerSource) {
+                if (parseFloat(options.scale, 10) >= layerSource.get("maxScale") || parseFloat(options.scale, 10) <= layerSource.get("minScale")) {
                     isOutOfRange = true;
                 }
             });

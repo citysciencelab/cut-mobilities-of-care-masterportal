@@ -44,10 +44,10 @@ define(function (require) {
          * @return {object}       Legendeninformation
          */
         getLegend: function (layer) {
-            var childLayers = layer.get("childLayer"); // Array oder undefined
+            var layerSources = layer.get("layerSource"); // Array oder undefined
 
             if (layer.get("isVisibleInMap")) {
-                return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), childLayers);
+                return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
             }
             return {
                 layername: layer.get("name"),
@@ -110,9 +110,9 @@ define(function (require) {
             this.unsetLegendParams();
 
             _.each(visibleLayer, function (layer) {
-                var childLayers = layer.get("childLayer"); // Array oder undefined
+                var layerSources = layer.get("layerSource"); // Array oder undefined
 
-                tempArray.push(this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), childLayers));
+                tempArray.push(this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources));
             }, this);
 
             this.set("legendParams", tempArray);
@@ -124,10 +124,10 @@ define(function (require) {
          * @param  {string} typ               Typ des Layers
          * @param  {string[]} [legendURL]     Nur bei typ !== GROUP
          * @param  {string} [styleId]         Nur bei typ === WFS
-         * @param  {object[]} [childLayers]   Nur bei typ === GROUP
+         * @param  {object[]} [layerSources]  Nur bei typ === GROUP
          * @return {object}                   Legendendefinition
          */
-        getLegendDefinition: function (layername, typ, legendURL, styleId, childLayers) {
+        getLegendDefinition: function (layername, typ, legendURL, styleId, layerSources) {
             var defs = [];
 
             if (legendURL === "ignore") {
@@ -149,11 +149,11 @@ define(function (require) {
                 return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
             }
             else if (typ === "GROUP") {
-                _.each(childLayers, function (childLayer) {
-                    var childLegend = this.getLegendDefinition(childLayer.get("name"), childLayer.get("typ"), childLayer.get("legendURL"), childLayer.get("styleId"), null);
+                _.each(layerSources, function (layerSource) {
+                    var childLegend = this.getLegendDefinition(layerSource.get("name"), layerSource.get("typ"), layerSource.get("legendURL"), layerSource.get("styleId"), null);
 
                     if (childLegend.legend) {
-                        // childLayer-Abfragen haben immer nur legend[0]
+                        // layerSource-Abfragen haben immer nur legend[0]
                         defs.push(childLegend.legend[0]);
                     }
                 }, this);

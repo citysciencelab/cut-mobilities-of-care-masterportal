@@ -208,12 +208,12 @@ define(function (require) {
                     visibleWMSLayerList.push(layer);
                 }
                 else if (typ === "GROUP") {
-                    _.each(layer.get("childLayer"), function (childLayer) {
-                        if (childLayer.get("typ") === "WMS") {
-                            visibleWMSLayerList.push(childLayer);
+                    _.each(layer.get("layerSource"), function (layerSource) {
+                        if (layerSource.get("typ") === "WMS") {
+                            visibleWMSLayerList.push(layerSource);
                         }
                         else {
-                            visibleVectorLayerList.push(childLayer);
+                            visibleVectorLayerList.push(layerSource);
                         }
                     }, this);
                 }
