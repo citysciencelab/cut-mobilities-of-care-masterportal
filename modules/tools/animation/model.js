@@ -2,7 +2,6 @@ define(function (require) {
 
     var ol = require("openlayers"),
         $ = require("jquery"),
-        Config = require("config"),
         Animation;
 
     Animation = Backbone.Model.extend({
@@ -18,7 +17,24 @@ define(function (require) {
             // Der aktuelle Animation Durchlauf (eine Richtung = ein Durchlauf)
             animationCount: 0,
             // Wie wieviele Durchläufe
-            animationLimit: 0
+            animationLimit: 0,
+            steps: 50,
+            zoomlevel: 1,
+            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            params: {
+                REQUEST: "GetFeature",
+                SERVICE: "WFS",
+                TYPENAME: "app:mrh_kreise",
+                VERSION: "1.1.0",
+                maxFeatures: "10000"
+            },
+            featureType: "mrh_einpendler_gemeinde",
+            minPx: 1,
+            maxPx: 20,
+            num_kreise_to_style: 2,
+            colors: ["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"],
+            attrAnzahl: "anzahl_einpendler",
+            attrKreis: "wohnort_kreis"
         },
         initialize: function () {
             var channel = Radio.channel("Animation");
@@ -71,56 +87,9 @@ define(function (require) {
                     this.createLineString();
                 }
             });
-
-            // Config auslesen oder default
-            this.setDefaults();
-
             this.sendRequest("GET", this.get("params"), this.parseKreise);
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), Radio.request("Map", "getLayers").getArray().length]);
         },
-
-        setDefaults: function () {
-            if (_.has(Config, "animation")) {
-                this.setZoomLevel(Config.animation.zoomlevel || 1);
-                this.setSteps(Config.animation.steps || 50);
-                this.setUrl(Config.animation.url || "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
-                this.setParams(Config.animation.params || {
-                    REQUEST: "GetFeature",
-                    SERVICE: "WFS",
-                    TYPENAME: "app:mrh_kreise",
-                    VERSION: "1.1.0",
-                    maxFeatures: "10000"
-                });
-                this.setFeatureType(Config.animation.featureType || "mrh_einpendler_gemeinde");
-                this.setMinPx(Config.animation.minPx || 1);
-                this.setMaxPx(Config.animation.maxPx || 20);
-                this.setNumKreiseToStyle(Config.animation.num_kreise_to_style || 2);
-                this.setColors(Config.animation.colors || ["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]);
-                this.setAttrAnzahl(Config.animation.attrAnzahl || "anzahl_einpendler");
-                this.setAttrKreis(Config.animation.attrKreis || "wohnort_kreis");
-            }
-            else {
-                this.setZoomLevel(1);
-                this.setSteps(50);
-                this.setUrl("http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
-                this.setParams({
-                    REQUEST: "GetFeature",
-                    SERVICE: "WFS",
-                    TYPENAME: "app:mrh_kreise",
-                    VERSION: "1.1.0",
-                    maxFeatures: "10000"
-                });
-                this.setFeatureType("mrh_einpendler_gemeinde");
-                this.setMinPx(1);
-                this.setMaxPx(20);
-                this.setNumKreiseToStyle(2);
-                this.setColors(["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]);
-                this.setAttrAnzahl("anzahl_einpendler");
-                this.setAttrKreis("wohnort_kreis");
-            }
-        },
-
-        /**
         /**
          * Führt einen HTTP-Request aus
          * @param {String} type - GET oder POST
@@ -135,7 +104,10 @@ define(function (require) {
                 contentType: "text/xml",
                 type: type,
                 context: this,
-                success: successFunction
+                success: successFunction,
+                error: function (jqXHR, errorText, error) {
+                    Radio.trigger("Alert", "alert", error);
+                }
             });
         },
 
@@ -386,30 +358,30 @@ define(function (require) {
         },
         draw: function (vectorContext, features, index) {
             var currentPoint,
-                i,
-                coordinates,
                 newFeature;
 
-            for (i = 0; i < features.length; i++) {
-                if (this.get("animating")) {
-                    coordinates = features[i].getGeometry().getCoordinates();
+            _.each(features, function (feature) {
+                var coordinates;
 
-                    this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
+                if (this.get("animating")) {
+                    coordinates = feature.getGeometry().getCoordinates();
+
+                    this.preparePointStyle(feature.get("anzahl_pendler"), feature.get("kreis"));
                     currentPoint = new ol.geom.Point(coordinates[index]);
                     newFeature = new ol.Feature(currentPoint);
                     vectorContext.drawFeature(newFeature, this.get("defaultPointStyle"));
                 }
-            }
+            }, this);
         },
         addFeaturesToLayer: function (features, layer) {
             var currentPoint, coordinates,
-                i,
-                drawIndex,
                 newFeature;
 
-            for (i = 0; i < features.length; i++) {
-                coordinates = features[i].getGeometry().getCoordinates();
-                this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
+            _.each(features, function (feature) {
+                var drawIndex;
+
+                coordinates = feature.getGeometry().getCoordinates();
+                this.preparePointStyle(feature.get("anzahl_pendler"), feature.get("kreis"));
                 // Ob die Feature bei der Startposition oder der Endposition gezeichnet werden müssen, ist abhängig von der anzahl der Durchgänge
                 drawIndex = this.get("animationLimit") % 2 === 1 ? 0 : coordinates.length - 1;
 
@@ -417,7 +389,7 @@ define(function (require) {
                 newFeature = new ol.Feature(currentPoint);
                 newFeature.setStyle(this.get("defaultPointStyle"));
                 layer.getSource().addFeature(newFeature);
-            }
+            }, this);
         },
         preparePointStyle: function (val, kreis) {
             var minVal = this.get("minVal"),

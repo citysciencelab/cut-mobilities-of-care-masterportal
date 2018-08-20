@@ -1,3 +1,10 @@
+# Changelog LGV Master-Portal 2.1.1
+
+FIXES:
+
+  - a2bce8dc metaidtomerge nicht alle objekte wurden gruppiert
+  - 3ec4b257 parcelSearch view getter entfernt, wms crossOrigiin entfernt, wfsfeaturefilter feature übergeben bei defaultStyle und marker und zoomlevel bei suche nach Schulstandorten
+
 # Changelog LGV Master-Portal 2.1.0
 
 NEU:

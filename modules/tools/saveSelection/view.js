@@ -6,18 +6,18 @@ define(function (require) {
         SaveSelectionView;
 
     SaveSelectionView = Backbone.View.extend({
-        model: new SaveSelection(),
-        className: "win-body",
-        template: _.template(SaveSelectionTemplate),
-        templateSimpleMap: _.template(SaveSelectionSimpleMapTemplate),
         events: {
             "click input": "copyToClipboard"
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new SaveSelection(attr);
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin change:url": this.render
             });
         },
+        className: "win-body",
+        template: _.template(SaveSelectionTemplate),
+        templateSimpleMap: _.template(SaveSelectionSimpleMapTemplate),
         render: function () {
             var attr = this.model.toJSON();
 
