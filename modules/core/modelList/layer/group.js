@@ -68,7 +68,8 @@ define(function (require) {
                     return layer.get("layer");
                 }),
                 groupLayer = new ol.layer.Group({
-                    layers: layers
+                    layers: layers,
+                    visible: false
                 });
 
             this.setLayer(groupLayer);
