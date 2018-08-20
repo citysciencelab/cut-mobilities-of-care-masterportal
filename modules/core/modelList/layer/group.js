@@ -58,7 +58,7 @@ define(function (require) {
         },
 
         /**
-         * Erzeugt einen Gruppenlayer mit den childLayern
+         * Erzeugt einen Gruppenlayer mit den layerSources
          * @return {void}
          */
         createLayer: function () {
@@ -78,8 +78,8 @@ define(function (require) {
          * @return {void}
          */
         createLegendURL: function () {
-            _.each(this.get("childLayer"), function (childLayer) {
-                childLayer.createLegendURL();
+            _.each(this.get("layerSource"), function (layerSource) {
+                layerSource.createLegendURL();
             }, this);
         },
 
@@ -113,15 +113,15 @@ define(function (require) {
         },
 
         /**
-        * Prüft anhand der Scale aller childLayer, ob der Layer sichtbar ist oder nicht
+        * Prüft anhand der Scale aller layerSources, ob der Layer sichtbar ist oder nicht
         * @param {object} options   Object mit zu prüfender .scale
         * @returns {void}
         **/
         checkForScale: function (options) {
             var isOutOfRange = false;
 
-            _.each(this.get("childLayer"), function (childLayer) {
-                if (parseFloat(options.scale, 10) >= childLayer.get("maxScale") || parseFloat(options.scale, 10) <= childLayer.get("minScale")) {
+            _.each(this.get("layerSource"), function (layerSource) {
+                if (parseFloat(options.scale, 10) >= layerSource.get("maxScale") || parseFloat(options.scale, 10) <= layerSource.get("minScale")) {
                     isOutOfRange = true;
                 }
             });
