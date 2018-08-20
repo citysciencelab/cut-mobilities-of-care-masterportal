@@ -1,7 +1,6 @@
 define(function (require) {
     var ol = require("openlayers"),
         proj4 = require("proj4"),
-        Config = require("config"),
         OrientationModel;
 
     OrientationModel = Backbone.Model.extend({
@@ -18,7 +17,8 @@ define(function (require) {
             geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
             position: "",
             isGeolocationDenied: false,
-            isGeoLocationPossible: false
+            isGeoLocationPossible: false,
+            epsg: "EPSG:25832"
         },
         initialize: function () {
             var channel = Radio.channel("geolocation");
@@ -146,7 +146,7 @@ define(function (require) {
                 position = geolocation.getPosition(),
                 firstGeolocation = this.get("firstGeolocation"),
                 zoomMode = this.get("zoomMode"),
-                centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position);
+                centerPosition = proj4(proj4("EPSG:4326"), proj4(this.get("epsg")), position);
 
             // speichere Position
             this.set("position", centerPosition);
@@ -216,7 +216,7 @@ define(function (require) {
         getVectorFeaturesInCircle: function (distance) {
             var geolocation = this.get("geolocation"),
                 position = geolocation.getPosition(),
-                centerPosition = proj4(proj4("EPSG:4326"), proj4(Config.view.epsg), position),
+                centerPosition = proj4(proj4("EPSG:4326"), proj4(this.get("epsg")), position),
                 circle = new ol.geom.Circle(centerPosition, distance),
                 circleExtent = circle.getExtent(),
                 visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
@@ -283,5 +283,5 @@ define(function (require) {
         }
     });
 
-    return new OrientationModel();
+    return OrientationModel;
 });

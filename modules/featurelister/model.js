@@ -1,5 +1,4 @@
 define(function (require) {
-
     var Requestor = require("modules/core/requestor"),
         FeatureListerModel;
 
@@ -251,5 +250,5 @@ define(function (require) {
         }
     });
 
-    return new FeatureListerModel();
+    return FeatureListerModel;
 });

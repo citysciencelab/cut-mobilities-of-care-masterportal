@@ -5,11 +5,22 @@ define(function (require) {
         TreeFilterView;
 
     TreeFilterView = Backbone.View.extend({
-        model: TreeFilter,
-        // id: "treeFilterWin",
-        className: "win-body",
-        template: _.template(TreeFilterTemplate),
-        initialize: function () {
+        events: {
+            "click #filterbutton": "setFilterParams",
+            "click #filterRemoveButton": "removeFilter",
+            "keyup #categoryInput": "setSearchCategoryString",
+            "keyup #typeInput": "setSearchTypeString",
+            "focusout #yearMin > input": "setYearMin",
+            "focusout #yearMax > input": "setYearMax",
+            "focusout #diameterMin > input": "setDiameterMin",
+            "focusout #diameterMax > input": "setDiamterMax",
+            "focusout #perimeterMin > input": "setPerimeterMin",
+            "focusout #perimeterMax > input": "setPerimeterMax",
+            "focusout #categoryInput": "setCategory",
+            "focusout #typeInput": "setType"
+        },
+        initialize: function (attr) {
+            this.model = new TreeFilter(attr);
             // this.render();
             this.listenTo(this.model, {
                 "change:isCurrentWin": this.render,
@@ -56,20 +67,8 @@ define(function (require) {
                 }
             });
         },
-        events: {
-            "click #filterbutton": "setFilterParams",
-            "click #filterRemoveButton": "removeFilter",
-            "keyup #categoryInput": "setSearchCategoryString",
-            "keyup #typeInput": "setSearchTypeString",
-            "focusout #yearMin > input": "setYearMin",
-            "focusout #yearMax > input": "setYearMax",
-            "focusout #diameterMin > input": "setDiameterMin",
-            "focusout #diameterMax > input": "setDiamterMax",
-            "focusout #perimeterMin > input": "setPerimeterMin",
-            "focusout #perimeterMax > input": "setPerimeterMax",
-            "focusout #categoryInput": "setCategory",
-            "focusout #typeInput": "setType"
-        },
+        className: "win-body",
+        template: _.template(TreeFilterTemplate),
         render: function () {
             var attr = this.model.toJSON();
 

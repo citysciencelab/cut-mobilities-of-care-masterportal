@@ -10,7 +10,8 @@ define(function (require) {
         events: {
             "click .close": "closeFilter"
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new FilterModel(attr);
             if (this.model.get("isInitOpen")) {
                 this.model.set("isActive", true);
                 this.render();
@@ -37,7 +38,6 @@ define(function (require) {
                 "renderDetailView": this.renderDetailView
             });
         },
-        model: new FilterModel(),
         id: "filter-view",
         template: _.template(Template),
         className: "filter",
@@ -49,7 +49,6 @@ define(function (require) {
             Radio.trigger("Sidebar", "toggle", true);
             this.renderSimpleViews();
             this.delegateEvents();
-
             return this;
         },
 

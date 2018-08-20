@@ -6,9 +6,6 @@ define(function (require) {
 
     require("jqueryui/widgets/draggable");
     FeatureLister = Backbone.View.extend({
-        model: Model,
-        className: "featurelist-win",
-        template: _.template(Template),
         events: {
             "click .glyphicon-remove": "toggle",
             "click #featurelistFeaturelist": "switchTabToListe", // wechselt den sichtbaren Tab
@@ -20,9 +17,10 @@ define(function (require) {
             "click .featurelist-list-button": "moreFeatures", // Klick auf Button zum Nachladen von Features
             "click .featurelist-list-table-th": "orderList" // Klick auf Sortiersymbol in thead
         },
-        initialize: function () {
+        initialize: function (attr) {
             var channel = Radio.channel("FeatureListerView");
 
+            this.model = new Model(attr);
             this.listenTo(channel, {
                 "toggle": this.toggle
             }, this);
@@ -41,6 +39,8 @@ define(function (require) {
 
             this.render();
         },
+        className: "featurelist-win",
+        template: _.template(Template),
         /*
         * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.
         */

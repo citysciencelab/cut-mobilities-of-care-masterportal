@@ -1,6 +1,5 @@
 define(function (require) {
     var ol = require("openlayers"),
-        Config = require("config"),
         Measure;
 
     Measure = Backbone.Model.extend({
@@ -25,7 +24,7 @@ define(function (require) {
                     })
                 })
             }),
-            type: "LineString",
+            geometryType: "LineString",
             unit: "m",
             decimal: 1,
             measureTooltips: [],
@@ -41,7 +40,7 @@ define(function (require) {
             });
 
             this.listenTo(this, {
-                "change:type": this.createInteraction
+                "change:geometryType": this.createInteraction
             });
 
             this.set("layer", new ol.layer.Vector({
@@ -54,10 +53,6 @@ define(function (require) {
             this.setUiStyle(Radio.request("Util", "getUiStyle"));
 
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
-
-            if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
-                this.set("quickHelp", true);
-            }
         },
         setStatus: function (args) {
             if (args[2].get("id") === "measure" && args[0] === true) {
@@ -75,7 +70,7 @@ define(function (require) {
             Radio.trigger("Map", "removeInteraction", this.get("draw"));
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
-                type: this.get("type"),
+                type: this.get("geometryType"),
                 style: this.get("style")
             }));
             this.get("draw").on("drawstart", function (evt) {
@@ -152,8 +147,8 @@ define(function (require) {
          * @return {undefined}
          */
         setGeometryType: function (value) {
-            this.set("type", value);
-            if (this.get("type") === "LineString") {
+            this.set("geometryType", value);
+            if (this.get("geometryType") === "LineString") {
                 this.setUnit("m");
             }
             else {

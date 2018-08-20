@@ -5,12 +5,12 @@ define(function (require) {
         FooterView;
 
     FooterView = Backbone.View.extend({
-        template: _.template(Template),
-        model: new Footermodel(),
-        className: "footer",
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new Footermodel(attr);
             this.render();
         },
+        template: _.template(Template),
+        className: "footer",
         render: function () {
             var attr = this.model.toJSON();
 

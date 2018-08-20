@@ -6,19 +6,19 @@ define(function (require) {
         SearchByCoordView;
 
     SearchByCoordView = Backbone.View.extend({
-        model: new SearchByCoord(),
-        className: "win-body",
-        template: _.template(SearchByCoordTemplate),
         events: {
             "change #coordSystemField": "setCoordSystem",
             "click button": "setCoordinates"
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new SearchByCoord(attr);
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin": this.render,
                 "change:coordSystem": this.setFocusToCoordSystemInput
             });
         },
+        className: "win-body",
+        template: _.template(SearchByCoordTemplate),
 
         render: function () {
             var attr = this.model.toJSON();

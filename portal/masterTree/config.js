@@ -1,25 +1,6 @@
 define(function () {
 
     var config = {
-        animation: {
-            steps: 30,
-            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
-            params: {
-                REQUEST: "GetFeature",
-                SERVICE: "WFS",
-                TYPENAME: "app:mrh_kreise",
-                VERSION: "1.1.0",
-                maxFeatures: "10000"
-            },
-            featureType: "mrh_einpendler_gemeinde",
-            attrAnzahl: "anzahl_einpendler",
-            attrKreis: "wohnort_kreis",
-            minPx: 5,
-            maxPx: 30,
-            num_kreise_to_style: 4,
-            zoomlevel: 1,
-            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
-        },
         clickCounter: {},
         footer: {
             visibility: true,
@@ -50,7 +31,9 @@ define(function () {
             ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
         ],
         portalConf: "../../portal/master/",
-        postMessageUrl: "http://localhost:8080",
+        remoteInterface: {
+            postMessageUrl: "http://localhost:8080"
+        },
         proxyURL: "/cgi-bin/proxy.cgi",
         quickHelp: true,
         restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
@@ -58,11 +41,11 @@ define(function () {
         simpleMap: false,
         styleConf: "../node_modules/lgv-config/style_v2.json",
         wfsImgPath: "../node_modules/lgv-config/img",
-        zoomtofeature: {
+        zoomToFeature: {
             attribute: "flaechenid",
-            imglink: "../img/location_eventlotse.svg",
-            layerid: "4561",
-            WFSid: "4560"
+            imgLink: "../img/location_eventlotse.svg",
+            layerId: "4561",
+            wfsId: "4560"
         }
     };
 

@@ -14,12 +14,12 @@ define(function (require) {
                 Radio.trigger("Quickhelp", "showWindowHelp", "measure");
             }
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new Measure(attr);
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:type": this.render
+                "change:isCollapsed change:isCurrentWin change:geometryType": this.render
             });
         },
-        model: new Measure(),
         className: "win-body",
         render: function () {
             var attr,
@@ -41,7 +41,6 @@ define(function (require) {
 
         setGeometryType: function (evt) {
             this.model.setGeometryType(evt.target.value);
-            Radio.trigger("Map", "activateClick", "measure");
         },
 
         setUnit: function (evt) {

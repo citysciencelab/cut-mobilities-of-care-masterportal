@@ -1,7 +1,5 @@
-define(function (require) {
-
-    var Backbone = require("backbone"),
-        GFIView;
+define(function () {
+    var GFIView;
 
     GFIView = Backbone.View.extend({
         events: {

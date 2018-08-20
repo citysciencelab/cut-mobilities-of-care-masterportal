@@ -71,7 +71,6 @@ define(function (require) {
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
 
-            Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
             if (!_.isUndefined(Radio.request("ParametricURL", "getZoomToExtent"))) {
                 this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
@@ -106,9 +105,9 @@ define(function (require) {
 
         setBBox: function (bbox) {
             this.set("bbox", bbox);
-            this.BBoxToMap(this.get("bbox"));
+            this.bboxToMap(this.get("bbox"));
         },
-        BBoxToMap: function (bbox) {
+        bboxToMap: function (bbox) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }

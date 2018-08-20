@@ -1,16 +1,9 @@
 define(function (require) {
-
-    var $ = require("jquery"),
-        Animation = require("modules/tools/animation/model"),
+    var Animation = require("modules/tools/animation/model"),
         AnimationTemplate = require("text!modules/tools/animation/template.html"),
         AnimationView;
 
     AnimationView = Backbone.View.extend({
-        model: new Animation(),
-        tagName: "form",
-        id: "animation-tool",
-        className: "win-body",
-        template: _.template(AnimationTemplate),
         events: {
             "click .start": "start",
             "click .reset": "reset",
@@ -18,7 +11,8 @@ define(function (require) {
             "change #select-gemeinde": "setGemeinde",
             "change input[type=radio]": "setDirection"
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new Animation(attr);
             this.listenTo(this.model, {
                 // ändert sich der Fensterstatus wird neu gezeichnet
                 "change:isCollapsed change:isCurrentWin": this.render,
@@ -26,6 +20,10 @@ define(function (require) {
                 "change:gemeinden change:gemeinde change:direction change:animating change:pendlerLegend": this.render
             });
         },
+        tagName: "form",
+        id: "animation-tool",
+        className: "win-body",
+        template: _.template(AnimationTemplate),
         render: function () {
             var attr = this.model.toJSON();
 

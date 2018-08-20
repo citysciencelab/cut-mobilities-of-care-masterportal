@@ -2,8 +2,6 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
-        Config = require("config"),
-        $ = require("jquery"),
         MapMarkerModel;
 
     MapMarkerModel = Backbone.Model.extend({
@@ -40,7 +38,6 @@ define(function (require) {
             if (_.has(searchConf, "zoomLevel")) {
                 this.setZoomLevel(searchConf.zoomLevel);
             }
-            this.askForMarkers();
         },
 
         getFeature: function () {
@@ -115,41 +112,6 @@ define(function (require) {
             }
 
             return wkt;
-        },
-
-        // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der pro Feature-BBox
-        askForMarkers: function () {
-            var centers,
-                imglink;
-
-            if (_.has(Config, "zoomtofeature")) {
-                centers = Radio.request("ZoomToFeature", "getCenterList");
-                imglink = Config.zoomtofeature.imglink;
-
-                _.each(centers, function (center, i) {
-                    var id = "featureMarker" + i,
-                        marker,
-                        markers;
-
-                    // lokaler Pfad zum IMG-Ordner ist anders
-                    $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Radio.request("Util", "getPath", imglink) + "'></div>");
-
-                    marker = new ol.Overlay({
-                        id: id,
-                        offset: [-12, 0],
-                        positioning: "bottom-center",
-                        element: document.getElementById(id),
-                        stopEvent: false
-                    });
-
-                    marker.setPosition(center);
-                    markers = this.get("markers");
-                    markers.push(marker);
-                    this.setMarkers(markers);
-                    Radio.trigger("Map", "addOverlay", marker);
-                }, this);
-                Radio.trigger("ZoomToFeature", "zoomtofeatures");
-            }
         },
 
         /**
