@@ -24,6 +24,8 @@ define(function (require) {
             isScaleSelectedManually: false,
             // true if the legend is to be printed
             isLegendSelected: true,
+            // true if the current layout supports meta data
+            isMetaDataAvailable: false,
             // the id from the rest services json for the plot app
             plotServiceId: undefined,
             deaktivateGFI: false,
@@ -76,7 +78,8 @@ define(function (require) {
         parseMapfishCapabilities: function (response) {
             this.setLayoutList(response.layouts);
             this.setCurrentLayout(response.layouts[0]);
-            // this.setIsLegendAvailable(this.isLegendAvailable(response.layouts[0]));
+            console.log(this.isMetaDataAvailable());
+            this.setIsMetaDataAvailable(this.isMetaDataAvailable());
             this.setFormatList(response.formats);
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
             this.togglePostcomposeListener(this, true);
@@ -317,6 +320,18 @@ define(function (require) {
         },
 
         /**
+         * checks if the current layout supports meta data
+         * @returns {boolean} true if the current layout supports otherwise false
+         */
+        isMetaDataAvailable: function () {
+            var dataSource = this.getAttributeInLayoutByName("datasource");
+
+            return dataSource.clientParams.attributes.some(function (attribute) {
+                return attribute.name.search("meta") !== -1;
+            });
+        },
+
+        /**
          * sorts an array numerically and ascending
          * @param {number} a - first value
          * @param {number} b - next value
@@ -391,6 +406,14 @@ define(function (require) {
          */
         setIsLegendSelected: function (value) {
             this.set("isLegendSelected", value);
+        },
+
+        /**
+         * @param {boolean} value - true if the current layout supports meta data
+         * @returns {void}
+         */
+        setIsMetaDataAvailable: function (value) {
+            this.set("isMetaDataAvailable", value);
         },
 
         /**
