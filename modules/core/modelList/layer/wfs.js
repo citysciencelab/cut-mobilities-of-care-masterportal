@@ -53,7 +53,7 @@ define(function (require) {
                 id: this.get("id")
             }));
 
-            this.updateData();
+            this.updateSource();
         },
 
         /**
@@ -72,7 +72,12 @@ define(function (require) {
             });
         },
 
-        updateData: function () {
+        /**
+         * Lädt den WFS neu
+         * @returns {void}
+         */
+        updateSource: function () {
+            console.log(123);
             var params = {
                     REQUEST: "GetFeature",
                     SERVICE: "WFS",
@@ -92,30 +97,33 @@ define(function (require) {
                 async: true,
                 type: "GET",
                 context: this,
-                success: function (data) {
-                    Radio.trigger("Util", "hideLoader");
-                    wfsReader = new ol.format.WFS({
-                        featureNS: this.get("featureNS")
-                    });
-                    features = wfsReader.readFeatures(data);
-                    isClustered = Boolean(this.has("clusterDistance"));
-
-                    // nur die Features verwenden die eine geometrie haben aufgefallen bei KITAs am 05.01.2018 (JW)
-                    features = _.filter(features, function (feature) {
-                        return !_.isUndefined(feature.getGeometry());
-                    });
-                    this.get("layerSource").addFeatures(features);
-                    this.set("loadend", "ready");
-                    Radio.trigger("WFSLayer", "featuresLoaded", this.get("id"), features);
-                    this.styling(isClustered);
-                    this.get("layer").setStyle(this.get("style"));
-                    this.featuresLoaded(features);
-                },
+                success: this.handleResponse,
                 error: function () {
                     Radio.trigger("Util", "hideLoader");
                 }
             });
         },
+
+        handleResponse: function (data) {
+            Radio.trigger("Util", "hideLoader");
+            wfsReader = new ol.format.WFS({
+                featureNS: this.get("featureNS")
+            });
+            features = wfsReader.readFeatures(data);
+            isClustered = Boolean(this.has("clusterDistance"));
+
+            // nur die Features verwenden die eine geometrie haben aufgefallen bei KITAs am 05.01.2018 (JW)
+            features = _.filter(features, function (feature) {
+                return !_.isUndefined(feature.getGeometry());
+            });
+            this.get("layerSource").addFeatures(features);
+            this.set("loadend", "ready");
+            Radio.trigger("WFSLayer", "featuresLoaded", this.get("id"), features);
+            this.styling(isClustered);
+            this.get("layer").setStyle(this.get("style"));
+            this.featuresLoaded(features);
+        },
+
         styling: function (isClustered) {
             var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
