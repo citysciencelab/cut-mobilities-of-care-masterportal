@@ -26,17 +26,17 @@ define(function (require) {
                 "toggleLegendWin": this.toggle
             });
 
-            this.render();
+            this.listenTo(Radio.channel("Map"), {
+                "updateSize": this.updateLegendSize
+            });
 
             Radio.trigger("Autostart", "initializedModul", "legend");
+
+            this.model.setLayerList();
 
             if (this.model.get("visible")) {
                 this.toggle();
             }
-
-            this.listenTo(Radio.channel("Map"), {
-                "updateSize": this.updateLegendSize
-            });
         },
         className: "legend-win",
         template: _.template(LegendTemplate),

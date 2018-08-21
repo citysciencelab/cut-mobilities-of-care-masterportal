@@ -19,7 +19,7 @@ define(function (require) {
                 "toggleLegendWin": this.toggle
             });
 
-            this.render();
+            this.model.setLayerList();
 
             if (this.model.get("visible")) {
                 this.toggle();
