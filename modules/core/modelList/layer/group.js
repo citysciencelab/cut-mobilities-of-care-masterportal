@@ -78,6 +78,19 @@ define(function (require) {
         },
 
         /**
+         * Startet updateSource() an allen layerSources, an denen es vorhanden ist.
+         * Nicht alle Layertypen unterstützen updateSource().
+         * @returns {void}
+         */
+        updateSource: function () {
+            _.each(this.get("layerSource"), function (layerSource) {
+                if (typeof layerSource.updateSource !== "undefined") {
+                    layerSource.updateSource();
+                }
+            }, this);
+        },
+
+        /**
          * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
          * @returns {void}
          */

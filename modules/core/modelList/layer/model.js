@@ -135,7 +135,7 @@ define(function (require) {
          * @returns {void}
          */
         intervalHandler: function () {
-            console.log(this);
+            this.updateSource();
         },
 
         setLayerInfoChecked: function (value) {

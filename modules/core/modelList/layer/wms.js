@@ -221,6 +221,14 @@ define(function (require) {
             this.get("layer").getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
         },
 
+        /**
+         * Lädt den WMS neu
+         * @returns {void}
+         */
+        updateSource: function () {
+            this.get("layer").getSource().updateParams({zufall: Math.random()});
+        },
+
         setInfoFormat: function (value) {
             this.set("infoFormat", value);
         },
