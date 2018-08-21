@@ -6,8 +6,6 @@ define(function (require) {
 
     Layer = Item.extend({
         defaults: {
-            // Zeitspanne zwischen Aktualisierungen der Daten
-            autorefresh: 0,
             // channel des Layer-Radios
             channel: Radio.channel("Layer"),
             // ist der Layer (ol.layer) in der Karte sichtbar
@@ -102,6 +100,7 @@ define(function (require) {
                     Radio.trigger("ClickCounter", "layerVisibleChanged");
                     Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"));
                     this.toggleLayerOnMap();
+                    this.toggleWindowsInterval();
                     this.toggleAttributionsInterval();
                 },
                 "change:transparency": this.updateLayerTransparency
@@ -120,6 +119,23 @@ define(function (require) {
                     this.checkForScale(options);
                 }
             });
+        },
+
+        /**
+         * Setter des Windows Intervals. Bindet an this.
+         * @param {function} func                Funktion, die in this ausgeführt werden soll
+         * @param {integer}  autorefreshInterval Intervall in ms
+         */
+        setWindowsInterval: function (func, autorefreshInterval) {
+            this.set("windowsInterval", setInterval(func.bind(this), autorefreshInterval));
+        },
+
+        /**
+         * Steuert die Handlungen in einem Layerinterval
+         * @returns {void}
+         */
+        intervalHandler: function () {
+            console.log(this);
         },
 
         setLayerInfoChecked: function (value) {
@@ -201,6 +217,27 @@ define(function (require) {
             }
             else {
                 this.setIsVisibleInMap(true);
+            }
+        },
+
+        /**
+         * Toggelt anhand der Layersichtbarkeit das windows Interval
+         * @returns {void}
+         */
+        toggleWindowsInterval: function () {
+            var wi = this.get("windowsInterval"),
+                isVisible = this.get("isVisibleInMap"),
+                autorefreshInterval = this.get("autorefreshInterval");
+
+            if (isVisible === true) {
+                if (autorefreshInterval > 0) {
+                    this.setWindowsInterval(this.intervalHandler, autorefreshInterval);
+                }
+            }
+            else {
+                if (!_.isUndefined(this.get("windowsInterval"))) {
+                    clearInterval(this.get("windowsInterval"));
+                }
             }
         },
 
