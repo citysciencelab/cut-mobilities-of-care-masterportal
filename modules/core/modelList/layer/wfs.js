@@ -77,7 +77,6 @@ define(function (require) {
          * @returns {void}
          */
         updateSource: function () {
-            console.log(123);
             var params = {
                     REQUEST: "GetFeature",
                     SERVICE: "WFS",
