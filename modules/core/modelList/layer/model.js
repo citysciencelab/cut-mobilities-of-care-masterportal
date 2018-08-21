@@ -44,7 +44,7 @@ define(function (require) {
         },
 
         featuresLoaded: function (features) {
-            Radio.trigger("Layer", "featuresLoaded", this.get("id"), features);
+            Radio.trigger(this.get("channel"), "featuresLoaded", this.get("id"), features);
         },
 
         /**
@@ -107,7 +107,7 @@ define(function (require) {
         },
 
         /**
-         * Hier wird die Schnitttstelle zur Interaktion mit der MapView registriert.
+         * Hier wird die Schnittstelle zur Interaktion mit der MapView registriert.
          * @listens Radio:MapView~changedOptions
          * @returns {void}
          */
