@@ -169,8 +169,8 @@ insert_final_newline = true
 
 ### Konfigurations-Änderungen
 Werden Änderungen im Code durchgeführt wodurch sich Konfigurationsparameter ändern, so ist sicherzustellen, dass der Code auch abwärts kompatibel ist.
-An den entsprechenden Funktionen im Code werden immer deprecated tags ("*@deprecated in version [nextMajorVersion]") mit sprechender Beschreibung versehen
-Falls dies nicht ausreicht werden innerhalb der Funktion weitere Kommentare mit // @deprecated in version [nextMajorVersion] versehen.
+An den entsprechenden Funktionen im Code werden immer deprecated tags ("*@deprecated in version [nextMajorVersion]") mit sprechender Beschreibung versehen.
+Falls dies nicht ausreicht, werden innerhalb der Funktion weitere Kommentare mit // @deprecated in version [nextMajorVersion] versehen.
 
 Beispiel "deprecated" Funktion:
 ```javascript
@@ -201,4 +201,4 @@ deprecatedFuntion2: function (config) {
     }
 }
 ```
-Diese "deprecated" Einträge werden beim Bauen der nächsten Major-Version vom LGV manuell ausgewertet und ggf entfernt.
+Diese "@deprecated" Einträge werden beim Bauen der nächsten Major-Version vom LGV manuell ausgewertet und ggf entfernt.
