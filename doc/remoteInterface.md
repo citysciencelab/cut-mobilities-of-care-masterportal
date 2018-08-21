@@ -76,6 +76,7 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"showPositionByExtent": [xMin, yMin, xMax, yMax]}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |showPositionByExtent|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
@@ -89,9 +90,11 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"showPositionByExtentNoScroll": [xMin, yMin, xMax, yMax]}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |showPositionByExtentNoScroll|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
+
 ### transactFeatureById
 Wird diese Funktion angetriggered, so wird ein Feature eines gegebenen WFST-Layers modifiziert.
 
@@ -101,12 +104,14 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"transactFeatureById": "id", "layerId": layerId, "attributes": attrs, "mode": "update"}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |transactFeaturesById|String|Id des Features.|
 |layerId|String|Id des Layers.|
 |attributes|String|JSON mit den Attributes des Features.|
 |mode|String|auszuführende Operation. Momentan nur "update" implementiert.|
+
 ### zoomToExtent
 Wird diese Funktion angetriggered, so wird die Karte auf den übergebenen Extent gezoomt.
 
@@ -116,9 +121,11 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"zoomToExtent": [xmin, ymin, xmax, ymax]}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |zoomToExtent|Array|Extent.|
+
 ### highlightfeature
 Wird diese Funktion angetriggered, so wird ein Vektor-Feature in der Karte gehighlightet.
 
@@ -128,9 +135,11 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"highlightfeature": "layerid,featureId"}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |highlightfeature|String|LayerId und FeatureId in einem String per Komma separiert|
+
 ### hidePosition
 Wird diese Funktion angetriggered, so wird der Marker versteckt.
 
@@ -142,6 +151,7 @@ iframe.postMessage("hidePosition", domain);
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |hidePosition|String|"hidePosition". Dadurch wird der Marker versteckt.|
+
 ### initDraw
 Wird diese Funktion angetriggered, wird das Zeichenmodul (ohne Oberfläche) mit den eingestellten Parametern aktiviert.
 
@@ -150,7 +160,7 @@ Wird diese Funktion angetriggered, wird das Zeichenmodul (ohne Oberfläche) mit 
 var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"initDraw": "function identifier", "drawType": "Polygon", "color": "128,128,128", "opacity": 0.5, "maxFeatures": "1", "initialJSON": null}, domain);
 ```
-Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |initDraw|String|Identifikation der Funktion.|
@@ -159,6 +169,7 @@ Attribute des JSON-Objektes:
 |opacity|Float|Transparenz für Flächenfüllung.|
 |maxFeatures|String|Anzahl der maximal zu zeichnenden Features.|
 |initialJSON|String|JSON mit initial auf dem Zeichen-Layer darzustellenden Features Features.|
+
 ### deleteDrawnFeatures
 Wird diese Funktion angetriggered, werden alle auf dem Zeichenlayer dargestellte Features gelöscht.
 
@@ -167,10 +178,11 @@ Wird diese Funktion angetriggered, werden alle auf dem Zeichenlayer dargestellte
 var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage("deleteDrawnFeatures", domain);
 ```
-Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |deleteDrawnFeatures|String|"deleteDrawnFeatures". Dadurch werden alle Features gelöscht.|
+
 ### editDrawnFeatures
 Wird diese Funktion angetriggered, wird die Editier-Möglichkeit für gezeichnete Features aktiviert.
 
@@ -179,10 +191,11 @@ Wird diese Funktion angetriggered, wird die Editier-Möglichkeit für gezeichnet
 var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage("editDrawnFeatures", domain);
 ```
-Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |editDrawnFeatures|String|"editDrawnFeatures". Dadurch können Features editiert werden.|
+
 ### cancelDraw
 Wird diese Funktion angetriggered, wird die Zeichen-Funktionalität wieder deaktiviert.
 
@@ -191,10 +204,11 @@ Wird diese Funktion angetriggered, wird die Zeichen-Funktionalität wieder deakt
 var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage("cancelDraw", domain);
 ```
-Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |cancelDraw|String|"cancelDraw". Dadurch wird die Zeichen-Funktionalität deaktiviert.|
+
 ### downloadDrawnFeatures
 Wird diese Funktion angetriggered, werden die gezeichneten Features per PostMessage an den aufrufenden Parent geschickt.
 Es wird eine PostMessage mit ID "downloadViaRemoteInterface" generiert. Diese beinhaltet im Parameter "result" eine GeoJSON mit den gezeichneten Features.
@@ -205,7 +219,7 @@ Diese PostMessage muss im aufrufenden Programm in Empfang genommen und ausgewert
 var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage("downloadDrawnFeatures", domain);
 ```
-Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |downloadDrawnFeatures|String|"downloadDrawnFeatures". Dadurch wird eine PostMessage mit ID "downloadViaRemoteInterface" generiert.|
