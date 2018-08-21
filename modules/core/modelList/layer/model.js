@@ -40,6 +40,7 @@ define(function (require) {
                 this.prepareLayerObject();
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
                 this.setIsVisibleInMap(this.get("isSelected"));
+                this.toggleWindowsInterval();
             }
         },
 
