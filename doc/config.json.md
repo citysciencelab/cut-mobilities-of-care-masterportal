@@ -1367,7 +1367,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |----|-------------|---|-------|------------|
 |displayInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden?|
 |gfiTheme|nein|String|Wert aus der [services.json](services.json.md) sonst *"default"*|Style für das GFI-Popover *(„default“* / *„table“*).|
-|id|ja|Array [String] oder String||ID aus [services.json](services.json.md).|
+|id|ja|Array [String] oder Array [id] oder String||Siehe [Eingabe von ID](#markdown-header-layerid).|
 |layerAttribution|nein|HTML-String|Wert aus der [services.json](services.json.md)|Zusatzinformationen zum Layer, die in der Karte angezeigt werden sollen. Voraussetzung Control [attributions](#markdown-header-portalconfigcontrols) ist aktiviert.|
 |legendURL|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|URL zur Legende|
 |maxScale|nein|String|Wert aus der [services.json](services.json.md)|Höchste Maßstabszahl, bei der ein Layer angezeigt wird.|
@@ -1451,5 +1451,61 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
     }
 ]
 ```
+### Layer.id ###
+Die Layer-IDs können auf drei unterschiedliche Arten definiert werden:
 
+**Beispiel als String:**
+
+In diesem Fall wird die genannte ID in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer.
+
+```
+#!json
+
+{
+  "id": "453"
+}
+```
+
+**Beispiel als Array of String:**
+
+In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer. Alle anderen id im Array werden der layerListe des Dienstes hinzugefügt. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Dies ist nur bei WMS möglich und sinnvoll, wenn die Dienst-URL des ersten Eintrags auch die weiteren Layer ausliefert.
+
+```
+#!json
+
+{
+  "id":["538","539","540"]
+}
+```
+
+**Beispiel als Array of Objects:**
+
+In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus unterschiedlichen Layern bestehen, bspw. auch gemischt aus WMS und WFS. Ein Gruppenlayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. 
+
+- Im Falle eines GFI wird jeder Layer einzeln abgefragt. 
+- Legenden werden aus allen childLayern einzeln erstellt und gemeinsam dargestellt. 
+- Die Layerinformationen werden gekürzt (nur erster Layer) dargestellt.
+
+```
+#!json
+
+{
+  "id":[
+    {
+      "id": "947"
+    },
+    {
+      "id": "946"
+    },
+    {
+      "id":"2714",
+      "gfiTheme":"reisezeiten",
+      "styleId":"2119"
+    },
+    {
+      "id": "1562"
+    }
+  ]
+}
+```
 >Zurück zur [Dokumentation Masterportal](doc.md).

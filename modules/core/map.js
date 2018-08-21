@@ -28,6 +28,7 @@ define(function (require) {
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
                 "getSize": this.getSize,
                 "getPixelFromCoordinate": this.getPixelFromCoordinate,
+                "getFeaturesAtPixel": this.getFeaturesAtPixel,
                 "getMap": function () {
                     return this.get("map");
                 }
@@ -171,6 +172,16 @@ define(function (require) {
          */
         hasFeatureAtPixel: function (pixel) {
             return this.get("map").hasFeatureAtPixel(pixel);
+        },
+
+        /**
+         * Rückgabe der Features an einer Pixelkoordinate
+         * @param  {pixel} pixel    Pixelkoordinate
+         * @param  {object} options layerDefinition und pixelTolerance
+         * @return {features[]}     Array der Features
+         */
+        getFeaturesAtPixel: function (pixel, options) {
+            return this.get("map").getFeaturesAtPixel(pixel, options);
         },
 
         /**

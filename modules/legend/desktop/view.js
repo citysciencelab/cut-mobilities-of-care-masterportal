@@ -1,11 +1,10 @@
 define(function (require) {
     var $ = require("jquery"),
         LegendTemplate = require("text!modules/legend/desktop/template.html"),
+        ContentTemplate = require("text!modules/legend/content.html"),
         LegendView;
 
     LegendView = Backbone.View.extend({
-        className: "legend-win",
-        template: _.template(LegendTemplate),
         events: {
             "click .glyphicon-remove": "toggle"
         },
@@ -27,23 +26,42 @@ define(function (require) {
                 "toggleLegendWin": this.toggle
             });
 
-            this.render();
+            this.listenTo(Radio.channel("Map"), {
+                "updateSize": this.updateLegendSize
+            });
 
             Radio.trigger("Autostart", "initializedModul", "legend");
+
+            this.model.setLayerList();
 
             if (this.model.get("visible")) {
                 this.toggle();
             }
-
-            this.listenTo(Radio.channel("Map"), {
-                "updateSize": this.updateLegendSize
-            });
         },
-
+        className: "legend-win",
+        template: _.template(LegendTemplate),
+        contentTemplate: _.template(ContentTemplate),
         paramsChanged: function () {
             Radio.trigger("Layer", "updateLayerInfo", this.model.get("paramsStyleWMS").styleWMSName);
+            this.addContentHTML();
             this.render();
         },
+
+        /**
+         * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
+         * Dieses wird im template benötigt.
+         * @returns {void}
+         */
+        addContentHTML: function () {
+            var legendParams = this.model.get("legendParams");
+
+            _.each(legendParams, function (legendDefinition) {
+                _.each(legendDefinition.legend, function (legend) {
+                    legend.html = this.contentTemplate(legend);
+                }, this);
+            }, this);
+        },
+
         render: function () {
             var attr = this.model.toJSON();
 

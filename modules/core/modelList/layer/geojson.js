@@ -7,7 +7,9 @@ define(function (require) {
 
     GeoJSONLayer = Layer.extend({
         initialize: function () {
-            this.superInitialize();
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
+            }
             this.toggleAutoReload();
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
@@ -187,6 +189,20 @@ define(function (require) {
                 else {
                     clearInterval(this.interval);
                 }
+            }
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
             }
         },
 
