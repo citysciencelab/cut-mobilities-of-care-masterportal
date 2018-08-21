@@ -22,8 +22,8 @@ define(function (require) {
             title: "",
             // is scale selected by the user over the view
             isScaleSelectedManually: false,
-            // does the current layout have a legend
-            isLegendAvailable: true,
+            // true if the legend is to be printed
+            isLegendSelected: true,
             // the id from the rest services json for the plot app
             plotServiceId: undefined,
             deaktivateGFI: false,
@@ -76,7 +76,7 @@ define(function (require) {
         parseMapfishCapabilities: function (response) {
             this.setLayoutList(response.layouts);
             this.setCurrentLayout(response.layouts[0]);
-            this.setIsLegendAvailable(this.isLegendAvailable(response.layouts[0]));
+            // this.setIsLegendAvailable(this.isLegendAvailable(response.layouts[0]));
             this.setFormatList(response.formats);
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
             this.togglePostcomposeListener(this, true);
@@ -111,17 +111,6 @@ define(function (require) {
             };
 
             this.createPrintJob(this.get("printAppId"), JSON.stringify(t), this.get("currentFormat"));
-        },
-
-        /**
-         * checks if the current layout has a legend
-         * @param {object} layout - current print layout
-         * @returns {boolean} true if the current layout has a legend otherwise false
-         */
-        isLegendAvailable: function (layout) {
-            return layout.attributes.some(function (attribute) {
-                return attribute.name === "legend";
-            });
         },
 
         /**
@@ -397,11 +386,11 @@ define(function (require) {
         },
 
         /**
-         * @param {boolean} value - true if the current layout has a legend
+         * @param {boolean} value - true if the legend is to be printed
          * @returns {void}
          */
-        setIsLegendAvailable: function (value) {
-            this.set("isLegendAvailable", value);
+        setIsLegendSelected: function (value) {
+            this.set("isLegendSelected", value);
         },
 
         /**

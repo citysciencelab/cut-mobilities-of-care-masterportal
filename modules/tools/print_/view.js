@@ -8,6 +8,7 @@ define(function (require) {
             "change #printFormat": "setCurrentFormat",
             "change #printScale": "setCurrentScale",
             "keyup input[type='text']": "setTitle",
+            "click #printLegend": "setIsLegendSelected",
             "click button": "print"
         },
         initialize: function () {
@@ -38,7 +39,6 @@ define(function (require) {
             var newLayout = this.model.getLayoutByName(this.model.get("layoutList"), evt.target.value);
 
             this.model.setCurrentLayout(newLayout);
-            this.model.setIsLegendAvailable(this.model.isLegendAvailable(newLayout));
             this.model.setIsScaleSelectedManually(false);
             Radio.trigger("Map", "render");
         },
@@ -58,6 +58,10 @@ define(function (require) {
 
         setTitle: function (evt) {
             this.model.setTitle(evt.target.value);
+        },
+
+        setIsLegendSelected: function (evt) {
+            this.model.setIsLegendSelected(evt.target.checked);
         },
 
         print: function () {
