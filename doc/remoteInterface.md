@@ -142,6 +142,73 @@ iframe.postMessage("hidePosition", domain);
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |hidePosition|String|"hidePosition". Dadurch wird der Marker versteckt.|
+### initDraw
+Wird diese Funktion angetriggered, wird das Zeichenmodul (ohne Oberfläche) mit den eingestellten Parametern aktiviert.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage({"initDraw": "function identifier", "drawType": "Polygon", "color": "128,128,128", "opacity": 0.5, "maxFeatures": "1", "initialJSON": null}, domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|initDraw|String|Identifikation der Funktion.|
+|drawType|String|Art der zu zeichnenden Geometrie {"Point", "LineString", "Polygon", "Circle"}.|
+|color|String|Farbe, mit der gezeichnet werden soll.|
+|opacity|Float|Transparenz für Flächenfüllung.|
+|maxFeatures|String|Anzahl der maximal zu zeichnenden Features.|
+|initialJSON|String|JSON mit initial auf dem Zeichen-Layer darzustellenden Features Features.|
+### deleteDrawnFeatures
+Wird diese Funktion angetriggered, werden alle auf dem Zeichenlayer dargestellte Features gelöscht.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage("deleteDrawnFeatures", domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|deleteDrawnFeatures|String|"deleteDrawnFeatures". Dadurch werden alle Features gelöscht.|
+### editDrawnFeatures
+Wird diese Funktion angetriggered, wird die Editier-Möglichkeit für gezeichnete Features aktiviert.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage("editDrawnFeatures", domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|editDrawnFeatures|String|"editDrawnFeatures". Dadurch können Features editiert werden.|
+### cancelDraw
+Wird diese Funktion angetriggered, wird die Zeichen-Funktionalität wieder deaktiviert.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage("cancelDraw", domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|cancelDraw|String|"cancelDraw". Dadurch wird die Zeichen-Funktionalität deaktiviert.|
+### downloadDrawnFeatures
+Wird diese Funktion angetriggered, werden die gezeichneten Features per PostMessage an den aufrufenden Parent geschickt.
+Es wird eine PostMessage mit ID "downloadViaRemoteInterface" generiert. Diese beinhaltet im Parameter "result" eine GeoJSON mit den gezeichneten Features.
+Diese PostMessage muss im aufrufenden Programm in Empfang genommen und ausgewertet werden.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage("downloadDrawnFeatures", domain);
+```
+Attribute des JSON-Objektes:
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|downloadDrawnFeatures|String|"downloadDrawnFeatures". Dadurch wird eine PostMessage mit ID "downloadViaRemoteInterface" generiert.|
 
 # **Karte**
 

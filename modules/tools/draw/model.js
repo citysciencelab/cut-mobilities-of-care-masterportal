@@ -40,6 +40,8 @@ define(function (require) {
                 "initWithoutGUI": this.inititalizeWithoutGUI,
                 "deleteAllFeatures": this.deleteFeatures,
                 "editWithoutGUI": this.editFeaturesWithoutGUI,
+                "cancelDrawWithoutGUI": this.cancelDrawWithoutGUI,
+                "downloadViaRemoteInterface": this.downloadViaRemoteInterface
 
             }, this);
 
@@ -57,9 +59,13 @@ define(function (require) {
          * @param {String} color - Farbe, in rgb (default: "55, 126, 184")
          * @param {Float} opacity - Transparenz (default: 1.0)
          * @param {Integer} maxFeatures - wie viele FEatures dürfen maximal auf dem Layer gezeichnet werden (default: unbegrenzt)
+         * @param {String} initialJSON - GeoJSON mit initial auf den Layer zu zeichnenden Features (z.B. zum Editieren)
          * @returns {String} GeoJSON aller Features als String
          */
-        inititalizeWithoutGUI: function (drawType, color, opacity, maxFeatures) {
+        inititalizeWithoutGUI: function (drawType, color, opacity, maxFeatures, initialJSON) {
+            var featJSON;
+            const format = new ol.format.GeoJSON();
+
             if ($.inArray(drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
                 this.set("isCurrentWin", true);
                 this.setDrawType(drawType, drawType + " zeichnen");
@@ -70,6 +76,22 @@ define(function (require) {
                     this.set("opacity", opacity);
                 }
                 this.createDrawInteraction(this.get("drawType"), this.get("layer"), maxFeatures);
+
+                if (initialJSON) {
+                    try {
+                        featJSON = format.readFeatures(initialJSON);
+                        if (featJSON.length > 0) {
+                            this.get("layer").setStyle(this.getStyle(drawType));
+                            this.get("layer").getSource().addFeatures(featJSON);
+                        }
+                    }
+                    catch (e) {
+                        // das übergebene JSON war nicht gültig
+                        Radio.trigger("Alert", "alert", "Die übergebene Geometrie konnte nicht dargestellt werden.");
+                    }
+                }
+                // GFI ausschalten beim Zeichnen
+                Radio.trigger("Tool", "activatedTool", "draw", true);
             }
         },
 
@@ -95,6 +117,29 @@ define(function (require) {
 
             return JSON.stringify(featuresKonverted);
         },
+        /**
+         * sendet das erzeugten GeoJSON an das RemoteInterface zur Kommunikation mit einem iframe
+         * @returns {void}
+         */
+        downloadViaRemoteInterface: function () {
+            var result = this.downloadFeaturesWithoutGUI();
+
+            Radio.trigger("RemoteInterface", "postMessage", {
+                "downloadViaRemoteInterface": "function identifier",
+                "success": true,
+                "response": result
+            });
+        },
+        /**
+         * beendet das Zeichnen via Radio
+         * @returns {void}
+         */
+        cancelDrawWithoutGUI: function () {
+            this.cancelEverything();
+            // GFI wieder einschalten nach dem Zeichnen
+            Radio.trigger("Tool", "activatedTool", "gfi", false);
+        },
+
         setStatus: function (args) {
             if (args[2].get("id") === "draw" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
@@ -102,11 +147,18 @@ define(function (require) {
                 this.createDrawInteraction(this.get("drawType"), this.get("layer"));
             }
             else {
-                this.set("isCurrentWin", false);
-                Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
-                Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
-                Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
+                this.cancelEverything();
             }
+        },
+        /**
+         * beendet das Zeichnen
+         * @returns {void}
+         */
+        cancelEverything: function () {
+            this.set("isCurrentWin", false);
+            Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
+            Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
+            Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
         },
 
         /**
@@ -140,7 +192,7 @@ define(function (require) {
                 layer.getSource().removeFeature(evt.selected[0]);
                 // remove feature from interaction
                 this.getFeatures().clear();
-            });
+            }, this);
             this.setSelectInteraction(selectInteraction);
         },
 
@@ -167,7 +219,7 @@ define(function (require) {
             }, this);
 
             if (maxFeatures && maxFeatures > 0) {
-                this.get("drawInteraction").on("drawstart", function (evt) {
+                this.get("drawInteraction").on("drawstart", function () {
                     const count = layer.getSource().getFeatures().length;
                     let text = "";
 

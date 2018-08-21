@@ -58,6 +58,21 @@ define(function (require) {
             else if (event.data === "hidePosition") {
                 Radio.trigger("MapMarker", "hideMarker");
             }
+            else if (event.data.hasOwnProperty("initDraw")) {
+                Radio.trigger("Draw", "initWithoutGUI", event.data.drawType, event.data.color, event.data.opacity, event.data.maxFeatures, event.data.initialJSON);
+            }
+            else if (event.data === "deleteDrawnFeatures") {
+                Radio.trigger("Draw", "deleteAllFeatures");
+            }
+            else if (event.data === "editDrawnFeatures") {
+                Radio.trigger("Draw", "editWithoutGUI");
+            }
+            else if (event.data === "cancelDraw") {
+                Radio.trigger("Draw", "cancelDrawWithoutGUI");
+            }
+            else if (event.data === "downloadDrawnFeatures") {
+                Radio.trigger("Draw", "downloadViaRemoteInterface");
+            }
         },
         /**
          * sends Message to remotehost via postMessage Api

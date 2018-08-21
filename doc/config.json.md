@@ -523,6 +523,7 @@ Ermöglicht die Ermittlung von Koordinaten in allen definierten Koordinatensyste
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
+|isVisibleInMenu|nein|Boolean|true|Gibt an, ob das Zeichnen Tool im Menü eingetragen sein soll. Wenn false, dann ist es nur über Radio ansprechbar.|
 
 ******
 ******

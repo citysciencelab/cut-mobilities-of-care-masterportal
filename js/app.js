@@ -171,9 +171,16 @@ define("app", function (require) {
                     break;
                 }
                 case "draw": {
-                    require(["modules/tools/draw/view"], function (DrawView) {
-                        new DrawView();
-                    });
+                    if (tool.isVisibleInMenu === false) {
+                        require(["modules/tools/draw/model"], function (DrawTool) {
+                            new DrawTool();
+                        });
+                    }
+                    else {
+                        require(["modules/tools/draw/view"], function (DrawView) {
+                            new DrawView();
+                        });
+                    }
                     break;
                 }
                 case "print": {
