@@ -1468,7 +1468,7 @@ In diesem Fall wird die genannte ID in der [services.json](services.json.md) ges
 
 **Beispiel als Array of String:**
 
-In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer. Alle anderen id im Array werden der layerListe des Dienstes hinzugefügt. Dies dient der gleichzeitigen Abgrage aller Layer in einem Request. Dies ist nur bei WMS möglich und sinnvoll, wenn die Dienst-URL des ersten Eintrags auch die weiteren Layer ausliefert.
+In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer. Alle anderen id im Array werden der layerListe des Dienstes hinzugefügt. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Dies ist nur bei WMS möglich und sinnvoll, wenn die Dienst-URL des ersten Eintrags auch die weiteren Layer ausliefert.
 
 ```
 #!json
