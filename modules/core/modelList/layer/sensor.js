@@ -32,6 +32,9 @@ define(function (require) {
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
+            if (this.has("clusterDistance")) {
+                this.createClusterLayerSource();
+            }
         },
 
         /**
