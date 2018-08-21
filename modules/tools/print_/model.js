@@ -8,16 +8,20 @@ define(function (require) {
         defaults: _.extend({}, Tool.prototype.defaults, {
             // the id from the rest services json for the mapfish app
             mapfishServiceId: undefined,
-            // mapfishServiceUrl
             // the identifier of one of the available mapfish print configurations
             printAppId: "default",
-            // title for the printout
-            title: "",
+            // available layouts of the specified print configuration
             layoutList: [],
             currentLayout: undefined,
+            // available formats of the specified print configuration
             formatList: [],
             currentFormat: "pdf",
+            // current print scale
             currentScale: undefined,
+            // title for the report
+            title: "",
+            // is scale selected by the user over the view
+            isScaleSelectedManually: false,
             // does the current layout have a legend
             isLegendAvailable: true,
             // the id from the rest services json for the plot app
@@ -41,8 +45,8 @@ define(function (require) {
             });
 
             this.listenTo(Radio.channel("MapView"), {
-                "changedOptions": function (options) {
-                    // this.setCurrentScale(options.scale);
+                "changedOptions": function () {
+                    this.setIsScaleSelectedManually(false);
                 }
             });
         },
@@ -175,13 +179,20 @@ define(function (require) {
          * @returns {void}
          */
         createPrintMask: function (evt) {
-            var frameState = evt.frameState, // representing the current render frame state
-                layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo,
-                context = evt.context, // CanvasRenderingContext2D
-                scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, [layoutMapInfo.width, layoutMapInfo.height], layoutMapInfo.scales.sort(this.sortNumbers));
+            var frameState = evt.frameState,
+                context = evt.context,
+                scale;
 
+            // scale was selected by the user over the view
+            if (this.get("isScaleSelectedManually")) {
+                scale = this.get("currentScale");
+            }
+            else {
+                scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), this.getPrintMapScales());
+                this.setCurrentScale(scale);
+            }
             this.drawMask(frameState, context);
-            this.drawPrintPage(frameState.size, frameState.viewState.resolution, scale, context);
+            this.drawPrintPage(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), scale, context);
             context.fillStyle = "rgba(0, 5, 25, 0.55)";
             context.fill();
         },
@@ -210,16 +221,15 @@ define(function (require) {
          * draws the print page
          * @param {ol.Size} mapSize - size of the map in px
          * @param {number} resolution - resolution of the map in m/px
+         * @param {number} printMapSize - size of the map on the report in dots
          * @param {number} scale - the optimal print scale
          * @param {CanvasRenderingContext2D} context - context of the postcompose event
          * @returns {void}
          */
-        drawPrintPage: function (mapSize, resolution, scale, context) {
+        drawPrintPage: function (mapSize, resolution, printMapSize, scale, context) {
             var center = [mapSize[0] / 2, mapSize[1] / 2],
-                printMapWidth = this.getAttributeInLayoutByName("map").clientInfo.width,
-                printMapHeight = this.getAttributeInLayoutByName("map").clientInfo.height,
-                boundWidth = printMapWidth / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
-                boundHeight = printMapHeight / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                boundWidth = printMapSize[0] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
+                boundHeight = printMapSize[1] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ol.has.DEVICE_PIXEL_RATIO,
                 minx = center[0] - (boundWidth / 2),
                 miny = center[1] - (boundHeight / 2),
                 maxx = center[0] + (boundWidth / 2),
@@ -238,7 +248,7 @@ define(function (require) {
          * gets the optimal print scale for a map
          * @param {ol.Size} mapSize - size of the map in px
          * @param {number} resolution - resolution of the map in m/px
-         * @param {ol.Size} printMapSize - size of the map on the paper in dots
+         * @param {ol.Size} printMapSize - size of the map on the report in dots
          * @param {object[]} scaleList - supported print scales, sorted in ascending order
          * @returns {number} the optimal scale
          */
@@ -257,6 +267,41 @@ define(function (require) {
             });
 
             return optimalScale;
+        },
+
+        /**
+         * gets the optimal map resolution for a print scale and a map size
+         * @param {number} scale - print scale for the report
+         * @param {number[]} mapSize - the current map size
+         * @param {number[]} printMapSize - size of the map on the report
+         * @returns {number} the optimal resolution
+         */
+        getOptimalResolution: function (scale, mapSize, printMapSize) {
+            var dotsPerMeter = this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH"),
+                resolutionX = printMapSize[0] * scale / (dotsPerMeter * mapSize[0]),
+                resolutiony = printMapSize[1] * scale / (dotsPerMeter * mapSize[1]);
+
+            return Math.max(resolutionX, resolutiony);
+        },
+
+        /**
+         * returns the size of the map on the report
+         * @returns {number[]} width and height
+         */
+        getPrintMapSize: function () {
+            var layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
+
+            return [layoutMapInfo.width, layoutMapInfo.height];
+        },
+
+        /**
+         * returns the supported scales of the map in the report
+         * @returns {number[]} scale list
+         */
+        getPrintMapScales: function () {
+            var layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
+
+            return layoutMapInfo.scales.sort(this.sortNumbers);
         },
 
         /**
@@ -344,7 +389,7 @@ define(function (require) {
         },
 
         /**
-         * @param {number} value - current map scale
+         * @param {number} value - current print scale
          * @returns {void}
          */
         setCurrentScale: function (value) {
@@ -365,6 +410,14 @@ define(function (require) {
          */
         setTitle: function (value) {
             this.set("title", value);
+        },
+
+        /**
+         * @param {boolean} value - true if the scale is selected by the user
+         * @returns {void}
+         */
+        setIsScaleSelectedManually: function (value) {
+            this.set("isScaleSelectedManually", value);
         },
 
         /**

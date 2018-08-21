@@ -15,14 +15,16 @@ define(function (require) {
             this.listenTo(this.model, {
                 "change:isActive": this.render,
                 "change:currentScale": this.render
-                // "change:isLegendAvailable": this.render
             });
         },
 
         render: function (model) {
+            var attributes = model.toJSON();
+
             if (model.get("isActive") && model.get("currentLayout")) {
+                _.extend(attributes, {"scaleList": model.getPrintMapScales()});
                 this.setElement(document.getElementsByClassName("win-body")[0]);
-                this.$el.html(this.template(model.toJSON()));
+                this.$el.html(this.template(attributes));
                 this.delegateEvents();
             }
             else {
@@ -37,6 +39,7 @@ define(function (require) {
 
             this.model.setCurrentLayout(newLayout);
             this.model.setIsLegendAvailable(this.model.isLegendAvailable(newLayout));
+            this.model.setIsScaleSelectedManually(false);
             Radio.trigger("Map", "render");
         },
 
@@ -45,7 +48,12 @@ define(function (require) {
         },
 
         setCurrentScale: function (evt) {
-            Radio.trigger("MapView", "setScale", parseInt(evt.target.value, 10));
+            var scale = parseInt(evt.target.value, 10),
+                optimalResolution = this.model.getOptimalResolution(scale, Radio.request("Map", "getSize"), this.model.getPrintMapSize());
+
+            this.model.setCurrentScale(scale);
+            Radio.trigger("MapView", "setConstrainedResolution", optimalResolution, 1);
+            this.model.setIsScaleSelectedManually(true);
         },
 
         setTitle: function (evt) {

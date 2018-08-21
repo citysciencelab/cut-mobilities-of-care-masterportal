@@ -38,11 +38,11 @@
         <label class="col-sm-4 control-label">Maßstab</label>
         <div class="col-sm-8">
             <select id="printScale" class="form-control input-sm">
-                <% _.each(currentLayout.attributes[2].clientInfo.scales, function(scale) { %>
+                <% _.each(scaleList, function(scale) { %>
                     <% if (scale === currentScale) { %>
-                        <option value="<%= scale %>" SELECTED>1: <%= scale %></option>
+                        <option value="<%= scale %>" SELECTED>1: <%= scale < 10000 ? scale : scale.toString().substring(0, scale.toString().length - 3) + " " + scale.toString().substring(scale.toString().length - 3) %></option>
                     <% } else { %>
-                        <option value="<%= scale %>">1: <%= scale %></option>
+                        <option value="<%= scale %>">1: <%= scale < 10000 ? scale : scale.toString().substring(0, scale.toString().length - 3) + " " + scale.toString().substring(scale.toString().length - 3) %></option>
                     <% }%>
                 <% }); %>
             </select>
