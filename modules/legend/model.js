@@ -30,8 +30,6 @@ define(function (require) {
             this.listenTo(this, {
                 "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
             });
-
-            this.setLayerList();
         },
 
         setVisible: function (val) {
@@ -95,6 +93,7 @@ define(function (require) {
 
         /**
          * Setzt die Legendeninformationen aller sichtbaren Layer
+         * @fires this#change:legendParams
          * @returns {void}
          */
         setLayerList: function () {
