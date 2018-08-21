@@ -1499,8 +1499,12 @@ Es gelten folgende Besonderheiten:
 {
   "id": "myUniqueId",
   "children": [    
-    {"id": "947"},
-    {"id": "946"},
+    {
+      "id": "947"
+    },
+    {
+      "id": "946"
+    },
     {
       "id":"2714",
       "gfiTheme":"reisezeiten",
