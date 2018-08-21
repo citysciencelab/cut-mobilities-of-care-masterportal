@@ -6,6 +6,8 @@ define(function (require) {
 
     Layer = Item.extend({
         defaults: {
+            // Zeitspanne zwischen Aktualisierungen der Daten
+            autorefresh: 0,
             // channel des Layer-Radios
             channel: Radio.channel("Layer"),
             // ist der Layer (ol.layer) in der Karte sichtbar
