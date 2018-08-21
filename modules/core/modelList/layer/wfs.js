@@ -53,7 +53,7 @@ define(function (require) {
                 id: this.get("id")
             }));
 
-            this.updateSource();
+            this.updateSource(true);
         },
 
         /**
@@ -74,57 +74,72 @@ define(function (require) {
 
         /**
          * Lädt den WFS neu
+         * @param  {[boolean=false]} showLoader Zeigt einen Loader während der Request läuft
          * @returns {void}
          */
-        updateSource: function () {
+        updateSource: function (showLoader) {
             var params = {
                     REQUEST: "GetFeature",
                     SERVICE: "WFS",
                     SRSNAME: Radio.request("MapView", "getProjection").getCode(),
                     TYPENAME: this.get("featureType"),
                     VERSION: this.get("version")
-                },
-                wfsReader,
-                features,
-                isClustered;
-
-            Radio.trigger("Util", "showLoader");
+                };
 
             $.ajax({
+                beforeSend: function () {
+                    if (showLoader) {
+                        Radio.trigger("Util", "showLoader");
+                    }
+                },
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
                 data: params,
                 async: true,
                 type: "GET",
                 context: this,
                 success: this.handleResponse,
-                error: function () {
-                    Radio.trigger("Util", "hideLoader");
+                complete: function () {
+                    if (showLoader) {
+                       Radio.trigger("Util", "hideLoader");
+                    }
                 }
             });
         },
 
+        /**
+         * Anstoßen der notwendigen Schritte nachdem neue Daten geladen wurden.
+         * @param  {xml} data Response des Ajax-Requests
+         * @returns {void}
+         */
         handleResponse: function (data) {
-            Radio.trigger("Util", "hideLoader");
+            var features = this.getFeaturesFromData(data);
+
+            this.get("layerSource").clear(true);
+            this.get("layerSource").addFeatures(features);
+            this.styling();
+            this.featuresLoaded(features);
+        },
+
+        getFeaturesFromData: function (data) {
+            var wfsReader,
+                features;
+
             wfsReader = new ol.format.WFS({
                 featureNS: this.get("featureNS")
             });
             features = wfsReader.readFeatures(data);
-            isClustered = Boolean(this.has("clusterDistance"));
 
-            // nur die Features verwenden die eine geometrie haben aufgefallen bei KITAs am 05.01.2018 (JW)
+            // Nur die Features verwenden, die eine Geometrie haben. Aufgefallen bei KITAs am 05.01.2018 (JW)
             features = _.filter(features, function (feature) {
                 return !_.isUndefined(feature.getGeometry());
             });
-            this.get("layerSource").addFeatures(features);
-            this.set("loadend", "ready");
-            Radio.trigger("WFSLayer", "featuresLoaded", this.get("id"), features);
-            this.styling(isClustered);
-            this.get("layer").setStyle(this.get("style"));
-            this.featuresLoaded(features);
+
+            return features;
         },
 
-        styling: function (isClustered) {
-            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        styling: function () {
+            var isClustered = Boolean(this.has("clusterDistance")),
+                stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
             if (!_.isUndefined(stylelistmodel)) {
                 /**
@@ -139,6 +154,8 @@ define(function (require) {
                     return stylelistmodel.createStyle(feature, isClustered);
                 });
             }
+
+            this.get("layer").setStyle(this.get("style"));
         },
 
         setProjection: function (proj) {
