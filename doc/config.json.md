@@ -1491,8 +1491,12 @@ In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus 
 
 {
   "id":[
-    {"id": "947"},
-    {"id": "946"},
+    {
+      "id": "947"
+    },
+    {
+      "id": "946"
+    },
     {
       "id":"2714",
       "gfiTheme":"reisezeiten",
