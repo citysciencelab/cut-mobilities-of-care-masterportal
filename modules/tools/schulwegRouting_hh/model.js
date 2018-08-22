@@ -51,6 +51,7 @@ define(function (require) {
                     if (layerId === this.get("layerId")) {
                         this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
                         this.addRouteFeatures(this.get("layer").getSource());
+                        this.get("layer").setVisible(false);
                         this.get("layer").setStyle(this.routeStyle);
                         this.setSchoolList(this.sortSchoolsByName(features));
                         if (this.get("isActive") === true) {
@@ -188,13 +189,16 @@ define(function (require) {
                 if (status === 200) {
                     parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
                     if (parsedData.ErrorOccured === "yes") {
+                        this.get("layer").setVisible(false);
                         this.handleWPSError(parsedData);
                     }
                     else {
+                        this.get("layer").setVisible(true);
                         this.handleSuccess(parsedData);
                     }
                 }
                 else {
+                    this.get("layer").setVisible(false);
                     this.handleWPSError("Routing kann nicht durchgeführt werden.<br>Bitte versuchen Sie es später erneut (Status: " + status + ").");
                 }
             }
@@ -264,7 +268,7 @@ define(function (require) {
         sendRequest: function (requestID, requestObj) {
             this.get("requestIDs").push(requestID);
             this.toggleLoader(true);
-            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting.fmw", requestObj);
+            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting_wps.fmw", requestObj);
         },
         toggleLoader: function (show) {
             if (show) {
@@ -502,6 +506,7 @@ define(function (require) {
             this.removeGeomFromFeatures(features);
             this.trigger("resetRouteResult");
             this.trigger("togglePrintEnabled", false);
+            this.get("layer").setVisible(false);
         },
         removeGeomFromFeatures: function (features) {
             _.each(features, function (feature) {
