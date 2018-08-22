@@ -182,10 +182,12 @@ define(function (require) {
             this.clearMarker();
             this.model.get("marker").setPosition(coordinate);
             this.$el.show();
+            this.model.get("polygon").setVisible(true);
         },
 
         hideMarker: function () {
             this.$el.hide();
+            this.model.get("polygon").setVisible(false);
         }
     });
 
