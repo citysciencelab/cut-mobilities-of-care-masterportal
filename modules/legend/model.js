@@ -13,13 +13,13 @@ define(function (require) {
             visible: false
         },
 
-        initialize: function () {         
+        initialize: function () {
             var channel = Radio.channel("Legend");
-            
+
             channel.reply({
                 "getLegend": this.getLegend
             }, this);
-            
+
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
             });
@@ -106,7 +106,7 @@ define(function (require) {
             tempArray = [];
             
             this.unsetLegendParams();
-            
+
             _.each(visibleLayer, function (layer) {
                 var layerSources = layer.get("layerSource"); // Array oder undefined
 
