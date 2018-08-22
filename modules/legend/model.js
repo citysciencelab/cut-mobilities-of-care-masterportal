@@ -7,7 +7,6 @@ define(function (require) {
     Legend = Backbone.Model.extend({
 
         defaults: {
-            getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
             legendParams: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
