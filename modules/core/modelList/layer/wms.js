@@ -5,14 +5,19 @@ define(function (require) {
         WMSLayer;
 
     WMSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            isChildLayer: false,
+            infoFormat: "text/xml"
+        }),
+
         initialize: function () {
-            this.superInitialize();
-            this.setAttributes();
-        },
-        setAttributes: function () {
-            if (_.isUndefined(this.get("infoFormat")) === true) {
-                this.setInfoFormat("text/xml");
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
             }
+
+            this.listenTo(this, {
+                "change:SLDBody": this.updateSourceSLDBody
+            });
         },
 
         /**
@@ -116,12 +121,11 @@ define(function (require) {
          */
         createLegendURL: function () {
             var layerNames,
-                legendURL
+                legendURL = [],
                 version = this.get("version");
-                
+
             if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
                 layerNames = this.get("layers").split(",");
-                legendURL = [];
 
                 if (layerNames.length === 1) {
                     legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
@@ -221,6 +225,20 @@ define(function (require) {
 
         setInfoFormat: function (value) {
             this.set("infoFormat", value);
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
+            }
         },
 
         /**

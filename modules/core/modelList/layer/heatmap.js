@@ -7,19 +7,20 @@ define(function (require) {
 
     HeatmapLayer = Layer.extend({
 
-        defaults: _.extend({}, Layer.prototype.defaults,
-            {
-                radius: 10,
-                blur: 15,
-                gradient: [
-                    "#00f", "#0ff", "#0f0", "#ff0", "#f00"
-                ]
-            }),
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            radius: 10,
+            blur: 15,
+            gradient: [
+                "#00f", "#0ff", "#0f0", "#ff0", "#f00"
+            ]
+        }),
 
         initialize: function () {
             var channel = Radio.channel("HeatmapLayer");
 
-            this.superInitialize();
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
+            }
 
             this.listenTo(channel, {
                 "loadInitialData": this.loadInitialData,
@@ -197,6 +198,20 @@ define(function (require) {
             }).length;
 
             return count;
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
+            }
         },
 
         /**

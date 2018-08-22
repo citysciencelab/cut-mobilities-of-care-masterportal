@@ -6,17 +6,27 @@ define(function (require) {
         WFSLayer;
 
     WFSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            isChildLayer: false
+        }),
 
         initialize: function () {
-            this.superInitialize();
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
+            }
         },
 
         /**
-         * [createLayerSource description]
+         * Wird vom Model getriggert und erzeugt eine vectorSource.
+         * Ggf. auch eine clusterSource
          * @return {[type]} [description]
+         * @uses this createClusterLayerSource
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
+            if (this.has("clusterDistance")) {
+                this.createClusterLayerSource();
+            }
         },
 
         /**
@@ -193,6 +203,20 @@ define(function (require) {
                 return style;
             };
 
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
+            }
         },
 
         // setter for style
