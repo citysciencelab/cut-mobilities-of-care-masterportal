@@ -97,14 +97,14 @@ define(function (require) {
          */
         setLayerList: function () {
             var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            sortedModelList = _.sortBy(modelList, function (layer) {
-                return layer.get("name");
-            }),
-            visibleLayer = _.filter(sortedModelList, function (layer) {
-                return layer.get("legendURL") !== "ignore";
-            }),
-            tempArray = [];
-            
+                sortedModelList = _.sortBy(modelList, function (layer) {
+                    return layer.get("name");
+                }),
+                visibleLayer = _.filter(sortedModelList, function (layer) {
+                    return layer.get("legendURL") !== "ignore";
+                }),
+                tempArray = [];
+                
             this.unsetLegendParams();
 
             _.each(visibleLayer, function (layer) {
