@@ -123,7 +123,7 @@ define(function (require) {
                 layerNames = this.get("layers").split(",");
                 legendURL = [];
 
-                if (layerNames.length === 1) {                    
+                if (layerNames.length === 1) {
                     legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
                 }
                 else if (layerNames.length > 1) {
