@@ -63,8 +63,8 @@ define(function (require) {
          * @returns {String} GeoJSON aller Features als String
          */
         inititalizeWithoutGUI: function (drawType, color, opacity, maxFeatures, initialJSON) {
-            var featJSON;
-            const format = new ol.format.GeoJSON();
+            var featJSON,
+                format = new ol.format.GeoJSON();
 
             if ($.inArray(drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
                 this.set("isCurrentWin", true);
