@@ -222,17 +222,18 @@ define(function (require) {
         },
 
         /**
-         * Toggelt anhand der Layersichtbarkeit das windows Interval
+         * Toggelt das Interval anhand der Layersichtbarkeit.
+         * Das autoRefresh Interval muss as Performance-Gründen > 500 sein.
          * @returns {void}
          */
         toggleWindowsInterval: function () {
             var wi = this.get("windowsInterval"),
                 isVisible = this.get("isVisibleInMap"),
-                autorefreshInterval = this.get("autorefreshInterval");
+                autoRefresh = this.get("autoRefresh");
 
             if (isVisible === true) {
-                if (autorefreshInterval > 0) {
-                    this.setWindowsInterval(this.intervalHandler, autorefreshInterval);
+                if (autoRefresh > 500) {
+                    this.setWindowsInterval(this.intervalHandler, autoRefresh);
                 }
             }
             else {

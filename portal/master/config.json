@@ -473,7 +473,7 @@
           }
         ],
         "extendedFilter": true,
-        "autorefreshInterval": 6000
+        "autoRefresh": 6000
       },
       {
         "id": "8712",
