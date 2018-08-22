@@ -1,5 +1,6 @@
 define(function (require) {
     var Tool = require("modules/core/modelList/tool/model"),
+        BuildSpecModel = require("modules/tools/print_/buildSpec"),
         ol = require("openlayers"),
         $ = require("jquery"),
         PrintModel;
@@ -19,13 +20,15 @@ define(function (require) {
             // current print scale
             currentScale: undefined,
             // title for the report
-            title: "",
+            title: "test",
             // is scale selected by the user over the view
             isScaleSelectedManually: false,
             // true if the legend is to be printed
             isLegendSelected: true,
             // true if the current layout supports meta data
             isMetaDataAvailable: false,
+            isGfiAvailable: false,
+            isGfiSelected: false,
             // the id from the rest services json for the plot app
             plotServiceId: undefined,
             deaktivateGFI: false,
@@ -49,6 +52,12 @@ define(function (require) {
             this.listenTo(Radio.channel("MapView"), {
                 "changedOptions": function () {
                     this.setIsScaleSelectedManually(false);
+                }
+            });
+
+            this.listenTo(Radio.channel("GFI"), {
+                "isVisible": function (isGfiVisible) {
+                    this.setIsGfiAvailable(isGfiVisible);
                 }
             });
         },
@@ -78,7 +87,6 @@ define(function (require) {
         parseMapfishCapabilities: function (response) {
             this.setLayoutList(response.layouts);
             this.setCurrentLayout(response.layouts[0]);
-            console.log(this.isMetaDataAvailable());
             this.setIsMetaDataAvailable(this.isMetaDataAvailable());
             this.setFormatList(response.formats);
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
@@ -86,34 +94,54 @@ define(function (require) {
         },
 
         print: function () {
-            var t = {
-                "layout": "A4 Hochformat",
-                "outputFormat": "pdf",
-                "attributes": {
-                    "title": "Ttest",
-                    "map": {
-                        "projection": "EPSG:25832",
-                        "dpi": 150,
-                        "rotation": 0,
-                        "center": [561210, 5932600],
-                        "scale": 60000,
-                        "layers": [{
-                            "baseURL": "https://geodienste.hamburg.de/wms_hamburgde",
-                            "opacity": 1,
-                            "type": "WMS",
-                            "layers": [
-                                "geobasisdaten"
-                            ],
-                            "imageFormat": "image/png",
-                            "customParams": {
-                                "TRANSPARENT": "true"
-                            }
-                        }]
+            var visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
+                    return layer.getVisible() === true;
+                }),
+                spec = new BuildSpecModel({
+                    "layout": this.get("currentLayout").name,
+                    "outputFormat": this.get("currentFormat"),
+                    "attributes": {
+                        "title": this.get("title"),
+                        "map": {
+                            "dpi": 96,
+                            "projection": Radio.request("MapView", "getProjection").getCode(),
+                            "center": Radio.request("MapView", "getCenter"),
+                            "scale": this.get("currentScale")
+                        },
+                        "datasource": []
                     }
-                }
-            };
+                });
 
-            this.createPrintJob(this.get("printAppId"), JSON.stringify(t), this.get("currentFormat"));
+            spec.buildLayers(visibleLayerList);
+            console.log(spec.toJSON());
+            // var t = {
+            //     "layout": "A4 Hochformat",
+            //     "outputFormat": "pdf",
+            //     "attributes": {
+            //         "title": "Ttest",
+            //         "map": {
+            //             "projection": "EPSG:25832",
+            //             "dpi": 150,
+            //             "rotation": 0,
+            //             "center": [561210, 5932600],
+            //             "scale": 60000,
+            //             "layers": [{
+            //                 "baseURL": "https://geodienste.hamburg.de/wms_hamburgde",
+            //                 "opacity": 1,
+            //                 "type": "WMS",
+            //                 "layers": [
+            //                     "geobasisdaten"
+            //                 ],
+            //                 "imageFormat": "image/png",
+            //                 "customParams": {
+            //                     "TRANSPARENT": "true"
+            //                 }
+            //             }]
+            //         }
+            //     }
+            // };
+            // console.log(t);
+            this.createPrintJob(this.get("printAppId"), JSON.stringify(spec.toJSON()), this.get("currentFormat"));
         },
 
         /**
@@ -135,15 +163,16 @@ define(function (require) {
          * @returns {void}
          */
         waitForPrintJob: function (response) {
-            var url = this.get("mapfishServiceUrl") + "/status/" + response.ref + ".json";
+            var url = this.get("mapfishServiceUrl") + "status/" + response.ref + ".json";
 
             this.sendRequest(url, "GET", function (status) {
+                console.log(status);
                 // Fehlerverarbeitung...
                 if (!status.done) {
                     this.waitForPrintJob(response);
                 }
                 else {
-                    window.open(this.get("mapfishServiceUrl") + "/report/" + response.ref);
+                    window.open(this.get("mapfishServiceUrl") + "report/" + response.ref);
                 }
             });
         },
@@ -406,6 +435,22 @@ define(function (require) {
          */
         setIsLegendSelected: function (value) {
             this.set("isLegendSelected", value);
+        },
+
+        /**
+         * @param {boolean} value - true if gfi is visible on the map
+         * @returns {void}
+         */
+        setIsGfiAvailable: function (value) {
+            this.set("isGfiAvailable", value);
+        },
+
+        /**
+         * @param {boolean} value - true if gfi is to be printed
+         * @returns {void}
+         */
+        setIsGfiSelected: function (value) {
+            this.set("isGfiSelected", value);
         },
 
         /**

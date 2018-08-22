@@ -9,12 +9,14 @@ define(function (require) {
             "change #printScale": "setCurrentScale",
             "keyup input[type='text']": "setTitle",
             "click #printLegend": "setIsLegendSelected",
+            "click #printGfi": "setIsGfiSelected",
             "click button": "print"
         },
         initialize: function () {
             this.template = _.template(PrintTemplate);
             this.listenTo(this.model, {
                 "change:isActive": this.render,
+                "change:isGfiAvailable": this.render,
                 "change:currentScale": this.render
             });
         },
@@ -63,6 +65,10 @@ define(function (require) {
 
         setIsLegendSelected: function (evt) {
             this.model.setIsLegendSelected(evt.target.checked);
+        },
+
+        setIsGfiSelected: function (evt) {
+            this.model.setIsGfiSelected(evt.target.checked);
         },
 
         print: function () {

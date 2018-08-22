@@ -52,11 +52,22 @@
         <div class="col-sm-offset-4 col-sm-8">
             <div class="checkbox">
             <label>
-                <input id="printLegend" type="checkbox">Legende
+                <input id="printLegend" type="checkbox" <% if (isLegendSelected) print('checked') %>>Legende
             </label>
             </div>
         </div>
     </div>
+    <% if(isGfiAvailable) { %>
+    <div class="form-group form-group-sm">
+        <div class="col-sm-offset-4 col-sm-8">
+            <div class="checkbox">
+            <label>
+                <input id="printGfi" type="checkbox" <% if (isGfiSelected) print('checked') %>>Sachinformationen
+            </label>
+            </div>
+        </div>
+    </div>
+    <% } %>
     <div class="form-group form-group-sm">
         <div class="col-sm-12">
             <button type="button" class="btn btn-primary btn-block">Drucken</button>
