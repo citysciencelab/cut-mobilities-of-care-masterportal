@@ -74,17 +74,17 @@ define(function (require) {
 
         /**
          * Lädt den WFS neu
-         * @param  {[boolean=false]} showLoader Zeigt einen Loader während der Request läuft
+         * @param  {boolean} [showLoader=false] Zeigt einen Loader während der Request läuft
          * @returns {void}
          */
         updateSource: function (showLoader) {
             var params = {
-                    REQUEST: "GetFeature",
-                    SERVICE: "WFS",
-                    SRSNAME: Radio.request("MapView", "getProjection").getCode(),
-                    TYPENAME: this.get("featureType"),
-                    VERSION: this.get("version")
-                };
+                REQUEST: "GetFeature",
+                SERVICE: "WFS",
+                SRSNAME: Radio.request("MapView", "getProjection").getCode(),
+                TYPENAME: this.get("featureType"),
+                VERSION: this.get("version")
+            };
 
             $.ajax({
                 beforeSend: function () {
@@ -100,7 +100,7 @@ define(function (require) {
                 success: this.handleResponse,
                 complete: function () {
                     if (showLoader) {
-                       Radio.trigger("Util", "hideLoader");
+                        Radio.trigger("Util", "hideLoader");
                     }
                 }
             });
@@ -120,6 +120,11 @@ define(function (require) {
             this.featuresLoaded(features);
         },
 
+        /**
+         * Erzeugt aus einer XML-Response eine ol.features Collection
+         * @param  {xml} data die XML-Response
+         * @return {ol/Feature[]}   Collection aus ol/Feature
+         */
         getFeaturesFromData: function (data) {
             var wfsReader,
                 features;
