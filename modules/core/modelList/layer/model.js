@@ -126,6 +126,7 @@ define(function (require) {
          * Setter des Windows Intervals. Bindet an this.
          * @param {function} func                Funktion, die in this ausgeführt werden soll
          * @param {integer}  autorefreshInterval Intervall in ms
+         * @returns {void}
          */
         setWindowsInterval: function (func, autorefreshInterval) {
             this.set("windowsInterval", setInterval(func.bind(this), autorefreshInterval));
@@ -227,8 +228,7 @@ define(function (require) {
          * @returns {void}
          */
         toggleWindowsInterval: function () {
-            var wi = this.get("windowsInterval"),
-                isVisible = this.get("isVisibleInMap"),
+            var isVisible = this.get("isVisibleInMap"),
                 autoRefresh = this.get("autoRefresh");
 
             if (isVisible === true) {
@@ -236,10 +236,8 @@ define(function (require) {
                     this.setWindowsInterval(this.intervalHandler, autoRefresh);
                 }
             }
-            else {
-                if (!_.isUndefined(this.get("windowsInterval"))) {
-                    clearInterval(this.get("windowsInterval"));
-                }
+            else if (!_.isUndefined(this.get("windowsInterval"))) {
+                clearInterval(this.get("windowsInterval"));
             }
         },
 
