@@ -445,6 +445,8 @@ define(function (require) {
          * @returns {void}
          */
         controlEvent: function (evt) {
+            console.log("keyup");
+            
             var count = this.model.get("tempCounter");
 
             if (evt.type === "contextmenu") {
@@ -478,11 +480,14 @@ define(function (require) {
         },
 
         setSearchString: function (evt) {
+            debugger;
             if (evt.target.value.length === 0) {
                 // suche zurücksetzten, wenn der letzte Buchstabe gelöscht wurde
                 this.deleteSearchString();
             }
             else {
+                console.log(evt.keyCode);
+                
                 if (evt.type === "paste") {
                     this.model.setSearchString(evt.target.value, evt.type);
                 }
@@ -523,6 +528,8 @@ define(function (require) {
         },
 
         toggleStyleForRemoveIcon: function (evt) {
+            console.log("Fokus in input");
+            
             if (evt.type === "focusin") {
                 if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
                     if (this.$("#searchInput").attr("value") === this.model.get("placeholder")) {
