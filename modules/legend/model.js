@@ -104,7 +104,7 @@ define(function (require) {
                     return layer.get("legendURL") !== "ignore";
                 }),
                 tempArray = [];
-                
+
             this.unsetLegendParams();
 
             _.each(visibleLayer, function (layer) {
