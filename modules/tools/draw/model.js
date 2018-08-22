@@ -55,33 +55,34 @@ define(function (require) {
         /**
          * initialisiert die Zeichenfunktionalität ohne eine Oberfläche dafür bereit zu stellen
          * sinnvoll zum Beispiel für die Nutzung über RemoteInterface
-         * @param {String} drawType - welcher Typ soll gezeichet werden ["Point", "LineString", "Polygon", "Circle"]
-         * @param {String} color - Farbe, in rgb (default: "55, 126, 184")
-         * @param {Float} opacity - Transparenz (default: 1.0)
-         * @param {Integer} maxFeatures - wie viele FEatures dürfen maximal auf dem Layer gezeichnet werden (default: unbegrenzt)
-         * @param {String} initialJSON - GeoJSON mit initial auf den Layer zu zeichnenden Features (z.B. zum Editieren)
+         * @param {String} para_object - Ein Objekt, welches die Parameter enthält
+         *                 {String} drawType - welcher Typ soll gezeichet werden ["Point", "LineString", "Polygon", "Circle"]
+         *                 {String} color - Farbe, in rgb (default: "55, 126, 184")
+         *                 {Float} opacity - Transparenz (default: 1.0)
+         *                 {Integer} maxFeatures - wie viele FEatures dürfen maximal auf dem Layer gezeichnet werden (default: unbegrenzt)
+         *                 {String} initialJSON - GeoJSON mit initial auf den Layer zu zeichnenden Features (z.B. zum Editieren)
          * @returns {String} GeoJSON aller Features als String
          */
-        inititalizeWithoutGUI: function (drawType, color, opacity, maxFeatures, initialJSON) {
+        inititalizeWithoutGUI: function (para_object) {
             var featJSON,
                 format = new ol.format.GeoJSON();
 
-            if ($.inArray(drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
+            if ($.inArray(para_object.drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
                 this.set("isCurrentWin", true);
-                this.setDrawType(drawType, drawType + " zeichnen");
-                if (color) {
-                    this.set("color", color);
+                this.setDrawType(para_object.drawType, para_object.drawType + " zeichnen");
+                if (para_object.color) {
+                    this.set("color", para_object.color);
                 }
-                if (opacity) {
-                    this.set("opacity", opacity);
+                if (para_object.opacity) {
+                    this.set("opacity", para_object.opacity);
                 }
-                this.createDrawInteraction(this.get("drawType"), this.get("layer"), maxFeatures);
+                this.createDrawInteraction(this.get("drawType"), this.get("layer"), para_object.maxFeatures);
 
-                if (initialJSON) {
+                if (para_object.initialJSON) {
                     try {
-                        featJSON = format.readFeatures(initialJSON);
+                        featJSON = format.readFeatures(para_object.initialJSON);
                         if (featJSON.length > 0) {
-                            this.get("layer").setStyle(this.getStyle(drawType));
+                            this.get("layer").setStyle(this.getStyle(para_object.drawType));
                             this.get("layer").getSource().addFeatures(featJSON);
                         }
                     }
@@ -220,8 +221,8 @@ define(function (require) {
 
             if (maxFeatures && maxFeatures > 0) {
                 this.get("drawInteraction").on("drawstart", function () {
-                    const count = layer.getSource().getFeatures().length;
-                    let text = "";
+                    var count = layer.getSource().getFeatures().length,
+                        text = "";
 
                     if (count > maxFeatures - 1) {
                         text = "Sie haben bereits " + maxFeatures + " Objekte gezeichnet, bitte löschen Sie erst eines, bevor Sie fortfahren!";
