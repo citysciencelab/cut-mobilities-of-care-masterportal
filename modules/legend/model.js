@@ -7,20 +7,19 @@ define(function (require) {
     Legend = Backbone.Model.extend({
 
         defaults: {
-            getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
             legendParams: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
             visible: false
         },
 
-        initialize: function () {
+        initialize: function () {         
             var channel = Radio.channel("Legend");
-
+            
             channel.reply({
                 "getLegend": this.getLegend
             }, this);
-
+            
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
             });
@@ -98,16 +97,16 @@ define(function (require) {
          */
         setLayerList: function () {
             var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-                sortedModelList = _.sortBy(modelList, function (layer) {
-                    return layer.get("name");
-                }),
-                visibleLayer = _.filter(sortedModelList, function (layer) {
-                    return layer.get("legendURL") !== "ignore";
-                }),
-                tempArray = [];
-
+            sortedModelList = _.sortBy(modelList, function (layer) {
+                return layer.get("name");
+            }),
+            visibleLayer = _.filter(sortedModelList, function (layer) {
+                return layer.get("legendURL") !== "ignore";
+            }),
+            tempArray = [];
+            
             this.unsetLegendParams();
-
+            
             _.each(visibleLayer, function (layer) {
                 var layerSources = layer.get("layerSource"); // Array oder undefined
 
