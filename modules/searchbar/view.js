@@ -500,6 +500,10 @@ define(function (require) {
                         this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                     }
                 }
+                else if (evt.keyCode === 38 || evt.keyCode === 40) {
+                    this.positionOfCursorToEnd();
+                }
+
                 // Der "x-Button" in der Suchleiste
                 if (evt.target.value.length > 0) {
                     this.$("#searchInput + span").show();
@@ -509,6 +513,25 @@ define(function (require) {
                 }
             }
         },
+
+        /**
+         * puts the cursor at the end of the text when the arrow key up or down is up,
+         * if navigate through results
+         * @returns {void}
+         */
+        positionOfCursorToEnd: function () {
+            var selectedElement = _.find(this.$(".list-group-item"), function (element) {
+                    return this.$(element).hasClass("selected");
+                }, this),
+                lastSelectedItem = this.model.get("searchFieldisSelected");
+
+            if (!_.isUndefined(lastSelectedItem) || (!_.isUndefined(lastSelectedItem) && this.$(".list-group-item").length !== 0)) {
+                this.focusOnEnd(this.$("#searchInput"));
+            }
+
+            this.model.setSearchFieldisSelected(selectedElement);
+        },
+
         collapseHits: function (target) {
             this.$(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
             if (target.next().css("display") === "block") {

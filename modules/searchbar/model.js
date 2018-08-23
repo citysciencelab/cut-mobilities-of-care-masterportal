@@ -196,6 +196,10 @@ define(function (require) {
 
         setEventType: function (value) {
             this.set("eventType", value);
+        },
+
+        setSearchFieldisSelected: function (value) {
+            this.set("searchFieldisSelected", value);
         }
     });
 
