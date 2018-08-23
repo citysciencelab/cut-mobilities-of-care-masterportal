@@ -153,7 +153,7 @@ iframe.postMessage("hidePosition", domain);
 |hidePosition|String|"hidePosition". Dadurch wird der Marker versteckt.|
 
 ## Nachricht ans Radio senden
-Eine Möglichkeit, via postMessage direkt das Radio des Masterportals anzusprechen ist, den Radio-Channel und die anzustriggernde Funktion zu übergeben.
+Eine Möglichkeit, via postMessage direkt das Radio des Masterportals anzusprechen ist, den Radio-Channel und die anzutriggernde Funktion zu übergeben.
 
 **Beispiel-Aufruf von extern**
 ```js
