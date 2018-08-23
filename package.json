@@ -10,7 +10,7 @@
   "scripts": {
     "test": "mocha test/end2end/TestRunner.js",
     "installDependencies": "npm install --verbose",
-    "installBrowserMqtt": "cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js",
+    "installBrowserMqtt": "cd node_modules/mqtt && npm install . && webpack mqtt.js ./browserMqtt.js --output-library mqtt",
     "installMasterportal": "npm run installDependencies && npm run installBrowserMqtt"
   },
   "dependencies": {
@@ -21,7 +21,6 @@
     "bootstrap-select": "1.12.x",
     "bootstrap-slider": "9.x",
     "bootstrap-toggle": "2.x.x",
-    "browserify": "15.2.0",
     "d3": "4.9.x",
     "jquery": "2.x",
     "jquery-ui": "1.x",
@@ -41,8 +40,8 @@
     "chai": "4.1.1",
     "deep-extend": "^0.3.2",
     "eslint": "^4.14.0",
-    "eslint-plugin-chai-friendly": "^0.4.1",
     "eslint-plugin-backbone": "^2.1.1",
+    "eslint-plugin-chai-friendly": "^0.4.1",
     "fs": "0.0.1-security",
     "glob": "4.2.1",
     "grunt": "^0.4.5",
@@ -63,7 +62,9 @@
     "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config.git",
     "mocha": "3.5.0",
     "selenium-webdriver": "^3.5.0",
-    "time-grunt": "1.0.0"
+    "time-grunt": "1.0.0",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
   },
   "title": "LGV Master"
 }
