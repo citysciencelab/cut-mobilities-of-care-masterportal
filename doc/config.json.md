@@ -1484,16 +1484,16 @@ Alle weiteren Werte im Array werden dahingehend ausgewertet, dass ihre _layers_-
 
 In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Grouplayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).  
 
-* Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer). 
-* Das Attribut _id_ wird in diesem Fall als unique _String_ erwartet und darf nicht in der [services.json](services.json.md) gelistet sein.
- * Über diesen Eintrag werden die _children_ gruppiert.
- * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
+*  Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer). 
+*  Das Attribut _id_ wird in diesem Fall als unique _String_ erwartet und darf nicht in der [services.json](services.json.md) gelistet sein.
+  *  Über diesen Eintrag werden die _children_ gruppiert.
+  *  Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
   
-Es gelten folgende Besonderheiten:
+Es gelten folgende Besonderheiten:  
 
-* Im Falle eines GFI wird jeder Layer einzeln abgefragt. 
-* Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt. 
-* Die Layerinformationen werden gekürzt (nur erster Layer) übernommen.
+*  Im Falle eines GFI wird jeder Layer einzeln abgefragt. 
+*  Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt. 
+*  Die Layerinformationen werden gekürzt (nur erster Layer) übernommen.
 
 ```
 #!json
