@@ -1,4 +1,28 @@
-.style-wms-win > .header {
-    padding-left: 10px;
-    border-bottom: 1px solid rgb(229, 229, 229);
+#layerslider {
+	width: 350px;
+}
+#layerslider .progress-bar {
+	background-color: rgb(85, 85, 85);
+}
+
+#layerslider .progress {
+	height: 25px;
+	background-color: #eee;
+}
+
+#layerslider .btn-default {
+	background-color: #eee;
+}
+
+#layerslider .btn-default:hover {
+	background-color: rgb(85, 85, 85);
+	color: #eee;
+}
+
+#layerslider input[readonly]{
+  	color: black;
+  	cursor: not-allowed;
+  	white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

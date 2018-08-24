@@ -6,7 +6,8 @@ define(function () {
             layerIds: [],
             timeInterval: 2000,
             title: null,
-            progressBarWidth: 10
+            progressBarWidth: 10,
+            activeLayerId: ""
         },
 
         initialize: function (layerIds, title, timeInterval) {
@@ -37,6 +38,13 @@ define(function () {
             else {
                 this.setIsCurrentWin(false);
             }
+        },
+
+        getActiveIndex: function () {
+            return _.find(this.get("layerIds"), function (layer, index) {
+                console.log(index);
+
+            });
         },
 
         /**

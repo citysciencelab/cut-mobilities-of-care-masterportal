@@ -6,7 +6,10 @@ define(function (require) {
 
     LayersliderView = Backbone.View.extend({
         events: {
-
+            "click #play": "playSlider",
+            "click #stop": "stopSlider",
+            "click #backward": "backwardSlider",
+            "click #forward": "forwardSlider"
         },
         initialize: function (attr) {
             var layerIds = _.has(attr, "layerIds") && _.isArray(attr.layerIds) ? attr.layerIds : null,
@@ -21,12 +24,29 @@ define(function (require) {
             this.model = new LayersliderModel(layerIds, title, timeInterval);
 
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render
+                "change:isCollapsed change:isCurrentWin": this.render,
+                "change:activeLayerId": this.layerSwitched
             });
         },
         className: "win-body",
         template: _.template(LayersliderTemplate),
 
+        playSlider: function () {
+
+        },
+
+        stopSlider: function () {
+
+        },
+
+        backwardSlider: function () {
+
+        },
+
+        forwardSlider: function () {
+
+        },
+        
         render: function () {
             var attr;
 
@@ -40,6 +60,12 @@ define(function (require) {
                 this.undelegateEvents();
             }
             return this;
+        },
+
+        layerSwitched: function () {
+            var index = this.model.getActiveIndex();
+
+            console.log(index);
         }
     });
 
