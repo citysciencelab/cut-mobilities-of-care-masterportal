@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Radio = require("backbone.radio"),
-        Parser = require("modules/core/configLoader/parser"),
+    var Parser = require("modules/core/configLoader/parser"),
         CustomTreeParser;
 
     CustomTreeParser = Parser.extend({
