@@ -106,6 +106,7 @@ define(function (require) {
                 style: this.getStyle(drawType.text)
             }));
             this.get("drawInteraction").on("drawend", function (evt) {
+                evt.feature.set("styleId", evt.feature.ol_uid);
                 evt.feature.setStyle(this.getStyle(drawType.text));
             }, this);
             Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
