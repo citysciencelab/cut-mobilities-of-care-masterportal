@@ -266,6 +266,11 @@ define("app", function (require) {
                     });
                     break;
                 }
+                case "timeslider": {
+                    require(["modules/tools/timeslider/view"], function (Timeslider) {
+                        new Timeslider(tool);
+                    });
+                }
                 default: {
                     break;
                 }
