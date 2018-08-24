@@ -572,7 +572,7 @@ define(function (require) {
          */
         createMqttConnectionToSensorThings: function (features) {
             var dataStreamIds = this.getDataStreamIds(features),
-                client = mqtt.connect({
+                client = window.mqtt.connect({
                     host: this.get("url").split("/")[2],
                     protocol: "wss",
                     path: "/mqtt",

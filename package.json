@@ -10,7 +10,7 @@
   "scripts": {
     "test": "mocha test/end2end/TestRunner.js",
     "installDependencies": "npm install --verbose",
-    "installBrowserMqtt": "cd node_modules/mqtt && npm install . && webpack mqtt.js ./browserMqtt.js --output-library mqtt",
+    "installBrowserMqtt": "cd node_modules/mqtt && npm install . && webpack mqtt.js -o ./browserMqtt.js --output-library mqtt",
     "installMasterportal": "npm run installDependencies && npm run installBrowserMqtt"
   },
   "dependencies": {
