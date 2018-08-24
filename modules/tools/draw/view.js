@@ -168,7 +168,14 @@ define(function (require) {
         },
 
         setColor: function (evt) {
-            this.model.setColor(evt.target.value);
+            var colors = evt.target.value.split(","),
+                newColor = [];
+
+            colors.forEach(function (color) {
+                newColor.push(parseInt(color, 10));
+            });
+            newColor.push(this.model.get("opacity"));
+            this.model.setColor(newColor);
         },
 
         setRadius: function (evt) {
@@ -180,7 +187,11 @@ define(function (require) {
         },
 
         setOpacity: function (evt) {
-            this.model.setOpacity(evt.target.value);
+            var newColor = this.model.get("color");
+
+            newColor[3] = parseFloat(evt.target.value);
+            this.model.setColor(newColor);
+            this.model.setOpacity(parseFloat(evt.target.value));
         }
     });
 
