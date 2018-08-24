@@ -105,14 +105,13 @@ define(function (require) {
                 }),
                 tempArray = [];
 
-            this.unsetLegendParams();
-
             _.each(visibleLayer, function (layer) {
                 var layerSources = layer.get("layerSource"); // Array oder undefined
 
                 tempArray.push(this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources));
             }, this);
 
+            this.unset("legendParams");
             this.set("legendParams", tempArray);
         },
 
@@ -167,10 +166,6 @@ define(function (require) {
                 layername: layername,
                 legend: null
             };
-        },
-
-        unsetLegendParams: function () {
-            this.set("tempArray", []);
         },
 
         getLegendParamsFromWMS: function (layername, legendURL) {

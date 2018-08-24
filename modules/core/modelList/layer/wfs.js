@@ -6,9 +6,7 @@ define(function (require) {
         WFSLayer;
 
     WFSLayer = Layer.extend({
-        defaults: _.extend({}, Layer.prototype.defaults, {
-            isChildLayer: false
-        }),
+        defaults: _.extend({}, Layer.prototype.defaults),
 
         initialize: function () {
             if (!this.get("isChildLayer")) {

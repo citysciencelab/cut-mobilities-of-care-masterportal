@@ -6,6 +6,8 @@ define(function (require) {
         GeoJSONLayer;
 
     GeoJSONLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults),
+
         initialize: function () {
             if (!this.get("isChildLayer")) {
                 Layer.prototype.initialize.apply(this);

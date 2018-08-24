@@ -19,18 +19,13 @@ define(function (require) {
         /**
          * Bei GruppenLayern sind die LayerSources deren childLayer.
          * Damit die layerSources nicht die layer.initialize() durchlaufen,
-         * wird isChildLayer: true gesetzt.
+         * wurde isChildLayer: true im parser gesetzt.
          * @return {void}
          */
         createLayerSource: function () {
             var layerSource = [];
 
-            _.each(this.get("layerdefinitions"), function (childLayerDefinition) {
-                // ergänze isChildLayer für initialize
-                _.extend(childLayerDefinition, {
-                    isChildLayer: true
-                });
-
+            _.each(this.get("children"), function (childLayerDefinition) {
                 if (childLayerDefinition.typ === "WMS") {
                     layerSource.push(new WMSLayer(childLayerDefinition));
                 }
@@ -91,7 +86,7 @@ define(function (require) {
                 legend = Radio.request("Legend", "getLegend", this),
                 name = this.get("name");
 
-            _.each(this.get("layerdefinitions"), function (layer) {
+            _.each(this.get("children"), function (layer) {
                 var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
 
                 if (layerMetaId) {
