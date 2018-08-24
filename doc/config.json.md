@@ -1469,7 +1469,8 @@ In diesem Fall wird die genannte ID in der [services.json](services.json.md) ges
 
 **Beispiel für WMS multiple Layers:**
 
-In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer gemäß den Angaben in der [services.json](services.json.md). Alle id im Array werden dem _layers-Parameter_ des Dienstes hinzugefügt. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Näheres kann der [Dokumentation](http://docs.geoserver.org/latest/en/user/services/wms/reference.html#wms-getmap) entnommen werden.
+In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer gemäß den Angaben in der [services.json](services.json.md) vollständig.  
+Alle weiteren Werte im Array werden dahingehend ausgewertet, dass ihre _layers_-Angabe den  _layers-Parameter_ des Dienstes erweitern. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Näheres kann der [Dokumentation](http://docs.geoserver.org/latest/en/user/services/wms/reference.html#wms-getmap) entnommen werden. Dem Themenbaum wird nur ein Eintrag hinzugefügt.
 
 ```
 #!json
@@ -1481,14 +1482,15 @@ In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json]
 
 **Beispiel für openlayers Layer Collection (GroupLayer):**
 
-In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Gruppenlayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).  
+In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Grouplayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).  
 
 * Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer). 
 * Das Attribut _id_ wird in diesem Fall als unique _String_ erwartet und darf nicht in der [services.json](services.json.md) gelistet sein.
-  * Über diesen Eintrag werden die _children_ gruppiert.
-  * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
+ * Über diesen Eintrag werden die _children_ gruppiert.
+ * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
   
 Es gelten folgende Besonderheiten:
+
 * Im Falle eines GFI wird jeder Layer einzeln abgefragt. 
 * Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt. 
 * Die Layerinformationen werden gekürzt (nur erster Layer) übernommen.
