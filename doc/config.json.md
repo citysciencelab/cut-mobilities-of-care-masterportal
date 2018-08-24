@@ -1486,8 +1486,8 @@ In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus 
 
 * Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer). 
 * Das Attribut _id_ wird in diesem Fall als unique _String_ erwartet und darf nicht in der [services.json](services.json.md) gelistet sein.
- * Über diesen Eintrag werden die _children_ gruppiert.
- * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
+    * Über diesen Eintrag werden die _children_ gruppiert.
+    * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
   
 Es gelten folgende Besonderheiten:  
 
