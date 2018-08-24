@@ -4,33 +4,35 @@ define(function (require) {
 
     BuildSpecModel = Backbone.Model.extend({
         defaults: {},
-        // initialize: function () {
-        //     console.log(this.toJSON());
-        // },
 
+        /**
+         * defines the layer attribute of the map spec
+         * @param {ol.layer.Layer[]} layerList - all visible layers on the map
+         * @returns {void}
+         */
         buildLayers: function (layerList) {
             var layers = [],
                 attributes = this.get("attributes");
 
-            // console.log(layerList);
             layerList.forEach(function (layer) {
                 if (layer instanceof ol.layer.Image) {
                     layers.push(this.buildImageWms(layer));
-                    // console.log(this.buildImageWms(layer));
                 }
                 else if (layer instanceof ol.layer.Tile) {
                     layers.push(this.buildTileWms(layer));
                 }
                 else if (layer instanceof ol.layer.Vector) {
-                    // console.log(layer.getSource().getFeatures());
-                    // console.log(this.buildVector(layer));
                     layers.push(this.buildVector(layer));
                 }
             }, this);
             attributes.map.layers = layers.reverse();
-            // console.log(this.get("attributes"));
         },
 
+        /**
+         * returns tile wms layer information
+         * @param {ol.layer.Tile} layer - tile layer with tile wms source
+         * @returns {object} wms layer spec
+         */
         buildTileWms: function (layer) {
             var source = layer.getSource();
 
@@ -46,6 +48,11 @@ define(function (require) {
             };
         },
 
+        /**
+         * returns image wms layer information
+         * @param {ol.layer.Image} layer - image layer with image wms source
+         * @returns {object} wms layer spec
+         */
         buildImageWms: function (layer) {
             var source = layer.getSource();
 
@@ -61,6 +68,11 @@ define(function (require) {
             };
         },
 
+        /**
+         * returns vector layer information
+         * @param {ol.layer.Vector} layer - vector layer with vector source
+         * @returns {object} geojson layer spec
+         */
         buildVector: function (layer) {
             var source = layer.getSource(),
                 geojsonFeatures = [],
@@ -74,41 +86,44 @@ define(function (require) {
         },
 
         buildStyle: function (layer, features, geojsonFeatures) {
-            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
-                mapfishStyleObject = {
+            var mapfishStyleObject = {
                     "version": "2"
                 },
-                stylingRule,
                 geojsonFormat = new ol.format.GeoJSON(),
-                styleModel;
+                styleAttribute = this.getStyleAttribute(layer);
 
-            if (layerModel !== undefined) {
-                styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
-                features.forEach(function (feature) {
-                    var style = this.getFeatureStyle(feature, layer)[0],
-                        styleObject;
+            features.forEach(function (feature) {
+                var style = this.getFeatureStyle(feature, layer)[0],
+                    stylingRule,
+                    styleObject;
 
-                    if (style !== null) {
+                if (style !== null) {
+                    stylingRule = this.getStylingRule(feature, styleAttribute);
+                    // do nothing if we already have a style object for this CQL rule
+                    if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
                         geojsonFeatures.push(geojsonFormat.writeFeatureObject(feature));
-                        stylingRule = this.getStylingRule(feature, styleModel.get("styleField"));
-
-                        // do nothing if we already have a style object for this CQL rule
-                        if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
-                            return;
-                        }
-                        styleObject = {
-                            symbolizers: []
-                        };
-                        if (feature.getGeometry().getType() === "Point") {
-                            styleObject.symbolizers.push(this.buildPointStyle(style));
-                        }
-                        mapfishStyleObject[stylingRule] = styleObject;
+                        return;
                     }
-                }, this);
-            }
-            // draw layer und co
-            else {
-            }
+                    styleObject = {
+                        symbolizers: []
+                    };
+                    if (feature.getGeometry().getType() === "Point") {
+                        styleObject.symbolizers.push(this.buildPointStyle(style));
+                    }
+                    else if (feature.getGeometry().getType() === "Polygon") {
+                        styleObject.symbolizers.push(this.buildPolygonStyle(style));
+                    }
+                    else if (feature.getGeometry().getType() === "Circle") {
+                        feature.setGeometry(ol.geom.Polygon.fromCircle(feature.getGeometry()));
+                        styleObject.symbolizers.push(this.buildPolygonStyle(style));
+                    }
+                    else if (feature.getGeometry().getType() === "LineString") {
+                        styleObject.symbolizers.push(this.buildLineStringStyle(style));
+                    }
+                    geojsonFeatures.push(geojsonFormat.writeFeatureObject(feature));
+                    mapfishStyleObject[stylingRule] = styleObject;
+                }
+            }, this);
             return mapfishStyleObject;
         },
 
@@ -116,7 +131,10 @@ define(function (require) {
             if (style.getImage() instanceof ol.style.Circle) {
                 return this.buildPointStyleCircle(style.getImage());
             }
-            return this.buildPointStyleIcon(style.getImage());
+            else if (style.getImage() instanceof ol.style.Icon) {
+                return this.buildPointStyleIcon(style.getImage());
+            }
+            return this.buildPointStyleText(style.getText());
         },
 
         buildPointStyleCircle: function (style) {
@@ -129,6 +147,7 @@ define(function (require) {
 
             if (fillStyle !== null) {
                 this.buildFillStyle(fillStyle, obj);
+                obj.strokeColor = this.rgbArrayToHex(fillStyle.getColor());
             }
             if (strokeStyle !== null) {
                 this.buildStrokeStyle(strokeStyle, obj);
@@ -146,6 +165,39 @@ define(function (require) {
             };
         },
 
+        buildPointStyleText: function (style) {
+            return {
+                type: "Text",
+                label: style.getText(),
+                fontColor: this.rgbArrayToHex(style.getFill().getColor()),
+                fontSize: style.getFont().split(" ")[0]
+            };
+        },
+
+        buildPolygonStyle: function (style) {
+            var fillStyle = style.getFill(),
+                strokeStyle = style.getStroke(),
+                obj = {
+                    type: "polygon"
+                };
+
+            this.buildFillStyle(fillStyle, obj);
+            if (strokeStyle !== null) {
+                this.buildStrokeStyle(strokeStyle, obj);
+            }
+            return obj;
+        },
+
+        buildLineStringStyle: function (style) {
+            var strokeStyle = style.getStroke(),
+                obj = {
+                    type: "line"
+                };
+
+            this.buildStrokeStyle(strokeStyle, obj);
+            return obj;
+        },
+
         buildFillStyle: function (style, obj) {
             var fillColor = style.getColor();
 
@@ -155,14 +207,13 @@ define(function (require) {
         },
 
         buildStrokeStyle: function (style, obj) {
-            var strokeColor = style.getColor(),
-                strokeWidth = style.getWidth();
+            var strokeColor = style.getColor();
 
             obj.strokeColor = this.rgbArrayToHex(strokeColor);
             obj.strokeOpacity = strokeColor[3];
 
-            if (strokeWidth !== undefined) {
-                obj.strokeWidth = strokeWidth;
+            if (style.getWidth() !== undefined) {
+                obj.strokeWidth = style.getWidth();
             }
             return obj;
         },
@@ -203,15 +254,33 @@ define(function (require) {
             return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
         },
 
+        getStyleAttribute: function (layer) {
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
+
+            if (layerModel !== undefined) {
+                return Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("styleField");
+            }
+            return "styleId";
+        },
+
+        /**
+         * @param {number[]} rgb - a rgb color represented as an array
+         * @returns {string} hex color
+         */
         rgbArrayToHex: function (rgb) {
-            var hexR = this.colorZeroPadding(rgb[0].toString(16)),
-                hexG = this.colorZeroPadding(rgb[1].toString(16)),
-                hexB = this.colorZeroPadding(rgb[2].toString(16));
+            var hexR = this.addZero(rgb[0].toString(16)),
+                hexG = this.addZero(rgb[1].toString(16)),
+                hexB = this.addZero(rgb[2].toString(16));
 
             return "#" + hexR + hexG + hexB;
         },
 
-        colorZeroPadding: function (hex) {
+        /**
+         * add zero to hex if required
+         * @param {string} hex - hexadecimal value
+         * @returns {string} hexadecimal value
+         */
+        addZero: function (hex) {
             return hex.length === 1 ? "0" + hex : hex;
         }
     });

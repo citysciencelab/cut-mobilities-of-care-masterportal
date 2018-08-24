@@ -87,7 +87,7 @@ define(function (require) {
         parseMapfishCapabilities: function (response) {
             this.setLayoutList(response.layouts);
             this.setCurrentLayout(response.layouts[0]);
-            this.setIsMetaDataAvailable(this.isMetaDataAvailable());
+            // this.setIsMetaDataAvailable(this.isMetaDataAvailable());
             this.setFormatList(response.formats);
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
             this.togglePostcomposeListener(this, true);
@@ -108,40 +108,16 @@ define(function (require) {
                             "center": Radio.request("MapView", "getCenter"),
                             "scale": this.get("currentScale")
                         },
-                        "datasource": []
+                        "showLegend": false,
+                        "showGfi": false,
+                        "metadata": false
                     }
                 });
 
             spec.buildLayers(visibleLayerList);
             console.log(spec.toJSON());
-            // var t = {
-            //     "layout": "A4 Hochformat",
-            //     "outputFormat": "pdf",
-            //     "attributes": {
-            //         "title": "Ttest",
-            //         "map": {
-            //             "projection": "EPSG:25832",
-            //             "dpi": 150,
-            //             "rotation": 0,
-            //             "center": [561210, 5932600],
-            //             "scale": 60000,
-            //             "layers": [{
-            //                 "baseURL": "https://geodienste.hamburg.de/wms_hamburgde",
-            //                 "opacity": 1,
-            //                 "type": "WMS",
-            //                 "layers": [
-            //                     "geobasisdaten"
-            //                 ],
-            //                 "imageFormat": "image/png",
-            //                 "customParams": {
-            //                     "TRANSPARENT": "true"
-            //                 }
-            //             }]
-            //         }
-            //     }
-            // };
-            // console.log(t);
-            this.createPrintJob(this.get("printAppId"), JSON.stringify(spec.toJSON()), this.get("currentFormat"));
+            this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec.toJSON())), this.get("currentFormat"));
+            // console.log(encodeURIComponent(JSON.stringify(spec.toJSON())));
         },
 
         /**
@@ -166,7 +142,6 @@ define(function (require) {
             var url = this.get("mapfishServiceUrl") + "status/" + response.ref + ".json";
 
             this.sendRequest(url, "GET", function (status) {
-                console.log(status);
                 // Fehlerverarbeitung...
                 if (!status.done) {
                     this.waitForPrintJob(response);
@@ -382,7 +357,6 @@ define(function (require) {
             $.ajax({
                 url: serviceUrl,
                 type: requestType,
-                contentType: "application/json; charset=UTF-8",
                 data: data,
                 context: this,
                 success: successCallback
