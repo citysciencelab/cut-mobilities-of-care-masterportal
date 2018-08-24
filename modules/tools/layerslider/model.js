@@ -1,5 +1,5 @@
 define(function () {
-    var TimesliderModel;
+    var LayersliderModel;
 
     LayersliderModel = Backbone.Model.extend({
         defaults: {
@@ -7,7 +7,7 @@ define(function () {
             timeInterval: 2000,
             title: null,
             progressBarWidth: 10,
-            activeLayerId: ""
+            activeLayer: {layerId: ""}
         },
 
         initialize: function (layerIds, title, timeInterval) {
@@ -26,8 +26,8 @@ define(function () {
                 "winParams": this.setStatus
             });
             // Mindestbreite der ProgressBar ist 10%.
-            if (layerIds.length >= 10) {
-                this.setProgressBarWidth(layerIds.length);
+            if (layerIds.length <= 10) {
+                this.setProgressBarWidth(100 / layerIds.length);
             }
         },
         setStatus: function (args) {
@@ -40,11 +40,71 @@ define(function () {
             }
         },
 
-        getActiveIndex: function () {
-            return _.find(this.get("layerIds"), function (layer, index) {
-                console.log(index);
+        /**
+         * Ermittelt die Prozentzahl des index im Array
+         * @returns {integer}   0-100
+         */
+        getFinished: function () {
+            if (!_.isUndefined(this.getActiveIndex())) {
+                var index = this.getActiveIndex() + 1,
+                    max = this.get("layerIds").length;
+                    
+                return Math.round(index * 100 / max);
+            }
+            else {
+                return 0;
+            }
+        },
 
-            });
+        /**
+         * Findet den index im layerIds-Array zur activeLayerId oder liefert undefined
+         * @returns {integer}   index im Array mit activeLayerId
+         */
+        getActiveIndex: function () {
+            return _.findIndex(this.get("layerIds"), function (layer) {
+                return layer.layerId === this.get("activeLayer").layerId;
+            }, this);
+        },
+
+        /**
+         * Findet die activeLayerId anhand des index und initiiert Speicherung
+         * @param {integer} index index in layerIds
+         * @returns {void}
+         */
+        setActiveIndex: function (index) {
+            this.setActiveLayer(this.get("layerIds")[index]);
+        },
+
+        /**
+         * Findet den vorherigen index im Array in einer Schleife.
+         * @returns {void}
+         */
+        backwardLayer: function () {
+            var index = this.getActiveIndex(),
+                max = this.get("layerIds").length - 1;
+
+            if (index > 0) {
+                this.setActiveIndex(index - 1);
+            }
+            else {
+                this.setActiveIndex(max);
+            }
+        },
+
+        /**
+         * Findet den nächsten index im Array in einer Schleife.
+         * @returns {void}
+         */
+        forwardLayer: function () {
+            var index = this.getActiveIndex(),
+                max = this.get("layerIds").length - 1;
+
+            if (index > -1 && index < max) {
+                this.setActiveIndex(index + 1);
+            }
+            else {
+                this.setActiveIndex(0);
+            }
         },
 
         /**
@@ -115,7 +175,16 @@ define(function () {
         * @returns {void}
         */
         setProgressBarWidth: function (value) {
-            this.set("progressBarWidth", value);
+            this.set("progressBarWidth", Math.round(value));
+        },
+
+        /*
+        * setter for activeLayerId
+        * @param {object} value activeLayer
+        * @returns {void}
+        */
+        setActiveLayer: function (value) {
+            this.set("activeLayer", value);
         }
     });
 

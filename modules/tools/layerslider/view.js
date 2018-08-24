@@ -1,6 +1,5 @@
 define(function (require) {
     var LayersliderTemplate = require("text!modules/tools/layerslider/template.html"),
-        $ = require("jquery"),
         LayersliderModel = require("modules/tools/layerslider/model"),
         LayersliderView;
 
@@ -25,7 +24,7 @@ define(function (require) {
 
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin": this.render,
-                "change:activeLayerId": this.layerSwitched
+                "change:activeLayer": this.layerSwitched
             });
         },
         className: "win-body",
@@ -40,13 +39,13 @@ define(function (require) {
         },
 
         backwardSlider: function () {
-
+            this.model.backwardLayer();
         },
 
         forwardSlider: function () {
-
+            this.model.forwardLayer();
         },
-        
+
         render: function () {
             var attr;
 
@@ -63,9 +62,40 @@ define(function (require) {
         },
 
         layerSwitched: function () {
-            var index = this.model.getActiveIndex();
+            this.setProgress();
+            this.setTitle();
+        },
 
-            console.log(index);
+        setProgress: function () {
+            var finishedPercent = this.model.getFinished(),
+                activeIndex = this.model.getActiveIndex(),
+                max = this.model.get("layerIds").length - 1,
+                progressBarWidth = this.model.get("progressBarWidth");
+
+            if (_.isUndefined(activeIndex)) {
+                this.$el.find(".progress-bar").attr("aria-valuenow", "0");
+                this.$el.find(".progress-bar").css("width", "0%")
+                this.$el.find(".progress-bar").css('margin-left', "0%")
+            }
+            else if (activeIndex === 0) {
+                this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
+                this.$el.find(".progress-bar").css("width", progressBarWidth +"%")
+                this.$el.find(".progress-bar").css("margin-left", "0%")
+            }
+            else if (activeIndex === max) {
+                this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
+                this.$el.find(".progress-bar").css("width", progressBarWidth +"%")
+                this.$el.find(".progress-bar").css("margin-left", (100 - progressBarWidth) + "%")
+            }
+            else {
+                this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
+                this.$el.find(".progress-bar").css("width", progressBarWidth +"%")
+                this.$el.find(".progress-bar").css("margin-left", ((100 - progressBarWidth) / 2) + "%")
+            }
+        },
+
+        setTitle: function () {
+            this.$el.find("#title").val(this.model.get("activeLayer").title);
         }
     });
 
