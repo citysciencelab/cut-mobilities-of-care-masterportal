@@ -151,12 +151,12 @@ define(function (require) {
         getTextStyle: function (color) {
             return new ol.style.Style({
                 text: new ol.style.Text({
+                    textAlign: "left",
                     text: this.get("text"),
                     font: this.get("fontSize") + "px " + this.get("font"),
                     fill: new ol.style.Fill({
                         color: color
-                    }),
-                    scale: this.get("fontSize") / 8
+                    })
                 })
             });
         },
