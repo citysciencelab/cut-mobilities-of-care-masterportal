@@ -1,16 +1,17 @@
 define(function () {
     var TimesliderModel;
 
-    TimesliderModel = Backbone.Model.extend({
+    LayersliderModel = Backbone.Model.extend({
         defaults: {
             layerIds: [],
             timeInterval: 2000,
-            title: null
+            title: null,
+            progressBarWidth: 10
         },
 
         initialize: function (layerIds, title, timeInterval) {
             if (!this.checkAllLayerOk(layerIds)) {
-                console.error("Konfiguration der Zeitreihe fehlerhaft.");
+                console.error("Konfiguration des layersliders fehlerhaft");
                 return;
             }
             this.setLayerIds(layerIds);
@@ -23,9 +24,13 @@ define(function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
+            // Mindestbreite der ProgressBar ist 10%.
+            if (layerIds.length >= 10) {
+                this.setProgressBarWidth(layerIds.length);
+            }
         },
         setStatus: function (args) {
-            if (args[2].get("id") === "timeslider" && args[0] === true) {
+            if (args[2].get("id") === "layerslider" && args[0] === true) {
                 this.setIsCollapsed(args[1]);
                 this.setIsCurrentWin(args[0]);
             }
@@ -35,7 +40,7 @@ define(function () {
         },
 
         /**
-         * Prüft, ob alle Layer, die die Zeitreihe nutzen soll, auch definiert sind.
+         * Prüft, ob alle Layer, die der Layerslider nutzen soll, auch definiert sind und ein title Attribut haben
          * @param   {object[]}  layerIds Konfiguration der Layer aus config.json
          * @returns {boolean}   True wenn alle Layer gefunden wurden
          */
@@ -43,7 +48,7 @@ define(function () {
             var allOk = true;
 
             _.each(layerIds, function (layer) {
-                if (_.isUndefined(Radio.request("ModelList", "getModelByAttributes", {id: layer.layerId}))) {
+                if (_.isUndefined(Radio.request("ModelList", "getModelByAttributes", {id: layer.layerId})) || _.isUndefined(layer.title)) {
                     allOk = false;
                 }
             });
@@ -94,8 +99,17 @@ define(function () {
         */
         setTimeInterval: function (value) {
             this.set("timeInterval", value);
+        },
+
+        /*
+        * setter for progressBarWidth
+        * @param {integer} value progressBarWidth
+        * @returns {void}
+        */
+        setProgressBarWidth: function (value) {
+            this.set("progressBarWidth", value);
         }
     });
 
-    return TimesliderModel;
+    return LayersliderModel;
 });

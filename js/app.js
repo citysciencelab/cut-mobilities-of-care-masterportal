@@ -266,9 +266,9 @@ define("app", function (require) {
                     });
                     break;
                 }
-                case "timeslider": {
-                    require(["modules/tools/timeslider/view"], function (Timeslider) {
-                        new Timeslider(tool);
+                case "layerslider": {
+                    require(["modules/tools/layerslider/view"], function (Layerslider) {
+                        new Layerslider(tool);
                     });
                 }
                 default: {

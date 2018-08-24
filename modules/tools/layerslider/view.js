@@ -1,10 +1,10 @@
 define(function (require) {
-    var TimesliderTemplate = require("text!modules/tools/timeslider/template.html"),
+    var LayersliderTemplate = require("text!modules/tools/layerslider/template.html"),
         $ = require("jquery"),
-        TimesliderModel = require("modules/tools/timeslider/model"),
-        TimesliderView;
+        LayersliderModel = require("modules/tools/layerslider/model"),
+        LayersliderView;
 
-    TimesliderView = Backbone.View.extend({
+    LayersliderView = Backbone.View.extend({
         events: {
 
         },
@@ -13,18 +13,19 @@ define(function (require) {
                 title = _.has(attr, "title") ? attr.title : null,
                 timeInterval = _.has(attr, "timeInterval") ? attr.timeInterval : null;
 
+            //Pflichtattribut abfragen
             if (!layerIds) {
-                console.error("Timesliderkonfiguration unvollständig");
+                console.error("Konfiguration des layersliders unvollständig");
                 return;
             }
-            this.model = new TimesliderModel(layerIds, title, timeInterval);
+            this.model = new LayersliderModel(layerIds, title, timeInterval);
 
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin": this.render
             });
         },
         className: "win-body",
-        template: _.template(TimesliderTemplate),
+        template: _.template(LayersliderTemplate),
 
         render: function () {
             var attr;
@@ -42,5 +43,5 @@ define(function (require) {
         }
     });
 
-    return TimesliderView;
+    return LayersliderView;
 });

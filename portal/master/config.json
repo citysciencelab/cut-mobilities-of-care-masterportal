@@ -294,7 +294,7 @@
             "name": "Auswahl speichern",
             "glyphicon": "glyphicon-share"
           },
-          "timeslider": {
+          "layerslider": {
             "name": "Zeitreihe",
             "glyphicon": "glyphicon-film",
             "title": "Simulation von Beispiel-WMS",
@@ -310,7 +310,7 @@
               },
               {
                 "title": "Dienst 3",
-                "layerId": "4561x"
+                "layerId": "4561"
               }
             ]
           }
