@@ -48,6 +48,7 @@
             </select>
         </div>
     </div>
+    <% if(isLegendAvailable) { %>
     <div class="form-group form-group-sm">
         <div class="col-sm-offset-4 col-sm-8">
             <div class="checkbox">
@@ -57,7 +58,8 @@
             </div>
         </div>
     </div>
-    <% if(isGfiAvailable) { %>
+    <% } %>
+    <% if(isGfiAvailable && isGfiActive) { %>
     <div class="form-group form-group-sm">
         <div class="col-sm-offset-4 col-sm-8">
             <div class="checkbox">

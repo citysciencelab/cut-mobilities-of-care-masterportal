@@ -45,7 +45,7 @@ define(function (require) {
                 "getIsVisible": function () {
                     return this.get("isVisible");
                 },
-                "getGFIForPrint": this.getGFIForPrint,
+                "getGfiForPrint": this.getGfiForPrint,
                 "getCoordinate": function () {
                     return this.get("coordinate");
                 },
@@ -303,10 +303,14 @@ define(function (require) {
         /*
         * @description Liefert die GFI-Infos ans Print-Modul.
         */
-        getGFIForPrint: function () {
-            var theme = this.get("themeList").at(this.get("themeIndex"));
+        getGfiForPrint: function () {
+            var theme = this.get("themeList").at(this.get("themeIndex")),
+                responseArray = [];
 
-            return [theme.get("gfiContent")[0], theme.get("name"), this.get("coordinate")];
+            if (!_.isUndefined(theme)) {
+                responseArray = [theme.get("gfiContent")[0], theme.get("name"), this.get("coordinate")];
+            }
+            return responseArray;
         },
 
         getVisibleTheme: function () {

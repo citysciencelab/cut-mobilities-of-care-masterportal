@@ -23,12 +23,20 @@ define(function (require) {
             title: "test",
             // is scale selected by the user over the view
             isScaleSelectedManually: false,
-            // true if the legend is to be printed
-            isLegendSelected: true,
             // true if the current layout supports meta data
             isMetaDataAvailable: false,
+            // true if the current layout supports gfi
             isGfiAvailable: false,
+            // true if gfi is to be printed
             isGfiSelected: false,
+            // true if gfi is active
+            isGfiActive: false,
+            // true if the current layout supports legend
+            isLegendAvailable: false,
+            // true if the legend is to be printed
+            isLegendSelected: false,
+            // true if the current layout supports scale
+            isScaleAvailable: false,
             // the id from the rest services json for the plot app
             plotServiceId: undefined,
             deaktivateGFI: false,
@@ -56,8 +64,11 @@ define(function (require) {
             });
 
             this.listenTo(Radio.channel("GFI"), {
-                "isVisible": function (isGfiVisible) {
-                    this.setIsGfiAvailable(isGfiVisible);
+                "isVisible": function (isGfiActive) {
+                    if (!isGfiActive) {
+                        this.setIsGfiSelected(false);
+                    }
+                    this.setIsGfiActive(isGfiActive);
                 }
             });
         },
@@ -87,7 +98,10 @@ define(function (require) {
         parseMapfishCapabilities: function (response) {
             this.setLayoutList(response.layouts);
             this.setCurrentLayout(response.layouts[0]);
-            // this.setIsMetaDataAvailable(this.isMetaDataAvailable());
+            this.setIsMetaDataAvailable(!_.isUndefined(this.getAttributeInLayoutByName("metadata")));
+            this.setIsGfiAvailable(!_.isUndefined(this.getAttributeInLayoutByName("gfi")));
+            this.setIsLegendAvailable(!_.isUndefined(this.getAttributeInLayoutByName("legend")));
+            this.setIsScaleAvailable(!_.isUndefined(this.getAttributeInLayoutByName("scale")));
             this.setFormatList(response.formats);
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
             this.togglePostcomposeListener(this, true);
@@ -97,7 +111,7 @@ define(function (require) {
             var visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
                     return layer.getVisible() === true;
                 }),
-                spec = new BuildSpecModel({
+                attr = {
                     "layout": this.get("currentLayout").name,
                     "outputFormat": this.get("currentFormat"),
                     "attributes": {
@@ -107,17 +121,27 @@ define(function (require) {
                             "projection": Radio.request("MapView", "getProjection").getCode(),
                             "center": Radio.request("MapView", "getCenter"),
                             "scale": this.get("currentScale")
-                        },
-                        "showLegend": false,
-                        "showGfi": false,
-                        "metadata": false
+                        }
                     }
-                });
+                },
+                spec;
 
+            spec = new BuildSpecModel(attr);
+            if (this.get("isMetaDataAvailable")) {
+                spec.setMetadata(true);
+            }
+            if (this.get("isLegendAvailable")) {
+                spec.buildLegend(this.get("isLegendSelected"), Radio.request("Legend", "getLegendParams"));
+            }
+            if (this.get("isGfiAvailable")) {
+                spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
+            }
+            if (this.get("isScaleAvailable")) {
+                spec.buildScale(this.get("currentScale"));
+            }
             spec.buildLayers(visibleLayerList);
             console.log(spec.toJSON());
             this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec.toJSON())), this.get("currentFormat"));
-            // console.log(encodeURIComponent(JSON.stringify(spec.toJSON())));
         },
 
         /**
@@ -324,18 +348,6 @@ define(function (require) {
         },
 
         /**
-         * checks if the current layout supports meta data
-         * @returns {boolean} true if the current layout supports otherwise false
-         */
-        isMetaDataAvailable: function () {
-            var dataSource = this.getAttributeInLayoutByName("datasource");
-
-            return dataSource.clientParams.attributes.some(function (attribute) {
-                return attribute.name.search("meta") !== -1;
-            });
-        },
-
-        /**
          * sorts an array numerically and ascending
          * @param {number} a - first value
          * @param {number} b - next value
@@ -412,11 +424,32 @@ define(function (require) {
         },
 
         /**
-         * @param {boolean} value - true if gfi is visible on the map
+         * @param {boolean} value - true if mapfish can print gfi
          * @returns {void}
          */
         setIsGfiAvailable: function (value) {
             this.set("isGfiAvailable", value);
+        },
+        /**
+         * @param {boolean} value - true if gfi is active
+         * @returns {void}
+         */
+        setIsGfiActive: function (value) {
+            this.set("isGfiActive", value);
+        },
+        /**
+         * @param {boolean} value - true if mapfish can print legend
+         * @returns {void}
+         */
+        setIsLegendAvailable: function (value) {
+            this.set("isLegendAvailable", value);
+        },
+        /**
+         * @param {boolean} value - true if mapfish can print scale
+         * @returns {void}
+         */
+        setIsScaleAvailable: function (value) {
+            this.set("isScaleAvailable", value);
         },
 
         /**

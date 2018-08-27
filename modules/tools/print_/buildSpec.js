@@ -4,7 +4,6 @@ define(function (require) {
 
     BuildSpecModel = Backbone.Model.extend({
         defaults: {},
-
         /**
          * defines the layer attribute of the map spec
          * @param {ol.layer.Layer[]} layerList - all visible layers on the map
@@ -318,6 +317,139 @@ define(function (require) {
          */
         addZero: function (hex) {
             return hex.length === 1 ? "0" + hex : hex;
+        },
+        /**
+         * gets legendParams and builds legend object for mapfish print
+         * @param  {Boolean} isLegendSelected flag if legend has to be printed
+         * @param  {[object]}  legendParams params derived from legend module
+         * @return {void}
+         */
+        buildLegend: function (isLegendSelected, legendParams) {
+            var legendObject = {},
+                filteredLegendParams = _.filter(legendParams, function (param) {
+                    return param.isVisibleInMap === true;
+                });
+            if (isLegendSelected) {
+                if (filteredLegendParams.length > 0) {
+                    legendObject.layers = [];
+                    _.each(filteredLegendParams, function (layerParam) {
+                        legendObject.layers.push({
+                            layerName: layerParam.layername,
+                            values: this.prepareLegendAttributes(layerParam)
+                        });
+                    }, this);
+                }
+            }
+            this.setShowLegend(isLegendSelected);
+            this.setLegend(legendObject);
+        },
+        prepareLegendAttributes: function (layerParam) {
+            var valuesArray = [];
+
+            if (layerParam.typ === "WMS" || layerParam.typ === "WFS") {
+                _.each(layerParam.img, function (url, index) {
+                    var valueObj = {
+                        legendType: "",
+                        geometryType: "",
+                        imageUrl: "",
+                        color: "",
+                        label: ""
+                    };
+
+                    if (layerParam.typ === "WMS") {
+                        valueObj.legendType = "wmsGetLegendGraphic";
+                    }
+                    else if (layerParam.typ === "WFS") {
+                        valueObj.legendType = "wfsImage";
+                    }
+
+                    valueObj.label = layerParam.legendname[index];
+                    valueObj.imageUrl = url;
+                    valuesArray.push(valueObj);
+                });
+            }
+            else if (layerParam.typ === "styleWMS") {
+                _.each(layerParam.params, function (styleWmsParam) {
+                    valuesArray.push({
+                        legendType: "geometry",
+                        geometryType: "polygon",
+                        imageUrl: "",
+                        color: styleWmsParam.color,
+                        label: styleWmsParam.startRange + " - " + styleWmsParam.stopRange
+                    });
+                });
+            }
+
+            return valuesArray;
+        },
+        /**
+         * gets array with [GfiContent, layername, coordinates] of actual gfi
+         * empty array if gfi is not active.
+         * coordinates not needed, yet.
+         * @param {boolean} isGfiSelected flag if gfi has to be printed
+         * @param  {array} gfiArray array
+         * @return {void}
+         */
+        buildGfi: function (isGfiSelected, gfiArray) {
+            var gfiObject = {},
+                gfiAttributes,
+                layerName;
+
+            if (isGfiSelected) {
+                if (gfiArray.length > 0) {
+                    gfiObject.layers = [];
+                    gfiAttributes = gfiArray[0];
+                    layerName = gfiArray[1];
+
+                    gfiObject.layers.push({
+                        layerName: layerName,
+                        values: this.prepareGfiAttributes(gfiAttributes)
+                    });
+
+                }
+            }
+            this.setShowGfi(isGfiSelected);
+            this.setGfi(gfiObject);
+        },
+        /**
+         * parses gfiAttributes object with key value pairs into array[objects] with attributes key and value
+         * @param  {object} gfiAttributes gfi Mapping attributes
+         * @return {[object]} parsed array[objects] with key- and value attributes
+         */
+        prepareGfiAttributes: function (gfiAttributes) {
+            var valuesArray = [];
+
+            _.each(gfiAttributes, function (value, key) {
+                valuesArray.push({
+                    key: key,
+                    value: value
+                });
+            });
+
+            return valuesArray;
+        },
+        buildScale: function (scale) {
+            var scaleText = "1:" + scale;
+
+            this.setScale(scaleText);
+        },
+        setMetadata: function (value) {
+            this.get("attributes").metadata = value;
+        },
+        setShowLegend: function (value) {
+            this.get("attributes").showLegend = value;
+        },
+        setLegend: function (value) {
+            this.get("attributes").legend = value;
+        },
+        setShowGfi: function (value) {
+            this.get("attributes").showGfi = value;
+        },
+        setGfi: function (value) {
+            this.get("attributes").gfi = value;
+        },
+        setScale: function (value) {
+            this.get("attributes").scale = value;
         }
     });
 
