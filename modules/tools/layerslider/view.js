@@ -30,22 +30,6 @@ define(function (require) {
         className: "win-body",
         template: _.template(LayersliderTemplate),
 
-        playSlider: function () {
-
-        },
-
-        stopSlider: function () {
-
-        },
-
-        backwardSlider: function () {
-            this.model.backwardLayer();
-        },
-
-        forwardSlider: function () {
-            this.model.forwardLayer();
-        },
-
         render: function () {
             var attr;
 
@@ -59,6 +43,22 @@ define(function (require) {
                 this.undelegateEvents();
             }
             return this;
+        },
+
+        playSlider: function () {
+            this.model.startInterval();
+        },
+
+        stopSlider: function () {
+            this.model.stopInterval();
+        },
+
+        backwardSlider: function () {
+            this.model.backwardLayer();
+        },
+
+        forwardSlider: function () {
+            this.model.forwardLayer();
         },
 
         layerSwitched: function () {

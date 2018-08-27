@@ -7,7 +7,8 @@ define(function () {
             timeInterval: 2000,
             title: null,
             progressBarWidth: 10,
-            activeLayer: {layerId: ""}
+            activeLayer: {layerId: ""},
+            windowsInterval: null
         },
 
         initialize: function (layerIds, title, timeInterval) {
@@ -76,6 +77,42 @@ define(function () {
         },
 
         /**
+         * Setter des Windows Intervals. Bindet an this.
+         * @param {function} func                Funktion, die in this ausgeführt werden soll
+         * @param {integer}  autorefreshInterval Intervall in ms
+         * @returns {void}
+         */
+        setWindowsInterval: function (func, autorefreshInterval) {
+            this.set("windowsInterval", setInterval(func.bind(this), autorefreshInterval));
+        },
+
+        /**
+         * Startet das windows-Interval einmalig.
+         * @returns {void}
+         */
+        startInterval: function () {
+            var windowsInterval = this.get("windowsInterval"),
+                timeInterval = this.get("timeInterval");
+
+            if (_.isNull(windowsInterval)) {
+                this.setWindowsInterval(this.forwardLayer, timeInterval);
+            }
+        },
+
+        /**
+         * Stoppt das windows-Interval
+         * @returns {void}
+         */
+        stopInterval: function () {
+            var windowsInterval = this.get("windowsInterval");
+
+            if (!_.isUndefined(windowsInterval)) {
+                clearInterval(windowsInterval);
+                this.set("windowsInterval", null);
+            }
+        },
+
+        /**
          * Findet den vorherigen index im Array in einer Schleife.
          * @returns {void}
          */
@@ -105,6 +142,16 @@ define(function () {
             else {
                 this.setActiveIndex(0);
             }
+        },
+
+        /**
+         * Setter des Windows Intervals. Bindet an this.
+         * @param {function} func                Funktion, die in this ausgeführt werden soll
+         * @param {integer}  autorefreshInterval Intervall in ms
+         * @returns {void}
+         */
+        setWindowsInterval: function (func, autorefreshInterval) {
+            this.set("windowsInterval", setInterval(func.bind(this), autorefreshInterval));
         },
 
         /**
