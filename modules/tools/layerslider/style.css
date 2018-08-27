@@ -3,6 +3,7 @@
 }
 #layerslider .progress-bar {
 	background-color: rgb(85, 85, 85);
+	transition: all .6s;
 }
 
 #layerslider .progress {
