@@ -75,7 +75,8 @@ define(function (require) {
         buildVector: function (layer) {
             var source = layer.getSource(),
                 geojsonList = [],
-                features = source.getFeatures();
+                extent = Radio.request("MapView", "getCurrentExtent"),
+                features = source.getFeaturesInExtent(extent);
 
             return {
                 type: "geojson",
