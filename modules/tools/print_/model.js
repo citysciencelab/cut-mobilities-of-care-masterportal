@@ -28,11 +28,13 @@ define(function (require) {
             // true if the current layout supports gfi
             isGfiAvailable: false,
             // true if gfi is to be printed
-            isGfiSelected: true,
+            isGfiSelected: false,
+            // true if gfi is active
+            isGfiActive: false,
             // true if the current layout supports legend
             isLegendAvailable: false,
             // true if the legend is to be printed
-            isLegendSelected: true,
+            isLegendSelected: false,
             // true if the current layout supports scale
             isScaleAvailable: false,
             // the id from the rest services json for the plot app
@@ -62,8 +64,11 @@ define(function (require) {
             });
 
             this.listenTo(Radio.channel("GFI"), {
-                "isVisible": function (isGfiVisible) {
-                    this.setIsGfiAvailable(isGfiVisible);
+                "isVisible": function (isGfiActive) {
+                    if (!isGfiActive) {
+                        this.setIsGfiSelected(false);
+                    }
+                    this.setIsGfiActive(isGfiActive);
                 }
             });
         },
@@ -424,6 +429,13 @@ define(function (require) {
          */
         setIsGfiAvailable: function (value) {
             this.set("isGfiAvailable", value);
+        },
+        /**
+         * @param {boolean} value - true if gfi is active
+         * @returns {void}
+         */
+        setIsGfiActive: function (value) {
+            this.set("isGfiActive", value);
         },
         /**
          * @param {boolean} value - true if mapfish can print legend
