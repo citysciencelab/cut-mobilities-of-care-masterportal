@@ -127,6 +127,9 @@ define(function (require) {
             if (this.get("isGfiAvailable")) {
                 spec.buildGfi(Radio.request("GFI", "getGfiForPrint"));
             }
+            if (this.get("isScaleAvailable")) {
+                spec.buildScale(this.get("currentScale"));
+            }
             spec.buildLayers(visibleLayerList);
             console.log(spec.toJSON());
             this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec.toJSON())), this.get("currentFormat"));

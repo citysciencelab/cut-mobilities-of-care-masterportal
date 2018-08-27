@@ -382,6 +382,11 @@ define(function (require) {
 
             return valuesArray;
         },
+        buildScale: function (scale) {
+            var scaleText = "1:" + scale;
+
+            this.setScale(scaleText);
+        },
         setMetadata: function (value) {
             this.get("attributes").metadata = value;
         },
@@ -396,6 +401,9 @@ define(function (require) {
         },
         setGfi: function (value) {
             this.get("attributes").gfi = value;
+        },
+        setScale: function (value) {
+            this.get("attributes").scale = value;
         }
     });
 
