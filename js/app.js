@@ -36,7 +36,10 @@ define("app", function (require) {
     new AddGeoJSON();
 
     // Funktionalitäten laden
-
+    // CSW parser
+    require(["modules/cswParser/model"], function (CswParserModel) {
+        new CswParserModel();
+    });
     // Browser Druck Modul
     require(["modules/functionalities/browserPrint/model"], function (BrowserPrintModel) {
         new BrowserPrintModel();

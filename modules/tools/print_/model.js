@@ -44,7 +44,6 @@ define(function (require) {
             DOTS_PER_INCH: 72,
             INCHES_PER_METER: 39.37
         }),
-
         initialize: function () {
             this.superInitialize();
 
@@ -131,7 +130,7 @@ define(function (require) {
                 spec.setMetadata(true);
             }
             if (this.get("isLegendAvailable")) {
-                spec.buildLegend(this.get("isLegendSelected"), Radio.request("Legend", "getLegendParams"));
+                spec.buildLegend(this.get("isLegendSelected"), Radio.request("Legend", "getLegendParams"), this.get("isMetaDataAvailable"));
             }
             if (this.get("isGfiAvailable")) {
                 spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
