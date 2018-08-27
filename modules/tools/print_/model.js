@@ -23,14 +23,18 @@ define(function (require) {
             title: "test",
             // is scale selected by the user over the view
             isScaleSelectedManually: false,
-            // true if the legend is to be printed
-            isLegendSelected: true,
             // true if the current layout supports meta data
             isMetaDataAvailable: false,
+            // true if the current layout supports gfi
             isGfiAvailable: false,
+            // true if gfi is to be printed
+            isGfiSelected: true,
+            // true if the current layout supports legend
             isLegendAvailable: false,
+            // true if the legend is to be printed
+            isLegendSelected: true,
+            // true if the current layout supports scale
             isScaleAvailable: false,
-            isGfiSelected: false,
             // the id from the rest services json for the plot app
             plotServiceId: undefined,
             deaktivateGFI: false,
@@ -122,10 +126,10 @@ define(function (require) {
                 spec.setMetadata(true);
             }
             if (this.get("isLegendAvailable")) {
-                spec.buildLegend(Radio.request("Legend", "getLegendParams"));
+                spec.buildLegend(this.get("isLegendSelected"), Radio.request("Legend", "getLegendParams"));
             }
             if (this.get("isGfiAvailable")) {
-                spec.buildGfi(Radio.request("GFI", "getGfiForPrint"));
+                spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
             }
             if (this.get("isScaleAvailable")) {
                 spec.buildScale(this.get("currentScale"));
@@ -133,7 +137,6 @@ define(function (require) {
             spec.buildLayers(visibleLayerList);
             console.log(spec.toJSON());
             this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec.toJSON())), this.get("currentFormat"));
-            // console.log(encodeURIComponent(JSON.stringify(spec.toJSON())));
         },
 
         /**

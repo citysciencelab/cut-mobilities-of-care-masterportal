@@ -282,25 +282,30 @@ define(function (require) {
         addZero: function (hex) {
             return hex.length === 1 ? "0" + hex : hex;
         },
-        buildLegend: function (legendParams) {
+        /**
+         * gets legendParams and builds legend object for mapfish print
+         * @param  {Boolean} isLegendSelected flag if legend has to be printed
+         * @param  {[object]}  legendParams params derived from legend module
+         * @return {void}
+         */
+        buildLegend: function (isLegendSelected, legendParams) {
             var legendObject = {},
-                showLegend = false,
                 filteredLegendParams = _.filter(legendParams, function (param) {
                     return param.isVisibleInMap === true;
                 });
 
-            console.log(filteredLegendParams);
-            if (filteredLegendParams.length > 0) {
-                legendObject.layers = [];
-                _.each(filteredLegendParams, function (layerParam) {
-                    legendObject.layers.push({
-                        layerName: layerParam.layername,
-                        values: this.prepareLegendAttributes(layerParam)
-                    });
-                }, this);
-                showLegend = true;
+            if (isLegendSelected) {
+                if (filteredLegendParams.length > 0) {
+                    legendObject.layers = [];
+                    _.each(filteredLegendParams, function (layerParam) {
+                        legendObject.layers.push({
+                            layerName: layerParam.layername,
+                            values: this.prepareLegendAttributes(layerParam)
+                        });
+                    }, this);
+                }
             }
-            this.setShowLegend(showLegend);
+            this.setShowLegend(isLegendSelected);
             this.setLegend(legendObject);
         },
         prepareLegendAttributes: function (layerParam) {
@@ -346,30 +351,36 @@ define(function (require) {
          * gets array with [GfiContent, layername, coordinates] of actual gfi
          * empty array if gfi is not active.
          * coordinates not needed, yet.
+         * @param {boolean} isGfiSelected flag if gfi has to be printed
          * @param  {array} gfiArray array
          * @return {void}
          */
-        buildGfi: function (gfiArray) {
+        buildGfi: function (isGfiSelected, gfiArray) {
             var gfiObject = {},
-                showGfi = false,
                 gfiAttributes,
                 layerName;
 
-            if (gfiArray.length > 0) {
-                gfiObject.layers = [];
-                showGfi = true;
-                gfiAttributes = gfiArray[0];
-                layerName = gfiArray[1];
+            if (isGfiSelected) {
+                if (gfiArray.length > 0) {
+                    gfiObject.layers = [];
+                    gfiAttributes = gfiArray[0];
+                    layerName = gfiArray[1];
 
-                gfiObject.layers.push({
-                    layerName: layerName,
-                    values: this.prepareGfiAttributes(gfiAttributes)
-                });
+                    gfiObject.layers.push({
+                        layerName: layerName,
+                        values: this.prepareGfiAttributes(gfiAttributes)
+                    });
 
+                }
             }
-            this.setShowGfi(showGfi);
+            this.setShowGfi(isGfiSelected);
             this.setGfi(gfiObject);
         },
+        /**
+         * parses gfiAttributes object with key value pairs into array[objects] with attributes key and value
+         * @param  {object} gfiAttributes gfi Mapping attributes
+         * @return {[object]} parsed array[objects] with key- and value attributes
+         */
         prepareGfiAttributes: function (gfiAttributes) {
             var valuesArray = [];
 
