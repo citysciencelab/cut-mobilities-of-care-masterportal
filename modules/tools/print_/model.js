@@ -133,13 +133,13 @@ define(function (require) {
             if (this.get("isLegendAvailable")) {
                 spec.buildLegend(this.get("isLegendSelected"), Radio.request("Legend", "getLegendParams"));
             }
-            if (this.get("isGfiAvailable")) {
-                spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
-            }
             if (this.get("isScaleAvailable")) {
                 spec.buildScale(this.get("currentScale"));
             }
             spec.buildLayers(visibleLayerList);
+            if (this.get("isGfiAvailable")) {
+                spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
+            }
             console.log(spec.toJSON());
             this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec.toJSON())), this.get("currentFormat"));
         },

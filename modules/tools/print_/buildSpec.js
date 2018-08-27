@@ -5,7 +5,7 @@ define(function (require) {
     BuildSpecModel = Backbone.Model.extend({
         defaults: {},
         /**
-         * defines the layer attribute of the map spec
+         * defines the layers attribute of the map spec
          * @param {ol.layer.Layer[]} layerList - all visible layers on the map
          * @returns {void}
          */
@@ -329,6 +329,7 @@ define(function (require) {
                 filteredLegendParams = _.filter(legendParams, function (param) {
                     return param.isVisibleInMap === true;
                 });
+
             if (isLegendSelected) {
                 if (filteredLegendParams.length > 0) {
                     legendObject.layers = [];
@@ -407,9 +408,46 @@ define(function (require) {
                     });
 
                 }
+                this.addGfiFeature(this.get("attributes").map.layers, gfiArray[2]);
             }
             this.setShowGfi(isGfiSelected);
             this.setGfi(gfiObject);
+        },
+
+        /**
+         * @param {object[]} layers - layers attribute of the map spec
+         * @param {number[]} coordinates - the coordinates of the gfi
+         * @returns {void}
+         */
+        addGfiFeature: function (layers, coordinates) {
+            var geojsonFormat = new ol.format.GeoJSON(),
+                gfiFeature = new ol.Feature({
+                    geometry: new ol.geom.Point(coordinates),
+                    name: "GFI Point"
+                });
+
+            layers.splice(0, 0, {
+                type: "geojson",
+                geojson: [geojsonFormat.writeFeatureObject(gfiFeature)],
+                style: {
+                    version: "2",
+                    "[name='GFI Point']": {
+                        symbolizers: [{
+                            fillOpacity: 0,
+                            pointRadius: 18,
+                            strokeColor: "#e10019",
+                            strokeWidth: 3,
+                            type: "point"
+                        },
+                        {
+                            fillColor: "#e10019",
+                            pointRadius: 4,
+                            strokeOpacity: 0,
+                            type: "point"
+                        }]
+                    }
+                }
+            });
         },
         /**
          * parses gfiAttributes object with key value pairs into array[objects] with attributes key and value
