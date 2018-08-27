@@ -42,6 +42,30 @@ define(function () {
         },
 
         /**
+         * Ermittelt die Sichtbarkeit der layerIds
+         * @param   {string} activeLayerId id des activeLayer
+         * @returns {void}
+         */
+        toggleLayerVisibility: function (activeLayerId) {
+            _.each(this.get("layerIds"), function (layer) {
+                this.sendModification(layer.layerId, layer.layerId === activeLayerId ? true : false);
+            }, this)
+        },
+
+        /**
+         * Triggert übers Radio die neue Sichtbarkeit
+         * @param   {string}    layerId layerId
+         * @param   {boolean}   status  Sichtbarkeit true / false
+         * @returns {void}
+         */
+        sendModification: function (layerId, status) {
+            Radio.trigger("ModelList", "setModelAttributesById", layerId, {
+                isSelected: status,
+                isVisibleInMap: status
+            });
+        },
+
+        /**
          * Ermittelt die Prozentzahl des index im Array
          * @returns {integer}   0-100
          */
@@ -58,7 +82,7 @@ define(function () {
         },
 
         /**
-         * Findet den index im layerIds-Array zur activeLayerId oder liefert undefined
+         * Findet den index im layerIds-Array zur activeLayerId oder liefert -1
          * @returns {integer}   index im Array mit activeLayerId
          */
         getActiveIndex: function () {
@@ -74,6 +98,7 @@ define(function () {
          */
         setActiveIndex: function (index) {
             this.setActiveLayer(this.get("layerIds")[index]);
+            this.toggleLayerVisibility(this.get("activeLayer").layerId);
         },
 
         /**
@@ -95,6 +120,7 @@ define(function () {
                 timeInterval = this.get("timeInterval");
 
             if (_.isNull(windowsInterval)) {
+                this.forwardLayer();
                 this.setWindowsInterval(this.forwardLayer, timeInterval);
             }
         },

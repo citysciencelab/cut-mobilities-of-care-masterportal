@@ -37,6 +37,7 @@ define(function (require) {
                 attr = this.model.toJSON();
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.layerSwitched();
                 this.delegateEvents();
             }
             else {
@@ -72,7 +73,7 @@ define(function (require) {
                 max = this.model.get("layerIds").length - 1,
                 progressBarWidth = this.model.get("progressBarWidth");
 
-            if (_.isUndefined(activeIndex)) {
+            if (activeIndex === -1) {
                 this.$el.find(".progress-bar").attr("aria-valuenow", "0");
                 this.$el.find(".progress-bar").css("width", "0%")
                 this.$el.find(".progress-bar").css('margin-left', "0%")
