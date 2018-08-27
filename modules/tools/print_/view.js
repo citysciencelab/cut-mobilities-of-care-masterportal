@@ -41,7 +41,7 @@ define(function (require) {
             var newLayout = this.model.getLayoutByName(this.model.get("layoutList"), evt.target.value);
 
             this.model.setCurrentLayout(newLayout);
-            this.model.isMetaDataAvailable();
+            // this.model.isMetaDataAvailable();
             this.model.setIsScaleSelectedManually(false);
             Radio.trigger("Map", "render");
         },

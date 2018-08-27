@@ -17,10 +17,10 @@ define(function (require) {
             font: "Arial",
             fontSize: 10,
             text: "Klicken Sie auf die Karte um den Text zu platzieren",
-            color: "55, 126, 184",
+            color: [55, 126, 184, 1],
             radius: 6,
             strokeWidth: 1,
-            opacity: "1.0",
+            opacity: 1,
             drawType: {
                 geometry: "Point",
                 text: "Punkt zeichnen"
@@ -106,6 +106,7 @@ define(function (require) {
                 style: this.getStyle(drawType.text)
             }));
             this.get("drawInteraction").on("drawend", function (evt) {
+                evt.feature.set("styleId", evt.feature.ol_uid);
                 evt.feature.setStyle(this.getStyle(drawType.text));
             }, this);
             Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
@@ -113,31 +114,30 @@ define(function (require) {
 
         getStyle: function (arg) {
             if (arg === "Text schreiben") {
-                return this.getTextStyle(this.get("color"), this.get("opacity"));
+                return this.getTextStyle(this.get("color"));
             }
-            return this.getDrawStyle(this.get("color"), this.get("opacity"), this.get("drawType").geometry);
+            return this.getDrawStyle(this.get("color"), this.get("drawType").geometry);
         },
 
         /**
          * Erstellt ein Feature Style für Punkte, Linien oder Flächen und gibt ihn zurück.
          * @param {number} color -
-         * @param {number} opacity -
          * @param {string} type -
          * @return {ol.style.Style} style
          */
-        getDrawStyle: function (color, opacity, type) {
+        getDrawStyle: function (color, type) {
             return new ol.style.Style({
                 fill: new ol.style.Fill({
-                    color: "rgba(" + color + ", " + opacity + ")"
+                    color: color
                 }),
                 stroke: new ol.style.Stroke({
-                    color: "rgba(" + color + ", " + opacity + ")",
+                    color: color,
                     width: this.get("strokeWidth")
                 }),
                 image: new ol.style.Circle({
                     radius: type === "Point" ? this.get("radius") : 6,
                     fill: new ol.style.Fill({
-                        color: "rgba(" + color + ", " + opacity + ")"
+                        color: color
                     })
                 })
             });
@@ -146,18 +146,17 @@ define(function (require) {
         /**
          * Erstellt ein Feature Style für Texte und gibt ihn zurück.
          * @param {number} color -
-         * @param {number} opacity -
          * @return {ol.style.Style} style
          */
-        getTextStyle: function (color, opacity) {
+        getTextStyle: function (color) {
             return new ol.style.Style({
                 text: new ol.style.Text({
+                    textAlign: "left",
                     text: this.get("text"),
                     font: this.get("fontSize") + "px " + this.get("font"),
                     fill: new ol.style.Fill({
-                        color: "rgba(" + color + ", " + opacity + ")"
-                    }),
-                    scale: this.get("fontSize") / 8
+                        color: color
+                    })
                 })
             });
         },
@@ -250,7 +249,7 @@ define(function (require) {
         },
 
         setOpacity: function (value) {
-            this.set("opacity", parseFloat(value, 10).toFixed(1));
+            this.set("opacity", value);
         },
 
         setText: function (value) {
