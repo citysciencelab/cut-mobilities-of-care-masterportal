@@ -41,6 +41,12 @@ define(function () {
             }
         },
 
+        reset: function () {
+            this.stopInterval();
+            this.set("activeLayer", {layerId: ""});
+            this.set("title", null);
+        },
+
         /**
          * Ermittelt die Sichtbarkeit der layerIds
          * @param   {string} activeLayerId id des activeLayer

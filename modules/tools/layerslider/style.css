@@ -13,6 +13,7 @@
 
 #layerslider .btn-default {
 	background-color: #eee;
+	transition: all .2s ease-in-out;
 }
 
 #layerslider .btn-default:hover {

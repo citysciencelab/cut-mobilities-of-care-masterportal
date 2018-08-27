@@ -40,6 +40,10 @@ define(function (require) {
                 this.layerSwitched();
                 this.delegateEvents();
             }
+            else if (this.model.get("isCurrentWin") === false) {
+                this.model.reset();                
+                this.undelegateEvents();
+            }
             else {
                 this.undelegateEvents();
             }
@@ -48,10 +52,17 @@ define(function (require) {
 
         playSlider: function () {
             this.model.startInterval();
+            this.toggleGlyphicon("glyphicon-pause");
         },
 
         stopSlider: function () {
-            this.model.stopInterval();
+            if (!_.isNull(this.model.get("windowsInterval"))) {
+                this.toggleGlyphicon("glyphicon-stop");
+                this.model.stopInterval();
+            }
+            else {
+                this.model.reset();
+            }
         },
 
         backwardSlider: function () {
@@ -97,6 +108,10 @@ define(function (require) {
 
         setTitle: function () {
             this.$el.find("#title").val(this.model.get("activeLayer").title);
+        },
+
+        toggleGlyphicon: function (glyph) {
+            this.$el.find("#stop").find("span").removeClass("glyphicon-stop glyphicon-pause").addClass(glyph);
         }
     });
 
