@@ -24,7 +24,9 @@ define(function (require) {
                     return this.get("legendParams");
                 }
             }, this);
-
+            channel.on({
+                "setLayerList": this.setLayerList
+            }, this);
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
             });

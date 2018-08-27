@@ -293,7 +293,6 @@ define(function (require) {
                 filteredLegendParams = _.filter(legendParams, function (param) {
                     return param.isVisibleInMap === true;
                 });
-
             if (isLegendSelected) {
                 if (filteredLegendParams.length > 0) {
                     legendObject.layers = [];

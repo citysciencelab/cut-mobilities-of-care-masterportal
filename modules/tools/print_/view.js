@@ -63,6 +63,9 @@ define(function (require) {
         },
 
         setIsLegendSelected: function (evt) {
+            if (evt.target.checked === true) {
+                Radio.trigger("Legend", "setLayerList");
+            }
             this.model.setIsLegendSelected(evt.target.checked);
         },
 
