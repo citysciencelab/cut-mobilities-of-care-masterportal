@@ -28,6 +28,8 @@ define(function (require) {
             // true if the current layout supports meta data
             isMetaDataAvailable: false,
             isGfiAvailable: false,
+            isLegendAvailable: false,
+            isScaleAvailable: false,
             isGfiSelected: false,
             // the id from the rest services json for the plot app
             plotServiceId: undefined,
@@ -87,7 +89,10 @@ define(function (require) {
         parseMapfishCapabilities: function (response) {
             this.setLayoutList(response.layouts);
             this.setCurrentLayout(response.layouts[0]);
-            this.setIsMetaDataAvailable(this.isMetaDataAvailable());
+            this.setIsMetaDataAvailable(!_.isUndefined(this.getAttributeInLayoutByName("metadata")));
+            this.setIsGfiAvailable(!_.isUndefined(this.getAttributeInLayoutByName("gfi")));
+            this.setIsLegendAvailable(!_.isUndefined(this.getAttributeInLayoutByName("legend")));
+            this.setIsScaleAvailable(!_.isUndefined(this.getAttributeInLayoutByName("scale")));
             this.setFormatList(response.formats);
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
             this.togglePostcomposeListener(this, true);
@@ -97,7 +102,7 @@ define(function (require) {
             var visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
                     return layer.getVisible() === true;
                 }),
-                spec = new BuildSpecModel({
+                attr = {
                     "layout": this.get("currentLayout").name,
                     "outputFormat": this.get("currentFormat"),
                     "attributes": {
@@ -107,10 +112,22 @@ define(function (require) {
                             "projection": Radio.request("MapView", "getProjection").getCode(),
                             "center": Radio.request("MapView", "getCenter"),
                             "scale": this.get("currentScale")
-                        },
-                        "datasource": []
+                        }
                     }
-                });
+                },
+                spec;
+
+            spec = new BuildSpecModel(attr);
+            if (this.get("isMetaDataAvailable")) {
+                spec.setMetadata(true);
+            }
+            if (this.get("isLegendAvailable")) {
+                spec.buildLegend(Radio.request("Legend", "getLegendParams"));
+            }
+            if (this.get("isGfiAvailable")) {
+                spec.buildGfi(Radio.request("GFI", "getGfiForPrint"));
+            }
+
 
             spec.buildLayers(visibleLayerList);
             console.log(spec.toJSON());
@@ -349,18 +366,6 @@ define(function (require) {
         },
 
         /**
-         * checks if the current layout supports meta data
-         * @returns {boolean} true if the current layout supports otherwise false
-         */
-        isMetaDataAvailable: function () {
-            var dataSource = this.getAttributeInLayoutByName("datasource");
-
-            return dataSource.clientParams.attributes.some(function (attribute) {
-                return attribute.name.search("meta") !== -1;
-            });
-        },
-
-        /**
          * sorts an array numerically and ascending
          * @param {number} a - first value
          * @param {number} b - next value
@@ -438,11 +443,25 @@ define(function (require) {
         },
 
         /**
-         * @param {boolean} value - true if gfi is visible on the map
+         * @param {boolean} value - true if mapfish can print gfi
          * @returns {void}
          */
         setIsGfiAvailable: function (value) {
             this.set("isGfiAvailable", value);
+        },
+        /**
+         * @param {boolean} value - true if mapfish can print legend
+         * @returns {void}
+         */
+        setIsLegendAvailable: function (value) {
+            this.set("isLegendAvailable", value);
+        },
+        /**
+         * @param {boolean} value - true if mapfish can print scale
+         * @returns {void}
+         */
+        setIsScaleAvailable: function (value) {
+            this.set("isScaleAvailable", value);
         },
 
         /**

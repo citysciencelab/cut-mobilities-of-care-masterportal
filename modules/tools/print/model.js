@@ -219,7 +219,7 @@ define(function (require) {
             if (drawLayer.getSource().getFeatures().length > 0) {
                 this.setLayer(drawLayer);
             }
-            this.getGFIForPrint();
+            this.getGfiForPrint();
         },
 
         setLayerToPrint: function (layers) {
@@ -490,8 +490,8 @@ define(function (require) {
         * Setzt die createURL in Abhängigkeit der GFI
         * @returns {void}
         */
-        getGFIForPrint: function () {
-            var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGFIForPrint") : null,
+        getGfiForPrint: function () {
+            var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
                 gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
                 gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
                 gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
