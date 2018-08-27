@@ -75,21 +75,20 @@ define(function (require) {
          */
         buildVector: function (layer) {
             var source = layer.getSource(),
-                geojsonFeatures = [],
+                geojsonList = [],
                 features = source.getFeatures();
 
             return {
                 type: "geojson",
-                style: this.buildStyle(layer, features, geojsonFeatures),
-                geojson: geojsonFeatures
+                style: this.buildStyle(layer, features, geojsonList),
+                geojson: geojsonList
             };
         },
 
-        buildStyle: function (layer, features, geojsonFeatures) {
+        buildStyle: function (layer, features, geojsonList) {
             var mapfishStyleObject = {
                     "version": "2"
                 },
-                geojsonFormat = new ol.format.GeoJSON(),
                 styleAttribute = this.getStyleAttribute(layer);
 
             features.forEach(function (feature) {
@@ -98,10 +97,10 @@ define(function (require) {
                     styleObject;
 
                 if (style !== null) {
+                    this.addFeatureToGeoJsonList(feature, geojsonList);
                     stylingRule = this.getStylingRule(feature, styleAttribute);
                     // do nothing if we already have a style object for this CQL rule
                     if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
-                        geojsonFeatures.push(geojsonFormat.writeFeatureObject(feature));
                         return;
                     }
                     styleObject = {
@@ -114,13 +113,11 @@ define(function (require) {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style));
                     }
                     else if (feature.getGeometry().getType() === "Circle") {
-                        feature.setGeometry(ol.geom.Polygon.fromCircle(feature.getGeometry()));
                         styleObject.symbolizers.push(this.buildPolygonStyle(style));
                     }
                     else if (feature.getGeometry().getType() === "LineString") {
                         styleObject.symbolizers.push(this.buildLineStringStyle(style));
                     }
-                    geojsonFeatures.push(geojsonFormat.writeFeatureObject(feature));
                     mapfishStyleObject[stylingRule] = styleObject;
                 }
             }, this);
@@ -225,6 +222,38 @@ define(function (require) {
         },
 
         /**
+         * adds the feature to the geojson list
+         * @param {ol.Feature} feature - the feature can be clustered
+         * @param {GeoJSON[]} geojsonList -
+         * @returns {void}
+         */
+        addFeatureToGeoJsonList: function (feature, geojsonList) {
+            if (feature.get("features") !== undefined) {
+                feature.get("features").forEach(function (clusteredFeature) {
+                    geojsonList.push(this.convertFeatureToGeoJson(clusteredFeature));
+                }, this);
+            }
+            else {
+                geojsonList.push(this.convertFeatureToGeoJson(feature));
+            }
+        },
+
+        /**
+         * converts an openlayers feature to a GeoJSON feature object
+         * @param {ol.Feature} feature - the feature to convert
+         * @returns {object} GeoJSON object
+         */
+        convertFeatureToGeoJson: function (feature) {
+            var geojsonFormat = new ol.format.GeoJSON();
+
+            // circle is not suppported by geojson
+            if (feature.getGeometry().getType() === "Circle") {
+                feature.setGeometry(ol.geom.Polygon.fromCircle(feature.getGeometry()));
+            }
+            return geojsonFormat.writeFeatureObject(feature);
+        },
+
+        /**
          * @param {ol.Feature} feature -
          * @param {ol.layer.Vector} layer -
          * @returns {ol.style.Style[]} returns or an array of styles
@@ -251,9 +280,16 @@ define(function (require) {
             if (styleAttribute === "") {
                 return "*";
             }
+            else if (feature.get("features") !== undefined) {
+                return "[" + styleAttribute + "='" + feature.get("features")[0].get(styleAttribute) + "']";
+            }
             return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
         },
 
+        /**
+         * @param {ol.Layer} layer -
+         * @returns {string} the attribute by whose value the feature is styled
+         */
         getStyleAttribute: function (layer) {
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
 
