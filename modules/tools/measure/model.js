@@ -10,20 +10,20 @@ define(function (require) {
             source: new ol.source.Vector(),
             style: new ol.style.Style({
                 fill: new ol.style.Fill({
-                    color: "rgba(255, 127, 0, 0.3)"
+                    color: [255, 127, 0, 0.3]
                 }),
                 stroke: new ol.style.Stroke({
-                    color: "rgba(255, 127, 0, 1.0)",
+                    color: [255, 127, 0, 1.0],
                     width: 2
                 }),
                 image: new ol.style.Circle({
                     radius: 6,
                     stroke: new ol.style.Stroke({
-                        color: "rgba(255, 127, 0, 1.0)",
+                        color: [255, 127, 0, 1.0],
                         width: 3
                     }),
                     fill: new ol.style.Fill({
-                        color: "rgba(255, 127, 0, 0.4)"
+                        color: [255, 127, 0, 0.4]
                     })
                 })
             }),
@@ -41,9 +41,6 @@ define(function (require) {
 
 
             this.superInitialize();
-            // this.listenTo(Radio.channel("Window"), {
-            //     "winParams": this.setStatus
-            // });
 
             this.listenTo(this, {
                 "change:geomtype": this.createInteraction,
@@ -93,7 +90,8 @@ define(function (require) {
                 this.set("sketch", evt.feature);
                 this.createMeasureTooltip();
             }, this);
-            this.get("draw").on("drawend", function () {
+            this.get("draw").on("drawend", function (evt) {
+                 evt.feature.set("styleId", evt.feature.ol_uid);
                 this.get("measureTooltipElement").className = "tooltip-default tooltip-static";
                 this.get("measureTooltip").setOffset([0, -7]);
                 // unset sketch
