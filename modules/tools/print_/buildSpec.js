@@ -3,7 +3,9 @@ define(function (require) {
         BuildSpecModel;
 
     BuildSpecModel = Backbone.Model.extend({
-        defaults: {},
+        defaults: {
+            uniqueIds: []
+        },
         /**
          * defines the layers attribute of the map spec
          * @param {ol.layer.Layer[]} layerList - all visible layers on the map
@@ -323,18 +325,23 @@ define(function (require) {
          * gets legendParams and builds legend object for mapfish print
          * @param  {Boolean} isLegendSelected flag if legend has to be printed
          * @param  {[object]}  legendParams params derived from legend module
+         * @param {Boolean} isMetaDataAvailable flag to print metadata
          * @return {void}
          */
-        buildLegend: function (isLegendSelected, legendParams) {
+        buildLegend: function (isLegendSelected, legendParams, isMetaDataAvailable) {
             var legendObject = {},
                 filteredLegendParams = _.filter(legendParams, function (param) {
                     return param.isVisibleInMap === true;
-                });
+                }),
+                metaDataLayerList = [];
 
             if (isLegendSelected) {
                 if (filteredLegendParams.length > 0) {
                     legendObject.layers = [];
                     _.each(filteredLegendParams, function (layerParam) {
+                        if (isMetaDataAvailable) {
+                            metaDataLayerList.push(layerParam.layername);
+                        }
                         legendObject.layers.push({
                             layerName: layerParam.layername,
                             values: this.prepareLegendAttributes(layerParam)
@@ -344,6 +351,26 @@ define(function (require) {
             }
             this.setShowLegend(isLegendSelected);
             this.setLegend(legendObject);
+            if (isMetaDataAvailable) {
+                _.each(metaDataLayerList, function (layerName) {
+                    this.getMetaData(layerName);
+                }, this);
+            }
+        },
+        getMetaData: function (layerName) {
+            var layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
+                metaId = layer.get("datasets") && layer.get("datasets")[0] ? layer.get("datasets")[0].md_id : null,
+                uniqueId = _.uniqueId(),
+                cswObj = {};
+
+            if (!_.isNull(metaId)) {
+                this.get("uniqueIds").push(uniqueId);
+                cswObj.metaId = metaId;
+                cswObj.keyList = ["date", "orga", "address", "email", "tel", "url"];
+                cswObj.uniqueId = uniqueId;
+
+                Radio.trigger("CswParser", "getMetaData", cswObj);
+            }
         },
         prepareLegendAttributes: function (layerParam) {
             var valuesArray = [];
