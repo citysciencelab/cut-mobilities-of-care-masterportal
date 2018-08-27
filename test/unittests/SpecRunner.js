@@ -92,7 +92,8 @@ define(function (require) {
             "modules/tools/graph/testModel.js",
             "modules/functionalities/browserPrint/testModel.js",
             "modules/tools/searchByCoord/testModel.js",
-            "modules/legend/legendModel.js"
+            "modules/legend/legendModel.js",
+            "modules/layerslider/layersliderModel.js"
         ], function () {
             mocha.run();
         });

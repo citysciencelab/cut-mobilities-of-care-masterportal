@@ -17,6 +17,7 @@ define(function () {
                 return;
             }
             this.setLayerIds(layerIds);
+            this.setProgressBarWidth(layerIds);
             if (!_.isUndefined(title)) {
                 this.setTitle(title);
             }
@@ -26,10 +27,6 @@ define(function () {
             this.listenTo(Radio.channel("Window"), {
                 "winParams": this.setStatus
             });
-            // Mindestbreite der ProgressBar ist 10%.
-            if (layerIds.length <= 10) {
-                this.setProgressBarWidth(100 / layerIds.length);
-            }
         },
         setStatus: function (args) {
             if (args[2].get("id") === "layerslider" && args[0] === true) {
@@ -250,11 +247,14 @@ define(function () {
 
         /*
         * setter for progressBarWidth
-        * @param {integer} value progressBarWidth
+        * @param {object[]} layerIds layerIds zum Ermitteln der width
         * @returns {void}
         */
-        setProgressBarWidth: function (value) {
-            this.set("progressBarWidth", Math.round(value));
+        setProgressBarWidth: function (layerIds) {
+            // Mindestbreite der ProgressBar ist 10%.
+            if (layerIds.length <= 10) {
+                this.set("progressBarWidth", Math.round(100 / layerIds.length));
+            }
         },
 
         /*
