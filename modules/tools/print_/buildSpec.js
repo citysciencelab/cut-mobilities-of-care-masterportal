@@ -4,7 +4,53 @@ define(function (require) {
 
     BuildSpecModel = Backbone.Model.extend({
         defaults: {
-            uniqueIds: []
+            uniqueIdList: []
+        },
+        initialize: function () {
+            this.listenTo(Radio.channel("CswParser"), {
+                "fetchedMetaData": this.fetchedMetaData
+            });
+        },
+        fetchedMetaData: function (cswObj) {
+            if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
+                this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
+                this.updateMetaData(cswObj.layerName, cswObj.parsedData);
+            }
+        },
+        isOwnMetaRequest: function (uniqueIdList, uniqueId) {
+            return _.contains(uniqueIdList, uniqueId);
+        },
+        removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
+            this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
+        },
+        updateMetaData: function (layerName, parsedData) {
+            var layers = this.get("attributes").legend.layers,
+                layer = _.findWhere(layers, {layerName: layerName});
+
+            layer.metaDate = parsedData.date;
+            layer.metaOwner = parsedData.orga;
+            layer.metaAddress = this.parseAddress(parsedData.address);
+            layer.metaEmail = parsedData.email;
+            layer.metaTel = parsedData.tel;
+            layer.metaUrl = parsedData.url;
+        },
+        parseAddress: function (addressObj) {
+            var street = addressObj.street,
+                housenr = addressObj.housenr,
+                postalCode = addressObj.postalCode,
+                city = addressObj.city,
+                addressString = "";
+
+            addressString = street;
+            addressString = addressString + street;
+            addressString = addressString + " ";
+            addressString = addressString + housenr;
+            addressString = addressString === "" ? "" : "\n ";
+            addressString = addressString + postalCode;
+            addressString = addressString + " ";
+            addressString = addressString + city;
+
+            return addressString;
         },
         /**
          * defines the layers attribute of the map spec
@@ -364,7 +410,8 @@ define(function (require) {
                 cswObj = {};
 
             if (!_.isNull(metaId)) {
-                this.get("uniqueIds").push(uniqueId);
+                this.get("uniqueIdList").push(uniqueId);
+                cswObj.layerName = layerName;
                 cswObj.metaId = metaId;
                 cswObj.keyList = ["date", "orga", "address", "email", "tel", "url"];
                 cswObj.uniqueId = uniqueId;
@@ -516,6 +563,9 @@ define(function (require) {
         },
         setScale: function (value) {
             this.get("attributes").scale = value;
+        },
+        setUniqueIdList: function (value) {
+            this.set("uniqueIdList", value);
         }
     });
 
