@@ -180,6 +180,19 @@ define("app", function (require) {
                     break;
                 }
                 case "print": {
+                    if (tool.has("version") && tool.get("version") === "mapfish_print_3") {
+                        require(["modules/tools/print_/view"], function (PrintView) {
+                            new PrintView({model: tool});
+                        });
+                    }
+                    else {
+                        require(["modules/tools/print/view"], function (PrintView) {
+                            new PrintView({model: tool});
+                        });
+                    }
+                    break;
+                }
+                case "printV2": {
                     require(["modules/tools/print_/view"], function (PrintView) {
                         new PrintView({model: tool});
                     });

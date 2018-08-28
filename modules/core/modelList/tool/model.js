@@ -21,7 +21,8 @@ define(function (require) {
             // true wenn das Tool aktiviert ist
             isActive: false,
             // deaktiviert GFI, wenn dieses tool geöffnet wird
-            deaktivateGFI: true
+            deaktivateGFI: true,
+            renderToWindow: true
         },
 
         superInitialize: function () {

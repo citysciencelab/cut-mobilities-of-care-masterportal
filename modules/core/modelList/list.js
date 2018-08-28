@@ -11,7 +11,8 @@ define(function (require) {
         Tool = require("modules/core/modelList/tool/model"),
         Legend = require("modules/legend/model"),
         Filter = require("modules/tools/filter/model"),
-        PrintModel = require("modules/tools/print_/model"),
+        PrintModelV2 = require("modules/tools/print_/model"),
+        PrintModel = require("modules/tools/print/model"),
         Measure = require("modules/tools/measure/model"),
         Draw = require("modules/tools/draw/model"),
         Animation = require("modules/tools/animation/model"),
@@ -128,7 +129,10 @@ define(function (require) {
             }
             else if (attrs.type === "tool") {
                 if (attrs.id === "print") {
-                    return new PrintModel(attrs, options);
+                    if (attrs.version === undefined) {
+                        return new PrintModel(attrs, options);
+                    }
+                    return new PrintModelV2(attrs, options);
                 }
                 else if (attrs.id === "parcelSearch") {
                     return new ParcelSearch(attrs, options);

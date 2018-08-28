@@ -1,11 +1,12 @@
 define(function (require) {
     var Config = require("config"),
         $ = require("jquery"),
+        Tool = require("modules/core/modelList/tool/model"),
         ol = require("openlayers"),
         PrintModel;
 
-    PrintModel = Backbone.Model.extend({
-        defaults: {
+    PrintModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             printID: "99999",
             MM_PER_INCHES: 25.4,
             POINTS_PER_INCH: 72,
@@ -13,7 +14,6 @@ define(function (require) {
             outputFilename: "Ausdruck",
             outputFormat: "pdf",
             gfiToPrint: [], // die sichtbaren GFIs
-            center: Config.view.center,
             scale: {},
             layerToPrint: [],
             fetched: false, // gibt an, ob info.json schon geladen wurde
@@ -34,8 +34,9 @@ define(function (require) {
                     stroke: false
                 }
             },
-            configYAML: "/master"
-        },
+            configYAML: "/master",
+            deactivateGFI: false
+        }),
 
         /*
          * Ermittelt die URL zum Fetchen in setStatus durch Abfrage der ServiceId
@@ -56,50 +57,19 @@ define(function (require) {
 
         //
         initialize: function () {
-            this.setConfigParams();
+            this.superInitialize();
+
             this.listenTo(this, {
-                "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
-                "change:specification": this.getPDFURL
+                "change:layout change:scale change:isActive": this.updatePrintPage,
+                "change:specification": this.getPDFURL,
+                "change:isActive": this.setStatus
             });
 
             this.listenTo(Radio.channel("MapView"), {
                 "changedOptions": this.setScaleByMapView,
                 "changedCenter": this.setCenter
             });
-
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
         },
-        setConfigParams: function () {
-            var printConf = Radio.request("ModelList", "getModelByAttributes", {id: "print"}),
-                printAttrs = printConf.attributes;
-
-            if (_.has(printAttrs, "printID") === true) {
-                this.setPrintID(printAttrs.printID);
-            }
-            if (_.has(printAttrs, "title") === true) {
-                this.setTitle(printAttrs.title);
-            }
-            if (_.has(printAttrs, "gfi") === true) {
-                this.setGfi(printAttrs.gfi);
-            }
-            if (_.has(printAttrs, "outputFilename") === true) {
-                this.setOutputFilename(printAttrs.outputFilename);
-            }
-            if (_.has(printAttrs, "gfiMarker") === true) {
-                this.setGfiMarker(printAttrs.gfiMarker);
-            }
-            if (_.has(printAttrs, "configYAML") === true) {
-                this.setConfigYAML(printAttrs.configYAML);
-            }
-        },
-
-        // Setzt die setConfigYAML-Datei für url Parameter
-        setConfigYAML: function (name) {
-            this.set("configYAML", "/" + name);
-        },
-
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
         setTitleFromForm: function () {
@@ -154,10 +124,10 @@ define(function (require) {
         },
 
         //
-        setStatus: function (args) {
+        setStatus: function (bmodel, value) {
             var scaletext;
 
-            if (args[2].get("id") === "print") {
+            if (value && this.get("layouts") === undefined) {
                 if (this.get("fetched") === false) {
                     // get print config (info.json)
                     this.fetch({
@@ -172,7 +142,6 @@ define(function (require) {
                             model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                             model.setScaleByMapView();
                             model.set("isCollapsed", false);
-                            model.set("isCurrentWin", true);
                             model.set("fetched", true);
                         },
                         error: function () {
@@ -187,19 +156,12 @@ define(function (require) {
                         }
                     });
                 }
-                else {
-                    this.set("isCollapsed", args[1]);
-                    this.set("isCurrentWin", args[0]);
-                }
-            }
-            else {
-                this.set("isCurrentWin", false);
             }
         },
 
         updatePrintPage: function () {
             if (this.has("scale")) {
-                if (this.get("isCurrentWin") === true) {
+                if (this.get("isActive")) {
                     Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose, this);
                     Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
                 }
@@ -216,7 +178,7 @@ define(function (require) {
 
             this.set("layerToPrint", []);
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            if (drawLayer.getSource().getFeatures().length > 0) {
+            if (drawLayer !== undefined && drawLayer.getSource().getFeatures().length > 0) {
                 this.setLayer(drawLayer);
             }
             this.getGfiForPrint();
@@ -290,10 +252,15 @@ define(function (require) {
                 isClustered,
                 styleModel;
 
-            if (!_.isUndefined(layer) && !_.isUndefined(layerId)) {
-                layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
-                isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
-                styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+            if (!_.isUndefined(layer)) {
+                // get styleModel if layerId is defined.
+                // layer id is not defined for portal-internal layer like animationLayer and import_draw_layer
+                // then the style is located directly at the feature, see line 312
+                if (!_.isUndefined(layerId)) {
+                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+                    isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
+                    styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+                }
                 // Alle features die eine Kreis-Geometrie haben
                 _.each(layer.getSource().getFeatures(), function (feature) {
                     if (feature.getGeometry() instanceof ol.geom.Circle) {
