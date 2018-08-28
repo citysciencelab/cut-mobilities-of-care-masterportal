@@ -19,7 +19,8 @@ define(function (require) {
             // Auswahl der Farbe
             "changeColor [id*=style-wms-colorpicker]": "setStyleClassAttributes",
             // Anwenden Button
-            "click button": "createSLD",
+            "click .btn-panel-submit": "createSLD",
+            "click .btn-panel-reset": "reset",
             "click .glyphicon-remove": "hide"
         },
 
@@ -53,6 +54,11 @@ define(function (require) {
             return this;
         },
 
+        reset: function () {
+            this.model.resetModel();
+            this.render();
+        },
+
         /**
          * Ruft setAttributeName im Model auf und übergibt den Attributnamen
          * @param {ChangeEvent} evt -
@@ -70,6 +76,9 @@ define(function (require) {
          */
         setNumberOfClasses: function (evt) {
             this.model.setNumberOfClasses(evt.target.value);
+
+            // Update attribute values
+            this.setStyleClassAttributes();
         },
 
         /**
