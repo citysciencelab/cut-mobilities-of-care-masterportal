@@ -1,7 +1,7 @@
 import ol from "openlayers";
 import Config from "../../portal/master/config";
 import $ from "jquery";
-import Radio from "backbone.Radio";
+import Radio from "backbone.radio";
 import _ from "underscore";
 
 const MapView = Backbone.Model.extend({

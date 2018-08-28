@@ -1,5 +1,5 @@
 import Config from "../../portal/master/config";
-import Radio from "backbone.Radio";
+import Radio from "backbone.radio";
 import _ from "underscore";
 
 const RawLayerList = Backbone.Collection.extend({
@@ -8,7 +8,8 @@ const RawLayerList = Backbone.Collection.extend({
     },
     // URL zur services.json
     url: function () {
-        return Radio.request("Util", "getPath", Config.layerConf);
+        // return Radio.request("Util", "getPath", Config.layerConf);
+        return ("https://localhost:9001/node_modules/lgv-config/services-fhhnet-ALL.json")
     },
     initialize: function (urlForTest) {
         var channel = Radio.channel("RawLayerList");
@@ -38,7 +39,6 @@ const RawLayerList = Backbone.Collection.extend({
      */
     parse: function (response) {
         var rawLayerArray = response;
-
         // Es gibt Layer in einem Dienst, die für unterschiedliche Portale unterschiedliche Daten/GFIs liefern --> z.B. Hochwasserrisikomanagement
         // Da alle Layer demselben Metadatensatz zugordnet sind, werden sie über die Id gelöscht
         if (_.has(Config.tree, "layerIDsToIgnore")) {

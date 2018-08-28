@@ -1,7 +1,7 @@
 import ol from "openlayers";
 import MapView from "./mapView";
 import $ from "jquery";
-import Radio from "backbone.Radio";
+import Radio from "backbone.radio";
 import _ from "underscore";
 
 const Map = Backbone.Model.extend({

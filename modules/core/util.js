@@ -1,5 +1,5 @@
 import $ from "jquery";
-import Radio from "backbone.Radio";
+import Radio from "backbone.radio";
 import _ from "underscore";
 
 const Util = Backbone.Model.extend({
@@ -240,7 +240,7 @@ const Util = Backbone.Model.extend({
         //     return baseUrl + path;
         // }
 
-        return "https://localhost:9001";
+        return "https://localhost:9001/portal/master";
 
     },
     showLoader: function () {
