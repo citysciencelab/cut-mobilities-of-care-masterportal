@@ -154,7 +154,7 @@ define(function (require) {
                     styleObject = {
                         symbolizers: []
                     };
-                    if (feature.getGeometry().getType() === "Point") {
+                    if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
                         styleObject.symbolizers.push(this.buildPointStyle(style));
                     }
                     else if (feature.getGeometry().getType() === "Polygon") {
