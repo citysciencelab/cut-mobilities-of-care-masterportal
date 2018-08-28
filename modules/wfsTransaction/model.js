@@ -1,12 +1,10 @@
 define(function (require) {
     var WFSTransaction,
+        $ = require("jquery"),
         ol = require("openlayers");
 
     WFSTransaction = Backbone.Model.extend({
-
-        /**
-         * inits the radio channel for this model and registers the events
-         */
+        defaults: {},
         initialize: function () {
             var channel = Radio.channel("wfsTransaction");
 
@@ -17,10 +15,11 @@ define(function (require) {
 
         /**
          * executes the wfs transaction
-         * @param  {String} layerId
-         * @param  {String} featureId
+         * @param  {String} layerId -
+         * @param  {String} featureId -
          * @param  {String} mode - transaction mode insert|update|delete
          * @param  {Object} attributes - feature attributes to be changed
+         * @returns {void}
          */
         transact: function (layerId, featureId, mode, attributes) {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
@@ -29,7 +28,7 @@ define(function (require) {
                 dom;
 
             if (!_.isUndefined(model)) {
-                feature = model.getLayer().getSource().getFeatureById(featureId);
+                feature = model.get("layer").getSource().getFeatureById(featureId);
                 feature.setProperties(attributes);
                 feature.unset("extent");
                 dom = this.writeTransaction(mode, [feature], this.getWriteOptions(model));
@@ -44,8 +43,8 @@ define(function (require) {
          * writes a WFS Transaction and return the DOM.
          * @param  {String} mode - transaction mode insert|update|delete
          * @param  {ol.Feature[]} features - features to insert, udpate or delete
-         * @param  {Object} writeOptions
-         * @return {DOM}
+         * @param  {Object} writeOptions -
+         * @return {DOM} node
          */
         writeTransaction: function (mode, features, writeOptions) {
             var formatWFS = new ol.format.WFS(),
@@ -64,14 +63,17 @@ define(function (require) {
                     dom = formatWFS.writeTransaction(null, features, null, writeOptions);
                     break;
                 }
+                default: {
+                    break;
+                }
             }
             return dom;
         },
 
         /**
          * gets the write options for wfs transaction
-         * @param  {Backbone.Model} model
-         * @return {Object}
+         * @param  {Backbone.Model} model -
+         * @return {Object} write options
          */
         getWriteOptions: function (model) {
             return {
@@ -84,8 +86,9 @@ define(function (require) {
 
         /**
          * sends a async POST request
-         * @param  {String} url
-         * @param  {String} data
+         * @param  {String} url -
+         * @param  {String} data -
+         * @returns {void}
          */
         sendRequest: function (url, data) {
             $.ajax(Radio.request("Util", "getProxyURL", url), {

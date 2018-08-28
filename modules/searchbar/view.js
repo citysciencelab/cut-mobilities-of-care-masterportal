@@ -1,8 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        SearchbarTemplate = require("text!modules/searchbar/template.html"),
+    var SearchbarTemplate = require("text!modules/searchbar/template.html"),
         TemplateTable = require("text!modules/searchbar/templateTable.html"),
         SearchbarRecommendedListTemplate = require("text!modules/searchbar/templateRecommendedList.html"),
         SearchbarHitListTemplate = require("text!modules/searchbar/templateHitList.html"),
@@ -12,18 +10,19 @@ define(function (require) {
 
     SearchbarView = Backbone.View.extend({
         events: {
-            "paste input": "setSearchString",
-            "keyup input": "setSearchString",
+            "paste input": "waitForEvent",
+            "keyup input": "waitForEvent",
+            "contextmenu input": "waitForEvent",
             "focusin input": "toggleStyleForRemoveIcon",
             "focusout input": "toggleStyleForRemoveIcon",
             "click .form-control-feedback": "deleteSearchString",
-            "click .btn-search": "renderHitList",
-            "click .btn-table-search": "renderHitList",
+            "click .btn-search": "searchAll",
             "click .list-group-item.hit": "hitSelected",
             "click .list-group-item.results": "renderHitList",
             "mouseover .list-group-item.hit": "showMarker",
             "mouseleave .list-group-item.hit": "hideMarker",
             "click .list-group-item.type": function (e) {
+
                 // fix für Firefox
                 var event = e || window.event;
 
@@ -35,80 +34,19 @@ define(function (require) {
             "keydown": "navigateList",
             "click": function () {
                 this.clearSelection();
-                this.$("#searchInput").focus();
-                Radio.request("TableMenu", "setActiveElement", "Searchbar");
+                $("#searchInput").focus();
             }
         },
-        /**
-        * @description Konfiguration für die Suchfunktion. Workaround für IE9 implementiert.
-        * @param {Object} config - Das Konfigurationsobjet der BKG Suche.
-        * @param {Object} [config.visibleWFS] Konfigurationsobjekt für die client-seitige Suche auf bereits geladenen WFS-Layern. Weitere Konfiguration am Layer, s. searchField in {@link config#layerIDs}.
-        * @param {integer} [config.visibleWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {Object} [config.tree] - Das Konfigurationsobjekt der Tree-Suche, wenn Treesuche gewünscht.
-        * @param {integer} [config.tree.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {Objekt} [config.specialWFS] - Das Konfigurationsarray für die specialWFS-Suche
-        * @param {integer} [config.specialWFS.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {Object[]} config.specialWFS.definitions - Definitionen der SpecialWFS.
-        * @param {Object} config.specialWFS.definitions[].definition - Definition eines SpecialWFS.
-        * @param {string} config.specialWFS.definitions[].definition.url - Die URL, des WFS
-        * @param {string} config.specialWFS.definitions[].definition.data - Query string des WFS-Request
-        * @param {string} config.specialWFS.definitions[].definition.name - Name der speziellen Filterfunktion (bplan|olympia|paralympia)
-        * @param {Object} config.bkg - Das Konfigurationsobjet der BKG Suche.
-        * @param {integer} [config.bkg.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-        * @param {string} config.bkg.bkgSuggestURL - URL für schnelles Suggest.
-        * @param {string} [config.bkg.bkgSearchURL] - URL für ausführliche Search.
-        * @param {float} [config.bkg.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
-        * @param {integer} [config.bkg.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
-        * @param {string} [config.bkg.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
-        * @param {string} [config.bkg.filter=filter=(typ:*)] - Filterstring
-        * @param {float} [config.bkg.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
-        * @param {Object} [config.gazetteer] - Das Konfigurationsobjekt für die Gazetteer-Suche.
-        * @param {string} config.gazetteer.url - Die URL.
-        * @param {boolean} [config.gazetteer.searchStreets=false] - Soll nach Straßennamen gesucht werden? Vorraussetzung für searchHouseNumbers. Default: false.
-        * @param {boolean} [config.gazetteer.searchHouseNumbers=false] - Sollen auch Hausnummern gesucht werden oder nur Straßen? Default: false.
-        * @param {boolean} [config.gazetteer.searchDistricts=false] - Soll nach Stadtteilen gesucht werden? Default: false.
-        * @param {boolean} [config.gazetteer.searchParcels=false] - Soll nach Flurstücken gesucht werden? Default: false.
-        * @param {integer} [config.gazetteer.minCharacters=3] - Mindestanzahl an Characters im Suchstring, bevor Suche initieert wird. Default: 3.
-        * @param {string} [config.renderToDOM=searchbar] - Die id des DOM-Elements, in das die Searchbar geladen wird.
-        * @param {string} [config.recommandedListLength=5] - Die Länge der Vorschlagsliste.
-        * @param {boolean} [config.quickHelp=false] - Gibt an, ob die quickHelp-Buttons angezeigt werden sollen.
-        * @param {string} [config.placeholder=Suche] - Placeholder-Value der Searchbar.
-        * @returns {void}
-        */
-        initialize: function (config) {
-            // https://developer.mozilla.org/de/docs/Web/API/Window/matchMedia
-            // var mediaQueryOrientation = window.matchMedia("(orientation: portrait)"),
-            //     mediaQueryMinWidth = window.matchMedia("(min-width: 768px)"),
-            //     mediaQueryMaxWidth = window.matchMedia("(max-width: 767px)"),
-            //     that = this;
-            //
-            // // Beim Wechsel der orientation landscape/portrait wird die Suchleiste neu gezeichnet
-            // mediaQueryOrientation.addListener(function () {
-            //     that.render();
-            // });
-            // // Beim Wechsel der Navigation(Burger-Button) wird die Suchleiste neu gezeichnet
-            // mediaQueryMinWidth.addListener(function () {
-            //     that.render();
-            // });
-            // mediaQueryMaxWidth.addListener(function () {
-            //     that.render();
-            // });
 
+        initialize: function (config) {
+            this.model = new Searchbar(config);
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
             }
-            if (config.recommandedListLength) {
-                this.model.set("recommandedListLength", config.recommandedListLength);
-            }
-            if (config.quickHelp) {
-                this.model.set("quickHelp", config.quickHelp);
-            }
-            if (config.placeholder) {
-                this.model.set("placeholder", config.placeholder);
-            }
+
             this.className = "navbar-form col-xs-9";
 
-            this.listenTo(this.model, "change:recommendedList", function () {
+            this.listenTo(this.model, "renderRecommendedList", function () {
                 this.renderRecommendedList();
             });
 
@@ -123,14 +61,14 @@ define(function (require) {
             this.listenTo(Radio.channel("MenuLoader"), {
                 "ready": function (parentElementId) {
                     this.render(parentElementId);
-                    if (!_.isUndefined(this.model.getInitSearchString())) {
+                    if (!_.isUndefined(this.model.get("initSearchString"))) {
                         this.renderRecommendedList();
-                        this.$("#searchInput").val(this.model.getInitSearchString());
+                        this.$("#searchInput").val(this.model.get("initSearchString"));
                         this.model.unset("initSearchString", true);
                     }
-
                     if (window.innerWidth >= 768) {
                         this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                        Radio.trigger("Title", "setSize");
                     }
                 }
             });
@@ -139,6 +77,10 @@ define(function (require) {
                 "isViewMobileChanged": function () {
                     this.render();
                 }
+            });
+
+            this.listenTo(Radio.channel("ViewZoom"), {
+                "hitSelected": this.hitSelected
             });
 
 
@@ -172,23 +114,22 @@ define(function (require) {
                     new TreeModel(config.tree);
                 });
             }
-            if (_.has(config, "layer") === true) {
-                require(["modules/searchbar/layer/model"], function (LayerSearch) {
-                    new LayerSearch(config.layer);
+            if (_.has(config, "osm") === true) {
+                require(["modules/searchbar/OSM/model"], function (OSMModel) {
+                    new OSMModel(config.osm);
                 });
             }
 
             // Hack für flexible Suchleiste
             $(window).on("resize", function () {
                 if (window.innerWidth >= 768) {
-                    this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                    this.$("#searchInput").width(window.innerWidth - this.$(".desktop").width() - 160);
                 }
             });
             if (window.innerWidth >= 768) {
-                this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                this.$("#searchInput").width(window.innerWidth - this.$(".desktop").width() - 160);
             }
         },
-        model: new Searchbar(),
         id: "searchbar", // wird ignoriert, bei renderToDOM
         className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
         searchbarKeyNavSelector: "#searchInputUL",
@@ -209,7 +150,6 @@ define(function (require) {
                     this.$("#searchInput:focus").css("border-right-width", "0");
                 }
                 this.delegateEvents(this.events);
-                Radio.trigger("Title", "setSize");
             }
             else {
                 this.$el.html(this.templateTable(attr));
@@ -247,7 +187,7 @@ define(function (require) {
             this.$("ul.dropdown-menu-search").html(template(attr));
             // }
             // bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
-            if (!_.isUndefined(this.model.getInitSearchString()) && this.model.get("hitList").length === 1) {
+            if (!_.isUndefined(this.model.get("initSearchString")) && this.model.get("hitList").length === 1) {
                 this.hitSelected();
             }
             this.$("#searchInput + span").show();
@@ -264,6 +204,10 @@ define(function (require) {
                 // IE 11 svg bug -> png
                 hit.imageSrc = this.model.changeFileExtension(hit.imageSrc, ".png");
             }, this);
+        },
+
+        searchAll: function () {
+            Radio.trigger("Searchbar", "searchAll", this.model.get("searchString"));
         },
 
         renderHitList: function () {
@@ -295,20 +239,23 @@ define(function (require) {
          * @return {void}
          */
         hitSelected: function (evt) {
-            var hit, hitID;
-
-            Radio.trigger("Filter", "resetFilter");
+            var hit,
+                hitID,
+                modelHitList = this.model.get("hitList");
 
             // Ermittle Hit
             if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
-                hit = _.values(_.pick(this.model.get("hitList"), "0"))[0];
+                hit = _.values(_.pick(modelHitList, "0"))[0];
             }
             else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
                 hitID = evt.currentTarget.id;
-                hit = _.findWhere(this.model.get("hitList"), {id: hitID});
+                hit = _.findWhere(modelHitList, {id: hitID});
+            }
+            else if (modelHitList.length > 1) {
+                return;
             }
             else {
-                hit = this.model.get("hitList")[0];
+                hit = modelHitList[0];
             }
             // 1. Schreibe Text in Searchbar
             this.setSearchbarString(hit.name);
@@ -475,20 +422,69 @@ define(function (require) {
             return this.$el.find(this.searchbarKeyNavSelector + " li").last();
         },
 
-        setSearchString: function (evt) {
+        /**
+         * wait until event is loaded complete
+         * @param {event} evt - a keyup, paste or contextmenu event
+         * @returns {void}
+         */
+        waitForEvent: function (evt) {
             var that = this;
 
+            // The paste event occurs before the value is inserted into the element
+            setTimeout(function () {
+                that.controlEvent(evt);
+            }, 0);
+        },
+
+        /**
+         * controls the input sequence of events,
+         * so that the paste works with shortcut and with contextmenu
+         * because with ctrl + c comes 1 paste and 2 keyup events,
+         * but with right-click and paste comes 1 contextmenu and 1 paste event
+         * @param {event} evt - a keyup, paste or contextmenu event
+         * @returns {void}
+         */
+        controlEvent: function (evt) {
+            var count = this.model.get("tempCounter");
+
+            if (evt.type === "contextmenu") {
+                this.model.setTempCounter(0);
+            }
+            else if (evt.type === "paste") {
+                this.handlePasteEvent(evt, count);
+            }
+            else if (evt.type === "keyup" && count < 2) {
+                this.model.setTempCounter(++count);
+            }
+            else {
+                this.setSearchString(evt);
+            }
+        },
+
+        /**
+         * handle paste event
+         * @param {event} evt - a keyup, paste or contextmenu event
+         * @param {number} count - temporary counter to control input events
+         * @returns {void}
+         */
+        handlePasteEvent: function (evt, count) {
+            if (_.isUndefined(count)) {
+                this.model.setTempCounter(0);
+            }
+            else {
+                this.model.setTempCounter(undefined);
+            }
+            this.setSearchString(evt);
+        },
+
+        setSearchString: function (evt) {
             if (evt.target.value.length === 0) {
-                // suche zurücksetzten, wenn der nletzte Buchstabe gelöscht wurde
+                // suche zurücksetzten, wenn der letzte Buchstabe gelöscht wurde
                 this.deleteSearchString();
             }
             else {
                 if (evt.type === "paste") {
-
-                    // Das Paste Event tritt auf, bevor der Wert in das Element eingefügt wird
-                    setTimeout(function () {
-                        that.model.setSearchString(evt.target.value, evt.type);
-                    }, 0);
+                    this.model.setSearchString(evt.target.value, evt.type);
                 }
                 else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
                     if (evt.key === "Enter" || evt.keyCode === 13) {
@@ -497,11 +493,15 @@ define(function (require) {
                         }
                         else {
                             this.renderHitList();
+                            this.searchAll();
                         }
                     }
                     else {
                         this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
                     }
+                }
+                else if (evt.keyCode === 38 || evt.keyCode === 40) {
+                    this.positionOfCursorToEnd();
                 }
 
                 // Der "x-Button" in der Suchleiste
@@ -513,6 +513,25 @@ define(function (require) {
                 }
             }
         },
+
+        /**
+         * puts the cursor at the end of the text when the arrow key up or down is up,
+         * if navigate through results
+         * @returns {void}
+         */
+        positionOfCursorToEnd: function () {
+            var selectedElement = _.find(this.$(".list-group-item"), function (element) {
+                    return this.$(element).hasClass("selected");
+                }, this),
+                lastSelectedItem = this.model.get("searchFieldisSelected");
+
+            if (!_.isUndefined(lastSelectedItem) || (!_.isUndefined(lastSelectedItem) && this.$(".list-group-item").length !== 0)) {
+                this.focusOnEnd(this.$("#searchInput"));
+            }
+
+            this.model.setSearchFieldisSelected(selectedElement);
+        },
+
         collapseHits: function (target) {
             this.$(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
             if (target.next().css("display") === "block") {

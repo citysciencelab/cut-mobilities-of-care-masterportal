@@ -1,10 +1,6 @@
-define([
-    "backbone",
-    "text!modules/menu/mobile/breadCrumb/template.html"
-], function () {
+define(function (require) {
 
-    var Backbone = require("backbone"),
-        Template = require("text!modules/menu/mobile/breadCrumb/template.html"),
+    var Template = require("text!modules/menu/mobile/breadCrumb/template.html"),
         BreadCrumbView;
 
     BreadCrumbView = Backbone.View.extend({
@@ -29,10 +25,6 @@ define([
             return this;
         },
 
-        /**
-         * Ruft removeItems im Model auf
-         * Wird beim Klicken auf ein "Breadcrumb-Item" ausgeführt
-         */
         removeItems: function () {
             this.model.removeItems();
         }

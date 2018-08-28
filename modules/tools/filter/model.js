@@ -44,14 +44,16 @@ define(function (require) {
             }, this);
             this.setDefaults();
 
-            this.createQueries(this.getConfiguredQueries());
+            this.createQueries(this.get("predefinedQueries"));
         },
 
-        resetFilter: function () {
-            this.deselectAllModels();
-            this.deactivateAllModels();
-            this.resetAllQueries();
-            this.activateDefaultQuery();
+        resetFilter: function (feature) {
+            if (feature && feature.getStyleFunction()() === null) {
+                this.deselectAllModels();
+                this.deactivateAllModels();
+                this.resetAllQueries();
+                this.activateDefaultQuery();
+            }
         },
         activateDefaultQuery: function () {
             var defaultQuery = this.get("queryCollection").findWhere({isDefault: true});
@@ -205,19 +207,15 @@ define(function (require) {
             }
         },
         setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "filter"}),
-                model;
+            var model;
 
-            _.each(config, function (value, key) {
-                this.set(key, value);
-            }, this);
-            if (this.getIsInitOpen()) {
+            if (this.get("isInitOpen")) {
                 Radio.trigger("ParametricURL", "pushToIsInitOpen", this.get("id").toUpperCase());
             }
             if (Radio.request("ParametricURL", "getIsInitOpen") === "FILTER") {
                 this.setIsInitOpen(true);
             }
-            if (this.getIsInitOpen()) {
+            if (this.get("isInitOpen")) {
                 model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
                 model.setIsActive(true);
             }
@@ -227,43 +225,46 @@ define(function (require) {
             var queryObjects = Radio.request("ParametricURL", "getFilter");
 
             _.each(queries, function (query) {
-                var queryObject;
+                var queryObject,
+                    oneQuery = query;
 
                 if (!_.isUndefined(queryObjects)) {
-                    queryObject = _.findWhere(queryObjects, {name: query.name});
+                    queryObject = _.findWhere(queryObjects, {name: oneQuery.name});
 
-                    query = _.extend(query, queryObject);
+                    oneQuery = _.extend(oneQuery, queryObject);
                 }
-                this.createQuery(query);
+                this.createQuery(oneQuery);
             }, this);
         },
 
         createQuery: function (model) {
             var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
-                query = layer.getTyp() === "WFS" || layer.getTyp() === "GeoJSON" ? new WfsQueryModel(model) : undefined;
+                query;
 
-            if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
-                _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+            if (!_.isUndefined(layer)) {
+                query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" ? new WfsQueryModel(model) : undefined;
+
+                if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
+                    _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+                }
+
+                if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
+                    query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
+                }
+
+                if (!_.isUndefined(this.get("sendToRemote"))) {
+                    query.set("sendToRemote", this.get("sendToRemote"));
+                }
+                if (!_.isUndefined(this.get("minScale"))) {
+                    query.set("minScale", this.get("minScale"));
+                }
+
+                if (query.get("isSelected")) {
+                    query.setIsDefault(true);
+                    query.setIsActive(true);
+                }
+                this.get("queryCollection").add(query);
             }
-
-            if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
-                query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
-            }
-
-            if (!_.isUndefined(this.get("sendToRemote"))) {
-                query.set("sendToRemote", this.get("sendToRemote"));
-            }
-
-            if (query.get("isSelected")) {
-                query.setIsDefault(true);
-                query.setIsActive(true);
-            }
-
-            this.get("queryCollection").add(query);
-        },
-
-        getConfiguredQueries: function () {
-            return this.get("predefinedQueries");
         },
 
         setIsActive: function (value) {
@@ -295,10 +296,7 @@ define(function (require) {
                 }
             }
         },
-        // getter for isInitOpen
-        getIsInitOpen: function () {
-            return this.get("isInitOpen");
-        },
+
         // setter for isInitOpen
         setIsInitOpen: function (value) {
             this.set("isInitOpen", value);

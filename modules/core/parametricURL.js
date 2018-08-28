@@ -1,30 +1,54 @@
 define(function (require) {
 
-    var $ = require("jquery"),
-        Config = require("config"),
+    var Config = require("config"),
         ParametricURL;
 
     ParametricURL = Backbone.Model.extend({
         defaults: {
             layerParams: [],
             isInitOpen: [],
-            zoomToGeometry: ""
+            zoomToGeometry: "",
+            zoomToFeatureIds: []
         },
+
         initialize: function () {
             var channel = Radio.channel("ParametricURL");
 
             channel.reply({
-                "getResult": this.getResult,
-                "getLayerParams": this.getLayerParams,
-                "getIsInitOpen": this.getIsInitOpen,
-                "getInitString": this.getInitString,
-                "getCenter": this.getCenter,
-                "getZoomLevel": this.getZoomLevel,
-                "getZoomToGeometry": this.getZoomToGeometry,
-                "getZoomToExtent": this.getZoomToExtent,
+                "getResult": function () {
+                    return this.get("result");
+                },
+                "getLayerParams": function () {
+                    return this.get("layerParams");
+                },
+                "getIsInitOpen": function () {
+                    return this.get("isInitOpen")[0];
+                },
+                "getInitString": function () {
+                    return this.get("initString");
+                },
+                "getCenter": function () {
+                    return this.get("center");
+                },
+                "getZoomLevel": function () {
+                    return this.get("zoomLevel");
+                },
+                "getZoomToGeometry": function () {
+                    return this.get("zoomToGeometry");
+                },
+                "getZoomToExtent": function () {
+                    return this.get("zoomToExtent");
+                },
                 "getStyle": this.getStyle,
-                "getFilter": this.getFilter,
-                "getHighlightFeature": this.getHighlightFeature
+                "getFilter": function () {
+                    return this.get("filter");
+                },
+                "getHighlightFeature": function () {
+                    return this.get("highlightfeature");
+                },
+                "getZoomToFeatureIds": function () {
+                    return this.get("zoomToFeatureIds");
+                }
             }, this);
 
             channel.on({
@@ -83,25 +107,11 @@ define(function (require) {
             this.set("layerParams", value);
         },
 
-        getResult: function () {
-            return this.get("result");
-        },
-
-        getLayerParams: function () {
-            return this.get("layerParams");
-        },
-
-        getIsInitOpen: function () {
-            return this.get("isInitOpen")[0];
-        },
-        getIsInitOpenArray: function () {
-            return this.get("isInitOpen");
-        },
         setIsInitOpenArray: function (value) {
             this.set("isInitOpen", value);
         },
         pushToIsInitOpen: function (value) {
-            var isInitOpenArray = this.getIsInitOpenArray(),
+            var isInitOpenArray = this.get("isInitOpen"),
                 msg = "";
 
             isInitOpenArray.push(value);
@@ -121,17 +131,10 @@ define(function (require) {
             this.setIsInitOpenArray(isInitOpenArray);
         },
 
-        getCenter: function () {
-            return this.get("center");
-        },
-
-        getInitString: function () {
-            return this.get("initString");
-        },
         createLayerParams: function () {
-            var layerIdString = _.values(_.pick(this.getResult(), "LAYERIDS"))[0],
-                visibilityListString = _.has(this.getResult(), "VISIBILITY") ? _.values(_.pick(this.getResult(), "VISIBILITY"))[0] : "",
-                transparencyListString = _.has(this.getResult(), "TRANSPARENCY") ? _.values(_.pick(this.getResult(), "TRANSPARENCY"))[0] : "",
+            var layerIdString = _.values(_.pick(this.get("result"), "LAYERIDS"))[0],
+                visibilityListString = _.has(this.get("result"), "VISIBILITY") ? _.values(_.pick(this.get("result"), "VISIBILITY"))[0] : "",
+                transparencyListString = _.has(this.get("result"), "TRANSPARENCY") ? _.values(_.pick(this.get("result"), "TRANSPARENCY"))[0] : "",
                 layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
                 visibilityList,
                 transparencyList,
@@ -263,7 +266,7 @@ define(function (require) {
         parseFeatureId: function (result) {
             var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
-            Config.zoomtofeature.ids = ids.split(",");
+            this.setZoomToFeatureIds(ids.split(","));
         },
         parseZoomLevel: function (result) {
             var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
@@ -436,7 +439,7 @@ define(function (require) {
 
             // If the "search" string exists, then build params from it
             if (urlQueryString) {
-                keyRegex = new RegExp("([&])" + key + "[^&]*");
+                keyRegex = new RegExp("([?,&])" + key + "[^&]*");
 
                 // If param exists already, update it
                 if (urlQueryString.match(keyRegex) !== null) {
@@ -456,31 +459,17 @@ define(function (require) {
             }
         },
 
-        // getter for zoomToGeometry
-        getZoomToGeometry: function () {
-            return this.get("zoomToGeometry");
-        },
         // setter for zoomToGeometry
         setZoomToGeometry: function (value) {
             this.set("zoomToGeometry", value);
         },
-        // getter for zoomToLevel
-        getZoomLevel: function () {
-            return this.get("zoomLevel");
-        },
+
         // setter for zoomLevel
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
         },
-
-        getZoomToExtent: function () {
-            return this.get("zoomToExtent");
-        },
-        getFilter: function () {
-            return this.get("filter");
-        },
-        getHighlightFeature: function () {
-            return this.get("highlightfeature");
+        setZoomToFeatureIds: function (value) {
+            this.set("zoomToFeatureIds", value);
         }
     });
 

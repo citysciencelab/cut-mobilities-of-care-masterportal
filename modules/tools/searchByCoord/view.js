@@ -2,22 +2,23 @@ define(function (require) {
 
     var SearchByCoordTemplate = require("text!modules/tools/searchByCoord/template.html"),
         SearchByCoord = require("modules/tools/searchByCoord/model"),
+        $ = require("jquery"),
         SearchByCoordView;
 
     SearchByCoordView = Backbone.View.extend({
-        model: SearchByCoord,
-        className: "win-body",
-        template: _.template(SearchByCoordTemplate),
         events: {
             "change #coordSystemField": "setCoordSystem",
             "click button": "setCoordinates"
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new SearchByCoord(attr);
             this.listenTo(this.model, {
                 "change:isCollapsed change:isCurrentWin": this.render,
                 "change:coordSystem": this.setFocusToCoordSystemInput
             });
         },
+        className: "win-body",
+        template: _.template(SearchByCoordTemplate),
 
         render: function () {
             var attr = this.model.toJSON();
@@ -30,18 +31,19 @@ define(function (require) {
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
         setCoordSystem: function () {
-            this.model.setCoordSystem($("#coordSystemField").val());
+            this.model.setCoordSystem(this.$("#coordSystemField").val());
         },
         setCoordinates: function (evt) {
             if (evt.keyCode === 13) {
                 this.model.validateCoordinates();
             }
-            this.model.setCoordinates($("#coordinatesEastingField").val(), $("#coordinatesNorthingField").val());
+            this.model.setCoordinates(this.$("#coordinatesEastingField").val().replace(",", "."), this.$("#coordinatesNorthingField").val().replace(",", "."));
         },
         setFocusToCoordSystemInput: function () {
-            $("#coordSystemField").focus();
+            this.$("#coordSystemField").focus();
             this.render();
         },
         validateCoords: function () {

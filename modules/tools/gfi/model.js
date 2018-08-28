@@ -1,8 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Config = require("config"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         ThemeList = require("modules/tools/gfi/themes/list"),
         gfiParams = [],
         Gfi;
@@ -37,50 +34,54 @@ define(function (require) {
 
             channel.on({
                 "setIsVisible": this.setIsVisible,
-                "setGfiParams": this.setGfiParamsFromCustomModule
+                "setGfiParams": this.setGfiParamsFromCustomModule,
+                "changeFeature": this.changeFeature
             }, this);
 
             channel.reply({
-                "getIsVisible": this.getIsVisible,
+                "getIsVisible": function () {
+                    return this.get("isVisible");
+                },
                 "getGFIForPrint": this.getGFIForPrint,
-                "getCoordinate": this.getCoordinate,
-                "getCurrentView": this.getCurrentView,
+                "getCoordinate": function () {
+                    return this.get("coordinate");
+                },
+                "getCurrentView": function () {
+                    return this.get("currentView");
+                },
                 "getVisibleTheme": this.getVisibleTheme
             }, this);
 
             this.listenTo(this, {
                 "change:isVisible": function (model, value) {
                     channel.trigger("isVisible", value);
-                    if (value === false && this.getNumberOfThemes() > 0) {
-                        this.getThemeList().setAllInVisible();
+                    if (value === false && this.get("numberOfThemes") > 0) {
+                        this.get("themeList").setAllInVisible();
                     }
                 },
                 "change:isMobile": function () {
                     this.initView();
-                    if (this.getIsVisible() === true) {
-                        this.getCurrentView().render();
-                        this.getThemeList().appendTheme(this.getThemeIndex());
-                        this.getCurrentView().toggle();
+                    if (this.get("isVisible") === true) {
+                        this.get("currentView").render();
+                        this.get("themeList").appendTheme(this.get("themeIndex"));
+                        this.get("currentView").toggle();
                     }
                 },
                 "change:coordinate": function (model, value) {
                     this.setIsVisible(false);
-                    this.getOverlay().setPosition(value);
+                    this.get("overlay").setPosition(value);
                 },
                 "change:themeIndex": function (model, value) {
-                    this.getThemeList().appendTheme(value);
-                },
-                "change:desktopViewType": function () {
-                    Radio.trigger("Map", "addOverlay", this.getOverlay());
+                    this.get("themeList").appendTheme(value);
                 }
             });
 
-            this.listenTo(this.getThemeList(), {
+            this.listenTo(this.get("themeList"), {
                 "isReady": function () {
-                    if (this.getThemeList().length > 0) {
-                        this.setNumberOfThemes(this.getThemeList().length);
-                        this.getCurrentView().render();
-                        this.getThemeList().appendTheme(0);
+                    if (this.get("themeList").length > 0) {
+                        this.setNumberOfThemes(this.get("themeList").length);
+                        this.get("currentView").render();
+                        this.get("themeList").appendTheme(0);
                         this.setIsVisible(true);
                     }
                     else {
@@ -99,16 +100,34 @@ define(function (require) {
                 }
             });
 
-            if (_.has(Config, "gfiWindow")) {
-                this.setDesktopViewType(Config.gfiWindow);
-            }
-
             tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
 
             if (!_.isUndefined(tool)) {
                 this.toggleGFI(tool.id);
             }
             this.initView();
+            Radio.trigger("Map", "addOverlay", this.get("overlay"));
+        },
+
+        /**
+         * if the displayed feature changes, the model is recreated and the gfi adjusted
+         * @param  {ol.Feature} feature - the feature which has been changed
+         * @returns {void}
+         */
+        changeFeature: function (feature) {
+            var gfiFeature,
+                gfiTheme;
+
+            if (this.get("isVisible")) {
+                gfiFeature = this.get("themeList").models[0].attributes.feature;
+
+                if (gfiFeature === feature) {
+                    gfiTheme = this.get("themeList").models[0].attributes.gfiTheme;
+
+                    Radio.trigger("gfiList", "redraw");
+                    Radio.trigger(gfiTheme + "Theme", "changeGfi");
+                }
+            }
         },
 
         /**
@@ -138,17 +157,17 @@ define(function (require) {
             var CurrentView;
 
             // Beim ersten Initialisieren ist CurrentView noch undefined
-            if (_.isUndefined(this.getCurrentView()) === false) {
-                this.getCurrentView().removeView();
+            if (_.isUndefined(this.get("currentView")) === false) {
+                this.get("currentView").removeView();
             }
 
-            if (this.getIsMobile()) {
+            if (this.get("isMobile")) {
                 CurrentView = require("modules/tools/gfi/mobile/view");
             }
-            else if (this.getDesktopViewType() === "attached") {
+            else if (this.get("desktopViewType") === "attached") {
                 CurrentView = require("modules/tools/gfi/desktop/attached/view");
             }
-            else if (this.getUiStyle() === "TABLE") {
+            else if (this.get("uiStyle") === "TABLE") {
                 CurrentView = require("modules/tools/gfi/table/view");
             }
             else {
@@ -163,39 +182,106 @@ define(function (require) {
          * @return {undefined}
          */
         setGfiParams: function (evt) {
-            var visibleWMSLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "WMS"}),
-                visibleGroupLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false, typ: "GROUP"}),
-                visibleLayerList = _.union(visibleWMSLayerList, visibleGroupLayerList),
+            var visibleLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
+                visibleWMSLayerList = [],
+                visibleVectorLayerList = [],
                 eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
-                isFeatureAtPixel = Radio.request("Map", "hasFeatureAtPixel", eventPixel);
+                vectorGFIParams,
+                wmsGFIParams;
+
+            Radio.trigger("ClickCounter", "gfi");
+
+            // Zuordnen von Layertypen zur Abfrage
+            _.each(visibleLayerList, function (layer) {
+                var typ = layer.get("typ");
+
+                if (typ === "WMS") {
+                    visibleWMSLayerList.push(layer);
+                }
+                else if (typ === "GROUP") {
+                    _.each(layer.get("layerSource"), function (layerSource) {
+                        if (layerSource.get("typ") === "WMS") {
+                            visibleWMSLayerList.push(layerSource);
+                        }
+                        else {
+                            visibleVectorLayerList.push(layerSource);
+                        }
+                    }, this);
+                }
+                else {
+                    visibleVectorLayerList.push(layer);
+                }
+            });
 
             this.setCoordinate(evt.coordinate);
 
             // Vector
-            Radio.trigger("ClickCounter", "gfi");
-            if (isFeatureAtPixel === true) {
-                Radio.trigger("Map", "forEachFeatureAtPixel", eventPixel, this.searchModelByFeature);
-            }
+            vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, eventPixel);
+            // WMS
+            wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
-            // WMS | GROUP
-            _.each(visibleLayerList, function (model) {
-                if (model.getGfiAttributes() !== "ignore" || _.isUndefined(model.getGfiAttributes()) === true) {
-                    if (model.getTyp() === "WMS") {
-                        model.attributes.gfiUrl = model.getGfiUrl();
-                        gfiParams.push(model.attributes);
+            this.setThemeIndex(0);
+            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+        },
+
+        /**
+         * Ermittelt die GFIParameter zur Abfrage von Vectorlayern
+         * @param  {layer[]} layerlist  Liste der abzufragenden Vectorlayer
+         * @param  {pixel} eventPixel   Pixelkoordinate
+         * @return {object[]}           GFI-Parameter von Vektorlayern
+         */
+        getVectorGFIParams: function (layerlist, eventPixel) {
+            var vectorGfiParams = [];
+
+            _.each(layerlist, function (vectorLayer) {
+                var features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
+                        layerFilter: function (layer) {
+                            return layer.get("name") === vectorLayer.get("name");
+                        },
+                        hitTolerance: 0
+                    }),
+                    modelAttributes;
+
+                _.each(features, function (featureAtPixel) {
+                    modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+
+                    // Feature
+                    if (_.has(featureAtPixel.getProperties(), "features") === false) {
+                        modelAttributes.feature = featureAtPixel;
+                        vectorGfiParams.push(modelAttributes);
                     }
+                    // Cluster Feature
                     else {
-                        _.each(model.getGfiParams(), function (params) {
-                            params.gfiUrl = model.getGfiUrl(params, evt.coordinate, params.childLayerIndex);
-                            gfiParams.push(params);
+                        _.each(featureAtPixel.get("features"), function (feature) {
+                            modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
+                            modelAttributes.feature = feature;
+                            vectorGfiParams.push(modelAttributes);
                         });
                     }
+                }, this);
+            }, this);
+
+            return vectorGfiParams;
+        },
+
+        /**
+         * Ermittelt die GFIParameter zur Abfrage von WMSlayern
+         * @param  {layer[]} layerlist  Liste der abzufragenden WMSlayer
+         * @return {object[]}           GFI-Parameter vom WMS-Layern
+         */
+        getWMSGFIParams: function (layerlist) {
+            var wmsGfiParams = [];
+
+            _.each(layerlist, function (layer) {
+                if (layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true) {
+                    layer.attributes.gfiUrl = layer.getGfiUrl();
+                    wmsGfiParams.push(layer.attributes);
                 }
             }, this);
-            this.setThemeIndex(0);
-            this.getThemeList().reset(gfiParams);
-            gfiParams = [];
+
+            return wmsGfiParams;
         },
+
         setGfiParamsFromCustomModule: function (params) {
             this.setCoordinate(params.coordinates);
             gfiParams = [{
@@ -205,36 +291,8 @@ define(function (require) {
                 feature: params.feature,
                 gfiTheme: params.gfiTheme
             }];
-            this.getThemeList().reset(gfiParams);
+            this.get("themeList").reset(gfiParams);
             gfiParams = [];
-        },
-        /**
-         *
-         * @param  {ol.Feature} featureAtPixel getroffenes Feature
-         * @param  {ol.layer.Vector} olLayer Layer
-         * @return {undefined}
-         */
-        searchModelByFeature: function (featureAtPixel, olLayer) {
-            var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")}),
-                modelAttributes;
-
-            if (_.isUndefined(model) === false) {
-                modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
-
-                // Feature
-                if (_.has(featureAtPixel.getProperties(), "features") === false) {
-                    modelAttributes.feature = featureAtPixel;
-                    gfiParams.push(modelAttributes);
-                }
-                // Cluster Feature
-                else {
-                    _.each(featureAtPixel.get("features"), function (feature) {
-                        modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
-                        modelAttributes.feature = feature;
-                        gfiParams.push(modelAttributes);
-                    });
-                }
-            }
         },
 
         // Setter
@@ -244,10 +302,6 @@ define(function (require) {
 
         setCurrentView: function (value) {
             this.set("currentView", value);
-        },
-
-        setDesktopViewType: function (value) {
-            this.set("desktopViewType", value);
         },
 
         setIsMobile: function (value) {
@@ -263,69 +317,28 @@ define(function (require) {
         },
 
         setOverlayElement: function (value) {
-            this.getOverlay().setElement(value);
+            this.get("overlay").setElement(value);
         },
 
         setThemeIndex: function (value) {
             this.set("themeIndex", value);
         },
 
-        // Getter
-        getCoordinate: function () {
-            return this.get("coordinate");
-        },
-
-        getCurrentView: function () {
-            return this.get("currentView");
-        },
-
-        getDesktopViewType: function () {
-            return this.get("desktopViewType");
-        },
-
-        getIsMobile: function () {
-            return this.get("isMobile");
-        },
-
-        getUiStyle: function () {
-            return this.get("uiStyle");
-        },
-
-        getIsVisible: function () {
-            return this.get("isVisible");
-        },
-
-        getNumberOfThemes: function () {
-            return this.get("numberOfThemes");
-        },
-
-        getOverlay: function () {
-            return this.get("overlay");
-        },
-
         getOverlayElement: function () {
-            return this.getOverlay().getElement();
-        },
-
-        getThemeIndex: function () {
-            return this.get("themeIndex");
-        },
-
-        getThemeList: function () {
-            return this.get("themeList");
+            return this.get("overlay").getElement();
         },
 
         /*
         * @description Liefert die GFI-Infos ans Print-Modul.
         */
         getGFIForPrint: function () {
-            var theme = this.getThemeList().at(this.getThemeIndex());
+            var theme = this.get("themeList").at(this.get("themeIndex"));
 
-            return [theme.getGfiContent()[0], theme.get("name"), this.getCoordinate()];
+            return [theme.get("gfiContent")[0], theme.get("name"), this.get("coordinate")];
         },
 
         getVisibleTheme: function () {
-            return this.getThemeList().findWhere({isVisible: true});
+            return this.get("themeList").findWhere({isVisible: true});
         },
 
         /**

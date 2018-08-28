@@ -1,13 +1,6 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function () {
+define(function () {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ScaleLine;
-
-    ScaleLine = Backbone.Model.extend({
+    var ScaleLine = Backbone.Model.extend({
 
         defaults: {
             // Maßstabszahl
@@ -31,6 +24,7 @@ define([
         /**
          * Ist die Maßstabszahl größer als vier Ziffern, wird die Zahl in Tausenderblöcken gruppiert
          * @param  {Object} obj - Resolution, Zoomlevel und Scale aus der MapView
+         * @returns {void}
          */
         modifyScale: function (obj) {
             var scaleNumber = obj.scale.toString();
@@ -38,17 +32,17 @@ define([
             if (scaleNumber >= 10000) {
                 scaleNumber = scaleNumber.substring(0, scaleNumber.length - 3) + " " + scaleNumber.substring(scaleNumber.length - 3);
             }
-
             this.setScaleNumber(scaleNumber);
         },
 
         /**
         * Berechnet den Wert für die Maßstabsleiste in Bezug auf eine 2cm lange Linie
         * Ist der Wert größer als 1000m ist, wird er km angegeben
+        * @returns {void}
         */
         createScaleLineValue: function () {
             var scaleLineValue,
-                scaleNumber = Math.round(0.02 * this.getScaleNumber().replace(" ", ""));
+                scaleNumber = Math.round(0.02 * this.get("scaleNumber").replace(" ", ""));
 
             if (scaleNumber >= 1000) {
                 scaleLineValue = (scaleNumber / 1000).toString() + " km";
@@ -60,39 +54,15 @@ define([
             this.setScaleLineValue(scaleLineValue);
         },
 
-        /**
-         * Setter für das Attribut "scaleNumber"
-         * @param {String}
-         */
         setScaleNumber: function (value) {
             this.set("scaleNumber", value);
         },
 
-        /**
-         * Setter für das Attribut "scaleLineValue"
-         * @param {String}
-         */
         setScaleLineValue: function (value) {
             this.set("scaleLineValue", value);
-        },
-
-        /**
-         * Getter für das Attribut "scaleNumber"
-         * @return {String}
-         */
-        getScaleNumber: function () {
-            return this.get("scaleNumber");
-        },
-
-        /**
-         * Getter für das Attribut "scaleLineValue"
-         * @return {String}
-         */
-        getScaleLineValue: function () {
-            return this.get("scaleLineValue");
         }
 
     });
 
-    return new ScaleLine();
+    return ScaleLine;
 });

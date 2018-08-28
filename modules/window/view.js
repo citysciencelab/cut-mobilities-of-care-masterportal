@@ -37,7 +37,7 @@ define(function (require) {
         },
         id: "window",
         className: "tool-window ui-widget-content",
-        model: Window,
+        model: new Window(),
         templateMax: _.template(templateMax),
         templateMin: _.template(templateMin),
         templateTable: _.template(templateTable),
@@ -83,7 +83,7 @@ define(function (require) {
                 Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).setIsActive(false);
             }
             this.$el.hide("slow");
-            this.model.setVisible(false);
+            this.model.setIsVisible(false);
             this.model.sendParamsToWinCotent();
             Radio.channel("Tool").trigger("activatedTool", "gfi", false);
         }

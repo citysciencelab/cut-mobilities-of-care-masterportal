@@ -1,23 +1,23 @@
-define([
-    "backbone",
-    "text!modules/tools/print/template.html",
-    "modules/tools/print/model"
-], function (Backbone, PrintWinTemplate, Print) {
+define(function (require) {
+    var PrintWinTemplate = require("text!modules/tools/print/template.html"),
+        Print = require("modules/tools/print/model"),
+        $ = require("jquery"),
+        PrintView;
 
-    var view = Backbone.View.extend({
-        model: new Print(),
-        className: "win-body",
-        template: _.template(PrintWinTemplate),
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:scale": this.render
-            });
-        },
+    PrintView = Backbone.View.extend({
         events: {
             "change #layoutField": "setLayout",
             "change #scaleField": "setScale",
             "click button": "createPDF"
         },
+        initialize: function (attrs) {
+            this.model = new Print(attrs);
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin change:scale": this.render
+            });
+        },
+        className: "win-body",
+        template: _.template(PrintWinTemplate),
         setLayout: function (evt) {
             this.model.setLayout(evt.target.selectedIndex);
         },
@@ -39,8 +39,8 @@ define([
             else {
                 this.undelegateEvents();
             }
+            return this;
         }
     });
-
-    return view;
+    return PrintView;
 });

@@ -1,6 +1,6 @@
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
-    configPath = window.location.origin + window.location.pathname + "config",
+    configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
     index,
     strippedLocation;
 
@@ -8,7 +8,7 @@ if (window.location.search !== "") {
     index = window.location.href.indexOf("?");
     strippedLocation = window.location.href.slice(0, index);
 
-    configPath = strippedLocation + "config";
+    configPath = strippedLocation.substring(0, strippedLocation.lastIndexOf("/") + 1) + "config";
 }
 
 scriptTagsArray.forEach(function (scriptTag) {
@@ -33,12 +33,11 @@ require.config({
         config: configPath,
         d3: "../node_modules/d3/build/d3.min",
         geoapi: "GeoAPI",
-        html2canvas: "../node_modules/html2canvas/dist/html2canvas.min",
-        "promise-polyfill": "../node_modules/promise-polyfill/dist/polyfill.min",
         jquery: "../node_modules/jquery/dist/jquery.min",
         jqueryui: "../node_modules/jquery-ui/ui",
         modules: "../modules",
-        moment: "../node_modules/moment/min/moment.min",
+        moment: "../node_modules/moment/min/moment-with-locales.min",
+        mqtt: "../node_modules/mqtt/browserMqtt",
         openlayers: "../node_modules/openlayers/dist/ol",
         pdfmake: "../node_modules/pdfmake/build/pdfmake",
         proj4: "../node_modules/proj4/dist/proj4",
@@ -68,9 +67,9 @@ require.config({
 });
 
 // Überschreibt das Errorhandling von Require so,
-// dass der ursprüngliche Fehler sammt Stacjtrace ausgegeben wird.
+// dass der ursprüngliche Fehler sammt Stacktrace ausgegeben wird.
 // funktioniert obwohl der Linter meckert
-requirejs.onError = function (err) {
+require.onError = function (err) {
     if (err.requireType === "timeout") {
         alert("error: " + err);
     }

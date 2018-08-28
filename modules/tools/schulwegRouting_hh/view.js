@@ -11,12 +11,6 @@ define(function (require) {
     require("bootstrap-select");
 
     SchulwegRoutingView = Backbone.View.extend({
-        model: new Model(),
-        className: "schulweg-routing",
-        template: _.template(template),
-        templateHitlist: _.template(templateHitlist),
-        templateRouteResult: _.template(templateRouteResult),
-        templateRouteDescription: _.template(templateRouteDescription),
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
@@ -43,14 +37,17 @@ define(function (require) {
             "click .print-route": "printRoute",
             "click .description button": "toggleRouteDesc",
             "click #regional-school": function () {
-                this.updateSelectedSchool(this.model.get("regionalSchool").get("schul_id"));
-                this.model.selectSchool(this.model.get("schoolList"), this.model.get("regionalSchool").get("schul_id"));
-                this.model.prepareRequest(this.model.get("startAddress"));
+                if (!_.isEmpty(this.model.get("regionalSchool"))) {
+                    this.updateSelectedSchool(this.model.get("regionalSchool").get("schul_id"));
+                    this.model.selectSchool(this.model.get("schoolList"), this.model.get("regionalSchool").get("schul_id"));
+                    this.model.prepareRequest(this.model.get("startAddress"));
+                }
             }
         },
-        initialize: function () {
+        initialize: function (attr) {
+            this.model = new Model(attr);
             this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
-            if (this.model.getIsActive()) {
+            if (this.model.get("isActive")) {
                 this.render();
             }
             this.listenTo(this.model, {
@@ -70,10 +67,18 @@ define(function (require) {
                 "updateRegionalSchool": this.updateRegionalSchool,
                 "updateSelectedSchool": this.updateSelectedSchool,
                 "resetRouteResult": this.resetRouteResult,
-                "togglePrintEnabled": this.togglePrintEnabled
+                "togglePrintEnabled": this.togglePrintEnabled,
+                "render": function () {
+                    this.$el.remove();
+                    this.render();
+                }
             });
-
         },
+        className: "schulweg-routing",
+        template: _.template(template),
+        templateHitlist: _.template(templateHitlist),
+        templateRouteResult: _.template(templateRouteResult),
+        templateRouteDescription: _.template(templateRouteDescription),
 
         render: function () {
             var attr = this.model.toJSON();
@@ -81,10 +86,11 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initSelectpicker();
             this.setPresetValues();
-            this.$el.find(".checkbox").append(this.checkBoxHVV.render());
+            this.$el.find(".routing-checkbox").append(this.checkBoxHVV.render().$el);
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
+            return this;
         },
         togglePrintEnabled: function (value) {
             if (value) {

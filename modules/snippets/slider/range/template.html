@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <form class="form-inline">
-    <div class="form-group form-group-sm">
-        <label><%= displayName %></label>
-        <% if (typeof infoText !== "undefined") { %>
-            <span class="glyphicon glyphicon-info-sign info-icon"></span>
-        <% } %>
+    <div class= "title-values pull-left">
+        <div class="form-group form-group-sm">
+            <label><%= displayName %></label>
+        </div>
+        <div class="form-group form-group-sm pull-right">
+            <input type="text" class="form-control form-minimum" placeholder="<%= valuesCollection.at(0).get('value') %>">
+            <span>-</span>
+            <input type="text" class="form-control form-maximum" placeholder="<%= valuesCollection.at(1).get('value') %>">
+        </div>
     </div>
-    <div class="form-group form-group-sm pull-right">
-        <input type="text" class="form-control" placeholder="<%= valuesCollection.at(0).get('value') %>" readonly>
-        <span>-</span>
-        <input type="text" class="form-control" placeholder="<%= valuesCollection.at(1).get('value') %>" readonly>
+    <% if (typeof infoText !== "undefined") { %>
+    <div class="info-icon">
+        <span class="glyphicon glyphicon-info-sign"></span>
     </div>
+    <% } %>
 </form>
+</div>
 <input class="slider" type="text" data-slider-tooltip="hide" />
 <% if (!_.isUndefined(this.model.get("infoText"))) { %>
     <div class="info-text"><%= infoText %></div>

@@ -1,7 +1,7 @@
 define(function (require) {
 
     var ol = require("openlayers"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         ZoomToGeometry;
 
     ZoomToGeometry = Backbone.Model.extend({
@@ -24,34 +24,32 @@ define(function (require) {
             }, this);
 
             if (name.length > 0 && name !== "ALL") {
-                this.zoomToGeometry(name, this.getWfsParams());
+                this.zoomToGeometry(name, this.get("wfsParams"));
             }
 
             Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
         },
         /**
         * Zoomt auf eine Geometrie, die auf einem WFS geladen wird.
-        * param name string naem des Features auf das gezommt werdem soll
-        * wfsParams string optional die Parameter, des WFS, von dem die Featurs geladen werden sollen, wenn nicht angegeben, dann werden standardwerte des Moduls genommen.
+        * @param {string} name - des Features auf das gezommt werdem soll
+        * @param {string} wfsParams - die Parameter, des WFS, von dem die Featurs geladen werden sollen, wenn nicht angegeben, dann werden standardwerte des Moduls genommen.
+        * @returns {void}
         **/
         zoomToGeometry: function (name, wfsParams) {
-            var wfsParams = wfsParams || this.getWfsParams();
+            var params = wfsParams || this.get("wfsParams");
 
-            if (!this.validateWfsParams(wfsParams)) {
+            if (!this.validateWfsParams(params)) {
                 return;
             }
 
-            this.getGeometryFromWFS(name, wfsParams);
+            this.getGeometryFromWFS(name, params);
         },
         validateWfsParams: function (wfsParams) {
-            var keysArray = _.keys(this.getWfsParams());
+            var keysArray = _.keys(this.get("wfsParams"));
 
-            _.each(keysArray, function (key) {
-                if (!_.contains(wfsParams, key) || _.isUndefined(wfsParams[key])) {
-                    return false;
-                }
+            return _.every(keysArray, function (key) {
+                return _.has(wfsParams, key) && !_.isUndefined(wfsParams[key]);
             });
-            return true;
         },
         getGeometryFromWFS: function (name, wfsParams) {
             var data = "service=WFS&version=" + wfsParams.version + "&request=GetFeature&TypeName=" + wfsParams.typename;
@@ -62,8 +60,8 @@ define(function (require) {
                 context: this,
                 async: false,
                 type: "GET",
-                success: function (data) {
-                    this.zoomToFeature(data, name, wfsParams.attribute);
+                success: function (resp) {
+                    this.zoomToFeature(resp, name, wfsParams.attribute);
                 },
                 timeout: 6000,
                 error: function () {
@@ -76,7 +74,10 @@ define(function (require) {
         },
         /**
         * zommt auf das Feature, das vom WFS geladen wurde.
-        *
+        * @param {obj} data - der GML String
+        * @param {string} name - Name des Features
+        * @param {string} attribute - GML-Attribut das nach dem Namen durchsucht werden soll
+        * @returns {void}
         **/
         zoomToFeature: function (data, name, attribute) {
             var foundFeature = this.parseFeatures(data, name, attribute),
@@ -96,9 +97,10 @@ define(function (require) {
         },
         /**
         * durchsucht ein GML String nach einem bestimmten Feature
-        * param data der GML String
-        * name Name des Features
-        * attribut GML-Attribut das nach dem Namen durchsucht werden soll
+        * @param {obj} data - der GML String
+        * @param {string} name - Name des Features
+        * @param {string} attribute - GML-Attribut das nach dem Namen durchsucht werden soll
+        * @returns {void}
         **/
         parseFeatures: function (data, name, attribute) {
             var format = new ol.format.WFS(),
@@ -131,7 +133,7 @@ define(function (require) {
         handlePostCompose: function (evt) {
             var canvas = evt.context;
 
-            if (this.getIsRender() === true && _.isUndefined(this.getFeatureGeometry()) === false) {
+            if (this.get("isRender") === true && _.isUndefined(this.get("featureGeometry")) === false) {
                 canvas.beginPath();
                 this.drawOutsidePolygon(canvas);
                 this.drawInsidePolygon(canvas);
@@ -156,7 +158,7 @@ define(function (require) {
 
         drawInsidePolygon: function (canvas) {
 
-            _.each(this.getFeatureGeometry().getPolygons(), function (polygon) {
+            _.each(this.get("featureGeometry").getPolygons(), function (polygon) {
                 // Damit es als inneres Polygon erkannt wird, muss es gegen die Uhrzeigerrichtung gezeichnet werden
                 var coordinates = polygon.getCoordinates()[0].reverse();
 
@@ -169,10 +171,6 @@ define(function (require) {
             });
         },
 
-        // getter for wfsParams
-        getWfsParams: function () {
-            return this.get("wfsParams");
-        },
         // setter for wfsParams
         setWfsParams: function (value) {
             this.set("wfsParams", value);
@@ -181,15 +179,8 @@ define(function (require) {
         setFeatureGeometry: function (value) {
             this.set("featureGeometry", value);
         },
-        // getter for bezirk Geometry
-        getFeatureGeometry: function () {
-            return this.get("featureGeometry");
-        },
         setIsRender: function (value) {
             this.set("isRender", value);
-        },
-        getIsRender: function () {
-            return this.get("isRender");
         }
     });
     return ZoomToGeometry;

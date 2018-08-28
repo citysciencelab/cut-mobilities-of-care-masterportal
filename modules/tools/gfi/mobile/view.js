@@ -1,17 +1,13 @@
 define(function (require) {
-    require("bootstrap/modal");
-
     var GFIView = require("modules/tools/gfi/view"),
         Template = require("text!modules/tools/gfi/mobile/template.html"),
         GFIMobileView;
 
+    require("bootstrap/modal");
+
     GFIMobileView = GFIView.extend({
         className: "modal fade gfi-mobile",
         template: _.template(Template),
-
-        /**
-         * Zeichnet das Template und erstellt das Bootstrap Modal
-         */
         render: function () {
             var attr = this.model.toJSON();
 
@@ -22,11 +18,8 @@ define(function (require) {
             });
         },
 
-        /**
-         * Blendet das Modal ein oder aus
-         */
         toggle: function () {
-            if (this.model.getIsVisible() === true) {
+            if (this.model.get("isVisible") === true) {
                 this.$el.modal("show");
                 Radio.trigger("GFI", "afterRender");
             }
@@ -35,9 +28,6 @@ define(function (require) {
             }
         },
 
-        /**
-         * Löscht das Modal Backdrop und sich selbst
-         */
         removeView: function () {
             this.$el.modal("hide");
             this.remove();

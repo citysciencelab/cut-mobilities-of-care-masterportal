@@ -1,17 +1,15 @@
 define(function (require) {
-    require("bootstrap/alert");
-
-    var Backbone = require("backbone"),
-        AlertingModel = require("modules/alerting/model"),
+    var AlertingModel = require("modules/alerting/model"),
         AlertingTemplate = require("text!modules/alerting/template.html"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         AlertingView;
 
+    require("bootstrap/alert");
+
     AlertingView = Backbone.View.extend({
-        id: "messages",
-        className: "top-center",
-        model: new AlertingModel(),
-        template: _.template(AlertingTemplate),
+        events: {
+            "click .close": "alertClosed"
+        },
         initialize: function () {
             this.listenTo(this.model, {
                 "render": this.render,
@@ -21,13 +19,20 @@ define(function (require) {
 
             $("body").prepend(this.$el);
         },
-        events: {
-            "click .close": "alertClosed"
-        },
+        id: "messages",
+        className: "top-center",
+        model: new AlertingModel(),
+        template: _.template(AlertingTemplate),
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.append(this.template(attr));
+            if (_.has(attr, "animation") && attr.animation !== false) {
+                this.$el.find(".alert").last().fadeOut(attr.animation, function () {
+                    $(this).remove();
+                });
+            }
+            return this;
         },
 
         alertClosed: function (evt) {
@@ -44,6 +49,7 @@ define(function (require) {
          * Positioniert der Alerts über css-Klassen
          * @param  {Backbone.Model} model - this.model
          * @param  {String} value - this.model.get("position")
+         * @returns {void}
          */
         positionAlerts: function (model, value) {
             var currentClassName = this.$el.attr("class");
@@ -54,6 +60,7 @@ define(function (require) {
 
         /**
          * Entfernt alle Meldungen
+         * @returns {void}
          */
         removeAll: function () {
             this.$el.find(".alert").remove();

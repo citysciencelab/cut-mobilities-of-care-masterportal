@@ -1,34 +1,36 @@
-define([
-    "backbone",
-    "text!modules/wfsfeaturefilter/template.html",
-    "modules/wfsfeaturefilter/model"
-], function (Backbone, wfsFeatureFilterTemplate, wfsFeatureFilter) {
-    "use strict";
-    var wfsFeatureFilterView = Backbone.View.extend({
-        model: wfsFeatureFilter,
-        id: "wfsFilterWin",
-        className: "win-body",
-        template: _.template(wfsFeatureFilterTemplate),
-        initialize: function () {
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
-        },
+define(function (require) {
+    var WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
+        $ = require("jquery"),
+        wfsFeatureFilterTemplate = require("text!modules/wfsfeaturefilter/template.html"),
+        wfsFeatureFilterView;
+
+    wfsFeatureFilterView = Backbone.View.extend({
         events: {
             "click #filterbutton": "getFilterInfos",
             "click .panel-heading": "toggleHeading"
         },
+        initialize: function (attr) {
+            this.model = new WfsFeatureFilter(attr);
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin": this.render
+            }, this);
+        },
+        id: "wfsFilterWin",
+        className: "win-body",
+        template: _.template(wfsFeatureFilterTemplate),
         toggleHeading: function (evt) {
-            var id = $(evt.currentTarget)[0].id;
+            var id = this.$(evt.currentTarget)[0].id;
 
-            $("." + id + "_wfs_panel").each(function (index, ele) {
+            this.$("." + id + "_wfs_panel").each(function (index, ele) {
                 $(ele).toggle();
             });
-            if ($("#wfsfeaturefilter_resizemarker").hasClass("glyphicon-resize-small")) {
-                $("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-small");
-                $("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-full");
+            if (this.$("#wfsfeaturefilter_resizemarker").hasClass("glyphicon-resize-small")) {
+                this.$("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-small");
+                this.$("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-full");
             }
             else {
-                $("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-small");
-                $("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-full");
+                this.$("#wfsfeaturefilter_resizemarker").addClass("glyphicon-resize-small");
+                this.$("#wfsfeaturefilter_resizemarker").removeClass("glyphicon-resize-full");
             }
         },
         getFilterInfos: function () {
@@ -95,6 +97,7 @@ define([
 
                     features.forEach(function (feature) {
                         var featuredarstellen = true,
+                            featureattribute,
                             attributname, attributvalue, featurevalue0, featurevalue;
 
                         // Prüfung, ob Feature dargestellt werden soll
@@ -102,8 +105,7 @@ define([
                             attributname = elementfilter.fieldName;
                             attributvalue = elementfilter.fieldValue;
                             if (attributvalue !== "*") {
-                                var featureattribute = _.pick(feature.getProperties(), attributname);
-
+                                featureattribute = _.pick(feature.getProperties(), attributname);
                                 if (featureattribute && !_.isNull(featureattribute)) {
                                     featurevalue0 = _.values(featureattribute)[0];
                                     if (featurevalue0) {
@@ -124,7 +126,7 @@ define([
                                 feature.setStyle(layer.defaultStyle(feature));
                             }
                             else {
-                                feature.setStyle(layer.defaultStyle);
+                                feature.setStyle(layer.defaultStyle(feature));
                             }
                         }
                         else if (featuredarstellen === false) {
@@ -164,11 +166,12 @@ define([
                     this.filterLayers(layerfilters);
                 }
             }
+            return this;
         },
         setMaxHeight: function () {
             var maxHeight = $(window).height() - 160;
 
-            $("#wfsFilterWin").css("max-height", maxHeight);
+            this.$el.css("max-height", maxHeight);
         }
     });
 

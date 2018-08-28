@@ -1,20 +1,21 @@
 define(function (require) {
-    var Config = require("config"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         Util;
 
     Util = Backbone.Model.extend({
         defaults: {
             // isViewMobile: false,
             config: "",
-            ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"]
+            ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
+            uiStyle: "DEFAULT"
         },
         initialize: function () {
-            var channel = Radio.channel("Util"),
-                uiStyle = Config.uiStyle ? Config.uiStyle.toUpperCase() : "DEFAULT";
+            var channel = Radio.channel("Util");
 
             channel.reply({
-                "isViewMobile": this.getIsViewMobile,
+                "isViewMobile": function () {
+                    return this.get("isViewMobile");
+                },
                 "getPath": this.getPath,
                 "getProxyURL": this.getProxyURL,
                 "isApple": this.isApple,
@@ -24,9 +25,15 @@ define(function (require) {
                 "isChrome": this.isChrome,
                 "isInternetExplorer": this.isInternetExplorer,
                 "isAny": this.isAny,
-                "getConfig": this.getConfig,
-                "getUiStyle": this.getUiStyle,
-                "getIgnoredKeys": this.getIgnoredKeys,
+                "getConfig": function () {
+                    return this.get("config");
+                },
+                "getUiStyle": function () {
+                    return this.get("uiStyle");
+                },
+                "getIgnoredKeys": function () {
+                    return this.get("ignoredKeys");
+                },
                 "punctuate": this.punctuate,
                 "sort": this.sort
             }, this);
@@ -34,7 +41,8 @@ define(function (require) {
             channel.on({
                 "hideLoader": this.hideLoader,
                 "showLoader": this.showLoader,
-                "setUiStyle": this.setUiStyle
+                "setUiStyle": this.setUiStyle,
+                "copyToClipboard": this.copyToClipboard
             }, this);
 
             // initial isMobileView setzen
@@ -42,13 +50,11 @@ define(function (require) {
 
             this.listenTo(this, {
                 "change:isViewMobile": function () {
-                    channel.trigger("isViewMobileChanged", this.getIsViewMobile());
+                    channel.trigger("isViewMobileChanged", this.get("isViewMobile"));
                 }
             });
 
             $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
-
-            this.setUiStyle(uiStyle);
             this.parseConfigFromURL();
         },
         /**
@@ -137,6 +143,47 @@ define(function (require) {
                 .value();
 
             return sortedObj;
+        },
+        /**
+         * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
+         * behaviour of ios strange used solution from :
+         * https://stackoverflow.com/questions/34045777/copy-to-clipboard-using-javascript-in-ios
+         * @param  {el} el element to copy
+         * @returns {void}
+         */
+        copyToClipboard: function (el) {
+            var oldReadOnly = el.readOnly,
+                oldContentEditable = el.contentEditable,
+                range = document.createRange(),
+                selection = window.getSelection();
+
+            el.readOnly = false;
+            el.contentEditable = true;
+
+            range.selectNodeContents(el);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            el.setSelectionRange(0, 999999); // A big number, to cover anything that could be inside the element.
+
+            el.readOnly = oldReadOnly;
+            el.contentEditable = oldContentEditable;
+
+            try {
+                document.execCommand("copy");
+                Radio.trigger("Alert", "alert", {
+                    text: "Inhalt wurde in die Zwischenablage kopiert.",
+                    kategorie: "alert-info",
+                    position: "top-center",
+                    animation: 2000
+                });
+            }
+            catch (e) {
+                Radio.trigger("Alert", "alert", {
+                    text: "Inhalt konnte nicht in die Zwischenablage kopiert werden.",
+                    kategorie: "alert-info",
+                    position: "top-center"
+                });
+            }
         },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);
@@ -238,14 +285,6 @@ define(function (require) {
         },
 
         /**
-         * Getter für Attribut isViewMobile
-         * @return {boolean} mobil
-         */
-        getIsViewMobile: function () {
-            return this.get("isViewMobile");
-        },
-
-        /**
          * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
          * @return {undefined}
          */
@@ -284,28 +323,14 @@ define(function (require) {
             }
         },
 
-        // getter for config
-        getConfig: function () {
-            return this.get("config");
-        },
-
         // setter for config
         setConfig: function (value) {
             this.set("config", value);
         },
 
-        // getter for UiStyle
-        getUiStyle: function () {
-            return this.get("uiStyle");
-        },
-
         // setter for UiStyle
         setUiStyle: function (value) {
             this.set("uiStyle", value);
-        },
-
-        getIgnoredKeys: function () {
-            return this.get("ignoredKeys");
         }
     });
 

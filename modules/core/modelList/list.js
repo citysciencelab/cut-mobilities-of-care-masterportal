@@ -5,10 +5,11 @@ define(function (require) {
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
+        SensorLayer = require("modules/core/modelList/layer/sensor"),
+        HeatmapLayer = require("modules/core/modelList/layer/heatmap"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
-        $ = require("jquery"),
         ModelList;
 
     ModelList = Backbone.Collection.extend({
@@ -50,18 +51,18 @@ define(function (require) {
                     channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                 },
                 "change:isExpanded": function (model) {
-                    this.trigger("updateOverlayerView", model.getId());
-                    if (model.getId() === "SelectedLayer") {
+                    this.trigger("updateOverlayerView", model.get("id"));
+                    if (model.get("id") === "SelectedLayer") {
                         this.trigger("updateSelection", model);
                     }
-                    // Trigger fÃ¼r mobiles Wandern im Baum
+                    // Trigger für mobiles Wandern im Baum
                     this.trigger("traverseTree", model);
                     channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                 },
                 "change:isSelected": function (model) {
-                    if (model.getType() === "layer") {
+                    if (model.get("type") === "layer") {
                         this.resetSelectionIdx(model);
-                        model.setIsVisibleInMap(model.getIsSelected());
+                        model.setIsVisibleInMap(model.get("isSelected"));
                     }
                     this.trigger("updateSelection");
                     channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
@@ -92,6 +93,12 @@ define(function (require) {
                 }
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
+                }
+                else if (attrs.typ === "SensorThings" || attrs.typ === "ESRIStreamLayer") {
+                    return new SensorLayer(attrs, options);
+                }
+                else if (attrs.typ === "Heatmap") {
+                    return new HeatmapLayer(attrs, options);
                 }
             }
             else if (attrs.type === "folder") {
@@ -164,7 +171,7 @@ define(function (require) {
             var itemListByParentId = this.where({parentId: parentId}),
                 parent = this.findWhere({id: parentId});
 
-            if (!parent.getIsExpanded()) {
+            if (!parent.get("isExpanded")) {
                 this.setAllDescendantsInvisible(parentId);
             }
             else {
@@ -178,10 +185,10 @@ define(function (require) {
 
             _.each(itemListByParentId, function (item) {
                 item.setIsVisibleInTree(false);
-                if (item.getType() === "folder") {
+                if (item.get("type") === "folder") {
                     item.setIsExpanded(false, {silent: true});
                 }
-                this.setAllDescendantsInvisible(item.getId());
+                this.setAllDescendantsInvisible(item.get("id"));
             }, this);
         },
 
@@ -192,7 +199,7 @@ define(function (require) {
         setAllModelsInvisible: function () {
             this.forEach(function (model) {
                 model.setIsVisibleInTree(false);
-                if (model.getType() === "folder") {
+                if (model.get("type") === "folder") {
                     model.setIsExpanded(false, {silent: true});
                 }
             });
@@ -203,10 +210,10 @@ define(function (require) {
         * @return {undefined}
         */
         setIsSelectedOnChildLayers: function (model) {
-            var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()}));
+            var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")}));
 
             _.each(layers, function (layer) {
-                layer.setIsSelected(model.getIsSelected());
+                layer.setIsSelected(model.get("isSelected"));
             });
         },
         /**
@@ -216,10 +223,10 @@ define(function (require) {
         * @return {undefined}
         */
         setIsSelectedOnParent: function (model) {
-            var layers = this.where({parentId: model.getParentId()}),
-                folderModel = this.findWhere({id: model.getParentId()}),
+            var layers = this.where({parentId: model.get("parentId")}),
+                folderModel = this.findWhere({id: model.get("parentId")}),
                 allLayersSelected = _.every(layers, function (layer) {
-                    return layer.getIsSelected() === true;
+                    return layer.get("isSelected") === true;
                 });
 
             if (allLayersSelected === true) {
@@ -235,7 +242,7 @@ define(function (require) {
 
             _.each(tools, function (tool) {
                 if (!_.isUndefined(tool)) {
-                    if (tool.getId() !== "gfi" || deactivateGFI) {
+                    if (model.get("id") !== "gfi" || deactivateGFI) {
                         tool.setIsActive(false);
                     }
                 }
@@ -245,12 +252,12 @@ define(function (require) {
         insertIntoSelectionIDX: function (model) {
             var idx = 0;
 
-            if (this.selectionIDX.length === 0 || model.getParentId() !== "Baselayer") {
+            if (this.selectionIDX.length === 0 || model.get("parentId") !== "Baselayer") {
                 idx = this.appendToSelectionIDX(model);
                 // idx = this.selectionIDX.push(model) - 1;
             }
             else {
-                while (idx < this.selectionIDX.length && this.selectionIDX[idx].getParentId() === "Baselayer") {
+                while (idx < this.selectionIDX.length && this.selectionIDX[idx].get("parentId") === "Baselayer") {
                     idx++;
                 }
                 this.selectionIDX.splice(idx, 0, model);
@@ -280,7 +287,7 @@ define(function (require) {
 
         resetSelectionIdx: function (model) {
             if (Radio.request("Parser", "getTreeType") !== "light") {
-                if (model.getIsSelected()) {
+                if (model.get("isSelected")) {
                     this.insertIntoSelectionIDX(model);
                 }
                 else {
@@ -289,14 +296,14 @@ define(function (require) {
             }
         },
         moveModelDown: function (model) {
-            var oldIDX = model.getSelectionIDX(),
+            var oldIDX = model.get("selectionIDX"),
                 newIDX = oldIDX - 1;
 
             if (oldIDX > 0) {
                 this.removeFromSelectionIDX(model);
                 this.insertIntoSelectionIDXAt(model, newIDX);
-                if (model.getIsSelected()) {
-                    Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
+                if (model.get("isSelected")) {
+                    Radio.trigger("Map", "addLayerToIndex", [model.get("layer"), newIDX]);
                 }
                 this.trigger("updateSelection");
                 this.trigger("updateLightTree");
@@ -305,7 +312,7 @@ define(function (require) {
             }
         },
         moveModelUp: function (model) {
-            var oldIDX = model.getSelectionIDX(),
+            var oldIDX = model.get("selectionIDX"),
                 newIDX = oldIDX + 1;
 
             if (oldIDX < this.selectionIDX.length - 1) {
@@ -313,8 +320,8 @@ define(function (require) {
                 this.insertIntoSelectionIDXAt(model, newIDX);
                 // Auch wenn die Layer im simple Tree noch nicht selected wurde, kÃ¶nnen
                 // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugtt und ist undefined
-                if (model.getIsSelected()) {
-                    Radio.trigger("Map", "addLayerToIndex", [model.getLayer(), newIDX]);
+                if (model.get("isSelected")) {
+                    Radio.trigger("Map", "addLayerToIndex", [model.get("layer"), newIDX]);
                 }
                 this.trigger("updateSelection");
                 this.trigger("updateLightTree");
@@ -493,7 +500,7 @@ define(function (require) {
 
         toggleCatalogs: function (id) {
             _.each(this.where({parentId: "tree"}), function (model) {
-                if (model.getId() !== id) {
+                if (model.get("id") !== id) {
                     model.setIsExpanded(false);
                 }
             }, this);
@@ -506,7 +513,7 @@ define(function (require) {
         */
         removeModelsByParentId: function (parentId) {
             _.each(this.where({parentId: parentId}), function (model) {
-                if (model.getType() === "layer" && model.getIsVisibleInMap() === true) {
+                if (model.get("type") === "layer" && model.get("isVisibleInMap") === true) {
                     model.setIsVisibleInMap(false);
                 }
                 model.setIsVisibleInTree(false);

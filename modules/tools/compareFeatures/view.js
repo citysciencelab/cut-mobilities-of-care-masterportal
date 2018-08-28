@@ -10,12 +10,12 @@ define(function (require) {
 
     CompareFeaturesView = Backbone.View.extend({
         className: "compare-feature-modal modal fade",
-
         events: {
             // is fired when the modal has finished being hidden
             "hidden.bs.modal": "setIsActivatedToFalse",
             "click .btn-open-list": "setIsActivatedToTrue",
             "click .btn-infos": "toggleRows",
+            "click .btn-print": "preparePrint",
             "click table .glyphicon-remove": "removeFeatureFromList",
             "change select": function (evt) {
                 this.model.setLayerId(evt.target.value);
@@ -23,8 +23,8 @@ define(function (require) {
             }
         },
 
-        initialize: function () {
-            this.model = new CompareFeaturesModel();
+        initialize: function (attr) {
+            this.model = new CompareFeaturesModel(attr);
             this.template = _.template(CompareFeaturesTemplate);
             this.templateNoFeatures = _.template(CompareFeaturesTemplateNoFeatures);
             this.templateFeedback = _.template(CompareFeaturesTemplateFeedback);
@@ -63,12 +63,12 @@ define(function (require) {
          */
         renderListModal: function (model) {
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: model.get("layerId")}),
-                themeConfig = Radio.request("Schulinfo", "getThemeConfig"),
                 attr = {
-                    list: model.prepareFeatureListToShow(layerModel.get("gfiAttributes"), themeConfig),
+                    list: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
                     rowsToShow: model.get("numberOfAttributesToShow"),
                     featureIds: model.getFeatureIds(model.get("groupedFeatureList"), model.get("layerId")),
-                    layerSelection: model.getLayerSelection(model.get("groupedFeatureList"))
+                    layerSelection: model.getLayerSelection(model.get("groupedFeatureList")),
+                    layerId: model.get("layerId")
                 };
 
             this.$el.html(this.template(attr));
@@ -113,7 +113,11 @@ define(function (require) {
                 this.renderErrorModal();
             }
         },
+        preparePrint: function () {
+            var rowsToShow = this.$el.find("tr:visible").length;
 
+            this.model.preparePrint(rowsToShow);
+        },
         /**
          * shows or hides the rows wiht the class toggle-row
          * and sets the button text

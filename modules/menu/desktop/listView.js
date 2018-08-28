@@ -1,17 +1,10 @@
-define([
-    "backbone.radio",
-    "modules/menu/desktop/listViewMain",
-    "modules/menu/desktop/folder/viewTree",
-    "modules/menu/desktop/folder/viewCatalog",
-    "modules/menu/desktop/layer/viewSelection",
-    "modules/menu/desktop/layer/view"
-], function () {
+define(function (require) {
     var listView = require("modules/menu/desktop/listViewMain"),
         DesktopThemenFolderView = require("modules/menu/desktop/folder/viewTree"),
         CatalogFolderView = require("modules/menu/desktop/folder/viewCatalog"),
         DesktopLayerView = require("modules/menu/desktop/layer/view"),
         SelectionView = require("modules/menu/desktop/layer/viewSelection"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         Menu;
 
     Menu = listView.extend({
@@ -37,46 +30,56 @@ define([
             Radio.trigger("Autostart", "initializedModul", "tree");
         },
         render: function () {
-            $("#" + "tree").html("");
+            $("#tree").html("");
             // Eine Themenebene rendern
             this.renderSubTree("tree", 0, 0, true);
             $("ul#tree ul#Overlayer").addClass("LayerListMaxHeight");
             $("ul#tree ul#SelectedLayer").addClass("LayerListMaxHeight");
             $("ul#tree ul#Baselayer").addClass("LayerListMaxHeight");
-            Radio.trigger("Title", "setSize");
         },
         /**
-             * Rendert die  Auswahlliste
-             * @return {[type]} [description]
-             */
+         * Rendert die  Auswahlliste
+         * @return {[type]} [description]
+         */
         renderSelectedList: function () {
-            $("#" + "SelectedLayer").html("");
-            var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"});
+            var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"}),
+                selectedModels;
 
-            if (selectedLayerModel.getIsExpanded()) {
-                var selectedModels = this.collection.where({isSelected: true, type: "layer"});
+            $("#SelectedLayer").html("");
+            if (selectedLayerModel.get("isExpanded")) {
+                selectedModels = this.collection.where({isSelected: true, type: "layer"});
 
                 selectedModels = _.sortBy(selectedModels, function (model) {
-                    return model.getSelectionIDX();
+                    return model.get("selectionIDX");
                 });
                 this.addSelectionView(selectedModels);
             }
         },
         /**
-            * Rendert rekursiv alle Themen unter ParentId bis als rekursionsstufe Levellimit erreicht wurde
-             */
+         * Rendert rekursiv alle Themen unter ParentId bis als rekursionsstufe Levellimit erreicht wurde
+         * @param {string} parentId -
+         * @param {number} level -
+         * @param {number} levelLimit -
+         * @param {boolean} firstTime -
+         * @returns {void}
+         */
         renderSubTree: function (parentId, level, levelLimit, firstTime) {
+            var lightModels,
+                models,
+                folders,
+                layer;
+
             if (level > levelLimit) {
                 return;
             }
 
-            var lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
-                models = this.collection.add(lightModels);
+            lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId});
+            models = this.collection.add(lightModels);
 
-                // Ordner öffnen, die initial geöffnet sein sollen
+            // Ordner öffnen, die initial geöffnet sein sollen
             if (parentId === "tree") {
                 _.each(models, function (model) {
-                    if (model.getType() === "folder" && model.getIsInitiallyExpanded()) {
+                    if (model.get("type") === "folder" && model.get("isInitiallyExpanded")) {
                         model.setIsExpanded(true);
                     }
                 });
@@ -86,14 +89,14 @@ define([
                 this.collection.setVisibleByParentIsExpanded(parentId);
             }
 
-            var layer = _.filter(models, function (model) {
-                return model.getType() === "layer";
+            layer = _.filter(models, function (model) {
+                return model.get("type") === "layer";
             });
 
-                // Layer Atlas sortieren
+            // Layer Atlas sortieren
             if (Radio.request("Parser", "getTreeType") === "default") {
                 layer = _.sortBy(layer, function (item) {
-                    return item.getName();
+                    return item.get("name");
                 });
             }
             // Notwendig, da jQuery.after() benutzt werden muss wenn die Layer in den Baum gezeichnet werden, um den Layern auf allen Ebenen die volle Breite des Baumes zu geben
@@ -102,40 +105,40 @@ define([
 
             this.addOverlayViews(layer);
 
-            var folder = _.filter(models, function (model) {
-                return model.getType() === "folder";
+            folders = _.filter(models, function (model) {
+                return model.get("type") === "folder";
             });
 
             if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "Overlayer" && parentId !== "tree") {
-                folder = _.sortBy(folder, function (item) {
-                    return item.getName();
+                folders = _.sortBy(folders, function (item) {
+                    return item.get("name");
                 });
             }
 
             if (parentId !== "Overlayer" && parentId !== "tree") {
-                folder.reverse();
+                folders.reverse();
             }
 
-            this.addOverlayViews(folder);
+            this.addOverlayViews(folders);
 
-            _.each(folder, function (folder) {
-                this.renderSubTree(folder.getId(), level + 1, levelLimit, false);
+            _.each(folders, function (folder) {
+                this.renderSubTree(folder.get("id"), level + 1, levelLimit, false);
             }, this);
         },
         updateOverlayer: function (parentId) {
             this.renderSubTree(parentId, 0, 0, false);
         },
         addViewsToItemsOfType: function (type, items, parentId) {
-            items = _.filter(items, function (model) {
-                return model.getType() === type;
+            var viewItems = _.filter(items, function (model) {
+                return model.get("type") === type;
             });
 
             if (Radio.request("Parser", "getTreeType") === "default" && parentId !== "tree") {
-                items = _.sortBy(items, function (item) {
-                    return item.getName();
+                viewItems = _.sortBy(viewItems, function (item) {
+                    return item.get("name");
                 });
                 if (parentId !== "Overlayer") {
-                    items.reverse();
+                    viewItems.reverse();
                 }
             }
 
@@ -144,9 +147,9 @@ define([
         },
         addOverlayViews: function (models) {
             _.each(models, function (model) {
-                if (model.getType() === "folder") {
+                if (model.get("type") === "folder") {
                     // Oberste ebene im Themenbaum?
-                    if (model.getParentId() === "tree") {
+                    if (model.get("parentId") === "tree") {
                         new CatalogFolderView({model: model});
                     }
                     else {

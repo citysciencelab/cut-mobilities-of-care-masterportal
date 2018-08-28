@@ -2,8 +2,6 @@ define(function (require) {
     var Backbone = require("backbone"),
         Radio = require("backbone.radio"),
         ol = require("openlayers"),
-        Config = require("config"),
-        $ = require("jquery"),
         MapMarkerModel;
 
     MapMarkerModel = Backbone.Model.extend({
@@ -34,18 +32,17 @@ define(function (require) {
         initialize: function () {
             var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
 
-            Radio.trigger("Map", "addOverlay", this.getMarker());
-            Radio.trigger("Map", "addLayerToIndex", [this.getPolygon(), Radio.request("Map", "getLayers").getArray().length]);
+            Radio.trigger("Map", "addOverlay", this.get("marker"));
+            Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);
 
             if (_.has(searchConf, "zoomLevel")) {
                 this.setZoomLevel(searchConf.zoomLevel);
             }
-            this.askForMarkers();
         },
 
         getFeature: function () {
             var format = new ol.format.WKT(),
-                feature = format.readFeature(this.getWkt());
+                feature = format.readFeature(this.get("wkt"));
 
             return feature;
         },
@@ -117,41 +114,6 @@ define(function (require) {
             return wkt;
         },
 
-        // frägt das model in zoomtofeatures ab und bekommt ein Array mit allen Centerpoints der pro Feature-BBox
-        askForMarkers: function () {
-            var centers,
-                imglink;
-
-            if (_.has(Config, "zoomtofeature")) {
-                centers = Radio.request("ZoomToFeature", "getCenterList");
-                imglink = Config.zoomtofeature.imglink;
-
-                _.each(centers, function (center, i) {
-                    var id = "featureMarker" + i,
-                        marker,
-                        markers;
-
-                    // lokaler Pfad zum IMG-Ordner ist anders
-                    $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Radio.request("Util", "getPath", imglink) + "'></div>");
-
-                    marker = new ol.Overlay({
-                        id: id,
-                        offset: [-12, 0],
-                        positioning: "bottom-center",
-                        element: document.getElementById(id),
-                        stopEvent: false
-                    });
-
-                    marker.setPosition(center);
-                    markers = this.getMarkers();
-                    markers.push(marker);
-                    this.setMarkers(markers);
-                    Radio.trigger("Map", "addOverlay", marker);
-                }, this);
-                Radio.trigger("ZoomToFeature", "zoomtofeatures");
-            }
-        },
-
         /**
          * Erstellt ein Polygon um das WKT-Feature
          * @return {void}
@@ -159,8 +121,8 @@ define(function (require) {
         showFeature: function () {
             var feature = this.getFeature();
 
-            this.getPolygon().getSource().addFeature(feature);
-            this.getPolygon().setVisible(true);
+            this.get("polygon").getSource().addFeature(feature);
+            this.get("polygon").setVisible(true);
         },
 
         /**
@@ -168,22 +130,14 @@ define(function (require) {
          * @return {void}
          */
         hideFeature: function () {
-            this.getPolygon().getSource().clear();
+            this.get("polygon").getSource().clear();
         },
 
-        // getter for zoomLevel
-        getZoomLevel: function () {
-            return this.get("zoomLevel");
-        },
         // setter for zoomLevel
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
         },
 
-        // getter for wkt
-        getWkt: function () {
-            return this.get("wkt");
-        },
         // setter for wkt
         setWkt: function (type, geom) {
             var value = this.getWKTGeom(type, geom);
@@ -191,28 +145,16 @@ define(function (require) {
             this.set("wkt", value);
         },
 
-        // getter for marker
-        getMarker: function () {
-            return this.get("marker");
-        },
         // setter for marker
         setMarker: function (value) {
             this.set("marker", value);
         },
 
-        // getter for markers
-        getMarkers: function () {
-            return this.get("markers");
-        },
         // setter for markers
         setMarkers: function (value) {
             this.set("markers", value);
         },
 
-        // getter for polygon
-        getPolygon: function () {
-            return this.get("polygon");
-        },
         // setter for polygon
         setPolygon: function (value) {
             this.set("polygon", value);

@@ -1,7 +1,5 @@
 define(function (require) {
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        FolderView = require("modules/menu/mobile/folder/view"),
+    var FolderView = require("modules/menu/mobile/folder/view"),
         LayerView = require("modules/menu/mobile/layer/view"),
         LayerViewLight = require("modules/menu/mobile/layer/viewLight"),
         ToolView = require("modules/menu/mobile/tool/view"),
@@ -40,18 +38,17 @@ define(function (require) {
         },
 
         render: function () {
-            $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
-            $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
-
             var rootModels = this.collection.where({parentId: "root"});
 
+            $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
+            $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
             this.addViews(rootModels);
+            return this;
         },
 
         traverseTree: function (model) {
-
-            if (model.getIsExpanded()) {
-                if (model.getId() === "SelectedLayer") {
+            if (model.get("isExpanded")) {
+                if (model.get("id") === "SelectedLayer") {
                     this.renderSelection(true);
                 }
                 else {
@@ -71,7 +68,7 @@ define(function (require) {
             models = this.collection.add(lightModels);
 
             models = _.sortBy(models, function (layer) {
-                return layer.getSelectionIDX();
+                return layer.get("selectionIDX");
             }).reverse();
 
             _.each(models, function (model) {
@@ -85,7 +82,7 @@ define(function (require) {
             var models = this.collection.where({isSelected: true, type: "layer"});
 
             models = _.sortBy(models, function (layer) {
-                return layer.getSelectionIDX();
+                return layer.get("selectionIDX");
             }).reverse();
             if (withAnimation) {
                 this.slideModels("descent", models, "tree", "Selection");
@@ -102,26 +99,27 @@ define(function (require) {
 
         descentInTree: function (model) {
             var models = [],
-                lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.getId()});
+                lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")});
 
             models = this.collection.add(lightModels);
 
-            if (model.getIsLeafFolder()) {
+            if (model.get("isLeafFolder")) {
                 models.push(model);
             }
-            this.slideModels("descent", models, model.getParentId());
+            this.slideModels("descent", models, model.get("parentId"));
         },
 
         ascentInTree: function (model) {
-            model.setIsVisibleInTree(false);
-            var models = this.collection.where({parentId: model.getParentId()});
+            var models = this.collection.where({parentId: model.get("parentId")});
 
-            this.slideModels("ascent", models, model.getId());
+            model.setIsVisibleInTree(false);
+            this.slideModels("ascent", models, model.get("id"));
         },
 
         slideModels: function (direction, modelsToShow, parentIdOfModelsToHide, currentList) {
             var slideIn,
                 slideOut,
+                groupedModels,
                 that = this;
 
             if (direction === "descent") {
@@ -142,17 +140,17 @@ define(function (require) {
                 }
                 else {
                     // Gruppieren nach Folder und Rest
-                    var groupedModels = _.groupBy(modelsToShow, function (model) {
-                        return model.getType() === "folder" ? "folder" : "other";
+                    groupedModels = _.groupBy(modelsToShow, function (model) {
+                        return model.get("type") === "folder" ? "folder" : "other";
                     });
 
                     // Im default-Tree werden folder und layer alphabetisch sortiert
-                    if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].getParentId() !== "tree") {
+                    if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].get("parentId") !== "tree") {
                         groupedModels.folder = _.sortBy(groupedModels.folder, function (item) {
-                            return item.getName();
+                            return item.get("name");
                         });
                         groupedModels.other = _.sortBy(groupedModels.other, function (item) {
-                            return item.getName();
+                            return item.get("name");
                         });
                     }
                     // Folder zuerst zeichnen
@@ -173,17 +171,17 @@ define(function (require) {
 
         addViews: function (models) {
             var nodeView,
-                treeType = this.doRequestTreeType();
+                attr,
+                treeType = this.doRequestTreeType(),
+                newModels = _.reject(models, function (model) {
+                    return model.get("onlyDesktop") === true;
+                });
 
-            models = _.reject(models, function (model) {
-                return model.get("onlyDesktop") === true;
-            });
-
-            _.each(models, function (model) {
+            _.each(newModels, function (model) {
                 model.setIsVisibleInTree(true);
-                switch (model.getType()) {
+                switch (model.get("type")) {
                     case "folder": {
-                        var attr = model.toJSON();
+                        attr = model.toJSON();
 
                         if (attr.isLeafFolder && attr.isExpanded && !attr.isFolderSelectable) {
                             // if the selectAll-checkbox should be hidden: don't add folder-view
@@ -217,6 +215,7 @@ define(function (require) {
 
         /**
          * Entfernt diesen ListView und alle subViews
+         * @returns {void}
          */
         removeView: function () {
             this.$el.find("ul.nav-menu").html("");
@@ -227,7 +226,7 @@ define(function (require) {
             $("#map").before(this.el);
         },
         startModul: function (modulId) {
-            var modul = _.findWhere(this.collection.models, {id: modulId});
+            var modul = this.collection.findWhere({id: modulId});
 
             if (modul.attributes.type === "tool") {
                 modul.setIsActive(true);

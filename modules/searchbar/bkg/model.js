@@ -86,13 +86,15 @@ define(function (require) {
                 $("#searchInput").val(searchString);
                 request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
                 this.setTypeOfRequest("direct");
-                this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false, this.getTypeOfRequest());
+                this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false, this.get("typeOfRequest"));
                 Radio.trigger("Searchbar", "createRecommendedList");
             }
         },
         directPushSuggestions: function (data) {
             if (data.length === 1) {
-                this.bkgSearch(data[0].suggestion);
+                this.bkgSearch({
+                    name: data[0].suggestion
+                });
             }
             else {
                 _.each(data, function (hit) {
@@ -128,7 +130,7 @@ define(function (require) {
             var request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
 
             this.setTypeOfRequest("suggest");
-            this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, true, this.getTypeOfRequest());
+            this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, true, this.get("typeOfRequest"));
         },
 
         /**
@@ -165,7 +167,7 @@ define(function (require) {
                 request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&count=1&query=" + encodeURIComponent(name);
 
             this.setTypeOfRequest("search");
-            this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.getTypeOfRequest());
+            this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.get("typeOfRequest"));
         },
         /**
          * @description Triggert das Zoomen auf den Eintrag
@@ -237,14 +239,6 @@ define(function (require) {
                 cleanedAjax = _.omit(ajax, type);
 
             this.set("ajaxRequests", cleanedAjax);
-        },
-
-        /**
-        * Holt den jeweiligen Typ der gesendet wird
-        * @returns {void}
-        */
-        getTypeOfRequest: function () {
-            return this.get("typeOfRequest");
         },
 
         /**

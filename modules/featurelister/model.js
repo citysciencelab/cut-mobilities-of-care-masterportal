@@ -1,8 +1,5 @@
 define(function (require) {
-
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        Requestor = require("modules/core/requestor"),
+    var Requestor = require("modules/core/requestor"),
         FeatureListerModel;
 
     FeatureListerModel = Backbone.Model.extend({
@@ -110,8 +107,8 @@ define(function (require) {
         * Skaliert den Style des zuvor selektierten Features auf den Ursprungswert
         */
         downlightFeature: function () {
-            var highlightedFeature = this.getHighlightedFeature(),
-                highlightedFeatureStyle = this.getHighlightedFeatureStyle();
+            var highlightedFeature = this.get("highlightedFeature"),
+                highlightedFeatureStyle = this.get("highlightedFeatureStyle");
 
             if (highlightedFeature) {
                 highlightedFeature.setStyle(highlightedFeatureStyle);
@@ -199,12 +196,12 @@ define(function (require) {
                 var props, geom;
 
                 if (feature.get("features")) {
-                    _.each(feature.get("features"), function (feat, index) {
+                    _.each(feature.get("features"), function (feat, idx) {
                         props = Requestor.translateGFI([feat.getProperties()], gfiAttributes)[0];
                         geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
                         ll.push({
-                            id: index,
+                            id: idx,
                             properties: props,
                             geometry: geom,
                             feature: feat
@@ -235,31 +232,23 @@ define(function (require) {
             layerlist.push({
                 id: layer.id,
                 name: layer.get("name"),
-                style: layer.getStyle()
+                style: layer.get("style")
             });
             this.unset("layerlist", {silent: true});
             this.set("layerlist", layerlist);
             this.trigger("switchTabToTheme"); // bei zusätzlichen Layern soll sich gleich der Tab öffnen.
         },
 
-        // getter for highlightedFeature
-        getHighlightedFeature: function () {
-            return this.get("highlightedFeature");
-        },
         // setter for highlightedFeature
         setHighlightedFeature: function (value) {
             this.set("highlightedFeature", value);
         },
 
-        // getter for highlightedFeatureStyle
-        getHighlightedFeatureStyle: function () {
-            return this.get("highlightedFeatureStyle");
-        },
         // setter for highlightedFeatureStyle
         setHighlightedFeatureStyle: function (value) {
             this.set("highlightedFeatureStyle", value);
         }
     });
 
-    return new FeatureListerModel();
+    return FeatureListerModel;
 });

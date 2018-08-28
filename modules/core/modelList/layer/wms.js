@@ -5,14 +5,18 @@ define(function (require) {
         WMSLayer;
 
     WMSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            infoFormat: "text/xml"
+        }),
+
         initialize: function () {
-            this.superInitialize();
-            this.setAttributes();
-        },
-        setAttributes: function () {
-            if (_.isUndefined(this.getInfoFormat()) === true) {
-                this.setInfoFormat("text/xml");
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
             }
+
+            this.listenTo(this, {
+                "change:SLDBody": this.updateSourceSLDBody
+            });
         },
 
         /**
@@ -21,16 +25,15 @@ define(function (require) {
          */
         createLayerSource: function () {
             var params,
-                source,
-                context;
+                source;
 
             params = {
                 t: new Date().getMilliseconds(),
                 zufall: Math.random(),
-                LAYERS: this.getLayers(),
-                FORMAT: this.getImageFormat() === "nicht vorhanden" ? "image/png" : this.getImageFormat(),
-                VERSION: this.getVersion(),
-                TRANSPARENT: this.getTransparent().toString()
+                LAYERS: this.get("layers"),
+                FORMAT: this.get("format") === "nicht vorhanden" ? "image/png" : this.get("format"),
+                VERSION: this.get("version"),
+                TRANSPARENT: this.get("transparent").toString()
             };
 
             if (this.get("styles") && this.get("styles") !== "" && this.get("styles") !== "nicht vorhanden") {
@@ -55,23 +58,22 @@ define(function (require) {
                             5809000
                         ],
                         tileSize: parseInt(this.get("tilesize"), 10)
-                    }),
-                    crossOrigin: "anonymous"
+                    })
+                    // Nur für Schulwegrouting, führte zu Problemen mit  diensten die dies nicht zulassen.
+                    // crossOrigin: "anonymous"
                 });
-                context = this;
 
                 // wms_webatlasde
-                source.on("tileloaderror", function () {
-                    if (context.get("tileloaderror") === false) {
-                        context.set("tileloaderror", true);
-                        if (!navigator.cookieEnabled) {
-                            if (context.get("url").indexOf("wms_webatlasde") !== -1) {
+                if (this.get("url").indexOf("wms_webatlasde") !== -1) {
+                    if (this.get("tileloaderror") === false) {
+                        this.set("tileloaderror", true);
+                        source.on("tileloaderror", function () {
+                            if (!navigator.cookieEnabled) {
                                 Radio.trigger("Alert", "alert", {text: "<strong>Bitte erlauben sie Cookies, damit diese Hintergrundkarte geladen werden kann.</strong>", kategorie: "alert-warning"});
                             }
-                        }
+                        });
                     }
-
-                });
+                }
 
                 this.setLayerSource(source);
             }
@@ -79,12 +81,13 @@ define(function (require) {
                 this.setLayerSource(new ol.source.ImageWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
-                    params: params,
-                    crossOrigin: "anonymous"
+                    params: params
+                    // Nur für Schulwegrouting, führte zu Problemen mit  diensten die dies nicht zulassen.
+                    // crossOrigin: "anonymous"
                 }));
             }
-            this.registerErrorListener();
-            this.registerLoadingListeners();
+            // this.registerErrorListener();
+            // this.registerLoadingListeners();
         },
 
         /**
@@ -93,8 +96,8 @@ define(function (require) {
          */
         createLayer: function () {
             var layerobjects = {
-                id: this.getId(),
-                source: this.getLayerSource(),
+                id: this.get("id"),
+                source: this.get("layerSource"),
                 name: this.get("name"),
                 typ: this.get("typ"),
                 legendURL: this.get("legendURL"),
@@ -103,7 +106,7 @@ define(function (require) {
                 infoFormat: this.get("infoFormat")
             };
 
-            if (this.getSingleTile() !== true) {
+            if (this.get("singleTile") !== true) {
                 this.setLayer(new ol.layer.Tile(layerobjects));
             }
             else {
@@ -116,16 +119,19 @@ define(function (require) {
          * @return {[type]} [description]
          */
         createLegendURL: function () {
+            var layerNames,
+                legendURL = [],
+                version = this.get("version");
+
             if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
-                var layerNames = this.get("layers").split(","),
-                    legendURL = [];
+                layerNames = this.get("layers").split(",");
 
                 if (layerNames.length === 1) {
-                    legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
+                    legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
                 }
                 else if (layerNames.length > 1) {
                     _.each(layerNames, function (layerName) {
-                        legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
+                        legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
                     }, this);
                 }
                 this.set("legendURL", legendURL);
@@ -134,28 +140,29 @@ define(function (require) {
 
         /**
          * Register LayerLoad-Events
+         * @returns {void}
          */
         registerLoadingListeners: function () {
-            if (this.getLayerSource() instanceof ol.source.TileWMS) {
+            if (this.get("layerSource") instanceof ol.source.TileWMS) {
                 this.registerTileWMSLoadEvents();
             }
-            else if (this.getLayerSource() instanceof ol.source.ImageWMS) {
+            else if (this.get("layerSource") instanceof ol.source.ImageWMS) {
                 this.registerImageLoadEvents();
             }
         },
 
         registerImageLoadEvents: function () {
-            this.getLayerSource().on("imageloadend", function () {
+            this.get("layerSource").on("imageloadend", function () {
                 this.set("loadingParts", this.get("loadingParts") - 1);
             });
 
-            this.getLayerSource().on("imageloadstart", function () {
+            this.get("layerSource").on("imageloadstart", function () {
                 var startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
 
                 this.set("loadingParts", startval + 1);
             });
 
-            this.getLayerSource().on("change:loadingParts", function (obj) {
+            this.get("layerSource").on("change:loadingParts", function (obj) {
                 if (obj.oldValue > 0 && this.get("loadingParts") === 0) {
                     this.dispatchEvent("wmsloadend");
                     this.unset("loadingParts", {silent: true});
@@ -167,17 +174,17 @@ define(function (require) {
         },
 
         registerTileWMSLoadEvents: function () {
-            this.getLayerSource().on("tileloadend", function () {
+            this.get("layerSource").on("tileloadend", function () {
                 this.set("loadingParts", this.get("loadingParts") - 1);
             });
 
-            this.getLayerSource().on("tileloadstart", function () {
+            this.get("layerSource").on("tileloadstart", function () {
                 var startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
 
                 this.set("loadingParts", startval + 1);
             });
 
-            this.getLayerSource().on("change:loadingParts", function (obj) {
+            this.get("layerSource").on("change:loadingParts", function (obj) {
                 if (obj.oldValue > 0 && this.get("loadingParts") === 0) {
                     this.dispatchEvent("wmsloadend");
                     this.unset("loadingParts", {silent: true});
@@ -190,32 +197,55 @@ define(function (require) {
 
         /**
          * Register LayerLoad-Events
+         * @returns {void}
          */
         registerErrorListener: function () {
-            if (this.getLayerSource() instanceof ol.source.TileWMS) {
+            if (this.get("layerSource") instanceof ol.source.TileWMS) {
                 this.registerTileloadError();
             }
-            else if (this.getLayerSource() instanceof ol.source.ImageWMS) {
+            else if (this.get("layerSource") instanceof ol.source.ImageWMS) {
                 this.registerImageloadError();
             }
         },
 
-        registerTileloadError: function () {
-            this.getLayerSource().on("tileloaderror", function () {
-            }, this);
-        },
+        // registerTileloadError: function () {
+        //     this.get("layerSource").on("tileloaderror", function () {
+        //     }, this);
+        // },
 
-        registerImageloadError: function () {
-            this.getLayerSource().on("imageloaderror", function () {
-            }, this);
-        },
+        // registerImageloadError: function () {
+        //     this.get("layerSource").on("imageloaderror", function () {
+        //     }, this);
+        // },
 
         updateSourceSLDBody: function () {
-            this.getLayer().getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
+            this.get("layer").getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
+        },
+
+        /**
+         * Lädt den WMS neu
+         * @returns {void}
+         */
+        updateSource: function () {
+            this.get("layer").getSource().updateParams({zufall: Math.random()});
         },
 
         setInfoFormat: function (value) {
             this.set("infoFormat", value);
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
+            }
         },
 
         /**
@@ -226,20 +256,12 @@ define(function (require) {
             return this.get("layers");
         },
 
-        getSingleTile: function () {
-            return this.get("singleTile");
-        },
-
-        getInfoFormat: function () {
-            return this.get("infoFormat");
-        },
-
         getGfiUrl: function () {
             var resolution = Radio.request("MapView", "getResolution").resolution,
                 projection = Radio.request("MapView", "getProjection"),
                 coordinate = Radio.request("GFI", "getCoordinate");
 
-            return this.getLayerSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.getInfoFormat(), FEATURE_COUNT: this.get("featureCount")});
+            return this.get("layerSource").getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")});
         }
     });
 

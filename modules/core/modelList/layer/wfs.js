@@ -1,22 +1,30 @@
 define(function (require) {
 
     var Layer = require("modules/core/modelList/layer/model"),
-        Radio = require("backbone.radio"),
         ol = require("openlayers"),
+        $ = require("jquery"),
         WFSLayer;
 
     WFSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults),
 
         initialize: function () {
-            this.superInitialize();
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
+            }
         },
 
         /**
-         * [createLayerSource description]
+         * Wird vom Model getriggert und erzeugt eine vectorSource.
+         * Ggf. auch eine clusterSource
          * @return {[type]} [description]
+         * @uses this createClusterLayerSource
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
+            if (this.has("clusterDistance")) {
+                this.createClusterLayerSource();
+            }
         },
 
         /**
@@ -25,8 +33,8 @@ define(function (require) {
          */
         createClusterLayerSource: function () {
             this.setClusterLayerSource(new ol.source.Cluster({
-                source: this.getLayerSource(),
-                distance: this.getClusterDistance()
+                source: this.get("layerSource"),
+                distance: this.get("clusterDistance")
             }));
         },
 
@@ -36,84 +44,107 @@ define(function (require) {
          */
         createLayer: function () {
             this.setLayer(new ol.layer.Vector({
-                source: this.has("clusterDistance") ? this.getClusterLayerSource() : this.getLayerSource(),
-                name: this.getName(),
-                typ: this.getTyp(),
-                gfiAttributes: this.getGfiAttributes(),
-                routable: this.getRoutable(),
-                gfiTheme: this.getGfiTheme(),
-                id: this.getId()
+                source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.get("layerSource"),
+                name: this.get("name"),
+                typ: this.get("typ"),
+                gfiAttributes: this.get("gfiAttributes"),
+                routable: this.get("routable"),
+                gfiTheme: this.get("gfiTheme"),
+                id: this.get("id")
             }));
 
-            this.updateData();
+            this.updateSource(true);
         },
 
         /**
          * [setClusterLayerSource description]
          * @param {[type]} value [description]
+         * @returns {void}
          */
         setClusterLayerSource: function (value) {
             this.set("clusterLayerSource", value);
         },
 
-        /**
-         * [getClusterLayerSource description]
-         * @return {[type]}       [description]
-         */
-        getClusterLayerSource: function () {
-            return this.get("clusterLayerSource");
-        },
-
         getWfsFormat: function () {
             return new ol.format.WFS({
-                featureNS: this.getFeatureNS(),
-                featureType: this.getFeatureType()
+                featureNS: this.get("featureNS"),
+                featureType: this.get("featureType")
             });
         },
 
-        updateData: function () {
+        /**
+         * Lädt den WFS neu
+         * @param  {boolean} [showLoader=false] Zeigt einen Loader während der Request läuft
+         * @returns {void}
+         */
+        updateSource: function (showLoader) {
             var params = {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
                 SRSNAME: Radio.request("MapView", "getProjection").getCode(),
-                TYPENAME: this.getFeatureType(),
-                VERSION: this.getVersion()
+                TYPENAME: this.get("featureType"),
+                VERSION: this.get("version")
             };
 
-            Radio.trigger("Util", "showLoader");
-
             $.ajax({
+                beforeSend: function () {
+                    if (showLoader) {
+                        Radio.trigger("Util", "showLoader");
+                    }
+                },
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
                 data: params,
                 async: true,
                 type: "GET",
                 context: this,
-                success: function (data) {
-                    Radio.trigger("Util", "hideLoader");
-                    var wfsReader = new ol.format.WFS({
-                            featureNS: this.getFeatureNS()
-                        }),
-                        features = wfsReader.readFeatures(data),
-                        isClustered = Boolean(this.has("clusterDistance"));
-
-                    // nur die Features verwenden die eine geometrie haben aufgefallen bei KITAs am 05.01.2018 (JW)
-                    features = _.filter(features, function (feature) {
-                        return !_.isUndefined(feature.getGeometry());
-                    });
-                    this.getLayerSource().addFeatures(features);
-                    this.set("loadend", "ready");
-                    Radio.trigger("WFSLayer", "featuresLoaded", this.getId(), features);
-                    this.styling(isClustered);
-                    this.getLayer().setStyle(this.getStyle());
-                    this.featuresLoaded(features);
-                },
-                error: function () {
-                    Radio.trigger("Util", "hideLoader");
+                success: this.handleResponse,
+                complete: function () {
+                    if (showLoader) {
+                        Radio.trigger("Util", "hideLoader");
+                    }
                 }
             });
         },
-        styling: function (isClustered) {
-            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.getStyleId());
+
+        /**
+         * Anstoßen der notwendigen Schritte nachdem neue Daten geladen wurden.
+         * @param  {xml} data Response des Ajax-Requests
+         * @returns {void}
+         */
+        handleResponse: function (data) {
+            var features = this.getFeaturesFromData(data);
+
+            this.get("layerSource").clear(true);
+            this.get("layerSource").addFeatures(features);
+            this.styling();
+            this.featuresLoaded(features);
+        },
+
+        /**
+         * Erzeugt aus einer XML-Response eine ol.features Collection
+         * @param  {xml} data die XML-Response
+         * @return {ol/Feature[]}   Collection aus ol/Feature
+         */
+        getFeaturesFromData: function (data) {
+            var wfsReader,
+                features;
+
+            wfsReader = new ol.format.WFS({
+                featureNS: this.get("featureNS")
+            });
+            features = wfsReader.readFeatures(data);
+
+            // Nur die Features verwenden, die eine Geometrie haben. Aufgefallen bei KITAs am 05.01.2018 (JW)
+            features = _.filter(features, function (feature) {
+                return !_.isUndefined(feature.getGeometry());
+            });
+
+            return features;
+        },
+
+        styling: function () {
+            var isClustered = Boolean(this.has("clusterDistance")),
+                stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
             if (!_.isUndefined(stylelistmodel)) {
                 /**
@@ -128,32 +159,33 @@ define(function (require) {
                     return stylelistmodel.createStyle(feature, isClustered);
                 });
             }
+
+            this.get("layer").setStyle(this.get("style"));
         },
 
         setProjection: function (proj) {
             this.set("projection", proj);
         },
 
-        getStyleId: function () {
-            return this.get("styleId");
-        },
-
         // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
         createLegendURL: function () {
-            if (!this.getLegendURL().length) {
-                var style = Radio.request("StyleList", "returnModelById", this.getStyleId());
+            var style;
+
+            if (!this.get("legendURL").length) {
+                style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
                 if (!_.isUndefined(style)) {
-                    this.setLegendURL([style.getImagePath() + style.getImageName()]);
+                    this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
                 }
             }
         },
 
         /**
          * sets null style (= no style) for all features
+         * @returns {void}
          */
         hideAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures();
+            var collection = this.get("layerSource").getFeatures();
 
             collection.forEach(function (feature) {
                 feature.setStyle(function () {
@@ -163,30 +195,32 @@ define(function (require) {
         },
 
         showAllFeatures: function () {
-            var collection = this.getLayerSource().getFeatures(),
+            var collection = this.get("layerSource").getFeatures(),
                 style;
 
             collection.forEach(function (feature) {
-                style = this.getStyleAsFunction(this.getStyle());
+                style = this.getStyleAsFunction(this.get("style"));
 
                 feature.setStyle(style(feature));
             }, this);
         },
         /**
          * Zeigt nur die Features an, deren Id übergeben wird
-         * @param  {string[]} featureIdList
+         * @param  {string[]} featureIdList - featureIdList
+         * @returns {void}
          */
         showFeaturesByIds: function (featureIdList) {
             this.hideAllFeatures();
             _.each(featureIdList, function (id) {
-                var feature = this.getLayerSource().getFeatureById(id),
+                var feature = this.get("layerSource").getFeatureById(id),
                     style = [];
 
-                style = this.getStyleAsFunction(this.getStyle());
+                style = this.getStyleAsFunction(this.get("style"));
 
                 feature.setStyle(style(feature));
             }, this);
         },
+
         getStyleAsFunction: function (style) {
             if (_.isFunction(style)) {
                 return style;
@@ -198,27 +232,23 @@ define(function (require) {
 
         },
 
-        // getter for style
-        getStyle: function () {
-            return this.get("style");
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
+            }
         },
+
         // setter for style
         setStyle: function (value) {
             this.set("style", value);
-        },
-
-        // getter for clusterDistance
-        getClusterDistance: function () {
-            return this.get("clusterDistance");
-        },
-
-        // getter for featureNS
-        getFeatureNS: function () {
-            return this.get("featureNS");
-        },
-        // getter for featureType
-        getFeatureType: function () {
-            return this.get("featureType");
         }
     });
 

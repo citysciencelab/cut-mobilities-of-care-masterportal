@@ -65,7 +65,7 @@ define(function (require) {
                 features = [];
 
             if (!_.isUndefined(model)) {
-                features = model.getLayerSource().getFeatures();
+                features = model.get("layerSource").getFeatures();
             }
             return features;
         },
@@ -157,19 +157,19 @@ define(function (require) {
 
                     _.each(attributeValues, function (value) {
                         if (this.isValid(value)) {
-                            values.push(value.trim());
+                            values.push(this.trimValue(value));
                         }
                     }, this);
                 }
                 else if (_.isArray(attributeValue)) {
                     _.each(attributeValue, function (value) {
                         if (this.isValid(value)) {
-                            values.push(value.trim());
+                            values.push(this.trimValue(value));
                         }
                     }, this);
                 }
                 else if (this.isValid(attributeValue)) {
-                    values.push(attributeValue.trim());
+                    values.push(this.trimValue(attributeValue));
                 }
             }
             return _.unique(values);
@@ -177,7 +177,14 @@ define(function (require) {
         isValid: function (value) {
             return value !== null && !_.isUndefined(value);
         },
+        trimValue: function (value) {
+            var trimmedValue = value;
 
+            if (_.isString(value)) {
+                trimmedValue = value.trim();
+            }
+            return trimmedValue;
+        },
         /**
          * Collect the feature Ids that match the predefined rules
          * and trigger them to the ModelList
@@ -245,12 +252,12 @@ define(function (require) {
                 feature;
 
             _.each(this.get("featureIds"), function (id) {
-                feature = model.getLayerSource().getFeatureById(id);
+                feature = model.get("layerSource").getFeatureById(id);
                 feature.set("extent", feature.getGeometry().getExtent());
                 features.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
             });
 
-            Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.getId(), "layerName": model.getName()});
+            Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.get("id"), "layerName": model.get("name")});
         },
         /**
          * determines the attributes and their values that are still selectable

@@ -1,9 +1,7 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
-        Config = require("config"),
+    var ol = require("openlayers"),
+        $ = require("jquery"),
         Animation;
 
     Animation = Backbone.Model.extend({
@@ -19,13 +17,32 @@ define(function (require) {
             // Der aktuelle Animation Durchlauf (eine Richtung = ein Durchlauf)
             animationCount: 0,
             // Wie wieviele Durchläufe
-            animationLimit: 0
+            animationLimit: 0,
+            steps: 50,
+            zoomlevel: 1,
+            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            params: {
+                REQUEST: "GetFeature",
+                SERVICE: "WFS",
+                TYPENAME: "app:mrh_kreise",
+                VERSION: "1.1.0",
+                maxFeatures: "10000"
+            },
+            featureType: "mrh_einpendler_gemeinde",
+            minPx: 1,
+            maxPx: 20,
+            num_kreise_to_style: 2,
+            colors: ["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"],
+            attrAnzahl: "anzahl_einpendler",
+            attrKreis: "wohnort_kreis"
         },
         initialize: function () {
             var channel = Radio.channel("Animation");
 
             channel.reply({
-                "getLayer": this.getLayer
+                "getLayer": function () {
+                    return this.get("layer");
+                }
             }, this);
 
             this.listenTo(Radio.channel("Window"), {
@@ -48,7 +65,7 @@ define(function (require) {
                         StoredQuery_ID: "SamtgemeindeZuKreis",
                         kreis: value
                     });
-                    this.sendRequest("GET", this.getParams(), this.parseGemeinden);
+                    this.sendRequest("GET", this.get("params"), this.parseGemeinden);
                 },
                 "change:gemeinde": function () {
                     this.unset("direction", {silent: true});
@@ -70,71 +87,26 @@ define(function (require) {
                     this.createLineString();
                 }
             });
-
-            // Config auslesen oder default
-            this.setDefaults();
-
-            this.sendRequest("GET", this.getParams(), this.parseKreise);
+            this.sendRequest("GET", this.get("params"), this.parseKreise);
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), Radio.request("Map", "getLayers").getArray().length]);
         },
-
-        setDefaults: function () {
-            if (_.has(Config, "animation")) {
-                this.setZoomLevel(Config.animation.zoomlevel || 1);
-                this.setSteps(Config.animation.steps || 50);
-                this.setUrl(Config.animation.url || "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
-                this.setParams(Config.animation.params || {
-                    REQUEST: "GetFeature",
-                    SERVICE: "WFS",
-                    TYPENAME: "app:mrh_kreise",
-                    VERSION: "1.1.0",
-                    maxFeatures: "10000"
-                });
-                this.setFeatureType(Config.animation.featureType || "mrh_einpendler_gemeinde");
-                this.setMinPx(Config.animation.minPx || 1);
-                this.setMaxPx(Config.animation.maxPx || 20);
-                this.setNumKreiseToStyle(Config.animation.num_kreise_to_style || 2);
-                this.setColors(Config.animation.colors || ["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]);
-                this.setAttrAnzahl(Config.animation.attrAnzahl || "anzahl_einpendler");
-                this.setAttrKreis(Config.animation.attrKreis || "wohnort_kreis");
-            }
-            else {
-                this.setZoomLevel(1);
-                this.setSteps(50);
-                this.setUrl("http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung");
-                this.setParams({
-                    REQUEST: "GetFeature",
-                    SERVICE: "WFS",
-                    TYPENAME: "app:mrh_kreise",
-                    VERSION: "1.1.0",
-                    maxFeatures: "10000"
-                });
-                this.setFeatureType("mrh_einpendler_gemeinde");
-                this.setMinPx(1);
-                this.setMaxPx(20);
-                this.setNumKreiseToStyle(2);
-                this.setColors(["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]);
-                this.setAttrAnzahl("anzahl_einpendler");
-                this.setAttrKreis("wohnort_kreis");
-            }
-        },
-
-        /**
         /**
          * Führt einen HTTP-Request aus
          * @param {String} type - GET oder POST
-         * @param {String} data
+         * @param {String} data -
          * @param {function} successFunction - Wird aufgerufen wenn der Request erfolgreich war
+         * @returns {void}
          */
         sendRequest: function (type, data, successFunction) {
             $.ajax({
-                url: Radio.request("Util", "getProxyURL", this.getUrl()),
+                url: Radio.request("Util", "getProxyURL", this.get("url")),
                 data: data,
                 contentType: "text/xml",
                 type: type,
                 context: this,
                 success: successFunction,
                 error: function (jqXHR, errorText, error) {
+                    Radio.trigger("Alert", "alert", error);
                 }
             });
         },
@@ -142,6 +114,7 @@ define(function (require) {
         /**
          * Success Funktion für die Landkreise
          * @param  {object} data - Response
+         * @returns {void}
          */
         parseKreise: function (data) {
             var kreise = [],
@@ -158,6 +131,7 @@ define(function (require) {
         /**
          * Success Funktion für die Gemeinden
          * @param  {ojbect} data - Response
+         * @returns {void}
          */
         parseGemeinden: function (data) {
             var gemeinden = [],
@@ -174,11 +148,12 @@ define(function (require) {
         /**
          * Success Funktion für die Features
          * @param  {ojbect} data - Response
+         * @returns {void}
          */
         parseFeatures: function (data) {
             var wfsReader = new ol.format.WFS({
                 featureNS: "http://www.deegree.org/app",
-                featureType: this.getFeatureType()
+                featureType: this.get("featureType")
             });
 
             this.get("layer").getSource().clear();
@@ -188,36 +163,37 @@ define(function (require) {
 
         /**
          * Übergibt die Zentrumskoordinate der Gemeinde an die MapView, abhängig der Richtung.
+         * @returns {void}
          */
         centerGemeindeAndSetMarker: function () {
             var coords = [];
 
-            if (this.getDirection() === "wohnort") {
-                coords = this.getLineFeatures()[0].getGeometry().getFirstCoordinate();
-                Radio.trigger("MapView", "setCenter", coords, this.getZoomLevel());
+            if (this.get("direction") === "wohnort") {
+                coords = this.get("lineFeatures")[0].getGeometry().getFirstCoordinate();
+                Radio.trigger("MapView", "setCenter", coords, this.get("zoomLevel"));
                 Radio.trigger("MapMarker", "showMarker", coords);
             }
             else {
-                coords = this.getLineFeatures()[0].getGeometry().getLastCoordinate();
-                Radio.trigger("MapView", "setCenter", coords, this.getZoomLevel());
+                coords = this.get("lineFeatures")[0].getGeometry().getLastCoordinate();
+                Radio.trigger("MapView", "setCenter", coords, this.get("zoomLevel"));
                 Radio.trigger("MapMarker", "showMarker", coords);
             }
         },
 
         prepareData: function () {
-            var features = this.getLineFeatures(),
+            var features = this.get("lineFeatures"),
                 values = [],
                 intermediate = 0,
                 data = [],
                 ort_kreise = [],
                 ort_kreise_mit_anzahl = [],
-                num_kreise_to_style = this.getNumKreiseToStyle(),
-                colors = this.getColors(),
+                num_kreise_to_style = this.get("num_kreise_to_style"),
+                colors = this.get("colors"),
                 num_kreise_to_style_anzahl = [];
 
             _.each(features, function (feature) {
-                var anzahl = parseInt(feature.get(this.getAttrAnzahl()), 10),
-                    kreis = feature.get(this.getAttrKreis());
+                var anzahl = parseInt(feature.get(this.get("attrAnzahl")), 10),
+                    kreis = feature.get(this.get("attrKreis"));
 
                 data.push({
                     anzahl_pendler: anzahl,
@@ -289,7 +265,7 @@ define(function (require) {
         },
 
         setStatus: function (args) {
-            if (args[2].getId() === "animation") {
+            if (args[2].get("id") === "animation") {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
             }
@@ -305,7 +281,7 @@ define(function (require) {
                                     "<ogc:Filter>" +
                                         "<ogc:PropertyIsEqualTo>" +
                                             "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
-                                            "<ogc:Literal>" + this.getGemeinde() + "</ogc:Literal>" +
+                                            "<ogc:Literal>" + this.get("gemeinde") + "</ogc:Literal>" +
                                         "</ogc:PropertyIsEqualTo>" +
                                     "</ogc:Filter>" +
                                 "</wfs:Query>" +
@@ -318,26 +294,25 @@ define(function (require) {
             this.set("postBody", value);
         },
 
-        getPostBody: function () {
-            return this.get("postBody");
-        },
-
         createLineString: function () {
-            _.each(this.getLineFeatures(), function (feature) {
+            _.each(this.get("lineFeatures"), function (feature) {
                 var startPoint = feature.getGeometry().getFirstCoordinate(),
                     endPoint = feature.getGeometry().getLastCoordinate(),
-                    directionX = (endPoint[0] - startPoint[0]) / this.getSteps(),
-                    directionY = (endPoint[1] - startPoint[1]) / this.getSteps(),
+                    directionX = (endPoint[0] - startPoint[0]) / this.get("steps"),
+                    directionY = (endPoint[1] - startPoint[1]) / this.get("steps"),
                     lineCoords = [],
-                    anzahl_pendler = feature.get(this.getAttrAnzahl()),
-                    kreis = feature.get(this.getAttrKreis());
+                    line,
+                    newEndPt,
+                    i,
+                    anzahl_pendler = feature.get(this.get("attrAnzahl")),
+                    kreis = feature.get(this.get("attrKreis"));
 
-                for (var i = 0; i <= this.getSteps(); i++) {
-                    var newEndPt = new ol.geom.Point([startPoint[0] + i * directionX, startPoint[1] + i * directionY, 0]);
+                for (i = 0; i <= this.get("steps"); i++) {
+                    newEndPt = new ol.geom.Point([startPoint[0] + (i * directionX), startPoint[1] + (i * directionY), 0]);
 
                     lineCoords.push(newEndPt.getCoordinates());
                 }
-                var line = new ol.Feature({
+                line = new ol.Feature({
                     geometry: new ol.geom.LineString(lineCoords),
                     anzahl_pendler: anzahl_pendler,
                     kreis: kreis
@@ -357,7 +332,7 @@ define(function (require) {
                 index = Math.round(elapsedTime / 100);
 
             // Bestimmt die Richtung der animation (alle geraden sind rückwärts)
-            if (this.getAnimationCount() % 2 === 1) {
+            if (this.get("animationCount") % 2 === 1) {
                 index = this.get("steps") - index;
                 if (index <= 0) {
                     this.repeatAnimation(features, true);
@@ -385,42 +360,46 @@ define(function (require) {
             var currentPoint,
                 newFeature;
 
-            for (var i = 0; i < features.length; i++) {
-                if (this.get("animating")) {
-                    var coordinates = features[i].getGeometry().getCoordinates();
+            _.each(features, function (feature) {
+                var coordinates;
 
-                    this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
+                if (this.get("animating")) {
+                    coordinates = feature.getGeometry().getCoordinates();
+
+                    this.preparePointStyle(feature.get("anzahl_pendler"), feature.get("kreis"));
                     currentPoint = new ol.geom.Point(coordinates[index]);
                     newFeature = new ol.Feature(currentPoint);
-                    vectorContext.drawFeature(newFeature, this.getDefaultPointStyle());
+                    vectorContext.drawFeature(newFeature, this.get("defaultPointStyle"));
                 }
-            }
+            }, this);
         },
         addFeaturesToLayer: function (features, layer) {
             var currentPoint, coordinates,
                 newFeature;
 
-            for (var i = 0; i < features.length; i++) {
-                coordinates = features[i].getGeometry().getCoordinates();
-                this.preparePointStyle(features[i].get("anzahl_pendler"), features[i].get("kreis"));
+            _.each(features, function (feature) {
+                var drawIndex;
+
+                coordinates = feature.getGeometry().getCoordinates();
+                this.preparePointStyle(feature.get("anzahl_pendler"), feature.get("kreis"));
                 // Ob die Feature bei der Startposition oder der Endposition gezeichnet werden müssen, ist abhängig von der anzahl der Durchgänge
-                var drawIndex = this.getAnimationLimit() % 2 === 1 ? 0 : coordinates.length - 1;
+                drawIndex = this.get("animationLimit") % 2 === 1 ? 0 : coordinates.length - 1;
 
                 currentPoint = new ol.geom.Point(coordinates[drawIndex]);
                 newFeature = new ol.Feature(currentPoint);
-                newFeature.setStyle(this.getDefaultPointStyle());
+                newFeature.setStyle(this.get("defaultPointStyle"));
                 layer.getSource().addFeature(newFeature);
-            }
+            }, this);
         },
         preparePointStyle: function (val, kreis) {
-            var minVal = this.getMinVal(),
-                maxVal = this.getMaxVal(),
-                intermediate = this.getIntermediate(),
-                minPx = this.getMinPx(),
-                maxPx = this.getMaxPx(),
+            var minVal = this.get("minVal"),
+                maxVal = this.get("maxVal"),
+                intermediate = this.get("intermediate"),
+                minPx = this.get("minPx"),
+                maxPx = this.get("maxPx"),
                 percent,
                 pixel,
-                ort_kreise_mit_anzahl = this.getOrtKreiseMitAnzahl(),
+                ort_kreise_mit_anzahl = this.get("ort_kreise_mit_anzahl"),
                 ort,
                 radius,
                 color;
@@ -451,15 +430,15 @@ define(function (require) {
         },
 
         prepareAnimation: function () {
-            if (this.getDirection() === "wohnort") {
+            var animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer");
+
+            if (this.get("direction") === "wohnort") {
                 this.setAnimationLimit(2);
             }
             else {
                 this.setAnimationLimit(1);
             }
             this.setAnimationCount(0);
-            var animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer");
-
             this.set("animationLayer", animationLayer);
             this.get("animationLayer").getSource().clear();
             Radio.trigger("Map", "registerListener", "postcompose", this.moveFeature, this);
@@ -478,10 +457,11 @@ define(function (require) {
         /**
          * Wiederholt die animation, wenn AnimationLimit noch nicht erreicht ist
          * @param  {[type]} features werden für das hinzufügen auf die Layer nach der naimation durchgereicht
+         * @returns {void}
          */
         repeatAnimation: function (features) {
-            if (this.getAnimationCount() < this.getAnimationLimit()) {
-                this.setAnimationCount(this.getAnimationCount() + 1);
+            if (this.get("animationCount") < this.get("animationLimit")) {
+                this.setAnimationCount(this.get("animationCount") + 1);
                 this.startAnimation();
             }
             else {
@@ -500,169 +480,79 @@ define(function (require) {
         setAnimationCount: function (value) {
             this.set("animationCount", value);
         },
-        getAnimationCount: function () {
-            return this.get("animationCount");
-        },
+
         setAnimationLimit: function (value) {
             this.set("animationLimit", value);
         },
-        getAnimationLimit: function () {
-            return this.get("animationLimit");
-        },
+
         setLineFeatures: function (value) {
             this.set("lineFeatures", value);
-        },
-        getLineFeatures: function () {
-            return this.get("lineFeatures");
         },
 
         setSteps: function (value) {
             this.set("steps", value);
         },
-        getSteps: function () {
-            return this.get("steps");
-        },
 
         setUrl: function (value) {
             this.set("url", value);
         },
-        getUrl: function () {
-            return this.get("url");
-        },
         setParams: function (value) {
             this.set("params", value);
-        },
-        getParams: function () {
-            return this.get("params");
         },
         setFeatureType: function (value) {
             this.set("featureType", value);
         },
-        getFeatureType: function () {
-            return this.get("featureType");
-        },
         setAttrAnzahl: function (value) {
             this.set("attrAnzahl", value);
-        },
-        getAttrAnzahl: function () {
-            return this.get("attrAnzahl");
         },
         setAttrKreis: function (value) {
             this.set("attrKreis", value);
         },
-        getAttrKreis: function () {
-            return this.get("attrKreis");
-        },
         setMinPx: function (value) {
             this.set("minPx", value);
-        },
-        getMinPx: function () {
-            return this.get("minPx");
         },
         setMaxPx: function (value) {
             this.set("maxPx", value);
         },
-        getMaxPx: function () {
-            return this.get("maxPx");
-        },
         setNumKreiseToStyle: function (value) {
             this.set("num_kreise_to_style", value);
-        },
-        getNumKreiseToStyle: function () {
-            return this.get("num_kreise_to_style");
         },
         setColors: function (value) {
             this.set("colors", value);
         },
-        getColors: function () {
-            return this.get("colors");
-        },
-
         setDefaultPointStyle: function (value) {
             this.set("defaultPointStyle", value);
         },
-        getDefaultPointStyle: function () {
-            return this.get("defaultPointStyle");
-        },
-
         setIntermediate: function (val) {
             this.set("intermediate", val);
         },
-        getIntermediate: function () {
-            return this.get("intermediate");
-        },
-
         setMinVal: function (val) {
             this.set("minVal", val);
         },
-        getMinVal: function () {
-            return this.get("minVal");
-        },
-
         setMaxVal: function (val) {
             this.set("maxVal", val);
         },
-        getMaxVal: function () {
-            return this.get("maxVal");
-        },
-
         setOrtKreiseMitAnzahl: function (val) {
             this.set("ort_kreise_mit_anzahl", val);
         },
-        getOrtKreiseMitAnzahl: function () {
-            return this.get("ort_kreise_mit_anzahl");
-        },
-
         setKreise: function (value) {
             this.set("kreise", value);
         },
-
-        getKreise: function () {
-            return this.get("kreise");
-        },
-
         setKreis: function (value) {
             this.set("kreis", value);
         },
-
-        getKreis: function () {
-            this.get("kreis");
-        },
-
         setGemeinden: function (value) {
             this.set("gemeinden", value);
         },
-
-        getGemeinden: function () {
-            return this.set("gemeinden");
-        },
-
         setGemeinde: function (value) {
             this.set("gemeinde", value);
         },
-
-        getGemeinde: function () {
-            return this.get("gemeinde");
-        },
-
         setDirection: function (value) {
             this.set("direction", value);
         },
 
-        getDirection: function () {
-            return this.get("direction");
-        },
-
         setZoomLevel: function (value) {
             this.set("zoomLevel", value);
-        },
-
-        getZoomLevel: function () {
-            return this.get("zoomLevel");
-        },
-
-        getLayer: function () {
-            return this.get("layer");
         },
 
         hideMapContent: function () {

@@ -1,8 +1,4 @@
-define([
-    "backbone",
-    "backbone.radio"
-], function (Backbone, Radio) {
-
+define(function () {
     var Window = Backbone.Model.extend({
         defaults: {
             isCollapsed: false,
@@ -15,7 +11,7 @@ define([
 
             channel.on({
                 "toggleWin": this.setParams,
-                "closeWin": this.setVisible,
+                "closeWin": this.setIsVisible,
                 "collapseWin": this.collapseWindow,
                 "uncollapseWin": this.uncollapseWindow
             }, this);
@@ -29,15 +25,18 @@ define([
         setCollapse: function (value) {
             this.set("isCollapsed", value);
         },
-        setVisible: function (value) {
+        setIsVisible: function (value) {
             this.set("isVisible", value);
+            if (!value) {
+                this.setCollapse(value);
+            }
         },
         setParams: function (value) {
             this.setTool(value);
-            this.set("title", value.getName());
-            this.set("icon", value.getGlyphicon());
-            this.set("winType", value.getId());
-            if (value.getId() === "gfi") {
+            this.set("title", value.get("name"));
+            this.set("icon", value.get("glyphicon"));
+            this.set("winType", value.get("id"));
+            if (value.get("id") === "gfi") {
                 this.set("isVisible", false);
             }
             else {
@@ -45,15 +44,12 @@ define([
             }
         },
         sendParamsToWinCotent: function () {
-            Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.getTool()]);
+            Radio.trigger("Window", "winParams", [this.get("isVisible"), this.get("isCollapsed"), this.get("tool")]);
         },
         setTool: function (value) {
             this.set("tool", value);
-        },
-        getTool: function () {
-            return this.get("tool");
         }
     });
 
-    return new Window();
+    return Window;
 });

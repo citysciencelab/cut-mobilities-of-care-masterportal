@@ -93,8 +93,8 @@ define(function (require) {
          * @returns {void}
          */
         search: function (searchString) {
-            var wfsMembers = this.getWfsMembers(),
-                minChars = this.getMinChars(),
+            var wfsMembers = this.get("wfsMembers"),
+                minChars = this.get("minChars"),
                 hits;
 
             if (searchString.length < minChars) {
@@ -124,7 +124,7 @@ define(function (require) {
          * @returns {void}
          */
         requestFeature: function (feature) {
-            var data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + feature.filter.typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>" + feature.filter.propertyName + "</ogc:PropertyName><ogc:Literal>" + feature.filter.literal + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
+            var data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + feature.filter.typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>" + feature.filter.propertyName + "</ogc:PropertyName><ogc:Literal>" + _.escape(feature.filter.literal) + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
 
             $.ajax({
                 url: feature.filter.url,
@@ -132,7 +132,7 @@ define(function (require) {
                 context: this,
                 type: "POST",
                 success: this.zoomTo,
-                timeout: this.getTimeout(),
+                timeout: this.get("timeout"),
                 contentType: "text/xml",
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error(textStatus + ": " + errorThrown);
@@ -149,8 +149,7 @@ define(function (require) {
         extractGeom: function (response) {
             var posList = $(response).find("gml\\:posList, posList")[0],
                 pos = $(response).find("gml\\:pos, pos")[0],
-                coordinate = posList ? posList.textContent : pos.textContent,
-                coordinateArray = coordinate.split(" ");
+                coordinate = posList ? posList.textContent : pos.textContent;
 
             return coordinate;
         },
@@ -217,7 +216,7 @@ define(function (require) {
             var url = element.url,
                 parameter = element.data,
                 name = element.name,
-                glyphicon = element.glyphicon ? element.glyphicon : this.getGlyphicon();
+                glyphicon = element.glyphicon ? element.glyphicon : this.get("glyphicon");
 
             $.ajax({
                 url: url,
@@ -229,7 +228,7 @@ define(function (require) {
 
                     this.setWfsMembers(name, features);
                 },
-                timeout: this.getTimeout(),
+                timeout: this.get("timeout"),
                 contentType: "text/xml",
                 error: function (jqXHR, textStatus) {
                     console.error(textStatus + ": " + url);
@@ -265,33 +264,16 @@ define(function (require) {
             return master;
         },
 
-        // getter for minChars
-        getMinChars: function () {
-            return this.get("minChars");
-        },
         // setter for minChars
         setMinChars: function (value) {
             this.set("minChars", value);
         },
 
-        // getter for RequestInfo
-        getRequestInfo: function () {
-            return this.get("requestInfo");
-        },
         // setter for RequestInfo
         setRequestInfo: function (value) {
             this.set("requestInfo", value);
         },
 
-        // getter for Glyphicon
-        getGlyphicon: function () {
-            return this.get("glyphicon");
-        },
-
-        // getter for wfsMembers
-        getWfsMembers: function () {
-            return this.get("wfsMembers");
-        },
         // setter for wfsMembers
         setWfsMembers: function (key, values) {
             var wfsMembers = this.get("wfsMembers"),
@@ -300,10 +282,6 @@ define(function (require) {
             this.set("wfsMembers", newWfsMembers);
         },
 
-        // getter for timeout
-        getTimeout: function () {
-            return this.get("timeout");
-        },
         // setter for timeout
         setTimeout: function (value) {
             this.set("timeout", value);

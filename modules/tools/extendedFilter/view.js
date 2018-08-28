@@ -1,23 +1,23 @@
 define(function (require) {
-    var Backbone = require("backbone"),
+    var $ = require("jquery"),
         Model = require("modules/tools/extendedFilter/model"),
         Template = require("text!modules/tools/extendedFilter/template.html"),
         ExtendedFilterView;
 
     ExtendedFilterView = Backbone.View.extend({
-        model: new Model(),
-        template: _.template(Template),
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isCurrentWin": this.render,
-                "change:isCollapsed": this.render
-            }, this); // Fenstermanagement
-        },
         events: {
             "change #dropdown": "nextStep",
             "click .btn_remove": "removeAttrFromFilter",
             "click #btn_back": "previousStep"
         },
+        initialize: function (attr) {
+            this.model = new Model(attr);
+            this.listenTo(this.model, {
+                "change:isCurrentWin": this.render,
+                "change:isCollapsed": this.render
+            }, this); // Fenstermanagement
+        },
+        template: _.template(Template),
         removeAttrFromFilter: function (evt) {
             this.model.removeAttrFromFilter(evt);
             this.render();
@@ -33,9 +33,10 @@ define(function (require) {
         },
 
         render: function () {
+            var attr = this.model.toJSON();
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
 
-                var attr = this.model.toJSON();
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
@@ -45,6 +46,7 @@ define(function (require) {
             else {
                 this.undelegateEvents();
             }
+            return this;
         }
     });
     return ExtendedFilterView;

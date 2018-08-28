@@ -5,19 +5,18 @@ define(function (require) {
 
     DefaultTreeParser = Parser.extend({
 
-        /**
-         *
-         */
         parseTree: function (layerList) {
             // Im Default-Tree(FHH-Atlas / GeoOnline) werden nur WMS angezeigt
             // Und nur Layer die min. einem Metadatensatz zugeordnet sind
-            layerList = this.filterList(layerList);
-            // Entfernt alle Layer, die bereits im Cache dargestellt werden
-            layerList = this.deleteLayersIncludeCache(layerList);
-            // Für Layer mit mehr als 1 Datensatz, wird pro Datensatz 1 zusätzlichen Layer erzeugt
-            layerList = this.createLayerPerDataset(layerList);
+            var newLayerList = this.filterList(layerList);
 
-            this.parseLayerList(layerList);
+            // Entfernt alle Layer, die bereits im Cache dargestellt werden
+            newLayerList = this.deleteLayersIncludeCache(newLayerList);
+
+            // Für Layer mit mehr als 1 Datensatz, wird pro Datensatz 1 zusätzlichen Layer erzeugt
+            newLayerList = this.createLayerPerDataset(newLayerList);
+
+            this.parseLayerList(newLayerList);
 
         },
 
@@ -81,10 +80,11 @@ define(function (require) {
 
         /**
          * Erzeugt den Themen Baum aus der von Rawlaylist geparsten Services.json
+         * @param {object[]} layerList -
+         * @returns {void}
          */
         parseLayerList: function (layerList) {
-
-            var baseLayerIds = _.flatten(_.pluck(this.getBaselayer().Layer, "id")),
+            var baseLayerIds = _.flatten(_.pluck(this.get("baselayer").Layer, "id")),
                 // Unterscheidung nach Overlay und Baselayer
                 typeGroup = _.groupBy(layerList, function (layer) {
                     return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
@@ -97,14 +97,16 @@ define(function (require) {
         },
 
         createBaselayer: function (layerList) {
-            _.each(this.getBaselayer().Layer, function (layer) {
+            _.each(this.get("baselayer").Layer, function (layer) {
+                var newLayer;
+
                 if (_.isArray(layer.id)) {
-                    layer = _.extend(this.mergeObjectsByIds(layer.id, layerList), _.omit(layer, "id"));
+                    newLayer = _.extend(this.mergeObjectsByIds(layer.id, layerList), _.omit(layer, "id"));
                 }
                 else {
-                    layer = _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
+                    newLayer = _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
                 }
-                this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0, isVisibleInTree: "true"}, layer));
+                this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0, isVisibleInTree: "true"}, newLayer));
             }, this);
         },
 
@@ -112,9 +114,11 @@ define(function (require) {
          * unterteilung der nach metaName groupierten Layer in Ordner und Layer
          * wenn eine MetaNameGroup nur einen Eintrag hat soll sie
          * als Layer und nicht als Ordner hinzugefügt werden
+         * @param {object[]} metaNameGroups -
+         * @param {string} name -
+         * @returns {object} categories
         */
         splitIntoFolderAndLayer: function (metaNameGroups, name) {
-
             var folder = [],
                 layer = [],
                 categories = {};
@@ -141,6 +145,7 @@ define(function (require) {
         /**
          * Gruppiert die Layer nach Kategorie und MetaName
          * @param  {Object} overlays die Fachdaten als Object
+         * @returns {void}
          */
         groupDefaultTreeOverlays: function (overlays) {
             var tree = {},
@@ -156,6 +161,7 @@ define(function (require) {
                     else if (this.get("category") === "Behörde") {
                         return layer.datasets[0].kategorie_organisation;
                     }
+                    return "Nicht zugeordnet";
                 }, this);
 
             // Gruppierung nach MetaName
@@ -173,6 +179,7 @@ define(function (require) {
         /**
          * Erzeugt alle Models für den DefaultTree
          * @param  {Object} tree aus den categorien und MetaNamen erzeugter Baum
+         * @returns {void}
          */
         createModelsForDefaultTree: function (tree) {
             var sortedKeys = Object.keys(tree).sort(),
@@ -198,7 +205,7 @@ define(function (require) {
                     level: 1,
                     isInThemen: true,
                     glyphicon: "glyphicon-plus-sign",
-                    isFolderSelectable: this.getIsFolderSelectable()
+                    isFolderSelectable: this.get("isFolderSelectable")
                 });
                 _.each(category.layer, function (layer) {
                     layer.name = layer.datasets[0].md_name;

@@ -1,8 +1,5 @@
 define(function (require) {
-
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         ParcelSearch;
 
     ParcelSearch = Backbone.Model.extend({
@@ -39,7 +36,7 @@ define(function (require) {
          * wird getriggert, wenn ein Tool in der Menüleiste geklickt wird. Übergibt die Konfiguration der parcelSearch aus args an readConfig().
          */
         setStatus: function (args) {
-            if (args[2].getId() === "parcelSearch") {
+            if (args[2].get("id") === "parcelSearch") {
                 this.setIsCollapsed(args[1]);
                 this.setIsCurrentWin(args[0]);
             }
@@ -48,25 +45,23 @@ define(function (require) {
             }
         },
         setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "parcelSearch"}),
-                restService,
+            var restService,
                 serviceURL;
 
-            _.each(config, function (val, key) {
-                this.set(key, val);
-            }, this);
+            if (this.get("parcelDenominator") === true) {
+                this.setParcelDenominatorField(true);
+            }
 
-            restService = this.getServiceId() ? Radio.request("RestReader", "getServiceById", this.getServiceId()) : null;
+            restService = this.get("serviceId") ? Radio.request("RestReader", "getServiceById", this.get("serviceId")) : null;
             serviceURL = restService && restService.get("url") ? restService.get("url") : null;
 
             this.setServiceURL(serviceURL);
             // lade json und Konfiguration
-            if (serviceURL && this.getConfigJSON() && this.getStoredQueryID()) {
-                this.loadConfiguration(this.getConfigJSON());
+            if (serviceURL && this.get("configJSON") && this.get("storedQueryID")) {
+                this.loadConfiguration(this.get("configJSON"));
             }
             else {
-                console.error("Ungültige oder unvollständige Konfiguration (parcelSearch)");
-                Radio.trigger("Window", "closeWin");
+                Radio.trigger("Alert", "alert", "Ungültige oder unvollständige Konfiguration (" + this.get("name") + ")");
             }
         },
         /*
@@ -76,9 +71,9 @@ define(function (require) {
             this.fetch({
                 url: configJSON,
                 cache: false,
+                context: this,
                 error: function () {
-                    console.error(configJSON + " konnte nicht geladen werden (parcelSearch)");
-                    Radio.trigger("Window", "closeWin");
+                    Radio.trigger("Alert", "alert", "Gemarkungen konnten nicht geladen werden (" + this.get("name") + ")");
                 },
                 complete: function () {
                     Radio.trigger("Util", "hideLoader");
@@ -112,7 +107,7 @@ define(function (require) {
         },
         createReport: function (flurstueck, gemarkung) {
             var flurst_kennz,
-                jasperService = Radio.request("RestReader", "getServiceById", this.getReportServiceId()),
+                jasperService = Radio.request("RestReader", "getServiceById", this.get("reportServiceId")),
                 params = _.isUndefined(jasperService) === false ? jasperService.get("params") : undefined,
                 url = _.isUndefined(jasperService) === false ? jasperService.get("url") + "?" : undefined;
 
@@ -125,7 +120,7 @@ define(function (require) {
 
             // prüfe ob es ein Flurstück gibt
             this.sendRequest();
-            if (this.getParcelFound() === true) {
+            if (this.get("parcelFound") === true) {
                 if (_.isUndefined(url) === false && _.isUndefined(params) === false) {
                     params.flurstueckskennzeichen = flurst_kennz;
                     url = this.buildUrl(url, params);
@@ -152,9 +147,9 @@ define(function (require) {
 
         },
         createFlurstKennz: function () {
-            var land = this.getCountryNumber(),
-                gemarkung = this.getDistrictNumber(),
-                flurst_nr = this.padLeft(this.getParcelNumber(), 5, "0");
+            var land = this.get("countryNumber"),
+                gemarkung = this.get("districtNumber"),
+                flurst_nr = this.padLeft(this.get("parcelNumber"), 5, "0");
 
             return land + gemarkung + "___" + flurst_nr + "______";
         },
@@ -169,15 +164,15 @@ define(function (require) {
             return Array(length - String(number).length + 1).join(prefix || "0") + number;
         },
         sendRequest: function () {
-            var storedQuery = "&StoredQuery_ID=" + this.getStoredQueryID(),
-                gemarkung = "&gemarkung=" + this.getDistrictNumber(),
-                flur = this.getCadastralDistrictField() === true ? "&flur=" + this.getCadastralDistrictNumber() : "",
-                parcelNumber = "&flurstuecksnummer=" + this.padLeft(this.getParcelNumber(), 5, "0"),
-                parcelDenominatorNumber = this.getParcelDenominatorField() === true ? "&flurstuecksnummernenner=" + this.padLeft(this.getParcelDenominatorNumber(), 3, "0") : "",
+            var storedQuery = "&StoredQuery_ID=" + this.get("storedQueryID"),
+                gemarkung = "&gemarkung=" + this.get("districtNumber"),
+                flur = this.get("cadastralDistrictField") === true ? "&flur=" + this.get("cadastralDistrictNumber") : "",
+                parcelNumber = "&flurstuecksnummer=" + this.padLeft(this.get("parcelNumber"), 5, "0"),
+                parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? "&flurstuecksnummernenner=" + this.padLeft(this.get("parcelDenominatorNumber"), 3, "0") : "",
                 data = storedQuery + gemarkung + flur + parcelNumber + parcelDenominatorNumber;
 
             $.ajax({
-                url: this.getServiceURL(),
+                url: this.get("serviceURL"),
                 data: data,
                 context: this,
                 success: this.getParcel,
@@ -204,8 +199,8 @@ define(function (require) {
                 attributes;
 
             if (!member || member.length === 0) {
-                parcelNumber = this.padLeft(this.getParcelNumber(), 5, "0");
-                parcelDenominatorNumber = this.getParcelDenominatorField() === true ? " / " + this.padLeft(this.getParcelDenominatorNumber(), 3, "0") : "";
+                parcelNumber = this.padLeft(this.get("parcelNumber"), 5, "0");
+                parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? " / " + this.padLeft(this.get("parcelDenominatorNumber"), 3, "0") : "";
                 this.setParcelFound(false);
                 Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
                 Radio.trigger("ParcelSearch", "noParcelFound");
@@ -240,38 +235,20 @@ define(function (require) {
             this.set("parcelDenominatorNumber", value);
         },
 
-        // getter for isCollapsed
-        getIsCollapsed: function () {
-            return this.get("isCollapsed");
+        setParcelDenominatorField: function (value) {
+            this.set("parcelDenominatorField", value);
         },
+
         // setter for isCollapsed
         setIsCollapsed: function (value) {
             this.set("isCollapsed", value);
         },
 
-        // getter for isCurrentWin
-        getIsCurrentWin: function () {
-            return this.get("isCurrentWin");
-        },
         // setter for isCurrentWin
         setIsCurrentWin: function (value) {
             this.set("isCurrentWin", value);
         },
 
-        // getter for parcelDenominatorField
-        getParcelDenominatorField: function () {
-            return this.get("parcelDenominatorField");
-        },
-
-        // getter for storedQueryID
-        getStoredQueryID: function () {
-            return this.get("storedQueryID");
-        },
-
-        // getter for serviceURL
-        getServiceURL: function () {
-            return this.get("serviceURL");
-        },
         // setter for serviceURL
         setServiceURL: function (value) {
             this.set("serviceURL", value);
@@ -282,10 +259,6 @@ define(function (require) {
             this.set("districts", value);
         },
 
-        // getter for cadastralDistricts
-        getCadastralDistricts: function () {
-            return this.get("cadastralDistricts");
-        },
         // setter for cadastralDistricts
         setCadastralDistricts: function (value) {
             this.set("cadastralDistricts", value);
@@ -296,53 +269,18 @@ define(function (require) {
             this.set("fetched", value);
         },
 
-        // getter for districtNumber
-        getDistrictNumber: function () {
-            return this.get("districtNumber");
-        },
-
-        // getter for cadastralDistrictField
-        getCadastralDistrictField: function () {
-            return this.get("cadastralDistrictField");
-        },
-        // setter for getCadastralDi
+        // setter for cadastralDistrictField
         setCadastralDistrictField: function (value) {
             this.set("cadastralDistrictField", value);
         },
 
-        // getter for parcelNumber
-        getParcelNumber: function () {
-            return this.get("parcelNumber");
-        },
         setParcelNumber: function (value) {
             this.set("parcelNumber", value);
         },
 
-        // getter for parcelFound
-        getParcelFound: function () {
-            return this.get("parcelFound");
-        },
         // setter for parcelFound
         setParcelFound: function (value) {
             this.set("parcelFound", value);
-        },
-
-        // getter for countryNumber
-        getCountryNumber: function () {
-            return this.get("countryNumber");
-        },
-
-        // getter for reportServiceId
-        getReportServiceId: function () {
-            return this.get("reportServiceId");
-        },
-        // getter for serviceId
-        getServiceId: function () {
-            return this.get("serviceId");
-        },
-        // getter for configJSON
-        getConfigJSON: function () {
-            return this.get("configJSON");
         }
     });
 

@@ -1,25 +1,11 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "config",
-    "modules/formular/grenznachweis",
-    "text!modules/formular/grenznachweis.html",
-    "text!modules/formular/grenznachweis.css"
-], function (Backbone, Radio, Config, Grenznachweismodel, Grenznachweistemplate, Grenznachweiscss) {
-    "use strict";
-    var formularView = Backbone.View.extend({
-        id: "formularWin",
-        initialize: function (modelname) {
-            if (modelname === "grenznachweis") {
-                this.model = new Grenznachweismodel();
-                this.template = _.template(Grenznachweistemplate);
-                $("head").prepend("<style>" + Grenznachweiscss + "</style>");
-            }
-            this.listenTo(this.model, {
-                "change:isCollapsed render invalid change:isCurrentWin": this.render
-            });
-            Radio.trigger("Autostart", "initializedModul", "formular");
-        },
+define(function (require) {
+    var Grenznachweismodel = require("modules/formular/grenznachweis"),
+        Grenznachweistemplate = require("text!modules/formular/grenznachweis.html"),
+        Grenznachweiscss = require("text!modules/formular/grenznachweis.css"),
+        $ = require("jquery"),
+        FormularView;
+
+    FormularView = Backbone.View.extend({
         events: {
             // anonymisierte Events
             "keyup input[type=text]": "keyup",
@@ -30,11 +16,21 @@ define([
             "click a": "click",
             "focusout": "focusout"
         },
+        initialize: function (attr) {
+            this.model = new Grenznachweismodel(attr);
+            this.template = _.template(Grenznachweistemplate);
+            $("head").prepend("<style>" + Grenznachweiscss + "</style>");
+            this.listenTo(this.model, {
+                "change:isCollapsed render invalid change:isCurrentWin": this.render
+            });
+            Radio.trigger("Autostart", "initializedModul", "formular");
+        },
+        id: "formularWin",
         render: function () {
+            var attr = this.model.toJSON();
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.model.prepWindow();
-                var attr = this.model.toJSON();
-
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
@@ -42,6 +38,7 @@ define([
             else if (this.model.get("isCurrentWin") === false) {
                 this.model.resetWindow();
             }
+            return this;
         },
         // anonymisierte Events
         keyup: function (evt) {
@@ -61,5 +58,5 @@ define([
         }
     });
 
-    return formularView;
+    return FormularView;
 });

@@ -1,11 +1,8 @@
-define([
-    "backbone",
-    "backbone.radio",
-    "openlayers",
-    "config"
-], function (Backbone, Radio, ol, Config) {
+define(function (require) {
+    var ol = require("openlayers"),
+        Measure;
 
-    var Measure = Backbone.Model.extend({
+    Measure = Backbone.Model.extend({
         defaults: {
             source: new ol.source.Vector(),
             style: new ol.style.Style({
@@ -27,7 +24,7 @@ define([
                     })
                 })
             }),
-            type: "LineString",
+            geometryType: "LineString",
             unit: "m",
             decimal: 1,
             measureTooltips: [],
@@ -43,7 +40,7 @@ define([
             });
 
             this.listenTo(this, {
-                "change:type": this.createInteraction
+                "change:geometryType": this.createInteraction
             });
 
             this.set("layer", new ol.layer.Vector({
@@ -56,13 +53,9 @@ define([
             this.setUiStyle(Radio.request("Util", "getUiStyle"));
 
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
-
-            if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
-                this.set("quickHelp", true);
-            }
         },
         setStatus: function (args) {
-            if (args[2].getId() === "measure" && args[0] === true) {
+            if (args[2].get("id") === "measure" && args[0] === true) {
                 this.set("isCollapsed", args[1]);
                 this.set("isCurrentWin", args[0]);
                 this.createInteraction();
@@ -77,11 +70,13 @@ define([
             Radio.trigger("Map", "removeInteraction", this.get("draw"));
             this.set("draw", new ol.interaction.Draw({
                 source: this.get("source"),
-                type: this.get("type"),
+                type: this.get("geometryType"),
                 style: this.get("style")
             }));
             this.get("draw").on("drawstart", function (evt) {
                 Radio.trigger("Map", "registerListener", "pointermove", this.placeMeasureTooltip, this);
+                // "click" needed for touch devices
+                Radio.trigger("Map", "registerListener", "click", this.placeMeasureTooltip, this);
                 this.set("sketch", evt.feature);
                 this.createMeasureTooltip();
             }, this);
@@ -93,6 +88,8 @@ define([
                 // unset tooltip so that a new one can be created
                 this.set("measureTooltipElement", null);
                 Radio.trigger("Map", "unregisterListener", "pointermove", this.placeMeasureTooltip, this);
+                // "click" needed for touch devices
+                Radio.trigger("Map", "unregisterListener", "click", this.placeMeasureTooltip, this);
             }, this);
             Radio.trigger("Map", "addInteraction", this.get("draw"));
         },
@@ -150,8 +147,8 @@ define([
          * @return {undefined}
          */
         setGeometryType: function (value) {
-            this.set("type", value);
-            if (this.get("type") === "LineString") {
+            this.set("geometryType", value);
+            if (this.get("geometryType") === "LineString") {
                 this.setUnit("m");
             }
             else {
@@ -294,10 +291,10 @@ define([
                     output = lengthRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 }
             }
+            else if (this.get("unit") === "km") {
+                output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
+            }
             else {
-                if (this.get("unit") === "km") {
-                    output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
-                }
                 output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
             }
             return output;
@@ -339,10 +336,10 @@ define([
                     output = areaRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 }
             }
+            else if (this.get("unit") === "km<sup>2</sup>") {
+                output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
+            }
             else {
-                if (this.get("unit") === "km<sup>2</sup>") {
-                    output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
-                }
                 output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
             }
             return output;

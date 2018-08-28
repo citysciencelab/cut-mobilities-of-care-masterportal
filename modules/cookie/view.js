@@ -1,13 +1,12 @@
-define([
-    "jquery",
-    "backbone",
-    "modules/cookie/model",
-    "text!modules/cookie/template.html"
-], function ($, Backbone, cookieModel, cookieTemplate) {
+define(function (require) {
+    var $ = require("jquery"),
+        CookieModel = require("modules/cookie/model"),
+        CookieTemplate = require("text!modules/cookie/template.html"),
+        CookieView;
 
-    var cookieView = Backbone.View.extend({
-        model: cookieModel,
-        template: _.template(cookieTemplate),
+    CookieView = Backbone.View.extend({
+        model: new CookieModel(),
+        template: _.template(CookieTemplate),
         initialize: function () {
             if (this.model.get("cookieEnabled") === true && this.model.get("approved") === false) {
                 this.render();
@@ -18,6 +17,8 @@ define([
         },
         render: function () {
             $("body").append(this.$el.html(this.template()));
+
+            return this;
         },
         buttonclick: function (evt) {
             if (evt.currentTarget.id === "cookiefalse") {
@@ -30,5 +31,5 @@ define([
         }
     });
 
-    return new cookieView();
+    return new CookieView();
 });

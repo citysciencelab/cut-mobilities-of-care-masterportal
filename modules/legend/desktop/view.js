@@ -1,13 +1,10 @@
-define([
-    "backbone",
-    "text!modules/legend/desktop/template.html",
-    "backbone.radio",
-    "jqueryui/widgets/draggable"
-], function (Backbone, LegendTemplate, Radio) {
+define(function (require) {
+    var $ = require("jquery"),
+        LegendTemplate = require("text!modules/legend/desktop/template.html"),
+        ContentTemplate = require("text!modules/legend/content.html"),
+        LegendView;
 
-    var LegendView = Backbone.View.extend({
-        className: "legend-win",
-        template: _.template(LegendTemplate),
+    LegendView = Backbone.View.extend({
         events: {
             "click .glyphicon-remove": "toggle"
         },
@@ -29,23 +26,52 @@ define([
                 "toggleLegendWin": this.toggle
             });
 
-            this.render();
-
-            Radio.trigger("Autostart", "initializedModul", "legend");
-
-            if (this.model.getVisible()) {
-                this.toggle();
-            }
-
             this.listenTo(Radio.channel("Map"), {
                 "updateSize": this.updateLegendSize
             });
+
+            Radio.trigger("Autostart", "initializedModul", "legend");
+
+            this.model.setLayerList();
+
+            if (this.model.get("visible")) {
+                this.toggle();
+            }
+        },
+        className: "legend-win",
+        template: _.template(LegendTemplate),
+        contentTemplate: _.template(ContentTemplate),
+
+        /**
+         * Steuert Maßnahmen zur Aufbereitung der Legende.
+         * @listens this.model~change:legendParams
+         * @returns {void}
+         */
+        paramsChanged: function () {
+            var legendParams = this.model.get("legendParams");
+
+            // Filtern von this.unset("legendParams")
+            if (!_.isUndefined(legendParams) && legendParams.length > 0) {
+                Radio.trigger("Layer", "updateLayerInfo", this.model.get("paramsStyleWMS").styleWMSName);
+                this.addContentHTML(legendParams);
+                this.render();
+            }
         },
 
-        paramsChanged: function () {
-            Radio.trigger("Layer", "updateLayerInfo", this.model.get("paramsStyleWMS").styleWMSName);
-            this.render();
+        /**
+         * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
+         * Dieses wird im template benötigt.
+         * @param {object[]} legendParams Legendenobjekte by reference
+         * @returns {void}
+         */
+        addContentHTML: function (legendParams) {
+            _.each(legendParams, function (legendDefinition) {
+                _.each(legendDefinition.legend, function (legend) {
+                    legend.html = this.contentTemplate(legend);
+                }, this);
+            }, this);
         },
+
         render: function () {
             var attr = this.model.toJSON();
 
@@ -56,6 +82,7 @@ define([
                 containment: "#map",
                 handle: ".legend-win-header"
             });
+            return this;
         },
 
         toggle: function () {
@@ -73,18 +100,16 @@ define([
                 legendModel.setIsActive(false);
             }
         },
-        /**
-         * Entfernt diese view
-         */
+
         removeView: function () {
             this.$el.hide();
-
             this.remove();
         },
 
         /**
          * Passt die Höhe der Legende an die Klasse lgv-container an.
          * Derzeit wird die Funktion ausgeführt auf die updateSize Funtkion der Map.
+         * @returns {void}
          */
         updateLegendSize: function () {
             $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);

@@ -14,14 +14,11 @@ define(function (require) {
             initalLoading: 0
         },
 
-        /**
-        *
-        */
         initialize: function () {
-            this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
             var channel = Radio.channel("Map"),
-                mapView = new MapView(),
-                mapHeight;
+                mapView = new MapView();
+
+            this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
 
             channel.reply({
                 "getLayers": this.getLayers,
@@ -31,7 +28,10 @@ define(function (require) {
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
                 "getSize": this.getSize,
                 "getPixelFromCoordinate": this.getPixelFromCoordinate,
-                "getMap": this.getMap
+                "getFeaturesAtPixel": this.getFeaturesAtPixel,
+                "getMap": function () {
+                    return this.get("map");
+                }
             }, this);
 
             channel.on({
@@ -47,14 +47,11 @@ define(function (require) {
                 "render": this.render,
                 "zoomToExtent": this.zoomToExtent,
                 "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
-                "createVectorLayer": this.createVectorLayer,
-                "addLoadingLayer": this.addLoadingLayer,
-                "removeLoadingLayer": this.removeLoadingLayer,
                 "registerListener": this.registerListener,
                 "unregisterListener": this.unregisterListener,
                 "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
                 "updateSize": function () {
-                    this.getMap().updateSize();
+                    this.get("map").updateSize();
                 }
             }, this);
 
@@ -75,7 +72,6 @@ define(function (require) {
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
 
-            Radio.trigger("zoomtofeature", "zoomtoid");
             Radio.trigger("ModelList", "addInitialyNeededModels");
             if (!_.isUndefined(Radio.request("ParametricURL", "getZoomToExtent"))) {
                 this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
@@ -96,26 +92,8 @@ define(function (require) {
             });
         },
 
-        /**
-         * Erstellt einen Vectorlayer
-         * @param {string} layerName - Name des Vectorlayers
-         */
-        createVectorLayer: function (layerName) {
-            var layer = new ol.layer.Vector({
-                source: new ol.source.Vector({useSpatialIndex: false}),
-                alwaysOnTop: true,
-                name: layerName
-            });
-
-            this.setVectorLayer(layer);
-        },
-
         setVectorLayer: function (value) {
             this.set("vectorLayer", value);
-        },
-
-        getVectorLayer: function () {
-            return this.get("vectorLayer");
         },
 
         getLayers: function () {
@@ -128,9 +106,9 @@ define(function (require) {
 
         setBBox: function (bbox) {
             this.set("bbox", bbox);
-            this.BBoxToMap(this.get("bbox"));
+            this.bBoxToMap(this.get("bbox"));
         },
-        BBoxToMap: function (bbox) {
+        bBoxToMap: function (bbox) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }
@@ -146,90 +124,91 @@ define(function (require) {
             return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
         },
 
-        getMap: function () {
-            return this.get("map");
-        },
-
         /**
          * Registriert Listener für bestimmte Events auf der Karte
          * Siehe http://openlayers.org/en/latest/apidoc/ol.Map.html
          * @param {String} event - Der Eventtyp
          * @param {Function} callback - Die Callback Funktion
-         * @param {Object} context
+         * @param {Object} context -
+         * @returns {void}
          */
         registerListener: function (event, callback, context) {
-            this.getMap().on(event, callback, context);
+            this.get("map").on(event, callback, context);
         },
 
         /**
          * Meldet Listener auf bestimmte Events ab
          * @param {String} event - Der Eventtyp
          * @param {Function} callback - Die Callback Funktion
-         * @param {Object} context
+         * @param {Object} context -
+         * @returns {void}
          */
         unregisterListener: function (event, callback, context) {
-            this.getMap().un(event, callback, context);
+            this.get("map").un(event, callback, context);
         },
 
         /**
          * Gibt die Kartenpixelposition für ein Browser-Event relative zum Viewport zurück
          * @param  {Event} evt - Mouse Events | Keyboard Events | ...
-         * @return {ol.Pixel}
+         * @return {ol.Pixel} pixel
          */
         getEventPixel: function (evt) {
-            return this.getMap().getEventPixel(evt);
+            return this.get("map").getEventPixel(evt);
         },
 
         /**
          * Gibt die Pixelposition im Viewport zu einer Koordinate zurück
-         * @param  {ol.Coordinate} value
-         * @return {ol.Pixel}
+         * @param  {ol.Coordinate} value -
+         * @return {ol.Pixel} pixel
          */
         getPixelFromCoordinate: function (value) {
-            return this.getMap().getPixelFromCoordinate(value);
+            return this.get("map").getPixelFromCoordinate(value);
         },
 
         /**
          * Ermittelt ob Features ein Pixel im Viewport schneiden
-         * @param  {ol.Pixel} pixel
-         * @return {Boolean}
+         * @param  {ol.Pixel} pixel -
+         * @return {Boolean} true | false
          */
         hasFeatureAtPixel: function (pixel) {
-            return this.getMap().hasFeatureAtPixel(pixel);
+            return this.get("map").hasFeatureAtPixel(pixel);
+        },
+
+        /**
+         * Rückgabe der Features an einer Pixelkoordinate
+         * @param  {pixel} pixel    Pixelkoordinate
+         * @param  {object} options layerDefinition und pixelTolerance
+         * @return {features[]}     Array der Features
+         */
+        getFeaturesAtPixel: function (pixel, options) {
+            return this.get("map").getFeaturesAtPixel(pixel, options);
         },
 
         /**
          * Iteriert über alle Features, die ein Pixel auf dem Viewport schneiden
-         * @param  {ol.Pixel} pixel
+         * @param  {ol.Pixel} pixel -
          * @param  {Function} callback - Die Feature Callback Funktion
+         * @returns {void}
          */
         forEachFeatureAtPixel: function (pixel, callback) {
-            this.getMap().forEachFeatureAtPixel(pixel, callback);
+            this.get("map").forEachFeatureAtPixel(pixel, callback);
         },
 
-        /**
-        * Interaction-Handling
-        */
         addInteraction: function (interaction) {
             this.get("map").addInteraction(interaction);
         },
         removeInteraction: function (interaction) {
             this.get("map").removeInteraction(interaction);
         },
-        /**
-        * Overlay-Handling
-        */
+
         addOverlay: function (overlay) {
             this.get("map").addOverlay(overlay);
         },
-        /**
-        */
+
         removeOverlay: function (overlay) {
             this.get("map").removeOverlay(overlay);
         },
-        /**
-        * Control-Handling
-        */
+
         addControl: function (control) {
             this.get("map").addControl(control);
         },
@@ -238,6 +217,8 @@ define(function (require) {
         },
         /**
         * Layer-Handling
+        * @param {ol.layer} layer -
+        * @returns {void}
         */
         addLayer: function (layer) {
             var layerList,
@@ -247,8 +228,8 @@ define(function (require) {
             // Alle Layer
             layerList = this.get("map").getLayers().getArray();
             // der erste Vectorlayer in der Liste
-            firstVectorLayer = _.find(layerList, function (layer) {
-                return layer instanceof ol.layer.Vector;
+            firstVectorLayer = _.find(layerList, function (veclayer) {
+                return veclayer instanceof ol.layer.Vector;
             });
             // Index vom ersten VectorLayer in der Layerlist
             index = _.indexOf(layerList, firstVectorLayer);
@@ -261,8 +242,6 @@ define(function (require) {
             }
         },
 
-        /**
-        */
         removeLayer: function (layer) {
             this.get("map").removeLayer(layer);
         },
@@ -270,6 +249,7 @@ define(function (require) {
         /**
          * Bewegt den Layer auf der Karte an die vorhergesehene Position
          * @param {Array} args - [0] = Layer, [1] = Index
+         * @returns {void}
          */
         addLayerToIndex: function (args) {
             var layer = args[0],
@@ -283,21 +263,13 @@ define(function (require) {
             // Laden des Layers überwachen
             if (layer instanceof ol.layer.Group) {
                 layer.getLayers().forEach(function (singleLayer) {
-                    singleLayer.getSource().on("wmsloadend", function () {
-                        Radio.trigger("Map", "removeLoadingLayer");
-                    });
-                    singleLayer.getSource().on("wmsloadstart", function () {
-                        Radio.trigger("Map", "addLoadingLayer");
-                    });
+                    singleLayer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
+                    singleLayer.getSource().on("wmsloadstart", this.addLoadingLayer, this);
                 });
             }
             else {
-                layer.getSource().on("wmsloadend", function () {
-                    Radio.trigger("Map", "removeLoadingLayer");
-                });
-                layer.getSource().on("wmsloadstart", function () {
-                    Radio.trigger("Map", "addLoadingLayer");
-                });
+                layer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
+                layer.getSource().on("wmsloadstart", this.addLoadingLayer, this);
             }
         },
 
@@ -344,10 +316,10 @@ define(function (require) {
                 if (feature.getId() === "APP_STAATLICHE_SCHULEN_4099") {
                     return;
                 }
-                (featureExtent[0] < extent[0]) && (extent[0] = featureExtent[0]);
-                (featureExtent[1] < extent[1]) && (extent[1] = featureExtent[1]);
-                (featureExtent[2] > extent[2]) && (extent[2] = featureExtent[2]);
-                (featureExtent[3] > extent[3]) && (extent[3] = featureExtent[3]);
+                extent[0] = featureExtent[0] < extent[0] ? featureExtent[0] : extent[0];
+                extent[1] = featureExtent[1] < extent[1] ? featureExtent[1] : extent[1];
+                extent[2] = featureExtent[2] > extent[2] ? featureExtent[2] : extent[2];
+                extent[3] = featureExtent[3] > extent[3] ? featureExtent[3] : extent[3];
             });
             return extent;
         },
@@ -356,7 +328,7 @@ define(function (require) {
          * @return {ol.Size} - Ein Array mit zwei Zahlen [width, height]
          */
         getSize: function () {
-            return this.getMap().getSize();
+            return this.get("map").getSize();
         },
 
         addLoadingLayer: function () {
@@ -368,6 +340,7 @@ define(function (require) {
         /**
          * Initiales Laden. "initalLoading" wird layerübergreifend hochgezählt, wenn mehrere Tiles abgefragt werden und wieder heruntergezählt, wenn die Tiles geladen wurden.
          * Listener wird anschließend gestoppt, damit nur beim initialen Laden der Loader angezeigt wird - nicht bei zoom/pan
+         * @returns {void}
          */
         initalLoadingChanged: function () {
             var num = this.get("initalLoading");
@@ -388,10 +361,10 @@ define(function (require) {
                 source,
                 resultLayer = {};
 
-            _.each(layers.getArray(), function (layer) {
-                if (layer.get("name") === name) {
+            _.each(layers.getArray(), function (ollayer) {
+                if (ollayer.get("name") === name) {
                     found = true;
-                    resultLayer = layer;
+                    resultLayer = ollayer;
                 }
             }, this);
 
@@ -411,8 +384,8 @@ define(function (require) {
         /**
          * Der ol-overlaycontainer-stopevent Container stoppt nicht jedes Event.
          * Unter anderem das Mousemove Event. Das übernimmt diese Methode.
-         *
          * @see {@link https://github.com/openlayers/openlayers/issues/4953}
+         * @returns {void}
          */
         stopMouseMoveEvent: function () {
             // Firefox & Safari.

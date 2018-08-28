@@ -17,10 +17,12 @@ require.config({
         util: "util",
         originUtil: "../../modules/core/util",
         config: "testConfig",
-        moment: "../../node_modules/moment/min/moment.min",
+        moment: "../../node_modules/moment/min/moment-with-locales.min",
         services: "resources/testServices.json",
         bootstrap: "../../node_modules/bootstrap/js",
-        text: "../../node_modules/requirejs-text/text"
+        mqtt: "../../node_modules/mqtt/dist/mqtt",
+        text: "../../node_modules/requirejs-text/text",
+        pdfmake: "../../node_modules/pdfmake/build/pdfmake"
     },
     shim: {
         bootstrap: {
@@ -40,54 +42,59 @@ define(function (require) {
     require("jquery");
 
     require("openlayers");
-    require("backbone");
-    require("backbone.radio");
 
     mocha.setup("bdd");
-
-    /** load testfiles here **/
-    require([
-        /* ******** load Testfiles here!!!**********/
-        "modules/tools/download/testModel.js",
-        "modules/mouseHover/testModel.js",
-        "modules/searchbar/testModel.js",
-        "modules/searchbar/testSpecialWFSModel.js",
-        "modules/tools/filter/query/source/testWfs.js",
-        "modules/tools/filter/query/testModel.js",
-        "modules/tools/filter/testFilter.js",
-        "modules/snippets/slider/testModel.js",
-        "modules/tools/gfi/themes/schulinfo/testModel.js",
-        "modules/tools/gfi/themes/verkehrsstaerken_rad/testModel.js",
-        "modules/core/testMap.js",
-        "modules/core/testParametricUrl.js",
-        "modules/core/modelList/layer/testGeoJson.js",
-        "modules/core/modelList/layer/testGroup.js",
-        "modules/core/modelList/testList.js",
-        "modules/contact/testModel.js",
-        "modules/core/testRawLayerList.js",
-        "modules/controls/orientation/testPoiModel.js",
-        "modules/vectorStyle/testModel.js",
-        "modules/tools/getCoord/testModel.js",
-        "modules/core/testCRS.js",
-        "modules/core/testWPS.js",
-        "modules/core/testUtil.js",
-        "modules/alerting/testModel.js",
-        "modules/tools/einwohnerabfrage/testModel.js",
-        "modules/tools/schulwegrouting_hh/testModel.js",
-        "modules/tools/parcelSearch/testModel.js",
-        "modules/tools/einwohnerabfrage/testModel.js",
-        "modules/tools/parcelSearch/testModel.js",
-        "modules/core/configLoader/testParserCustomTree.js",
-        "modules/core/configLoader/testParserDefaultTree.js",
-        "modules/core/configLoader/testPreparser.js",
-        "modules/menu/desktop/folder/testViewTree.js",
-        "modules/menu/mobile/folder/testView.js",
-        "modules/core/testUtil.js",
-        "modules/tools/schulwegrouting_hh/testModel.js",
-        "modules/tools/compareFeatures/testModel.js",
-        "modules/menu/mobile/folder/testView.js"
-    ], function () {
+    require(["backbone", "backbone.radio"], function () {
         Radio = Backbone.Radio;
-        mocha.run();
+        /** load testfiles here **/
+        require([
+            /* ******** load Testfiles here!!!**********/
+            "modules/tools/download/testModel.js",
+            "modules/mouseHover/testModel.js",
+            "modules/searchbar/testModel.js",
+            "modules/searchbar/testSpecialWFSModel.js",
+            "modules/tools/filter/query/source/testWfs.js",
+            "modules/tools/filter/query/testModel.js",
+            "modules/tools/filter/testFilter.js",
+            "modules/snippets/slider/testModel.js",
+            "modules/tools/gfi/themes/elektroladesaeulen/testModel.js",
+            "modules/tools/gfi/themes/testModel.js",
+            "modules/tools/gfi/themes/schulinfo/testModel.js",
+            "modules/tools/gfi/themes/verkehrsstaerken_rad/testModel.js",
+            "modules/core/testMap.js",
+            "modules/core/testParametricUrl.js",
+            "modules/core/modelList/layer/testGeoJson.js",
+            "modules/core/modelList/layer/testSensor.js",
+            "modules/core/modelList/testList.js",
+            "modules/contact/testModel.js",
+            "modules/core/testRawLayerList.js",
+            "modules/controls/orientation/testPoiModel.js",
+            "modules/vectorStyle/testModel.js",
+            "modules/tools/getCoord/testModel.js",
+            "modules/core/testCRS.js",
+            "modules/core/testWPS.js",
+            "modules/core/testUtil.js",
+            "modules/alerting/testModel.js",
+            "modules/tools/einwohnerabfrage/testModel.js",
+            "modules/tools/schulwegrouting_hh/testModel.js",
+            "modules/tools/parcelSearch/testModel.js",
+            "modules/tools/einwohnerabfrage/testModel.js",
+            "modules/tools/parcelSearch/testModel.js",
+            "modules/core/configLoader/testParserCustomTree.js",
+            "modules/core/configLoader/testParserDefaultTree.js",
+            "modules/core/configLoader/testPreparser.js",
+            "modules/menu/desktop/folder/testViewTree.js",
+            "modules/menu/mobile/folder/testView.js",
+            "modules/core/testUtil.js",
+            "modules/tools/schulwegrouting_hh/testModel.js",
+            "modules/tools/compareFeatures/testModel.js",
+            "modules/menu/mobile/folder/testView.js",
+            "modules/tools/graph/testModel.js",
+            "modules/functionalities/browserPrint/testModel.js",
+            "modules/tools/searchByCoord/testModel.js",
+            "modules/legend/legendModel.js"
+        ], function () {
+            mocha.run();
+        });
     });
 });

@@ -8,7 +8,7 @@
 * [***EditorConfig***](http://editorconfig.org/) Einstellungen beachten
 
 ### ESLint
-* [***ESLint***](https://eslint.org/) wird genutzt, um die syntaktische und sonstige Fehler zu verhindern und den Code lesbar und verständlich zu schreiben. 
+* [***ESLint***](https://eslint.org/) wird genutzt, um die syntaktische und sonstige Fehler zu verhindern und den Code lesbar und verständlich zu schreiben.
 * Wir interpretieren die ESLint Kategorien (warn bzw. error) unterschiedlich.
 * Eine "warning" ist ein Hinweis an den Entwickler um zu prüfen, ob der Code hier besser geschrieben werden kann. Sie ist unabhängig von einem approve. Eine Änderung liegt im Ermessensspielraum des Entwicklers.
 * Ein "error" verhindert ein approven des PullRequest.
@@ -76,12 +76,18 @@ Ob ein String leer ist:
 if (!string) ...
 ```
 
+### Meldungen im Fehlerfall
+Wir unterscheiden Fehlermeldungen in:
+
+* Meldung zur Fehlersuche für Experten / Entwickler: Erlaubt sind console.error bzw. console.warn zum loggen von Fehlerzuständen.
+* Meldungen zur Information des Nutzers in Form von Alerts sollen nur erfolgen, wenn der Nutzer eine Aktion manuell angestoßen hat und diese erfolglos beendet wurde.
+
 ### Bezeichnungen
 * Sprechende Namen für Variablen und Funktionen verwenden
 * *camelCase* für Funktions- und var- Deklarationen
 * Wenn es die String-Variable "dog" gibt, ist "dogList" ein Array bestehend aus "dog" Strings
 * Bezeichnung für Konstanten --> SYMBOLIC_CONSTANTS_LIKE_THIS
-* Von außen zugeladene Abhängigkeiten werden zur Unterscheidung in *PascalCase* geschrieben.
+* Von außen zugeladene Abhängigkeiten werden zur Unterscheidung in *PascalCase* geschrieben, es sei denn die Schreibweise wird innerhalb der Bibliothek anders verwendet
 
 ### Anführungszeichen
 * Es werden doppelte Anführungszeichen eingesetzt
@@ -92,7 +98,7 @@ var html = "<div id='my-id'></div>";
 
 #### Kommentare
 * Mehrzeilige Kommentare sind gut
-* Funktionen werden wenn überhaupt immer im JSDoc Style kommentiert.
+* Funktionen werden, wenn überhaupt, immer im JSDoc Style kommentiert.
 
 #### Backbone spezifische Konventionen
 * "listenTo" anstatt "on" als Eventlistener (nicht Backbone.Radio)
@@ -109,33 +115,13 @@ defaults: {
     ...
 }
 ```
-* Model-weite Variablen werden nur durch Setter- und Getter-Funktionen geholt oder gesetzt, die paarweise am Ende des Models stehen.
+* Model-weite Variablen werden nur durch Setter-Funktionen gesetzt die am Ende des Models stehen.
 ```javascript
 setVariable1: function (value) {
     this.set("variable1", value);
 },
-getVariable1: function () {
-    return this.get("variable1");
-},
 setVariable2: function (value) {
     this.set("variable2", value);
-},
-getVariable2: function () {
-    return this.get("variable2");
-}
-```
-"so nicht" Beispiele:
-```javascript
-randomFunc: function () {
-    var modelVar1 = this.get("variable1");
-    ...
-}
-```
-"so ja" Beispiele:
-```javascript
-randomFunc: function () {
-    var modelVar1 = this.getVariable1();
-    ...
 }
 ```
 
@@ -186,3 +172,42 @@ Mit *grunt less:production* sowie *grunt less:development* wird die *css/modules
     color: #333;
 }
 ```
+### Commits
+* Der Changelog liest nur Merge-Commits mit prefix "add" oder "fix" (intern auch "hotfix") aus. Daher Merge-Commits entsprechend benennen.
+* Sprache der Commits: Deutsch oder Englisch
+
+### Konfigurations-Änderungen
+Werden Änderungen im Code durchgeführt wodurch sich Konfigurationsparameter ändern, so ist sicherzustellen, dass der Code auch abwärts kompatibel ist.
+An den entsprechenden Funktionen im Code werden immer deprecated tags ("*@deprecated in version [nextMajorVersion]") mit sprechender Beschreibung versehen.
+Falls dies nicht ausreicht, werden innerhalb der Funktion weitere Kommentare mit // @deprecated in version [nextMajorVersion] versehen.
+
+Beispiel "deprecated" Funktion:
+```javascript
+/**
+ * [function description]
+ * @deprecated in version [x.0.0] remove function when versioning.
+ */
+deprecatedFuntion: function () {
+    ...
+}
+```
+Beispiel "deprecated" Funktions-Teil:
+```javascript
+/**
+ * [function description]
+ * @deprecated in version [x.0.0] further comments in function.
+ */
+deprecatedFuntion2: function (config) {
+    var a,
+        b;
+
+    if(_.has(config, "newA")) {
+        a = config.newA
+    }
+    // @deprecated in version [x.0.0] remove following if-block
+    if(_.has(config, "oldA")) {
+        a = config.oldA
+    }
+}
+```
+Diese "@deprecated" Einträge werden beim Bauen der nächsten Major-Version vom LGV manuell ausgewertet und ggf entfernt.

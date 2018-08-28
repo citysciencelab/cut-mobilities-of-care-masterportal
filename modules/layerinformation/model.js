@@ -1,8 +1,8 @@
 define(function (require) {
     var ViewMobile = require("modules/layerinformation/viewMobile"),
         View = require("modules/layerinformation/view"),
-        Config = require("config"),
-        Moment = require("moment"),
+        $ = require("jquery"),
+        moment = require("moment"),
         LayerInformation;
 
     LayerInformation = Backbone.Model.extend({
@@ -18,11 +18,13 @@ define(function (require) {
          * @return {String} - CSW GetRecordById Request-String
          */
         url: function () {
-            var cswService = Radio.request("RestReader", "getServiceById", this.getCswId());
+            var cswService = Radio.request("RestReader", "getServiceById", this.get("cswId")),
+                url = "undefined";
 
             if (_.isUndefined(cswService) === false) {
-                return Radio.request("Util", "getProxyURL", cswService.get("url"));
+                url = Radio.request("Util", "getProxyURL", cswService.get("url"));
             }
+            return url;
         },
 
         initialize: function () {
@@ -41,10 +43,6 @@ define(function (require) {
                     this.bindView(isMobile);
                 }
             });
-
-            if (_.has(Config, "csw")) {
-                this.setCswId(Config.csw);
-            }
             this.bindView(Radio.request("Util", "isViewMobile"));
         },
 
@@ -57,7 +55,7 @@ define(function (require) {
             else {
                 currentView = new View({model: this});
             }
-            if (this.getIsVisible() === true) {
+            if (this.get("isVisible") === true) {
                 currentView.render();
             }
         },
@@ -66,6 +64,7 @@ define(function (require) {
          * Wird über Trigger vom Layer gestartet und übernimmt die Attribute zur Darstellung
          * @param {object} attrs Objekt mit Attributen zur Darstellung
          * @fires sync#render-Funktion
+         * @returns {void}
          */
         setAttributes: function (attrs) {
             this.set(attrs);
@@ -102,8 +101,7 @@ define(function (require) {
         },
 
         parse: function (xmlDoc) {
-            var layername = this.get("layername"),
-                layerid = this.get("id"); // CI_Citation fall-back-level
+            var layername = this.get("layername");
 
             return {
                 "abstractText": function () {
@@ -139,7 +137,7 @@ define(function (require) {
                     else if (publicationDateTime) {
                         dateTime = publicationDateTime;
                     }
-                    return Moment(dateTime).format("DD.MM.YYYY");
+                    return moment(dateTime).format("DD.MM.YYYY");
                 }(),
                 "title": function () {
                     var ci_Citation = $("gmd\\:CI_Citation,CI_Citation", xmlDoc)[0],
@@ -173,6 +171,7 @@ define(function (require) {
 
         /**
          * Wertet das Array der der metaIDs aus und erzeugt Array metaURL mit vollständiger URL für Template, ohne Doppelte Einträge zuzulassen
+         * @returns {void}
          */
         setMetadataURL: function () {
             var metaURLs = [],
@@ -197,18 +196,6 @@ define(function (require) {
 
         setIsVisible: function (value) {
             this.set("isVisible", value);
-        },
-
-        getIsVisible: function () {
-            return this.get("isVisible");
-        },
-
-        setCswId: function (value) {
-            this.set("cswId", value);
-        },
-
-        getCswId: function () {
-            return this.get("cswId");
         }
     });
 

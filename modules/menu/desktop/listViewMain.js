@@ -1,19 +1,13 @@
-define([
-    "backbone",
-    "modules/menu/desktop/tool/view",
-    "modules/menu/desktop/folder/viewMenu",
-    "modules/menu/desktop/folder/viewCatalog",
-    "modules/menu/desktop/staticlink/view",
-    "bootstrap/dropdown",
-    "bootstrap/collapse"
-],
-function () {
-    var Backbone = require("backbone"),
+define(function (require) {
+    var $ = require("jquery"),
         DesktopToolView = require("modules/menu/desktop/tool/view"),
         DesktopFolderView = require("modules/menu/desktop/folder/viewMenu"),
         CatalogFolderView = require("modules/menu/desktop/folder/viewCatalog"),
         DesktopStaticLinkView = require("modules/menu/desktop/staticlink/view"),
         Menu;
+
+    require("bootstrap/dropdown");
+    require("bootstrap/collapse");
 
     Menu = Backbone.View.extend({
         collection: {},
@@ -29,15 +23,15 @@ function () {
             this.renderTopMenu();
         },
         renderTopMenu: function () {
-            var models = _.filter(this.collection.models, function (model) {
-                return model.getType() === "tool" || model.getType() === "staticlink" || model.getType() === "folder";
+            var models = this.collection.filter(function (model) {
+                return model.get("type") === "tool" || model.get("type") === "staticlink" || model.get("type") === "folder";
             });
 
             this.parseViews(models);
         },
         parseViews: function (models) {
             _.each(models, function (model) {
-                switch (model.getType()) {
+                switch (model.get("type")) {
                     case "tool": {
                         this.addToolView(model);
                         break;
@@ -48,12 +42,15 @@ function () {
                     }
                     case "folder": {
                         // Oberste ebene im Themenbaum?
-                        if (model.getParentId() === "tree") {
+                        if (model.get("parentId") === "tree") {
                             this.addCatalogFolderView(model);
                         }
                         else {
                             this.addDesktopFolderView(model);
                         }
+                        break;
+                    }
+                    default: {
                         break;
                     }
                 }

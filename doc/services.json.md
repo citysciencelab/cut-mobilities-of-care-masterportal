@@ -3,7 +3,7 @@
 [TOC]
 
 # services.json #
-Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS und WFS. Hier geht es zu einem [Beispiel](https://bitbucket.org/lgv-g12/lgv-config-public/raw/master/services-internet.json).
+Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS SensorThings-API) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und SensorThings-API (Sensor). Hier geht es zu einem [Beispiel](https://bitbucket.org/lgv-g12/lgv-config-public/raw/master/services-internet.json).
 Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beispiel GeoJSON).
 
 ## WMS-Layer ##
@@ -27,7 +27,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |singleTile|nein|Boolean||Soll die Grafik als eine große Kachel ausgeliefert werden? Wenn true wird immer der gesamte Kartenausschnitt angefragt, wenn false wird der Kartenausschnitt in kleineren Kacheln angefragt und zusammengesetzt.|`false`|
 |tilesize|ja|String||Kachelgröße in Pixel. Diese wird verwandt wenn singleTile=false gesetzt ist.|`"512"`|
 |transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`true`|
-|typ|ja|String||Diensttyp, in diesem Fall WMS ([WFS siehe unten](#markdown-header-wfs-layer))|`"WMS"`|
+|typ|ja|String||Diensttyp, in diesem Fall WMS ([WFS siehe unten](#markdown-header-wfs-layer) und [SensorThings-API siehe unten](#markdown-header-sensor-layer))|`"WMS"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.3.0"`|
 **Beispiel WMS:**
@@ -87,7 +87,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|typ|ja|String||Diensttyp, in diesem Fall WFS ([WMS siehe oben](#markdown-header-wms-layer))|`"WFS"`|
+|typ|ja|String||Diensttyp, in diesem Fall WFS ([WMS siehe oben](#markdown-header-wms-layer) und [SensorThings-API siehe unten](#markdown-header-sensor-layer))|`"WFS"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"`|
 |version|nein|String||Dienste Version, die über GetFeature angesprochen wird.|`"1.1.0"`|
 
@@ -124,6 +124,50 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
             "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
          }
       ]
+   }
+```
+
+
+## Sensor-Layer ##
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|epsg|nein|String|"EPSG:4326"|Koordinatensystem der SensorThings-API|`"EPSG:4326"`|
+|gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"showAll"`|
+|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht default gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|id|ja|String||Frei wählbare Layer-ID|`"999999"`|
+|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Elektro Ladestandorte"`|
+|typ|ja|String||Diensttyp, in diesem Fall SensorThings-API ([WMS siehe oben](#markdown-header-wms-layer) und [WFS siehe oben](#markdown-header-wfs-layer))|`"SensorThings"`|
+|url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
+|urlParameter|nein|String||Anagbe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). |`{"filter" : "startswith(Things/name,'Charging')", "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"}`|
+|version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
+
+**Beispiel Sensor:**
+
+
+```
+#!json
+
+   {
+      "id" : "999999",
+      "name" : "Live - Elektro Ladestandorte",
+      "typ" : "SensorThings",
+      "version" : "1.0",
+      "url" : "https://51.5.242.162/itsLGVhackathon",
+      "urlParameter" : {
+         "filter" : "startswith(Things/name,'Charging')",
+         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
+      },
+      "epsg": "EPSG:4326",
+      "gfiTheme" : "default",
+      "gfiAttributes" : {
+         "phenomenonTime" : "Letze Zustandsänderung",
+         "state" : "Zustand",
+         "plug" : "Stecker",
+         "type" : "Typ",
+         "dataStreamId" : "DataStreamID"
+      }
    }
 ```
 

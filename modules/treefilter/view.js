@@ -1,20 +1,34 @@
-define([
-    "backbone",
-    "text!modules/treefilter/template.html",
-    "modules/treefilter/model"
-], function (Backbone, TreeFilterTemplate, TreeFilter) {
+define(function (require) {
+    var TreeFilterTemplate = require("text!modules/treefilter/template.html"),
+        TreeFilter = require("modules/treefilter/model"),
+        $ = require("jquery"),
+        TreeFilterView;
 
-    var View = Backbone.View.extend({
-        model: TreeFilter,
-        // id: "treeFilterWin",
-        className: "win-body",
-        template: _.template(TreeFilterTemplate),
-        initialize: function () {
+    TreeFilterView = Backbone.View.extend({
+        events: {
+            "click #filterbutton": "setFilterParams",
+            "click #filterRemoveButton": "removeFilter",
+            "keyup #categoryInput": "setSearchCategoryString",
+            "keyup #typeInput": "setSearchTypeString",
+            "focusout #yearMin > input": "setYearMin",
+            "focusout #yearMax > input": "setYearMax",
+            "focusout #diameterMin > input": "setDiameterMin",
+            "focusout #diameterMax > input": "setDiamterMax",
+            "focusout #perimeterMin > input": "setPerimeterMin",
+            "focusout #perimeterMax > input": "setPerimeterMax",
+            "focusout #categoryInput": "setCategory",
+            "focusout #typeInput": "setType"
+        },
+        initialize: function (attr) {
+            this.model = new TreeFilter(attr);
             // this.render();
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
-            this.model.on("change:filterHits invalid change:errors", this.render, this);
-            this.model.on("change:categoryArray", this.render, this);
-            this.model.on("change:typeArray", this.render, this);
+            this.listenTo(this.model, {
+                "change:isCurrentWin": this.render,
+                "change:isCollapsed ": this.render,
+                "change:categoryArray": this.render,
+                "change:filterHits invalid change:errors change:treeType": this.render,
+                "change:typeArray": this.render
+            }, this);
 
             // NOTE http://www.benknowscode.com/2013/12/bootstrap-dropdown-button-select-box-control.html
             $(document.body).on("click", ".categoryPick", this, function (evt) {
@@ -53,26 +67,12 @@ define([
                 }
             });
         },
-        events: {
-            "click .glyphicon-chevron-up, .glyphicon-chevron-down": "toggleContent",
-            "click .close": "toggleFilterTreeWin",
-            "click #filterbutton": "setFilterParams",
-            "click #filterRemoveButton": "removeFilter",
-            "keyup #categoryInput": "setSearchCategoryString",
-            "keyup #typeInput": "setSearchTypeString",
-            "focusout #yearMin > input": "setYearMin",
-            "focusout #yearMax > input": "setYearMax",
-            "focusout #diameterMin > input": "setDiameterMin",
-            "focusout #diameterMax > input": "setDiamterMax",
-            "focusout #perimeterMin > input": "setPerimeterMin",
-            "focusout #perimeterMax > input": "setPerimeterMax",
-            "focusout #categoryInput": "setCategory",
-            "focusout #typeInput": "setType"
-        },
+        className: "win-body",
+        template: _.template(TreeFilterTemplate),
         render: function () {
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
+            var attr = this.model.toJSON();
 
+            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
                 this.delegateEvents();
@@ -80,24 +80,26 @@ define([
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
         setSearchCategoryString: function () {
-            this.model.setSearchCategoryString($("#categoryInput").val());
-            if ($(".treeList").css("display") !== "block") {
-                $(".dropdown-toggle-category").dropdown("toggle");
+            this.model.setSearchCategoryString(this.$("#categoryInput").val());
+            if (this.$(".treeList").css("display") !== "block") {
+                this.$(".dropdown-toggle-category").dropdown("toggle");
             }
-            this.focusOnEnd($("#categoryInput"));
+            this.focusOnEnd(this.$("#categoryInput"));
         },
         setSearchTypeString: function () {
-            this.model.setSearchTypeString($("#typeInput").val());
-            if ($(".treeTypeList").css("display") !== "block") {
-                $(".dropdown-toggle-type").dropdown("toggle");
+            this.model.setSearchTypeString(this.$("#typeInput").val());
+            if (this.$(".treeTypeList").css("display") !== "block") {
+                this.$(".dropdown-toggle-type").dropdown("toggle");
             }
-            this.focusOnEnd($("#typeInput"));
+            this.focusOnEnd(this.$("#typeInput"));
         },
         /**
          * Platziert den Cursor am Ende vom String
          * @param {Element} element - Das Dom-Element
+         * @returns {void}
          */
         focusOnEnd: function (element) {
             var strLength = element.val().length * 2;
@@ -108,18 +110,13 @@ define([
         /**
          * Platziert den Cursor am Anfang vom String
          * @param {Element} element - Das Dom-Element
+         * @returns {void}
          */
         focusOnStart: function (element) {
             element.focus();
             element[0].setSelectionRange(0, 0);
         },
-        toggleContent: function () {
-            $("#treeFilterWin > .panel-body").toggle("slow");
-            $("#treeFilterWin > .panel-heading > .toggleChevron").toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
-        },
-        toggleFilterTreeWin: function () {
-            $("#treeFilterWin").toggle();
-        },
+
         removeFilter: function () {
             this.model.removeFilter();
         },
@@ -152,5 +149,5 @@ define([
         }
     });
 
-    return View;
+    return TreeFilterView;
 });

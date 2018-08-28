@@ -3,6 +3,8 @@ define(function (require) {
         ol = require("openlayers");
 
     HighlightFeature = Backbone.Model.extend({
+        defaults: {
+        },
         initialize: function () {
             var featureToAdd = Radio.request("ParametricURL", "getHighlightFeature"),
                 channel = Radio.channel("Highlightfeature"),
@@ -26,17 +28,17 @@ define(function (require) {
             var layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
                 features;
 
-            if (layer && layer.getLayerSource()) {
-                features = layer.getLayerSource().getFeatures();
+            if (layer && layer.get("layerSource")) {
+                features = layer.get("layerSource").getFeatures();
 
                 if (features.length > 1) {
-                    this.addFeature(layer.getLayerSource().getFeatureById(featureId));
+                    this.addFeature(layer.get("layerSource").getFeatureById(featureId));
                 }
                 else {
                     this.listenTo(Radio.channel("Layer"), {
                         "featuresLoaded": function (loadedLayerId) {
                             if (layerId === loadedLayerId) {
-                                this.addFeature(layer.getLayerSource().getFeatureById(featureId));
+                                this.addFeature(layer.get("layerSource").getFeatureById(featureId));
                             }
                         }
                     });

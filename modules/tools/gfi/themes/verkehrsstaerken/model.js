@@ -1,7 +1,7 @@
 define(function (require) {
 
     var Theme = require("modules/tools/gfi/themes/model"),
-        Radio = require("backbone.radio"),
+        $ = require("jquery"),
         d3 = require("d3"),
         VerkehrsStaerkenTheme;
 
@@ -24,16 +24,20 @@ define(function (require) {
         },
         /**
          * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
+         * @returns {void}
          */
         parseGfiContent: function () {
+            var gfiContent,
+                rowNames,
+                newRowNames = [],
+                yearData,
+                dataPerYear = [],
+                year,
+                years = [];
+
             if (_.isUndefined(this.get("gfiContent")) === false) {
-                var gfiContent = this.getGfiContent()[0],
-                    rowNames = _.keys(this.getGfiContent()[0]),
-                    newRowNames = [],
-                    yearData,
-                    dataPerYear = [],
-                    year,
-                    years = [];
+                gfiContent = this.get("gfiContent")[0];
+                rowNames = _.keys(this.get("gfiContent")[0]);
 
                 _.each(rowNames, function (rowName) {
                     var newRowName, index, yearDigits, charBeforeYear;
@@ -119,19 +123,13 @@ define(function (require) {
         setDataset: function (value) {
             this.set("dataset", value);
         },
-        getDataset: function () {
-            return this.get("dataset");
-        },
-        // getter for attrToShow
-        getAttrToShow: function () {
-            return this.get("attrToShow");
-        },
         // setter for attrToShow
         setAttrToShow: function (value) {
             this.set("attrToShow", value);
         },
         /**
          * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
+         * @returns {void}
          */
         destroy: function () {
             _.each(this.get("gfiContent"), function (element) {
@@ -162,11 +160,11 @@ define(function (require) {
                 var parsedDataObj = {};
 
                 _.each(dataObj, function (dataVal, dataAttr) {
-                    var dataVal = this.parseDataValue(dataVal),
-                        parseFloatVal = parseFloat(dataVal);
+                    var parseDataVal = this.parseDataValue(dataVal),
+                        parseFloatVal = parseFloat(parseDataVal);
 
                     if (isNaN(parseFloatVal)) {
-                        parsedDataObj[dataAttr] = dataVal;
+                        parsedDataObj[dataAttr] = parseDataVal;
                     }
                     else {
                         parsedDataObj[dataAttr] = parseFloatVal;
@@ -179,17 +177,15 @@ define(function (require) {
         },
         parseDataValue: function (value) {
             if (value === "*") {
-                value = "Ja";
+                return "Ja";
             }
             return value;
         },
         createD3Document: function () {
-            var heightGfiContent = $(".gfi-content").css("height").slice(0, -2),
-                heightPegelHeader = $(".pegelHeader").css("height").slice(0, -2),
-                heightNavbar = $(".verkehrsstaerken .nav").css("height").slice(0, -2),
-                heightBtnGroup = $(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2),
-                height = heightGfiContent - heightPegelHeader - heightNavbar - heightBtnGroup,
-                width = $(".gfi-content").css("width").slice(0, -2),
+            var heightTabContent = parseInt($(".verkehrsstaerken .tab-content").css("height").slice(0, -2), 10),
+                heightBtnGroup = parseInt($(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-top").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-bottom").slice(0, -2), 10),
+                height = heightTabContent - heightBtnGroup,
+                width = parseInt($(".verkehrsstaerken .tab-content").css("width").slice(0, -2), 10),
                 graphConfig = {
                     graphType: "Linegraph",
                     selector: ".graph",
@@ -198,10 +194,10 @@ define(function (require) {
                     selectorTooltip: ".graph-tooltip-div",
                     scaleTypeX: "ordinal",
                     scaleTypeY: "linear",
-                    data: this.getDataset(),
+                    data: this.get("dataset"),
                     xAttr: "year",
                     xAxisLabel: "Jahr",
-                    attrToShowArray: this.getAttrToShow(),
+                    attrToShowArray: this.get("attrToShow"),
                     legendArray: [{
                         key: "DTV",
                         value: "DTV (Kfz/24h)"
@@ -219,7 +215,7 @@ define(function (require) {
         },
         manipulateSVG: function () {
             var graphParams = Radio.request("Graph", "getGraphParams"),
-                data = this.getDataset(),
+                data = this.get("dataset"),
                 svg = d3.select(".graph-svg"),
                 scaleX = graphParams.scaleX,
                 scaleY = graphParams.scaleY,
@@ -227,9 +223,8 @@ define(function (require) {
                 margin = graphParams.margin,
                 offset = graphParams.offset,
                 size = 10,
-                attrToShowArray = this.getAttrToShow(),
+                attrToShowArray = this.get("attrToShow"),
                 width,
-                height,
                 x,
                 y,
                 legendBBox;
@@ -242,7 +237,7 @@ define(function (require) {
                 .enter().append("g")
                 .append("rect")
                 .attr("x", function (d) {
-                    return scaleX(d.year) + margin.left - (size / 2) + (offset + scaleX.bandwidth() / 2);
+                    return scaleX(d.year) + margin.left - (size / 2) + (offset + (scaleX.bandwidth() / 2));
                 })
                 .attr("y", function (d) {
                     return scaleY(d[attrToShowArray[0]]) + (size / 2) + offset + margin.top;
@@ -284,10 +279,9 @@ define(function (require) {
                         .style("left", (d3.event.offsetX + 5) + "px")
                         .style("top", (d3.event.offsetY - 5) + "px");
                 });
-            legendBBox = svg.selectAll(".graph-legend").node().getBBox(),
-            width = legendBBox.width,
-            height = legendBBox.height,
-            x = legendBBox.x,
+            legendBBox = svg.selectAll(".graph-legend").node().getBBox();
+            width = legendBBox.width;
+            x = legendBBox.x;
             y = legendBBox.y;
 
             svg.selectAll(".graph-legend").append("g")
@@ -299,7 +293,6 @@ define(function (require) {
 
             legendBBox = svg.selectAll(".graph-legend").node().getBBox();
             width = legendBBox.width;
-            height = legendBBox.height;
             x = legendBBox.x;
             y = legendBBox.y;
 

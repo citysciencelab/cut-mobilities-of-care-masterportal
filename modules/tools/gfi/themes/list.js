@@ -26,46 +26,74 @@ define(function (require) {
         DipasThemeView = require("modules/tools/gfi/themes/dipas/view"),
         FlaecheninfoTheme = require("modules/tools/gfi/themes/flaecheninfo/model"),
         FlaecheninfoThemeView = require("modules/tools/gfi/themes/flaecheninfo/view"),
+        ElektroladesaeulenThemeView = require("modules/tools/gfi/themes/elektroladesaeulen/view"),
+        ElektroladesaeulenTheme = require("modules/tools/gfi/themes/elektroladesaeulen/model"),
         ThemeList;
 
     ThemeList = Backbone.Collection.extend({
         model: function (attrs, options) {
+            var gfiTheme = attrs.gfiTheme,
+                theme;
+
+            if (_.isObject(attrs.gfiTheme)) {
+                attrs.gfiParams = gfiTheme.params;
+                attrs.gfiTheme = gfiTheme.name;
+            }
+
             if (attrs.gfiTheme === "table") {
-                return new TableTheme(attrs, options);
+                theme = new TableTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "reisezeiten") {
-                return new ReisezeitenTheme(attrs, options);
+                theme = new ReisezeitenTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "solaratlas") {
-                return new SolaratlasTheme(attrs, options);
+                theme = new SolaratlasTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "trinkwasser") {
-                return new TrinkwasserTheme(attrs, options);
+                theme = new TrinkwasserTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "mietenspiegel") {
-                return new MietenspiegelTheme(attrs, options);
+                theme = new MietenspiegelTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "sgvonline") {
-                return new SgvOnlineTheme(attrs, options);
+                theme = new SgvOnlineTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "verkehrsstaerken") {
-                return new VerkehrsStaerkenTheme(attrs, options);
+                theme = new VerkehrsStaerkenTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "schulinfo") {
-                return new SchulInfoTheme(attrs, options);
+                theme = new SchulInfoTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "verkehrsstaerken_rad") {
-                return new VerkehrsStaerkenRadTheme(attrs, options);
+                theme = new VerkehrsStaerkenRadTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "itgbm") {
-                return new ItGbmTheme(attrs, options);
+                theme = new ItGbmTheme(attrs, options);
             }
             else if (attrs.gfiTheme === "flaecheninfo") {
-                return new FlaecheninfoTheme(attrs, options);
+                theme = new FlaecheninfoTheme(attrs, options);
             }
-            return new DefaultTheme(attrs, options);
+            else if (attrs.gfiTheme === "elektroladesaeulen") {
+                theme = new ElektroladesaeulenTheme(attrs, options);
+            }
+            else {
+                theme = new DefaultTheme(attrs, options);
+            }
+            return theme;
         },
+
         initialize: function () {
+            var channel = Radio.channel("gfiList");
+
+            // get new feature data
+            this.listenTo(channel, {
+                redraw: function () {
+                    this.forEach(function (model) {
+                        model.requestFeatureInfos();
+                    });
+                }
+            });
+
             this.listenTo(this, {
                 "reset": function () {
                     this.forEach(function (model) {
@@ -139,6 +167,10 @@ define(function (require) {
                 }
                 case "flaecheninfo": {
                     new FlaecheninfoThemeView({model: model});
+                    break;
+                }
+                case "elektroladesaeulen": {
+                    new ElektroladesaeulenThemeView({model: model});
                     break;
                 }
                 default: {

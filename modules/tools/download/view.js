@@ -6,24 +6,29 @@ define(function (require) {
         DownloadView;
 
     DownloadView = Backbone.View.extend({
-        model: DownloadModel,
-        template: _.template(DownloadWin),
         events: {
             "click button.back": "back",
             "change .file-endings": "prepareData"
         },
         initialize: function () {
-            this.model.on("change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
             var channel = Radio.channel("download");
+
+            this.listenTo(this.model, {
+                "change:isCollapsed change:isCurrentWin": this.render
+            }); // Fenstermanagement
 
             channel.on({
                 "start": this.start
             }, this);
         },
+        model: new DownloadModel(),
+        className: "win-body",
+        template: _.template(DownloadWin),
         /**
-     * Startet das Download modul
-     * @param  {ol.feature} features die Features die heruntergeladen werden sollen
-     */
+         * Startet das Download modul
+         * @param  {ol.feature} features die Features die heruntergeladen werden sollen
+         * @returns {void}
+         */
         start: function (features) {
             if (features.data.length === 0) {
                 Radio.trigger("Alert", "alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
@@ -40,21 +45,21 @@ define(function (require) {
             this.model.setFormats(features.formats);
             this.model.setCaller(features.caller);
             this.model.set("id", "download");
-            this.model.set("title", "Download");
+            this.model.set("name", "Download");
             this.model.set("glyphicon", "glyphicon-plus");
-
             Radio.trigger("Window", "toggleWin", this.model);
         },
         /**
-     * Ruft das Tool auf, das den Download gestartet hat
-     */
+         * Ruft das Tool auf, das den Download gestartet hat
+         * @returns {void}
+         */
         back: function () {
             Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "draw"}));
         },
         /**
-     *
-     * @return {[type]} [description]
-     */
+         *
+         * @return {[type]} [description]
+         */
         prepareDownloadButton: function () {
             this.model.setSelectedFormat();
             if (this.model.prepareData() !== "invalid Format") {
@@ -68,14 +73,16 @@ define(function (require) {
             }
         },
         /**
-     * startet den Download, wenn auf den Button geklickt wird
-     */
+         * startet den Download, wenn auf den Button geklickt wird
+         * @returns {void}
+         */
         triggerDownload: function () {
             this.model.download();
         },
         render: function () {
+            var attr = this.model.toJSON();
+
             if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                var attr = this.model.toJSON();
 
                 this.$el.html("");
                 $(".win-heading").after(this.$el.html(this.template(attr)));
@@ -85,21 +92,23 @@ define(function (require) {
             else {
                 this.undelegateEvents();
             }
+            return this;
         },
         /**
-     * Hängt die wählbaren Dateiformate als Option an das Formate-Dropdown
-     */
+         * Hängt die wählbaren Dateiformate als Option an das Formate-Dropdown
+         * @returns {void}
+         */
         appendOptions: function () {
             var options = this.model.getFormats();
 
             _.each(options, function (option) {
-                $(".file-endings").append($("<option>", {
+                this.$(".file-endings").append($("<option>", {
                     value: option,
                     text: option
                 }));
             });
             if (options.length === 1) {
-                $(".file-endings").val(options[0]);
+                this.$(".file-endings").val(options[0]);
                 this.prepareDownloadButton();
             }
         }

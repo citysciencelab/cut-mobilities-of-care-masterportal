@@ -16,13 +16,12 @@ define([
             this.model.set("zufallszahl", Math.floor(Math.random() * (20000 - 0 + 1)) + 0);
             this.model.checkImage();
         },
-        /**
-         *
-         */
+
         render: function () {
             var attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            return this;
         },
 
         checkReloadVersuch: function () {

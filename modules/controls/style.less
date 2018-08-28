@@ -73,27 +73,31 @@
 }
 
 /***** Attributions *****/
-.attributions-view {
-    cursor: pointer;
-    margin-bottom: 30px;
-}
-.attributions-view-withOverviewmap{
-    margin-bottom: 170px;
+.attributions-div {
+    padding: 5px;
+    background-color: #f3f3f3;
+    margin-right: 34px;
+    /* float: left; */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    border: 1px solid rgb(229, 229, 229);
+    margin-bottom: 20px;
 }
 
-.attributions-view-withOverviewmapHidden{
-    margin-bottom: 30px;
+.attributions-button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 20px;
 }
 
 .attributions-view dt {
     color: rgb(182, 0, 0);
-    font-size: 14px;
-    font-weight: normal;
+    font-size: 15px;
+    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
 }
 
 .attributions-view dl {
     margin-bottom: 0;
-    /*font-size: 12px;*/
     max-width: calc(100vw - 410px);
 }
 
@@ -102,10 +106,8 @@
 }
 
 .attributions-view .glyphicon {
-    color: #f3f3f3;
     font-size: 22px;
-    background-color: rgb(182, 0, 0);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    top: 0;
 }
 
 .attributions-view .glyphicon-info-sign {
@@ -114,18 +116,6 @@
 
 .attributions-view .glyphicon-forward {
     padding: 6px 4px 6px 8px;
-}
-
-.attributions-background-color {
-    background: -moz-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -webkit-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -o-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -ms-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-}
-
-.attributions-div {
-    padding: 3px;
 }
 
 @media (max-width: 767px) {
@@ -172,7 +162,7 @@
 
 .control-view-bottom-right {
     position: absolute;
-    right: 0;
+    right: 3px;
     bottom: 0;
 }
 

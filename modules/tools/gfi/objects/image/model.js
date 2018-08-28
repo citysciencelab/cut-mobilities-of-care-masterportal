@@ -18,9 +18,7 @@ define([
             reloadMaxVersuche: 10,
             reloadVersuch: 1
         },
-        /**
-         *
-         */
+
         initialize: function () {
             this.set("id", _.uniqueId("img"));
             if (Config.gfiImgReloadTime && Config.gfiImgReloadTime > 0) {

@@ -1,16 +1,16 @@
 <div class="attributions-div">
     <dl>
         <% _.each(modelList, function (model) { %>
-            <dt><%= model.getName() %>:</dt>
-            <% if (_.isObject(model.getAttributions()) === true) { %>
-                <dd><%= model.getAttributions().text %></d>
+            <dt><%= model.get("name") %>:</dt>
+            <% if (_.isObject(model.get("layerAttribution")) === true) { %>
+                <dd><%= model.get("layerAttribution").text %></d>
             <% }
             else { %>
-                <dd><%= model.getAttributions() %></d>
+                <dd><%= model.get("layerAttribution") %></d>
             <% } %>
         <% }); %>
     </dl>
 </div>
-<div class="attributions-button pull-right" title="Layer-Attributions ausblenden">
+<div class="attributions-button" title="Layer-Attributions ausblenden">
     <span class="glyphicon glyphicon-forward"></span>
 </div>
