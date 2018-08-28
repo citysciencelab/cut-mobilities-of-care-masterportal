@@ -39,6 +39,9 @@
     "webpack": "^4.17.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-loader": "^8.0.0",
     "build-config": "git+https://bitbucket.org/lgv-g12/build-config.git",
     "chai": "4.1.1",
     "deep-extend": "^0.3.2",
