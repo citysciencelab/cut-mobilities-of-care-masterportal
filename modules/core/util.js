@@ -1,7 +1,8 @@
-var $ = require("jquery"),
-    Util;
+import $ from "jquery";
+import Radio from "backbone.Radio";
+import _ from "underscore";
 
-Util = Backbone.Model.extend({
+const Util = Backbone.Model.extend({
     defaults: {
         // isViewMobile: false,
         config: "",
@@ -225,20 +226,21 @@ Util = Backbone.Model.extend({
         }
         return ie;
     },
+    //TODO: baseUrl neu schreiben ohne require
     getPath: function (path) {
-        var baseUrl = require.toUrl("").split("?")[0];
+        // var baseUrl = require.toUrl("").split("?")[0];
+        //
+        // if (path) {
+        //     if (path.indexOf("/") === 0) {
+        //         baseUrl = "";
+        //     }
+        //     else if (path.indexOf("http") === 0) {
+        //         baseUrl = "";
+        //     }
+        //     return baseUrl + path;
+        // }
 
-        if (path) {
-            if (path.indexOf("/") === 0) {
-                baseUrl = "";
-            }
-            else if (path.indexOf("http") === 0) {
-                baseUrl = "";
-            }
-            return baseUrl + path;
-        }
-
-        return "";
+        return "https://localhost:9001";
 
     },
     showLoader: function () {
@@ -333,4 +335,4 @@ Util = Backbone.Model.extend({
     }
 });
 
-module.exports = Util;
+export default Util;
