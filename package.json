@@ -9,6 +9,7 @@
   },
   "scripts": {
     "test": "mocha test/end2end/TestRunner.js",
+    "build": "webpack",
     "installDependencies": "npm install --verbose",
     "installBrowserMqtt": "cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js",
     "installMasterportal": "npm run installDependencies && npm run installBrowserMqtt"
@@ -34,7 +35,8 @@
     "requirejs-text": "2.x",
     "underscore": "1.x",
     "video.js": "6.x",
-    "videojs-flash": "^2.1.0"
+    "videojs-flash": "^2.1.0",
+    "webpack": "^4.17.1"
   },
   "devDependencies": {
     "build-config": "git+https://bitbucket.org/lgv-g12/build-config.git",

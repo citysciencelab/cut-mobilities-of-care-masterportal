@@ -5,7 +5,8 @@
         // browser global variables
         "browser": true,
         // adds all of the Mocha testing global variables.
-        "mocha": true
+        "mocha": true,
+        "es6": true
     },
     "globals": {
         "_": true,
