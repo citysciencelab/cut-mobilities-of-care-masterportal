@@ -91,7 +91,9 @@ define(function (require) {
             "modules/tools/compareFeatures/testModel.js",
             "modules/menu/mobile/folder/testView.js",
             "modules/tools/graph/testModel.js",
-            "modules/functionalities/browserPrint/testModel.js"
+            "modules/functionalities/browserPrint/testModel.js",
+            "modules/tools/print/testModel.js",
+            "modules/tools/print/testBuildSpec.js"
         ], function () {
             mocha.run();
         });

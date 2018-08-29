@@ -35,20 +35,19 @@ define(function (require) {
             layer.metaUrl = parsedData.url;
         },
         parseAddress: function (addressObj) {
-            var street = addressObj.street,
-                housenr = addressObj.housenr,
-                postalCode = addressObj.postalCode,
-                city = addressObj.city,
+            var street = _.isUndefined(addressObj) ? undefined : addressObj.street,
+                housenr = _.isUndefined(addressObj) ? undefined : addressObj.housenr,
+                postalCode = _.isUndefined(addressObj) ? undefined : addressObj.postalCode,
+                city = _.isUndefined(addressObj) ? undefined : addressObj.city,
                 addressString = "";
 
-            addressString = street;
-            addressString = addressString + street;
-            addressString = addressString + " ";
-            addressString = addressString + housenr;
-            addressString = addressString === "" ? "" : "\n ";
-            addressString = addressString + postalCode;
-            addressString = addressString + " ";
-            addressString = addressString + city;
+            addressString = addressString + _.isUndefined(street) ? "" : street;
+            addressString = addressString === "" ? "" : " ";
+            addressString = addressString + _.isUndefined(housenr) ? "" : housenr;
+            addressString = addressString === "" ? "" : addressString + "\n ";
+            addressString = addressString + _.isUndefined(postalCode) ? "" : postalCode;
+            addressString = addressString === "" ? "" : " ";
+            addressString = addressString + _.isUndefined(city) ? "" : city;
 
             return addressString;
         },
