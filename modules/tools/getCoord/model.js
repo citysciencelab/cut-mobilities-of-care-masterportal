@@ -10,6 +10,7 @@ define(function (require) {
             mapProjection: null,
             positionMapProjection: [],
             updatePosition: true,
+            currentProjectionName: "EPSG:25832",
             deactivateGFI: true,
             renderToWindow: true
         }),
@@ -50,7 +51,11 @@ define(function (require) {
 
         returnTransformedPosition: function (targetProjection) {
             var positionMapProjection = this.get("positionMapProjection"),
+                positionTargetProjection = [0, 0];
+
+            if (positionMapProjection.length > 0) {
                 positionTargetProjection = Radio.request("CRS", "transformFromMapProjection", targetProjection, positionMapProjection);
+            }
 
             return positionTargetProjection;
         },
@@ -94,6 +99,10 @@ define(function (require) {
         // setter for updatePosition
         setUpdatePosition: function (value) {
             this.set("updatePosition", value);
+        },
+        // setter for currentProjection
+        setCurrentProjectionName: function (value) {
+            this.set("currentProjectionName", value);
         }
     });
 

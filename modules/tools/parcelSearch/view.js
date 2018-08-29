@@ -18,9 +18,7 @@ define(function (require) {
          * In init wird configuration nach "renderToDOM" untersucht.
          * Switch Window oder render2DOM - Modus
          */
-        initialize: function (psconfig) {
-            var renderToDOM = psconfig && psconfig.renderToDOM ? psconfig.renderToDOM : null;
-
+        initialize: function () {
             this.listenTo(this.model, {
                 "change:parcelNumber": this.checkInput,
                 "change:parcelDenominatorNumber": this.checkInput,
@@ -28,8 +26,8 @@ define(function (require) {
                 "change:cadastralDistrictNumber": this.checkInput
             });
 
-            if (_.isString(renderToDOM)) {
-                this.setElement(renderToDOM);
+            if (this.model.has("renderToDOM")) {
+                this.setElement(this.get("renderToDOM"));
                 this.listenTo(this.model, {
                     "change:fetched": function () {
                         this.render2DOM();
@@ -38,7 +36,7 @@ define(function (require) {
             }
             else {
                 this.listenTo(this.model, {
-                    "change:isActive change:isCollapsed change:isCurrentWin": this.render2Window
+                    "change:isActive": this.render2Window
                 });
             }
         },
@@ -67,10 +65,10 @@ define(function (require) {
         },
         checkInput: function () {
             if (this.model.get("districtNumber") !== "0" &&
-                (this.model.get("cadastralDistrictField") === false || this.model.getCadastralDistrictNumber() !== "0") &&
+                (this.model.get("cadastralDistrictField") === false || this.model.get("cadastralDistrictNumber") !== "0") &&
                 this.model.get("parcelNumber") !== "" &&
                 _.isNumber(parseInt(this.model.get("parcelNumber"), 10)) &&
-                (this.model.get("parcelDenominatorField") === false || this.model.getParcelDenominatorNumber() !== "")) {
+                (this.model.get("parcelDenominatorField") === false || this.model.get("ParcelDenominatorNumber") !== "")) {
                 this.$("#submitbutton").attr("disabled", false);
                 this.$("#reportbutton").attr("disabled", false);
             }

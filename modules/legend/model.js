@@ -8,10 +8,6 @@ define(function (require) {
         defaults: _.extend({}, Tool.prototype.defaults, {
             getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
             legendParams: [],
-            wmsLayerList: [],
-            wfsLayerList: [],
-            sensorLayerList: [],
-            geojsonLayerList: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: []
         }),
@@ -20,9 +16,7 @@ define(function (require) {
 
             this.superInitialize();
             channel.reply({
-                "getLegendParams": function () {
-                    return this.get("legendParams");
-                }
+                "getLegend": this.getLegend
             }, this);
             channel.on({
                 "setLayerList": this.setLayerList
@@ -34,13 +28,25 @@ define(function (require) {
                 "updateParamsStyleWMS": this.updateParamsStyleWMSArray
             });
             this.listenTo(this, {
-                "change:wmsLayerList": this.setLegendParamsFromWMS,
-                "change:wfsLayerList": this.setLegendParamsFromVector,
-                "change:sensorLayerList": this.setLegendParamsFromVector,
-                "change:geojsonLayerList": this.setLegendParamsFromVector,
-                "change:groupLayerList": this.setLegendParamsFromGROUP,
                 "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
             });
+        },
+
+        /**
+         * Erstellt die Legendeninformation zu einem Layer und liefert diese zurück
+         * @param  {object} layer gesuchter Layer
+         * @return {object}       Legendeninformation
+         */
+        getLegend: function (layer) {
+            var layerSources = layer.get("layerSource"); // Array oder undefined
+
+            if (layer.get("isVisibleInMap")) {
+                return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
+            }
+            return {
+                layername: layer.get("name"),
+                legend: null
+            };
         },
 
         updateParamsStyleWMSArray: function (params) {
@@ -55,7 +61,6 @@ define(function (require) {
             paramsStyleWMSArray2.push(params);
             this.set("paramsStyleWMS", params);
             this.set("paramsStyleWMSArray", paramsStyleWMSArray2);
-
         },
 
         updateLegendFromStyleWMSArray: function () {
@@ -82,194 +87,214 @@ define(function (require) {
             this.set("legendParams", legendParams);
         },
 
-        createLegend: function () {
-            this.set("legendParams", []);
-            this.set("legendParams", _.sortBy(this.get("tempArray"), function (obj) {
-                return obj.layername;
-            }));
-        },
-
+        /**
+         * Setzt die Legendeninformationen aller sichtbaren Layer
+         * @fires this#change:legendParams
+         * @returns {void}
+         */
         setLayerList: function () {
-            var filteredLayerList,
-                groupedLayers,
-                modelList = Radio.request("ModelList", "getCollection");
+            var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
+                sortedModelList = _.sortBy(modelList, function (layer) {
+                    return layer.get("name");
+                }),
+                visibleLayer = _.filter(sortedModelList, function (layer) {
+                    return layer.get("legendURL") !== "ignore";
+                }),
+                tempArray = [];
 
-            // layerlist = modelList.where({type: "layer", isVisibleInMap: true});
-            this.unsetLegendParams();
-            // Die Layer die in der Legende dargestellt werden sollen
-            filteredLayerList = _.filter(modelList.models, function (layer) {
-                return layer.get("legendURL") !== "ignore";
-            });
+            _.each(visibleLayer, function (layer) {
+                var layerSources = layer.get("layerSource"); // Array oder undefined
 
-            // Liste wird nach Typen(WMS, WFS,...) gruppiert
-            groupedLayers = _.groupBy(filteredLayerList, function (layer) {
-                return layer.get("typ");
-            });
-            // this.set("tempArray", []);
-            if (_.has(groupedLayers, "WMS")) {
-                this.set("wmsLayerList", groupedLayers.WMS);
-            }
-            if (_.has(groupedLayers, "WFS")) {
-                this.set("wfsLayerList", groupedLayers.WFS);
-            }
-            if (_.has(groupedLayers, "Sensor")) {
-                this.set("sensorLayerList", groupedLayers.Sensor);
-            }
-            if (_.has(groupedLayers, "GeoJSON")) {
-                this.set("geojsonLayerList", groupedLayers.GeoJSON);
-            }
-            if (_.has(groupedLayers, "GROUP")) {
-                this.set("groupLayerList", groupedLayers.GROUP);
-            }
-            this.createLegend();
+                tempArray.push(this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources));
+            }, this);
+
+            this.unset("legendParams");
+            this.set("legendParams", tempArray);
         },
 
-        unsetLegendParams: function () {
-            this.set("wfsLayerList", "");
-            this.set("sensorLayerList", "");
-            this.set("wmsLayerList", "");
-            this.set("geojsonLayerList", "");
-            this.set("groupLayerList", "");
-            this.set("tempArray", []);
+        /**
+         * Wertet den Layer aus und gibt dessen Legendendefinition zurück
+         * @param  {string} layername         Name des Layers
+         * @param  {string} typ               Typ des Layers
+         * @param  {string[]} [legendURL]     Nur bei typ !== GROUP
+         * @param  {string} [styleId]         Nur bei typ === WFS
+         * @param  {object[]} [layerSources]  Nur bei typ === GROUP
+         * @return {object}                   Legendendefinition
+         */
+        getLegendDefinition: function (layername, typ, legendURL, styleId, layerSources) {
+            var defs = [];
+
+            if (legendURL === "ignore") {
+                return {
+                    layername: layername,
+                    legend: null
+                };
+            }
+            else if (typ === "WMS") {
+                return this.getLegendParamsFromWMS(layername, legendURL);
+            }
+            else if (typ === "WFS") {
+                return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+            }
+            else if (typ === "SensorThings" || typ === "ESRIStreamLayer") {
+                return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+            }
+            else if (typ === "GeoJSON") {
+                return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+            }
+            else if (typ === "GROUP") {
+                _.each(layerSources, function (layerSource) {
+                    var childLegend = this.getLegendDefinition(layerSource.get("name"), layerSource.get("typ"), layerSource.get("legendURL"), layerSource.get("styleId"), null);
+
+                    if (childLegend.legend) {
+                        // layerSource-Abfragen haben immer nur legend[0]
+                        defs.push(childLegend.legend[0]);
+                    }
+                }, this);
+
+                if (defs.length > 0) {
+                    return {
+                        layername: layername,
+                        legend: defs
+                    };
+                }
+            }
+            return {
+                layername: layername,
+                legend: null
+            };
         },
 
-        setLegendParamsFromWMS: function () {
+        getLegendParamsFromWMS: function (layername, legendURL) {
             var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-                paramsStyleWMS = "",
-                legendURL;
+                paramsStyleWMS = "";
 
-            _.each(this.get("wmsLayerList"), function (layer) {
-                paramsStyleWMS = _.find(paramsStyleWMSArray, function (params) {
-                    var bol;
+            paramsStyleWMS = _.find(paramsStyleWMSArray, function (params) {
+                var bol;
 
-                    if (layer.get("name") === params.styleWMSName) {
-                        bol = true;
-                    }
-                    return bol;
-                });
+                if (layername === params.styleWMSName) {
+                    bol = true;
+                }
+                return bol;
+            });
 
-                if (paramsStyleWMS) {
-
-                    this.push("tempArray", {
-                        layername: layer.get("name"),
+            if (paramsStyleWMS) {
+                return {
+                    layername: layername,
+                    legend: [{
                         typ: "styleWMS",
-                        params: paramsStyleWMS,
-                        isVisibleInMap: layer.get("isVisibleInMap")
-                    });
-                }
-                else {
-                    legendURL = layer.get("legendURL");
-
-                    this.push("tempArray", {
-                        layername: layer.get("name"),
-                        img: legendURL,
-                        typ: "WMS",
-                        isVisibleInMap: layer.get("isVisibleInMap")
-                    });
-                }
-            }, this);
+                        params: paramsStyleWMS
+                    }]
+                };
+            }
+            return {
+                layername: layername,
+                legend: [{
+                    img: legendURL,
+                    typ: "WMS"
+                }]
+            };
         },
-        setLegendParamsFromVector: function (model, layerList) {
-            _.each(layerList, function (layer) {
-                var image,
-                    name,
-                    style,
-                    styleClass,
-                    styleSubClass,
-                    styleFieldValues,
-                    allItems;
 
-                if (typeof layer.get("legendURL") === "string") {
-                    this.push("tempArray", {
-                        layername: layer.get("name"),
-                        img: layer.get("legendURL"),
-                        typ: layer.get("typ"),
-                        isVisibleInMap: layer.get("isVisibleInMap")
+        getLegendParamsFromVector: function (layername, legendURL, typ, styleId) {
+            var image,
+                name,
+                style,
+                styleClass,
+                styleSubClass,
+                styleFieldValues,
+                allItems;
+
+            if (typeof legendURL === "string" && legendURL !== "") {
+                return {
+                    layername: layername,
+                    legend: [{
+                        img: legendURL,
+                        typ: typ
+                    }]
+                };
+            }
+
+            image = [];
+            name = [];
+            style = Radio.request("StyleList", "returnModelById", styleId);
+            styleClass = style.get("class");
+            styleSubClass = style.get("subClass");
+            styleFieldValues = style.get("styleFieldValues");
+
+            if (styleClass === "POINT") {
+                // Custom Point Styles
+                if (styleSubClass === "CUSTOM") {
+                    _.each(styleFieldValues, function (styleFieldValue) {
+                        image.push(style.get("imagePath") + styleFieldValue.imageName);
+                        if (_.has(styleFieldValue, "legendValue")) {
+                            name.push(styleFieldValue.legendValue);
+                        }
+                        else {
+                            name.push(styleFieldValue.styleFieldValue);
+                        }
                     });
+                }
+                // Circle Point Style
+                else if (styleSubClass === "CIRCLE") {
+                    image.push(this.createCircleSVG(style));
+                    name.push(layername);
+                }
+                // Advanced Point Styles
+                else if (styleSubClass === "ADVANCED") {
+                    allItems = this.drawAdvancedStyle(style, layername, image, name);
+
+                    image = allItems[0];
+                    name = allItems[1];
                 }
                 else {
-                    image = [];
-                    name = [];
-                    style = Radio.request("StyleList", "returnModelById", layer.get("styleId"));
-                    styleClass = style.get("class");
-                    styleSubClass = style.get("subClass");
-                    styleFieldValues = style.get("styleFieldValues");
-
-                    if (styleClass === "POINT") {
-                        // Custom Point Styles
-                        if (styleSubClass === "CUSTOM") {
-                            _.each(styleFieldValues, function (styleFieldValue) {
-                                image.push(style.get("imagePath") + styleFieldValue.imageName);
-                                if (_.has(styleFieldValue, "legendValue")) {
-                                    name.push(styleFieldValue.legendValue);
-                                }
-                                else {
-                                    name.push(styleFieldValue.styleFieldValue);
-                                }
-                            });
-                        }
-                        // Circle Point Style
-                        else if (styleSubClass === "CIRCLE") {
-                            image.push(this.createCircleSVG(style));
-                            name.push(layer.get("name"));
-                        }
-                        // Advanced Point Styles
-                        else if (styleSubClass === "ADVANCED") {
-                            allItems = this.drawAdvancedStyle(style, layer, image, name);
-
-                            image = allItems[0];
-                            name = allItems[1];
-                        }
-                        else {
-                            if (style.get("imageName") !== "blank.png") {
-                                image.push(style.get("imagePath") + style.get("imageName"));
-                            }
-                            name.push(layer.get("name"));
-                        }
+                    if (style.get("imageName") !== "blank.png") {
+                        image.push(style.get("imagePath") + style.get("imageName"));
                     }
-                    // Simple Line Style
-                    if (styleClass === "LINE") {
-                        image.push(this.createLineSVG(style));
-                        if (style.has("legendValue")) {
-                            name.push(style.get("legendValue"));
-                        }
-                        else {
-                            name.push(layer.get("name"));
-                        }
-                    }
-                    // Simple Polygon Style
-                    if (styleClass === "POLYGON") {
-                        if (styleSubClass === "CUSTOM") {
-                            _.each(styleFieldValues, function (styleFieldValue) {
-                                image.push(this.createPolygonSVG(style, styleFieldValue));
-                                if (_.has(styleFieldValue, "legendValue")) {
-                                    name.push(styleFieldValue.legendValue);
-                                }
-                                else {
-                                    name.push(styleFieldValue.styleFieldValue);
-                                }
-                            }, this);
-                        }
-                        else {
-                            image.push(this.createPolygonSVG(style));
-                            if (style.has("legendValue")) {
-                                name.push(style.get("legendValue"));
-                            }
-                            else {
-                                name.push(layer.get("name"));
-                            }
-                        }
-                    }
-                    this.push("tempArray", {
-                        layername: layer.get("name"),
-                        legendname: name,
-                        img: image,
-                        typ: layer.get("typ"),
-                        isVisibleInMap: layer.get("isVisibleInMap")
-                    });
+                    name.push(layername);
                 }
-            }, this);
-
+            }
+            // Simple Line Style
+            if (styleClass === "LINE") {
+                image.push(this.createLineSVG(style));
+                if (style.has("legendValue")) {
+                    name.push(style.get("legendValue"));
+                }
+                else {
+                    name.push(layername);
+                }
+            }
+            // Simple Polygon Style
+            if (styleClass === "POLYGON") {
+                if (styleSubClass === "CUSTOM") {
+                    _.each(styleFieldValues, function (styleFieldValue) {
+                        image.push(this.createPolygonSVG(style, styleFieldValue));
+                        if (_.has(styleFieldValue, "legendValue")) {
+                            name.push(styleFieldValue.legendValue);
+                        }
+                        else {
+                            name.push(styleFieldValue.styleFieldValue);
+                        }
+                    }, this);
+                }
+                else {
+                    image.push(this.createPolygonSVG(style));
+                    if (style.has("legendValue")) {
+                        name.push(style.get("legendValue"));
+                    }
+                    else {
+                        name.push(layername);
+                    }
+                }
+            }
+            return {
+                layername: layername,
+                legend: [{
+                    legendname: name,
+                    img: image,
+                    typ: typ
+                }]
+            };
         },
         createCircleSVG: function (style) {
             var svg = "",
@@ -341,12 +366,12 @@ define(function (require) {
         /**
          * draw advanced styles in legend
          * @param {ol.style} style - style from features
-         * @param {ol.layer} layer - layer with features
+         * @param {string} layername - Name des Layers
          * @param {array} image - should contains the image source for legend elements
          * @param {array} name - should contains the names for legend elements
          * @returns {array} allItems
          */
-        drawAdvancedStyle: function (style, layer, image, name) {
+        drawAdvancedStyle: function (style, layername, image, name) {
             var scalingShape = style.get("scalingShape"),
                 scalingAttribute = style.get("scalingAttribute"),
                 scalingValueDefaultColor = style.get("scalingValueDefaultColor"),
@@ -370,7 +395,7 @@ define(function (require) {
                 allItems = this.drawNominalCircleSegmentsStyle(styleScalingValues, scalingValueDefaultColor, scalingAttribute, advancedStyle, image, name);
             }
             else if (scaling === "INTERVAL" && scalingShape === "CIRCLE_BAR") {
-                allItems = this.drawIntervalCircleBars(scalingAttribute, advancedStyle, layer, image, name);
+                allItems = this.drawIntervalCircleBars(scalingAttribute, advancedStyle, layername, image, name);
             }
 
             return allItems;
@@ -414,56 +439,24 @@ define(function (require) {
          * draw advanced styles for interval circle bars in legend
          * @param {String} scalingAttribute - attribute that contains the values of a feature
          * @param {ol.style} advancedStyle - copy of style
-         * @param {ol.layer} layer - layer with features
+         * @param {string} layername - Name des Layers
          * @param {array} image - should contains the image source for legend elements
          * @param {array} name - should contains the names for legend elements
          * @returns {array} allItems
          */
-        drawIntervalCircleBars: function (scalingAttribute, advancedStyle, layer, image, name) {
+        drawIntervalCircleBars: function (scalingAttribute, advancedStyle, layername, image, name) {
             var olFeature = new ol.Feature({}),
-                stylePerValue;
+                stylePerValue,
+                circleBarScalingFactor = advancedStyle.get("circleBarScalingFactor"),
+                barHeight = String(20 / circleBarScalingFactor);
 
-            olFeature.set(scalingAttribute, "20");
+            olFeature.set(scalingAttribute, barHeight);
             stylePerValue = advancedStyle.createStyle(olFeature, false);
 
             image.push(stylePerValue.getImage().getSrc());
-            name.push(layer.get("name"));
+            name.push(layername);
 
             return [image, name];
-        },
-
-        /**
-         * Übergibt GroupLayer in den tempArray. Für jeden GroupLayer wird der Typ "Group" gesetzt und als legendURL ein Array übergeben.
-         * @returns {void}
-         */
-        setLegendParamsFromGROUP: function () {
-            var groupLayerList = this.get("groupLayerList");
-
-            _.each(groupLayerList, function (groupLayer) {
-                var legendURLS = groupLayer.get("legendURL"),
-                    name = groupLayer.get("name"),
-                    isVisibleInMap = groupLayer.get("isVisibleInMap");
-
-                this.push("tempArray", {
-                    layername: name,
-                    img: legendURLS,
-                    typ: "GROUP",
-                    isVisibleInMap: isVisibleInMap
-                });
-            }, this);
-        },
-
-        /**
-         * @desc Hilfsmethode um ein Attribut vom Typ Array zu setzen.
-         * @param {String} attribute - Das Attribut das gesetzt werden soll.
-         * @param {whatever} value - Der Wert des Attributs.
-         * @returns {void}
-         */
-        push: function (attribute, value) {
-            var tempArray = _.clone(this.get(attribute));
-
-            tempArray.push(value);
-            this.set(attribute, _.flatten(tempArray));
         }
     });
 

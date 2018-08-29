@@ -21,7 +21,7 @@ define(function (require) {
             addressList: [],
             addressListFiltered: [],
             // route layer
-            layer: {},
+            layer: undefined,
             isActive: false,
             requestIDs: [],
             routeResult: {},
@@ -77,6 +77,18 @@ define(function (require) {
             });
             this.listenTo(this.get("checkBoxHVV"), {
                 "valuesChanged": this.toggleHVVLayer
+            });
+
+            this.listenTo(this, {
+                "change:isActive": function (model, value) {
+                    if (value && this.get("layer") === undefined) {
+                        this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
+                        this.addRouteFeatures(this.get("layer").getSource());
+                        this.get("layer").setStyle(this.routeStyle);
+                        layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
+                        this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
+                    }
+                }
             });
 
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
@@ -228,11 +240,19 @@ define(function (require) {
             }
         },
         parseRegionalSchool: function (xml) {
-            var schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0",
-                school = this.filterSchoolById(this.get("schoolList"), schoolId);
+            var schoolId,
+                school;
 
-            this.setRegionalSchool(school);
-            this.trigger("updateRegionalSchool", school.get("schulname"));
+            if ($(xml).find("gages\\:grundschulnr").length > 0) {
+                schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
+                school = this.filterSchoolById(this.get("schoolList"), schoolId);
+                this.setRegionalSchool(school);
+                this.trigger("updateRegionalSchool", school.get("schulname"));
+            }
+            else {
+                this.setRegionalSchool({});
+                this.trigger("updateRegionalSchool", "Keine Schule gefunden!");
+            }
         },
 
         /**

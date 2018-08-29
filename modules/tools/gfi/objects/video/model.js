@@ -11,24 +11,23 @@ define(function (require) {
 
     VideoModel = Backbone.Model.extend({
         defaults: {
-            id: "",
+            id: _.uniqueId("video"),
             url: "",
-            poster: ""
+            type: "",
+            width: "400px",
+            height: "300px"
         },
 
-        initialize: function (url) {
-            var portalConfig = Radio.request("Parser", "getPortalConfig");
+        initialize: function (url, type, width, height) {
+            this.setUrl(url);
+            this.setType(type);
+            this.setWidth(width);
+            this.setHeight(height);
 
             this.listenTo(Radio.channel("GFI"), {
                 "afterRender": this.startStreaming,
                 "isVisible": this.changedGFI
             }, this);
-
-            if (_.has(portalConfig, "portalTitle") && _.has(portalConfig.portalTitle, "logo")) {
-                this.setPoster(portalConfig.portalTitle.logo);
-            }
-            this.setId(_.uniqueId("video"));
-            this.setUrl(url);
         },
 
         /**
@@ -82,9 +81,19 @@ define(function (require) {
             this.set("url", value);
         },
 
-        // setter for poster
-        setPoster: function (value) {
-            this.set("poster", value);
+        // setter for type
+        setType: function (value) {
+            this.set("type", value);
+        },
+
+        // setter for width
+        setWidth: function (value) {
+            this.set("width", value);
+        },
+
+        // setter for height
+        setHeight: function (value) {
+            this.set("height", value);
         }
     });
     return VideoModel;

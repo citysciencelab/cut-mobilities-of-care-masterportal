@@ -5,15 +5,6 @@ define(function (require) {
         FormularView;
 
     FormularView = Backbone.View.extend({
-        initialize: function () {
-            if (this.model.get("modelname") === "grenznachweis") {
-                this.template = _.template(Grenznachweistemplate);
-                $("head").prepend("<style>" + Grenznachweiscss + "</style>");
-            }
-            this.listenTo(this.model, {
-                "change:isActive render invalid": this.render
-            });
-        },
         events: {
             // anonymisierte Events
             "keyup input[type=text]": "keyup",
@@ -23,6 +14,15 @@ define(function (require) {
             "click button": "click",
             "click a": "click",
             "focusout": "focusout"
+        },
+        initialize: function () {
+            if (this.model.get("modelname") === "grenznachweis") {
+                this.template = _.template(Grenznachweistemplate);
+                $("head").prepend("<style>" + Grenznachweiscss + "</style>");
+            }
+            this.listenTo(this.model, {
+                "change:isActive render invalid": this.render
+            });
         },
         render: function (model, value) {
             if (value) {

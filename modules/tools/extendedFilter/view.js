@@ -3,17 +3,17 @@ define(function (require) {
         ExtendedFilterView;
 
     ExtendedFilterView = Backbone.View.extend({
-        template: _.template(Template),
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isActive": this.render
-            }, this); // Fenstermanagement
-        },
         events: {
             "change #dropdown": "nextStep",
             "click .btn_remove": "removeAttrFromFilter",
             "click #btn_back": "previousStep"
         },
+        initialize: function () {
+            this.listenTo(this.model, {
+                "change:isActive": this.render
+            }, this); // Fenstermanagement
+        },
+        template: _.template(Template),
         removeAttrFromFilter: function (evt) {
             this.model.removeAttrFromFilter(evt);
             this.render(this.model, this.model.get("isActive"));

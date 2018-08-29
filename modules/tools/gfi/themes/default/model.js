@@ -57,9 +57,10 @@ define(function (require) {
                     _.each(ele, function (val, key) {
                         var copyright,
                             imgView,
-                            videoView;
+                            videoView,
+                            valString = String(val);
 
-                        if (val.substr(0, 7) === "http://" && (val.search(/\.jpg/i) !== -1 || val.search(/\.png/i) !== -1)) {
+                        if (valString.substr(0, 7) === "http://" && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1)) {
                             // Prüfen, ob es auch ein Copyright für das Bild gibt, dann dieses ebenfalls an ImgView übergeben, damit es im Bild dargestellt wird
                             copyright = "";
 
@@ -72,7 +73,7 @@ define(function (require) {
                                 element[index].copyright = "#";
                             }
 
-                            imgView = new ImgView(val, copyright);
+                            imgView = new ImgView(valString, copyright);
 
                             element[index][key] = "#";
 
@@ -83,7 +84,7 @@ define(function (require) {
                             });
                         }
                         else if (key === "video" && Radio.request("Util", "isAny") === null) {
-                            videoView = new VideoView(val);
+                            videoView = new VideoView(valString, "rtmp/mp4", "400px", "300px");
 
                             element[index][key] = "#";
                             children.push({
@@ -96,7 +97,7 @@ define(function (require) {
                             }
                         }
                         else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
-                            videoView = new VideoView(val);
+                            videoView = new VideoView(valString, "application/x-mpegURL", "300px", "300px");
 
                             element[index][key] = "#";
                             children.push({

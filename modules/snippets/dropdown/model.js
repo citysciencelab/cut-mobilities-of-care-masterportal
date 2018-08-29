@@ -94,7 +94,6 @@ define(function (require) {
             if (!_.isArray(values)) {
                 if (!this.get("isMultiple")) {
                     this.setDisplayName(values);
-
                 }
                 vals = [vals];
             }

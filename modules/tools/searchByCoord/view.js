@@ -4,7 +4,6 @@ define(function (require) {
         SearchByCoordView;
 
     SearchByCoordView = Backbone.View.extend({
-        template: _.template(SearchByCoordTemplate),
         events: {
             "change #coordSystemField": "setCoordSystem",
             "click button": "setCoordinates"
@@ -15,7 +14,7 @@ define(function (require) {
                 "change:coordSystem": this.setFocusToCoordSystemInput
             });
         },
-
+        template: _.template(SearchByCoordTemplate),
         render: function (model, value) {
             if (value) {
                 this.setElement(document.getElementsByClassName("win-body")[0]);
@@ -34,7 +33,7 @@ define(function (require) {
             if (evt.keyCode === 13) {
                 this.model.validateCoordinates();
             }
-            this.model.setCoordinates(this.$("#coordinatesEastingField").val(), this.$("#coordinatesNorthingField").val());
+            this.model.setCoordinates(this.$("#coordinatesEastingField").val().replace(",", "."), this.$("#coordinatesNorthingField").val().replace(",", "."));
         },
         setFocusToCoordSystemInput: function () {
             this.$("#coordSystemField").focus();

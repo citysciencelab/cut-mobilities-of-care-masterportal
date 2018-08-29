@@ -5,14 +5,18 @@ define(function (require) {
         WMSLayer;
 
     WMSLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults, {
+            infoFormat: "text/xml"
+        }),
+
         initialize: function () {
-            this.superInitialize();
-            this.setAttributes();
-        },
-        setAttributes: function () {
-            if (_.isUndefined(this.get("infoFormat")) === true) {
-                this.setInfoFormat("text/xml");
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
             }
+
+            this.listenTo(this, {
+                "change:SLDBody": this.updateSourceSLDBody
+            });
         },
 
         /**
@@ -54,8 +58,9 @@ define(function (require) {
                             5809000
                         ],
                         tileSize: parseInt(this.get("tilesize"), 10)
-                    }),
-                    crossOrigin: "anonymous"
+                    })
+                    // Nur für Schulwegrouting, führte zu Problemen mit  diensten die dies nicht zulassen.
+                    // crossOrigin: "anonymous"
                 });
 
                 // wms_webatlasde
@@ -76,8 +81,9 @@ define(function (require) {
                 this.setLayerSource(new ol.source.ImageWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
-                    params: params,
-                    crossOrigin: "anonymous"
+                    params: params
+                    // Nur für Schulwegrouting, führte zu Problemen mit  diensten die dies nicht zulassen.
+                    // crossOrigin: "anonymous"
                 }));
             }
             // this.registerErrorListener();
@@ -114,18 +120,18 @@ define(function (require) {
          */
         createLegendURL: function () {
             var layerNames,
-                legendURL;
+                legendURL = [],
+                version = this.get("version");
 
             if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
                 layerNames = this.get("layers").split(",");
-                legendURL = [];
 
                 if (layerNames.length === 1) {
-                    legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
+                    legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
                 }
                 else if (layerNames.length > 1) {
                     _.each(layerNames, function (layerName) {
-                        legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
+                        legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
                     }, this);
                 }
                 this.set("legendURL", legendURL);
@@ -216,8 +222,30 @@ define(function (require) {
             this.get("layer").getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
         },
 
+        /**
+         * Lädt den WMS neu
+         * @returns {void}
+         */
+        updateSource: function () {
+            this.get("layer").getSource().updateParams({zufall: Math.random()});
+        },
+
         setInfoFormat: function (value) {
             this.set("infoFormat", value);
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
+            }
         },
 
         /**

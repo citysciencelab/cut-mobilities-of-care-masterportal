@@ -209,6 +209,7 @@ define(function (require) {
 
         appendXAxisToSvg: function (svg, xAxis, xAxisLabel, AxisOffset, marginTop, height) {
             var svgBBox = svg.node().getBBox(),
+                text = _.isUndefined(xAxisLabel.label) ? xAxisLabel : xAxisLabel.label,
                 textOffset = _.isUndefined(xAxisLabel.offset) ? 0 : xAxisLabel.offset,
                 textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
                 fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
@@ -230,7 +231,7 @@ define(function (require) {
                 .style("text-anchor", textAnchor)
                 .style("fill", fill)
                 .style("font-size", fontSize)
-                .text(xAxisLabel.label);
+                .text(text);
         },
 
         appendYAxisToSvg: function (svg, yAxis, yAxisLabel, textOffset, AxisOffset) {
@@ -323,13 +324,13 @@ define(function (require) {
 
             legend.append("circle")
                 .attr("cx", 5)
-                .attr("cy", 5)
+                .attr("cy", 10)
                 .attr("r", 5)
                 .attr("class", "dot");
 
             legend.append("text")
                 .attr("x", 20)
-                .attr("y", 10)
+                .attr("y", 15)
                 .text(function (d) {
                     return d;
                 });

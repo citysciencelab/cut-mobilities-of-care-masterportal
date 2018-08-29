@@ -3,19 +3,19 @@ define(function (require) {
         formularView;
 
     formularView = Backbone.View.extend({
-        template: _.template(Template),
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isActive": this.render,
-                "invalid": this.showValidity
-            });
-        },
         events: {
             "keyup #contactName": "setUserAttributes",
             "keyup #contactEmail": "setUserAttributes",
             "keyup #contactTel": "setUserAttributes",
             "keyup #contactText": "setUserAttributes",
             "click .contactButton": "send"
+        },
+        initialize: function () {
+            this.template = _.template(Template);
+            this.listenTo(this.model, {
+                "change:isActive": this.render,
+                "invalid": this.showValidity
+            });
         },
         render: function (model, value) {
             if (value) {

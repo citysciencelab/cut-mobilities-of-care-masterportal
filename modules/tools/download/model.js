@@ -114,7 +114,7 @@ define(function (require) {
             filename.trim();
             result = filename.match(/^[0-9a-zA-Z]+(\.[0-9a-zA-Z]+)?$/);
 
-            if (_.isUndefined(result) && _.isNull(result)) {
+            if (_.isUndefined(result) || _.isNull(result)) {
                 Radio.trigger("Alert", "alert", "Bitte geben Sie einen gültigen Dateinamen ein! (Erlaubt sind Klein-,Großbuchstaben und Zahlen.)");
             }
             return !_.isUndefined(result) && !_.isNull(result);
@@ -258,20 +258,24 @@ define(function (require) {
         },
         /**
              * Diese funktion wählt anhand der im Dropdown ausgewählten Endung die Konvertier funktion
-             * @param  {string} format das Fromat in das konvertiert wird
+             * @param  {string} format das Format in das konvertiert wird
              * @return {function} die Konvertierfunktion
              */
         getConverter: function (format) {
-            var knownFormats = ["kml", "jpg"];
+            var knownFormats = ["kml", "jpg"],
+                convertFunction;
 
             switch (format) {
                 case knownFormats[0]: {
-                    return this.convertFeaturesToKML;
+                    convertFunction = this.convertFeaturesToKML;
+                    break;
                 }
                 default: {
                     Radio.trigger("Alert", "alert", "Ein Unbekanntes Format wurde an das Download Tool übergeben: <br><strong>" + format + "</strong><br> Bekannte Formate:<br>" + knownFormats);
                 }
             }
+
+            return convertFunction;
         },
         /**
          * Transfomiert Geometrische Objekte
@@ -381,14 +385,15 @@ define(function (require) {
                 if (type === "Point") {
                     // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
                     if (!feature.getStyle().getText()) {
-                        color = style.getFill().getColor().split("(")[1].split(",");
+                        color = style.getImage().getFill().getColor().split("(")[1].split(",");
 
-                        pointOpacities.push(style.getFill().getColor().split(",")[3].split(")")[0]);
+                        pointOpacities.push(style.getImage().getFill().getColor().split(",")[3].split(")")[0]);
                         pointColors.push(color[0] + "," + color[1] + "," + color[2]);
                         pointRadiuses.push(style.getImage().getRadius());
                     }
                 }
             }, context);
+
 
             // KML zerlegen und die Punktstyles einfügen
             featuresWithPointStyle = $.parseXML(format.writeFeatures(features));

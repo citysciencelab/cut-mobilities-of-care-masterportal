@@ -55,7 +55,6 @@ define(function (require) {
             Radio.trigger("Sidebar", "toggle", true);
             this.renderSimpleViews();
             this.delegateEvents();
-
             return this;
         },
 

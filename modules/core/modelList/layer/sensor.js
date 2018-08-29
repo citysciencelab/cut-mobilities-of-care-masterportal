@@ -18,7 +18,9 @@ define(function (require) {
             }),
 
         initialize: function () {
-            this.superInitialize();
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
+            }
 
             // change language from moment.js to german
             moment.locale("de");
@@ -30,6 +32,9 @@ define(function (require) {
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
+            if (this.has("clusterDistance")) {
+                this.createClusterLayerSource();
+            }
         },
 
         /**
@@ -42,7 +47,7 @@ define(function (require) {
                 name: this.get("name"),
                 typ: this.get("typ"),
                 gfiAttributes: this.get("gfiAttributes"),
-                gfiTheme: this.get("gfiTheme"),
+                gfiTheme: _.isObject(this.get("gfiTheme")) ? this.get("gfiTheme").name : this.get("gfiTheme"),
                 routable: this.get("routable"),
                 id: this.get("id")
             }));
@@ -167,8 +172,10 @@ define(function (require) {
                 feature.setProperties(data.properties);
 
                 // for a special theme
-                feature.set("gfiParams", this.get("gfiParams"));
-                feature.set("utc", this.get("utc"));
+                if (_.isObject(this.get("gfiTheme"))) {
+                    feature.set("gfiParams", this.get("gfiTheme").params);
+                    feature.set("utc", this.get("utc"));
+                }
 
                 features.push(feature);
             }, this);
@@ -421,8 +428,6 @@ define(function (require) {
                     thing.properties.phenomenonTime = "undefined";
                 }
 
-                thing.properties.state = this.convertScaling(thing.properties.state);
-
                 thing.properties.dataStreamId = thing.Datastreams[0]["@iot.id"];
                 thingsProperties.push(thing.properties);
             }, this);
@@ -448,35 +453,6 @@ define(function (require) {
             }, this);
 
             return properties;
-        },
-
-        /**
-         * convert Scaling with given factor and adds a unit
-         * @param  {String} state - contains the state from observation
-         * @return {String} state with converted value
-         */
-        convertScaling: function (state) {
-            var conversionFactor = this.get("conversionFactor"),
-                scalingUnit = this.get("scalingUnit"),
-                scalingDecimal = this.get("scalingDecimal"),
-                conversionState = !_.isNaN(parseFloat(state, 10)) ? parseFloat(state, 10) : state;
-
-            if (!_.isUndefined(conversionState) && !_.isString(conversionState)) {
-                if (!_.isUndefined(conversionFactor)) {
-                    conversionState = conversionState * conversionFactor;
-                }
-                if (!_.isUndefined(scalingDecimal)) {
-                    conversionState = parseFloat(conversionState);
-                    conversionState = conversionState.toFixed(scalingDecimal);
-                }
-                if (!_.isUndefined(scalingUnit)) {
-                    conversionState = conversionState + " " + scalingUnit;
-                }
-
-                conversionState = String(conversionState);
-            }
-
-            return conversionState;
         },
 
         /**
@@ -632,7 +608,7 @@ define(function (require) {
                 dataStreamId = thingToUpdate.dataStreamId,
                 features = this.get("layerSource").getFeatures(),
                 featureArray = this.getFeatureByDataStreamId(dataStreamId, features),
-                thingResult = this.convertScaling(thingToUpdate.result),
+                thingResult = String(thingToUpdate.result),
                 utc = this.get("utc"),
                 thingPhenomenonTime = this.changeTimeZone(thingToUpdate.phenomenonTime, utc);
 
@@ -838,6 +814,20 @@ define(function (require) {
                 if (!_.isUndefined(style)) {
                     this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
                 }
+            }
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
             }
         },
 

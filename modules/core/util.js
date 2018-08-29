@@ -1,17 +1,16 @@
 define(function (require) {
-    var Config = require("config"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         Util;
 
     Util = Backbone.Model.extend({
         defaults: {
             // isViewMobile: false,
             config: "",
-            ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"]
+            ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
+            uiStyle: "DEFAULT"
         },
         initialize: function () {
-            var channel = Radio.channel("Util"),
-                uiStyle = Config.uiStyle ? Config.uiStyle.toUpperCase() : "DEFAULT";
+            var channel = Radio.channel("Util");
 
             channel.reply({
                 "isViewMobile": function () {
@@ -42,7 +41,8 @@ define(function (require) {
             channel.on({
                 "hideLoader": this.hideLoader,
                 "showLoader": this.showLoader,
-                "setUiStyle": this.setUiStyle
+                "setUiStyle": this.setUiStyle,
+                "copyToClipboard": this.copyToClipboard
             }, this);
 
             // initial isMobileView setzen
@@ -55,8 +55,6 @@ define(function (require) {
             });
 
             $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
-
-            this.setUiStyle(uiStyle);
             this.parseConfigFromURL();
         },
         /**
@@ -145,6 +143,47 @@ define(function (require) {
                 .value();
 
             return sortedObj;
+        },
+        /**
+         * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
+         * behaviour of ios strange used solution from :
+         * https://stackoverflow.com/questions/34045777/copy-to-clipboard-using-javascript-in-ios
+         * @param  {el} el element to copy
+         * @returns {void}
+         */
+        copyToClipboard: function (el) {
+            var oldReadOnly = el.readOnly,
+                oldContentEditable = el.contentEditable,
+                range = document.createRange(),
+                selection = window.getSelection();
+
+            el.readOnly = false;
+            el.contentEditable = true;
+
+            range.selectNodeContents(el);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            el.setSelectionRange(0, 999999); // A big number, to cover anything that could be inside the element.
+
+            el.readOnly = oldReadOnly;
+            el.contentEditable = oldContentEditable;
+
+            try {
+                document.execCommand("copy");
+                Radio.trigger("Alert", "alert", {
+                    text: "Inhalt wurde in die Zwischenablage kopiert.",
+                    kategorie: "alert-info",
+                    position: "top-center",
+                    animation: 2000
+                });
+            }
+            catch (e) {
+                Radio.trigger("Alert", "alert", {
+                    text: "Inhalt konnte nicht in die Zwischenablage kopiert werden.",
+                    kategorie: "alert-info",
+                    position: "top-center"
+                });
+            }
         },
         isAndroid: function () {
             return navigator.userAgent.match(/Android/i);

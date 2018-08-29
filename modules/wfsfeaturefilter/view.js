@@ -4,16 +4,17 @@ define(function (require) {
         wfsFeatureFilterView;
 
     wfsFeatureFilterView = Backbone.View.extend({
-        template: _.template(wfsFeatureFilterTemplate),
+        events: {
+            "click #filterbutton": "getFilterInfos",
+            "click .panel-heading": "toggleHeading"
+        },
         initialize: function () {
             this.listenTo(this.model, {
                 "change:isActive": this.render
             }, this);
         },
-        events: {
-            "click #filterbutton": "getFilterInfos",
-            "click .panel-heading": "toggleHeading"
-        },
+        id: "wfsFilterWin",
+        template: _.template(wfsFeatureFilterTemplate),
         toggleHeading: function (evt) {
             var id = this.$(evt.currentTarget)[0].id;
 
@@ -122,7 +123,7 @@ define(function (require) {
                                 feature.setStyle(layer.defaultStyle(feature));
                             }
                             else {
-                                feature.setStyle(layer.defaultStyle);
+                                feature.setStyle(layer.defaultStyle(feature));
                             }
                         }
                         else if (featuredarstellen === false) {

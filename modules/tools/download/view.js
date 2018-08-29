@@ -6,14 +6,15 @@ define(function (require) {
         DownloadView;
 
     DownloadView = Backbone.View.extend({
-        model: new DownloadModel(),
-        template: _.template(DownloadWin),
         events: {
             "click button.back": "back",
             "change .file-endings": "prepareData"
         },
         initialize: function () {
             var channel = Radio.channel("download");
+
+            this.model = new DownloadModel();
+            this.template = _.template(DownloadWin);
 
             this.listenTo(this.model, {
                 "change:isActive": this.render
@@ -26,6 +27,7 @@ define(function (require) {
         /**
          * Startet das Download modul
          * @param  {ol.feature} features die Features die heruntergeladen werden sollen
+         * @returns {void}
          */
         start: function (features) {
             if (features.data.length === 0) {
@@ -51,6 +53,7 @@ define(function (require) {
         },
         /**
          * Ruft das Tool auf, das den Download gestartet hat
+         * @returns {void}
          */
         back: function () {
             this.model.set("isActive", false);
@@ -74,6 +77,7 @@ define(function (require) {
         },
         /**
          * startet den Download, wenn auf den Button geklickt wird
+         * @returns {void}
          */
         triggerDownload: function () {
             this.model.download();
@@ -92,18 +96,19 @@ define(function (require) {
         },
         /**
          * Hängt die wählbaren Dateiformate als Option an das Formate-Dropdown
+         * @returns {void}
          */
         appendOptions: function () {
             var options = this.model.getFormats();
 
             _.each(options, function (option) {
-                $(".file-endings").append($("<option>", {
+                this.$(".file-endings").append($("<option>", {
                     value: option,
                     text: option
                 }));
             });
             if (options.length === 1) {
-                $(".file-endings").val(options[0]);
+                this.$(".file-endings").val(options[0]);
                 this.prepareDownloadButton();
             }
         }

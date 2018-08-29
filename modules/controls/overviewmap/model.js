@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Radio = require("backbone.radio"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         $ = require("jquery"),
         OverviewmapModel;
 
@@ -40,7 +39,8 @@ define(function (require) {
         newOverviewmap: function () {
             var overviewmap = new ol.control.OverviewMap({
                 collapsible: false,
-                className: "overviewmap ol-overviewmap ol-custom-overviewmap hidden-xs",
+                className: "ol-overviewmap ol-custom-overviewmap",
+                target: "overviewmap",
                 layers: [
                     this.getOvmLayer(this.get("baselayer"))
                 ],

@@ -80,7 +80,7 @@ if (!string) ...
 Wir unterscheiden Fehlermeldungen in:
 
 * Meldung zur Fehlersuche für Experten / Entwickler: Erlaubt sind console.error bzw. console.warn zum loggen von Fehlerzuständen.
-* Meldungen zur Information des Nutzers in Form von Alerts sollen nur erfolgen, wenn der Nutzer eine Aktion manuell angestoßen hat und diese erfolglos beendet wurde. 
+* Meldungen zur Information des Nutzers in Form von Alerts sollen nur erfolgen, wenn der Nutzer eine Aktion manuell angestoßen hat und diese erfolglos beendet wurde.
 
 ### Bezeichnungen
 * Sprechende Namen für Variablen und Funktionen verwenden
@@ -163,3 +163,42 @@ insert_final_newline = true
     color: #333;
 }
 ```
+### Commits
+* Der Changelog liest nur Merge-Commits mit prefix "add" oder "fix" (intern auch "hotfix") aus. Daher Merge-Commits entsprechend benennen.
+* Sprache der Commits: Deutsch oder Englisch
+
+### Konfigurations-Änderungen
+Werden Änderungen im Code durchgeführt wodurch sich Konfigurationsparameter ändern, so ist sicherzustellen, dass der Code auch abwärts kompatibel ist.
+An den entsprechenden Funktionen im Code werden immer deprecated tags ("*@deprecated in version [nextMajorVersion]") mit sprechender Beschreibung versehen.
+Falls dies nicht ausreicht, werden innerhalb der Funktion weitere Kommentare mit // @deprecated in version [nextMajorVersion] versehen.
+
+Beispiel "deprecated" Funktion:
+```javascript
+/**
+ * [function description]
+ * @deprecated in version [x.0.0] remove function when versioning.
+ */
+deprecatedFuntion: function () {
+    ...
+}
+```
+Beispiel "deprecated" Funktions-Teil:
+```javascript
+/**
+ * [function description]
+ * @deprecated in version [x.0.0] further comments in function.
+ */
+deprecatedFuntion2: function (config) {
+    var a,
+        b;
+
+    if(_.has(config, "newA")) {
+        a = config.newA
+    }
+    // @deprecated in version [x.0.0] remove following if-block
+    if(_.has(config, "oldA")) {
+        a = config.oldA
+    }
+}
+```
+Diese "@deprecated" Einträge werden beim Bauen der nächsten Major-Version vom LGV manuell ausgewertet und ggf entfernt.

@@ -16,19 +16,19 @@ define("app", function (require) {
         sbconfig;
 
     // RemoteInterface laden
-    if (Config.remoteInterface && Config.remoteInterface === true) {
+    if (_.has(Config, "remoteInterface")) {
         require(["modules/remoteInterface/model"], function (RemoteInterface) {
-            new RemoteInterface();
+            new RemoteInterface(Config.remoteInterface);
         });
     }
     // Core laden
     new Alert();
     new Autostarter();
-    new Util();
-    new StyleList();
+    new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
     new RawLayerList();
     new RestReaderList();
     new Preparser();
+    new StyleList();
     new ParametricURL();
     new CRS();
     new Map();
@@ -42,7 +42,7 @@ define("app", function (require) {
     });
     // Browser Druck Modul
     require(["modules/functionalities/browserPrint/model"], function (BrowserPrintModel) {
-        new BrowserPrintModel();
+        new BrowserPrintModel(_.has(Config, "browserPrint") ? Config.browserPrint : {});
     });
     // Graph laden
     require(["modules/tools/graph/model"], function (GraphModel) {
@@ -61,14 +61,14 @@ define("app", function (require) {
         new ZoomToGeometry();
     });
 
-    if (Config.zoomtofeature) {
+    if (_.has(Config, "zoomToFeature")) {
         require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
-            new ZoomToFeature();
+            new ZoomToFeature(Config.zoomToFeature);
         });
     }
 
     // load customModules from config
-    if (Config.customModules) {
+    if (_.has(Config, "customModules") && Config.customModules.length > 0) {
         _.each(Config.customModules, function (module) {
             require([module], function (CustomModule) {
                 new CustomModule();
@@ -82,34 +82,34 @@ define("app", function (require) {
         new DropdownView();
     });
     require(["modules/layerinformation/model"], function (LayerinformationModel) {
-        new LayerinformationModel();
+        new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
     });
 
-    if (Config.footer && Config.footer.visibility === true) {
+    if (_.has(Config, "footer")) {
         require(["modules/footer/view"], function (FooterView) {
-            new FooterView();
+            new FooterView(Config.footer);
         });
     }
 
-    if (Config.clickCounter && Config.clickCounter.desktop && Config.clickCounter.desktop !== "" && Config.clickCounter.mobile && Config.clickCounter.mobile !== "") {
+    if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
         require(["modules/ClickCounter/view"], function (ClickCounterView) {
             new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
         });
     }
 
-    if (Config.mouseHover) {
+    if (_.has(Config, "mouseHover")) {
         require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
-            new MouseHoverPopupView();
+            new MouseHoverPopupView(Config.mouseHover);
         });
     }
 
-    if (Config.quickHelp && Config.quickHelp === true) {
+    if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
         require(["modules/quickhelp/view"], function (QuickHelpView) {
             new QuickHelpView();
         });
     }
 
-    if (Config.scaleLine && Config.scaleLine === true) {
+    if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
         require(["modules/scaleline/view"], function (ScaleLineView) {
             new ScaleLineView();
         });
@@ -121,7 +121,7 @@ define("app", function (require) {
     // Module laden
     // Tools
     require(["modules/sidebar/view"], function (SidebarView) {
-        var sidebarView = new SidebarView();
+        new SidebarView();
 
         _.each(Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
@@ -157,7 +157,7 @@ define("app", function (require) {
                 }
                 case "gfi": {
                     require(["modules/tools/gfi/model"], function (GfiModel) {
-                        new GfiModel();
+                        new GfiModel(_.extend(tool, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}));
                     });
                     break;
                 }
@@ -190,12 +190,6 @@ define("app", function (require) {
                             new PrintView({model: tool});
                         });
                     }
-                    break;
-                }
-                case "printV2": {
-                    require(["modules/tools/print_/view"], function (PrintView) {
-                        new PrintView({model: tool});
-                    });
                     break;
                 }
                 case "parcelSearch": {
@@ -291,7 +285,6 @@ define("app", function (require) {
             var controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"}),
                 controlsView = new ControlsView();
 
-
             _.each(controls, function (control) {
                 var element;
 
@@ -309,10 +302,10 @@ define("app", function (require) {
                         break;
                     }
                     case "orientation": {
-                        element = controlsView.addRowTR(control.id);
+                        element = controlsView.addRowTR(control.id, true);
 
                         require(["modules/controls/orientation/view"], function (OrientationView) {
-                            new OrientationView({el: element});
+                            new OrientationView({el: element, attr: {config: {epsg: Radio.request("MapView", "getProjection").getCode()}}});
                         });
                         break;
                     }
@@ -386,8 +379,8 @@ define("app", function (require) {
         new MapMarkerView();
     });
 
-    sbconfig = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
-
+    sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
+    sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         require(["modules/searchbar/view"], function (SearchbarView) {
             new SearchbarView(sbconfig);

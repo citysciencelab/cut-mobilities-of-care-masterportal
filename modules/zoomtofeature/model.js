@@ -1,38 +1,51 @@
 define(function (require) {
-    var Config = require("config"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         ol = require("openlayers"),
         ZoomToFeature;
 
     ZoomToFeature = Backbone.Model.extend({
         defaults: {
-            prefs: {},
+            ids: [],
+            attribute: "flaechenid",
+            imgLink: "../img/location_eventlotse.svg",
+            layerId: "4561",
+            wfsId: "4560",
             centerList: [],
             format: new ol.format.WFS(),
-            features: []
+            features: [],
+            markers: []
         },
         initialize: function () {
-            var channel = Radio.channel("ZoomToFeature"),
-                prefs = Config.zoomtofeature;
-
-            channel.on({
-                "zoomtofeatures": this.zoomtofeatures
-            }, this);
-            channel.reply({
-                "getCenterList": function () {
-                    return this.get("centerList");
-                }
-            }, this);
-
-            this.setPrefs(prefs);
+            this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
             this.getFeaturesFromWFS();
             this.createCenterList();
+            this.setMarkerForFeatureIds();
+            this.zoomToFeatures();
+        },
+        setMarkerForFeatureIds: function () {
+            _.each(this.get("centerList"), function (center, i) {
+                var id = "featureMarker" + i,
+                    marker;
+
+                // lokaler Pfad zum IMG-Ordner ist anders
+                $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Radio.request("Util", "getPath", this.get("imgLink")) + "'></div>");
+
+                marker = new ol.Overlay({
+                    id: id,
+                    offset: [-12, 0],
+                    positioning: "bottom-center",
+                    element: document.getElementById(id),
+                    stopEvent: false
+                });
+
+                marker.setPosition(center);
+                this.get("markers").push(marker);
+                Radio.trigger("Map", "addOverlay", marker);
+            }, this);
         },
         getFeaturesFromWFS: function () {
-            var prefs = this.get("prefs");
-
-            if (!_.isUndefined(prefs.ids)) {
-                this.requestFeaturesFromWFS(prefs);
+            if (!_.isUndefined(this.get("ids"))) {
+                this.requestFeaturesFromWFS(this.get("wfsId"));
             }
         },
 
@@ -44,18 +57,14 @@ define(function (require) {
         setFormat: function (value) {
             this.set("format", value);
         },
-        setPrefs: function (value) {
-            this.set("prefs", value);
-        },
         setCenterList: function (value) {
             this.set("centerList", value);
         },
 
         // holt sich "zoomtofeature" aus der Config, prüft ob ID vorhanden ist
         createCenterList: function () {
-            var prefs = this.get("prefs"),
-                ids = prefs.ids ? prefs.ids : null,
-                attribute = prefs.attribute ? prefs.attribute : null,
+            var ids = this.get("ids") || null,
+                attribute = this.get("attribute") || null,
                 features = this.get("features");
 
             if (_.isNull(ids) === false) {
@@ -77,9 +86,8 @@ define(function (require) {
         },
 
         // baut sich aus den Config-prefs die URL zusammen
-        requestFeaturesFromWFS: function (prefs) {
-            var LayerId = prefs.WFSid,
-                LayerPrefs = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: LayerId}),
+        requestFeaturesFromWFS: function (wfsId) {
+            var LayerPrefs = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: wfsId}),
                 url = LayerPrefs.url,
                 version = LayerPrefs.version,
                 typename = LayerPrefs.name,
@@ -115,14 +123,13 @@ define(function (require) {
         },
 
         // holt sich das "bboxes"-array, berechnet aus allen bboxes die finale bbox und sendet diese an die map
-        zoomtofeatures: function () {
+        zoomToFeatures: function () {
             var bbox = [],
-                prefs = this.get("prefs"),
-                ids = prefs.ids ? prefs.ids : null,
-                attribute = prefs.attribute ? prefs.attribute : null,
+                ids = this.get("ids"),
+                attribute = this.get("attribute") || null,
                 features = this.get("features");
 
-            if (_.isNull(ids) === false) {
+            if (ids.length > 0) {
                 _.each(ids, function (id, index) {
                     var feature = _.filter(features, function (feat) {
                             return feat.get(attribute) === id ? 1 : 0;
@@ -147,6 +154,9 @@ define(function (require) {
                 }, this);
                 Radio.trigger("Map", "setBBox", bbox);
             }
+        },
+        setIds: function (value) {
+            this.set("ids", value);
         }
     });
 

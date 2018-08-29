@@ -9,7 +9,6 @@ define(function (require) {
 
     CompareFeaturesView = Backbone.View.extend({
         className: "compare-feature-modal modal fade",
-
         events: {
             // is fired when the modal has finished being hidden
             "hidden.bs.modal": "setIsActivatedToFalse",

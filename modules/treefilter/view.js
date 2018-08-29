@@ -4,7 +4,20 @@ define(function (require) {
         TreeFilterView;
 
     TreeFilterView = Backbone.View.extend({
-        template: _.template(TreeFilterTemplate),
+        events: {
+            "click #filterbutton": "setFilterParams",
+            "click #filterRemoveButton": "removeFilter",
+            "keyup #categoryInput": "setSearchCategoryString",
+            "keyup #typeInput": "setSearchTypeString",
+            "focusout #yearMin > input": "setYearMin",
+            "focusout #yearMax > input": "setYearMax",
+            "focusout #diameterMin > input": "setDiameterMin",
+            "focusout #diameterMax > input": "setDiamterMax",
+            "focusout #perimeterMin > input": "setPerimeterMin",
+            "focusout #perimeterMax > input": "setPerimeterMax",
+            "focusout #categoryInput": "setCategory",
+            "focusout #typeInput": "setType"
+        },
         initialize: function () {
             // this.render();
             this.listenTo(this.model, {
@@ -51,20 +64,7 @@ define(function (require) {
                 }
             });
         },
-        events: {
-            "click #filterbutton": "setFilterParams",
-            "click #filterRemoveButton": "removeFilter",
-            "keyup #categoryInput": "setSearchCategoryString",
-            "keyup #typeInput": "setSearchTypeString",
-            "focusout #yearMin > input": "setYearMin",
-            "focusout #yearMax > input": "setYearMax",
-            "focusout #diameterMin > input": "setDiameterMin",
-            "focusout #diameterMax > input": "setDiamterMax",
-            "focusout #perimeterMin > input": "setPerimeterMin",
-            "focusout #perimeterMax > input": "setPerimeterMax",
-            "focusout #categoryInput": "setCategory",
-            "focusout #typeInput": "setType"
-        },
+        template: _.template(TreeFilterTemplate),
         render: function () {
             var attr = this.model.toJSON();
 
