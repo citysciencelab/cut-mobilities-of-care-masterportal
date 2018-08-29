@@ -31,7 +31,10 @@ define(function (require) {
                 context: this,
                 error: function () {
                     Radio.trigger("Alert", "alert", {
-                        text: "Informationen zurzeit nicht verfügbar",
+                        text: "<b>Entschuldigung</b><br>" +
+                            "Zurzeit können leider keine Metadaten abgefragt werden.<br>" +
+                            "Eventuell ist die Metadaten-Schnittstelle nicht erreichbar.<br>" +
+                            "Versuchen Sie es bitte später erneut",
                         kategorie: "alert-warning"
                     });
                 },
