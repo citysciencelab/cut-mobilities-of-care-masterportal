@@ -1,13 +1,13 @@
 import Config from "../portal/master/config";
 // var Config = require("config"),
 //     Alert = require("modules/alerting/view"),
-//     RestReaderList = require("modules/restReader/collection"),
+import RestReaderList from "../modules/restReader/collection";
 //     Autostarter = require("modules/core/autostarter"),
 import Util from "../modules/core/util";
 //     StyleList = require("modules/vectorStyle/list"),
 //     RawLayerList = require("modules/core/rawLayerList"),
 import RawLayerList from "../modules/core/rawLayerList";
-//import * as Preparser from "../modules/core/configLoader/preparser";
+import Preparser from "../modules/core/configLoader/preparser";
 //     Preparser = require("modules/core/configLoader/preparser"),
 //     ParametricURL = require("modules/core/parametricURL"),
 import CRS from "../modules/core/crs";
@@ -31,12 +31,12 @@ import _ from "underscore";
 new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});*/
 new Util();
 new RawLayerList();
-// new Preparser();
+new Preparser();
 // new StyleList();
 // new ParametricURL();
 new CRS();
 new Map();
-// new RestReaderList();
+new RestReaderList();
 // new WPS();
 // new AddGeoJSON();
 
