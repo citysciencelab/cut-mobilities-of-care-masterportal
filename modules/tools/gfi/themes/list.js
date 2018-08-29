@@ -32,7 +32,13 @@ define(function (require) {
 
     ThemeList = Backbone.Collection.extend({
         model: function (attrs, options) {
-            var theme;
+            var gfiTheme = attrs.gfiTheme,
+                theme;
+
+            if (_.isObject(attrs.gfiTheme)) {
+                attrs.gfiParams = gfiTheme.params;
+                attrs.gfiTheme = gfiTheme.name;
+            }
 
             if (attrs.gfiTheme === "table") {
                 theme = new TableTheme(attrs, options);

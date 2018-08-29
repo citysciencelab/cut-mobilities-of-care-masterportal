@@ -4,7 +4,6 @@ define(function (require) {
         GetCoord;
 
     GetCoord = Backbone.View.extend({
-        template: _.template(GetCoordTemplate),
         events: {
             "click .glyphicon-remove": "destroy",
             "change #coordSystemField": "changedPosition",
@@ -17,12 +16,13 @@ define(function (require) {
                 "change:positionMapProjection": this.changedPosition
             });
         },
-
+        template: _.template(GetCoordTemplate),
         render: function (model, value) {
             if (value) {
                 this.setElement(document.getElementsByClassName("win-body")[0]);
                 this.model.createInteraction();
                 this.$el.html(this.template(model.toJSON()));
+                this.changedPosition();
                 this.delegateEvents();
             }
             else {
@@ -38,6 +38,7 @@ define(function (require) {
                 position = this.model.returnTransformedPosition(targetProjectionName),
                 targetProjection = this.model.returnProjectionByName(targetProjectionName);
 
+            this.model.setCurrentProjectionName(targetProjectionName);
             if (position) {
                 this.adjustPosition(position, targetProjection);
                 this.adjustWindow(targetProjection);
@@ -77,22 +78,8 @@ define(function (require) {
             }
         },
 
-        /**
-         * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
-         * @param  {evt} evt Evt-Button
-         * @returns {void}
-         */
         copyToClipboard: function (evt) {
-            var textField = evt.currentTarget;
-
-            this.$(textField).select();
-
-            try {
-                document.execCommand("copy");
-            }
-            catch (e) {
-                console.warn("Unable to copy text to clipboard.");
-            }
+            Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
         }
     });
 

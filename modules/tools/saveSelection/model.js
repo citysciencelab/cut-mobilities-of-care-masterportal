@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Config = require("config"),
-        Tool = require("modules/core/modelList/tool/model"),
+    var Tool = require("modules/core/modelList/tool/model"),
         SaveSelection;
 
     SaveSelection = Tool.extend({
@@ -43,10 +42,6 @@ define(function (require) {
                 "change:zoomLevel change:centerCoords": this.setUrl,
                 "change:url": this.setSimpleMapUrl
             });
-
-            if (_.has(Config, "simpleMap")) {
-                this.setSimpleMap(Config.simpleMap);
-            }
         },
 
         /**

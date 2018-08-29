@@ -1,5 +1,4 @@
 define(function (require) {
-
     var Requestor = require("modules/core/requestor"),
         Tool = require("modules/core/modelList/tool/model"),
         FeatureListerModel;

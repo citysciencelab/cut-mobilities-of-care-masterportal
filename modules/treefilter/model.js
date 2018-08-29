@@ -1,6 +1,5 @@
 define(function (require) {
-    var Config = require("config"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         Tool = require("modules/core/modelList/tool/model"),
         TreeFilter;
 
@@ -20,10 +19,11 @@ define(function (require) {
             perimeterMax: "1000", // Stammumfang[cm] bis
             searchCategoryString: "", // Treffer für die Vorschalgsuche der Baumgattung
             searchTypeString: "", // Treffer für die Vorschalgsuche der Baumart
-            renderToWindow: true
+            renderToWindow: true,
+            treeConf: ""
         }),
         url: function () {
-            return Radio.request("Util", "getPath", Config.treeConf);
+            return Radio.request("Util", "getPath", this.get("treeConf"));
         },
         initialize: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});

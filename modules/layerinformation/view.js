@@ -1,5 +1,6 @@
 define(function (require) {
     var Template = require("text!modules/layerinformation/template.html"),
+        ContentTemplate = require("text!modules/legend/content.html"),
         $ = require("jquery"),
         LayerInformationView;
 
@@ -7,13 +8,9 @@ define(function (require) {
     require("bootstrap/tab");
 
     LayerInformationView = Backbone.View.extend({
-        id: "layerinformation-desktop",
-        className: "layerinformation",
-        template: _.template(Template),
         events: {
             "click .glyphicon-remove": "hide"
         },
-
         initialize: function () {
             this.listenTo(this.model, {
                 // model.fetch() feuert das Event sync, sobald der Request erfoglreich war
@@ -21,10 +18,14 @@ define(function (require) {
                 "removeView": this.remove
             });
         },
-
+        id: "layerinformation-desktop",
+        className: "layerinformation",
+        template: _.template(Template),
+        contentTemplate: _.template(ContentTemplate),
         render: function () {
             var attr = this.model.toJSON();
 
+            this.addContentHTML();
             $("#map").append(this.$el.html(this.template(attr)));
             this.$el.draggable({
                 containment: "#map",
@@ -32,6 +33,19 @@ define(function (require) {
             });
             this.$el.show();
             return this;
+        },
+
+        /**
+         * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
+         * Dieses wird im template benötigt.
+         * @returns {void}
+         */
+        addContentHTML: function () {
+            var legends = this.model.get("legend");
+
+            _.each(legends.legend, function (legend) {
+                legend.html = this.contentTemplate(legend);
+            }, this);
         },
 
         hide: function () {

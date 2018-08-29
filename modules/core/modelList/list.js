@@ -1,6 +1,7 @@
 define(function (require) {
 
     var $ = require("jquery"),
+        Config = require("config"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
@@ -130,7 +131,7 @@ define(function (require) {
             else if (attrs.type === "tool") {
                 if (attrs.id === "print") {
                     if (attrs.version === undefined) {
-                        return new PrintModel(attrs, options);
+                        return new PrintModel(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                     }
                     return new PrintModelV2(attrs, options);
                 }
@@ -156,7 +157,7 @@ define(function (require) {
                     return new GetCoordModel(attrs, options);
                 }
                 else if (attrs.id === "measure") {
-                    return new Measure(attrs, options);
+                    return new Measure(_.extend(attrs, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}), options);
                 }
                 else if (attrs.id === "draw") {
                     return new Draw(attrs, options);
@@ -165,7 +166,7 @@ define(function (require) {
                     return new SearchByCoord(attrs, options);
                 }
                 else if (attrs.id === "saveSelection") {
-                    return new SaveSelection(attrs, options);
+                    return new SaveSelection(_.extend(attrs, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
                 }
                 else if (attrs.id === "animation") {
                     return new Animation(attrs, options);
@@ -177,7 +178,7 @@ define(function (require) {
                     return new AddWms(attrs, options);
                 }
                 else if (attrs.id === "treeFilter") {
-                    return new TreeFilter(attrs, options);
+                    return new TreeFilter(_.extend(attrs, _.has(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);
                 }
                 else if (attrs.id === "contact") {
                     return new Contact(attrs, options);
@@ -186,7 +187,7 @@ define(function (require) {
                     return new WfsFeatureFilter(attrs, options);
                 }
                 else if (attrs.id === "extendedFilter") {
-                    return new ExtendedFilter(attrs, options);
+                    return new ExtendedFilter(_.extend(attrs, _.has(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
                 }
                 else if (attrs.id === "featureLister") {
                     return new FeatureLister(attrs, options);

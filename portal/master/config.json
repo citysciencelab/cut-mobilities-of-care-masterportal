@@ -86,7 +86,7 @@
       "schulwegrouting": {
         "name": "Schulweg-Routing",
         "glyphicon": "glyphicon-filter",
-        "layerId": "11616"
+        "layerId": "8712"
       },
       "filter":
       {
@@ -98,7 +98,7 @@
         "allowMultipleQueriesPerLayer": true,
         "predefinedQueries": [
             {
-              "layerId": "11616",
+              "layerId": "8712",
               "isActive": false,
               "isSelected": false,
               "name": "Grundschulen",
@@ -110,7 +110,7 @@
               "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
             },
             {
-              "layerId": "11616",
+              "layerId": "8712",
               "isActive": false,
               "isSelected": false,
               "name": "Stadtteilschulen",
@@ -122,7 +122,7 @@
               "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
             },
             {
-              "layerId": "11616",
+              "layerId": "8712",
               "isActive": false,
               "isSelected": false,
               "name": "Gymnasien",
@@ -135,7 +135,7 @@
               "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
             },
             {
-              "layerId": "11616",
+              "layerId": "8712",
               "isActive": false,
               "isSelected": false,
               "name": "Sonderschulen",
@@ -217,7 +217,7 @@
           },
           "wfsFeatureFilter":
           {
-            "name": "Filter",
+            "name": "Feature Filter",
             "glyphicon": "glyphicon-filter",
             "deaktivateGFI": false
           },
@@ -255,7 +255,24 @@
           "animation":
           {
             "name": "Pendler Animation",
-            "glyphicon": "glyphicon-play-circle"
+            "glyphicon": "glyphicon-play-circle",
+            "steps": 30,
+            "url": "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            "params": {
+                "REQUEST": "GetFeature",
+                "SERVICE": "WFS",
+                "TYPENAME": "app:mrh_kreise",
+                "VERSION": "1.1.0",
+                "maxFeatures": "10000"
+            },
+            "featureType": "mrh_einpendler_gemeinde",
+            "attrAnzahl": "anzahl_einpendler",
+            "attrKreis": "wohnort_kreis",
+            "minPx": 5,
+            "maxPx": 30,
+            "num_kreise_to_style": 4,
+            "zoomlevel": 1,
+            "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
           },
           "saveSelection": {
             "name": "Auswahl speichern",
@@ -437,10 +454,11 @@
             "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
           }
         ],
-        "extendedFilter": true
+        "extendedFilter": true,
+        "autoRefresh": 6000
       },
       {
-        "id": "11616",
+        "id": "8712",
         "visibility": true,
         "name": "Schulinfosystem",
         "styleId": "8712",
@@ -471,13 +489,15 @@
         "extendedFilter": true
       },
       {
-        "id": [
-        {
-          "id": "946"
-        },
-        {
-          "id": "947"
-        }],
+        "id": "myId",
+        "children": [
+          {
+            "id": "946"
+          },
+          {
+            "id": "947"
+          }
+        ],
         "name": "Verkehrslage auf Autobahnen",
         "layerAttribution":
         {
@@ -488,13 +508,15 @@
         }
       },
       {
-        "id": [
-        {
-          "id": "682"
-        },
-        {
-          "id": "1731"
-        }],
+        "id": "myId2",
+        "children": [
+          {
+            "id": "682"
+          },
+          {
+            "id": "1731"
+          }
+        ],
         "name": "Kita und KH"
       }]
     }

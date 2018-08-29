@@ -499,7 +499,51 @@ Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten,
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|attrAnzahl|nein|String|"anzahl_einpendler"|Aus diesem Attribut des featureTypes wird die Anzahl der Pendler ausgelesen.|
+|attrKreis|nein|String|"wohnort_kreis"|Aus diesem Attribut werden die zur Auswahl stehenden Kreise ausgelesen.|
+|colors|nein|Array[String]|["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]|Angabe der verschiedenen Farben, die für die Animation verschiedener Kreise genutzt werden sollen in [rgba()-Notation](https://www.w3.org/TR/css3-color/#rgba-color) ([siehe auch hier](https://developer.mozilla.org/de/docs/Web/CSS/Farben#rgba)). Anzahl der Farben muss mit "num_kreise_to_style" übereinstimmen.|
+|featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType, der animiert werden soll.|
+|maxPx|nein|Number|20|Größe des größten Punkts in px.|
+|minPx|nein|Number|1|Größe des kleinsten Punkts in px.|
+|num_kreise_to_style|nein|Number|2|Anzahl, der mit verschiedenen Farben darzustellenden Kreise. Muss mit der Anzahl der Farben in "colors" übereinstimmen.|
+|[params](#markdown-header-animationparams)|nein|Object||Hier gibt es verschiedene Konfigurationsmöglichkeiten.|
+|steps|nein|Number|50|Anzahl der Schritte, die pro Animation durchlaufen werden.|
+|url|nein|String|"http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"|Die URL des zu animierenden Dienstes.|
+|zoomlevel|nein|Number|1|Zoomlevel, auf das nach Auswahl eines Kreises gezoomt wird.|
 
+### animation.params ###
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|REQUEST|nein|String|"GetFeature"|WFS-Request|
+|SERVICE|nein|String|"WFS"|Service-Typ|
+|TYPENAME|nein|String|"app:mrh_kreise"|FeatureType des WFS|
+|VERSION|nein|String|"1.1.0"|Version des Dienstes|
+|maxFeatures|nein|String|"10000"|maximale Anzahl an zu ladenden Features|
+
+**Beispiel animation:**
+
+```
+#!json
+animation: {
+            steps: 30,
+            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            params: {
+                REQUEST: "GetFeature",
+                SERVICE: "WFS",
+                TYPENAME: "app:mrh_kreise",
+                VERSION: "1.1.0",
+                maxFeatures: "10000"
+            },
+            featureType: "mrh_einpendler_gemeinde",
+            attrAnzahl: "anzahl_einpendler",
+            attrKreis: "wohnort_kreis",
+            minPx: 5,
+            maxPx: 30,
+            num_kreise_to_style: 4,
+            zoomlevel: 1,
+            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
+        }
+```
 ******
 ******
 
@@ -991,7 +1035,9 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |[bkg](#markdown-header-portalconfigsearchbarbkg)|nein|Object||Ein deutschlandweites Ortsverzeichnis.|
 |[gazetteer](#markdown-header-portalconfigsearchbargazetteer)|nein|Object||Das Ortsverzeichnis von Hamburg.|
 |minChars||Number||Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-|placeholder|nein|String|"Suche"|Gibt an welche Themen gesucht werden können.|
+|placeholder|nein|String|"Suche"|Platzhaltertext in der Suchleiste. Gibt dem Nutzer an welche Themen gesucht werden können.|
+|recommendedListLength|nein|Integer|5|Anzahl der Suchvorschläge.|
+|quickHelp|nein|Boolean|false|Gibt an ob eine portalseitige Hilfe angezeigt werden soll. Wenn sie nicht gesetzt ist, wird der globale Wert aus der config.js verwendet.|
 |[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)|nein|Object||Durchsuchen von speziell definierten WFS-Layern.|
 |[tree](#markdown-header-portalconfigsearchbartree)|nein|Object||Themensuche. Durchsucht den Themenbaum des Portals.|
 |[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)|nein|Object||Durchsuchen von sichtbar geschalteten WFS-Layern.|
@@ -1197,11 +1243,10 @@ Layer die in der [services.json](services.json.md) beschrieben sind, können üb
 
 ```
 
-Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Array bestehend aus Objekten, welche jeweils einen Layer in der Karte beschreiben. In Portalen mit dem Baumtyp *light*, werden die unter Hintergrundkarten beschriebenen Layer entsprechend der Konfigurationsreihenfolge von unten nach oben im Themenbaum einsortiert. Bei Portalen vom Baumtyp *custom* werden die Layer im Menüpunkt Themen/Hintergrundkarten, ebenfalls von unten nach oben, einsortiert.
-
 ******
 
-### Layerkonfiguration Hintergrundkarten ###
+### Themenconfig.Hintergrundkarten ###
+Der Abschnitt Hintergrundkarten besteht aus dem Attribut _Layer_. Es ist ein Array bestehend aus Objekten, welche jeweils einen Layer in der Karte beschreiben. In Portalen mit dem Baumtyp *light*, werden die unter Hintergrundkarten beschriebenen Layer entsprechend der Konfigurationsreihenfolge von unten nach oben im Themenbaum einsortiert. Bei Portalen vom Baumtyp *custom* werden die Layer im Menüpunkt Themen/Hintergrundkarten, ebenfalls von unten nach oben, einsortiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1237,12 +1282,11 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 
 ```
 
-Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche Möglichkeit, Layer unterhalb von Fachdaten  in Ordner zusammenzufassen. Ordner können wiederum auch Ordner enthalten, so kann eine beliebig tiefe Verschachtelung entstehen.
-
 ******
 
 
-### Ordnerkonfiguration Fachdaten ###
+### Themenconfig.Fachdaten ###
+Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche Möglichkeit, Layer unterhalb von Fachdaten in Ordner zusammenzufassen. Ordner können wiederum auch Unerordner enthalten, so kann eine beliebig tiefe Verschachtelung entstehen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1314,14 +1358,17 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
 
 ******
 
-### Layerkonfiguration Fachdaten ###
-Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für WFS-FeatureTypes.
+### Themenconfig.Fachdaten.Layer ###
+In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstellung von Layern auf der Karte beschrieben. 
+
+**Folgende Konfigurationen sind allgemeingültig:**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |displayInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden?|
 |gfiTheme|nein|String|Wert aus der [services.json](services.json.md) sonst *"default"*|Style für das GFI-Popover *(„default“* / *„table“*).|
-|id|ja|Array [String] oder String||ID aus [services.json](services.json.md).|
+|id|ja|Array [String] oder String||Siehe [Eingabe von ID](#markdown-header-layerid).|
+|children|nein|Array [Themenconfig.Fachdaten.Layer]||Für Grouplayer. Siehe [Eingabe von ID](#markdown-header-layerid).
 |layerAttribution|nein|HTML-String|Wert aus der [services.json](services.json.md)|Zusatzinformationen zum Layer, die in der Karte angezeigt werden sollen. Voraussetzung Control [attributions](#markdown-header-portalconfigcontrols) ist aktiviert.|
 |legendURL|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|URL zur Legende|
 |maxScale|nein|String|Wert aus der [services.json](services.json.md)|Höchste Maßstabszahl, bei der ein Layer angezeigt wird.|
@@ -1329,6 +1376,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |name|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
+|autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
 
 **Folgende Layerkonfigurationen gelten nur für WMS:**
 
@@ -1352,12 +1400,6 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
 |searchField|nein|String || Attray [String]||Attributname[n], über den die Suche die Featuers des Layers finden kann.|
 |styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md).|
-
-**Folgende Layerkonfigurationen gelten nur für GeoJSON:**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
 
 
 #### filterOptions ####
@@ -1405,5 +1447,70 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
     }
 ]
 ```
+### Layer.id ###
+Die [id einer Layerkonfiguration](#markdown-header-themenconfigfachdatenlayer) kann auf drei unterschiedliche Arten definiert werden:
 
+**Beispiel für einfache Layer:**
+
+In diesem Fall wird die genannte ID in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer.
+
+```
+#!json
+
+{
+  "id": "453"
+}
+```
+
+**Beispiel für WMS multiple Layers:**
+
+In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer gemäß den Angaben in der [services.json](services.json.md) vollständig.  
+Alle weiteren Werte im Array werden dahingehend ausgewertet, dass ihre _layers_-Angabe den  _layers-Parameter_ des Dienstes erweitern. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Näheres kann der [Dokumentation](http://docs.geoserver.org/latest/en/user/services/wms/reference.html#wms-getmap) entnommen werden. Dem Themenbaum wird nur ein Eintrag hinzugefügt.
+
+```
+#!json
+
+{
+  "id":["538","539","540"]
+}
+```
+
+**Beispiel für openlayers Layer Collection (GroupLayer):**
+
+In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Grouplayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).  
+
+* Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer). 
+* Das Attribut _id_ wird in diesem Fall als unique _String_ erwartet und darf nicht in der [services.json](services.json.md) gelistet sein.
+    * Über diesen Eintrag werden die _children_ gruppiert.
+    * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
+  
+Es gelten folgende Besonderheiten:  
+
+* Im Falle eines GFI wird jeder Layer einzeln abgefragt. 
+* Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt. 
+* Die Layerinformationen werden gekürzt (nur erster Layer) übernommen.
+
+```
+#!json
+
+{
+  "id": "myUniqueId",
+  "children": [    
+    {
+      "id": "947"
+    },
+    {
+      "id": "946"
+    },
+    {
+      "id":"2714",
+      "gfiTheme":"reisezeiten",
+      "styleId":"2119"
+    },
+    {
+      "id": "1562"
+    }
+  ]
+}
+```
 >Zurück zur [Dokumentation Masterportal](doc.md).

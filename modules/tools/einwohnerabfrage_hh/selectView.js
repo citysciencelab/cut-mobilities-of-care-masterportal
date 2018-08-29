@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var $ = require("jquery"),
-        SnippetDropdownView = require("modules/snippets/dropdown/view"),
+    var SnippetDropdownView = require("modules/snippets/dropdown/view"),
         ResultView = require("modules/tools/einwohnerabfrage_hh/resultView"),
         Template = require("text!modules/tools/einwohnerabfrage_hh/selectTemplate.html"),
         SnippetCheckBoxView = require("modules/snippets/checkbox/view"),

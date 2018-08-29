@@ -1,3 +1,49 @@
+# Changelog LGV Master-Portal 2.1.1
+
+FIXES:
+
+  - a2bce8dc metaidtomerge nicht alle objekte wurden gruppiert
+  - 3ec4b257 parcelSearch view getter entfernt, wms crossOrigiin entfernt, wfsfeaturefilter feature übergeben bei defaultStyle und marker und zoomlevel bei suche nach Schulstandorten
+
+# Changelog LGV Master-Portal 2.1.0
+
+NEU:
+
+  - b5e4ece5 new layertype sensorLayer for sensorThings-API
+  - 966711f0 groupLayer rawlayerlist
+  - 4e53968d osm search by grid
+  - 11bc78fa table-ui and freezecontrol
+  - f4822098 control visibility of the "SelectAll"-checkbox within leaf-folders
+  - 45dca5d1 merge confilcts and unittest for parseRoute
+  - 5b526f6d Transparency To Table LayerMenu
+  - fb807917 style-param-test
+  - 16abe7d7 measure Tool
+  - 1587ce39 table-gfi-design
+  - b38afd98 tablenav tools menu
+  - cc21bf2a Werkzeug-Button für table - Menü
+  - 9d090108 menutemplate for table
+  - 595af610 parameter for table ui
+
+FIXES:
+
+  - f1147895 Videostreaming mobil wurde nicht mit HLS sondern Flash gestreamt
+  - 714df6f7 bkg query neuenfelder straße
+  - 77bee217 mapMarker view Fehler bei Layer sichtbar schalten über searchbar
+  - e1d8d303 table theme height zu schmal bei vielen Einträgen
+  - c985d399 initiale Suche nach Straße + Hausnummer über query Parameter schlug fehl
+  - 0e4851cf im IE wird beim schalten in den fullScreen-Mode ein weißer Rand angezeigt
+  - 5b2c7718 sinnvolle default Koordinatensysteme für Hamburg
+  - 0c14730a Dipas 99 bug query
+  - 6f8defe3 update merge dev, merge conflicts
+  - 4e82ca43 mapSize mit Menu falsch berechnet was zu falscher Koordinatenangabe führte
+  - b292e9bb mapheight on resize
+  - 25fd5fdf UrlParams funktionieren nicht mehr
+  - 0fdfd56b Flurstückssuche löscht default Flurstücksnenner beim Wechsel der Gemarkung bei parcelDenominator = true
+  - 63fbbbd4 Flash-Videostream im Chrome konnnte nicht abgespielt werden
+  - dd8e5d30 contact tests wenn keine portalconfig geladen wird
+  - 2f9102eb betrieb contact configjson new portaltitleObject
+  - 8db97eed filter dropdown css overflow-y hinzugefügt
+
 # Changelog LGV Master-Portal 2.0.4
 
 NEU:

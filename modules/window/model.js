@@ -1,5 +1,4 @@
 define(function () {
-
     var Window = Backbone.Model.extend({
         defaults: {
             isCollapsed: false,
@@ -35,5 +34,5 @@ define(function () {
         }
     });
 
-    return new Window();
+    return Window;
 });

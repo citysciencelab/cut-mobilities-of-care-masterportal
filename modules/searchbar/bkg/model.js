@@ -92,7 +92,9 @@ define(function (require) {
         },
         directPushSuggestions: function (data) {
             if (data.length === 1) {
-                this.bkgSearch(data[0].suggestion);
+                this.bkgSearch({
+                    name: data[0].suggestion
+                });
             }
             else {
                 _.each(data, function (hit) {

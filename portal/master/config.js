@@ -1,36 +1,16 @@
 define(function () {
     var config = {
-        animation: {
-            steps: 30,
-            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
-            params: {
-                REQUEST: "GetFeature",
-                SERVICE: "WFS",
-                TYPENAME: "app:mrh_kreise",
-                VERSION: "1.1.0",
-                maxFeatures: "10000"
-            },
-            featureType: "mrh_einpendler_gemeinde",
-            attrAnzahl: "anzahl_einpendler",
-            attrKreis: "wohnort_kreis",
-            minPx: 5,
-            maxPx: 30,
-            num_kreise_to_style: 4,
-            zoomlevel: 1,
-            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
-        },
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         gfiWindow: "attached",
         simpleMap: false,
         wfsImgPath: "../node_modules/lgv-config/img/",
         allowParametricURL: true,
-        zoomtofeature: {
+        zoomToFeature: {
             attribute: "flaechenid",
-            imglink: "../img/location_eventlotse.svg",
-            layerid: "4561",
-            WFSid: "4560"
+            imgLink: "../img/location_eventlotse.svg",
+            layerId: "4561",
+            wfsId: "4560"
         },
-        postMessageUrl: "http://localhost:8080",
         namedProjections: [
             // GK DHDN
             ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -42,7 +22,6 @@ define(function () {
             ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
         ],
         footer: {
-            visibility: true,
             urls: [
                 {
                     "bezeichnung": "Kartographie und Gestaltung: ",
@@ -67,7 +46,10 @@ define(function () {
         isMenubarVisible: true,
         geoAPI: false,
         clickCounter: {},
-        remoteInterface: true
+        remoteInterface: {
+            postMessageUrl: "http://localhost:8080"
+        },
+        browserPrint: {}
     };
 
     return config;

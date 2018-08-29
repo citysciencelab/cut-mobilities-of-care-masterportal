@@ -26,7 +26,6 @@ define(function (require) {
                 "addFeatureToList": this.addFeatureToList,
                 "removeFeatureFromList": this.removeFeatureFromList
             }, this);
-
         },
 
         /**
@@ -69,6 +68,7 @@ define(function (require) {
          * creates a JSON where an object matches to a row
          * one object attribute is created for each feature (column)
          * @param {object} gfiAttributes -
+         *@param {object} themeConfig attribute configuration from schulinfo theme
          * @returns {object[]} list - one object per row
          */
         prepareFeatureListToShow: function (gfiAttributes) {

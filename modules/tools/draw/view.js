@@ -4,7 +4,6 @@ define(function (require) {
         DrawToolView;
 
     DrawToolView = Backbone.View.extend({
-        template: _.template(DrawTemplate),
         events: {
             "change .interaction": "setDrawType",
             "keyup .text input": "setText",
@@ -25,6 +24,8 @@ define(function (require) {
             "click .downloadDrawing": "downloadFeatures"
         },
         initialize: function () {
+            this.template = _.template(DrawTemplate);
+
             require(["modules/tools/download/view"], function (DownloadView) {
                 new DownloadView();
             });
@@ -32,7 +33,6 @@ define(function (require) {
                 "change:isActive": this.render
             });
         },
-
         render: function (model, value) {
             if (value) {
 

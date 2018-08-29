@@ -79,20 +79,34 @@ define(function (require) {
                 }),
                 hsnr = _.filter(arr, function (val, index, list) {
                     var patt = /^\D*$/,
-                        preString = patt.test(list[index - 1]);
+                        preString = patt.test(list[index - 1]),
+                        isHouseNr = false;
 
                     if (index >= 1) {
                         if (preString) { // vorher ein String
-                            return val.match(/^[0-9]{1,4}\D?$/);
+                            isHouseNr = val.match(/^[0-9]{1,4}\D?$/);
                         }
                     }
+                    return isHouseNr;
                 }),
                 query = "&query=" + _.without(arr, plz[0], hsnr[0]),
                 bbox = _.isNull(this.get("bbox")) === false ? this.get("bbox") : "",
-                filter = plz.length === 1 && hsnr.length === 1 ? "&filter=(plz:" + plz + ") AND (typ:Haus) AND haus:(" + hsnr + "*)" :
-                    plz.length === 1 && hsnr.length !== 1 ? "&filter=(plz:" + plz + ") AND (typ:Strasse OR typ:Ort OR typ:Geoname)" :
-                        plz.length !== 1 && hsnr.length === 1 ? "&filter=(typ:Haus) AND haus:(" + hsnr + "*)" : " &filter=(typ:Strasse OR typ:Ort OR typ:Geoname)";
+                filter = "";
 
+            if (plz.length === 1 && hsnr.length === 1) {
+                filter = "&filter=(plz:" + plz + ") AND (typ:Haus) AND haus:(" + hsnr + "*)";
+            }
+            else if (plz.length === 1 && hsnr.length !== 1) {
+                filter = "&filter=(plz:" + plz + ") AND (typ:Strasse OR typ:Ort OR typ:Geoname)";
+            }
+            else if (plz.length !== 1 && hsnr.length === 1) {
+                filter = "&filter=(typ:Haus) AND haus:(" + hsnr + "*)";
+            }
+            else {
+                filter = "&filter=(typ:Strasse OR typ:Ort OR typ:Geoname)";
+            }
+
+            query = encodeURI(query);
             $.ajax({
                 url: this.get("bkgSuggestURL"),
                 data: "count=5" + query + bbox + filter,
@@ -126,7 +140,7 @@ define(function (require) {
         geosearchByBKG: function (value, target) {
             $.ajax({
                 url: this.get("bkgGeosearchURL"),
-                data: this.get("epsgCode") + "&count=1&outputformat=json&query=" + value,
+                data: this.get("epsgCode") + "&count=1&outputformat=json&query=" + encodeURI(value),
                 context: this, // das model
                 async: true,
                 type: "GET",

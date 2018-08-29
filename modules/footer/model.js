@@ -1,6 +1,5 @@
-define(function (require) {
-    var Config = require("config"),
-        FooterModel;
+define(function () {
+    var FooterModel;
 
     FooterModel = Backbone.Model.extend({
         defaults: {
@@ -12,20 +11,6 @@ define(function (require) {
                     "alias_mobil": "LGV Hamburg"
                 }
             ]
-        },
-        initialize: function () {
-            var urls;
-
-            if (!_.isUndefined(Config.footer.urls)) {
-                urls = Config.footer.urls;
-
-                if (!_.isUndefined(urls[0].bezeichnung) &&
-                !_.isUndefined(urls[0].url) &&
-                !_.isUndefined(urls[0].alias)) {
-                    this.set("urls", urls);
-                }
-            }
-
         }
     });
 

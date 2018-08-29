@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var Radio = require("backbone.radio"),
-        Parser = require("modules/core/configLoader/parser"),
+    var Parser = require("modules/core/configLoader/parser"),
         CustomTreeParser;
 
     CustomTreeParser = Parser.extend({
@@ -20,18 +19,17 @@ define(function (require) {
                     var objFromRawList,
                         objsFromRawList,
                         layerExtended = layer,
-                        layerdefinitions,
                         mergedObjsFromRawList;
 
                     // Für Singel-Layer (ol.layer.Layer)
                     // z.B.: {id: "5181", visible: false}
-                    if (_.isString(layerExtended.id)) {
+                    if (!_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
                         objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerExtended.id});
 
                         if (_.isNull(objFromRawList)) { // Wenn LayerID nicht definiert, dann Abbruch
                             return;
                         }
-                        layerExtended = _.extend(objFromRawList, layerExtended);
+                        layerExtended = _.extend(objFromRawList, layerExtended, {"isChildLayer": false});
                     }
                     // Für Single-Layer (ol.layer.Layer) mit mehreren Layern(FNP, LAPRO, Geobasisdaten (farbig), etc.)
                     // z.B.: {id: ["550,551,552,...,559"], visible: false}
@@ -42,26 +40,28 @@ define(function (require) {
                         if (layerExtended.id.length !== mergedObjsFromRawList.layers.split(",").length) { // Wenn nicht alle LayerIDs des Arrays definiert, dann Abbruch
                             return;
                         }
-                        layerExtended = _.extend(mergedObjsFromRawList, _.omit(layerExtended, "id"));
+                        layerExtended = _.extend(mergedObjsFromRawList, _.omit(layerExtended, "id"), {"isChildLayer": false});
                     }
                     // Für Gruppen-Layer (ol.layer.Group)
-                    // z.B.: {id: [{ id: "1364" }, { id: "1365" }], visible: false }
-                    else if (_.isArray(layerExtended.id) && _.isObject(layerExtended.id[0])) {
-                        layerdefinitions = [];
-
-                        _.each(layerExtended.id, function (childLayer) {
+                    // z.B.: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
+                    else if (_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
+                        layerExtended.children = _.map(layerExtended.children, function (childLayer) {
                             objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: childLayer.id});
 
                             if (!_.isNull(objFromRawList)) {
-                                objFromRawList = _.extend(objFromRawList, childLayer);
-                                layerdefinitions.push(objFromRawList);
+                                return _.extend(objFromRawList, childLayer, {"isChildLayer": true});
                             }
+
+                            return undefined;
+                        }, this);
+
+                        layerExtended.children = _.filter(layerExtended.children, function (childLayer) {
+                            return !_.isUndefined(childLayer);
                         });
-                        if (layerExtended.id.length !== layerdefinitions.length) { // Wenn nicht alle LayerIDs des Arrays definiert, dann Abbruch
-                            return;
+
+                        if (layerExtended.children.length > 0) {
+                            layerExtended = _.extend(layerExtended, {typ: "GROUP", isChildLayer: false});
                         }
-                        layerExtended = _.extend(layerExtended, {typ: "GROUP", id: layerdefinitions[0].id + "_groupLayer", layerdefinitions: layerdefinitions});
-                        Radio.trigger("RawLayerList", "addGroupLayer", layerExtended);
                     }
 
                     // HVV :(

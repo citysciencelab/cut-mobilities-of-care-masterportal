@@ -65,7 +65,6 @@ define(function (require) {
             "modules/core/testParametricUrl.js",
             "modules/core/modelList/layer/testGeoJson.js",
             "modules/core/modelList/layer/testSensor.js",
-            "modules/core/modelList/layer/testGroup.js",
             "modules/core/modelList/testList.js",
             "modules/contact/testModel.js",
             "modules/core/testRawLayerList.js",
@@ -93,7 +92,9 @@ define(function (require) {
             "modules/tools/graph/testModel.js",
             "modules/functionalities/browserPrint/testModel.js",
             "modules/tools/print/testModel.js",
-            "modules/tools/print/testBuildSpec.js"
+            "modules/tools/print/testBuildSpec.js",
+            "modules/tools/searchByCoord/testModel.js",
+            "modules/legend/legendModel.js"
         ], function () {
             mocha.run();
         });
