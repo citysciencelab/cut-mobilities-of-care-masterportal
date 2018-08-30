@@ -5,9 +5,14 @@ define(function (require) {
         WMSLayer;
 
     WMSLayer = Layer.extend({
-        defaults: _.extend({}, Layer.prototype.defaults, {
-            infoFormat: "text/xml"
-        }),
+        defaults: function () {
+            // extended die Layer defaults by value
+            return _.extend(_.result(Layer.prototype, "defaults"), {
+                infoFormat: "text/xml",
+                // Eine Veränderung der SESSIONID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
+                sessionId: _.random(9999999)
+            });
+        },
 
         initialize: function () {
             if (!this.get("isChildLayer")) {
@@ -28,8 +33,7 @@ define(function (require) {
                 source;
 
             params = {
-                t: new Date().getMilliseconds(),
-                zufall: Math.random(),
+                SESSIONID: this.get("sessionId"),
                 LAYERS: this.get("layers"),
                 FORMAT: this.get("format") === "nicht vorhanden" ? "image/png" : this.get("format"),
                 VERSION: this.get("version"),
@@ -44,6 +48,7 @@ define(function (require) {
             this.set("tileloaderror", false);
 
             if (this.get("singleTile") !== true) {
+                // TileWMS can be cached
                 this.set("tileCountloaderror", 0);
                 this.set("tileCount", 0);
                 source = new ol.source.TileWMS({
@@ -78,6 +83,7 @@ define(function (require) {
                 this.setLayerSource(source);
             }
             else {
+                // ImageWMS can not be cached
                 this.setLayerSource(new ol.source.ImageWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
@@ -223,11 +229,13 @@ define(function (require) {
         },
 
         /**
-         * Lädt den WMS neu
+         * Lädt den WMS neu, indem ein Parameter verändert wird.
          * @returns {void}
          */
         updateSource: function () {
-            this.get("layer").getSource().updateParams({zufall: Math.random()});
+            this.newSessionId();
+
+            this.get("layer").getSource().updateParams({SESSIONID: this.get("sessionId")});
         },
 
         setInfoFormat: function (value) {
@@ -262,6 +270,14 @@ define(function (require) {
                 coordinate = Radio.request("GFI", "getCoordinate");
 
             return this.get("layerSource").getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")});
+        },
+
+        /*
+        * random setter for sessionId
+        * @returns {void}
+        */
+        newSessionId: function () {
+            this.set("sessionId", _.random(9999999));
         }
     });
 
