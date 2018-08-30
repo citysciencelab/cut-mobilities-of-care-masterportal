@@ -13,8 +13,8 @@ define(function (require) {
             id: "filter",
             queryCollection: {},
             isActive: false,
-            allowMultipleQueriesPerLayer: true,
-            liveZoomToFeatures: false,
+            allowMultipleQueriesPerLayer: false,
+            liveZoomToFeatures: true,
             sendToRemote: false,
             renderToSidebar: true,
             renderToWindow: false

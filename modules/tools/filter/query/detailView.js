@@ -25,7 +25,7 @@ define(function (require) {
                 "hideAllInfoText": this.hideAllInfoText
             }, this);
         },
-        className: "detail-view-container",
+        className: "detail-view",
         template: _.template(Template),
         render: function () {
             var attr;
