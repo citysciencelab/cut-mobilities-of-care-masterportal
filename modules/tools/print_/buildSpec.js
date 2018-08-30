@@ -70,7 +70,7 @@ define(function (require) {
                     layers.push(this.buildTileWms(layer));
                 }
                 else if (layer instanceof ol.layer.Vector) {
-                    layers.push(this.buildVector(layer));
+                    layers.push(this.buildVector(layer, Radio.request("MapView", "getCurrentExtent"),));
                 }
             }, this);
             attributes.map.layers = layers.reverse();
@@ -121,10 +121,9 @@ define(function (require) {
          * @param {ol.layer.Vector} layer - vector layer with vector source
          * @returns {object} geojson layer spec
          */
-        buildVector: function (layer) {
+        buildVector: function (layer, extent) {
             var source = layer.getSource(),
                 geojsonList = [],
-                extent = Radio.request("MapView", "getCurrentExtent"),
                 features = source.getFeaturesInExtent(extent);
 
             return {
@@ -267,7 +266,7 @@ define(function (require) {
         getImageName: function (imageSrc) {
             var start = imageSrc.lastIndexOf("/");
 
-            return imageSrc.substr(start);
+            return imageSrc.indexOf("/") !== -1 ? imageSrc.substr(start) : "/" + imageSrc;
         },
 
         /**

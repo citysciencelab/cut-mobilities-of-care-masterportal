@@ -203,7 +203,8 @@
             "mapfishServiceId": "mapfish_qs",
             "printAppId": "mrh",
             "filename": "Ausdruck",
-            "title": "Mein Titel"
+            "title": "Mein Titel",
+            "version" : "mapfish_print_3"
           },
           "searchByCoord":
           {
