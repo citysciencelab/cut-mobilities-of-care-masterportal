@@ -127,7 +127,6 @@ define(function (require) {
 
             return {
                 type: "geojson",
-                opacity: layer.getOpacity(),
                 style: this.buildStyle(layer, features, geojsonList),
                 geojson: geojsonList
             };
@@ -205,8 +204,7 @@ define(function (require) {
                 type: "point",
                 graphicWidth: style.getSize()[0] * style.getScale(),
                 graphicHeight: style.getSize()[1] * style.getScale(),
-                externalGraphic: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img" + this.getImageName(style.getSrc()),
-                opacity: style.getOpacity()
+                externalGraphic: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img" + this.getImageName(style.getSrc())
             };
         },
 

@@ -369,7 +369,7 @@ define(function (require) {
             }, this);
 
             if (!found) {
-                source = new ol.source.Vector({useSpatialIndex: false});
+                source = new ol.source.Vector();
                 layer = new ol.layer.Vector({
                     name: name,
                     source: source,
