@@ -353,11 +353,19 @@ define(function (require) {
          * @returns {string} hex color
          */
         rgbArrayToHex: function (rgb) {
-            var hexR = this.addZero(rgb[0].toString(16)),
-                hexG = this.addZero(rgb[1].toString(16)),
-                hexB = this.addZero(rgb[2].toString(16));
+            var hexR,
+                hexG,
+                hexB,
+                hexString = "#000000";
 
-            return "#" + hexR + hexG + hexB;
+            if (_.isArray(rgb) && rgb.length >= 3) {
+                hexR = this.addZero(rgb[0].toString(16));
+                hexG = this.addZero(rgb[1].toString(16));
+                hexB = this.addZero(rgb[2].toString(16));
+                hexString = "#" + hexR + hexG + hexB;
+            }
+
+            return hexString;
         },
 
         /**

@@ -217,5 +217,27 @@ define(function (require) {
             });
 
         });
+        describe("addZero", function () {
+            it("should create hex string part with leading 0 if input length === 1", function () {
+                expect(model.addZero("A")).to.deep.include("0A");
+            });
+            it("should create hex string part without leading 0 if input length >1", function () {
+                expect(model.addZero("ff")).to.deep.include("ff");
+            });
+        });
+        describe("rgbArrayToHex", function () {
+            it("should create hex string from rgbArray", function () {
+                expect(model.rgbArrayToHex([255, 255, 255])).to.deep.include("#ffffff");
+            });
+            it("should create default hex string from empty rgbArray", function () {
+                expect(model.rgbArrayToHex([])).to.deep.include("#000000");
+            });
+            it("should create default hex string from undefined rgbArray", function () {
+                expect(model.rgbArrayToHex(undefined)).to.deep.include("#000000");
+            });
+            it("should create hex string from rgbArray with transparency", function () {
+                expect(model.rgbArrayToHex([255, 0, 0, 1])).to.deep.include("#ff0000");
+            });
+        });
     });
 });
