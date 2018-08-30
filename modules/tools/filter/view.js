@@ -16,9 +16,12 @@ define(function (require) {
 
                         if (model.get("queryCollection").length < 1) {
                             model.createQueries(model.get("predefinedQueries"));
+                            this.render();
                         }
-                        this.render();
-                        this.renderDetailView();
+                        else {
+                            this.renderDetailView();
+                            this.render();
+                        }
                     }
                     else {
                         this.$el.remove();
@@ -41,7 +44,6 @@ define(function (require) {
                     this.model.createQueries(this.model.get("predefinedQueries"));
                 }
                 this.render();
-                this.renderDetailView();
             }
         },
         id: "filter-view",
