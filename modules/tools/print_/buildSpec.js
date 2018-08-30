@@ -24,15 +24,17 @@ define(function (require) {
             this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
         },
         updateMetaData: function (layerName, parsedData) {
-            var layers = this.get("attributes").legend.layers,
+            var layers = _.has(this.get("attributes"), "legend") && _.has(this.get("attributes").legend, "layers") ? this.get("attributes").legend.layers : undefined,
                 layer = _.findWhere(layers, {layerName: layerName});
 
-            layer.metaDate = parsedData.date;
-            layer.metaOwner = parsedData.orga;
-            layer.metaAddress = this.parseAddress(parsedData.address);
-            layer.metaEmail = parsedData.email;
-            layer.metaTel = parsedData.tel;
-            layer.metaUrl = parsedData.url;
+            if (!_.isUndefined(layer)) {
+                layer.metaDate = _.has(parsedData, "date") ? parsedData.date : "";
+                layer.metaOwner = _.has(parsedData, "orga") ? parsedData.orga : "";
+                layer.metaAddress = _.has(parsedData, "address") ? this.parseAddress(parsedData.address) : "";
+                layer.metaEmail = _.has(parsedData, "email") ? parsedData.email : "";
+                layer.metaTel = _.has(parsedData, "tel") ? parsedData.tel : "";
+                layer.metaUrl = _.has(parsedData, "url") ? parsedData.url : "";
+            }
         },
         parseAddress: function (addressObj) {
             var street = _.isUndefined(addressObj) ? undefined : addressObj.street,
