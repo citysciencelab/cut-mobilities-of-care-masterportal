@@ -127,6 +127,7 @@ define(function (require) {
 
             return {
                 type: "geojson",
+                opacity: layer.getOpacity(),
                 style: this.buildStyle(layer, features, geojsonList),
                 geojson: geojsonList
             };
