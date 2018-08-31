@@ -169,14 +169,14 @@ define(function (require) {
             if (this.canShowHit(searched)) {
 
                 _.each(params, function (param) {
-                    if ((address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
-                        (address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                        (address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
+                    if ((_.has(address, "house_number") && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
+                        (_.has(address, "road") && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (_.has(address, "pedestrian") && address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (_.has(address, "city") && address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (_.has(address, "city_district") && address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (_.has(address, "town") && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (_.has(address, "village") && address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                        (_.has(address, "suburb") && address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
                     ) {
                         this.push(param);
                     }
