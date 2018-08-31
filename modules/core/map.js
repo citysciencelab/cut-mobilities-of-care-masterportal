@@ -1,10 +1,14 @@
-import ol from "openlayers";
+import Map from "ol/Map.js";
+import VectorLayer from "ol/layer/Vector.js";
+import {Group as LayerGroup} from "ol/layer.js";
+import VectorSource from "ol/source/Vector.js";
+import {defaults as olDefaultInteractions} from "ol/interaction.js";
 import MapView from "./mapView";
 import $ from "jquery";
 import Radio from "backbone.radio";
 import _ from "underscore";
 
-const Map = Backbone.Model.extend({
+const map = Backbone.Model.extend({
 
     /**
      *
@@ -62,13 +66,13 @@ const Map = Backbone.Model.extend({
 
         this.set("view", mapView.get("view"));
 
-        this.set("map", new ol.Map({
+        this.set("map", new Map({
             logo: null,
             renderer: "canvas",
             target: "map",
             view: this.get("view"),
             controls: [],
-            interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
+            interactions: olDefaultInteractions({altShiftDragRotate: false, pinchRotate: false})
         }));
 
         Radio.trigger("ModelList", "addInitialyNeededModels");
@@ -228,7 +232,7 @@ const Map = Backbone.Model.extend({
         layerList = this.get("map").getLayers().getArray();
         // der erste Vectorlayer in der Liste
         firstVectorLayer = _.find(layerList, function (veclayer) {
-            return veclayer instanceof ol.layer.Vector;
+            return veclayer instanceof VectorLayer;
         });
         // Index vom ersten VectorLayer in der Layerlist
         index = _.indexOf(layerList, firstVectorLayer);
@@ -260,11 +264,11 @@ const Map = Backbone.Model.extend({
         this.setImportDrawMeasureLayersOnTop(layersCollection);
 
         // Laden des Layers überwachen
-        if (layer instanceof ol.layer.Group) {
+        if (layer instanceof LayerGroup) {
             layer.getLayers().forEach(function (singleLayer) {
                 singleLayer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
                 singleLayer.getSource().on("wmsloadstart", this.addLoadingLayer, this);
-            });
+            }.bind(this));
         }
         else {
             layer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
@@ -368,8 +372,8 @@ const Map = Backbone.Model.extend({
         }, this);
 
         if (!found) {
-            source = new ol.source.Vector({useSpatialIndex: false});
-            layer = new ol.layer.Vector({
+            source = new VectorSource({useSpatialIndex: false});
+            layer = new VectorLayer({
                 name: name,
                 source: source,
                 alwaysOnTop: true
@@ -400,4 +404,4 @@ const Map = Backbone.Model.extend({
     }
 });
 
-export default Map;
+export default map;
