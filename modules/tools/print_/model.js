@@ -10,7 +10,7 @@ define(function (require) {
             // the id from the rest services json for the mapfish app
             mapfishServiceId: undefined,
             // the identifier of one of the available mapfish print configurations
-            printAppId: "default",
+            printAppId: "master",
             // available layouts of the specified print configuration
             layoutList: [],
             currentLayout: undefined,
@@ -20,7 +20,7 @@ define(function (require) {
             // current print scale
             currentScale: undefined,
             // title for the report
-            title: "test",
+            title: "PrintResult",
             // is scale selected by the user over the view
             isScaleSelectedManually: false,
             // true if the current layout supports meta data
