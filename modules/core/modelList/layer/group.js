@@ -1,4 +1,4 @@
-import ol from "openlayers";
+import {Group as LayerGroup} from "ol/layer.js";
 import Layer from "./model";
 import WMSLayer from "./wms";
 import WFSLayer from "./wfs";
@@ -58,7 +58,7 @@ const GroupLayer = Layer.extend({
         var layers = _.map(this.get("layerSource"), function (layer) {
                 return layer.get("layer");
             }),
-            groupLayer = new ol.layer.Group({
+            groupLayer = new LayerGroup({
                 layers: layers,
                 visible: false
             });

@@ -1,8 +1,10 @@
-import ol from "openlayers";
 import Config from "../../portal/master/config";
 import $ from "jquery";
 import Radio from "backbone.radio";
 import _ from "underscore";
+import {Projection, addProjection} from "ol/proj.js";
+import View from "ol/View.js";
+
 
 const MapView = Backbone.Model.extend({
     /**
@@ -311,7 +313,7 @@ const MapView = Backbone.Model.extend({
             return;
         }
 
-        proj = new ol.proj.Projection({
+        proj = new Projection({
             code: epsgCode,
             units: this.get("units"),
             extent: this.get("extent"),
@@ -319,7 +321,7 @@ const MapView = Backbone.Model.extend({
             global: false
         });
 
-        ol.proj.addProjection(proj);
+        addProjection(proj);
 
         // attach epsg and projection object to Config.view for further access by other modules
         Config.view = {
@@ -331,7 +333,7 @@ const MapView = Backbone.Model.extend({
     },
 
     setView: function () {
-        var view = new ol.View({
+        var view = new View({
             projection: this.get("projection"),
             center: this.get("startCenter"),
             extent: this.get("extent"),
@@ -397,7 +399,7 @@ const MapView = Backbone.Model.extend({
 
     getResolution: function (scale) {
         var units = this.get("units"),
-            mpu = ol.proj.METERS_PER_UNIT[units],
+            mpu = Projection.METERS_PER_UNIT[units],
             dpi = this.get("DOTS_PER_INCH"),
             resolution = scale / (mpu * 39.37 * dpi);
 

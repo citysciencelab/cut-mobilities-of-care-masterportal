@@ -1,8 +1,12 @@
-import ol from "openlayers";
 import Layer from "./model";
 import $ from "jquery";
 import _ from "underscore";
-import * as Radio from "backbone.Radio";
+import Radio from "backbone.radio";
+import VectorSource from "ol/source/Vector.js";
+import Cluster from "ol/source/Cluster.js";
+import VectorLayer from "ol/layer/Vector.js";
+import {WFS} from "ol/format.js";
+
 
 const WFSLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults),
@@ -20,7 +24,7 @@ const WFSLayer = Layer.extend({
      * @uses this createClusterLayerSource
      */
     createLayerSource: function () {
-        this.setLayerSource(new ol.source.Vector());
+        this.setLayerSource(new VectorSource());
         if (this.has("clusterDistance")) {
             this.createClusterLayerSource();
         }
@@ -31,7 +35,7 @@ const WFSLayer = Layer.extend({
      * @return {[type]} [description]
      */
     createClusterLayerSource: function () {
-        this.setClusterLayerSource(new ol.source.Cluster({
+        this.setClusterLayerSource(new Cluster({
             source: this.get("layerSource"),
             distance: this.get("clusterDistance")
         }));
@@ -42,7 +46,7 @@ const WFSLayer = Layer.extend({
      * @return {[type]} [description]
      */
     createLayer: function () {
-        this.setLayer(new ol.layer.Vector({
+        this.setLayer(new VectorLayer({
             source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.get("layerSource"),
             name: this.get("name"),
             typ: this.get("typ"),
@@ -65,7 +69,7 @@ const WFSLayer = Layer.extend({
     },
 
     getWfsFormat: function () {
-        return new ol.format.WFS({
+        return new WFS({
             featureNS: this.get("featureNS"),
             featureType: this.get("featureType")
         });
@@ -128,7 +132,7 @@ const WFSLayer = Layer.extend({
         var wfsReader,
             features;
 
-        wfsReader = new ol.format.WFS({
+        wfsReader = new WFS({
             featureNS: this.get("featureNS")
         });
         features = wfsReader.readFeatures(data);

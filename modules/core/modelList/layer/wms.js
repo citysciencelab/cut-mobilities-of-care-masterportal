@@ -1,8 +1,10 @@
-import "openlayers";
 import Layer from "./model";
 import _ from "underscore";
-import * as Radio from "backbone.Radio";
-
+import Radio from "backbone.radio";
+import TileWMS from "ol/source/TileWMS.js";
+import TileGrid from "ol/tilegrid/TileGrid.js";
+import ImageWMS from "ol/source/ImageWMS.js";
+import {Image, Tile} from "ol/layer.js";
 
 const WMSLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults, {
@@ -46,12 +48,12 @@ const WMSLayer = Layer.extend({
         if (this.get("singleTile") !== true) {
             this.set("tileCountloaderror", 0);
             this.set("tileCount", 0);
-            source = new ol.source.TileWMS({
+            source = new TileWMS({
                 url: this.get("url"),
                 attributions: this.get("olAttribution"),
                 gutter: this.get("gutter"),
                 params: params,
-                tileGrid: new ol.tilegrid.TileGrid({
+                tileGrid: new TileGrid({
                     resolutions: Radio.request("MapView", "getResolutions"),
                     origin: [
                         442800,
@@ -78,7 +80,7 @@ const WMSLayer = Layer.extend({
             this.setLayerSource(source);
         }
         else {
-            this.setLayerSource(new ol.source.ImageWMS({
+            this.setLayerSource(new ImageWMS({
                 url: this.get("url"),
                 attributions: this.get("olAttribution"),
                 params: params
@@ -107,10 +109,10 @@ const WMSLayer = Layer.extend({
         };
 
         if (this.get("singleTile") !== true) {
-            this.setLayer(new ol.layer.Tile(layerobjects));
+            this.setLayer(new Tile(layerobjects));
         }
         else {
-            this.setLayer(new ol.layer.Image(layerobjects));
+            this.setLayer(new Image(layerobjects));
         }
     },
 
@@ -143,10 +145,10 @@ const WMSLayer = Layer.extend({
      * @returns {void}
      */
     registerLoadingListeners: function () {
-        if (this.get("layerSource") instanceof ol.source.TileWMS) {
+        if (this.get("layerSource") instanceof TileWMS) {
             this.registerTileWMSLoadEvents();
         }
-        else if (this.get("layerSource") instanceof ol.source.ImageWMS) {
+        else if (this.get("layerSource") instanceof ImageWMS) {
             this.registerImageLoadEvents();
         }
     },
@@ -200,10 +202,10 @@ const WMSLayer = Layer.extend({
      * @returns {void}
      */
     registerErrorListener: function () {
-        if (this.get("layerSource") instanceof ol.source.TileWMS) {
+        if (this.get("layerSource") instanceof TileWMS) {
             this.registerTileloadError();
         }
-        else if (this.get("layerSource") instanceof ol.source.ImageWMS) {
+        else if (this.get("layerSource") instanceof ImageWMS) {
             this.registerImageloadError();
         }
     },
