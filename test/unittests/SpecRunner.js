@@ -95,7 +95,9 @@ define(function (require) {
             "modules/tools/searchByCoord/testModel.js",
             "modules/legend/legendModel.js",
             "modules/tools/styleWMS/testModel.js",
-            "modules/tools/styleWMS/testView.js"
+            "modules/tools/styleWMS/testView.js",
+            "modules/menu/desktop/layer/testViewLight.js",
+            "modules/menu/desktop/layer/testViewSelection.js"
         ], function () {
             mocha.run();
         });
