@@ -825,6 +825,55 @@ define(function (require) {
                 });
             });
         });
+        describe("buildPolygonStyle", function () {
+            it("should convert polygonStyle into style object for print", function () {
+                var polygonStyleModel = new Style({
+                        class: "POLYGON",
+                        subClass: "SIMPLE",
+                        polygonFillColor: [189, 189, 0, 1],
+                        polygonStrokeColor: [98, 98, 0, 1],
+                        polygonStrokeWidth: 2
+                    }),
+                    vectorLayer = new ol.layer.Vector({
+                        style: function (feature) {
+                            return polygonStyleModel.createStyle(feature, false);
+                        }
+                    }),
+                    style = buildSpecModel.getFeatureStyle(polygonFeatures[0], vectorLayer)[0];
+
+                expect(buildSpecModel.buildPolygonStyle(style)).to.deep.own.include({
+                    fillColor: "#bdbd00",
+                    fillOpacity: 1,
+                    strokeColor: "#626200",
+                    strokeOpacity: 1,
+                    strokeWidth: 2,
+                    type: "polygon"
+                });
+            });
+        });
+        describe("buildLineStringStyle", function () {
+            it("should convert lineStringStyle into style object for print", function () {
+                var lineStyleModel = new Style({
+                        class: "Line",
+                        subClass: "SIMPLE",
+                        lineStrokeColor: [51, 153, 0],
+                        lineStrokeWidth: 3
+                    }),
+                    vectorLayer = new ol.layer.Vector({
+                        style: function (feature) {
+                            return lineStyleModel.createStyle(feature, false);
+                        }
+                    }),
+                    style = buildSpecModel.getFeatureStyle(lineStringFeatures[0], vectorLayer)[0];
+
+                expect(buildSpecModel.buildLineStringStyle(style)).to.deep.own.include({
+                    strokeColor: "#339900",
+                    strokeOpacity: undefined,
+                    strokeWidth: 3,
+                    type: "line"
+                });
+            });
+        });
         describe("getImageName", function () {
             it("should return everything behind last \"/\" inclusive", function () {
                 var iconStyleModel = new Style({
