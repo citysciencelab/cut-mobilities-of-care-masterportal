@@ -130,6 +130,9 @@ define(function (require) {
                 spec.setMetadata(true);
             }
             if (this.get("isLegendAvailable")) {
+                if (this.get("isLegendSelected")) {
+                    Radio.trigger("Legend", "setLayerList");
+                }
                 spec.buildLegend(this.get("isLegendSelected"), Radio.request("Legend", "getLegendParams"), this.get("isMetaDataAvailable"));
             }
             if (this.get("isScaleAvailable")) {
@@ -139,8 +142,10 @@ define(function (require) {
             if (this.get("isGfiAvailable")) {
                 spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
             }
-            console.log(spec.toJSON());
-            this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec.toJSON())), this.get("currentFormat"));
+            spec = spec.toJSON();
+            spec = _.omit(spec, "uniqueIdList");
+            console.log(spec);
+            this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
         },
 
         /**

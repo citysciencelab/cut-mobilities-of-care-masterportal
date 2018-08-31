@@ -16,7 +16,10 @@ define(function (require) {
 
             this.superInitialize();
             channel.reply({
-                "getLegend": this.getLegend
+                "getLegend": this.getLegend,
+                "getLegendParams": function () {
+                    return this.get("legendParams");
+                }
             }, this);
             channel.on({
                 "setLayerList": this.setLayerList
