@@ -106,9 +106,9 @@ define(function (require) {
 
         setBBox: function (bbox) {
             this.set("bbox", bbox);
-            this.bboxToMap(this.get("bbox"));
+            this.bBoxToMap(this.get("bbox"));
         },
-        bboxToMap: function (bbox) {
+        bBoxToMap: function (bbox) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }

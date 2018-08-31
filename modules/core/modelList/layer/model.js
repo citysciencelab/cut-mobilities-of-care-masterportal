@@ -40,6 +40,7 @@ define(function (require) {
                 this.prepareLayerObject();
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
                 this.setIsVisibleInMap(this.get("isSelected"));
+                this.toggleWindowsInterval();
             }
         },
 
@@ -100,6 +101,7 @@ define(function (require) {
                     Radio.trigger("ClickCounter", "layerVisibleChanged");
                     Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"));
                     this.toggleLayerOnMap();
+                    this.toggleWindowsInterval();
                     this.toggleAttributionsInterval();
                 },
                 "change:transparency": this.updateLayerTransparency
@@ -118,6 +120,24 @@ define(function (require) {
                     this.checkForScale(options);
                 }
             });
+        },
+
+        /**
+         * Setter des Windows Intervals. Bindet an this.
+         * @param {function} func                Funktion, die in this ausgeführt werden soll
+         * @param {integer}  autorefreshInterval Intervall in ms
+         * @returns {void}
+         */
+        setWindowsInterval: function (func, autorefreshInterval) {
+            this.set("windowsInterval", setInterval(func.bind(this), autorefreshInterval));
+        },
+
+        /**
+         * Steuert die Handlungen in einem Layerinterval
+         * @returns {void}
+         */
+        intervalHandler: function () {
+            this.updateSource();
         },
 
         setLayerInfoChecked: function (value) {
@@ -199,6 +219,25 @@ define(function (require) {
             }
             else {
                 this.setIsVisibleInMap(true);
+            }
+        },
+
+        /**
+         * Toggelt das Interval anhand der Layersichtbarkeit.
+         * Das autoRefresh Interval muss as Performance-Gründen > 500 sein.
+         * @returns {void}
+         */
+        toggleWindowsInterval: function () {
+            var isVisible = this.get("isVisibleInMap"),
+                autoRefresh = this.get("autoRefresh");
+
+            if (isVisible === true) {
+                if (autoRefresh > 500) {
+                    this.setWindowsInterval(this.intervalHandler, autoRefresh);
+                }
+            }
+            else if (!_.isUndefined(this.get("windowsInterval"))) {
+                clearInterval(this.get("windowsInterval"));
             }
         },
 
@@ -333,6 +372,7 @@ define(function (require) {
         setLegendURL: function (value) {
             this.set("legendURL", value);
         }
+
     });
 
     return Layer;

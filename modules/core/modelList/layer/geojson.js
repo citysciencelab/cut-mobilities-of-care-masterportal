@@ -6,16 +6,12 @@ define(function (require) {
         GeoJSONLayer;
 
     GeoJSONLayer = Layer.extend({
+        defaults: _.extend({}, Layer.prototype.defaults),
+
         initialize: function () {
             if (!this.get("isChildLayer")) {
                 Layer.prototype.initialize.apply(this);
             }
-            this.toggleAutoReload();
-            this.listenTo(this, {
-                "change:isVisibleInMap": function () {
-                    this.toggleAutoReload();
-                }
-            });
             this.setStyleId(this.get("styleId") || this.get("id"));
             this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         },
@@ -43,13 +39,19 @@ define(function (require) {
                 id: this.get("id")
             }));
             if (_.isUndefined(this.get("geojson"))) {
-                this.updateData();
+                this.updateSource();
             }
             else {
                 this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
             }
         },
-        updateData: function (showLoader) {
+
+        /**
+         * Lädt das GeoJSON neu
+         * @param  {boolean} [showLoader=false] Zeigt einen Loader während der Request läuft
+         * @returns {void}
+         */
+        updateSource: function (showLoader) {
             var params = {
                 request: "GetFeature",
                 service: "WFS",
@@ -58,22 +60,24 @@ define(function (require) {
                 version: this.get("version")
             };
 
-            if (!_.isUndefined(showLoader) && showLoader === true) {
-                Radio.trigger("Util", "showLoader");
-            }
-
             $.ajax({
+                beforeSend: function () {
+                    if (showLoader) {
+                        Radio.trigger("Util", "showLoader");
+                    }
+                },
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
                 data: params,
                 async: true,
                 type: "GET",
                 context: this,
                 success: function (data) {
-                    Radio.trigger("Util", "hideLoader");
                     this.handleData(data, Radio.request("MapView", "getProjection").getCode());
                 },
-                error: function () {
-                    Radio.trigger("Util", "hideLoader");
+                complete: function () {
+                    if (showLoader) {
+                        Radio.trigger("Util", "hideLoader");
+                    }
                 }
             });
         },
@@ -105,7 +109,6 @@ define(function (require) {
             }
 
             this.featuresLoaded(features);
-            Radio.trigger("Util", "hideLoader");
         },
 
         parseDataToFeatures: function (data) {
@@ -177,19 +180,6 @@ define(function (require) {
                     return null;
                 });
             }, this);
-        },
-
-        toggleAutoReload: function () {
-            if (this.has("autoRefresh") && _.isNumber(this.attributes.autoRefresh) && this.attributes.autoRefresh > 500) {
-                if (this.get("isVisibleInMap") === true) {
-                    this.interval = setInterval(function (my) {
-                        my.updateData(false);
-                    }, this.attributes.autoRefresh, this);
-                }
-                else {
-                    clearInterval(this.interval);
-                }
-            }
         },
 
         /**

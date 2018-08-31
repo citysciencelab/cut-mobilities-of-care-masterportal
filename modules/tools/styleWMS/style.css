@@ -61,3 +61,19 @@
 #style-wms-colorpicker > span {
     border-left: 1px solid #ccc;
 }
+
+.btn-panel-submit {
+    float: right;
+}
+
+.stylewms-panel > .btn {
+    width: 49%;
+}
+
+.stylewms-panel > .btn-panel-submit {
+    margin-left: 1%;
+}
+
+.stylewms-panel > .btn-panel-reset {
+    margin-right: 1%;
+}

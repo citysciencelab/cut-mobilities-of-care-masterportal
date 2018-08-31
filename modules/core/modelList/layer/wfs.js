@@ -6,9 +6,7 @@ define(function (require) {
         WFSLayer;
 
     WFSLayer = Layer.extend({
-        defaults: _.extend({}, Layer.prototype.defaults, {
-            isChildLayer: false
-        }),
+        defaults: _.extend({}, Layer.prototype.defaults),
 
         initialize: function () {
             if (!this.get("isChildLayer")) {
@@ -55,7 +53,7 @@ define(function (require) {
                 id: this.get("id")
             }));
 
-            this.updateData();
+            this.updateSource(true);
         },
 
         /**
@@ -74,52 +72,79 @@ define(function (require) {
             });
         },
 
-        updateData: function () {
+        /**
+         * Lädt den WFS neu
+         * @param  {boolean} [showLoader=false] Zeigt einen Loader während der Request läuft
+         * @returns {void}
+         */
+        updateSource: function (showLoader) {
             var params = {
-                    REQUEST: "GetFeature",
-                    SERVICE: "WFS",
-                    SRSNAME: Radio.request("MapView", "getProjection").getCode(),
-                    TYPENAME: this.get("featureType"),
-                    VERSION: this.get("version")
-                },
-                wfsReader,
-                features,
-                isClustered;
-
-            Radio.trigger("Util", "showLoader");
+                REQUEST: "GetFeature",
+                SERVICE: "WFS",
+                SRSNAME: Radio.request("MapView", "getProjection").getCode(),
+                TYPENAME: this.get("featureType"),
+                VERSION: this.get("version")
+            };
 
             $.ajax({
+                beforeSend: function () {
+                    if (showLoader) {
+                        Radio.trigger("Util", "showLoader");
+                    }
+                },
                 url: Radio.request("Util", "getProxyURL", this.get("url")),
                 data: params,
                 async: true,
                 type: "GET",
                 context: this,
-                success: function (data) {
-                    Radio.trigger("Util", "hideLoader");
-                    wfsReader = new ol.format.WFS({
-                        featureNS: this.get("featureNS")
-                    });
-                    features = wfsReader.readFeatures(data);
-                    isClustered = Boolean(this.has("clusterDistance"));
-
-                    // nur die Features verwenden die eine geometrie haben aufgefallen bei KITAs am 05.01.2018 (JW)
-                    features = _.filter(features, function (feature) {
-                        return !_.isUndefined(feature.getGeometry());
-                    });
-                    this.get("layerSource").addFeatures(features);
-                    this.set("loadend", "ready");
-                    Radio.trigger("WFSLayer", "featuresLoaded", this.get("id"), features);
-                    this.styling(isClustered);
-                    this.get("layer").setStyle(this.get("style"));
-                    this.featuresLoaded(features);
-                },
-                error: function () {
-                    Radio.trigger("Util", "hideLoader");
+                success: this.handleResponse,
+                complete: function () {
+                    if (showLoader) {
+                        Radio.trigger("Util", "hideLoader");
+                    }
                 }
             });
         },
-        styling: function (isClustered) {
-            var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+
+        /**
+         * Anstoßen der notwendigen Schritte nachdem neue Daten geladen wurden.
+         * @param  {xml} data Response des Ajax-Requests
+         * @returns {void}
+         */
+        handleResponse: function (data) {
+            var features = this.getFeaturesFromData(data);
+
+            this.get("layerSource").clear(true);
+            this.get("layerSource").addFeatures(features);
+            this.styling();
+            this.featuresLoaded(features);
+        },
+
+        /**
+         * Erzeugt aus einer XML-Response eine ol.features Collection
+         * @param  {xml} data die XML-Response
+         * @return {ol/Feature[]}   Collection aus ol/Feature
+         */
+        getFeaturesFromData: function (data) {
+            var wfsReader,
+                features;
+
+            wfsReader = new ol.format.WFS({
+                featureNS: this.get("featureNS")
+            });
+            features = wfsReader.readFeatures(data);
+
+            // Nur die Features verwenden, die eine Geometrie haben. Aufgefallen bei KITAs am 05.01.2018 (JW)
+            features = _.filter(features, function (feature) {
+                return !_.isUndefined(feature.getGeometry());
+            });
+
+            return features;
+        },
+
+        styling: function () {
+            var isClustered = Boolean(this.has("clusterDistance")),
+                stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
             if (!_.isUndefined(stylelistmodel)) {
                 /**
@@ -134,6 +159,8 @@ define(function (require) {
                     return stylelistmodel.createStyle(feature, isClustered);
                 });
             }
+
+            this.get("layer").setStyle(this.get("style"));
         },
 
         setProjection: function (proj) {

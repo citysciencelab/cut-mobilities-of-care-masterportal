@@ -1243,11 +1243,10 @@ Layer die in der [services.json](services.json.md) beschrieben sind, können üb
 
 ```
 
-Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Array bestehend aus Objekten, welche jeweils einen Layer in der Karte beschreiben. In Portalen mit dem Baumtyp *light*, werden die unter Hintergrundkarten beschriebenen Layer entsprechend der Konfigurationsreihenfolge von unten nach oben im Themenbaum einsortiert. Bei Portalen vom Baumtyp *custom* werden die Layer im Menüpunkt Themen/Hintergrundkarten, ebenfalls von unten nach oben, einsortiert.
-
 ******
 
-### Layerkonfiguration Hintergrundkarten ###
+### Themenconfig.Hintergrundkarten ###
+Der Abschnitt Hintergrundkarten besteht aus dem Attribut _Layer_. Es ist ein Array bestehend aus Objekten, welche jeweils einen Layer in der Karte beschreiben. In Portalen mit dem Baumtyp *light*, werden die unter Hintergrundkarten beschriebenen Layer entsprechend der Konfigurationsreihenfolge von unten nach oben im Themenbaum einsortiert. Bei Portalen vom Baumtyp *custom* werden die Layer im Menüpunkt Themen/Hintergrundkarten, ebenfalls von unten nach oben, einsortiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1283,12 +1282,11 @@ Der Abschnitt Hintergrundkarten hat als einziges Attribut Layer. Es ist ein Arra
 
 ```
 
-Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche Möglichkeit, Layer unterhalb von Fachdaten  in Ordner zusammenzufassen. Ordner können wiederum auch Ordner enthalten, so kann eine beliebig tiefe Verschachtelung entstehen.
-
 ******
 
 
-### Ordnerkonfiguration Fachdaten ###
+### Themenconfig.Fachdaten ###
+Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche Möglichkeit, Layer unterhalb von Fachdaten in Ordner zusammenzufassen. Ordner können wiederum auch Unerordner enthalten, so kann eine beliebig tiefe Verschachtelung entstehen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1360,14 +1358,17 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
 
 ******
 
-### Layerkonfiguration Fachdaten ###
-Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für WFS-FeatureTypes.
+### Themenconfig.Fachdaten.Layer ###
+In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstellung von Layern auf der Karte beschrieben. 
+
+**Folgende Konfigurationen sind allgemeingültig:**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |displayInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden?|
 |gfiTheme|nein|String|Wert aus der [services.json](services.json.md) sonst *"default"*|Style für das GFI-Popover *(„default“* / *„table“*).|
-|id|ja|Array [String] oder Array [id] oder String||Siehe [Eingabe von ID](#markdown-header-layerid).|
+|id|ja|Array [String] oder String||Siehe [Eingabe von ID](#markdown-header-layerid).|
+|children|nein|Array [Themenconfig.Fachdaten.Layer]||Für Grouplayer. Siehe [Eingabe von ID](#markdown-header-layerid).
 |layerAttribution|nein|HTML-String|Wert aus der [services.json](services.json.md)|Zusatzinformationen zum Layer, die in der Karte angezeigt werden sollen. Voraussetzung Control [attributions](#markdown-header-portalconfigcontrols) ist aktiviert.|
 |legendURL|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|URL zur Legende|
 |maxScale|nein|String|Wert aus der [services.json](services.json.md)|Höchste Maßstabszahl, bei der ein Layer angezeigt wird.|
@@ -1375,6 +1376,7 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |name|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
+|autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
 
 **Folgende Layerkonfigurationen gelten nur für WMS:**
 
@@ -1398,12 +1400,6 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
 |searchField|nein|String || Attray [String]||Attributname[n], über den die Suche die Featuers des Layers finden kann.|
 |styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md).|
-
-**Folgende Layerkonfigurationen gelten nur für GeoJSON:**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
 
 
 #### filterOptions ####
@@ -1452,9 +1448,9 @@ Die folgenden Konfigurationsoptionen gelten sowohl für WMS-Layer als auch für 
 ]
 ```
 ### Layer.id ###
-Die Layer-IDs können auf drei unterschiedliche Arten definiert werden:
+Die [id einer Layerkonfiguration](#markdown-header-themenconfigfachdatenlayer) kann auf drei unterschiedliche Arten definiert werden:
 
-**Beispiel als String:**
+**Beispiel für einfache Layer:**
 
 In diesem Fall wird die genannte ID in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer.
 
@@ -1466,9 +1462,10 @@ In diesem Fall wird die genannte ID in der [services.json](services.json.md) ges
 }
 ```
 
-**Beispiel als Array of String:**
+**Beispiel für WMS multiple Layers:**
 
-In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer. Alle anderen id im Array werden der layerListe des Dienstes hinzugefügt. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Dies ist nur bei WMS möglich und sinnvoll, wenn die Dienst-URL des ersten Eintrags auch die weiteren Layer ausliefert.
+In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer gemäß den Angaben in der [services.json](services.json.md) vollständig.  
+Alle weiteren Werte im Array werden dahingehend ausgewertet, dass ihre _layers_-Angabe den  _layers-Parameter_ des Dienstes erweitern. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Näheres kann der [Dokumentation](http://docs.geoserver.org/latest/en/user/services/wms/reference.html#wms-getmap) entnommen werden. Dem Themenbaum wird nur ein Eintrag hinzugefügt.
 
 ```
 #!json
@@ -1478,19 +1475,27 @@ In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json]
 }
 ```
 
-**Beispiel als Array of Objects:**
+**Beispiel für openlayers Layer Collection (GroupLayer):**
 
-In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus unterschiedlichen Layern bestehen, bspw. auch gemischt aus WMS und WFS. Ein Gruppenlayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. 
+In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Grouplayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).  
 
-- Im Falle eines GFI wird jeder Layer einzeln abgefragt. 
-- Legenden werden aus allen childLayern einzeln erstellt und gemeinsam dargestellt. 
-- Die Layerinformationen werden gekürzt (nur erster Layer) dargestellt.
+* Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer). 
+* Das Attribut _id_ wird in diesem Fall als unique _String_ erwartet und darf nicht in der [services.json](services.json.md) gelistet sein.
+    * Über diesen Eintrag werden die _children_ gruppiert.
+    * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
+  
+Es gelten folgende Besonderheiten:  
+
+* Im Falle eines GFI wird jeder Layer einzeln abgefragt. 
+* Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt. 
+* Die Layerinformationen werden gekürzt (nur erster Layer) übernommen.
 
 ```
 #!json
 
 {
-  "id":[
+  "id": "myUniqueId",
+  "children": [    
     {
       "id": "947"
     },

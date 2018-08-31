@@ -553,13 +553,15 @@
         "Titel": "Gruppenlayer",
         "Layer": [
         {
-          "id": [
-          {
-            "id": "682"
-          },
-          {
-            "id": "1731"
-          }],
+          "id": "xyz",
+          "children":[
+            {
+              "id": "682"
+            },
+            {
+              "id": "1731"
+            }
+          ],
           "visibility": true,
           "name": "Kita und Krankenhäuser"
         }]

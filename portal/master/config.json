@@ -472,7 +472,8 @@
             "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
           }
         ],
-        "extendedFilter": true
+        "extendedFilter": true,
+        "autoRefresh": 6000
       },
       {
         "id": "8712",
@@ -506,13 +507,15 @@
         "extendedFilter": true
       },
       {
-        "id": [
-        {
-          "id": "946"
-        },
-        {
-          "id": "947"
-        }],
+        "id": "myId",
+        "children": [
+          {
+            "id": "946"
+          },
+          {
+            "id": "947"
+          }
+        ],
         "name": "Verkehrslage auf Autobahnen",
         "layerAttribution":
         {
@@ -523,13 +526,15 @@
         }
       },
       {
-        "id": [
-        {
-          "id": "682"
-        },
-        {
-          "id": "1731"
-        }],
+        "id": "myId2",
+        "children": [
+          {
+            "id": "682"
+          },
+          {
+            "id": "1731"
+          }
+        ],
         "name": "Kita und KH"
       }]
     }
