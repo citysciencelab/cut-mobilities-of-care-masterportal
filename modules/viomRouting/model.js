@@ -9,7 +9,7 @@ define(function (require) {
             bkgGeosearchURL: "",
             viomRoutingURL: "",
             viomProviderID: "",
-            description: "",
+            description: null,
             endDescription: "",
             routingtime: "",
             routingdate: "",
@@ -66,7 +66,7 @@ define(function (require) {
                 this.removeOverlay();
                 Radio.trigger("Map", "removeLayer", this.get("routelayer"));
                 this.set("routelayer", "");
-                this.set("description", "");
+                this.set("description", null);
                 this.set("endDescription", "");
                 this.set("sumLength", "");
                 this.set("sumTime", "");
@@ -225,7 +225,7 @@ define(function (require) {
                 },
                 error: function () {
                     $("#loader").hide();
-                    this.set("description", "");
+                    this.set("description", null);
                     this.set("endDescription", "");
                     Radio.trigger("Alert", "alert", {text: "Fehlermeldung bei Routenberechung", kategorie: "alert-warning"});
                 }

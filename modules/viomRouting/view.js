@@ -115,7 +115,9 @@ define(function (require) {
             this.model.set("zielAdresse", "gewähltes Ziel");
         },
         addDescription: function () {
-            this.renderWin(); // Template schreibt Ergebnisse in Div
+            if (!_.isNull(this.model.get("description"))) {
+                this.renderWin(); // Template schreibt Ergebnisse in Div
+            }
         },
         routeBerechnen: function () {
             if (this.$("#calc").parent().hasClass("disabled") === false) {
