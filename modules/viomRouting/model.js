@@ -11,7 +11,7 @@ define(function (require) {
             viomProviderID: null,
             description: null,
             epsgCode: null,
-            endDescription: "",
+            endDescription: null,
             routingtime: "",
             routingdate: "",
             fromCoord: "",
@@ -21,7 +21,7 @@ define(function (require) {
             startAdresse: "",
             zielAdresse: "",
             bbox: null,
-            routelayer: "",
+            routelayer: null,
             mhpOverlay: "",
             isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true
         },
@@ -33,9 +33,14 @@ define(function (require) {
             this.setEpsgCode();
             this.setBbox(attr.bbox);
 
-            Radio.on("Window", "winParams", this.setStatus, this);
-            Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
-            Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
+            if (_.isString(this.get("bkgSuggestURL")) && _.isString(this.get("bkgGeosearchURL")) && _.isString(this.get("viomRoutingURL")) && _.isString(this.get("viomProviderID"))) {
+                Radio.on("Window", "winParams", this.setStatus, this);
+                Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
+                Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
+            }
+            else {
+                console.error("Konfiguration des Viom Routenplaners fehlerhaft.")
+            }
         },
         setStartpoint: function (geoloc) {
             this.set("fromCoord", geoloc);
@@ -54,12 +59,12 @@ define(function (require) {
         },
 
         deleteRouteFromMap: function () {
-            if (this.get("routelayer") !== "") { // Funktion WÜRDE bei jeder Window-Aktion ausgeführt
+            if (!_.isNull(this.get("routelayer"))) { // Funktion WÜRDE bei jeder Window-Aktion ausgeführt
                 this.removeOverlay();
                 Radio.trigger("Map", "removeLayer", this.get("routelayer"));
-                this.set("routelayer", "");
+                this.set("routelayer", null);
                 this.set("description", null);
-                this.set("endDescription", "");
+                this.set("endDescription", null);
                 this.set("sumLength", "");
                 this.set("sumTime", "");
             }
@@ -218,7 +223,7 @@ define(function (require) {
                 error: function () {
                     $("#loader").hide();
                     this.set("description", null);
-                    this.set("endDescription", "");
+                    this.set("endDescription", null);
                     Radio.trigger("Alert", "alert", {text: "Fehlermeldung bei Routenberechung", kategorie: "alert-warning"});
                 }
             });
@@ -265,7 +270,7 @@ define(function (require) {
         * @returns {void}
         */
         setBkgGeosearchURL: function (value) {
-            var service = Radio.request("RestReader", "getServiceById", value);            
+            var service = Radio.request("RestReader", "getServiceById", value);
 
             this.set("bkgGeosearchURL", service.get("url"));
         },
