@@ -828,17 +828,17 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |point|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
 
 #### Portalconfig.menu.tools.children.routing ######
-Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Parameter müssen am Werkzeug vorhanden sein:
+Der Routenplaner ermöglicht ein Routing innerhalb des Portals über den externen Anbieter VIOM (Berlin). Der VIOM-Dienst berechnet aufgrund von Start- und Ziel-Koordinate tageszeitabhängig die schnellste Route. Folgende Parameter müssen am Werkzeug vorhanden sein:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Routingmodul beim initialen Laden des Portals geöffnet ist.|
-|bkgGeosearchID|nein|String||ID des GeoSuchdienstes des BKG. Anhand der vom Nutzer angeklickten finalen Adresse wandelt dieser Dienst den Namen in eine Koordinate um und gibt diese zurück. Die Koordinate wird benötigt, um den Routingdienst mit Daten zu füllen. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
-|bkgSuggestID|nein|String||ID des Vorschlagsdienstes des BKG. Der Dienst gibt eine Trefferliste möglicher Adressen zurück, die auf den Eingabestring des Nutzers passen. Werden als Dropdown-Menü dargestellt. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
+|bkgGeosearchID|ja|String||ID des GeoSuchdienstes des BKG. Anhand der vom Nutzer angeklickten finalen Adresse wandelt dieser Dienst den Namen in eine Koordinate um und gibt diese zurück. Die Koordinate wird benötigt, um den Routingdienst mit Daten zu füllen. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
+|bkgSuggestID|ja|String||ID des Vorschlagsdienstes des BKG. Der Dienst gibt eine Trefferliste möglicher Adressen zurück, die auf den Eingabestring des Nutzers passen. Werden als Dropdown-Menü dargestellt. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|viomRoutingID|nein|String||ID des Routing-Dienstes. Der Dienst berechnet aufgrund von Start- und Ziel-Koordinate die schnellste Route. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
+|viomRoutingID|ja|String||ID des Routing-Dienstes. Wird in der [rest-services.json](rest-services.json.md) aufgelöst. Dort müssen die URL und die providerID definiert sein.|
 
 
 ******
