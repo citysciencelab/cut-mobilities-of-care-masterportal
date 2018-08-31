@@ -3,10 +3,11 @@ define(function (require) {
     var Layer = require("modules/core/modelList/layer/model"),
         ol = require("openlayers"),
         Config = require("config"),
-        mqtt = require("mqtt"),
         moment = require("moment"),
         $ = require("jquery"),
         SensorLayer;
+
+    require("mqtt");
 
     SensorLayer = Layer.extend({
 
