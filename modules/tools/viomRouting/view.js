@@ -1,6 +1,6 @@
 define(function (require) {
-    var RoutingWin = require("text!modules/viomRouting/template.html"),
-        RoutingModel = require("modules/viomRouting/model"),
+    var RoutingWin = require("text!modules/tools/viomRouting/template.html"),
+        RoutingModel = require("modules/tools/viomRouting/model"),
         $ = require("jquery"),
         RoutingView;
 
