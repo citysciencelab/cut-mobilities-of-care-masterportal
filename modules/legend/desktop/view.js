@@ -6,7 +6,7 @@ define(function (require) {
 
     LegendView = Backbone.View.extend({
         events: {
-            "click .glyphicon-remove": "toggle"
+            "click .glyphicon-remove": "hide"
         },
         initialize: function () {
             $(window).resize(function () {
@@ -17,19 +17,22 @@ define(function (require) {
 
             this.listenTo(this.model, {
                 "change:legendParams": this.paramsChanged,
-                "change:paramsStyleWMSArray": this.paramsChanged
-            });
-
-            this.listenTo(Radio.channel("Legend"), {
-                "toggleLegendWin": this.toggle
+                "change:paramsStyleWMSArray": this.paramsChanged,
+                "change:isActive": function (model, value) {
+                    if (value) {
+                        this.show();
+                    }
+                    else {
+                        this.hide();
+                    }
+                }
             });
 
             this.listenTo(Radio.channel("Map"), {
                 "updateSize": this.updateLegendSize
             });
-
             if (this.model.get("isActive")) {
-                this.toggle();
+                this.show();
             }
         },
         className: "legend-win",
@@ -79,15 +82,17 @@ define(function (require) {
             return this;
         },
 
-        toggle: function () {
-            this.render();
-            this.$el.toggle();
-
-            if (this.$el.css("display") === "block") {
-                this.model.setLayerList();
+        show: function () {
+            if ($("body").find(".legend-win").length === 0) {
+                this.render();
             }
+            this.model.setLayerList();
+            this.$el.show();
         },
-
+        hide: function () {
+            this.$el.hide();
+            this.model.setIsActive(false);
+        },
         removeView: function () {
             this.$el.hide();
             this.remove();

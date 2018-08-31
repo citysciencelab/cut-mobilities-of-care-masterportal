@@ -34,9 +34,6 @@ define(function (require) {
                         Radio.trigger("Window", "showTool", model);
                         Radio.trigger("Window", "setIsVisible", true);
                     }
-                    else if (value && !model.get("renderToSidebar")) {
-                        Radio.trigger("Legend", "toggleLegendWin");
-                    }
                     else if (!value && model.get("renderToWindow")) {
                         Radio.trigger("Window", "setIsVisible", false);
                     }
@@ -52,7 +49,6 @@ define(function (require) {
             if (this.get("isInitOpen")) {
                 this.setIsActive("true");
             }
-            // console.log(this.get("isInitOpen"));
         },
 
         setIsActive: function (value, options) {

@@ -9,7 +9,9 @@ define(function (require) {
             getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
             legendParams: [],
             paramsStyleWMS: [],
-            paramsStyleWMSArray: []
+            paramsStyleWMSArray: [],
+            renderToWindow: false,
+            renderToSidebar: false
         }),
         initialize: function () {
             var channel = Radio.channel("Legend");
