@@ -1,7 +1,3 @@
-import $ from "jquery";
-import Radio from "backbone.radio";
-import _ from "underscore";
-
 const Util = Backbone.Model.extend({
     defaults: {
         // isViewMobile: false,

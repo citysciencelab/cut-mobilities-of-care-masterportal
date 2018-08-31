@@ -1,6 +1,4 @@
 import Parser from "./parser";
-import _ from "underscore";
-import Radio from "backbone.radio";
 
 const CustomTreeParser = Parser.extend({
 

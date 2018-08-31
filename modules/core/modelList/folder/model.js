@@ -1,6 +1,4 @@
 import Item from "../item";
-import _ from "underscore";
-import * as Radio from "backbone.Radio";
 
 const Folder = Item.extend({
     defaults: _.extend({}, Item.prototype.defaults, {

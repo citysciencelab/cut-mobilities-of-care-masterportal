@@ -1,12 +1,8 @@
 import Layer from "./model";
-import $ from "jquery";
-import _ from "underscore";
-import Radio from "backbone.radio";
 import VectorSource from "ol/source/Vector.js";
 import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {WFS} from "ol/format.js";
-
 
 const WFSLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults),

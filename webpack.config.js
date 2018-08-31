@@ -9,6 +9,11 @@ module.exports = {
         path: path.resolve(__dirname, "build"),
         filename: "bundle.js"
     },
+    resolve: {
+        alias: {
+            text: "text-loader"
+        }
+    },
     module: {
         rules: [
             {
@@ -22,5 +27,14 @@ module.exports = {
                 }
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            jQuery: "jquery",
+            $: "jquery",
+            Backbone: "backbone",
+            Radio: "backbone.radio",
+            _: "underscore"
+        })
+    ]
 };

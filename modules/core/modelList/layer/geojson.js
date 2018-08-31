@@ -1,7 +1,5 @@
 import Layer from "./model";
-import $ from "jquery";
 import ol from "openlayers";
-import _ from "underscore";
 
 const GeoJSONLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults),

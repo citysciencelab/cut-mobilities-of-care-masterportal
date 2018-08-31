@@ -1,6 +1,4 @@
 import Layer from "./model";
-import _ from "underscore";
-import Radio from "backbone.radio";
 import TileWMS from "ol/source/TileWMS.js";
 import TileGrid from "ol/tilegrid/TileGrid.js";
 import ImageWMS from "ol/source/ImageWMS.js";

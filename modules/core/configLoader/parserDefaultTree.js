@@ -1,5 +1,4 @@
 import Parser from "./parser";
-import _ from "underscore";
 
 const DefaultTreeParser = Parser.extend({
 

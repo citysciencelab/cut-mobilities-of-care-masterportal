@@ -1,7 +1,4 @@
 import Item from ".././item";
-import Radio from "backbone.radio";
-import _ from "underscore";
-
 
 const Tool = Item.extend({
     defaults: {

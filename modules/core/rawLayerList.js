@@ -1,6 +1,4 @@
 import Config from "../../portal/master/config";
-import Radio from "backbone.radio";
-import _ from "underscore";
 
 const RawLayerList = Backbone.Collection.extend({
     model: function (attrs) {

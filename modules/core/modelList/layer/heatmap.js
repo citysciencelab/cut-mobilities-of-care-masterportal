@@ -1,9 +1,5 @@
 import Layer from "./model";
 import ol from "openlayers";
-import $ from "jquery";
-import _ from "underscore";
-import Radio from "backbone.radio";
-
 
 const HeatmapLayer = Layer.extend({
 

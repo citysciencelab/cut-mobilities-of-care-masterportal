@@ -2,9 +2,6 @@ import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 import {register} from "ol/proj/proj4.js";
 import * as Config from "../../portal/master/config";
-import Radio from "backbone.radio";
-import _ from "underscore";
-
 
 const CRS = Backbone.Model.extend({
     defaults: {

@@ -1,10 +1,6 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
 import Config from "../../../portal/master/config";
-import $ from "jquery";
-import Radio from "backbone.radio";
-import _ from "underscore";
-
 
 const Preparser = Backbone.Model.extend({
     defaults: {},

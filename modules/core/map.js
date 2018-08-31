@@ -4,9 +4,6 @@ import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import {defaults as olDefaultInteractions} from "ol/interaction.js";
 import MapView from "./mapView";
-import $ from "jquery";
-import Radio from "backbone.radio";
-import _ from "underscore";
 
 const map = Backbone.Model.extend({
 

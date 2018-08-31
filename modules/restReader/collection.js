@@ -1,5 +1,4 @@
 import Config from "../../portal/master/config";
-import Radio from "backbone.radio";
 
 const RestList = Backbone.Collection.extend({
     url: function () {

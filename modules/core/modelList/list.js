@@ -1,4 +1,4 @@
-import $ from "jquery";
+
 import WMSLayer from "./layer/wms";
 import WFSLayer from "./layer/wfs";
 import GeoJSONLayer from "./layer/geojson";
@@ -8,9 +8,6 @@ import HeatmapLayer from "./layer/heatmap";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
-import Radio from "backbone.radio";
-import _ from "underscore";
-
 
 const ModelList = Backbone.Collection.extend({
     initialize: function () {

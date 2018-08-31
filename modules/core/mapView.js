@@ -1,7 +1,4 @@
 import Config from "../../portal/master/config";
-import $ from "jquery";
-import Radio from "backbone.radio";
-import _ from "underscore";
 import {Projection, addProjection} from "ol/proj.js";
 import View from "ol/View.js";
 

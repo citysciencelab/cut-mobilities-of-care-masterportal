@@ -1,8 +1,5 @@
 import Backbone from "backbone";
-import Radio from "backbone.radio";
 import ModelList from "../modelList/list";
-import _ from "underscore";
-
 
 const Parser = Backbone.Model.extend({
     defaults: {

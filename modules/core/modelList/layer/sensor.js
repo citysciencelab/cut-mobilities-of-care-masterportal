@@ -3,9 +3,6 @@ import Layer from "./model";
 import Config from "../../../../portal/master/config";
 import mqtt from "mqtt";
 import moment from "moment";
-import $ from "jquery";
-import _ from "underscore";
-import * as Radio from "backbone.Radio";
 
 const SensorLayer = Layer.extend({
 

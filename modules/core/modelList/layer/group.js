@@ -5,8 +5,6 @@ import WFSLayer from "./wfs";
 import GeoJSONLayer from "./geojson";
 import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
-import _ from "underscore";
-
 
 const GroupLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults),
