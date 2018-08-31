@@ -71,13 +71,13 @@ define(function () {
 
                 if (regExp.test(element.startRange) === false) {
                     errors.push({
-                        minText: "Bitte tragen sie eine natürliche Zahl ein.",
+                        minText: "Bitte tragen Sie eine natürliche Zahl ein.",
                         minIndex: index
                     });
                 }
                 if (regExp.test(element.stopRange) === false) {
                     errors.push({
-                        maxText: "Bitte tragen sie eine natürliche Zahl ein.",
+                        maxText: "Bitte tragen Sie eine natürliche Zahl ein.",
                         maxIndex: index
                     });
                 }
@@ -107,6 +107,8 @@ define(function () {
             if (_.isEmpty(errors) === false) {
                 return errors;
             }
+
+            return null;
         },
 
         /**
@@ -114,15 +116,46 @@ define(function () {
          * @returns {void}
          */
         createSLD: function () {
+
+            var sld = "";
+
             if (this.isValid() === true) {
-                this.setSLD(this.createAndGetRootElement());
+
+                sld = this.createAndGetRootElement();
+
                 this.updateLegend(this.get("styleClassAttributes"));
+                this.get("model").get("layer").getSource().updateParams({SLD_BODY: sld, STYLES: "style"});
             }
+        },
+
+        removeSLDBody: function () {
+            var source = this.get("model").get("layer").getSource(),
+                params = source.getParams();
+
+            /* eslint-disable-next-line no-undefined */
+            params.SLD_BODY = undefined;
+            params.STYLES = "";
+
+            source.updateParams(params);
+        },
+
+        resetModel: function () {
+            this.removeSLDBody();
+            this.setNumberOfClasses(this.defaults.numberOfClasses);
+            this.resetLegend();
         },
 
         updateLegend: function (attributes) {
             attributes.styleWMSName = this.get("model").get("name");
             Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes);
+        },
+
+        resetLegend: function () {
+            Radio.trigger("StyleWMS", "resetParamsStyleWMS", this.get("model"));
+        },
+
+        updateLayerInfo: function (layerName) {
+            Radio.trigger("Layer", "updateLayerInfo", layerName);
         },
 
         /**
@@ -176,6 +209,10 @@ define(function () {
                                 this.createAndGetPolygonSymbolizer(obj.color) +
                             "</sld:Rule>";
                 }, this);
+            }
+            else {
+                // TODO: ErrorHandling...
+                console.debug("Type of geometry is not supported, abort styling.");
             }
             return rule;
         },
@@ -269,10 +306,6 @@ define(function () {
 
         setStyleClassAttributes: function (value) {
             this.set("styleClassAttributes", value);
-        },
-
-        setSLD: function (value) {
-            this.set("setSLD", value);
         },
 
         setErrors: function (value) {

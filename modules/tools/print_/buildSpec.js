@@ -24,15 +24,17 @@ define(function (require) {
             this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
         },
         updateMetaData: function (layerName, parsedData) {
-            var layers = this.get("attributes").legend.layers,
+            var layers = _.has(this.get("attributes"), "legend") && _.has(this.get("attributes").legend, "layers") ? this.get("attributes").legend.layers : undefined,
                 layer = _.findWhere(layers, {layerName: layerName});
 
-            layer.metaDate = parsedData.date;
-            layer.metaOwner = parsedData.orga;
-            layer.metaAddress = this.parseAddress(parsedData.address);
-            layer.metaEmail = parsedData.email;
-            layer.metaTel = parsedData.tel;
-            layer.metaUrl = parsedData.url;
+            if (!_.isUndefined(layer)) {
+                layer.metaDate = _.has(parsedData, "date") ? parsedData.date : "";
+                layer.metaOwner = _.has(parsedData, "orga") ? parsedData.orga : "";
+                layer.metaAddress = _.has(parsedData, "address") ? this.parseAddress(parsedData.address) : "";
+                layer.metaEmail = _.has(parsedData, "email") ? parsedData.email : "";
+                layer.metaTel = _.has(parsedData, "tel") ? parsedData.tel : "";
+                layer.metaUrl = _.has(parsedData, "url") ? parsedData.url : "";
+            }
         },
         parseAddress: function (addressObj) {
             var street = _.isUndefined(addressObj) ? undefined : addressObj.street,
@@ -68,7 +70,7 @@ define(function (require) {
                     layers.push(this.buildTileWms(layer));
                 }
                 else if (layer instanceof ol.layer.Vector) {
-                    layers.push(this.buildVector(layer));
+                    layers.push(this.buildVector(layer, Radio.request("MapView", "getCurrentExtent")));
                 }
             }, this);
             attributes.map.layers = layers.reverse();
@@ -115,14 +117,14 @@ define(function (require) {
         },
 
         /**
-         * returns vector layer information
-         * @param {ol.layer.Vector} layer - vector layer with vector source
-         * @returns {object} geojson layer spec
+          * returns vector layer information
+          * @param {ol.layer.Vector} layer - vector layer with vector source
+          * @param {array[number]} extent mapextent
+          * @returns {object} geojson layer spec
          */
-        buildVector: function (layer) {
+        buildVector: function (layer, extent) {
             var source = layer.getSource(),
                 geojsonList = [],
-                extent = Radio.request("MapView", "getCurrentExtent"),
                 features = source.getFeaturesInExtent(extent);
 
             return {
@@ -156,13 +158,13 @@ define(function (require) {
                     if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
                         styleObject.symbolizers.push(this.buildPointStyle(style));
                     }
-                    else if (feature.getGeometry().getType() === "Polygon") {
+                    else if (feature.getGeometry().getType() === "Polygon" || feature.getGeometry().getType() === "MultiPolygon") {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style));
                     }
                     else if (feature.getGeometry().getType() === "Circle") {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style));
                     }
-                    else if (feature.getGeometry().getType() === "LineString") {
+                    else if (feature.getGeometry().getType() === "LineString" || feature.getGeometry().getType() === "MultiLineString") {
                         styleObject.symbolizers.push(this.buildLineStringStyle(style));
                     }
                     mapfishStyleObject[stylingRule] = styleObject;
@@ -264,7 +266,7 @@ define(function (require) {
         getImageName: function (imageSrc) {
             var start = imageSrc.lastIndexOf("/");
 
-            return imageSrc.substr(start);
+            return imageSrc.indexOf("/") !== -1 ? imageSrc.substr(start) : "/" + imageSrc;
         },
 
         /**
@@ -350,11 +352,19 @@ define(function (require) {
          * @returns {string} hex color
          */
         rgbArrayToHex: function (rgb) {
-            var hexR = this.addZero(rgb[0].toString(16)),
-                hexG = this.addZero(rgb[1].toString(16)),
-                hexB = this.addZero(rgb[2].toString(16));
+            var hexR,
+                hexG,
+                hexB,
+                hexString = "#000000";
 
-            return "#" + hexR + hexG + hexB;
+            if (_.isArray(rgb) && rgb.length >= 3) {
+                hexR = this.addZero(rgb[0].toString(16));
+                hexG = this.addZero(rgb[1].toString(16));
+                hexB = this.addZero(rgb[2].toString(16));
+                hexString = "#" + hexR + hexG + hexB;
+            }
+
+            return hexString;
         },
 
         /**
@@ -374,15 +384,12 @@ define(function (require) {
          */
         buildLegend: function (isLegendSelected, legendParams, isMetaDataAvailable) {
             var legendObject = {},
-                filteredLegendParams = _.filter(legendParams, function (param) {
-                    return param.isVisibleInMap === true;
-                }),
                 metaDataLayerList = [];
 
             if (isLegendSelected) {
-                if (filteredLegendParams.length > 0) {
+                if (legendParams.length > 0) {
                     legendObject.layers = [];
-                    _.each(filteredLegendParams, function (layerParam) {
+                    _.each(legendParams, function (layerParam) {
                         if (isMetaDataAvailable) {
                             metaDataLayerList.push(layerParam.layername);
                         }
@@ -420,8 +427,8 @@ define(function (require) {
         prepareLegendAttributes: function (layerParam) {
             var valuesArray = [];
 
-            if (layerParam.typ === "WMS" || layerParam.typ === "WFS") {
-                _.each(layerParam.img, function (url, index) {
+            if (layerParam.legend[0].typ === "WMS" || layerParam.legend[0].typ === "WFS") {
+                _.each(layerParam.legend[0].img, function (url, index) {
                     var valueObj = {
                         legendType: "",
                         geometryType: "",
@@ -430,20 +437,20 @@ define(function (require) {
                         label: ""
                     };
 
-                    if (layerParam.typ === "WMS") {
+                    if (layerParam.legend[0].typ === "WMS") {
                         valueObj.legendType = "wmsGetLegendGraphic";
                     }
-                    else if (layerParam.typ === "WFS") {
+                    else if (layerParam.legend[0].typ === "WFS") {
                         valueObj.legendType = "wfsImage";
                     }
 
-                    valueObj.label = layerParam.legendname[index];
+                    valueObj.label = layerParam.legend[0].legendname[index];
                     valueObj.imageUrl = url;
                     valuesArray.push(valueObj);
                 });
             }
-            else if (layerParam.typ === "styleWMS") {
-                _.each(layerParam.params, function (styleWmsParam) {
+            else if (layerParam.legend[0].typ === "styleWMS") {
+                _.each(layerParam.legend[0].params, function (styleWmsParam) {
                     valuesArray.push({
                         legendType: "geometry",
                         geometryType: "polygon",

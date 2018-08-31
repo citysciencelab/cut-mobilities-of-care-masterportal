@@ -22,7 +22,8 @@ require.config({
         bootstrap: "../../node_modules/bootstrap/js",
         mqtt: "../../node_modules/mqtt/dist/mqtt",
         text: "../../node_modules/requirejs-text/text",
-        pdfmake: "../../node_modules/pdfmake/build/pdfmake"
+        pdfmake: "../../node_modules/pdfmake/build/pdfmake",
+        colorpicker: "../../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min"
     },
     shim: {
         bootstrap: {
@@ -94,7 +95,9 @@ define(function (require) {
             "modules/tools/print/testModel.js",
             "modules/tools/print/testBuildSpec.js",
             "modules/tools/searchByCoord/testModel.js",
-            "modules/legend/legendModel.js"
+            "modules/legend/legendModel.js",
+            "modules/tools/styleWMS/testModel.js",
+            "modules/tools/styleWMS/testView.js"
         ], function () {
             mocha.run();
         });

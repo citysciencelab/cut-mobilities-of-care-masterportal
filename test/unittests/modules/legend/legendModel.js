@@ -1,12 +1,12 @@
 define(function (require) {
     var expect = require("chai").expect,
-        Model = require("../../../../modules/legend/model.js");
+        LegendModel = require("../../../../modules/legend/model.js");
 
     describe("modules/legend", function () {
         var model;
 
         before(function () {
-            model = Model;
+            model = new LegendModel();
         });
 
         describe("creates correct legend definitions", function () {
