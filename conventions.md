@@ -80,7 +80,12 @@ if (!string) ...
 Wir unterscheiden Fehlermeldungen in:
 
 * Meldung zur Fehlersuche für Experten / Entwickler: Erlaubt sind console.error bzw. console.warn zum loggen von Fehlerzuständen.
-* Meldungen zur Information des Nutzers in Form von Alerts sollen nur erfolgen, wenn der Nutzer eine Aktion manuell angestoßen hat und diese erfolglos beendet wurde.
+* Meldungen zur Information des Nutzers in Form von Alerts sollen nur erfolgen, wenn der Nutzer eine Aktion manuell angestoßen hat und diese erfolglos beendet wurde. Die Meldungen sollten folgende Eigenschaften haben:
+      * Höflich formuliert: nicht "Ungültige Eingabe" oder "Sie haben einen Fehler gemacht". 
+      * Spezifisch: nicht "Syntax-Error" sondern "Bitte geben sie ihre Email in der Form test@test.de" ein
+      * Lesbar von Nutzern: nicht "Error29xz: not a Constructor" sondern "Es ist ein Fehler beim Absenden der Nachricht aufgetreten"
+      * Immer mit konstruktivem Lösungsvorschlag
+      * Meldungen sollten nach folgendem Schema formuliert sein: Information dass es Fehler gibt - Information warum es diesen gibt - Information was der Nutzer machen kann, z.B. "Entschuldigung, hier ist leider etwas schiefgelaufen. Die Koordinatentransformation konnte nicht ausgeführt werden. Bitte geben sie ihre Koordinaten in der Form "3556911.52/5943772.38" an und drücken sie erneut 'transformieren'" 
 
 ### Bezeichnungen
 * Sprechende Namen für Variablen und Funktionen verwenden

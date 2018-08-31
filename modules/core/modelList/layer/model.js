@@ -372,6 +372,7 @@ define(function (require) {
         setLegendURL: function (value) {
             this.set("legendURL", value);
         }
+
     });
 
     return Layer;
