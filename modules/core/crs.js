@@ -1,7 +1,8 @@
 import proj4 from "proj4";
-import * as ol from "openlayers";
+import * as Proj from "ol/proj.js";
+import {register} from "ol/proj/proj4.js";
 import * as Config from "../../portal/master/config";
-import * as Radio from "backbone.Radio";
+import Radio from "backbone.radio";
 import _ from "underscore";
 
 
@@ -33,13 +34,13 @@ const CRS = Backbone.Model.extend({
         var namedProjections = this.get("namedProjections");
 
         proj4.defs(namedProjections);
-        ol.proj.setProj4(proj4);
+        register(proj4);
 
         _.each(namedProjections, function (namedProjection) {
-            var projection = ol.proj.get(namedProjection[0]);
+            var projection = Proj.get(namedProjection[0]);
 
-            ol.proj.addProjection(projection);
-        });
+            Proj.addProjection(projection);
+        }, this);
     },
 
     getProjection: function (name) {
