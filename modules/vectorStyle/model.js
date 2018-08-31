@@ -1,4 +1,5 @@
 import Config from "@app/config";
+import {Circle as CircleStyle, Fill, Stroke, Style, Icon, Text} from "ol/style.js";
 
 const WFSStyle = Backbone.Model.extend({
     defaults: {
@@ -151,16 +152,16 @@ const WFSStyle = Backbone.Model.extend({
     * create openLayers Default Style
     */
     getDefaultStyle: function () {
-        var fill = new ol.style.Fill({
+        var fill = new Fill({
                 color: "rgba(255,255,255,0.4)"
             }),
-            stroke = new ol.style.Stroke({
+            stroke = new Stroke({
                 color: "#3399CC",
                 width: 1.25
             });
 
-        return new ol.style.Style({
-            image: new ol.style.Circle({
+        return new Style({
+            image: new CircleStyle({
                 fill: fill,
                 stroke: stroke,
                 radius: 5
@@ -190,13 +191,13 @@ const WFSStyle = Backbone.Model.extend({
     createSimpleLineStyle: function () {
         var strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
             strokewidth = parseFloat(this.get("lineStrokeWidth"), 10),
-            strokestyle = new ol.style.Stroke({
+            strokestyle = new Stroke({
                 color: strokecolor,
                 width: strokewidth
             }),
             style;
 
-        style = style = new ol.style.Style({
+        style = style = new Style({
             stroke: strokestyle
         });
 
@@ -225,16 +226,16 @@ const WFSStyle = Backbone.Model.extend({
     * all features get the same style.
     */
     createSimplePolygonStyle: function () {
-        var strokestyle = new ol.style.Stroke({
+        var strokestyle = new Stroke({
                 color: this.returnColor(this.get("polygonStrokeColor"), "rgb"),
                 width: parseFloat(this.get("polygonStrokeWidth"))
             }),
-            fill = new ol.style.Fill({
+            fill = new Fill({
                 color: this.returnColor(this.get("polygonFillColor"), "rgb")
             }),
             style;
 
-        style = new ol.style.Style({
+        style = new Style({
             stroke: strokestyle,
             fill: fill
         });
@@ -266,15 +267,15 @@ const WFSStyle = Backbone.Model.extend({
         polygonStrokeColor = styleFieldValueObj.polygonStrokeColor ? styleFieldValueObj.polygonStrokeColor : this.get("polygonStrokeColor");
         polygonStrokeWidth = styleFieldValueObj.polygonStrokeWidth ? styleFieldValueObj.polygonStrokeWidth : this.get("polygonStrokeWidth");
 
-        strokestyle = new ol.style.Stroke({
+        strokestyle = new Stroke({
             color: this.returnColor(polygonStrokeColor, "rgb"),
             width: parseFloat(polygonStrokeWidth)
         });
-        fillstyle = new ol.style.Fill({
+        fillstyle = new Fill({
             color: this.returnColor(polygonFillColor, "rgb")
         });
 
-        style = new ol.style.Style({
+        style = new Style({
             stroke: strokestyle,
             fill: fillstyle
         });
@@ -332,7 +333,7 @@ const WFSStyle = Backbone.Model.extend({
             height = this.get("clusterImageHeight"),
             scale = this.get("clusterImageScale"),
             offset = [parseFloat(this.get("clusterImageOffsetX")), parseFloat(this.get("clusterImageOffsetY"))],
-            clusterStyle = new ol.style.Icon({
+            clusterStyle = new Icon({
                 src: src,
                 width: width,
                 height: height,
@@ -353,12 +354,12 @@ const WFSStyle = Backbone.Model.extend({
             fillcolor = this.returnColor(this.get("clusterCircleFillColor"), "rgb"),
             strokecolor = this.returnColor(this.get("clusterCircleStrokeColor"), "rgb"),
             strokewidth = parseFloat(this.get("clusterCircleStrokeWidth"), 10),
-            clusterStyle = new ol.style.Circle({
+            clusterStyle = new CircleStyle({
                 radius: radius,
-                fill: new ol.style.Fill({
+                fill: new Fill({
                     color: fillcolor
                 }),
-                stroke: new ol.style.Stroke({
+                stroke: new Stroke({
                     color: strokecolor,
                     width: strokewidth
                 })
@@ -391,7 +392,7 @@ const WFSStyle = Backbone.Model.extend({
             height = this.get("imageHeight");
             scale = parseFloat(this.get("imageScale"));
             offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))];
-            imagestyle = new ol.style.Icon({
+            imagestyle = new Icon({
                 src: src,
                 width: width,
                 height: height,
@@ -401,7 +402,7 @@ const WFSStyle = Backbone.Model.extend({
             });
         }
 
-        style = new ol.style.Style({
+        style = new Style({
             image: imagestyle
         });
 
@@ -449,7 +450,7 @@ const WFSStyle = Backbone.Model.extend({
             imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX");
             imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY");
             offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
-            imagestyle = new ol.style.Icon({
+            imagestyle = new Icon({
                 src: src,
                 width: width,
                 height: height,
@@ -459,7 +460,7 @@ const WFSStyle = Backbone.Model.extend({
             });
         }
 
-        style = new ol.style.Style({
+        style = new Style({
             image: imagestyle
         });
 
@@ -486,18 +487,18 @@ const WFSStyle = Backbone.Model.extend({
             fillcolor = this.returnColor(this.get("circleFillColor"), "rgb");
             strokecolor = this.returnColor(this.get("circleStrokeColor"), "rgb");
             strokewidth = parseFloat(this.get("circleStrokeWidth"), 10);
-            circleStyle = new ol.style.Circle({
+            circleStyle = new CircleStyle({
                 radius: radius,
-                fill: new ol.style.Fill({
+                fill: new Fill({
                     color: fillcolor
                 }),
-                stroke: new ol.style.Stroke({
+                stroke: new Stroke({
                     color: strokecolor,
                     width: strokewidth
                 })
             });
         }
-        style = new ol.style.Style({
+        style = new Style({
             image: circleStyle
         });
 
@@ -519,7 +520,7 @@ const WFSStyle = Backbone.Model.extend({
         if (isClustered && feature.get("features").length > 1) {
             imagestyle = this.createClusterStyle();
 
-            style = new ol.style.Style({
+            style = new Style({
                 image: imagestyle
             });
         }
@@ -597,8 +598,8 @@ const WFSStyle = Backbone.Model.extend({
     createSVGStyle: function (svgPath) {
         var size = this.get("size");
 
-        return new ol.style.Style({
-            image: new ol.style.Icon({
+        return new Style({
+            image: new Icon({
                 src: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgPath),
                 imgSize: [size, size]
             })
@@ -639,17 +640,17 @@ const WFSStyle = Backbone.Model.extend({
         return textStyle;
     },
     createTextStyleFromObject: function (textObj) {
-        var textStyle = new ol.style.Text({
+        var textStyle = new Text({
             text: textObj.text,
             textAlign: textObj.textAlign,
             offsetX: textObj.offsetX,
             offsetY: textObj.offsetY,
             font: textObj.font,
             scale: textObj.scale,
-            fill: new ol.style.Fill({
+            fill: new Fill({
                 color: textObj.fillcolor
             }),
-            stroke: new ol.style.Stroke({
+            stroke: new Stroke({
                 color: textObj.strokecolor,
                 width: textObj.strokewidth
             })
