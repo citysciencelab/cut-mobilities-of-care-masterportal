@@ -11,7 +11,8 @@ module.exports = {
     },
     resolve: {
         alias: {
-            text: "text-loader"
+            text: "text-loader",
+            "@app": path.resolve(__dirname, "portal/master")
         }
     },
     module: {

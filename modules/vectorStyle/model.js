@@ -1,4 +1,4 @@
-import Config from "../../portal/master/config";
+import Config from "@app/config";
 
 const WFSStyle = Backbone.Model.extend({
     defaults: {
