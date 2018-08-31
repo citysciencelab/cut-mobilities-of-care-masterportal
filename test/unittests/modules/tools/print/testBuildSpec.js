@@ -8,7 +8,12 @@ define(function (require) {
     describe("tools/print_/buildSpec", function () {
         var buildSpecModel,
             utilModel,
-            features,
+            pointFeatures,
+            multiPointFeatures,
+            lineStringFeatures,
+            multiLineStringFeatures,
+            polygonFeatures,
+            multiPolygonFeatures,
             attr = {
                 "layout": "A4 Hochformat",
                 "outputFormat": "pdf",
@@ -26,7 +31,12 @@ define(function (require) {
         before(function () {
             buildSpecModel = new BuildSpecModel(attr);
             utilModel = new Util();
-            features = utilModel.createTestFeatures("resources/testFeatures.xml");
+            pointFeatures = utilModel.createTestFeatures("resources/testFeatures.xml");
+            multiPointFeatures = utilModel.createTestFeatures("resources/testFeaturesSpassAmWasserMultiPoint.xml");
+            polygonFeatures = utilModel.createTestFeatures("resources/testFeaturesNaturschutzPolygon.xml");
+            multiPolygonFeatures = utilModel.createTestFeatures("resources/testFeaturesBplanMultiPolygon.xml");
+            lineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVerkehrsnetzLineString.xml");
+            multiLineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVeloroutenMultiLineString.xml");
         });
         describe("parseAddress", function () {
             it("should return empty string if all keys in address object are empty", function () {
@@ -329,15 +339,15 @@ define(function (require) {
             var vectorLayer = new ol.layer.Vector();
 
             it("should return array with an ol-style", function () {
-                expect(buildSpecModel.getFeatureStyle(features[0], vectorLayer)).to.be.an("array");
-                expect(buildSpecModel.getFeatureStyle(features[0], vectorLayer)[0]).to.be.an.instanceof(ol.style.Style);
+                expect(buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)).to.be.an("array");
+                expect(buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0]).to.be.an.instanceof(ol.style.Style);
             });
         });
         describe("addFeatureToGeoJsonList", function () {
             var list = [];
 
             it("should return array with point JSON", function () {
-                buildSpecModel.addFeatureToGeoJsonList(features[0], list);
+                buildSpecModel.addFeatureToGeoJsonList(pointFeatures[0], list);
                 expect(list).to.be.an("array");
                 expect(list[0]).to.deep.own.include({
                     type: "Feature",
@@ -362,31 +372,200 @@ define(function (require) {
                     }
                 });
             });
-            it("TODO:should return array with multipoint JSON", function () {
-                var multipoint;
+            it("should return array with multiPoint JSON", function () {
+                list = [];
 
-                buildSpecModel.addFeatureToGeoJsonList(multipoint, list);
+                buildSpecModel.addFeatureToGeoJsonList(multiPointFeatures[0], list);
                 expect(list).to.be.an("array");
-                expect(list[0]).to.deep.own.include();
+                expect(list[0]).to.deep.own.include({
+                    type: "Feature",
+                    id: "APP_SPASS_IM_UND_AM_WASSER_1",
+                    properties: {
+                        nummer: "1",
+                        name: "Ostender Teich - Sommerbad Ostende (Eintritt)",
+                        kategorie: "Badeseen",
+                        adresse: "Tonndorfer Strand 30, 22045 Hamburg",
+                        link: "http://www.hamburg.de/sommerbad-ostende/",
+                        kurztext: "Das Strandbad Ostende verfügt über einen Sandstrand und eine große Liegewiese mit Spielgeräten für Kinder"
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [
+                            [573983.957, 5938583.644, 0]
+                        ]
+                    }
+                });
             });
-            it("TODO:should return array with linestring JSON", function () {
-                var linestring;
+            it("should return array with lineString JSON", function () {
+                list = [];
 
-                buildSpecModel.addFeatureToGeoJsonList(linestring, list);
+                buildSpecModel.addFeatureToGeoJsonList(lineStringFeatures[0], list);
                 expect(list).to.be.an("array");
-                expect(list[0]).to.deep.own.include();
+                expect(list[0]).to.deep.own.include({
+                    type: "Feature",
+                    id: "APP_STRASSENNETZ_INSPIRE_BAB_6351",
+                    properties: {
+                        abs: "252500101 252500102",
+                        abschnittslaenge: "469.0",
+                        ast: "0",
+                        europastrasse: "E 45",
+                        gemeindeschluessel: undefined,
+                        kreisschluessel: undefined,
+                        laengenherkunft: undefined,
+                        landesschluessel: "02",
+                        strasse: "A 7",
+                        strassenart: "A",
+                        strassenname: "BAB A7",
+                        strassennummer: "7"
+                    },
+                    geometry: {
+                        type: "LineString",
+                        coordinates: [
+                            [561590.68, 5921144.34, 0],
+                            [561644.084, 5921103.671, 0],
+                            [561659.2, 5921092.16, 0],
+                            [561716.088, 5921051.085, 0],
+                            [561735.65, 5921036.96, 0],
+                            [561842.988, 5920965.121, 0],
+                            [561877.19, 5920942.23, 0],
+                            [561979.23, 5920880.72, 0]
+                        ]
+                    }
+                });
             });
-            it("TODO:should return array with polygon JSON", function () {
-                var polygon;
+            it("should return array with multiLineString JSON", function () {
+                list = [];
 
-                buildSpecModel.addFeatureToGeoJsonList(polygon, list);
+                buildSpecModel.addFeatureToGeoJsonList(multiLineStringFeatures[0], list);
                 expect(list).to.be.an("array");
-                expect(list[0]).to.deep.own.include();
+                expect(list[0]).to.deep.own.include({
+                    type: "Feature",
+                    id: "Erster_Gruener_Ring.1",
+                    properties: {
+                        RoutenTyp: "Radfernwege",
+                        Status: "Hauptroute",
+                        Richtung: "Hin- und Rückweg",
+                        RoutenName: "1. Grüner Ring",
+                        Group_: "1. Grüner Ring_Hauptroute_Hinweg",
+                        Routennummer: "0",
+                        Verlauf: "\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\n",
+                        Routeninformation: "\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\n"
+                    },
+                    geometry: {
+                        type: "MultiLineString",
+                        coordinates: [[
+                            [5933240.612299999, 565065.9052999998, 0],
+                            [5933242.200099999, 565024.3496000003, 0],
+                            [5933243.6862, 564984.2522, 0],
+                            [5933245.1719, 564955.2928999998, 0],
+                            [5933239.976399999, 564871.3853000002, 0],
+                            [5933232.553300001, 564780.0521999998, 0],
+                            [5933229.584100001, 564741.4397, 0]
+                        ]]
+                    }
+                });
+            });
+            it("should return array with polygon JSON", function () {
+                list = [];
+
+                buildSpecModel.addFeatureToGeoJsonList(polygonFeatures[0], list);
+                expect(list).to.be.an("array");
+                expect(list[0]).to.deep.own.include({
+                    type: "Feature",
+                    id: "APP_AUSGLEICHSFLAECHEN_333876",
+                    properties: {
+                        vorhaben: "W-006 - BPlan Marienthal 22 (Husarenweg)",
+                        vorhaben_zulassung_am: "23.04.1996",
+                        vorhaben_verfahrensart: "BPlan",
+                        kompensationsmassnahme: "Grünfläche",
+                        massnahmenstatus: "festgesetzt",
+                        flaechensicherung: "k.A.",
+                        flaeche: "6837.878000000001",
+                        hektar: "0.6838000000000001",
+                        kompensationsmassnahme_detail: "Bepflanzung mit Gehölzen und/oder Sträuchern",
+                    },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [[
+                            [573169.734, 5935998.106, 0],
+                            [573174.965, 5935999.887, 0],
+                            [573179.967, 5936000.464, 0],
+                            [573290.094, 5935931.609, 0],
+                            [573299.702, 5935890.794, 0],
+                            [573290.927, 5935888.812, 0],
+                            [573251.047, 5935912.837, 0],
+                            [573192.37, 5935919.986, 0],
+                            [573194.244, 5935935.367, 0],
+                            [573176.051, 5935952.246, 0],
+                            [573147.404, 5935981.236, 0],
+                            [573169.734, 5935998.106, 0]
+                        ]]
+                    }
+                });
+            });
+            it("should return array with multiPolygon JSON", function () {
+                list = [];
+
+                buildSpecModel.addFeatureToGeoJsonList(multiPolygonFeatures[0], list);
+                expect(list).to.be.an("array");
+                expect(list[0]).to.deep.own.include({
+                    type: "Feature",
+                    id: "APP_PROSIN_FESTGESTELLT_1",
+                    properties: {
+                        aenderung1: undefined,
+                        aenderung2: undefined,
+                        aenderung3: undefined,
+                        feststellung: "11.11.1969",
+                        gop: undefined,
+                        goplink: undefined,
+                        hotlink: "http://daten-hamburg.de/infrastruktur_bauen_wohnen/bebauungsplaene/pdfs/bplan/Bahrenfeld18.pdf                                                                                                                                                                 ",
+                        hotlink_begr: "http://daten-hamburg.de/infrastruktur_bauen_wohnen/bebauungsplaene/pdfs/bplan_begr/Bahrenfeld18.pdf                                                                                                                                                            ",
+                        nachricht: undefined,
+                        name_png: "Bahrenfeld18.png",
+                        planjahr_m: "1969",
+                        planrecht: "Bahrenfeld18                                                                                                                                                                                                                                                   ",
+                        staedtebaulichervertrag: undefined
+                    },
+                    geometry: {
+                        type: "MultiPolygon",
+                        coordinates: [[[
+                            [560717.814, 5936195.048, 0],
+                            [560904.504, 5936154.977, 0],
+                            [560987.031, 5936160.915, 0],
+                            [561110.273, 5936169.785, 0],
+                            [561125.876, 5936177.985, 0],
+                            [561145.448, 5936138.313, 0],
+                            [561186.978, 5936014.535, 0],
+                            [561204.961, 5935958.995, 0],
+                            [561223.729, 5935885.048, 0],
+                            [561239.877, 5935821.734, 0],
+                            [561086.214, 5935819.353, 0],
+                            [561062.173, 5935818.616, 0],
+                            [560960.89, 5935815.511, 0],
+                            [560876.868, 5935811.999, 0],
+                            [560865.675, 5935811.531, 0],
+                            [560862.37, 5935822.577, 0],
+                            [560859.9, 5935832.94, 0],
+                            [560847.669, 5935884.252, 0],
+                            [560843.601, 5935901.318, 0],
+                            [560840.342, 5935914.697, 0],
+                            [560824.457, 5935979.913, 0],
+                            [560804.971, 5936059.458, 0],
+                            [560787.478, 5936062.022, 0],
+                            [560786.155, 5936062.216, 0],
+                            [560742.375, 5936069.167, 0],
+                            [560724.241, 5936122.096, 0],
+                            [560719.891, 5936136.876, 0],
+                            [560718.946, 5936139.051, 0],
+                            [560717.814, 5936195.048, 0]
+                        ]]]
+                    }
+                });
             });
         });
         describe("convertFeatureToGeoJson", function () {
             it("should convert point feature to JSON", function () {
-                expect(buildSpecModel.convertFeatureToGeoJson(features[0])).to.deep.own.include({
+                expect(buildSpecModel.convertFeatureToGeoJson(pointFeatures[0])).to.deep.own.include({
                     type: "Feature",
                     properties: {
                         anzahl_plaetze_teilstationaer: "43",
@@ -409,31 +588,186 @@ define(function (require) {
                     }
                 });
             });
-            it("TODO:should convert multipoint feature to JSON", function () {
-                var multipoint;
-
-                expect(buildSpecModel.convertFeatureToGeoJson(multipoint)).to.deep.own.include();
+            it("should convert multiPoint feature to JSON", function () {
+                expect(buildSpecModel.convertFeatureToGeoJson(multiPointFeatures[0])).to.deep.own.include({
+                    type: "Feature",
+                    id: "APP_SPASS_IM_UND_AM_WASSER_1",
+                    properties: {
+                        nummer: "1",
+                        name: "Ostender Teich - Sommerbad Ostende (Eintritt)",
+                        kategorie: "Badeseen",
+                        adresse: "Tonndorfer Strand 30, 22045 Hamburg",
+                        link: "http://www.hamburg.de/sommerbad-ostende/",
+                        kurztext: "Das Strandbad Ostende verfügt über einen Sandstrand und eine große Liegewiese mit Spielgeräten für Kinder"
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [
+                            [573983.957, 5938583.644, 0]
+                        ]
+                    }
+                });
             });
-            it("TODO:should convert linestring feature to JSON", function () {
-                var linestring;
-
-                expect(buildSpecModel.convertFeatureToGeoJson(linestring)).to.deep.own.include();
+            it("should convert lineString feature to JSON", function () {
+                expect(buildSpecModel.convertFeatureToGeoJson(lineStringFeatures[0])).to.deep.own.include({
+                    type: "Feature",
+                    id: "APP_STRASSENNETZ_INSPIRE_BAB_6351",
+                    properties: {
+                        abs: "252500101 252500102",
+                        abschnittslaenge: "469.0",
+                        ast: "0",
+                        europastrasse: "E 45",
+                        gemeindeschluessel: undefined,
+                        kreisschluessel: undefined,
+                        laengenherkunft: undefined,
+                        landesschluessel: "02",
+                        strasse: "A 7",
+                        strassenart: "A",
+                        strassenname: "BAB A7",
+                        strassennummer: "7"
+                    },
+                    geometry: {
+                        type: "LineString",
+                        coordinates: [
+                            [561590.68, 5921144.34, 0],
+                            [561644.084, 5921103.671, 0],
+                            [561659.2, 5921092.16, 0],
+                            [561716.088, 5921051.085, 0],
+                            [561735.65, 5921036.96, 0],
+                            [561842.988, 5920965.121, 0],
+                            [561877.19, 5920942.23, 0],
+                            [561979.23, 5920880.72, 0]
+                        ]
+                    }
+                });
             });
-            it("TODO:should convert polygon feature to JSON", function () {
-                var polygon;
-
-                expect(buildSpecModel.convertFeatureToGeoJson(polygon)).to.deep.own.include();
+            it("should convert multiLineString feature to JSON", function () {
+                expect(buildSpecModel.convertFeatureToGeoJson(multiLineStringFeatures[0])).to.deep.own.include({
+                    type: "Feature",
+                    id: "Erster_Gruener_Ring.1",
+                    properties: {
+                        RoutenTyp: "Radfernwege",
+                        Status: "Hauptroute",
+                        Richtung: "Hin- und Rückweg",
+                        RoutenName: "1. Grüner Ring",
+                        Group_: "1. Grüner Ring_Hauptroute_Hinweg",
+                        Routennummer: "0",
+                        Verlauf: "\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\n",
+                        Routeninformation: "\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\n"
+                    },
+                    geometry: {
+                        type: "MultiLineString",
+                        coordinates: [[
+                            [5933240.612299999, 565065.9052999998, 0],
+                            [5933242.200099999, 565024.3496000003, 0],
+                            [5933243.6862, 564984.2522, 0],
+                            [5933245.1719, 564955.2928999998, 0],
+                            [5933239.976399999, 564871.3853000002, 0],
+                            [5933232.553300001, 564780.0521999998, 0],
+                            [5933229.584100001, 564741.4397, 0]
+                        ]]
+                    }
+                });
+            });
+            it("should convert polygon feature to JSON", function () {
+                expect(buildSpecModel.convertFeatureToGeoJson(polygonFeatures[0])).to.deep.own.include({
+                    type: "Feature",
+                    id: "APP_AUSGLEICHSFLAECHEN_333876",
+                    properties: {
+                        vorhaben: "W-006 - BPlan Marienthal 22 (Husarenweg)",
+                        vorhaben_zulassung_am: "23.04.1996",
+                        vorhaben_verfahrensart: "BPlan",
+                        kompensationsmassnahme: "Grünfläche",
+                        massnahmenstatus: "festgesetzt",
+                        flaechensicherung: "k.A.",
+                        flaeche: "6837.878000000001",
+                        hektar: "0.6838000000000001",
+                        kompensationsmassnahme_detail: "Bepflanzung mit Gehölzen und/oder Sträuchern",
+                    },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [[
+                            [573169.734, 5935998.106, 0],
+                            [573174.965, 5935999.887, 0],
+                            [573179.967, 5936000.464, 0],
+                            [573290.094, 5935931.609, 0],
+                            [573299.702, 5935890.794, 0],
+                            [573290.927, 5935888.812, 0],
+                            [573251.047, 5935912.837, 0],
+                            [573192.37, 5935919.986, 0],
+                            [573194.244, 5935935.367, 0],
+                            [573176.051, 5935952.246, 0],
+                            [573147.404, 5935981.236, 0],
+                            [573169.734, 5935998.106, 0]
+                        ]]
+                    }
+                });
+            });
+            it("should convert multiPolygon feature to JSON", function () {
+                expect(buildSpecModel.convertFeatureToGeoJson(multiPolygonFeatures[0])).to.deep.own.include({
+                    type: "Feature",
+                    id: "APP_PROSIN_FESTGESTELLT_1",
+                    properties: {
+                        aenderung1: undefined,
+                        aenderung2: undefined,
+                        aenderung3: undefined,
+                        feststellung: "11.11.1969",
+                        gop: undefined,
+                        goplink: undefined,
+                        hotlink: "http://daten-hamburg.de/infrastruktur_bauen_wohnen/bebauungsplaene/pdfs/bplan/Bahrenfeld18.pdf                                                                                                                                                                 ",
+                        hotlink_begr: "http://daten-hamburg.de/infrastruktur_bauen_wohnen/bebauungsplaene/pdfs/bplan_begr/Bahrenfeld18.pdf                                                                                                                                                            ",
+                        nachricht: undefined,
+                        name_png: "Bahrenfeld18.png",
+                        planjahr_m: "1969",
+                        planrecht: "Bahrenfeld18                                                                                                                                                                                                                                                   ",
+                        staedtebaulichervertrag: undefined
+                    },
+                    geometry: {
+                        type: "MultiPolygon",
+                        coordinates: [[[
+                            [560717.814, 5936195.048, 0],
+                            [560904.504, 5936154.977, 0],
+                            [560987.031, 5936160.915, 0],
+                            [561110.273, 5936169.785, 0],
+                            [561125.876, 5936177.985, 0],
+                            [561145.448, 5936138.313, 0],
+                            [561186.978, 5936014.535, 0],
+                            [561204.961, 5935958.995, 0],
+                            [561223.729, 5935885.048, 0],
+                            [561239.877, 5935821.734, 0],
+                            [561086.214, 5935819.353, 0],
+                            [561062.173, 5935818.616, 0],
+                            [560960.89, 5935815.511, 0],
+                            [560876.868, 5935811.999, 0],
+                            [560865.675, 5935811.531, 0],
+                            [560862.37, 5935822.577, 0],
+                            [560859.9, 5935832.94, 0],
+                            [560847.669, 5935884.252, 0],
+                            [560843.601, 5935901.318, 0],
+                            [560840.342, 5935914.697, 0],
+                            [560824.457, 5935979.913, 0],
+                            [560804.971, 5936059.458, 0],
+                            [560787.478, 5936062.022, 0],
+                            [560786.155, 5936062.216, 0],
+                            [560742.375, 5936069.167, 0],
+                            [560724.241, 5936122.096, 0],
+                            [560719.891, 5936136.876, 0],
+                            [560718.946, 5936139.051, 0],
+                            [560717.814, 5936195.048, 0]
+                        ]]]
+                    }
+                });
             });
         });
         describe("getStylingRule", function () {
             it("should return \"*\" if styleAttribute is empty string", function () {
-                expect(buildSpecModel.getStylingRule(features[0], "")).to.equal("*");
+                expect(buildSpecModel.getStylingRule(pointFeatures[0], "")).to.equal("*");
             });
             it("should return \"[styleId='undefined']\" if styleAttribute is \"styleId\"", function () {
-                expect(buildSpecModel.getStylingRule(features[0], "styleId")).to.equal("[styleId='undefined']");
+                expect(buildSpecModel.getStylingRule(pointFeatures[0], "styleId")).to.equal("[styleId='undefined']");
             });
             it("should return \"[kh_nummer='20']\" if styleAttribute is \"kh_nummer\"", function () {
-                expect(buildSpecModel.getStylingRule(features[0], "kh_nummer")).to.equal("[kh_nummer='20']");
+                expect(buildSpecModel.getStylingRule(pointFeatures[0], "kh_nummer")).to.equal("[kh_nummer='20']");
             });
         });
         describe("buildPointStyleCircle", function () {
@@ -452,7 +786,7 @@ define(function (require) {
                             return circleStyleModel.createStyle(feature, false);
                         }
                     }),
-                    style = buildSpecModel.getFeatureStyle(features[0], vectorLayer)[0];
+                    style = buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0];
 
                 expect(buildSpecModel.buildPointStyleCircle(style.getImage())).to.deep.own.include({
                     fillColor: "#ff0000",
@@ -481,7 +815,7 @@ define(function (require) {
                             return iconStyleModel.createStyle(feature, false);
                         }
                     }),
-                    style = buildSpecModel.getFeatureStyle(features[0], vectorLayer)[0];
+                    style = buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0];
 
                 expect(buildSpecModel.buildPointStyleIcon(style.getImage())).to.deep.own.include({
                     externalGraphic: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/krankenhaus.png",
@@ -506,7 +840,7 @@ define(function (require) {
                             return iconStyleModel.createStyle(feature, false);
                         }
                     }),
-                    style = buildSpecModel.getFeatureStyle(features[0], vectorLayer)[0];
+                    style = buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0];
 
                 expect(buildSpecModel.getImageName(style.getImage().getSrc())).to.equal("/krankenhaus.png");
             });

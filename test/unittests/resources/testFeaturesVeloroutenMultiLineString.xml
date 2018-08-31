@@ -1,0 +1,494 @@
+<wfs:FeatureCollection xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:Fahrradrouten="http://lgvfds04.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/Fahrradrouten/MapServer/WFSServer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" timeStamp="2018-08-31T06:30:02Z" numberOfFeatures="unknown" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/gml.xsd http://lgvfds04.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/Fahrradrouten/MapServer/WFSServer http://lgvfds04.fhhnet.stadt.hamburg.de/arcgis/services/FD_FHH_Map/Fahrradrouten/MapServer/WFSServer?service=wfs%26version=1.1.0%26request=DescribeFeatureType">
+<gml:boundedBy>
+<gml:Envelope srsName="urn:ogc:def:crs:EPSG::25832">
+<gml:lowerCorner>5933098.142000001 564229.0867999997</gml:lowerCorner>
+<gml:upperCorner>5934883.891100001 566687.8990000002</gml:upperCorner>
+</gml:Envelope>
+</gml:boundedBy>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.1">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hin- und Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933240.612299999 565065.9052999998 5933242.200099999 565024.3496000003 5933243.6862 564984.2522 5933245.1719 564955.2928999998 5933239.976399999 564871.3853000002 5933232.553300001 564780.0521999998 5933229.584100001 564741.4397
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.2">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Rueckweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933614.3248 566587.3049999997 5933636.775699999 566610.8576999996 5933658.1917 566638.2708999999 5933668.426899999 566678.5236999998 5933724.478700001 566687.1726000002 5933740.791400001 566674.5513000004 5933748.078 566674.8317 5933787.056700001 566676.3313999996 5933870.6898 566687.8990000002 5933941.021500001 566686.4029000001 5933990.253799999 566678.0118000004 5934109.523 566661.5314999996 5934133.133199999 566635.9494000003
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.3">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hin- und Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933614.3248 566587.3049999997 5933605.4066 566579.2462999998 5933603.181500001 566577.2357000001 5933576.6994 566553.3057000004 5933550.071599999 566529.244 5933503.5397 566487.6610000003 5933456.0178 566449.0481000003 5933418.396299999 566418.3558 5933394.635600001 566386.6736000003 5933376.815199999 566348.0613000002 5933349.094799999 566277.7668000003 5933315.4345 566191.6316 5933287.714199999 566138.1679999996 5933280.555199999 566126.4868000001 5933268.903999999 566107.4757000003 5933242.173699999 566064.9028000003 5933217.424000001 566001.5384999998 5933199.8519 565947.3326000003 5933183.5178 565883.4733999996 5933170.153999999 565805.5059000002 5933148.624600001 565639.9181000004 5933121.898399999 565435.7177999998 5933104.0812 565288.6935999999 5933098.142000001 565245.6259000003 5933099.6275 565224.8345999997 5933112.993799999 565202.5585000003 5933133.043 565178.7973999996 5933167.281 565141.3305000002
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.4">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hinweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5934133.133199999 566635.9494000003 5934102.403100001 566628.0203999998 5934060.0305 566639.6703000004 5934018.671700001 566648.0294000004 5933976.432800001 566655.9485999998 5933930.234200001 566657.2679000003 5933861.156300001 566655.5069000004 5933787.6787 566646.2660999997 5933779.3191 566633.0662000002 5933760.8399 566614.1464 5933733.120999999 566599.1864 5933706.722100001 566578.5066 5933665.363399999 566574.1062000003 5933659.590600001 566574.8832 5933642.483999999 566577.1857000003 5933630.1645 566570.5855999999 5933614.3248 566587.3049999997
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.5">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hinweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933167.281 565141.3305000002 5933191.5898 565159.7977 5933263.232899999 565111.3980999999 5933253.5011 565094.9615000002 5933240.612299999 565065.9052999998
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.6">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Rueckweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933167.281 565141.3305000002 5933172.398600001 565135.7302999999 5933217.694599999 565091.9209000003 5933240.612299999 565065.9052999998
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.7">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hin- und Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933240.612299999 565065.9052999998 5933242.200099999 565024.3496000003 5933243.6862 564984.2522 5933245.1719 564955.2928999998 5933239.976399999 564871.3853000002 5933232.553300001 564780.0521999998 5933229.584100001 564741.4397 5933234.039999999 564711.7379000001 5933250.376499999 564685.7492000004 5933275.6238 564650.8498999998 5933300.871200001 564605.5549999997 5933332.0592 564549.1220000004 5933354.3367 564499.3718999997 5933365.475600001 564465.2149999999 5933372.1592 564436.9983999999 5933379.5856 564399.1287000002 5933387.2322 564372.3676000005 5933388.4968 564367.9419 5933397.3676 564346.1355999997 5933406.318800001 564324.1320000002 5933422.914799999 564279.1386000002 5933431.5667 564262.5011999998 5933447.160800001 564229.0867999997 5933451.6161 564230.5719999997 5933476.1194 564246.9083000002 5933505.0778 564269.9276999999 5933522.1557 564289.9765999997 5933546.6589 564313.7385 5933569.677100001 564332.3025000002 5933588.2403 564341.9557999997 5933612.744000001 564345.6688999999 5933635.762800001 564342.699 5933662.4944 564333.7889 5933695.909 564318.9386 5933724.125700001 564310.7708999999 5933750.857000001 564312.9989 5933777.588199999 564321.9099000003 5933798.378900001 564334.5334999999 5933817.6841 564366.4632000001 5933833.2763 564411.7587000001 5933839.215700001 564448.1435000002 5933845.898 564468.9348999998 5933857.035800001 564480.0732000005 5933882.2818 564494.9244999997 5933938.7141 564522.3995000003 5933991.433599999 564548.3893999998 5934050.835999999 564578.0921 5934182.2634 564650.8634000002 5934251.318600001 564689.4768000003 5934319.630899999 564736.2581000002 5934448.0878 564830.5632999996 5934500.0646 564867.6913999999 5934517.590299999 564881.6754000001 5934569.8618 564923.3832999999 5934648.5689 565000.6091 5934698.317700001 565057.7858999996 5934740.640699999 565123.8731000004 5934765.885600001 565176.5942000002 5934785.190400001 565227.8300999999 5934800.8287 565282.3724999996 5934817.4287 565390.4479 5934827.451300001 565459.0522999996 5934829.643200001 565495.0773999998 5934827.449899999 565513.8729999997 5934846.4827 565521.3258999996 5934843.0023 565537.4210000001 5934871.7118 565549.6014 5934874.3215 565560.4764999999 5934883.891100001 565576.5717000002 5934883.455399999 565604.8469000002 5934874.7542 565652.6969999997 5934863.444 565662.2669000002 5934852.1338 565671.8366999999 5934841.692600001 565725.3419000004 5934826.900900001 565790.1569999997 5934818.886399999 565796.8475000002 5934738.5571 565768.7874999996 5934734.2652 565781.6704000002 5934724.386399999 565794.3102000002 5934732.237199999 565812.9042999996 5934736.369200001 565841.6907000002 5934738.022 565869.5129000004 5934726.865599999 565917.8575999998 5934714.744999999 565960.0040999996 5934697.1151 566004.2166999998 5934699.3391 566019.3016999997 5934680.421599999 566066.3559999997 5934648.2732 566142.9402000001 5934618.016799999 566197.7780999998 5934591.5426 566238.4336000001 5934558.2346 566283.7999999998 5934551.1249 566293.4836999998 5934536.703400001 566313.1261999998 5934479.027899999 566379.3092999999 5934433.643999999 566431.3103999998 5934355.5296 566514.4101 5934284.1482 566576.6659000004 5934263.781199999 566592.1295999996 5934227.5351 566610.7936000004 5934178.035 566628.1051000003 5934143.9529 566633.5148999998 5934133.133199999 566635.9494000003
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.8">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Rueckweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933614.3248 566587.3049999997 5933636.775699999 566610.8576999996 5933658.1917 566638.2708999999 5933668.426899999 566678.5236999998 5933724.478700001 566687.1726000002 5933740.791400001 566674.5513000004 5933748.078 566674.8317 5933787.056700001 566676.3313999996 5933870.6898 566687.8990000002 5933941.021500001 566686.4029000001 5933990.253799999 566678.0118000004 5934109.523 566661.5314999996 5934133.133199999 566635.9494000003
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.9">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hin- und Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933614.3248 566587.3049999997 5933605.4066 566579.2462999998 5933603.181500001 566577.2357000001 5933576.6994 566553.3057000004 5933550.071599999 566529.244 5933503.5397 566487.6610000003 5933456.0178 566449.0481000003 5933418.396299999 566418.3558 5933394.635600001 566386.6736000003 5933376.815199999 566348.0613000002 5933349.094799999 566277.7668000003 5933315.4345 566191.6316 5933287.714199999 566138.1679999996 5933280.555199999 566126.4868000001 5933268.903999999 566107.4757000003 5933242.173699999 566064.9028000003 5933217.424000001 566001.5384999998 5933199.8519 565947.3326000003 5933183.5178 565883.4733999996 5933170.153999999 565805.5059000002 5933148.624600001 565639.9181000004 5933121.898399999 565435.7177999998 5933104.0812 565288.6935999999 5933098.142000001 565245.6259000003 5933099.6275 565224.8345999997 5933112.993799999 565202.5585000003 5933133.043 565178.7973999996 5933167.281 565141.3305000002
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.10">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hinweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5934133.133199999 566635.9494000003 5934102.403100001 566628.0203999998 5934060.0305 566639.6703000004 5934018.671700001 566648.0294000004 5933976.432800001 566655.9485999998 5933930.234200001 566657.2679000003 5933861.156300001 566655.5069000004 5933787.6787 566646.2660999997 5933779.3191 566633.0662000002 5933760.8399 566614.1464 5933733.120999999 566599.1864 5933706.722100001 566578.5066 5933665.363399999 566574.1062000003 5933659.590600001 566574.8832 5933642.483999999 566577.1857000003 5933630.1645 566570.5855999999 5933614.3248 566587.3049999997
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.11">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hinweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933167.281 565141.3305000002 5933191.5898 565159.7977 5933263.232899999 565111.3980999999 5933253.5011 565094.9615000002 5933240.612299999 565065.9052999998
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.12">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Rueckweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933167.281 565141.3305000002 5933172.398600001 565135.7302999999 5933217.694599999 565091.9209000003 5933240.612299999 565065.9052999998
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.13">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hin- und Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933240.612299999 565065.9052999998 5933242.200099999 565024.3496000003 5933243.6862 564984.2522 5933245.1719 564955.2928999998 5933239.976399999 564871.3853000002 5933232.553300001 564780.0521999998 5933229.584100001 564741.4397 5933234.039999999 564711.7379000001 5933250.376499999 564685.7492000004 5933275.6238 564650.8498999998 5933300.871200001 564605.5549999997 5933332.0592 564549.1220000004 5933354.3367 564499.3718999997 5933365.475600001 564465.2149999999 5933372.1592 564436.9983999999 5933379.5856 564399.1287000002 5933387.2322 564372.3676000005 5933388.4968 564367.9419 5933397.3676 564346.1355999997 5933406.318800001 564324.1320000002 5933422.914799999 564279.1386000002 5933431.5667 564262.5011999998 5933447.160800001 564229.0867999997 5933451.6161 564230.5719999997 5933476.1194 564246.9083000002 5933505.0778 564269.9276999999 5933522.1557 564289.9765999997 5933546.6589 564313.7385 5933569.677100001 564332.3025000002 5933588.2403 564341.9557999997 5933612.744000001 564345.6688999999 5933635.762800001 564342.699 5933662.4944 564333.7889 5933695.909 564318.9386 5933724.125700001 564310.7708999999 5933750.857000001 564312.9989 5933777.588199999 564321.9099000003 5933798.378900001 564334.5334999999 5933817.6841 564366.4632000001 5933833.2763 564411.7587000001 5933839.215700001 564448.1435000002 5933845.898 564468.9348999998 5933857.035800001 564480.0732000005 5933882.2818 564494.9244999997 5933938.7141 564522.3995000003 5933991.433599999 564548.3893999998 5934050.835999999 564578.0921 5934182.2634 564650.8634000002 5934251.318600001 564689.4768000003 5934319.630899999 564736.2581000002 5934448.0878 564830.5632999996 5934500.0646 564867.6913999999 5934517.590299999 564881.6754000001 5934569.8618 564923.3832999999 5934648.5689 565000.6091 5934698.317700001 565057.7858999996 5934740.640699999 565123.8731000004 5934765.885600001 565176.5942000002 5934785.190400001 565227.8300999999 5934800.8287 565282.3724999996 5934817.4287 565390.4479 5934827.451300001 565459.0522999996 5934829.643200001 565495.0773999998 5934827.449899999 565513.8729999997 5934846.4827 565521.3258999996 5934843.0023 565537.4210000001 5934871.7118 565549.6014 5934874.3215 565560.4764999999 5934883.891100001 565576.5717000002 5934883.455399999 565604.8469000002 5934874.7542 565652.6969999997 5934863.444 565662.2669000002 5934852.1338 565671.8366999999 5934841.692600001 565725.3419000004 5934826.900900001 565790.1569999997 5934818.886399999 565796.8475000002 5934738.5571 565768.7874999996 5934734.2652 565781.6704000002 5934724.386399999 565794.3102000002 5934732.237199999 565812.9042999996 5934736.369200001 565841.6907000002 5934738.022 565869.5129000004 5934726.865599999 565917.8575999998 5934714.744999999 565960.0040999996 5934697.1151 566004.2166999998 5934699.3391 566019.3016999997 5934680.421599999 566066.3559999997 5934648.2732 566142.9402000001 5934618.016799999 566197.7780999998 5934591.5426 566238.4336000001 5934558.2346 566283.7999999998 5934551.1249 566293.4836999998 5934536.703400001 566313.1261999998 5934479.027899999 566379.3092999999 5934433.643999999 566431.3103999998 5934355.5296 566514.4101 5934284.1482 566576.6659000004 5934263.781199999 566592.1295999996 5934227.5351 566610.7936000004 5934178.035 566628.1051000003 5934143.9529 566633.5148999998 5934133.133199999 566635.9494000003
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.14">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Rueckweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933614.3248 566587.3049999997 5933636.775699999 566610.8576999996 5933658.1917 566638.2708999999 5933668.426899999 566678.5236999998 5933724.478700001 566687.1726000002 5933740.791400001 566674.5513000004 5933748.078 566674.8317 5933787.056700001 566676.3313999996 5933870.6898 566687.8990000002 5933941.021500001 566686.4029000001 5933990.253799999 566678.0118000004 5934109.523 566661.5314999996 5934133.133199999 566635.9494000003
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.15">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hin- und Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933614.3248 566587.3049999997 5933605.4066 566579.2462999998 5933603.181500001 566577.2357000001 5933576.6994 566553.3057000004 5933550.071599999 566529.244 5933503.5397 566487.6610000003 5933456.0178 566449.0481000003 5933418.396299999 566418.3558 5933394.635600001 566386.6736000003 5933376.815199999 566348.0613000002 5933349.094799999 566277.7668000003 5933315.4345 566191.6316 5933287.714199999 566138.1679999996 5933280.555199999 566126.4868000001 5933268.903999999 566107.4757000003 5933242.173699999 566064.9028000003 5933217.424000001 566001.5384999998 5933199.8519 565947.3326000003 5933183.5178 565883.4733999996 5933170.153999999 565805.5059000002 5933148.624600001 565639.9181000004 5933121.898399999 565435.7177999998 5933104.0812 565288.6935999999 5933098.142000001 565245.6259000003 5933099.6275 565224.8345999997 5933112.993799999 565202.5585000003 5933133.043 565178.7973999996 5933167.281 565141.3305000002
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.16">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hinweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5934133.133199999 566635.9494000003 5934102.403100001 566628.0203999998 5934060.0305 566639.6703000004 5934018.671700001 566648.0294000004 5933976.432800001 566655.9485999998 5933930.234200001 566657.2679000003 5933861.156300001 566655.5069000004 5933787.6787 566646.2660999997 5933779.3191 566633.0662000002 5933760.8399 566614.1464 5933733.120999999 566599.1864 5933706.722100001 566578.5066 5933665.363399999 566574.1062000003 5933659.590600001 566574.8832 5933642.483999999 566577.1857000003 5933630.1645 566570.5855999999 5933614.3248 566587.3049999997
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.17">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Hinweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Hinweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933167.281 565141.3305000002 5933191.5898 565159.7977 5933263.232899999 565111.3980999999 5933253.5011 565094.9615000002 5933240.612299999 565065.9052999998
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+<gml:featureMember>
+<Fahrradrouten:Erster_Gruener_Ring gml:id="Erster_Gruener_Ring.18">
+<Fahrradrouten:RoutenTyp>Radfernwege</Fahrradrouten:RoutenTyp>
+<Fahrradrouten:Status>Hauptroute</Fahrradrouten:Status>
+<Fahrradrouten:Richtung>Rückweg</Fahrradrouten:Richtung>
+<Fahrradrouten:RoutenName>1. Grüner Ring</Fahrradrouten:RoutenName>
+<Fahrradrouten:Group_>1. Grüner Ring_Hauptroute_Rueckweg</Fahrradrouten:Group_>
+<Fahrradrouten:Routennummer>0</Fahrradrouten:Routennummer>
+<Fahrradrouten:Verlauf>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Verlauf>
+<Fahrradrouten:Routeninformation>
+Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken
+</Fahrradrouten:Routeninformation>
+<Fahrradrouten:SHAPE>
+<gml:MultiCurve>
+<gml:curveMember>
+<gml:LineString>
+<gml:posList>
+5933167.281 565141.3305000002 5933172.398600001 565135.7302999999 5933217.694599999 565091.9209000003 5933240.612299999 565065.9052999998
+</gml:posList>
+</gml:LineString>
+</gml:curveMember>
+</gml:MultiCurve>
+</Fahrradrouten:SHAPE>
+</Fahrradrouten:Erster_Gruener_Ring>
+</gml:featureMember>
+</wfs:FeatureCollection>

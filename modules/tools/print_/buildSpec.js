@@ -157,13 +157,13 @@ define(function (require) {
                     if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
                         styleObject.symbolizers.push(this.buildPointStyle(style));
                     }
-                    else if (feature.getGeometry().getType() === "Polygon") {
+                    else if (feature.getGeometry().getType() === "Polygon" || feature.getGeometry().getType() === "MultiPolygon") {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style));
                     }
                     else if (feature.getGeometry().getType() === "Circle") {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style));
                     }
-                    else if (feature.getGeometry().getType() === "LineString") {
+                    else if (feature.getGeometry().getType() === "LineString" || feature.getGeometry().getType() === "MultiLineString") {
                         styleObject.symbolizers.push(this.buildLineStringStyle(style));
                     }
                     mapfishStyleObject[stylingRule] = styleObject;
