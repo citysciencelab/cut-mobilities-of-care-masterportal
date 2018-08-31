@@ -266,7 +266,7 @@ define("app", function (require) {
                 }
                 case "legend": {
                     require(["modules/legend/legendLoader"], function (LegendLoader) {
-                        new LegendLoader(Radio.request("ModelList", "getModelByAttributes", {id: tool.id}));
+                        new LegendLoader(tool);
                     });
                     break;
                 }
