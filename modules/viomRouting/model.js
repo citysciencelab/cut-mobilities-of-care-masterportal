@@ -39,7 +39,7 @@ define(function (require) {
                 Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
             }
             else {
-                console.error("Konfiguration des Viom Routenplaners fehlerhaft.")
+                console.error("Konfiguration des Viom Routenplaners fehlerhaft.");
             }
         },
         setStartpoint: function (geoloc) {
@@ -111,29 +111,29 @@ define(function (require) {
                 async: true,
                 type: "GET",
                 success: function (data) {
-                    var treffer = [];
-
-                    try {
-                        _.each(data, function (strasse) {
-                            treffer.push([strasse.suggestion, strasse.highlighted]);
-                        });
-                        if (target === "start") {
-                            this.set("fromList", treffer);
-                        }
-                        else {
-                            this.set("toList", treffer);
-                        }
-                    }
-                    catch (error) {
-                        Radio.trigger("Alert", "alert", {text: "Adressabfrage unverständlich", kategorie: "alert-warning"});
-                    }
+                    this.suggestSuccess(data, target);
                 },
                 error: function (error) {
-                    Radio.trigger("Alert", "alert", {text: "Adressabfrage fehlgeschlagen: " + error.statusText, kategorie: "alert-warning"});
+                    console.error("Adressabfrage fehlgeschlagen: " + error.statusText);
                 },
                 timeout: 3000
             });
         },
+
+        suggestSuccess: function (data, target) {
+            var treffer = [];
+
+            _.each(data, function (strasse) {
+                treffer.push([strasse.suggestion, strasse.highlighted]);
+            });
+            if (target === "start") {
+                this.set("fromList", treffer);
+            }
+            else {
+                this.set("toList", treffer);
+            }
+        },
+
         geosearchByBKG: function (value, target) {
             $.ajax({
                 url: this.get("bkgGeosearchURL"),
@@ -142,26 +142,32 @@ define(function (require) {
                 async: true,
                 type: "GET",
                 success: function (data) {
-                    if (data.features[0] && data.features[0].geometry) {
-                        if (target === "start") {
-                            this.set("fromCoord", data.features[0].geometry.coordinates);
-                            this.set("fromList", "");
-                            this.set("startAdresse", data.features[0].properties.text);
-                        }
-                        else {
-                            this.set("toCoord", data.features[0].geometry.coordinates);
-                            this.set("toList", "");
-                            this.set("zielAdresse", data.features[0].properties.text);
-                        }
-                        this.setCenter(data.features[0].geometry.coordinates);
-                    }
+                    this.geosearchSuccess(data, target);
                 },
                 error: function (error) {
-                    Radio.trigger("Alert", "alert", {text: "Adressabfrage fehlgeschlagen: " + error.statusText, kategorie: "alert-warning"});
+                    console.error("Adressabfrage fehlgeschlagen: " + error.statusText);
+                    Radio.trigger("Alert", "alert", {text: "Die Adressabfrage ist fehlgeschlagen. Bitte versuchen Sie es später erneut.", kategorie: "alert-warning"});
                 },
                 timeout: 3000
             });
         },
+
+        geosearchSuccess: function (data, target) {
+            if (data.features[0] && data.features[0].geometry) {
+                if (target === "start") {
+                    this.set("fromCoord", data.features[0].geometry.coordinates);
+                    this.set("fromList", "");
+                    this.set("startAdresse", data.features[0].properties.text);
+                }
+                else {
+                    this.set("toCoord", data.features[0].geometry.coordinates);
+                    this.set("toList", "");
+                    this.set("zielAdresse", data.features[0].properties.text);
+                }
+                this.setCenter(data.features[0].geometry.coordinates);
+            }
+        },
+
         setCenter: function (newCoord) {
             if (newCoord && newCoord.length === 2) {
                 Radio.trigger("MapView", "setCenter", newCoord, 10);
@@ -185,49 +191,57 @@ define(function (require) {
                 splitter = this.get("routingtime").split(":");
                 utcHour = (parseFloat(splitter[0]) + (new Date().getTimezoneOffset() / 60)).toString();
                 utcMinute = parseFloat(splitter[1]);
-
                 request = request + "&STARTTIME=" + this.get("routingdate") + "T" + utcHour + ":" + utcMinute + ":00.000Z";
             }
-            $("#loader").show();
+
             $.ajax({
+                beforeSend: function () {
+                    Radio.trigger("Util", "showLoader");
+                },
                 url: this.get("viomRoutingURL").indexOf(window.location.host) !== -1 ? this.get("viomRoutingURL") : Radio.request("Util", "getProxyURL", this.get("viomRoutingURL")),
                 data: request,
                 async: true,
                 context: this,
-                success: function (data) {
-                    var geoJsonFormat = new ol.format.GeoJSON(),
-                        olFeature = geoJsonFormat.readFeature(data),
-                        vectorlayer = new ol.layer.Vector({
-                            source: new ol.source.Vector({
-                                features: [olFeature]
-                            }),
-                            style: new ol.style.Style({
-                                stroke: new ol.style.Stroke({
-                                    color: "blue",
-                                    width: 5
-                                })
-                            })
-                        });
-
-                    $("#loader").hide();
-                    vectorlayer.id = "routenplanerroute";
-                    this.set("routelayer", vectorlayer);
-                    Radio.trigger("Map", "addLayer", vectorlayer);
-                    this.set("endDescription", olFeature.get("EndDescription"));
-                    this.set("sumLength", (olFeature.get("Distance") / 1000).toFixed(1).toString().replace(".", ","));
-                    this.set("sumTime", Math.round(olFeature.get("Duration") / 60).toString());
-                    this.set("description", olFeature.get("RouteDescription"));
-                    Radio.trigger("Map", "zoomToExtent", olFeature.getGeometry().getExtent());
-                    this.addOverlay(olFeature);
+                success: this.routingSuccess,
+                complete: function () {
+                    Radio.trigger("Util", "hideLoader");
                 },
                 error: function () {
-                    $("#loader").hide();
                     this.set("description", null);
                     this.set("endDescription", null);
-                    Radio.trigger("Alert", "alert", {text: "Fehlermeldung bei Routenberechung", kategorie: "alert-warning"});
+                    Radio.trigger("Alert", "alert", {text: "Bei der Routenberechnung ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.", kategorie: "alert-warning"});
+                    console.error("Fehler bei Routenberechnung.");
                 }
             });
         },
+
+        routingSuccess: function (data) {
+            var geoJsonFormat = new ol.format.GeoJSON(),
+                olFeature = geoJsonFormat.readFeature(data),
+                vectorlayer = new ol.layer.Vector({
+                    source: new ol.source.Vector({
+                        features: [olFeature]
+                    }),
+                    style: new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: "blue",
+                            width: 5
+                        })
+                    })
+                });
+
+            $("#loader").hide();
+            vectorlayer.id = "routenplanerroute";
+            this.set("routelayer", vectorlayer);
+            Radio.trigger("Map", "addLayer", vectorlayer);
+            this.set("endDescription", olFeature.get("EndDescription"));
+            this.set("sumLength", (olFeature.get("Distance") / 1000).toFixed(1).toString().replace(".", ","));
+            this.set("sumTime", Math.round(olFeature.get("Duration") / 60).toString());
+            this.set("description", olFeature.get("RouteDescription"));
+            Radio.trigger("Map", "zoomToExtent", olFeature.getGeometry().getExtent());
+            this.addOverlay(olFeature);
+        },
+
         removeOverlay: function () {
             if (this.get("mhpOverlay") !== "") {
                 Radio.trigger("Map", "removeOverlay", this.get("mhpOverlay"));
