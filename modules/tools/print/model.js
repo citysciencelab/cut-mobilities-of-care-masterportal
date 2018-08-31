@@ -517,21 +517,18 @@ define(function (require) {
         // Gibt den hexadezimal String und die Opacity zurück.
         getColor: function (value) {
             var color = value,
-                opacity = 1,
-                begin;
+                opacity = 1;
 
             // color kommt als array--> parsen als String
             color = color.toString();
 
             if (color.search("#") === -1) {
-                begin = color.indexOf("(") + 1;
-
-                color = color.substring(begin, color.length - 1);
                 color = color.split(",");
                 if (color.length === 4) {
                     opacity = parseFloat(color[3], 10);
                 }
                 color = this.rgbToHex(parseInt(color[0], 10), parseInt(color[1], 10), parseInt(color[2], 10));
+
                 return {
                     "color": color,
                     "opacity": opacity
