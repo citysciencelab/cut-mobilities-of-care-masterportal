@@ -977,7 +977,7 @@ Auch gibt es eine Möglichkeit die Vergleichsliste zu exportieren
 #### Portalconfig.menu.tools.children.addwms ######
 Das AddWMS-Tool ermöglicht das nachträgliche Hinzufügen weiterer WMS über Eingabe von Dienst-URL. Der Dienst wird untersucht und dessen Layer werden unterhalb der [Fachdaten](#markdown-header-themenconfigfachdaten) in einem separaten Bereich hinzugefügt. Dieses Tool steht nur in Portalen vom Baumtyp [custom](#markdown-header-portalconfig) zur Verfügung.  
 
-Dieses Tool nutzt zum Einbinden die konfigurierte [Proxy-URL](doc/config.js.md#configjs). Der Proxy muss entsprechend konfiguriert sein, und die Dienst-URL durchlassen. Ggf. muss ein offener Proxy definiert werden.
+Dieses Tool nutzt zum Einbinden die konfigurierte [Proxy-URL](config.js.md#configjs). Der Proxy muss entsprechend konfiguriert sein, und die Dienst-URL durchlassen. Ggf. muss ein offener Proxy definiert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
