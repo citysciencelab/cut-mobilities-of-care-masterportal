@@ -196,6 +196,11 @@
           {
             "name": "WMS hinzufügen",
             "glyphicon": "glyphicon-plus"
+                    },
+                    "styleWMS": {
+                        "name": "Style WMS",
+                        "glyphicon": "glyphicon-tint",
+                        "onlyDesktop": true
           }
         }
       },
@@ -553,13 +558,15 @@
         "Titel": "Gruppenlayer",
         "Layer": [
         {
-          "id": [
-          {
-            "id": "682"
-          },
-          {
-            "id": "1731"
-          }],
+          "id": "xyz",
+          "children":[
+            {
+              "id": "682"
+            },
+            {
+              "id": "1731"
+            }
+          ],
           "visibility": true,
           "name": "Kita und Krankenhäuser"
         }]

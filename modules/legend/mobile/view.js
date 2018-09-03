@@ -36,19 +36,28 @@ define(function (require) {
             return this;
         },
 
+        /**
+         * Steuert Maßnahmen zur Aufbereitung der Legende.
+         * @listens this.model~change:legendParams
+         * @returns {void}
+         */
         paramsChanged: function () {
-            this.addContentHTML();
-            this.render();
+            var legendParams = this.model.get("legendParams");
+
+            // Filtern von this.unset("legendParams")
+            if (!_.isUndefined(legendParams) && legendParams.length > 0) {
+                this.addContentHTML(legendParams);
+                this.render();
+            }
         },
 
         /**
          * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
          * Dieses wird im template benötigt.
+         * @param {object[]} legendParams Legendenobjekte by reference
          * @returns {void}
          */
-        addContentHTML: function () {
-            var legendParams = this.model.get("legendParams");
-
+        addContentHTML: function (legendParams) {
             _.each(legendParams, function (legendDefinition) {
                 _.each(legendDefinition.legend, function (legend) {
                     legend.html = this.contentTemplate(legend);

@@ -220,19 +220,6 @@ define(function (require) {
 
         getDisplayNamesOfFeatureAttributes: function (layerId) {
             return this.get(layerId).get("gfiAttributes");
-        },
-        /**
-         * Fügt der Collection eine Kopie des Backbone Models hinzu.
-         * Es wird das Model geklont, welches zuerst im Gruppenlayer angegeben ist.
-         * @param {object} groupLayer  Layerobjekt des Gruppenlayers
-         * @return {Object[]} - Liste der Modelattribute
-         */
-        addGroupLayer: function (groupLayer) {
-            var modelById = this.getLayerWhere({id: groupLayer.id.split("_groupLayer")[0]}),
-                cloneObj = modelById.clone();
-
-            cloneObj.set("id", groupLayer.id);
-            this.add(cloneObj);
         }
     });
 

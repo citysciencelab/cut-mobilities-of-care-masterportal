@@ -41,20 +41,30 @@ define(function (require) {
         className: "legend-win",
         template: _.template(LegendTemplate),
         contentTemplate: _.template(ContentTemplate),
+
+        /**
+         * Steuert Maßnahmen zur Aufbereitung der Legende.
+         * @listens this.model~change:legendParams
+         * @returns {void}
+         */
         paramsChanged: function () {
-            Radio.trigger("Layer", "updateLayerInfo", this.model.get("paramsStyleWMS").styleWMSName);
-            this.addContentHTML();
-            this.render();
+            var legendParams = this.model.get("legendParams");
+
+            // Filtern von this.unset("legendParams")
+            if (!_.isUndefined(legendParams) && legendParams.length > 0) {
+                Radio.trigger("Layer", "updateLayerInfo", this.model.get("paramsStyleWMS").styleWMSName);
+                this.addContentHTML(legendParams);
+                this.render();
+            }
         },
 
         /**
          * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
          * Dieses wird im template benötigt.
+         * @param {object[]} legendParams Legendenobjekte by reference
          * @returns {void}
          */
-        addContentHTML: function () {
-            var legendParams = this.model.get("legendParams");
-
+        addContentHTML: function (legendParams) {
             _.each(legendParams, function (legendDefinition) {
                 _.each(legendDefinition.legend, function (legend) {
                     legend.html = this.contentTemplate(legend);

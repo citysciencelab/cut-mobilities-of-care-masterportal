@@ -5,10 +5,14 @@ define(function (require) {
         WMSLayer;
 
     WMSLayer = Layer.extend({
-        defaults: _.extend({}, Layer.prototype.defaults, {
-            isChildLayer: false,
-            infoFormat: "text/xml"
-        }),
+        defaults: function () {
+            // extended die Layer defaults by value
+            return _.extend(_.result(Layer.prototype, "defaults"), {
+                infoFormat: "text/xml",
+                // Eine Veränderung der SESSIONID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
+                sessionId: _.random(9999999)
+            });
+        },
 
         initialize: function () {
             if (!this.get("isChildLayer")) {
@@ -29,8 +33,7 @@ define(function (require) {
                 source;
 
             params = {
-                t: new Date().getMilliseconds(),
-                zufall: Math.random(),
+                SESSIONID: this.get("sessionId"),
                 LAYERS: this.get("layers"),
                 FORMAT: this.get("format") === "nicht vorhanden" ? "image/png" : this.get("format"),
                 VERSION: this.get("version"),
@@ -45,6 +48,7 @@ define(function (require) {
             this.set("tileloaderror", false);
 
             if (this.get("singleTile") !== true) {
+                // TileWMS can be cached
                 this.set("tileCountloaderror", 0);
                 this.set("tileCount", 0);
                 source = new ol.source.TileWMS({
@@ -79,6 +83,7 @@ define(function (require) {
                 this.setLayerSource(source);
             }
             else {
+                // ImageWMS can not be cached
                 this.setLayerSource(new ol.source.ImageWMS({
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
@@ -121,17 +126,18 @@ define(function (require) {
          */
         createLegendURL: function () {
             var layerNames,
-                legendURL = [];
+                legendURL = [],
+                version = this.get("version");
 
             if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
                 layerNames = this.get("layers").split(",");
 
                 if (layerNames.length === 1) {
-                    legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
+                    legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
                 }
                 else if (layerNames.length > 1) {
                     _.each(layerNames, function (layerName) {
-                        legendURL.push(this.get("url") + "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
+                        legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
                     }, this);
                 }
                 this.set("legendURL", legendURL);
@@ -222,6 +228,16 @@ define(function (require) {
             this.get("layer").getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});
         },
 
+        /**
+         * Lädt den WMS neu, indem ein Parameter verändert wird.
+         * @returns {void}
+         */
+        updateSource: function () {
+            this.newSessionId();
+
+            this.get("layer").getSource().updateParams({SESSIONID: this.get("sessionId")});
+        },
+
         setInfoFormat: function (value) {
             this.set("infoFormat", value);
         },
@@ -254,6 +270,14 @@ define(function (require) {
                 coordinate = Radio.request("GFI", "getCoordinate");
 
             return this.get("layerSource").getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")});
+        },
+
+        /*
+        * random setter for sessionId
+        * @returns {void}
+        */
+        newSessionId: function () {
+            this.set("sessionId", _.random(9999999));
         }
     });
 
