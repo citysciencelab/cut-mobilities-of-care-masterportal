@@ -54,25 +54,15 @@ define(function () {
             }, this);
         },
         /**
-         * @description Führt die Suche in der Layervariablen mit Suchstring aus.
+         * Führt die Suche in der Layervariablen mit Suchstring aus und findet im Layernamen und im dataset name.
          * @param {string} searchStringRegExp - Suchstring als RegExp.
          * @returns {void}
          */
         searchInLayers: function (searchStringRegExp) {
             _.each(this.get("layers"), function (layer) {
-                var layerName = layer.name.replace(/ /g, ""),
-                    metaName;
+                var searchString = layer.metaName ? layer.metaName.replace(/ /g, "") : layer.name.replace(/ /g, "");
 
-                if (layer.metaName !== null) {
-                    metaName = layer.metaName.replace(/ /g, "");
-                    if (metaName.search(searchStringRegExp) !== -1 && metaName === layerName) {
-                        Radio.trigger("Searchbar", "pushHits", "hitList", layer);
-                    }
-                    else if (metaName.search(searchStringRegExp) !== -1 || layerName.search(searchStringRegExp) !== -1) {
-                        Radio.trigger("Searchbar", "pushHits", "hitList", layer);
-                    }
-                }
-                else if (layerName.search(searchStringRegExp) !== -1) {
+                if (searchString.search(searchStringRegExp) !== -1) {
                     Radio.trigger("Searchbar", "pushHits", "hitList", layer);
                 }
             }, this);
@@ -91,7 +81,7 @@ define(function () {
             _.each(layerModels, function (model) {
                 this.get("layers").push({
                     name: model.name,
-                    metaName: _.has(model, "datasets") && _.has(model.datasets[0], "md_name") ? model.datasets[0].md_name : model.name,
+                    metaName: _.has(model, "datasets") && _.has(model.datasets[0], "md_name") ? model.name + " (" + model.datasets[0].md_name + ")" : model.name,
                     type: "Thema",
                     glyphicon: "glyphicon-list",
                     id: model.id

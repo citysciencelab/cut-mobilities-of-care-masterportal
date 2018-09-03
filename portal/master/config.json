@@ -261,6 +261,17 @@
           },
           "featureLister":
           {
+          "addWMS":
+          {
+            "name": "WMS hinzufügen",
+            "glyphicon": "glyphicon-plus"
+          },
+          "styleWMS": {
+            "name": "Style WMS",
+            "glyphicon": "glyphicon-tint",
+            "onlyDesktop": true
+          },
+          "featureLister": {
             "name": "Liste",
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10

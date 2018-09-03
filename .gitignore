@@ -3,6 +3,8 @@
 
 .DS_Store
 *.sass-cache
+css/bootstrap.css
+css/modules.css
 
 coverage
 test/coverage
