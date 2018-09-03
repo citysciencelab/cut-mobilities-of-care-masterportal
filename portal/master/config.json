@@ -259,8 +259,6 @@
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
           },
-          "featureLister":
-          {
           "addWMS":
           {
             "name": "WMS hinzufügen",
