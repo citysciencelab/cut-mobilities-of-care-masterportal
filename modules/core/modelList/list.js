@@ -33,6 +33,7 @@ define(function (require) {
         CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
         Einwohnerabfrage_HH = require("modules/tools/einwohnerabfrage_hh/model"),
         ParcelSearch = require("modules/tools/parcelSearch/model"),
+        StyleWMS = require("modules/tools/styleWMS/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
         ModelList;
 
@@ -137,6 +138,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "parcelSearch") {
                     return new ParcelSearch(attrs, options);
+                }
+                else if (attrs.id === "styleWMS") {
+                    return new StyleWMS(attrs, options);
                 }
                 else if (attrs.id === "compareFeatures") {
                     return new CompareFeaturesModel(attrs, options);

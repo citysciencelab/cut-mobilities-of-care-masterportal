@@ -270,6 +270,12 @@ define("app", function (require) {
                     });
                     break;
                 }
+                case "styleWMS": {
+                    require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
+                        new StyleWMSView({model: tool});
+                    });
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -391,10 +397,6 @@ define("app", function (require) {
             }
         });
     }
-
-    require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
-        new StyleWMSView();
-    });
 
     require(["modules/highlightFeature/model"], function (HighlightFeature) {
         new HighlightFeature();

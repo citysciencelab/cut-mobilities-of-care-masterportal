@@ -1,7 +1,10 @@
-define(function () {
+define(function (require) {
 
-    var StyleWMS = Backbone.Model.extend({
-        defaults: {
+    var Tool = require("modules/core/modelList/tool/model"),
+        StyleWMS;
+
+    StyleWMS = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             // true wenn dieses Tool im Fenster angezeigt wird und damit aktiv ist
             isCurrentWin: false,
             // true wenn das Fenster minimiert ist
@@ -29,17 +32,18 @@ define(function () {
             styleWMSName: "",
             // Namen und IDs der verfügbaren stylebaren Layer
             styleableLayerList: []
-        },
+        }),
 
         initialize: function () {
             var channel = Radio.channel("StyleWMS");
 
+            this.superInitialize();
             channel.on({
                 "openStyleWMS": function (model) {
 
                     // Prüfe ob bereits ein Fenster offen ist, wenn nicht erzeuge ein Fenster
-                    if (this.get("isCurrentWin") !== true) {
-                        this.setIsCurrentWin(true);
+                    if (this.get("isActive") !== true) {
+                        this.setIsActive(true);
                         Radio.trigger("Window", "toggleWin", this);
                     }
 
@@ -78,27 +82,29 @@ define(function () {
                 }
             });
 
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
+            // this.listenTo(Radio.channel("Window"), {
+            //     "winParams": this.setStatus
+            // });
         },
 
-        // Fenstermanagement
-        setStatus: function (args) {
-            if (args[2].get("id") === "styleWMS") {
-                this.setIsCollapsed(args[1]);
-                this.setIsCurrentWin(args[0]);
-            }
-            else {
-                this.setIsCurrentWin(false);
-            }
-        },
+        // // Fenstermanagement
+        // setStatus: function (args) {
+        //     console.log(args);
+        //     if (args[2].get("id") === "styleWMS") {
+        //         this.setIsCollapsed(args[1]);
+        //         this.setIsCurrentWin(args[0]);
+        //     }
+        //     else {
+        //         this.setIsCurrentWin(false);
+        //     }
+        // },
 
         // Aktualisiere die Liste stylebarer Layer
         refreshStyleableLayerList: function () {
 
             var styleableLayerList = [],
-                layerModelList;
+                layerModelList,
+                result;
 
             // Berücksichtige selektierte stylebare Layer
             layerModelList = Radio.request("ModelList", "getModelsByAttributes", {styleable: true, isSelected: true});
@@ -111,7 +117,7 @@ define(function () {
 
             // Wenn das aktuelle layerModel nicht mehr enthalten ist wird es deaktiviert
             if (this.get("model") !== null && this.get("model") !== undefined) {
-                var result = _.find(styleableLayerList, function (styleableLayer) {
+                result = _.find(styleableLayerList, function (styleableLayer) {
                     return styleableLayer.id === this.get("model").get("id");
                 }, this);
 
@@ -393,15 +399,15 @@ define(function () {
 
         setErrors: function (value) {
             this.set("errors", value);
-        },
-
-        setIsCurrentWin: function (value) {
-            this.set("isCurrentWin", value);
-        },
-
-        setIsCollapsed: function (value) {
-            this.set("isCollapsed", value);
         }
+
+        // setIsCurrentWin: function (value) {
+        //     this.set("isCurrentWin", value);
+        // },
+
+        // setIsCollapsed: function (value) {
+        //     this.set("isCollapsed", value);
+        // }
     });
 
     return StyleWMS;
