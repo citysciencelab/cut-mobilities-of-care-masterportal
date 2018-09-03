@@ -1,4 +1,5 @@
 import LightMenu from "./desktop/listViewLight";
+import Menu from "./desktop/listView";
 import MobileMenu from "./mobile/listView";
 
 function MenuLoader () {
@@ -33,28 +34,24 @@ function MenuLoader () {
                 channel.trigger("ready");
             }
             else if (this.treeType === "light") {
-                debugger;
                 caller.currentMenu = new LightMenu();
                 channel.trigger("ready");
                 Radio.trigger("Map", "updateSize");
             }
             else {
-                // require(["modules/menu/desktop/listView"], function (Menu) {
-                //     caller.currentMenu = new Menu();
-                //     channel.trigger("ready");
-                //     Radio.trigger("Map", "updateSize");
-                // });
+                caller.currentMenu = new Menu();
+                channel.trigger("ready");
+                Radio.trigger("Map", "updateSize");
             }
             // Nachdem die MapSize geändert wurde, muss die Map aktualisiert werden.
             Radio.trigger("Map", "updateSize");
         }
     };
     this.currentMenu = this.loadMenu(this);
-    debugger;
+
     Radio.on("Util", {
         "isViewMobileChanged": function () {
             if (this.menuStyle === "DEFAULT") {
-                debugger;
                 this.currentMenu.removeView();
                 this.currentMenu = this.loadMenu(this);
             }
