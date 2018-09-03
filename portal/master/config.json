@@ -259,11 +259,6 @@
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
           },
-          "addWMS":
-          {
-            "name": "WMS hinzufügen",
-            "glyphicon": "glyphicon-plus"
-          },
           "styleWMS": {
             "name": "Style WMS",
             "glyphicon": "glyphicon-tint",
