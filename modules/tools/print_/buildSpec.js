@@ -82,17 +82,22 @@ define(function (require) {
          * @returns {object} wms layer spec
          */
         buildTileWms: function (layer) {
-            var source = layer.getSource();
+            var source = layer.getSource(),
+                customParams = {
+                    "TRANSPARENT": "true"
+                };
 
+            // if (_.has(source.getParams(), "SLD_BODY")) {
+            //     customParams.SLD_BODY = encodeURIComponent(source.getParams().SLD_BODY);
+            //     customParams.STYLES = "style";
+            // }
             return {
                 baseURL: source.getUrls()[0],
                 opacity: layer.getOpacity(),
                 type: "WMS",
                 layers: source.getParams().LAYERS.split(","),
                 imageFormat: source.getParams().FORMAT,
-                customParams: {
-                    "TRANSPARENT": "true"
-                }
+                customParams: customParams
             };
         },
 
@@ -117,11 +122,11 @@ define(function (require) {
         },
 
         /**
-          * returns vector layer information
-          * @param {ol.layer.Vector} layer - vector layer with vector source
-          * @param {array[number]} extent mapextent
-          * @returns {object} geojson layer spec
-         */
+         * returns vector layer information
+         * @param {ol.layer.Vector} layer - vector layer with vector source
+         * @param {[number]} extent mapextent
+         * @returns {object} geojson layer spec
+        */
         buildVector: function (layer, extent) {
             var source = layer.getSource(),
                 geojsonList = [],

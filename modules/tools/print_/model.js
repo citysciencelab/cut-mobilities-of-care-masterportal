@@ -158,6 +158,7 @@ define(function (require) {
         createPrintJob: function (printAppId, payload, format) {
             var url = this.get("mapfishServiceUrl") + printAppId + "/report." + format;
 
+            Radio.trigger("Util", "showLoader");
             this.sendRequest(url, "POST", this.waitForPrintJob, payload);
         },
 
@@ -175,6 +176,7 @@ define(function (require) {
                     this.waitForPrintJob(response);
                 }
                 else {
+                    Radio.trigger("Util", "hideLoader");
                     window.open(this.get("mapfishServiceUrl") + "report/" + response.ref);
                 }
             });
