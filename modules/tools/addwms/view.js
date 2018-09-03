@@ -15,6 +15,10 @@ define(function (require) {
             "keydown": "keydown"
         },
         initialize: function (attr) {
+            // Tool ist nur für treeType: custom verfügbar
+            if (Radio.request("Parser", "getTreeType") !== "custom") {
+                return;
+            }
             this.model = new AddWMSModel(attr);
             this.listenTo(this.model, {
                 "change:wmsURL": this.urlChange,
