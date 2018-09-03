@@ -11,10 +11,6 @@ label {
     font-weight: normal;
 }
 
-*:not(.badge) {
-    border-radius: 0 !important;
-}
-
 
 .lgv-container #cursorGlyph {
     position: absolute;
