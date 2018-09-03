@@ -87,8 +87,5 @@
 //     require(["app"]);
 // });
 
-import * as Backbone from "backbone";
-import * as Radio from "backbone.Radio";
-import * as _ from "underscore";
 
 import "./app";
