@@ -231,7 +231,7 @@ define("app", function (require) {
                     break;
                 }
                 case "routing": {
-                    require(["modules/viomRouting/view"], function (RoutingView) {
+                    require(["modules/tools/viomRouting/view"], function (RoutingView) {
                         new RoutingView(tool);
                     });
                     break;
