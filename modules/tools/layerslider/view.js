@@ -51,11 +51,19 @@ define(function (require) {
             return this;
         },
 
+        /**
+         * Startet das Interval
+         * @returns {void}
+         */
         playSlider: function () {
             this.model.startInterval();
             this.toggleGlyphicon("glyphicon-pause");
         },
 
+        /**
+         * Stoppt das Interval durch Pause oder Stop
+         * @returns {void}
+         */
         stopSlider: function () {
             if (!_.isNull(this.model.get("windowsInterval"))) {
                 this.toggleGlyphicon("glyphicon-stop");
@@ -66,50 +74,66 @@ define(function (require) {
             }
         },
 
+        /**
+         * Triggert den vorherigen Layer an
+         * @returns {void}
+         */
         backwardSlider: function () {
             this.model.backwardLayer();
         },
 
+        /**
+         * Triggert den nächsten Layer an
+         * @returns {void}
+         */
         forwardSlider: function () {
             this.model.forwardLayer();
         },
 
+        /**
+         * Steuert die Aktionen nach einem Layerwechsel im Model
+         * @returns {void}
+         */
         layerSwitched: function () {
             this.setProgress();
             this.setTitle();
         },
 
+        /**
+         * Berechnet und setzt die Breite und Abstand der ProgressBar
+         * @returns {void}
+         */
         setProgress: function () {
             var activeIndex = this.model.getActiveIndex(),
-                max = this.model.get("layerIds").length - 1,
-                progressBarWidth = this.model.get("progressBarWidth");
+                max = this.model.get("layerIds").length,
+                progressBarWidth = this.model.get("progressBarWidth"),
+                singleStep = (100 - progressBarWidth) / (max - 1);
+
+            this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
 
             if (activeIndex === -1) {
-                this.$el.find(".progress-bar").attr("aria-valuenow", "0");
                 this.$el.find(".progress-bar").css("width", "0%");
                 this.$el.find(".progress-bar").css("margin-left", "0%");
             }
-            else if (activeIndex === 0) {
-                this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
-                this.$el.find(".progress-bar").css("width", progressBarWidth + "%");
-                this.$el.find(".progress-bar").css("margin-left", "0%");
-            }
-            else if (activeIndex === max) {
-                this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
-                this.$el.find(".progress-bar").css("width", progressBarWidth + "%");
-                this.$el.find(".progress-bar").css("margin-left", (100 - progressBarWidth) + "%");
-            }
             else {
-                this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
                 this.$el.find(".progress-bar").css("width", progressBarWidth + "%");
-                this.$el.find(".progress-bar").css("margin-left", ((100 - progressBarWidth) / 2) + "%");
+                this.$el.find(".progress-bar").css("margin-left", (activeIndex * singleStep) + "%");
             }
         },
 
+        /**
+         * Setzt den Titel des aktiven Layer
+         * @returns {void}
+         */
         setTitle: function () {
             this.$el.find("#title").val(this.model.get("activeLayer").title);
         },
 
+        /**
+         * toggelt das Pause / Stop Glyphicon
+         * @param   {string} glyph Class des Glyphicon
+         * @returns {void}
+         */
         toggleGlyphicon: function (glyph) {
             this.$el.find("#stop").find("span").removeClass("glyphicon-stop glyphicon-pause").addClass(glyph);
         }
