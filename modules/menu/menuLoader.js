@@ -1,4 +1,5 @@
 import LightMenu from "./desktop/listViewLight";
+import MobileMenu from "./mobile/listView";
 
 function MenuLoader () {
     var channel = Radio.channel("MenuLoader");
@@ -28,12 +29,11 @@ function MenuLoader () {
             $("#main-nav").show();
 
             if (isMobile) {
-                // require(["modules/menu/mobile/listView"], function (Menu) {
-                //     caller.currentMenu = new Menu();
-                //     channel.trigger("ready");
-                // });
+                caller.currentMenu = new MobileMenu();
+                channel.trigger("ready");
             }
             else if (this.treeType === "light") {
+                debugger;
                 caller.currentMenu = new LightMenu();
                 channel.trigger("ready");
                 Radio.trigger("Map", "updateSize");
@@ -50,14 +50,16 @@ function MenuLoader () {
         }
     };
     this.currentMenu = this.loadMenu(this);
+    debugger;
     Radio.on("Util", {
         "isViewMobileChanged": function () {
             if (this.menuStyle === "DEFAULT") {
+                debugger;
                 this.currentMenu.removeView();
                 this.currentMenu = this.loadMenu(this);
             }
         }
     }, this);
-};
+}
 
 export default MenuLoader;
