@@ -83,7 +83,7 @@ Mit
 ```
 # grunt less:production
 // sowie ebenfalls über
-grunt less:development
+# grunt less:development
 ```
 wird die *css/modules.css* aus allen *.less Dateien* unter */modules/* erstellt.
 
