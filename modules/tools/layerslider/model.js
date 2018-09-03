@@ -51,8 +51,10 @@ define(function () {
          */
         toggleLayerVisibility: function (activeLayerId) {
             _.each(this.get("layerIds"), function (layer) {
-                this.sendModification(layer.layerId, layer.layerId === activeLayerId ? true : false);
-            }, this)
+                var status = layer.layerId === activeLayerId;
+
+                this.sendModification(layer.layerId, status);
+            }, this);
         },
 
         /**
@@ -66,22 +68,6 @@ define(function () {
                 isSelected: status,
                 isVisibleInMap: status
             });
-        },
-
-        /**
-         * Ermittelt die Prozentzahl des index im Array
-         * @returns {integer}   0-100
-         */
-        getFinished: function () {
-            if (!_.isUndefined(this.getActiveIndex())) {
-                var index = this.getActiveIndex() + 1,
-                    max = this.get("layerIds").length;
-                    
-                return Math.round(index * 100 / max);
-            }
-            else {
-                return 0;
-            }
         },
 
         /**
@@ -171,16 +157,6 @@ define(function () {
             else {
                 this.setActiveIndex(0);
             }
-        },
-
-        /**
-         * Setter des Windows Intervals. Bindet an this.
-         * @param {function} func                Funktion, die in this ausgeführt werden soll
-         * @param {integer}  autorefreshInterval Intervall in ms
-         * @returns {void}
-         */
-        setWindowsInterval: function (func, autorefreshInterval) {
-            this.set("windowsInterval", setInterval(func.bind(this), autorefreshInterval));
         },
 
         /**

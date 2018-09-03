@@ -270,6 +270,7 @@ define("app", function (require) {
                     require(["modules/tools/layerslider/view"], function (Layerslider) {
                         new Layerslider(tool);
                     });
+                    break;
                 }
                 default: {
                     break;

@@ -157,7 +157,8 @@
             }
           ]
       },
-      "tools": {
+      "tools": 
+      {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {

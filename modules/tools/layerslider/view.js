@@ -1,6 +1,7 @@
 define(function (require) {
     var LayersliderTemplate = require("text!modules/tools/layerslider/template.html"),
         LayersliderModel = require("modules/tools/layerslider/model"),
+        $ = require("jquery"),
         LayersliderView;
 
     LayersliderView = Backbone.View.extend({
@@ -15,7 +16,7 @@ define(function (require) {
                 title = _.has(attr, "title") ? attr.title : null,
                 timeInterval = _.has(attr, "timeInterval") ? attr.timeInterval : null;
 
-            //Pflichtattribut abfragen
+            // Pflichtattribut abfragen
             if (!layerIds) {
                 console.error("Konfiguration des layersliders unvollständig");
                 return;
@@ -41,7 +42,7 @@ define(function (require) {
                 this.delegateEvents();
             }
             else if (this.model.get("isCurrentWin") === false) {
-                this.model.reset();                
+                this.model.reset();
                 this.undelegateEvents();
             }
             else {
@@ -79,30 +80,29 @@ define(function (require) {
         },
 
         setProgress: function () {
-            var finishedPercent = this.model.getFinished(),
-                activeIndex = this.model.getActiveIndex(),
+            var activeIndex = this.model.getActiveIndex(),
                 max = this.model.get("layerIds").length - 1,
                 progressBarWidth = this.model.get("progressBarWidth");
 
             if (activeIndex === -1) {
                 this.$el.find(".progress-bar").attr("aria-valuenow", "0");
-                this.$el.find(".progress-bar").css("width", "0%")
-                this.$el.find(".progress-bar").css('margin-left', "0%")
+                this.$el.find(".progress-bar").css("width", "0%");
+                this.$el.find(".progress-bar").css("margin-left", "0%");
             }
             else if (activeIndex === 0) {
                 this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
-                this.$el.find(".progress-bar").css("width", progressBarWidth +"%")
-                this.$el.find(".progress-bar").css("margin-left", "0%")
+                this.$el.find(".progress-bar").css("width", progressBarWidth + "%");
+                this.$el.find(".progress-bar").css("margin-left", "0%");
             }
             else if (activeIndex === max) {
                 this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
-                this.$el.find(".progress-bar").css("width", progressBarWidth +"%")
-                this.$el.find(".progress-bar").css("margin-left", (100 - progressBarWidth) + "%")
+                this.$el.find(".progress-bar").css("width", progressBarWidth + "%");
+                this.$el.find(".progress-bar").css("margin-left", (100 - progressBarWidth) + "%");
             }
             else {
                 this.$el.find(".progress-bar").attr("aria-valuenow", activeIndex + 1);
-                this.$el.find(".progress-bar").css("width", progressBarWidth +"%")
-                this.$el.find(".progress-bar").css("margin-left", ((100 - progressBarWidth) / 2) + "%")
+                this.$el.find(".progress-bar").css("width", progressBarWidth + "%");
+                this.$el.find(".progress-bar").css("margin-left", ((100 - progressBarWidth) / 2) + "%");
             }
         },
 

@@ -1,6 +1,6 @@
 define(function (require) {
     var expect = require("chai").expect,
-        Model = require("../../../../modules/tools/layerslider/model.js");
+        Model = require("../../../../../modules/tools/layerslider/model.js");
 
     describe("modules/layerslider", function () {
         var model,
@@ -39,18 +39,6 @@ define(function (require) {
             it("should return average width", function () {
                 model.setProgressBarWidth(_.range(3));
                 expect(model.get("progressBarWidth")).to.equal(33);
-            });
-        });
-
-        describe("calculates correct percentage of done", function () {
-            it("should return 20 %", function () {
-                model.setLayerIds(layerIds);
-                model.setActiveIndex(0);
-                expect(model.getFinished()).to.equal(20);
-            });
-            it("should return 80 %", function () {
-                model.setActiveIndex(3);
-                expect(model.getFinished()).to.equal(80);
             });
         });
 
