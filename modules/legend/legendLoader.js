@@ -1,32 +1,27 @@
-define(function (require) {
-    var Model = require("modules/legend/model"),
-        LegendLoader;
+import Model from "./model";
+import MobileLegend from "./mobile/view";
+import DesktopLegend from "./desktop/view";
 
-    LegendLoader = function () {
-        this.loadMenu = function (caller) {
-            var isMobile = Radio.request("Util", "isViewMobile");
+function LegendLoader () {
+    this.loadMenu = function (caller) {
+        var isMobile = Radio.request("Util", "isViewMobile");
 
-            if (isMobile) {
-                require(["modules/legend/mobile/view"], function (Legend) {
-                    caller.currentLegend = new Legend(Model);
-                });
-            }
-            else {
-                require(["modules/legend/desktop/view"], function (Legend) {
-                    caller.currentLegend = new Legend(Model);
-                });
-            }
-        };
-
-        this.currentLegend = this.loadMenu(this, false);
-
-        Radio.on("Util", {
-            "isViewMobileChanged": function () {
-                this.currentLegend.removeView();
-                this.currentLegend = this.loadMenu(this);
-            }
-        }, this);
+        if (isMobile) {
+            caller.currentLegend = new MobileLegend(Model);
+        }
+        else {
+            caller.currentLegend = new DesktopLegend(Model);
+        }
     };
 
-    return LegendLoader;
-});
+    this.currentLegend = this.loadMenu(this, false);
+
+    Radio.on("Util", {
+        "isViewMobileChanged": function () {
+            this.currentLegend.removeView();
+            this.currentLegend = this.loadMenu(this);
+        }
+    }, this);
+}
+
+export default LegendLoader;
