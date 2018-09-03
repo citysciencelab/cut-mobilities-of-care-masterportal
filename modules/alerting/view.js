@@ -1,9 +1,5 @@
-
 import AlertingModel from "./model";
 import AlertingTemplate from "text-loader!./template.html";
-
-
-
 import "bootstrap";
 
 const AlertingView = Backbone.View.extend({

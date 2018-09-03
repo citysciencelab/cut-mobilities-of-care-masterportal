@@ -1,6 +1,3 @@
-
-
-
 const AlertingModel = Backbone.Model.extend({
     defaults: {
         // http://getbootstrap.com/components/#alerts-examples
