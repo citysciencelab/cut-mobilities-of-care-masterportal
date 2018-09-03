@@ -196,6 +196,11 @@
           {
             "name": "WMS hinzufügen",
             "glyphicon": "glyphicon-plus"
+                    },
+                    "styleWMS": {
+                        "name": "Style WMS",
+                        "glyphicon": "glyphicon-tint",
+                        "onlyDesktop": true
           }
         }
       },
