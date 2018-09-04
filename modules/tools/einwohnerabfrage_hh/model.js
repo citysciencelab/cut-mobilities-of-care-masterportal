@@ -1,5 +1,4 @@
 define(function (require) {
-
     var $ = require("jquery"),
         ol = require("openlayers"),
         Tool = require("modules/core/modelList/tool/model"),
@@ -256,7 +255,8 @@ define(function (require) {
         },
         /**
          * Handles (de-)activation of this Tool
-         * @param {object} args -
+         * @param {object} model - tool model
+         * @param {boolean} value flag is tool is ctive
          * @returns {void}
          */
         setStatus: function (model, value) {
