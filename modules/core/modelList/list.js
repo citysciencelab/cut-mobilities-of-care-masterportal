@@ -12,8 +12,8 @@ define(function (require) {
         Tool = require("modules/core/modelList/tool/model"),
         Legend = require("modules/legend/model"),
         Filter = require("modules/tools/filter/model"),
-        PrintModelV2 = require("modules/tools/print_/model"),
-        PrintModel = require("modules/tools/print/model"),
+        PrintV2 = require("modules/tools/print_/model"),
+        Print = require("modules/tools/print/model"),
         Measure = require("modules/tools/measure/model"),
         Draw = require("modules/tools/draw/model"),
         Animation = require("modules/tools/animation/model"),
@@ -28,9 +28,9 @@ define(function (require) {
         Formular = require("modules/formular/grenznachweis"),
         FeatureLister = require("modules/featureLister/model"),
         AddWms = require("modules/tools/addwms/model"),
-        GetCoordModel = require("modules/tools/getCoord/model"),
+        GetCoord = require("modules/tools/getCoord/model"),
         Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
-        CompareFeaturesModel = require("modules/tools/compareFeatures/model"),
+        CompareFeatures = require("modules/tools/compareFeatures/model"),
         Einwohnerabfrage_HH = require("modules/tools/einwohnerabfrage_hh/model"),
         ParcelSearch = require("modules/tools/parcelSearch/model"),
         StyleWMS = require("modules/tools/styleWMS/model"),
@@ -132,9 +132,9 @@ define(function (require) {
             else if (attrs.type === "tool") {
                 if (attrs.id === "print") {
                     if (attrs.version === undefined) {
-                        return new PrintModel(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                        return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                     }
-                    return new PrintModelV2(attrs, options);
+                    return new PrintV2(attrs, options);
                 }
                 else if (attrs.id === "parcelSearch") {
                     return new ParcelSearch(attrs, options);
@@ -143,7 +143,7 @@ define(function (require) {
                     return new StyleWMS(attrs, options);
                 }
                 else if (attrs.id === "compareFeatures") {
-                    return new CompareFeaturesModel(attrs, options);
+                    return new CompareFeatures(attrs, options);
                 }
                 else if (attrs.id === "einwohnerabfrage") {
                     return new Einwohnerabfrage_HH(attrs, options);
@@ -158,7 +158,7 @@ define(function (require) {
                     return new Filter(attrs, options);
                 }
                 else if (attrs.id === "coord") {
-                    return new GetCoordModel(attrs, options);
+                    return new GetCoord(attrs, options);
                 }
                 else if (attrs.id === "measure") {
                     return new Measure(_.extend(attrs, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}), options);

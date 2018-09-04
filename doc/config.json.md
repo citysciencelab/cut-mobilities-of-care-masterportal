@@ -784,14 +784,14 @@ Bis zur Version 3.0.0 kann noch auf Mapfish-Print 2 gedruck werden. ab dann wird
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|gfi (@deprecated in 3.0.0)|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
-|printID (@deprecated in 3.0.0)|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md). Ab v3.0.0 ersetzt durch mapfishServiceId|
+|gfi(@deprecated in 3.0.0)|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
+|printID(@deprecated in 3.0.0)|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md). Ab v3.0.0 ersetzt durch mapfishServiceId|
 |mapfishServiceId|nein|String||ID des neuen Druckdienstes (Mapfish-Print-3) in der restConf. Siehe [rest-services.json](rest-services.json.md).|
 |title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
 |[gfiMarker(@deprecated in 3.0.0)](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
 |configYAML(@deprecated in 3.0.0)|nein|String|master|Der Name der YAML-Datei der MapFish-Webapp. Ab v3.0.0 ersetzt durch printAppId|
 |printAppId|nein|String|master|Der Name der Druck-App für den Mapfish-Print-3.|
-|version|nein|String||Flag die angibt welche druckversion verwendet werden soll. Bei "mapfish_print_3" wird der Mapfish-Print-3 verwendet. @deprecated in 3.0.0|
+|version|nein|String||Flag die angibt welche Druckversion verwendet werden soll. Bei "mapfish_print_3" wird der Mapfish-Print-3 verwendet. @deprecated in 3.0.0|
 |outputFilename(@deprecated in 3.0.0)|nein|String|Ausdruck|Der Dateiname der PDF, den die MapFish-Webapp erstellt.|
 
 **Beispiel Mapfish-Print-2:**
@@ -991,7 +991,7 @@ Auch gibt es eine Möglichkeit die Vergleichsliste zu exportieren
 ******
 ******
 #### Portalconfig.menu.tools.children.addwms ######
-Das AddWMS-Tool ermöglicht das nachträgliche Hinzufügen weiterer WMS über Eingabe von Dienst-URL. Der Dienst wird untersucht und dessen Layer werden unterhalb der [Fachdaten](#markdown-header-themenconfigfachdaten) in einem separaten Bereich hinzugefügt. Dieses Tool steht nur in Portalen vom Baumtyp [custom](#markdown-header-portalconfig) zur Verfügung.  
+Das AddWMS-Tool ermöglicht das nachträgliche Hinzufügen weiterer WMS über Eingabe von Dienst-URL. Der Dienst wird untersucht und dessen Layer werden unterhalb der [Fachdaten](#markdown-header-themenconfigfachdaten) in einem separaten Bereich hinzugefügt. Dieses Tool steht nur in Portalen vom Baumtyp [custom](#markdown-header-portalconfig) zur Verfügung.
 
 Dieses Tool nutzt zum Einbinden die konfigurierte [Proxy-URL](config.js.md#configjs). Der Proxy muss entsprechend konfiguriert sein und die Dienst-URL durchleiten. Ggf. muss ein offener Proxy definiert werden.
 

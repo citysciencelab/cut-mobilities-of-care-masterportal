@@ -180,6 +180,10 @@ define("app", function (require) {
                     break;
                 }
                 case "print": {
+                    // @deprecated in version 3.0.0
+                    // remove "version" in doc and config.
+                    // rename "print_" to "print"
+                    // only load correct view
                     if (tool.has("version") && tool.get("version") === "mapfish_print_3") {
                         require(["modules/tools/print_/view"], function (PrintView) {
                             new PrintView({model: tool});
