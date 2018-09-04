@@ -45,6 +45,8 @@ define(function (require) {
             INCHES_PER_METER: 39.37
         }),
         initialize: function () {
+            var channel = Radio.channel("Print");
+
             this.superInitialize();
 
             this.listenTo(this, {
@@ -70,8 +72,17 @@ define(function (require) {
                     this.setIsGfiActive(isGfiActive);
                 }
             });
+            channel.on({
+                "createPrintJob": this.createPrintJob
+            }, this);
+            this.createMapFishServiceUrl(this.get("mapfishServiceId"));
         },
 
+        createMapFishServiceUrl: function (id) {
+            var serviceUrl = Radio.request("RestReader", "getServiceById", id).get("url");
+
+            this.setMapfishServiceUrl(serviceUrl);
+        },
         /**
          * Gets the capabilities for a specific print configuration
          * @param {Backbone.Model} model - this
