@@ -64,7 +64,7 @@ define(function (require) {
             }, this);
         },
         show: function () {
-            if ($("body").find(".legend-win").length === 0) {
+            if (this.$("body").find(".legend-win").length === 0) {
                 this.render();
             }
             this.model.setLayerList();

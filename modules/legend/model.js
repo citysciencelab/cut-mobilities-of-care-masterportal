@@ -6,7 +6,6 @@ define(function (require) {
 
     Legend = Tool.extend({
         defaults: _.extend({}, Tool.prototype.defaults, {
-            getLegendURLParams: "?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=",
             legendParams: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],

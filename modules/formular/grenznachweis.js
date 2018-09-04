@@ -163,6 +163,7 @@ define(function (require) {
             if (_.isEmpty(errors) === false) {
                 return errors;
             }
+            return null;
         },
         // anonymisierte Events
         focusout: function (evt) {
