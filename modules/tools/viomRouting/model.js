@@ -1,18 +1,17 @@
 define(function (require) {
-    var Tool = require("modules/core/modelList/tool/model"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
+        Tool = require("modules/core/modelList/Tool/model"),
         $ = require("jquery"),
         RoutingModel;
 
     RoutingModel = Tool.extend({
-        defaults: {
-            bkgSuggestURL: null,
-            bkgGeosearchURL: null,
-            viomRoutingURL: null,
-            viomProviderID: null,
-            description: null,
-            epsgCode: null,
-            endDescription: null,
+        defaults: _.extend({}, Tool.prototype.defaults, {
+            bkgSuggestURL: "",
+            bkgGeosearchURL: "",
+            viomRoutingURL: "",
+            viomProviderID: "",
+            description: "",
+            endDescription: "",
             routingtime: "",
             routingdate: "",
             fromCoord: "",
@@ -21,51 +20,54 @@ define(function (require) {
             toList: [],
             startAdresse: "",
             zielAdresse: "",
-            bbox: null,
+            bbox: "",
             routelayer: null,
             mhpOverlay: "",
-            isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true
-        },
+            isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true,
+            renderToWindow: true
+        }),
         initialize: function () {
-            this.setViomRoutingURL(this.get("viomRoutingID"));
-            this.setViomProviderID(this.get("viomRoutingID"));
-            this.setBkgSuggestURL(this.get("bkgSuggestID"));
-            this.setBkgGeosearchURL(this.get("bkgGeosearchID"));
-            this.setEpsgCode();
-            this.setBbox(this.get("bbox"));
-
-            if (_.isString(this.get("bkgSuggestURL")) && _.isString(this.get("bkgGeosearchURL")) && _.isString(this.get("viomRoutingURL")) && _.isString(this.get("viomProviderID"))) {
-                Radio.on("Window", "winParams", this.setStatus, this);
-                Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
-                Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
-            }
-            else {
-                console.error("Konfiguration des Viom Routenplaners fehlerhaft.");
-            }
+            this.superInitialize();
+            this.listenTo(this, {
+                "change:isActive": this.setStatus
+            });
+            Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
+            Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
         },
         setStartpoint: function (geoloc) {
             this.set("fromCoord", geoloc);
             this.setCenter(geoloc);
             this.set("startAdresse", "aktueller Standpunkt");
         },
+        setStatus: function (model, value) { // Fenstermanagement
+            var viomRoutingID,
+                bkgSuggestID,
+                bkgGeosearchID,
+                epsgCode,
+                bbox;
 
-        setStatus: function (args) { // Fenstermanagement
-            if (args[2].get("id") === "routing") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
+            if (value) {
+                viomRoutingID = Radio.request("RestReader", "getServiceById", model.get("viomRoutingID"));
+                bkgSuggestID = Radio.request("RestReader", "getServiceById", model.get("bkgSuggestID"));
+                bkgGeosearchID = Radio.request("RestReader", "getServiceById", model.get("bkgGeosearchID"));
+                epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "";
+                bbox = model.get("bbox") && epsgCode !== "" ? "&bbox=" + model.get("bbox") + epsgCode : null;
+
+                this.set("bkgSuggestURL", bkgSuggestID.get("url"));
+                this.set("bkgGeosearchURL", bkgGeosearchID.get("url"));
+                this.set("viomRoutingURL", viomRoutingID.get("url"));
+                this.set("viomProviderID", viomRoutingID.get("providerID"));
+                this.set("bbox", bbox);
+                this.set("epsgCode", epsgCode);
             }
         },
-
         deleteRouteFromMap: function () {
-            if (!_.isNull(this.get("routelayer"))) { // Funktion WÜRDE bei jeder Window-Aktion ausgeführt
+            if (this.get("routelayer") !== "") { // Funktion WÜRDE bei jeder Window-Aktion ausgeführt
                 this.removeOverlay();
                 Radio.trigger("Map", "removeLayer", this.get("routelayer"));
-                this.set("routelayer", null);
-                this.set("description", null);
-                this.set("endDescription", null);
+                this.set("routelayer", "");
+                this.set("description", "");
+                this.set("endDescription", "");
                 this.set("sumLength", "");
                 this.set("sumTime", "");
             }
@@ -112,29 +114,29 @@ define(function (require) {
                 async: true,
                 type: "GET",
                 success: function (data) {
-                    this.suggestSuccess(data, target);
+                    var treffer = [];
+
+                    try {
+                        _.each(data, function (strasse) {
+                            treffer.push([strasse.suggestion, strasse.highlighted]);
+                        });
+                        if (target === "start") {
+                            this.set("fromList", treffer);
+                        }
+                        else {
+                            this.set("toList", treffer);
+                        }
+                    }
+                    catch (error) {
+                        Radio.trigger("Alert", "alert", {text: "Adressabfrage unverständlich", kategorie: "alert-warning"});
+                    }
                 },
                 error: function (error) {
-                    console.error("Adressabfrage fehlgeschlagen: " + error.statusText);
+                    Radio.trigger("Alert", "alert", {text: "Adressabfrage fehlgeschlagen: " + error.statusText, kategorie: "alert-warning"});
                 },
                 timeout: 3000
             });
         },
-
-        suggestSuccess: function (data, target) {
-            var treffer = [];
-
-            _.each(data, function (strasse) {
-                treffer.push([strasse.suggestion, strasse.highlighted]);
-            });
-            if (target === "start") {
-                this.set("fromList", treffer);
-            }
-            else {
-                this.set("toList", treffer);
-            }
-        },
-
         geosearchByBKG: function (value, target) {
             $.ajax({
                 url: this.get("bkgGeosearchURL"),
@@ -143,32 +145,26 @@ define(function (require) {
                 async: true,
                 type: "GET",
                 success: function (data) {
-                    this.geosearchSuccess(data, target);
+                    if (data.features[0] && data.features[0].geometry) {
+                        if (target === "start") {
+                            this.set("fromCoord", data.features[0].geometry.coordinates);
+                            this.set("fromList", "");
+                            this.set("startAdresse", data.features[0].properties.text);
+                        }
+                        else {
+                            this.set("toCoord", data.features[0].geometry.coordinates);
+                            this.set("toList", "");
+                            this.set("zielAdresse", data.features[0].properties.text);
+                        }
+                        this.setCenter(data.features[0].geometry.coordinates);
+                    }
                 },
                 error: function (error) {
-                    console.error("Adressabfrage fehlgeschlagen: " + error.statusText);
-                    Radio.trigger("Alert", "alert", {text: "Die Adressabfrage ist fehlgeschlagen. Bitte versuchen Sie es später erneut.", kategorie: "alert-warning"});
+                    Radio.trigger("Alert", "alert", {text: "Adressabfrage fehlgeschlagen: " + error.statusText, kategorie: "alert-warning"});
                 },
                 timeout: 3000
             });
         },
-
-        geosearchSuccess: function (data, target) {
-            if (data.features[0] && data.features[0].geometry) {
-                if (target === "start") {
-                    this.set("fromCoord", data.features[0].geometry.coordinates);
-                    this.set("fromList", "");
-                    this.set("startAdresse", data.features[0].properties.text);
-                }
-                else {
-                    this.set("toCoord", data.features[0].geometry.coordinates);
-                    this.set("toList", "");
-                    this.set("zielAdresse", data.features[0].properties.text);
-                }
-                this.setCenter(data.features[0].geometry.coordinates);
-            }
-        },
-
         setCenter: function (newCoord) {
             if (newCoord && newCoord.length === 2) {
                 Radio.trigger("MapView", "setCenter", newCoord, 10);
@@ -192,57 +188,49 @@ define(function (require) {
                 splitter = this.get("routingtime").split(":");
                 utcHour = (parseFloat(splitter[0]) + (new Date().getTimezoneOffset() / 60)).toString();
                 utcMinute = parseFloat(splitter[1]);
+
                 request = request + "&STARTTIME=" + this.get("routingdate") + "T" + utcHour + ":" + utcMinute + ":00.000Z";
             }
-
+            $("#loader").show();
             $.ajax({
-                beforeSend: function () {
-                    Radio.trigger("Util", "showLoader");
-                },
                 url: this.get("viomRoutingURL").indexOf(window.location.host) !== -1 ? this.get("viomRoutingURL") : Radio.request("Util", "getProxyURL", this.get("viomRoutingURL")),
                 data: request,
                 async: true,
                 context: this,
-                success: this.routingSuccess,
-                complete: function () {
-                    Radio.trigger("Util", "hideLoader");
+                success: function (data) {
+                    var geoJsonFormat = new ol.format.GeoJSON(),
+                        olFeature = geoJsonFormat.readFeature(data),
+                        vectorlayer = new ol.layer.Vector({
+                            source: new ol.source.Vector({
+                                features: [olFeature]
+                            }),
+                            style: new ol.style.Style({
+                                stroke: new ol.style.Stroke({
+                                    color: "blue",
+                                    width: 5
+                                })
+                            })
+                        });
+
+                    $("#loader").hide();
+                    vectorlayer.id = "routenplanerroute";
+                    this.set("routelayer", vectorlayer);
+                    Radio.trigger("Map", "addLayer", vectorlayer);
+                    this.set("endDescription", olFeature.get("EndDescription"));
+                    this.set("sumLength", (olFeature.get("Distance") / 1000).toFixed(1).toString().replace(".", ","));
+                    this.set("sumTime", Math.round(olFeature.get("Duration") / 60).toString());
+                    this.set("description", olFeature.get("RouteDescription"));
+                    Radio.trigger("Map", "zoomToExtent", olFeature.getGeometry().getExtent());
+                    this.addOverlay(olFeature);
                 },
                 error: function () {
-                    this.set("description", null);
-                    this.set("endDescription", null);
-                    Radio.trigger("Alert", "alert", {text: "Bei der Routenberechnung ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.", kategorie: "alert-warning"});
-                    console.error("Fehler bei Routenberechnung.");
+                    $("#loader").hide();
+                    this.set("description", "");
+                    this.set("endDescription", "");
+                    Radio.trigger("Alert", "alert", {text: "Fehlermeldung bei Routenberechung", kategorie: "alert-warning"});
                 }
             });
         },
-
-        routingSuccess: function (data) {
-            var geoJsonFormat = new ol.format.GeoJSON(),
-                olFeature = geoJsonFormat.readFeature(data),
-                vectorlayer = new ol.layer.Vector({
-                    source: new ol.source.Vector({
-                        features: [olFeature]
-                    }),
-                    style: new ol.style.Style({
-                        stroke: new ol.style.Stroke({
-                            color: "blue",
-                            width: 5
-                        })
-                    })
-                });
-
-            $("#loader").hide();
-            vectorlayer.id = "routenplanerroute";
-            this.set("routelayer", vectorlayer);
-            Radio.trigger("Map", "addLayer", vectorlayer);
-            this.set("endDescription", olFeature.get("EndDescription"));
-            this.set("sumLength", (olFeature.get("Distance") / 1000).toFixed(1).toString().replace(".", ","));
-            this.set("sumTime", Math.round(olFeature.get("Duration") / 60).toString());
-            this.set("description", olFeature.get("RouteDescription"));
-            Radio.trigger("Map", "zoomToExtent", olFeature.getGeometry().getExtent());
-            this.addOverlay(olFeature);
-        },
-
         removeOverlay: function () {
             if (this.get("mhpOverlay") !== "") {
                 Radio.trigger("Map", "removeOverlay", this.get("mhpOverlay"));
@@ -266,73 +254,6 @@ define(function (require) {
         // setter for isGeolocationPossible
         setIsGeolocationPossible: function (value) {
             this.set("isGeolocationPossible", value);
-        },
-
-        /*
-        * setter for bkgSuggestURL
-        * @param {string} value bkgSuggestID
-        * @returns {void}
-        */
-        setBkgSuggestURL: function (value) {
-            var service = Radio.request("RestReader", "getServiceById", value);
-
-            this.set("bkgSuggestURL", service.get("url"));
-        },
-
-        /*
-        * setter for bkgGeosearchURL
-        * @param {string} value bkgGeosearchID
-        * @returns {void}
-        */
-        setBkgGeosearchURL: function (value) {
-            var service = Radio.request("RestReader", "getServiceById", value);
-
-            this.set("bkgGeosearchURL", service.get("url"));
-        },
-
-        /*
-        * setter for viomRoutingURL
-        * @param {object} value viomRoutingID
-        * @returns {void}
-        */
-        setViomRoutingURL: function (value) {
-            var service = Radio.request("RestReader", "getServiceById", value);
-
-            this.set("viomRoutingURL", service.get("url"));
-        },
-
-        /*
-        * setter for viomProviderID
-        * @param {string} value viomRoutingID
-        * @returns {void}
-        */
-        setViomProviderID: function (value) {
-            var service = Radio.request("RestReader", "getServiceById", value);
-
-            this.set("viomProviderID", service.get("providerID"));
-        },
-
-        /*
-        * setter for epsgCode
-        * @returns {void}
-        */
-        setEpsgCode: function () {
-            var code = !_.isUndefined(Radio.request("MapView", "getProjection")) ? Radio.request("MapView", "getProjection").getCode() : undefined,
-                value = code ? "&srsName=" + code : "";
-
-            this.set("epsgCode", value);
-        },
-
-        /*
-        * setter for bbox
-        * @param {number[]} value BBOX-Array
-        * @returns {void}
-        */
-        setBbox: function (value) {
-            var epsgCode = this.get("epsgCode"),
-                bbox = value && epsgCode !== "" ? "&bbox=" + value + epsgCode : null;
-
-            this.set("bbox", bbox);
         }
     });
 

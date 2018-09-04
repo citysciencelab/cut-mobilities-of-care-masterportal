@@ -222,7 +222,6 @@ define(function (require) {
             }
         },
         render: function (model, value) {
-            console.log(value);
             if (value) {
                 this.renderWin();
                 this.delegateEvents();
@@ -236,7 +235,6 @@ define(function (require) {
             return this;
         },
         renderWin: function () {
-            console.log(this.template(this.model.toJSON()));
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template(this.model.toJSON()));
         },
