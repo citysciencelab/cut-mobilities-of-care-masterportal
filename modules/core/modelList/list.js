@@ -21,7 +21,7 @@ define(function (require) {
         SearchByCoord = require("modules/tools/searchByCoord/model"),
         SaveSelection = require("modules/tools/saveSelection/model"),
         KmlImport = require("modules/tools/kmlimport/model"),
-        Routing = require("modules/viomRouting/model"),
+        Routing = require("modules/tools/viomRouting/model"),
         WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
         TreeFilter = require("modules/treefilter/model"),
         ExtendedFilter = require("modules/tools/extendedFilter/model"),

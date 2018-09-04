@@ -1,5 +1,5 @@
 define(function (require) {
-    var RoutingWin = require("text!modules/viomRouting/template.html"),
+    var RoutingWin = require("text!modules/tools/viomRouting/template.html"),
         $ = require("jquery"),
         RoutingView;
 
@@ -17,15 +17,17 @@ define(function (require) {
             var channel = Radio.channel("ViomRouting");
 
             this.template = _.template(RoutingWin);
-            this.listenTo(this.model, "change:isActive", this.render, this); // Fenstermanagement
-            this.listenTo(this.model, "change:fromCoord", this.toggleRoutingButton);
-            this.listenTo(this.model, "change:toCoord", this.toggleRoutingButton);
-            this.listenTo(this.model, "change:description", this.addDescription);
-            this.listenTo(this.model, "change:fromList", this.fromListChanged);
-            this.listenTo(this.model, "change:toList", this.toListChanged);
-            this.listenTo(this.model, "change:startAdresse", this.changeStartAdresse);
-            this.listenTo(this.model, "change:zielAdresse", this.changeZielAdresse);
-            this.listenTo(this.model, "change:isGeolocationPossible", this.changeGeolocationPossible, this);
+            this.listenTo(this.model, {
+                "change:isActive": this.render,
+                "change:fromCoord": this.toggleRoutingButton,
+                "change:toCoord": this.toggleRoutingButton,
+                "change:description": this.addDescription,
+                "change:fromList": this.fromListChanged,
+                "change:toList": this.toListChanged,
+                "change:startAdresse": this.changeStartAdresse,
+                "change:zielAdresse": this.changeZielAdresse,
+                "change:isGeolocationPossible": this.changeGeolocationPossible
+            }, this);
             channel.on({
                 "setRoutingDestination": this.setRoutingDestination
             }, this);
@@ -110,7 +112,9 @@ define(function (require) {
             this.model.set("zielAdresse", "gewähltes Ziel");
         },
         addDescription: function () {
-            this.renderWin(); // Template schreibt Ergebnisse in Div
+            if (!_.isNull(this.model.get("description"))) {
+                this.renderWin(); // Template schreibt Ergebnisse in Div
+            }
         },
         routeBerechnen: function () {
             if (this.$("#calc").parent().hasClass("disabled") === false) {
@@ -218,6 +222,7 @@ define(function (require) {
             }
         },
         render: function (model, value) {
+            console.log(value);
             if (value) {
                 this.renderWin();
                 this.delegateEvents();
@@ -231,6 +236,7 @@ define(function (require) {
             return this;
         },
         renderWin: function () {
+            console.log(this.template(this.model.toJSON()));
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template(this.model.toJSON()));
         },

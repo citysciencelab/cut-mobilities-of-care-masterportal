@@ -8,17 +8,21 @@ define(function (require) {
         AddWMSView;
 
     AddWMSView = Backbone.View.extend({
-        template: _.template(AddWMSWin),
+        events: {
+            "click #addWMSButton": "loadAndAddLayers",
+            "keydown": "keydown"
+        },
         initialize: function () {
+            // Tool ist nur für treeType: custom verfügbar
+            if (Radio.request("Parser", "getTreeType") !== "custom") {
+                return;
+            }
             this.listenTo(this.model, {
                 "change:wmsURL": this.urlChange,
                 "change:isActive": this.render
             });
         },
-        events: {
-            "click #addWMSButton": "loadAndAddLayers",
-            "keydown": "keydown"
-        },
+        template: _.template(AddWMSWin),
         // Löst das laden und einfügen der Layer in den Baum aus
         loadAndAddLayers: function () {
             this.model.loadAndAddLayers();

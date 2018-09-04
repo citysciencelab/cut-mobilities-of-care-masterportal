@@ -242,17 +242,12 @@
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
           },
-          "addWMS":
-          {
-            "name": "WMS hinzufügen",
-            "glyphicon": "glyphicon-plus"
+          "styleWMS": {
+            "name": "Style WMS",
+            "glyphicon": "glyphicon-tint",
+            "onlyDesktop": true
           },
-                    "styleWMS": {
-                      "name": "Style WMS",
-                      "glyphicon": "glyphicon-tint",
-                      "onlyDesktop": true
-                    },
-                    "featureLister": {
+          "featureLister": {
             "name": "Liste",
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10

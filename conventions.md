@@ -148,14 +148,9 @@ insert_final_newline = true
 ```
 
 ### CSS mit LESS
-CSS-Code gehört nur in LESS-Dateien und in keine HTML-Dokumente
-Über einen grunt-Task (grunt-contrib-less) werden automatisch CSS Dateien generiert:
+CSS-Code gehört nur in LESS-Dateien und in keine HTML-Dokumente oder CSS-Dateien. 
+Über einen grunt-Task (grunt-contrib-less) werden automatisch die LESS-Regeln in CSS konvertiert und ins Portal eingebunden. Näheres in der [setup-dev-proxy](doc/setup-dev-proxy.md#markdown-header-gruntless) bzw. in der [setup-dev](doc/setup-dev.md#markdown-header-gruntless).
 
-####bootstrap.css
-Mit *grunt less:production* wird die *css/bootstrap.css* anhand der *css/bootstrap.less* mit Masterportal-Variablen neu erstellt.
-
-####modules.css
-Mit *grunt less:production* sowie *grunt less:development* wird die *css/modules.css* aus allen *.less Dateien* unter */modules/* erstellt.
 
 ####Weitere Konventionen
 * Keine ID-Selektoren verwenden
