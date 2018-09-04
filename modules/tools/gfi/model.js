@@ -1,11 +1,12 @@
 define(function (require) {
     var ol = require("openlayers"),
+        Tool = require("modules/core/modelList/tool/model"),
         ThemeList = require("modules/tools/gfi/themes/list"),
         gfiParams = [],
         Gfi;
 
-    Gfi = Backbone.Model.extend({
-        defaults: {
+    Gfi = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             // detached | attached
             desktopViewType: "detached",
             // ist das Modal/Popover sichtbar
@@ -27,7 +28,7 @@ define(function (require) {
             // Anzahl der Themes
             numberOfThemes: 0,
             rotateAngle: 0
-        },
+        }),
         initialize: function () {
             var channel = Radio.channel("GFI"),
                 tool;
