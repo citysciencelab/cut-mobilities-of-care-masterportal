@@ -1,5 +1,6 @@
 import MapMarkerModel from "./model";
 
+
 const MapMarker = Backbone.View.extend({
     initialize: function () {
         var markerPosition,
@@ -13,6 +14,8 @@ const MapMarker = Backbone.View.extend({
             "zoomToBKGSearchResult": this.zoomToBKGSearchResult
         }, this);
 
+        this.model = new MapMarkerModel();
+
         this.render();
         // For BauInfo: requests customModule and askes for marker position to set.
         markerPosition = Radio.request("CustomModule", "getMarkerPosition");
@@ -20,7 +23,6 @@ const MapMarker = Backbone.View.extend({
             this.showMarker(markerPosition);
         }
     },
-    model: new MapMarkerModel(),
     id: "searchMarker",
     className: "glyphicon glyphicon-map-marker",
     /**
