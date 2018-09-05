@@ -402,6 +402,11 @@ define(function (require) {
             this.setSearchRegExp(value);
         },
 
+        searchHouseNumbers: function (value) {
+            Radio.trigger("Gaz", "findHouseNumbers", value);
+            this.setSearchRegExp(value);
+        },
+
         /**
          * finds a specific address in the address list and calls 'setGeometryByFeatureId' for the startPoint
          * will be executed after a click on a address in the hitList

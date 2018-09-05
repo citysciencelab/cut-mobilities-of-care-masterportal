@@ -20,12 +20,12 @@ define(function (require) {
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
-                this.setAddressSearchValue(evt);
+                this.setAddressSearchValue(evt, true);
                 this.$el.find(".address-search").focus();
                 evt.stopPropagation();
             },
             "click li.address": function (evt) {
-                this.setAddressSearchValue(evt);
+                this.setAddressSearchValue(evt, false);
                 this.model.selectStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
                 this.model.findRegionalSchool(this.model.get("startAddress"));
                 this.model.prepareRequest(this.model.get("startAddress"));
@@ -166,9 +166,15 @@ define(function (require) {
             }
         },
 
-        setAddressSearchValue: function (evt) {
+        setAddressSearchValue: function (evt, searchHouseNumber) {
             this.$el.find(".address-search").val(evt.target.textContent);
-            this.model.searchAddress(evt.target.textContent);
+            if (searchHouseNumber) {
+                this.model.setStreetNameList([evt.target.textContent]);
+                this.model.searchHouseNumbers(evt.target.textContent);
+            }
+            else {
+                this.model.searchAddress(evt.target.textContent);
+            }
         },
         closeView: function () {
             this.model.setIsActive(false);
