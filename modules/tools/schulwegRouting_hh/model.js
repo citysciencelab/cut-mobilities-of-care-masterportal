@@ -278,6 +278,7 @@ define(function (require) {
                 requestObj = {};
 
             if (Object.keys(address).length !== 0 && schoolID.length > 0) {
+                Radio.trigger("GFI", "setIsVisible", false);
                 requestObj = this.setObjectAttribute(requestObj, "Schul-ID", "string", schoolID);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerStrasse", "string", address.street);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerHausnr", "integer", parseInt(address.number, 10));
@@ -291,7 +292,7 @@ define(function (require) {
         sendRequest: function (requestID, requestObj) {
             this.get("requestIDs").push(requestID);
             this.toggleLoader(true);
-            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting.fmw", requestObj);
+            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting_wps.fmw", requestObj);
         },
         toggleLoader: function (show) {
             if (show) {
