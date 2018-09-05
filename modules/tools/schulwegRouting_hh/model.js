@@ -205,12 +205,20 @@ define(function (require) {
                 this.toggleLoader(false);
                 this.removeId(this.get("requestIDs"), requestID);
                 if (status === 200) {
-                    parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
-                    if (parsedData.ErrorOccured === "yes") {
-                        this.handleWPSError(parsedData);
+                    if (_.has(response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData, "Schulweg")) {
+                        parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
+                        if (parsedData.ErrorOccured === "yes") {
+                            this.handleWPSError(parsedData);
+                        }
+                        else {
+                            this.handleSuccess(parsedData);
+                        }
                     }
                     else {
-                        this.handleSuccess(parsedData);
+                        Radio.trigger("Alert", "alert", "<b>Entschuldigung</b><br>"
+                            + "Routing konnte nicht berechnet werden, mit folgender Fehlermeldung:<br><br>"
+                            + "<i>" + response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.serviceResponse.statusInfo.message + "</i><br><br>"
+                            + "Bitte wenden Sie sich mit dieser Fehlermeldung an den Administrator.");
                     }
                 }
                 else {
