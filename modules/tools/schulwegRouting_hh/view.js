@@ -157,12 +157,23 @@ define(function (require) {
         },
 
         searchAddress: function (evt) {
-            if (evt.target.value.length > 2) {
-                this.model.searchAddress(evt.target.value);
+            var evtValue = evt.target.value,
+                targetList;
+
+            if (evtValue.length > 2) {
+                this.model.searchAddress(evtValue);
             }
             else {
                 this.model.setAddressListFiltered([]);
                 this.model.setStartAddress({});
+            }
+
+            // necessary to find the correct house numbers for more results
+            if (evtValue.slice(-1) === " ") {
+                targetList = this.model.filterStreets(evtValue);
+                if (targetList.length === 1) {
+                    this.model.startSearch(targetList, []);
+                }
             }
         },
 

@@ -550,6 +550,30 @@ define(function (require) {
             });
         },
 
+        /**
+         * Searches all streets that contain the string
+        * @param {String} evtValue - input streetname
+        * @returns {array} targetList
+        */
+        filterStreets: function (evtValue) {
+            var streetNameList = this.get("streetNameList"),
+                targetStreet = evtValue.split(" ")[0],
+                targetList = [];
+
+            _.each(streetNameList, function (street) {
+                var streetNameParts = _.contains(street, " ") ? street.split(" ") : [street],
+                    resultStreets = _.filter(streetNameParts, function (part) {
+                        return part.toLowerCase() === targetStreet.toLowerCase();
+                    }, this);
+
+                if (!_.isEmpty(resultStreets)) {
+                    targetList.push(street);
+                }
+            }, this);
+
+            return targetList;
+        },
+
         setSchoolList: function (value) {
             this.set("schoolList", value);
         },
