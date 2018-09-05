@@ -32,7 +32,6 @@ define(function (require) {
             }
             else {
                 this.$el.empty();
-                this.model.reset();
                 this.undelegateEvents();
             }
             return this;
