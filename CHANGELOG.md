@@ -1,3 +1,13 @@
+# Changelog LGV Master-Portal 2.1.2
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 688f637b Es wurde ein Problem im Schulwegrouting behoben, welches den Aufruf einiger Adressen verhinderte. Das GFI wird beim wechseln der Schule oder Adresse im Schulwegrouting nun automatisch geschlossen.
+
 # Changelog LGV Master-Portal 2.1.1
 
 FIXES:
