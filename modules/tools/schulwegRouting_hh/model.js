@@ -35,8 +35,7 @@ define(function (require) {
         }),
 
         initialize: function () {
-            var layerModel,
-                channel = Radio.channel("SchulwegRouting");
+            var channel = Radio.channel("SchulwegRouting");
 
             this.superInitialize();
             this.listenTo(channel, {
@@ -86,16 +85,17 @@ define(function (require) {
                         this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
                         this.addRouteFeatures(this.get("layer").getSource());
                         this.get("layer").setStyle(this.routeStyle);
-                        layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
-                        this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
                     }
                 }
             });
 
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
-            if (!_.isUndefined(layerModel)) {
-                this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
-            }
+            this.listenTo(Radio.channel("Layer"), {
+                "featuresLoaded": function (layerId, features) {
+                    if (layerId === this.get("layerId")) {
+                        this.setSchoolList(this.sortSchoolsByName(features));
+                    }
+                }
+            });
         },
         toggleHVVLayer: function (value) {
             Radio.trigger("ModelList", "setModelAttributesById", "1935geofox-bus", {

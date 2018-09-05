@@ -45,7 +45,7 @@ define(function (require) {
         },
 
         featuresLoaded: function (features) {
-            Radio.trigger(this.get("channel"), "featuresLoaded", this.get("id"), features);
+            this.get("channel").trigger("featuresLoaded", this.get("id"), features);
         },
 
         /**
