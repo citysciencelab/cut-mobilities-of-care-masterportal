@@ -256,14 +256,20 @@ define(function (require) {
                 this.toggleLoader(false);
                 this.removeId(this.get("requestIDs"), requestID);
                 if (status === 200) {
-                    parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
-                    if (parsedData.ErrorOccured === "yes") {
-                        this.get("layer").setVisible(false);
-                        this.handleWPSError(parsedData);
+                    if (_.has(response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData, "Schulweg")) {
+                        parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
+                        if (parsedData.ErrorOccured === "yes") {
+                            this.handleWPSError(parsedData);
+                        }
+                        else {
+                            this.handleSuccess(parsedData);
+                        }
                     }
                     else {
-                        this.get("layer").setVisible(true);
-                        this.handleSuccess(parsedData);
+                        Radio.trigger("Alert", "alert", "<b>Entschuldigung</b><br>"
+                            + "Routing konnte nicht berechnet werden, mit folgender Fehlermeldung:<br><br>"
+                            + "<i>" + response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.serviceResponse.statusInfo.message + "</i><br><br>"
+                            + "Bitte wenden Sie sich mit dieser Fehlermeldung an den Administrator.");
                     }
                 }
                 else {
@@ -332,6 +338,7 @@ define(function (require) {
                 requestObj = {};
 
             if (Object.keys(address).length !== 0 && schoolID.length > 0) {
+                Radio.trigger("GFI", "setIsVisible", false);
                 requestObj = this.setObjectAttribute(requestObj, "Schul-ID", "string", schoolID);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerStrasse", "string", address.street);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerHausnr", "integer", parseInt(address.number, 10));
@@ -444,6 +451,11 @@ define(function (require) {
 
         searchAddress: function (value) {
             Radio.trigger("Gaz", "findStreets", value);
+            this.setSearchRegExp(value);
+        },
+
+        searchHouseNumbers: function (value) {
+            Radio.trigger("Gaz", "findHouseNumbers", value);
             this.setSearchRegExp(value);
         },
 
@@ -590,6 +602,30 @@ define(function (require) {
             _.each(features, function (feature) {
                 feature.unset("geometry");
             });
+        },
+
+        /**
+         * Searches all streets that contain the string
+        * @param {String} evtValue - input streetname
+        * @returns {array} targetList
+        */
+        filterStreets: function (evtValue) {
+            var streetNameList = this.get("streetNameList"),
+                targetStreet = evtValue.split(" ")[0],
+                targetList = [];
+
+            _.each(streetNameList, function (street) {
+                var streetNameParts = _.contains(street, " ") ? street.split(" ") : [street],
+                    resultStreets = _.filter(streetNameParts, function (part) {
+                        return part.toLowerCase() === targetStreet.toLowerCase();
+                    }, this);
+
+                if (!_.isEmpty(resultStreets)) {
+                    targetList.push(street);
+                }
+            }, this);
+
+            return targetList;
         },
 
         setSchoolList: function (value) {

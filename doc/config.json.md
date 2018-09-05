@@ -448,6 +448,7 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 |[wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter)|nein|Object||WFS Filter|
 |[schulwegrouting](#markdown-header-portalconfigmenutoolschildrenschulwegrouting)|nein|Object||Schulwegrouting|
 |[compareFeatures](#markdown-header-portalconfigmenutoolschildrencomparefeatures)|nein|Object||Feature-Vergleichsliste|
+|[layerslider](#markdown-header-portalconfigmenutoolschildrenlayerslider)|nein|Object||Layer nacheinander abspielen|
 |[addWMS](#markdown-header-portalconfigmenutoolschildrenaddwms)|nein|Object||Hinzufügen weiterer WMS über URL-Eingabe|
 
 Werden mehrere Werkzeuge verwendet, so werden die Objekte mit Komma getrennt. Die Reihenfolge der Werkzeuge in der Konfiguration gibt die Reihenfolge der Werkzeuge im Portal wieder.
@@ -987,6 +988,48 @@ Auch gibt es eine Möglichkeit die Vergleichsliste zu exportieren
 |numberOfFeaturesToShow|nein|integer|3|Anzahl der Features, die maximal pro Layer vergleichen werden kann|
 |numberOfAttributesToShow|nein|integer|12|Anzahl der Attribute die beim öffnen der Vergleichsliste angezeigt wird. Über einen Button ("mehr Infos") können dann alle Attribute angezeigt werden.|
 
+******
+******
+#### Portalconfig.menu.tools.children.layerslider ######
+Der Layerslider ermöglicht die Konfiguration eines Stack von Layern, die nacheinander mittels Play, Pause, Stop, Forward und Backward abgespielt werden können. Die Layer müssen hierfür regulär konfiguriert sein und werden mittels Radio nur sichtbar / unsichtbar geschaltet. Der layerslider eignet sich daher gut, um bspw. historische Karten in festgelegter Reihenfolge abzuspielen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|name|nein|String||Name des Werkzeuges im Menüeintrag.|
+|title|nein|String||Überschrift im Tool-Window.|
+|timeInterval|nein|number|2000|Zeitinterval in Millisekunden. Min-Interval = 500.|
+|layerIds|ja|Objekt[]||Konfiguration des Stack an Layern in spezifischer Reihenfolge.|
+|layerIds.title|ja|string||Titel des Layers im Layerslider.|
+|layerIds.layerId|ja|string||Wert aus der [services.json](services.json.md).|
+
+**Beispiel einer *layerslider*-Konfiguration:**
+
+```
+#!json
+
+"layerslider": {
+  "name": "Zeitreihe",
+  "glyphicon": "glyphicon-film",
+  "title": "Simulation von Beispiel-WMS",
+  "timeInterval": 2000,
+  "layerIds": [
+    {
+      "title": "Dienst 1",
+      "layerId": "8730"
+    },
+    {
+      "title": "Dienst 2",
+      "layerId": "2426"
+    },
+    {
+      "title": "Dienst 3",
+      "layerId": "4561"
+    }
+  ]
+}
+
+```
 
 ******
 ******

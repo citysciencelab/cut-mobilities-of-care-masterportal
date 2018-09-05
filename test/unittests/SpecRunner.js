@@ -95,6 +95,7 @@ define(function (require) {
             "modules/tools/print/testBuildSpec.js",
             "modules/tools/searchByCoord/testModel.js",
             "modules/legend/legendModel.js",
+            "modules/tools/layerslider/layersliderModel.js",
             "modules/tools/styleWMS/testModel.js",
             "modules/tools/styleWMS/testView.js",
             "modules/menu/desktop/layer/testViewLight.js",

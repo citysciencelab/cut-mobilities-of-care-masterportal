@@ -280,6 +280,12 @@ define("app", function (require) {
                     });
                     break;
                 }
+                case "layerslider": {
+                    require(["modules/tools/layerslider/view"], function (LayersliderView) {
+                        new LayersliderView({model: tool});
+                    });
+                    break;
+                }
                 default: {
                     break;
                 }

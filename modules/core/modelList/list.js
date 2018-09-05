@@ -35,6 +35,7 @@ define(function (require) {
         ParcelSearch = require("modules/tools/parcelSearch/model"),
         StyleWMS = require("modules/tools/styleWMS/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
+        LayersliderModel = require("modules/tools/layerslider/model"),
         ModelList;
 
     ModelList = Backbone.Collection.extend({
@@ -201,6 +202,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "formular") {
                     return new Formular(attrs, options);
+                }
+                else if (attrs.id === "layerslider") {
+                    return new LayersliderModel(attrs, options);
                 }
                 return new Tool(attrs, options);
             }
