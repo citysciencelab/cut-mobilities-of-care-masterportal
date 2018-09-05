@@ -1,6 +1,6 @@
 define(function (require) {
     var Grenznachweistemplate = require("text!modules/formular/grenznachweis.html"),
-        Grenznachweiscss = require("text!modules/formular/grenznachweis.css"),
+        Grenznachweiscss = require("text!modules/formular/grenznachweis.less"),
         $ = require("jquery"),
         FormularView;
 
