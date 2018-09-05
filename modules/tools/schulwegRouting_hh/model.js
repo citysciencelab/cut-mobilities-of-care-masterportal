@@ -120,7 +120,7 @@ define(function (require) {
             });
         },
 
-        printRoute: function () {
+        printRouteMapFish: function () {
             var visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
                     return layer.getVisible() === true;
                 }),
@@ -156,6 +156,90 @@ define(function (require) {
             buildSpec = buildSpec.toJSON();
             buildSpec = _.omit(buildSpec, "uniqueIdList");
             Radio.trigger("Print", "createPrintJob", "schulwegrouting", encodeURIComponent(JSON.stringify(buildSpec)), "pdf");
+        },
+        /**
+         * [printRouteClient description]
+         * @deprecated in v3.3.0. remove function. pdfMake is to remove. routing over mapfish print 3
+         * @return {void}
+         */
+        printRouteClient: function () {
+            var address = this.get("startAddress"),
+                school = this.get("selectedSchool"),
+                route = this.get("routeResult"),
+                routeDesc = this.get("routeDescription"),
+                filename = "Schulweg_zu_" + school.get("schulname"),
+                mapCanvas = document.getElementsByTagName("canvas")[0],
+                screenshotMap = mapCanvas.toDataURL("image/png"),
+                title = "Schulwegrouting",
+                pdfDef = this.createPDFDef(screenshotMap, address, school, route, routeDesc);
+
+            Radio.trigger("BrowserPrint", "print", filename, pdfDef, title, "download");
+        },
+        createPDFDef: function (screenshotMap, address, school, route, routeDescription) {
+            var addr = address.street + " " + address.number + address.affix,
+                schoolname = school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
+                routeDesc = this.createRouteDesc(routeDescription),
+                defs = {
+                    pageSize: "A4",
+                    pageOrientation: "portrait",
+                    content: [
+                        {
+                            image: screenshotMap,
+                            fit: [500, 500],
+                            style: ["image", "center"]
+                        },
+                        {
+                            text: "Zusammenfassung:",
+                            style: "subheader"
+                        },
+                        {
+                            canvas: [{
+                                type: "rect",
+                                x: 0,
+                                y: 0,
+                                w: 500,
+                                h: 90,
+                                r: 0,
+                                color: "#e5e5e5"
+                            }],
+                            style: "center"
+                        },
+                        {
+                            text: [
+                                {text: "Die Gesamtlänge beträgt ", style: "normal"},
+                                {text: route.kuerzesteStrecke + "m.\n", style: ["normal", "bold"]},
+                                {text: "von:\n", style: "small"},
+                                {text: addr + "\n", style: ["normal", "bold"]},
+                                {text: "nach:\n", style: "small"},
+                                {text: schoolname + "\n", style: ["normal", "bold"]}
+                            ],
+                            relativePosition: {
+                                x: 0,
+                                y: -90
+                            },
+                            style: ["onGrey", "center"],
+                            pageBreak: "after"
+                        },
+                        {
+                            text: "Routenbeschreibung:",
+                            style: "subheader"
+                        },
+                        {
+                            ol: routeDesc
+                        }
+                    ]
+                };
+
+            return defs;
+        },
+        /**
+         * [createRouteDesc description]
+         * @deprecated  in v3.3.0 remove this function when pdfmake is removed
+         * @param  {[object]} routeDescArray route description array
+         * @return {[String]} array of directions
+         */
+        createRouteDesc: function (routeDescArray) {
+            return _.pluck(routeDescArray, "anweisung");
         },
         prepareRouteDesc: function (routeDesc) {
             var data = [];

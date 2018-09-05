@@ -198,8 +198,14 @@ define(function (require) {
             this.$el.find(".result").html("");
             this.$el.find(".description").html("");
         },
+        /**
+         * trigger the model to print the route
+         * @deprecated in v 3.0.0 remove "this.model.printRouteClient();". enable "this.model.printRouteMapFish();"
+         * @return {[type]} [description]
+         */
         printRoute: function () {
-            this.model.printRoute();
+            this.model.printRouteClient();
+            // this.model.printRouteMapFish();
         }
     });
 
