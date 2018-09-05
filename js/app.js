@@ -1,22 +1,21 @@
-import Config from "../portal/master/config";
+import Config from "@app/config";
 // var Config = require("config"),
-//     Alert = require("modules/alerting/view"),
+import Alert from "../modules/alerting/view";
 import RestReaderList from "../modules/restReader/collection";
 //     Autostarter = require("modules/core/autostarter"),
 import Util from "../modules/core/util";
-//     StyleList = require("modules/vectorStyle/list"),
-//     RawLayerList = require("modules/core/rawLayerList"),
+import StyleList from "../modules/vectorStyle/list";
 import RawLayerList from "../modules/core/rawLayerList";
 import Preparser from "../modules/core/configLoader/preparser";
-//     Preparser = require("modules/core/configLoader/preparser"),
-//     ParametricURL = require("modules/core/parametricURL"),
+import ParametricURL from "../modules/core/parametricURL";
 import CRS from "../modules/core/crs";
 import Map from "../modules/core/map";
+
 //     WPS = require("modules/core/wps"),
 //     AddGeoJSON = require("modules/tools/addGeoJSON/model"),
 //     style,
 //     sbconfig;
-import _ from "underscore";
+
 
 // RemoteInterface laden
 // if (_.has(Config, "remoteInterface")) {
@@ -25,15 +24,14 @@ import _ from "underscore";
 //     });
 // }
 // Core laden
-// new Alert();
+new Alert();
 // new Autostarter();
-/*na work:
-new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});*/
-new Util();
+
+new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
 new RawLayerList();
 new Preparser();
-// new StyleList();
-// new ParametricURL();
+new StyleList();
+new ParametricURL();
 new CRS();
 new Map();
 new RestReaderList();
@@ -55,19 +53,24 @@ new RestReaderList();
 //     new WFSTransactionModel();
 // });
 //
-// require(["modules/menu/menuLoader"], function (MenuLoader) {
-//     new MenuLoader();
-// });
+import MenuLoader from "../modules/menu/menuLoader";
+new MenuLoader();
 //
 // require(["modules/zoomToGeometry/model"], function (ZoomToGeometry) {
 //     new ZoomToGeometry();
 // });
+import ZoomToGeometry from "../modules/zoomToGeometry/model";
+new ZoomToGeometry();
 //
 // if (_.has(Config, "zoomToFeature")) {
 //     require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
 //         new ZoomToFeature(Config.zoomToFeature);
 //     });
 // }
+import ZoomToFeature from "../modules/zoomtofeature/model";
+if (_.has(Config, "zoomToFeature")) {
+    new ZoomToFeature(Config.zoomToFeature);
+}
 //
 // // load customModules from config
 // if (_.has(Config, "customModules") && Config.customModules.length > 0) {
@@ -83,16 +86,14 @@ new RestReaderList();
 //     // new SliderRangeView();
 //     new DropdownView();
 // });
-// require(["modules/layerinformation/model"], function (LayerinformationModel) {
-//     new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
-// });
-//
-// if (_.has(Config, "footer")) {
-//     require(["modules/footer/view"], function (FooterView) {
-//         new FooterView(Config.footer);
-//     });
-// }
-//
+import LayerinformationModel from "../modules/layerinformation/model";
+new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
+
+
+import FooterView from "../modules/footer/view";
+if (_.has(Config, "footer")) {
+    new FooterView(Config.footer);
+}
 // if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
 //     require(["modules/ClickCounter/view"], function (ClickCounterView) {
 //         new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
@@ -111,24 +112,27 @@ new RestReaderList();
 //     });
 // }
 //
-// if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
-//     require(["modules/scaleline/view"], function (ScaleLineView) {
+// import ScaleLineView from "../modules/scaleline/view";
+// function loadFunctionalities () {
+//     if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
 //         new ScaleLineView();
-//     });
+//     }
 // }
+
 //
-// require(["modules/window/view"], function (WindowView) {
-//     new WindowView();
-// });
+import WindowView from "../modules/window/view";
+new WindowView();
 // // Module laden
 // // Tools
 // require(["modules/sidebar/view"], function (SidebarView) {
 //     new SidebarView();
 //
-//     _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
+import GfiModel from "../modules/tools/gfi/model";
+import LegendLoader from "../modules/legend/legendLoader";
+_.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
 //         var printConf = {};
 //
-//         switch (tool.id) {
+    switch (tool.id) {
 //             case "compareFeatures": {
 //                 require(["modules/tools/compareFeatures/view"], function (CompareFeaturesView) {
 //                     new CompareFeaturesView(tool);
@@ -159,12 +163,14 @@ new RestReaderList();
 //                 });
 //                 break;
 //             }
-//             case "gfi": {
+        case "gfi": {
 //                 require(["modules/tools/gfi/model"], function (GfiModel) {
 //                     new GfiModel(_.extend(tool, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}));
 //                 });
-//                 break;
-//             }
+
+            new GfiModel(_.extend(tool, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}));
+            break;
+        }
 //             case "coord": {
 //                 require(["modules/tools/getCoord/view"], function (CoordPopupView) {
 //                     new CoordPopupView(tool);
@@ -265,17 +271,15 @@ new RestReaderList();
 //                 });
 //                 break;
 //             }
-//             case "legend": {
-//                 require(["modules/legend/legendLoader"], function (LegendLoader) {
-//                     new LegendLoader();
-//                 });
-//                 break;
-//             }
-//             default: {
-//                 break;
-//             }
-//         }
-//     });
+        case "legend": {
+            new LegendLoader();
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+});
 // });
 //
 // // controls
@@ -376,9 +380,12 @@ new RestReaderList();
 //     });
 // }
 //
+
 // require(["modules/mapMarker/view"], function (MapMarkerView) {
 //     new MapMarkerView();
 // });
+// import MapMarkerView from "../modules/mapMarker/view";
+// new MapMarkerView();
 //
 // sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
 // sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
@@ -401,4 +408,4 @@ new RestReaderList();
 //     new HighlightFeature();
 // });
 //
-// Radio.trigger("Util", "hideLoader");
+Radio.trigger("Util", "hideLoader");
