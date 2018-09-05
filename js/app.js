@@ -231,7 +231,7 @@ define("app", function (require) {
                     break;
                 }
                 case "routing": {
-                    require(["modules/viomRouting/view"], function (RoutingView) {
+                    require(["modules/tools/viomRouting/view"], function (RoutingView) {
                         new RoutingView(tool);
                     });
                     break;
@@ -263,6 +263,12 @@ define("app", function (require) {
                 case "legend": {
                     require(["modules/legend/legendLoader"], function (LegendLoader) {
                         new LegendLoader();
+                    });
+                    break;
+                }
+                case "layerslider": {
+                    require(["modules/tools/layerslider/view"], function (Layerslider) {
+                        new Layerslider(tool);
                     });
                     break;
                 }

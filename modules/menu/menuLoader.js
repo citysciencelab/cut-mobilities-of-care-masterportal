@@ -54,14 +54,15 @@ define(function (require) {
             }
         };
         this.currentMenu = this.loadMenu(this);
-        Radio.on("Util", {
-            "isViewMobileChanged": function () {
-                if (this.menuStyle === "DEFAULT") {
+        // im Table-Style soll das ui nicht verändert werden
+        if (this.menuStyle === "DEFAULT") {
+            Radio.on("Util", {
+                "isViewMobileChanged": function () {
                     this.currentMenu.removeView();
                     this.currentMenu = this.loadMenu(this);
                 }
-            }
-        }, this);
+            }, this);
+        }
     };
 
     return MenuLoader;

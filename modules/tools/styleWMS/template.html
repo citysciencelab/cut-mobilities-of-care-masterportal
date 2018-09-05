@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<div class="header">
-    <p class="buttons pull-right">
-        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
-    </p>
-    <p class="title">
-        <span class="glyphicon glyphicon-picture"></span>
-        <span>Style WMS</span>
-    </p>
-</div>
-<div class="content">
-    <p class="layer-name"><%= model.get("name") %></p>
-    <br>
-    <div class="form-horizontal" role="form">
+<div class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12">
+            <label class="range-label">Layer</label>
+            <select class="form-control input-sm" id="layerField">
+                <option class="pull-left" value="" selected="true">Bitte Layer auswählen</option>
+                <% _.each(styleableLayerList, function (styleableLayer) { %>
+                    <option class ="pull-left" value="<%= styleableLayer.id %>"><%= styleableLayer.name %></option>
+                <% })%>
+            </select>
+        </div>
+    </div>
+    <% if ( model !== null && model!== undefined) { %>
         <div class="form-group form-group-sm">
             <div class="col-md-12 col-sm-12">
                 <label class="range-label">Attribut</label>
@@ -24,17 +24,17 @@
             </div>
         </div>
         <% if (attributeName !== "default") { %>
-        <div class="form-group form-group-sm">
-            <div class="col-md-12 col-sm-12">
-                <label class="range-label">Anzahl der Klassen</label>
-                <select class="form-control input-sm" id="numberField">
-                    <option class="pull-left" value="default" <% if (numberOfClasses === "default") { print ("SELECTED")} %>>Bitte Anzahl der Klassen ausw&auml;hlen</option>
-                    <% _.each(numberOfClassesList, function (number) { %>
-                        <option class="pull-left" value=<%= number %> <% if (number === numberOfClasses) { print ("SELECTED")} %>><%= number %></option>
-                    <% }); %>
-                </select>
+            <div class="form-group form-group-sm">
+                <div class="col-md-12 col-sm-12">
+                    <label class="range-label">Anzahl der Klassen</label>
+                    <select class="form-control input-sm" id="numberField">
+                        <option class="pull-left" value="default" <% if (numberOfClasses === "default") { print ("SELECTED")} %>>Bitte Anzahl der Klassen ausw&auml;hlen</option>
+                        <% _.each(numberOfClassesList, function (number) { %>
+                            <option class="pull-left" value=<%= number %> <% if (number === numberOfClasses) { print ("SELECTED")} %>><%= number %></option>
+                        <% }); %>
+                    </select>
+                </div>
             </div>
-        </div>
         <% } %>
         <% if (numberOfClasses !== "default") { %>
             <% for (var i = 0; i < numberOfClasses; i++) { %>
@@ -66,5 +66,5 @@
                 </div>
             </div>
         <% } %>
-    </div>
+    <% } %>
 </div>

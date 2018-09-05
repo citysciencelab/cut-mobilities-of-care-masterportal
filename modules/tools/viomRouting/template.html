@@ -1,18 +1,18 @@
 <nav aria-label="...">
   <ul class="pagination pagination-lg">
-    <li class="<% if (routelayer === '') {print ('active');} %>">
+    <li class="<% if (_.isNull(routelayer)) {print ('active');} %>">
       <span id="address" title="Start- und Ziel eingeben" class="glyphicon glyphicon-road" aria-hidden="true"></span>
     </li>
     <li>
       <span id="options" title="Optionen eingeben" class="glyphicon glyphicon-tags" aria-hidden="true"></span>
     </li>
-    <li id="calcLi" class="<% if (fromCoord === '' || toCoord === '') {print ('disabled');} else if (routelayer !== '') {print ('active');} %>">
+    <li id="calcLi" class="<% if (fromCoord === '' || toCoord === '') {print ('disabled');} else if (!_.isNull(routelayer)) {print ('active');} %>">
       <span id="calc" title="Route berechnen" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
     </li>
   </ul>
 </nav>
 
-<div class="address innerRDiv" style="<% if (routelayer !== '') {print ('display: none');} %>">
+<div class="address innerRDiv" style="<% if (!_.isNull(routelayer)) {print ('display: none');} %>">
     <h4>Startadresse:</h4>
     <div class="input-group inputGroupR" id="input-group-start">
         <input type="text" class="form-control adresse" id="startAdresse" placeholder="Von:" aria-describedby="basic-addon1"  value="<%=startAdresse%>" autocomplete="off">
@@ -45,8 +45,8 @@
     </div>
 </div>
 
-<div class="calc" style="<% if (routelayer === '') {print ('display: none');} %>">
-    <h4 id="summary"><% if (routelayer !== '') {print ('Sie erreichen Ihr Ziel nach ' + sumLength + ' km (' + sumTime + ' Min.):');} %></h4>
+<div class="calc" style="<% if (_.isNull(routelayer)) {print ('display: none');} %>">
+    <h4 id="summary"><% if (!_.isNull(routelayer)) {print ('Sie erreichen Ihr Ziel nach ' + sumLength + ' km (' + sumTime + ' Min.):');} %></h4>
     <ul id="description" class="list-group">
         <%
             _.each(description, function (item, index) {
@@ -57,6 +57,6 @@
             });
         %>
     </ul>
-    <h4 id="endeDescription"><% if (routelayer !== '') {print (endDescription)} %></h4>
+    <h4 id="endeDescription"><% if (!_.isNull(routelayer)) {print (endDescription)} %></h4>
 </div>
 

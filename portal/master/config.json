@@ -157,12 +157,11 @@
             }
           ]
       },
-      "tools":
+      "tools": 
       {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
-        "children":
-        {
+        "children": {
           "einwohnerabfrage": {
             "name": "Einwohneranzahl abfragen",
             "glyphicon": "glyphicon-wrench"
@@ -259,13 +258,12 @@
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
           },
-          "addWMS":
-          {
-            "name": "WMS hinzufügen",
-            "glyphicon": "glyphicon-plus"
+          "styleWMS": {
+            "name": "Style WMS",
+            "glyphicon": "glyphicon-tint",
+            "onlyDesktop": true
           },
-          "featureLister":
-          {
+          "featureLister": {
             "name": "Liste",
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
@@ -295,6 +293,26 @@
           "saveSelection": {
             "name": "Auswahl speichern",
             "glyphicon": "glyphicon-share"
+          },
+          "layerslider": {
+            "name": "Zeitreihe",
+            "glyphicon": "glyphicon-film",
+            "title": "Simulation von Beispiel-WMS",
+            "timeInterval": 2000,
+            "layerIds": [
+              {
+                "title": "Dienst 1",
+                "layerId": "8730"
+              },
+              {
+                "title": "Dienst 2",
+                "layerId": "2426"
+              },
+              {
+                "title": "Dienst 3",
+                "layerId": "4561"
+              }
+            ]
           }
         }
       },

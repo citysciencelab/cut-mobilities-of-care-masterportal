@@ -147,10 +147,14 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 ```
 
-### CSS
-* CSS-Code gehört nur in CSS-Dateien und in keine HTML-Dokumente
+### CSS mit LESS
+CSS-Code gehört nur in LESS-Dateien und in keine HTML-Dokumente oder CSS-Dateien. 
+Über einen grunt-Task (grunt-contrib-less) werden automatisch die LESS-Regeln in CSS konvertiert und ins Portal eingebunden. Näheres in der [setup-dev-proxy](doc/setup-dev-proxy.md#markdown-header-gruntless) bzw. in der [setup-dev](doc/setup-dev.md#markdown-header-gruntless).
+
+
+####Weitere Konventionen
 * Keine ID-Selektoren verwenden
-* !improtant vermeiden
+* !important vermeiden
 * Nach dem Selektor gehört ein Leerzeichen
 * Regeln einrücken und über mehrere Zeilen und nicht in einer schreiben
 * CSS-Regeln die nur für ein Modul bestimmt sind, werden über das className-Attribut der entsprechenden Backbone.View erstellt
