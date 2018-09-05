@@ -1,5 +1,7 @@
 import Layer from "./model";
-import ol from "openlayers";
+import VectorSource from "ol/source/Vector.js";
+import VectorLayer from "ol/layer/Vector.js";
+import {GeoJSON} from "ol/format.js";
 
 const GeoJSONLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults),
@@ -17,7 +19,7 @@ const GeoJSONLayer = Layer.extend({
      * @return {[type]} [description]
      */
     createLayerSource: function () {
-        this.setLayerSource(new ol.source.Vector());
+        this.setLayerSource(new VectorSource());
     },
 
     /**
@@ -25,7 +27,7 @@ const GeoJSONLayer = Layer.extend({
      * @return {[type]} [description]
      */
     createLayer: function () {
-        this.setLayer(new ol.layer.Vector({
+        this.setLayer(new VectorLayer({
             source: this.get("layerSource"),
             name: this.get("name"),
             typ: this.get("typ"),
@@ -108,7 +110,7 @@ const GeoJSONLayer = Layer.extend({
     },
 
     parseDataToFeatures: function (data) {
-        var geojsonReader = new ol.format.GeoJSON();
+        var geojsonReader = new GeoJSON();
 
         return geojsonReader.readFeatures(data);
     },

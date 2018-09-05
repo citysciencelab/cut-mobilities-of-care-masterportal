@@ -1,5 +1,6 @@
 import Layer from "./model";
-import ol from "openlayers";
+import VectorSource from "ol/source/Vector.js";
+import {Heatmap} from "ol/layer.js";
 
 const HeatmapLayer = Layer.extend({
 
@@ -41,7 +42,7 @@ const HeatmapLayer = Layer.extend({
      * @returns {void}
      */
     createLayerSource: function () {
-        this.setLayerSource(new ol.source.Vector());
+        this.setLayerSource(new VectorSource());
     },
 
     /**
@@ -49,7 +50,7 @@ const HeatmapLayer = Layer.extend({
      * @returns {void}
      */
     createLayer: function () {
-        this.setLayer(new ol.layer.Heatmap({
+        this.setLayer(new Heatmap({
             source: this.get("layerSource"),
             name: this.get("name"),
             typ: this.get("typ"),

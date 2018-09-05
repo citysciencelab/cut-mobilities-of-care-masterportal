@@ -1,8 +1,13 @@
-import ol from "openlayers";
 import Layer from "./model";
 import Config from "../../../../portal/master/config";
 import mqtt from "mqtt";
 import moment from "moment";
+import {Cluster, VectorSource} from "ol/source.js";
+import VectorLayer from "ol/layer/Vector.js";
+import {EsriJSON} from "ol/format.js";
+import {transform} from "ol/proj.js";
+import Feature from "ol/Feature.js";
+import Point from "ol/geom/Point.js";
 
 const SensorLayer = Layer.extend({
 
@@ -27,7 +32,7 @@ const SensorLayer = Layer.extend({
      * @returns {void}
      */
     createLayerSource: function () {
-        this.setLayerSource(new ol.source.Vector());
+        this.setLayerSource(new VectorSource());
         if (this.has("clusterDistance")) {
             this.createClusterLayerSource();
         }
@@ -38,7 +43,7 @@ const SensorLayer = Layer.extend({
      * @returns {void}
      */
     createLayer: function () {
-        this.setLayer(new ol.layer.Vector({
+        this.setLayer(new VectorLayer({
             source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.get("layerSource"),
             name: this.get("name"),
             typ: this.get("typ"),
@@ -58,7 +63,7 @@ const SensorLayer = Layer.extend({
      * @returns {void}
      */
     createClusterLayerSource: function () {
-        this.setClusterLayerSource(new ol.source.Cluster({
+        this.setClusterLayerSource(new Cluster({
             source: this.get("layerSource"),
             distance: this.get("clusterDistance")
         }));
@@ -155,9 +160,9 @@ const SensorLayer = Layer.extend({
                 feature;
 
             if (_.has(data, "location") && !_.isUndefined(epsg)) {
-                xyTransfrom = ol.proj.transform(data.location, epsg, Config.view.epsg);
-                feature = new ol.Feature({
-                    geometry: new ol.geom.Point(xyTransfrom)
+                xyTransfrom = transform(data.location, epsg, Config.view.epsg);
+                feature = new Feature({
+                    geometry: new Point(xyTransfrom)
                 });
             }
             else {
@@ -503,7 +508,7 @@ const SensorLayer = Layer.extend({
     drawESRIGeoJson: function (sensorData) {
         var streamId = this.get("streamId"),
             epsgCode = this.get("epsg"),
-            esriFormat = new ol.format.EsriJSON(),
+            esriFormat = new EsriJSON(),
             olFeaturesArray = [];
 
         _.each(sensorData, function (data) {
@@ -748,7 +753,7 @@ const SensorLayer = Layer.extend({
 
         // if the feature does not exist, then draw it otherwise update it
         if (_.isUndefined(existingFeature)) {
-            esriFormat = new ol.format.EsriJSON();
+            esriFormat = new EsriJSON();
             olFeature = esriFormat.readFeature(esriJson, {
                 dataProjection: epsgCode,
                 featureProjection: Config.view.epsg
@@ -764,7 +769,7 @@ const SensorLayer = Layer.extend({
         }
         else {
             location = [esriJson.geometry.x, esriJson.geometry.y];
-            xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg);
+            xyTransform = transform(location, epsgCode, Config.view.epsg);
 
             if (!(xyTransform[0] < 0 || xyTransform[1] < 0 || xyTransform[0] === Infinity || xyTransform[1] === Infinity)) {
                 existingFeature.setProperties(esriJson.attributes);
