@@ -1,14 +1,10 @@
-define(function (require) {
+import ThemeView from "../view";
+import TableThemeTemplate from "text-loader!./template.html";
 
-    var ThemeView = require("modules/tools/gfi/themes/view"),
-        TableThemeTemplate = require("text!modules/tools/gfi/themes/table/template.html"),
-        TableThemeView;
-
-    TableThemeView = ThemeView.extend({
-        tagName: "div",
-        className: "table-wrapper-div",
-        template: _.template(TableThemeTemplate)
-    });
-
-    return TableThemeView;
+const TableThemeView = ThemeView.extend({
+    tagName: "div",
+    className: "table-wrapper-div",
+    template: _.template(TableThemeTemplate)
 });
+
+export default TableThemeView;

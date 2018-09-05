@@ -1,9 +1,12 @@
-define(function (require) {
-    var ol = require("openlayers"),
-        ThemeList = require("modules/tools/gfi/themes/list"),
-        gfiParams = [],
-        Gfi;
+import Overlay from "ol/Overlay.js";
+import ThemeList from "./themes/list";
+import DesktopDetachedView from "./desktop/detached/view";
+import TableView from "./table/view";
+import DesktopAttachedView from "./desktop/attached/view";
+import MobileView from "./mobile/view";
 
+
+const gfiParams = [],
     Gfi = Backbone.Model.extend({
         defaults: {
             // detached | attached
@@ -15,7 +18,7 @@ define(function (require) {
             // uiStyle DEFAULT | TABLE | SIMPLE
             uiStyle: Radio.request("Util", "getUiStyle"),
             // ol.Overlay für attached
-            overlay: new ol.Overlay({element: undefined}),
+            overlay: new Overlay({element: undefined}),
             // desktop/attached/view.js | desktop/detached/view.js | mobile/view.js
             currentView: undefined,
             // Koordinate für das attached Popover und den Marker
@@ -138,13 +141,13 @@ define(function (require) {
          */
         toggleGFI: function (id, deaktivateGFI) {
             if (id === "gfi") {
-                Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
+                Radio.trigger("Map", "registerListener", "click", this.setGfiParams.bind(this), this);
             }
             else if (deaktivateGFI === true) {
-                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
+                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
             }
             else if (_.isUndefined(deaktivateGFI)) {
-                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
+                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
             }
         },
 
@@ -162,16 +165,16 @@ define(function (require) {
             }
 
             if (this.get("isMobile")) {
-                CurrentView = require("modules/tools/gfi/mobile/view");
+                CurrentView = MobileView;
             }
             else if (this.get("desktopViewType") === "attached") {
-                CurrentView = require("modules/tools/gfi/desktop/attached/view");
+                CurrentView = DesktopAttachedView;
             }
             else if (this.get("uiStyle") === "TABLE") {
-                CurrentView = require("modules/tools/gfi/table/view");
+                CurrentView = TableView;
             }
             else {
-                CurrentView = require("modules/tools/gfi/desktop/detached/view");
+                CurrentView = DesktopDetachedView;
             }
             this.setCurrentView(new CurrentView({model: this}));
         },
@@ -212,7 +215,7 @@ define(function (require) {
                     visibleVectorLayerList.push(layer);
                 }
             });
-
+debugger;
             this.setCoordinate(evt.coordinate);
 
             // Vector
@@ -362,5 +365,4 @@ define(function (require) {
 
     });
 
-    return Gfi;
-});
+export default Gfi;
