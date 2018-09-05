@@ -215,7 +215,7 @@ const gfiParams = [],
                     visibleVectorLayerList.push(layer);
                 }
             });
-debugger;
+
             this.setCoordinate(evt.coordinate);
 
             // Vector
