@@ -95,7 +95,7 @@
         "deaktivateGFI": false,
         "isGeneric": false,
         "isInitOpen": false,
-        "allowMultipleQueriesPerLayer": true,
+        "allowMultipleQueriesPerLayer": false,
         "predefinedQueries": [
             {
               "layerId": "8712",

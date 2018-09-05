@@ -1,5 +1,4 @@
 define(function (require) {
-
     var Tool = require("modules/core/modelList/tool/model"),
         StyleWMS;
 
@@ -301,7 +300,7 @@ define(function (require) {
             }
             else {
                 // TODO: ErrorHandling...
-                console.debug("Type of geometry is not supported, abort styling.");
+                console.error("Type of geometry is not supported, abort styling.");
             }
             return rule;
         },

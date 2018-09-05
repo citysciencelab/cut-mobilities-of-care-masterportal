@@ -143,9 +143,11 @@ define(function (require) {
         describe("prepareLegendAttributes", function () {
             it("should create legend attributes array for WMS", function () {
                 var layerParam = {
-                    img: ["http://GetlegendGraphicRequest1", "http://GetlegendGraphicRequest2"],
-                    legendname: ["Layer1", "Layer2"],
-                    typ: "WMS"
+                    legend: [{
+                        img: ["http://GetlegendGraphicRequest1", "http://GetlegendGraphicRequest2"],
+                        legendname: ["Layer1", "Layer2"],
+                        typ: "WMS"
+                    }]
                 };
 
                 expect(buildSpecModel.prepareLegendAttributes(layerParam)[0]).to.deep.own.include({
@@ -165,9 +167,11 @@ define(function (require) {
             });
             it("should create legend attributes array for WFS", function () {
                 var layerParam = {
-                    img: ["http://imgLink1", "http://imgLink2"],
-                    legendname: ["Layer1", "Layer2"],
-                    typ: "WFS"
+                    legend: [{
+                        img: ["http://imgLink1", "http://imgLink2"],
+                        legendname: ["Layer1", "Layer2"],
+                        typ: "WFS"
+                    }]
                 };
 
                 expect(buildSpecModel.prepareLegendAttributes(layerParam)[0]).to.deep.own.include({
@@ -187,11 +191,13 @@ define(function (require) {
             });
             it("should create legend attributes array for styleWMS", function () {
                 var layerParam = {
-                    params: [
-                        {color: "#000000", startRange: "1", stopRange: "2"},
-                        {color: "#ff0000", startRange: "3", stopRange: "4"},
-                        {color: "#00ff00", startRange: "5", stopRange: "6"}],
-                    typ: "styleWMS"
+                    legend: [{
+                        params: [
+                            {color: "#000000", startRange: "1", stopRange: "2"},
+                            {color: "#ff0000", startRange: "3", stopRange: "4"},
+                            {color: "#00ff00", startRange: "5", stopRange: "6"}],
+                        typ: "styleWMS"
+                    }]
                 };
 
                 expect(buildSpecModel.prepareLegendAttributes(layerParam)[0]).to.deep.own.include({
