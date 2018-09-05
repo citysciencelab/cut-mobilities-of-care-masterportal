@@ -84,7 +84,14 @@ define(function (require) {
                     if (value && this.get("layer") === undefined) {
                         this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
                         this.addRouteFeatures(this.get("layer").getSource());
+                        this.get("layer").setVisible(true);
                         this.get("layer").setStyle(this.routeStyle);
+                    }
+                    if (value && !_.isUndefined(this.get("layer"))) {
+                        this.get("layer").setVisible(true);
+                    }
+                    if (!value && !_.isUndefined(this.get("layer"))) {
+                        this.get("layer").setVisible(false);
                     }
                 }
             });
