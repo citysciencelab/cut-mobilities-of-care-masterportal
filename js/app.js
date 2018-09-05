@@ -266,6 +266,12 @@ define("app", function (require) {
                     });
                     break;
                 }
+                case "layerslider": {
+                    require(["modules/tools/layerslider/view"], function (Layerslider) {
+                        new Layerslider(tool);
+                    });
+                    break;
+                }
                 default: {
                     break;
                 }
