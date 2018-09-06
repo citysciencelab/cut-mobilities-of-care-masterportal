@@ -3,10 +3,11 @@ define(function (require) {
     var Layer = require("modules/core/modelList/layer/model"),
         ol = require("openlayers"),
         Config = require("config"),
-        mqtt = require("mqtt"),
         moment = require("moment"),
         $ = require("jquery"),
         SensorLayer;
+
+    require("mqtt");
 
     SensorLayer = Layer.extend({
 
@@ -572,7 +573,7 @@ define(function (require) {
          */
         createMqttConnectionToSensorThings: function (features) {
             var dataStreamIds = this.getDataStreamIds(features),
-                client = mqtt.connect({
+                client = window.mqtt.connect({
                     host: this.get("url").split("/")[2],
                     protocol: "wss",
                     path: "/mqtt",
