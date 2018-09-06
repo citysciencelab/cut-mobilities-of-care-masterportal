@@ -1,6 +1,7 @@
 define(function (require) {
 
     var $ = require("jquery"),
+        Config = require("config"),
         WMSLayer = require("modules/core/modelList/layer/wms"),
         WFSLayer = require("modules/core/modelList/layer/wfs"),
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
@@ -9,7 +10,32 @@ define(function (require) {
         HeatmapLayer = require("modules/core/modelList/layer/heatmap"),
         Folder = require("modules/core/modelList/folder/model"),
         Tool = require("modules/core/modelList/tool/model"),
+        Legend = require("modules/legend/model"),
+        Filter = require("modules/tools/filter/model"),
+        PrintV2 = require("modules/tools/print_/model"),
+        Print = require("modules/tools/print/model"),
+        Measure = require("modules/tools/measure/model"),
+        Draw = require("modules/tools/draw/model"),
+        Animation = require("modules/tools/animation/model"),
+        Contact = require("modules/contact/model"),
+        SearchByCoord = require("modules/tools/searchByCoord/model"),
+        SaveSelection = require("modules/tools/saveSelection/model"),
+        KmlImport = require("modules/tools/kmlimport/model"),
+        Routing = require("modules/tools/viomRouting/model"),
+        WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
+        TreeFilter = require("modules/treefilter/model"),
+        ExtendedFilter = require("modules/tools/extendedFilter/model"),
+        Formular = require("modules/formular/grenznachweis"),
+        FeatureLister = require("modules/featureLister/model"),
+        AddWms = require("modules/tools/addwms/model"),
+        GetCoord = require("modules/tools/getCoord/model"),
+        Schulwegrouting = require("modules/tools/schulwegRouting_hh/model"),
+        CompareFeatures = require("modules/tools/compareFeatures/model"),
+        Einwohnerabfrage_HH = require("modules/tools/einwohnerabfrage_hh/model"),
+        ParcelSearch = require("modules/tools/parcelSearch/model"),
+        StyleWMS = require("modules/tools/styleWMS/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
+        LayersliderModel = require("modules/tools/layerslider/model"),
         ModelList;
 
     ModelList = Backbone.Collection.extend({
@@ -105,6 +131,81 @@ define(function (require) {
                 return new Folder(attrs, options);
             }
             else if (attrs.type === "tool") {
+                if (attrs.id === "print") {
+                    if (attrs.version === undefined) {
+                        return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                    }
+                    return new PrintV2(attrs, options);
+                }
+                else if (attrs.id === "parcelSearch") {
+                    return new ParcelSearch(attrs, options);
+                }
+                else if (attrs.id === "styleWMS") {
+                    return new StyleWMS(attrs, options);
+                }
+                else if (attrs.id === "compareFeatures") {
+                    return new CompareFeatures(attrs, options);
+                }
+                else if (attrs.id === "einwohnerabfrage") {
+                    return new Einwohnerabfrage_HH(attrs, options);
+                }
+                else if (attrs.id === "legend") {
+                    return new Legend(attrs, options);
+                }
+                else if (attrs.id === "schulwegrouting") {
+                    return new Schulwegrouting(attrs, options);
+                }
+                else if (attrs.id === "filter") {
+                    return new Filter(attrs, options);
+                }
+                else if (attrs.id === "coord") {
+                    return new GetCoord(attrs, options);
+                }
+                else if (attrs.id === "measure") {
+                    return new Measure(_.extend(attrs, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}), options);
+                }
+                else if (attrs.id === "draw") {
+                    return new Draw(attrs, options);
+                }
+                else if (attrs.id === "searchByCoord") {
+                    return new SearchByCoord(attrs, options);
+                }
+                else if (attrs.id === "saveSelection") {
+                    return new SaveSelection(_.extend(attrs, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
+                }
+                else if (attrs.id === "animation") {
+                    return new Animation(attrs, options);
+                }
+                else if (attrs.id === "routing") {
+                    return new Routing(attrs, options);
+                }
+                else if (attrs.id === "addWMS") {
+                    return new AddWms(attrs, options);
+                }
+                else if (attrs.id === "treeFilter") {
+                    return new TreeFilter(_.extend(attrs, _.has(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);
+                }
+                else if (attrs.id === "contact") {
+                    return new Contact(attrs, options);
+                }
+                else if (attrs.id === "wfsFeatureFilter") {
+                    return new WfsFeatureFilter(attrs, options);
+                }
+                else if (attrs.id === "extendedFilter") {
+                    return new ExtendedFilter(_.extend(attrs, _.has(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
+                }
+                else if (attrs.id === "featureLister") {
+                    return new FeatureLister(attrs, options);
+                }
+                else if (attrs.id === "kmlimport") {
+                    return new KmlImport(attrs, options);
+                }
+                else if (attrs.id === "formular") {
+                    return new Formular(attrs, options);
+                }
+                else if (attrs.id === "layerslider") {
+                    return new LayersliderModel(attrs, options);
+                }
                 return new Tool(attrs, options);
             }
             else if (attrs.type === "staticlink") {
@@ -242,7 +343,7 @@ define(function (require) {
 
             _.each(tools, function (tool) {
                 if (!_.isUndefined(tool)) {
-                    if (model.get("id") !== "gfi" || deactivateGFI) {
+                    if (model.get("id") !== "gfi" || model.get("id") !== "compareFeatures" || deactivateGFI) {
                         tool.setIsActive(false);
                     }
                 }

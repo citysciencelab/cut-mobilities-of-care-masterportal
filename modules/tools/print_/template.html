@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<form id="printTool" class="form-horizontal">
+    <div class="form-group form-group-sm">
+        <label class="col-sm-4 control-label">Titel</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" value="<%= title %>">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label class="col-sm-4 control-label">Layout</label>
+        <div class="col-sm-8">
+            <select id="printLayout" class="form-control input-sm">
+                <% _.each(layoutList, function(layout) { %>
+                    <% if (layout.name === currentLayout.name) { %>
+                        <option SELECTED><%= layout.name %></option>
+                    <% } else { %>
+                        <option><%= layout.name %></option>
+                    <% }%>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label class="col-sm-4 control-label">Format</label>
+        <div class="col-sm-8">
+            <select id="printFormat" class="form-control input-sm">
+                <% _.each(formatList, function(format) { %>
+                    <% if (format === currentFormat) { %>
+                        <option SELECTED><%= format %></option>
+                    <% } else { %>
+                        <option><%= format %></option>
+                    <% }%>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label class="col-sm-4 control-label">Maßstab</label>
+        <div class="col-sm-8">
+            <select id="printScale" class="form-control input-sm">
+                <% _.each(scaleList, function(scale) { %>
+                    <% if (scale === currentScale) { %>
+                        <option value="<%= scale %>" SELECTED>1: <%= scale < 10000 ? scale : scale.toString().substring(0, scale.toString().length - 3) + " " + scale.toString().substring(scale.toString().length - 3) %></option>
+                    <% } else { %>
+                        <option value="<%= scale %>">1: <%= scale < 10000 ? scale : scale.toString().substring(0, scale.toString().length - 3) + " " + scale.toString().substring(scale.toString().length - 3) %></option>
+                    <% }%>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <% if(isLegendAvailable) { %>
+    <div class="form-group form-group-sm">
+        <div class="col-sm-offset-4 col-sm-8">
+            <div class="checkbox">
+            <label>
+                <input id="printLegend" type="checkbox" <% if (isLegendSelected) print('checked') %>>Legende
+            </label>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    <% if(isGfiAvailable && isGfiActive) { %>
+    <div class="form-group form-group-sm">
+        <div class="col-sm-offset-4 col-sm-8">
+            <div class="checkbox">
+            <label>
+                <input id="printGfi" type="checkbox" <% if (isGfiSelected) print('checked') %>>Sachinformationen
+            </label>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    <div class="form-group form-group-sm">
+        <div class="col-sm-12">
+            <button type="button" class="btn btn-primary btn-block">Drucken</button>
+        </div>
+    </div>
+</form>

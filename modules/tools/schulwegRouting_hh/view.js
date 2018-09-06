@@ -3,7 +3,6 @@ define(function (require) {
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
         templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
         templateRouteDescription = require("text!modules/tools/schulwegRouting_hh/templateRouteDescription.html"),
-        Model = require("modules/tools/schulwegRouting_hh/model"),
         SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SchulwegRoutingView;
 
@@ -44,8 +43,7 @@ define(function (require) {
                 }
             }
         },
-        initialize: function (attr) {
-            this.model = new Model(attr);
+        initialize: function () {
             this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
             if (this.model.get("isActive")) {
                 this.render();
@@ -217,8 +215,14 @@ define(function (require) {
             this.$el.find(".result").html("");
             this.$el.find(".description").html("");
         },
+        /**
+         * trigger the model to print the route
+         * @deprecated in v 3.0.0 remove "this.model.printRouteClient();". enable "this.model.printRouteMapFish();"
+         * @return {[type]} [description]
+         */
         printRoute: function () {
-            this.model.printRoute();
+            this.model.printRouteClient();
+            // this.model.printRouteMapFish();
         }
     });
 

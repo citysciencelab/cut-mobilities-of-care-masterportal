@@ -1,7 +1,6 @@
 define(function (require) {
     var DrawTemplate = require("text!modules/tools/draw/template.html"),
         $ = require("jquery"),
-        DrawTool = require("modules/tools/draw/model"),
         DrawToolView;
 
     DrawToolView = Backbone.View.extend({
@@ -24,29 +23,26 @@ define(function (require) {
             "click .btn-primary": "enableAllElements",
             "click .downloadDrawing": "downloadFeatures"
         },
-        initialize: function (attr) {
-            this.model = new DrawTool(attr);
+        initialize: function () {
+            this.template = _.template(DrawTemplate);
+
             require(["modules/tools/download/view"], function (DownloadView) {
                 new DownloadView();
             });
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render
+                "change:isActive": this.render
             });
         },
-        className: "win-body",
-        template: _.template(DrawTemplate),
+        render: function (model, value) {
+            if (value) {
 
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();
                 this.renderForm();
                 this.renderGlyphicon();
             }
-            else if (this.model.get("isCurrentWin") === false) {
+            else {
                 $("#map").removeClass("no-cursor");
                 $("#map").removeClass("cursor-crosshair");
                 $("#cursorGlyph").remove();
@@ -172,7 +168,14 @@ define(function (require) {
         },
 
         setColor: function (evt) {
-            this.model.setColor(evt.target.value);
+            var colors = evt.target.value.split(","),
+                newColor = [];
+
+            colors.forEach(function (color) {
+                newColor.push(parseInt(color, 10));
+            });
+            newColor.push(this.model.get("opacity"));
+            this.model.setColor(newColor);
         },
 
         setRadius: function (evt) {
@@ -184,7 +187,11 @@ define(function (require) {
         },
 
         setOpacity: function (evt) {
-            this.model.setOpacity(evt.target.value);
+            var newColor = this.model.get("color");
+
+            newColor[3] = parseFloat(evt.target.value);
+            this.model.setColor(newColor);
+            this.model.setOpacity(parseFloat(evt.target.value));
         }
     });
 

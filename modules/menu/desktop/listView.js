@@ -167,9 +167,11 @@ define(function (require) {
             }, this);
         },
         startModul: function (modulId) {
-            var modul = _.findWhere(this.collection.models, {id: modulId});
+            var modul = this.collection.find(function (model) {
+                return model.get("id").toLowerCase() === modulId;
+            });
 
-            if (modul.attributes.type === "tool") {
+            if (modul.get("type") === "tool") {
                 modul.setIsActive(true);
             }
             else {

@@ -1,47 +1,36 @@
-define(function () {
-    var LayersliderModel;
+define(function (require) {
+    var Tool = require("modules/core/modelList/tool/model"),
+        LayersliderModel;
 
-    LayersliderModel = Backbone.Model.extend({
-        defaults: {
+    LayersliderModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             layerIds: [],
             timeInterval: 2000,
             title: null,
             progressBarWidth: 10,
             activeLayer: {layerId: ""},
-            windowsInterval: null
-        },
+            windowsInterval: null,
+            renderToWindow: true
+        }),
 
-        initialize: function (layerIds, title, timeInterval) {
-            if (!this.checkAllLayerOk(layerIds)) {
-                console.error("Konfiguration des layersliders fehlerhaft");
-                return;
-            }
-            this.setLayerIds(layerIds);
-            this.setProgressBarWidth(layerIds);
-            if (!_.isUndefined(title)) {
-                this.setTitle(title);
-            }
-            if (!_.isUndefined(timeInterval)) {
-                this.setTimeInterval(timeInterval);
-            }
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
+        initialize: function () {
+            this.superInitialize();
+            this.setProgressBarWidth(this.get("layerIds"));
+            this.listenTo(this, {
+                "change:isActive": function (model, value) {
+                    if (value) {
+                        if (!this.checkAllLayerOk(this.get("layerIds"))) {
+                            console.error("Konfiguration des layersliders fehlerhaft");
+                        }
+                    }
+                }
             });
-        },
-        setStatus: function (args) {
-            if (args[2].get("id") === "layerslider" && args[0] === true) {
-                this.setIsCollapsed(args[1]);
-                this.setIsCurrentWin(args[0]);
-            }
-            else {
-                this.setIsCurrentWin(false);
-            }
         },
 
         reset: function () {
             this.stopInterval();
             this.set("activeLayer", {layerId: ""});
-            this.set("title", null);
+            // this.set("title", null);
         },
 
         /**
@@ -230,6 +219,9 @@ define(function () {
             // Mindestbreite der ProgressBar ist 10%.
             if (layerIds.length <= 10) {
                 this.set("progressBarWidth", Math.round(100 / layerIds.length));
+            }
+            else {
+                this.set("progressBarWidth", 10);
             }
         },
 

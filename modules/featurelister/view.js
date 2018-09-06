@@ -1,11 +1,12 @@
 define(function (require) {
     var Template = require("text!modules/featurelister/template.html"),
         $ = require("jquery"),
-        Model = require("modules/featurelister/model"),
         FeatureLister;
 
     require("jqueryui/widgets/draggable");
     FeatureLister = Backbone.View.extend({
+        className: "featurelist-win",
+        template: _.template(Template),
         events: {
             "click .glyphicon-remove": "toggle",
             "click #featurelistFeaturelist": "switchTabToListe", // wechselt den sichtbaren Tab
@@ -17,15 +18,9 @@ define(function (require) {
             "click .featurelist-list-button": "moreFeatures", // Klick auf Button zum Nachladen von Features
             "click .featurelist-list-table-th": "orderList" // Klick auf Sortiersymbol in thead
         },
-        initialize: function (attr) {
-            var channel = Radio.channel("FeatureListerView");
-
-            this.model = new Model(attr);
-            this.listenTo(channel, {
-                "toggle": this.toggle
-            }, this);
-
+        initialize: function () {
             this.listenTo(this.model, {
+                "change:isActive": this.toggle,
                 "change:layerlist": this.updateVisibleLayer,
                 "change:layer": function () {
                     this.updateLayerList();
@@ -39,8 +34,6 @@ define(function (require) {
 
             this.render();
         },
-        className: "featurelist-win",
-        template: _.template(Template),
         /*
         * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.
         */

@@ -777,48 +777,64 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 ******
 
 #### Portalconfig.menu.tools.children.print ######
+Bis zur Version 3.0.0 kann noch auf Mapfish-Print 2 gedruck werden. ab dann wird die alte Drucktechnologie komplett abgelöst durch den neuen Mapfish-Print-3.
+
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|gfi|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
-|printID|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
+|gfi(@deprecated in 3.0.0)|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
+|printID(@deprecated in 3.0.0)|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md). Ab v3.0.0 ersetzt durch mapfishServiceId|
+|mapfishServiceId|nein|String||ID des neuen Druckdienstes (Mapfish-Print-3) in der restConf. Siehe [rest-services.json](rest-services.json.md).|
 |title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
-|[gfiMarker](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
-|configYAML|nein|String|master|Der Name der YAML-Datei der MapFish-Webapp.|
-|outputFilename|nein|String|Ausdruck|Der Dateiname der PDF, den die MapFish-Webapp erstellt.|
+|[gfiMarker(@deprecated in 3.0.0)](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
+|configYAML(@deprecated in 3.0.0)|nein|String|master|Der Name der YAML-Datei der MapFish-Webapp. Ab v3.0.0 ersetzt durch printAppId|
+|printAppId|nein|String|master|Der Name der Druck-App für den Mapfish-Print-3.|
+|version|nein|String||Flag die angibt welche Druckversion verwendet werden soll. Bei "mapfish_print_3" wird der Mapfish-Print-3 verwendet. @deprecated in 3.0.0|
+|outputFilename(@deprecated in 3.0.0)|nein|String|Ausdruck|Der Dateiname der PDF, den die MapFish-Webapp erstellt.|
 
-**Beispiel:**
-
-
+**Beispiel Mapfish-Print-2:**
 ```
 #!json
 
 "print": {
-            "name": "Karte drucken",
-            "glyphicon": "glyphicon-print",
-            "printID": "99999",
-            "title": "Master",
-            "gfi": true,
-            "outputFilename": "DruckPDF",
-            "gfiMarker": {
-              "outerCircle": {
-                "fill": false,
-                "pointRadius": 8,
-                "stroke": true,
-                "strokeColor": "#ff0000",
-                "strokeWidth": 3
-              },
-              "point": {
-                "fill": true,
-                "pointRadius": 1,
-                  "fillColor": "#000000",
-                  "stroke": false
-                }
-            }
-          }
+    "name": "Karte drucken",
+    "glyphicon": "glyphicon-print",
+    "printID": "99999",
+    "title": "Master",
+    "gfi": true,
+    "outputFilename": "DruckPDF",
+    "gfiMarker": {
+        "outerCircle": {
+            "fill": false,
+            "pointRadius": 8,
+            "stroke": true,
+            "strokeColor": "#ff0000",
+            "strokeWidth": 3
+        },
+    "point": {
+        "fill": true,
+        "pointRadius": 1,
+        "fillColor": "#000000",
+        "stroke": false
+    }
+  }
+}
+```
+**Beispiel Mapfish-Print-3:**
+```
+#!json
+
+"print": {
+    "name": "Karte drucken",
+    "glyphicon": "glyphicon-print",
+    "mapfishServiceId": "mapfish_qs",
+    "printAppId": "mrh",
+    "title": "Master",
+    "version": "mapfish_print_3"
+}
 ```
 
 ******
@@ -1018,7 +1034,7 @@ Der Layerslider ermöglicht die Konfiguration eines Stack von Layern, die nachei
 ******
 ******
 #### Portalconfig.menu.tools.children.addwms ######
-Das AddWMS-Tool ermöglicht das nachträgliche Hinzufügen weiterer WMS über Eingabe von Dienst-URL. Der Dienst wird untersucht und dessen Layer werden unterhalb der [Fachdaten](#markdown-header-themenconfigfachdaten) in einem separaten Bereich hinzugefügt. Dieses Tool steht nur in Portalen vom Baumtyp [custom](#markdown-header-portalconfig) zur Verfügung.  
+Das AddWMS-Tool ermöglicht das nachträgliche Hinzufügen weiterer WMS über Eingabe von Dienst-URL. Der Dienst wird untersucht und dessen Layer werden unterhalb der [Fachdaten](#markdown-header-themenconfigfachdaten) in einem separaten Bereich hinzugefügt. Dieses Tool steht nur in Portalen vom Baumtyp [custom](#markdown-header-portalconfig) zur Verfügung.
 
 Dieses Tool nutzt zum Einbinden die konfigurierte [Proxy-URL](config.js.md#configjs). Der Proxy muss entsprechend konfiguriert sein und die Dienst-URL durchleiten. Ggf. muss ein offener Proxy definiert werden.
 
@@ -1415,7 +1431,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
 ******
 
 ### Themenconfig.Fachdaten.Layer ###
-In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstellung von Layern auf der Karte beschrieben. 
+In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstellung von Layern auf der Karte beschrieben.
 
 **Folgende Konfigurationen sind allgemeingültig:**
 
@@ -1520,7 +1536,7 @@ In diesem Fall wird die genannte ID in der [services.json](services.json.md) ges
 
 **Beispiel für WMS multiple Layers:**
 
-In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer gemäß den Angaben in der [services.json](services.json.md) vollständig.  
+In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer gemäß den Angaben in der [services.json](services.json.md) vollständig.
 Alle weiteren Werte im Array werden dahingehend ausgewertet, dass ihre _layers_-Angabe den  _layers-Parameter_ des Dienstes erweitern. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Näheres kann der [Dokumentation](http://docs.geoserver.org/latest/en/user/services/wms/reference.html#wms-getmap) entnommen werden. Dem Themenbaum wird nur ein Eintrag hinzugefügt.
 
 ```
@@ -1533,17 +1549,17 @@ Alle weiteren Werte im Array werden dahingehend ausgewertet, dass ihre _layers_-
 
 **Beispiel für openlayers Layer Collection (GroupLayer):**
 
-In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Grouplayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).  
+In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Grouplayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).
 
-* Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer). 
+* Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer).
 * Das Attribut _id_ wird in diesem Fall als unique _String_ erwartet und darf nicht in der [services.json](services.json.md) gelistet sein.
     * Über diesen Eintrag werden die _children_ gruppiert.
     * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
-  
-Es gelten folgende Besonderheiten:  
 
-* Im Falle eines GFI wird jeder Layer einzeln abgefragt. 
-* Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt. 
+Es gelten folgende Besonderheiten:
+
+* Im Falle eines GFI wird jeder Layer einzeln abgefragt.
+* Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt.
 * Die Layerinformationen werden gekürzt (nur erster Layer) übernommen.
 
 ```
@@ -1551,7 +1567,7 @@ Es gelten folgende Besonderheiten:
 
 {
   "id": "myUniqueId",
-  "children": [    
+  "children": [
     {
       "id": "947"
     },

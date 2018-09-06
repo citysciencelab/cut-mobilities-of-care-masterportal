@@ -1,16 +1,10 @@
 define(function (require) {
-
-    var StyleWMS = require("modules/tools/styleWMS/model"),
-        StyleWMSTemplate = require("text!modules/tools/styleWMS/template.html"),
+    var StyleWMSTemplate = require("text!modules/tools/styleWMS/template.html"),
         StyleWMSTemplateNoStyleableLayers = require("text!modules/tools/styleWMS/templateNoStyleableLayers.html"),
         StyleWMSView;
 
     require("colorpicker");
     StyleWMSView = Backbone.View.extend({
-        model: new StyleWMS(),
-        className: "win-body wmsStyle-window",
-        template: _.template(StyleWMSTemplate),
-        templateNoStyleableLayers: _.template(StyleWMSTemplateNoStyleableLayers),
         events: {
             // Auswahl des Layers
             "change #layerField": "setModelByID",
@@ -27,17 +21,19 @@ define(function (require) {
             "click .btn-panel-reset": "reset",
             "click .glyphicon-remove": "hide"
         },
-
         initialize: function () {
 
             this.listenTo(this.model, {
                 // ändert sich der Fensterstatus wird neu gezeichnet
-                "change:isCollapsed change:isCurrentWin sync": this.render,
+                // "change:isCollapsed change:isCurrentWin sync": this.render,
                 // wird das fenster geschlossen, so wird das Layer-Model zurückgesetzt
-                "change:isCurrentWin": function () {
-                    if (this.model.get("isCurrentWin") !== true) {
+                "change:isActive": function (model, value) {
+                    if (!value) {
                         this.model.setModel(null);
                         this.undelegateEvents();
+                    }
+                    else {
+                        this.render();
                     }
                 },
                 // ändert sich eins dieser Attribute wird neu gezeichnet
@@ -46,6 +42,10 @@ define(function (require) {
                 "invalid": this.showErrorMessages
             });
         },
+        className: "wmsStyle-window",
+        template: _.template(StyleWMSTemplate),
+        templateNoStyleableLayers: _.template(StyleWMSTemplateNoStyleableLayers),
+
 
         /**
          * [render description]
@@ -54,14 +54,15 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+            // if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+            if (this.model.get("isActive") === true) {
 
                 if (attr.styleableLayerList.length === 0) {
                     // Es existieren keine stylebaren Layer
-                    $(".win-heading").after(this.$el.html(this.templateNoStyleableLayers()));
+                    $(".win-body").append(this.$el.html(this.templateNoStyleableLayers()));
                 }
                 else {
-                    $(".win-heading").after(this.$el.html(this.template(attr)));
+                    $(".win-body").append(this.$el.html(this.template(attr)));
 
                     if (attr.model !== null && attr.model !== undefined) {
                         // Selektiere den momentan ausgewählen Layer (wenn Tool über den Themenbaum geöffnet wurde).

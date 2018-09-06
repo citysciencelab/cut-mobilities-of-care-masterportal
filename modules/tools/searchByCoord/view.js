@@ -1,8 +1,6 @@
 define(function (require) {
 
     var SearchByCoordTemplate = require("text!modules/tools/searchByCoord/template.html"),
-        SearchByCoord = require("modules/tools/searchByCoord/model"),
-        $ = require("jquery"),
         SearchByCoordView;
 
     SearchByCoordView = Backbone.View.extend({
@@ -10,22 +8,17 @@ define(function (require) {
             "change #coordSystemField": "setCoordSystem",
             "click button": "setCoordinates"
         },
-        initialize: function (attr) {
-            this.model = new SearchByCoord(attr);
+        initialize: function () {
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render,
+                "change:isActive": this.render,
                 "change:coordSystem": this.setFocusToCoordSystemInput
             });
         },
-        className: "win-body",
         template: _.template(SearchByCoordTemplate),
-
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+        render: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();
             }
             else {

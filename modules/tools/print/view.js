@@ -1,7 +1,5 @@
 define(function (require) {
     var PrintWinTemplate = require("text!modules/tools/print/template.html"),
-        Print = require("modules/tools/print/model"),
-        $ = require("jquery"),
         PrintView;
 
     PrintView = Backbone.View.extend({
@@ -10,14 +8,23 @@ define(function (require) {
             "change #scaleField": "setScale",
             "click button": "createPDF"
         },
-        initialize: function (attrs) {
-            this.model = new Print(attrs);
+        initialize: function () {
+            this.template = _.template(PrintWinTemplate);
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:scale": this.render
+                "change:isActive change:fetched change:scale": this.render
             });
         },
-        className: "win-body",
-        template: _.template(PrintWinTemplate),
+        render: function (model) {
+            if (model.get("fetched") && model.get("isActive")) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
+                this.delegateEvents();
+            }
+            else {
+                this.undelegateEvents();
+            }
+            return this;
+        },
         setLayout: function (evt) {
             this.model.setLayout(evt.target.selectedIndex);
         },
@@ -27,19 +34,6 @@ define(function (require) {
         createPDF: function () {
             this.model.setTitleFromForm();
             this.model.getLayersForPrint();
-        },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
-                this.delegateEvents();
-            }
-            else {
-                this.undelegateEvents();
-            }
-            return this;
         }
     });
     return PrintView;

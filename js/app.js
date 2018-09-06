@@ -26,17 +26,20 @@ define("app", function (require) {
     new Autostarter();
     new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
     new RawLayerList();
+    new RestReaderList();
     new Preparser();
     new StyleList();
     new ParametricURL();
     new CRS();
     new Map();
-    new RestReaderList();
     new WPS();
     new AddGeoJSON();
 
     // Funktionalitäten laden
-
+    // CSW parser
+    require(["modules/cswParser/model"], function (CswParserModel) {
+        new CswParserModel();
+    });
     // Browser Druck Modul
     require(["modules/functionalities/browserPrint/model"], function (BrowserPrintModel) {
         new BrowserPrintModel(_.has(Config, "browserPrint") ? Config.browserPrint : {});
@@ -120,37 +123,35 @@ define("app", function (require) {
     require(["modules/sidebar/view"], function (SidebarView) {
         new SidebarView();
 
-        _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
-            var printConf = {};
-
+        _.each(Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}), function (tool) {
             switch (tool.id) {
                 case "compareFeatures": {
                     require(["modules/tools/compareFeatures/view"], function (CompareFeaturesView) {
-                        new CompareFeaturesView(tool);
+                        new CompareFeaturesView({model: tool});
                     });
                     break;
                 }
                 case "einwohnerabfrage": {
                     require(["modules/tools/einwohnerabfrage_hh/selectView"], function (EinwohnerabfrageView) {
-                        new EinwohnerabfrageView(tool);
+                        new EinwohnerabfrageView({model: tool});
                     });
                     break;
                 }
                 case "animation": {
                     require(["modules/tools/animation/view"], function (AnimationView) {
-                        new AnimationView(tool);
+                        new AnimationView({model: tool});
                     });
                     break;
                 }
                 case "filter": {
                     require(["modules/tools/filter/view"], function (FilterView) {
-                        new FilterView(tool);
+                        new FilterView({model: tool});
                     });
                     break;
                 }
                 case "schulwegrouting": {
                     require(["modules/tools/schulwegRouting_hh/view"], function (SchulwegRoutingView) {
-                        new SchulwegRoutingView(tool);
+                        new SchulwegRoutingView({model: tool});
                     });
                     break;
                 }
@@ -162,113 +163,126 @@ define("app", function (require) {
                 }
                 case "coord": {
                     require(["modules/tools/getCoord/view"], function (CoordPopupView) {
-                        new CoordPopupView(tool);
+                        new CoordPopupView({model: tool});
                     });
                     break;
                 }
                 case "measure": {
                     require(["modules/tools/measure/view"], function (MeasureView) {
-                        new MeasureView(_.extend(tool, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}));
+                        new MeasureView({model: tool});
                     });
                     break;
                 }
                 case "draw": {
                     require(["modules/tools/draw/view"], function (DrawView) {
-                        new DrawView(tool);
+                        new DrawView({model: tool});
                     });
                     break;
                 }
                 case "print": {
-                    printConf = tool;
-                    printConf = _.extend(printConf, {center: Radio.request("MapView", "getCenter")});
-                    printConf = _.extend(printConf, {proxyURL: Config.proxyURL});
-                    printConf = _.extend(printConf, {srs: Radio.request("MapView", "getProjection").getCode()});
-                    require(["modules/tools/print/view"], function (PrintView) {
-                        new PrintView(printConf);
-                    });
+                    // @deprecated in version 3.0.0
+                    // remove "version" in doc and config.
+                    // rename "print_" to "print"
+                    // only load correct view
+                    if (tool.has("version") && tool.get("version") === "mapfish_print_3") {
+                        require(["modules/tools/print_/view"], function (PrintView) {
+                            new PrintView({model: tool});
+                        });
+                    }
+                    else {
+                        require(["modules/tools/print/view"], function (PrintView) {
+                            new PrintView({model: tool});
+                        });
+                    }
                     break;
                 }
                 case "parcelSearch": {
                     require(["modules/tools/parcelSearch/view"], function (ParcelSearchView) {
-                        new ParcelSearchView(_.extend(tool, Radio.request("Parser", "getItemByAttributes", {id: "parcelSearch"})));
+                        new ParcelSearchView({model: tool});
                     });
                     break;
                 }
                 case "searchByCoord": {
                     require(["modules/tools/searchByCoord/view"], function (SearchByCoordView) {
-                        new SearchByCoordView(tool);
+                        new SearchByCoordView({model: tool});
                     });
                     break;
                 }
                 case "saveSelection": {
                     require(["modules/tools/saveSelection/view"], function (SaveSelectionView) {
-                        new SaveSelectionView(_.extend(tool, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}));
+                        new SaveSelectionView({model: tool});
                     });
                     break;
                 }
                 case "kmlimport": {
                     require(["modules/tools/kmlimport/view"], function (ImportView) {
-                        new ImportView(tool);
+                        new ImportView({model: tool});
                     });
                     break;
                 }
                 case "wfsFeatureFilter": {
                     require(["modules/wfsfeaturefilter/view"], function (WFSFeatureFilterView) {
-                        new WFSFeatureFilterView(tool);
+                        new WFSFeatureFilterView({model: tool});
                     });
                     break;
                 }
                 case "extendedFilter": {
                     require(["modules/tools/extendedFilter/view"], function (ExtendedFilterView) {
-                        new ExtendedFilterView(_.extend(tool, _.has(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}));
+                        new ExtendedFilterView({model: tool});
                     });
                     break;
                 }
                 case "treeFilter": {
                     require(["modules/treefilter/view"], function (TreeFilterView) {
-                        new TreeFilterView(_.extend(tool, _.has(Config, "treeConf") ? {treeConf: Config.treeConf} : {}));
+                        new TreeFilterView({model: tool});
                     });
                     break;
                 }
                 case "routing": {
                     require(["modules/tools/viomRouting/view"], function (RoutingView) {
-                        new RoutingView(tool);
+                        new RoutingView({model: tool});
                     });
                     break;
                 }
                 case "contact": {
                     require(["modules/contact/view"], function (Contact) {
-                        new Contact(tool);
+                        new Contact({model: tool});
                     });
                     break;
                 }
                 case "addWMS": {
                     require(["modules/tools/addwms/view"], function (AddWMSView) {
-                        new AddWMSView(tool);
+                        new AddWMSView({model: tool});
                     });
                     break;
                 }
                 case "featureLister": {
                     require(["modules/featurelister/view"], function (FeatureLister) {
-                        new FeatureLister(tool);
+                        new FeatureLister({model: tool});
                     });
                     break;
                 }
                 case "formular": {
                     require(["modules/formular/view"], function (Formular) {
-                        new Formular(tool);
+                        new Formular({model: tool});
                     });
                     break;
                 }
                 case "legend": {
                     require(["modules/legend/legendLoader"], function (LegendLoader) {
-                        new LegendLoader();
+                        new LegendLoader(tool);
+                    });
+                    break;
+                }
+                case "styleWMS": {
+                    require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
+                        new StyleWMSView({model: tool});
                     });
                     break;
                 }
                 case "layerslider": {
-                    require(["modules/tools/layerslider/view"], function (Layerslider) {
-                        new Layerslider(tool);
+                    require(["modules/tools/layerslider/view"], function (LayersliderView) {
+                        new LayersliderView({model: tool});
                     });
                     break;
                 }
@@ -393,10 +407,6 @@ define("app", function (require) {
             }
         });
     }
-
-    require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
-        new StyleWMSView();
-    });
 
     require(["modules/highlightFeature/model"], function (HighlightFeature) {
         new HighlightFeature();

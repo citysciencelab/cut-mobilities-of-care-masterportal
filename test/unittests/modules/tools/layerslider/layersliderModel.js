@@ -28,7 +28,7 @@ define(function (require) {
             ];
 
         before(function () {
-            model = new Model(layerIds, "Test", 500);
+            model = new Model({layerIds: layerIds, title: "Test", timeInterval: 500});
         });
 
         describe("creates correct width for progress bar", function () {

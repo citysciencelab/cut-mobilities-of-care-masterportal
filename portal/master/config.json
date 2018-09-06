@@ -95,7 +95,7 @@
         "deaktivateGFI": false,
         "isGeneric": false,
         "isInitOpen": false,
-        "allowMultipleQueriesPerLayer": true,
+        "allowMultipleQueriesPerLayer": false,
         "predefinedQueries": [
             {
               "layerId": "8712",
@@ -199,28 +199,11 @@
           {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
-            "printID": "99999",
-            "title": "Master",
-            "gfi": true,
-            "outputFilename": "DruckPDF",
-            "gfiMarker":
-                {
-                  "outerCircle":
-                  {
-                    "fill": false,
-                    "pointRadius": 8,
-                    "stroke": true,
-                    "strokeColor": "#ff0000",
-                    "strokeWidth": 3
-                  },
-                  "point":
-                  {
-                    "fill": true,
-                    "pointRadius": 1,
-                    "fillColor": "#000000",
-                    "stroke": false
-                  }
-                }
+            "mapfishServiceId": "mapfish_qs",
+            "printAppId": "mrh",
+            "filename": "Ausdruck",
+            "title": "Mein Titel",
+            "version" : "mapfish_print_3"
           },
           "searchByCoord":
           {

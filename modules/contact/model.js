@@ -1,9 +1,10 @@
 define(function (require) {
     var $ = require("jquery"),
+        Tool = require("modules/core/modelList/tool/model"),
         ContactModel;
 
-    ContactModel = Backbone.Model.extend({
-        defaults: {
+    ContactModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             maxLines: Radio.request("Util", "isAny") ? "5" : "10",
             from: [{
                 "email": "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -28,37 +29,30 @@ define(function (require) {
             isCurrentWin: false,
             includeSystemInfo: false,
             contactInfo: "",
-            portalConfig: {}
-        },
+            portalConfig: {},
+            renderToWindow: true
+        }),
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
-
+            this.superInitialize();
             this.setPortalConfig(Radio.request("Parser", "getPortalConfig"));
             this.setAttributes();
-            Radio.trigger("Autostart", "initializedModul", "contact");
         },
         setAttributes: function () {
-            var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: "contact"}),
-                portalConfig = _.has(this.get("portalConfig"), "portalTitle") ? this.get("portalConfig") : "",
+            var portalConfig = _.has(this.get("portalConfig"), "portalTitle") ? this.get("portalConfig") : "",
                 portalTitle = _.has(portalConfig.portalTitle, "title") ? portalConfig.portalTitle.title : document.title,
                 hrefString = "<br>==================<br>Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
                 platformString = "<br>Platform: " + navigator.platform + "<br>",
                 cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
                 userAgentString = "UserAgent: " + navigator.userAgent,
                 systemInfo = hrefString + platformString + cookiesString + userAgentString,
-                isSubjectUndefined = _.isUndefined(toolModel) === false ? _.isUndefined(toolModel.get("subject")) : true,
-                subject = isSubjectUndefined === true ? "Supportanfrage zum Portal " + portalTitle : toolModel.get("subject"),
+                isSubjectUndefined = _.isUndefined(this) === false ? _.isUndefined(this.get("subject")) : true,
+                subject = isSubjectUndefined === true ? "Supportanfrage zum Portal " + portalTitle : this.get("subject"),
                 date = new Date(),
                 day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
                 month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
                 ticketID = month + day + "-" + _.random(1000, 9999),
-                resp = _.isUndefined(toolModel) === false ? Radio.request("RestReader", "getServiceById", toolModel.get("serviceID")) : undefined;
+                resp = _.isUndefined(this) === false ? Radio.request("RestReader", "getServiceById", this.get("serviceID")) : undefined;
 
-            if (_.isUndefined(toolModel) === false) {
-                this.set(toolModel.attributes);
-            }
             if (_.isUndefined(resp) === false && resp.get("url")) {
                 this.setUrl(resp.get("url"));
                 this.setTicketID(ticketID);
@@ -91,17 +85,6 @@ define(function (require) {
                 }
             }
             this.isValid();
-        },
-
-        setStatus: function (args) {
-            // Fenstermanagement
-            if (args[2].get("id") === "contact") {
-                this.setIsCollapsed(args[1]);
-                this.setIsCurrentWin(args[0]);
-            }
-            else {
-                this.setIsCurrentWin(false);
-            }
         },
 
         validate: function (attributes) {

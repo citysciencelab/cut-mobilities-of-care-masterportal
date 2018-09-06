@@ -1,21 +1,14 @@
-define(function () {
-    var WfsFeatureFilter = Backbone.Model.extend({
-        defaults: {
-            wfsList: []
-        },
+define(function (require) {
+    var Tool = require("modules/core/modelList/tool/model"),
+        WfsFeatureFilter;
+
+    WfsFeatureFilter = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
+            wfsList: [],
+            renderToWindow: true
+        }),
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.checkStatus
-            });
-        },
-        checkStatus: function (args) { // Fenstermanagement
-            if (args[2].get("id") === "wfsFeatureFilter") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
-            }
+            this.superInitialize();
         },
         getLayers: function () {
             var layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),

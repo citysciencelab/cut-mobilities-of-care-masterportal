@@ -1,7 +1,6 @@
 define(function (require) {
 
-    var FilterModel = require("modules/tools/filter/model"),
-        QueryDetailView = require("modules/tools/filter/query/detailView"),
+    var QueryDetailView = require("modules/tools/filter/query/detailView"),
         QuerySimpleView = require("modules/tools/filter/query/simpleView"),
         Template = require("text!modules/tools/filter/template.html"),
         FilterView;
@@ -10,17 +9,19 @@ define(function (require) {
         events: {
             "click .close": "closeFilter"
         },
-        initialize: function (attr) {
-            this.model = new FilterModel(attr);
-            if (this.model.get("isInitOpen")) {
-                this.model.set("isActive", true);
-                this.render();
-            }
+        initialize: function () {
             this.listenTo(this.model, {
                 "change:isActive": function (model, isActive) {
                     if (isActive) {
-                        this.render();
-                        this.renderDetailView();
+
+                        if (model.get("queryCollection").length < 1) {
+                            model.createQueries(model.get("predefinedQueries"));
+                            this.render();
+                        }
+                        else {
+                            this.renderDetailView();
+                            this.render();
+                        }
                     }
                     else {
                         this.$el.remove();
@@ -37,6 +38,13 @@ define(function (require) {
                 },
                 "renderDetailView": this.renderDetailView
             });
+
+            if (this.model.get("isActive")) {
+                if (this.model.get("queryCollection").length < 1) {
+                    this.model.createQueries(this.model.get("predefinedQueries"));
+                }
+                this.render();
+            }
         },
         id: "filter-view",
         template: _.template(Template),
@@ -79,7 +87,6 @@ define(function (require) {
         closeFilter: function () {
             this.model.setIsActive(false);
             this.model.collapseOpenSnippet();
-            Radio.trigger("Sidebar", "toggle", false);
         }
     });
 

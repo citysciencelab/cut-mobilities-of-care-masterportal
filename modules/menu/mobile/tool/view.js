@@ -5,9 +5,6 @@ define(function (require) {
         ItemView;
 
     ItemView = Backbone.View.extend({
-        tagName: "li",
-        className: "list-group-item",
-        template: _.template(ItemTemplate),
         events: {
             "click": "checkItem"
         },
@@ -16,6 +13,9 @@ define(function (require) {
                 "change:isVisibleInTree": this.removeIfNotVisible
             });
         },
+        tagName: "li",
+        className: "list-group-item",
+        template: _.template(ItemTemplate),
         render: function () {
             var attr = this.model.toJSON();
 
@@ -25,12 +25,7 @@ define(function (require) {
             return this;
         },
         checkItem: function () {
-            if (this.model.get("id") === "legend") {
-                Radio.trigger("Legend", "toggleLegendWin");
-            }
-            else {
-                this.model.setIsActive(true);
-            }
+            this.model.setIsActive(true);
             // Navigation wird geschlossen
             $("div.collapse.navbar-collapse").removeClass("in");
         },

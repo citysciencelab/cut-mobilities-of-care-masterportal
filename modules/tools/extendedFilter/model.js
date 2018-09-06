@@ -1,9 +1,10 @@
 define(function (require) {
     var $ = require("jquery"),
+        Tool = require("modules/core/modelList/tool/model"),
         ExtendedFilter;
 
-    ExtendedFilter = Backbone.Model.extend({
-        defaults: {
+    ExtendedFilter = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             currentContent: {
                 step: 1,
                 name: "Bitte wählen Sie die Filteroption",
@@ -16,12 +17,11 @@ define(function (require) {
             currentFilterType: "Neuen Filter erstellen",
             currentFilters: [],
             ignoredKeys: [],
-            filterCounter: 1
-        },
+            filterCounter: 1,
+            renderToWindow: true
+        }),
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.checkStatus
-            });
+            this.superInitialize();
         },
         // getDefaultContent: function () {
         //     return this.get("defaultContent");
@@ -40,15 +40,6 @@ define(function (require) {
         },
         setWfsList: function (val) {
             return this.set("wfsList", val);
-        },
-        checkStatus: function (args) { // Fenstermanagement
-            if (args[2].get("id") === "extendedFilter") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
-            }
         },
         getLayers: function () {
             var layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),

@@ -1,7 +1,6 @@
 define(function (require) {
-    var Grenznachweismodel = require("modules/formular/grenznachweis"),
-        Grenznachweistemplate = require("text!modules/formular/grenznachweis.html"),
-        Grenznachweiscss = require("text!modules/formular/grenznachweis.css"),
+    var Grenznachweistemplate = require("text!modules/formular/grenznachweis.html"),
+        Grenznachweiscss = require("text!modules/formular/grenznachweis.less"),
         $ = require("jquery"),
         FormularView;
 
@@ -16,27 +15,24 @@ define(function (require) {
             "click a": "click",
             "focusout": "focusout"
         },
-        initialize: function (attr) {
-            this.model = new Grenznachweismodel(attr);
-            this.template = _.template(Grenznachweistemplate);
-            $("head").prepend("<style>" + Grenznachweiscss + "</style>");
+        initialize: function () {
+            if (this.model.get("modelname") === "grenznachweis") {
+                this.template = _.template(Grenznachweistemplate);
+                $("head").prepend("<style>" + Grenznachweiscss + "</style>");
+            }
             this.listenTo(this.model, {
-                "change:isCollapsed render invalid change:isCurrentWin": this.render
+                "change:isActive render invalid": this.render
             });
-            Radio.trigger("Autostart", "initializedModul", "formular");
         },
-        id: "formularWin",
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+        render: function (model, value) {
+            if (value) {
                 this.model.prepWindow();
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();
             }
-            else if (this.model.get("isCurrentWin") === false) {
-                this.model.resetWindow();
+            else {
+                this.$el.empty();
             }
             return this;
         },

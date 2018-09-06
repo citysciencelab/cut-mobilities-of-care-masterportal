@@ -1,6 +1,5 @@
 define(function (require) {
-    var WfsFeatureFilter = require("modules/wfsfeaturefilter/model"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         wfsFeatureFilterTemplate = require("text!modules/wfsfeaturefilter/template.html"),
         wfsFeatureFilterView;
 
@@ -9,14 +8,12 @@ define(function (require) {
             "click #filterbutton": "getFilterInfos",
             "click .panel-heading": "toggleHeading"
         },
-        initialize: function (attr) {
-            this.model = new WfsFeatureFilter(attr);
+        initialize: function () {
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render
+                "change:isActive": this.render
             }, this);
         },
         id: "wfsFilterWin",
-        className: "win-body",
         template: _.template(wfsFeatureFilterTemplate),
         toggleHeading: function (evt) {
             var id = this.$(evt.currentTarget)[0].id;
@@ -137,15 +134,13 @@ define(function (require) {
             }, this);
             this.model.set("layerfilters", layerfilters);
         },
-        render: function () {
-            var attr,
-                layerfilters = this.model.get("layerfilters");
+        render: function (model, value) {
+            var layerfilters = this.model.get("layerfilters");
 
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+            if (value) {
                 this.model.getLayers();
-                attr = this.model.toJSON();
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.setMaxHeight();
                 this.delegateEvents();
                 if (layerfilters) {
@@ -156,15 +151,13 @@ define(function (require) {
                     });
                 }
             }
-            else if (this.model.get("isCurrentWin") === false) {
-                if (layerfilters) {
-                    _.each(layerfilters, function (layerfilter) {
-                        _.each(layerfilter.filter, function (filter) {
-                            filter.fieldValue = "*";
-                        });
+            else if (layerfilters) {
+                _.each(layerfilters, function (layerfilter) {
+                    _.each(layerfilter.filter, function (filter) {
+                        filter.fieldValue = "*";
                     });
-                    this.filterLayers(layerfilters);
-                }
+                });
+                this.filterLayers(layerfilters);
             }
             return this;
         },

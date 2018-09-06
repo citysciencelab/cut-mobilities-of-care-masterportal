@@ -14,6 +14,7 @@ define(function (require) {
                 name: "mapMarker",
                 source: new ol.source.Vector(),
                 alwaysOnTop: true,
+                visible: false,
                 style: new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: "#08775f",
@@ -131,6 +132,7 @@ define(function (require) {
          */
         hideFeature: function () {
             this.get("polygon").getSource().clear();
+            this.get("polygon").setVisible(false);
         },
 
         // setter for zoomLevel

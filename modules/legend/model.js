@@ -1,25 +1,30 @@
 define(function (require) {
 
-    var Radio = require("backbone.radio"),
+    var Tool = require("modules/core/modelList/tool/model"),
         ol = require("openlayers"),
         Legend;
 
-    Legend = Backbone.Model.extend({
-
-        defaults: {
+    Legend = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             legendParams: [],
             paramsStyleWMS: [],
             paramsStyleWMSArray: [],
-            visible: false
-        },
-
+            renderToWindow: false,
+            renderToSidebar: false
+        }),
         initialize: function () {
             var channel = Radio.channel("Legend");
 
+            this.superInitialize();
             channel.reply({
-                "getLegend": this.getLegend
+                "getLegend": this.getLegend,
+                "getLegendParams": function () {
+                    return this.get("legendParams");
+                }
             }, this);
-
+            channel.on({
+                "setLayerList": this.setLayerList
+            }, this);
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": this.setLayerList
             });
@@ -30,10 +35,6 @@ define(function (require) {
             this.listenTo(this, {
                 "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
             });
-        },
-
-        setVisible: function (val) {
-            this.set("visible", val);
         },
 
         /**
@@ -500,5 +501,5 @@ define(function (require) {
         }
     });
 
-    return new Legend();
+    return Legend;
 });

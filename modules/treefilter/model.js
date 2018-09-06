@@ -1,10 +1,10 @@
 define(function (require) {
-    var Config = require("config"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
+        Tool = require("modules/core/modelList/tool/model"),
         TreeFilter;
 
-    TreeFilter = Backbone.Model.extend({
-        defaults: {
+    TreeFilter = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             filter: "",
             filterHits: "", // Filtertreffer
             isFilter: false,
@@ -19,16 +19,18 @@ define(function (require) {
             perimeterMax: "1000", // Stammumfang[cm] bis
             searchCategoryString: "", // Treffer für die Vorschalgsuche der Baumgattung
             searchTypeString: "", // Treffer für die Vorschalgsuche der Baumart
+            renderToWindow: true,
             treeConf: ""
-        },
+        }),
         url: function () {
             return Radio.request("Util", "getPath", this.get("treeConf"));
         },
         initialize: function () {
             var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
 
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
+            this.superInitialize();
+            this.listenTo(this, {
+                "change:isActive": this.setStatus
             });
 
             if (!_.isUndefined(model)) {
@@ -58,15 +60,12 @@ define(function (require) {
                 }
             });
         },
-        setStatus: function (args) { // Fenstermanagement
-            if (args[2].get("id") === "treeFilter" && args[0] === true) {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
+        setStatus: function (model, value) { // Fenstermanagement
+            if (value) {
                 $("#window").css("max-width", "420px");
             }
             else {
                 $("#window").css("max-width", "");
-                this.set("isCurrentWin", false);
             }
         },
         setListenerForVisibility: function (model) {

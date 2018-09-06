@@ -1,6 +1,7 @@
 define(function (require) {
     var expect = require("chai").expect,
-        StyleWMS = require("../../../../modules/tools/styleWMS/view");
+        StyleWMS = require("../../../../modules/tools/styleWMS/view"),
+        StyleWMSModel = require("../../../../modules/tools/styleWMS/model");
 
     describe("tools/styleWMS/view", function () {
         var styleWMS;
@@ -32,7 +33,7 @@ define(function (require) {
                 }
             ];
 
-            styleWMS = new StyleWMS();
+            styleWMS = new StyleWMS({model: new StyleWMSModel()});
 
             // prepare html body
             for (var i=0; i < 10; i++) {
