@@ -317,7 +317,7 @@ define(function (require) {
                 schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
                 school = this.filterSchoolById(this.get("schoolList"), schoolId);
                 this.setRegionalSchool(school);
-                this.trigger("updateRegionalSchool", this.get("schulname"));
+                this.trigger("updateRegionalSchool", school.get("schulname"));
             }
             else {
                 this.setRegionalSchool({});
