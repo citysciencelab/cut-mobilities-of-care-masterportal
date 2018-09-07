@@ -31,6 +31,13 @@
         "filter": "filter=(typ:*)",
         "score": 0.6
       },
+      "osm": {
+        "minChars": 3,
+        "serviceId": "10",
+        "limit": 60,
+        "states": "Hamburg",
+        "classes": "place,highway,building,shop,historic,leisure"
+      },
       "specialWFS":
       {
         "minChars": 3,
