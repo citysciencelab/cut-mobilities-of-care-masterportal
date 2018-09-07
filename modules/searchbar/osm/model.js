@@ -115,7 +115,7 @@ define(function (require) {
 
             _.each(data, function (hit) {
                 if (this.get("states").length === 0 || this.get("states").includes(hit.address.state)) {
-                    if (this.isSearched(hit)) {
+                    if (this.isSearched(hit, this.get("searchParams"))) {
                         weg = hit.address.road || hit.address.pedestrian;
                         display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
                         if (!_.isUndefined(weg)) {
@@ -158,13 +158,13 @@ define(function (require) {
 
         /**
          * stellt fest, ob Das Ergebnis alle eingegebenen Parameter enthält
-         * @param  {[type]} searched [description] Das zu untersuchende Suchergebnis
+         * @param  {[object]} searched Das zu untersuchende Suchergebnis
+         * @param  {[array]} params Das Ergebnis aufgesplittet
          * @returns {boolean} true | false
          */
-        isSearched: function (searched) {
+        isSearched: function (searched, params) {
             var hits = [],
-                address = searched.address,
-                params = this.get("searchParams");
+                address = searched.address;
 
             if (this.canShowHit(searched)) {
 
