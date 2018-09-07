@@ -62,6 +62,12 @@ define(function (require) {
             it("should be true by correct input response from osm", function () {
                 expect(model.isSearched(searched, params)).to.be.true;
             });
+            it("should be false for empty input object", function () {
+                expect(model.isSearched({}, params)).to.be.false;
+            });
+            it("should be false for to short input object", function () {
+                expect(model.isSearched({"address": {"road": "Neuenfelder Straße", "suburb": "Wilhelmsburg"}}, params)).to.be.false;
+            });
         });
     });
 });
