@@ -467,9 +467,9 @@ define(function (require) {
                     }
 
                     valueObj.label = layerParam.legend[0].legendname[index];
-                    valueObj.imageUrl = url;
+                    valueObj.imageUrl = this.createLegendImageUrl(url);
                     valuesArray.push(valueObj);
-                });
+                }, this);
             }
             else if (layerParam.legend[0].typ === "styleWMS") {
                 _.each(layerParam.legend[0].params, function (styleWmsParam) {
@@ -484,6 +484,12 @@ define(function (require) {
             }
 
             return valuesArray;
+        },
+        createLegendImageUrl: function (path) {
+            var url = this.buildGraphicPath(),
+                image = path.substring(path.lastIndexOf("/"));
+
+            return url + image;
         },
         /**
          * gets array with [GfiContent, layername, coordinates] of actual gfi
