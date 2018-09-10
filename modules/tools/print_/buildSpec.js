@@ -214,8 +214,22 @@ define(function (require) {
                 type: "point",
                 graphicWidth: style.getSize()[0] * style.getScale(),
                 graphicHeight: style.getSize()[1] * style.getScale(),
-                externalGraphic: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img" + this.getImageName(style.getSrc())
+                externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc())
             };
+        },
+        /**
+         * derives the url of the image from the server the app is running on
+         * if the app is running on localhost the images from test-geofos are used
+         * @return {String} path to image directory
+         */
+        buildGraphicPath: function () {
+            var url = "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img",
+                origin = window.location.origin;
+
+            if (origin.indexOf("localhost") === -1) {
+                url = origin + "/lgv-config/img";
+            }
+            return url;
         },
 
         buildPointStyleText: function (style) {
