@@ -90,20 +90,26 @@ define(function (require) {
             var source = layer.getSource(),
                 customParams = {
                     "TRANSPARENT": "true"
+                },
+                mapObject = {
+                    baseURL: source.getUrls()[0],
+                    opacity: layer.getOpacity(),
+                    type: "WMS",
+                    layers: source.getParams().LAYERS.split(","),
+                    imageFormat: source.getParams().FORMAT,
+                    customParams: customParams
                 };
 
-            // if (_.has(source.getParams(), "SLD_BODY")) {
-            //     customParams.SLD_BODY = encodeURIComponent(source.getParams().SLD_BODY);
-            //     customParams.STYLES = "style";
-            // }
-            return {
-                baseURL: source.getUrls()[0],
-                opacity: layer.getOpacity(),
-                type: "WMS",
-                layers: source.getParams().LAYERS.split(","),
-                imageFormat: source.getParams().FORMAT,
-                customParams: customParams
-            };
+            if (_.has(source.getParams(), "SLD_BODY")) {
+                console.log(source.getParams().SLD_BODY);
+                // mapObject.customParams.SLD_BODY = encodeURIComponent(source.getParams().SLD_BODY);
+                mapObject = _.extend(mapObject, {
+                    // rasterStyle: source.getParams().SLD_BODY,
+                    styles: "style"
+                });
+                console.log(mapObject);
+            }
+            return mapObject;
         },
 
         /**
