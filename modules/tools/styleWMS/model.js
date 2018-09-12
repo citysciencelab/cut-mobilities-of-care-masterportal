@@ -74,7 +74,7 @@ define(function (require) {
             this.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": function () {
                     this.refreshStyleableLayerList();
-                    if (this.get("isCurrentWin")) {
+                    if (this.get("isActive") === true) {
                         // Wenn das Tool gerade aktiv ist aktualisiere den Inhalt.
                         this.trigger("sync");
                     }
