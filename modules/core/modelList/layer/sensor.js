@@ -2,7 +2,7 @@ import Layer from "./model";
 import Config from "../../../../portal/master/config";
 import mqtt from "mqtt";
 import moment from "moment";
-import {Cluster, VectorSource} from "ol/source.js";
+import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {EsriJSON} from "ol/format.js";
 import {transform} from "ol/proj.js";
