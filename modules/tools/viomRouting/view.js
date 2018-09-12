@@ -16,6 +16,7 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("ViomRouting");
 
+            this.model.setStatus();
             this.template = _.template(RoutingWin);
             this.listenTo(this.model, {
                 "change:isActive": this.render,
@@ -31,6 +32,7 @@ define(function (require) {
             channel.on({
                 "setRoutingDestination": this.setRoutingDestination
             }, this);
+            Radio.trigger("Autostart", "initializedModul", "routing");
         },
         id: "routingWin",
         startAdressePosition: function () {
