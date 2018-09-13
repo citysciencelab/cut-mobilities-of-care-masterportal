@@ -3,8 +3,6 @@ var webpack = require("webpack"),
 
 module.exports = {
     entry: "./js/main.js",
-    mode: "development",
-    watch: true,
     output: {
         path: path.resolve(__dirname, "build"),
         filename: "bundle.js"
