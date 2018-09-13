@@ -45,7 +45,7 @@ define(function (require) {
                     }
                 }
             });
-            
+
             if (this.get("isInitOpen")) {
                 this.setIsActive("true");
             }
