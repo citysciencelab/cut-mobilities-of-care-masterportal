@@ -4,8 +4,8 @@
         <label for="layoutField" class="col-md-5 col-sm-5 control-label">Geometrie</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm" id="geomField">
-                <option value="LineString" <% if (type === "LineString") { print ("SELECTED")} %>>Strecke</option>
-                <option value="Polygon" <% if (type === "Polygon") { print ("SELECTED")} %>>Fläche</option>
+                <option value="LineString" <% if (geomtype === "LineString") { print ("SELECTED")} %>>Strecke</option>
+                <option value="Polygon" <% if (geomtype === "Polygon") { print ("SELECTED")} %>>Fläche</option>
             </select>
         </div>
     </div>
@@ -13,7 +13,7 @@
         <label for="unitField" class="col-md-5 col-sm-5 control-label">Einheit</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm" id="unitField">
-                <% if (type === "LineString") { %>
+                <% if (geomtype === "LineString") { %>
                     <option value="m">m</option>
                     <option value="km">km</option>
                 <% }
