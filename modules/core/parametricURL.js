@@ -57,6 +57,7 @@ define(function (require) {
             }, this);
 
             this.parseURL();
+            channel.trigger("ready");
         },
 
         /**

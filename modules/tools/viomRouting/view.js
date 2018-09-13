@@ -32,7 +32,8 @@ define(function (require) {
             channel.on({
                 "setRoutingDestination": this.setRoutingDestination
             }, this);
-            Radio.trigger("Autostart", "initializedModul", "routing");
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         id: "routingWin",
         startAdressePosition: function () {
