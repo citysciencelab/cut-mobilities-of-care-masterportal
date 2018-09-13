@@ -88,26 +88,20 @@ define(function (require) {
          */
         buildTileWms: function (layer) {
             var source = layer.getSource(),
-                customParams = {
-                    "TRANSPARENT": "true"
-                },
                 mapObject = {
                     baseURL: source.getUrls()[0],
                     opacity: layer.getOpacity(),
                     type: "WMS",
                     layers: source.getParams().LAYERS.split(","),
                     imageFormat: source.getParams().FORMAT,
-                    customParams: customParams
+                    customParams: {
+                        "TRANSPARENT": "true"
+                    }
                 };
 
             if (_.has(source.getParams(), "SLD_BODY")) {
-                console.log(source.getParams().SLD_BODY);
-                // mapObject.customParams.SLD_BODY = encodeURIComponent(source.getParams().SLD_BODY);
-                mapObject = _.extend(mapObject, {
-                    // rasterStyle: source.getParams().SLD_BODY,
-                    styles: "style"
-                });
-                console.log(mapObject);
+                mapObject.customParams.SLD_BODY = source.getParams().SLD_BODY;
+                mapObject.styles = ["style"];
             }
             return mapObject;
         },
@@ -118,24 +112,25 @@ define(function (require) {
          * @returns {object} wms layer spec
          */
         buildImageWms: function (layer) {
-            var source = layer.getSource();
+            var source = layer.getSource(),
+                mapObject = {
+                    baseURL: source.getUrl(),
+                    opacity: layer.getOpacity(),
+                    type: "WMS",
+                    layers: source.getParams().LAYERS.split(","),
+                    imageFormat: source.getParams().FORMAT,
+                    customParams: {
+                        "TRANSPARENT": "true"
+                    }
+                };
 
-            return {
-                baseURL: source.getUrl(),
-                opacity: layer.getOpacity(),
-                type: "WMS",
-                layers: source.getParams().LAYERS.split(","),
-                imageFormat: source.getParams().FORMAT,
-                customParams: {
-                    "TRANSPARENT": "true"
-                }
-            };
+            return mapObject;
         },
 
         /**
          * returns vector layer information
          * @param {ol.layer.Vector} layer - vector layer with vector source
-         * @param {[number]} extent mapextent
+         * @param {[ol.feature]} features vectorfeatures
          * @returns {object} geojson layer spec
         */
         buildVector: function (layer, features) {
