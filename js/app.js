@@ -14,7 +14,7 @@ import Map from "../modules/core/map";
 //     WPS = require("modules/core/wps"),
 //     AddGeoJSON = require("modules/tools/addGeoJSON/model"),
 //     style,
-//     sbconfig;
+let sbconfig;
 
 
 // RemoteInterface laden
@@ -56,17 +56,11 @@ new RestReaderList();
 import MenuLoader from "../modules/menu/menuLoader";
 new MenuLoader();
 //
-// require(["modules/zoomToGeometry/model"], function (ZoomToGeometry) {
-//     new ZoomToGeometry();
-// });
+
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 new ZoomToGeometry();
 //
-// if (_.has(Config, "zoomToFeature")) {
-//     require(["modules/zoomtofeature/model"], function (ZoomToFeature) {
-//         new ZoomToFeature(Config.zoomToFeature);
-//     });
-// }
+
 import ZoomToFeature from "../modules/zoomtofeature/model";
 if (_.has(Config, "zoomToFeature")) {
     new ZoomToFeature(Config.zoomToFeature);
@@ -94,30 +88,30 @@ import FooterView from "../modules/footer/view";
 if (_.has(Config, "footer")) {
     new FooterView(Config.footer);
 }
-// if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
-//     require(["modules/ClickCounter/view"], function (ClickCounterView) {
-//         new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
-//     });
-// }
+
+import ClickCounterView from "../modules/ClickCounter/view";
+if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
+    new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
+}
+
 //
+// import MouseHoverPopupView from "../modules/mouseHover/view";
 // if (_.has(Config, "mouseHover")) {
-//     require(["modules/mouseHover/view"], function (MouseHoverPopupView) {
-//         new MouseHoverPopupView(Config.mouseHover);
-//     });
+//     new MouseHoverPopupView(Config.mouseHover);
 // }
-//
-// if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
-//     require(["modules/quickhelp/view"], function (QuickHelpView) {
-//         new QuickHelpView();
-//     });
-// }
-//
-// import ScaleLineView from "../modules/scaleline/view";
-// function loadFunctionalities () {
-//     if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
-//         new ScaleLineView();
-//     }
-// }
+
+
+import QuickHelpView from "../modules/quickhelp/view";
+if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
+    new QuickHelpView();
+}
+
+import ScaleLineView from "../modules/scaleline/view";
+
+if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
+    new ScaleLineView();
+}
+
 
 //
 import WindowView from "../modules/window/view";
@@ -129,6 +123,9 @@ new WindowView();
 //
 import GfiModel from "../modules/tools/gfi/model";
 import LegendLoader from "../modules/legend/legendLoader";
+import MeasureView from "../modules/tools/measure/view";
+import DrawView from "../modules/tools/draw/view";
+
 _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function (tool) {
 //         var printConf = {};
 //
@@ -164,10 +161,6 @@ _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function
 //                 break;
 //             }
         case "gfi": {
-//                 require(["modules/tools/gfi/model"], function (GfiModel) {
-//                     new GfiModel(_.extend(tool, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}));
-//                 });
-
             new GfiModel(_.extend(tool, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}));
             break;
         }
@@ -177,18 +170,14 @@ _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function
 //                 });
 //                 break;
 //             }
-//             case "measure": {
-//                 require(["modules/tools/measure/view"], function (MeasureView) {
-//                     new MeasureView(_.extend(tool, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}));
-//                 });
-//                 break;
-//             }
-//             case "draw": {
-//                 require(["modules/tools/draw/view"], function (DrawView) {
-//                     new DrawView(tool);
-//                 });
-//                 break;
-//             }
+        case "measure": {
+            new MeasureView(_.extend(tool, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}));
+            break;
+        }
+        case "draw": {
+            new DrawView(tool);
+            break;
+        }
 //             case "print": {
 //                 printConf = tool;
 //                 printConf = _.extend(printConf, {center: Radio.request("MapView", "getCenter")});
@@ -381,31 +370,29 @@ _.each(Radio.request("Parser", "getItemsByAttributes", {type: "tool"}), function
 // }
 //
 
-// require(["modules/mapMarker/view"], function (MapMarkerView) {
-//     new MapMarkerView();
-// });
-// import MapMarkerView from "../modules/mapMarker/view";
-// new MapMarkerView();
+
 //
-// sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
-// sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
-// if (sbconfig) {
-//     require(["modules/searchbar/view"], function (SearchbarView) {
-//         new SearchbarView(sbconfig);
-//         if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
-//             require(["modules/title/view"], function (TitleView) {
-//                 new TitleView();
-//             });
-//         }
-//     });
+
+import SearchbarView from "../modules/searchbar/view";
+// import TitleView from "../modules/searchbar/view";
+sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
+sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
+if (sbconfig) {
+    new SearchbarView(sbconfig);
+    // if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
+    //     new TitleView();
+    // }
+}
 // }
 //
+import MapMarkerView from "../modules/mapMarker/view";
+new MapMarkerView();
 // require(["modules/tools/styleWMS/view"], function (StyleWMSView) {
 //     new StyleWMSView();
 // });
 //
-// require(["modules/highlightFeature/model"], function (HighlightFeature) {
-//     new HighlightFeature();
-// });
+import HighlightFeature from "../modules/highlightFeature/model";
+new HighlightFeature();
+
 //
 Radio.trigger("Util", "hideLoader");
