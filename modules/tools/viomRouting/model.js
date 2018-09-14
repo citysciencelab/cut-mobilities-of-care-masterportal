@@ -108,7 +108,7 @@ define(function (require) {
 
             query = encodeURI(query);
             $.ajax({
-                url: this.get("bkgSuggestURL"),
+                url: this.get("bkgSuggestURL").indexOf(window.location.host) !== -1 ? this.get("bkgSuggestURL") : Radio.request("Util", "getProxyURL", this.get("bkgSuggestURL")),
                 data: "count=5" + query + bbox + filter,
                 context: this, // das Model
                 async: true,
@@ -139,7 +139,7 @@ define(function (require) {
         },
         geosearchByBKG: function (value, target) {
             $.ajax({
-                url: this.get("bkgGeosearchURL"),
+                url: this.get("bkgGeosearchURL").indexOf(window.location.host) !== -1 ? this.get("bkgGeosearchURL") : Radio.request("Util", "getProxyURL", this.get("bkgGeosearchURL")),
                 data: this.get("epsgCode") + "&count=1&outputformat=json&query=" + encodeURI(value),
                 context: this, // das model
                 async: true,
