@@ -16,7 +16,7 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("ViomRouting");
 
-            this.model.setStatus();
+            this.model.setParams();
             this.template = _.template(RoutingWin);
             this.listenTo(this.model, {
                 "change:isActive": this.render,
