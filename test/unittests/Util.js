@@ -1,5 +1,7 @@
 define(function (require) {
-    var proj = new ol.proj.Projection({
+    var ol = require("openlayers"),
+        $ = require("jquery"),
+        proj = new ol.proj.Projection({
             code: "EPSG:25832",
             units: "m",
             axisOrientation: "enu",
@@ -12,6 +14,7 @@ define(function (require) {
 
 
     Util = Backbone.Model.extend({
+        defaults: {},
         initialize: function () {},
         createTestFeatures: function (path) {
             var format = new ol.format.WFS({

@@ -3,11 +3,9 @@ import ContentTemplate from "text-loader!../content.html";
 
 const LegendView = Backbone.View.extend({
     events: {
-        "click .glyphicon-remove": "toggle"
+        "click .glyphicon-remove": "hide"
     },
-    initialize: function (Model) {
-        this.model = Model;
-
+    initialize: function () {
         $(window).resize(function () {
             if ($(".legend-win-content").height() !== null) {
                 $(".legend-win-content").css("max-height", $(window).height() * 0.7);
@@ -16,23 +14,22 @@ const LegendView = Backbone.View.extend({
 
         this.listenTo(this.model, {
             "change:legendParams": this.paramsChanged,
-            "change:paramsStyleWMSArray": this.paramsChanged
-        });
-
-        this.listenTo(Radio.channel("Legend"), {
-            "toggleLegendWin": this.toggle
+            "change:paramsStyleWMSArray": this.paramsChanged,
+            "change:isActive": function (model, value) {
+                if (value) {
+                    this.show();
+                }
+                else {
+                    this.hide();
+                }
+            }
         });
 
         this.listenTo(Radio.channel("Map"), {
             "updateSize": this.updateLegendSize
         });
-
-        Radio.trigger("Autostart", "initializedModul", "legend");
-
-        this.model.setLayerList();
-
-        if (this.model.get("visible")) {
-            this.toggle();
+        if (this.model.get("isActive")) {
+            this.show();
         }
     },
     className: "legend-win",
@@ -82,22 +79,17 @@ const LegendView = Backbone.View.extend({
         return this;
     },
 
-    toggle: function () {
-        var legendModel = Radio.request("ModelList", "getModelByAttributes", {id: "legend"}),
-            visible = !this.$el.is(":visible");
-
-        this.model.setVisible(visible); // speichere neuen Status
-        this.render();
-        this.$el.toggle();
-
-        if (this.$el.css("display") === "block") {
-            legendModel.setIsActive(true);
+    show: function () {
+        if ($("body").find(".legend-win").length === 0) {
+            this.render();
         }
-        else {
-            legendModel.setIsActive(false);
-        }
+        this.model.setLayerList();
+        this.$el.show();
     },
-
+    hide: function () {
+        this.$el.hide();
+        this.model.setIsActive(false);
+    },
     removeView: function () {
         this.$el.hide();
         this.remove();

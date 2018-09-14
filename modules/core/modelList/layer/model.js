@@ -41,7 +41,7 @@ const Layer = Item.extend({
     },
 
     featuresLoaded: function (features) {
-        Radio.trigger(this.get("channel"), "featuresLoaded", this.get("id"), features);
+        this.get("channel").trigger("featuresLoaded", this.get("id"), features);
     },
 
     /**
@@ -368,6 +368,7 @@ const Layer = Item.extend({
     setLegendURL: function (value) {
         this.set("legendURL", value);
     }
+
 });
 
 export default Layer;

@@ -1,6 +1,5 @@
 import DefaultTemplate from "text-loader!./default/template.html";
 import TableTemplate from "text-loader!./table/template.html";
-import Measure from "./model";
 
 const MeasureView = Backbone.View.extend({
     events: {
@@ -11,23 +10,19 @@ const MeasureView = Backbone.View.extend({
             Radio.trigger("Quickhelp", "showWindowHelp", "measure");
         }
     },
-    initialize: function (attr) {
-        this.model = new Measure(attr);
+    initialize: function () {
         this.listenTo(this.model, {
-            "change:isCollapsed change:isCurrentWin change:geometryType": this.render
+            "change:isActive change:geomtype": this.render
         });
     },
-    className: "win-body",
-    render: function () {
-        var attr,
-            template;
+    render: function (model, value) {
+        var template;
 
-        if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-            attr = this.model.toJSON();
+        if (value) {
             template = Radio.request("Util", "getUiStyle") === "TABLE" ? _.template(TableTemplate) : _.template(DefaultTemplate);
 
-            this.$el.html("");
-            $(".win-heading").after(this.$el.html(template(attr)));
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(template(model.toJSON()));
             this.delegateEvents();
         }
         else {

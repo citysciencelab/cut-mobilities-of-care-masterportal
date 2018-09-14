@@ -1,10 +1,11 @@
 define(function (require) {
     var $ = require("jquery"),
         ol = require("openlayers"),
+        Tool = require("modules/core/modelList/tool/model"),
         PrintModel;
 
-    PrintModel = Backbone.Model.extend({
-        defaults: {
+    PrintModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             printID: "99999",
             MM_PER_INCHES: 25.4,
             POINTS_PER_INCH: 72,
@@ -34,9 +35,10 @@ define(function (require) {
                 }
             },
             configYAML: "/master",
-            proxyURL: "",
-            srs: ""
-        },
+            deactivateGFI: false,
+            renderToWindow: true,
+            proxyURL: ""
+        }),
 
         /*
          * Ermittelt die URL zum Fetchen in setStatus durch Abfrage der ServiceId
@@ -57,18 +59,17 @@ define(function (require) {
 
         //
         initialize: function () {
+            this.superInitialize();
+
             this.listenTo(this, {
-                "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
-                "change:specification": this.getPDFURL
+                "change:layout change:scale change:isActive": this.updatePrintPage,
+                "change:specification": this.getPDFURL,
+                "change:isActive": this.setStatus
             });
 
             this.listenTo(Radio.channel("MapView"), {
                 "changedOptions": this.setScaleByMapView,
                 "changedCenter": this.setCenter
-            });
-
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
             });
         },
 
@@ -105,10 +106,10 @@ define(function (require) {
         },
 
         //
-        setStatus: function (args) {
+        setStatus: function (bmodel, value) {
             var scaletext;
 
-            if (args[2].get("id") === "print" && args[0] === true) {
+            if (value && this.get("layouts") === undefined) {
                 if (this.get("fetched") === false) {
                     // get print config (info.json)
                     this.fetch({
@@ -123,12 +124,11 @@ define(function (require) {
                             model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                             model.setScaleByMapView();
                             model.set("isCollapsed", false);
-                            model.set("isCurrentWin", true);
                             model.set("fetched", true);
                         },
                         error: function () {
                             Radio.trigger("Alert", "alert", {text: "<strong>Druckkonfiguration konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
-                            Radio.trigger("Window", "closeWin", false);
+                            Radio.trigger("Window", "setIsVisible", false);
                         },
                         complete: function () {
                             Radio.trigger("Util", "hideLoader");
@@ -137,20 +137,14 @@ define(function (require) {
                             Radio.trigger("Util", "showLoader");
                         }
                     });
+                    this.updatePrintPage();
                 }
-                else {
-                    this.set("isCollapsed", args[1]);
-                    this.set("isCurrentWin", args[0]);
-                }
-            }
-            else {
-                this.set("isCurrentWin", false);
             }
         },
 
         updatePrintPage: function () {
-            if (this.has("scale")) {
-                if (this.get("isCurrentWin") === true) {
+            if (this.has("scale") && this.has("layout")) {
+                if (this.get("isActive")) {
                     Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose, this);
                     Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
                 }
@@ -167,10 +161,10 @@ define(function (require) {
 
             this.set("layerToPrint", []);
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            if (drawLayer.getSource().getFeatures().length > 0) {
+            if (drawLayer !== undefined && drawLayer.getSource().getFeatures().length > 0) {
                 this.setLayer(drawLayer);
             }
-            this.getGFIForPrint();
+            this.getGfiForPrint();
         },
 
         setLayerToPrint: function (layers) {
@@ -369,7 +363,7 @@ define(function (require) {
             }, this);
             specification = {
                 layout: this.get("layout").name,
-                srs: this.get("srs"),
+                srs: Radio.request("MapView", "getProjection").getCode(),
                 units: "m",
                 outputFilename: this.get("outputFilename"),
                 outputFormat: this.get("outputFormat"),
@@ -443,8 +437,8 @@ define(function (require) {
         * Setzt die createURL in Abhängigkeit der GFI
         * @returns {void}
         */
-        getGFIForPrint: function () {
-            var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGFIForPrint") : null,
+        getGfiForPrint: function () {
+            var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
                 gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
                 gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
                 gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
@@ -523,21 +517,18 @@ define(function (require) {
         // Gibt den hexadezimal String und die Opacity zurück.
         getColor: function (value) {
             var color = value,
-                opacity = 1,
-                begin;
+                opacity = 1;
 
             // color kommt als array--> parsen als String
             color = color.toString();
 
             if (color.search("#") === -1) {
-                begin = color.indexOf("(") + 1;
-
-                color = color.substring(begin, color.length - 1);
                 color = color.split(",");
                 if (color.length === 4) {
                     opacity = parseFloat(color[3], 10);
                 }
                 color = this.rgbToHex(parseInt(color[0], 10), parseInt(color[1], 10), parseInt(color[2], 10));
+
                 return {
                     "color": color,
                     "opacity": opacity

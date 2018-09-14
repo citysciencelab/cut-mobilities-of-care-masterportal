@@ -1,8 +1,6 @@
 define(function (require) {
 
     var GetCoordTemplate = require("text!modules/tools/getCoord/template.html"),
-        $ = require("jquery"),
-        GetCoordModel = require("modules/tools/getCoord/model"),
         GetCoord;
 
     GetCoord = Backbone.View.extend({
@@ -12,21 +10,18 @@ define(function (require) {
             "click #coordinatesEastingField": "copyToClipboard",
             "click #coordinatesNorthingField": "copyToClipboard"
         },
-        initialize: function (attr) {
-            this.model = new GetCoordModel(attr);
+        initialize: function () {
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:url": this.render,
+                "change:isActive change:url": this.render,
                 "change:positionMapProjection": this.changedPosition
             });
         },
-        className: "win-body",
         template: _.template(GetCoordTemplate),
-
-        render: function () {
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(this.model.toJSON())));
+        render: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
                 this.model.createInteraction();
+                this.$el.html(this.template(model.toJSON()));
                 this.changedPosition();
                 this.delegateEvents();
             }

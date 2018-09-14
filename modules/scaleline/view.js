@@ -12,9 +12,12 @@ const ScaleLineView = Backbone.View.extend({
     render: function () {
         var attr = this.model.toJSON();
 
-        this.$el.html(this.template(attr));
-        document.getElementsByClassName("footer")[0].appendChild(this.el);
-        this.$el.css("right", 0);
+        if (!_.isEmpty(document.getElementsByClassName("footer"))) {
+            this.$el.html(this.template(attr));
+            document.getElementsByClassName("footer")[0].appendChild(this.el);
+            this.$el.css("right", 0);
+        }
+
         return this;
     }
 });

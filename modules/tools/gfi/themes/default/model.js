@@ -4,7 +4,6 @@ import VideoView from "../../objects/video/view";
 import RoutableView from "../../objects/routingButton/view";
 
 const DefaultTheme = Theme.extend({
-
     initialize: function () {
         var channel = Radio.channel("defaultTheme");
 
@@ -56,7 +55,8 @@ const DefaultTheme = Theme.extend({
                         videoView,
                         valString = String(val);
 
-                    if (valString.substr(0, 7) === "http://" && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1)) {
+                    if (valString.substr(0, 4) === "http"
+                        && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1 || valString.search(/\.jpeg/i) !== -1 || valString.search(/\.gif/i) !== -1)) {
                         // Prüfen, ob es auch ein Copyright für das Bild gibt, dann dieses ebenfalls an ImgView übergeben, damit es im Bild dargestellt wird
                         copyright = "";
 

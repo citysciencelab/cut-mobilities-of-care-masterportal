@@ -1,11 +1,8 @@
 define(function (require) {
-    var $ = require("jquery"),
-        ParcelSearchTemplate = require("text!modules/tools/parcelSearch/template.html"),
-        ParcelSearch = require("modules/tools/parcelSearch/model"),
+    var ParcelSearchTemplate = require("text!modules/tools/parcelSearch/template.html"),
         ParcelSearchView;
 
     ParcelSearchView = Backbone.View.extend({
-        className: "win-body",
         template: _.template(ParcelSearchTemplate),
         events: {
             "change #districtField": "districtFieldChanged",
@@ -21,10 +18,7 @@ define(function (require) {
          * In init wird configuration nach "renderToDOM" untersucht.
          * Switch Window oder render2DOM - Modus
          */
-        initialize: function (psconfig) {
-            var renderToDOM = psconfig && psconfig.renderToDOM ? psconfig.renderToDOM : null;
-
-            this.model = new ParcelSearch(psconfig);
+        initialize: function () {
             this.listenTo(this.model, {
                 "change:parcelNumber": this.checkInput,
                 "change:parcelDenominatorNumber": this.checkInput,
@@ -32,8 +26,8 @@ define(function (require) {
                 "change:cadastralDistrictNumber": this.checkInput
             });
 
-            if (_.isString(renderToDOM)) {
-                this.setElement(renderToDOM);
+            if (this.model.has("renderToDOM")) {
+                this.setElement(this.get("renderToDOM"));
                 this.listenTo(this.model, {
                     "change:fetched": function () {
                         this.render2DOM();
@@ -42,23 +36,24 @@ define(function (require) {
             }
             else {
                 this.listenTo(this.model, {
-                    "change:isCollapsed change:isCurrentWin": this.render2Window
+                    "change:isActive": this.render2Window
                 });
             }
         },
         /*
          * Standard-Renderer, wenn parcelSearch in Window über Menubar angezeigt wird.
          */
-        render2Window: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+        render2Window: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();
             }
             else {
-                this.undelegateEvents();
+                this.$el.empty();
             }
+
+            return this;
         },
         /*
          * Renderer, wenn parcelSearch ohne Menubar angezeigt wird, z.B. in IDA

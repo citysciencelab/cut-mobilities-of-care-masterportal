@@ -8,8 +8,8 @@ import MapView from "./mapView";
 const map = Backbone.Model.extend({
 
     /**
-     *
-     */
+    *
+    */
     defaults: {
         initalLoading: 0
     },
@@ -65,6 +65,7 @@ const map = Backbone.Model.extend({
 
         this.set("map", new Map({
             logo: null,
+            renderer: "canvas",
             target: "map",
             view: this.get("view"),
             controls: [],
@@ -79,10 +80,10 @@ const map = Backbone.Model.extend({
     },
 
     /**
-     * Findet einen Layer über seinen Namen und gibt ihn zurück
-     * @param  {string} layerName - Name des Layers
-     * @return {ol.layer} - found layer
-     */
+    * Findet einen Layer über seinen Namen und gibt ihn zurück
+    * @param  {string} layerName - Name des Layers
+    * @return {ol.layer} - found layer
+    */
     getLayerByName: function (layerName) {
         var layers = this.get("map").getLayers().getArray();
 
@@ -124,71 +125,71 @@ const map = Backbone.Model.extend({
     },
 
     /**
-     * Registriert Listener für bestimmte Events auf der Karte
-     * Siehe http://openlayers.org/en/latest/apidoc/ol.Map.html
-     * @param {String} event - Der Eventtyp
-     * @param {Function} callback - Die Callback Funktion
-     * @param {Object} context -
-     * @returns {void}
-     */
+    * Registriert Listener für bestimmte Events auf der Karte
+    * Siehe http://openlayers.org/en/latest/apidoc/ol.Map.html
+    * @param {String} event - Der Eventtyp
+    * @param {Function} callback - Die Callback Funktion
+    * @param {Object} context -
+    * @returns {void}
+    */
     registerListener: function (event, callback, context) {
         this.get("map").on(event, callback, context);
     },
 
     /**
-     * Meldet Listener auf bestimmte Events ab
-     * @param {String} event - Der Eventtyp
-     * @param {Function} callback - Die Callback Funktion
-     * @param {Object} context -
-     * @returns {void}
-     */
+    * Meldet Listener auf bestimmte Events ab
+    * @param {String} event - Der Eventtyp
+    * @param {Function} callback - Die Callback Funktion
+    * @param {Object} context -
+    * @returns {void}
+    */
     unregisterListener: function (event, callback, context) {
         this.get("map").un(event, callback, context);
     },
 
     /**
-     * Gibt die Kartenpixelposition für ein Browser-Event relative zum Viewport zurück
-     * @param  {Event} evt - Mouse Events | Keyboard Events | ...
-     * @return {ol.Pixel} pixel
-     */
+    * Gibt die Kartenpixelposition für ein Browser-Event relative zum Viewport zurück
+    * @param  {Event} evt - Mouse Events | Keyboard Events | ...
+    * @return {ol.Pixel} pixel
+    */
     getEventPixel: function (evt) {
         return this.get("map").getEventPixel(evt);
     },
 
     /**
-     * Gibt die Pixelposition im Viewport zu einer Koordinate zurück
-     * @param  {ol.Coordinate} value -
-     * @return {ol.Pixel} pixel
-     */
+    * Gibt die Pixelposition im Viewport zu einer Koordinate zurück
+    * @param  {ol.Coordinate} value -
+    * @return {ol.Pixel} pixel
+    */
     getPixelFromCoordinate: function (value) {
         return this.get("map").getPixelFromCoordinate(value);
     },
 
     /**
-     * Ermittelt ob Features ein Pixel im Viewport schneiden
-     * @param  {ol.Pixel} pixel -
-     * @return {Boolean} true | false
-     */
+    * Ermittelt ob Features ein Pixel im Viewport schneiden
+    * @param  {ol.Pixel} pixel -
+    * @return {Boolean} true | false
+    */
     hasFeatureAtPixel: function (pixel) {
         return this.get("map").hasFeatureAtPixel(pixel);
     },
 
     /**
-     * Rückgabe der Features an einer Pixelkoordinate
-     * @param  {pixel} pixel    Pixelkoordinate
-     * @param  {object} options layerDefinition und pixelTolerance
-     * @return {features[]}     Array der Features
-     */
+    * Rückgabe der Features an einer Pixelkoordinate
+    * @param  {pixel} pixel    Pixelkoordinate
+    * @param  {object} options layerDefinition und pixelTolerance
+    * @return {features[]}     Array der Features
+    */
     getFeaturesAtPixel: function (pixel, options) {
         return this.get("map").getFeaturesAtPixel(pixel, options);
     },
 
     /**
-     * Iteriert über alle Features, die ein Pixel auf dem Viewport schneiden
-     * @param  {ol.Pixel} pixel -
-     * @param  {Function} callback - Die Feature Callback Funktion
-     * @returns {void}
-     */
+    * Iteriert über alle Features, die ein Pixel auf dem Viewport schneiden
+    * @param  {ol.Pixel} pixel -
+    * @param  {Function} callback - Die Feature Callback Funktion
+    * @returns {void}
+    */
     forEachFeatureAtPixel: function (pixel, callback) {
         this.get("map").forEachFeatureAtPixel(pixel, callback);
     },
@@ -246,10 +247,10 @@ const map = Backbone.Model.extend({
     },
 
     /**
-     * Bewegt den Layer auf der Karte an die vorhergesehene Position
-     * @param {Array} args - [0] = Layer, [1] = Index
-     * @returns {void}
-     */
+    * Bewegt den Layer auf der Karte an die vorhergesehene Position
+    * @param {Array} args - [0] = Layer, [1] = Index
+    * @returns {void}
+    */
     addLayerToIndex: function (args) {
         var layer = args[0],
             index = args[1],
@@ -264,7 +265,7 @@ const map = Backbone.Model.extend({
             layer.getLayers().forEach(function (singleLayer) {
                 singleLayer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
                 singleLayer.getSource().on("wmsloadstart", this.addLoadingLayer, this);
-            }.bind(this));
+            });
         }
         else {
             layer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
@@ -323,9 +324,9 @@ const map = Backbone.Model.extend({
         return extent;
     },
     /**
-     * Gibt die Größe in Pixel der Karte zurück.
-     * @return {ol.Size} - Ein Array mit zwei Zahlen [width, height]
-     */
+    * Gibt die Größe in Pixel der Karte zurück.
+    * @return {ol.Size} - Ein Array mit zwei Zahlen [width, height]
+    */
     getSize: function () {
         return this.get("map").getSize();
     },
@@ -337,10 +338,10 @@ const map = Backbone.Model.extend({
         this.set("initalLoading", this.get("initalLoading") - 1);
     },
     /**
-     * Initiales Laden. "initalLoading" wird layerübergreifend hochgezählt, wenn mehrere Tiles abgefragt werden und wieder heruntergezählt, wenn die Tiles geladen wurden.
-     * Listener wird anschließend gestoppt, damit nur beim initialen Laden der Loader angezeigt wird - nicht bei zoom/pan
-     * @returns {void}
-     */
+    * Initiales Laden. "initalLoading" wird layerübergreifend hochgezählt, wenn mehrere Tiles abgefragt werden und wieder heruntergezählt, wenn die Tiles geladen wurden.
+    * Listener wird anschließend gestoppt, damit nur beim initialen Laden der Loader angezeigt wird - nicht bei zoom/pan
+    * @returns {void}
+    */
     initalLoadingChanged: function () {
         var num = this.get("initalLoading");
 
@@ -368,7 +369,7 @@ const map = Backbone.Model.extend({
         }, this);
 
         if (!found) {
-            source = new VectorSource({useSpatialIndex: false});
+            source = new VectorSource();
             layer = new VectorLayer({
                 name: name,
                 source: source,
@@ -381,11 +382,11 @@ const map = Backbone.Model.extend({
         return resultLayer;
     },
     /**
-     * Der ol-overlaycontainer-stopevent Container stoppt nicht jedes Event.
-     * Unter anderem das Mousemove Event. Das übernimmt diese Methode.
-     * @see {@link https://github.com/openlayers/openlayers/issues/4953}
-     * @returns {void}
-     */
+    * Der ol-overlaycontainer-stopevent Container stoppt nicht jedes Event.
+    * Unter anderem das Mousemove Event. Das übernimmt diese Methode.
+    * @see {@link https://github.com/openlayers/openlayers/issues/4953}
+    * @returns {void}
+    */
     stopMouseMoveEvent: function () {
         // Firefox & Safari.
         $(".ol-overlaycontainer-stopevent").on("mousemove", function (evt) {

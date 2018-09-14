@@ -1,6 +1,6 @@
 {
   "name": "LGV-Master",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "LGV Master",
   "license": "MIT",
   "repository": {
@@ -12,7 +12,7 @@
     "build": "webpack --config webpack.dev.js",
     "buildProd": "webpack --config webpack.prod.js",
     "installDependencies": "npm install --verbose",
-    "installBrowserMqtt": "cd node_modules/mqtt && npm install . && browserify mqtt.js -s mqtt > browserMqtt.js",
+    "installBrowserMqtt": "cd node_modules/mqtt && npm install . && webpack mqtt.js -o ./browserMqtt.js --output-library mqtt",
     "installMasterportal": "npm run installDependencies && npm run installBrowserMqtt"
   },
   "dependencies": {
@@ -23,7 +23,6 @@
     "bootstrap-select": "1.12.x",
     "bootstrap-slider": "9.x",
     "bootstrap-toggle": "2.x.x",
-    "browserify": "15.2.0",
     "d3": "4.9.x",
     "jquery": "2.x",
     "jquery-ui": "1.x",
@@ -37,8 +36,7 @@
     "requirejs-text": "2.x",
     "underscore": "1.x",
     "video.js": "6.x",
-    "videojs-flash": "^2.1.0",
-    "webpack": "^4.17.1"
+    "videojs-flash": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -60,7 +58,7 @@
     "grunt-contrib-connect": "0.8.0",
     "grunt-contrib-copy": "0.7.0",
     "grunt-contrib-cssmin": "^0.12.2",
-    "grunt-contrib-less": "^1.2.0",
+    "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-requirejs": "^0.4.4",
     "grunt-contrib-watch": "0.6.1",
     "grunt-gitinfo": "^0.1.7",
@@ -72,6 +70,7 @@
     "selenium-webdriver": "^3.5.0",
     "text-loader": "0.0.1",
     "time-grunt": "1.0.0",
+    "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",
     "webpack-merge": "^4.1.4",
     "webpack-visualizer-plugin": "^0.1.11"

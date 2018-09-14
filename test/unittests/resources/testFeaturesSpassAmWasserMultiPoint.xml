@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://www.deegree.org/app http://lgvfds03.fhhnet.stadt.hamburg.de/fachdaten_n_s/services/wfs_hh_spass_im_und_am_wasser?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=text%2Fxml%3B+subtype%3Dgml%2F3.1.1&amp;TYPENAME=app:spass_im_und_am_wasser&amp;NAMESPACE=xmlns(app=http%3A%2F%2Fwww.deegree.org%2Fapp)" xmlns:wfs="http://www.opengis.net/wfs" timeStamp="2018-08-31T07:02:40Z" xmlns:gml="http://www.opengis.net/gml">
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_1">
+      <app:nummer>1</app:nummer>
+      <app:name>Ostender Teich - Sommerbad Ostende (Eintritt)</app:name>
+      <app:kategorie>Badeseen</app:kategorie>
+      <app:adresse>Tonndorfer Strand 30, 22045 Hamburg</app:adresse>
+      <app:link>http://www.hamburg.de/sommerbad-ostende/</app:link>
+      <app:kurztext>Das Strandbad Ostende verfügt über einen Sandstrand und eine große Liegewiese mit Spielgeräten für Kinder</app:kurztext>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_1_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_1_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>573983.957 5938583.644</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_2">
+      <app:nummer>2</app:nummer>
+      <app:name>Öjendorfer See</app:name>
+      <app:kategorie>Badeseen</app:kategorie>
+      <app:adresse>Driftredder 1, 22117 Hamburg</app:adresse>
+      <app:link>http://www.hamburg.de/oejendorfer-see-sued/</app:link>
+      <app:kurztext>Mitten im Öjendorfer Park liegt der Öjendorfer See mit zwei Badestellen. Oberhalb einer großen Liegewiese befindet sich ein Kiosk mit Sitzgelegenheiten.</app:kurztext>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_2_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_2_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>575367.102 5934522.729</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_3">
+      <app:nummer>3</app:nummer>
+      <app:name>Billstedt</app:name>
+      <app:kategorie>Schwimmbäder</app:kategorie>
+      <app:adresse>Archenholzstraße 50 a, 22117 Hamburg</app:adresse>
+      <app:link>http://www.baederland.de/bad/billstedt.html</app:link>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_3_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_3_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>574078.876 5933001.419</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_4">
+      <app:nummer>4</app:nummer>
+      <app:name>Boberger See</app:name>
+      <app:kategorie>Badeseen</app:kategorie>
+      <app:adresse>Billwerder Billdeich (etwa Höhe Hausnummer 143), 22113 Hamburg</app:adresse>
+      <app:link>http://www.hamburg.de/boberger-see/</app:link>
+      <app:kurztext>Der Boberger See liegt im Naturschutzgebiet Boberger Niederung. Am nordöstlichen Ufer befinden sich eine Badestelle, ein  über 16 Meter langer Sandstrand und eine Liegewiese.</app:kurztext>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_4_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_4_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>575363.695 5930170.901</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_5">
+      <app:nummer>5</app:nummer>
+      <app:name>Wasserpark Dove-Elbe</app:name>
+      <app:kategorie>Spaß am Wasser</app:kategorie>
+      <app:adresse>Zwischen Moorfleeter Deich und Dove-Elbe</app:adresse>
+      <app:link>http://www.hamburg.de/parkanlagen/3118942/wasserpark-dove-elbe/</app:link>
+      <app:kurztext>Der Wasserpark Dove-Elbe umfasst den 28 Hektar großen Eichbaumsee, den Eichbaumpark mit weitläufigen Rasenflächen und die Dove Elbe. Er ist ein attraktives Naherholungsgebiet und einzigartiges Wassersportzentrum.</app:kurztext>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_5_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_5_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>573175.692 5926542.451</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_6">
+      <app:nummer>7</app:nummer>
+      <app:name>Neuländer See</app:name>
+      <app:kategorie>Spaß am Wasser</app:kategorie>
+      <app:adresse>Straße Am Neuländer Baggerteich</app:adresse>
+      <app:link>http://www.hamburg.de/parkanlagen/4292686/parkanlage-neulaender-see/</app:link>
+      <app:kurztext>Im beschaulichen Neuland befindet sich Hamburgs erster Wasserskilift. Von März  bis Oktober kann man sich auf Wasserski oder dem Wakeboard über den Neuländer Baggersee ziehen lassen.</app:kurztext>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_6_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_6_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>567515.264 5923774.634</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_8">
+      <app:nummer>9</app:nummer>
+      <app:name>MidSommerland</app:name>
+      <app:kategorie>Schwimmbäder</app:kategorie>
+      <app:adresse>Gotthelfweg 2, 21077 Hamburg</app:adresse>
+      <app:link>http://www.baederland.de/bad/midsommerland.html</app:link>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_8_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_8_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>565034.989 5922351.586</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_7">
+      <app:nummer>8</app:nummer>
+      <app:name>Außenmühlenteich</app:name>
+      <app:kategorie>Spaß am Wasser</app:kategorie>
+      <app:adresse>Hohe Straße / Marmstorfer Weg</app:adresse>
+      <app:link>http://www.hamburg.de/parkanlagen/3229448/harburger-stadtpark/</app:link>
+      <app:kurztext>Der Außenmühlenteich ist das Herzstück des Harburger Stadtparks und wichtiges Habitat für die artenreiche Flora und Fauna. Das idyllische Gewässer kann sowohl bei einem Rundgang zu Fuß als auch bei einer Tretbootfahrt erkundet werden.</app:kurztext>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_7_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_7_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>565051.327 5922699.762</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_9">
+      <app:nummer>10</app:nummer>
+      <app:name>Finkenwerder / Schwimmen und Wasserspaß mit Elbblick</app:name>
+      <app:kategorie>Schwimmbäder</app:kategorie>
+      <app:adresse>Finksweg 82, 21129 Hamburg</app:adresse>
+      <app:link>http://www.baederland.de/bad/finkenwerder.html</app:link>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_9_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_9_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>557707.339 5932591.246</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_10">
+      <app:nummer>12</app:nummer>
+      <app:name>Teufelsbrück</app:name>
+      <app:kategorie>Spaß am Wasser</app:kategorie>
+      <app:adresse>Fähranleger Teufelsbrück, 22609 Hamburg</app:adresse>
+      <app:link>http://www.hamburg.de/oeffentliche-plaetze/4255832/faehranleger-teufelsbrueck/</app:link>
+      <app:kurztext>Der schöne Platz am Fähranleger lädt zum Verweilen mit Blick auf die Elbe ein. Er ist Ausgangspunkt für Fahrten auf der Elbe und Spaziergänge am Elbufer und zum Elbstrand Nienstedten.</app:kurztext>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_10_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_10_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>557255.958 5933490.302</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_11">
+      <app:nummer>13</app:nummer>
+      <app:name>Bramfelder See</app:name>
+      <app:kategorie>Spaß am Wasser</app:kategorie>
+      <app:adresse>Bramfelder Redder, 22177 Hamburg</app:adresse>
+      <app:link>http://www.hamburg.de/sehenswuerdigkeiten/4626398/bramfelder-see/</app:link>
+      <app:kurztext>Rund um das 2,9 Kilometer lange Ufer des Bramfelder Sees kann man eine Auszeit vom Großstadt-Alltag nehmen. Westlich des Sees befindet sich ein großer Spielplatz und ein Grillplatz.</app:kurztext>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_11_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_11_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>570228.505 5941701.662</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_12">
+      <app:nummer>14</app:nummer>
+      <app:name>Alsterwanderweg</app:name>
+      <app:kategorie>Spaß am Wasser</app:kategorie>
+      <app:adresse>Entlang der Alster zwischen dem Alsterdorfer Damm und dem S-Bahnhof Ohlsdorf</app:adresse>
+      <app:link>http://www.hamburg.de/fussgaenger-hamburg/315234/alsterwanderweg-wegbeschreibung-suedlicher-teil/</app:link>
+      <app:kurztext>Der idyllische Weg entlang der Alster bietet schöne Ausblicke und ist Teil des Alsterwanderwegs, der auf einer Länge von etwa 37 km von dessen Quelle in Henstedt-Ulzburg bis zur Mündung in die Elbe führt.</app:kurztext>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_12_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_12_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>567693.766 5941495.208</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_13">
+      <app:nummer>15</app:nummer>
+      <app:name>Poseidonbad</app:name>
+      <app:kategorie>Schwimmbäder</app:kategorie>
+      <app:adresse>Olloweg 51, 22527 Hamburg</app:adresse>
+      <app:link>http://www.poseidon-hamburg.de/</app:link>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_13_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_13_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>560689.772 5939687.618</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_14">
+      <app:nummer>16</app:nummer>
+      <app:name>Bondenwald</app:name>
+      <app:kategorie>Schwimmbäder</app:kategorie>
+      <app:adresse>Friedrich-Ebert-Straße 71, 22459 Hamburg</app:adresse>
+      <app:link>http://www.baederland.de/bad/bondenwald.html</app:link>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_14_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_14_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>561943.014 5942113.999</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:spass_im_und_am_wasser xmlns:app="http://www.deegree.org/app" gml:id="APP_SPASS_IM_UND_AM_WASSER_15">
+      <app:nummer>17</app:nummer>
+      <app:name>Ohlsdorf</app:name>
+      <app:kategorie>Schwimmbäder</app:kategorie>
+      <app:adresse>Im Grünen Grunde 1, 22337 Hamburg</app:adresse>
+      <app:link>http://www.baederland.de/bad/ohlsdorf.html</app:link>
+      <app:geom>
+        <!--Inlined geometry 'APP_SPASS_IM_UND_AM_WASSER_15_APP_GEOM'-->
+        <gml:MultiPoint gml:id="APP_SPASS_IM_UND_AM_WASSER_15_APP_GEOM" srsName="EPSG:25832">
+          <gml:pointMember>
+            <gml:Point srsName="EPSG:25832">
+              <gml:pos>568080.037 5941927.997</gml:pos>
+            </gml:Point>
+          </gml:pointMember>
+        </gml:MultiPoint>
+      </app:geom>
+    </app:spass_im_und_am_wasser>
+  </gml:featureMember>
+</wfs:FeatureCollection>

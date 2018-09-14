@@ -14,6 +14,7 @@ const MapMarkerModel = Backbone.Model.extend({
             name: "mapMarker",
             source: new VectorSource(),
             alwaysOnTop: true,
+            visible: false,
             style: new Style({
                 stroke: new Stroke({
                     color: "#08775f",
@@ -131,6 +132,7 @@ const MapMarkerModel = Backbone.Model.extend({
      */
     hideFeature: function () {
         this.get("polygon").getSource().clear();
+        this.get("polygon").setVisible(false);
     },
 
     // setter for zoomLevel

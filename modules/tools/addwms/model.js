@@ -9,23 +9,15 @@
 define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
+        Tool = require("modules/core/modelList/tool/model"),
         AddWMSModel;
 
-    AddWMSModel = Backbone.Model.extend({
-        defaults: {},
+    AddWMSModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
+            renderToWindow: true
+        }),
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.checkStatus
-            });
-        },
-        checkStatus: function (args) { // Fenstermanagement
-            if (args[2].get("id") === "addWMS") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
-            }
+            this.superInitialize();
         },
         // Diese funktion wird benutzt, um Fehlermeldungen im WMSView darzustellen
         displayError: function (text) {

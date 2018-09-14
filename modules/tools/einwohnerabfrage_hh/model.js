@@ -1,14 +1,16 @@
 define(function (require) {
-
     var $ = require("jquery"),
         ol = require("openlayers"),
+        Tool = require("modules/core/modelList/tool/model"),
         SnippetDropdownModel = require("modules/snippets/dropdown/model"),
         moment = require("moment"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         Einwohnerabfrage;
 
-    Einwohnerabfrage = Backbone.Model.extend({
-        defaults: {
+    Einwohnerabfrage = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
+            deactivateGFI: true,
+            renderToWindow: true,
             // checkbox snippet for alkis adressen layer
             checkBoxAddress: new SnippetCheckboxModel({
                 isSelected: false,
@@ -52,11 +54,12 @@ define(function (require) {
             tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen"
             // hmdk/metaver link
             // metaDataLink: Radio.request("RestReader", "getServiceById", "2").get("url")
-        },
+        }),
 
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
+            this.superInitialize();
+            this.listenTo(this, {
+                "change:isActive": this.setStatus
             });
             this.listenTo(Radio.channel("WPS"), {
                 "response": this.handleResponse
@@ -70,7 +73,7 @@ define(function (require) {
             this.listenTo(this.get("checkBoxAddress"), {
                 "valuesChanged": this.toggleAlkisAddressLayer
             });
-            this.on("change:isCurrentWin", this.handleCswRequests, this);
+            this.on("change:isActive", this.handleCswRequests, this);
             this.createDomOverlay("circle-overlay", this.get("circleOverlay"));
             this.createDomOverlay("tooltip-overlay", this.get("tooltipOverlay"));
             this.setDropDownSnippet(new SnippetDropdownModel({
@@ -252,20 +255,21 @@ define(function (require) {
         },
         /**
          * Handles (de-)activation of this Tool
-         * @param {object} args -
+         * @param {object} model - tool model
+         * @param {boolean} value flag is tool is ctive
          * @returns {void}
          */
-        setStatus: function (args) {
+        setStatus: function (model, value) {
             var selectedValues;
 
-            if (args[2].get("id") === "einwohnerabfrage" && args[0] === true) {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
+            if (value) {
+                // this.set("isCollapsed", args[1]);
+                // this.set("isCurrentWin", args[0]);
                 selectedValues = this.get("snippetDropdownModel").getSelectedValues();
                 this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
             }
             else {
-                this.setIsCurrentWin(false);
+                // this.setIsCurrentWin(false);
                 if (!_.isUndefined(this.get("drawInteraction"))) {
                     this.get("drawInteraction").setActive(false);
                 }
@@ -282,10 +286,10 @@ define(function (require) {
         handleCswRequests: function () {
             var cswUrl = Radio.request("RestReader", "getServiceById", "1").get("url");
 
-            if (this.get("isCurrentWin")) {
+            if (this.get("isActive")) {
                 this.sendRequest(cswUrl, {id: this.get("fhhId")}, this.setFhhDate);
                 this.sendRequest(cswUrl, {id: this.get("mrhId")}, this.setMrhDate);
-                this.off("change:isCurrentWin", this.handleCswRequests);
+                this.off("change:isActive", this.handleCswRequests);
             }
         },
 

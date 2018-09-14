@@ -1,10 +1,12 @@
-define(function () {
-    var CompareFeaturesModel;
+define(function (require) {
 
-    CompareFeaturesModel = Backbone.Model.extend({
-        defaults: {
+    var Tool = require("modules/core/modelList/tool/model"),
+        CompareFeaturesModel;
+
+    CompareFeaturesModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             // true if the tool is activated
-            isActivated: false,
+            // isActivated: false,
             // all comparable features
             featureList: [],
             // the comparable features group by layer
@@ -15,12 +17,12 @@ define(function () {
             numberOfFeaturesToShow: 3,
             // number of attributes to be displayed
             numberOfAttributesToShow: 12
-        },
+        }),
         initialize: function () {
             var channel = Radio.channel("CompareFeatures");
 
             channel.on({
-                "setIsActivated": this.setIsActivated,
+                "setIsActivated": this.setIsActive,
                 "addFeatureToList": this.addFeatureToList,
                 "removeFeatureFromList": this.removeFeatureFromList
             }, this);
@@ -314,7 +316,7 @@ define(function () {
          * @returns {void}
          */
         setIsActivated: function (value) {
-            this.set("isActivated", value);
+            this.set("isActive", value);
         }
     });
 

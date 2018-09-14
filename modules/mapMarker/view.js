@@ -1,10 +1,12 @@
-import MapMarkerModel from "./model";
+import MapHandlerModel from "./model";
 
 
 const MapMarker = Backbone.View.extend({
     initialize: function () {
         var markerPosition,
             channel = Radio.channel("MapMarker");
+
+        this.model = new MapHandlerModel();
 
         channel.on({
             "clearMarker": this.clearMarker,
@@ -13,8 +15,6 @@ const MapMarker = Backbone.View.extend({
             "showMarker": this.showMarker,
             "zoomToBKGSearchResult": this.zoomToBKGSearchResult
         }, this);
-
-        this.model = new MapMarkerModel();
 
         this.render();
         // For BauInfo: requests customModule and askes for marker position to set.
@@ -170,10 +170,12 @@ const MapMarker = Backbone.View.extend({
         this.clearMarker();
         this.model.get("marker").setPosition(coordinate);
         this.$el.show();
+        this.model.get("polygon").setVisible(true);
     },
 
     hideMarker: function () {
         this.$el.hide();
+        this.model.get("polygon").setVisible(false);
     }
 });
 

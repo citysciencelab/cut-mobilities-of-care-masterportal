@@ -94,6 +94,7 @@ const BKGSearchModel = Backbone.Model.extend({
                 if (hit.score > this.get("score")) {
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
                         name: hit.suggestion,
+                        metaName: hit.suggestion,
                         type: "Ort",
                         bkg: true,
                         glyphicon: "glyphicon-road",
@@ -136,6 +137,7 @@ const BKGSearchModel = Backbone.Model.extend({
             if (hit.score > this.get("score")) {
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: hit.suggestion,
+                    metaName: hit.suggestion,
                     type: "Ort",
                     bkg: true,
                     glyphicon: "glyphicon-road",

@@ -1,12 +1,14 @@
 define(function (require) {
     var ol = require("openlayers"),
+        Tool = require("modules/core/modelList/tool/model"),
+        BuildSpecModel = require("modules/tools/print_/buildSpec"),
         $ = require("jquery"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),
         SchulwegRouting;
 
-    SchulwegRouting = Backbone.Model.extend({
+    SchulwegRouting = Tool.extend({
 
-        defaults: {
+        defaults: _.extend({}, Tool.prototype.Tool, {
             id: "",
             layerId: "",
             // ol-features of all schools
@@ -20,7 +22,7 @@ define(function (require) {
             addressList: [],
             addressListFiltered: [],
             // route layer
-            layer: {},
+            layer: undefined,
             isActive: false,
             requestIDs: [],
             routeResult: {},
@@ -28,14 +30,14 @@ define(function (require) {
             checkBoxHVV: new SnippetCheckboxModel({
                 isSelected: false,
                 label: "HVV Verkehrsnetz"
-            })
-        },
+            }),
+            renderToSidebar: true
+        }),
 
         initialize: function () {
-            var layerModel,
-                channel = Radio.channel("SchulwegRouting"),
-                model;
+            var channel = Radio.channel("SchulwegRouting");
 
+            this.superInitialize();
             this.listenTo(channel, {
                 "selectSchool": function (schoolId) {
                     this.trigger("updateSelectedSchool", schoolId);
@@ -47,6 +49,10 @@ define(function (require) {
             this.listenTo(Radio.channel("Layer"), {
                 "featuresLoaded": function (layerId, features) {
                     if (layerId === this.get("layerId")) {
+                        this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
+                        this.addRouteFeatures(this.get("layer").getSource());
+                        this.get("layer").setVisible(false);
+                        this.get("layer").setStyle(this.routeStyle);
                         this.setSchoolList(this.sortSchoolsByName(features));
                         if (this.get("isActive") === true) {
                             this.trigger("render");
@@ -55,10 +61,6 @@ define(function (require) {
                 }
             });
 
-            this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": this.activate,
-                "deactivatedTool": this.deactivate
-            });
             this.listenTo(Radio.channel("WPS"), {
                 "response": this.handleResponse
             });
@@ -77,19 +79,30 @@ define(function (require) {
                 "valuesChanged": this.toggleHVVLayer
             });
 
-            this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
-            this.addRouteFeatures(this.get("layer").getSource());
-            this.get("layer").setStyle(this.routeStyle);
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
-            if (!_.isUndefined(layerModel)) {
-                this.setSchoolList(this.sortSchoolsByName(layerModel.get("layer").getSource().getFeatures()));
-            }
-            if (Radio.request("ParametricURL", "getIsInitOpen") === "SCHULWEGROUTING") {
-                // model in modellist gets activated.
-                // And there the "Tool", "activatedTool" is triggered where this model listens to.
-                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
-                model.setIsActive(true);
-            }
+            this.listenTo(this, {
+                "change:isActive": function (model, value) {
+                    if (value && this.get("layer") === undefined) {
+                        this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
+                        this.addRouteFeatures(this.get("layer").getSource());
+                        this.get("layer").setVisible(true);
+                        this.get("layer").setStyle(this.routeStyle);
+                    }
+                    if (value && !_.isUndefined(this.get("layer"))) {
+                        this.get("layer").setVisible(true);
+                    }
+                    if (!value && !_.isUndefined(this.get("layer"))) {
+                        this.get("layer").setVisible(false);
+                    }
+                }
+            });
+
+            this.listenTo(Radio.channel("Layer"), {
+                "featuresLoaded": function (layerId, features) {
+                    if (layerId === this.get("layerId")) {
+                        this.setSchoolList(this.sortSchoolsByName(features));
+                    }
+                }
+            });
         },
         toggleHVVLayer: function (value) {
             Radio.trigger("ModelList", "setModelAttributesById", "1935geofox-bus", {
@@ -114,7 +127,49 @@ define(function (require) {
             });
         },
 
-        printRoute: function () {
+        printRouteMapFish: function () {
+            var visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
+                    return layer.getVisible() === true;
+                }),
+                address = this.get("startAddress"),
+                school = this.get("selectedSchool"),
+                route = this.get("routeResult"),
+                routeDesc = this.prepareRouteDesc(this.get("routeDescription")),
+                attr = {
+                    "layout": "A4 Hochformat",
+                    "outputFormat": "pdf",
+                    "attributes": {
+                        "title": "Schulwegrouting",
+                        "length": route.kuerzesteStrecke + "m",
+                        "address": address.street + " " + address.number + address.affix,
+                        "school": school.get("schulname") + ", " + route.SchuleingangTyp + " (" + route.SchuleingangAdresse + ")",
+                        "map": {
+                            "dpi": 96,
+                            "projection": Radio.request("MapView", "getProjection").getCode(),
+                            "center": Radio.request("MapView", "getCenter"),
+                            "scale": Radio.request("MapView", "getOptions").scale
+                        },
+                        "datasource": [{
+                            "table": {
+                                "columns": ["index", "description"],
+                                "data": routeDesc
+                            }
+                        }]
+                    }
+                },
+                buildSpec = new BuildSpecModel(attr);
+
+            buildSpec.buildLayers(visibleLayerList);
+            buildSpec = buildSpec.toJSON();
+            buildSpec = _.omit(buildSpec, "uniqueIdList");
+            Radio.trigger("Print", "createPrintJob", "schulwegrouting", encodeURIComponent(JSON.stringify(buildSpec)), "pdf");
+        },
+        /**
+         * [printRouteClient description]
+         * @deprecated in v3.3.0. remove function. pdfMake is to remove. routing over mapfish print 3
+         * @return {void}
+         */
+        printRouteClient: function () {
             var address = this.get("startAddress"),
                 school = this.get("selectedSchool"),
                 route = this.get("routeResult"),
@@ -184,8 +239,22 @@ define(function (require) {
 
             return defs;
         },
+        /**
+         * [createRouteDesc description]
+         * @deprecated  in v3.3.0 remove this function when pdfmake is removed
+         * @param  {[object]} routeDescArray route description array
+         * @return {[String]} array of directions
+         */
         createRouteDesc: function (routeDescArray) {
             return _.pluck(routeDescArray, "anweisung");
+        },
+        prepareRouteDesc: function (routeDesc) {
+            var data = [];
+
+            _.each(routeDesc, function (route, index) {
+                data.push([String(index + 1), route.anweisung]);
+            });
+            return data;
         },
         handleResponse: function (requestID, response, status) {
             var parsedData;
@@ -194,15 +263,24 @@ define(function (require) {
                 this.toggleLoader(false);
                 this.removeId(this.get("requestIDs"), requestID);
                 if (status === 200) {
-                    parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
-                    if (parsedData.ErrorOccured === "yes") {
-                        this.handleWPSError(parsedData);
+                    if (_.has(response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData, "Schulweg")) {
+                        parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
+                        if (parsedData.ErrorOccured === "yes") {
+                            this.handleWPSError(parsedData);
+                        }
+                        else {
+                            this.handleSuccess(parsedData);
+                        }
                     }
                     else {
-                        this.handleSuccess(parsedData);
+                        Radio.trigger("Alert", "alert", "<b>Entschuldigung</b><br>"
+                            + "Routing konnte nicht berechnet werden, mit folgender Fehlermeldung:<br><br>"
+                            + "<i>" + response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.serviceResponse.statusInfo.message + "</i><br><br>"
+                            + "Bitte wenden Sie sich mit dieser Fehlermeldung an den Administrator.");
                     }
                 }
                 else {
+                    this.get("layer").setVisible(false);
                     this.handleWPSError("Routing kann nicht durchgeführt werden.<br>Bitte versuchen Sie es später erneut (Status: " + status + ").");
                 }
             }
@@ -267,6 +345,7 @@ define(function (require) {
                 requestObj = {};
 
             if (Object.keys(address).length !== 0 && schoolID.length > 0) {
+                Radio.trigger("GFI", "setIsVisible", false);
                 requestObj = this.setObjectAttribute(requestObj, "Schul-ID", "string", schoolID);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerStrasse", "string", address.street);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerHausnr", "integer", parseInt(address.number, 10));
@@ -280,7 +359,7 @@ define(function (require) {
         sendRequest: function (requestID, requestObj) {
             this.get("requestIDs").push(requestID);
             this.toggleLoader(true);
-            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting.fmw", requestObj);
+            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting_wps.fmw", requestObj);
         },
         toggleLoader: function (show) {
             if (show) {
@@ -309,16 +388,16 @@ define(function (require) {
         isRoutingRequest: function (ownRequests, requestID) {
             return _.contains(ownRequests, requestID);
         },
-        activate: function (id) {
-            if (this.get("id") === id) {
-                this.setIsActive(true);
-            }
-        },
-        deactivate: function (id) {
-            if (this.get("id") === id) {
-                this.setIsActive(false);
-            }
-        },
+        // activate: function (id) {
+        //     if (this.get("id") === id) {
+        //         this.setIsActive(true);
+        //     }
+        // },
+        // deactivate: function (id) {
+        //     if (this.get("id") === id) {
+        //         this.setIsActive(false);
+        //     }
+        // },
 
         /**
          * sorts the school features by name
@@ -379,6 +458,11 @@ define(function (require) {
 
         searchAddress: function (value) {
             Radio.trigger("Gaz", "findStreets", value);
+            this.setSearchRegExp(value);
+        },
+
+        searchHouseNumbers: function (value) {
+            Radio.trigger("Gaz", "findHouseNumbers", value);
             this.setSearchRegExp(value);
         },
 
@@ -451,6 +535,7 @@ define(function (require) {
                 var feature = new ol.Feature();
 
                 feature.setId(id);
+                feature.set("styleId", id);
                 source.addFeature(feature);
             }, this);
         },
@@ -488,7 +573,7 @@ define(function (require) {
                                 width: 3
                             }),
                             fill: new ol.style.Fill({
-                                color: "rgba(255, 255, 255, 0)"
+                                color: [255, 255, 255, 0]
                             })
                         })
                     }),
@@ -504,7 +589,7 @@ define(function (require) {
             }
             return new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: "rgba(225, 0, 25, 0.6)",
+                    color: [225, 0, 25, 0.6],
                     width: 6
                 })
             });
@@ -518,6 +603,7 @@ define(function (require) {
             this.removeGeomFromFeatures(features);
             this.trigger("resetRouteResult");
             this.trigger("togglePrintEnabled", false);
+            this.get("layer").setVisible(false);
         },
         removeGeomFromFeatures: function (features) {
             _.each(features, function (feature) {
@@ -525,23 +611,34 @@ define(function (require) {
             });
         },
 
+        /**
+         * Searches all streets that contain the string
+        * @param {String} evtValue - input streetname
+        * @returns {array} targetList
+        */
+        filterStreets: function (evtValue) {
+            var streetNameList = this.get("streetNameList"),
+                targetStreet = evtValue.split(" ")[0],
+                targetList = [];
+
+            _.each(streetNameList, function (street) {
+                var streetNameParts = _.contains(street, " ") ? street.split(" ") : [street],
+                    resultStreets = _.filter(streetNameParts, function (part) {
+                        return part.toLowerCase() === targetStreet.toLowerCase();
+                    }, this);
+
+                if (!_.isEmpty(resultStreets)) {
+                    targetList.push(street);
+                }
+            }, this);
+
+            return targetList;
+        },
+
         setSchoolList: function (value) {
             this.set("schoolList", value);
         },
-        getIsActive: function () {
-            return this.get("isActive");
-        },
-        setIsActive: function (value) {
-            var model;
 
-            this.set("isActive", value);
-            if (!value) {
-                // tool model aus modellist auf inactive setzen
-                model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("id")});
-
-                model.setIsActive(false);
-            }
-        },
         setStreetNameList: function (value) {
             this.set("streetNameList", value);
         },

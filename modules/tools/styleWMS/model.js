@@ -1,15 +1,23 @@
-define(function () {
+define(function (require) {
+    var Tool = require("modules/core/modelList/tool/model"),
+        StyleWMS;
 
-    var StyleWMS = Backbone.Model.extend({
-        defaults: {
+    StyleWMS = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             // true wenn dieses Tool im Fenster angezeigt wird und damit aktiv ist
             isCurrentWin: false,
             // true wenn das Fenster minimiert ist
             isCollapsed: false,
+            // Bootstrap Glyphicon Class
+            glyphicon: "glyphicon-tint",
+            // Name (Überschrift) der Funktion
+            name: "Style WMS",
+            // ID des Tools
+            id: "styleWMS",
             // Id vom Model dessen Layer ein neues Styling bekommt
             modelId: "",
             // Model dessen Layer ein neues Styling bekommt
-            model: {},
+            model: null,
             // Art der Layer Geometrie
             geomType: "",
             // Name des Attributs, auf das der Style angewendet wird
@@ -20,14 +28,25 @@ define(function () {
             numberOfClasses: "default",
             // Die Angaben der Style Klassen (Wertebereich und Farbe)
             styleClassAttributes: [],
-            styleWMSName: ""
-        },
+            styleWMSName: "",
+            // Namen und IDs der verfügbaren stylebaren Layer
+            styleableLayerList: []
+        }),
 
         initialize: function () {
             var channel = Radio.channel("StyleWMS");
 
+            this.superInitialize();
             channel.on({
                 "openStyleWMS": function (model) {
+
+                    // Prüfe ob bereits ein Fenster offen ist, wenn nicht erzeuge ein Fenster
+                    if (this.get("isActive") !== true) {
+                        this.setIsActive(true);
+                        Radio.trigger("Window", "toggleWin", this);
+                    }
+
+                    // Übernehme den im Themenbaum angeklickten Layer
                     this.setModel(model);
                     this.trigger("sync");
                 }
@@ -38,8 +57,10 @@ define(function () {
                 // ändert sich das Model, wird der entsprechende Geometrietyp gesetzt
                 // und der Attributname zurückgesetzt
                 "change:model": function (model, value) {
-                    this.setAttributeName("default");
-                    this.setGeomType(value.get("geomType"));
+                    if (value !== null && value !== undefined) {
+                        this.setAttributeName("default");
+                        this.setGeomType(value.get("geomType"));
+                    }
                 },
                 // ändert sich der Attributname wird die Anzahl der Klassen zurückgesetzt
                 "change:attributeName": function () {
@@ -50,6 +71,60 @@ define(function () {
                     Radio.trigger("ModelList", "setModelAttributesById", this.get("model").get("id"), {"SLDBody": this.get("setSLD"), paramStyle: "style"});
                 }
             });
+            this.listenTo(Radio.channel("ModelList"), {
+                "updatedSelectedLayerList": function () {
+                    this.refreshStyleableLayerList();
+                    if (this.get("isActive") === true) {
+                        // Wenn das Tool gerade aktiv ist aktualisiere den Inhalt.
+                        this.trigger("sync");
+                    }
+                }
+            });
+
+            // this.listenTo(Radio.channel("Window"), {
+            //     "winParams": this.setStatus
+            // });
+        },
+
+        // // Fenstermanagement
+        // setStatus: function (args) {
+        //     console.log(args);
+        //     if (args[2].get("id") === "styleWMS") {
+        //         this.setIsCollapsed(args[1]);
+        //         this.setIsCurrentWin(args[0]);
+        //     }
+        //     else {
+        //         this.setIsCurrentWin(false);
+        //     }
+        // },
+
+        // Aktualisiere die Liste stylebarer Layer
+        refreshStyleableLayerList: function () {
+
+            var styleableLayerList = [],
+                layerModelList,
+                result;
+
+            // Berücksichtige selektierte stylebare Layer
+            layerModelList = Radio.request("ModelList", "getModelsByAttributes", {styleable: true, isSelected: true});
+
+            _.each(layerModelList, function (layerModel) {
+                styleableLayerList.push({name: layerModel.get("name"), id: layerModel.get("id")});
+            });
+
+            this.set("styleableLayerList", styleableLayerList);
+
+            // Wenn das aktuelle layerModel nicht mehr enthalten ist wird es deaktiviert
+            if (this.get("model") !== null && this.get("model") !== undefined) {
+                result = _.find(styleableLayerList, function (styleableLayer) {
+                    return styleableLayer.id === this.get("model").get("id");
+                }, this);
+
+                if (result === undefined) {
+                    this.setModel(null);
+                    // "sync" wird später an anderer Stelle getriggert.
+                }
+            }
         },
 
         /**
@@ -71,13 +146,13 @@ define(function () {
 
                 if (regExp.test(element.startRange) === false) {
                     errors.push({
-                        minText: "Bitte tragen sie eine natürliche Zahl ein.",
+                        minText: "Bitte tragen Sie eine natürliche Zahl ein.",
                         minIndex: index
                     });
                 }
                 if (regExp.test(element.stopRange) === false) {
                     errors.push({
-                        maxText: "Bitte tragen sie eine natürliche Zahl ein.",
+                        maxText: "Bitte tragen Sie eine natürliche Zahl ein.",
                         maxIndex: index
                     });
                 }
@@ -107,6 +182,8 @@ define(function () {
             if (_.isEmpty(errors) === false) {
                 return errors;
             }
+
+            return null;
         },
 
         /**
@@ -114,15 +191,59 @@ define(function () {
          * @returns {void}
          */
         createSLD: function () {
+
+            var sld = "";
+
             if (this.isValid() === true) {
-                this.setSLD(this.createAndGetRootElement());
+
+                sld = this.createAndGetRootElement();
+
                 this.updateLegend(this.get("styleClassAttributes"));
+                this.get("model").get("layer").getSource().updateParams({SLD_BODY: sld, STYLES: "style"});
             }
+        },
+
+        removeSLDBody: function () {
+            var source = this.get("model").get("layer").getSource(),
+                params = source.getParams();
+
+            /* eslint-disable-next-line no-undefined */
+            params.SLD_BODY = undefined;
+            params.STYLES = "";
+
+            source.updateParams(params);
+        },
+
+        resetModel: function () {
+            this.removeSLDBody();
+            this.setNumberOfClasses(this.defaults.numberOfClasses);
+            this.resetLegend();
+        },
+
+        // Setze das Layer-Model anhand einer gegebenen ID (aus dem Layer-Dialog).
+        // Wenn dort kein Layer ausgewählt wurde, wird das Model genullt.
+        setModelByID: function (id) {
+            var model = null;
+
+            if (id !== "") {
+                model = Radio.request("ModelList", "getModelByAttributes", {id: id});
+            }
+
+            this.setModel(model);
+            this.trigger("sync");
         },
 
         updateLegend: function (attributes) {
             attributes.styleWMSName = this.get("model").get("name");
             Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes);
+        },
+
+        resetLegend: function () {
+            Radio.trigger("StyleWMS", "resetParamsStyleWMS", this.get("model"));
+        },
+
+        updateLayerInfo: function (layerName) {
+            Radio.trigger("Layer", "updateLayerInfo", layerName);
         },
 
         /**
@@ -176,6 +297,10 @@ define(function () {
                                 this.createAndGetPolygonSymbolizer(obj.color) +
                             "</sld:Rule>";
                 }, this);
+            }
+            else {
+                // TODO: ErrorHandling...
+                console.error("Type of geometry is not supported, abort styling.");
             }
             return rule;
         },
@@ -271,21 +396,17 @@ define(function () {
             this.set("styleClassAttributes", value);
         },
 
-        setSLD: function (value) {
-            this.set("setSLD", value);
-        },
-
         setErrors: function (value) {
             this.set("errors", value);
-        },
-
-        setIsCurrentWin: function (value) {
-            this.set("isCurrentWin", value);
-        },
-
-        setIsCollapsed: function (value) {
-            this.set("isCollapsed", value);
         }
+
+        // setIsCurrentWin: function (value) {
+        //     this.set("isCurrentWin", value);
+        // },
+
+        // setIsCollapsed: function (value) {
+        //     this.set("isCollapsed", value);
+        // }
     });
 
     return StyleWMS;

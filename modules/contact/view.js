@@ -1,7 +1,5 @@
 define(function (require) {
-    var ContactModel = require("modules/contact/model"),
-        Template = require("text!modules/contact/template.html"),
-        $ = require("jquery"),
+    var Template = require("text!modules/contact/template.html"),
         formularView;
 
     formularView = Backbone.View.extend({
@@ -12,21 +10,17 @@ define(function (require) {
             "keyup #contactText": "setUserAttributes",
             "click .contactButton": "send"
         },
-        initialize: function (attr) {
-            this.model = new ContactModel(attr);
+        initialize: function () {
+            this.template = _.template(Template);
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render,
+                "change:isActive": this.render,
                 "invalid": this.showValidity
             });
         },
-        className: "win-body",
-        template: _.template(Template),
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+        render: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.setMaxHeight();
                 this.delegateEvents();
             }

@@ -3,7 +3,6 @@ define(function (require) {
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
         templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
         templateRouteDescription = require("text!modules/tools/schulwegRouting_hh/templateRouteDescription.html"),
-        Model = require("modules/tools/schulwegRouting_hh/model"),
         SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SchulwegRoutingView;
 
@@ -14,12 +13,12 @@ define(function (require) {
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
-                this.setAddressSearchValue(evt);
+                this.setAddressSearchValue(evt, true);
                 this.$el.find(".address-search").focus();
                 evt.stopPropagation();
             },
             "click li.address": function (evt) {
-                this.setAddressSearchValue(evt);
+                this.setAddressSearchValue(evt, false);
                 this.model.selectStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
                 this.model.findRegionalSchool(this.model.get("startAddress"));
                 this.model.prepareRequest(this.model.get("startAddress"));
@@ -44,8 +43,7 @@ define(function (require) {
                 }
             }
         },
-        initialize: function (attr) {
-            this.model = new Model(attr);
+        initialize: function () {
             this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
             if (this.model.get("isActive")) {
                 this.render();
@@ -156,18 +154,35 @@ define(function (require) {
         },
 
         searchAddress: function (evt) {
-            if (evt.target.value.length > 2) {
-                this.model.searchAddress(evt.target.value);
+            var evtValue = evt.target.value,
+                targetList;
+
+            if (evtValue.length > 2) {
+                this.model.searchAddress(evtValue);
             }
             else {
                 this.model.setAddressListFiltered([]);
                 this.model.setStartAddress({});
             }
+
+            // necessary to find the correct house numbers for more results
+            if (evtValue.slice(-1) === " ") {
+                targetList = this.model.filterStreets(evtValue);
+                if (targetList.length === 1) {
+                    this.model.startSearch(targetList, []);
+                }
+            }
         },
 
-        setAddressSearchValue: function (evt) {
+        setAddressSearchValue: function (evt, searchHouseNumber) {
             this.$el.find(".address-search").val(evt.target.textContent);
-            this.model.searchAddress(evt.target.textContent);
+            if (searchHouseNumber) {
+                this.model.setStreetNameList([evt.target.textContent]);
+                this.model.searchHouseNumbers(evt.target.textContent);
+            }
+            else {
+                this.model.searchAddress(evt.target.textContent);
+            }
         },
         closeView: function () {
             this.model.setIsActive(false);
@@ -200,8 +215,14 @@ define(function (require) {
             this.$el.find(".result").html("");
             this.$el.find(".description").html("");
         },
+        /**
+         * trigger the model to print the route
+         * @deprecated in v 3.0.0 remove "this.model.printRouteClient();". enable "this.model.printRouteMapFish();"
+         * @return {[type]} [description]
+         */
         printRoute: function () {
-            this.model.printRoute();
+            this.model.printRouteClient();
+            // this.model.printRouteMapFish();
         }
     });
 

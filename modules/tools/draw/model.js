@@ -1,8 +1,9 @@
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
+import Tool from "../../core/modelList/tool/model";
 
-const DrawTool = Backbone.Model.extend({
-    defaults: {
+const DrawTool = Tool.extend({
+    defaults: _.extend({}, Tool.prototype.defautls, {
         // ol.interaction.Draw
         drawInteraction: undefined,
         // ol.interaction.Select for the deleted features
@@ -14,41 +15,39 @@ const DrawTool = Backbone.Model.extend({
         font: "Arial",
         fontSize: 10,
         text: "Klicken Sie auf die Karte um den Text zu platzieren",
-        color: "55, 126, 184",
+        color: [55, 126, 184, 1],
         radius: 6,
         strokeWidth: 1,
-        opacity: "1.0",
+        opacity: 1,
         drawType: {
             geometry: "Point",
             text: "Punkt zeichnen"
-        }
-    },
+        },
+        renderToWindow: true,
+        deactivateGFI: true
+    }),
 
     initialize: function () {
         var channel = Radio.channel("Draw");
 
+        this.superInitialize();
         channel.reply({
             "getLayer": function () {
                 return this.get("layer");
             }
         }, this);
 
-        this.listenTo(Radio.channel("Window"), {
-            "winParams": this.setStatus
-        });
-
-        this.on("change:isCurrentWin", this.createLayer, this);
-        Radio.trigger("Autostart", "initializedModul", "draw");
+        this.on("change:isActive", this.setStatus, this);
     },
 
-    setStatus: function (args) {
-        if (args[2].get("id") === "draw" && args[0] === true) {
-            this.set("isCollapsed", args[1]);
-            this.set("isCurrentWin", args[0]);
+    setStatus: function (model, value) {
+        if (value) {
+            if (this.get("layer") === undefined) {
+                this.createLayer();
+            }
             this.createDrawInteraction(this.get("drawType"), this.get("layer"));
         }
         else {
-            this.set("isCurrentWin", false);
             Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
             Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
             Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
@@ -61,14 +60,10 @@ const DrawTool = Backbone.Model.extend({
      * @param {boolean} value - is tool active
      * @returns {void}
      */
-    createLayer: function (value) {
+    createLayer: function () {
         var layer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
 
-        if (value) {
-
-            this.setLayer(layer);
-            this.off("change:isCurrentWin", this.createLayer);
-        }
+        this.setLayer(layer);
     },
 
     /**
@@ -109,6 +104,7 @@ const DrawTool = Backbone.Model.extend({
             style: this.getStyle(drawType.text)
         }));
         this.get("drawInteraction").on("drawend", function (evt) {
+            evt.feature.set("styleId", evt.feature.ol_uid);
             evt.feature.setStyle(this.getStyle(drawType.text));
         }, this);
         Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
@@ -116,31 +112,30 @@ const DrawTool = Backbone.Model.extend({
 
     getStyle: function (arg) {
         if (arg === "Text schreiben") {
-            return this.getTextStyle(this.get("color"), this.get("opacity"));
+            return this.getTextStyle(this.get("color"));
         }
-        return this.getDrawStyle(this.get("color"), this.get("opacity"), this.get("drawType").geometry);
+        return this.getDrawStyle(this.get("color"), this.get("drawType").geometry);
     },
 
     /**
      * Erstellt ein Feature Style für Punkte, Linien oder Flächen und gibt ihn zurück.
      * @param {number} color -
-     * @param {number} opacity -
      * @param {string} type -
      * @return {ol.style.Style} style
      */
-    getDrawStyle: function (color, opacity, type) {
+    getDrawStyle: function (color, type) {
         return new Style({
             fill: new Fill({
-                color: "rgba(" + color + ", " + opacity + ")"
+                color: color
             }),
             stroke: new Stroke({
-                color: "rgba(" + color + ", " + opacity + ")",
+                color: color,
                 width: this.get("strokeWidth")
             }),
             image: new Circle({
                 radius: type === "Point" ? this.get("radius") : 6,
                 fill: new Fill({
-                    color: "rgba(" + color + ", " + opacity + ")"
+                    color: color
                 })
             })
         });
@@ -149,18 +144,17 @@ const DrawTool = Backbone.Model.extend({
     /**
      * Erstellt ein Feature Style für Texte und gibt ihn zurück.
      * @param {number} color -
-     * @param {number} opacity -
      * @return {ol.style.Style} style
      */
-    getTextStyle: function (color, opacity) {
+    getTextStyle: function (color) {
         return new Style({
             text: new Text({
+                textAlign: "left",
                 text: this.get("text"),
                 font: this.get("fontSize") + "px " + this.get("font"),
                 fill: new Fill({
-                    color: "rgba(" + color + ", " + opacity + ")"
-                }),
-                scale: this.get("fontSize") / 8
+                    color: color
+                })
             })
         });
     },
@@ -253,7 +247,7 @@ const DrawTool = Backbone.Model.extend({
     },
 
     setOpacity: function (value) {
-        this.set("opacity", parseFloat(value, 10).toFixed(1));
+        this.set("opacity", value);
     },
 
     setText: function (value) {

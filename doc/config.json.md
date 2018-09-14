@@ -448,6 +448,8 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 |[wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter)|nein|Object||WFS Filter|
 |[schulwegrouting](#markdown-header-portalconfigmenutoolschildrenschulwegrouting)|nein|Object||Schulwegrouting|
 |[compareFeatures](#markdown-header-portalconfigmenutoolschildrencomparefeatures)|nein|Object||Feature-Vergleichsliste|
+|[layerslider](#markdown-header-portalconfigmenutoolschildrenlayerslider)|nein|Object||Layer nacheinander abspielen|
+|[addWMS](#markdown-header-portalconfigmenutoolschildrenaddwms)|nein|Object||Hinzufügen weiterer WMS über URL-Eingabe|
 
 Werden mehrere Werkzeuge verwendet, so werden die Objekte mit Komma getrennt. Die Reihenfolge der Werkzeuge in der Konfiguration gibt die Reihenfolge der Werkzeuge im Portal wieder.
 
@@ -775,48 +777,64 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 ******
 
 #### Portalconfig.menu.tools.children.print ######
+Bis zur Version 3.0.0 kann noch auf Mapfish-Print 2 gedruck werden. ab dann wird die alte Drucktechnologie komplett abgelöst durch den neuen Mapfish-Print-3.
+
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|gfi|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
-|printID|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md).|
+|gfi(@deprecated in 3.0.0)|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
+|printID(@deprecated in 3.0.0)|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md). Ab v3.0.0 ersetzt durch mapfishServiceId|
+|mapfishServiceId|nein|String||ID des neuen Druckdienstes (Mapfish-Print-3) in der restConf. Siehe [rest-services.json](rest-services.json.md).|
 |title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
-|[gfiMarker](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
-|configYAML|nein|String|master|Der Name der YAML-Datei der MapFish-Webapp.|
-|outputFilename|nein|String|Ausdruck|Der Dateiname der PDF, den die MapFish-Webapp erstellt.|
+|[gfiMarker(@deprecated in 3.0.0)](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
+|configYAML(@deprecated in 3.0.0)|nein|String|master|Der Name der YAML-Datei der MapFish-Webapp. Ab v3.0.0 ersetzt durch printAppId|
+|printAppId|nein|String|master|Der Name der Druck-App für den Mapfish-Print-3.|
+|version|nein|String||Flag die angibt welche Druckversion verwendet werden soll. Bei "mapfish_print_3" wird der Mapfish-Print-3 verwendet. @deprecated in 3.0.0|
+|outputFilename(@deprecated in 3.0.0)|nein|String|Ausdruck|Der Dateiname der PDF, den die MapFish-Webapp erstellt.|
 
-**Beispiel:**
-
-
+**Beispiel Mapfish-Print-2:**
 ```
 #!json
 
 "print": {
-            "name": "Karte drucken",
-            "glyphicon": "glyphicon-print",
-            "printID": "99999",
-            "title": "Master",
-            "gfi": true,
-            "outputFilename": "DruckPDF",
-            "gfiMarker": {
-              "outerCircle": {
-                "fill": false,
-                "pointRadius": 8,
-                "stroke": true,
-                "strokeColor": "#ff0000",
-                "strokeWidth": 3
-              },
-              "point": {
-                "fill": true,
-                "pointRadius": 1,
-                  "fillColor": "#000000",
-                  "stroke": false
-                }
-            }
-          }
+    "name": "Karte drucken",
+    "glyphicon": "glyphicon-print",
+    "printID": "99999",
+    "title": "Master",
+    "gfi": true,
+    "outputFilename": "DruckPDF",
+    "gfiMarker": {
+        "outerCircle": {
+            "fill": false,
+            "pointRadius": 8,
+            "stroke": true,
+            "strokeColor": "#ff0000",
+            "strokeWidth": 3
+        },
+    "point": {
+        "fill": true,
+        "pointRadius": 1,
+        "fillColor": "#000000",
+        "stroke": false
+    }
+  }
+}
+```
+**Beispiel Mapfish-Print-3:**
+```
+#!json
+
+"print": {
+    "name": "Karte drucken",
+    "glyphicon": "glyphicon-print",
+    "mapfishServiceId": "mapfish_qs",
+    "printAppId": "mrh",
+    "title": "Master",
+    "version": "mapfish_print_3"
+}
 ```
 
 ******
@@ -828,17 +846,17 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 |point|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
 
 #### Portalconfig.menu.tools.children.routing ######
-Der Routenplaner ermöglicht ein Routing innerhalb des Portals. Folgende Parameter müssen am Werkzeug vorhanden sein:
+Der Routenplaner ermöglicht ein Routing innerhalb des Portals über den externen Anbieter VIOM (Berlin). Der VIOM-Dienst berechnet aufgrund von Start- und Ziel-Koordinate tageszeitabhängig die schnellste Route. Folgende Parameter müssen am Werkzeug vorhanden sein:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Routingmodul beim initialen Laden des Portals geöffnet ist.|
-|bkgGeosearchID|nein|String||ID des GeoSuchdienstes des BKG. Anhand der vom Nutzer angeklickten finalen Adresse wandelt dieser Dienst den Namen in eine Koordinate um und gibt diese zurück. Die Koordinate wird benötigt, um den Routingdienst mit Daten zu füllen. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
-|bkgSuggestID|nein|String||ID des Vorschlagsdienstes des BKG. Der Dienst gibt eine Trefferliste möglicher Adressen zurück, die auf den Eingabestring des Nutzers passen. Werden als Dropdown-Menü dargestellt. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
+|bkgGeosearchID|ja|String||ID des GeoSuchdienstes des BKG. Anhand der vom Nutzer angeklickten finalen Adresse wandelt dieser Dienst den Namen in eine Koordinate um und gibt diese zurück. Die Koordinate wird benötigt, um den Routingdienst mit Daten zu füllen. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
+|bkgSuggestID|ja|String||ID des Vorschlagsdienstes des BKG. Der Dienst gibt eine Trefferliste möglicher Adressen zurück, die auf den Eingabestring des Nutzers passen. Werden als Dropdown-Menü dargestellt. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|viomRoutingID|nein|String||ID des Routing-Dienstes. Der Dienst berechnet aufgrund von Start- und Ziel-Koordinate die schnellste Route. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
+|viomRoutingID|ja|String||ID des Routing-Dienstes. Wird in der [rest-services.json](rest-services.json.md) aufgelöst. Dort müssen die URL und die providerID definiert sein.|
 
 
 ******
@@ -970,6 +988,60 @@ Auch gibt es eine Möglichkeit die Vergleichsliste zu exportieren
 |numberOfFeaturesToShow|nein|integer|3|Anzahl der Features, die maximal pro Layer vergleichen werden kann|
 |numberOfAttributesToShow|nein|integer|12|Anzahl der Attribute die beim öffnen der Vergleichsliste angezeigt wird. Über einen Button ("mehr Infos") können dann alle Attribute angezeigt werden.|
 
+******
+******
+#### Portalconfig.menu.tools.children.layerslider ######
+Der Layerslider ermöglicht die Konfiguration eines Stack von Layern, die nacheinander mittels Play, Pause, Stop, Forward und Backward abgespielt werden können. Die Layer müssen hierfür regulär konfiguriert sein und werden mittels Radio nur sichtbar / unsichtbar geschaltet. Der layerslider eignet sich daher gut, um bspw. historische Karten in festgelegter Reihenfolge abzuspielen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|name|nein|String||Name des Werkzeuges im Menüeintrag.|
+|title|nein|String||Überschrift im Tool-Window.|
+|timeInterval|nein|number|2000|Zeitinterval in Millisekunden. Min-Interval = 500.|
+|layerIds|ja|Objekt[]||Konfiguration des Stack an Layern in spezifischer Reihenfolge.|
+|layerIds.title|ja|string||Titel des Layers im Layerslider.|
+|layerIds.layerId|ja|string||Wert aus der [services.json](services.json.md).|
+
+**Beispiel einer *layerslider*-Konfiguration:**
+
+```
+#!json
+
+"layerslider": {
+  "name": "Zeitreihe",
+  "glyphicon": "glyphicon-film",
+  "title": "Simulation von Beispiel-WMS",
+  "timeInterval": 2000,
+  "layerIds": [
+    {
+      "title": "Dienst 1",
+      "layerId": "8730"
+    },
+    {
+      "title": "Dienst 2",
+      "layerId": "2426"
+    },
+    {
+      "title": "Dienst 3",
+      "layerId": "4561"
+    }
+  ]
+}
+
+```
+
+******
+******
+#### Portalconfig.menu.tools.children.addwms ######
+Das AddWMS-Tool ermöglicht das nachträgliche Hinzufügen weiterer WMS über Eingabe von Dienst-URL. Der Dienst wird untersucht und dessen Layer werden unterhalb der [Fachdaten](#markdown-header-themenconfigfachdaten) in einem separaten Bereich hinzugefügt. Dieses Tool steht nur in Portalen vom Baumtyp [custom](#markdown-header-portalconfig) zur Verfügung.
+
+Dieses Tool nutzt zum Einbinden die konfigurierte [Proxy-URL](config.js.md#configjs). Der Proxy muss entsprechend konfiguriert sein und die Dienst-URL durchleiten. Ggf. muss ein offener Proxy definiert werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|name|nein|String||Name des Werkzeuges im Menüeintrag.|
 
 ******
 ******
@@ -1359,7 +1431,7 @@ Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche M
 ******
 
 ### Themenconfig.Fachdaten.Layer ###
-In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstellung von Layern auf der Karte beschrieben. 
+In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstellung von Layern auf der Karte beschrieben.
 
 **Folgende Konfigurationen sind allgemeingültig:**
 
@@ -1464,7 +1536,7 @@ In diesem Fall wird die genannte ID in der [services.json](services.json.md) ges
 
 **Beispiel für WMS multiple Layers:**
 
-In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer gemäß den Angaben in der [services.json](services.json.md) vollständig.  
+In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer gemäß den Angaben in der [services.json](services.json.md) vollständig.
 Alle weiteren Werte im Array werden dahingehend ausgewertet, dass ihre _layers_-Angabe den  _layers-Parameter_ des Dienstes erweitern. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Näheres kann der [Dokumentation](http://docs.geoserver.org/latest/en/user/services/wms/reference.html#wms-getmap) entnommen werden. Dem Themenbaum wird nur ein Eintrag hinzugefügt.
 
 ```
@@ -1477,17 +1549,17 @@ Alle weiteren Werte im Array werden dahingehend ausgewertet, dass ihre _layers_-
 
 **Beispiel für openlayers Layer Collection (GroupLayer):**
 
-In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Grouplayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).  
+In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Grouplayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).
 
-* Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer). 
+* Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer).
 * Das Attribut _id_ wird in diesem Fall als unique _String_ erwartet und darf nicht in der [services.json](services.json.md) gelistet sein.
     * Über diesen Eintrag werden die _children_ gruppiert.
     * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
-  
-Es gelten folgende Besonderheiten:  
 
-* Im Falle eines GFI wird jeder Layer einzeln abgefragt. 
-* Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt. 
+Es gelten folgende Besonderheiten:
+
+* Im Falle eines GFI wird jeder Layer einzeln abgefragt.
+* Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt.
 * Die Layerinformationen werden gekürzt (nur erster Layer) übernommen.
 
 ```
@@ -1495,7 +1567,7 @@ Es gelten folgende Besonderheiten:
 
 {
   "id": "myUniqueId",
-  "children": [    
+  "children": [
     {
       "id": "947"
     },

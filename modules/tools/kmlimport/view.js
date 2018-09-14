@@ -1,30 +1,23 @@
 define(function (require) {
     var ImportTemplate = require("text!modules/tools/kmlimport/template.html"),
-        ImportTool = require("modules/tools/kmlimport/model"),
-        $ = require("jquery"),
         ImportView;
 
     ImportView = Backbone.View.extend({
-        className: "win-body",
         template: _.template(ImportTemplate),
         events: {
             "click .import": "importKML",
             "change .file": "setText"
         },
-        initialize: function (attr) {
-            this.model = new ImportTool(attr);
+        initialize: function () {
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render
+                "change:isActive": this.render
             });
         },
 
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+        render: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();
             }
             else {

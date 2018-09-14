@@ -3,23 +3,23 @@ import ContentTemplate from "text-loader!../content.html";
 
 const MobileLegendView = Backbone.View.extend({
     events: {
-        "click .glyphicon-remove": "toggle"
+        "click .glyphicon-remove": "hide"
     },
-    initialize: function (Model) {
-        this.model = Model;
-
+    initialize: function () {
         this.listenTo(this.model, {
-            "change:legendParams": this.paramsChanged
+            "change:legendParams": this.paramsChanged,
+            "change:paramsStyleWMSArray": this.paramsChanged,
+            "change:isActive": function (model, value) {
+                if (value) {
+                    this.show();
+                }
+                else {
+                    this.hide();
+                }
+            }
         });
-
-        this.listenTo(Radio.channel("Legend"), {
-            "toggleLegendWin": this.toggle
-        });
-
-        this.model.setLayerList();
-
-        if (this.model.get("visible")) {
-            this.toggle();
+        if (this.model.get("isActive")) {
+            this.show();
         }
     },
     id: "base-modal-legend",
@@ -61,23 +61,20 @@ const MobileLegendView = Backbone.View.extend({
             }, this);
         }, this);
     },
-
-    toggle: function () {
-        var visible = !this.$el.is(":visible");
-
-        this.model.setVisible(visible); // speichere neuen Status
-        this.$el.modal({
-            backdrop: true,
-            show: true
-        });
+    show: function () {
+        if (this.$("body").find(".legend-win").length === 0) {
+            this.render();
+        }
+        this.model.setLayerList();
+        this.$el.modal("show");
     },
-    /**
-     * Entfernt diese view
-     * @returns {void}
-     */
-    removeView: function () {
-        this.$el.hide();
+    hide: function () {
+        this.$el.modal("hide");
+        this.model.setIsActive(false);
+    },
 
+    removeView: function () {
+        this.$el.modal("hide");
         this.remove();
     }
 });

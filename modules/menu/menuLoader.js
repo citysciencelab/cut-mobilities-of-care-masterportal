@@ -20,10 +20,8 @@ function MenuLoader () {
         }
 
         if (this.menuStyle === "TABLE") {
-            // require(["modules/menu/table/view"], function (Menu) {
-            //     caller.currentMenu = new Menu();
-            //     channel.trigger("ready", caller.currentMenu.id);
-            // });
+            caller.currentMenu = new Menu();
+            channel.trigger("ready", caller.currentMenu.id);
         }
         else if (this.menuStyle === "DEFAULT") {
             $("#map").css("height", "calc(100% - 50px)");
@@ -31,7 +29,6 @@ function MenuLoader () {
 
             if (isMobile) {
                 caller.currentMenu = new MobileMenu();
-                channel.trigger("ready");
             }
             else if (this.treeType === "light") {
                 caller.currentMenu = new LightMenu();
@@ -48,15 +45,15 @@ function MenuLoader () {
         }
     };
     this.currentMenu = this.loadMenu(this);
-
-    Radio.on("Util", {
-        "isViewMobileChanged": function () {
-            if (this.menuStyle === "DEFAULT") {
+    // im Table-Style soll das ui nicht verändert werden
+    if (this.menuStyle === "DEFAULT") {
+        Radio.on("Util", {
+            "isViewMobileChanged": function () {
                 this.currentMenu.removeView();
                 this.currentMenu = this.loadMenu(this);
             }
-        }
-    }, this);
+        }, this);
+    }
 }
 
 export default MenuLoader;

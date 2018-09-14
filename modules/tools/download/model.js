@@ -1,13 +1,12 @@
 import proj4 from "proj4";
 import {KML} from "ol/format.js";
+import Tool from "../../core/modelList/tool/model";
 
-const Download = Backbone.Model.extend({
-    defaults: {},
-    initialize: function () {
-        this.listenTo(Radio.channel("Window"), {
-            "winParams": this.setStatus
-        });
-    },
+const Download = Tool.extend({
+    defaults: _.extend({}, Tool.prototype.defautls, {
+        id: "download",
+        renderToWindow: true
+    }),
     // Die Features
     data: {},
     // das ausgewählte Format
@@ -18,13 +17,14 @@ const Download = Backbone.Model.extend({
     caller: {},
     // download button selector
     dlBtnSel: "a.downloadFile",
-    setStatus: function (args) { // Fenstermanagement
-        if (args[2].get("id") === "download") {
-            this.set("isCollapsed", args[1]);
-            this.set("isCurrentWin", args[0]);
-        }
-        else {
-            this.set("isCurrentWin", false);
+    initialize: function () {
+        this.superInitialize();
+        this.listenTo(this, {
+            "change:isActive": this.setStatus
+        });
+    },
+    setStatus: function (model, value) { // Fenstermanagement
+        if (!value) {
             this.data = {};
             this.formats = {};
         }
@@ -382,9 +382,8 @@ const Download = Backbone.Model.extend({
             if (type === "Point") {
                 // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
                 if (!feature.getStyle().getText()) {
-                    color = style.getImage().getFill().getColor().split("(")[1].split(",");
-
-                    pointOpacities.push(style.getImage().getFill().getColor().split(",")[3].split(")")[0]);
+                    color = style.getImage().getFill().getColor();
+                    pointOpacities.push(style.getImage().getFill().getColor()[3]);
                     pointColors.push(color[0] + "," + color[1] + "," + color[2]);
                     pointRadiuses.push(style.getImage().getRadius());
                 }

@@ -12,15 +12,15 @@ const Menu = Backbone.View.extend({
         role: "navigation"
     },
     renderMain: function () {
-        this.$("div.collapse.navbar-collapse ul.nav-menu").addClass("nav navbar-nav desktop");
-        this.$("div.collapse.navbar-collapse ul.nav-menu").removeClass("list-group mobile");
-        this.$("div.collapse.navbar-collapse").removeClass("in");
+        $("div.collapse.navbar-collapse ul.nav-menu").addClass("nav navbar-nav desktop");
+        $("div.collapse.navbar-collapse ul.nav-menu").removeClass("list-group mobile");
+        $("div.collapse.navbar-collapse").removeClass("in");
 
         this.renderTopMenu();
     },
     renderTopMenu: function () {
         var models = this.collection.filter(function (model) {
-            return model.get("type") === "tool" || model.get("type") === "staticlink" || model.get("type") === "folder";
+            return model.get("type") === "tool" || model.get("type") === "staticlink" || (model.get("parentId") === "root" && model.get("type") === "folder");
         });
 
         this.parseViews(models);

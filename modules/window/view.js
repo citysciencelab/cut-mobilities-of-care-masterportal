@@ -1,18 +1,17 @@
 import Window from "./model";
 import templateMax from "text-loader!./templateMax.html";
-import templateMin from "text-loader!./templateMin.html";
 import templateTable from "text-loader!./templateTable.html";
 import "jquery-ui/ui/widgets/draggable";
 
 const WindowView = Backbone.View.extend({
     events: {
         "click .glyphicon-minus": "minimize",
-        "click .header-min > .title": "maximize",
+        "click .header > .title": "maximize",
         "click .glyphicon-remove": "hide"
     },
     initialize: function () {
         this.listenTo(this.model, {
-            "change:isVisible change:isCollapsed change:winType": this.render
+            "change:isVisible change:winType": this.render
         });
         this.$el.draggable({
             containment: "#map",
@@ -35,7 +34,6 @@ const WindowView = Backbone.View.extend({
     className: "tool-window ui-widget-content",
     model: new Window(),
     templateMax: _.template(templateMax),
-    templateMin: _.template(templateMin),
     templateTable: _.template(templateTable),
     render: function () {
         var attr = this.model.toJSON();
@@ -45,29 +43,34 @@ const WindowView = Backbone.View.extend({
                 $(".lgv-container").append(this.$el.html(this.templateTable(attr)));
                 this.$el.addClass("table-tool-window");
             }
-            else if (this.model.get("isCollapsed") === true) {
-                $("body").append(this.$el.html(this.templateMin(attr)));
-                this.$el.css({"top": "", "bottom": "0", "left": "0", "margin-bottom": "60px"});
-            }
             else {
                 $("body").append(this.$el.html(this.templateMax(attr)));
                 this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
             }
-            this.model.sendParamsToWinCotent();
             this.$el.show("slow");
         }
         else {
-            this.hide();
+            this.$el.hide("slow");
         }
         return this;
     },
     minimize: function () {
         this.model.set("maxPosTop", this.$el.css("top"));
         this.model.set("maxPosLeft", this.$el.css("left"));
-        this.model.setCollapse(true);
+        this.$(".win-body").hide();
+        this.$(".glyphicon-minus").hide();
+        this.$el.css({"top": "", "bottom": "0", "left": "0", "margin-bottom": "60px"});
+        this.$(".header").addClass("header-min");
+        this.$el.draggable("disable");
     },
     maximize: function () {
-        this.model.setCollapse(false);
+        if (this.$(".win-body").css("display") === "none") {
+            this.$(".win-body").show();
+            this.$(".glyphicon-minus").show();
+            this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
+            this.$(".header").removeClass("header-min");
+            this.$el.draggable("enable");
+        }
     },
     hide: function () {
         var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
@@ -75,13 +78,8 @@ const WindowView = Backbone.View.extend({
         if (toolModel) {
             toolModel.setIsActive(false);
         }
-        if (this.model.get("winType") === "download") {
-            Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).setIsActive(false);
-        }
         this.$el.hide("slow");
-        this.model.setIsVisible(false);
-        this.model.sendParamsToWinCotent();
-        Radio.channel("Tool").trigger("activatedTool", "gfi", false);
+        this.model.setVisible(false);
     }
 });
 

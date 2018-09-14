@@ -32,7 +32,6 @@ const MobileMenu = Backbone.View.extend({
     el: "nav#main-nav",
     attributes: {role: "navigation"},
     breadCrumbListView: {},
-
     render: function () {
         var rootModels = this.collection.where({parentId: "root"});
 
@@ -222,9 +221,11 @@ const MobileMenu = Backbone.View.extend({
         $("#map").before(this.el);
     },
     startModul: function (modulId) {
-        var modul = this.collection.findWhere({id: modulId});
+        var modul = this.collection.find(function (model) {
+            return model.get("id").toLowerCase() === modulId;
+        });
 
-        if (modul.attributes.type === "tool") {
+        if (modul.get("type") === "tool") {
             modul.setIsActive(true);
         }
         else {

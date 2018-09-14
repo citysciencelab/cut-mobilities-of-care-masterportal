@@ -15,7 +15,6 @@ const ItemView = Backbone.View.extend({
     tagName: "li",
     className: "dropdown",
     template: _.template(ItemTemplate),
-
     render: function () {
         var attr = this.model.toJSON();
 
@@ -50,10 +49,11 @@ const ItemView = Backbone.View.extend({
     },
 
     checkItem: function () {
-        if (this.model.get("name") === "legend") {
-            Radio.trigger("Legend", "toggleLegendWin");
+        if (this.model.get("name") === "Legende") {
+            this.model.setIsActive(true);
         }
         else {
+            this.model.collection.setActiveToolToFalse(this.model);
             this.model.setIsActive(true);
         }
         // Navigation wird geschlossen

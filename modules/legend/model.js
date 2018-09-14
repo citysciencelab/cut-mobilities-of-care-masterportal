@@ -1,34 +1,37 @@
 import Feature from "ol/Feature.js";
+import Tool from "../core/modelList/tool/model";
 
-const Legend = Backbone.Model.extend({
-
-    defaults: {
+const Legend = Tool.extend({
+    defaults: _.extend({}, Tool.prototype.defaults, {
         legendParams: [],
         paramsStyleWMS: [],
         paramsStyleWMSArray: [],
-        visible: false
-    },
-
+        renderToWindow: false,
+        renderToSidebar: false
+    }),
     initialize: function () {
         var channel = Radio.channel("Legend");
 
+        this.superInitialize();
         channel.reply({
-            "getLegend": this.getLegend
+            "getLegend": this.getLegend,
+            "getLegendParams": function () {
+                return this.get("legendParams");
+            }
         }, this);
-
+        channel.on({
+            "setLayerList": this.setLayerList
+        }, this);
         this.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": this.setLayerList
         });
         this.listenTo(Radio.channel("StyleWMS"), {
-            "updateParamsStyleWMS": this.updateParamsStyleWMSArray
+            "updateParamsStyleWMS": this.updateParamsStyleWMSArray,
+            "resetParamsStyleWMS": this.resetParamsStyleWMSArray
         });
         this.listenTo(this, {
             "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
         });
-    },
-
-    setVisible: function (val) {
-        this.set("visible", val);
     },
 
     /**
@@ -49,17 +52,52 @@ const Legend = Backbone.Model.extend({
     },
 
     updateParamsStyleWMSArray: function (params) {
+
+        var paramsStyleWMSArray2 = this.copyOtherParamsStyleWMS(params.styleWMSName);
+
+        paramsStyleWMSArray2.push(params);
+        this.set("paramsStyleWMS", params);
+        this.set("paramsStyleWMSArray", paramsStyleWMSArray2);
+    },
+
+    copyOtherParamsStyleWMS: function (nameOfLayerToExclude) {
         var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
             paramsStyleWMSArray2 = [];
 
         _.each(paramsStyleWMSArray, function (paramsStyleWMS) {
-            if (params.styleWMSName !== paramsStyleWMS.styleWMSName) {
+            if (nameOfLayerToExclude !== paramsStyleWMS.styleWMSName) {
                 paramsStyleWMSArray2.push(paramsStyleWMS);
             }
         });
-        paramsStyleWMSArray2.push(params);
-        this.set("paramsStyleWMS", params);
-        this.set("paramsStyleWMSArray", paramsStyleWMSArray2);
+
+        return paramsStyleWMSArray2;
+    },
+
+    resetParamsStyleWMSArray: function (layer) {
+
+        var legendParams;
+
+        // Remove custom style from paramsStyleWMSArray
+        this.set("paramsStyleWMSArray", this.copyOtherParamsStyleWMS(layer.get("name")));
+
+        // Update legendParams: Replace legend for custom style with legend from legendURL
+        legendParams = this.get("legendParams");
+
+        _.each(this.get("legendParams"), function (legendParam, i) {
+
+            if (legendParam.layername === layer.get("name")) {
+
+                legendParams.splice(i, 1, {
+                    layername: legendParam.layername,
+                    typ: "WMS",
+                    isVisibleInMap: legendParam.isVisibleInMap,
+                    img: layer.get("legendURL")
+                });
+            }
+        });
+
+        this.set("legendParams", legendParams);
+        this.setLayerList();
     },
 
     updateLegendFromStyleWMSArray: function () {
@@ -84,6 +122,7 @@ const Legend = Backbone.Model.extend({
             });
         });
         this.set("legendParams", legendParams);
+        this.setLayerList();
     },
 
     /**
@@ -459,4 +498,4 @@ const Legend = Backbone.Model.extend({
     }
 });
 
-export default new Legend();
+export default Legend;

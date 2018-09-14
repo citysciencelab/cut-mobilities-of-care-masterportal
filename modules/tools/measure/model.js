@@ -4,46 +4,48 @@ import VectorLayer from "ol/layer/Vector.js";
 import {Draw} from "ol/interaction.js";
 import Overlay from "ol/Overlay.js";
 import {Polygon, LineString} from "ol/geom.js";
+import Tool from "../../core/modelList/tool/model";
 
-const Measure = Backbone.Model.extend({
-    defaults: {
+const Measure = Tool.extend({
+    defaults: _.extend({}, Tool.prototype.defaults, {
         source: new VectorSource(),
         style: new Style({
             fill: new Fill({
-                color: "rgba(255, 127, 0, 0.3)"
+                color: [255, 127, 0, 0.3]
             }),
             stroke: new Stroke({
-                color: "rgba(255, 127, 0, 1.0)",
+                color: [255, 127, 0, 1.0],
                 width: 2
             }),
             image: new Circle({
                 radius: 6,
                 stroke: new Stroke({
-                    color: "rgba(255, 127, 0, 1.0)",
+                    color: [255, 127, 0, 1.0],
                     width: 3
                 }),
                 fill: new Fill({
-                    color: "rgba(255, 127, 0, 0.4)"
+                    color: [255, 127, 0, 0.4]
                 })
             })
         }),
-        geometryType: "LineString",
+        geomtype: "LineString",
         unit: "m",
         decimal: 1,
         measureTooltips: [],
         uiStyle: "DEFAULT",
-        quickHelp: false
-    },
+        quickHelp: false,
+        renderToWindow: true,
+        deactivateGFI: true
+    }),
 
     initialize: function () {
-        var layers = Radio.request("Map", "getLayers");
 
-        this.listenTo(Radio.channel("Window"), {
-            "winParams": this.setStatus
-        });
+
+        this.superInitialize();
 
         this.listenTo(this, {
-            "change:geometryType": this.createInteraction
+            "change:geomtype": this.createInteraction,
+            "change:isActive": this.setStatus
         });
 
         this.set("layer", new VectorLayer({
@@ -54,17 +56,21 @@ const Measure = Backbone.Model.extend({
         }));
 
         this.setUiStyle(Radio.request("Util", "getUiStyle"));
-
-        Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
     },
-    setStatus: function (args) {
-        if (args[2].get("id") === "measure" && args[0] === true) {
-            this.set("isCollapsed", args[1]);
-            this.set("isCurrentWin", args[0]);
+    setStatus: function (model, value) {
+        var layers = Radio.request("Map", "getLayers"),
+            measureLayer;
+
+        if (value) {
+            measureLayer = _.find(layers.getArray(), function (layer) {
+                return layer.get("name") === "measure_layer";
+            });
+            if (measureLayer === undefined) {
+                Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
+            }
             this.createInteraction();
         }
         else {
-            this.set("isCurrentWin", false);
             Radio.trigger("Map", "removeInteraction", this.get("draw"));
         }
     },
@@ -73,7 +79,7 @@ const Measure = Backbone.Model.extend({
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
         this.set("draw", new Draw({
             source: this.get("source"),
-            type: this.get("geometryType"),
+            type: this.get("geomtype"),
             style: this.get("style")
         }));
         this.get("draw").on("drawstart", function (evt) {
@@ -83,7 +89,8 @@ const Measure = Backbone.Model.extend({
             this.set("sketch", evt.feature);
             this.createMeasureTooltip();
         }, this);
-        this.get("draw").on("drawend", function () {
+        this.get("draw").on("drawend", function (evt) {
+            evt.feature.set("styleId", evt.feature.ol_uid);
             this.get("measureTooltipElement").className = "tooltip-default tooltip-static";
             this.get("measureTooltip").setOffset([0, -7]);
             // unset sketch
@@ -150,8 +157,8 @@ const Measure = Backbone.Model.extend({
      * @return {undefined}
      */
     setGeometryType: function (value) {
-        this.set("geometryType", value);
-        if (this.get("geometryType") === "LineString") {
+        this.set("geomtype", value);
+        if (this.get("geomtype") === "LineString") {
             this.setUnit("m");
         }
         else {

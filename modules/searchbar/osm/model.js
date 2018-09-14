@@ -101,6 +101,7 @@ const OsmModel = Backbone.Model.extend({
      */
     pushSuggestions: function (data) {
         var display,
+            metaName,
             bbox,
             north,
             east,
@@ -112,6 +113,7 @@ const OsmModel = Backbone.Model.extend({
         _.each(data, function (hit) {
             if (this.get("states").length === 0 || this.get("states").includes(hit.address.state)) {
                 if (this.isSearched(hit)) {
+                    // Anzeigename
                     weg = hit.address.road || hit.address.pedestrian;
                     display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
                     if (!_.isUndefined(weg)) {
@@ -120,6 +122,16 @@ const OsmModel = Backbone.Model.extend({
                             display = display + " " + hit.address.house_number;
                         }
                     }
+
+                    // Tooltip
+                    metaName = display;
+                    if (!_.isUndefined(hit.address.postcode) && !_.isUndefined(hit.address.state)) {
+                        metaName = metaName + ", " + hit.address.postcode + " " + hit.address.state;
+                        if (!_.isUndefined(hit.address.suburb)) {
+                            metaName = metaName + " (" + hit.address.suburb + ")";
+                        }
+                    }
+
                     bbox = hit.boundingbox;
                     if (!_.isUndefined(hit.address.house_number)) {
                         // Zentrum der BoundingBox ermitteln und von lat/lon ins Zielkoordinatensystem transformieren...
@@ -139,6 +151,7 @@ const OsmModel = Backbone.Model.extend({
                     }
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
                         name: display,
+                        metaName: metaName,
                         type: "OpenStreetMap",
                         osm: true,
                         glyphicon: "glyphicon-road",
@@ -165,14 +178,14 @@ const OsmModel = Backbone.Model.extend({
         if (this.canShowHit(searched)) {
 
             _.each(params, function (param) {
-                if ((address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
-                    (address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
+                if ((_.has(address, "house_number") && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
+                    (_.has(address, "road") && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (_.has(address, "pedestrian") && address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (_.has(address, "city") && address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (_.has(address, "city_district") && address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (_.has(address, "town") && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (_.has(address, "village") && address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (_.has(address, "suburb") && address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
                 ) {
                     this.push(param);
                 }

@@ -4,11 +4,12 @@ import DesktopDetachedView from "./desktop/detached/view";
 import TableView from "./table/view";
 import DesktopAttachedView from "./desktop/attached/view";
 import MobileView from "./mobile/view";
+import Tool from "../../core/modelList/tool/model";
 
 
 const gfiParams = [],
-    Gfi = Backbone.Model.extend({
-        defaults: {
+    Gfi = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             // detached | attached
             desktopViewType: "detached",
             // ist das Modal/Popover sichtbar
@@ -30,7 +31,7 @@ const gfiParams = [],
             // Anzahl der Themes
             numberOfThemes: 0,
             rotateAngle: 0
-        },
+        }),
         initialize: function () {
             var channel = Radio.channel("GFI"),
                 tool;
@@ -45,7 +46,7 @@ const gfiParams = [],
                 "getIsVisible": function () {
                     return this.get("isVisible");
                 },
-                "getGFIForPrint": this.getGFIForPrint,
+                "getGfiForPrint": this.getGfiForPrint,
                 "getCoordinate": function () {
                     return this.get("coordinate");
                 },
@@ -98,15 +99,13 @@ const gfiParams = [],
             }, this);
 
             this.listenTo(Radio.channel("Tool"), {
-                "activatedTool": function (id, deaktivateGFI) {
-                    this.toggleGFI(id, deaktivateGFI);
-                }
+                "activatedTool": this.toggleGFI
             });
 
             tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
 
             if (!_.isUndefined(tool)) {
-                this.toggleGFI(tool.id);
+                this.toggleGFI(tool.id, !tool.isActive);
             }
             this.initView();
             Radio.trigger("Map", "addOverlay", this.get("overlay"));
@@ -140,14 +139,14 @@ const gfiParams = [],
          * @return {undefined}
          */
         toggleGFI: function (id, deaktivateGFI) {
-            if (id === "gfi") {
-                Radio.trigger("Map", "registerListener", "click", this.setGfiParams.bind(this), this);
+            if (id === "gfi" && deaktivateGFI === false) {
+                Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
             }
             else if (deaktivateGFI === true) {
-                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
+                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
             else if (_.isUndefined(deaktivateGFI)) {
-                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
+                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
             }
         },
 
@@ -334,10 +333,14 @@ const gfiParams = [],
         /*
         * @description Liefert die GFI-Infos ans Print-Modul.
         */
-        getGFIForPrint: function () {
-            var theme = this.get("themeList").at(this.get("themeIndex"));
+        getGfiForPrint: function () {
+            var theme = this.get("themeList").at(this.get("themeIndex")),
+                responseArray = [];
 
-            return [theme.get("gfiContent")[0], theme.get("name"), this.get("coordinate")];
+            if (!_.isUndefined(theme)) {
+                responseArray = [theme.get("gfiContent")[0], theme.get("name"), this.get("coordinate")];
+            }
+            return responseArray;
         },
 
         getVisibleTheme: function () {

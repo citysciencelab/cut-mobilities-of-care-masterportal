@@ -1,6 +1,5 @@
 define(function (require) {
-    var RoutingWin = require("text!modules/viomRouting/template.html"),
-        RoutingModel = require("modules/viomRouting/model"),
+    var RoutingWin = require("text!modules/tools/viomRouting/template.html"),
         $ = require("jquery"),
         RoutingView;
 
@@ -14,28 +13,26 @@ define(function (require) {
             "click .addressLi": "addressSelected",
             "click .pagination": "paginationSwitcher"
         },
-        initialize: function (attr) {
+        initialize: function () {
             var channel = Radio.channel("ViomRouting");
 
-            this.model = new RoutingModel(attr);
-            this.listenTo(this.model, "change:isCollapsed change:isCurrentWin", this.render, this); // Fenstermanagement
-            this.listenTo(this.model, "change:fromCoord", this.toggleRoutingButton);
-            this.listenTo(this.model, "change:toCoord", this.toggleRoutingButton);
-            this.listenTo(this.model, "change:description", this.addDescription);
-            this.listenTo(this.model, "change:fromList", this.fromListChanged);
-            this.listenTo(this.model, "change:toList", this.toListChanged);
-            this.listenTo(this.model, "change:startAdresse", this.changeStartAdresse);
-            this.listenTo(this.model, "change:zielAdresse", this.changeZielAdresse);
-            this.listenTo(this.model, "change:isGeolocationPossible", this.changeGeolocationPossible, this);
+            this.template = _.template(RoutingWin);
+            this.listenTo(this.model, {
+                "change:isActive": this.render,
+                "change:fromCoord": this.toggleRoutingButton,
+                "change:toCoord": this.toggleRoutingButton,
+                "change:description": this.addDescription,
+                "change:fromList": this.fromListChanged,
+                "change:toList": this.toListChanged,
+                "change:startAdresse": this.changeStartAdresse,
+                "change:zielAdresse": this.changeZielAdresse,
+                "change:isGeolocationPossible": this.changeGeolocationPossible
+            }, this);
             channel.on({
                 "setRoutingDestination": this.setRoutingDestination
             }, this);
-
-            Radio.trigger("Autostart", "initializedModul", "routing");
         },
         id: "routingWin",
-        className: "win-body routingWin",
-        template: _.template(RoutingWin),
         startAdressePosition: function () {
             Radio.trigger("geolocation", "sendPosition");
         },
@@ -109,13 +106,15 @@ define(function (require) {
 
         setRoutingDestination: function (coordinate) {
             Radio.trigger("GFIPopup", "closeGFIParams");
-            Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "routing"}));
+            Radio.trigger("Window", "showTool", Radio.request("ModelList", "getModelByAttributes", {id: "routing"}));
             this.model.set("toStrassenname", coordinate.toString());
             this.model.set("toCoord", coordinate);
             this.model.set("zielAdresse", "gewähltes Ziel");
         },
         addDescription: function () {
-            this.renderWin(); // Template schreibt Ergebnisse in Div
+            if (!_.isNull(this.model.get("description"))) {
+                this.renderWin(); // Template schreibt Ergebnisse in Div
+            }
         },
         routeBerechnen: function () {
             if (this.$("#calc").parent().hasClass("disabled") === false) {
@@ -222,22 +221,22 @@ define(function (require) {
                 this.model.set("routingdate", "");
             }
         },
-        render: function () {
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+        render: function (model, value) {
+            if (value) {
                 this.renderWin();
                 this.delegateEvents();
+                this.$el.addClass("routingWin");
             }
-            else if (this.model.get("isCurrentWin") === false) {
+            else {
+                this.$el.removeClass("routingWin");
                 this.model.deleteRouteFromMap();
                 this.undelegateEvents();
             }
             return this;
         },
         renderWin: function () {
-            var attr = this.model.toJSON();
-
-            this.$el.html("");
-            $(".win-heading").after(this.$el.html(this.template(attr)));
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template(this.model.toJSON()));
         },
         changeGeolocationPossible: function (val) {
             if (val === true) {
