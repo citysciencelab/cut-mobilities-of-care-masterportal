@@ -28,9 +28,7 @@ define(function (require) {
         }),
         initialize: function () {
             this.superInitialize();
-            this.listenTo(this, {
-                "change:isActive": this.setStatus
-            });
+            
             Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
             Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
         },

@@ -39,6 +39,8 @@ define(function (require) {
                     "change:isActive": this.render2Window
                 });
             }
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         /*
          * Standard-Renderer, wenn parcelSearch in Window über Menubar angezeigt wird.

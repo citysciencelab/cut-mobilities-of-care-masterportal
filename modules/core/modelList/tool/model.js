@@ -45,7 +45,7 @@ define(function (require) {
                     }
                 }
             });
-            Radio.trigger("Autostart", "initializedModul", this.get("id"));
+
             if (this.get("isInitOpen")) {
                 this.setIsActive("true");
             }
