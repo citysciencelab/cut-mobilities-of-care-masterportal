@@ -171,7 +171,7 @@ define(function (require) {
         createLegendURL: function () {
             var style;
 
-            if (!this.get("legendURL").length) {
+            if (!_.isUndefined(this.get("legendURL")) && !this.get("legendURL").length) {
                 style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
                 if (!_.isUndefined(style)) {
