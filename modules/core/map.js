@@ -37,10 +37,12 @@ const map = Backbone.Model.extend({
         channel.on({
             "addLayer": this.addLayer,
             "addLayerToIndex": this.addLayerToIndex,
+            "addLoadingLayer": this.addLoadingLayer,
             "addOverlay": this.addOverlay,
             "addInteraction": this.addInteraction,
             "addControl": this.addControl,
             "removeLayer": this.removeLayer,
+            "removeLoadingLayer": this.removeLoadingLayer,
             "removeOverlay": this.removeOverlay,
             "removeInteraction": this.removeInteraction,
             "setBBox": this.setBBox,
@@ -254,6 +256,7 @@ const map = Backbone.Model.extend({
     addLayerToIndex: function (args) {
         var layer = args[0],
             index = args[1],
+            channel = Radio.channel("Map"),
             layersCollection = this.get("map").getLayers();
 
         layersCollection.remove(layer);
@@ -263,13 +266,13 @@ const map = Backbone.Model.extend({
         // Laden des Layers überwachen
         if (layer instanceof LayerGroup) {
             layer.getLayers().forEach(function (singleLayer) {
-                singleLayer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
-                singleLayer.getSource().on("wmsloadstart", this.addLoadingLayer, this);
+                singleLayer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
+                singleLayer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
             });
         }
         else {
-            layer.getSource().on("wmsloadend", this.removeLoadingLayer, this);
-            layer.getSource().on("wmsloadstart", this.addLoadingLayer, this);
+            layer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
+            layer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
         }
     },
 
