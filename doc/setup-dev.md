@@ -72,18 +72,22 @@ Die *modules.css* muss *nicht manuell* erzeugt werden. Diese wird über *grunt s
 Nachfolgend die Aufrufe zur Erstellung der CSS aus LESS:
 
 ####bootstrap.css
+Die eingebundene CSS unterscheidet sich hinsichtlich des Icon-Pfads zwischen Development- und Produktionsumgebung. 
+```
+# grunt less:bootstrapDev
+```
+wird die *css/bootstrap.css* anhand der *css/bootstrap.less* mit Masterportal-Variablen neu erstellt. Als icon-font-path wird "../node_modules/bootstrap/fonts/" gesetzt. *grunt server* beinhaltet *grunt less:bootstrapDev*.
+
 Mit 
 ```
-# grunt less:production
+# grunt less:bootstrapBuild
 ```
-wird die *css/bootstrap.css* anhand der *css/bootstrap.less* mit Masterportal-Variablen neu erstellt.
+wird die *css/bootstrap.css* anhand der *css/bootstrap.less* mit Masterportal-Variablen neu erstellt. Als icon-font-path wird ""../fonts/"" gesetzt. *grunt build* beinhaltet *grunt less:bootstrapBuild*.
 
 ####modules.css
 Mit 
 ```
-# grunt less:production
-// sowie ebenfalls über
-# grunt less:development
+# grunt less:modules
 ```
 wird die *css/modules.css* aus allen *.less Dateien* unter */modules/* erstellt.
 
