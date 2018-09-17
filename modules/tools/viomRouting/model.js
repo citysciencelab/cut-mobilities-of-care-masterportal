@@ -28,7 +28,7 @@ define(function (require) {
         }),
         initialize: function () {
             this.superInitialize();
-            
+
             Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
             Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
         },

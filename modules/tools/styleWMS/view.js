@@ -1,5 +1,6 @@
 define(function (require) {
     var StyleWMSTemplate = require("text!modules/tools/styleWMS/template.html"),
+        $ = require("jquery"),
         StyleWMSTemplateNoStyleableLayers = require("text!modules/tools/styleWMS/templateNoStyleableLayers.html"),
         StyleWMSView;
 
