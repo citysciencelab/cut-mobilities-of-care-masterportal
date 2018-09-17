@@ -626,12 +626,9 @@ define(function (require) {
 
         showMarker: function (evt) {
             var hitID = evt.currentTarget.id,
-                hit = _.findWhere(this.model.get("hitList"), {id: hitID}),
-                allowedtypes = ["Adresse", "Stadtteil", "Olympiastandort", "Paralympiastandort"];;
+                hit = _.findWhere(this.model.get("hitList"), {id: hitID});
 
-            if (_.has(hit, "type") && _.contains(allowedtypes, hit.type)) {
-                Radio.trigger("MapMarker", "showMarker", hit.coordinate);
-            }
+            Radio.trigger("MapMarker", "showMarker", hit.coordinate);
         },
 
         hideMarker: function () {
