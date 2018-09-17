@@ -23,8 +23,6 @@ define(function (require) {
             channel.on({
                 "start": this.start
             }, this);
-            // Bestätige, dass das Modul geladen wurde
-            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         /**
          * Startet das Download modul

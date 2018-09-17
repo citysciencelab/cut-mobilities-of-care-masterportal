@@ -16,6 +16,8 @@ define(function (require) {
                 },
                 "change:activeLayer": this.layerSwitched
             });
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         className: "layerslider",
         template: _.template(LayersliderTemplate),

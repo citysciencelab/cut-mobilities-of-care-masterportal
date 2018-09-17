@@ -41,6 +41,8 @@ define(function (require) {
                 // Liefert die validate Methode Error Meldungen zurück, werden diese angezeigt
                 "invalid": this.showErrorMessages
             });
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         className: "wmsStyle-window",
         template: _.template(StyleWMSTemplate),
