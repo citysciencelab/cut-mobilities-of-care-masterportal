@@ -60,21 +60,9 @@ const SearchbarView = Backbone.View.extend({
             "deleteSearchString": this.deleteSearchString,
             "setFocus": this.setFocus
         });
-        this.listenTo(Radio.channel("MenuLoader"), {
-            "ready": function (parentElementId) {
 
-                this.render(parentElementId);
-                if (!_.isUndefined(this.model.get("initSearchString"))) {
-                    this.renderRecommendedList();
-                    this.$("#searchInput").val(this.model.get("initSearchString"));
-                    this.model.unset("initSearchString", true);
-                }
-                if (window.innerWidth >= 768) {
-                    this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
-                    Radio.trigger("Title", "setSize");
-                }
-            }
-        });
+        this.initialRender();
+
 
         this.listenTo(Radio.channel("Util"), {
             "isViewMobileChanged": function () {
@@ -114,7 +102,7 @@ const SearchbarView = Backbone.View.extend({
         // Hack für flexible Suchleiste
         $(window).on("resize", function () {
             if (window.innerWidth >= 768) {
-                this.$("#searchInput").width(window.innerWidth - this.$(".desktop").width() - 160);
+                $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
             }
         });
         if (window.innerWidth >= 768) {
@@ -126,10 +114,11 @@ const SearchbarView = Backbone.View.extend({
     searchbarKeyNavSelector: "#searchInputUL",
     template: _.template(SearchbarTemplate),
     templateTable: _.template(TemplateTable),
-    render: function (parentElementId) {
-        var attr = this.model.toJSON();
+    render: function () {
+        var attr = this.model.toJSON(),
+            menuStyle = Radio.request("Util", "getUiStyle");
 
-        if (parentElementId !== "table-nav") {
+        if (menuStyle !== "TABLE") {
             this.$el.html(this.template(attr));
             if (window.innerWidth < 768) {
                 $(".navbar-toggle").before(this.$el); // vor dem toggleButton
@@ -138,7 +127,7 @@ const SearchbarView = Backbone.View.extend({
                 $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
             }
             if (this.model.get("searchString").length !== 0) {
-                this.$("#searchInput:focus").css("border-right-width", "0");
+                $("#searchInput:focus").css("border-right-width", "0");
             }
             this.delegateEvents(this.events);
         }
@@ -147,6 +136,18 @@ const SearchbarView = Backbone.View.extend({
             $("#table-nav-main").prepend(this.$el);
         }
         return this;
+    },
+    initialRender: function () {
+        this.render();
+        if (!_.isUndefined(this.model.get("initSearchString"))) {
+            this.renderRecommendedList();
+            this.$("#searchInput").val(this.model.get("initSearchString"));
+            this.model.unset("initSearchString", true);
+        }
+        if (window.innerWidth >= 768) {
+            this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+            Radio.trigger("Title", "setSize");
+        }
     },
 
     /**
