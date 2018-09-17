@@ -214,8 +214,22 @@ define(function (require) {
                 type: "point",
                 graphicWidth: style.getSize()[0] * style.getScale(),
                 graphicHeight: style.getSize()[1] * style.getScale(),
-                externalGraphic: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img" + this.getImageName(style.getSrc())
+                externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc())
             };
+        },
+        /**
+         * derives the url of the image from the server the app is running on
+         * if the app is running on localhost the images from test-geofos are used
+         * @return {String} path to image directory
+         */
+        buildGraphicPath: function () {
+            var url = "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img",
+                origin = window.location.origin;
+
+            if (origin.indexOf("localhost") === -1) {
+                url = origin + "/lgv-config/img";
+            }
+            return url;
         },
 
         buildPointStyleText: function (style) {
@@ -453,9 +467,9 @@ define(function (require) {
                     }
 
                     valueObj.label = layerParam.legend[0].legendname[index];
-                    valueObj.imageUrl = url;
+                    valueObj.imageUrl = this.createLegendImageUrl(url);
                     valuesArray.push(valueObj);
-                });
+                }, this);
             }
             else if (layerParam.legend[0].typ === "styleWMS") {
                 _.each(layerParam.legend[0].params, function (styleWmsParam) {
@@ -470,6 +484,12 @@ define(function (require) {
             }
 
             return valuesArray;
+        },
+        createLegendImageUrl: function (path) {
+            var url = this.buildGraphicPath(),
+                image = path.substring(path.lastIndexOf("/"));
+
+            return url + image;
         },
         /**
          * gets array with [GfiContent, layername, coordinates] of actual gfi
