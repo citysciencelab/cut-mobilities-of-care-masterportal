@@ -76,6 +76,7 @@ const MobileLegendView = Backbone.View.extend({
     removeView: function () {
         this.$el.modal("hide");
         this.remove();
+        $(".modal-backdrop").remove();
     }
 });
 
