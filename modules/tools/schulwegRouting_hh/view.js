@@ -71,6 +71,8 @@ define(function (require) {
                     this.render();
                 }
             });
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         className: "schulweg-routing",
         template: _.template(template),

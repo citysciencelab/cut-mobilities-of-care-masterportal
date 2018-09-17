@@ -5,8 +5,6 @@ define(function (require) {
 
     require("jqueryui/widgets/draggable");
     FeatureLister = Backbone.View.extend({
-        className: "featurelist-win",
-        template: _.template(Template),
         events: {
             "click .glyphicon-remove": "toggle",
             "click #featurelistFeaturelist": "switchTabToListe", // wechselt den sichtbaren Tab
@@ -32,8 +30,13 @@ define(function (require) {
                 "switchTabToTheme": this.switchTabToTheme
             });
 
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+
             this.render();
         },
+        className: "featurelist-win",
+        template: _.template(Template),
         /*
         * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.
         */

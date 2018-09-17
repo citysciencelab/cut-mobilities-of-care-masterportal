@@ -15,6 +15,8 @@ define(function (require) {
                 "change:isActive change:url": this.render,
                 "change:positionMapProjection": this.changedPosition
             });
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         template: _.template(GetCoordTemplate),
         render: function (model, value) {

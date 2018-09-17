@@ -22,6 +22,8 @@ define(function (require) {
             this.snippetDropdownView = new SnippetDropdownView({model: this.model.get("snippetDropdownModel")});
             this.checkBoxRaster = new SnippetCheckBoxView({model: this.model.get("checkBoxRaster")});
             this.checkBoxAddress = new SnippetCheckBoxView({model: this.model.get("checkBoxAddress")});
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         render: function (model, value) {
             if (value) {

@@ -12,6 +12,8 @@ define(function (require) {
             this.listenTo(this.model, {
                 "change:isActive": this.render
             }, this); // Fenstermanagement
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         template: _.template(Template),
         removeAttrFromFilter: function (evt) {
