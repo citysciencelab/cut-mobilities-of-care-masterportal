@@ -146,10 +146,10 @@ define(function (require) {
         createLegendURL: function () {
             var style;
 
-            if (_.isUndefined(this.get("legendURL")) === false && this.get("legendURL").length !== 0) {
+            if (!_.isUndefined(this.get("legendURL")) && !this.get("legendURL").length) {
                 style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
-                if (_.isUndefined(style) === false) {
+                if (!_.isUndefined(style)) {
                     this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
                 }
             }
