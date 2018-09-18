@@ -150,7 +150,7 @@ define(function (require) {
                 style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
                 if (!_.isUndefined(style)) {
-                    this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
+                    this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
                 }
             }
         },
@@ -208,6 +208,7 @@ define(function (require) {
             }, this);
         },
 
+        // setter for styleId
         setStyleId: function (value) {
             this.set("styleId", value);
         },
@@ -215,7 +216,11 @@ define(function (require) {
         // setter for style
         setStyle: function (value) {
             this.set("style", value);
+        },
 
+        // setter for legendURL
+        setLegendURL: function (value) {
+            this.set("legendURL", value);
         }
     });
 
