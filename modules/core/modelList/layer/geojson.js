@@ -146,11 +146,11 @@ define(function (require) {
         createLegendURL: function () {
             var style;
 
-            if (_.isUndefined(this.get("legendURL")) === false && this.get("legendURL").length !== 0) {
+            if (!_.isUndefined(this.get("legendURL")) && !this.get("legendURL").length) {
                 style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
-                if (_.isUndefined(style) === false) {
-                    this.set("legendURL", [style.get("imagePath") + style.get("imageName")]);
+                if (!_.isUndefined(style)) {
+                    this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
                 }
             }
         },
@@ -208,6 +208,7 @@ define(function (require) {
             }, this);
         },
 
+        // setter for styleId
         setStyleId: function (value) {
             this.set("styleId", value);
         },
@@ -215,7 +216,11 @@ define(function (require) {
         // setter for style
         setStyle: function (value) {
             this.set("style", value);
+        },
 
+        // setter for legendURL
+        setLegendURL: function (value) {
+            this.set("legendURL", value);
         }
     });
 
