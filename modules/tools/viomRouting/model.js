@@ -37,27 +37,25 @@ define(function (require) {
             this.setCenter(geoloc);
             this.set("startAdresse", "aktueller Standpunkt");
         },
-        setStatus: function (model, value) { // Fenstermanagement
+        setParams: function () {
             var viomRoutingID,
                 bkgSuggestID,
                 bkgGeosearchID,
                 epsgCode,
                 bbox;
 
-            if (value) {
-                viomRoutingID = Radio.request("RestReader", "getServiceById", model.get("viomRoutingID"));
-                bkgSuggestID = Radio.request("RestReader", "getServiceById", model.get("bkgSuggestID"));
-                bkgGeosearchID = Radio.request("RestReader", "getServiceById", model.get("bkgGeosearchID"));
-                epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "";
-                bbox = model.get("bbox") && epsgCode !== "" ? "&bbox=" + model.get("bbox") + epsgCode : null;
+            viomRoutingID = Radio.request("RestReader", "getServiceById", this.get("viomRoutingID"));
+            bkgSuggestID = Radio.request("RestReader", "getServiceById", this.get("bkgSuggestID"));
+            bkgGeosearchID = Radio.request("RestReader", "getServiceById", this.get("bkgGeosearchID"));
+            epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "";
+            bbox = this.get("bbox") && epsgCode !== "" ? "&bbox=" + this.get("bbox") + epsgCode : null;
 
-                this.set("bkgSuggestURL", bkgSuggestID.get("url"));
-                this.set("bkgGeosearchURL", bkgGeosearchID.get("url"));
-                this.set("viomRoutingURL", viomRoutingID.get("url"));
-                this.set("viomProviderID", viomRoutingID.get("providerID"));
-                this.set("bbox", bbox);
-                this.set("epsgCode", epsgCode);
-            }
+            this.set("bkgSuggestURL", bkgSuggestID.get("url"));
+            this.set("bkgGeosearchURL", bkgGeosearchID.get("url"));
+            this.set("viomRoutingURL", viomRoutingID.get("url"));
+            this.set("viomProviderID", viomRoutingID.get("providerID"));
+            this.set("bbox", bbox);
+            this.set("epsgCode", epsgCode);
         },
         deleteRouteFromMap: function () {
             if (this.get("routelayer") !== "") { // Funktion WÜRDE bei jeder Window-Aktion ausgeführt
@@ -106,7 +104,7 @@ define(function (require) {
 
             query = encodeURI(query);
             $.ajax({
-                url: this.get("bkgSuggestURL"),
+                url: this.get("bkgSuggestURL").indexOf(window.location.host) !== -1 ? this.get("bkgSuggestURL") : Radio.request("Util", "getProxyURL", this.get("bkgSuggestURL")),
                 data: "count=5" + query + bbox + filter,
                 context: this, // das Model
                 async: true,
@@ -137,7 +135,7 @@ define(function (require) {
         },
         geosearchByBKG: function (value, target) {
             $.ajax({
-                url: this.get("bkgGeosearchURL"),
+                url: this.get("bkgGeosearchURL").indexOf(window.location.host) !== -1 ? this.get("bkgGeosearchURL") : Radio.request("Util", "getProxyURL", this.get("bkgGeosearchURL")),
                 data: this.get("epsgCode") + "&count=1&outputformat=json&query=" + encodeURI(value),
                 context: this, // das model
                 async: true,
