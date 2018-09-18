@@ -40,6 +40,7 @@ define(function (require) {
 
         initialize: function (config) {
             this.model = new Searchbar(config);
+
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
             }
