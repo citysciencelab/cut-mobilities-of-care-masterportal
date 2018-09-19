@@ -311,10 +311,13 @@ define(function (require) {
         },
         parseRegionalSchool: function (xml) {
             var schoolId,
-                school;
+                school,
+                // necessary because the browser edge does not works with xml-namespaces
+                primarySchool = $(xml).find("gages\\:grundschulnr").length > 0
+                    ? $(xml).find("gages\\:grundschulnr") : $(xml).find("grundschulnr");
 
-            if ($(xml).find("gages\\:grundschulnr").length > 0) {
-                schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
+            if (primarySchool.length > 0) {
+                schoolId = primarySchool[0].textContent + "-0";
                 school = this.filterSchoolById(this.get("schoolList"), schoolId);
                 this.setRegionalSchool(school);
                 this.trigger("updateRegionalSchool", school.get("schulname"));
