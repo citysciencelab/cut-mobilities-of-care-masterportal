@@ -16,6 +16,8 @@ define(function (require) {
                 "change:isActive": this.render,
                 "invalid": this.showValidity
             });
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
         render: function (model, value) {
             if (value) {

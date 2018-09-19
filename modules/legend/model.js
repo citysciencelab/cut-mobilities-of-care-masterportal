@@ -259,9 +259,12 @@ define(function (require) {
             image = [];
             name = [];
             style = Radio.request("StyleList", "returnModelById", styleId);
-            styleClass = style.get("class");
-            styleSubClass = style.get("subClass");
-            styleFieldValues = style.get("styleFieldValues");
+
+            if (!_.isUndefined(style)) {
+                styleClass = style.get("class");
+                styleSubClass = style.get("subClass");
+                styleFieldValues = style.get("styleFieldValues");
+            }
 
             if (styleClass === "POINT") {
                 // Custom Point Styles

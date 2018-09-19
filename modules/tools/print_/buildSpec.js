@@ -88,22 +88,22 @@ define(function (require) {
          */
         buildTileWms: function (layer) {
             var source = layer.getSource(),
-                customParams = {
-                    "TRANSPARENT": "true"
+                mapObject = {
+                    baseURL: source.getUrls()[0],
+                    opacity: layer.getOpacity(),
+                    type: "WMS",
+                    layers: source.getParams().LAYERS.split(","),
+                    imageFormat: source.getParams().FORMAT,
+                    customParams: {
+                        "TRANSPARENT": "true"
+                    }
                 };
 
-            // if (_.has(source.getParams(), "SLD_BODY")) {
-            //     customParams.SLD_BODY = encodeURIComponent(source.getParams().SLD_BODY);
-            //     customParams.STYLES = "style";
-            // }
-            return {
-                baseURL: source.getUrls()[0],
-                opacity: layer.getOpacity(),
-                type: "WMS",
-                layers: source.getParams().LAYERS.split(","),
-                imageFormat: source.getParams().FORMAT,
-                customParams: customParams
-            };
+            if (_.has(source.getParams(), "SLD_BODY")) {
+                mapObject.customParams.SLD_BODY = source.getParams().SLD_BODY;
+                mapObject.styles = ["style"];
+            }
+            return mapObject;
         },
 
         /**
@@ -112,24 +112,25 @@ define(function (require) {
          * @returns {object} wms layer spec
          */
         buildImageWms: function (layer) {
-            var source = layer.getSource();
+            var source = layer.getSource(),
+                mapObject = {
+                    baseURL: source.getUrl(),
+                    opacity: layer.getOpacity(),
+                    type: "WMS",
+                    layers: source.getParams().LAYERS.split(","),
+                    imageFormat: source.getParams().FORMAT,
+                    customParams: {
+                        "TRANSPARENT": "true"
+                    }
+                };
 
-            return {
-                baseURL: source.getUrl(),
-                opacity: layer.getOpacity(),
-                type: "WMS",
-                layers: source.getParams().LAYERS.split(","),
-                imageFormat: source.getParams().FORMAT,
-                customParams: {
-                    "TRANSPARENT": "true"
-                }
-            };
+            return mapObject;
         },
 
         /**
          * returns vector layer information
          * @param {ol.layer.Vector} layer - vector layer with vector source
-         * @param {[number]} extent mapextent
+         * @param {[ol.feature]} features vectorfeatures
          * @returns {object} geojson layer spec
         */
         buildVector: function (layer, features) {
@@ -214,8 +215,22 @@ define(function (require) {
                 type: "point",
                 graphicWidth: style.getSize()[0] * style.getScale(),
                 graphicHeight: style.getSize()[1] * style.getScale(),
-                externalGraphic: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img" + this.getImageName(style.getSrc())
+                externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc())
             };
+        },
+        /**
+         * derives the url of the image from the server the app is running on
+         * if the app is running on localhost the images from test-geofos are used
+         * @return {String} path to image directory
+         */
+        buildGraphicPath: function () {
+            var url = "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img",
+                origin = window.location.origin;
+
+            if (origin.indexOf("localhost") === -1) {
+                url = origin + "/lgv-config/img";
+            }
+            return url;
         },
 
         buildPointStyleText: function (style) {
@@ -453,9 +468,9 @@ define(function (require) {
                     }
 
                     valueObj.label = layerParam.legend[0].legendname[index];
-                    valueObj.imageUrl = url;
+                    valueObj.imageUrl = this.createLegendImageUrl(url);
                     valuesArray.push(valueObj);
-                });
+                }, this);
             }
             else if (layerParam.legend[0].typ === "styleWMS") {
                 _.each(layerParam.legend[0].params, function (styleWmsParam) {
@@ -470,6 +485,12 @@ define(function (require) {
             }
 
             return valuesArray;
+        },
+        createLegendImageUrl: function (path) {
+            var url = this.buildGraphicPath(),
+                image = path.substring(path.lastIndexOf("/"));
+
+            return url + image;
         },
         /**
          * gets array with [GfiContent, layername, coordinates] of actual gfi

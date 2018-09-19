@@ -164,7 +164,7 @@
             }
           ]
       },
-      "tools": 
+      "tools":
       {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
@@ -418,6 +418,7 @@
       },
       {
         "id": "5708",
+        "visibility": true,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
@@ -462,7 +463,7 @@
       {
         "id": "1711",
         "styleId": "1711",
-        "visibility": true,
+        "visibility": false,
         "layerAttribution": "<span>Attributierung für Fachlayer</span>",
         "mouseHoverField": ["name", "strasse"],
         "searchField": "name",
@@ -485,7 +486,7 @@
       },
       {
         "id": "8712",
-        "visibility": true,
+        "visibility": false,
         "name": "Schulinfosystem",
         "styleId": "8712",
         "searchField": "schulname",
@@ -509,7 +510,7 @@
       },
       {
         "id": "8145",
-        "visibility": true,
+        "visibility": false,
         "styleId": "8145",
         "mouseHoverField": "kategorie",
         "extendedFilter": true
