@@ -43,6 +43,7 @@ define(function (require) {
 
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
+                this.render();
             }
 
             this.className = "navbar-form col-xs-9";
