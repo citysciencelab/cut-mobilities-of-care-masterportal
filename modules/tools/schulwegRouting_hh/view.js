@@ -178,13 +178,15 @@ define(function (require) {
         },
 
         setAddressSearchValue: function (evt, searchHouseNumber) {
-            this.$el.find(".address-search").val(evt.target.textContent);
+            var address = evt.target.textContent;
+
+            this.$el.find(".address-search").val(address);
             if (searchHouseNumber) {
-                this.model.setStreetNameList([evt.target.textContent]);
-                this.model.searchHouseNumbers(evt.target.textContent);
+                this.model.setStreetNameList([address]);
+                this.model.searchHouseNumbers(address);
             }
             else {
-                this.model.searchAddress(evt.target.textContent);
+                this.model.searchAddress(address);
             }
         },
         closeView: function () {
