@@ -20,12 +20,12 @@ define(function (require) {
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
-                this.setAddressSearchValue(evt);
+                this.setAddressSearchValue(evt, true);
                 this.$el.find(".address-search").focus();
                 evt.stopPropagation();
             },
             "click li.address": function (evt) {
-                this.setAddressSearchValue(evt);
+                this.setAddressSearchValue(evt, false);
                 this.model.selectStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
                 this.model.findRegionalSchool(this.model.get("startAddress"));
                 this.model.prepareRequest(this.model.get("startAddress"));
@@ -43,9 +43,11 @@ define(function (require) {
             "click .print-route": "printRoute",
             "click .description button": "toggleRouteDesc",
             "click #regional-school": function () {
-                this.updateSelectedSchool(this.model.get("regionalSchool").get("schul_id"));
-                this.model.selectSchool(this.model.get("schoolList"), this.model.get("regionalSchool").get("schul_id"));
-                this.model.prepareRequest(this.model.get("startAddress"));
+                if (!_.isEmpty(this.model.get("regionalSchool"))) {
+                    this.updateSelectedSchool(this.model.get("regionalSchool").get("schul_id"));
+                    this.model.selectSchool(this.model.get("schoolList"), this.model.get("regionalSchool").get("schul_id"));
+                    this.model.prepareRequest(this.model.get("startAddress"));
+                }
             }
         },
         initialize: function () {
@@ -85,7 +87,7 @@ define(function (require) {
             this.$el.html(this.template(attr));
             this.initSelectpicker();
             this.setPresetValues();
-            this.$el.find(".checkbox").append(this.checkBoxHVV.render().$el);
+            this.$el.find(".routing-checkbox").append(this.checkBoxHVV.render().$el);
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true);
             this.delegateEvents();
@@ -155,18 +157,35 @@ define(function (require) {
         },
 
         searchAddress: function (evt) {
-            if (evt.target.value.length > 2) {
-                this.model.searchAddress(evt.target.value);
+            var evtValue = evt.target.value,
+                targetList;
+
+            if (evtValue.length > 2) {
+                this.model.searchAddress(evtValue);
             }
             else {
                 this.model.setAddressListFiltered([]);
                 this.model.setStartAddress({});
             }
+
+            // necessary to find the correct house numbers for more results
+            if (evtValue.slice(-1) === " ") {
+                targetList = this.model.filterStreets(evtValue);
+                if (targetList.length === 1) {
+                    this.model.startSearch(targetList, []);
+                }
+            }
         },
 
-        setAddressSearchValue: function (evt) {
+        setAddressSearchValue: function (evt, searchHouseNumber) {
             this.$el.find(".address-search").val(evt.target.textContent);
-            this.model.searchAddress(evt.target.textContent);
+            if (searchHouseNumber) {
+                this.model.setStreetNameList([evt.target.textContent]);
+                this.model.searchHouseNumbers(evt.target.textContent);
+            }
+            else {
+                this.model.searchAddress(evt.target.textContent);
+            }
         },
         closeView: function () {
             this.model.setIsActive(false);

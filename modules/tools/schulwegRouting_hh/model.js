@@ -205,12 +205,20 @@ define(function (require) {
                 this.toggleLoader(false);
                 this.removeId(this.get("requestIDs"), requestID);
                 if (status === 200) {
-                    parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
-                    if (parsedData.ErrorOccured === "yes") {
-                        this.handleWPSError(parsedData);
+                    if (_.has(response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData, "Schulweg")) {
+                        parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
+                        if (parsedData.ErrorOccured === "yes") {
+                            this.handleWPSError(parsedData);
+                        }
+                        else {
+                            this.handleSuccess(parsedData);
+                        }
                     }
                     else {
-                        this.handleSuccess(parsedData);
+                        Radio.trigger("Alert", "alert", "<b>Entschuldigung</b><br>"
+                            + "Routing konnte nicht berechnet werden, mit folgender Fehlermeldung:<br><br>"
+                            + "<i>" + response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.serviceResponse.statusInfo.message + "</i><br><br>"
+                            + "Bitte wenden Sie sich mit dieser Fehlermeldung an den Administrator.");
                     }
                 }
                 else {
@@ -243,11 +251,19 @@ define(function (require) {
             }
         },
         parseRegionalSchool: function (xml) {
-            var schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0",
-                school = this.filterSchoolById(this.get("schoolList"), schoolId);
+            var schoolId,
+                school;
 
-            this.setRegionalSchool(school);
-            this.trigger("updateRegionalSchool", school.get("schulname"));
+            if ($(xml).find("gages\\:grundschulnr").length > 0) {
+                schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
+                school = this.filterSchoolById(this.get("schoolList"), schoolId);
+                this.setRegionalSchool(school);
+                this.trigger("updateRegionalSchool", school.get("schulname"));
+            }
+            else {
+                this.setRegionalSchool({});
+                this.trigger("updateRegionalSchool", "Keine Schule gefunden!");
+            }
         },
 
         /**
@@ -270,6 +286,7 @@ define(function (require) {
                 requestObj = {};
 
             if (Object.keys(address).length !== 0 && schoolID.length > 0) {
+                Radio.trigger("GFI", "setIsVisible", false);
                 requestObj = this.setObjectAttribute(requestObj, "Schul-ID", "string", schoolID);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerStrasse", "string", address.street);
                 requestObj = this.setObjectAttribute(requestObj, "SchuelerHausnr", "integer", parseInt(address.number, 10));
@@ -283,7 +300,7 @@ define(function (require) {
         sendRequest: function (requestID, requestObj) {
             this.get("requestIDs").push(requestID);
             this.toggleLoader(true);
-            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting.fmw", requestObj);
+            Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting_wps.fmw", requestObj);
         },
         toggleLoader: function (show) {
             if (show) {
@@ -382,6 +399,11 @@ define(function (require) {
 
         searchAddress: function (value) {
             Radio.trigger("Gaz", "findStreets", value);
+            this.setSearchRegExp(value);
+        },
+
+        searchHouseNumbers: function (value) {
+            Radio.trigger("Gaz", "findHouseNumbers", value);
             this.setSearchRegExp(value);
         },
 
@@ -526,6 +548,30 @@ define(function (require) {
             _.each(features, function (feature) {
                 feature.unset("geometry");
             });
+        },
+
+        /**
+         * Searches all streets that contain the string
+        * @param {String} evtValue - input streetname
+        * @returns {array} targetList
+        */
+        filterStreets: function (evtValue) {
+            var streetNameList = this.get("streetNameList"),
+                targetStreet = evtValue.split(" ")[0],
+                targetList = [];
+
+            _.each(streetNameList, function (street) {
+                var streetNameParts = _.contains(street, " ") ? street.split(" ") : [street],
+                    resultStreets = _.filter(streetNameParts, function (part) {
+                        return part.toLowerCase() === targetStreet.toLowerCase();
+                    }, this);
+
+                if (!_.isEmpty(resultStreets)) {
+                    targetList.push(street);
+                }
+            }, this);
+
+            return targetList;
         },
 
         setSchoolList: function (value) {

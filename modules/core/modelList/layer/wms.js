@@ -80,6 +80,7 @@ define(function (require) {
                     url: this.get("url"),
                     attributions: this.get("olAttribution"),
                     params: params
+                    // Nur für Schulwegrouting, führte zu Problemen mit  diensten die dies nicht zulassen.
                     // crossOrigin: "anonymous"
                 }));
             }

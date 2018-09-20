@@ -628,9 +628,7 @@ define(function (require) {
             var hitID = evt.currentTarget.id,
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
 
-            if (hit.type === "Adresse" || hit.type === "Stadtteil" || hit.type === "Olympiastandort" || hit.type === "Paralympiastandort") {
-                Radio.trigger("MapMarker", "showMarker", hit.coordinate);
-            }
+            Radio.trigger("MapMarker", "showMarker", hit.coordinate);
         },
 
         hideMarker: function () {
