@@ -69,7 +69,7 @@ define(function (require) {
                 this.get("uniqueIdList").push(uniqueId);
                 cswObj.layerName = attrs.layername;
                 cswObj.metaId = metaId;
-                cswObj.keyList = ["abstractText", "date", "title", "downloadLinks"];
+                cswObj.keyList = ["abstractText", "date", "periodicity", "title", "downloadLinks"];
                 cswObj.uniqueId = uniqueId;
                 Radio.trigger("CswParser", "getMetaData", cswObj);
             }
