@@ -4,6 +4,7 @@ define(function (require) {
         MapView = require("modules/core/mapView"),
         Cesium = require("cesium"),
         $ = require("jquery"),
+        Config = require("config"),
         Map;
 
     Map = Backbone.Model.extend({
