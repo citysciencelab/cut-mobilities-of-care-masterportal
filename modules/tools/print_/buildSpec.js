@@ -303,7 +303,7 @@ define(function (require) {
             var fillColor = style.getColor();
 
             obj.fillColor = this.rgbArrayToHex(fillColor);
-            obj.fillOpacity = this.rgbArrayToOpacity(fillColor);
+            obj.fillOpacity = fillColor[3];
 
             return obj;
         },
@@ -312,20 +312,11 @@ define(function (require) {
             var strokeColor = style.getColor();
 
             obj.strokeColor = this.rgbArrayToHex(strokeColor);
-            obj.strokeOpacity = this.rgbArrayToOpacity(strokeColor);
+            obj.strokeOpacity = strokeColor[3];
             if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
                 obj.strokeWidth = style.getWidth();
             }
             return obj;
-        },
-
-        rgbArrayToOpacity: function (rgba) {
-            var opacity = 1;
-
-            if (rgba.length === 4) {
-                opacity = rgba[3];
-            }
-            return opacity;
         },
         getImageName: function (imageSrc) {
             var start = imageSrc.lastIndexOf("/");
