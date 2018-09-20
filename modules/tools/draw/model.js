@@ -109,12 +109,18 @@ define(function (require) {
 
         /**
          * erzeugt ein GeoJSON von allen Featues und gibt es zurück
+         * gibt ein leeres Objekt zurück, wenn vorher kein init erfolgt ist (= kein layer gesetzt)
          * @returns {String} GeoJSON aller Features als String
          */
         downloadFeaturesWithoutGUI: function () {
-            var features = this.get("layer").getSource().getFeatures(),
+            var features = null,
                 format = new ol.format.GeoJSON(),
+                featuresKonverted = {"type": "FeatureCollection", "features": []};
+
+            if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
+                features = this.get("layer").getSource().getFeatures();
                 featuresKonverted = format.writeFeaturesObject(features);
+            }
 
             return JSON.stringify(featuresKonverted);
         },
