@@ -430,6 +430,11 @@
         "mouseHoverField": "GEBIETSNAME"
       },
       {
+        "id": "47",
+        "styleId": "47",
+        "mouseHoverField": "GEBIETSNAME"
+      },
+      {
         "id": "2714",
         "gfiTheme": "reisezeiten",
         "styleId": "2119"
@@ -509,7 +514,7 @@
       },
       {
         "id": "8145",
-        "visibility": false,
+        "visibility": true,
         "styleId": "8145",
         "mouseHoverField": "kategorie",
         "extendedFilter": true
