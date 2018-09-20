@@ -72,6 +72,18 @@ define(function (require) {
                         parsedData[key] = this.parseUrl(xmlDoc);
                         break;
                     }
+                    case "abstractText": {
+                        parsedData[key] = this.parseAbstractText(xmlDoc);
+                        break;
+                    }
+                    case "title": {
+                        parsedData[key] = this.parseTitle(xmlDoc, cswObj);
+                        break;
+                    }
+                    case "downloadLinks": {
+                        parsedData[key] = this.parseDownloadLinks(xmlDoc);
+                        break;
+                    }
                     default: {
                         break;
                     }
@@ -80,6 +92,33 @@ define(function (require) {
             }, this);
             cswObj.parsedData = parsedData;
             Radio.trigger("CswParser", "fetchedMetaData", cswObj);
+        },
+        parseDownloadLinks: function (xmlDoc) {
+            var transferOptions = $("gmd\\:MD_DigitalTransferOptions,MD_DigitalTransferOptions", xmlDoc),
+                downloadLinks = [],
+                linkName,
+                link,
+                datetype;
+
+            transferOptions.each(function (index, element) {
+                datetype = $("gmd\\:CI_OnLineFunctionCode,CI_OnLineFunctionCode", element);
+                if ($(datetype).attr("codeListValue") === "download") {
+                    linkName = $("gmd\\:name,name", element)[0].textContent;
+                    if (linkName.indexOf("Download") !== -1) {
+                        linkName = linkName.replace("Download", "");
+                    }
+                    link = $("gmd\\:URL,URL", element)[0].textContent;
+                    downloadLinks.push([linkName, link]);
+                }
+            });
+            return downloadLinks.length > 0 ? downloadLinks : null;
+        },
+        parseTitle: function (xmlDoc, cswObj) {
+            var ci_Citation = $("gmd\\:CI_Citation,CI_Citation", xmlDoc)[0],
+                gmdTitle = _.isUndefined(ci_Citation) === false ? $("gmd\\:title,title", ci_Citation) : undefined,
+                title = _.isUndefined(gmdTitle) === false ? gmdTitle[0].textContent : cswObj.layerName;
+
+            return title;
         },
         parseAddress: function (xmlDoc) {
             var contact = $("gmd\\:contact,contact", xmlDoc),
@@ -98,6 +137,15 @@ define(function (require) {
                 };
 
             return address;
+        },
+        parseAbstractText: function (xmlDoc) {
+            var abstractText = $("gmd\\:abstract,abstract", xmlDoc)[0].textContent;
+
+            if (abstractText.length > 1000) {
+                return abstractText.substring(0, 600) + "...";
+            }
+
+            return abstractText;
         },
         parseUrl: function (xmlDoc) {
             // TODO

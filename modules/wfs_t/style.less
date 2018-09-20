@@ -1,3 +1,7 @@
+@color_1: #777;
+@color_2: rgb(252, 141, 98);
+@font_family_1: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+
 .record-button {
     float: left;
     width: 66px;
@@ -11,31 +15,28 @@
     background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    color: #777;
+    color: @color_1;
+    &:hover {
+        cursor: pointer;
+        color: @color_2;
+    }
+    >.glyphicon {
+        font-size: 20px;
+    }
+    >.glyphicon-play {
+        transform: rotate(45deg);
+    }
+    >.glyphicon-minus {
+        transform: rotate(45deg);
+    }
 }
-
-.record-button:hover {
-    cursor: pointer;
-    color: rgb(252, 141, 98);
-}
-
 .record-active {
-    color: rgb(252, 141, 98);
-}
-
-.record-button > .glyphicon {
-    font-size: 20px;
-}
-
-.record-button > .glyphicon-play, .record-button > .glyphicon-minus {
-    transform: rotate(45deg);
+    color: @color_2;
 }
 .record-label {
     font-size: 11px;
-    font-family: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+    font-family: @font_family_1;
 }
-
-
 .record-form {
     padding-top: 86px;
 }
