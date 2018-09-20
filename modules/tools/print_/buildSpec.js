@@ -391,7 +391,7 @@ define(function (require) {
             else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
                 styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
 
-                if (styleModel !== undefined && styleModel.get("labeField") !== undefined) {
+                if (styleModel !== undefined && styleModel.get("labelField").length > 0) {
                     labelField = styleModel.get("labelField");
                     labelValue = feature.get(labelField);
                     return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "' AND " + labelField + "='" + labelValue + "']";
