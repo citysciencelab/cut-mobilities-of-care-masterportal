@@ -165,7 +165,7 @@ define(function (require) {
                         symbolizers: []
                     };
                     if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
-                        styleObject.symbolizers.push(this.buildPointStyle(style));
+                        styleObject.symbolizers.push(this.buildPointStyle(style, layer));
                     }
                     else if (feature.getGeometry().getType() === "Polygon" || feature.getGeometry().getType() === "MultiPolygon") {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style));
@@ -182,12 +182,12 @@ define(function (require) {
             return mapfishStyleObject;
         },
 
-        buildPointStyle: function (style) {
+        buildPointStyle: function (style, layer) {
             if (style.getImage() instanceof ol.style.Circle) {
                 return this.buildPointStyleCircle(style.getImage());
             }
             else if (style.getImage() instanceof ol.style.Icon) {
-                return this.buildPointStyleIcon(style.getImage());
+                return this.buildPointStyleIcon(style.getImage(), layer);
             }
             return this.buildPointStyleText(style.getText());
         },
@@ -210,12 +210,13 @@ define(function (require) {
             return obj;
         },
 
-        buildPointStyleIcon: function (style) {
+        buildPointStyleIcon: function (style, layer) {
             return {
                 type: "point",
                 graphicWidth: style.getSize()[0] * style.getScale(),
                 graphicHeight: style.getSize()[1] * style.getScale(),
-                externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc())
+                externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc()),
+                graphicOpacity: layer.getOpacity()
             };
         },
         /**
@@ -270,7 +271,8 @@ define(function (require) {
             var fillColor = style.getColor();
 
             obj.fillColor = this.rgbArrayToHex(fillColor);
-            obj.fillOpacity = fillColor[3];
+            obj.fillOpacity = this.rgbArrayToOpacity(fillColor);
+
             return obj;
         },
 
@@ -278,14 +280,22 @@ define(function (require) {
             var strokeColor = style.getColor();
 
             obj.strokeColor = this.rgbArrayToHex(strokeColor);
-            obj.strokeOpacity = strokeColor[3];
-
+            obj.strokeOpacity = this.rgbArrayToOpacity(strokeColor);
+            // _.indexOf(_.functions(style), "getWidth") !== -1 &&
             if (style.getWidth() !== undefined) {
                 obj.strokeWidth = style.getWidth();
             }
             return obj;
         },
 
+        rgbArrayToOpacity: function (rgba) {
+            var opacity = 1;
+
+            if (rgba.length === 4) {
+                opacity = rgba[3];
+            }
+            return opacity;
+        },
         getImageName: function (imageSrc) {
             var start = imageSrc.lastIndexOf("/");
 
