@@ -147,7 +147,7 @@ define(function (require) {
 
             return abstractText;
         },
-        parseUrl: function (xmlDoc) {
+        parseUrl: function () {
             // TODO
             return "";
         },
@@ -200,4 +200,4 @@ define(function (require) {
         }
     });
     return CswParser;
-})
+});
