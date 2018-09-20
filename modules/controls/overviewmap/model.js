@@ -7,38 +7,17 @@ define(function (require) {
     OverviewmapModel = Backbone.Model.extend({
         defaults: {
             baselayer: "",
-            ovMap: ""
+            newOvmView: ""
         },
         initialize: function () {
             var map = Radio.request("Map", "getMap"),
+                maxResolution = _.first(Radio.request("MapView", "getResolutions")),
+                mapView = map.getView(),
                 layers = map.getLayers().getArray(),
                 ovmConfig = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}),
                 ovmConfigRes = _.isUndefined(ovmConfig) === false ? ovmConfig.attr : ovmConfig,
                 initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
                 initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
-                newOlView,
-                ovMap;
-
-            newOlView = this.createOlView();
-            this.setBaselayer(ovmConfigRes.baselayer ? this.getBaseLayerFromCollection(layers, ovmConfigRes.baselayer) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
-            ovMap = this.newOverviewmap(newOlView);
-            this.setOvMap(ovMap);
-            if (_.isUndefined(this.getBaselayer()) === false) {
-                Radio.trigger("Map", "addControl", ovMap);
-            }
-            else {
-                $("#overviewmap").remove();
-            }
-            this.listenTo(Radio.channel("Map"), {
-                "change": this.mapChanged
-            });
-        },
-        createOlView: function (value) {
-            var map = Radio.request("Map", "getMap"),
-                maxResolution = _.first(Radio.request("MapView", "getResolutions")),
-                mapView = map.getView(),
-                ovmConfig = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}),
-                ovmConfigRes = _.isUndefined(ovmConfig) === false ? ovmConfig.attr : ovmConfig,
                 newOlView;
 
             newOlView = new ol.View({
@@ -47,32 +26,25 @@ define(function (require) {
                 resolution: mapView.getResolution(),
                 resolutions: [ovmConfigRes.resolution ? ovmConfigRes.resolution : maxResolution]
             });
-
+            this.setNewOvmView(newOlView);
             this.setBaselayer(ovmConfigRes.baselayer ? this.getBaseLayerFromCollection(layers, ovmConfigRes.baselayer) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
             if (_.isUndefined(this.get("baselayer")) === false) {
-                Radio.trigger("Map", "addControl", this.newOverviewmap(newOlView));
+                Radio.trigger("Map", "addControl", this.newOverviewmap());
             }
             else {
                 $("#overviewmap").remove();
             }
         },
-        mapChanged: function (value) {
-            var view = this.createOlView(value),
-                ovMap = this.newOverviewmap(view);
 
-            Radio.trigger("Map", "removeControl", this.get("ovMap"));
-            this.setOvMap(ovMap);
-            Radio.trigger("Map", "addControl", ovMap);
-
-        },
-        newOverviewmap: function (view) {
+        newOverviewmap: function () {
             var overviewmap = new ol.control.OverviewMap({
                 collapsible: false,
-                className: "overviewmap ol-overviewmap ol-custom-overviewmap hidden-xs",
+                className: "ol-overviewmap ol-custom-overviewmap",
+                target: "overviewmap",
                 layers: [
                     this.getOvmLayer(this.get("baselayer"))
                 ],
-                view: view
+                view: this.get("newOvmView")
             });
 
             return overviewmap;
@@ -95,11 +67,15 @@ define(function (require) {
                         TRANSPARENT: modelFromCollection.get("transparent").toString()
                     }
                 };
+
+                return baseLayerParams;
             }
-            else {
-                Radio.trigger("Alert", "alert", "Die Overviewmap konnte nicht erstellt werden da kein Layer für die angegebene ID gefunden wurde. (" + baselayer + ")");
-            }
-            return baseLayerParams;
+
+            Radio.trigger("Alert", "alert", "Die Overviewmap konnte nicht erstellt werden da kein Layer für die angegebene ID gefunden wurde. (" + baselayer + ")");
+
+            return undefined;
+
+
         },
 
         getOvmLayer: function (baselayer) {
@@ -122,10 +98,11 @@ define(function (require) {
             this.set("baselayer", value);
         },
 
-        // setter for ovMap
-        setOvMap: function (value) {
-            this.set("ovMap", value);
+        // setter for newOvmView
+        setNewOvmView: function (value) {
+            this.set("newOvmView", value);
         }
+
     });
 
     return OverviewmapModel;
