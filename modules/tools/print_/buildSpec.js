@@ -272,7 +272,7 @@ define(function (require) {
             return "cb";
         },
 
-        buildPolygonStyle: function (style) {
+        buildPolygonStyle: function (style, layer) {
             var fillStyle = style.getFill(),
                 strokeStyle = style.getStroke(),
                 obj = {
