@@ -766,14 +766,16 @@ define(function (require) {
             });
         });
         describe("getStylingRule", function () {
+            var vectorLayer = new ol.layer.Vector();
+
             it("should return \"*\" if styleAttribute is empty string", function () {
-                expect(buildSpecModel.getStylingRule(pointFeatures[0], "")).to.equal("*");
+                expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "")).to.equal("*");
             });
             it("should return \"[styleId='undefined']\" if styleAttribute is \"styleId\"", function () {
-                expect(buildSpecModel.getStylingRule(pointFeatures[0], "styleId")).to.equal("[styleId='undefined']");
+                expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "styleId")).to.equal("[styleId='undefined']");
             });
             it("should return \"[kh_nummer='20']\" if styleAttribute is \"kh_nummer\"", function () {
-                expect(buildSpecModel.getStylingRule(pointFeatures[0], "kh_nummer")).to.equal("[kh_nummer='20']");
+                expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "kh_nummer")).to.equal("[kh_nummer='20']");
             });
         });
         describe("buildPointStyleCircle", function () {
