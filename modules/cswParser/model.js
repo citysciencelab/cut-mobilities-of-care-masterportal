@@ -52,6 +52,10 @@ define(function (require) {
                         parsedData[key] = this.parseDate(xmlDoc);
                         break;
                     }
+                    case "periodicity": {
+                        parsedData[key] = this.parsePeriodicity(xmlDoc);
+                        break;
+                    }
                     case "orga": {
                         parsedData[key] = this.parseOrga(xmlDoc);
                         break;
@@ -176,7 +180,10 @@ define(function (require) {
         parseDate: function (xmlDoc) {
             var citation = $("gmd\\:citation,citation", xmlDoc),
                 dates = $("gmd\\:CI_Date,CI_Date", citation),
-                datetype, revisionDateTime, publicationDateTime, dateTime;
+                datetype,
+                revisionDateTime,
+                publicationDateTime,
+                dateTime;
 
             dates.each(function (index, element) {
                 datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
@@ -197,6 +204,54 @@ define(function (require) {
                 dateTime = publicationDateTime;
             }
             return moment(dateTime).format("DD.MM.YYYY");
+        },
+
+        parsePeriodicity: function (xmlDoc) {
+            var resourceMaintenance = $("gmd\\:resourceMaintenance,resourceMaintenance", xmlDoc),
+                maintenanceInformation = $("gmd\\:MD_MaintenanceInformation,MD_MaintenanceInformation", resourceMaintenance),
+                maintenanceAndUpdateFrequency = $("gmd\\:maintenanceAndUpdateFrequency,maintenanceAndUpdateFrequency", maintenanceInformation),
+                maintenanceFrequencyCode = $("gmd\\:MD_MaintenanceFrequencyCode,MD_MaintenanceFrequencyCode", maintenanceAndUpdateFrequency),
+                dateType = $(maintenanceFrequencyCode).attr("codeListValue"),
+                periodicity;
+
+            if (dateType === "continual") {
+                periodicity = "kontinuierlich";
+            }
+            else if (dateType === "daily") {
+                periodicity = "täglich";
+            }
+            else if (dateType === "weekly") {
+                periodicity = "wöchentlich";
+            }
+            else if (dateType === "fortnightly") {
+                periodicity = "zweimal wöchentlich";
+            }
+            else if (dateType === "monthly") {
+                periodicity = "monatlich";
+            }
+            else if (dateType === "quarterly") {
+                periodicity = "quartalsweise";
+            }
+            else if (dateType === "biannually") {
+                periodicity = "zweimal järlich";
+            }
+            else if (dateType === "annually") {
+                periodicity = "järlich";
+            }
+            else if (dateType === "asNeeded") {
+                periodicity = "bei Bedarf";
+            }
+            else if (dateType === "irregular") {
+                periodicity = "unregelmäßige Intervalle";
+            }
+            else if (dateType === "notPlanned") {
+                periodicity = "nicht geplant";
+            }
+            else if (dateType === "unknown") {
+                periodicity = "unbekannt";
+            }
+
+            return periodicity;
         }
     });
     return CswParser;
