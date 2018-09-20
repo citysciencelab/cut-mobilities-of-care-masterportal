@@ -156,7 +156,7 @@ define(function (require) {
 
                 if (style !== null) {
                     this.addFeatureToGeoJsonList(feature, geojsonList);
-                    stylingRule = this.getStylingRule(feature, styleAttribute);
+                    stylingRule = this.getStylingRule(layer, feature, styleAttribute);
                     // do nothing if we already have a style object for this CQL rule
                     if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
                         return;
@@ -176,6 +176,10 @@ define(function (require) {
                     else if (feature.getGeometry().getType() === "LineString" || feature.getGeometry().getType() === "MultiLineString") {
                         styleObject.symbolizers.push(this.buildLineStringStyle(style));
                     }
+                    // label styling
+                    if (style.getText() !== null && style.getText() !== undefined) {
+                        styleObject.symbolizers.push(this.buildTextStyle(style.getText()));
+                    }
                     mapfishStyleObject[stylingRule] = styleObject;
                 }
             }, this);
@@ -189,7 +193,7 @@ define(function (require) {
             else if (style.getImage() instanceof ol.style.Icon) {
                 return this.buildPointStyleIcon(style.getImage());
             }
-            return this.buildPointStyleText(style.getText());
+            return this.buildTextStyle(style.getText());
         },
 
         buildPointStyleCircle: function (style) {
@@ -233,13 +237,38 @@ define(function (require) {
             return url;
         },
 
-        buildPointStyleText: function (style) {
+        buildTextStyle: function (style) {
             return {
-                type: "Text",
+                type: "text",
                 label: style.getText(),
                 fontColor: this.rgbArrayToHex(style.getFill().getColor()),
-                fontSize: style.getFont().split(" ")[0]
+                labelXOffset: -style.getOffsetX(),
+                labelYOffset: -style.getOffsetY(),
+                fontSize: style.getFont().split(" ")[0],
+                fontFamily: style.getFont().split(" ")[1],
+                labelAlign: this.getLabelAlign(style)
             };
+        },
+
+        /**
+         * gets the indicator of how to align the text with respect to the geometry.
+         * this property must have 2 characters, the x-align and the y-align
+         * @param {ol.style} style -
+         * @returns {string} placement indicator
+         */
+        getLabelAlign: function (style) {
+            var textAlign = style.getTextAlign();
+
+            if (textAlign === "left") {
+                // left bottom
+                return "lb";
+            }
+            else if (textAlign === "right") {
+                // right bottom
+                return "rb";
+            }
+            // center bottom
+            return "cb";
         },
 
         buildPolygonStyle: function (style) {
@@ -343,17 +372,31 @@ define(function (require) {
         },
 
         /**
+         * returns the rule for styling a feature
+         * @param {ol.Feature} layer -
          * @param {ol.Feature} feature -
          * @param {string} styleAttribute - the attribute by whose value the feature is styled
          * @returns {string} an ECQL Expression
          */
-        getStylingRule: function (feature, styleAttribute) {
+        getStylingRule: function (layer, feature, styleAttribute) {
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
+                labelField,
+                labelValue;
+
             if (styleAttribute === "") {
                 return "*";
             }
+            // feature with geometry style and label style
+            else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
+                labelField = Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("labelField");
+                labelValue = feature.get(labelField);
+                return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "' AND " + labelField + "='" + labelValue + "']";
+            }
+            // cluster feature with geometry style
             else if (feature.get("features") !== undefined) {
                 return "[" + styleAttribute + "='" + feature.get("features")[0].get(styleAttribute) + "']";
             }
+            // feature with geometry style
             return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
         },
 

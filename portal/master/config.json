@@ -418,7 +418,6 @@
       },
       {
         "id": "5708",
-        "visibility": true,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
@@ -428,6 +427,11 @@
       {
         "id": "2003",
         "styleId": "2003",
+        "mouseHoverField": "GEBIETSNAME"
+      },
+      {
+        "id": "47",
+        "styleId": "47",
         "mouseHoverField": "GEBIETSNAME"
       },
       {
@@ -463,7 +467,7 @@
       {
         "id": "1711",
         "styleId": "1711",
-        "visibility": false,
+        "visibility": true,
         "layerAttribution": "<span>Attributierung für Fachlayer</span>",
         "mouseHoverField": ["name", "strasse"],
         "searchField": "name",
@@ -486,7 +490,7 @@
       },
       {
         "id": "8712",
-        "visibility": false,
+        "visibility": true,
         "name": "Schulinfosystem",
         "styleId": "8712",
         "searchField": "schulname",
@@ -510,7 +514,7 @@
       },
       {
         "id": "8145",
-        "visibility": false,
+        "visibility": true,
         "styleId": "8145",
         "mouseHoverField": "kategorie",
         "extendedFilter": true
