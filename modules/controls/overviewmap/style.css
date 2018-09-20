@@ -30,3 +30,7 @@
     border: none;
     width: 200px;
 }
+
+.ol-custom-overviewmap .ol-overviewmap-box {
+    border: 2px solid rgb(182, 0, 0);
+}
