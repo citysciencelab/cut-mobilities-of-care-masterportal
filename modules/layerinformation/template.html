@@ -19,6 +19,9 @@
     <% if (date !== null) { %>
         <p>Veröffentlichung der Daten: <%= date %></p>
     <% } %>
+    <% if (periodicity !== null) { %>
+        <p>Aktualisierungszeitraum: <%= periodicity %></p>
+    <% } %>
         <hr>
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
