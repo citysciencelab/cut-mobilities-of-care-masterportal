@@ -154,7 +154,7 @@ define(function (require) {
             url += "&center=" + this.get("centerCoords");
             url += "&zoomlevel=" + this.get("zoomLevel");
             url += "&map=" + this.get("mapMode");
-            if (this.getMapMode() === "3D" && this.get("cameraParameter")) {
+            if (this.get("mapMode") === "3D" && this.get("cameraParameter")) {
                 url += "&heading=" + this.get("cameraParameter").heading;
                 url += "&tilt=" + this.get("cameraParameter").tilt;
                 url += "&altitude=" + this.get("cameraParameter").altitude;
