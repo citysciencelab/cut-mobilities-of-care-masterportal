@@ -1,16 +1,13 @@
 define(function (require) {
     var ViewMobile = require("modules/layerinformation/viewMobile"),
         View = require("modules/layerinformation/view"),
-        $ = require("jquery"),
-        moment = require("moment"),
         LayerInformation;
 
     LayerInformation = Backbone.Model.extend({
         defaults: {
-            // konfiguriert in der rest-services.json
-            cswId: "3",
             // true wenn die Layerinformation sichtbar ist
-            isVisible: false
+            isVisible: false,
+            uniqueIdList: []
         },
 
         /**
@@ -43,9 +40,40 @@ define(function (require) {
                     this.bindView(isMobile);
                 }
             });
+            this.listenTo(Radio.channel("CswParser"), {
+                "fetchedMetaData": this.fetchedMetaData
+            });
             this.bindView(Radio.request("Util", "isViewMobile"));
         },
+        fetchedMetaData: function (cswObj) {
+            if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
+                this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
+                this.updateMetaData(cswObj.layerName, cswObj.parsedData);
+            }
+        },
+        isOwnMetaRequest: function (uniqueIdList, uniqueId) {
+            return _.contains(uniqueIdList, uniqueId);
+        },
+        removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
+            this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
+        },
+        updateMetaData: function (layerName, parsedData) {
+            this.set(parsedData);
+        },
+        requestMetaData: function (attrs) {
+            var metaId = !_.isNull(attrs.metaID) ? attrs.metaID[0] : null,
+                uniqueId = _.uniqueId(),
+                cswObj = {};
 
+            if (!_.isNull(metaId)) {
+                this.get("uniqueIdList").push(uniqueId);
+                cswObj.layerName = attrs.layername;
+                cswObj.metaId = metaId;
+                cswObj.keyList = ["abstractText", "date", "title", "downloadLinks"];
+                cswObj.uniqueId = uniqueId;
+                Radio.trigger("CswParser", "getMetaData", cswObj);
+            }
+        },
         bindView: function (isMobile) {
             var currentView;
 
@@ -70,7 +98,7 @@ define(function (require) {
             this.set(attrs);
             this.setMetadataURL();
             if (!_.isNull(this.get("metaID")[0])) {
-                this.fetchData({id: this.get("metaID")[0]});
+                this.requestMetaData(attrs);
             }
             else {
                 this.set("title", this.get("layername"));
@@ -78,95 +106,8 @@ define(function (require) {
                 this.set("date", null);
                 this.set("metaURL", null);
                 this.set("downloadLinks", null);
-                this.trigger("sync");
             }
-        },
-
-        fetchData: function (data) {
-            Radio.trigger("Util", "showLoader");
-            this.fetch({
-                data: data,
-                dataType: "xml",
-                error: function () {
-                    Radio.trigger("Util", "hideLoader");
-                    Radio.trigger("Alert", "alert", {
-                        text: "Informationen zurzeit nicht verfügbar",
-                        kategorie: "alert-warning"
-                    });
-                },
-                success: function () {
-                    Radio.trigger("Util", "hideLoader");
-                }
-            });
-        },
-
-        parse: function (xmlDoc) {
-            var layername = this.get("layername");
-
-            return {
-                "abstractText": function () {
-                    var abstractText = $("gmd\\:abstract,abstract", xmlDoc)[0].textContent;
-
-                    if (abstractText.length > 1000) {
-                        return abstractText.substring(0, 600) + "...";
-                    }
-
-                    return abstractText;
-
-                }(),
-                "date": function () {
-                    var citation = $("gmd\\:citation,citation", xmlDoc),
-                        dates = $("gmd\\:CI_Date,CI_Date", citation),
-                        datetype, revisionDateTime, publicationDateTime, dateTime;
-
-                    dates.each(function (index, element) {
-                        datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
-                        if ($(datetype).attr("codeListValue") === "revision") {
-                            revisionDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-                        }
-                        else if ($(datetype).attr("codeListValue") === "publication") {
-                            publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-                        }
-                        else {
-                            dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-                        }
-                    });
-                    if (revisionDateTime) {
-                        dateTime = revisionDateTime;
-                    }
-                    else if (publicationDateTime) {
-                        dateTime = publicationDateTime;
-                    }
-                    return moment(dateTime).format("DD.MM.YYYY");
-                }(),
-                "title": function () {
-                    var ci_Citation = $("gmd\\:CI_Citation,CI_Citation", xmlDoc)[0],
-                        gmdTitle = _.isUndefined(ci_Citation) === false ? $("gmd\\:title,title", ci_Citation) : undefined,
-                        title = _.isUndefined(gmdTitle) === false ? gmdTitle[0].textContent : layername;
-
-                    return title;
-                }(),
-                "downloadLinks": function () {
-                    var transferOptions = $("gmd\\:MD_DigitalTransferOptions,MD_DigitalTransferOptions", xmlDoc),
-                        downloadLinks = [],
-                        linkName,
-                        link,
-                        datetype;
-
-                    transferOptions.each(function (index, element) {
-                        datetype = $("gmd\\:CI_OnLineFunctionCode,CI_OnLineFunctionCode", element);
-                        if ($(datetype).attr("codeListValue") === "download") {
-                            linkName = $("gmd\\:name,name", element)[0].textContent;
-                            if (linkName.indexOf("Download") !== -1) {
-                                linkName = linkName.replace("Download", "");
-                            }
-                            link = $("gmd\\:URL,URL", element)[0].textContent;
-                            downloadLinks.push([linkName, link]);
-                        }
-                    });
-                    return downloadLinks.length > 0 ? downloadLinks : null;
-                }()
-            };
+            this.trigger("sync");
         },
 
         /**
@@ -196,6 +137,9 @@ define(function (require) {
 
         setIsVisible: function (value) {
             this.set("isVisible", value);
+        },
+        setUniqueIdList: function (value) {
+            this.set("uniqueIdList", value);
         }
     });
 

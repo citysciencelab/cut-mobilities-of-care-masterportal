@@ -463,7 +463,7 @@ define(function (require) {
             var valuesArray = [];
 
             if (layerParam.legend[0].typ === "WMS" || layerParam.legend[0].typ === "WFS") {
-                _.each(layerParam.legend[0].img, function (url, index) {
+                _.each(layerParam.legend[0].img, function (url) {
                     var valueObj = {
                         legendType: "",
                         geometryType: "",
@@ -474,13 +474,14 @@ define(function (require) {
 
                     if (layerParam.legend[0].typ === "WMS") {
                         valueObj.legendType = "wmsGetLegendGraphic";
+                        valueObj.imageUrl = this.createLegendImageUrl("WMS", url);
                     }
                     else if (layerParam.legend[0].typ === "WFS") {
                         valueObj.legendType = "wfsImage";
+                        valueObj.imageUrl = this.createLegendImageUrl("WFS", url);
                     }
 
-                    valueObj.label = layerParam.legend[0].legendname[index];
-                    valueObj.imageUrl = this.createLegendImageUrl(url);
+                    valueObj.label = layerParam.layername;
                     valuesArray.push(valueObj);
                 }, this);
             }
@@ -498,11 +499,17 @@ define(function (require) {
 
             return valuesArray;
         },
-        createLegendImageUrl: function (path) {
-            var url = this.buildGraphicPath(),
-                image = path.substring(path.lastIndexOf("/"));
+        createLegendImageUrl: function (typ, path) {
+            var url = path,
+                image;
 
-            return url + image;
+            if (typ === "WFS") {
+                url = this.buildGraphicPath();
+                image = path.substring(path.lastIndexOf("/"));
+                url = url + image;
+            }
+
+            return url;
         },
         /**
          * gets array with [GfiContent, layername, coordinates] of actual gfi
