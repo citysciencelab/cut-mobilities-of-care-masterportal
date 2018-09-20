@@ -57,8 +57,8 @@ define(function (require) {
             this.listenTo(Radio.channel("Map"), {
                 "change": function (mode) {
                     if (this.get("supported").indexOf(mode) >= 0) {
-                        if (this.getIsVisibleInMap()) {
-                            this.getLayer().setVisible(true);
+                        if (this.get("isVisibleInMap")) {
+                            this.get("layer").setVisible(true);
                         }
                     }
                     else {

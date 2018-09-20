@@ -137,7 +137,7 @@ define(function (require) {
         createMap3d: function () {
             var map3d = new olcs.OLCesium(
                 {
-                    map: this.getMap(),
+                    map: this.get("map"),
                     stopOpenLayersEventsPropagation: true,
                     createSynchronizers: function (map, scene) {
                         return [new olcs.WMSRasterSynchronizer(map, scene), new olcs.VectorSynchronizer(map, scene), new olcs.OverlaySynchronizer(map, scene)];
