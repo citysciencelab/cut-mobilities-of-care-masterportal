@@ -6,6 +6,7 @@
 @import "../node_modules/bootstrap-slider/dist/css/bootstrap-slider.css";
 @import "../node_modules/bootstrap-toggle/css/bootstrap-toggle.css";
 @import "../node_modules/video.js/dist/video-js.css";
+@import "../node_modules/openlayers/dist/ol.css";
 @import "../node_modules/lgv-config/css/fonts.css";
 @import "../node_modules/video.js/dist/video-js.min.css";
 @import "../lib/ol-cesium/css/olcs.css";
