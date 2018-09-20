@@ -1,3 +1,6 @@
+@color_1: #777;
+@font_family_1: 'UniversNextW01-Regular','Arial Narrow',Arial,sans-serif;
+
 .portal-title {
     padding-left: 10px;
     white-space: nowrap;
@@ -5,18 +8,17 @@
     overflow: hidden;
     text-shadow: #c0c0c0 3px 3px 5px;
     font-size: 26px;
-    color: #777;
-    font-family: 'UniversNextW01-Regular','Arial Narrow',Arial,sans-serif;
+    color: @color_1;
+    font-family: @font_family_1;
     vertical-align: middle;
     line-height: 50px;
     float: left;
-}
-
-.portal-title > a > img {
-    /*height: 44px;*/
-    margin: 5px 5px 5px 10px;
-}
-
-.portal-title > span {
-    padding-left: 5px;
+    >a {
+        >img {
+            margin: 5px 5px 5px 10px;
+        }
+    }
+    >span {
+        padding-left: 5px;
+    }
 }
