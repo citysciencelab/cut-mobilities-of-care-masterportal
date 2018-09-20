@@ -168,13 +168,13 @@ define(function (require) {
                         styleObject.symbolizers.push(this.buildPointStyle(style, layer));
                     }
                     else if (feature.getGeometry().getType() === "Polygon" || feature.getGeometry().getType() === "MultiPolygon") {
-                        styleObject.symbolizers.push(this.buildPolygonStyle(style));
+                        styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                     }
                     else if (feature.getGeometry().getType() === "Circle") {
-                        styleObject.symbolizers.push(this.buildPolygonStyle(style));
+                        styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                     }
                     else if (feature.getGeometry().getType() === "LineString" || feature.getGeometry().getType() === "MultiLineString") {
-                        styleObject.symbolizers.push(this.buildLineStringStyle(style));
+                        styleObject.symbolizers.push(this.buildLineStringStyle(style, layer));
                     }
                     mapfishStyleObject[stylingRule] = styleObject;
                 }
@@ -202,7 +202,7 @@ define(function (require) {
 
             if (fillStyle !== null) {
                 this.buildFillStyle(fillStyle, obj);
-                obj.strokeColor = this.rgbArrayToHex(fillStyle.getColor());
+                this.buildStrokeStyle(fillStyle, obj);
             }
             if (strokeStyle !== null) {
                 this.buildStrokeStyle(strokeStyle, obj);
@@ -243,11 +243,13 @@ define(function (require) {
             };
         },
 
-        buildPolygonStyle: function (style) {
+        buildPolygonStyle: function (style, layer) {
             var fillStyle = style.getFill(),
                 strokeStyle = style.getStroke(),
                 obj = {
-                    type: "polygon"
+                    type: "polygon",
+                    fillOpacity: layer.getOpacity(),
+                    strokeOpacity: layer.getOpacity()
                 };
 
             this.buildFillStyle(fillStyle, obj);
@@ -257,10 +259,11 @@ define(function (require) {
             return obj;
         },
 
-        buildLineStringStyle: function (style) {
+        buildLineStringStyle: function (style, layer) {
             var strokeStyle = style.getStroke(),
                 obj = {
-                    type: "line"
+                    type: "line",
+                    strokeOpacity: layer.getOpacity()
                 };
 
             this.buildStrokeStyle(strokeStyle, obj);
@@ -281,8 +284,7 @@ define(function (require) {
 
             obj.strokeColor = this.rgbArrayToHex(strokeColor);
             obj.strokeOpacity = this.rgbArrayToOpacity(strokeColor);
-            // _.indexOf(_.functions(style), "getWidth") !== -1 &&
-            if (style.getWidth() !== undefined) {
+            if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
                 obj.strokeWidth = style.getWidth();
             }
             return obj;
