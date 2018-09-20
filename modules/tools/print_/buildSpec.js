@@ -380,6 +380,7 @@ define(function (require) {
          */
         getStylingRule: function (layer, feature, styleAttribute) {
             var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
+                styleModel,
                 labelField,
                 labelValue;
 
@@ -388,9 +389,15 @@ define(function (require) {
             }
             // feature with geometry style and label style
             else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
-                labelField = Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("labelField");
-                labelValue = feature.get(labelField);
-                return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "' AND " + labelField + "='" + labelValue + "']";
+                styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
+                if (styleModel !== undefined && styleModel.get("labeField") !== undefined) {
+                    labelField = styleModel.get("labelField");
+                    labelValue = feature.get(labelField);
+                    return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "' AND " + labelField + "='" + labelValue + "']";
+                }
+                // feature with geometry style
+                return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
             }
             // cluster feature with geometry style
             else if (feature.get("features") !== undefined) {
