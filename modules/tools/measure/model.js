@@ -39,7 +39,11 @@ const Measure = Tool.extend({
     }),
 
     initialize: function () {
+        var channel = Radio.channel("Measure");
 
+        channel.on({
+            "placeMeasureTooltip": this.placeMeasureTooltip
+        }, this);
 
         this.superInitialize();
 
@@ -76,6 +80,8 @@ const Measure = Tool.extend({
     },
 
     createInteraction: function () {
+        var that = this;
+
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
         this.set("draw", new Draw({
             source: this.get("source"),
@@ -83,23 +89,23 @@ const Measure = Tool.extend({
             style: this.get("style")
         }));
         this.get("draw").on("drawstart", function (evt) {
-            Radio.trigger("Map", "registerListener", "pointermove", this.placeMeasureTooltip, this);
+            Radio.trigger("Map", "registerListener", "pointermove", that.placeMeasureTooltip.bind(that), this);
             // "click" needed for touch devices
-            Radio.trigger("Map", "registerListener", "click", this.placeMeasureTooltip, this);
-            this.set("sketch", evt.feature);
-            this.createMeasureTooltip();
+            Radio.trigger("Map", "registerListener", "click", that.placeMeasureTooltip.bind(that), this);
+            that.set("sketch", evt.feature);
+            that.createMeasureTooltip();
         }, this);
         this.get("draw").on("drawend", function (evt) {
             evt.feature.set("styleId", evt.feature.ol_uid);
-            this.get("measureTooltipElement").className = "tooltip-default tooltip-static";
-            this.get("measureTooltip").setOffset([0, -7]);
+            that.get("measureTooltipElement").className = "tooltip-default tooltip-static";
+            that.get("measureTooltip").setOffset([0, -7]);
             // unset sketch
-            this.set("sketch", null);
+            that.set("sketch", null);
             // unset tooltip so that a new one can be created
-            this.set("measureTooltipElement", null);
-            Radio.trigger("Map", "unregisterListener", "pointermove", this.placeMeasureTooltip, this);
+            that.set("measureTooltipElement", null);
+            Radio.trigger("Map", "unregisterListener", "pointermove", that.placeMeasureTooltip.bind(that), this);
             // "click" needed for touch devices
-            Radio.trigger("Map", "unregisterListener", "click", this.placeMeasureTooltip, this);
+            Radio.trigger("Map", "unregisterListener", "click", that.placeMeasureTooltip.bind(that), this);
         }, this);
         Radio.trigger("Map", "addInteraction", this.get("draw"));
     },
@@ -124,12 +130,12 @@ const Measure = Tool.extend({
         this.get("measureTooltips").push(measureTooltip);
     },
 
-    placeMeasureTooltip: function (evt) {
+    placeMeasureTooltip: function (evt, scope) {
         var output, geom, coord;
 
-        if (evt.dragging) {
-            return;
-        }
+        // if (evt.dragging) {
+        //     return;
+        // }
 
         if (this.get("measureTooltips").length > 0) {
             this.setScale(Radio.request("MapView", "getOptions"));
