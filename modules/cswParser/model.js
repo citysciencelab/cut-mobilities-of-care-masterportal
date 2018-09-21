@@ -235,10 +235,10 @@ define(function (require) {
                 periodicity = "quartalsweise";
             }
             else if (dateType === "biannually") {
-                periodicity = "zweimal järlich";
+                periodicity = "zweimal jährlich";
             }
             else if (dateType === "annually") {
-                periodicity = "järlich";
+                periodicity = "järhlich";
             }
             else if (dateType === "asNeeded") {
                 periodicity = "bei Bedarf";
