@@ -194,7 +194,7 @@ define(function (require) {
                     publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                 }
                 else {
-                    publicationDateTime = _.isUndefined(publicationDateTime) ? $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent : undefined;;
+                    publicationDateTime = _.isUndefined(publicationDateTime) ? $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent : publicationDateTime;
                 }
             });
 
