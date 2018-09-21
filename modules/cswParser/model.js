@@ -250,6 +250,9 @@ define(function (require) {
             else if (dateType === "unknown") {
                 periodicity = "unbekannt";
             }
+            else {
+                periodicity = null;
+            }
 
             return periodicity;
         }
