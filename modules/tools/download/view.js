@@ -96,10 +96,11 @@ const DownloadView = Backbone.View.extend({
      * @returns {void}
      */
     appendOptions: function () {
-        var options = this.model.getFormats();
+        var options = this.model.getFormats(),
+            that = this;
 
         _.each(options, function (option) {
-            this.$(".file-endings").append($("<option>", {
+            that.$(".file-endings").append($("<option>", {
                 value: option,
                 text: option
             }));
