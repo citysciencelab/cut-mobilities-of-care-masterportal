@@ -155,7 +155,6 @@ define(function (require) {
             }
             spec = spec.toJSON();
             spec = _.omit(spec, "uniqueIdList");
-            console.log(spec);
             this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
         },
 
@@ -384,7 +383,7 @@ define(function (require) {
          */
         sendRequest: function (serviceUrl, requestType, successCallback, data) {
             $.ajax({
-                url: serviceUrl,
+                url: Radio.request("Util", "getProxyURL", serviceUrl),
                 type: requestType,
                 data: data,
                 context: this,
