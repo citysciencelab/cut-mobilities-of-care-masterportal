@@ -312,9 +312,7 @@ define(function (require) {
         parseRegionalSchool: function (xml) {
             var schoolId,
                 school,
-                // necessary because the browser edge does not works with xml-namespaces
-                primarySchool = $(xml).find("gages\\:grundschulnr").length > 0
-                    ? $(xml).find("gages\\:grundschulnr") : $(xml).find("grundschulnr");
+                primarySchool = $(xml).find("gages\\:grundschulnr,grundschulnr");
 
             if (primarySchool.length > 0) {
                 schoolId = primarySchool[0].textContent + "-0";
