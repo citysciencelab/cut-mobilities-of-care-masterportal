@@ -253,10 +253,11 @@ define(function (require) {
         parseRegionalSchool: function (xml) {
             var schoolId,
                 school,
+                primarySchool = $(xml).find("gages\\:grundschulnr,grundschulnr"),
                 schoolWithAdress;
 
-            if ($(xml).find("gages\\:grundschulnr").length > 0) {
-                schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
+            if (primarySchool.length > 0) {
+                schoolId = primarySchool[0].textContent + "-0";
                 school = this.filterSchoolById(this.get("schoolList"), schoolId);
                 this.setRegionalSchool(school);
                 schoolWithAdress = school.get("schulname") + ", " + school.get("adresse_strasse_hausnr") + ", " + school.get("adresse_ort");
