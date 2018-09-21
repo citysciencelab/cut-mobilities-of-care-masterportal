@@ -156,7 +156,7 @@ define(function (require) {
 
                 if (style !== null) {
                     this.addFeatureToGeoJsonList(feature, geojsonList);
-                    stylingRule = this.getStylingRule(feature, styleAttribute);
+                    stylingRule = this.getStylingRule(layer, feature, styleAttribute);
                     // do nothing if we already have a style object for this CQL rule
                     if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
                         return;
@@ -176,6 +176,10 @@ define(function (require) {
                     else if (feature.getGeometry().getType() === "LineString" || feature.getGeometry().getType() === "MultiLineString") {
                         styleObject.symbolizers.push(this.buildLineStringStyle(style));
                     }
+                    // label styling
+                    if (style.getText() !== null && style.getText() !== undefined) {
+                        styleObject.symbolizers.push(this.buildTextStyle(style.getText()));
+                    }
                     mapfishStyleObject[stylingRule] = styleObject;
                 }
             }, this);
@@ -189,7 +193,7 @@ define(function (require) {
             else if (style.getImage() instanceof ol.style.Icon) {
                 return this.buildPointStyleIcon(style.getImage());
             }
-            return this.buildPointStyleText(style.getText());
+            return this.buildTextStyle(style.getText());
         },
 
         buildPointStyleCircle: function (style) {
@@ -233,13 +237,38 @@ define(function (require) {
             return url;
         },
 
-        buildPointStyleText: function (style) {
+        buildTextStyle: function (style) {
             return {
-                type: "Text",
+                type: "text",
                 label: style.getText(),
                 fontColor: this.rgbArrayToHex(style.getFill().getColor()),
-                fontSize: style.getFont().split(" ")[0]
+                labelXOffset: -style.getOffsetX(),
+                labelYOffset: -style.getOffsetY(),
+                fontSize: style.getFont().split(" ")[0],
+                fontFamily: style.getFont().split(" ")[1],
+                labelAlign: this.getLabelAlign(style)
             };
+        },
+
+        /**
+         * gets the indicator of how to align the text with respect to the geometry.
+         * this property must have 2 characters, the x-align and the y-align
+         * @param {ol.style} style -
+         * @returns {string} placement indicator
+         */
+        getLabelAlign: function (style) {
+            var textAlign = style.getTextAlign();
+
+            if (textAlign === "left") {
+                // left bottom
+                return "lb";
+            }
+            else if (textAlign === "right") {
+                // right bottom
+                return "rb";
+            }
+            // center bottom
+            return "cb";
         },
 
         buildPolygonStyle: function (style) {
@@ -343,17 +372,38 @@ define(function (require) {
         },
 
         /**
+         * returns the rule for styling a feature
+         * @param {ol.Feature} layer -
          * @param {ol.Feature} feature -
          * @param {string} styleAttribute - the attribute by whose value the feature is styled
          * @returns {string} an ECQL Expression
          */
-        getStylingRule: function (feature, styleAttribute) {
+        getStylingRule: function (layer, feature, styleAttribute) {
+            var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
+                styleModel,
+                labelField,
+                labelValue;
+
             if (styleAttribute === "") {
                 return "*";
             }
+            // feature with geometry style and label style
+            else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
+                styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
+                if (styleModel !== undefined && styleModel.get("labelField").length > 0) {
+                    labelField = styleModel.get("labelField");
+                    labelValue = feature.get(labelField);
+                    return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "' AND " + labelField + "='" + labelValue + "']";
+                }
+                // feature with geometry style
+                return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
+            }
+            // cluster feature with geometry style
             else if (feature.get("features") !== undefined) {
                 return "[" + styleAttribute + "='" + feature.get("features")[0].get(styleAttribute) + "']";
             }
+            // feature with geometry style
             return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
         },
 
@@ -451,7 +501,7 @@ define(function (require) {
             var valuesArray = [];
 
             if (layerParam.legend[0].typ === "WMS" || layerParam.legend[0].typ === "WFS") {
-                _.each(layerParam.legend[0].img, function (url, index) {
+                _.each(layerParam.legend[0].img, function (url) {
                     var valueObj = {
                         legendType: "",
                         geometryType: "",
@@ -462,13 +512,14 @@ define(function (require) {
 
                     if (layerParam.legend[0].typ === "WMS") {
                         valueObj.legendType = "wmsGetLegendGraphic";
+                        valueObj.imageUrl = this.createLegendImageUrl("WMS", url);
                     }
                     else if (layerParam.legend[0].typ === "WFS") {
                         valueObj.legendType = "wfsImage";
+                        valueObj.imageUrl = this.createLegendImageUrl("WFS", url);
                     }
 
-                    valueObj.label = layerParam.legend[0].legendname[index];
-                    valueObj.imageUrl = this.createLegendImageUrl(url);
+                    valueObj.label = layerParam.layername;
                     valuesArray.push(valueObj);
                 }, this);
             }
@@ -486,11 +537,17 @@ define(function (require) {
 
             return valuesArray;
         },
-        createLegendImageUrl: function (path) {
-            var url = this.buildGraphicPath(),
-                image = path.substring(path.lastIndexOf("/"));
+        createLegendImageUrl: function (typ, path) {
+            var url = path,
+                image;
 
-            return url + image;
+            if (typ === "WFS") {
+                url = this.buildGraphicPath();
+                image = path.substring(path.lastIndexOf("/"));
+                url = url + image;
+            }
+
+            return url;
         },
         /**
          * gets array with [GfiContent, layername, coordinates] of actual gfi

@@ -143,9 +143,9 @@ define(function (require) {
         describe("prepareLegendAttributes", function () {
             it("should create legend attributes array for WMS", function () {
                 var layerParam = {
+                    layername: "Layer1",
                     legend: [{
                         img: ["http://GetlegendGraphicRequest1", "http://GetlegendGraphicRequest2"],
-                        legendname: ["Layer1", "Layer2"],
                         typ: "WMS"
                     }]
                 };
@@ -162,14 +162,14 @@ define(function (require) {
                     geometryType: "",
                     imageUrl: "http://GetlegendGraphicRequest2",
                     color: "",
-                    label: "Layer2"
+                    label: "Layer1"
                 });
             });
             it("should create legend attributes array for WFS", function () {
                 var layerParam = {
+                    layername: "Layer1",
                     legend: [{
-                        img: ["http://imgLink1", "http://imgLink2"],
-                        legendname: ["Layer1", "Layer2"],
+                        img: ["https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/imgLink1.png", "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/imgLink2.png"],
                         typ: "WFS"
                     }]
                 };
@@ -177,16 +177,16 @@ define(function (require) {
                 expect(buildSpecModel.prepareLegendAttributes(layerParam)[0]).to.deep.own.include({
                     legendType: "wfsImage",
                     geometryType: "",
-                    imageUrl: "http://imgLink1",
+                    imageUrl: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/imgLink1.png",
                     color: "",
                     label: "Layer1"
                 });
                 expect(buildSpecModel.prepareLegendAttributes(layerParam)[1]).to.deep.own.include({
                     legendType: "wfsImage",
                     geometryType: "",
-                    imageUrl: "http://imgLink2",
+                    imageUrl: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/imgLink2.png",
                     color: "",
-                    label: "Layer2"
+                    label: "Layer1"
                 });
             });
             it("should create legend attributes array for styleWMS", function () {
@@ -766,14 +766,16 @@ define(function (require) {
             });
         });
         describe("getStylingRule", function () {
+            var vectorLayer = new ol.layer.Vector();
+
             it("should return \"*\" if styleAttribute is empty string", function () {
-                expect(buildSpecModel.getStylingRule(pointFeatures[0], "")).to.equal("*");
+                expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "")).to.equal("*");
             });
             it("should return \"[styleId='undefined']\" if styleAttribute is \"styleId\"", function () {
-                expect(buildSpecModel.getStylingRule(pointFeatures[0], "styleId")).to.equal("[styleId='undefined']");
+                expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "styleId")).to.equal("[styleId='undefined']");
             });
             it("should return \"[kh_nummer='20']\" if styleAttribute is \"kh_nummer\"", function () {
-                expect(buildSpecModel.getStylingRule(pointFeatures[0], "kh_nummer")).to.equal("[kh_nummer='20']");
+                expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "kh_nummer")).to.equal("[kh_nummer='20']");
             });
         });
         describe("buildPointStyleCircle", function () {

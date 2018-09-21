@@ -99,7 +99,8 @@ define(function (require) {
             "modules/tools/styleWMS/testModel.js",
             "modules/tools/styleWMS/testView.js",
             "modules/menu/desktop/layer/testViewLight.js",
-            "modules/menu/desktop/layer/testViewSelection.js"
+            "modules/menu/desktop/layer/testViewSelection.js",
+            "modules/layerinformation/testModel.js"
         ], function () {
             mocha.run();
         });
