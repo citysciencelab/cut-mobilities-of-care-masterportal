@@ -151,10 +151,6 @@ define(function (require) {
 
             return abstractText;
         },
-        parseUrl: function () {
-            // TODO
-            return "";
-        },
         parseEmail: function (xmlDoc) {
             var contact = $("gmd\\:contact,contact", xmlDoc),
                 emailField = $("gmd\\:electronicMailAddress,electronicMailAddress", contact),
