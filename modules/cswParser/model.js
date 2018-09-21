@@ -238,7 +238,7 @@ define(function (require) {
                 periodicity = "zweimal jährlich";
             }
             else if (dateType === "annually") {
-                periodicity = "järhlich";
+                periodicity = "jährlich";
             }
             else if (dateType === "asNeeded") {
                 periodicity = "bei Bedarf";
