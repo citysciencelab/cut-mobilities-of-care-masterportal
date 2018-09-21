@@ -97,6 +97,8 @@ const DrawTool = Tool.extend({
     },
 
     createDrawInteraction: function (drawType, layer) {
+        var that = this;
+
         Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         this.set("drawInteraction", new Draw({
             source: layer.getSource(),
@@ -105,7 +107,7 @@ const DrawTool = Tool.extend({
         }));
         this.get("drawInteraction").on("drawend", function (evt) {
             evt.feature.set("styleId", evt.feature.ol_uid);
-            evt.feature.setStyle(this.getStyle(drawType.text));
+            evt.feature.setStyle(that.getStyle(drawType.text));
         }, this);
         Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
     },
