@@ -16,8 +16,11 @@
         <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
     <% }); %>
     <% } %>
-    <% if (date !== null) { %>
-        <p>Stand der Daten: <%= date %></p>
+    <% if (datePublication !== null) { %>
+        <p>Veröffentlichung der Daten: <%= datePublication %></p>
+    <% } %>
+    <% if (dateRevision !== null) { %>
+        <p>Letzte Aktualisierung: <%= dateRevision %></p>
     <% } %>
     <% if (periodicity !== null) { %>
         <p>Aktualisierungszeitraum: <%= periodicity %></p>

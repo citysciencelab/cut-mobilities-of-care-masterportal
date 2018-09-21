@@ -48,8 +48,12 @@ define(function (require) {
 
             _.each(cswObj.keyList, function (key) {
                 switch (key) {
-                    case "date": {
-                        parsedData[key] = this.parseDate(xmlDoc);
+                    case "datePublication": {
+                        parsedData[key] = this.parseDate(xmlDoc, "publication");
+                        break;
+                    }
+                    case "dateRevision": {
+                        parsedData[key] = this.parseDate(xmlDoc, "revision");
                         break;
                     }
                     case "periodicity": {
@@ -173,7 +177,7 @@ define(function (require) {
 
             return orga;
         },
-        parseDate: function (xmlDoc) {
+        parseDate: function (xmlDoc, status) {
             var citation = $("gmd\\:citation,citation", xmlDoc),
                 dates = $("gmd\\:CI_Date,CI_Date", citation),
                 datetype,
@@ -190,16 +194,18 @@ define(function (require) {
                     publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
                 }
                 else {
-                    dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                    publicationDateTime = _.isUndefined(publicationDateTime) ? $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent : undefined;;
                 }
             });
-            if (revisionDateTime) {
+
+            if (!_.isUndefined(revisionDateTime) && status === "revision") {
                 dateTime = revisionDateTime;
             }
-            else if (publicationDateTime) {
+            else if (!_.isUndefined(publicationDateTime) && status === "publication") {
                 dateTime = publicationDateTime;
             }
-            return moment(dateTime).format("DD.MM.YYYY");
+
+            return !_.isUndefined(dateTime) ? moment(dateTime).format("DD.MM.YYYY") : null;
         },
 
         parsePeriodicity: function (xmlDoc) {
