@@ -418,6 +418,7 @@
       },
       {
         "id": "5708",
+        "visibility": false,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
