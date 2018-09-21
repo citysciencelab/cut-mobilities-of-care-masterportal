@@ -70,10 +70,10 @@ define(function (require) {
         },
         checkInput: function () {
             if (this.model.get("districtNumber") !== "0" &&
-                (this.model.get("cadastralDistrictField") === false || this.model.getCadastralDistrictNumber() !== "0") &&
+                (this.model.get("cadastralDistrictField") === false || this.model.get("cadastralDistrictNumber") !== "0") &&
                 this.model.get("parcelNumber") !== "" &&
                 _.isNumber(parseInt(this.model.get("parcelNumber"), 10)) &&
-                (this.model.get("parcelDenominatorField") === false || this.model.getParcelDenominatorNumber() !== "")) {
+                (this.model.get("parcelDenominatorField") === false || this.model.get("ParcelDenominatorNumber") !== "")) {
                 this.$("#submitbutton").attr("disabled", false);
                 this.$("#reportbutton").attr("disabled", false);
             }

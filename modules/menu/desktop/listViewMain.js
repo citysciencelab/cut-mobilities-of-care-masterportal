@@ -25,7 +25,7 @@ define(function (require) {
         },
         renderTopMenu: function () {
             var models = this.collection.filter(function (model) {
-                return model.get("type") === "tool" || model.get("type") === "staticlink" || model.get("type") === "folder" || model.getType() === "viewpoint";
+                return model.get("type") === "tool" || model.get("type") === "staticlink" || model.get("type") === "folder" || model.get("type") === "viewpoint";
             });
 
             this.parseViews(models);

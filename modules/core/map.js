@@ -4,6 +4,7 @@ define(function (require) {
         MapView = require("modules/core/mapView"),
         Cesium = require("cesium"),
         $ = require("jquery"),
+        Config = require("config"),
         Map;
 
     Map = Backbone.Model.extend({
@@ -136,7 +137,7 @@ define(function (require) {
         createMap3d: function () {
             var map3d = new olcs.OLCesium(
                 {
-                    map: this.getMap(),
+                    map: this.get("map"),
                     stopOpenLayersEventsPropagation: true,
                     createSynchronizers: function (map, scene) {
                         return [new olcs.WMSRasterSynchronizer(map, scene), new olcs.VectorSynchronizer(map, scene), new olcs.OverlaySynchronizer(map, scene)];

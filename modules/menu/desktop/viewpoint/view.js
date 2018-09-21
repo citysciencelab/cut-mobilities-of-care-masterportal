@@ -19,7 +19,8 @@ define(function (require) {
         },
         render: function () {
             var attr = this.model.toJSON();
-            $("#" + this.model.getParentId()).append(this.$el.html(this.template(attr)));
+
+            $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         },
 
         /**
@@ -27,7 +28,7 @@ define(function (require) {
          * bekommt die View eine andere CSS-Klasse zugeordent
          */
         setCssClass: function () {
-            if (this.model.getParentId() === "root") {
+            if (this.model.get("parentId") === "root") {
                 this.$el.addClass("viewpoint-style");
                 this.$el.find("span").addClass("hidden-sm");
             }

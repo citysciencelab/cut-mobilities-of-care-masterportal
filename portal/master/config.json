@@ -31,6 +31,13 @@
         "filter": "filter=(typ:*)",
         "score": 0.6
       },
+      "osm": {
+        "minChars": 3,
+        "serviceId": "10",
+        "limit": 60,
+        "states": "Hamburg",
+        "classes": "place,highway,building,shop,historic,leisure"
+      },
       "specialWFS":
       {
         "minChars": 3,
@@ -432,7 +439,7 @@
       {
         "id": "2003",
         "styleId": "2003",
-        "mouseHoverField": "GEBIETSNAME"
+        "mouseHoverField": "gebietsname"
       },
       {
         "id": "2714",

@@ -141,6 +141,11 @@ define(function (require) {
                     Radio.trigger("Map", "zoomToExtent", coord, {maxZoom: index});
                     break;
                 }
+                case "Schulstandorte": {
+                    this.showMarker(coord);
+                    Radio.trigger("MapView", "setCenter", coord, 6);
+                    break;
+                }
                 // Features
                 default: {
                     if (coord.length === 2) {
