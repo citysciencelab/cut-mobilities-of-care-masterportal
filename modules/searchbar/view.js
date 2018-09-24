@@ -40,8 +40,10 @@ define(function (require) {
 
         initialize: function (config) {
             this.model = new Searchbar(config);
+
             if (config.renderToDOM) {
                 this.setElement(config.renderToDOM);
+                this.render();
             }
 
             this.className = "navbar-form col-xs-9";

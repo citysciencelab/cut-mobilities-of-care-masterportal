@@ -27,7 +27,7 @@ define(function (require) {
             });
 
             if (this.model.has("renderToDOM")) {
-                this.setElement(this.get("renderToDOM"));
+                this.setElement(this.model.get("renderToDOM"));
                 this.listenTo(this.model, {
                     "change:fetched": function () {
                         this.render2DOM();
