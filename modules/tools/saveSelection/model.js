@@ -9,7 +9,7 @@ define(function (require) {
             centerCoords: [],
             layerIDList: [],
             layerVisibilityList: [],
-            layerTranseparenceList: [],
+            layerTransparencyList: [],
             url: "",
             simpleMap: false
         },
@@ -150,7 +150,7 @@ define(function (require) {
 
             url += "?layerIDs=" + this.get("layerIdList");
             url += "&visibility=" + this.get("layerVisibilityList");
-            url += "&transparency=" + this.get("layertransparencyList");
+            url += "&transparency=" + this.get("layerTransparencyList");
             url += "&center=" + this.get("centerCoords");
             url += "&zoomlevel=" + this.get("zoomLevel");
             url += "&map=" + this.get("mapMode");
