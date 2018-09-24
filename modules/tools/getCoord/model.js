@@ -16,6 +16,11 @@ define(function (require) {
         }),
         initialize: function () {
             this.superInitialize();
+            this.listenTo(this, {
+                "change:isActive": function () {
+                    Radio.trigger("MapMarker", "hideMarker");
+                }
+            });
         },
 
         createInteraction: function () {
