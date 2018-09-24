@@ -24,7 +24,7 @@ define(function (require) {
             isActive: false,
             // deaktiviert GFI, wenn dieses tool geöffnet wird
             deaktivateGFI: true,
-            supportedIn3d: ["coord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure"],
+            supportedIn3d: ["coord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"],
             // Tools die in die Sidebar und nicht in das Fenster sollen
             toolsToRenderInSidebar: ["filter", "schulwegrouting"]
         },
