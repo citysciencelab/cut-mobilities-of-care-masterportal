@@ -383,6 +383,11 @@
     "Fachdaten":
     {
       "Layer": [
+        {
+          "id": "4026",
+          "styleId": "999999",
+          "visibility": true
+        },
       {
         "id": "8194"
       },
