@@ -106,17 +106,19 @@ define(function (require) {
                 style: this.getStyle(drawType.text)
             }));
             this.get("drawInteraction").on("drawend", function (evt) {
-                evt.feature.set("styleId", evt.feature.ol_uid);
+                evt.feature.set("styleId", _.uniqueId());
                 evt.feature.setStyle(this.getStyle(drawType.text));
             }, this);
             Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
         },
 
         getStyle: function (arg) {
+            var color = [this.get("color")[0], this.get("color")[1], this.get("color")[2], this.get("color")[3]];
+
             if (arg === "Text schreiben") {
                 return this.getTextStyle(this.get("color"));
             }
-            return this.getDrawStyle(this.get("color"), this.get("drawType").geometry);
+            return this.getDrawStyle(color, this.get("drawType").geometry);
         },
 
         /**
