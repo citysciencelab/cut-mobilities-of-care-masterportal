@@ -36,8 +36,6 @@ define(function (require) {
         },
 
         changedPosition: function () {
-            console.log(3);
-            
             var targetProjectionName = this.$("#coordSystemField option:selected").val(),
                 position = this.model.returnTransformedPosition(targetProjectionName),
                 targetProjection = this.model.returnProjectionByName(targetProjectionName);
@@ -50,8 +48,6 @@ define(function (require) {
         },
 
         adjustPosition: function (position, targetProjection) {
-            console.log(2);
-            
             var coord, easting, northing;
 
             // geographische Koordinaten
@@ -85,8 +81,6 @@ define(function (require) {
         },
 
         copyToClipboard: function (evt) {
-            console.log(1);
-            
             Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
         }
     });
