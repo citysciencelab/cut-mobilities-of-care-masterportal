@@ -88,24 +88,19 @@ define(function (require) {
                 gfiFormat,
                 pgfi = [],
                 gfiFeatures,
-                dat = data;
-
-            // handle non text/xml responses arriving as string
-            if (_.isString(dat)) {
-                dat = $.parseXML(dat);
-            }
+                dat = _.isString(data) ? $.parseXML(data) : data; // handle non text/xml responses arriving as string
 
             // parse result, try built-in Ol-format first
             gfiFormat = new ol.format.WMSGetFeatureInfo();
             // das reverse wird fürs Planportal gebraucht SD 18.01.2016
-            gfiFeatures = gfiFormat.readFeatures(data, {
+            gfiFeatures = gfiFormat.readFeatures(dat, {
                 dataProjection: Config.view.proj
             }).reverse();
 
             // ESRI is not parsed by the Ol-format
             if (_.isEmpty(gfiFeatures)) {
-                if (data.getElementsByTagName("FIELDS")[0] !== undefined) {
-                    _.each(data.getElementsByTagName("FIELDS"), function (element) {
+                if (dat.getElementsByTagName("FIELDS")[0] !== undefined) {
+                    _.each(dat.getElementsByTagName("FIELDS"), function (element) {
                         var gfi = {};
 
                         _.each(element.attributes, function (attribute) {
