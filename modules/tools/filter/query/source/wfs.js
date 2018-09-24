@@ -1,5 +1,5 @@
 import QueryModel from "../model";
-import intersects from "ol/extent.js";
+import {intersects} from "ol/extent.js";
 
 const WfsQueryModel = QueryModel.extend({
     initialize: function () {
@@ -7,7 +7,7 @@ const WfsQueryModel = QueryModel.extend({
         this.prepareQuery();
 
         if (this.get("searchInMapExtent") === true) {
-            Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive, this);
+            Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive.bind(this), this);
         }
     },
     /**
