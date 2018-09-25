@@ -133,15 +133,13 @@ const MapView = Backbone.Model.extend({
         this.setView();
 
         // Listener für ol.View
-        this.get("view").on("change:resolution", this.cbChangeResolution.bind(this));
+        this.get("view").on("change:resolution", this.cbChangedResolution.bind(this));
         this.get("view").on("change:center", function () {
-            // console.log(this);
-            // this.set("center", this.get("view").getCenter());
-            channel.trigger("changedCenter", this.getCenter());
-        }, this);
+            Radio.trigger("MapView", "changedCenter", this.getCenter());
+        });
     },
 
-    cbChangeResolution: function (evt) {
+    cbChangedResolution: function (evt) {
         var mapView = evt.target,
             constrainResolution = mapView.constrainResolution(mapView.getResolution()),
             params = _.findWhere(this.get("options"), {resolution: constrainResolution});
@@ -282,10 +280,6 @@ const MapView = Backbone.Model.extend({
 
     setZoomLevels: function () {
         this.set("zoomLevels", _.pluck(this.get("options"), "zoomLevel"));
-    },
-
-    setResolution: function (val) {
-        this.set("resolution", val);
     },
 
     // setter for extent
