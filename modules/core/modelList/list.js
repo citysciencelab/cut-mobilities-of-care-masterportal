@@ -313,7 +313,7 @@ define(function (require) {
         */
         setIsSelectedOnChildLayers: function (model, sort) {
             var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")})),
-                sortLayers = sort ? this.sortLayers(layers, "layers").reverse() : layers;
+                sortLayers = sort ? this.sortLayers(layers, "name").reverse() : layers;
 
             _.each(sortLayers, function (layer) {
                 layer.setIsSelected(model.get("isSelected"));
