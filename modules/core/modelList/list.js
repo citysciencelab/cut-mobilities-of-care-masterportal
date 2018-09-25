@@ -7,32 +7,32 @@ import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
-// import StaticLink from "./staticlink/model";
-// import Legend from "../../legend/model";
-// import Filter from "../../tools/filter/model";
-// import PrintV2 from "../../tools/print_/model";
-// import Print from "../../tools/print/model";
-// import Measure from "../../tools/measure/model";
-// import Draw from "../../tools/draw/model";
-// import Animation from "../../tools/animation/model";
-// import Contact from "../../contact/model";
-// import SearchByCoord from "../../tools/searchByCoord/model";
-// import SaveSelection from "../../tools/saveSelection/model";
-// import KmlImport from "../../tools/kmlimport/model";
-// import Routing from "../../tools/viomRouting/model";
-// import WfsFeatureFilter from "../../wfsfeaturefilter/model";
-// import TreeFilter from "../../treefilter/model";
-// import ExtendedFilter from "../../tools/extendedFilter/model";
-// import Formular from "../../formular/grenznachweis";
-// import FeatureLister from "../../featureLister/model";
-// import AddWms from "../../tools/addwms/model";
-// import GetCoord from "../../tools/getCoord/model";
-// import Schulwegrouting from "../../tools/schulwegRouting_hh/model";
-// import CompareFeatures from "../../tools/compareFeatures/model";
-// import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
-// import ParcelSearch from "../../tools/parcelSearch/model";
-// import StyleWMS from "../../tools/styleWMS/model";
-// import LayersliderModel from "../../tools/layerslider/model";
+import StaticLink from "./staticlink/model";
+import Legend from "../../legend/model";
+import Filter from "../../tools/filter/model";
+import PrintV2 from "../../tools/print_/model";
+import Print from "../../tools/print/model";
+import Measure from "../../tools/measure/model";
+import Draw from "../../tools/draw/model";
+import Animation from "../../tools/animation/model";
+import Contact from "../../contact/model";
+import SearchByCoord from "../../tools/searchByCoord/model";
+import SaveSelection from "../../tools/saveSelection/model";
+import KmlImport from "../../tools/kmlimport/model";
+import Routing from "../../tools/viomRouting/model";
+import WfsFeatureFilter from "../../wfsfeaturefilter/model";
+import TreeFilter from "../../treefilter/model";
+import ExtendedFilter from "../../tools/extendedFilter/model";
+import Formular from "../../formular/grenznachweis";
+import FeatureLister from "../../featureLister/model";
+import AddWms from "../../tools/addwms/model";
+import GetCoord from "../../tools/getCoord/model";
+import Schulwegrouting from "../../tools/schulwegRouting_hh/model";
+import CompareFeatures from "../../tools/compareFeatures/model";
+import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
+import ParcelSearch from "../../tools/parcelSearch/model";
+import StyleWMS from "../../tools/styleWMS/model";
+import LayersliderModel from "../../tools/layerslider/model";
 
 const ModelList = Backbone.Collection.extend({
     initialize: function () {
@@ -126,87 +126,87 @@ const ModelList = Backbone.Collection.extend({
         else if (attrs.type === "folder") {
             return new Folder(attrs, options);
         }
-        // else if (attrs.type === "tool") {
-        //     if (attrs.id === "print") {
-        //         if (attrs.version === undefined) {
-        //             return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
-        //         }
-        //         return new PrintV2(attrs, options);
-        //     }
-        //     else if (attrs.id === "parcelSearch") {
-        //         return new ParcelSearch(attrs, options);
-        //     }
-        //     else if (attrs.id === "styleWMS") {
-        //         return new StyleWMS(attrs, options);
-        //     }
-        //     else if (attrs.id === "compareFeatures") {
-        //         return new CompareFeatures(attrs, options);
-        //     }
-        //     else if (attrs.id === "einwohnerabfrage") {
-        //         return new Einwohnerabfrage_HH(attrs, options);
-        //     }
-        //     else if (attrs.id === "legend") {
-        //         return new Legend(attrs, options);
-        //     }
-        //     else if (attrs.id === "schulwegrouting") {
-        //         return new Schulwegrouting(attrs, options);
-        //     }
-        //     else if (attrs.id === "filter") {
-        //         return new Filter(attrs, options);
-        //     }
-        //     else if (attrs.id === "coord") {
-        //         return new GetCoord(attrs, options);
-        //     }
-        //     else if (attrs.id === "measure") {
-        //         return new Measure(_.extend(attrs, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}), options);
-        //     }
-        //     else if (attrs.id === "draw") {
-        //         return new Draw(attrs, options);
-        //     }
-        //     else if (attrs.id === "searchByCoord") {
-        //         return new SearchByCoord(attrs, options);
-        //     }
-        //     else if (attrs.id === "saveSelection") {
-        //         return new SaveSelection(_.extend(attrs, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
-        //     }
-        //     else if (attrs.id === "animation") {
-        //         return new Animation(attrs, options);
-        //     }
-        //     else if (attrs.id === "routing") {
-        //         return new Routing(attrs, options);
-        //     }
-        //     else if (attrs.id === "addWMS") {
-        //         return new AddWms(attrs, options);
-        //     }
-        //     else if (attrs.id === "treeFilter") {
-        //         return new TreeFilter(_.extend(attrs, _.has(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);
-        //     }
-        //     else if (attrs.id === "contact") {
-        //         return new Contact(attrs, options);
-        //     }
-        //     else if (attrs.id === "wfsFeatureFilter") {
-        //         return new WfsFeatureFilter(attrs, options);
-        //     }
-        //     else if (attrs.id === "extendedFilter") {
-        //         return new ExtendedFilter(_.extend(attrs, _.has(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
-        //     }
-        //     else if (attrs.id === "featureLister") {
-        //         return new FeatureLister(attrs, options);
-        //     }
-        //     else if (attrs.id === "kmlimport") {
-        //         return new KmlImport(attrs, options);
-        //     }
-        //     else if (attrs.id === "formular") {
-        //         return new Formular(attrs, options);
-        //     }
-        //     else if (attrs.id === "layerslider") {
-        //         return new LayersliderModel(attrs, options);
-        //     }
-        //     return new Tool(attrs, options);
-        // }
-        // else if (attrs.type === "staticlink") {
-        //     return new StaticLink(attrs, options);
-        // }
+        else if (attrs.type === "tool") {
+            if (attrs.id === "print") {
+                if (attrs.version === undefined) {
+                    return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                }
+                return new PrintV2(attrs, options);
+            }
+            if (attrs.id === "parcelSearch") {
+                return new ParcelSearch(attrs, options);
+            }
+            else if (attrs.id === "styleWMS") {
+                return new StyleWMS(attrs, options);
+            }
+            else if (attrs.id === "compareFeatures") {
+                return new CompareFeatures(attrs, options);
+            }
+            else if (attrs.id === "einwohnerabfrage") {
+                return new Einwohnerabfrage_HH(attrs, options);
+            }
+            else if (attrs.id === "legend") {
+                return new Legend(attrs, options);
+            }
+            else if (attrs.id === "schulwegrouting") {
+                return new Schulwegrouting(attrs, options);
+            }
+            else if (attrs.id === "filter") {
+                return new Filter(attrs, options);
+            }
+            else if (attrs.id === "coord") {
+                return new GetCoord(attrs, options);
+            }
+            else if (attrs.id === "measure") {
+                return new Measure(_.extend(attrs, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}), options);
+            }
+            else if (attrs.id === "draw") {
+                return new Draw(attrs, options);
+            }
+            else if (attrs.id === "searchByCoord") {
+                return new SearchByCoord(attrs, options);
+            }
+            else if (attrs.id === "saveSelection") {
+                return new SaveSelection(_.extend(attrs, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
+            }
+            else if (attrs.id === "animation") {
+                return new Animation(attrs, options);
+            }
+            else if (attrs.id === "routing") {
+                return new Routing(attrs, options);
+            }
+            else if (attrs.id === "addWMS") {
+                return new AddWms(attrs, options);
+            }
+            else if (attrs.id === "treeFilter") {
+                return new TreeFilter(_.extend(attrs, _.has(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);
+            }
+            else if (attrs.id === "contact") {
+                return new Contact(attrs, options);
+            }
+            else if (attrs.id === "wfsFeatureFilter") {
+                return new WfsFeatureFilter(attrs, options);
+            }
+            else if (attrs.id === "extendedFilter") {
+                return new ExtendedFilter(_.extend(attrs, _.has(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
+            }
+            else if (attrs.id === "featureLister") {
+                return new FeatureLister(attrs, options);
+            }
+            else if (attrs.id === "kmlimport") {
+                return new KmlImport(attrs, options);
+            }
+            else if (attrs.id === "formular") {
+                return new Formular(attrs, options);
+            }
+            else if (attrs.id === "layerslider") {
+                return new LayersliderModel(attrs, options);
+            }
+            return new Tool(attrs, options);
+        }
+        else if (attrs.type === "staticlink") {
+            return new StaticLink(attrs, options);
+        }
         else {
             Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + attrs.type + ". Bitte wenden Sie sich an einen Administrator!");
         }
