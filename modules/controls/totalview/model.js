@@ -1,25 +1,18 @@
-define(function (require) {
-    var Radio = require("backbone.radio"),
-        TotalviewmapModel;
+const TotalviewmapModel = Backbone.Model.extend({
+    defaults: {
+        startCenter: Radio.request("MapView", "getCenter"),
+        zoomLevel: Radio.request("MapView", "getZoomLevel")
+    },
 
-    require("modules/core/mapView");
+    // setter for startCenter
+    setStartCenter: function (value) {
+        this.set("startCenter", value);
+    },
 
-    TotalviewmapModel = Backbone.Model.extend({
-        defaults: {
-            startCenter: Radio.request("MapView", "getCenter"),
-            zoomLevel: Radio.request("MapView", "getZoomLevel")
-        },
-
-        // setter for startCenter
-        setStartCenter: function (value) {
-            this.set("startCenter", value);
-        },
-
-        // setter for zoomLevel
-        setZoomLevel: function (value) {
-            this.set("zoomLevel", value);
-        }
-    });
-
-    return TotalviewmapModel;
+    // setter for zoomLevel
+    setZoomLevel: function (value) {
+        this.set("zoomLevel", value);
+    }
 });
+
+export default TotalviewmapModel;
