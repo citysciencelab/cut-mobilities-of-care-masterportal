@@ -16,7 +16,8 @@ const Layer = Item.extend({
         selectionIDX: 0,
         layerInfoClicked: false,
         minScale: "0",
-        maxScale: "1000000"
+        maxScale: "1000000",
+        legendURL: ""
     },
 
     initialize: function () {

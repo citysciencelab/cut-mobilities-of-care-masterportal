@@ -31,6 +31,13 @@
         "filter": "filter=(typ:*)",
         "score": 0.6
       },
+      "osm": {
+        "minChars": 3,
+        "serviceId": "10",
+        "limit": 60,
+        "states": "Hamburg",
+        "classes": "place,highway,building,shop,historic,leisure"
+      },
       "specialWFS":
       {
         "minChars": 3,
@@ -157,7 +164,7 @@
             }
           ]
       },
-      "tools": 
+      "tools":
       {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
@@ -411,6 +418,7 @@
       },
       {
         "id": "5708",
+        "visibility": false,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
@@ -420,6 +428,11 @@
       {
         "id": "2003",
         "styleId": "2003",
+        "mouseHoverField": "gebietsname"
+      },
+      {
+        "id": "47",
+        "styleId": "47",
         "mouseHoverField": "GEBIETSNAME"
       },
       {

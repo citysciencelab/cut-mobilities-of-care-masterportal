@@ -24,7 +24,7 @@ const ParcelSearchView = Backbone.View.extend({
         });
 
         if (this.model.has("renderToDOM")) {
-            this.setElement(this.get("renderToDOM"));
+            this.setElement(this.model.get("renderToDOM"));
             this.listenTo(this.model, {
                 "change:fetched": function () {
                     this.render2DOM();
@@ -36,6 +36,8 @@ const ParcelSearchView = Backbone.View.extend({
                 "change:isActive": this.render2Window
             });
         }
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     template: _.template(ParcelSearchTemplate),
     /*

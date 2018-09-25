@@ -27,7 +27,7 @@ const WFSStyle = Backbone.Model.extend({
         "circleStrokeWidth": 2,
         // Für Label
         "textAlign": "left",
-        "textFont": "Courier",
+        "textFont": "10px sans-serif",
         "textScale": 1,
         "textOffsetX": 0,
         "textOffsetY": 0,

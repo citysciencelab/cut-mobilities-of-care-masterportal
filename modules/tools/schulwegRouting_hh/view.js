@@ -15,8 +15,10 @@ const SchulwegRoutingView = Backbone.View.extend({
             evt.stopPropagation();
         },
         "click li.address": function (evt) {
+            var address = evt.target.textContent;
+
             this.setAddressSearchValue(evt, false);
-            this.model.selectStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
+            this.model.selectStartAddress(address, this.model.get("addressListFiltered"));
             this.model.findRegionalSchool(this.model.get("startAddress"));
             this.model.prepareRequest(this.model.get("startAddress"));
         },
@@ -68,6 +70,8 @@ const SchulwegRoutingView = Backbone.View.extend({
                 this.render();
             }
         });
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     className: "schulweg-routing",
     template: _.template(template),
@@ -172,20 +176,24 @@ const SchulwegRoutingView = Backbone.View.extend({
     },
 
     setAddressSearchValue: function (evt, searchHouseNumber) {
-        this.$el.find(".address-search").val(evt.target.textContent);
+        var address = evt.target.textContent;
+
+        this.$el.find(".address-search").val(address);
         if (searchHouseNumber) {
-            this.model.setStreetNameList([evt.target.textContent]);
-            this.model.searchHouseNumbers(evt.target.textContent);
+            this.model.setStreetNameList([address]);
+            this.model.searchHouseNumbers(address);
         }
         else {
-            this.model.searchAddress(evt.target.textContent);
+            this.model.searchAddress(address);
         }
     },
     closeView: function () {
         this.model.setIsActive(false);
     },
     selectSchool: function (evt) {
-        this.model.selectSchool(this.model.get("schoolList"), evt.target.value);
+        var schoolname = evt.target.value;
+
+        this.model.selectSchool(this.model.get("schoolList"), schoolname);
         this.model.prepareRequest(this.model.get("startAddress"));
     },
     updateSelectedSchool: function (schoolId) {

@@ -22,10 +22,13 @@ const FeatureLister = Backbone.View.extend({
                 this.updateLayerHeader();
             },
             "change:featureProps": this.showFeatureProps,
-            "gfiHit": this.selectGFIHit.bind(this),
+            "gfiHit": this.selectGFIHit,
             "gfiClose": this.deselectGFIHit,
             "switchTabToTheme": this.switchTabToTheme
         });
+
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
 
         this.render();
     },
@@ -37,7 +40,7 @@ const FeatureLister = Backbone.View.extend({
     deselectGFIHit: function () {
         this.$("#featurelist-list-table tr").each(function (inte, tr) {
             this.$(tr).removeClass("info");
-        }, this);
+        });
     },
     /*
     * Wenn im Model ein GFI empfangen wurde, wird dieses in der Liste gesucht und ggf. gehighlighted.
@@ -52,7 +55,7 @@ const FeatureLister = Backbone.View.extend({
             if (trId === gesuchteId) {
                 this.$(tr).addClass("info");
             }
-        }, this);
+        });
     },
     /*
     * Findet das Spanelement der Spalte, die geklickt wurde. Liest dann die derzeit dargestellten Features aus und sortiert diese. Leert die aktuelle (unsortierte) Tabelle

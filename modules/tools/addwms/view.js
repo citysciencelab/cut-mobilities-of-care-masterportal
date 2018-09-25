@@ -18,6 +18,8 @@ const AddWMSView = Backbone.View.extend({
             "change:wmsURL": this.urlChange,
             "change:isActive": this.render
         });
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     template: _.template(AddWMSWin),
     // Löst das laden und einfügen der Layer in den Baum aus

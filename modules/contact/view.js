@@ -14,6 +14,8 @@ const formularView = Backbone.View.extend({
             "change:isActive": this.render,
             "invalid": this.showValidity
         });
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     render: function (model, value) {
         if (value) {

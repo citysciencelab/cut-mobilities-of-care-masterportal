@@ -29,6 +29,8 @@ const CompareFeaturesView = Backbone.View.extend({
             "renderFeedbackModal": this.renderFeedbackModal
         });
         document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
 
     /**
@@ -143,5 +145,6 @@ const CompareFeaturesView = Backbone.View.extend({
         this.model.setIsActive(true);
     }
 });
+
 
 export default CompareFeaturesView;

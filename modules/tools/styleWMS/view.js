@@ -39,12 +39,13 @@ const StyleWMSView = Backbone.View.extend({
             // Liefert die validate Methode Error Meldungen zurück, werden diese angezeigt
             "invalid": this.showErrorMessages
         });
-
         // Erzeuge die initiale Layer-Liste (für den Light-Modus in dem Fall wichtig, in dem stylebare
         // Layer initial sichtbar sind. Im custom-Modus wird dies an andere Stelle getriggert.)
         if (Radio.request("Parser", "getTreeType") === "light") {
             this.model.refreshStyleableLayerList();
         }
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     className: "wmsStyle-window",
     template: _.template(StyleWMSTemplate),

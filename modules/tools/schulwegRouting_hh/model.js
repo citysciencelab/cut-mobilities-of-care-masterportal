@@ -311,13 +311,16 @@ const SchulwegRouting = Tool.extend({
     },
     parseRegionalSchool: function (xml) {
         var schoolId,
-            school;
+            school,
+            primarySchool = $(xml).find("gages\\:grundschulnr,grundschulnr"),
+            schoolWithAdress;
 
-        if ($(xml).find("gages\\:grundschulnr").length > 0) {
-            schoolId = $(xml).find("gages\\:grundschulnr")[0].textContent + "-0";
+        if (primarySchool.length > 0) {
+            schoolId = primarySchool[0].textContent + "-0";
             school = this.filterSchoolById(this.get("schoolList"), schoolId);
             this.setRegionalSchool(school);
-            this.trigger("updateRegionalSchool", school.get("schulname"));
+            schoolWithAdress = school.get("schulname") + ", " + school.get("adresse_strasse_hausnr") + ", " + school.get("adresse_ort");
+            this.trigger("updateRegionalSchool", schoolWithAdress);
         }
         else {
             this.setRegionalSchool({});

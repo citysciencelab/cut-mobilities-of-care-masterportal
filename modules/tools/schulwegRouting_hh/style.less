@@ -1,94 +1,99 @@
-.schulweg-routing .header {
-    width: 100%;
-    border-bottom: 1px solid rgb(229,229,229);
-    padding: 10px;
-}
+@font_family_1: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+@background_color_1: #e3e3e3;
+@background_color_2: rgb(229, 229, 229);
 
-.schulweg-routing .tool-name {
-    padding-left: 15px;
-    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    font-size: 16px;
+.schulweg-routing {
+    .header {
+        width: 100%;
+        border-bottom: 1px solid rgb(229,229,229);
+        padding: 10px;
+    }
+    .tool-name {
+        padding-left: 15px;
+        font-family: @font_family_1;
+        font-size: 16px;
+    }
+    .content {
+        padding-top: 20px;
+        .form-group {
+            margin-bottom: 25px;
+            >label {
+                float: left;
+                width: 75%;
+            }
+        }
+        .checkbox-container {
+            margin-bottom: 20px;
+        }
+    }
+    #regional-school {
+        cursor: pointer;
+    }
+    .title-checkbox {
+        >label {
+            padding-left: 0;
+        }
+    }
+    .toggle {
+        float: right;
+    }
+    .bootstrap-select {
+        .dropdown-menu {
+            right: 0;
+            left: null;
+        }
+    }
+    .hit-list {
+        z-index: 3;
+        padding-left: 15px;
+        li {
+            &:first-child {
+                border-top: 0;
+            }
+            &:hover {
+                cursor: pointer;
+                background-color: @background_color_1;
+            }
+        }
+    }
+    .description {
+        button {
+            margin: 20px 0;
+        }
+    }
+    .result {
+        background-color: @background_color_2;
+        p {
+            &:first-child {
+                padding-top: 20px;
+            }
+            &:last-child {
+                padding-bottom: 20px;
+            }
+        }
+    }
+    .route-container {
+        span {
+            font-family: @font_family_1;
+            font-size: 15px;
+        }
+    }
 }
-
-.schulweg-routing .content {
-    padding-top: 20px;
+.description {
+    ol {
+        padding-left: 15px;
+    }
+    li {
+        padding-bottom: 5px;
+    }
 }
-
-.schulweg-routing #regional-school {
-    cursor: pointer;
-}
-
-.schulweg-routing .content .form-group {
-    margin-bottom: 25px;
-}
-.schulweg-routing .content .form-group > label {
-    float: left;
-    width: 75%;
-}
-
-.schulweg-routing .content .checkbox-container {
-    /* clear: both; */
-    /* margin-top: 0; */
-    margin-bottom: 20px;
-}
-
-.schulweg-routing .title-checkbox > label {
-    padding-left: 0;
-}
-
-.schulweg-routing .toggle {
-    float: right;
-}
-
-.schulweg-routing .bootstrap-select .dropdown-menu {
-    right: 0;
-    left: null;
-}
-
-.schulweg-routing .hit-list {
-    z-index: 3;
-    padding-left: 15px;
-}
-
-.schulweg-routing .hit-list li:first-child {
-    border-top: 0;
-}
-
-.schulweg-routing .hit-list li:hover {
-    cursor: pointer;
-    background-color: #e3e3e3;
-}
-
-.description ol {
-    padding-left: 15px;
-}
-
-.description li {
-    padding-bottom: 5px;
-}
-
-.schulweg-routing .description button {
-    margin: 20px 0;
-}
-.schulweg-routing .result {
-    background-color: rgb(229, 229, 229);
-}
-
-.schulweg-routing .result p:first-child{
-    padding-top: 20px;
-}
-
-.schulweg-routing .result p:last-child{
-    padding-bottom: 20px;
-}
-
-.schulweg-routing .route-container span {
-    font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-    font-size: 15px;
-}
-
 @media (max-width: 767px) {
-    .schulweg-routing ol, .schulweg-routing label {
-        font-size: 14px;
+    .schulweg-routing {
+        ol {
+            font-size: 14px;
+        }
+        label {
+            font-size: 14px;
+        }
     }
 }

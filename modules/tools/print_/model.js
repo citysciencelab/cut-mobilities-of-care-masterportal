@@ -152,7 +152,6 @@ const PrintModel = Tool.extend({
         }
         spec = spec.toJSON();
         spec = _.omit(spec, "uniqueIdList");
-
         this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
     },
 
@@ -199,10 +198,10 @@ const PrintModel = Tool.extend({
      */
     togglePostcomposeListener: function (model, value) {
         if (value && model.get("layoutList").length !== 0) {
-            Radio.trigger("Map", "registerListener", "postcompose", this.createPrintMask.bind(this), this);
+            Radio.trigger("Map", "registerListener", "postcompose", this.createPrintMask, this);
         }
         else {
-            Radio.trigger("Map", "unregisterListener", "postcompose", this.createPrintMask.bind(this), this);
+            Radio.trigger("Map", "unregisterListener", "postcompose", this.createPrintMask, this);
         }
         Radio.trigger("Map", "render");
     },
@@ -381,7 +380,7 @@ const PrintModel = Tool.extend({
      */
     sendRequest: function (serviceUrl, requestType, successCallback, data) {
         $.ajax({
-            url: serviceUrl,
+            url: Radio.request("Util", "getProxyURL", serviceUrl),
             type: requestType,
             data: data,
             context: this,

@@ -42,6 +42,8 @@ const FilterView = Backbone.View.extend({
             }
             this.render();
         }
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     id: "filter-view",
     template: _.template(Template),

@@ -40,11 +40,13 @@ const SearchbarView = Backbone.View.extend({
         }
     },
 
-    initialize: function (config) {
-        this.model = new Searchbar(config);
-        if (config.renderToDOM) {
-            this.setElement(config.renderToDOM);
-        }
+        initialize: function (config) {
+            this.model = new Searchbar(config);
+
+            if (config.renderToDOM) {
+                this.setElement(config.renderToDOM);
+                this.render();
+            }
 
         this.className = "navbar-form col-xs-9";
 

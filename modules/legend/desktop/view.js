@@ -28,9 +28,8 @@ const LegendView = Backbone.View.extend({
         this.listenTo(Radio.channel("Map"), {
             "updateSize": this.updateLegendSize
         });
-        if (this.model.get("isActive")) {
-            this.show();
-        }
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     className: "legend-win",
     template: _.template(LegendTemplate),

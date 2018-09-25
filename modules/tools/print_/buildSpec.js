@@ -90,22 +90,22 @@ const BuildSpecModel = Backbone.Model.extend({
      */
     buildTileWms: function (layer) {
         var source = layer.getSource(),
-            customParams = {
-                "TRANSPARENT": "true"
+            mapObject = {
+                baseURL: source.getUrls()[0],
+                opacity: layer.getOpacity(),
+                type: "WMS",
+                layers: source.getParams().LAYERS.split(","),
+                imageFormat: source.getParams().FORMAT,
+                customParams: {
+                    "TRANSPARENT": "true"
+                }
             };
 
-        // if (_.has(source.getParams(), "SLD_BODY")) {
-        //     customParams.SLD_BODY = encodeURIComponent(source.getParams().SLD_BODY);
-        //     customParams.STYLES = "style";
-        // }
-        return {
-            baseURL: source.getUrls()[0],
-            opacity: layer.getOpacity(),
-            type: "WMS",
-            layers: source.getParams().LAYERS.split(","),
-            imageFormat: source.getParams().FORMAT,
-            customParams: customParams
-        };
+        if (_.has(source.getParams(), "SLD_BODY")) {
+            mapObject.customParams.SLD_BODY = source.getParams().SLD_BODY;
+            mapObject.styles = ["style"];
+        }
+        return mapObject;
     },
 
     /**
@@ -114,24 +114,25 @@ const BuildSpecModel = Backbone.Model.extend({
      * @returns {object} wms layer spec
      */
     buildImageWms: function (layer) {
-        var source = layer.getSource();
+        var source = layer.getSource(),
+            mapObject = {
+                baseURL: source.getUrl(),
+                opacity: layer.getOpacity(),
+                type: "WMS",
+                layers: source.getParams().LAYERS.split(","),
+                imageFormat: source.getParams().FORMAT,
+                customParams: {
+                    "TRANSPARENT": "true"
+                }
+            };
 
-        return {
-            baseURL: source.getUrl(),
-            opacity: layer.getOpacity(),
-            type: "WMS",
-            layers: source.getParams().LAYERS.split(","),
-            imageFormat: source.getParams().FORMAT,
-            customParams: {
-                "TRANSPARENT": "true"
-            }
-        };
+        return mapObject;
     },
 
     /**
      * returns vector layer information
      * @param {ol.layer.Vector} layer - vector layer with vector source
-     * @param {ol.features} features - ol features
+     * @param {[ol.feature]} features vectorfeatures
      * @returns {object} geojson layer spec
     */
     buildVector: function (layer, features) {
@@ -157,7 +158,7 @@ const BuildSpecModel = Backbone.Model.extend({
 
             if (style !== null) {
                 this.addFeatureToGeoJsonList(feature, geojsonList);
-                stylingRule = this.getStylingRule(feature, styleAttribute);
+                stylingRule = this.getStylingRule(layer, feature, styleAttribute);
                 // do nothing if we already have a style object for this CQL rule
                 if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
                     return;
@@ -166,16 +167,20 @@ const BuildSpecModel = Backbone.Model.extend({
                     symbolizers: []
                 };
                 if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
-                    styleObject.symbolizers.push(this.buildPointStyle(style));
+                    styleObject.symbolizers.push(this.buildPointStyle(style, layer));
                 }
                 else if (feature.getGeometry().getType() === "Polygon" || feature.getGeometry().getType() === "MultiPolygon") {
-                    styleObject.symbolizers.push(this.buildPolygonStyle(style));
+                    styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                 }
                 else if (feature.getGeometry().getType() === "Circle") {
-                    styleObject.symbolizers.push(this.buildPolygonStyle(style));
+                    styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                 }
                 else if (feature.getGeometry().getType() === "LineString" || feature.getGeometry().getType() === "MultiLineString") {
-                    styleObject.symbolizers.push(this.buildLineStringStyle(style));
+                    styleObject.symbolizers.push(this.buildLineStringStyle(style, layer));
+                }
+                // label styling
+                if (style.getText() !== null && style.getText() !== undefined) {
+                    styleObject.symbolizers.push(this.buildTextStyle(style.getText()));
                 }
                 mapfishStyleObject[stylingRule] = styleObject;
             }
@@ -183,14 +188,14 @@ const BuildSpecModel = Backbone.Model.extend({
         return mapfishStyleObject;
     },
 
-    buildPointStyle: function (style) {
+    buildPointStyle: function (style, layer) {
         if (style.getImage() instanceof CircleStyle) {
             return this.buildPointStyleCircle(style.getImage());
         }
         else if (style.getImage() instanceof Icon) {
-            return this.buildPointStyleIcon(style.getImage());
+            return this.buildPointStyleIcon(style.getImage(), layer);
         }
-        return this.buildPointStyleText(style.getText());
+        return this.buildTextStyle(style.getText());
     },
 
     buildPointStyleCircle: function (style) {
@@ -203,7 +208,7 @@ const BuildSpecModel = Backbone.Model.extend({
 
         if (fillStyle !== null) {
             this.buildFillStyle(fillStyle, obj);
-            obj.strokeColor = this.rgbArrayToHex(fillStyle.getColor());
+            this.buildStrokeStyle(fillStyle, obj);
         }
         if (strokeStyle !== null) {
             this.buildStrokeStyle(strokeStyle, obj);
@@ -211,29 +216,71 @@ const BuildSpecModel = Backbone.Model.extend({
         return obj;
     },
 
-    buildPointStyleIcon: function (style) {
+    buildPointStyleIcon: function (style, layer) {
         return {
             type: "point",
             graphicWidth: style.getSize()[0] * style.getScale(),
             graphicHeight: style.getSize()[1] * style.getScale(),
-            externalGraphic: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img" + this.getImageName(style.getSrc())
+            externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc()),
+            graphicOpacity: layer.getOpacity()
         };
     },
+    /**
+     * derives the url of the image from the server the app is running on
+     * if the app is running on localhost the images from test-geofos are used
+     * @return {String} path to image directory
+     */
+    buildGraphicPath: function () {
+        var url = "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img",
+            origin = window.location.origin;
 
-    buildPointStyleText: function (style) {
+        if (origin.indexOf("localhost") === -1) {
+            url = origin + "/lgv-config/img";
+        }
+        return url;
+    },
+
+    buildTextStyle: function (style) {
         return {
-            type: "Text",
+            type: "text",
             label: style.getText(),
             fontColor: this.rgbArrayToHex(style.getFill().getColor()),
-            fontSize: style.getFont().split(" ")[0]
+            labelXOffset: -style.getOffsetX(),
+            labelYOffset: -style.getOffsetY(),
+            fontSize: style.getFont().split(" ")[0],
+            fontFamily: style.getFont().split(" ")[1],
+            labelAlign: this.getLabelAlign(style)
         };
     },
 
-    buildPolygonStyle: function (style) {
+    /**
+     * gets the indicator of how to align the text with respect to the geometry.
+     * this property must have 2 characters, the x-align and the y-align
+     * @param {ol.style} style -
+     * @returns {string} placement indicator
+     */
+    getLabelAlign: function (style) {
+        var textAlign = style.getTextAlign();
+
+        if (textAlign === "left") {
+            // left bottom
+            return "lb";
+        }
+        else if (textAlign === "right") {
+            // right bottom
+            return "rb";
+        }
+        // center bottom
+        return "cb";
+    },
+
+    buildPolygonStyle: function (style, layer) {
         var fillStyle = style.getFill(),
             strokeStyle = style.getStroke(),
             obj = {
-                type: "polygon"
+                type: "polygon",
+                fillOpacity: layer.getOpacity(),
+                strokeOpacity: layer.getOpacity()
             };
 
         this.buildFillStyle(fillStyle, obj);
@@ -243,10 +290,11 @@ const BuildSpecModel = Backbone.Model.extend({
         return obj;
     },
 
-    buildLineStringStyle: function (style) {
+    buildLineStringStyle: function (style, layer) {
         var strokeStyle = style.getStroke(),
             obj = {
-                type: "line"
+                type: "line",
+                strokeOpacity: layer.getOpacity()
             };
 
         this.buildStrokeStyle(strokeStyle, obj);
@@ -258,6 +306,7 @@ const BuildSpecModel = Backbone.Model.extend({
 
         obj.fillColor = this.rgbArrayToHex(fillColor);
         obj.fillOpacity = fillColor[3];
+
         return obj;
     },
 
@@ -266,13 +315,11 @@ const BuildSpecModel = Backbone.Model.extend({
 
         obj.strokeColor = this.rgbArrayToHex(strokeColor);
         obj.strokeOpacity = strokeColor[3];
-
-        if (style.getWidth() !== undefined) {
+        if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
             obj.strokeWidth = style.getWidth();
         }
         return obj;
     },
-
     getImageName: function (imageSrc) {
         var start = imageSrc.lastIndexOf("/");
 
@@ -330,17 +377,38 @@ const BuildSpecModel = Backbone.Model.extend({
     },
 
     /**
+     * returns the rule for styling a feature
+     * @param {ol.Feature} layer -
      * @param {ol.Feature} feature -
      * @param {string} styleAttribute - the attribute by whose value the feature is styled
      * @returns {string} an ECQL Expression
      */
-    getStylingRule: function (feature, styleAttribute) {
+    getStylingRule: function (layer, feature, styleAttribute) {
+        var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
+            styleModel,
+            labelField,
+            labelValue;
+
         if (styleAttribute === "") {
             return "*";
         }
+        // feature with geometry style and label style
+        else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
+            styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
+            if (styleModel !== undefined && styleModel.get("labelField").length > 0) {
+                labelField = styleModel.get("labelField");
+                labelValue = feature.get(labelField);
+                return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "' AND " + labelField + "='" + labelValue + "']";
+            }
+            // feature with geometry style
+            return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
+        }
+        // cluster feature with geometry style
         else if (feature.get("features") !== undefined) {
             return "[" + styleAttribute + "='" + feature.get("features")[0].get(styleAttribute) + "']";
         }
+        // feature with geometry style
         return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
     },
 
@@ -438,7 +506,7 @@ const BuildSpecModel = Backbone.Model.extend({
         var valuesArray = [];
 
         if (layerParam.legend[0].typ === "WMS" || layerParam.legend[0].typ === "WFS") {
-            _.each(layerParam.legend[0].img, function (url, index) {
+            _.each(layerParam.legend[0].img, function (url) {
                 var valueObj = {
                     legendType: "",
                     geometryType: "",
@@ -449,15 +517,16 @@ const BuildSpecModel = Backbone.Model.extend({
 
                 if (layerParam.legend[0].typ === "WMS") {
                     valueObj.legendType = "wmsGetLegendGraphic";
+                    valueObj.imageUrl = this.createLegendImageUrl("WMS", url);
                 }
                 else if (layerParam.legend[0].typ === "WFS") {
                     valueObj.legendType = "wfsImage";
+                    valueObj.imageUrl = this.createLegendImageUrl("WFS", url);
                 }
 
-                valueObj.label = layerParam.legend[0].legendname[index];
-                valueObj.imageUrl = url;
+                valueObj.label = layerParam.layername;
                 valuesArray.push(valueObj);
-            });
+            }, this);
         }
         else if (layerParam.legend[0].typ === "styleWMS") {
             _.each(layerParam.legend[0].params, function (styleWmsParam) {
@@ -472,6 +541,18 @@ const BuildSpecModel = Backbone.Model.extend({
         }
 
         return valuesArray;
+    },
+    createLegendImageUrl: function (typ, path) {
+        var url = path,
+            image;
+
+        if (typ === "WFS") {
+            url = this.buildGraphicPath();
+            image = path.substring(path.lastIndexOf("/"));
+            url = url + image;
+        }
+
+        return url;
     },
     /**
      * gets array with [GfiContent, layername, coordinates] of actual gfi

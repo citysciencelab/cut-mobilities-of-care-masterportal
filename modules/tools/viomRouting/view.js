@@ -13,6 +13,7 @@ const RoutingView = Backbone.View.extend({
     initialize: function () {
         var channel = Radio.channel("ViomRouting");
 
+        this.model.setParams();
         this.template = _.template(RoutingWin);
         this.listenTo(this.model, {
             "change:isActive": this.render,
@@ -28,6 +29,8 @@ const RoutingView = Backbone.View.extend({
         channel.on({
             "setRoutingDestination": this.setRoutingDestination
         }, this);
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     id: "routingWin",
     startAdressePosition: function () {

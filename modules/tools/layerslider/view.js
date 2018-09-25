@@ -14,6 +14,8 @@ const LayersliderView = Backbone.View.extend({
             },
             "change:activeLayer": this.layerSwitched
         });
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     className: "layerslider",
     template: _.template(LayersliderTemplate),
@@ -122,5 +124,6 @@ const LayersliderView = Backbone.View.extend({
         this.$el.find("#stop").find("span").removeClass("glyphicon-stop glyphicon-pause").addClass(glyph);
     }
 });
+
 
 export default LayersliderView;

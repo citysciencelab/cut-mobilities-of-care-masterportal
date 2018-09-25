@@ -15,6 +15,8 @@ const AnimationView = Backbone.View.extend({
             // ändert sich eins dieser Attribute wird neu gezeichnet
             "change:gemeinden change:gemeinde change:direction change:animating change:pendlerLegend": this.render
         });
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     tagName: "form",
     id: "animation-tool",

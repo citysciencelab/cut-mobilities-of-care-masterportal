@@ -18,9 +18,8 @@ const MobileLegendView = Backbone.View.extend({
                 }
             }
         });
-        if (this.model.get("isActive")) {
-            this.show();
-        }
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     id: "base-modal-legend",
     className: "modal bs-example-modal-sm legend fade in",
@@ -76,7 +75,6 @@ const MobileLegendView = Backbone.View.extend({
     removeView: function () {
         this.$el.modal("hide");
         this.remove();
-        $(".modal-backdrop").remove();
     }
 });
 

@@ -1,10 +1,8 @@
 import Tool from "../../core/modelList/tool/model";
 import SnippetDropdownModel from "../../snippets/dropdown/model";
-import * as moment from "moment";
 import SnippetCheckboxModel from "../../snippets/checkbox/model";
 import {GeoJSON} from "ol/format.js";
 import Overlay from "ol/Overlay.js";
-import {createBox} from "ol/interaction/Draw.js";
 import {Draw} from "ol/interaction.js";
 import {Circle, Polygon} from "ol/geom.js";
 
@@ -52,7 +50,8 @@ const Einwohnerabfrage = Tool.extend({
         fhhId: "D3DDBBA3-7329-475C-BB07-14D539ED6B1E",
         fhhDate: undefined,
         tooltipMessage: "Klicken zum Starten und Beenden",
-        tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen"
+        tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen",
+        uniqueIdList: []
         // hmdk/metaver link
         // metaDataLink: Radio.request("RestReader", "getServiceById", "2").get("url")
     }),
@@ -64,6 +63,9 @@ const Einwohnerabfrage = Tool.extend({
         });
         this.listenTo(Radio.channel("WPS"), {
             "response": this.handleResponse
+        });
+        this.listenTo(Radio.channel("CswParser"), {
+            "fetchedMetaData": this.fetchedMetaData
         });
         this.listenTo(this.snippetDropdownModel, {
             "valuesChanged": this.createDrawInteraction
@@ -86,6 +88,26 @@ const Einwohnerabfrage = Tool.extend({
             isMultiple: false,
             preselectedValues: _.allKeys(this.get("values"))[0]
         }));
+    },
+    fetchedMetaData: function (cswObj) {
+        if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
+            this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
+            this.updateMetaData(cswObj.attr, cswObj.parsedData);
+        }
+    },
+    isOwnMetaRequest: function (uniqueIdList, uniqueId) {
+        return _.contains(uniqueIdList, uniqueId);
+    },
+    removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
+        this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
+    },
+    updateMetaData: function (attr, parsedData) {
+        if (attr === "fhhDate") {
+            this.setFhhDate(parsedData.date);
+        }
+        else if (attr === "mrhDate") {
+            this.setMrhDate(parsedData.date);
+        }
     },
     /**
      * Reset State when tool becomes active/inactive
@@ -285,57 +307,31 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     handleCswRequests: function () {
-        var cswUrl = Radio.request("RestReader", "getServiceById", "1").get("url");
+        var metaIds = [
+            {
+                metaId: this.get("fhhId"),
+                attr: "fhhDate"
+            },
+            {
+                metaId: this.get("mrhId"),
+                attr: "mrhDate"
+            }];
 
         if (this.get("isActive")) {
-            this.sendRequest(cswUrl, {id: this.get("fhhId")}, this.setFhhDate);
-            this.sendRequest(cswUrl, {id: this.get("mrhId")}, this.setMrhDate);
+            _.each(metaIds, function (metaIdObj) {
+                var uniqueId = _.uniqueId(),
+                    cswObj = {};
+
+                this.get("uniqueIdList").push(uniqueId);
+                cswObj.metaId = metaIdObj.metaId;
+                cswObj.keyList = ["date"];
+                cswObj.uniqueId = uniqueId;
+                cswObj.attr = metaIdObj.attr;
+                Radio.trigger("CswParser", "getMetaData", cswObj);
+            }, this);
+
             this.off("change:isActive", this.handleCswRequests);
         }
-    },
-
-    /**
-     * runs an async http ajax get request
-     * @param {string} url - the url for the request
-     * @param {object} data - data to be sent
-     * @param {function} callback - success function
-     * @returns {void}
-     */
-    sendRequest: function (url, data, callback) {
-        $.ajax({
-            url: Radio.request("Util", "getProxyURL", url),
-            data: data,
-            context: this,
-            success: callback,
-            error: function () {
-                Radio.trigger("Alert", "alert", "CSW Request Fehlgeschlagen");
-            }
-        });
-    },
-
-    /**
-     * parse and returns the date of the GetRecordById response
-     * @param {xml} response -
-     * @return {string} date
-     */
-    parseDate: function (response) {
-        var citation = $("gmd\\:citation,citation", response),
-            dates = $("gmd\\:CI_Date,CI_Date", citation),
-            datetype, dateTime;
-
-        dates.each(function (index, element) {
-            datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
-            if ($(datetype).attr("codeListValue") === "revision") {
-                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-            }
-            else if ($(datetype).attr("codeListValue") === "publication") {
-                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-            }
-            else {
-                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
-            }
-        });
-        return moment(dateTime).format("DD.MM.YYYY");
     },
 
     /**
@@ -347,7 +343,7 @@ const Einwohnerabfrage = Tool.extend({
         var that = this,
             value = this.get("values")[drawType],
             layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
-            createBoxFunc = createBox(),
+            createBoxFunc = Draw.createBox(),
             drawInteraction = new Draw({
                 // destination for drawn features
                 source: layer.getSource(),
@@ -370,7 +366,7 @@ const Einwohnerabfrage = Tool.extend({
 
         this.setDrawInteractionListener(drawInteraction, layer);
         this.setDrawInteraction(drawInteraction);
-        Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay.bind(this), this);
+        Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay, this);
         Radio.trigger("Map", "addInteraction", drawInteraction);
     },
     snapRadiusToInterval: function (coordinates, opt_geom) {
@@ -391,16 +387,14 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     setDrawInteractionListener: function (interaction, layer) {
-        var that = this;
-
         interaction.on("drawstart", function () {
             layer.getSource().clear();
         }, this);
 
         interaction.on("drawend", function (evt) {
-            var geoJson = that.featureToGeoJson(evt.feature);
+            var geoJson = this.featureToGeoJson(evt.feature);
 
-            that.makeRequest(geoJson);
+            this.makeRequest(geoJson);
         }, this);
 
         interaction.on("change:active", function (evt) {
@@ -557,12 +551,12 @@ const Einwohnerabfrage = Tool.extend({
         this.set("snippetDropdownModel", value);
     },
 
-    setFhhDate: function (response) {
-        this.set("fhhDate", this.parseDate(response));
+    setFhhDate: function (value) {
+        this.set("fhhDate", value);
     },
 
-    setMrhDate: function (response) {
-        this.set("mrhDate", this.parseDate(response));
+    setMrhDate: function (value) {
+        this.set("mrhDate", value);
     },
 
     setDrawInteraction: function (value) {
@@ -579,6 +573,9 @@ const Einwohnerabfrage = Tool.extend({
 
     setCurrentValue: function (value) {
         this.set("currentValue", value);
+    },
+    setUniqueIdList: function (value) {
+        this.set("uniqueIdList", value);
     }
 });
 
