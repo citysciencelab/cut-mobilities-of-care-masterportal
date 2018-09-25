@@ -19,7 +19,7 @@ const MouseHoverPopup = Backbone.Model.extend({
             "hide": this.destroyPopup
         });
         Radio.trigger("Map", "addOverlay", this.get("overlay"));
-        Radio.trigger("Map", "registerListener", "pointermove", this.checkDragging, this);
+        Radio.trigger("Map", "registerListener", "pointermove", this.checkDragging.bind(this), this);
         this.getMouseHoverInfosFromConfig();
     },
 
@@ -117,7 +117,6 @@ const MouseHoverPopup = Backbone.Model.extend({
      * @returns {void}
      */
     checkDragging: function (evt) {
-        debugger;
         if (evt.dragging) {
             return;
         }
