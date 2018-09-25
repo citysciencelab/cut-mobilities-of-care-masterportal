@@ -773,23 +773,21 @@ define(function (require) {
         /**
          * makes sure that one rgb color always consists of four values
          * @param {array} newColor Color in rgb
-         * @param {string} value which represents the color
          * @return {array} normColor
          */
-        normalizeRgbColor: function (newColor, value) {
+        normalizeRgbColor: function (newColor) {
             var normColor = newColor;
 
             if (normColor.length === 4) {
                 return normColor;
             }
-            else if (normColor.length === 3) {
-                normColor.push(1);
-            }
             else if (newColor.length > 4) {
                 normColor = normColor.slice(0, 3);
             }
-            else {
-                normColor = this.defaults[value];
+            else if (newColor.length < 4) {
+                while (newColor.length !== 4) {
+                    newColor.push(1);
+                }
             }
 
             return normColor;
