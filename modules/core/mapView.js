@@ -63,7 +63,7 @@ const MapView = Backbone.Model.extend({
                 zoomLevel: 9
             }
         ],
-        resolution: 15.874991427504629,
+        startResolution: 15.874991427504629,
         startCenter: [565874, 5934140],
         units: "m",
         DOTS_PER_INCH: $("#dpidiv").outerWidth() // Hack um die Bildschirmauflösung zu bekommen
@@ -82,7 +82,7 @@ const MapView = Backbone.Model.extend({
                 return this.get("projection");
             },
             "getOptions": function () {
-                return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
+                return _.findWhere(this.get("options"), {resolution: this.get("view").getResolution()});
             },
             "getCenter": function () {
                 return this.getCenter();
@@ -94,7 +94,7 @@ const MapView = Backbone.Model.extend({
                 return this.get("resolutions");
             },
             "getResolution": function () {
-                return _.findWhere(this.get("options"), {resolution: this.get("resolution")});
+                return _.findWhere(this.get("options"), {resolution: this.get("view").getResolution()});
             },
             "getResoByScale": this.getResoByScale,
             "getScales": function () {
@@ -108,34 +108,12 @@ const MapView = Backbone.Model.extend({
             "toggleBackground": this.toggleBackground,
             "setZoomLevelUp": this.setZoomLevelUp,
             "setZoomLevelDown": this.setZoomLevelDown,
-            "setScale": this.setScale,
+            "setScale": this.setResolutionByScale,
             "setConstrainedResolution": this.setConstrainedResolution,
             "resetView": this.resetView
         }, this);
 
         this.listenTo(this, {
-            "change:resolution": function (model, resolution) {
-                // everytime the resolution changes, the scale also has to be changed.
-                // needs to be refactored because listener triggeres other listener
-                var params = _.findWhere(this.get("options"), {resolution: resolution});
-
-                if (!_.isUndefined(this.get("view"))) {
-                    this.get("view").setResolution(resolution);
-                }
-                this.set("scale", params.scale);
-                channel.trigger("changedOptions", params);
-
-                // triggert das Zoom in / out übers Mausrad / Touch
-                Radio.trigger("ClickCounter", "zoomChanged");
-            },
-            "change:scale": function (model, scale) {
-                var params = _.findWhere(this.get("options"), {scale: scale});
-
-                this.set("resolution", params.resolution);
-                if (!_.isUndefined(this.get("view"))) {
-                    this.get("view").setResolution(params.resolution);
-                }
-            },
             "change:background": function (model, value) {
                 if (value === "white") {
                     $("#map").css("background", "white");
@@ -155,15 +133,31 @@ const MapView = Backbone.Model.extend({
         this.setView();
 
         // Listener für ol.View
-        this.get("view").on("change:resolution", function () {
-            this.set("resolution", this.get("view").constrainResolution(this.get("view").getResolution()));
-            // this.set("resolution", this.get("view").getResolution());
-            channel.trigger("changedZoomLevel", this.getZoom());
-        }, this);
+        this.get("view").on("change:resolution", this.cbChangeResolution.bind(this));
         this.get("view").on("change:center", function () {
-            this.set("center", this.get("view").getCenter());
+            // console.log(this);
+            // this.set("center", this.get("view").getCenter());
             channel.trigger("changedCenter", this.getCenter());
         }, this);
+    },
+
+    cbChangeResolution: function (evt) {
+        var mapView = evt.target,
+            constrainResolution = mapView.constrainResolution(mapView.getResolution()),
+            params = _.findWhere(this.get("options"), {resolution: constrainResolution});
+
+        Radio.trigger("MapView", "changedOptions", params);
+        Radio.trigger("MapView", "changedZoomLevel", this.getZoom());
+        // triggert das Zoom in / out übers Mausrad / Touch
+        Radio.trigger("ClickCounter", "zoomChanged");
+    },
+
+    setResolutionByScale: function (scale) {
+        var params = _.findWhere(this.get("options"), {scale: scale});
+
+        if (!_.isUndefined(this.get("view"))) {
+            this.get("view").setResolution(params.resolution);
+        }
     },
 
     /**
@@ -223,13 +217,11 @@ const MapView = Backbone.Model.extend({
         }
 
         if (_.isUndefined(mapViewResolution) === false) {
-            this.setResolution(mapViewResolution.attr);
             this.setStartResolution(mapViewResolution.attr);
         }
         else if (_.isUndefined(mapViewZoomLevel) === false) {
             res = this.get("options")[mapViewZoomLevel.attr].resolution;
 
-            this.setResolution(res);
             this.setStartResolution(res);
         }
     },
@@ -246,8 +238,7 @@ const MapView = Backbone.Model.extend({
         }
 
         if (!_.isUndefined(zoomLevelFromParamUrl)) {
-            this.setResolution(this.get("resolutions")[zoomLevelFromParamUrl]);
-            this.set("startResolution", this.get("resolution"));
+            this.set("startResolution", this.get("resolutions")[zoomLevelFromParamUrl]);
         }
     },
 
@@ -297,11 +288,6 @@ const MapView = Backbone.Model.extend({
         this.set("resolution", val);
     },
 
-    // Setzt den Maßstab.
-    setScale: function (scale) {
-        this.set("scale", scale);
-    },
-
     // setter for extent
     setExtent: function (value) {
         this.set("extent", value);
@@ -344,7 +330,7 @@ const MapView = Backbone.Model.extend({
             projection: this.get("projection"),
             center: this.get("startCenter"),
             extent: this.get("extent"),
-            resolution: this.get("resolution"),
+            resolution: this.get("startResolution"),
             resolutions: this.get("resolutions")
         });
 
