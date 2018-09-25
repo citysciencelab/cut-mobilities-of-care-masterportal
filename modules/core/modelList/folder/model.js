@@ -78,8 +78,32 @@ define(function (require) {
             }
         },
 
+        sortLayers: function (layer, key) {
+            return layer.sort(function (firstObj, secondObj) {
+                var firstValue = firstObj[key],
+                    secondValue = secondObj[key],
+                    direction;
+
+                if (firstValue < secondValue) {
+                    direction = -1;
+                }
+                else if (firstValue > secondValue) {
+                    direction = 1;
+                }
+                else {
+                    direction = 0;
+                }
+
+                return direction;
+            });
+        },
+
         setSelectAllGlyphicon: function (value) {
             this.set("selectAllGlyphicon", value);
+        },
+
+        setLayer: function (value) {
+            this.set("layer", value);
         }
     });
 

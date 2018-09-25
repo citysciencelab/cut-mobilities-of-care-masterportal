@@ -71,6 +71,9 @@ define(function (require) {
             this.model.toggleIsExpanded();
         },
         toggleIsSelected: function () {
+            var sortLayers = this.model.sortLayers(this.model.get("layer"), "name");
+
+            this.model.setLayer(sortLayers);
             this.model.toggleIsSelected();
             Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
             this.model.setIsExpanded(true);
