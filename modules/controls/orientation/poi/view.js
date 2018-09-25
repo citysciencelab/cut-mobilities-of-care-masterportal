@@ -1,67 +1,63 @@
-define(function (require) {
-    var Template = require("text!modules/controls/orientation/poi/template.html"),
-        POIModel = require("modules/controls/orientation/poi/model"),
-        POIView;
+import Template from "text-loader!./template.html";
+import POIModel from "./model";
+import "bootstrap/js/tab";
+import "bootstrap/js/modal";
 
-    require("bootstrap/tab");
-    require("bootstrap/modal");
+const POIView = Backbone.View.extend({
+    events: {
+        "click .glyphicon-remove": "hide",
+        "click tr": "zoomFeature",
+        "click li": "changedCategory"
+    },
+    initialize: function () {
+        var channel = Radio.channel("POI");
 
-    POIView = Backbone.View.extend({
-        model: POIModel,
-        id: "surrounding_vectorfeatures",
-        className: "modal fade in poi",
-        template: _.template(Template),
-        events: {
-            "click .glyphicon-remove": "hide",
-            "click tr": "zoomFeature",
-            "click li": "changedCategory"
-        },
-        initialize: function () {
-            var channel = Radio.channel("POI");
+        this.model = POIModel;
 
-            channel.on({
-                "showPOIModal": this.show,
-                "hidePOIModal": this.hide
-            }, this);
-        },
+        channel.on({
+            "showPOIModal": this.show,
+            "hidePOIModal": this.hide
+        }, this);
+    },
+    id: "surrounding_vectorfeatures",
+    className: "modal fade in poi",
+    template: _.template(Template),
+    render: function () {
+        var attr = this.model.toJSON();
 
-        render: function () {
-            var attr = this.model.toJSON();
+        this.$el.html(this.template(attr));
+        return this;
+    },
 
-            this.$el.html(this.template(attr));
-            return this;
-        },
+    show: function () {
+        Radio.trigger("Util", "showLoader");
+        this.model.calcInfos();
+        this.render();
 
-        show: function () {
-            Radio.trigger("Util", "showLoader");
-            this.model.calcInfos();
-            this.render();
+        this.$el.modal({
+            backdrop: true,
+            show: true
+        });
+        Radio.trigger("Util", "hideLoader");
+    },
 
-            this.$el.modal({
-                backdrop: true,
-                show: true
-            });
-            Radio.trigger("Util", "hideLoader");
-        },
+    hide: function () {
+        this.$el.modal("hide");
+        this.model.reset();
+        Radio.trigger("geolocation", "removeOverlay");
+    },
 
-        hide: function () {
-            this.$el.modal("hide");
-            this.model.reset();
-            Radio.trigger("geolocation", "removeOverlay");
-        },
+    zoomFeature: function (evt) {
+        this.model.zoomFeature(evt.currentTarget.id);
+        this.hide();
+    },
 
-        zoomFeature: function (evt) {
-            this.model.zoomFeature(evt.currentTarget.id);
-            this.hide();
-        },
+    changedCategory: function (evt) {
+        var a = this.$(evt.currentTarget).children("a")[0],
+            cat = this.$(a).attr("aria-controls");
 
-        changedCategory: function (evt) {
-            var a = this.$(evt.currentTarget).children("a")[0],
-                cat = this.$(a).attr("aria-controls");
-
-            this.model.setActiveCategory(parseFloat(cat));
-        }
-    });
-
-    return POIView;
+        this.model.setActiveCategory(parseFloat(cat));
+    }
 });
+
+export default POIView;
