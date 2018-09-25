@@ -742,6 +742,8 @@ define(function (require) {
                 newColor = this.rgbToHex(newColor[0], newColor[1], newColor[2]);
             }
 
+            newColor = dest === "rgb" ? this.normalizeRgbColor(newColor) : newColor;
+
             return newColor;
         },
         rgbToHex: function (r, g, b) {
@@ -766,6 +768,31 @@ define(function (require) {
             result = result.exec(hexReplace);
 
             return result ? [parseFloat(result[1], 16), parseFloat(result[2], 16), parseFloat(result[3], 16)] : null;
+        },
+
+        /**
+         * makes sure that one rgb color always consists of four values
+         * @param {array} newColor Color in rgb
+         * @param {string} value which represents the color
+         * @return {array} normColor
+         */
+        normalizeRgbColor: function (newColor, value) {
+            var normColor = newColor;
+
+            if (normColor.length === 4) {
+                return normColor;
+            }
+            else if (normColor.length === 3) {
+                normColor.push(1);
+            }
+            else if (newColor.length > 4) {
+                normColor = normColor.slice(0, 3);
+            }
+            else {
+                normColor = this.defaults[value];
+            }
+
+            return normColor;
         },
 
         /**
