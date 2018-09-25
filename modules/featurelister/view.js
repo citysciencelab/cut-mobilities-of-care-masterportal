@@ -22,7 +22,7 @@ const FeatureLister = Backbone.View.extend({
                 this.updateLayerHeader();
             },
             "change:featureProps": this.showFeatureProps,
-            "gfiHit": this.selectGFIHit,
+            "gfiHit": this.selectGFIHit.bind(this),
             "gfiClose": this.deselectGFIHit,
             "switchTabToTheme": this.switchTabToTheme
         });
@@ -37,7 +37,7 @@ const FeatureLister = Backbone.View.extend({
     deselectGFIHit: function () {
         this.$("#featurelist-list-table tr").each(function (inte, tr) {
             this.$(tr).removeClass("info");
-        });
+        }, this);
     },
     /*
     * Wenn im Model ein GFI empfangen wurde, wird dieses in der Liste gesucht und ggf. gehighlighted.
@@ -52,7 +52,7 @@ const FeatureLister = Backbone.View.extend({
             if (trId === gesuchteId) {
                 this.$(tr).addClass("info");
             }
-        });
+        }, this);
     },
     /*
     * Findet das Spanelement der Spalte, die geklickt wurde. Liest dann die derzeit dargestellten Features aus und sortiert diese. Leert die aktuelle (unsortierte) Tabelle
@@ -109,7 +109,7 @@ const FeatureLister = Backbone.View.extend({
             _.each(props, function (value, key) {
                 this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'><strong>" + key + "</strong></li>");
                 this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
-            });
+            }, this);
             this.switchTabToDetails();
         }
         else {
@@ -132,7 +132,7 @@ const FeatureLister = Backbone.View.extend({
             else {
                 this.$(child).removeClass("active");
             }
-        });
+        }, this);
         this.$("#featurelist-themes").hide();
         this.$("#featurelist-list").show();
         this.$("#featurelist-details").hide();
@@ -149,7 +149,7 @@ const FeatureLister = Backbone.View.extend({
             else {
                 this.$(child).removeClass("active");
             }
-        });
+        }, this);
         this.$("#featurelist-themes").show();
         this.$("#featurelist-list").hide();
         this.$("#featurelist-details").hide();
@@ -171,7 +171,7 @@ const FeatureLister = Backbone.View.extend({
             else {
                 this.$(child).removeClass("active");
             }
-        });
+        }, this);
         this.$("#featurelist-themes").hide();
         this.$("#featurelist-list").hide();
         this.$("#featurelist-details").show();
@@ -201,7 +201,7 @@ const FeatureLister = Backbone.View.extend({
         // setze active Class
         _.each(this.$(evt.currentTarget.parentElement.children), function (li) {
             this.$(li).removeClass("active");
-        });
+        }, this);
         this.$(evt.currentTarget).addClass("active");
     },
     /*
@@ -314,7 +314,7 @@ const FeatureLister = Backbone.View.extend({
         this.$("#featurelist-themes-ul").empty();
         _.each(ll, function (layer) {
             this.$("#featurelist-themes-ul").append("<li id='" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
-        });
+        }, this);
     },
     render: function () {
         var attr = this.model.toJSON();
