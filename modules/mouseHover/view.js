@@ -1,5 +1,4 @@
 import MouseHoverPopup from "./model";
-import "bootstrap/js/popover";
 
 const MouseHoverPopupView = Backbone.View.extend({
     initialize: function (attr) {
@@ -20,19 +19,12 @@ const MouseHoverPopupView = Backbone.View.extend({
      * @returns {void}
      */
     render: function (text) {
-        var element = this.model.get("overlay").getElement();
+        var element = this.model.get("overlay").getElement(),
+            template = "<div class='tooltip top in' role='tooltip'><div class='tooltip-inner mouseHover in'>" + text + "</div></div>";
 
-        $(element).tooltip("destroy");
-        $(element).tooltip({
-            html: true,
-            title: text,
-            template: "<div class='tooltip' role='tooltip'><div class='tooltip-inner mouseHover'></div></div>",
-            placement: "auto",
-            animation: true,
-            trigger: "manual",
-            viewport: "#map"
-        }, this);
-        $(element).tooltip("show");
+        $(element).empty();
+        $(element).append(template);
+
         return this;
     },
 
