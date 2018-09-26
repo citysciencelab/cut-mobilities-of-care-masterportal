@@ -121,9 +121,9 @@ define(function (require) {
 
         setBBox: function (bbox) {
             this.set("bbox", bbox);
-            this.BBoxToMap(this.get("bbox"));
+            this.bboxToMap(this.get("bbox"));
         },
-        BBoxToMap: function (bbox) {
+        bboxToMap: function (bbox) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }
@@ -135,14 +135,14 @@ define(function (require) {
             return this.getMap3d() && this.getMap3d().getEnabled();
         },
         createMap3d: function () {
-            var map3d = new olcs.OLCesium(
-                {
-                    map: this.get("map"),
-                    stopOpenLayersEventsPropagation: true,
-                    createSynchronizers: function (map, scene) {
-                        return [new olcs.WMSRasterSynchronizer(map, scene), new olcs.VectorSynchronizer(map, scene), new olcs.OverlaySynchronizer(map, scene)];
-                    }
-                });
+            var map3d = new olcs.OLCesium({
+                map: this.get("map"),
+                stopOpenLayersEventsPropagation: true,
+                createSynchronizers: function (map, scene) {
+                    return [new olcs.WMSRasterSynchronizer(map, scene), new olcs.VectorSynchronizer(map, scene), new olcs.OverlaySynchronizer(map, scene)];
+                }
+            });
+
             return map3d;
         },
         handle3DEvents: function () {
@@ -287,6 +287,7 @@ define(function (require) {
 
         reactToCameraChanged: function () {
             var camera = this.getMap3d().getCamera();
+
             Radio.trigger("Map", "cameraChanged", {"heading": camera.getHeading(), "altitude": camera.getAltitude(), "tilt": camera.getTilt()});
         },
 
@@ -540,7 +541,7 @@ define(function (require) {
                     name: name,
                     source: source,
                     alwaysOnTop: true,
-                    altitudeMode : "clampToGround"
+                    altitudeMode: "clampToGround"
                 });
 
                 resultLayer = layer;

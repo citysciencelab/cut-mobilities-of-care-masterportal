@@ -10,7 +10,8 @@
     "globals": {
         "_": true,
         "Radio": true,
-        "Backbone": true
+        "Backbone": true,
+        "olcs": true
     },
     "plugins": [
         "chai-friendly"

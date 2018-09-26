@@ -21,7 +21,7 @@ define(function (require) {
             });
             this.listenTo(Radio.channel("Layer"), {
                 "updateLayerInfo": function (name) {
-                    if (this.get("name") === name && this.getLayerInfoChecked() === true) {
+                    if (this.get("name") === name && this.get("layerInfoChecked") === true) {
                         this.showLayerInformation();
                     }
                 },
@@ -66,6 +66,7 @@ define(function (require) {
         /**
          * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
          * Abhängig vom Attribut "isSelected"
+         * @returns {void}
          */
         toggleLayerOnMap: function () {
             var map3d,
@@ -105,14 +106,16 @@ define(function (require) {
         /**
          * Setter für Attribut "isVisibleInMap"
          * Zusätzlich wird das "visible-Attribut" vom Layer auf den gleichen Wert gesetzt
-         * @param {boolean} value
+         * @param {boolean} value -
+         * @returns {void}
          */
         setIsVisibleInMap: function (value) {
             this.set("isVisibleInMap", value);
         },
 
         /**
-         * @param {Cesium.Cesium3DTileset} value
+         * @param {Cesium.Cesium3DTileset} value -
+         * @returns {void}
          */
         setTileSet: function (value) {
             this.set("tileSet", value);
