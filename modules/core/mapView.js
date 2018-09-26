@@ -137,9 +137,17 @@ const MapView = Backbone.Model.extend({
         });
     },
 
+    /**
+     * is called when the view resolution is changed
+     * triggers the map view options
+     * @param {ObjectEvent} evt - openlayers event object
+     * @param {string} evt.key - the name of the property whose value is changing
+     * @param {ol.View} evt.target - this.get("view")
+     * @returns {void}
+     */
     cbChangedResolution: function (evt) {
         var mapView = evt.target,
-            constrainResolution = mapView.constrainResolution(mapView.getResolution()),
+            constrainResolution = mapView.constrainResolution(mapView.get(evt.key)),
             params = _.findWhere(this.get("options"), {resolution: constrainResolution});
 
         Radio.trigger("MapView", "changedOptions", params);
@@ -148,6 +156,11 @@ const MapView = Backbone.Model.extend({
         Radio.trigger("ClickCounter", "zoomChanged");
     },
 
+    /**
+     * finds the right resolution for the scale and sets it for this view
+     * @param {number} scale - map view scale
+     * @returns {void}
+     */
     setResolutionByScale: function (scale) {
         var params = _.findWhere(this.get("options"), {scale: scale});
 
