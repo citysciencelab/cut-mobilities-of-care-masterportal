@@ -3,8 +3,8 @@ import ScaleLineTemplate from "text-loader!./template.html";
 
 const ScaleLineView = Backbone.View.extend({
     initialize: function () {
-        this.listenTo(this.model, "change:scaleLineValue", this.render);
         this.model = new ScaleLine();
+        this.listenTo(this.model, "change:scaleLineValue", this.render);
         this.render();
     },
     className: "scale-line",
