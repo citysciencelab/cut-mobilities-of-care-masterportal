@@ -21,7 +21,7 @@
     "bootstrap-select": "1.12.x",
     "bootstrap-slider": "9.x",
     "bootstrap-toggle": "2.x.x",
-    "cesium": "^1.45.0",
+    "cesium": "1.45.0",
     "browserify": "15.2.0",
     "d3": "4.9.x",
     "jquery": "2.x",
