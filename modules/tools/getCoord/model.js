@@ -65,7 +65,7 @@ define(function (require) {
          * @returns {void}
          */
         toggleMapMarker: function (position, updatePosition) {
-            if (!updatePosition) {
+            if (updatePosition) {
                 Radio.trigger("MapMarker", "showMarker", position);
             }
             else {
