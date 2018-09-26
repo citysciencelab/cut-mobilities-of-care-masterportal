@@ -131,7 +131,7 @@ const MapView = Backbone.Model.extend({
         this.setView();
 
         // Listener für ol.View
-        this.get("view").on("change:resolution", this.cbChangedResolution.bind(this));
+        this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this));
         this.get("view").on("change:center", function () {
             Radio.trigger("MapView", "changedCenter", this.getCenter());
         });
@@ -145,14 +145,13 @@ const MapView = Backbone.Model.extend({
      * @param {ol.View} evt.target - this.get("view")
      * @returns {void}
      */
-    cbChangedResolution: function (evt) {
+    changedResolutionCallback: function (evt) {
         var mapView = evt.target,
             constrainResolution = mapView.constrainResolution(mapView.get(evt.key)),
             params = _.findWhere(this.get("options"), {resolution: constrainResolution});
 
         Radio.trigger("MapView", "changedOptions", params);
         Radio.trigger("MapView", "changedZoomLevel", this.getZoom());
-        // triggert das Zoom in / out übers Mausrad / Touch
         Radio.trigger("ClickCounter", "zoomChanged");
     },
 
