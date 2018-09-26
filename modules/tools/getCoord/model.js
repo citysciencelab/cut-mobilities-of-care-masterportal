@@ -52,7 +52,13 @@ define(function (require) {
         positionClicked: function (position) {
             this.setPositionMapProjection(position);
             this.setUpdatePosition(!this.get("updatePosition"));
-            Radio.trigger("MapMarker", "showMarker", position);
+
+            if (!this.get("updatePosition")) {
+                Radio.trigger("MapMarker", "showMarker", position);
+            }
+            else {
+                Radio.trigger("MapMarker", "hideMarker", position);
+            }
         },
 
         returnTransformedPosition: function (targetProjection) {
