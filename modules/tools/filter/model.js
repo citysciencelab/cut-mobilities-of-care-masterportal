@@ -17,7 +17,8 @@ define(function (require) {
             liveZoomToFeatures: true,
             sendToRemote: false,
             renderToSidebar: true,
-            renderToWindow: false
+            renderToWindow: false,
+            glyphicon: "glyphicon-filter"
         }),
         initialize: function () {
             var channel = Radio.channel("Filter");

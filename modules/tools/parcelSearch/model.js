@@ -25,7 +25,8 @@ define(function (require) {
             "parcelNumber": "", // default Flurstücksnummer
             "parcelDenominatorNumber": "0", // default Flurstücksnenner,
             "createReport": false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
-            "parcelFound": false // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
+            "parcelFound": false, // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
+            glyphicon: "glyphicon-search"
         }),
         initialize: function () {
             this.superInitialize();

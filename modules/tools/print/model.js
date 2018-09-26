@@ -37,7 +37,8 @@ define(function (require) {
             configYAML: "/master",
             deactivateGFI: false,
             renderToWindow: true,
-            proxyURL: ""
+            proxyURL: "",
+            glyphicon: "glyphicon-print"
         }),
 
         /*

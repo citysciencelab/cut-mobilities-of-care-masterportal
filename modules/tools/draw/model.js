@@ -26,7 +26,8 @@ define(function (require) {
                 text: "Punkt zeichnen"
             },
             renderToWindow: true,
-            deactivateGFI: true
+            deactivateGFI: true,
+            glyphicon: "glyphicon-pencil"
         }),
 
         initialize: function () {

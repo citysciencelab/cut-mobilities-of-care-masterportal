@@ -30,7 +30,8 @@ define(function (require) {
             styleClassAttributes: [],
             styleWMSName: "",
             // Namen und IDs der verfügbaren stylebaren Layer
-            styleableLayerList: []
+            styleableLayerList: [],
+            glyphicon: "glyphicon-tint"
         }),
 
         initialize: function () {

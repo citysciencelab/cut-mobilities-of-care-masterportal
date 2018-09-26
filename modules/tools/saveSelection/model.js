@@ -12,7 +12,8 @@ define(function (require) {
             layerTranseparenceList: [],
             url: "",
             simpleMap: false,
-            renderToWindow: true
+            renderToWindow: true,
+            glyphicon: "glyphicon-share"
         }),
         initialize: function () {
             var channel = Radio.channel("SaveSelection");

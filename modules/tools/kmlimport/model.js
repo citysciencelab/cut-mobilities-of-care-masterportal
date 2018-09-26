@@ -10,7 +10,8 @@ define(function (require) {
             text: "",
             features: [],
             format: new ol.format.KML({extractStyles: true}),
-            renderToWindow: true
+            renderToWindow: true,
+            glyphicon: "glyphicon-import"
         }),
 
         initialize: function () {

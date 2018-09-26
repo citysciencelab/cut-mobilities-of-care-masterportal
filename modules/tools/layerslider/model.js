@@ -10,7 +10,8 @@ define(function (require) {
             progressBarWidth: 10,
             activeLayer: {layerId: ""},
             windowsInterval: null,
-            renderToWindow: true
+            renderToWindow: true,
+            glyphicon: "glyphicon-film"
         }),
 
         initialize: function () {

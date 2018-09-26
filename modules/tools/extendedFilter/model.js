@@ -18,7 +18,8 @@ define(function (require) {
             currentFilters: [],
             ignoredKeys: [],
             filterCounter: 1,
-            renderToWindow: true
+            renderToWindow: true,
+            glyphicon: "glyphicon-filter"
         }),
         initialize: function () {
             this.superInitialize();

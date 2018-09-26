@@ -33,7 +33,8 @@ define(function (require) {
             uiStyle: "DEFAULT",
             quickHelp: false,
             renderToWindow: true,
-            deactivateGFI: true
+            deactivateGFI: true,
+            glyphicon: "glyphicon-resize-full"
         }),
 
         initialize: function () {

@@ -37,7 +37,8 @@ define(function (require) {
             num_kreise_to_style: 2,
             colors: ["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"],
             attrAnzahl: "anzahl_einpendler",
-            attrKreis: "wohnort_kreis"
+            attrKreis: "wohnort_kreis",
+            glyphicon: "glyphicon-play-circle"
         }),
         initialize: function () {
             var channel = Radio.channel("Animation");

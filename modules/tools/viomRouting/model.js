@@ -24,7 +24,8 @@ define(function (require) {
             routelayer: null,
             mhpOverlay: "",
             isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true,
-            renderToWindow: true
+            renderToWindow: true,
+            glyphicon: "glyphicon-road"
         }),
         initialize: function () {
             this.superInitialize();

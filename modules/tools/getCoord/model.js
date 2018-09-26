@@ -12,7 +12,8 @@ define(function (require) {
             updatePosition: true,
             currentProjectionName: "EPSG:25832",
             deactivateGFI: true,
-            renderToWindow: true
+            renderToWindow: true,
+            glyphicon: "glyphicon-screenshot"
         }),
         initialize: function () {
             this.superInitialize();

@@ -31,7 +31,8 @@ define(function (require) {
                 isSelected: false,
                 label: "HVV Verkehrsnetz"
             }),
-            renderToSidebar: true
+            renderToSidebar: true,
+            glyphicon: "glyphicon-filter"
         }),
 
         initialize: function () {

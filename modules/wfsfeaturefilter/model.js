@@ -5,7 +5,8 @@ define(function (require) {
     WfsFeatureFilter = Tool.extend({
         defaults: _.extend({}, Tool.prototype.defaults, {
             wfsList: [],
-            renderToWindow: true
+            renderToWindow: true,
+            glyphicon: "glyphicon-filter"
         }),
         initialize: function () {
             this.superInitialize();
