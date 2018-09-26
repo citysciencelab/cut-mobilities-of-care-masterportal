@@ -140,13 +140,13 @@ const gfiParams = [],
          */
         toggleGFI: function (id, deaktivateGFI) {
             if (id === "gfi" && deaktivateGFI === false) {
-                Radio.trigger("Map", "registerListener", "click", this.setGfiParams, this);
+                Radio.trigger("Map", "registerListener", "click", this.setGfiParams.bind(this), this);
             }
             else if (deaktivateGFI === true) {
-                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
+                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
             }
             else if (_.isUndefined(deaktivateGFI)) {
-                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams, this);
+                Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
             }
         },
 
