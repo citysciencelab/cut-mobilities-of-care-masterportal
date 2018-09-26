@@ -131,10 +131,10 @@ const MapView = Backbone.Model.extend({
         this.setView();
 
         // Listener für ol.View
-        this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this));
+        this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this), this);
         this.get("view").on("change:center", function () {
             Radio.trigger("MapView", "changedCenter", this.getCenter());
-        });
+        }, this);
     },
 
     /**
