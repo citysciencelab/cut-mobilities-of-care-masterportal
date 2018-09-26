@@ -40,7 +40,7 @@ const FeatureLister = Backbone.View.extend({
     deselectGFIHit: function () {
         this.$("#featurelist-list-table tr").each(function (inte, tr) {
             this.$(tr).removeClass("info");
-        });
+        }, this);
     },
     /*
     * Wenn im Model ein GFI empfangen wurde, wird dieses in der Liste gesucht und ggf. gehighlighted.
@@ -55,7 +55,7 @@ const FeatureLister = Backbone.View.extend({
             if (trId === gesuchteId) {
                 this.$(tr).addClass("info");
             }
-        });
+        }, this);
     },
     /*
     * Findet das Spanelement der Spalte, die geklickt wurde. Liest dann die derzeit dargestellten Features aus und sortiert diese. Leert die aktuelle (unsortierte) Tabelle
