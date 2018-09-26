@@ -98,7 +98,7 @@ const MapView = Backbone.Model.extend({
             },
             "getResoByScale": this.getResoByScale,
             "getScales": function () {
-                return this.get("scales");
+                return _.pluck(this.get("options"), "scale");
             },
             "getCurrentExtent": this.getCurrentExtent
         }, this);
@@ -127,8 +127,6 @@ const MapView = Backbone.Model.extend({
         this.setConfig();
         this.setResolutions();
         this.setUrlParams();
-        this.setScales();
-        this.setZoomLevels();
         this.setProjection();
         this.setView();
 
@@ -270,16 +268,8 @@ const MapView = Backbone.Model.extend({
         }
     },
 
-    setScales: function () {
-        this.set("scales", _.pluck(this.get("options"), "scale"));
-    },
-
     setResolutions: function () {
         this.set("resolutions", _.pluck(this.get("options"), "resolution"));
-    },
-
-    setZoomLevels: function () {
-        this.set("zoomLevels", _.pluck(this.get("options"), "zoomLevel"));
     },
 
     // setter for extent
@@ -353,25 +343,15 @@ const MapView = Backbone.Model.extend({
      * @return {number} resolution
      */
     getResoByScale: function (scale, scaleType) {
-        var mapViewScales = _.union(this.get("scales"), [parseInt(scale, 10)]),
+        var scales = _.pluck(this.get("options"), "scale"),
+            unionScales = _.union(scales, [parseInt(scale, 10)]),
             index;
 
-        mapViewScales = _.sortBy(mapViewScales, function (num) {
+        unionScales = _.sortBy(unionScales, function (num) {
             return -num;
         });
-        index = _.indexOf(mapViewScales, parseInt(scale, 10));
-        if (mapViewScales.length === this.get("scales").length) {
-            if (scaleType === "max") {
-                return this.get("resolutions")[index];
-            }
-            else if (scaleType === "min") {
-                return this.get("resolutions")[index];
-            }
-        }
-        else if (scaleType === "max") {
-            if (index === 0) {
-                return this.get("resolutions")[index];
-            }
+        index = _.indexOf(unionScales, parseInt(scale, 10));
+        if (unionScales.length === scales.length || scaleType === "max") {
             return this.get("resolutions")[index];
         }
         else if (scaleType === "min") {
