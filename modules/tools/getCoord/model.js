@@ -65,12 +65,9 @@ define(function (require) {
          * @returns {void}
          */
         toggleMapMarker: function (position, updatePosition) {
-            if (updatePosition) {
-                Radio.trigger("MapMarker", "showMarker", position);
-            }
-            else {
-                Radio.trigger("MapMarker", "hideMarker", position);
-            }
+            var showHideMarker = updatePosition ? "showMarker" : "hideMarker";
+
+            Radio.trigger("MapMarker", showHideMarker, position);
         },
 
         returnTransformedPosition: function (targetProjection) {
