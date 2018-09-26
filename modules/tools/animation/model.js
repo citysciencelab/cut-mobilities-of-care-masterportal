@@ -443,7 +443,7 @@ const Animation = Tool.extend({
         this.setAnimationCount(0);
         this.set("animationLayer", animationLayer);
         this.get("animationLayer").getSource().clear();
-        Radio.trigger("Map", "registerListener", "postcompose", this.moveFeature, this);
+        Radio.trigger("Map", "registerListener", "postcompose", this.moveFeature.bind(this), this);
         if (this.get("animating")) {
             this.stopAnimation([]);
         }
