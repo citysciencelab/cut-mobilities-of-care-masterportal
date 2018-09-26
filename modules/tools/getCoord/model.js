@@ -50,10 +50,22 @@ define(function (require) {
         },
 
         positionClicked: function (position) {
-            this.setPositionMapProjection(position);
-            this.setUpdatePosition(!this.get("updatePosition"));
+            var updatePosition = this.get("updatePosition");
 
-            if (!this.get("updatePosition")) {
+            this.setPositionMapProjection(position);
+            this.setUpdatePosition(!updatePosition);
+            this.toggleMapMarker(position, updatePosition);
+        },
+
+        /**
+         * Shows the map marker when the coordinate is frozen.
+         * Otherwise, the MapMarker hide
+         * @param {array} position at which was clicked
+         * @param {boolean} updatePosition display of the position is frozen
+         * @returns {void}
+         */
+        toggleMapMarker: function (position, updatePosition) {
+            if (!updatePosition) {
                 Radio.trigger("MapMarker", "showMarker", position);
             }
             else {
