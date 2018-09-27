@@ -198,10 +198,10 @@ const PrintModel = Tool.extend({
      */
     togglePostcomposeListener: function (model, value) {
         if (value && model.get("layoutList").length !== 0) {
-            Radio.trigger("Map", "registerListener", "postcompose", this.createPrintMask, this);
+            Radio.trigger("Map", "registerListener", "postcompose", this.createPrintMask.bind(this), this);
         }
         else {
-            Radio.trigger("Map", "unregisterListener", "postcompose", this.createPrintMask, this);
+            Radio.trigger("Map", "unregisterListener", "postcompose", this.createPrintMask.bind(this), this);
         }
         Radio.trigger("Map", "render");
     },
