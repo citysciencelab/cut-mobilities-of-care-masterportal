@@ -1,3 +1,15 @@
+# Changelog LGV Master-Portal 2.1.3
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 48b55e8f8 Fehler wurden behoben, durch die keine Schulen im Schulwegrouting zu einer gefundenen Adresse in den Browsern Internet Explorer und Edge angezeigt wurden
+  - 62e9c8da0 Schulen mit dem gleichen Namen im Schulwegrouting können nun durch die Anzeige der Adresse unterschieden werden
+  - 8dd4f82b5 Ein Fehler in der Nomatim-Suche (OSM), durch den einige Suchergebnisse nicht angezeigt worden sind, wurde behoben
+
 # Changelog LGV Master-Portal 2.1.2
 
 NEU:

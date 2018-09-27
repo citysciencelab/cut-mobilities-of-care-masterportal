@@ -2,11 +2,12 @@ define(function (require) {
     var Config = require("config"),
         ol = require("openlayers"),
         cookie = require("modules/cookie/view"),
+        Tool = require("modules/core/modelList/tool/model"),
         $ = require("jquery"),
         GrenznachweisModel;
 
-    GrenznachweisModel = Backbone.Model.extend({
-        defaults: {
+    GrenznachweisModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             nutzungsbedingungakzeptiert: false,
             gebuehrenordnungakzeptiert: false,
             lage: "",
@@ -33,20 +34,18 @@ define(function (require) {
             weiterButton: {enabled: true, name: "weiter"},
             zurueckButton: {enabled: false, name: "zurück"},
             activeDIV: "beschreibung", // beschreibung oder kundendaten
-            wpsurl: ""
-        },
+            wpsurl: "",
+            renderToWindow: true
+        }),
         initialize: function () {
             // lese WPS-Url aus JSON ein
             var wpsService = Radio.request("RestReader", "getServiceById", Config.wpsID),
                 wpsURL = wpsService && wpsService && wpsService.get("url") ? wpsService.get("url") : null,
                 newURL = wpsURL ? Radio.request("Util", "getProxyURL", wpsURL) : null;
 
+            this.superInitialize();
             if (newURL) {
                 this.set("wpsurl", newURL);
-                // Fenstermanagement
-                this.listenTo(Radio.channel("Window"), {
-                    "winParams": this.setStatus
-                });
                 // Erzeuge OL-Layer für Geometrie
                 this.set("layer", new ol.layer.Vector({
                     source: this.get("source"),
@@ -63,24 +62,13 @@ define(function (require) {
                 Radio.trigger("Alert", "alert", "Die WPS-URL konnte nicht ermittelt werden.");
             }
         },
-        setStatus: function (args) {
-            // Fenstermanagement
-            if (args[2].get("id") === "formular") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
-            }
-        },
         // Fenstermanagement-Events
         prepWindow: function () {
             if (this.get("lage") === "" && $("#searchInput") && $("#searchInput").val() !== "") {
                 this.set("lage", $("#searchInput").val());
             }
         },
-        // resetWindow: function () {
-        // },
+
         // Validation
         validators: {
             minLength: function (value, minLength) {
@@ -176,6 +164,7 @@ define(function (require) {
             if (_.isEmpty(errors) === false) {
                 return errors;
             }
+            return null;
         },
         // anonymisierte Events
         focusout: function (evt) {
@@ -248,19 +237,19 @@ define(function (require) {
         click: function (evt) {
             if (evt.target.id === "zweckGebaeudeeinmessung") {
                 this.set("zweckGebaeudeeinmessung", evt.target.checked);
-                this.trigger("render");
+                this.trigger("render", this, this.get("isActive"));
             }
             else if (evt.target.id === "zweckGebaeudeabsteckung") {
                 this.set("zweckGebaeudeabsteckung", evt.target.checked);
-                this.trigger("render");
+                this.trigger("render", this, this.get("isActive"));
             }
             else if (evt.target.id === "zweckLageplan") {
                 this.set("zweckLageplan", evt.target.checked);
-                this.trigger("render");
+                this.trigger("render", this, this.get("isActive"));
             }
             else if (evt.target.id === "zweckSonstiges") {
                 this.set("zweckSonstiges", evt.target.checked);
-                this.trigger("render");
+                this.trigger("render", this, this.get("isActive"));
             }
             else if (evt.target.id === "weiter") {
                 this.changeZurueckButton(true, "zurück");
@@ -276,7 +265,7 @@ define(function (require) {
                     this.changeWeiterButton(true, "weiter");
                     this.set("activeDIV", "beschreibung");
                     this.changeZurueckButton(false, "zurück");
-                    this.trigger("render");
+                    this.trigger("render", this, this.get("isActive"));
                 }
             }
             else if (evt.target.id === "setgeometrie") {
@@ -291,7 +280,7 @@ define(function (require) {
                 this.$("#anrede3").removeClass("active");
                 this.$("#" + evt.target.parentElement.id).addClass("active");
                 this.set("kundenanrede", evt.target.textContent);
-                this.trigger("render");
+                this.trigger("render", this, this.get("isActive"));
             }
             else if (evt.target.id === "nutzungsbedingungen") {
                 if (evt.target.checked === true) {
@@ -332,7 +321,7 @@ define(function (require) {
             if (checker === true) {
                 this.set("activeDIV", "kundendaten");
                 this.changeWeiterButton(true, "Gebührenpflichtig bestellen");
-                this.trigger("render");
+                this.trigger("render", this, this.get("isActive"));
             }
         },
         transmitOrder: function () {
@@ -605,7 +594,7 @@ define(function (require) {
                 this.set("activatedInteraction", false);
                 this.sourcechanged();
             }
-            this.trigger("render");
+            this.trigger("render", this, this.get("isActive"));
         },
         removeAllGeometries: function () {
             // lösche alle Geometrien

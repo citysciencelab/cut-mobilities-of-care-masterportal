@@ -1,11 +1,11 @@
 define(function (require) {
-    var Config = require("config"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         ol = require("openlayers"),
+        Tool = require("modules/core/modelList/tool/model"),
         PrintModel;
 
-    PrintModel = Backbone.Model.extend({
-        defaults: {
+    PrintModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             printID: "99999",
             MM_PER_INCHES: 25.4,
             POINTS_PER_INCH: 72,
@@ -13,7 +13,7 @@ define(function (require) {
             outputFilename: "Ausdruck",
             outputFormat: "pdf",
             gfiToPrint: [], // die sichtbaren GFIs
-            center: Config.view.center,
+            center: [],
             scale: {},
             layerToPrint: [],
             fetched: false, // gibt an, ob info.json schon geladen wurde
@@ -34,8 +34,11 @@ define(function (require) {
                     stroke: false
                 }
             },
-            configYAML: "/master"
-        },
+            configYAML: "/master",
+            deactivateGFI: false,
+            renderToWindow: true,
+            proxyURL: ""
+        }),
 
         /*
          * Ermittelt die URL zum Fetchen in setStatus durch Abfrage der ServiceId
@@ -49,57 +52,26 @@ define(function (require) {
                 printurl = url + this.get("configYAML");
 
                 this.set("printurl", printurl);
-                return Config.proxyURL + "?url=" + printurl + "/info.json";
+                return this.get("proxyURL") + "?url=" + printurl + "/info.json";
             }
             return "undefined"; // muss String übergeben, sonst Laufzeitfehler
         },
 
         //
         initialize: function () {
-            this.setConfigParams();
+            this.superInitialize();
+
             this.listenTo(this, {
-                "change:layout change:scale change:isCurrentWin": this.updatePrintPage,
-                "change:specification": this.getPDFURL
+                "change:layout change:scale change:isActive": this.updatePrintPage,
+                "change:specification": this.getPDFURL,
+                "change:isActive": this.setStatus
             });
 
             this.listenTo(Radio.channel("MapView"), {
                 "changedOptions": this.setScaleByMapView,
                 "changedCenter": this.setCenter
             });
-
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
         },
-        setConfigParams: function () {
-            var printConf = Radio.request("ModelList", "getModelByAttributes", {id: "print"}),
-                printAttrs = printConf.attributes;
-
-            if (_.has(printAttrs, "printID") === true) {
-                this.setPrintID(printAttrs.printID);
-            }
-            if (_.has(printAttrs, "title") === true) {
-                this.setTitle(printAttrs.title);
-            }
-            if (_.has(printAttrs, "gfi") === true) {
-                this.setGfi(printAttrs.gfi);
-            }
-            if (_.has(printAttrs, "outputFilename") === true) {
-                this.setOutputFilename(printAttrs.outputFilename);
-            }
-            if (_.has(printAttrs, "gfiMarker") === true) {
-                this.setGfiMarker(printAttrs.gfiMarker);
-            }
-            if (_.has(printAttrs, "configYAML") === true) {
-                this.setConfigYAML(printAttrs.configYAML);
-            }
-        },
-
-        // Setzt die setConfigYAML-Datei für url Parameter
-        setConfigYAML: function (name) {
-            this.set("configYAML", "/" + name);
-        },
-
 
         // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
         setTitleFromForm: function () {
@@ -111,26 +83,6 @@ define(function (require) {
         // Setzt das Format(DinA4/A3 Hoch-/Querformat) für den Ausdruck.
         setLayout: function (index) {
             this.set("layout", this.get("layouts")[index]);
-        },
-
-        // setter for printID
-        setPrintID: function (value) {
-            this.set("printID", value);
-        },
-
-        // setter for title
-        setTitle: function (value) {
-            this.set("title", value);
-        },
-
-        // setter for gfi
-        setGfi: function (value) {
-            this.set("gfi", value);
-        },
-
-        // setter for outputFilename
-        setOutputFilename: function (value) {
-            this.set("outputFilename", value);
         },
         // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
         setScale: function (index) {
@@ -154,10 +106,10 @@ define(function (require) {
         },
 
         //
-        setStatus: function (args) {
+        setStatus: function (bmodel, value) {
             var scaletext;
 
-            if (args[2].get("id") === "print" && args[0] === true) {
+            if (value && this.get("layouts") === undefined) {
                 if (this.get("fetched") === false) {
                     // get print config (info.json)
                     this.fetch({
@@ -172,12 +124,11 @@ define(function (require) {
                             model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                             model.setScaleByMapView();
                             model.set("isCollapsed", false);
-                            model.set("isCurrentWin", true);
                             model.set("fetched", true);
                         },
                         error: function () {
                             Radio.trigger("Alert", "alert", {text: "<strong>Druckkonfiguration konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
-                            Radio.trigger("Window", "closeWin", false);
+                            Radio.trigger("Window", "setIsVisible", false);
                         },
                         complete: function () {
                             Radio.trigger("Util", "hideLoader");
@@ -186,20 +137,14 @@ define(function (require) {
                             Radio.trigger("Util", "showLoader");
                         }
                     });
+                    this.updatePrintPage();
                 }
-                else {
-                    this.set("isCollapsed", args[1]);
-                    this.set("isCurrentWin", args[0]);
-                }
-            }
-            else {
-                this.set("isCurrentWin", false);
             }
         },
 
         updatePrintPage: function () {
-            if (this.has("scale")) {
-                if (this.get("isCurrentWin") === true) {
+            if (this.has("scale") && this.has("layout")) {
+                if (this.get("isActive")) {
                     Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose, this);
                     Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
                 }
@@ -216,10 +161,10 @@ define(function (require) {
 
             this.set("layerToPrint", []);
             this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-            if (drawLayer.getSource().getFeatures().length > 0) {
+            if (drawLayer !== undefined && drawLayer.getSource().getFeatures().length > 0) {
                 this.setLayer(drawLayer);
             }
-            this.getGFIForPrint();
+            this.getGfiForPrint();
         },
 
         setLayerToPrint: function (layers) {
@@ -265,8 +210,8 @@ define(function (require) {
                 else if (layer.get("url").indexOf("gdi_mrh") >= 0) {
                     layerURL = layer.get("url").replace("gdi_mrh", "gdi_mrh_print");
                 }
-                else if (layer.get("url").indexOf("http://geoportal.metropolregion.hamburg.de") >= 0 ||
-                         layer.get("url").indexOf("http://87.106.16.168") >= 0) {
+                else if (layer.get("url").indexOf("geoportal.metropolregion.hamburg.de") >= 0 ||
+                         layer.get("url").indexOf("geoportaltest.metropolregion.hamburg.de") >= 0) {
                     layerURL = layer.get("url") + "_print";
                 }
                 this.push("layerToPrint", {
@@ -417,9 +362,8 @@ define(function (require) {
                 this.setLayer(layer);
             }, this);
             specification = {
-                // layout: $("#layoutField option:selected").html(),
                 layout: this.get("layout").name,
-                srs: Config.view.epsg,
+                srs: Radio.request("MapView", "getProjection").getCode(),
                 units: "m",
                 outputFilename: this.get("outputFilename"),
                 outputFormat: this.get("outputFormat"),
@@ -493,8 +437,8 @@ define(function (require) {
         * Setzt die createURL in Abhängigkeit der GFI
         * @returns {void}
         */
-        getGFIForPrint: function () {
-            var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGFIForPrint") : null,
+        getGfiForPrint: function () {
+            var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
                 gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
                 gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
                 gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
@@ -504,7 +448,7 @@ define(function (require) {
 
             this.set("gfiParams", gfiParams);
             this.set("gfiTitle", gfiTitle);
-            // Wenn eine GFIPos vorhanden ist, die Config das hergibt und die Anzahl der gfiParameter != 0 ist
+            // Wenn eine GFIPos vorhanden ist, und die Anzahl der gfiParameter != 0 ist
             if (!_.isNull(gfiPosition) && printGFI === true && gfiParams && gfiParams.length > 0) {
                 this.set("createURL", printurl + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
             }
@@ -521,7 +465,7 @@ define(function (require) {
         getPDFURL: function () {
 
             $.ajax({
-                url: Config.proxyURL + "?url=" + this.get("createURL"),
+                url: this.get("proxyURL") + "?url=" + this.get("createURL"),
                 type: "POST",
                 context: this,
                 async: false,
@@ -573,21 +517,18 @@ define(function (require) {
         // Gibt den hexadezimal String und die Opacity zurück.
         getColor: function (value) {
             var color = value,
-                opacity = 1,
-                begin;
+                opacity = 1;
 
             // color kommt als array--> parsen als String
             color = color.toString();
 
             if (color.search("#") === -1) {
-                begin = color.indexOf("(") + 1;
-
-                color = color.substring(begin, color.length - 1);
                 color = color.split(",");
                 if (color.length === 4) {
                     opacity = parseFloat(color[3], 10);
                 }
                 color = this.rgbToHex(parseInt(color[0], 10), parseInt(color[1], 10), parseInt(color[2], 10));
+
                 return {
                     "color": color,
                     "opacity": opacity
@@ -667,44 +608,6 @@ define(function (require) {
             maxx = center[0] + (w / 2);
             maxy = center[1] + (h / 2);
             return [minx, miny, maxx, maxy];
-        },
-
-        /**
-         * Setzt die Parameter aus der config.js für den GFI Marker im Druck, wenn vorhanden
-         * @param {obj} gfiMarker -
-         * @returns {void}
-         */
-        setGfiMarker: function (gfiMarker) {
-            gfiMarker.outerCircle = gfiMarker.outerCircle ? this.setOuterCircle(gfiMarker.outerCircle) : null;
-            gfiMarker.point = gfiMarker.point ? this.setPoint(gfiMarker.point) : null;
-        },
-
-        /**
-         * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Kreis des GFI Markers im Druck
-         * @param {object} outerCircle -
-         * @returns {void}
-         */
-        setOuterCircle: function (outerCircle) {
-            var gfiMarker = this.get("gfiMarker");
-
-            gfiMarker.outerCircle.pointRadius = outerCircle.pointRadius ? outerCircle.pointRadius : null;
-            gfiMarker.outerCircle.stroke = outerCircle.stroke ? outerCircle.stroke : null;
-            gfiMarker.outerCircle.strokeColor = outerCircle.strokeColor ? outerCircle.strokeColor : null;
-            gfiMarker.outerCircle.strokeWidth = outerCircle.strokeWidth ? outerCircle.strokeWidth : null;
-        },
-
-        /**
-         * Wenn vorhanden werden die Parameter aus der config.js verwendet für den Punkt im Kreis des GFI Markers im Druck
-         * @param {object} point -
-         * @returns {void}
-         */
-        setPoint: function (point) {
-            var gfiMarker = this.get("gfiMarker");
-
-            gfiMarker.point.fill = point.fill ? point.fill : null;
-            gfiMarker.point.pointRadius = point.pointRadius ? point.pointRadius : null;
-            gfiMarker.point.fillColor = point.fillColor ? point.fillColor : null;
-            gfiMarker.point.stroke = point.stroke ? point.stroke : null;
         }
     });
 

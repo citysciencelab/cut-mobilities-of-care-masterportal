@@ -174,15 +174,15 @@ define(function (require) {
             });
 
         });
-        describe("createRouteDesc", function () {
+        describe("prepareRouteDesc", function () {
             it("should return an array for empty array input", function () {
-                expect(model.createRouteDesc([])).to.be.an("array");
+                expect(model.prepareRouteDesc([])).to.be.an("array");
             });
             it("should return an array for undefined input", function () {
-                expect(model.createRouteDesc(undefined)).to.be.an("array");
+                expect(model.prepareRouteDesc(undefined)).to.be.an("array");
             });
             it("should return an array for empty object input", function () {
-                expect(model.createRouteDesc({})).to.be.an("array");
+                expect(model.prepareRouteDesc({})).to.be.an("array");
             });
             it("should return an array for given array[object] input", function () {
                 var array = [
@@ -194,7 +194,7 @@ define(function (require) {
                     }
                 ];
 
-                expect(model.createRouteDesc(array)).to.be.an("array").to.deep.equal(["test1", "test2"]);
+                expect(model.prepareRouteDesc(array)).to.be.an("array").to.deep.equal([["1", "test1"], ["2", "test2"]]);
             });
 
         });

@@ -20,7 +20,7 @@ define(function (require) {
             "click .arrows > .glyphicon-arrow-down": "moveModelDown",
             "click .glyphicon-plus-sign": "incTransparency",
             "click .glyphicon-minus-sign": "decTransparency",
-            "click .glyphicon-picture": "openStyleWMS"
+            "click .glyphicon-tint": "openStyleWMS"
         },
         initialize: function () {
             this.listenTo(this.model, {

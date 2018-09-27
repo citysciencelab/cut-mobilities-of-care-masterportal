@@ -2,34 +2,30 @@ define(function (require) {
     var ol = require("openlayers"),
         $ = require("jquery"),
         proj4 = require("proj4"),
+        Tool = require("modules/core/modelList/tool/model"),
         ImportTool;
 
-    ImportTool = Backbone.Model.extend({
-        defaults: {
+    ImportTool = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             text: "",
             features: [],
-            format: new ol.format.KML({extractStyles: true})
-        },
+            format: new ol.format.KML({extractStyles: true}),
+            renderToWindow: true
+        }),
 
         initialize: function () {
-            var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+            this.superInitialize();
 
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
+            this.listenTo(this, {
+                "change:isActive": function (model, value) {
+                    var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+
+                    if (value && this.get("layer") === undefined) {
+                        this.set("layer", drawLayer);
+                        this.set("source", drawLayer.getSource());
+                    }
+                }
             });
-
-            this.set("layer", drawLayer);
-            this.set("source", drawLayer.getSource());
-        },
-
-        setStatus: function (args) {
-            if (args[2].get("id") === "kmlimport") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
-            }
         },
 
         setText: function (value) {

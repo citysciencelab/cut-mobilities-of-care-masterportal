@@ -1,15 +1,14 @@
 define(function (require) {
-
-    var StyleWMS = require("modules/tools/styleWMS/model"),
-        StyleWMSTemplate = require("text!modules/tools/styleWMS/template.html"),
+    var StyleWMSTemplate = require("text!modules/tools/styleWMS/template.html"),
+        $ = require("jquery"),
+        StyleWMSTemplateNoStyleableLayers = require("text!modules/tools/styleWMS/templateNoStyleableLayers.html"),
         StyleWMSView;
 
     require("colorpicker");
     StyleWMSView = Backbone.View.extend({
-        model: new StyleWMS(),
-        className: "style-wms-win ui-widget-content",
-        template: _.template(StyleWMSTemplate),
         events: {
+            // Auswahl des Layers
+            "change #layerField": "setModelByID",
             // Auswahl der Attribute
             "change #attributField": "setAttributeName",
             // Auswahl Anzahl der Klassen
@@ -19,20 +18,42 @@ define(function (require) {
             // Auswahl der Farbe
             "changeColor [id*=style-wms-colorpicker]": "setStyleClassAttributes",
             // Anwenden Button
-            "click button": "createSLD",
+            "click .btn-panel-submit": "createSLD",
+            "click .btn-panel-reset": "reset",
             "click .glyphicon-remove": "hide"
         },
-
         initialize: function () {
+
             this.listenTo(this.model, {
-                // ändert sich der Fensterstatus wird neu gezeichnet
-                "change:isCollapsed change:isCurrentWin sync": this.render,
+                // Aktualisiere die Layerliste, wenn Layer aktiviert / deaktiviert wurden.
+                "sync": this.render,
+                // wird das fenster geschlossen, so wird das Layer-Model zurückgesetzt
+                "change:isActive": function (model, value) {
+                    if (!value) {
+                        this.model.setModel(null);
+                        this.undelegateEvents();
+                    }
+                    else {
+                        this.render();
+                    }
+                },
                 // ändert sich eins dieser Attribute wird neu gezeichnet
                 "change:model change:attributeName change:numberOfClasses": this.render,
                 // Liefert die validate Methode Error Meldungen zurück, werden diese angezeigt
                 "invalid": this.showErrorMessages
             });
+            // Erzeuge die initiale Layer-Liste (für den Light-Modus in dem Fall wichtig, in dem stylebare
+            // Layer initial sichtbar sind. Im custom-Modus wird dies an andere Stelle getriggert.)
+            if (Radio.request("Parser", "getTreeType") === "light") {
+                this.model.refreshStyleableLayerList();
+            }
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
+        className: "wmsStyle-window",
+        template: _.template(StyleWMSTemplate),
+        templateNoStyleableLayers: _.template(StyleWMSTemplateNoStyleableLayers),
+
 
         /**
          * [render description]
@@ -41,16 +62,35 @@ define(function (require) {
         render: function () {
             var attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
-            document.getElementsByTagName("body")[0].appendChild(this.el);
-            this.$el.draggable({
-                containment: "#map",
-                handle: ".header > .title"
-            });
-            this.$el.show();
-            // aktiviert den/die colorpicker
-            this.$el.find("[class*=selected-color]").parent().colorpicker({format: "hex"});
+            // if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
+            if (this.model.get("isActive") === true) {
+
+                if (attr.styleableLayerList.length === 0) {
+                    // Es existieren keine stylebaren Layer
+                    $(".win-body").append(this.$el.html(this.templateNoStyleableLayers()));
+                }
+                else {
+                    $(".win-body").append(this.$el.html(this.template(attr)));
+
+                    if (attr.model !== null && attr.model !== undefined) {
+                        // Selektiere den momentan ausgewählen Layer (wenn Tool über den Themenbaum geöffnet wurde).
+                        this.$el.find("#layerField").find("option[value='" + attr.model.get("id") + "']").attr("selected", true);
+
+                        // aktiviert den/die colorpicker
+                        this.$el.find("[class*=selected-color]").parent().colorpicker({format: "hex"});
+                    }
+                }
+
+                // Lausche auf Events (nötig, wenn das Fenster zwischenzeitlich geschlossen war)
+                this.delegateEvents();
+            }
+
             return this;
+        },
+
+        reset: function () {
+            this.model.resetModel();
+            this.render();
         },
 
         /**
@@ -62,6 +102,10 @@ define(function (require) {
             this.model.setAttributeName(evt.target.value);
         },
 
+        setModelByID: function (evt) {
+            this.model.setModelByID(evt.target.value);
+        },
+
         /**
          * Ruft setNumberOfClasses im Model auf und übergibt die Anzahl der Klassen
          * Alle Colorpicker werden scharf geschaltet
@@ -70,6 +114,9 @@ define(function (require) {
          */
         setNumberOfClasses: function (evt) {
             this.model.setNumberOfClasses(evt.target.value);
+
+            // Update attribute values
+            this.setStyleClassAttributes();
         },
 
         /**

@@ -4,25 +4,27 @@
 **/
 
 define(function (require) {
-    var $ = require("jquery"),
-        AddWMSWin = require("text!modules/tools/addwms/template.html"),
-        AddWMSModel = require("modules/tools/addwms/model"),
+    var AddWMSWin = require("text!modules/tools/addwms/template.html"),
         AddWMSView;
 
     AddWMSView = Backbone.View.extend({
-        model: new AddWMSModel(),
-        template: _.template(AddWMSWin),
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:wmsURL": this.urlChange,
-                "change:isCollapsed": this.render,
-                "change:isCurrentWin": this.render
-            });
-        },
         events: {
             "click #addWMSButton": "loadAndAddLayers",
             "keydown": "keydown"
         },
+        initialize: function () {
+            // Tool ist nur für treeType: custom verfügbar
+            if (Radio.request("Parser", "getTreeType") !== "custom") {
+                return;
+            }
+            this.listenTo(this.model, {
+                "change:wmsURL": this.urlChange,
+                "change:isActive": this.render
+            });
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        },
+        template: _.template(AddWMSWin),
         // Löst das laden und einfügen der Layer in den Baum aus
         loadAndAddLayers: function () {
             this.model.loadAndAddLayers();
@@ -36,12 +38,10 @@ define(function (require) {
             }
         },
         // Rendert das Tool-Fenster
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+        render: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.delegateEvents();
             }
             else {

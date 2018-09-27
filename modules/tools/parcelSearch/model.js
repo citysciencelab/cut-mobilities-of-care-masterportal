@@ -1,12 +1,13 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
+    var Tool = require("modules/core/modelList/tool/model"),
         $ = require("jquery"),
         ParcelSearch;
 
-    ParcelSearch = Backbone.Model.extend({
-        defaults: {
+    ParcelSearch = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
+            "deaktivateGFI": false,
+            "renderToWindow": true,
             "isCollapsed": undefined,
             "isCurrentWin": undefined,
             "countryNumber": "02", // Kennzeichen des Landes. Wird für den Report benötigt um das Flurstückskennzeichen zusammmenzubauen
@@ -25,36 +26,19 @@ define(function (require) {
             "parcelDenominatorNumber": "0", // default Flurstücksnenner,
             "createReport": false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
             "parcelFound": false // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
-        },
+        }),
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
+            this.superInitialize();
+
             this.listenTo(Radio.channel("ParcelSearch"), {
                 "createReport": this.createReport
             });
             this.setDefaults();
         },
-        /*
-         * wird getriggert, wenn ein Tool in der Menüleiste geklickt wird. Übergibt die Konfiguration der parcelSearch aus args an readConfig().
-         */
-        setStatus: function (args) {
-            if (args[2].get("id") === "parcelSearch") {
-                this.setIsCollapsed(args[1]);
-                this.setIsCurrentWin(args[0]);
-            }
-            else {
-                this.setIsCurrentWin(false);
-            }
-        },
-        setDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "parcelSearch"}),
-                restService,
-                serviceURL;
 
-            _.each(config, function (val, key) {
-                this.set(key, val);
-            }, this);
+        setDefaults: function () {
+            var restService,
+                serviceURL;
 
             if (this.get("parcelDenominator") === true) {
                 this.setParcelDenominatorField(true);

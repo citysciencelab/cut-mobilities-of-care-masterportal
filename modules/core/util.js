@@ -1,17 +1,16 @@
 define(function (require) {
-    var Config = require("config"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         Util;
 
     Util = Backbone.Model.extend({
         defaults: {
             // isViewMobile: false,
             config: "",
-            ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"]
+            ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
+            uiStyle: "DEFAULT"
         },
         initialize: function () {
-            var channel = Radio.channel("Util"),
-                uiStyle = Config.uiStyle ? Config.uiStyle.toUpperCase() : "DEFAULT";
+            var channel = Radio.channel("Util");
 
             channel.reply({
                 "isViewMobile": function () {
@@ -56,8 +55,6 @@ define(function (require) {
             });
 
             $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
-
-            this.setUiStyle(uiStyle);
             this.parseConfigFromURL();
         },
         /**

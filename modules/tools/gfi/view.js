@@ -1,7 +1,5 @@
-define(function (require) {
-
-    var Backbone = require("backbone"),
-        GFIView;
+define(function () {
+    var GFIView;
 
     GFIView = Backbone.View.extend({
         events: {
@@ -24,6 +22,8 @@ define(function (require) {
                 this.renderDomElementToBody();
                 this.model.setOverlayElement(document.getElementById("gfipopup"));
             }
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
 
         renderNext: function () {

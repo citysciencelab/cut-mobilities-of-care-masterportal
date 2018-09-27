@@ -30,6 +30,7 @@ define(function (require) {
                 "hasFeatureAtPixel": this.hasFeatureAtPixel,
                 "getSize": this.getSize,
                 "getPixelFromCoordinate": this.getPixelFromCoordinate,
+                "getFeaturesAtPixel": this.getFeaturesAtPixel,
                 "getMap": function () {
                     return this.get("map");
                 },
@@ -121,9 +122,9 @@ define(function (require) {
 
         setBBox: function (bbox) {
             this.set("bbox", bbox);
-            this.bboxToMap(this.get("bbox"));
+            this.bBoxToMap(this.get("bbox"));
         },
-        bboxToMap: function (bbox) {
+        bBoxToMap: function (bbox) {
             if (bbox) {
                 this.get("view").fit(bbox, this.get("map").getSize());
             }
@@ -352,6 +353,16 @@ define(function (require) {
         },
 
         /**
+         * Rückgabe der Features an einer Pixelkoordinate
+         * @param  {pixel} pixel    Pixelkoordinate
+         * @param  {object} options layerDefinition und pixelTolerance
+         * @return {features[]}     Array der Features
+         */
+        getFeaturesAtPixel: function (pixel, options) {
+            return this.get("map").getFeaturesAtPixel(pixel, options);
+        },
+
+        /**
          * Iteriert über alle Features, die ein Pixel auf dem Viewport schneiden
          * @param  {ol.Pixel} pixel -
          * @param  {Function} callback - Die Feature Callback Funktion
@@ -536,7 +547,7 @@ define(function (require) {
             }, this);
 
             if (!found) {
-                source = new ol.source.Vector({useSpatialIndex: false});
+                source = new ol.source.Vector();
                 layer = new ol.layer.Vector({
                     name: name,
                     source: source,

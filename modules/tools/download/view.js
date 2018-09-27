@@ -13,17 +13,17 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("download");
 
+            this.model = new DownloadModel();
+            this.template = _.template(DownloadWin);
+
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin": this.render
-            }); // Fenstermanagement
+                "change:isActive": this.render
+            });
 
             channel.on({
                 "start": this.start
             }, this);
         },
-        model: new DownloadModel(),
-        className: "win-body",
-        template: _.template(DownloadWin),
         /**
          * Startet das Download modul
          * @param  {ol.feature} features die Features die heruntergeladen werden sollen
@@ -47,14 +47,17 @@ define(function (require) {
             this.model.set("id", "download");
             this.model.set("name", "Download");
             this.model.set("glyphicon", "glyphicon-plus");
-            Radio.trigger("Window", "toggleWin", this.model);
+            // $(".win-heading .title").text("Download");
+            Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", false);
+            this.model.set("isActive", true);
         },
         /**
          * Ruft das Tool auf, das den Download gestartet hat
          * @returns {void}
          */
         back: function () {
-            Radio.trigger("Window", "toggleWin", Radio.request("ModelList", "getModelByAttributes", {id: "draw"}));
+            this.model.set("isActive", false);
+            Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", true);
         },
         /**
          *
@@ -79,13 +82,10 @@ define(function (require) {
         triggerDownload: function () {
             this.model.download();
         },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
+        render: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
+                this.$el.html(this.template(model.toJSON()));
                 this.appendOptions();
                 this.delegateEvents();
             }

@@ -3,7 +3,6 @@ define(function (require) {
         templateHitlist = require("text!modules/tools/schulwegRouting_hh/templateHitlist.html"),
         templateRouteResult = require("text!modules/tools/schulwegRouting_hh/templateRouteResult.html"),
         templateRouteDescription = require("text!modules/tools/schulwegRouting_hh/templateRouteDescription.html"),
-        Model = require("modules/tools/schulwegRouting_hh/model"),
         SnippetCheckBoxView = require("modules/snippets/checkbox/view"),
         SchulwegRoutingView;
 
@@ -11,12 +10,6 @@ define(function (require) {
     require("bootstrap-select");
 
     SchulwegRoutingView = Backbone.View.extend({
-        model: new Model(),
-        className: "schulweg-routing",
-        template: _.template(template),
-        templateHitlist: _.template(templateHitlist),
-        templateRouteResult: _.template(templateRouteResult),
-        templateRouteDescription: _.template(templateRouteDescription),
         events: {
             "keyup .address-search": "searchAddress",
             "click li.street": function (evt) {
@@ -25,8 +18,10 @@ define(function (require) {
                 evt.stopPropagation();
             },
             "click li.address": function (evt) {
+                var address = evt.target.textContent;
+
                 this.setAddressSearchValue(evt, false);
-                this.model.selectStartAddress(evt.target.textContent, this.model.get("addressListFiltered"));
+                this.model.selectStartAddress(address, this.model.get("addressListFiltered"));
                 this.model.findRegionalSchool(this.model.get("startAddress"));
                 this.model.prepareRequest(this.model.get("startAddress"));
             },
@@ -78,8 +73,14 @@ define(function (require) {
                     this.render();
                 }
             });
-
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
+        className: "schulweg-routing",
+        template: _.template(template),
+        templateHitlist: _.template(templateHitlist),
+        templateRouteResult: _.template(templateRouteResult),
+        templateRouteDescription: _.template(templateRouteDescription),
 
         render: function () {
             var attr = this.model.toJSON();
@@ -178,20 +179,24 @@ define(function (require) {
         },
 
         setAddressSearchValue: function (evt, searchHouseNumber) {
-            this.$el.find(".address-search").val(evt.target.textContent);
+            var address = evt.target.textContent;
+
+            this.$el.find(".address-search").val(address);
             if (searchHouseNumber) {
-                this.model.setStreetNameList([evt.target.textContent]);
-                this.model.searchHouseNumbers(evt.target.textContent);
+                this.model.setStreetNameList([address]);
+                this.model.searchHouseNumbers(address);
             }
             else {
-                this.model.searchAddress(evt.target.textContent);
+                this.model.searchAddress(address);
             }
         },
         closeView: function () {
             this.model.setIsActive(false);
         },
         selectSchool: function (evt) {
-            this.model.selectSchool(this.model.get("schoolList"), evt.target.value);
+            var schoolname = evt.target.value;
+
+            this.model.selectSchool(this.model.get("schoolList"), schoolname);
             this.model.prepareRequest(this.model.get("startAddress"));
         },
         updateSelectedSchool: function (schoolId) {
@@ -218,8 +223,14 @@ define(function (require) {
             this.$el.find(".result").html("");
             this.$el.find(".description").html("");
         },
+        /**
+         * trigger the model to print the route
+         * @deprecated in v 3.0.0 remove "this.model.printRouteClient();". enable "this.model.printRouteMapFish();"
+         * @return {[type]} [description]
+         */
         printRoute: function () {
-            this.model.printRoute();
+            this.model.printRouteClient();
+            // this.model.printRouteMapFish();
         }
     });
 

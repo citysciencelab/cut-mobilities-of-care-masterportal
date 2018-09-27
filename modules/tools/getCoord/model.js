@@ -1,20 +1,21 @@
 define(function (require) {
-    var ol = require("openlayers"),
+    var Tool = require("modules/core/modelList/tool/model"),
+        ol = require("openlayers"),
         CoordPopup;
 
-    CoordPopup = Backbone.Model.extend({
-        defaults: {
+    CoordPopup = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             selectPointerMove: null,
             projections: [],
             mapProjection: null,
             positionMapProjection: [],
             updatePosition: true,
-            currentProjectionName: "EPSG:25832"
-        },
+            currentProjectionName: "EPSG:25832",
+            deactivateGFI: true,
+            renderToWindow: true
+        }),
         initialize: function () {
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
+            this.superInitialize();
 
             // for 3d mode
             this.listenTo(Radio.channel("Map"), {
@@ -22,27 +23,11 @@ define(function (require) {
                     this.positionClicked(obj.coordinate);
                 }
             });
-
-            this.setProjections(Radio.request("CRS", "getProjections"));
-            this.setMapProjection(Radio.request("MapView", "getProjection"));
-            if (!_.isUndefined(this.get("mapProjection"))) {
-                this.setCurrentProjectionName(this.get("mapProjection").getCode());
-            }
-        },
-
-        setStatus: function (args) { // Fenstermanagement
-            if (args[2].get("id") === "coord") {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-            }
-            else {
-                this.set("isCurrentWin", false);
-                this.data = {};
-                this.formats = {};
-            }
         },
 
         createInteraction: function () {
+            this.setProjections(Radio.request("CRS", "getProjections"));
+            this.setMapProjection(Radio.request("MapView", "getProjection"));
             this.setSelectPointerMove(new ol.interaction.Pointer({
                 handleMoveEvent: function (evt) {
                     this.checkPosition(evt.coordinate);

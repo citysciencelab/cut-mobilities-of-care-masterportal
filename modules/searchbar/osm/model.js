@@ -105,6 +105,7 @@ define(function (require) {
          */
         pushSuggestions: function (data) {
             var display,
+                metaName,
                 bbox,
                 north,
                 east,
@@ -124,6 +125,16 @@ define(function (require) {
                                 display = display + " " + hit.address.house_number;
                             }
                         }
+
+                        // Tooltip
+                        metaName = display;
+                        if (!_.isUndefined(hit.address.postcode) && !_.isUndefined(hit.address.state)) {
+                            metaName = metaName + ", " + hit.address.postcode + " " + hit.address.state;
+                            if (!_.isUndefined(hit.address.suburb)) {
+                                metaName = metaName + " (" + hit.address.suburb + ")";
+                            }
+                        }
+
                         bbox = hit.boundingbox;
                         if (!_.isUndefined(hit.address.house_number)) {
                             // Zentrum der BoundingBox ermitteln und von lat/lon ins Zielkoordinatensystem transformieren...
@@ -143,6 +154,7 @@ define(function (require) {
                         }
                         Radio.trigger("Searchbar", "pushHits", "hitList", {
                             name: display,
+                            metaName: metaName,
                             type: "OpenStreetMap",
                             osm: true,
                             glyphicon: "glyphicon-road",

@@ -1,11 +1,12 @@
-define(function () {
+define(function (require) {
 
-    var CompareFeaturesModel;
+    var Tool = require("modules/core/modelList/tool/model"),
+        CompareFeaturesModel;
 
-    CompareFeaturesModel = Backbone.Model.extend({
-        defaults: {
+    CompareFeaturesModel = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             // true if the tool is activated
-            isActivated: false,
+            // isActivated: false,
             // all comparable features
             featureList: [],
             // the comparable features group by layer
@@ -16,24 +17,14 @@ define(function () {
             numberOfFeaturesToShow: 3,
             // number of attributes to be displayed
             numberOfAttributesToShow: 12
-        },
+        }),
         initialize: function () {
             var channel = Radio.channel("CompareFeatures");
 
             channel.on({
-                "setIsActivated": this.setIsActivated,
+                "setIsActivated": this.setIsActive,
                 "addFeatureToList": this.addFeatureToList,
                 "removeFeatureFromList": this.removeFeatureFromList
-            }, this);
-
-            this.overwriteDefaults();
-        },
-
-        overwriteDefaults: function () {
-            var config = Radio.request("Parser", "getItemByAttributes", {id: "compareFeatures"});
-
-            _.each(config, function (value, key) {
-                this.set(key, value);
             }, this);
         },
 
@@ -77,6 +68,7 @@ define(function () {
          * creates a JSON where an object matches to a row
          * one object attribute is created for each feature (column)
          * @param {object} gfiAttributes -
+         *@param {object} themeConfig attribute configuration from schulinfo theme
          * @returns {object[]} list - one object per row
          */
         prepareFeatureListToShow: function (gfiAttributes) {
@@ -324,7 +316,7 @@ define(function () {
          * @returns {void}
          */
         setIsActivated: function (value) {
-            this.set("isActivated", value);
+            this.set("isActive", value);
         }
     });
 

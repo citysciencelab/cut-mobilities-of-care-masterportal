@@ -1,0 +1,62 @@
+<nav aria-label="...">
+  <ul class="pagination pagination-lg">
+    <li class="<% if (_.isNull(routelayer)) {print ('active');} %>">
+      <span id="address" title="Start- und Ziel eingeben" class="glyphicon glyphicon-road" aria-hidden="true"></span>
+    </li>
+    <li>
+      <span id="options" title="Optionen eingeben" class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+    </li>
+    <li id="calcLi" class="<% if (fromCoord === '' || toCoord === '') {print ('disabled');} else if (!_.isNull(routelayer)) {print ('active');} %>">
+      <span id="calc" title="Route berechnen" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+    </li>
+  </ul>
+</nav>
+
+<div class="address innerRDiv" style="<% if (!_.isNull(routelayer)) {print ('display: none');} %>">
+    <h4>Startadresse:</h4>
+    <div class="input-group inputGroupR" id="input-group-start">
+        <input type="text" class="form-control adresse" id="startAdresse" placeholder="Von:" aria-describedby="basic-addon1"  value="<%=startAdresse%>" autocomplete="off">
+        <div style="position:relative;">
+             <ul id="start" class="dropdown-menu-routing" aria-labelledby="startAdresse">
+            </ul>
+        </div>
+        <span id="startAdressePositionSpan" class="<% if (!isGeolocationPossible) {print ('hidden ');} %>input-group-addon glyphicon glyphicon-map-marker routinglocator startAdressePosition" aria-hidden="true"></span>
+    </div>
+    <h4>Zieladresse:</h4>
+    <div class="input-group inputGroupR" id="input-group-ziel">
+        <input type="text" class="form-control adresse" id="zielAdresse" placeholder="Nach:" aria-describedby="basic-addon1" value="<%=zielAdresse%>" autocomplete="off">
+        <div style="position:relative;">
+            <ul id="ziel" class="dropdown-menu-routing" role="menu" aria-labelledby="zielAdresse">
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="options innerRDiv" style="display: none;">
+    <h4>Startzeitpunkt vorgeben:</h4>
+    <div class="input-group inputGroupR">
+        <span class="input-group-addon">Datum</span>
+        <input type="date" id="dayOfWeekButton" class="form-control changedWochentag" aria-describedby="basic-addon2" min="2017-01-01" value="<% var date = new Date(); print (date.toISOString().split('T')[0]) %>">
+    </div>
+    <br>
+    <div class="input-group inputGroupR">
+        <span class="input-group-addon">Uhrzeit</span>
+        <input type="time" id="timeButton" class="form-control changedUhrzeit" aria-describedby="basic-addon2" min="00:00" max="23:59" value="<% var date = new Date(); print (date.toLocaleTimeString()) %>">
+    </div>
+</div>
+
+<div class="calc" style="<% if (_.isNull(routelayer)) {print ('display: none');} %>">
+    <h4 id="summary"><% if (!_.isNull(routelayer)) {print ('Sie erreichen Ihr Ziel nach ' + sumLength + ' km (' + sumTime + ' Min.):');} %></h4>
+    <ul id="description" class="list-group">
+        <%
+            _.each(description, function (item, index) {
+                var tracDesc = "<strong>" + item.Description.split(". ")[0] + ".</strong>",
+                    tracLength = "<em>" + item.Description.split(". ")[1] + "</em>";
+
+                print("<li id='teil" + index.toString() + "' class='list-group-item'><span class=''>" + tracDesc + "<br>" + tracLength + "</span></li>");
+            });
+        %>
+    </ul>
+    <h4 id="endeDescription"><% if (!_.isNull(routelayer)) {print (endDescription)} %></h4>
+</div>
+

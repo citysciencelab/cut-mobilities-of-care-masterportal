@@ -1,0 +1,37 @@
+@color_1: rgb(255, 255, 255);
+@color_2: rgb(53, 53, 53);
+@font_family_1: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+@background_color_1: rgb(8, 88, 158);
+
+.dropdown-menu {
+    border: 1px solid #ccc;
+    >li {
+        >a {
+            &:hover {
+                background-color: @background_color_1;
+                color: @color_1;
+            }
+            font-family: @font_family_1;
+            font-size: 12px;
+            color: @color_2;
+            >span {
+                padding-right: 8px;
+            }
+        }
+    }
+    >.active {
+        >a {
+            background-color: @background_color_1;
+            color: @color_1;
+        }
+    }
+    >.divider {
+        margin: 6px 0;
+    }
+}
+@media (max-width: 767px) {
+    .dropdown-menu {
+        border-right: 0;
+        border-left: 0;
+    }
+}

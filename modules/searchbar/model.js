@@ -1,13 +1,12 @@
 define(function (require) {
-    var Config = require("config"),
-        $ = require("jquery"),
+    var $ = require("jquery"),
         SearchbarModel;
 
     SearchbarModel = Backbone.Model.extend({
         defaults: {
             placeholder: "Suche",
             recommendedList: "",
-            recommandedListLength: 5,
+            recommendedListLength: 5,
             quickHelp: false,
             searchString: "", // der aktuelle String in der Suchmaske
             hitList: [],
@@ -16,9 +15,6 @@ define(function (require) {
         },
 
         initialize: function () {
-            if (Config.quickHelp) {
-                this.set("quickHelp", Config.quickHelp);
-            }
             this.listenTo(Radio.channel("Searchbar"), {
                 "createRecommendedList": this.createRecommendedList,
                 "pushHits": this.pushHits,
@@ -156,7 +152,7 @@ define(function (require) {
         },
 
         createRecommendedList: function () {
-            var max = this.get("recommandedListLength"),
+            var max = this.get("recommendedListLength"),
                 recommendedList = [],
                 hitList = this.get("hitList"),
                 foundTypes = [],
@@ -200,6 +196,10 @@ define(function (require) {
 
         setEventType: function (value) {
             this.set("eventType", value);
+        },
+
+        setSearchFieldisSelected: function (value) {
+            this.set("searchFieldisSelected", value);
         }
     });
 

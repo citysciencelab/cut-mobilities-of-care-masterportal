@@ -113,6 +113,7 @@ define(function (require) {
                 "setZoomLevelUp": this.setZoomLevelUp,
                 "setZoomLevelDown": this.setZoomLevelDown,
                 "setScale": this.setScale,
+                "setConstrainedResolution": this.setConstrainedResolution,
                 "resetView": this.resetView
             }, this);
 
@@ -168,6 +169,16 @@ define(function (require) {
                 channel.trigger("changedCenter", this.getCenter());
             }, this);
         },
+
+        /**
+         * @param {number} resolution -
+         * @param {number} direction - 0 set the nearest, 1 set the largest nearest, -1 set the smallest nearest
+         * @returns {void}
+         */
+        setConstrainedResolution: function (resolution, direction) {
+            this.get("view").setResolution(this.get("view").constrainResolution(resolution, 0, direction));
+        },
+
         resetView: function () {
             this.get("view").setCenter(this.get("startCenter"));
             this.get("view").setResolution(this.get("startResolution"));

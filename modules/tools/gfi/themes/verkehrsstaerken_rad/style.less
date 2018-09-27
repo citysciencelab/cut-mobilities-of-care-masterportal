@@ -1,0 +1,55 @@
+@color_1: black;
+
+.verkehrsstaerken_rad {
+    .data {
+        white-space: nowrap;
+        text-align: center;
+    }
+    .nav-pills {
+        padding: 6px;
+    }
+    .tab-content {
+        overflow: auto;
+    }
+    .text-align-center {
+        text-align: center;
+    }
+    .pointer {
+        cursor: pointer;
+    }
+    .graph {
+        position: relative;
+        width: 500px;
+        height: 250px;
+    }
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 2px;
+    }
+    .dot {
+        cursor: pointer;
+        stroke: none;
+        fill: steelblue;
+    }
+    .dot_visible {
+        cursor: pointer;
+        stroke: none;
+        fill: red;
+    }
+    .dot_invisible {
+        display: none;
+    }
+    .domain {
+        fill: none;
+        stroke: #000;
+    }
+    .graph-tooltip-div {
+        display: inline-block;
+        position: absolute;
+        color: @color_1;
+        padding: 2px;
+        border: 2px solid white;
+        text-align: center;
+    }
+}

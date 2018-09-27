@@ -5,11 +5,11 @@
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm" id="geomField">
                 <% if (!isMap3d) { %>
-                    <option value="LineString" <% if (type === "LineString") { print ("SELECTED")} %>>Strecke</option>
-                    <option value="Polygon" <% if (type === "Polygon") { print ("SELECTED")} %>>Fläche</option>
+                    <option value="LineString" <% if (geomtype === "LineString") { print ("SELECTED")} %>>Strecke</option>
+                    <option value="Polygon" <% if (geomtype === "Polygon") { print ("SELECTED")} %>>Fläche</option>
                 <% }
                 else { %>
-                    <option value="3d" <% if (type === "3d") { print ("SELECTED")} %>>3D Messen</option>
+                    <option value="3d" <% if (geomtype === "3d") { print ("SELECTED")} %>>3D Messen</option>
                 <% } %>
             </select>
         </div>
@@ -18,7 +18,7 @@
         <label for="unitField" class="col-md-5 col-sm-5 control-label">Einheit</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm" id="unitField">
-                <% if (type === "LineString" || type === "3d") { %>
+                <% if (geomtype === "LineString" || geomtype === "3d") { %>
                     <option value="m">m</option>
                     <option value="km">km</option>
                 <% }

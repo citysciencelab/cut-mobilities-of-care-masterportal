@@ -101,6 +101,7 @@ define(function (require) {
                     if (hit.score > this.get("score")) {
                         Radio.trigger("Searchbar", "pushHits", "hitList", {
                             name: hit.suggestion,
+                            metaName: hit.suggestion,
                             type: "Ort",
                             bkg: true,
                             glyphicon: "glyphicon-road",
@@ -143,6 +144,7 @@ define(function (require) {
                 if (hit.score > this.get("score")) {
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
                         name: hit.suggestion,
+                        metaName: hit.suggestion,
                         type: "Ort",
                         bkg: true,
                         glyphicon: "glyphicon-road",

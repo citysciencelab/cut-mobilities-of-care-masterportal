@@ -58,6 +58,40 @@ Test in normaler cmd:
 ```
 
 ## Grunt Tasks ausführen
+### grunt less
+Bootstrap- und Masterportal-CSS Regeln werden in LESS erstellt und in CSS konvertiert. Die CSS-Dateien werden in der style.css ins Portal eingebunden.
+```
+@import "bootstrap.css";
+@import "modules.css";
+```
+Sie liegen jedoch nicht im Repository und müssen nach einem clone noch erstellt werden.
+
+*Einmalig nach clone* muss eine *bootstrap.css* Datei kompiliert werden. Dies geschieht mittels des nachfolgenden grunt-Tasks für LESS.
+Die *modules.css* muss *nicht manuell* erzeugt werden. Diese wird über *grunt server* und fortlaufend über einen *watch-Task* automatisch generiert.
+
+Nachfolgend die Aufrufe zur Erstellung der CSS aus LESS:
+
+####bootstrap.css
+Die eingebundene CSS unterscheidet sich hinsichtlich des Icon-Pfads zwischen Development- und Produktionsumgebung. 
+```
+# grunt less:bootstrapDev
+```
+wird die *css/bootstrap.css* anhand der *css/bootstrap.less* mit Masterportal-Variablen neu erstellt. Als icon-font-path wird "../node_modules/bootstrap/fonts/" gesetzt. *grunt server* beinhaltet *grunt less:bootstrapDev*.
+
+Mit 
+```
+# grunt less:bootstrapBuild
+```
+wird die *css/bootstrap.css* anhand der *css/bootstrap.less* mit Masterportal-Variablen neu erstellt. Als icon-font-path wird ""../fonts/"" gesetzt. *grunt build* beinhaltet *grunt less:bootstrapBuild*.
+
+####modules.css
+Mit 
+```
+# grunt less:modules
+```
+wird die *css/modules.css* aus allen *.less Dateien* unter */modules/* erstellt.
+
+
 ### grunt server
 Einen lokalen Entwicklungsserver starten.
 

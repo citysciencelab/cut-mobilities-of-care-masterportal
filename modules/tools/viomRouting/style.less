@@ -1,0 +1,117 @@
+@color_1: blue;
+@color_2: #cdcdcd;
+@font_family_1: "UniversNextW01-Regular",sans-serif;
+@background_color_1: #fff;
+@background_color_2: #ebebeb;
+@background_color_3: #efefef;
+
+.routingWin {
+    min-height: 280px;
+    overflow: auto;
+    max-height: 1280px;
+}
+.inputGroupR {
+    width: 100%;
+}
+.innerRDiv {
+    position: absolute;
+    width: 225px;
+}
+.options {
+    >.input-group {
+        input {
+            width: calc(225px - 70px);
+        }
+    }
+}
+.routinglocator {
+    background-color: @background_color_1;
+    vertical-align: middle !important;
+    top: 0;
+    &:hover {
+        background-color: @background_color_2;
+    }
+}
+#routingoverlay {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
+    color: @color_1;
+    border-radius: 5px !important;
+    font-family: @font_family_1;
+    font-weight: bold;
+    padding: 5px;
+}
+.dropdown-menu-routing {
+    background-clip: padding-box;
+    background-color: @background_color_1;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    float: left;
+    font-size: 13px;
+    list-style: outside none none;
+    margin: 2px 0 0;
+    min-width: 225px;
+    position: absolute;
+    z-index: 1001;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    top: 31px !important;
+    .glyphicon {
+        color: @color_2;
+        padding-right: 12px;
+        padding-left: 3px;
+        font-size: 12px;
+    }
+    img {
+        width: 28px;
+        padding-right: 10px;
+        margin-bottom: 4px;
+    }
+    small {
+        color: @color_2;
+        padding-left: 10px;
+    }
+    li.type {
+        background: #e7e7e7;
+        background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+        background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+        background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+        background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+        background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    }
+    li {
+        &:hover {
+            cursor: pointer;
+            background-color: @background_color_3;
+        }
+    }
+}
+@media (min-height:360px) {
+    .routingWin {
+        max-height: 120px;
+    }
+}
+@media (min-height:540px) {
+    .routingWin {
+        max-height: 300px;
+    }
+}
+@media (min-height:700px) {
+    .routingWin {
+        max-height: 460px;
+    }
+}
+@media (min-height: 820px) {
+    .routingWin {
+        max-height: 580px;
+    }
+}
+@media (min-height: 1000px) {
+    .routingWin {
+        max-height: 750px;
+    }
+}
+@media (min-height: 1100px) {
+    .routingWin {
+        max-height: 950px;
+    }
+}

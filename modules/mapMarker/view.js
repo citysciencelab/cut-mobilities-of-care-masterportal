@@ -46,13 +46,11 @@ define(function (require) {
             if (markerPosition) {
                 this.showMarker(markerPosition);
             }
-            this.model.askForMarkers();
         },
         render: function () {
             this.model.get("marker").setElement(this.$el[0]);
             return this;
         },
-
         /**
         * @description Entfernt den searchVector
         * @returns {void}
@@ -190,10 +188,12 @@ define(function (require) {
             this.clearMarker();
             this.model.get("marker").setPosition(coordinate);
             this.$el.show();
+            this.model.get("polygon").setVisible(true);
         },
 
         hideMarker: function () {
             this.$el.hide();
+            this.model.get("polygon").setVisible(false);
         }
     });
 

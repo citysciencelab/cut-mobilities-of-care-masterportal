@@ -3,10 +3,11 @@ define(function (require) {
     var Layer = require("modules/core/modelList/layer/model"),
         ol = require("openlayers"),
         Config = require("config"),
-        mqtt = require("mqtt"),
         moment = require("moment"),
         $ = require("jquery"),
         SensorLayer;
+
+    require("mqtt");
 
     SensorLayer = Layer.extend({
 
@@ -18,7 +19,9 @@ define(function (require) {
             }),
 
         initialize: function () {
-            this.superInitialize();
+            if (!this.get("isChildLayer")) {
+                Layer.prototype.initialize.apply(this);
+            }
 
             // change language from moment.js to german
             moment.locale("de");
@@ -30,6 +33,9 @@ define(function (require) {
          */
         createLayerSource: function () {
             this.setLayerSource(new ol.source.Vector());
+            if (this.has("clusterDistance")) {
+                this.createClusterLayerSource();
+            }
         },
 
         /**
@@ -567,7 +573,7 @@ define(function (require) {
          */
         createMqttConnectionToSensorThings: function (features) {
             var dataStreamIds = this.getDataStreamIds(features),
-                client = mqtt.connect({
+                client = window.mqtt.connect({
                     host: this.get("url").split("/")[2],
                     protocol: "wss",
                     path: "/mqtt",
@@ -809,6 +815,20 @@ define(function (require) {
                 if (!_.isUndefined(style)) {
                     this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
                 }
+            }
+        },
+
+        /**
+        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+        * @param {object} options -
+        * @returns {void}
+        **/
+        checkForScale: function (options) {
+            if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+                this.setIsOutOfRange(false);
+            }
+            else {
+                this.setIsOutOfRange(true);
             }
         },
 

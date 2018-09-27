@@ -1,54 +1,56 @@
 define(function (require) {
+
     var ol = require("openlayers"),
-        Config = require("config"),
         Cesium = require("cesium"),
+        Tool = require("modules/core/modelList/tool/model"),
         Measure;
 
-    Measure = Backbone.Model.extend({
-        defaults: {
+    Measure = Tool.extend({
+        defaults: _.extend({}, Tool.prototype.defaults, {
             source: new ol.source.Vector(),
             style: new ol.style.Style({
                 fill: new ol.style.Fill({
-                    color: "rgba(255, 127, 0, 0.3)"
+                    color: [255, 127, 0, 0.3]
                 }),
                 stroke: new ol.style.Stroke({
-                    color: "rgba(255, 127, 0, 1.0)",
+                    color: [255, 127, 0, 1.0],
                     width: 2
                 }),
                 image: new ol.style.Circle({
                     radius: 6,
                     stroke: new ol.style.Stroke({
-                        color: "rgba(255, 127, 0, 1.0)",
+                        color: [255, 127, 0, 1.0],
                         width: 3
                     }),
                     fill: new ol.style.Fill({
-                        color: "rgba(255, 127, 0, 0.4)"
+                        color: [255, 127, 0, 0.4]
                     })
                 })
             }),
-            type: "LineString",
+            geomtype: "LineString",
             unit: "m",
             decimal: 1,
             measureTooltips: [],
             hits3d: [],
             quickHelp: false,
             isMap3d: false,
-            uiStyle: "DEFAULT"
-        },
+            uiStyle: "DEFAULT",
+            renderToWindow: true,
+            deactivateGFI: true
+        }),
 
         initialize: function () {
-            var layers = Radio.request("Map", "getLayers");
 
-            this.listenTo(Radio.channel("Window"), {
-                "winParams": this.setStatus
-            });
+
+            this.superInitialize();
 
             this.listenTo(Radio.channel("Map"), {
                 "change": this.changeMap
             });
 
             this.listenTo(this, {
-                "change:type": this.createInteraction
+                // "change:geomtype": this.createInteraction,
+                "change:isActive": this.setStatus
             });
 
             this.set("layer", new ol.layer.Vector({
@@ -59,36 +61,37 @@ define(function (require) {
             }));
 
             this.setUiStyle(Radio.request("Util", "getUiStyle"));
+        },
+        setStatus: function (model, value) {
+            var layers = Radio.request("Map", "getLayers"),
+                measureLayer;
 
-            Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
-
-            if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
-                this.set("quickHelp", true);
+            if (value) {
+                measureLayer = _.find(layers.getArray(), function (layer) {
+                    return layer.get("name") === "measure_layer";
+                });
+                if (measureLayer === undefined) {
+                    Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
+                }
+                this.createInteraction();
+            }
+            else {
+                Radio.trigger("Map", "removeInteraction", this.get("draw"));
+                this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
             }
         },
-
         changeMap: function (map) {
             this.deleteFeatures();
             if (map === "3D") {
                 this.set("isMap3d", true);
-                this.set("type", "3d");
+                this.set("geomtype", "3d");
             }
             else {
                 this.set("isMap3d", false);
-                this.set("type", "LineString");
-            }
-            this.createInteraction();
-        },
-        setStatus: function (args) {
-            if (args[2].get("id") === "measure" && args[0] === true) {
-                this.set("isCollapsed", args[1]);
-                this.set("isCurrentWin", args[0]);
-                this.createInteraction();
-            }
-            else {
-                this.set("isCurrentWin", false);
-                Radio.trigger("Map", "removeInteraction", this.get("draw"));
-                this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
+                this.set("geomtype", "LineString");
+                if (this.get("isActive")) {
+                    this.createInteraction();
+                }
             }
         },
         handle3DClicked: function (obj) {
@@ -168,12 +171,8 @@ define(function (require) {
             return feature;
         },
         createInteraction: function () {
-            if (!this.get("isCurrentWin")) {
-                return;
-            }
             Radio.trigger("Map", "removeInteraction", this.get("draw"));
             this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
-            Radio.trigger("Map", "unregisterListener", "pointermove", this.placeMeasureTooltip, this);
             if (Radio.request("Map", "isMap3d")) {
                 this.listenTo(Radio.channel("Map"), "clickedWindowPosition", this.handle3DClicked.bind(this));
                 this.set("hits3d", []);
@@ -181,7 +180,7 @@ define(function (require) {
             else {
                 this.set("draw", new ol.interaction.Draw({
                     source: this.get("source"),
-                    type: this.get("type"),
+                    type: this.get("geomtype"),
                     style: this.get("style")
                 }));
                 this.get("draw").on("drawstart", function (evt) {
@@ -191,7 +190,8 @@ define(function (require) {
                     this.set("sketch", evt.feature);
                     this.createMeasureTooltip();
                 }, this);
-                this.get("draw").on("drawend", function () {
+                this.get("draw").on("drawend", function (evt) {
+                    evt.feature.set("styleId", evt.feature.ol_uid);
                     this.get("measureTooltipElement").className = "tooltip-default tooltip-static";
                     this.get("measureTooltip").setOffset([0, -7]);
                     // unset sketch
@@ -277,8 +277,8 @@ define(function (require) {
          * @return {undefined}
          */
         setGeometryType: function (value) {
-            this.set("type", value);
-            if (this.get("type") === "LineString") {
+            this.set("geomtype", value);
+            if (this.get("geomtype") === "LineString") {
                 this.setUnit("m");
             }
             else {

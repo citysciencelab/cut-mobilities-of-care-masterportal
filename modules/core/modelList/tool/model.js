@@ -16,8 +16,6 @@ define(function (require) {
             parentId: "",
             // Bootstrap Glyphicon Class
             glyphicon: "",
-            // Email Adresse
-            email: undefined,
             // Name (Überschrift) der Funktion
             name: "",
             // true wenn das Tool aktiviert ist
@@ -26,52 +24,33 @@ define(function (require) {
             deaktivateGFI: true,
             supportedIn3d: ["coord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"],
             // Tools die in die Sidebar und nicht in das Fenster sollen
-            toolsToRenderInSidebar: ["filter", "schulwegrouting"]
+            toolsToRenderInSidebar: ["filter", "schulwegrouting"],
+            renderToWindow: true
         },
 
-        initialize: function () {
+        superInitialize: function () {
             var channel = Radio.channel("Tool");
 
             this.listenTo(this, {
                 "change:isActive": function (model, value) {
-                    if (value) {
-                        this.activateTool();
-                        channel.trigger("activatedTool", this.get("id"), this.get("deaktivateGFI"));
+                    if (value && model.get("renderToWindow")) {
+                        Radio.trigger("Window", "showTool", model);
+                        Radio.trigger("Window", "setIsVisible", true);
+                    }
+                    else if (!value && model.get("renderToWindow")) {
+                        Radio.trigger("Window", "setIsVisible", false);
+                    }
+                    if (model.get("deactivateGFI") && value) {
+                        channel.trigger("activatedTool", "gfi", true);
                     }
                     else {
-                        channel.trigger("deactivatedTool", this.get("id"), this.get("deaktivateGFI"));
-                    }
-                    if (_.contains(this.get("toolsToRenderInSidebar"), this.get("id")) || this.get("id") === "legend" || this.get("id") === "compareFeatures") {
                         channel.trigger("activatedTool", "gfi", false);
                     }
                 }
             });
-        },
 
-        activateTool: function () {
-            if (this.get("isActive") === true) {
-                // triggert das Ändern eines Tools
-                Radio.trigger("ClickCounter", "toolChanged");
-                if (this.get("id") !== "legend" && this.get("id") !== "compareFeatures") {
-                    this.collection.setActiveToolToFalse(this, this.get("deaktivateGFI"));
-                }
-
-                if (this.get("id") === "legend") {
-                    Radio.trigger("Legend", "toggleLegendWin");
-                }
-                else if (this.get("id") === "featureLister") {
-                    Radio.trigger("FeatureListerView", "toggle");
-                }
-                else if (_.contains(this.get("toolsToRenderInSidebar"), this.get("id"))) {
-                    Radio.trigger("Sidebar", "toggle", true);
-                    Radio.trigger("Window", "closeWin", false);
-                }
-                else if (this.get("id") === "compareFeatures") {
-                    Radio.trigger("CompareFeatures", "setIsActivated", true);
-                }
-                else {
-                    Radio.trigger("Window", "toggleWin", this);
-                }
+            if (this.get("isInitOpen")) {
+                this.setIsActive("true");
             }
         },
 

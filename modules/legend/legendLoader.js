@@ -1,19 +1,18 @@
 define(function (require) {
-    var Model = require("modules/legend/model"),
-        LegendLoader;
+    var LegendLoader;
 
-    LegendLoader = function () {
+    LegendLoader = function (LegendModel) {
         this.loadMenu = function (caller) {
             var isMobile = Radio.request("Util", "isViewMobile");
 
             if (isMobile) {
                 require(["modules/legend/mobile/view"], function (Legend) {
-                    caller.currentLegend = new Legend(Model);
+                    caller.currentLegend = new Legend({model: LegendModel});
                 });
             }
             else {
                 require(["modules/legend/desktop/view"], function (Legend) {
-                    caller.currentLegend = new Legend(Model);
+                    caller.currentLegend = new Legend({model: LegendModel});
                 });
             }
         };

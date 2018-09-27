@@ -1,14 +1,12 @@
 define(function (require) {
     var assert = require("chai").assert,
+        model,
         Model = require("../../../../../modules/tools/download/model.js");
 
     describe("downloadModel", function () {
-        var model;
-
         before(function () {
             model = new Model();
         });
-
         describe("validateFilename", function () {
             it("validation should succeed when filename valid", function () {
                 assert.isTrue(model.validateFilename("name.jpg"), "validation should succeed when filename valid");

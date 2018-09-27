@@ -74,7 +74,6 @@ define(function () {
             if (this.get("parametersAnalysed") === true && this.get("configAnalysed") === true) {
                 autostartModuls = this.get("autostartModuls");
                 initializedModuls = this.get("initializedModuls");
-
                 if (autostartModuls.length === 0) {
                     // es werden keine Module automatisch gestartet. Autostarter wird nicht benötigt.
                     this.unloadModule();

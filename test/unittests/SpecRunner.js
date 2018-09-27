@@ -22,7 +22,8 @@ require.config({
         bootstrap: "../../node_modules/bootstrap/js",
         mqtt: "../../node_modules/mqtt/dist/mqtt",
         text: "../../node_modules/requirejs-text/text",
-        pdfmake: "../../node_modules/pdfmake/build/pdfmake"
+        pdfmake: "../../node_modules/pdfmake/build/pdfmake",
+        colorpicker: "../../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min"
     },
     shim: {
         bootstrap: {
@@ -65,7 +66,6 @@ define(function (require) {
             "modules/core/testParametricUrl.js",
             "modules/core/modelList/layer/testGeoJson.js",
             "modules/core/modelList/layer/testSensor.js",
-            "modules/core/modelList/layer/testGroup.js",
             "modules/core/modelList/testList.js",
             "modules/contact/testModel.js",
             "modules/core/testRawLayerList.js",
@@ -87,12 +87,20 @@ define(function (require) {
             "modules/menu/desktop/folder/testViewTree.js",
             "modules/menu/mobile/folder/testView.js",
             "modules/core/testUtil.js",
-            "modules/tools/schulwegrouting_hh/testModel.js",
             "modules/tools/compareFeatures/testModel.js",
             "modules/menu/mobile/folder/testView.js",
             "modules/tools/graph/testModel.js",
             "modules/functionalities/browserPrint/testModel.js",
-            "modules/tools/searchByCoord/testModel.js"
+            // "modules/tools/print/testModel.js",
+            "modules/tools/print/testBuildSpec.js",
+            "modules/tools/searchByCoord/testModel.js",
+            "modules/legend/legendModel.js",
+            "modules/tools/layerslider/layersliderModel.js",
+            "modules/tools/styleWMS/testModel.js",
+            "modules/tools/styleWMS/testView.js",
+            "modules/menu/desktop/layer/testViewLight.js",
+            "modules/menu/desktop/layer/testViewSelection.js",
+            "modules/layerinformation/testModel.js"
         ], function () {
             mocha.run();
         });

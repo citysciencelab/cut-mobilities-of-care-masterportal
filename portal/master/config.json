@@ -118,7 +118,7 @@
         "deaktivateGFI": false,
         "isGeneric": false,
         "isInitOpen": false,
-        "allowMultipleQueriesPerLayer": true,
+        "allowMultipleQueriesPerLayer": false,
         "predefinedQueries": [
             {
               "layerId": "8712",
@@ -184,8 +184,7 @@
       {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
-        "children":
-        {
+        "children": {
           "einwohnerabfrage": {
             "name": "Einwohneranzahl abfragen",
             "glyphicon": "glyphicon-wrench"
@@ -223,28 +222,11 @@
           {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
-            "printID": "99999",
-            "title": "Master",
-            "gfi": true,
-            "outputFilename": "DruckPDF",
-            "gfiMarker":
-                {
-                  "outerCircle":
-                  {
-                    "fill": false,
-                    "pointRadius": 8,
-                    "stroke": true,
-                    "strokeColor": "#ff0000",
-                    "strokeWidth": 3
-                  },
-                  "point":
-                  {
-                    "fill": true,
-                    "pointRadius": 1,
-                    "fillColor": "#000000",
-                    "stroke": false
-                  }
-                }
+            "mapfishServiceId": "mapfish_qs",
+            "printAppId": "mrh",
+            "filename": "Ausdruck",
+            "title": "Mein Titel",
+            "version" : "mapfish_print_3"
           },
           "searchByCoord":
           {
@@ -282,13 +264,12 @@
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
           },
-          "addWMS":
-          {
-            "name": "WMS hinzufügen",
-            "glyphicon": "glyphicon-plus"
+          "styleWMS": {
+            "name": "Style WMS",
+            "glyphicon": "glyphicon-tint",
+            "onlyDesktop": true
           },
-          "featureLister":
-          {
+          "featureLister": {
             "name": "Liste",
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
@@ -296,11 +277,48 @@
           "animation":
           {
             "name": "Pendler Animation",
-            "glyphicon": "glyphicon-play-circle"
+            "glyphicon": "glyphicon-play-circle",
+            "steps": 30,
+            "url": "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            "params": {
+                "REQUEST": "GetFeature",
+                "SERVICE": "WFS",
+                "TYPENAME": "app:mrh_kreise",
+                "VERSION": "1.1.0",
+                "maxFeatures": "10000"
+            },
+            "featureType": "mrh_einpendler_gemeinde",
+            "attrAnzahl": "anzahl_einpendler",
+            "attrKreis": "wohnort_kreis",
+            "minPx": 5,
+            "maxPx": 30,
+            "num_kreise_to_style": 4,
+            "zoomlevel": 1,
+            "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
           },
           "saveSelection": {
             "name": "Auswahl speichern",
             "glyphicon": "glyphicon-share"
+          },
+          "layerslider": {
+            "name": "Zeitreihe",
+            "glyphicon": "glyphicon-film",
+            "title": "Simulation von Beispiel-WMS",
+            "timeInterval": 2000,
+            "layerIds": [
+              {
+                "title": "Dienst 1",
+                "layerId": "8730"
+              },
+              {
+                "title": "Dienst 2",
+                "layerId": "2426"
+              },
+              {
+                "title": "Dienst 3",
+                "layerId": "4561"
+              }
+            ]
           }
         }
       },
@@ -430,6 +448,7 @@
       },
       {
         "id": "5708",
+        "visibility": false,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
@@ -440,6 +459,11 @@
         "id": "2003",
         "styleId": "2003",
         "mouseHoverField": "gebietsname"
+      },
+      {
+        "id": "47",
+        "styleId": "47",
+        "mouseHoverField": "GEBIETSNAME"
       },
       {
         "id": "2714",
@@ -492,7 +516,8 @@
             "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
           }
         ],
-        "extendedFilter": true
+        "extendedFilter": true,
+        "autoRefresh": 6000
       },
       {
         "id": "8712",
@@ -526,13 +551,15 @@
         "extendedFilter": true
       },
       {
-        "id": [
-        {
-          "id": "946"
-        },
-        {
-          "id": "947"
-        }],
+        "id": "myId",
+        "children": [
+          {
+            "id": "946"
+          },
+          {
+            "id": "947"
+          }
+        ],
         "name": "Verkehrslage auf Autobahnen",
         "layerAttribution":
         {
@@ -543,13 +570,15 @@
         }
       },
       {
-        "id": [
-        {
-          "id": "682"
-        },
-        {
-          "id": "1731"
-        }],
+        "id": "myId2",
+        "children": [
+          {
+            "id": "682"
+          },
+          {
+            "id": "1731"
+          }
+        ],
         "name": "Kita und KH"
       }]
     }

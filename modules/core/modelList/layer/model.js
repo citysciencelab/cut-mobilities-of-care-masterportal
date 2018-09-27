@@ -6,6 +6,8 @@ define(function (require) {
 
     Layer = Item.extend({
         defaults: {
+            // channel des Layer-Radios
+            channel: Radio.channel("Layer"),
             // ist der Layer (ol.layer) in der Karte sichtbar
             isVisibleInMap: false,
             // ist das Model im Baum selektiert
@@ -20,30 +22,71 @@ define(function (require) {
             minScale: "0",
             maxScale: "1000000",
             supported: ["2D"],
-            showSettings: true
+            showSettings: true,
+            legendURL: ""
         },
-        superInitialize: function () {
-            var channel = Radio.channel("Layer");
 
-            this.listenToOnce(this, {
-                // Die LayerSource wird beim ersten Selektieren einmalig erstellt
-                "change:isSelected": function () {
-                    if (this.has("childLayerSources") === false && _.isUndefined(this.get("layerSource"))) {
-                        this.createLayerSource();
-                    }
-                },
-                // Anschließend evt. die ClusterSource und der Layer
-                "change:layerSource": function () {
-                    if (this.has("clusterDistance") === true) {
-                        this.createClusterLayerSource();
-                    }
-                    this.createLayer();
-                },
-                "change:layer": function () {
-                    this.updateLayerTransparency();
-                    this.getResolutions();
+        initialize: function () {
+            this.registerInteractionTreeListeners(this.get("channel"));
+            this.registerInteractionMapViewListeners();
+
+            //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
+            //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
+            //  selectionIDX benötigen, um verschoben werden zu können
+            if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
+                if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
+                    this.collection.appendToSelectionIDX(this);
                 }
-            });
+                else {
+                    this.collection.insertIntoSelectionIDX(this);
+                }
+                this.prepareLayerObject();
+                Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
+                this.setIsVisibleInMap(this.get("isSelected"));
+                this.toggleWindowsInterval();
+            }
+        },
+
+        featuresLoaded: function (features) {
+            this.get("channel").trigger("featuresLoaded", this.get("id"), features);
+        },
+
+        /**
+         * Ruft die Einzelfunktionen zur Layererstellung auf.
+         * @returns {void}
+         */
+        prepareLayerObject: function () {
+            this.createLayerSource();
+            this.createLayer();
+            this.updateLayerTransparency();
+            this.getResolutions();
+            this.createLegendURL();
+            this.checkForScale(Radio.request("MapView", "getOptions"));
+        },
+
+        /**
+         * Hier wird die Schnittstelle zur Interaktion mit dem Tree registriert.
+         * @return {void}
+         * @param {Radio.channel} channel Kanal dieses Moduls
+         * @listens this~change:isSelected
+         * @listens Layer~updateLayerInfo
+         * @listens Layer~setLayerInfoChecked
+         * @listens this~change:isVisibleInMap
+         * @listens this~change:transparency
+         */
+        registerInteractionTreeListeners: function (channel) {
+            // beim treetype: "light" werden alle Layer initial geladen
+            if (Radio.request("Parser", "getTreeType") !== "light") {
+                this.listenToOnce(this, {
+                    // Die LayerSource wird beim ersten Selektieren einmalig erstellt
+                    "change:isSelected": function () {
+                        if (_.isUndefined(this.get("layerSource"))) {
+                            this.prepareLayerObject();
+                        }
+                    }
+                });
+            }
+            // Dieses Radio kümmert sich um die Darstellung der layerInformation
             this.listenTo(channel, {
                 "updateLayerInfo": function (name) {
                     if (this.get("name") === name && this.get("layerInfoChecked") === true) {
@@ -66,84 +109,63 @@ define(function (require) {
                     }
                 }
             });
+            // Diese Listener kümmern sich um die Sichtbarkeit der Layer
             this.listenTo(this, {
                 "change:isVisibleInMap": function () {
                     // triggert das Ein- und Ausschalten von Layern
                     Radio.trigger("ClickCounter", "layerVisibleChanged");
                     Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"));
                     this.toggleLayerOnMap();
+                    this.toggleWindowsInterval();
                     this.toggleAttributionsInterval();
                 },
-                "change:transparency": this.updateLayerTransparency,
-                "change:SLDBody": this.updateSourceSLDBody
+                "change:transparency": this.updateLayerTransparency
             });
+        },
 
+        /**
+         * Hier wird die Schnittstelle zur Interaktion mit der MapView registriert.
+         * @listens Radio:MapView~changedOptions
+         * @returns {void}
+         */
+        registerInteractionMapViewListeners: function () {
+            // Dieser Listener um eine Veränderung des angezeigten Maßstabs
             this.listenTo(Radio.channel("MapView"), {
                 "changedOptions": function (options) {
                     this.checkForScale(options);
                 }
             });
-
-            // Default min/max Resolutions für WFS setzen
-            if (this.get("typ") === "WFS") {
-                this.setDefaultResolutions();
-            }
-
-            //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
-            //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
-            //  selectionIDX benötigen, um verschoben werden zu können
-            if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
-                if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
-                    this.collection.appendToSelectionIDX(this);
-                }
-                else {
-                    this.collection.insertIntoSelectionIDX(this);
-                }
-                this.createLayerSource();
-                Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
-                this.setIsVisibleInMap(this.get("isSelected"));
-            }
-            this.checkForScale(Radio.request("MapView", "getOptions"));
-            this.createLegendURL();
         },
 
-        featuresLoaded: function (features) {
-            Radio.trigger("Layer", "featuresLoaded", this.get("id"), features);
+        /**
+         * Setter des Windows Intervals. Bindet an this.
+         * @param {function} func                Funktion, die in this ausgeführt werden soll
+         * @param {integer}  autorefreshInterval Intervall in ms
+         * @returns {void}
+         */
+        setWindowsInterval: function (func, autorefreshInterval) {
+            this.set("windowsInterval", setInterval(func.bind(this), autorefreshInterval));
         },
 
-        setDefaultResolutions: function () {
-            var resolutions = Radio.request("MapView", "getScales");
-
-            if (!_.isUndefined(resolutions) && resolutions.length > 0) {
-                if (_.isUndefined(this.attributes.minScale)) {
-                    this.attributes.minScale = resolutions[resolutions.length - 1];
-                }
-                if (_.isUndefined(this.attributes.maxScale)) {
-                    this.attributes.maxScale = resolutions[0];
-                }
-            }
+        /**
+         * Steuert die Handlungen in einem Layerinterval
+         * @returns {void}
+         */
+        intervalHandler: function () {
+            this.updateSource();
         },
 
         setLayerInfoChecked: function (value) {
             this.set("layerInfoChecked", value);
         },
-        /**
-        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-        * @param {object} options -
-        * @returns {void}
-        **/
-        checkForScale: function (options) {
-            if (parseFloat(options.scale, 10) <= this.getMaxScale() && parseFloat(options.scale, 10) >= this.getMinScale()) {
-                this.setIsOutOfRange(false);
-            }
-            else {
-                this.setIsOutOfRange(true);
-            }
-        },
 
+        /**
+         * Setzt die sichtbaren Resolution an den ol.layer.
+         * @returns {void}
+         */
         getResolutions: function () {
-            var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.getMaxScale(), "max"),
-                resoByMinScale = Radio.request("MapView", "getResoByScale", this.getMinScale(), "min");
+            var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
+                resoByMinScale = Radio.request("MapView", "getResoByScale", this.get("minScale"), "min");
 
             this.setMaxResolution(resoByMaxScale + resoByMaxScale / 100);
             this.setMinResolution(resoByMinScale);
@@ -186,14 +208,6 @@ define(function (require) {
             this.get("layer").setMinResolution(value);
         },
 
-        getMaxScale: function () {
-            return parseFloat(this.get("maxScale"));
-        },
-
-        getMinScale: function () {
-            return parseFloat(this.get("minScale"));
-        },
-
         incTransparency: function () {
             if (this.get("transparency") <= 90) {
                 this.setTransparency(this.get("transparency") + 10);
@@ -220,6 +234,25 @@ define(function (require) {
             }
             else {
                 this.setIsVisibleInMap(true);
+            }
+        },
+
+        /**
+         * Toggelt das Interval anhand der Layersichtbarkeit.
+         * Das autoRefresh Interval muss as Performance-Gründen > 500 sein.
+         * @returns {void}
+         */
+        toggleWindowsInterval: function () {
+            var isVisible = this.get("isVisibleInMap"),
+                autoRefresh = this.get("autoRefresh");
+
+            if (isVisible === true) {
+                if (autoRefresh > 500) {
+                    this.setWindowsInterval(this.intervalHandler, autoRefresh);
+                }
+            }
+            else if (!_.isUndefined(this.get("windowsInterval"))) {
+                clearInterval(this.get("windowsInterval"));
             }
         },
 
@@ -292,16 +325,15 @@ define(function (require) {
          */
         showLayerInformation: function () {
             var metaID = [],
-                legendParams = Radio.request("Legend", "getLegendParams"),
+                legend = Radio.request("Legend", "getLegend", this),
                 name = this.get("name"),
-                legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null,
                 layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
             metaID.push(layerMetaId);
 
             Radio.trigger("LayerInformation", "add", {
                 "id": this.get("id"),
-                "legendURL": legendURL,
+                "legend": legend,
                 "metaID": metaID,
                 "layername": name,
                 "url": this.get("url"),
@@ -353,6 +385,7 @@ define(function (require) {
         setLegendURL: function (value) {
             this.set("legendURL", value);
         }
+
     });
 
     return Layer;

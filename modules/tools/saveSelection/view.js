@@ -1,13 +1,9 @@
 define(function (require) {
     var SaveSelectionSimpleMapTemplate = require("text!modules/tools/saveSelection/templateSimpleMap.html"),
         SaveSelectionTemplate = require("text!modules/tools/saveSelection/template.html"),
-        SaveSelection = require("modules/tools/saveSelection/model"),
-        $ = require("jquery"),
         SaveSelectionView;
 
     SaveSelectionView = Backbone.View.extend({
-        model: new SaveSelection(),
-        className: "win-body",
         template: _.template(SaveSelectionTemplate),
         templateSimpleMap: _.template(SaveSelectionSimpleMapTemplate),
         events: {
@@ -15,19 +11,20 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:url": this.render
+                "change:isActive": this.render,
+                "change:url": this.setUrlValue
             });
+            // Bestätige, dass das Modul geladen wurde
+            Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
         },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.$el.html("");
+        render: function (model, value) {
+            if (value) {
+                this.setElement(document.getElementsByClassName("win-body")[0]);
                 if (this.model.get("simpleMap") === true) {
-                    $(".win-heading").after(this.$el.html(this.templateSimpleMap(attr)));
+                    this.$el.html(this.templateSimpleMap(model.toJSON()));
                 }
                 else {
-                    $(".win-heading").after(this.$el.html(this.template(attr)));
+                    this.$el.html(this.template(model.toJSON()));
                 }
                 this.delegateEvents();
             }
@@ -37,6 +34,9 @@ define(function (require) {
             return this;
         },
 
+        setUrlValue: function (model, value) {
+            this.$("input").val(value);
+        },
         /**
          * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
          * @param  {evt} evt Evt-Button
