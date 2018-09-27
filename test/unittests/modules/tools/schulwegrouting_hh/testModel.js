@@ -2,6 +2,7 @@ define(function (require) {
     var expect = require("chai").expect,
         ol = require("openlayers"),
         Util = require("util"),
+        MapModel = require("../../../../../modules/core/map.js"),
         Model = require("../../../../../modules/tools/schulwegrouting_hh/model.js");
 
     describe("tools/schulwegrouting_hh", function () {
@@ -50,6 +51,7 @@ define(function (require) {
         before(function () {
             utilModel = new Util();
             schoolFeatures = utilModel.createTestFeatures("resources/testFeaturesSchulen.xml");
+            new MapModel();
             model = new Model();
             model.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
             model.addRouteFeatures(model.get("layer").getSource());

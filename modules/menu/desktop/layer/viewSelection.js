@@ -29,7 +29,7 @@ define(function (require) {
                 "change:transparency": this.rerender,
                 "change:isOutOfRange": this.toggleColor
             });
-            if (this.model.attributes.supported) {
+            if (this.model.get("supported")) {
                 this.listenTo(Radio.channel("Map"), {
                     "change": function (mode) {
                         this.toggleSupportedVisibility(mode);
@@ -52,11 +52,12 @@ define(function (require) {
             }
             return this;
         },
-        toggleSupportedVisibility: function(mode) {
+        toggleSupportedVisibility: function (mode) {
 
-            if(this.model.attributes.supported.indexOf(mode) >= 0) {
+            if (this.model.get("supported").indexOf(mode) >= 0) {
                 this.$el.show();
-            }else{
+            }
+            else {
                 this.$el.hide();
             }
         },

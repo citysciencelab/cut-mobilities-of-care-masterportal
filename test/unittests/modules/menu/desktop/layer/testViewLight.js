@@ -16,6 +16,7 @@ define(function (require) {
 
                 isSettingVisible: false,
                 isStyleable: false,
+                supported: ["2D"],
 
                 setIsSettingVisible: function (value) {
                     this.isSettingVisible = value;
@@ -31,6 +32,8 @@ define(function (require) {
                             return this.isSettingVisible;
                         case "isStyleable":
                             return this.isStyleable;
+                        case "supported":
+                            return "2D";
                         default:
                             return null;
                     }
@@ -45,7 +48,8 @@ define(function (require) {
                         styleable: this.isStyleable,
                         isSettingVisible: this.isSettingVisible,
                         transparency: 42,
-                        isVisibleInMap: true
+                        isVisibleInMap: true,
+                        showSettings: true
                     };
                 }
             };
@@ -61,6 +65,7 @@ define(function (require) {
 
             it("should be visible for stylable layers", function () {
                 var layerView;
+
                 fakeModel.setIsStyleable(true);
                 fakeModel.setIsSettingVisible(true);
 
@@ -74,8 +79,8 @@ define(function (require) {
             });
 
             it("should be hidden for other not styleable layers", function () {
-
                 var layerView;
+
                 fakeModel.setIsStyleable(false);
                 fakeModel.setIsSettingVisible(true);
                 layerView = new CustomLayerView({model: fakeModel});

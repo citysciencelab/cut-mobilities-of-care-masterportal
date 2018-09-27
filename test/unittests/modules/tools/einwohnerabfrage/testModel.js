@@ -2,6 +2,7 @@ define(function (require) {
     var expect = require("chai").expect,
         testUtil = require("util"),
         Util = require("../../../../../modules/core/util.js"),
+        MapModel = require("../../../../../modules/core/map.js"),
         Model = require("../../../../../modules/tools/einwohnerabfrage_hh/model.js");
 
     describe("tools/einwohnerabfrageModel", function () {
@@ -10,6 +11,7 @@ define(function (require) {
             cswResponseXml;
 
         before(function () {
+            new MapModel();
             model = new Model();
             testUtilModel = new testUtil();
             new Util();
