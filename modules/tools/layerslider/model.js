@@ -54,14 +54,8 @@ define(function (require) {
          */
         addLayerModel: function (layerId) {
             Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
-            Radio.trigger("ModelList", "setModelAttributesById", layerId, {
-                isSelected: true,
-                isVisibleInMap: true
-            });
-            // isSelected: false damit nicht mehr in map visible wegen asynchroner Ausführung
-            Radio.trigger("ModelList", "setModelAttributesById", layerId, {
-                isSelected: false
-            });
+            this.sendModification(layerId, true);
+            this.sendModification(layerId, false);
         },
 
         /**
