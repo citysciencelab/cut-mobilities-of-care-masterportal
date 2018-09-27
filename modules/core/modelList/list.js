@@ -120,7 +120,7 @@ define(function (require) {
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
                 }
-                else if (attrs.typ === "SensorThings" || attrs.typ === "ESRIStreamLayer") {
+                else if (attrs.typ === "SensorThings") {
                     return new SensorLayer(attrs, options);
                 }
                 else if (attrs.typ === "Heatmap") {
