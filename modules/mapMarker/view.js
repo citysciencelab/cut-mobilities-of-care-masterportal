@@ -5,9 +5,6 @@ define(function (require) {
         MapMarker;
 
     MapMarker = Backbone.View.extend({
-        model: new MapHandlerModel(),
-        id: "searchMarker",
-        className: "glyphicon glyphicon-map-marker",
         /**
         * @description View des Map Handlers
         * @returns {void}
@@ -35,6 +32,9 @@ define(function (require) {
             this.model.get("marker").setElement(this.$el[0]);
             return this;
         },
+        model: new MapHandlerModel(),
+        id: "searchMarker",
+        className: "glyphicon glyphicon-map-marker",
         /**
         * @description Entfernt den searchVector
         * @returns {void}
@@ -126,6 +126,12 @@ define(function (require) {
                 case "Schulstandorte": {
                     this.showMarker(coord);
                     Radio.trigger("MapView", "setCenter", coord, 6);
+                    break;
+                }
+                // gfiTheme für Flächeninformation soll nur dargestellt und nicht gezommt werden.
+                case "flaecheninfo": {
+                    this.model.setWkt("POLYGON", coord);
+                    this.model.showFeature();
                     break;
                 }
                 // Features
