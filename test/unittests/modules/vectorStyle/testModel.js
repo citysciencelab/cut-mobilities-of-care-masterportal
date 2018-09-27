@@ -429,5 +429,16 @@ define(function (require) {
                     + " stroke='#000000' stroke-width='1' fill='#000000' /></svg>");
             });
         });
+        describe("normalizeRgbColor", function () {
+            it("should be extend the given array with length 3 by value 1", function () {
+                expect(vectorStyle.normalizeRgbColor([255, 255, 255])).to.be.an("array").to.to.include(255, 255, 255, 1);
+            });
+            it("should be extend the given array with length 2 by value 1, 1", function () {
+                expect(vectorStyle.normalizeRgbColor([255, 255])).to.be.an("array").to.to.include(255, 255, 1, 1);
+            });
+            it("should be return the input value, which is an array with length 4", function () {
+                expect(vectorStyle.normalizeRgbColor([0, 0, 0, 0])).to.be.an("array").to.to.include(0, 0, 0, 0);
+            });
+        });
     });
 });

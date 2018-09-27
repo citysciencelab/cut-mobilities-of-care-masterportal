@@ -77,35 +77,22 @@ define(function (require) {
         updateData: function () {
             var sensorData,
                 features,
-                typ = this.get("typ").toUpperCase(),
                 isClustered = this.has("clusterDistance"),
                 url = this.get("url"),
                 version = this.get("version"),
                 urlParams = this.get("urlParameter"),
                 epsg = this.get("epsg");
 
-            // check for subtypes
-            if (typ === "SENSORTHINGS") {
-                sensorData = this.loadSensorThings(url, version, urlParams);
-                features = this.drawPoints(sensorData, epsg);
+            sensorData = this.loadSensorThings(url, version, urlParams);
+            features = this.drawPoints(sensorData, epsg);
 
-                // Add features to vectorlayer
-                if (!_.isEmpty(features)) {
-                    this.get("layerSource").addFeatures(features);
-                }
+            // Add features to vectorlayer
+            if (!_.isEmpty(features)) {
+                this.get("layerSource").addFeatures(features);
+            }
 
-                // connection to live update
-                this.createMqttConnectionToSensorThings(features);
-            }
-            else if (typ === "ESRISTREAMLAYER") {
-                sensorData = this.loadStreamLayer();
-                if (!_.isUndefined(sensorData)) {
-                    features = this.drawESRIGeoJson(sensorData);
-                }
-                if (!_.isUndefined(this.get("wssUrl"))) {
-                    this.createWebSocketConnectionToStreamLayer();
-                }
-            }
+            // connection to live update
+            this.createMqttConnectionToSensorThings(features);
 
             if (!_.isUndefined(features)) {
                 this.styling(isClustered);
@@ -237,7 +224,7 @@ define(function (require) {
                 thingsMerge = [],
                 requestURL = this.buildSensorThingsURL(url, version, urlParams),
                 things = this.getResponseFromRequestURL(requestURL),
-                thingsCount = _.isUndefined(things["@iot.count"]) ? 0 : things["@iot.count"], // count of all things
+                thingsCount = _.isUndefined(things) ? 0 : things["@iot.count"], // count of all things
                 thingsbyOneRequest = things.value.length, // count of things on one request
                 aggregateArrays,
                 thingsRequestURL,
@@ -457,100 +444,6 @@ define(function (require) {
         },
 
         /**
-         * parses the required elements from the specified url
-         * and returns the sensordata as esriJSON
-         * @return {esriJSON} sensorData
-         */
-        loadStreamLayer: function () {
-            var layerUrl = this.get("url") + "?f=pjson",
-                streamData = this.getResponseFromRequestURL(layerUrl),
-                streamDataJSON,
-                streamId,
-                epsg,
-                wssUrl,
-                featuresUrl,
-                featuresUrlWithQuery,
-                response,
-                responseJSON,
-                sensorData;
-
-            if (_.isUndefined(streamData)) {
-                return streamData;
-            }
-
-            streamDataJSON = JSON.parse(streamData);
-            streamId = streamDataJSON.displayField;
-            // streamId = streamDataJSON.timeInfo.trackIdField;
-            epsg = _.isUndefined(streamDataJSON.spatialReference) ? "EPSG:4326" : streamDataJSON.spatialReference.wkid;
-            wssUrl = streamDataJSON.streamUrls[0].urls[0];
-
-            // only if there is a URL
-            if (!_.isUndefined(streamDataJSON.keepLatestArchive)) {
-                featuresUrl = _.isUndefined(streamDataJSON.keepLatestArchive.featuresUrl) ? "" : streamDataJSON.keepLatestArchive.featuresUrl;
-                featuresUrlWithQuery = featuresUrl + "/query?f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=" + epsg;
-                response = this.getResponseFromRequestURL(featuresUrlWithQuery);
-                responseJSON = JSON.parse(response);
-                sensorData = responseJSON.features;
-            }
-
-            this.setWssUrl(wssUrl);
-            this.setStreamId(streamId);
-            this.setEpsg("EPSG:" + epsg);
-
-            return sensorData;
-        },
-
-        /**
-         * draw features from esriJSON
-         * @param  {esriJSON} sensorData - features
-         * @return {array} olFeaturesArray
-         */
-        drawESRIGeoJson: function (sensorData) {
-            var streamId = this.get("streamId"),
-                epsgCode = this.get("epsg"),
-                esriFormat = new ol.format.EsriJSON(),
-                olFeaturesArray = [];
-
-            _.each(sensorData, function (data) {
-                var dataToString = this.changeValueToString(data),
-                    id = dataToString.attributes[streamId],
-                    olFeature;
-
-                olFeature = esriFormat.readFeature(dataToString, {
-                    dataProjection: epsgCode,
-                    featureProjection: Config.view.epsg
-                });
-
-                olFeature.setId(id);
-                olFeaturesArray.push(olFeature);
-            }, this);
-
-            this.get("layerSource").addFeatures(olFeaturesArray);
-
-            return olFeaturesArray;
-        },
-
-        /**
-         * change all numbers from features from StreamLayer to String
-         * this is necessary to draw the gfi
-         * @param  {Object} data - feature
-         * @returns {Object} data
-         */
-        changeValueToString: function (data) {
-            var attributes = data.attributes,
-                values = _.values(attributes),
-                keys = _.keys(attributes);
-
-            _.each(keys, function (key, index) {
-                if (_.isNumber(values[index])) {
-                    attributes[key] = String(values[index]);
-                }
-            });
-
-            return data;
-        },
-
-        /**
          * create style, function triggers to style_v2.json
          * @param  {boolean} isClustered - should
          * @returns {void}
@@ -704,102 +597,6 @@ define(function (require) {
             });
 
             return featureArray;
-        },
-
-        /**
-         * create a connection to a websocketserver,
-         * which fire new observation using MQTT
-         * thingPhenomenonTime
-         * @returns {void}
-         */
-        createWebSocketConnectionToStreamLayer: function () {
-            var that = this,
-                websocketURL = this.get("wssUrl") + "/subscribe",
-                connection = new WebSocket(websocketURL);
-
-            // errors
-            connection.onerror = function () {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Ein Fehler bei der WebSocket Verbindung ist aufgetreten!</strong>",
-                    kategorie: "alert-danger"
-                });
-            };
-
-            // messages from the server
-            connection.onmessage = function (ev) {
-                var jsonData = JSON.parse(ev.data);
-
-                that.updateFromWebSocketStreamLayer(jsonData);
-            };
-        },
-
-        /**
-         * function updates the features when an event comes from ESRI-StreamLayer
-         * one stream deliver only one feature
-         * @param  {JSON} esriJson - contains the updated feature
-         * @returns {void}
-         */
-        updateFromWebSocketStreamLayer: function (esriJson) {
-            var streamId = this.get("streamId"),
-                id = esriJson.attributes[streamId],
-                features = this.get("layerSource").getFeatures(),
-                existingFeature = this.getFeatureById(features, id),
-                epsgCode = this.get("epsg"),
-                esriFormat,
-                olFeature,
-                isClustered,
-                location,
-                xyTransform;
-
-            // if the feature does not exist, then draw it otherwise update it
-            if (_.isUndefined(existingFeature)) {
-                esriFormat = new ol.format.EsriJSON();
-                olFeature = esriFormat.readFeature(esriJson, {
-                    dataProjection: epsgCode,
-                    featureProjection: Config.view.epsg
-                });
-                isClustered = this.has("clusterDistance");
-
-                olFeature.setId(id);
-                this.get("layerSource").addFeature(olFeature);
-                this.styling(isClustered);
-                this.get("layer").setStyle(this.get("style"));
-
-                Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.get("id"), olFeature);
-            }
-            else {
-                location = [esriJson.geometry.x, esriJson.geometry.y];
-                xyTransform = ol.proj.transform(location, epsgCode, Config.view.epsg);
-
-                if (!(xyTransform[0] < 0 || xyTransform[1] < 0 || xyTransform[0] === Infinity || xyTransform[1] === Infinity)) {
-                    existingFeature.setProperties(esriJson.attributes);
-                    existingFeature.getGeometry().setCoordinates(xyTransform);
-
-                    // trigger the heatmap and gfi to update them
-                    Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.get("id"), existingFeature);
-                    Radio.trigger("GFI", "changeFeature", existingFeature);
-                }
-            }
-        },
-
-        /**
-         * returns a feature for a given id, if it exists
-         * @param  {[Ol.Feature]} features - features from map
-         * @param  {String} id - id from Stream-Feature
-         * @return {Ol.Feature} feature - feature from map with the same id as Stream-Feature
-         */
-        getFeatureById: function (features, id) {
-            var feature;
-
-            _.each(features, function (feat) {
-                var featureId = feat.get("id");
-
-                if (featureId === id) {
-                    feature = feat;
-                }
-            });
-
-            return feature;
         },
 
         /**

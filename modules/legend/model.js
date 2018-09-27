@@ -177,7 +177,7 @@ define(function (require) {
             else if (typ === "WFS") {
                 return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
             }
-            else if (typ === "SensorThings" || typ === "ESRIStreamLayer") {
+            else if (typ === "SensorThings") {
                 return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
             }
             else if (typ === "GeoJSON") {
