@@ -308,12 +308,11 @@ define(function (require) {
         /**
         * Alle Layermodels von einem Leaffolder werden "selected" oder "deselected"
         * @param {Backbone.Model} model - folderModel
-        * @param {boolean} sort - true if the layers should be sorted alphabetically
         * @return {void}
         */
-        setIsSelectedOnChildLayers: function (model, sort) {
+        setIsSelectedOnChildLayers: function (model) {
             var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")})),
-                sortLayers = sort ? this.sortLayers(layers, "name").reverse() : layers;
+                sortLayers = this.sortLayers(layers, "name").reverse();
 
             _.each(sortLayers, function (layer) {
                 layer.setIsSelected(model.get("isSelected"));

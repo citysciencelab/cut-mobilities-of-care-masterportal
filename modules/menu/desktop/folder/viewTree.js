@@ -72,7 +72,7 @@ define(function (require) {
         },
         toggleIsSelected: function () {
             this.model.toggleIsSelected();
-            Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model, true);
+            Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
             this.model.setIsExpanded(true);
         },
         removeIfNotVisible: function () {
