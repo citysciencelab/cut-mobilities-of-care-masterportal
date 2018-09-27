@@ -77,35 +77,22 @@ define(function (require) {
         updateData: function () {
             var sensorData,
                 features,
-                typ = this.get("typ").toUpperCase(),
                 isClustered = this.has("clusterDistance"),
                 url = this.get("url"),
                 version = this.get("version"),
                 urlParams = this.get("urlParameter"),
                 epsg = this.get("epsg");
 
-            // check for subtypes
-            if (typ === "SENSORTHINGS") {
-                sensorData = this.loadSensorThings(url, version, urlParams);
-                features = this.drawPoints(sensorData, epsg);
+            sensorData = this.loadSensorThings(url, version, urlParams);
+            features = this.drawPoints(sensorData, epsg);
 
-                // Add features to vectorlayer
-                if (!_.isEmpty(features)) {
-                    this.get("layerSource").addFeatures(features);
-                }
+            // Add features to vectorlayer
+            if (!_.isEmpty(features)) {
+                this.get("layerSource").addFeatures(features);
+            }
 
-                // connection to live update
-                this.createMqttConnectionToSensorThings(features);
-            }
-            else if (typ === "ESRISTREAMLAYER") {
-                sensorData = this.loadStreamLayer();
-                if (!_.isUndefined(sensorData)) {
-                    features = this.drawESRIGeoJson(sensorData);
-                }
-                if (!_.isUndefined(this.get("wssUrl"))) {
-                    this.createWebSocketConnectionToStreamLayer();
-                }
-            }
+            // connection to live update
+            this.createMqttConnectionToSensorThings(features);
 
             if (!_.isUndefined(features)) {
                 this.styling(isClustered);
