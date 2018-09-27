@@ -11,7 +11,7 @@ define(function (require) {
             // die ID der Parent-Node
             parentId: "",
             // Bootstrap Glyphicon Class
-            glyphicon: "",
+            glyphicon: "glyphicon-globe",
             // Name (Überschrift) der Funktion
             name: "",
             // URL des Links
