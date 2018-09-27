@@ -16,12 +16,13 @@ define(function (require) {
         initialize: function () {
             this.superInitialize();
             this.setProgressBarWidth(this.get("layerIds"));
+            if (!this.checkAllLayerOk(this.get("layerIds"))) {
+                console.error("Konfiguration des layersliders fehlerhaft");
+            }
             this.listenTo(this, {
                 "change:isActive": function (model, value) {
                     if (value) {
-                        if (!this.checkAllLayerOk(this.get("layerIds"))) {
-                            console.error("Konfiguration des layersliders fehlerhaft");
-                        }
+                        this.checkIfLayermodelExist(this.get("layerIds"));
                     }
                 }
             });
@@ -31,6 +32,36 @@ define(function (require) {
             this.stopInterval();
             this.set("activeLayer", {layerId: ""});
             // this.set("title", null);
+        },
+
+        /**
+         * Prüft ob das Layermodel schon existiert
+         * @param   {object[]}  layerIds Konfiguration der Layer aus config.json
+         * @returns {void}
+         */
+        checkIfLayermodelExist: function (layerIds) {
+            _.each(layerIds, function (layer) {
+                if (Radio.request("ModelList", "getModelsByAttributes", {id: layer.layerId}).length === 0) {
+                    this.addLayerModel(layer.layerId);
+                }
+            }, this);
+        },
+
+        /**
+         * Fügt das Layermodel kurzzeitig der Modellist hinzu um prepareLayerObject auszuführen und entfernt das Model dann wieder.
+         * @param   {string}  layerId
+         * @returns {void}
+         */
+        addLayerModel: function (layerId) {
+            Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
+            Radio.trigger("ModelList", "setModelAttributesById", layerId, {
+                isSelected: true,
+                isVisibleInMap: true
+            });
+            // isSelected: false damit nicht mehr in map visible wegen asynchroner Ausführung
+            Radio.trigger("ModelList", "setModelAttributesById", layerId, {
+                isSelected: false
+            });
         },
 
         /**
@@ -157,7 +188,7 @@ define(function (require) {
             var allOk = true;
 
             _.each(layerIds, function (layer) {
-                if (_.isNull(Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.layerId}))) {
+                if (_.isNull(Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.layerId})) || _.isUndefined(layer.title)) {
                     allOk = false;
                 }
             });
