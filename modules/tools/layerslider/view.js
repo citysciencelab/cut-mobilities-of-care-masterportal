@@ -33,6 +33,7 @@ define(function (require) {
                 this.delegateEvents();
             }
             else {
+                this.model.reset();
                 this.$el.empty();
                 this.undelegateEvents();
             }
