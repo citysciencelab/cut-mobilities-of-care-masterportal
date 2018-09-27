@@ -17,6 +17,11 @@ define(function (require) {
         }),
         initialize: function () {
             this.superInitialize();
+            this.listenTo(this, {
+                "change:isActive": function () {
+                    Radio.trigger("MapMarker", "hideMarker");
+                }
+            });
         },
 
         createInteraction: function () {
@@ -46,8 +51,24 @@ define(function (require) {
         },
 
         positionClicked: function (position) {
+            var updatePosition = this.get("updatePosition");
+
             this.setPositionMapProjection(position);
-            this.setUpdatePosition(!this.get("updatePosition"));
+            this.setUpdatePosition(!updatePosition);
+            this.toggleMapMarker(position, updatePosition);
+        },
+
+        /**
+         * Shows the map marker when the coordinate is frozen.
+         * Otherwise, the MapMarker hide
+         * @param {array} position at which was clicked
+         * @param {boolean} updatePosition display of the position is frozen
+         * @returns {void}
+         */
+        toggleMapMarker: function (position, updatePosition) {
+            var showHideMarker = updatePosition ? "showMarker" : "hideMarker";
+
+            Radio.trigger("MapMarker", showHideMarker, position);
         },
 
         returnTransformedPosition: function (targetProjection) {
