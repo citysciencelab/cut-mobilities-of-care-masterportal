@@ -4,6 +4,7 @@ import SnippetCheckboxModel from "../../snippets/checkbox/model";
 import {GeoJSON} from "ol/format.js";
 import Overlay from "ol/Overlay.js";
 import {Draw} from "ol/interaction.js";
+import {createBox} from "ol/interaction/Draw.js";
 import {Circle, Polygon} from "ol/geom.js";
 
 const Einwohnerabfrage = Tool.extend({
@@ -343,7 +344,7 @@ const Einwohnerabfrage = Tool.extend({
         var that = this,
             value = this.get("values")[drawType],
             layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
-            createBoxFunc = Draw.createBox(),
+            createBoxFunc = createBox(),
             drawInteraction = new Draw({
                 // destination for drawn features
                 source: layer.getSource(),
@@ -366,7 +367,7 @@ const Einwohnerabfrage = Tool.extend({
 
         this.setDrawInteractionListener(drawInteraction, layer);
         this.setDrawInteraction(drawInteraction);
-        Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay, this);
+        Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay.bind(this), this);
         Radio.trigger("Map", "addInteraction", drawInteraction);
     },
     snapRadiusToInterval: function (coordinates, opt_geom) {
@@ -387,14 +388,16 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     setDrawInteractionListener: function (interaction, layer) {
+        var that = this;
+
         interaction.on("drawstart", function () {
             layer.getSource().clear();
         }, this);
 
         interaction.on("drawend", function (evt) {
-            var geoJson = this.featureToGeoJson(evt.feature);
+            var geoJson = that.featureToGeoJson(evt.feature);
 
-            this.makeRequest(geoJson);
+            that.makeRequest(geoJson);
         }, this);
 
         interaction.on("change:active", function (evt) {
