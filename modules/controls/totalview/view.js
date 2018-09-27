@@ -8,6 +8,8 @@ const TotalView = Backbone.View.extend({
         var style = Radio.request("Util", "getUiStyle"),
             el;
 
+        this.model = new Model();
+
         if (style === "DEFAULT") {
             el = Radio.request("ControlsView", "addRowTR", "totalview");
             this.setElement(el[0]);
@@ -28,7 +30,6 @@ const TotalView = Backbone.View.extend({
     },
     template: _.template("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
     tabletemplate: _.template("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>"),
-    model: new Model(),
     id: "totalview",
     render: function () {
         this.$el.html(this.template());
@@ -39,10 +40,7 @@ const TotalView = Backbone.View.extend({
         this.$el.prepend(this.tabletemplate());
     },
     setTotalView: function () {
-        var center = this.model.get("startCenter"),
-            zoomlevel = this.model.get("zoomLevel");
-
-        Radio.trigger("MapView", "setCenter", center, zoomlevel);
+        Radio.trigger("MapView", "resetView");
     }
 
 });
