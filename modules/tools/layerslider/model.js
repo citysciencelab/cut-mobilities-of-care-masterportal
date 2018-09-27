@@ -157,11 +157,10 @@ define(function (require) {
             var allOk = true;
 
             _.each(layerIds, function (layer) {
-                if (_.isUndefined(Radio.request("ModelList", "getModelByAttributes", {id: layer.layerId})) || _.isUndefined(layer.title)) {
+                if (_.isNull(Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.layerId}))) {
                     allOk = false;
                 }
             });
-
             return allOk;
         },
 
