@@ -311,24 +311,24 @@ define(function (require) {
         * @return {void}
         */
         setIsSelectedOnChildLayers: function (model) {
-            var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")})),
-                sortLayers = this.sortLayers(layers, "name").reverse();
+            var childModels = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")})),
+                sortChildModels = this.sortLayers(childModels, "name").reverse();
 
-            _.each(sortLayers, function (layer) {
-                layer.setIsSelected(model.get("isSelected"));
+            _.each(sortChildModels, function (childModel) {
+                childModel.setIsSelected(model.get("isSelected"));
             });
         },
 
         /**
          * sorts elements from an array by given attribute
-         * @param {array} layer contains the layer to be sort
+         * @param {array} childModels contains the layer to be sort
          * @param {string} key represents the attribute to be sorted by
          * @returns {array} sorted Array
          */
-        sortLayers: function (layer, key) {
-            return layer.sort(function (firstObj, secondObj) {
-                var firstValue = firstObj.get(key),
-                    secondValue = secondObj.get(key),
+        sortLayers: function (childModels, key) {
+            return childModels.sort(function (firstChild, secondChild) {
+                var firstValue = firstChild.get(key),
+                    secondValue = secondChild.get(key),
                     direction;
 
                 if (firstValue < secondValue) {
