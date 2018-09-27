@@ -49,7 +49,7 @@ define(function (require) {
 
         /**
          * Fügt das Layermodel kurzzeitig der Modellist hinzu um prepareLayerObject auszuführen und entfernt das Model dann wieder.
-         * @param   {string}  layerId
+         * @param   {string}  layerId    Id des Layers
          * @returns {void}
          */
         addLayerModel: function (layerId) {
