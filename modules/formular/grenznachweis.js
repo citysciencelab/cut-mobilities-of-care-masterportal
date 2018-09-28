@@ -50,7 +50,7 @@ define(function (require) {
                 this.set("layer", new ol.layer.Vector({
                     source: this.get("source"),
                     name: "grenznachweisDraw",
-                    altitudeMode : "clampToGround"
+                    altitudeMode: "clampToGround"
                 }));
                 Radio.trigger("Map", "addLayer", this.get("layer"));
                 // Cookie lesen

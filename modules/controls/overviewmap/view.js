@@ -1,7 +1,6 @@
 define(function (require) {
     var OverviewmapModel = require("modules/controls/overviewmap/model"),
         template = require("text!modules/controls/overviewmap/template.html"),
-        $ = require("jquery"),
         OverviewmapView;
 
     OverviewmapView = Backbone.View.extend({

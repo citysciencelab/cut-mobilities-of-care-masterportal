@@ -37,7 +37,7 @@ define(function (require) {
         },
 
         toggleSupportedVisibility: function (mode) {
-            if (mode === '2D') {
+            if (mode === "2D") {
                 this.$el.show();
             }
             else if (this.model.get("supportedIn3d").indexOf(this.model.get("id")) >= 0) {

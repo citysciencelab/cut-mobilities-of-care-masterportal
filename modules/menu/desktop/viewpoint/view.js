@@ -1,8 +1,7 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ItemTemplate = require("text!modules/menu/desktop/viewpoint/template.html"),
+    var ItemTemplate = require("text!modules/menu/desktop/viewpoint/template.html"),
+        $ = require("jquery"),
         ItemView;
 
     ItemView = Backbone.View.extend({
@@ -26,6 +25,7 @@ define(function (require) {
         /**
          * Abhängig davon ob ein Viepoint in die Menüleiste oder unter dem Punkt Ansichten gezeichnet wird,
          * bekommt die View eine andere CSS-Klasse zugeordent
+         * @returns {void}
          */
         setCssClass: function () {
             if (this.model.get("parentId") === "root") {
@@ -36,7 +36,7 @@ define(function (require) {
                 this.$el.addClass("viewpoint-style");
             }
         },
-        click: function(){
+        click: function () {
             this.model.activateViewpoint();
         }
     });

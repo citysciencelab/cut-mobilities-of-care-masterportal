@@ -9,11 +9,12 @@ define(function (require) {
             "click .glyphicon-minus": "setZoomLevelDown"
         },
         initialize: function () {
+            var channel = Radio.channel("Map");
+
             this.render();
             if (!Radio.request("Map", "isMap3d")) {
                 this.show();
             }
-            var channel = Radio.channel("Map");
             channel.on({
                 "activateMap3d": this.hide,
                 "deactivateMap3d": this.show

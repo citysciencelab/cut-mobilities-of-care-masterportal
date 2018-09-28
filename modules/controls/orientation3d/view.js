@@ -13,6 +13,7 @@ define(function (require) {
         },
         initialize: function () {
             var channel = Radio.channel("Map");
+
             this.render();
             if (Radio.request("Map", "isMap3d")) {
                 this.show();
@@ -65,6 +66,7 @@ define(function (require) {
                     "zoom-in": camera.zoomIn.bind(camera, distance),
                     "zoom-out": camera.zoomOut.bind(camera, distance)
                 };
+
             directions[event.target.id]();
         },
         northDown: function (event) {
@@ -92,6 +94,7 @@ define(function (require) {
         },
         northUp: function () {
             var endTime = new Date().getTime();
+
             if (endTime - this.startTime < 200) {
                 this.setHeading(0);
             }

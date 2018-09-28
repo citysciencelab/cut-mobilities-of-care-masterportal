@@ -1,8 +1,6 @@
 define(function (require) {
 
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ItemTemplate = require("text!modules/menu/mobile/tool/template.html"),
+    var ItemTemplate = require("text!modules/menu/mobile/tool/template.html"),
         ItemView;
 
     ItemView = Backbone.View.extend({
@@ -19,6 +17,7 @@ define(function (require) {
         },
         render: function () {
             var attr = this.model.toJSON();
+
             this.$el.html(this.template(attr));
             return this;
         },

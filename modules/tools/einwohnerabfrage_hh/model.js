@@ -1,6 +1,5 @@
 define(function (require) {
-    var $ = require("jquery"),
-        ol = require("openlayers"),
+    var ol = require("openlayers"),
         Tool = require("modules/core/modelList/tool/model"),
         SnippetDropdownModel = require("modules/snippets/dropdown/model"),
         SnippetCheckboxModel = require("modules/snippets/checkbox/model"),

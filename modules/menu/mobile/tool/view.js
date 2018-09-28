@@ -31,12 +31,14 @@ define(function (require) {
             return this;
         },
 
-        toggleSupportedVisibility: function(mode) {
-            if(mode === '2D'){
+        toggleSupportedVisibility: function (mode) {
+            if (mode === "2D") {
                 this.$el.show();
-            } else if(this.model.get("supportedIn3d").indexOf(this.model.getId()) >= 0){
+            }
+            else if (this.model.get("supportedIn3d").indexOf(this.model.getId()) >= 0) {
                 this.$el.show();
-            } else {
+            }
+            else {
                 this.$el.hide();
             }
         },

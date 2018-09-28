@@ -1,5 +1,5 @@
 define(function (require) {
-    var Model = require("modules/snippets/checkbox/model"),
+    var $ = require("jquery"),
         Template = require("text!modules/snippets/checkbox/template.html"),
         CheckboxSnippetView;
 
@@ -30,6 +30,7 @@ define(function (require) {
 
         /**
          * inits the Checkbox
+         * @returns {void}
          */
         initCheckbox: function () {
             this.$el.find("input").bootstrapToggle({
@@ -41,7 +42,8 @@ define(function (require) {
 
         /**
          * calls the function setIsSelected in the model
-         * @param {ChangeEvent} evt
+         * @param {ChangeEvent} evt -
+         * @returns {void}
          */
         setIsSelected: function (evt) {
             this.model.setIsSelected($(evt.target).prop("checked"));
@@ -53,7 +55,7 @@ define(function (require) {
             if (!isInfoTextVisible) {
                 this.$el.find(".info-text").toggle();
             }
-        },
+        }
     });
     return CheckboxSnippetView;
 });

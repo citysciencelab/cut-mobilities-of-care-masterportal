@@ -28,9 +28,11 @@ define(function (require) {
                 else {
                     this.getWmsGfi(this.parseWmsGfi);
                 }
-            } else if (this.get("typ") === "Cesium3DTileFeature"){
+            }
+            else if (this.get("typ") === "Cesium3DTileFeature") {
                 this.getCesium3DTileFeatureGfi();
-            } else {
+            }
+            else {
                 this.getVectorGfi();
             }
         },

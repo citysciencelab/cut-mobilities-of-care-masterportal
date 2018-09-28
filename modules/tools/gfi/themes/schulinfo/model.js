@@ -104,8 +104,6 @@ define(function (require) {
             }]
         }),
         initialize: function () {
-            var channel = Radio.channel("Schulinfo");
-
             this.listenTo(this, {
                 "change:isReady": this.parseGfiContent
             });

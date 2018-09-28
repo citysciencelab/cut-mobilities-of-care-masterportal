@@ -206,7 +206,7 @@ define(function (require) {
                                     width: 5
                                 })
                             }),
-                            altitudeMode : "clampToGround",
+                            altitudeMode: "clampToGround"
                         });
 
                     $("#loader").hide();

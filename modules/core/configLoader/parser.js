@@ -269,7 +269,7 @@ define(function (require) {
                 isbaselayer: false,
                 cache: false,
                 datasets: [],
-                supported: ['2D', '3D'],
+                supported: ["2D", "3D"],
                 showSettings: true
             };
 
