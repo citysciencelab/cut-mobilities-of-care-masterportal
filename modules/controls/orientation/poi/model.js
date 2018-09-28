@@ -1,6 +1,6 @@
 const POIModel = Backbone.Model.extend({
     defaults: {
-        poiDistances: Radio.request("geolocation", "getPoiDistances"),
+        poiDistances: [],
         poiFeatures: [],
         activeCategory: ""
     },
@@ -28,7 +28,7 @@ const POIModel = Backbone.Model.extend({
      * @returns {void}
      */
     getFeatures: function () {
-        var poiDistances = this.get("poiDistances"),
+        var poiDistances = Radio.request("geolocation", "getPoiDistances"),
             poiFeatures = [],
             featInCircle = [],
             sortedFeatures = [];
@@ -42,7 +42,7 @@ const POIModel = Backbone.Model.extend({
                 "category": distance,
                 "features": sortedFeatures
             });
-        });
+        }, this);
 
         _.each(poiFeatures, function (category) {
             _.each(category.features, function (feat) {
