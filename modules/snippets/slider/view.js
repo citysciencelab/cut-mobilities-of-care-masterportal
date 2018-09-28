@@ -1,4 +1,5 @@
 import Template from "text-loader!./template.html";
+import "bootstrap-slider";
 
 const SliderView = Backbone.View.extend({
     events: {
