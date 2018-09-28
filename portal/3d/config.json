@@ -102,6 +102,11 @@
             "name": "Informationen abfragen",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
+          },
+          "searchByCoord":
+          {
+            "name": "Koordinatensuche",
+            "glyphicon": "glyphicon-record"
           }
         }
       }
@@ -142,12 +147,12 @@
           "visibility": true
         },
         {
-          "id": "terrain",
+          "id": "terrainlgv",
           "name": "Gelände",
           "visibility": true
         },
         {
-          "id": "buildings",
+          "id": "buildingslgv",
           "name": "Gebäude LoD2",
           "visibility": true
         }

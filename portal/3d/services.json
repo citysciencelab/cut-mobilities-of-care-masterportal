@@ -276,5 +276,58 @@
                 "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
             }
         ]
-    }
+    },
+    {
+      "id": "buildingslgv",
+            "name": "Gebäude LoD2 LGV",
+            "url": "https://test.geoportal-hamburg.de/gdi3d/datasource-data/LoD2",
+            "typ": "TileSet",
+            "cesium3DTilesetOptions": {
+                "maximumScreenSpaceError": 6
+            },
+            "gfiAttributes": "showAll",
+            "layerAttribution": "nicht vorhanden",
+            "legendURL": "ignore",
+            "datasets": [
+                {
+                    "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+                    "rs_id": "HMDK/001719df-6619-40b7-aefe-32e8aaf49337",
+                    "md_name": "Geobasiskarten Hamburg",
+                    "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+                    "kategorie_opendata": [
+                        "Sonstiges"
+                    ],
+                    "kategorie_inspire": [
+                        "nicht INSPIRE-identifiziert"
+                    ],
+                    "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+                }
+            ]
+      },
+      {
+          "id": "terrainlgv",
+          "name": "Gelände LGV",
+          "url": "https://test.geoportal-hamburg.de/gdi3d/datasource-data/Gelaende",
+          "typ": "Terrain",
+          "layerAttribution": "nicht vorhanden",
+          "legendURL": "ignore",
+          "cesiumTerrainProviderOptions": {
+              "requestVertexNormals": true
+          },
+          "datasets": [
+              {
+                  "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+                  "rs_id": "HMDK/001719df-6619-40b7-aefe-32e8aaf49337",
+                  "md_name": "Geobasiskarten Hamburg",
+                  "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+                  "kategorie_opendata": [
+                      "Sonstiges"
+                  ],
+                  "kategorie_inspire": [
+                      "nicht INSPIRE-identifiziert"
+                  ],
+                  "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+              }
+          ]
+      }
 ]
