@@ -583,7 +583,9 @@ define(function (require) {
             var hitID = evt.currentTarget.id,
                 hit = _.findWhere(this.model.get("hitList"), {id: hitID});
 
-            Radio.trigger("MapMarker", "showMarker", hit.coordinate);
+            if (hit.coordinate && hit.coordinate.length < 4) {
+                Radio.trigger("MapMarker", "showMarker", hit.coordinate);
+            }
         },
 
         hideMarker: function () {
