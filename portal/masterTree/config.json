@@ -518,10 +518,10 @@
               "Busliniennummern"
             ],
             "legendURL": [
-              "http://87.106.16.168/legende_mrh/hvv-faehre.png",
-              "http://87.106.16.168/legende_mrh/hvv-bahn.png",
-              "http://87.106.16.168/legende_mrh/hvv-bus.png",
-              "http://87.106.16.168/legende_mrh/hvv-bus.png"
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-faehre.png",
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bahn.png",
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png",
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
             ]
           },
           {
@@ -533,7 +533,7 @@
               "Haltestellen"
             ],
             "legendURL": [
-              "http://87.106.16.168/legende_mrh/hvv-bus.png"
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
             ]
           }]
         }],
