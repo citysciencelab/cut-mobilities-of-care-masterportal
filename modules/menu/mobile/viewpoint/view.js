@@ -25,7 +25,7 @@ define(function (require) {
             this.model.activateViewpoint();
         },
         removeIfNotVisible: function () {
-            if (!this.model.getIsVisibleInTree()) {
+            if (!this.model.get("isVisibleInTree")) {
                 this.remove();
             }
         }
