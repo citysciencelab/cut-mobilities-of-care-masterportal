@@ -1,4 +1,4 @@
-import Config from "@app/config";
+import Config from "config";
 
 const RawLayerList = Backbone.Collection.extend({
     model: function (attrs) {

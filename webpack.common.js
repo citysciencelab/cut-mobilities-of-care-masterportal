@@ -9,9 +9,11 @@ module.exports = {
     },
     resolve: {
         alias: {
-            text: "text-loader",
-            "@app": path.resolve(__dirname, "portal/master")
+            text: "text-loader"
         }
+    },
+    externals: {
+        config: "Config"
     },
     module: {
         rules: [

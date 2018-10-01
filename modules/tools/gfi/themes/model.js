@@ -1,4 +1,4 @@
-import Config from "@app/config";
+import Config from "config";
 import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import * as moment from "moment";
 

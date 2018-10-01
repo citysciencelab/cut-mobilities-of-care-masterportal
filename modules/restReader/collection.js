@@ -1,4 +1,4 @@
-import Config from "@app/config";
+import Config from "config";
 
 const RestList = Backbone.Collection.extend({
     url: function () {

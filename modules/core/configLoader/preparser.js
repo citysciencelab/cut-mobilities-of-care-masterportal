@@ -1,6 +1,6 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
-import Config from "../../../portal/master/config";
+import Config from "config";
 
 const Preparser = Backbone.Model.extend({
     defaults: {},

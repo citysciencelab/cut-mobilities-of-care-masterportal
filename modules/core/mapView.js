@@ -1,4 +1,4 @@
-import Config from "@app/config";
+import Config from "config";
 import {Projection, addProjection} from "ol/proj.js";
 import View from "ol/View.js";
 

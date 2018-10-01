@@ -1,4 +1,4 @@
-import Config from "@app/config";
+import Config from "config";
 import WMSLayer from "./layer/wms";
 import WFSLayer from "./layer/wfs";
 import GeoJSONLayer from "./layer/geojson";

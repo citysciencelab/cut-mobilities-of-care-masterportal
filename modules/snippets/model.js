@@ -1,5 +1,5 @@
 import ValueModel from "./value/model";
-import Config from "@app/config";
+import Config from "config";
 
 const Snippet = Backbone.Model.extend({
     defaults: {

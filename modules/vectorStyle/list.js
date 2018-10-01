@@ -1,5 +1,5 @@
 import WFSStyle from "./model";
-import Config from "@app/config";
+import Config from "config";
 
 const StyleList = Backbone.Collection.extend({
     model: WFSStyle,
