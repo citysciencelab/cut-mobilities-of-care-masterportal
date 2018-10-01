@@ -49,7 +49,11 @@ define(function (require) {
             });
 
             this.listenTo(this, {
-                "change:geomtype": this.createInteraction,
+                "change:geomtype": function () {
+                    if (this.get("isActive")) {
+                        this.createInteraction();
+                    }
+                },
                 "change:isActive": this.setStatus
             });
 
