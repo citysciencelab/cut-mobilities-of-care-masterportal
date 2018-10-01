@@ -15,7 +15,7 @@ const GFIView = Backbone.View.extend({
         });
 
         // Die attached View braucht für ol.Overlay noch ein Dom-Element
-        if (this.model.get("desktopViewType") === "attached" && this.model.get("isMobile") === false) {
+        if (this.model.get("desktopViewType") === "attached" && Radio.request("Util", "isViewMobile") === false) {
             this.renderDomElementToBody();
             this.model.setOverlayElement(document.getElementById("gfipopup"));
         }
