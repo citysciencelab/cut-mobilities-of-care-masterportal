@@ -117,7 +117,8 @@ const ImportTool = Tool.extend({
 
         _.each(features, function (feature) {
             var type = feature.getGeometry().getType(),
-                styles = feature.getStyleFunction().call(feature),
+                featureStyleFunction = feature.getStyleFunction(),
+                styles = featureStyleFunction(feature),
                 style = styles[0];
 
             // wenn Punkt-Geometrie
