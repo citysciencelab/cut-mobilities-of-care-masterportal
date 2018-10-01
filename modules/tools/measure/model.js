@@ -49,7 +49,7 @@ define(function (require) {
             });
 
             this.listenTo(this, {
-                // "change:geomtype": this.createInteraction,
+                "change:geomtype": this.createInteraction,
                 "change:isActive": this.setStatus
             });
 
@@ -89,9 +89,9 @@ define(function (require) {
             else {
                 this.set("isMap3d", false);
                 this.set("geomtype", "LineString");
-                if (this.get("isActive")) {
-                    this.createInteraction();
-                }
+            }
+            if (this.get("isActive")) {
+                this.createInteraction();
             }
         },
         handle3DClicked: function (obj) {
