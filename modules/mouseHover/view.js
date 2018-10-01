@@ -20,11 +20,10 @@ const MouseHoverPopupView = Backbone.View.extend({
      */
     render: function (text) {
         var element = this.model.get("overlay").getElement(),
-            template = "<div class='tooltip top in' role='tooltip'><div class='tooltip-inner mouseHover in'>" + text + "</div></div>";
+            template = "<div style='bottom:5px' class='tooltip top in' role='tooltip'><div class='tooltip-inner mouseHover in'>" + text + "</div></div>";
 
         $(element).empty();
         $(element).append(template);
-
         return this;
     },
 
