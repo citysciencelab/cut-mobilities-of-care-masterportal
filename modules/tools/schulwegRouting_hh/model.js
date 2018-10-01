@@ -335,7 +335,7 @@ const SchulwegRouting = Tool.extend({
      */
     parseRoute: function (routeParts) {
         var wktParser = new WKT(),
-            multiLineString = new MultiLineString();
+            multiLineString = new MultiLineString({});
 
         routeParts.forEach(function (routePart) {
             multiLineString.appendLineString(wktParser.readGeometry(routePart.wkt));
