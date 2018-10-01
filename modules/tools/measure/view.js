@@ -14,7 +14,12 @@ define(function (require) {
         },
         initialize: function () {
             this.listenTo(this.model, {
-                "change:isActive change:geomtype": this.render
+                "change:isActive": this.render,
+                "change:geomtype": function (model) {
+                    if (model.get("isActive") === true) {
+                        this.render(model, true);
+                    }
+                }
             });
             // Bestätige, dass das Modul geladen wurde
             Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
