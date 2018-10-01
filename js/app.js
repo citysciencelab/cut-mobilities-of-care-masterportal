@@ -1,4 +1,4 @@
-import Config from "@app/config";
+import Config from "config";
 import Alert from "../modules/alerting/view";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
