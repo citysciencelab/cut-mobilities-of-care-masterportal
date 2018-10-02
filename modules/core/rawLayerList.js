@@ -6,8 +6,7 @@ const RawLayerList = Backbone.Collection.extend({
     },
     // URL zur services.json
     url: function () {
-        // return Radio.request("Util", "getPath", Config.layerConf);
-        return "https://localhost:9001/node_modules/lgv-config/services-fhhnet-ALL.json";
+        return Radio.request("Util", "getPath", Config.layerConf);
     },
     initialize: function (urlForTest) {
         var channel = Radio.channel("RawLayerList");
