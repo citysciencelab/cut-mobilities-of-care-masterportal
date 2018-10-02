@@ -16,19 +16,7 @@ describe("core/CRS", function () {
     describe("returns correct proj4 format", function () {
         it("getProjection for EPSG:31461", function () {
             expect(model.getProjection("EPSG:31461")).to.not.be.empty;
-            expect(model.getProjection("EPSG:31461")).to.deep.equal({
-                datumCode: "potsdam",
-                ellps: "bessel",
-                k0: 1,
-                lat0: 0,
-                long0: 0.05235987755982989,
-                no_defs: true,
-                projName: "tmerc",
-                title: "Gauß 3° Bessel",
-                units: "m",
-                x0: 1500000,
-                y0: 0
-            });
+            expect(model.getProjection("EPSG:31461").datumName).to.equal("Potsdam Rauenberg 1950 DHDN");
         });
         it("returns 2 proj4 from config", function () {
             expect(model.getProjections()).to.have.lengthOf(2);
