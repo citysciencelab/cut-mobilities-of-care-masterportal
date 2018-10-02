@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import Model from "@modules/searchbar/model.js";
+import Model from "@modules/searchbar/specialWFS/model.js";
 
 describe("modules/searchbar/specialWFS", function () {
     var model = {},
