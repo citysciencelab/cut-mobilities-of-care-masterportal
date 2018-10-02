@@ -1,6 +1,5 @@
 import {expect} from "chai";
 import Model from "@modules/core/rawLayerList.js";
-import Config from "../../testConfig.js";
 
 describe("core/rawLayerList", function () {
     var model,
