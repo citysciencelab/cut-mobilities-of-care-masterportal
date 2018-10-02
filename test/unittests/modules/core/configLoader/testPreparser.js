@@ -1,10 +1,14 @@
 import {expect} from "chai";
 import Preparser from "@modules/core/configLoader/preparser.js";
+import RawLayerList from "@modules/core/rawLayerList.js";
+import RestReaderList from "@modules/restReader/collection";
 
 describe("core/configLoader/preparser", function () {
     var preparser;
 
     before(function () {
+        new RawLayerList();
+        new RestReaderList();
         preparser = new Preparser();
     });
 
