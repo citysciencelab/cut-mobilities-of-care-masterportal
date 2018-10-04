@@ -15,9 +15,16 @@ define(function () {
             if (config.minChars) {
                 this.set("minChars", config.minChars);
             }
+
             this.listenTo(Radio.channel("Searchbar"), {
                 "search": this.search
             });
+
+            if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+                // Führe die initiale Suche durch, da ein Suchparameter übergeben wurde.
+                this.search(Radio.request("ParametricURL", "getInitString"));
+            }
+
         },
 
         search: function (searchString) {
@@ -31,7 +38,7 @@ define(function () {
                 searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
                 this.searchInLayers(searchStringRegExp);
                 this.searchInNodes(searchStringRegExp);
-                Radio.trigger("Searchbar", "createRecommendedList");
+                Radio.trigger("Searchbar", "createRecommendedList", "tree");
                 this.set("inUse", false);
             }
         },
