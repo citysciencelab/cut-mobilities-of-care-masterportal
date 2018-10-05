@@ -28,6 +28,17 @@
 </div>
 <% } %>
 <% if (typeof gemeinde !== "undefined") { %>
+<div class="form-group">
+    <select id="select-trefferAnzahl" class="form-control">
+        <option disabled selected hidden>Anzahl anzuzeigender Beziehungen</option>
+        <option value="top5" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top5") ? "selected" : "" %> >Top 5</option>
+        <option value="top10" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top10") ? "selected" : "" %> >Top 10</option>
+        <option value="top15" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top15") ? "selected" : "" %> >Top 15</option>
+        <!-- <option value="alle" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "alle") ? "selected" : "" %> >Alle</option> -->
+    </select>
+</div>
+<% } %>
+<% if (typeof trefferAnzahl !== "undefined") { %>
 <div class="radio">
   <label class=" radio-inline">
     <input type="radio" name="direction" value="wohnort" <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
@@ -41,10 +52,10 @@
 <% } %>
 <% if (typeof direction !== "undefined") { %>
 <table class="table">
-    <% _.each(pendlerLegend, function(kreis){ %>
+    <% _.each(pendlerLegend, function(gemeinde){ %>
         <tr>
-            <td><div class="form-group pull-left animation_legend" style="background-color:<%= kreis.color %>"></div></td>
-            <td><%=kreis.kreis%> (Gesamt: <%=kreis.anzahl_pendler%>)</td>
+            <td><div class="form-group pull-left animation_legend" style="background-color:<%= gemeinde.color %>"></div></td>
+            <td><%= gemeinde.name %>: <%= gemeinde.anzahlPendler %> Personen</td>
         </tr>
     <% }); %>
 </table>
