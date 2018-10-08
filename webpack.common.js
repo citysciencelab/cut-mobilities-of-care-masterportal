@@ -6,7 +6,7 @@ module.exports = {
     entry: "./js/main.js",
     output: {
         path: path.resolve(__dirname, "build"),
-        filename: "bundle.js"
+        filename: "masterportal.js"
     },
     resolve: {
         alias: {
@@ -66,7 +66,7 @@ module.exports = {
             _: "underscore"
         }),
         new MiniCssExtractPlugin({
-            filename: "style.css"
+            filename: "css/style.css"
         })
     ]
 };
