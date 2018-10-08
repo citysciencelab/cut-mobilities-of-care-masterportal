@@ -222,21 +222,26 @@ const Util = Backbone.Model.extend({
         }
         return ie;
     },
-    //TODO: baseUrl neu schreiben ohne require
     getPath: function (path) {
-        // var baseUrl = require.toUrl("").split("?")[0];
-        //
-        // if (path) {
-        //     if (path.indexOf("/") === 0) {
-        //         baseUrl = "";
-        //     }
-        //     else if (path.indexOf("http") === 0) {
-        //         baseUrl = "";
-        //     }
-        //     return baseUrl + path;
-        // }
+        var baseUrl = window.location.origin.split("?")[0],
+            basepath;
 
-        return "https://localhost:9001/portal/master";
+        if (path) {
+            basepath = path;
+
+            if (path.indexOf("/") === 0) {
+                baseUrl = "";
+            }
+            else if (path.indexOf("http") === 0) {
+                baseUrl = "";
+            }
+            else if (path.indexOf("..") === 0) {
+                basepath = path.replace("..", "");
+            }
+            return baseUrl + basepath;
+        }
+
+        return path;
 
     },
     showLoader: function () {
