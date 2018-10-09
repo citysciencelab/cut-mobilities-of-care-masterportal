@@ -121,7 +121,7 @@ const OrientationModel = Backbone.Model.extend({
             }
             else {
                 geolocation = this.get("geolocation");
-                this.positioning().bind(this);
+                this.positioning();
             }
             geolocation.on("change", this.positioning.bind(this), this);
             geolocation.on("error", this.onError.bind(this), this);
