@@ -1,4 +1,7 @@
-import d3 from "d3";
+import {scaleBand, scaleLinear} from "d3-scale";
+import {axisBottom, axisLeft} from "d3-axis";
+import {line} from "d3-shape";
+import {select, event} from "d3-selection";
 
 const GraphModel = Backbone.Model.extend({
     defaults: {},
@@ -121,13 +124,13 @@ const GraphModel = Backbone.Model.extend({
         });
         values = _.uniq(values);
         // values.sort(); Sortierung nach String funktioniert nicht für timestamp, daher auskommentiert und Daten vorsortiert
-        return d3.scaleBand()
+        return scaleBand()
             .range(rangeArray)
             .domain(values);
     },
 
     createLinearScale: function (minValue, maxValue, rangeArray) {
-        return d3.scaleLinear()
+        return scaleLinear()
             .range(rangeArray)
             .domain([minValue, maxValue])
             .nice();
@@ -139,7 +142,7 @@ const GraphModel = Backbone.Model.extend({
             d3Object;
 
         if (_.isUndefined(xAxisTicks) || !_.has(xAxisTicks, "ticks")) {
-            d3Object = _.isUndefined(scale) ? undefined : d3.axisBottom(scale)
+            d3Object = _.isUndefined(scale) ? undefined : axisBottom(scale)
                 .tickValues(scale.domain().filter(function (d, i) {
                     var val = i % xThinningFactor;
 
@@ -151,7 +154,7 @@ const GraphModel = Backbone.Model.extend({
                 });
         }
         else {
-            d3Object = d3.axisBottom(scale)
+            d3Object = axisBottom(scale)
                 .ticks(xAxisTicks.ticks, xAxisTicks.factor)
 
                 .tickFormat(function (d) {
@@ -167,20 +170,20 @@ const GraphModel = Backbone.Model.extend({
         var d3Object;
 
         if (_.isUndefined(yAxisTicks) && !_.has(yAxisTicks, "ticks")) {
-            d3Object = d3.axisLeft(scale)
+            d3Object = axisLeft(scale)
                 .tickFormat(function (d) {
                     return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 });
         }
         else {
-            d3Object = d3.axisLeft(scale).ticks(yAxisTicks.ticks, yAxisTicks.factor);
+            d3Object = axisLeft(scale).ticks(yAxisTicks.ticks, yAxisTicks.factor);
         }
 
         return d3Object;
     },
 
     createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow, offset) {
-        return d3.line()
+        return line()
             .x(function (d) {
                 return scaleX(d[xAttr]) + (offset + (scaleX.bandwidth() / 2));
             })
@@ -275,8 +278,8 @@ const GraphModel = Backbone.Model.extend({
                     .style("opacity", 0.9);
                 tooltipDiv.html(d[yAttrToShow])
                     .attr("style", "background: gray")
-                    .style("left", (d3.event.offsetX + 5) + "px")
-                    .style("top", (d3.event.offsetY - 5) + "px");
+                    .style("left", (event.offsetX + 5) + "px")
+                    .style("top", (event.offsetY - 5) + "px");
             })
             .on("mouseout", function () {
                 tooltipDiv.transition()
@@ -293,13 +296,13 @@ const GraphModel = Backbone.Model.extend({
                     .style("opacity", 0.9);
                 tooltipDiv.html(d[yAttrToShow])
                     .attr("style", "background: gray")
-                    .style("left", (d3.event.offsetX + 5) + "px")
-                    .style("top", (d3.event.offsetY - 5) + "px");
+                    .style("left", (event.offsetX + 5) + "px")
+                    .style("top", (event.offsetY - 5) + "px");
             });
     },
 
     createSvg: function (selector, marginObj, width, height, svgClass) {
-        return d3.select(selector).append("svg")
+        return select(selector).append("svg")
             .attr("width", width + marginObj.left + marginObj.right)
             .attr("height", height + marginObj.top + marginObj.bottom)
             .attr("class", svgClass)
@@ -362,7 +365,7 @@ const GraphModel = Backbone.Model.extend({
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
             valueLine,
-            tooltipDiv = d3.select(graphConfig.selectorTooltip),
+            tooltipDiv = select(graphConfig.selectorTooltip),
             xThinning = graphConfig.xThinning ? graphConfig.xThinning : 1,
             xAxis = this.createAxisBottom(scaleX, xThinning),
             yAxis = this.createAxisLeft(scaleY),
@@ -435,7 +438,7 @@ const GraphModel = Backbone.Model.extend({
                 return height - y(d[attrToShowArray[0]]);
             })
             .on("mouseover", function () {
-                d3.select(this);
+                select(this);
             })
             .append("title")
             .text(function (d) {

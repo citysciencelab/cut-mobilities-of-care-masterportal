@@ -1,5 +1,5 @@
 import Theme from "../model";
-import * as d3 from "d3";
+import {select, event} from "d3-selection";
 
 const VerkehrsStaerkenTheme = Theme.extend({
     defaults: _.extend({}, Theme.prototype.defaults,
@@ -212,7 +212,7 @@ const VerkehrsStaerkenTheme = Theme.extend({
     manipulateSVG: function () {
         var graphParams = Radio.request("Graph", "getGraphParams"),
             data = this.get("dataset"),
-            svg = d3.select(".graph-svg"),
+            svg = select(".graph-svg"),
             scaleX = graphParams.scaleX,
             scaleY = graphParams.scaleY,
             tooltipDiv = graphParams.tooltipDiv,
@@ -257,8 +257,8 @@ const VerkehrsStaerkenTheme = Theme.extend({
                     .style("opacity", 0.9);
                 tooltipDiv.html(d[attrToShowArray[0]])
                     .attr("style", "background: gray")
-                    .style("left", (d3.event.offsetX + 5) + "px")
-                    .style("top", (d3.event.offsetY - 5) + "px");
+                    .style("left", (event.offsetX + 5) + "px")
+                    .style("top", (event.offsetY - 5) + "px");
 
             })
             .on("mouseout", function () {
@@ -272,8 +272,8 @@ const VerkehrsStaerkenTheme = Theme.extend({
                     .style("opacity", 0.9);
                 tooltipDiv.html(d[attrToShowArray[0]])
                     .attr("style", "background: gray")
-                    .style("left", (d3.event.offsetX + 5) + "px")
-                    .style("top", (d3.event.offsetY - 5) + "px");
+                    .style("left", (event.offsetX + 5) + "px")
+                    .style("top", (event.offsetY - 5) + "px");
             });
         legendBBox = svg.selectAll(".graph-legend").node().getBBox();
         width = legendBBox.width;
