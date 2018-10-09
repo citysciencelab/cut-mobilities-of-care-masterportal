@@ -503,12 +503,11 @@ Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten,
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
 |attrAnzahl|nein|String|"anzahl_einpendler"|Aus diesem Attribut des featureTypes wird die Anzahl der Pendler ausgelesen.|
-|attrKreis|nein|String|"wohnort_kreis"|Aus diesem Attribut werden die zur Auswahl stehenden Kreise ausgelesen.|
-|colors|nein|Array[String]|["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]|Angabe der verschiedenen Farben, die für die Animation verschiedener Kreise genutzt werden sollen in [rgba()-Notation](https://www.w3.org/TR/css3-color/#rgba-color) ([siehe auch hier](https://developer.mozilla.org/de/docs/Web/CSS/Farben#rgba)). Anzahl der Farben muss mit "num_kreise_to_style" übereinstimmen.|
+|attrGemeinde|nein|String|"wohnort"|Aus diesem Attribut des featureTypes wird der Name der Gemeinde ausgelesen.|
+|colors|nein|Array[String]|["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]|Angabe der verschiedenen Farben, die für die Animation verschiedener Kreise genutzt werden sollen in [rgba()-Notation](https://www.w3.org/TR/css3-color/#rgba-color) ([siehe auch hier](https://developer.mozilla.org/de/docs/Web/CSS/Farben#rgba)). Es sollten 15 Farben definiert werden, damit auch im Falle der Auswahl  "Top 15" alle Ergebnisse wie gewünscht angezeight werden können. Werden zu wenige Farben definiert, so wird auf eine default-Farbpalette zurückgegriffen.|
 |featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType, der animiert werden soll.|
 |maxPx|nein|Number|20|Größe des größten Punkts in px.|
 |minPx|nein|Number|1|Größe des kleinsten Punkts in px.|
-|num_kreise_to_style|nein|Number|2|Anzahl, der mit verschiedenen Farben darzustellenden Kreise. Muss mit der Anzahl der Farben in "colors" übereinstimmen.|
 |[params](#markdown-header-animationparams)|nein|Object||Hier gibt es verschiedene Konfigurationsmöglichkeiten.|
 |steps|nein|Number|50|Anzahl der Schritte, die pro Animation durchlaufen werden.|
 |url|nein|String|"http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"|Die URL des zu animierenden Dienstes.|
