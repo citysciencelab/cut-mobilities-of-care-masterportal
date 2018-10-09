@@ -1,7 +1,10 @@
 import MapHandlerModel from "./model";
 
-
 const MapMarker = Backbone.View.extend({
+    /**
+    * @description View des Map Handlers
+    * @returns {void}
+    */
     initialize: function () {
         var markerPosition,
             channel = Radio.channel("MapMarker");
@@ -23,16 +26,12 @@ const MapMarker = Backbone.View.extend({
             this.showMarker(markerPosition);
         }
     },
-    id: "searchMarker",
-    className: "glyphicon glyphicon-map-marker",
-    /**
-    * @description View des Map Handlers
-    * @returns {void}
-    */
     render: function () {
         this.model.get("marker").setElement(this.$el[0]);
         return this;
     },
+    id: "searchMarker",
+    className: "glyphicon glyphicon-map-marker",
     /**
     * @description Entfernt den searchVector
     * @returns {void}
@@ -126,6 +125,12 @@ const MapMarker = Backbone.View.extend({
                 Radio.trigger("MapView", "setCenter", coord, 6);
                 break;
             }
+            // gfiTheme für Flächeninformation soll nur dargestellt und nicht gezommt werden.
+            case "flaecheninfo": {
+                this.model.setWkt("POLYGON", coord);
+                this.model.showFeature();
+                break;
+            }
             // Features
             default: {
                 if (coord.length === 2) {
@@ -177,6 +182,7 @@ const MapMarker = Backbone.View.extend({
         this.$el.hide();
         this.model.get("polygon").setVisible(false);
     }
+
 });
 
 export default MapMarker;

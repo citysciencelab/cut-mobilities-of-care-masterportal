@@ -35,7 +35,7 @@ const GroupLayer = Layer.extend({
             else if (childLayerDefinition.typ === "GeoJSON") {
                 layerSource.push(new GeoJSONLayer(childLayerDefinition));
             }
-            else if (childLayerDefinition.typ === "SensorThings" || childLayerDefinition.typ === "ESRIStreamLayer") {
+            else if (childLayerDefinition.typ === "SensorThings") {
                 layerSource.push(new SensorLayer(childLayerDefinition));
             }
             else if (childLayerDefinition.typ === "Heatmap") {

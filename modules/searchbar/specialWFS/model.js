@@ -91,12 +91,16 @@ const SpecialWFSModel = Backbone.Model.extend({
             hits;
 
         if (searchString.length < minChars) {
+            Radio.trigger("Searchbar", "abortSearch", "specialWFS");
             return;
         }
         hits = this.collectHits(searchString, wfsMembers);
         if (hits.length > 0) {
             Radio.trigger("Searchbar", "pushHits", "hitList", hits);
-            Radio.trigger("Searchbar", "createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
+        }
+        else {
+            Radio.trigger("Searchbar", "abortSearch", "specialWFS");
         }
     },
 

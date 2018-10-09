@@ -865,7 +865,7 @@ describe("tools/print_/buildSpec", function () {
             var lineStyleModel = new Style({
                     class: "Line",
                     subClass: "SIMPLE",
-                    lineStrokeColor: [51, 153, 0],
+                    lineStrokeColor: [51, 153, 0, 1],
                     lineStrokeWidth: 3
                 }),
                 vectorLayer = new Vector({

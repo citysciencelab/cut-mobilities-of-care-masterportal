@@ -40,13 +40,13 @@ const SearchbarView = Backbone.View.extend({
         }
     },
 
-        initialize: function (config) {
-            this.model = new Searchbar(config);
+    initialize: function (config) {
+        this.model = new Searchbar();
 
-            if (config.renderToDOM) {
-                this.setElement(config.renderToDOM);
-                this.render();
-            }
+        if (config.renderToDOM) {
+            this.setElement(config.renderToDOM);
+            this.render();
+        }
 
         this.className = "navbar-form col-xs-9";
 
@@ -63,8 +63,25 @@ const SearchbarView = Backbone.View.extend({
             "setFocus": this.setFocus
         });
 
-        this.initialRender();
+        this.listenTo(Radio.channel("MenuLoader"), {
+            "ready": function (parentElementId) {
+                this.render(parentElementId);
+                if (!_.isUndefined(this.model.get("initSearchString"))) {
+                    if (this.model.get("isInitialRecommendedListCreated") === true) {
+                        this.renderRecommendedList();
+                        this.$("#searchInput").val(this.model.get("initSearchString"));
+                        this.model.unset("initSearchString", true);
+                    }
+                }
+                if (window.innerWidth >= 768) {
+                    this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+                    Radio.trigger("Title", "setSize");
+                }
+            }
+        });
 
+
+        this.initialRender();
 
         this.listenTo(Radio.channel("Util"), {
             "isViewMobileChanged": function () {
@@ -76,12 +93,14 @@ const SearchbarView = Backbone.View.extend({
             "hitSelected": this.hitSelected
         });
 
-
         if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
             this.$("#searchInput").val(this.model.get("placeholder"));
         }
         this.$("#searchInput").blur();
-        // bedarfsweises Laden der Suchalgorythmen
+        // Verwalte Suchalgorithmen zur initialen Suche
+        this.model.setInitialSearchTasks(config);
+
+        // Bedarfsweises Laden der Suchalgorythmen
         if (_.has(config, "gazetteer") === true) {
             new GAZModel(config.gazetteer);
         }
@@ -179,8 +198,8 @@ const SearchbarView = Backbone.View.extend({
 
         this.$("ul.dropdown-menu-search").css("max-width", this.$("#searchForm").width());
         this.$("ul.dropdown-menu-search").html(template(attr));
-        // }
-        // bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
+        // Bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
+        // und im Falle eines Tree-Search auch das Menü aufgeklappt.
         if (!_.isUndefined(this.model.get("initSearchString")) && this.model.get("hitList").length === 1) {
             this.hitSelected();
         }
@@ -575,9 +594,7 @@ const SearchbarView = Backbone.View.extend({
         var hitID = evt.currentTarget.id,
             hit = _.findWhere(this.model.get("hitList"), {id: hitID});
 
-        if (hit.type === "Adresse" || hit.type === "Stadtteil" || hit.type === "Olympiastandort" || hit.type === "Paralympiastandort") {
-            Radio.trigger("MapMarker", "showMarker", hit.coordinate);
-        }
+        Radio.trigger("MapMarker", "showMarker", hit.coordinate);
     },
 
     hideMarker: function () {

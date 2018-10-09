@@ -80,7 +80,6 @@ const BKGSearchModel = Backbone.Model.extend({
             request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
             this.setTypeOfRequest("direct");
             this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false, this.get("typeOfRequest"));
-            Radio.trigger("Searchbar", "createRecommendedList");
         }
     },
     directPushSuggestions: function (data) {
@@ -107,6 +106,7 @@ const BKGSearchModel = Backbone.Model.extend({
                 }
             }, this);
         }
+        Radio.trigger("Searchbar", "createRecommendedList", "bkg");
     },
 
     /**
@@ -206,6 +206,7 @@ const BKGSearchModel = Backbone.Model.extend({
                 if (err.status !== 0) { // Bei abort keine Fehlermeldung
                     this.showError(err);
                 }
+                Radio.trigger("Searchbar", "abortSearch", "bkg");
             },
             complete: function () {
                 this.polishAjax(typeRequest);

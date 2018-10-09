@@ -21,6 +21,7 @@ const VisibleWFSModel = Backbone.Model.extend({
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.prepSearch
         });
+
     },
     prepSearch: function (searchString) {
         var prepSearchString,
@@ -36,7 +37,7 @@ const VisibleWFSModel = Backbone.Model.extend({
             });
 
             this.findMatchingFeatures(filteredModels, prepSearchString);
-            Radio.trigger("Searchbar", "createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList", "visibleWFS");
             this.setInUse(false);
         }
     },

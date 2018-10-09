@@ -174,7 +174,7 @@ tree: {
                     "id": "1935",
                     "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
                     "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
-                    "legendURL": ["http://87.106.16.168/legende_mrh/hvv-faehre.png", "http://87.106.16.168/legende_mrh/hvv-bahn.png", "http://87.106.16.168/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
+                    "legendURL": ["http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-faehre.png", "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bahn.png", "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
                 }
             ],
             metaIDsToMerge: [

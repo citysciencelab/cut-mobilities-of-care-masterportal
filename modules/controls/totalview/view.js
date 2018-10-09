@@ -28,7 +28,7 @@ const TotalView = Backbone.View.extend({
             this.renderToToolbar();
         }
     },
-    template: _.template("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Gesamtansicht anzeigen'></span></div>"),
+    template: _.template("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Zurück zur Startansicht'></span></div>"),
     tabletemplate: _.template("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>"),
     id: "totalview",
     render: function () {

@@ -57,9 +57,13 @@ const OsmModel = Backbone.Model.extend({
      * @returns {void}
      */
     search: function (searchString) {
+
         if (searchString.length >= this.get("minChars")) {
             Radio.trigger("Searchbar", "removeHits", "hitList", {type: "OpenStreetMap"});
             this.suggestByOSM(searchString);
+        }
+        else {
+            Radio.trigger("Searchbar", "abortSearch", "osm");
         }
     },
     /**
@@ -161,7 +165,7 @@ const OsmModel = Backbone.Model.extend({
                 }
             }
         }, this);
-        Radio.trigger("Searchbar", "createRecommendedList");
+        Radio.trigger("Searchbar", "createRecommendedList", "osm");
     },
 
     /**
@@ -253,6 +257,7 @@ const OsmModel = Backbone.Model.extend({
                 if (err.status !== 0) { // Bei abort keine Fehlermeldung
                     this.showError(err);
                 }
+                Radio.trigger("Searchbar", "abortSearch", "osm");
             },
             complete: function () {
                 this.polishAjax();
@@ -268,7 +273,7 @@ const OsmModel = Backbone.Model.extend({
     showError: function (err) {
         var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
-        Radio.trigger("Alert", "alert", "URL nicht erreichbar. " + detail);
+        Radio.trigger("Alert", "alert", "OpenStreetMap-Suche nicht erreichbar. " + detail);
     },
 
     polishAjax: function () {
