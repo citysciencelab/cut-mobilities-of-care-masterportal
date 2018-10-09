@@ -125,11 +125,11 @@ const RoutingModel = Tool.extend({
                     }
                 }
                 catch (error) {
-                    Radio.trigger("Alert", "alert", {text: "Adressabfrage unverständlich", kategorie: "alert-warning"});
+                    Radio.trigger("Alert", "alert", {text: "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator.", kategorie: "alert-warning"});
                 }
             },
             error: function (error) {
-                Radio.trigger("Alert", "alert", {text: "Adressabfrage fehlgeschlagen: " + error.statusText, kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten:  " + error.statusText, kategorie: "alert-warning"});
             },
             timeout: 3000
         });
