@@ -58,6 +58,7 @@ module.exports = {
         ]
     },
     plugins: [
+        // provide libraries globally
         new webpack.ProvidePlugin({
             jQuery: "jquery",
             $: "jquery",
@@ -65,8 +66,11 @@ module.exports = {
             Radio: "backbone.radio",
             _: "underscore"
         }),
+        // create css under build/
         new MiniCssExtractPlugin({
             filename: "css/style.css"
-        })
+        }),
+        // import only de-locale from momentjs
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/)
     ]
 };
