@@ -50,5 +50,3 @@ const Config = {
     },
     browserPrint: {}
 };
-
-module.exports = Config;

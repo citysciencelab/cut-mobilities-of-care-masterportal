@@ -46,5 +46,3 @@ const Config = {
         wfsId: "4560"
     }
 };
-
-module.exports = Config;
