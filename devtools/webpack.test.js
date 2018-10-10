@@ -11,8 +11,8 @@ module.exports = {
     mode: "development",
     resolve: {
         alias: {
-            "@modules": path.resolve(__dirname, "./modules"),
-            "@testUtil": path.resolve(__dirname, "./test/unittests/Util")
+            "@modules": path.resolve(__dirname, "../modules"),
+            "@testUtil": path.resolve(__dirname, "../test/unittests/Util")
         }
     },
     externals: {

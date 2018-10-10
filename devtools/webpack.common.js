@@ -5,7 +5,7 @@ var webpack = require("webpack"),
 module.exports = {
     entry: "./js/main.js",
     output: {
-        path: path.resolve(__dirname, "build"),
+        path: path.resolve(__dirname, "../build"),
         filename: "masterportal.js"
     },
     resolve: {
