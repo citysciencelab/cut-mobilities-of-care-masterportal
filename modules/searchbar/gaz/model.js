@@ -4,8 +4,6 @@ define(function (require) {
 
     require("modules/searchbar/model");
 
-    require("modules/searchbar/model");
-
     GazetteerModel = Backbone.Model.extend({
         defaults: {
             namespace: "http://www.adv-online.de/namespaces/adv/dog",
@@ -216,7 +214,14 @@ define(function (require) {
                     this.setTypeOfRequest("searchStreetKey2");
                     this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, this.get("typeOfRequest"));
                 }
+                else {
+                    Radio.trigger("Searchbar", "abortSearch", "gazetteer_streetKeys");
+                }
             }
+            else {
+                Radio.trigger("Searchbar", "abortSearch", "gazetteer_streetKeys");
+            }
+
             $("#searchInput").val(this.get("searchString"));
         },
         /**
@@ -282,7 +287,7 @@ define(function (require) {
                     }, this);
                 }
             }
-            Radio.trigger("Searchbar", "createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList", "gazetteer_streetsOrHouseNumbers");
         },
 
         /**
@@ -344,7 +349,7 @@ define(function (require) {
         handleHouseNumbers: function (data) {
             this.createHouseNumbers(data);
             this.searchInHouseNumbers();
-            Radio.trigger("Searchbar", "createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList", "gazetteer_streetsOrHouseNumbers");
         },
 
         createHouseNumbers: function (data) {
@@ -377,7 +382,7 @@ define(function (require) {
                     id: "Parcel"
                 });
             }, this);
-            Radio.trigger("Searchbar", "createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList", "gazetter_parcel");
         },
 
         getStreetKey: function (data) {
@@ -399,7 +404,7 @@ define(function (require) {
                     });
                 }
             }, this);
-            Radio.trigger("Searchbar", "createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList", "gazetteer_streetKey");
         },
         /**
          * @description Führt einen HTTP-GET-Request aus.
@@ -432,6 +437,15 @@ define(function (require) {
                     if (err.status !== 0) { // Bei abort keine Fehlermeldung
                         this.showError(err);
                     }
+
+                    // Markiere den Algorithmus für das entsprechende Suchziel als erledigt
+                    if (typeRequest === "onlyOneStreetName2" || typeRequest === "onlyOneStreetName1") {
+                        Radio.trigger("Searchbar", "abortSearch", "gazetteer_streetsOrHouseNumbers");
+                    }
+                    else if (typeRequest === "searchStreetKey2") {
+                        Radio.trigger("Searchbar", "abortSearch", "gazetteer_streetKeys");
+                    }
+
                 },
                 complete: function () {
                     this.polishAjax(typeRequest);

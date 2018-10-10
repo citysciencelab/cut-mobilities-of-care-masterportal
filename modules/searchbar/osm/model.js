@@ -61,9 +61,13 @@ define(function (require) {
          * @returns {void}
          */
         search: function (searchString) {
+
             if (searchString.length >= this.get("minChars")) {
                 Radio.trigger("Searchbar", "removeHits", "hitList", {type: "OpenStreetMap"});
                 this.suggestByOSM(searchString);
+            }
+            else {
+                Radio.trigger("Searchbar", "abortSearch", "osm");
             }
         },
         /**
@@ -165,7 +169,7 @@ define(function (require) {
                     }
                 }
             }, this);
-            Radio.trigger("Searchbar", "createRecommendedList");
+            Radio.trigger("Searchbar", "createRecommendedList", "osm");
         },
 
         /**
@@ -257,6 +261,7 @@ define(function (require) {
                     if (err.status !== 0) { // Bei abort keine Fehlermeldung
                         this.showError(err);
                     }
+                    Radio.trigger("Searchbar", "abortSearch", "osm");
                 },
                 complete: function () {
                     this.polishAjax();
@@ -272,7 +277,7 @@ define(function (require) {
         showError: function (err) {
             var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
-            Radio.trigger("Alert", "alert", "URL nicht erreichbar. " + detail);
+            Radio.trigger("Alert", "alert", "OpenStreetMap-Suche nicht erreichbar. " + detail);
         },
 
         polishAjax: function () {
