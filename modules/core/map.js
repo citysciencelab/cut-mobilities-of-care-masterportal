@@ -67,7 +67,6 @@ const map = Backbone.Model.extend({
 
         this.set("map", new Map({
             logo: null,
-            renderer: "canvas",
             target: "map",
             view: this.get("view"),
             controls: [],
