@@ -20,7 +20,7 @@ const TreeFilter = Tool.extend({
         treeConf: ""
     }),
     url: function () {
-        return Radio.request("Util", "getPath", this.get("treeConf"));
+        return this.get("treeConf");
     },
     initialize: function () {
         var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});

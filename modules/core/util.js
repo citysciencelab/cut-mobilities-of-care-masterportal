@@ -12,7 +12,6 @@ const Util = Backbone.Model.extend({
             "isViewMobile": function () {
                 return this.get("isViewMobile");
             },
-            "getPath": this.getPath,
             "getProxyURL": this.getProxyURL,
             "isApple": this.isApple,
             "isAndroid": this.isAndroid,
@@ -221,28 +220,6 @@ const Util = Backbone.Model.extend({
             ie = "IE11";
         }
         return ie;
-    },
-    getPath: function (path) {
-        var baseUrl = window.location.origin.split("?")[0],
-            basepath;
-
-        if (path) {
-            basepath = path;
-
-            if (path.indexOf("/") === 0) {
-                baseUrl = "";
-            }
-            else if (path.indexOf("http") === 0) {
-                baseUrl = "";
-            }
-            else if (path.indexOf("..") === 0) {
-                basepath = path.replace("..", "");
-            }
-            return baseUrl + basepath;
-        }
-
-        return path;
-
     },
     showLoader: function () {
         $("#loader").show();

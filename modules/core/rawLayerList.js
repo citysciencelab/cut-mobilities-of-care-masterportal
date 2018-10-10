@@ -5,9 +5,7 @@ const RawLayerList = Backbone.Collection.extend({
         return new Backbone.Model(attrs);
     },
     // URL zur services.json
-    url: function () {
-        return Radio.request("Util", "getPath", Config.layerConf);
-    },
+    url: Config.layerConf,
     initialize: function (urlForTest) {
         var channel = Radio.channel("RawLayerList");
 

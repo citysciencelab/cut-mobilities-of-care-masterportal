@@ -44,10 +44,10 @@ const quickHelpView = Backbone.View.extend({
 
         switch (value) {
             case "search": {
-                allgemein = Radio.request("Util", "getPath", "../img/allgemein.png");
-                allgemein2 = Radio.request("Util", "getPath", "../img/allgemein_2.png");
-                allgemein3 = Radio.request("Util", "getPath", "../img/allgemein_3.png");
-                allgemein4 = Radio.request("Util", "getPath", "../img/allgemein_4.png");
+                allgemein = "../img/allgemein.png";
+                allgemein2 = "../img/allgemein_2.png";
+                allgemein3 = "../img/allgemein_3.png";
+                allgemein4 = "../img/allgemein_4.png";
 
                 this.$el.html(this.templateSearch({
                     allgemein: allgemein,
@@ -58,8 +58,8 @@ const quickHelpView = Backbone.View.extend({
                 break;
             }
             case "tree": {
-                themen = Radio.request("Util", "getPath", "../img/themen.png");
-                themen2 = Radio.request("Util", "getPath", "../img/themen_2.png");
+                themen = "../img/themen.png";
+                themen2 = "../img/themen_2.png";
 
                 this.$el.html(this.templateTree({
                     themen: themen,
@@ -68,11 +68,11 @@ const quickHelpView = Backbone.View.extend({
                 break;
             }
             case "measure": {
-                statistikFlaecheNiemeier = Radio.request("Util", "getPath", "../img/Statistik_Flaeche_Niemeier.png");
-                statistikStreckeUniErlangen = Radio.request("Util", "getPath", "../img/Statistik_Strecke_UniErlangen.png");
-                utmStreifen = Radio.request("Util", "getPath", "../img/UTM_Streifen.png");
-                utmVerzerrung = Radio.request("Util", "getPath", "../img/UTM_Verzerrung.png");
-                utmFormeln = Radio.request("Util", "getPath", "../img/UTM_Formeln.png");
+                statistikFlaecheNiemeier = "../img/Statistik_Flaeche_Niemeier.png";
+                statistikStreckeUniErlangen = "../img/Statistik_Strecke_UniErlangen.png";
+                utmStreifen = "../img/UTM_Streifen.png";
+                utmVerzerrung = "../img/UTM_Verzerrung.png";
+                utmFormeln = "../img/UTM_Formeln.png";
 
                 this.$el.html(this.templateMeasureTool({
                     statistikFlaecheNiemeier: statistikFlaecheNiemeier,

@@ -110,7 +110,7 @@ const WFSStyle = Backbone.Model.extend({
         ]
     },
     initialize: function () {
-        this.setImagePath(Radio.request("Util", "getPath", Config.wfsImgPath));
+        this.setImagePath(Config.wfsImgPath);
     },
 
     /*

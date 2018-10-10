@@ -26,7 +26,7 @@ const ZoomToFeature = Backbone.Model.extend({
                 marker;
 
             // lokaler Pfad zum IMG-Ordner ist anders
-            $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + Radio.request("Util", "getPath", this.get("imgLink")) + "'></div>");
+            $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + this.get("imgLink") + "'></div>");
 
             marker = new Overlay({
                 id: id,

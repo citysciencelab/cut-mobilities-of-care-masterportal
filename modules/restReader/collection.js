@@ -1,9 +1,7 @@
 import Config from "config";
 
 const RestList = Backbone.Collection.extend({
-    url: function () {
-        return Radio.request("Util", "getPath", Config.restConf);
-    },
+    url: Config.restConf,
     initialize: function () {
         var channel = Radio.channel("RestReader");
 
@@ -20,7 +18,7 @@ const RestList = Backbone.Collection.extend({
             },
             error: function () {
                 Radio.trigger("Alert", "alert", {
-                    text: "Fehler beim Laden von: " + Radio.request("Util", "getPath", Config.restConf),
+                    text: "Fehler beim Laden von: " + Config.restConf,
                     kategorie: "alert-warning"
                 });
             }

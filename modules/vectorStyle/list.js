@@ -7,7 +7,7 @@ const StyleList = Backbone.Collection.extend({
         if (!_.has(Config, "styleConf") || Config.styleConf === "") {
             return "keine Style JSON";
         }
-        return Radio.request("Util", "getPath", Config.styleConf);
+        return Config.styleConf;
     },
     initialize: function () {
         var channel = Radio.channel("StyleList");
@@ -22,7 +22,7 @@ const StyleList = Backbone.Collection.extend({
                 async: false,
                 error: function () {
                     Radio.trigger("Alert", "alert", {
-                        text: "Fehler beim Laden von: " + Radio.request("Util", "getPath", Config.styleConf),
+                        text: "Fehler beim Laden von: " + Config.styleConf,
                         kategorie: "alert-warning"
                     });
                 }
