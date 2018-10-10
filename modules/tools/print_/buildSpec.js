@@ -165,16 +165,16 @@ define(function (require) {
                         symbolizers: []
                     };
                     if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
-                        styleObject.symbolizers.push(this.buildPointStyle(style));
+                        styleObject.symbolizers.push(this.buildPointStyle(style, layer));
                     }
                     else if (feature.getGeometry().getType() === "Polygon" || feature.getGeometry().getType() === "MultiPolygon") {
-                        styleObject.symbolizers.push(this.buildPolygonStyle(style));
+                        styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                     }
                     else if (feature.getGeometry().getType() === "Circle") {
-                        styleObject.symbolizers.push(this.buildPolygonStyle(style));
+                        styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                     }
                     else if (feature.getGeometry().getType() === "LineString" || feature.getGeometry().getType() === "MultiLineString") {
-                        styleObject.symbolizers.push(this.buildLineStringStyle(style));
+                        styleObject.symbolizers.push(this.buildLineStringStyle(style, layer));
                     }
                     // label styling
                     if (style.getText() !== null && style.getText() !== undefined) {
@@ -186,12 +186,12 @@ define(function (require) {
             return mapfishStyleObject;
         },
 
-        buildPointStyle: function (style) {
+        buildPointStyle: function (style, layer) {
             if (style.getImage() instanceof ol.style.Circle) {
                 return this.buildPointStyleCircle(style.getImage());
             }
             else if (style.getImage() instanceof ol.style.Icon) {
-                return this.buildPointStyleIcon(style.getImage());
+                return this.buildPointStyleIcon(style.getImage(), layer);
             }
             return this.buildTextStyle(style.getText());
         },
@@ -206,7 +206,7 @@ define(function (require) {
 
             if (fillStyle !== null) {
                 this.buildFillStyle(fillStyle, obj);
-                obj.strokeColor = this.rgbArrayToHex(fillStyle.getColor());
+                this.buildStrokeStyle(fillStyle, obj);
             }
             if (strokeStyle !== null) {
                 this.buildStrokeStyle(strokeStyle, obj);
@@ -214,12 +214,13 @@ define(function (require) {
             return obj;
         },
 
-        buildPointStyleIcon: function (style) {
+        buildPointStyleIcon: function (style, layer) {
             return {
                 type: "point",
                 graphicWidth: style.getSize()[0] * style.getScale(),
                 graphicHeight: style.getSize()[1] * style.getScale(),
-                externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc())
+                externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc()),
+                graphicOpacity: layer.getOpacity()
             };
         },
         /**
@@ -271,11 +272,13 @@ define(function (require) {
             return "cb";
         },
 
-        buildPolygonStyle: function (style) {
+        buildPolygonStyle: function (style, layer) {
             var fillStyle = style.getFill(),
                 strokeStyle = style.getStroke(),
                 obj = {
-                    type: "polygon"
+                    type: "polygon",
+                    fillOpacity: layer.getOpacity(),
+                    strokeOpacity: layer.getOpacity()
                 };
 
             this.buildFillStyle(fillStyle, obj);
@@ -285,10 +288,11 @@ define(function (require) {
             return obj;
         },
 
-        buildLineStringStyle: function (style) {
+        buildLineStringStyle: function (style, layer) {
             var strokeStyle = style.getStroke(),
                 obj = {
-                    type: "line"
+                    type: "line",
+                    strokeOpacity: layer.getOpacity()
                 };
 
             this.buildStrokeStyle(strokeStyle, obj);
@@ -300,6 +304,7 @@ define(function (require) {
 
             obj.fillColor = this.rgbArrayToHex(fillColor);
             obj.fillOpacity = fillColor[3];
+
             return obj;
         },
 
@@ -307,14 +312,14 @@ define(function (require) {
             var strokeColor = style.getColor();
 
             obj.strokeColor = this.rgbArrayToHex(strokeColor);
-            obj.strokeOpacity = strokeColor[3];
-
-            if (style.getWidth() !== undefined) {
+            if (strokeColor[3] !== undefined) {
+                obj.strokeOpacity = strokeColor[3];
+            }
+            if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
                 obj.strokeWidth = style.getWidth();
             }
             return obj;
         },
-
         getImageName: function (imageSrc) {
             var start = imageSrc.lastIndexOf("/");
 

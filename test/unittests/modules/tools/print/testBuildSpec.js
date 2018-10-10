@@ -688,7 +688,7 @@ define(function (require) {
                         flaechensicherung: "k.A.",
                         flaeche: "6837.878000000001",
                         hektar: "0.6838000000000001",
-                        kompensationsmassnahme_detail: "Bepflanzung mit Gehölzen und/oder Sträuchern",
+                        kompensationsmassnahme_detail: "Bepflanzung mit Gehölzen und/oder Sträuchern"
                     },
                     geometry: {
                         type: "Polygon",
@@ -825,7 +825,7 @@ define(function (require) {
                     }),
                     style = buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0];
 
-                expect(buildSpecModel.buildPointStyleIcon(style.getImage())).to.deep.own.include({
+                expect(buildSpecModel.buildPointStyleIcon(style.getImage(), vectorLayer)).to.deep.own.include({
                     externalGraphic: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/krankenhaus.png",
                     graphicHeight: NaN, // image kann im test nicht gefunden werden, daher kann size nicht berechnet werden
                     graphicWidth: NaN,
@@ -849,7 +849,7 @@ define(function (require) {
                     }),
                     style = buildSpecModel.getFeatureStyle(polygonFeatures[0], vectorLayer)[0];
 
-                expect(buildSpecModel.buildPolygonStyle(style)).to.deep.own.include({
+                expect(buildSpecModel.buildPolygonStyle(style, vectorLayer)).to.deep.own.include({
                     fillColor: "#bdbd00",
                     fillOpacity: 1,
                     strokeColor: "#626200",
@@ -864,7 +864,7 @@ define(function (require) {
                 var lineStyleModel = new Style({
                         class: "Line",
                         subClass: "SIMPLE",
-                        lineStrokeColor: [51, 153, 0],
+                        lineStrokeColor: [51, 153, 0, 1],
                         lineStrokeWidth: 3
                     }),
                     vectorLayer = new ol.layer.Vector({
@@ -874,9 +874,9 @@ define(function (require) {
                     }),
                     style = buildSpecModel.getFeatureStyle(lineStringFeatures[0], vectorLayer)[0];
 
-                expect(buildSpecModel.buildLineStringStyle(style)).to.deep.own.include({
+                expect(buildSpecModel.buildLineStringStyle(style, vectorLayer)).to.deep.own.include({
                     strokeColor: "#339900",
-                    strokeOpacity: undefined,
+                    strokeOpacity: 1,
                     strokeWidth: 3,
                     type: "line"
                 });

@@ -120,7 +120,7 @@ define(function (require) {
                 else if (attrs.typ === "GROUP") {
                     return new GROUPLayer(attrs, options);
                 }
-                else if (attrs.typ === "SensorThings" || attrs.typ === "ESRIStreamLayer") {
+                else if (attrs.typ === "SensorThings") {
                     return new SensorLayer(attrs, options);
                 }
                 else if (attrs.typ === "Heatmap") {
@@ -308,15 +308,43 @@ define(function (require) {
         /**
         * Alle Layermodels von einem Leaffolder werden "selected" oder "deselected"
         * @param {Backbone.Model} model - folderModel
-        * @return {undefined}
+        * @return {void}
         */
         setIsSelectedOnChildLayers: function (model) {
-            var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")}));
+            var childModels = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")})),
+                sortChildModels = this.sortLayers(childModels, "name").reverse();
 
-            _.each(layers, function (layer) {
-                layer.setIsSelected(model.get("isSelected"));
+            _.each(sortChildModels, function (childModel) {
+                childModel.setIsSelected(model.get("isSelected"));
             });
         },
+
+        /**
+         * sorts elements from an array by given attribute
+         * @param {array} childModels contains the layer to be sort
+         * @param {string} key represents the attribute to be sorted by
+         * @returns {array} sorted Array
+         */
+        sortLayers: function (childModels, key) {
+            return childModels.sort(function (firstChild, secondChild) {
+                var firstValue = firstChild.get(key),
+                    secondValue = secondChild.get(key),
+                    direction;
+
+                if (firstValue < secondValue) {
+                    direction = -1;
+                }
+                else if (firstValue > secondValue) {
+                    direction = 1;
+                }
+                else {
+                    direction = 0;
+                }
+
+                return direction;
+            });
+        },
+
         /**
         * PrÃ¼ft ob alle Layer im Leaffolder isSelected = true sind
         * Falls ja, wird der Leaffolder auch auf isSelected = true gesetzt

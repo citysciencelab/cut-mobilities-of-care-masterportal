@@ -23,6 +23,7 @@ define(function (require) {
             this.listenTo(Radio.channel("Searchbar"), {
                 "search": this.prepSearch
             });
+
         },
         prepSearch: function (searchString) {
             var prepSearchString,
@@ -38,7 +39,7 @@ define(function (require) {
                 });
 
                 this.findMatchingFeatures(filteredModels, prepSearchString);
-                Radio.trigger("Searchbar", "createRecommendedList");
+                Radio.trigger("Searchbar", "createRecommendedList", "visibleWFS");
                 this.setInUse(false);
             }
         },

@@ -2,7 +2,6 @@ define(function (require) {
     var ol = require("openlayers"),
         Tool = require("modules/core/modelList/tool/model"),
         ThemeList = require("modules/tools/gfi/themes/list"),
-        gfiParams = [],
         Gfi;
 
     Gfi = Tool.extend({
@@ -35,7 +34,7 @@ define(function (require) {
 
             channel.on({
                 "setIsVisible": this.setIsVisible,
-                "setGfiParams": this.setGfiParamsFromCustomModule,
+                "layerAtPosition": this.setGfiOfLayerAtPosition,
                 "changeFeature": this.changeFeature
             }, this);
 
@@ -182,35 +181,14 @@ define(function (require) {
          */
         setGfiParams: function (evt) {
             var visibleLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
-                visibleWMSLayerList = [],
-                visibleVectorLayerList = [],
+                gfiParamsList = this.getGFIParamsList(visibleLayerList),
+                visibleWMSLayerList = gfiParamsList.wmsLayerList,
+                visibleVectorLayerList = gfiParamsList.vectorLayerList,
                 eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
                 vectorGFIParams,
                 wmsGFIParams;
 
             Radio.trigger("ClickCounter", "gfi");
-
-            // Zuordnen von Layertypen zur Abfrage
-            _.each(visibleLayerList, function (layer) {
-                var typ = layer.get("typ");
-
-                if (typ === "WMS") {
-                    visibleWMSLayerList.push(layer);
-                }
-                else if (typ === "GROUP") {
-                    _.each(layer.get("layerSource"), function (layerSource) {
-                        if (layerSource.get("typ") === "WMS") {
-                            visibleWMSLayerList.push(layerSource);
-                        }
-                        else {
-                            visibleVectorLayerList.push(layerSource);
-                        }
-                    }, this);
-                }
-                else {
-                    visibleVectorLayerList.push(layer);
-                }
-            });
 
             this.setCoordinate(evt.coordinate);
 
@@ -221,6 +199,43 @@ define(function (require) {
 
             this.setThemeIndex(0);
             this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+        },
+
+        /**
+         * Aufschlüsselung von WMS und Vector-GFI Abfragen aus einer gemischten Layerliste unter Berücksichtung von GroupLayern.
+         * @param   {model[]} layerList Liste der aufzuschlüsselnden Layer
+         * @returns {Object}            Objekt der aufgeschlüsslten GFI
+         */
+        getGFIParamsList: function (layerList) {
+            var wmsLayerList = [],
+                vectorLayerList = [];
+
+            // Zuordnen von Layertypen zur Abfrage
+            _.each(layerList, function (layer) {
+                var typ = layer.get("typ");
+
+                if (typ === "WMS") {
+                    wmsLayerList.push(layer);
+                }
+                else if (typ === "GROUP") {
+                    _.each(layer.get("layerSource"), function (layerSource) {
+                        if (layerSource.get("typ") === "WMS") {
+                            wmsLayerList.push(layerSource);
+                        }
+                        else {
+                            vectorLayerList.push(layerSource);
+                        }
+                    }, this);
+                }
+                else {
+                    vectorLayerList.push(layer);
+                }
+            });
+
+            return {
+                wmsLayerList: wmsLayerList,
+                vectorLayerList: vectorLayerList
+            };
         },
 
         /**
@@ -281,17 +296,33 @@ define(function (require) {
             return wmsGfiParams;
         },
 
-        setGfiParamsFromCustomModule: function (params) {
-            this.setCoordinate(params.coordinates);
-            gfiParams = [{
-                name: params.name,
-                gfiAttributes: params.attributes,
-                typ: params.typ,
-                feature: params.feature,
-                gfiTheme: params.gfiTheme
-            }];
-            this.get("themeList").reset(gfiParams);
-            gfiParams = [];
+        /**
+         * Erzeugt ein GFI eines spezifischen Layers an einer bestimmten Position
+         * @param {string} layerId    ID des Layers
+         * @param {coordinate[]} coordinate Position des GFI
+         * @returns {void}
+         */
+        setGfiOfLayerAtPosition: function (layerId, coordinate) {
+            var layerList = Radio.request("ModelList", "getModelsByAttributes", {id: layerId}),
+                gfiParamsList = this.getGFIParamsList(layerList),
+                visibleWMSLayerList = gfiParamsList.wmsLayerList,
+                visibleVectorLayerList = gfiParamsList.vectorLayerList,
+                vectorGFIParams,
+                wmsGFIParams;
+
+            Radio.trigger("ClickCounter", "gfi");
+
+            if (layerList.length === 1) {
+                this.setCoordinate(coordinate);
+
+                // Vector
+                vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, coordinate);
+                // WMS
+                wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
+
+                this.setThemeIndex(0);
+                this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+            }
         },
 
         // Setter

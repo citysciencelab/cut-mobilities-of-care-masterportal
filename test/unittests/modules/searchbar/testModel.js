@@ -1,6 +1,5 @@
 define(function (require) {
     var expect = require("chai").expect,
-        Radio = require("backbone.radio"),
         Model = require("../../../../modules/searchbar/model.js");
 
     describe("modules/searchbar", function () {
@@ -32,6 +31,112 @@ define(function (require) {
             });
             it("should return undefined if name is undefined", function () {
                 expect(model.shortenString(undefined, 1)).to.be.undefined;
+            });
+        });
+
+        describe("removeHits for object-filter", function () {
+            it("remove multiple items if filter-attributes are matching", function () {
+
+                model.set("hitList", [
+                    {
+                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                        "type": "Thema",
+                        "id": "1562"
+                    },
+                    {
+                        "name": "Festgestellte Bebauungspläne (§ 10 BauGB)",
+                        "type": "Thema",
+                        "id": "1561"
+                    }
+                ]);
+
+                model.removeHits("hitList", {type: "Thema"});
+
+                expect(model.get("hitList")).to.be.empty;
+            });
+
+            it("keep multiple items if filter-attributes are not matching", function () {
+                var hitListObj = [
+                    {
+                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                        "type": "Thema",
+                        "id": "1562"
+                    },
+                    {
+                        "name": "Festgestellte Bebauungspläne (§ 10 BauGB)",
+                        "type": "Thema",
+                        "id": "1561"
+                    }
+                ];
+
+                model.set("hitList", hitListObj);
+
+                model.removeHits("hitList", {type: "OpenStreetMap"});
+
+                expect(model.get("hitList")).to.deep.equal(hitListObj);
+            });
+
+            it("handle items with matching and not matching filter attributes", function () {
+                var hitListObjInput,
+                    hitListObijOutput;
+
+                hitListObjInput = [
+                    {
+                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                        "type": "Thema",
+                        "id": "1562"
+                    },
+                    {
+                        "name": "Hamburg",
+                        "type": "OpenStreetMap"
+                    }
+                ];
+
+                hitListObijOutput = [
+                    {
+                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                        "type": "Thema",
+                        "id": "1562"
+                    }
+                ];
+
+                model.set("hitList", hitListObjInput);
+
+                model.removeHits("hitList", {type: "OpenStreetMap"});
+
+                expect(model.get("hitList")).to.deep.equal(hitListObijOutput);
+            });
+
+            it("handle items with matching and not matching multi-key filter attributes", function () {
+                var hitListObjInput,
+                    hitListObijOutput;
+
+                hitListObjInput = [
+                    {
+                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                        "type": "Thema",
+                        "id": "1562"
+                    },
+                    {
+                        "name": "Festgestellte Bebauungspläne (§ 10 BauGB)",
+                        "type": "Thema",
+                        "id": "1561"
+                    }
+                ];
+
+                hitListObijOutput = [
+                    {
+                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                        "type": "Thema",
+                        "id": "1562"
+                    }
+                ];
+
+                model.set("hitList", hitListObjInput);
+
+                model.removeHits("hitList", {type: "Thema", id: "1561"});
+
+                expect(model.get("hitList")).to.deep.equal(hitListObijOutput);
             });
         });
     });

@@ -100,7 +100,8 @@ define(function (require) {
             "modules/tools/styleWMS/testView.js",
             "modules/menu/desktop/layer/testViewLight.js",
             "modules/menu/desktop/layer/testViewSelection.js",
-            "modules/layerinformation/testModel.js"
+            "modules/layerinformation/testModel.js",
+            "modules/tools/animation/testModel.js"
         ], function () {
             mocha.run();
         });

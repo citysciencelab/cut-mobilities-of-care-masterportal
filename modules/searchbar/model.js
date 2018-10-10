@@ -10,7 +10,11 @@ define(function (require) {
             quickHelp: false,
             searchString: "", // der aktuelle String in der Suchmaske
             hitList: [],
-            minChars: ""
+            minChars: "",
+            isInitialSearch: true, // Flag das nach Ende der initialen Suche (ParametricURL) auf false gesetzt wird
+            isInitialRecommendedListCreated: false, // Wurde die Ergebnisliste nach der initialen Suche bereits erzeugt?
+            knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm"], // Suchalgorithmen, für die eine initiale Suche möglich ist
+            activeInitialSearchTasks: [] // Suchalgorithmen, für die eine initiale Suche aktiviert ist
             // isHitListReady: true
         },
 
@@ -18,12 +22,93 @@ define(function (require) {
             this.listenTo(Radio.channel("Searchbar"), {
                 "createRecommendedList": this.createRecommendedList,
                 "pushHits": this.pushHits,
-                "removeHits": this.removeHits
+                "removeHits": this.removeHits,
+                "checkInitialSearch": this.checkInitialSearch,
+                "abortSearch": this.abortSearch
             });
 
             if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+                // Speichere den Such-Parameter für die initiale Suche zur späteren Verwendung in der View
                 this.setInitSearchString(Radio.request("ParametricURL", "getInitString"));
             }
+            else {
+                // Es wird keine initiale Suche durchgeführt
+                this.set("isInitialSearch", false);
+                this.set("isInitialRecommendedListCreated", true);
+            }
+
+        },
+
+        /**
+         * Bricht ein Suchalgorithmus die Suche ab, so muss für diesen nicht mehr auf ein Ergebnis gewartet werden.
+         * Daher wird dieser Suchalgoritghmus als erledigt markiert.
+         *
+         * @param {String} triggeredBy Name des aufrufenden Suchalgorithmus
+         * @returns {Void} Kein Rückgabewert
+         */
+        abortSearch: function (triggeredBy) {
+            if (this.get("isInitialSearch")) {
+                // Markiere Algorithmus als abgearbeitet
+                this.set("initialSearch_" + triggeredBy, true);
+                // Prüfe, ob es noch ausstehende Ergebnisse gibt
+                this.checkInitialSearch();
+            }
+        },
+
+        /**
+         * Prüft ob alle Suchalgorithmen der initialen Suche abgearbeitet wurden
+         * @returns {Void} Kein Rückgabewert
+         */
+        checkInitialSearch: function () {
+            var allDone = true;
+
+            // Ist mindestens ein Suchalgorithmus noch als ausstehend markiert?
+            _.forEach(this.get("activeInitialSearchTasks"), function (taskName) {
+                var status = this.get("initialSearch_" + taskName);
+
+                if (!status) {
+                    allDone = false;
+                }
+
+            }, this);
+
+            if (allDone) {
+                // Sobald alle Ergebnisse vorliegen, wird der Modus "Initiale Suche"
+                // beendet und die Ergebnisliste erstmalig erzeugt.
+                this.set("isInitialSearch", false);
+                this.createRecommendedList("initialSearchFinished");
+                this.set("isInitialRecommendedListCreated", true);
+            }
+        },
+
+        /**
+         * Prüfe anhand der Konfiguration welche Suchalgorithmen zur initialen Suche aktiviert sind
+         * @param {Object} config Konfiguration
+         * @returns {Void} Keine Rückgabe
+         */
+        setInitialSearchTasks: function (config) {
+            var searchTasks = this.get("knownInitialSearchTasks"),
+                activeSearchTasks = [];
+
+            // Prüfe für jeden bekannten Suchalgorithmus ob er aktiviert ist. Wenn ja markiere ihn als
+            // "Ergebnis ausstehend" und füge ihn der Liste aktiver Suchalgorithmen hinzu.
+            _.forEach(searchTasks, function (taskName) {
+                if (_.has(config, taskName) === true) {
+                    if (taskName === "gazetteer") {
+                        // Der Suchalgorithmus "gazetteer" ist ein Sonderfall, da er mehrere Suchen durchführen kann
+                        this.set("initialSearch_gazetteer_streetsOrHouseNumbers", false);
+                        activeSearchTasks.push("gazetteer_streetsOrHouseNumbers");
+                        this.set("initialSearch_gazetteer_streetKeys", false);
+                        activeSearchTasks.push("gazetteer_streetKeys");
+                    }
+                    else {
+                        this.set("initialSearch_" + taskName, false);
+                        activeSearchTasks.push(taskName);
+                    }
+                }
+            }, this);
+
+            this.set("activeInitialSearchTasks", activeSearchTasks);
         },
 
         setInitSearchString: function (value) {
@@ -92,19 +177,17 @@ define(function (require) {
         },
 
         /**
-         * removes all hits with the given filter
-         * @param  {[type]} attribute [description]
-         * @param  {[type]} filter     [description]
-         * @return {[type]}         [description]
+         * Removes all hits with the given filter
+         * @param  {[type]} attribute Name of the object to be filtered
+         * @param  {[type]} filter Filter parameters
+         * @return {Void} Nothing
          */
         removeHits: function (attribute, filter) {
             var toRemove, i,
                 tempArray = _.clone(this.get(attribute));
 
             if (_.isObject(filter)) {
-                toRemove = _.filter(tempArray, function (obj) {
-                    return _.where(obj, filter);
-                });
+                toRemove = _.where(tempArray, filter);
                 _.each(toRemove, function (item) {
                     tempArray.splice(tempArray.indexOf(item), 1);
                 });
@@ -151,7 +234,12 @@ define(function (require) {
             return s;
         },
 
-        createRecommendedList: function () {
+        /**
+         * Erzeuge eine Liste mit Treffern der einzelnen Suchalgorithmen.
+         * @param {String} triggeredBy Aufrufender Suchalgorithmus
+         * @returns {Void} Kein Rückgabewert
+         */
+        createRecommendedList: function (triggeredBy) {
             var max = this.get("recommendedListLength"),
                 recommendedList = [],
                 hitList = this.get("hitList"),
@@ -159,6 +247,18 @@ define(function (require) {
                 singleTypes,
                 usedNumbers = [],
                 randomNumber;
+
+            // Die Funktion "createRecommendedList" wird vielfach (von jedem Suchalgorithmus) aufgerufen.
+            // Im Rahmen der initialen Suche muss sichergestellt werden, dass die Ergebnisse der einzelnen
+            // Algorithmen erst verarbeitet werden, wenn alle Ergebnisse vorliegen.
+            if (this.get("isInitialSearch")) {
+                // Markiere den aufgrufenden Suchalgorithmus als erledigt
+                this.set("initialSearch_" + triggeredBy, true);
+                // Stoße eine Prüfung, ob alle Suchen abgeschlossen sind, an. Hinweis: Wenn dies der Fall ist,
+                // so wird "isInitialSearch" auf false gesetzt und die aktuelle Funktion erneut aufgerufen.
+                Radio.trigger("Searchbar", "checkInitialSearch");
+                return;
+            }
 
             if (hitList.length > max) {
                 singleTypes = _.reject(hitList, function (hit) {
