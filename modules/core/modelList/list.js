@@ -36,6 +36,7 @@ define(function (require) {
         StyleWMS = require("modules/tools/styleWMS/model"),
         StaticLink = require("modules/core/modelList/staticlink/model"),
         LayersliderModel = require("modules/tools/layerslider/model"),
+        GFI = require("modules/tools/gfi/model"),
         ModelList;
 
     ModelList = Backbone.Collection.extend({
@@ -205,6 +206,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "layerslider") {
                     return new LayersliderModel(attrs, options);
+                }
+                else if (attrs.id === "gfi") {
+                    return new GFI(attrs, options);
                 }
                 return new Tool(attrs, options);
             }
