@@ -2,7 +2,7 @@ const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "attached",
     simpleMap: false,
-    wfsImgPath: "../node_modules/lgv-config/img/",
+    wfsImgPath: "/lgv-config/img/",
     allowParametricURL: true,
     zoomToFeature: {
         attribute: "flaechenid",
@@ -82,9 +82,9 @@ const Config = {
 
     quickHelp: true,
     portalConf: "../../portal/master/",
-    layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
-    restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
-    styleConf: "../node_modules/lgv-config/style_v2.json",
+    layerConf: "/lgv-config/services-fhhnet-ALL.json",
+    restConf: "/lgv-config/rest-services-fhhnet.json",
+    styleConf: "/lgv-config/style_v2.json",
     proxyURL: "/cgi-bin/proxy.cgi",
     attributions: true,
     scaleLine: true,

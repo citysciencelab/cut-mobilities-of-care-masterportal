@@ -106,7 +106,7 @@ describe("vectorStyle", function () {
                     createdStyle,
                     createdStyleObj = {},
                     expectedValues = {
-                        imageName: "blank.png", // undefined, da wir nicht aus der Config und Util den Pfad holen.
+                        imageName: "/lgv-config/img/blank.png", // undefined, da wir nicht aus der Config und Util den Pfad holen.
                         imageScale: 1
                     };
 
@@ -127,7 +127,7 @@ describe("vectorStyle", function () {
                     createdStyle,
                     createdStyleObj = {},
                     expectedValues = {
-                        imageName: "krankenhaus.png", // undefined, da wir nicht aus der Config und Util den Pfad holen.
+                        imageName: "/lgv-config/img/krankenhaus.png", // undefined, da wir nicht aus der Config und Util den Pfad holen.
                         imageScale: 2.5,
                         imageSize: ""
                     };
@@ -193,7 +193,7 @@ describe("vectorStyle", function () {
                         ]
                     },
                     expectedValues = {
-                        imageName: "krankenhaus.png",
+                        imageName: "/lgv-config/img/krankenhaus.png",
                         imageScale: 2.5,
                         imageSize: "" // imageSize wird nur dann als array gesetzt, wenn der imageName mit .svg endet.
                     },
