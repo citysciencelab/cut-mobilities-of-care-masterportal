@@ -14,11 +14,17 @@ define(function (require) {
         }),
 
         initialize: function () {
+            var invalidLayerId;
+
             this.superInitialize();
             this.setProgressBarWidth(this.get("layerIds"));
-            if (!this.checkAllLayerOk(this.get("layerIds"))) {
-                console.error("Konfiguration des layersliders fehlerhaft");
+
+            // Prüfe Konfiguration
+            invalidLayerId = this.checkAllLayerOk(this.get("layerIds"));
+            if (invalidLayerId !== "") {
+                console.error("Konfiguration des layersliders fehlerhaft. Prüfen Sie layerId:" + invalidLayerId);
             }
+
             this.listenTo(this, {
                 "change:isActive": function (model, value) {
                     if (value) {
@@ -31,7 +37,6 @@ define(function (require) {
         reset: function () {
             this.stopInterval();
             this.set("activeLayer", {layerId: ""});
-            // this.set("title", null);
         },
 
         /**
@@ -176,17 +181,19 @@ define(function (require) {
         /**
          * Prüft, ob alle Layer, die der Layerslider nutzen soll, auch definiert sind und ein title Attribut haben
          * @param   {object[]}  layerIds Konfiguration der Layer aus config.json
-         * @returns {boolean}   True wenn alle Layer gefunden wurden
+         * @returns {string}   Invalid LayerId oder Leerstring, wenn alle Layer gültig.
          */
         checkAllLayerOk: function (layerIds) {
-            var allOk = true;
+            var invalidLayerId = "";
 
             _.each(layerIds, function (layer) {
-                if (_.isNull(Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.layerId})) || _.isUndefined(layer.title)) {
-                    allOk = false;
+                if (_.isNull(Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.layerId})) ||
+                    _.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: layer.layerId})) ||
+                    _.isUndefined(layer.title)) {
+                    invalidLayerId = layer.layerId;
                 }
             });
-            return allOk;
+            return invalidLayerId;
         },
 
         /**
