@@ -191,6 +191,7 @@ define(function (require) {
                     _.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: layer.layerId})) ||
                     _.isUndefined(layer.title)) {
                     invalidLayerId = layer.layerId;
+                    return;
                 }
             });
             return invalidLayerId;
