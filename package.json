@@ -33,6 +33,7 @@
     "requirejs": "2.x",
     "requirejs-text": "2.x",
     "underscore": "1.x",
+    "vcs-oblique": "^1.0.1",
     "video.js": "6.x",
     "videojs-flash": "^2.1.0"
   },
