@@ -16,7 +16,8 @@ define(function (require) {
         Print = require("modules/tools/print/model"),
         Measure = require("modules/tools/measure/model"),
         Draw = require("modules/tools/draw/model"),
-        Animation = require("modules/tools/animation/model"),
+        Animation = require("modules/tools/pendler/animation/model"),
+        Lines = require("modules/tools/pendler/lines/model"),
         Contact = require("modules/contact/model"),
         SearchByCoord = require("modules/tools/searchByCoord/model"),
         SaveSelection = require("modules/tools/saveSelection/model"),
@@ -172,6 +173,9 @@ define(function (require) {
                 }
                 else if (attrs.id === "saveSelection") {
                     return new SaveSelection(_.extend(attrs, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
+                }
+                else if (attrs.id === "lines") {
+                    return new Lines(attrs, options);
                 }
                 else if (attrs.id === "animation") {
                     return new Animation(attrs, options);

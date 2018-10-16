@@ -441,6 +441,7 @@ Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert
 |[filter](#markdown-header-portalconfigmenutoolschildrenfilter)|nein|Object||Feature-Filter|
 |[gfi](#markdown-header-portalconfigmenutoolschildrengfi)|nein|Object||Informationen abfragen|
 |[kmlimport](#markdown-header-portalconfigmenutoolschildrenkmlimport)|nein|Object||KML Import|
+|[lines](#markdown-header-portalconfigmenutoolschildrenlines)|nein|Object||Pendler Linien|
 |[measure](#markdown-header-portalconfigmenutoolschildrenmeasure)|nein|Object||Strecke / Fläche messen|
 |[parcelSearch](#markdown-header-portalconfigmenutoolschildrenparcelsearch)|nein|Object||Flurstückssuche|
 |[print](#markdown-header-portalconfigmenutoolschildrenprint)|nein|Object||Karte drucken|
@@ -538,7 +539,7 @@ animation: {
             },
             featureType: "mrh_einpendler_gemeinde",
             attrAnzahl: "anzahl_einpendler",
-            attrKreis: "wohnort_kreis",
+            attrGemeinde: "wohnort",
             minPx: 5,
             maxPx: 30,
             num_kreise_to_style: 4,
@@ -548,6 +549,19 @@ animation: {
 ```
 ******
 ******
+
+#### Portalconfig.menu.tools.children.lines
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
+|name|nein|String||Name des Werkzeuges im Menüeintrag.|
+|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
+|attrAnzahl|nein|String|"anzahl_einpendler"|Aus diesem Attribut des featureTypes wird die Anzahl der Pendler ausgelesen.|
+|attrGemeinde|nein|String|"wohnort"|Aus diesem Attribut des featureTypes wird der Name der Gemeinde ausgelesen.|
+|featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType, der animiert werden soll.|
+|url|nein|String|"http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"|Die URL des zu animierenden Dienstes.|
+|zoomlevel|nein|Number|1|Zoomlevel, auf das nach Auswahl eines Kreises gezoomt wird.|
 
 #### Portalconfig.menu.tools.children.coord ######
 Ermöglicht mit Hilfe des Mouse Ziegers  die Ermittlung von Koordinaten in allen in der config.js definierten Koordinatensystemen(siehe [namedProjections](config.js.md)).Der Titel der Projektion wird dem "+title"-Attribut entnommen. Alternativ wird der Name der Projektion(z.B. "EPSG:25832") verwendet.

@@ -101,7 +101,8 @@ define(function (require) {
             "modules/menu/desktop/layer/testViewLight.js",
             "modules/menu/desktop/layer/testViewSelection.js",
             "modules/layerinformation/testModel.js",
-            "modules/tools/animation/testModel.js"
+            "modules/tools/pendler/lines/testModel.js",
+            "modules/tools/pendler/animation/testModel.js"
         ], function () {
             mocha.run();
         });

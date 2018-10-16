@@ -1,12 +1,10 @@
 define(function (require) {
 
-    var AnimationTemplate = require("text!modules/tools/animation/template.html"),
-        AnimationView;
+    var LinesTemplate = require("text!modules/tools/pendler/lines/template.html"),
+        LinesView;
 
-    AnimationView = Backbone.View.extend({
+    LinesView = Backbone.View.extend({
         events: {
-            "click .start": "start",
-            "click .reset": "reset",
             "change #select-kreis": "setKreis",
             "change #select-gemeinde": "setGemeinde",
             "change #select-trefferAnzahl": "setTrefferAnzahl",
@@ -25,8 +23,8 @@ define(function (require) {
         },
 
         tagName: "form",
-        id: "animation-tool",
-        template: _.template(AnimationTemplate),
+        id: "lines-tool",
+        template: _.template(LinesTemplate),
 
         render: function (model, value) {
             if (value || !model.get("animating")) {
@@ -39,13 +37,6 @@ define(function (require) {
                 this.undelegateEvents();
             }
             return this;
-        },
-
-        start: function () {
-            this.model.prepareAnimation();
-        },
-        reset: function () {
-            this.model.stopAnimation();
         },
 
         setKreis: function (evt) {
@@ -65,5 +56,5 @@ define(function (require) {
         }
     });
 
-    return AnimationView;
+    return LinesView;
 });
