@@ -20,7 +20,8 @@ define(function (require) {
             steps: 50,
             minPx: 5,
             maxPx: 20,
-            colors: []
+            colors: [],
+            glyphicon: "glyphicon-play-circle"
         }),
 
         /**
