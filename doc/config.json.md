@@ -791,7 +791,7 @@ Bis zur Version 3.0.0 kann noch auf Mapfish-Print 2 gedruck werden. ab dann wird
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
 |gfi(@deprecated in 3.0.0)|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
-|printID( @deprecated in 3.0.0)|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md). Ab v3.0.0 ersetzt durch mapfishServiceId|
+|[printID(@deprecated in 3.0.0)]()|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md). Ab v3.0.0 ersetzt durch mapfishServiceId|
 |mapfishServiceId|nein|String||ID des neuen Druckdienstes (Mapfish-Print-3) in der restConf. Siehe [rest-services.json](rest-services.json.md).|
 |title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
 |[gfiMarker(@deprecated in 3.0.0)](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
