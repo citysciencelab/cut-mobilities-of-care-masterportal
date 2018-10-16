@@ -1,10 +1,10 @@
 define(function (require) {
     var expect = require("chai").expect,
         model,
-        Model = require("../../../../../modules/tools/animation/model.js"),
-        createFeature;
+        Model = require("../../../../../../modules/tools/pendler/animation/model.js"),
+        createTestFeature;
 
-    createFeature = function (pendlerAnzahl, wohnort) {
+    createTestFeature = function (pendlerAnzahl, wohnort) {
         return {
             "get": function (value) {
                 switch (value) {
@@ -20,27 +20,24 @@ define(function (require) {
     };
 
     describe("Pendler-Animation", function () {
-        describe("prepareData", function () {
+        describe("Verarbeitung der abgefragten Daten", function () {
             before(function () {
                 var featuresInput = [],
                     i;
 
                 for (i = 7; i <= 11; i++) {
-                    featuresInput.push(createFeature(i, "TestOrt" + i));
+                    featuresInput.push(createTestFeature(i, "TestOrt" + i));
                 }
 
-                featuresInput.push(createFeature(9, "TestOrtDoppel"));
+                featuresInput.push(createTestFeature(9, "TestOrtDoppel"));
 
                 model = new Model();
 
-                model.preparePendlerLegend = function (features) {
+                model.createLineString = function (features) {
                     // Überschreibe die Funktion mit einem Setter zur Abfrage des Ergebnisses
                     model.set("relevantFeatures", features);
                 };
-                model.createLineString = function () {
-                    // Überschreibe Funktion mit Dummy
-                };
-                model.centerGemeindeAndSetMarker = function () {
+                model.centerGemeinde = function () {
                     // Überschreibe Funktion mit Dummy
                 };
 
@@ -50,7 +47,7 @@ define(function (require) {
 
                 model.set("trefferAnzahl", "top5");
 
-                model.prepareData();
+                model.handleData();
             });
 
             it("Die Statistik wurde korrekt berechnet", function () {
@@ -91,6 +88,17 @@ define(function (require) {
 
                 expect(_.uniq(colors).length).to.be.equal(colors.length);
 
+            });
+
+            it("Jedes Feature hat zur Darstellung in der Legende neben einem Namen auch das Attribut \"Pendler-Anzahl\" und eine Farbe", function () {
+
+                expect(model.get("pendlerLegend")).to.have.lengthOf(5);
+
+                _.forEach(model.get("pendlerLegend"), function (feature) {
+                    expect(feature.name.length).to.be.above(0);
+                    expect(feature.color).to.exist;
+                    expect(feature.anzahlPendler).to.be.above(0);
+                });
             });
         });
     });

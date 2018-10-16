@@ -70,7 +70,6 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children":
-
         {
           "parcelSearch":
           {
@@ -165,9 +164,13 @@
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
+          "lines": {
+            "name": "Pendler (Linien)",
+            "glyphicon": "glyphicon-play-circle"
+          },
           "animation":
           {
-            "name": "Pendler Animation",
+            "name": "Pendler (Animation)",
             "glyphicon": "glyphicon-play-circle",
             "steps": 30,
             "url": "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
