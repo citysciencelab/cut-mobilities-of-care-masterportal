@@ -1,30 +1,35 @@
 var ncp = require("ncp").ncp,
-    rimraf = require("rimraf");
+    rimraf = require("rimraf"),
+    copypathes = [
+        {
+            "source": "./portal/master",
+            "destination": "dist"
+        },
+        {
+            "source": "./build",
+            "destination": "dist"
+        }
+    ];
 
 ncp.limit = 16;
 
 // process.argv.forEach(function (val, index, array) {
 //   console.log(index + ": " + val);
 // });
-
-rimraf("dist/*", function (err) {
+// empty dist
+rimraf("../../dist/*", function (err) {
     if (err) {
         console.log (err)
     }
 
-    console.log ("Successfully deleted a directory");
+    console.log ("Successfully deleted 'dist' directory");
 });
 
-ncp("./portal/master", "dist", function (err) {
-    if (err) {
-        return console.error(err);
-    }
-    console.log("done!");
-});
-
-ncp("./build", "dist", function (err) {
-    if (err) {
-        return console.error(err);
-    }
-    console.log("done!");
+copypathes.forEach(function (path) {
+    ncp(path.source, path.destination, function (err) {
+        if (err) {
+            return console.error(err);
+        }
+        console.log("Successfully Copied '" + path.source + "' to '" + path.destination + "' !" );
+    });
 });
