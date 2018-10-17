@@ -11,7 +11,6 @@ import AddGeoJSON from "../modules/tools/addGeoJSON/model";
 import WPS from "../modules/core/wps";
 import RemoteInterface from "../modules/remoteInterface/model";
 import CswParserModel from "../modules/cswParser/model";
-// import BrowserPrintModel from "../modules/functionalities/browserPrint/model";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import GraphModel from "../modules/tools/graph/model";
 import MenuLoader from "../modules/menu/menuLoader";
@@ -94,8 +93,6 @@ function loadApp () {
     new WPS();
     new AddGeoJSON();
     new CswParserModel();
-    // // Browser Druck Modul
-    // new BrowserPrintModel(_.has(Config, "browserPrint") ? Config.browserPrint : {});
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
