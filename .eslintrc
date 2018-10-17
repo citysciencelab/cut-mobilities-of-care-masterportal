@@ -10,6 +10,7 @@
     "globals": {
         "$": true,
         "_": true,
+        "Config": true,
         "Radio": true,
         "Backbone": true
     },

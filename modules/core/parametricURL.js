@@ -1,6 +1,3 @@
-import Config from "config";
-
-
 const ParametricURL = Backbone.Model.extend({
     defaults: {
         layerParams: [],

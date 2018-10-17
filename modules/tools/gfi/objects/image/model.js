@@ -1,5 +1,3 @@
-import Config from "config";
-
 const ImgModel = Backbone.Model.extend({
     /**
      *

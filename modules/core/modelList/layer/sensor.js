@@ -1,5 +1,4 @@
 import Layer from "./model";
-import Config from "config";
 import mqtt from "mqtt";
 import moment from "moment";
 import {Cluster, Vector as VectorSource} from "ol/source.js";

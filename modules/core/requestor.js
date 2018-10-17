@@ -1,4 +1,3 @@
-import Config from "config";
 import {WMSGetFeatureInfo} from "ol/format.js";
 
 const Requestor = Backbone.Model.extend({

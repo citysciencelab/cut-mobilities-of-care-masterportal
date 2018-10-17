@@ -1,5 +1,3 @@
-import Config from "config";
-
 const ThemeView = Backbone.View.extend({
     initialize: function () {
         var gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached",

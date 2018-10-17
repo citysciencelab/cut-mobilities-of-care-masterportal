@@ -1,7 +1,4 @@
-import Config from "config";
-
 const RestList = Backbone.Collection.extend({
-    url: Config.restConf,
     initialize: function () {
         var channel = Radio.channel("RestReader");
 
@@ -10,6 +7,7 @@ const RestList = Backbone.Collection.extend({
             "getServiceById": this.getServiceById
         }, this);
 
+        this.url = Config.restConf;
         this.fetch({
             cache: false,
             async: false,

@@ -1,4 +1,3 @@
-import Config from "config";
 import cookie from "../cookie/view";
 import Tool from "../core/modelList/tool/model";
 import VectorSource from "ol/source/Vector.js";

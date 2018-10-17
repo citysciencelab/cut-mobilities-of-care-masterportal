@@ -6,15 +6,12 @@ module.exports = {
     entry: "./js/main.js",
     output: {
         path: path.resolve(__dirname, "../build"),
-        filename: "masterportal.js"
+        filename: "js/masterportal.js"
     },
     resolve: {
         alias: {
             text: "text-loader"
         }
-    },
-    externals: {
-        config: "Config"
     },
     module: {
         rules: [

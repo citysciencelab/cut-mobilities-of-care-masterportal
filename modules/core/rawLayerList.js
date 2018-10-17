@@ -1,13 +1,12 @@
-import Config from "config";
-
 const RawLayerList = Backbone.Collection.extend({
     model: function (attrs) {
         return new Backbone.Model(attrs);
     },
-    // URL zur services.json
-    url: Config.layerConf,
     initialize: function (urlForTest) {
         var channel = Radio.channel("RawLayerList");
+
+        // URL zur services.json
+        this.url = Config.layerConf;
 
         if (urlForTest) {
             this.url = urlForTest;

@@ -1,4 +1,3 @@
-import Config from "config";
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon, Text} from "ol/style.js";
 
 const WFSStyle = Backbone.Model.extend({

@@ -1,7 +1,6 @@
 import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 import {register} from "ol/proj/proj4.js";
-import Config from "config";
 
 const CRS = Backbone.Model.extend({
     defaults: {

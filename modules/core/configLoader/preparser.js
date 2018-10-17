@@ -1,6 +1,5 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
-import Config from "config";
 
 const Preparser = Backbone.Model.extend({
     defaults: {},
