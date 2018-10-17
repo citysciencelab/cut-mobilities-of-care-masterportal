@@ -1,67 +1,65 @@
-define(function (require) {
-    var expect = require("chai").expect,
-        ViewTree = require("../../../../../../modules/menu/desktop/folder/viewTree.js");
+import {expect} from "chai";
+import ViewTree from "@modules/menu/desktop/folder/viewTree.js";
 
-    describe("menu/desktop/folder/viewTree", function () {
-        var viewTree;
+describe("menu/desktop/folder/viewTree", function () {
+    var viewTree;
 
-        before(function () {
-            var fakeModel = {
-                get: function () {
-                    return true;
-                },
-                getIsVisibleInTree: function () {
-                    return true;
-                },
+    before(function () {
+        var fakeModel = {
+            get: function () {
+                return true;
+            },
+            getIsVisibleInTree: function () {
+                return true;
+            },
 
-                getId: function () {
-                    return "getID";
-                },
+            getId: function () {
+                return "getID";
+            },
 
-                isFolderSelectable: false,
+            isFolderSelectable: false,
 
-                setIsFolderSelectable: function (value) {
-                    this.isFolderSelectable = value;
-                },
+            setIsFolderSelectable: function (value) {
+                this.isFolderSelectable = value;
+            },
 
-                toJSON: function () {
-                    return {
-                        "isFolderSelectable": this.isFolderSelectable,
-                        "isLeafFolder": true,
-                        "isSelected": false,
-                        "name": "testFolder"
-                    };
-                },
+            toJSON: function () {
+                return {
+                    "isFolderSelectable": this.isFolderSelectable,
+                    "isLeafFolder": true,
+                    "isSelected": false,
+                    "name": "testFolder"
+                };
+            },
 
-                getParentId: function () {
-                    return "parentID";
-                },
+            getParentId: function () {
+                return "parentID";
+            },
 
-                getLevel: function () {
-                    return 3;
-                },
+            getLevel: function () {
+                return 3;
+            },
 
-                getIsExpanded: function () {
-                    return true;
-                }
-            };
+            getIsExpanded: function () {
+                return true;
+            }
+        };
 
-            viewTree = new ViewTree({
-                model: fakeModel
-            });
+        viewTree = new ViewTree({
+            model: fakeModel
         });
+    });
 
-        describe("the \"SelectAll\" checkbox", function () {
-            it("should be hidden if the folder-property \"isFolderSelectable\" is false", function () {
-                viewTree.model.setIsFolderSelectable(false);
-                viewTree.render();
-                expect(viewTree.$el.find(".selectall").length).to.be.equal(0);
-            });
-            it("should be visible if the folder-property \"isFolderSelectable\" is true", function () {
-                viewTree.model.setIsFolderSelectable(true);
-                viewTree.render();
-                expect(viewTree.$el.find(".selectall").length).to.be.equal(1);
-            });
+    describe("the \"SelectAll\" checkbox", function () {
+        it("should be hidden if the folder-property \"isFolderSelectable\" is false", function () {
+            viewTree.model.setIsFolderSelectable(false);
+            viewTree.render();
+            expect(viewTree.$el.find(".selectall").length).to.be.equal(0);
+        });
+        it("should be visible if the folder-property \"isFolderSelectable\" is true", function () {
+            viewTree.model.setIsFolderSelectable(true);
+            viewTree.render();
+            expect(viewTree.$el.find(".selectall").length).to.be.equal(1);
         });
     });
 });
