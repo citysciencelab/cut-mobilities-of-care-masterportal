@@ -6,7 +6,7 @@ var replace = require("replace-in-file"),
     },
     {
         "files": "dist/css/style.css",
-        "from": /css\/woffs/g,
+        "from": /\.\.\/\.\.\/node_modules\/lgv-config\/css\/woffs/g,
         "to": "./woffs"
     },
     {
