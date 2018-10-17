@@ -26,6 +26,8 @@ define(function (require) {
             var models = this.collection.filter(function (model) {
                 return model.get("type") === "tool" || model.get("type") === "staticlink" || (model.get("parentId") === "root" && model.get("type") === "folder");
             });
+            console.log(models);
+            
 
             this.parseViews(models);
         },

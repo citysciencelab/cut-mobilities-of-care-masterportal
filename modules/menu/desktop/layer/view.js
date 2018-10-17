@@ -20,6 +20,8 @@ define(function (require) {
                 "change:isVisibleInTree": this.removeIfNotVisible,
                 "change:isOutOfRange": this.toggleColor
             });
+            console.log(this.model);
+            
             this.render();
             this.toggleColor(this.model, this.model.get("isOutOfRange"));
         },
