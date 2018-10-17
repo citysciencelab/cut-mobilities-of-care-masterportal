@@ -11,7 +11,7 @@
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
-    "build": "webpack --config devtools/webpack.prod.js"
+    "build": "webpack --config devtools/webpack.prod.js && node devtools/tasks/copy.js && node devtools/tasks/replace.js"
   },
   "dependencies": {
     "backbone": "1.x",
