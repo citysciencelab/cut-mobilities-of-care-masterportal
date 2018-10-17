@@ -13,7 +13,7 @@ const Config = {
     },
     gfiWindow: "attached",
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-    layerConf: "../node_modules/lgv-config/services-fhhnet-ALL.json",
+    layerConf: "../../node_modules/lgv-config/services-fhhnet-ALL.json",
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
@@ -34,11 +34,11 @@ const Config = {
     },
     proxyURL: "/cgi-bin/proxy.cgi",
     quickHelp: true,
-    restConf: "../node_modules/lgv-config/rest-services-fhhnet.json",
+    restConf: "../../node_modules/lgv-config/rest-services-fhhnet.json",
     scaleLine: true,
     simpleMap: false,
-    styleConf: "../node_modules/lgv-config/style_v2.json",
-    wfsImgPath: "../node_modules/lgv-config/img",
+    styleConf: "../../node_modules/lgv-config/style_v2.json",
+    wfsImgPath: "../../node_modules/lgv-config/img",
     zoomToFeature: {
         attribute: "flaechenid",
         imgLink: "../img/location_eventlotse.svg",
