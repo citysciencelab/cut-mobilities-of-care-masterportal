@@ -13,7 +13,8 @@ import PrintV2 from "../../tools/print_/model";
 import Print from "../../tools/print/model";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
-import Animation from "../../tools/animation/model";
+import Animation from "../../tools/pendler/animation/model";
+import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
@@ -132,7 +133,7 @@ const ModelList = Backbone.Collection.extend({
                 }
                 return new PrintV2(attrs, options);
             }
-            if (attrs.id === "parcelSearch") {
+            else if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);
             }
             else if (attrs.id === "styleWMS") {
@@ -167,6 +168,9 @@ const ModelList = Backbone.Collection.extend({
             }
             else if (attrs.id === "saveSelection") {
                 return new SaveSelection(_.extend(attrs, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
+            }
+            else if (attrs.id === "lines") {
+                return new Lines(attrs, options);
             }
             else if (attrs.id === "animation") {
                 return new Animation(attrs, options);
@@ -303,15 +307,43 @@ const ModelList = Backbone.Collection.extend({
     /**
     * Alle Layermodels von einem Leaffolder werden "selected" oder "deselected"
     * @param {Backbone.Model} model - folderModel
-    * @return {undefined}
+    * @return {void}
     */
     setIsSelectedOnChildLayers: function (model) {
-        var layers = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")}));
+        var childModels = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")})),
+            sortChildModels = this.sortLayers(childModels, "name").reverse();
 
-        _.each(layers, function (layer) {
-            layer.setIsSelected(model.get("isSelected"));
+        _.each(sortChildModels, function (childModel) {
+            childModel.setIsSelected(model.get("isSelected"));
         });
     },
+
+    /**
+     * sorts elements from an array by given attribute
+     * @param {array} childModels contains the layer to be sort
+     * @param {string} key represents the attribute to be sorted by
+     * @returns {array} sorted Array
+     */
+    sortLayers: function (childModels, key) {
+        return childModels.sort(function (firstChild, secondChild) {
+            var firstValue = firstChild.get(key),
+                secondValue = secondChild.get(key),
+                direction;
+
+            if (firstValue < secondValue) {
+                direction = -1;
+            }
+            else if (firstValue > secondValue) {
+                direction = 1;
+            }
+            else {
+                direction = 0;
+            }
+
+            return direction;
+        });
+    },
+
     /**
     * PrÃ¼ft ob alle Layer im Leaffolder isSelected = true sind
     * Falls ja, wird der Leaffolder auch auf isSelected = true gesetzt

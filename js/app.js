@@ -35,6 +35,7 @@ import CoordPopupView from "../modules/tools/getCoord/view";
 import DrawView from "../modules/tools/draw/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import SearchByCoordView from "../modules/tools/searchByCoord/view";
+import LineView from "../modules/tools/pendler/lines/view";
 import AnimationView from "../modules/tools/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
@@ -157,6 +158,10 @@ function loadApp () {
             }
             case "einwohnerabfrage": {
                 new EinwohnerabfrageView({model: tool});
+                break;
+            }
+            case "lines": {
+                new LineView({model: tool});
                 break;
             }
             case "animation": {
