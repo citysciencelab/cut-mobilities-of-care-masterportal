@@ -60,25 +60,40 @@ define(function (require) {
          */
         buildLayers: function (layerList) {
             var layers = [],
-                attributes = this.get("attributes"),
-                extent = Radio.request("MapView", "getCurrentExtent"),
-                features = [];
+                attributes = this.get("attributes");
 
             layerList.forEach(function (layer) {
-                if (layer instanceof ol.layer.Image) {
-                    layers.push(this.buildImageWms(layer));
+                if (layer instanceof ol.layer.Group) {
+                    _.each(layer.getLayers().getArray(), function (childLayer) {
+                        layers.push(this.buildLayerType(childLayer));
+                    }, this);
                 }
-                else if (layer instanceof ol.layer.Tile) {
-                    layers.push(this.buildTileWms(layer));
-                }
-                else if (layer instanceof ol.layer.Vector) {
-                    features = layer.getSource().getFeaturesInExtent(extent);
-                    if (features.length > 0) {
-                        layers.push(this.buildVector(layer, features));
-                    }
+                else {
+                    layers.push(this.buildLayerType(layer));
                 }
             }, this);
+
             attributes.map.layers = layers.reverse();
+        },
+
+        buildLayerType: function (layer) {
+            var features = [],
+                extent = Radio.request("MapView", "getCurrentExtent"),
+                returnLayer;
+
+            if (layer instanceof ol.layer.Image) {
+                returnLayer = this.buildImageWms(layer);
+            }
+            else if (layer instanceof ol.layer.Tile) {
+                returnLayer = this.buildTileWms(layer);
+            }
+            else if (layer instanceof ol.layer.Vector) {
+                features = layer.getSource().getFeaturesInExtent(extent);
+                if (features.length > 0) {
+                    returnLayer = this.buildVector(layer, features);
+                }
+            }
+            return returnLayer;
         },
 
         /**
