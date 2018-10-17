@@ -28,8 +28,6 @@
     "ol": "^5.2.0",
     "pdfmake": "^0.1.36",
     "proj4": "2.x",
-    "requirejs": "2.x",
-    "requirejs-text": "2.x",
     "underscore": "1.x",
     "video.js": "6.x",
     "videojs-flash": "^2.1.0"
