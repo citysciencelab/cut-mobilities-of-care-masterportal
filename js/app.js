@@ -36,7 +36,7 @@ import DrawView from "../modules/tools/draw/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import SearchByCoordView from "../modules/tools/searchByCoord/view";
 import LineView from "../modules/tools/pendler/lines/view";
-import AnimationView from "../modules/tools/animation/view";
+import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";

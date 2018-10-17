@@ -1,4 +1,4 @@
-import Tool from "../../core/modelList/tool/model";
+import Tool from "../../../core/modelList/tool/model";
 import {WFS} from "ol/format.js";
 
 const PendlerCoreModel = Tool.extend({
