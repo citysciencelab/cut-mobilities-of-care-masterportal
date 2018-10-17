@@ -94,7 +94,7 @@ const RoutingView = Backbone.View.extend({
             this.$("#input-group-ziel ul").empty();
             _.each(toList, function (value) {
                 this.$("#input-group-ziel ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
-            });
+            }.bind(this));
             this.$("#input-group-ziel ul").show();
             this.$("#zielAdresse").focus();
         }
