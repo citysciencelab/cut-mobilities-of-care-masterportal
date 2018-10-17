@@ -1,5 +1,3 @@
-import Config from "config";
-import Alert from "../modules/alerting/view";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -15,103 +13,21 @@ import RemoteInterface from "../modules/remoteInterface/model";
 import CswParserModel from "../modules/cswParser/model";
 // import BrowserPrintModel from "../modules/functionalities/browserPrint/model";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
-
-var sbconfig, controls, controlsView;
-
-// RemoteInterface laden
-if (_.has(Config, "remoteInterface")) {
-    new RemoteInterface(Config.remoteInterface);
-}
-// Core laden
-new Alert();
-new Autostarter();
-new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
-new RawLayerList();
-new RestReaderList();
-new Preparser();
-new StyleList();
-new ParametricURL();
-new CRS();
-new Map();
-new WPS();
-new AddGeoJSON();
-
-// Funktionalitäten laden
-// CSW parser
-new CswParserModel();
-// // Browser Druck Modul
-// new BrowserPrintModel(_.has(Config, "browserPrint") ? Config.browserPrint : {});
-// Graph laden
 import GraphModel from "../modules/tools/graph/model";
-new GraphModel();
-
-// // Module laden
-new WFSTransactionModel();
-
 import MenuLoader from "../modules/menu/menuLoader";
-new MenuLoader();
-
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
-new ZoomToGeometry();
-
 import ZoomToFeature from "../modules/zoomtofeature/model";
-if (_.has(Config, "zoomToFeature")) {
-    new ZoomToFeature(Config.zoomToFeature);
-}
-
-// // load customModules from config
-// if (_.has(Config, "customModules") && Config.customModules.length > 0) {
-//     _.each(Config.customModules, function (module) {
-//         require([module], function (CustomModule) {
-//             new CustomModule();
-//         });
-//     });
-// }
-//
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
-new SliderView();
-new SliderRangeView();
-new DropdownView();
-
-
 import LayerinformationModel from "../modules/layerinformation/model";
-new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
-
-
 import FooterView from "../modules/footer/view";
-if (_.has(Config, "footer")) {
-    new FooterView(Config.footer);
-}
-
 import ClickCounterView from "../modules/ClickCounter/view";
-if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
-    new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
-}
-
 import MouseHoverPopupView from "../modules/mouseHover/view";
-if (_.has(Config, "mouseHover")) {
-    new MouseHoverPopupView(Config.mouseHover);
-}
-
 import QuickHelpView from "../modules/quickhelp/view";
-if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
-    new QuickHelpView();
-}
-
 import ScaleLineView from "../modules/scaleline/view";
-if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
-    new ScaleLineView();
-}
-
 import WindowView from "../modules/window/view";
-new WindowView();
-// Module laden
-// Tools
 import SidebarView from "../modules/sidebar/view";
-new SidebarView();
-
 import GfiModel from "../modules/tools/gfi/model";
 import LegendLoader from "../modules/legend/legendLoader";
 import MeasureView from "../modules/tools/measure/view";
@@ -142,126 +58,6 @@ import PrintView from "../modules/tools/print_/view";
 // rename "print_" to "print"
 // only load PrintView
 import PrintView2 from "../modules/tools/print/view";
-
-
-_.each(Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}), function (tool) {
-    switch (tool.id) {
-        case "compareFeatures": {
-            new CompareFeaturesView({model: tool});
-            break;
-        }
-        case "einwohnerabfrage": {
-            new EinwohnerabfrageView({model: tool});
-            break;
-        }
-        case "animation": {
-            new AnimationView({model: tool});
-            break;
-        }
-        case "filter": {
-            new FilterView({model: tool});
-            break;
-        }
-        case "schulwegrouting": {
-            new SchulwegRoutingView({model: tool});
-            break;
-        }
-        case "gfi": {
-            new GfiModel(_.extend(tool, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}));
-            break;
-        }
-        case "coord": {
-            new CoordPopupView({model: tool});
-            break;
-        }
-        case "measure": {
-            new MeasureView({model: tool});
-            break;
-        }
-        case "draw": {
-            new DrawView({model: tool});
-            break;
-        }
-        case "print": {
-            // @deprecated in version 3.0.0
-            // remove "version" in doc and config.
-            // rename "print_" to "print"
-            // only load correct view
-            if (tool.has("version") && tool.get("version") === "mapfish_print_3") {
-                new PrintView({model: tool});
-            }
-            else {
-                new PrintView2({model: tool});
-            }
-            break;
-        }
-        case "parcelSearch": {
-            new ParcelSearchView({model: tool});
-            break;
-        }
-        case "searchByCoord": {
-            new SearchByCoordView({model: tool});
-            break;
-        }
-        case "saveSelection": {
-            new SaveSelectionView({model: tool});
-            break;
-        }
-        case "kmlimport": {
-            new ImportView({model: tool});
-            break;
-        }
-        case "wfsFeatureFilter": {
-            new WFSFeatureFilterView({model: tool});
-            break;
-        }
-        case "extendedFilter": {
-            new ExtendedFilterView({model: tool});
-            break;
-        }
-        case "treeFilter": {
-            new TreeFilterView({model: tool});
-            break;
-        }
-        case "routing": {
-            new RoutingView({model: tool});
-            break;
-        }
-        case "contact": {
-            new Contact({model: tool});
-            break;
-        }
-        case "addWMS": {
-            new AddWMSView({model: tool});
-            break;
-        }
-        case "featureLister": {
-            new FeatureLister({model: tool});
-            break;
-        }
-        case "formular": {
-            new Formular({model: tool});
-            break;
-        }
-        case "legend": {
-            new LegendLoader(tool);
-            break;
-        }
-        case "styleWMS": {
-            new StyleWMSView({model: tool});
-            break;
-        }
-        case "layerslider": {
-            new LayersliderView({model: tool});
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-});
-// });
-
 // controls
 import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
@@ -272,68 +68,196 @@ import TotalView from "../modules/controls/totalview/view";
 import AttributionsView from "../modules/controls/attributions/view";
 import OverviewmapView from "../modules/controls/overviewmap/view";
 import FreezeModel from "../modules/controls/freeze/model";
+import MapMarkerView from "../modules/mapMarker/view";
+import SearchbarView from "../modules/searchbar/view";
+import TitleView from "../modules/title/view";
+import HighlightFeature from "../modules/highlightFeature/model";
 
-const style = Radio.request("Util", "getUiStyle");
+var sbconfig, controls, controlsView;
 
-if (!style || style !== "SIMPLE") {
-    controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
-    controlsView = new ControlsView();
+function loadApp () {
+    // RemoteInterface laden
+    if (_.has(Config, "remoteInterface")) {
+        new RemoteInterface(Config.remoteInterface);
+    }
+    // Core laden
+    new Autostarter();
+    new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
+    new RawLayerList();
+    new RestReaderList();
+    new Preparser();
+    new StyleList();
+    new ParametricURL();
+    new CRS();
+    new Map();
+    new WPS();
+    new AddGeoJSON();
+    new CswParserModel();
+    // // Browser Druck Modul
+    // new BrowserPrintModel(_.has(Config, "browserPrint") ? Config.browserPrint : {});
+    new GraphModel();
+    new WFSTransactionModel();
+    new MenuLoader();
+    new ZoomToGeometry();
 
-    _.each(controls, function (control) {
-        var element;
 
-        switch (control.id) {
-            case "zoom": {
-                if (control.attr === true) {
-                    element = controlsView.addRowTR(control.id);
-                    new ZoomControlView({el: element});
+    if (_.has(Config, "zoomToFeature")) {
+        new ZoomToFeature(Config.zoomToFeature);
+    }
+
+    // // load customModules from config
+    // if (_.has(Config, "customModules") && Config.customModules.length > 0) {
+    //     _.each(Config.customModules, function (module) {
+    //         require([module], function (CustomModule) {
+    //             new CustomModule();
+    //         });
+    //     });
+    // }
+    //
+
+    new SliderView();
+    new SliderRangeView();
+    new DropdownView();
+
+    new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
+
+    if (_.has(Config, "footer")) {
+        new FooterView(Config.footer);
+    }
+
+
+    if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
+        new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
+    }
+
+    if (_.has(Config, "mouseHover")) {
+        new MouseHoverPopupView(Config.mouseHover);
+    }
+
+
+    if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
+        new QuickHelpView();
+    }
+
+    if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
+        new ScaleLineView();
+    }
+
+    new WindowView();
+    // Module laden
+    // Tools
+
+    new SidebarView();
+
+    _.each(Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}), function (tool) {
+        switch (tool.id) {
+            case "compareFeatures": {
+                new CompareFeaturesView({model: tool});
+                break;
+            }
+            case "einwohnerabfrage": {
+                new EinwohnerabfrageView({model: tool});
+                break;
+            }
+            case "animation": {
+                new AnimationView({model: tool});
+                break;
+            }
+            case "filter": {
+                new FilterView({model: tool});
+                break;
+            }
+            case "schulwegrouting": {
+                new SchulwegRoutingView({model: tool});
+                break;
+            }
+            case "gfi": {
+                new GfiModel(_.extend(tool, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}));
+                break;
+            }
+            case "coord": {
+                new CoordPopupView({model: tool});
+                break;
+            }
+            case "measure": {
+                new MeasureView({model: tool});
+                break;
+            }
+            case "draw": {
+                new DrawView({model: tool});
+                break;
+            }
+            case "print": {
+                // @deprecated in version 3.0.0
+                // remove "version" in doc and config.
+                // rename "print_" to "print"
+                // only load correct view
+                if (tool.has("version") && tool.get("version") === "mapfish_print_3") {
+                    new PrintView({model: tool});
+                }
+                else {
+                    new PrintView2({model: tool});
                 }
                 break;
             }
-            case "orientation": {
-                element = controlsView.addRowTR(control.id, true);
-                new OrientationView({el: element, attr: {config: {epsg: Radio.request("MapView", "getProjection").getCode()}}});
+            case "parcelSearch": {
+                new ParcelSearchView({model: tool});
                 break;
             }
-            case "mousePosition": {
-                if (control.attr === true) {
-                    element = controlsView.addRowBL(control.id);
-                    new MousePositionView({el: element});
-                }
+            case "searchByCoord": {
+                new SearchByCoordView({model: tool});
                 break;
             }
-            case "fullScreen": {
-                if (control.attr === true) {
-                    element = controlsView.addRowTR(control.id);
-                    new FullScreenView({el: element});
-                }
+            case "saveSelection": {
+                new SaveSelectionView({model: tool});
                 break;
             }
-            case "totalview": {
-                if (control.attr === true) {
-                    new TotalView();
-                }
+            case "kmlimport": {
+                new ImportView({model: tool});
                 break;
             }
-            case "attributions": {
-                if (control.attr === true || typeof control.attr === "object") {
-                    element = controlsView.addRowBR(control.id);
-                    new AttributionsView({el: element});
-                }
+            case "wfsFeatureFilter": {
+                new WFSFeatureFilterView({model: tool});
                 break;
             }
-            case "overviewmap": {
-                if (control.attr === true || typeof control.attr === "object") {
-                    element = controlsView.addRowBR(control.id);
-                    new OverviewmapView({el: element});
-                }
+            case "extendedFilter": {
+                new ExtendedFilterView({model: tool});
                 break;
             }
-            case "freeze": {
-                if (control.attr === true) {
-                    element = controlsView.addRowTR(control.id);
-                    new FreezeModel({uiStyle: style, el: element});
-                }
+            case "treeFilter": {
+                new TreeFilterView({model: tool});
+                break;
+            }
+            case "routing": {
+                new RoutingView({model: tool});
+                break;
+            }
+            case "contact": {
+                new Contact({model: tool});
+                break;
+            }
+            case "addWMS": {
+                new AddWMSView({model: tool});
+                break;
+            }
+            case "featureLister": {
+                new FeatureLister({model: tool});
+                break;
+            }
+            case "formular": {
+                new Formular({model: tool});
+                break;
+            }
+            case "legend": {
+                new LegendLoader(tool);
+                break;
+            }
+            case "styleWMS": {
+                new StyleWMSView({model: tool});
+                break;
+            }
+            case "layerslider": {
+                new LayersliderView({model: tool});
                 break;
             }
             default: {
@@ -341,25 +265,91 @@ if (!style || style !== "SIMPLE") {
             }
         }
     });
-}
 
+    const style = Radio.request("Util", "getUiStyle");
 
-import MapMarkerView from "../modules/mapMarker/view";
-new MapMarkerView();
+    if (!style || style !== "SIMPLE") {
+        controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
+        controlsView = new ControlsView();
 
-import SearchbarView from "../modules/searchbar/view";
-import TitleView from "../modules/title/view";
+        _.each(controls, function (control) {
+            var element;
 
-sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
-sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
-if (sbconfig) {
-    new SearchbarView(sbconfig);
-    if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
-        new TitleView();
+            switch (control.id) {
+                case "zoom": {
+                    if (control.attr === true) {
+                        element = controlsView.addRowTR(control.id);
+                        new ZoomControlView({el: element});
+                    }
+                    break;
+                }
+                case "orientation": {
+                    element = controlsView.addRowTR(control.id, true);
+                    new OrientationView({el: element, attr: {config: {epsg: Radio.request("MapView", "getProjection").getCode()}}});
+                    break;
+                }
+                case "mousePosition": {
+                    if (control.attr === true) {
+                        element = controlsView.addRowBL(control.id);
+                        new MousePositionView({el: element});
+                    }
+                    break;
+                }
+                case "fullScreen": {
+                    if (control.attr === true) {
+                        element = controlsView.addRowTR(control.id);
+                        new FullScreenView({el: element});
+                    }
+                    break;
+                }
+                case "totalview": {
+                    if (control.attr === true) {
+                        new TotalView();
+                    }
+                    break;
+                }
+                case "attributions": {
+                    if (control.attr === true || typeof control.attr === "object") {
+                        element = controlsView.addRowBR(control.id);
+                        new AttributionsView({el: element});
+                    }
+                    break;
+                }
+                case "overviewmap": {
+                    if (control.attr === true || typeof control.attr === "object") {
+                        element = controlsView.addRowBR(control.id);
+                        new OverviewmapView({el: element});
+                    }
+                    break;
+                }
+                case "freeze": {
+                    if (control.attr === true) {
+                        element = controlsView.addRowTR(control.id);
+                        new FreezeModel({uiStyle: style, el: element});
+                    }
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        });
     }
+
+
+    new MapMarkerView();
+
+    sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
+    sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
+    if (sbconfig) {
+        new SearchbarView(sbconfig);
+        if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
+            new TitleView();
+        }
+    }
+
+    new HighlightFeature();
+    Radio.trigger("Util", "hideLoader");
 }
 
-import HighlightFeature from "../modules/highlightFeature/model";
-new HighlightFeature();
-
-Radio.trigger("Util", "hideLoader");
+export {loadApp};
