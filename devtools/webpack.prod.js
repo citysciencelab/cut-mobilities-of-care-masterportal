@@ -1,12 +1,18 @@
 const merge = require("webpack-merge"),
-    Visualizer = require("webpack-visualizer-plugin"),
     common = require("./webpack.common.js");
 
 module.exports = merge(common, {
     mode: "production",
-    plugins: [
-        new Visualizer({
-            filename: "./prodstatistics.html"
-        })
-    ]
+    module: {
+        rules: [
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: "file-loader",
+                options: {
+                    name: "[name].[ext]",
+                    outputPath: "css/woffs/"
+                }
+            }
+        ]
+    }
 });
