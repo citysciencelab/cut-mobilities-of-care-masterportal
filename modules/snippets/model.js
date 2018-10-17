@@ -1,5 +1,4 @@
 import ValueModel from "./value/model";
-import Config from "config";
 
 const Snippet = Backbone.Model.extend({
     defaults: {
@@ -13,8 +12,10 @@ const Snippet = Backbone.Model.extend({
     superInitialize: function () {
         this.set("valuesCollection", new Backbone.Collection());
 
-        if (_.has(Config, "infoJson")) {
-            this.checkSnippetInfos(Radio.request("Parser", "getSnippetInfos"), this.get("name"));
+        if ("Config" in window) {
+            if (_.has(Config, "infoJson")) {
+                this.checkSnippetInfos(Radio.request("Parser", "getSnippetInfos"), this.get("name"));
+            }
         }
     },
 
