@@ -137,8 +137,14 @@ define("app", function (require) {
                     });
                     break;
                 }
+                case "lines": {
+                    require(["modules/tools/pendler/lines/view"], function (LineView) {
+                        new LineView({model: tool});
+                    });
+                    break;
+                }
                 case "animation": {
-                    require(["modules/tools/animation/view"], function (AnimationView) {
+                    require(["modules/tools/pendler/animation/view"], function (AnimationView) {
                         new AnimationView({model: tool});
                     });
                     break;
