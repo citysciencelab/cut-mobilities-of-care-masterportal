@@ -9,9 +9,9 @@
     "url": "https://bitbucket.org/lgv-g12/lgv.git"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
-    "test": "webpack-dev-server --config webpack.testserver.js --hot --inline"
+    "start": "webpack-dev-server --config devtools/webpack.dev.js",
+    "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
+    "build": "webpack --config devtools/webpack.prod.js"
   },
   "dependencies": {
     "backbone": "1.x",
@@ -41,6 +41,7 @@
     "chai": "4.1.1",
     "css-loader": "^1.0.0",
     "deep-extend": "^0.3.2",
+    "es6-promise": "^4.2.5",
     "eslint": "^4.14.0",
     "eslint-plugin-backbone": "^2.1.1",
     "eslint-plugin-chai-friendly": "^0.4.1",
