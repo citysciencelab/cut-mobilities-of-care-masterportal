@@ -11,7 +11,8 @@ import {WMSCapabilities} from "ol/format.js";
 
 const AddWMSModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
-        renderToWindow: true
+        renderToWindow: true,
+        glyphicon: "glyphicon-plus"
     }),
     initialize: function () {
         this.superInitialize();

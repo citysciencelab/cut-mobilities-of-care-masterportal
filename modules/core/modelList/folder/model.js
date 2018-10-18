@@ -18,7 +18,8 @@ const Folder = Item.extend({
         // UniqueId
         id: "",
         // Glyphicon massen auswahl
-        selectAllGlyphicon: "glyphicon-unchecked"
+        selectAllGlyphicon: "glyphicon-unchecked",
+        glyphicon: "glyphicon-folder-open"
     }),
 
     initialize: function () {

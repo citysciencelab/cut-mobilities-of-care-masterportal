@@ -15,7 +15,8 @@ const ExtendedFilter = Tool.extend({
         currentFilters: [],
         ignoredKeys: [],
         filterCounter: 1,
-        renderToWindow: true
+        renderToWindow: true,
+        glyphicon: "glyphicon-filter"
     }),
     initialize: function () {
         this.superInitialize();
