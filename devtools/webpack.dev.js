@@ -20,4 +20,16 @@ module.exports = merge(common, {
             filename: "./statistics.html"
         })
     ]
+    module: {
+        rules: [
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: "file-loader",
+                options: {
+                    name: "[name].[ext]",
+                    publicPath: "../../node_modules/lgv-config/css/woffs"
+                }
+            }
+        ]
+    }
 });
