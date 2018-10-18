@@ -488,7 +488,7 @@ const SchulwegRouting = Tool.extend({
                     image: new CircleStyle({
                         radius: 18,
                         stroke: new Stroke({
-                            color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019",
+                            color: feature.getId() === "startPoint" ? [0, 92, 169, 1] : [225, 0, 25, 1],
                             width: 3
                         }),
                         fill: new Fill({
@@ -500,7 +500,7 @@ const SchulwegRouting = Tool.extend({
                     image: new CircleStyle({
                         radius: 4,
                         fill: new Fill({
-                            color: feature.getId() === "startPoint" ? "#005ca9" : "#e10019"
+                            color: feature.getId() === "startPoint" ? [0, 92, 169, 1] : [225, 0, 25, 1]
                         })
                     })
                 })
