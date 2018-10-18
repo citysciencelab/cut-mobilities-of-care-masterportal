@@ -145,8 +145,8 @@ const PrintModel = Tool.extend({
     updatePrintPage: function () {
         if (this.has("scale") && this.has("layout")) {
             if (this.get("isActive")) {
-                Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose, this);
-                Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
+                Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose.bind(this), this);
+                Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose.bind(this), this);
             }
             else {
                 Radio.trigger("Map", "unregisterListener", "precompose", this.handlePreCompose, this);
