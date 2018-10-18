@@ -126,9 +126,6 @@ const SearchbarView = Backbone.View.extend({
                 $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
             }
         });
-        if (window.innerWidth >= 768) {
-            this.$("#searchInput").width(window.innerWidth - this.$(".desktop").width() - 160);
-        }
     },
     id: "searchbar", // wird ignoriert, bei renderToDOM
     className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
@@ -166,7 +163,7 @@ const SearchbarView = Backbone.View.extend({
             this.model.unset("initSearchString", true);
         }
         if (window.innerWidth >= 768) {
-            this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+            this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160 + "px");
             Radio.trigger("Title", "setSize");
         }
     },
