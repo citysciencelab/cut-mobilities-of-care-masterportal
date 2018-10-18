@@ -252,7 +252,6 @@ const PrintModel = Tool.extend({
                 }
                 style.push(defaultStyle);
             }
-
             // Damit Web-Atlas gedruckt werden kann
             if (layer.get("url").indexOf("gdi_mrh_themen") >= 0) {
                 layerURL = layer.get("url").replace("gdi_mrh_themen", "gdi_mrh_themen_print");
@@ -261,7 +260,7 @@ const PrintModel = Tool.extend({
                 layerURL = layer.get("url").replace("gdi_mrh", "gdi_mrh_print");
             }
             else if (layer.get("url").indexOf("geoportal.metropolregion.hamburg.de") >= 0 ||
-                        layer.get("url").indexOf("geoportaltest.metropolregion.hamburg.de") >= 0) {
+                layer.get("url").indexOf("geoportaltest.metropolregion.hamburg.de") >= 0) {
                 layerURL = layer.get("url") + "_print";
             }
             this.push("layerToPrint", {
