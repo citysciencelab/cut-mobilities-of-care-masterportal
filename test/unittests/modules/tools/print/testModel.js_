@@ -1,0 +1,10 @@
+import PrintModel from "@modules/tools/print_/model.js";
+
+var model;
+
+before(function () {
+    model = new PrintModel();
+});
+
+describe("tools/print_/model", function () {
+});

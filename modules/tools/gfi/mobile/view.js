@@ -1,38 +1,34 @@
-define(function (require) {
-    var GFIView = require("modules/tools/gfi/view"),
-        Template = require("text!modules/tools/gfi/mobile/template.html"),
-        GFIMobileView;
+import GFIView from "../view";
+import Template from "text-loader!./template.html";
+import "bootstrap/js/modal";
 
-    require("bootstrap/modal");
+const GFIMobileView = GFIView.extend({
+    className: "modal fade gfi-mobile",
+    template: _.template(Template),
+    render: function () {
+        var attr = this.model.toJSON();
 
-    GFIMobileView = GFIView.extend({
-        className: "modal fade gfi-mobile",
-        template: _.template(Template),
-        render: function () {
-            var attr = this.model.toJSON();
+        this.$el.html(this.template(attr));
+        this.$el.modal({
+            backdrop: "static",
+            show: false
+        });
+    },
 
-            this.$el.html(this.template(attr));
-            this.$el.modal({
-                backdrop: "static",
-                show: false
-            });
-        },
-
-        toggle: function () {
-            if (this.model.get("isVisible") === true) {
-                this.$el.modal("show");
-                Radio.trigger("GFI", "afterRender");
-            }
-            else {
-                this.$el.modal("hide");
-            }
-        },
-
-        removeView: function () {
-            this.$el.modal("hide");
-            this.remove();
+    toggle: function () {
+        if (this.model.get("isVisible") === true) {
+            this.$el.modal("show");
+            Radio.trigger("GFI", "afterRender");
         }
-    });
+        else {
+            this.$el.modal("hide");
+        }
+    },
 
-    return GFIMobileView;
+    removeView: function () {
+        this.$el.modal("hide");
+        this.remove();
+    }
 });
+
+export default GFIMobileView;

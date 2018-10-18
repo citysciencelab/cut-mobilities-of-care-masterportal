@@ -14,8 +14,8 @@ Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](http://geowerkstatt-
 ## für Entwickler
 * [lokale Entwicklungsumgebung einrichten](doc/setup-dev.md)
 * [lokale Entwicklungsumgebung einrichten mit proxy](doc/setup-dev-proxy.md)
-* [Code-Konventionen](conventions.md)
+* [Code-Konventionen](doc/conventions.md)
 * [Hinweise zur Versionierung](doc/Versionierung.md)
-* [Git-Workflow](git-workflow.md)
+* [Git-Workflow](doc/git-workflow.md)
 * [Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](doc/02_tutorial_new_module_scale_switcher.md)
 * [Community Board (Entwicklerforum, Issue Tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
