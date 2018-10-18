@@ -1,5 +1,6 @@
 const merge = require("webpack-merge"),
-    Visualizer = require("webpack-visualizer-plugin"),
+    // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
+    // Visualizer = require("webpack-visualizer-plugin"),
     common = require("./webpack.common.js"),
     proxies = require("lgv-config/proxyconf.json");
 
@@ -15,11 +16,6 @@ module.exports = merge(common, {
         openPage: "portal/master",
         proxy: proxies
     },
-    plugins: [
-        new Visualizer({
-            filename: "./statistics.html"
-        })
-    ]
     module: {
         rules: [
             {
@@ -32,4 +28,10 @@ module.exports = merge(common, {
             }
         ]
     }
+    // auskommentieren um eine grafische Darstellung vom bundle als html unter "build/statistics.html" zu erzeugen
+    // plugins: [
+    //     new Visualizer({
+    //         filename: "./statistics.html"
+    //     })
+    // ]
 });
