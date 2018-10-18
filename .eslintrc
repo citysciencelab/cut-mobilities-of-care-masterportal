@@ -1,14 +1,16 @@
 {
     "env": {
-        // defines require() and define() as global variables as per the amd spec
-        "amd": true,
         // browser global variables
         "browser": true,
         // adds all of the Mocha testing global variables.
-        "mocha": true
+        "mocha": true,
+        "node": true,
+        "es6": true
     },
     "globals": {
+        "$": true,
         "_": true,
+        "Config": true,
         "Radio": true,
         "Backbone": true
     },
