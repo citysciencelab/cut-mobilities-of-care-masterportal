@@ -1,9 +1,6 @@
-define([
-    "modules/tools/gfi/themes/model"
-], function (Theme) {
+import Theme from "../model";
 
-    var SolaratlasTheme = Theme.extend({
-    });
-
-    return SolaratlasTheme;
+const SolaratlasTheme = Theme.extend({
 });
+
+export default SolaratlasTheme;

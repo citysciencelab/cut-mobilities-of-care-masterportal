@@ -1,35 +1,30 @@
-define(function (require) {
+import ToolTemplate from "text-loader!./tooltemplate.html";
 
-    var ToolTemplate = require("text!modules/menu/table/tool/tooltemplate.html"),
-        $ = require("jquery"),
-        ToolView;
+const ToolView = Backbone.View.extend({
+    events: {
+        "click": "checkItem"
+    },
+    initialize: function () {
+        this.render();
+    },
+    id: "table-tool",
+    className: "table-tool",
+    template: _.template(ToolTemplate),
+    render: function () {
+        var attr = this.model.toJSON();
 
-    ToolView = Backbone.View.extend({
-        events: {
-            "click": "checkItem"
-        },
-        initialize: function () {
-            this.render();
-        },
-        id: "table-tool",
-        className: "table-tool",
-        template: _.template(ToolTemplate),
-        render: function () {
-            var attr = this.model.toJSON();
+        $("#table-tools-menu").append(this.$el.html(this.template(attr)));
 
-            $("#table-tools-menu").append(this.$el.html(this.template(attr)));
-
-            return this;
-        },
-        checkItem: function () {
-            if (this.model.get("name") === "legend") {
-                Radio.trigger("Legend", "toggleLegendWin");
-            }
-            else {
-                this.model.setIsActive(true);
-            }
+        return this;
+    },
+    checkItem: function () {
+        if (this.model.get("name") === "legend") {
+            Radio.trigger("Legend", "toggleLegendWin");
         }
-    });
-
-    return ToolView;
+        else {
+            this.model.setIsActive(true);
+        }
+    }
 });
+
+export default ToolView;

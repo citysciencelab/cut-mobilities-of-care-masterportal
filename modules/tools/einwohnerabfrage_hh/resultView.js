@@ -1,19 +1,14 @@
-define(function (require) {
+import ResultTemplate from "text-loader!./resultTemplate.html";
 
-    var Backbone = require("backbone"),
-        ResultTemplate = require("text!modules/tools/einwohnerabfrage_hh/resultTemplate.html"),
-        ResultView;
+const ResultView = Backbone.View.extend({
+    model: {},
+    template: _.template(ResultTemplate),
+    render: function () {
+        var attr = this.model.toJSON();
 
-    ResultView = Backbone.View.extend({
-        model: {},
-        template: _.template(ResultTemplate),
-        render: function () {
-            var attr = this.model.toJSON();
-
-            this.$el.html(this.template(attr));
-            return this;
-        }
-    });
-
-    return ResultView;
+        this.$el.html(this.template(attr));
+        return this;
+    }
 });
+
+export default ResultView;

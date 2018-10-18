@@ -1,62 +1,57 @@
-define(function (require) {
+import Template from "text-loader!./template.html";
+import Model from "./model";
 
-    var Template = require("text!modules/title/template.html"),
-        Model = require("modules/title/model"),
-        $ = require("jquery"),
-        TitleView;
+const TitleView = Backbone.View.extend({
+    initialize: function () {
+        this.model = new Model();
 
-    TitleView = Backbone.View.extend({
-        className: "portal-title",
-        id: "portalTitle",
-        model: new Model(),
-        template: _.template(Template),
-        initialize: function () {
-            this.listenTo(Radio.channel("Title"), {
-                "setSize": function () {
-                    this.setSize();
-                }
-            });
+        this.listenTo(Radio.channel("Title"), {
+            "setSize": function () {
+                this.setSize();
+            }
+        });
 
-            window.addEventListener("resize", _.bind(this.setSize, this));
+        window.addEventListener("resize", _.bind(this.setSize, this));
 
-            this.listenTo(Radio.channel("Util"), {
-                "isViewMobileChanged": function () {
-                    this.render();
-                }
-            });
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": function () {
+                this.render();
+            }
+        });
 
-            this.setSize();
-        },
+        this.setSize();
+    },
+    className: "portal-title",
+    id: "portalTitle",
+    template: _.template(Template),
+    render: function () {
+        var attr = this.model.toJSON();
 
-        render: function () {
-            var attr = this.model.toJSON();
+        this.$el.html(this.template(attr));
+        $(".nav-menu").after(this.$el);
 
-            this.$el.html(this.template(attr));
-            $(".nav-menu").after(this.$el);
+        return this;
+    },
 
-            return this;
-        },
+    setSize: function () {
+        var rootWidth,
+            searchbarWidth,
+            width;
 
-        setSize: function () {
-            var rootWidth,
-                searchbarWidth,
-                width;
+        if (!_.isNull(document.getElementById("searchbar"))) {
+            rootWidth = document.getElementById("root").offsetWidth;
+            searchbarWidth = document.getElementById("searchbar").offsetWidth;
+            width = document.getElementById("navbarRow").offsetWidth - rootWidth - searchbarWidth - 100; // 50px toleranz wegen padding und margin von #root, #searchbar , .navbar-collapse und #portalTitle
 
-            if (!_.isNull(document.getElementById("searchbar"))) {
-                rootWidth = document.getElementById("root").offsetWidth;
-                searchbarWidth = document.getElementById("searchbar").offsetWidth;
-                width = document.getElementById("navbarRow").offsetWidth - rootWidth - searchbarWidth - 100; // 50px toleranz wegen padding und margin von #root, #searchbar , .navbar-collapse und #portalTitle
-
-                this.$el.width(width);
-                if (width > 100) {
-                    this.render();
-                }
-                else {
-                    this.$el.empty();
-                }
+            this.$el.width(width);
+            if (width > 100) {
+                this.render();
+            }
+            else {
+                this.$el.empty();
             }
         }
-    });
-
-    return TitleView;
+    }
 });
+
+export default TitleView;
