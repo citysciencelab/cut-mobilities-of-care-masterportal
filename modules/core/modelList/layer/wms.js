@@ -64,8 +64,6 @@ const WMSLayer = Layer.extend({
                     ],
                     tileSize: parseInt(this.get("tilesize"), 10)
                 })
-                // Nur für Schulwegrouting, führte zu Problemen mit  diensten die dies nicht zulassen.
-                // crossOrigin: "anonymous"
             });
 
             // wms_webatlasde
@@ -88,8 +86,6 @@ const WMSLayer = Layer.extend({
                 url: this.get("url"),
                 attributions: this.get("olAttribution"),
                 params: params
-                // Nur für Schulwegrouting, führte zu Problemen mit  diensten die dies nicht zulassen.
-                // crossOrigin: "anonymous"
             }));
         }
         // this.registerErrorListener();
