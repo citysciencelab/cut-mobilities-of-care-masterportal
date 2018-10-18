@@ -47,6 +47,5 @@ const Config = {
     clickCounter: {},
     remoteInterface: {
         postMessageUrl: "http://localhost:8080"
-    },
-    browserPrint: {}
+    }
 };

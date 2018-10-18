@@ -222,12 +222,10 @@ const SchulwegRoutingView = Backbone.View.extend({
     },
     /**
      * trigger the model to print the route
-     * @deprecated in v 3.0.0 remove "this.model.printRouteClient();". enable "this.model.printRouteMapFish();"
      * @return {[type]} [description]
      */
     printRoute: function () {
-        this.model.printRouteClient();
-        // this.model.printRouteMapFish();
+        this.model.printRouteMapFish();
     }
 });
 
