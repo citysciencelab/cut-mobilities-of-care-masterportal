@@ -20,7 +20,8 @@ const Lines = PendlerCoreModel.extend({
             source: new VectorSource(),
             style: null,
             name: "labelLayer"
-        })
+        }),
+        glyphicon: "glyphicon-play-circle"
     }),
 
     preparePendlerLegend: function (features) {

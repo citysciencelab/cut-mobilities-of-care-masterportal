@@ -13,7 +13,8 @@ const CompareFeaturesModel = Tool.extend({
         // number of features to be displayed per layer
         numberOfFeaturesToShow: 3,
         // number of attributes to be displayed
-        numberOfAttributesToShow: 12
+        numberOfAttributesToShow: 12,
+        glyphicon: "glyphicon-th-list"
     }),
     initialize: function () {
         var channel = Radio.channel("CompareFeatures");

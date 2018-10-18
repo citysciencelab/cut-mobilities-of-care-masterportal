@@ -29,7 +29,8 @@ const Gfi = Tool.extend({
         themeIndex: 0,
         // Anzahl der Themes
         numberOfThemes: 0,
-        rotateAngle: 0
+        rotateAngle: 0,
+        glyphicon: "glyphicon-info-sign"
     }),
     initialize: function () {
         var channel = Radio.channel("GFI"),
