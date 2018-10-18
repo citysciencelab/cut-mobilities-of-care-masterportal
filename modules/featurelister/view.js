@@ -15,7 +15,7 @@ const FeatureLister = Backbone.View.extend({
     },
     initialize: function () {
         this.listenTo(this.model, {
-            "change:isActive": this.toggle,
+            "change:isActive": this.render,
             "change:layerlist": this.updateVisibleLayer,
             "change:layer": function () {
                 this.updateLayerList();
@@ -29,8 +29,6 @@ const FeatureLister = Backbone.View.extend({
 
         // Bestätige, dass das Modul geladen wurde
         Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
-
-        this.render();
     },
     className: "featurelist-win",
     template: _.template(Template),
@@ -319,22 +317,20 @@ const FeatureLister = Backbone.View.extend({
             this.$("#featurelist-themes-ul").append("<li id='" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
         }, this);
     },
-    render: function () {
-        var attr = this.model.toJSON();
 
-        this.$el.html(this.template(attr));
-        $("body").append(this.$el.html(this.template(attr)));
-        this.$el.draggable({
-            containment: "#map",
-            handle: ".featurelist-win-header",
-            drag: function () {
-                this.setMaxHeight();
-            }.bind(this)
-        });
+    render: function (model, value) {
+        if (value) {
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template(model.toJSON()));
+            this.toggle();
+            this.delegateEvents();
+        }
+        else {
+            this.undelegateEvents();
+        }
         return this;
     },
     toggle: function () {
-        this.$el.toggle();
         if (this.$el.is(":visible") === true) {
             this.updateVisibleLayer();
             this.model.checkVisibleLayer();
@@ -343,9 +339,6 @@ const FeatureLister = Backbone.View.extend({
                 this.model.set("layerid", this.model.get("layerlist")[0].id);
             }
             this.setMaxHeight();
-        }
-        else {
-            Radio.trigger("ModelList", "setModelAttributesById", "gfi", {isActive: true});
         }
         this.model.downlightFeature();
     },
