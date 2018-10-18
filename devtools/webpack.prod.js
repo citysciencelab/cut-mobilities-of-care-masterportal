@@ -1,8 +1,14 @@
 const merge = require("webpack-merge"),
-    common = require("./webpack.common.js");
+    common = require("./webpack.common.js"),
+    UglifyJsPlugin = require("uglifyjs-webpack-plugin"),
+    path = require("path");
 
 module.exports = merge(common, {
     mode: "production",
+    output: {
+        path: path.resolve(__dirname, "../dist/build"),
+        filename: "js/masterportal.js"
+    },
     module: {
         rules: [
             {
@@ -14,5 +20,9 @@ module.exports = merge(common, {
                 }
             }
         ]
-    }
+    },
+    optimization: {
+        minimizer: [new UglifyJsPlugin()]
+    },
+    stats: "errors-only"
 });
