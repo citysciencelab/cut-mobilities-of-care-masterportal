@@ -155,45 +155,6 @@ const PrintModel = Tool.extend({
         }
     },
 
-    // setLayerToPrint: function (layers) {
-    //     var sortedLayers;
-
-    //     sortedLayers = _.sortBy(layers, function (layer) {
-    //         return layer.get("selectionIDX");
-    //     });
-    //     _.each(sortedLayers, function (layer) {
-    //         // nur wichtig für treeFilter
-    //         var params = {},
-    //             style = [],
-    //             layerURL = layer.get("url"),
-    //             numberOfLayer,
-    //             i,
-    //             defaultStyle;
-
-    //         if (layer.has("SLDBody")) {
-    //             params.SLD_BODY = layer.get("SLDBody");
-    //         }
-    //         if (layer.get("id") === "2298") {
-    //             style.push("strassenbaumkataster_grau");
-    //         }
-    //         if (layer.has("styles")) {
-    //             style.push(layer.get("styles"));
-    //         }
-    //         // Für jeden angegebenen Layer muss ein Style angegeben werden.
-    //         // Wenn ein Style mit einem Blank angegeben wird,
-    //         // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
-    //         else {
-    //             numberOfLayer = layer.get("layers").split(",").length;
-    //             defaultStyle = "";
-
-    //             for (i = 1; i < numberOfLayer; i++) {
-    //                 defaultStyle += ",";
-    //             }
-    //             style.push(defaultStyle);
-    //         }
-    //     }, this);
-    // },
-
     getLayersForPrint: function () {
         var drawLayer = Radio.request("Draw", "getLayer");
 
