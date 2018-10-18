@@ -12,14 +12,21 @@ const LayersliderModel = Tool.extend({
     }),
 
     initialize: function () {
+        var invalidLayer;
+
         this.superInitialize();
         this.setProgressBarWidth(this.get("layerIds"));
+
+        // Prüfe Konfiguration
+        invalidLayer = this.checkAllLayerOk(this.get("layerIds"));
+        if (invalidLayer) {
+            console.error("Konfiguration des layersliders fehlerhaft. Prüfen Sie layerId: " + invalidLayer.layerId);
+        }
+
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 if (value) {
-                    if (!this.checkAllLayerOk(this.get("layerIds"))) {
-                        console.error("Konfiguration des layersliders fehlerhaft");
-                    }
+                    this.checkIfLayermodelExist(this.get("layerIds"));
                 }
             }
         });
@@ -29,6 +36,30 @@ const LayersliderModel = Tool.extend({
         this.stopInterval();
         this.set("activeLayer", {layerId: ""});
         // this.set("title", null);
+    },
+
+    /**
+     * Prüft ob das Layermodel schon existiert
+     * @param   {object[]}  layerIds Konfiguration der Layer aus config.json
+     * @returns {void}
+     */
+    checkIfLayermodelExist: function (layerIds) {
+        _.each(layerIds, function (layer) {
+            if (Radio.request("ModelList", "getModelsByAttributes", {id: layer.layerId}).length === 0) {
+                this.addLayerModel(layer.layerId);
+            }
+        }, this);
+    },
+
+    /**
+     * Fügt das Layermodel kurzzeitig der Modellist hinzu um prepareLayerObject auszuführen und entfernt das Model dann wieder.
+     * @param   {string}  layerId    Id des Layers
+     * @returns {void}
+     */
+    addLayerModel: function (layerId) {
+        Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
+        this.sendModification(layerId, true);
+        this.sendModification(layerId, false);
     },
 
     /**
@@ -149,18 +180,21 @@ const LayersliderModel = Tool.extend({
     /**
      * Prüft, ob alle Layer, die der Layerslider nutzen soll, auch definiert sind und ein title Attribut haben
      * @param   {object[]}  layerIds Konfiguration der Layer aus config.json
-     * @returns {boolean}   True wenn alle Layer gefunden wurden
+     * @returns {object}   Invalid Layer oder undefined
      */
     checkAllLayerOk: function (layerIds) {
-        var allOk = true;
+        var invalidLayer;
 
-        _.each(layerIds, function (layer) {
-            if (_.isUndefined(Radio.request("ModelList", "getModelByAttributes", {id: layer.layerId})) || _.isUndefined(layer.title)) {
-                allOk = false;
+        invalidLayer = _.find(layerIds, function (layer) {
+            if (_.isNull(Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.layerId})) ||
+                _.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: layer.layerId})) ||
+                _.isUndefined(layer.title)) {
+                return layer;
             }
+            return undefined;
         });
 
-        return allOk;
+        return invalidLayer;
     },
 
     /**

@@ -92,7 +92,7 @@ const DrawTool = Tool.extend({
      */
     createModifyInteraction: function (layer) {
         this.set("modifyInteraction", new Modify({
-            features: layer.getSource().getFeaturesCollection()
+            source: layer.getSource()
         }));
     },
 

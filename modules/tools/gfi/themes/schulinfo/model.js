@@ -106,11 +106,7 @@ const SchulInfoTheme = Theme.extend({
             "change:isReady": this.parseGfiContent
         });
 
-        this.get("feature").on("propertychange", function (evt) {
-            if (evt.key === "isOnCompareList") {
-                this.trigger("toggleStarGlyphicon", evt.target);
-            }
-        }, this);
+        this.get("feature").on("propertychange", this.toggleStarGlyphicon.bind(this));
 
         this.get("feature").set("layerId", this.get("id"));
         this.get("feature").set("layerName", this.get("name"));
@@ -289,6 +285,13 @@ const SchulInfoTheme = Theme.extend({
         }
         return newNameFound;
     },
+
+    toggleStarGlyphicon: function (evt) {
+        if (evt.key === "isOnCompareList") {
+            this.trigger("toggleStarGlyphicon", evt.target);
+        }
+    },
+
     // setter for selectedContent
     setSelectedContent: function (value) {
         this.set("selectedContent", value);
