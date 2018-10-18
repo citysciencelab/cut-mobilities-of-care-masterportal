@@ -6,7 +6,7 @@ var replace = require("replace-in-file"),
     },
     {
         "files": "dist/css/style.css",
-        "from": /\.\.\/\.\.\/node_modules\/lgv-config\/css\/woffs/g,
+        "from": /css\/woffs/g,
         "to": "./woffs"
     },
     {
@@ -14,14 +14,15 @@ var replace = require("replace-in-file"),
         "from": /\.\.\/\.\.\/node_modules\/lgv-config/g,
         "to": "../lgv-config"
     }
-    ];
+];
 
-
-replacements.forEach(function (replacement) {
-    replace.sync({
-        files: replacement.files,
-        from: replacement.from,
-        to: replacement.to
+module.exports = function () {
+    replacements.forEach(function (replacement) {
+        replace.sync({
+            files: replacement.files,
+            from: replacement.from,
+            to: replacement.to
+        });
+        console.log ("Successfully replaced '" + replacement.from + "' in Files '" + replacement.files + "' to '" + replacement.to + "!");
     });
-    console.log ("Successfully replaced '" + replacement.from + "' in Files '" + replacement.files + "' to '" + replacement.to + "!");
-});
+};
