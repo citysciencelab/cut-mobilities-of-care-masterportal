@@ -1,36 +1,33 @@
-define(function (require) {
-    var ClickCounterModel = require("modules/ClickCounter/model"),
-        ClickCounterView;
+import ClickCounterModel from "./model";
 
-    ClickCounterView = Backbone.View.extend({
-        initialize: function (desktopURL, mobileURL) {
-            var channel = Radio.channel("ClickCounter");
+const ClickCounterView = Backbone.View.extend({
+    initialize: function (desktopURL, mobileURL) {
+        var channel = Radio.channel("ClickCounter");
 
-            this.model = new ClickCounterModel(desktopURL, mobileURL);
+        this.model = new ClickCounterModel(desktopURL, mobileURL);
 
-            channel.on({
-                "toolChanged": this.registerClick,
-                "calcRoute": this.registerClick,
-                "zoomChanged": this.registerClick,
-                "layerVisibleChanged": this.registerClick,
-                "gfi": this.registerClick
-            }, this);
+        channel.on({
+            "toolChanged": this.registerClick,
+            "calcRoute": this.registerClick,
+            "zoomChanged": this.registerClick,
+            "layerVisibleChanged": this.registerClick,
+            "gfi": this.registerClick
+        }, this);
 
-            // fired beim Öffnen der Seite
-            this.registerClick();
-        },
-        registerLayerEvent: function (layertree) {
-            // fired beim LayerChange, Info-Button, Einstellungen auf dem Layertree
-            if (layertree.length > 0) {
-                layertree.click(function () {
-                    this.registerClick();
-                }.bind(this));
-            }
-        },
-        registerClick: function () {
-            this.model.refreshIframe();
+        // fired beim Öffnen der Seite
+        this.registerClick();
+    },
+    registerLayerEvent: function (layertree) {
+        // fired beim LayerChange, Info-Button, Einstellungen auf dem Layertree
+        if (layertree.length > 0) {
+            layertree.click(function () {
+                this.registerClick();
+            }.bind(this));
         }
-    });
-
-    return ClickCounterView;
+    },
+    registerClick: function () {
+        this.model.refreshIframe();
+    }
 });
+
+export default ClickCounterView;

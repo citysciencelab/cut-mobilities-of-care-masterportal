@@ -1,29 +1,25 @@
-define(function (require) {
+import Template from "text-loader!./templateMenu.html";
 
-    var $ = require("jquery"),
-        Template = require("text!modules/menu/desktop/folder/templateMenu.html"),
-        FolderView;
+const FolderView = Backbone.View.extend({
+    initialize: function () {
+        this.render();
+    },
+    tagName: "li",
+    className: "dropdown dropdown-folder",
+    template: _.template(Template),
+    // events: {
+    //     "click .folder-item": ""
+    // },
 
-    FolderView = Backbone.View.extend({
-        tagName: "li",
-        className: "dropdown dropdown-folder",
-        template: _.template(Template),
-        // events: {
-        //     "click .folder-item": ""
-        // },
-        initialize: function () {
-            this.render();
-        },
-        render: function () {
-            var attr = this.model.toJSON();
+    render: function () {
+        var attr = this.model.toJSON();
 
-            $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
-            return this;
-        }
-        // toggleIsChecked: function () {
-        //     this.model.toggleIsChecked();
-        // }
-    });
-
-    return FolderView;
+        $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+        return this;
+    }
+    // toggleIsChecked: function () {
+    //     this.model.toggleIsChecked();
+    // }
 });
+
+export default FolderView;

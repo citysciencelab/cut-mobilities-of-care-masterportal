@@ -1,55 +1,50 @@
-define(function (require) {
+import DesktopView from "../../view";
+import Template from "text-loader!../template.html";
 
-    var DesktopView = require("modules/tools/gfi/view"),
-        $ = require("jquery"),
-        Template = require("text!modules/tools/gfi/desktop/template.html"),
-        GFIDetachedView;
+const GFIDetachedView = DesktopView.extend({
+    className: "gfi gfi-detached",
+    template: _.template(Template),
 
-    GFIDetachedView = DesktopView.extend({
-        className: "gfi gfi-detached",
-        template: _.template(Template),
+    render: function () {
+        var attr = this.model.toJSON();
 
-        render: function () {
-            var attr = this.model.toJSON();
-
-            $("#map").append(this.$el.html(this.template(attr)));
-            this.$el.css("maxWidth", $("#map").width() / 2.2);
-            this.$el.draggable({
-                containment: "#map",
-                handle: ".gfi-header",
-                stop: function (evt, ui) {
-                    // helper, so that "left" is never 0. needed for gfi/themes/view.js adjustGfiWindow()
-                    $(".gfi").css("left", (ui.position.left + 1) + "px");
-                    // $(".gfi").css("top", (ui.position.top - 50) + "px");
-                }
-            });
-        },
-
-        toggle: function () {
-            if (this.model.get("isVisible") === true) {
-                this.$el.show();
-                Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
-                Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
-                Radio.trigger("GFI", "afterRender");
+        $("#map").append(this.$el.html(this.template(attr)));
+        this.$el.css("maxWidth", $("#map").width() / 2.2);
+        this.$el.draggable({
+            containment: "#map",
+            handle: ".gfi-header",
+            stop: function (evt, ui) {
+                // helper, so that "left" is never 0. needed for gfi/themes/view.js adjustGfiWindow()
+                $(".gfi").css("left", (ui.position.left + 1) + "px");
+                // $(".gfi").css("top", (ui.position.top - 50) + "px");
             }
-            else {
-                this.$el.hide();
-                Radio.trigger("MapMarker", "hideMarker");
-            }
-        },
+        });
+    },
 
-        setMarker: function () {
-            if (this.model.get("isVisible") === true) {
-                Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
-                Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
-            }
-        },
-
-        removeView: function () {
-            Radio.trigger("MapMarker", "hideMarker");
-            this.remove();
+    toggle: function () {
+        if (this.model.get("isVisible") === true) {
+            this.$el.show();
+            Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
+            Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
+            Radio.trigger("GFI", "afterRender");
         }
-    });
+        else {
+            this.$el.hide();
+            Radio.trigger("MapMarker", "hideMarker");
+        }
+    },
 
-    return GFIDetachedView;
+    setMarker: function () {
+        if (this.model.get("isVisible") === true) {
+            Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
+            Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
+        }
+    },
+
+    removeView: function () {
+        Radio.trigger("MapMarker", "hideMarker");
+        this.remove();
+    }
 });
+
+export default GFIDetachedView;
