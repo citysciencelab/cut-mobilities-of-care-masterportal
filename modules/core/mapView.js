@@ -81,7 +81,7 @@ const MapView = Backbone.Model.extend({
                 return this.get("projection");
             },
             "getOptions": function () {
-                return _.findWhere(this.get("options"), {resolution: this.get("view").getResolution()});
+                return _.findWhere(this.get("options"), {resolution: this.get("view").constrainResolution(this.get("view").getResolution())});
             },
             "getCenter": function () {
                 return this.getCenter();
@@ -127,10 +127,10 @@ const MapView = Backbone.Model.extend({
         this.setView();
 
         // Listener für ol.View
-        this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this));
+        this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this), this);
         this.get("view").on("change:center", function () {
             Radio.trigger("MapView", "changedCenter", this.getCenter());
-        });
+        }, this);
     },
 
     /**
