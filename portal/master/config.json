@@ -489,7 +489,8 @@
             "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
           }
         ],
-        "extendedFilter": true
+        "extendedFilter": true,
+        "autoRefresh": 6000
       },
       {
         "id": "8712",
