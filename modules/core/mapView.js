@@ -81,7 +81,7 @@ const MapView = Backbone.Model.extend({
                 return this.get("projection");
             },
             "getOptions": function () {
-                return _.findWhere(this.get("options"), {resolution: this.get("view").getResolution()});
+                return _.findWhere(this.get("options"), {resolution: this.get("view").constrainResolution(this.get("view").getResolution())});
             },
             "getCenter": function () {
                 return this.getCenter();
@@ -91,9 +91,6 @@ const MapView = Backbone.Model.extend({
             },
             "getResolutions": function () {
                 return this.get("resolutions");
-            },
-            "getResolution": function () {
-                return _.findWhere(this.get("options"), {resolution: this.get("view").getResolution()});
             },
             "getResoByScale": this.getResoByScale,
             "getScales": function () {
