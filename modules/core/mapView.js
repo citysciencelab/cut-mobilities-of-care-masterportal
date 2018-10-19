@@ -92,9 +92,6 @@ const MapView = Backbone.Model.extend({
             "getResolutions": function () {
                 return this.get("resolutions");
             },
-            "getResolution": function () {
-                return _.findWhere(this.get("options"), {resolution: this.get("view").getResolution()});
-            },
             "getResoByScale": this.getResoByScale,
             "getScales": function () {
                 return _.pluck(this.get("options"), "scale");

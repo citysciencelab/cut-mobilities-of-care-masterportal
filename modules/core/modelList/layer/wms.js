@@ -261,7 +261,7 @@ const WMSLayer = Layer.extend({
     },
 
     getGfiUrl: function () {
-        var resolution = Radio.request("MapView", "getResolution").resolution,
+        var resolution = Radio.request("MapView", "getOptions").resolution,
             projection = Radio.request("MapView", "getProjection"),
             coordinate = Radio.request("GFI", "getCoordinate");
 
