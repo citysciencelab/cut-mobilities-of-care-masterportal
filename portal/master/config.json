@@ -99,7 +99,7 @@
       {
         "name": "Filter",
         "glyphicon": "glyphicon-filter",
-        "deaktivateGFI": false,
+        "deactivateGFI": false,
         "isGeneric": false,
         "isInitOpen": false,
         "allowMultipleQueriesPerLayer": false,
@@ -226,13 +226,13 @@
           {
             "name": "Feature Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "extendedFilter":
           {
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "routing":
           {

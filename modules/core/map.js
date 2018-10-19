@@ -1,4 +1,5 @@
 import Map from "ol/Map.js";
+import {unByKey as unlistenByKey} from "ol/Observable.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
@@ -29,6 +30,7 @@ const map = Backbone.Model.extend({
             "getSize": this.getSize,
             "getPixelFromCoordinate": this.getPixelFromCoordinate,
             "getFeaturesAtPixel": this.getFeaturesAtPixel,
+            "registerListener": this.registerListener,
             "getMap": function () {
                 return this.get("map");
             }
@@ -134,18 +136,23 @@ const map = Backbone.Model.extend({
     * @returns {void}
     */
     registerListener: function (event, callback, context) {
-        this.get("map").on(event, callback, context);
+        return this.get("map").on(event, callback, context);
     },
 
     /**
     * Meldet Listener auf bestimmte Events ab
-    * @param {String} event - Der Eventtyp
+    * @param {String | Object} event - Der Eventtyp oder ein Objekt welches als Key benutzt wird
     * @param {Function} callback - Die Callback Funktion
     * @param {Object} context -
     * @returns {void}
     */
     unregisterListener: function (event, callback, context) {
-        this.get("map").un(event, callback, context);
+        if (typeof event === "string") {
+            this.get("map").un(event, callback, context);
+        }
+        else {
+            unlistenByKey(event);
+        }
     },
 
     /**

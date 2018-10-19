@@ -6,7 +6,6 @@ import DesktopAttachedView from "./desktop/attached/view";
 import MobileView from "./mobile/view";
 import Tool from "../../core/modelList/tool/model";
 
-
 const Gfi = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         // detached | attached
@@ -138,15 +137,16 @@ const Gfi = Tool.extend({
      * @param  {String} deaktivateGFI - soll durch aktivierung des Tools das GFI deaktiviert werden?
      * @return {undefined}
      */
-    toggleGFI: function (id, deaktivateGFI) {
-        if (id === "gfi" && deaktivateGFI === false) {
-            Radio.trigger("Map", "registerListener", "click", this.setGfiParams.bind(this), this);
+    toggleGFI: function (id, deactivateGFI) {
+        if (id === "gfi" && deactivateGFI === false) {
+            this.setClickEventKey(Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
+            // this.set("key", Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
         }
-        else if (deaktivateGFI === true) {
-            Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
+        else if (deactivateGFI === true) {
+            Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
         }
-        else if (_.isUndefined(deaktivateGFI)) {
-            Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
+        else if (_.isUndefined(deactivateGFI)) {
+            Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
         }
     },
 
@@ -396,6 +396,10 @@ const Gfi = Tool.extend({
             return true;
         }
         return false;
+    },
+
+    setClickEventKey: function (value) {
+        this.set("clickEventKey", value);
     }
 
 });

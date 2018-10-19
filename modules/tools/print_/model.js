@@ -36,7 +36,7 @@ const PrintModel = Tool.extend({
         isScaleAvailable: false,
         // the id from the rest services json for the plot app
         plotServiceId: undefined,
-        deaktivateGFI: false,
+        deactivateGFI: false,
         renderToWindow: true,
         DOTS_PER_INCH: 72,
         INCHES_PER_METER: 39.37,

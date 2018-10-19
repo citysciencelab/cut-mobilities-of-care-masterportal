@@ -17,7 +17,7 @@ const Tool = Item.extend({
         // true wenn das Tool aktiviert ist
         isActive: false,
         // deaktiviert GFI, wenn dieses tool geöffnet wird
-        deaktivateGFI: true,
+        deactivateGFI: false,
         renderToWindow: true
     },
 
