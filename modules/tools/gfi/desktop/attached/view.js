@@ -1,5 +1,6 @@
 import DesktopView from "../../view";
 import Template from "text-loader!../template.html";
+import "bootstrap/js/tooltip";
 import "bootstrap/js/popover";
 
 const GFIAttachedView = DesktopView.extend({
