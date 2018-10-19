@@ -67,6 +67,7 @@ define(function (require) {
             var featJSON,
                 format = new ol.format.GeoJSON();
 
+            Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).setIsActive(true);
             if ($.inArray(para_object.drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
                 this.set("isCurrentWin", true);
                 this.setDrawType(para_object.drawType, para_object.drawType + " zeichnen");
@@ -91,8 +92,10 @@ define(function (require) {
                         Radio.trigger("Alert", "alert", "Die übergebene Geometrie konnte nicht dargestellt werden.");
                     }
                 }
+
+                $("#window").hide();
                 // GFI ausschalten beim Zeichnen
-                Radio.trigger("Tool", "activatedTool", "draw", true);
+                // Radio.trigger("Tool", "activatedTool", "gfi", false);
             }
         },
 
