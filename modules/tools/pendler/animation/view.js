@@ -4,6 +4,7 @@ const AnimationView = Backbone.View.extend({
     events: {
         "click .start": "start",
         "click .reset": "reset",
+        "click .csv-download": "download",
         "change #select-kreis": "setKreis",
         "change #select-gemeinde": "setGemeinde",
         "change #select-trefferAnzahl": "setTrefferAnzahl",
@@ -43,6 +44,9 @@ const AnimationView = Backbone.View.extend({
     },
     reset: function () {
         this.model.stopAnimation();
+    },
+    download: function () {
+        this.model.download();
     },
 
     setKreis: function (evt) {

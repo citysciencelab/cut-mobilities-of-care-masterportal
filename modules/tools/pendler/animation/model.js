@@ -105,7 +105,6 @@ const Animation = PendlerCoreModel.extend({
             min,
             max;
 
-
         this.centerGemeinde(true);
 
         topFeatures = this.selectFeatures(rawFeatures);
@@ -320,6 +319,16 @@ const Animation = PendlerCoreModel.extend({
             newFeature.setStyle(style);
             layer.getSource().addFeature(newFeature);
         }, this);
+    },
+
+    download: function () {
+        const features = this.get("lineFeatures"),
+            featurePropList = [];
+
+        features.forEach(function (feat) {
+            featurePropList.push(feat.getProperties());
+        });
+        console.info(featurePropList);
     },
 
     setSteps: function (value) {
