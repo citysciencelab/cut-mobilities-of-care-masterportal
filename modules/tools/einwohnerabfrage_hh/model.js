@@ -52,9 +52,10 @@ const Einwohnerabfrage = Tool.extend({
         fhhDate: undefined,
         tooltipMessage: "Klicken zum Starten und Beenden",
         tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen",
-        uniqueIdList: []
+        uniqueIdList: [],
         // hmdk/metaver link
         // metaDataLink: Radio.request("RestReader", "getServiceById", "2").get("url")
+        glyphicon: "glyphicon-wrench"
     }),
 
     initialize: function () {

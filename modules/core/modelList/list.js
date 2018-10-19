@@ -33,6 +33,7 @@ import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import LayersliderModel from "../../tools/layerslider/model";
+import GFI from "../../tools/gfi/model";
 
 const ModelList = Backbone.Collection.extend({
     initialize: function () {
@@ -132,6 +133,9 @@ const ModelList = Backbone.Collection.extend({
                     return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 return new PrintV2(attrs, options);
+            }
+            else if (attrs.id === "gfi") {
+                return new GFI(attrs, options);
             }
             else if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);

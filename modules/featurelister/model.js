@@ -12,7 +12,8 @@ const FeatureListerModel = Tool.extend({
         featureid: "", // ID des Features, das angezeigt werden soll.
         featureProps: {}, // Properties des Features mit gesuchter featureid
         highlightedFeature: null,
-        highlightedFeatureStyle: null
+        highlightedFeatureStyle: null,
+        glyphicon: "glyphicon-menu-hamburger"
     }),
     initialize: function () {
         this.superInitialize();

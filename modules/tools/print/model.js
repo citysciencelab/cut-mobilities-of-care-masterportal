@@ -36,7 +36,8 @@ const PrintModel = Tool.extend({
         configYAML: "/master",
         deactivateGFI: false,
         renderToWindow: true,
-        proxyURL: ""
+        proxyURL: "",
+        glyphicon: "glyphicon-print"
     }),
 
     /*
@@ -144,8 +145,8 @@ const PrintModel = Tool.extend({
     updatePrintPage: function () {
         if (this.has("scale") && this.has("layout")) {
             if (this.get("isActive")) {
-                Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose, this);
-                Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
+                Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose.bind(this), this);
+                Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose.bind(this), this);
             }
             else {
                 Radio.trigger("Map", "unregisterListener", "precompose", this.handlePreCompose, this);
@@ -159,14 +160,63 @@ const PrintModel = Tool.extend({
         var drawLayer = Radio.request("Draw", "getLayer");
 
         this.set("layerToPrint", []);
-        this.setLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
+        this.setWMSLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
+        this.setGROUPLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}));
+
         if (drawLayer !== undefined && drawLayer.getSource().getFeatures().length > 0) {
             this.setLayer(drawLayer);
         }
         this.getGfiForPrint();
     },
 
-    setLayerToPrint: function (layers) {
+    setGROUPLayerToPrint: function (layers) {
+        var sortedLayers;
+
+        sortedLayers = _.sortBy(layers, function (layer) {
+            return layer.get("selectionIDX");
+        });
+        _.each(sortedLayers, function (groupLayer) {
+            var layerList = groupLayer.get("layerSource");
+
+            _.each(layerList, function (layer) {
+                var params = {},
+                    style = [],
+                    numberOfLayer,
+                    i,
+                    defaultStyle;
+
+                if (layer.get("typ") === "WMS") {
+                    if (layer.has("styles")) {
+                        style.push(layer.get("styles"));
+                    }
+                    // Für jeden angegebenen Layer muss ein Style angegeben werden.
+                    // Wenn ein Style mit einem Blank angegeben wird,
+                    // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
+                    else {
+                        numberOfLayer = layer.get("layers").split(",").length;
+                        defaultStyle = "";
+
+                        for (i = 1; i < numberOfLayer; i++) {
+                            defaultStyle += ",";
+                        }
+                        style.push(defaultStyle);
+                    }
+
+                    this.push("layerToPrint", {
+                        type: layer.get("typ"),
+                        layers: layer.get("layers").split(),
+                        baseURL: layer.get("url"),
+                        format: "image/png",
+                        opacity: (100 - layer.get("transparency")) / 100,
+                        customParams: params,
+                        styles: style
+                    });
+                }
+            }, this);
+        }, this);
+    },
+
+    setWMSLayerToPrint: function (layers) {
         var sortedLayers;
 
         sortedLayers = _.sortBy(layers, function (layer) {
@@ -210,7 +260,7 @@ const PrintModel = Tool.extend({
                 layerURL = layer.get("url").replace("gdi_mrh", "gdi_mrh_print");
             }
             else if (layer.get("url").indexOf("geoportal.metropolregion.hamburg.de") >= 0 ||
-                     layer.get("url").indexOf("geoportaltest.metropolregion.hamburg.de") >= 0) {
+                    layer.get("url").indexOf("geoportaltest.metropolregion.hamburg.de") >= 0) {
                 layerURL = layer.get("url") + "_print";
             }
             this.push("layerToPrint", {
@@ -594,7 +644,7 @@ const PrintModel = Tool.extend({
         var s = this.get("scale").value,
             width = this.get("layout").map.width,
             height = this.get("layout").map.height,
-            resolution = Radio.request("MapView", "getResolution").resolution,
+            resolution = Radio.request("MapView", "getOptions").resolution,
             w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO,
             h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO,
             mapSize = Radio.request("Map", "getSize"),

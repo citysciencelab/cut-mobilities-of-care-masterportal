@@ -8,7 +8,8 @@ const ImportTool = Tool.extend({
         text: "",
         features: [],
         format: new KML({extractStyles: true}),
-        renderToWindow: true
+        renderToWindow: true,
+        glyphicon: "glyphicon-import"
     }),
 
     initialize: function () {

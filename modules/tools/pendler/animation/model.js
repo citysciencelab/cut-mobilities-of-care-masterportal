@@ -21,7 +21,8 @@ const Animation = PendlerCoreModel.extend({
         steps: 50,
         minPx: 5,
         maxPx: 20,
-        colors: []
+        colors: [],
+        glyphicon: "glyphicon-play-circle"
     }),
 
     /**
@@ -194,7 +195,7 @@ const Animation = PendlerCoreModel.extend({
         this.setAnimationCount(0);
         this.set("animationLayer", animationLayer);
         this.get("animationLayer").getSource().clear();
-        Radio.trigger("Map", "registerListener", "postcompose", this.moveFeature, this);
+        Radio.trigger("Map", "registerListener", "postcompose", this.moveFeature.bind(this));
         if (this.get("animating")) {
             this.stopAnimation([]);
         }
@@ -222,7 +223,7 @@ const Animation = PendlerCoreModel.extend({
         }
     },
     stopAnimation: function (features) {
-        Radio.trigger("Map", "unregisterListener", "postcompose", this.moveFeature, this);
+        Radio.trigger("Map", "unregisterListener", "postcompose", this.moveFeature.bind(this));
         this.set("animating", false);
         // Wenn Animation fertig alle Features als Vectoren auf neue Layer malen.
         // features ist undefined, wenn die Funktion üder den Resetknopf aufgerufen wird

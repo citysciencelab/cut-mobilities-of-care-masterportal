@@ -28,7 +28,8 @@ const Gfi = Tool.extend({
         themeIndex: 0,
         // Anzahl der Themes
         numberOfThemes: 0,
-        rotateAngle: 0
+        rotateAngle: 0,
+        glyphicon: "glyphicon-info-sign"
     }),
     initialize: function () {
         var channel = Radio.channel("GFI"),
@@ -136,15 +137,15 @@ const Gfi = Tool.extend({
      * @param  {String} deaktivateGFI - soll durch aktivierung des Tools das GFI deaktiviert werden?
      * @return {undefined}
      */
-    toggleGFI: function (id, deaktivateGFI) {
-        if (id === "gfi" && deaktivateGFI === false) {
+    toggleGFI: function (id, deactivateGFI) {
+        if (id === "gfi" && deactivateGFI === false) {
             this.setClickEventKey(Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
             // this.set("key", Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
         }
-        else if (deaktivateGFI === true) {
+        else if (deactivateGFI === true) {
             Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
         }
-        else if (_.isUndefined(deaktivateGFI)) {
+        else if (_.isUndefined(deactivateGFI)) {
             Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
         }
     },

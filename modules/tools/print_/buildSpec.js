@@ -2,7 +2,7 @@ import {Circle as CircleStyle, Icon} from "ol/style.js";
 import {Point, Polygon} from "ol/geom.js";
 import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
-import {Image, Tile, Vector} from "ol/layer.js";
+import {Image, Tile, Vector, Group} from "ol/layer.js";
 
 const BuildSpecModel = Backbone.Model.extend({
     defaults: {
@@ -55,6 +55,7 @@ const BuildSpecModel = Backbone.Model.extend({
 
         return addressString;
     },
+
     /**
      * defines the layers attribute of the map spec
      * @param {ol.layer.Layer[]} layerList - all visible layers on the map
@@ -62,25 +63,40 @@ const BuildSpecModel = Backbone.Model.extend({
      */
     buildLayers: function (layerList) {
         var layers = [],
-            attributes = this.get("attributes"),
-            extent = Radio.request("MapView", "getCurrentExtent"),
-            features = [];
+            attributes = this.get("attributes");
 
         layerList.forEach(function (layer) {
-            if (layer instanceof Image) {
-                layers.push(this.buildImageWms(layer));
+            if (layer instanceof Group) {
+                _.each(layer.getLayers().getArray(), function (childLayer) {
+                    layers.push(this.buildLayerType(childLayer));
+                }, this);
             }
-            else if (layer instanceof Tile) {
-                layers.push(this.buildTileWms(layer));
-            }
-            else if (layer instanceof Vector) {
-                features = layer.getSource().getFeaturesInExtent(extent);
-                if (features.length > 0) {
-                    layers.push(this.buildVector(layer, features));
-                }
+            else {
+                layers.push(this.buildLayerType(layer));
             }
         }, this);
+
         attributes.map.layers = layers.reverse();
+    },
+
+    buildLayerType: function (layer) {
+        var features = [],
+            extent = Radio.request("MapView", "getCurrentExtent"),
+            returnLayer;
+
+        if (layer instanceof Image) {
+            returnLayer = this.buildImageWms(layer);
+        }
+        else if (layer instanceof Tile) {
+            returnLayer = this.buildTileWms(layer);
+        }
+        else if (layer instanceof Vector) {
+            features = layer.getSource().getFeaturesInExtent(extent);
+            if (features.length > 0) {
+                returnLayer = this.buildVector(layer, features);
+            }
+        }
+        return returnLayer;
     },
 
     /**
