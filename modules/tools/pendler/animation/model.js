@@ -327,59 +327,30 @@ const Animation = PendlerCoreModel.extend({
             featurePropList = [];
 
         features.forEach(function (feat) {
-            featurePropList.push(feat.getProperties());
+            featurePropList.push(_.omit(feat.getProperties(), "geom_line"));
         });
         console.info(featurePropList);
-        var csv = this.convertArrayOfObjectsToCSV({data: featurePropList});
 
-        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        var csv = Radio.request("Util", "convertArrayOfObjectsToCsv", featurePropList);
+
+        var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
         if (navigator.msSaveBlob) { // IE 10+
-            navigator.msSaveBlob(blob, 'export.csv');
+            navigator.msSaveBlob(blob, "export.csv");
         } else {
             var link = document.createElement("a");
             if (link.download !== undefined) { // feature detection
                 // Browsers that support HTML5 download attribute
                 var url = URL.createObjectURL(blob);
                 link.setAttribute("href", url);
-                link.setAttribute("download", 'export.csv');
-                link.style.visibility = 'hidden';
+                link.setAttribute("download", "export.csv");
+                link.style.visibility = "hidden";
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
             }
         }
     },
-    convertArrayOfObjectsToCSV: function (args) {
-        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
 
-        data = args.data || null;
-        if (data == null || !data.length) {
-            return null;
-        }
-
-        columnDelimiter = args.columnDelimiter || ',';
-        lineDelimiter = args.lineDelimiter || '\n';
-
-        keys = _.without(Object.keys(data[0]), "geom_line");
-
-        result = '';
-        result += keys.join(columnDelimiter);
-        result += lineDelimiter;
-
-        data.forEach(function(item) {
-            item = _.omit(item, "geom_line");
-            ctr = 0;
-            keys.forEach(function(key) {
-                if (ctr > 0) result += columnDelimiter;
-
-                result += item[key];
-                ctr++;
-            });
-            result += lineDelimiter;
-        });
-
-        return result;
-    },
 
     setSteps: function (value) {
         this.set("steps", value);
