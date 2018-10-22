@@ -38,7 +38,7 @@ const Config = {
     scaleLine: true,
     simpleMap: false,
     styleConf: "../../node_modules/lgv-config/style_v2.json",
-    wfsImgPath: "../../node_modules/lgv-config/img",
+    wfsImgPath: "../../node_modules/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
         imgLink: "../img/location_eventlotse.svg",
