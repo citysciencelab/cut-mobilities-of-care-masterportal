@@ -93,9 +93,9 @@ define(function (require) {
                     }
                 }
 
-                $("#window").hide();
+
                 // GFI ausschalten beim Zeichnen
-                // Radio.trigger("Tool", "activatedTool", "gfi", false);
+                $("#window").hide();
             }
         },
 
