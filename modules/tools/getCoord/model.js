@@ -51,11 +51,12 @@ const CoordPopup = Tool.extend({
     },
 
     positionClicked: function (position) {
-        var updatePosition = this.get("updatePosition");
+        var isViewMobile = Radio.request("Util", "isViewMobile"),
+            updatePosition = isViewMobile ? true : this.get("updatePosition");
 
         this.setPositionMapProjection(position);
         this.setUpdatePosition(!updatePosition);
-        this.toggleMapMarker(position, updatePosition);
+        this.toggleMapMarker(position, updatePosition, isViewMobile);
     },
 
     /**
@@ -63,11 +64,11 @@ const CoordPopup = Tool.extend({
      * Otherwise, the MapMarker hide
      * @param {array} position at which was clicked
      * @param {boolean} updatePosition display of the position is frozen
+     * @param {boolean} isViewMobile is portal in view or desktop version
      * @returns {void}
      */
-    toggleMapMarker: function (position, updatePosition) {
-        var isViewMobile = Radio.request("Util", "isViewMobile"),
-            showHideMarker = updatePosition || isViewMobile ? "showMarker" : "hideMarker";
+    toggleMapMarker: function (position, updatePosition, isViewMobile) {
+        var showHideMarker = updatePosition || isViewMobile ? "showMarker" : "hideMarker";
 
         Radio.trigger("MapMarker", showHideMarker, position);
     },
