@@ -40,7 +40,8 @@ const PrintModel = Tool.extend({
         renderToWindow: true,
         DOTS_PER_INCH: 72,
         INCHES_PER_METER: 39.37,
-        glyphicon: "glyphicon-print"
+        glyphicon: "glyphicon-print",
+        eventListener: {}
     }),
     initialize: function () {
         var channel = Radio.channel("Print");
@@ -199,10 +200,11 @@ const PrintModel = Tool.extend({
      */
     togglePostcomposeListener: function (model, value) {
         if (value && model.get("layoutList").length !== 0) {
-            Radio.trigger("Map", "registerListener", "postcompose", this.createPrintMask.bind(this), this);
+            this.setEventListener(Radio.request("Map", "registerListener", "postcompose", this.createPrintMask.bind(this)));
+
         }
         else {
-            Radio.trigger("Map", "unregisterListener", "postcompose", this.createPrintMask.bind(this), this);
+            Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
         }
         Radio.trigger("Map", "render");
     },
@@ -504,6 +506,9 @@ const PrintModel = Tool.extend({
      */
     setMapfishServiceUrl: function (value) {
         this.set("mapfishServiceUrl", value);
+    },
+    setEventListener: function (value) {
+        this.set("eventListener", value);
     }
 });
 
