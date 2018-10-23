@@ -40,7 +40,13 @@ const FilterView = Backbone.View.extend({
                 }
                 this.model.closeGFI();
             },
-            "renderDetailView": this.renderDetailView
+            "renderDetailView": this.renderDetailView,
+            "add": function (model) {
+                console.log(model);
+                this.renderDetailView();
+                this.render();
+                
+            }
         });
 
         if (this.model.get("isActive")) {
