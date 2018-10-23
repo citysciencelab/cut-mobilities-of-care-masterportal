@@ -367,6 +367,7 @@ define(function (require) {
             if (!_.isUndefined(zoomLevel)) {
                 this.get("view").setZoom(zoomLevel);
             }
+            Radio.trigger("MapView", "centerSet", coordinates);
         },
 
         setZoomLevelUp: function () {

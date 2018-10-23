@@ -13,7 +13,6 @@ define(function (require) {
         initialize: function () {
             var channel = Radio.channel("ObliqueMap");
 
-            this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
             this.pausedInteractions = [];
 
             channel.reply({
@@ -50,6 +49,10 @@ define(function (require) {
             this.switchThreshold = 0.0;
 
             this.listenerKeys = [];
+
+            this.listenTo(Radio.channel("MapView"), {
+                "centerSet": this.setCenter
+            });
         },
         isActive: function () {
             return this.get("active");

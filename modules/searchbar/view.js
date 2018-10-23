@@ -48,6 +48,11 @@ define(function (require) {
 
             this.className = "navbar-form col-xs-9";
 
+            this.listenTo(Radio.channel("Map"), {
+                "change": function (mode) {
+                    this.toggleSupportedVisibility(mode);
+                }
+            });
             this.listenTo(this.model, "renderRecommendedList", function () {
                 this.renderRecommendedList();
             });
@@ -174,6 +179,21 @@ define(function (require) {
         */
         hideMenu: function () {
             this.$(".dropdown-menu-search").hide();
+        },
+
+        toggleSupportedVisibility: function (mode) {
+            if (mode === "2D") {
+                this.$el.show();
+            }
+            else if (mode === "3D") {
+                this.$el.show();
+            }
+            else if (mode === "Oblique") {
+                this.$el.hide();
+            }
+            else {
+                this.$el.hide();
+            }
         },
 
         renderRecommendedList: function () {

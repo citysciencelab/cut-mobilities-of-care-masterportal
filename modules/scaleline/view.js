@@ -6,6 +6,11 @@ define(function (require) {
     ScaleLineView = Backbone.View.extend({
         initialize: function () {
             this.listenTo(this.model, "change:scaleLineValue", this.render);
+            this.listenTo(Radio.channel("Map"), {
+                "change": function (mode) {
+                    this.toggleSupportedVisibility(mode);
+                }
+            });
             this.render();
         },
         model: new ScaleLine(),
@@ -21,6 +26,20 @@ define(function (require) {
             }
 
             return this;
+        },
+        toggleSupportedVisibility: function (mode) {
+            if (mode === "2D") {
+                this.$el.show();
+            }
+            else if (mode === "3D") {
+                this.$el.hide();
+            }
+            else if (mode === "Oblique") {
+                this.$el.hide();
+            }
+            else {
+                this.$el.hide();
+            }
         }
     });
 

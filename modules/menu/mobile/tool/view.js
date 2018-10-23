@@ -35,7 +35,10 @@ define(function (require) {
             if (mode === "2D") {
                 this.$el.show();
             }
-            else if (this.model.get("supportedIn3d").indexOf(this.model.getId()) >= 0) {
+            else if (mode === "3D" && this.model.get("supportedIn3d").indexOf(this.model.getId()) >= 0) {
+                this.$el.show();
+            }
+            else if (mode === "Oblique" && this.model.get("supportedInOblique").indexOf(this.model.getId()) >= 0) {
                 this.$el.show();
             }
             else {

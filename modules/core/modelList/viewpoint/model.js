@@ -25,7 +25,7 @@ define(function (require) {
         },
 
         activateViewpoint: function () {
-            if (Radio.request("Map", "isMap3d")) {
+            if (Radio.request("Map", "getMapMode") === "3D") {
                 Radio.trigger("MapView", "setCenter", this.get("center"), this.get("zoomLevel"));
                 Radio.trigger("Map", "setCameraParameter", {tilt: this.get("tilt"), heading: this.get("heading"), altitude: this.get("altitude")});
             }
