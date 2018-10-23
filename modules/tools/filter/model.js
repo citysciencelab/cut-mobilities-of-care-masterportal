@@ -41,26 +41,26 @@ const FilterModel = Tool.extend({
             }
         }, this);
 
-        this.listenTo(Radio.channel("Layer"), {
-            "featuresLoaded": function (layerId, features) {
-                var filterModels = _.filter(this.get("predefinedQueries"), function (query) {
-                    return query.layerId === layerId;
-                });
-                console.log(filterModels);
+        // this.listenTo(Radio.channel("Layer"), {
+        //     "featuresLoaded": function (layerId, features) {
+        //         var filterModels = _.filter(this.get("predefinedQueries"), function (query) {
+        //             return query.layerId === layerId;
+        //         });
+        //         console.log(filterModels);
                 
-                console.log(this.get("predefinedQueries"));
-                console.log(this.get("queryCollection"));
+        //         console.log(this.get("predefinedQueries"));
+        //         console.log(this.get("queryCollection"));
 
-                _.each(filterModels, function (filterModel) {
-                    this.createQuery(filterModel);
-                }, this);
+        //         _.each(filterModels, function (filterModel) {
+        //             this.createQuery(filterModel);
+        //         }, this);
 
-                this.setIsActive(true);
+        //         this.setIsActive(true);
 
                 
-                // this.createQueries(this.get("predefinedQueries"));
-            }
-        }, this);
+        //         // this.createQueries(this.get("predefinedQueries"));
+        //     }
+        // }, this);
     },
 
     resetFilter: function (feature) {
@@ -233,9 +233,9 @@ const FilterModel = Tool.extend({
         var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
             query;
 
+        console.log("\ncreateQuery:");
         console.log(model);
         console.log(layer);
-        
 
         if (!_.isUndefined(layer)) {
             query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" ? new WfsQueryModel(model) : undefined;
@@ -259,9 +259,11 @@ const FilterModel = Tool.extend({
                 query.setIsDefault(true);
                 query.setIsActive(true);
             }
+            console.log("\nQuery:");
             console.log(query);
-            
+
             this.get("queryCollection").add(query);
+            console.log(this.get("queryCollection"));
         }
     },
 
