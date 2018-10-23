@@ -16,7 +16,10 @@ const WfsQueryModel = QueryModel.extend({
      * @return {ol.Feature[]} openlayers Features
      */
     prepareQuery: function () {
+        console.log(71);
+        
         var features = this.getFeaturesFromWFS();
+console.log(features);
 
         if (features.length > 0) {
             this.processFeatures(features);

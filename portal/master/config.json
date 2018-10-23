@@ -101,7 +101,7 @@
         "glyphicon": "glyphicon-filter",
         "deactivateGFI": false,
         "isGeneric": false,
-        "isInitOpen": false,
+        "isInitOpen": true,
         "allowMultipleQueriesPerLayer": false,
         "predefinedQueries": [
             {
@@ -471,7 +471,7 @@
       {
         "id": "1711",
         "styleId": "1711",
-        "visibility": true,
+        "visibility": false,
         "layerAttribution": "<span>Attributierung für Fachlayer</span>",
         "mouseHoverField": ["name", "strasse"],
         "searchField": "name",
@@ -494,7 +494,7 @@
       },
       {
         "id": "8712",
-        "visibility": true,
+        "visibility": false,
         "name": "Schulinfosystem",
         "styleId": "8712",
         "searchField": "schulname",

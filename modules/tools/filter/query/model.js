@@ -39,12 +39,14 @@ const QueryModel = Backbone.Model.extend({
         this.checkLayerVisibility();
         this.listenTo(Radio.channel("Layer"), {
             "layerVisibleChanged": function (layerId, visible) {
+                console.log(4);
+                console.log(this.get("layerId"));
+                
                 if (layerId === this.get("layerId")) {
                     this.setIsLayerVisible(visible);
                 }
             }
         }, this);
-
     },
 
     isSearchInMapExtentActive: function () {
