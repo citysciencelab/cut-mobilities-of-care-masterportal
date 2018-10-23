@@ -41,26 +41,26 @@ const FilterModel = Tool.extend({
             }
         }, this);
 
-        // this.listenTo(Radio.channel("Layer"), {
-        //     "featuresLoaded": function (layerId, features) {
-        //         var filterModels = _.filter(this.get("predefinedQueries"), function (query) {
-        //             return query.layerId === layerId;
-        //         });
-        //         console.log(filterModels);
+        this.listenTo(Radio.channel("Layer"), {
+            "featuresLoaded": function (layerId, features) {
+                var filterModels = _.filter(this.get("predefinedQueries"), function (query) {
+                    return query.layerId === layerId;
+                });
+                console.log(filterModels);
                 
-        //         console.log(this.get("predefinedQueries"));
-        //         console.log(this.get("queryCollection"));
+                console.log(this.get("predefinedQueries"));
+                console.log(this.get("queryCollection"));
 
-        //         _.each(filterModels, function (filterModel) {
-        //             this.createQuery(filterModel);
-        //         }, this);
+                _.each(filterModels, function (filterModel) {
+                    this.createQuery(filterModel);
+                }, this);
 
-        //         this.setIsActive(true);
+                // this.setIsActive(true);
 
                 
-        //         // this.createQueries(this.get("predefinedQueries"));
-        //     }
-        // }, this);
+                // this.createQueries(this.get("predefinedQueries"), layerId);
+            }
+        }, this);
     },
 
     resetFilter: function (feature) {
