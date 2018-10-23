@@ -24,9 +24,6 @@ Test in cmd:
 # npm -v
 ```
 
-**Known Issue**: Auf Windows 10 wurde mit genannter node-Version *PATH* nicht erweitert. Dies hat zur Folge, dass *grunt server* die Fehlermeldung *command not found* in der Konsole ausgab.
-* *Path* muss um *%USERPROFILE%\AppData\Roaming\npm* ergänzt sein
-* *grunt.cmd* befindet sich unter *%USERPROFILE%\AppData\Roaming\npm*
 
 # Installation des Masterportals
 Mit der Git-Bash (als Admin ausführen) in den Ordner navigieren, in den das Repo geklont werden soll.
