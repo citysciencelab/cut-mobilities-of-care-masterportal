@@ -7,13 +7,9 @@ const FilterView = Backbone.View.extend({
         "click .close": "closeFilter"
     },
     initialize: function () {
-        console.log("start");
 
         this.listenTo(this.model, {
             "change:isActive": function (model, isActive) {
-                console.log("\nChange ist active:");
-                console.log(isActive);
-                console.log(model);
 
                 if (isActive) {
 
@@ -34,7 +30,6 @@ const FilterView = Backbone.View.extend({
         });
         this.listenTo(this.model.get("queryCollection"), {
             "change:isSelected": function (model, value) {
-                console.log("\nChangeSelected:");
                 if (value === true) {
                     this.renderDetailView();
                 }
@@ -42,10 +37,8 @@ const FilterView = Backbone.View.extend({
             },
             "renderDetailView": this.renderDetailView,
             "add": function (model) {
-                console.log(model);
-                this.renderDetailView();
+                this.renderDetailView(model);
                 this.render();
-                
             }
         });
 
@@ -73,11 +66,11 @@ const FilterView = Backbone.View.extend({
         return this;
     },
 
-    renderDetailView: function () {
-        var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true}),
+    renderDetailView: function (model) {
+        var selectedModel = _.isUndefined(model) ? this.model.get("queryCollection").findWhere({isSelected: true}) : model,
             view;
 
-        if (_.isUndefined(selectedModel) === false) {
+        if (!_.isUndefined(selectedModel)) {
             view = new QueryDetailView({model: selectedModel});
 
             this.$el.find(".detail-view-container").html(view.render().$el);
