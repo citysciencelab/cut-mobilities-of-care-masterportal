@@ -7,22 +7,21 @@ const FilterView = Backbone.View.extend({
         "click .close": "closeFilter"
     },
     initialize: function () {
+        console.log("start");
+
         this.listenTo(this.model, {
             "change:isActive": function (model, isActive) {
-                console.log(model);
+                console.log("\nChange ist active:");
                 console.log(isActive);
-                
+                console.log(model);
+
                 if (isActive) {
 
                     if (model.get("queryCollection").length < 1) {
-                        console.log("a");
-                        
                         model.createQueries(model.get("predefinedQueries"));
                         this.render();
                     }
                     else {
-                        console.log("b");
-                        
                         this.renderDetailView();
                         this.render();
                     }
@@ -31,17 +30,11 @@ const FilterView = Backbone.View.extend({
                     this.$el.remove();
                     Radio.trigger("Sidebar", "toggle", false);
                 }
-            },
-            "change:queryCollection": function () {
-                console.log(555);
-                
-                this.renderDetailView();
-                this.render();
             }
         });
         this.listenTo(this.model.get("queryCollection"), {
             "change:isSelected": function (model, value) {
-                console.log(666);
+                console.log("\nChangeSelected:");
                 if (value === true) {
                     this.renderDetailView();
                 }
@@ -62,6 +55,7 @@ const FilterView = Backbone.View.extend({
     id: "filter-view",
     template: _.template(Template),
     className: "filter",
+
     render: function () {
         var attr = this.model.toJSON();
 

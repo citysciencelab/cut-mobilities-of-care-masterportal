@@ -16,10 +16,10 @@ const WfsQueryModel = QueryModel.extend({
      * @return {ol.Feature[]} openlayers Features
      */
     prepareQuery: function () {
-        console.log(71);
+        console.log("\nPrepareQuery:");
         
         var features = this.getFeaturesFromWFS();
-console.log(features);
+        console.log(features);
 
         if (features.length > 0) {
             this.processFeatures(features);
@@ -62,6 +62,8 @@ console.log(features);
     getFeaturesFromWFS: function () {
         var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
             features = [];
+console.log(model);
+console.log(model.get("layerSource"));
 
         if (!_.isUndefined(model)) {
             features = model.get("layerSource").getFeatures();
