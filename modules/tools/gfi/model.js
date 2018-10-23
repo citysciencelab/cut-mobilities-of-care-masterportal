@@ -70,10 +70,6 @@ const Gfi = Tool.extend({
                     this.get("currentView").toggle();
                 }
             },
-            "change:coordinate": function (model, value) {
-                this.setIsVisible(false);
-                this.get("overlay").setPosition(value);
-            },
             "change:themeIndex": function (model, value) {
                 this.get("themeList").appendTheme(value);
             }
@@ -191,19 +187,26 @@ const Gfi = Tool.extend({
             visibleVectorLayerList = gfiParamsList.vectorLayerList,
             eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
             vectorGFIParams,
-            wmsGFIParams;
+            wmsGFIParams,
+            unionParams;
 
         Radio.trigger("ClickCounter", "gfi");
-
+        // für detached MapMarker
         this.setCoordinate(evt.coordinate);
-
         // Vector
         vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, eventPixel);
         // WMS
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
         this.setThemeIndex(0);
-        this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+        unionParams = _.union(vectorGFIParams, wmsGFIParams);
+        if (_.isEmpty(unionParams)) {
+            this.setIsVisible(false);
+        }
+        else {
+            this.get("overlay").setPosition(evt.coordinate);
+            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+        }
     },
 
     /**
