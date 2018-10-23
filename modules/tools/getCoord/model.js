@@ -23,6 +23,10 @@ define(function (require) {
                     this.positionClicked(obj.coordinate);
                 }
             });
+            // for oblique mode
+            this.listenTo(Radio.channel("ObliqueMap"), {
+                "clicked": this.positionClicked
+            });
         },
 
         createInteraction: function () {

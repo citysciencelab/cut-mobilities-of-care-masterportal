@@ -186,7 +186,12 @@ define(function (require) {
 
                 this.set("newCenter", [easting, northing]);
             }
-            Radio.trigger("MapMarker", "zoomTo", {type: "SearchByCoord", coordinate: this.get("newCenter")});
+            if (Radio.request("ObliqueMap", "isActive")) {
+                Radio.trigger("ObliqueMap", "setCenter", this.get("newCenter"));
+            }
+            else {
+                Radio.trigger("MapMarker", "zoomTo", {type: "SearchByCoord", coordinate: this.get("newCenter")});
+            }
         },
         // setter for coordinatesEasting
         setCoordinatesEasting: function (value) {

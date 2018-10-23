@@ -57,6 +57,7 @@ define(function () {
         geoAPI: false,
         clickCounter: {},
         startingMap3D: false,
+        obliqueMap: true,
         cesiumParameter: {
             tileCacheSize: 20,
             enableLighting: false,

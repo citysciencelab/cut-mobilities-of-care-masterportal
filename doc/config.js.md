@@ -32,6 +32,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[zoomToFeature](#markdown-header-zoomtofeature)|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe [URL-Parameter](URL-Parameter.md).||
 |postMessageUrl|nein|String|"http://localhost:8080"|Url auf die das Portal per post-Message agieren und reagieren kann.| "http://localhost:8080"|
 |startingMap3D|nein|Boolean|false|Legt fest ob der 3D Modus beim Start der Anwendung geladen werden soll.||
+|obliqueMap|nein|Boolean|false|Legt fest eine Schrägluftbild Karte erstellt werden soll. Benötigt zusätzlich noch eine Schrägluftbildebene.||
 |[cameraParameter](#markdown-header-cameraParameter)|nein|Object||Start Camera Parameter||
 |[cesiumParameter](#markdown-header-cesiumParameter)|nein|Object||Cesium Flags||
 |[remoteInterface](#markdown-header-remoteInterface)|nein|object||Optionale Konfiguration für das remoteInterface.||

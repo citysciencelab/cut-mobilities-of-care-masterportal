@@ -131,7 +131,8 @@
         "resolution": 611.4974492763076,
         "baselayer": "4988"
       },
-      "button3d": true
+      "button3d": true,
+      "buttonOblique": true
     },
     "scaleLine": true,
     "Baumtyp": "light"
@@ -154,6 +155,16 @@
         {
           "id": "buildingslgv",
           "name": "Gebäude LoD2",
+          "visibility": true
+        },
+        {
+          "id": "oblique",
+          "name": "Oblique",
+          "visibility": false
+        },
+        {
+          "id": "oblique2",
+          "name": "Oblique2",
           "visibility": true
         }
       ]

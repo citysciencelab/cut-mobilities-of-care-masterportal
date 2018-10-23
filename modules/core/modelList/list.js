@@ -7,6 +7,7 @@ define(function (require) {
         GeoJSONLayer = require("modules/core/modelList/layer/geojson"),
         TerrainLayer = require("modules/core/modelList/layer/terrain"),
         TileSetLayer = require("modules/core/modelList/layer/tileset"),
+        ObliqueLayer = require("modules/core/modelList/layer/oblique"),
         GROUPLayer = require("modules/core/modelList/layer/group"),
         SensorLayer = require("modules/core/modelList/layer/sensor"),
         HeatmapLayer = require("modules/core/modelList/layer/heatmap"),
@@ -128,6 +129,9 @@ define(function (require) {
                 }
                 else if (attrs.typ === "TileSet") {
                     return new TileSetLayer(attrs, options);
+                }
+                else if (attrs.typ === "Oblique") {
+                    return new ObliqueLayer(attrs, options);
                 }
                 else if (attrs.typ === "SensorThings" || attrs.typ === "ESRIStreamLayer") {
                     return new SensorLayer(attrs, options);

@@ -177,7 +177,7 @@
     background-repeat: no-repeat;
     cursor: pointer;
 }
-.compass-pointer-south{
+.oblique > .compass-pointer-south{
     background-image: url("/img/compass/pointer-south-short.png");
     bottom: -7px;
     left: 49px;
@@ -185,7 +185,7 @@
     -webkit-transform-origin: 11px -45px;
     transform-origin: 11px -45px;
 }
-.compass-pointer-east{
+.oblique > .compass-pointer-east{
     background-image: url("/img/compass/pointer-east-short.png");
     top: 49px;
     right: -7px;
@@ -193,7 +193,7 @@
     -webkit-transform-origin: -45px 11px;
     transform-origin: -45px 11px;
 }
-.compass-pointer-west{
+.oblique > .compass-pointer-west{
     background-image: url("/img/compass/pointer-west-short.png");
     top: 49px;
     left: -7px;
@@ -254,14 +254,22 @@
     display: inline-block;
     margin: .5rem 0 .25rem 1px;
 }
+.oblique .btn-group-wrap{
+    margin-left: 26px;
+}
 
 .tilt-down{
     background-image: url("/img/compass/tilt-down.png");
 }
+.oblique .tilt-down {
+    display:none;
+}
 .tilt-up{
     background-image: url("/img/compass/tilt-up.png");
 }
-
+.oblique .tilt-up {
+    display:none;
+}
 .control-box-btn{
     display: inline-block;
     border: 1px solid #5F5F5F;
@@ -319,6 +327,16 @@
     padding: 6px;
     font-family: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
 }
+/***** Oblique *****/
+.buttonOblique {
+    margin-top: 20px;
+}
+.buttonOblique > .glyphicon {
+    font-size: 22px;
+    margin-top: 4px;
+    padding: 5px 5px 7px 8px;
+}
+
 @media (max-width: 767px) {
     .full-screen-button {
         display: none;

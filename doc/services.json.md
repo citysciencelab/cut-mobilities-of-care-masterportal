@@ -284,6 +284,10 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 
 
 **Beispiel Terrain:**
+
+```
+#!json
+   {
       "id" : "buildings",
       "name" : "Terrain",
       "url" : "https://geodienste.hamburg.de/terrain",
@@ -305,6 +309,53 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
             ],
             "kategorie_inspire" : [
                "Terrain"
+            ],
+            "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
+         }
+      ]
+   }
+```
+## Oblique Layer##
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|id|ja|String||Frei wählbare Layer-ID|`"44"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
+|typ|ja|String||Diensttyp, in diesem Fall Oblique |`"Oblique"`|
+|hideLevels|nein|Number||Anzahl der Level der Bildpyramide, die nicht angezeigt werden sollen. |`0`|
+|minZoom|nein|Number||Minimale Zoomstufe 0 zeigt das komplette Schrägluftbild in der Mitte des Bildschirms. |`0`|
+|terrainUrl|nein|String||URL zu Cesium Quantized Mesh Terrain dataset |`"https://geodienste.hamburg.de/terrain"`|
+|resolution|nein|Number||Auflösung der Schrägluftbilder in cm z.B. 10 . |`10`|
+|projection|ja|String||Projektion der Schrägluftbild ebene. |`EPSG:25832`|
+|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/oblique"`|
+
+
+**Beispiel Oblique Ebene:**
+
+```
+#!json
+   {
+      "id" : "oblique",
+      "name" : "Oblique",
+      "url" : "https://geodienste.hamburg.de/oblique",
+      "typ" : "Oblique",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "ignore",      
+      "datasets" : [
+         {
+            "md_id" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
+            "rs_id" : "HMDK/6f62c5f7-7ea3-4e31-99ba-97407b1af9ba",
+            "md_name" : "Oblique",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Oblique"
+            ],
+            "kategorie_inspire" : [
+               "Oblique"
             ],
             "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
          }

@@ -5,6 +5,7 @@ define(function (require) {
         Cesium = require("cesium"),
         $ = require("jquery"),
         Config = require("config"),
+        ObliqueMap = require("modules/core/obliqueMap"),
         Map;
 
     Map = Backbone.Model.extend({
@@ -81,6 +82,11 @@ define(function (require) {
                 interactions: ol.interaction.defaults({altShiftDragRotate: false, pinchRotate: false})
             }));
 
+
+
+            if (Config.obliqueMap) {
+                this.set("obliqueMap", new ObliqueMap({}));
+            }
             // this.getMap().on("click", this.reactToClickEvent, this);
 
 
@@ -130,7 +136,13 @@ define(function (require) {
             }
         },
         getMapMode: function () {
-            return this.getMap3d() && this.getMap3d().getEnabled() ? "3D" : "2D";
+            if (Radio.request("ObliqueMap", "isActive")) {
+                return "Oblique";
+            }
+            else if (this.getMap3d() && this.getMap3d().getEnabled()) {
+                return "3D";
+            }
+            return "2D";
         },
         isMap3d: function () {
             return this.getMap3d() && this.getMap3d().getEnabled();

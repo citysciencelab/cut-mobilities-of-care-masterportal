@@ -393,6 +393,16 @@ define("app", function (require) {
                         }
                         break;
                     }
+                    case "buttonOblique": {
+                        if (control.attr === true) {
+                            element = controlsView.addRowTR(control.id);
+
+                            require(["modules/controls/buttonoblique/view"], function (ButtonObliqueView) {
+                                new ButtonObliqueView({el: element});
+                            });
+                        }
+                        break;
+                    }
                     case "orientation3d": {
                         if (control.attr === true) {
                             element = controlsView.addRowTR(control.id);

@@ -8,8 +8,22 @@ define(function (require) {
             "click .button3D": "mapChange"
         },
         initialize: function () {
+            var channel = Radio.channel("Map");
+
+            channel.on({
+                "change": this.change
+            }, this);
+
             this.template = _.template(Button3dTemplate);
             this.render();
+        },
+        change: function (map) {
+            if (map === "3D") {
+                this.$("#button3D").addClass("toggleButtonPressed");
+            }
+            else {
+                this.$("#button3D").removeClass("toggleButtonPressed");
+            }
         },
         render: function () {
             this.$el.html(this.template);
@@ -22,14 +36,21 @@ define(function (require) {
         mapChange: function () {
             if (Radio.request("Map", "isMap3d")) {
                 Radio.trigger("Map", "deactivateMap3d");
-                this.$("#button3D").removeClass("toggleButtonPressed");
                 Radio.trigger("Alert", "alert:remove");
             }
             else {
+                if (Radio.request("ObliqueMap", "isActive")) {
+                    Radio.once("Map", "change", function (map) {
+                        if (map === "2D") {
+                            this.mapChange();
+                        }
+                    }.bind(this));
+                    Radio.trigger("ObliqueMap", "deactivate");
+                    return;
+                }
                 Radio.trigger("Map", "activateMap3d");
                 // Radio.trigger("ModelList", "setModelAttributesById", "3d_daten", {isExpanded: true});
                 // Radio.trigger("ModelList", "setModelAttributesById", "terrain", {isSelected: true});
-                this.$("#button3D").addClass("toggleButtonPressed");
                 Radio.trigger("Alert", "alert", "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!");
             }
 

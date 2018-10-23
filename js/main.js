@@ -71,7 +71,7 @@ require.config({
         underscore: "../node_modules/underscore/underscore-min",
         videojs: "../node_modules/video.js/dist/video.min",
         videojsflash: "../node_modules/videojs-flash/dist/videojs-flash.min",
-        oblique: "../node_modules/vcs-oblique/dist/vcs-oblique.min.js"
+        oblique: "../node_modules/vcs-oblique/dist/vcs-oblique.min"
     },
     shim: {
         bootstrap: {
@@ -85,6 +85,9 @@ require.config({
         },
         cesium: {
             exports: "Cesium"
+        },
+        oblique: {
+            exports: "vcs"
         }
     },
     map: {
