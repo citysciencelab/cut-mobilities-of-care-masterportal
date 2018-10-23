@@ -106,7 +106,6 @@ const Animation = PendlerCoreModel.extend({
             min,
             max;
 
-
         this.centerGemeinde(true);
 
         topFeatures = this.selectFeatures(rawFeatures);

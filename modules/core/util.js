@@ -30,7 +30,8 @@ const Util = Backbone.Model.extend({
                 return this.get("ignoredKeys");
             },
             "punctuate": this.punctuate,
-            "sort": this.sort
+            "sort": this.sort,
+            "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv
         }, this);
 
         channel.on({
@@ -300,6 +301,37 @@ const Util = Backbone.Model.extend({
                 });
             }
         }
+    },
+
+    /**
+     * converts an array of objects to csv
+     * @param {object[]} data - array of object (no nested objects)
+     * @param {string} colDeli - column delimiter
+     * @param {string} lineDeli - line delimiter
+     * @returns {string} csv
+     */
+    convertArrayOfObjectsToCsv: function (data, colDeli, lineDeli) {
+        const keys = Object.keys(data[0]),
+            columnDelimiter = colDeli || ",",
+            lineDelimiter = lineDeli || "\n";
+
+        // header line
+        let result = keys.join(columnDelimiter) + lineDelimiter;
+
+        data.forEach(function (item) {
+            let colCounter = 0;
+
+            keys.forEach(function (key) {
+                if (colCounter > 0) {
+                    result += columnDelimiter;
+                }
+                result += item[key];
+                colCounter++;
+            });
+            result += lineDelimiter;
+        });
+
+        return result;
     },
 
     // setter for config
