@@ -37,7 +37,9 @@ const PrintModel = Tool.extend({
         deactivateGFI: false,
         renderToWindow: true,
         proxyURL: "",
-        glyphicon: "glyphicon-print"
+        glyphicon: "glyphicon-print",
+        precomposeListener: {},
+        postcomposeListener: {}
     }),
 
     /*
@@ -145,12 +147,16 @@ const PrintModel = Tool.extend({
     updatePrintPage: function () {
         if (this.has("scale") && this.has("layout")) {
             if (this.get("isActive")) {
-                Radio.trigger("Map", "registerListener", "precompose", this.handlePreCompose.bind(this), this);
-                Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose.bind(this), this);
+                if (_.isEmpty(this.get("precomposeListener"))) {
+                    this.setPrecomposeListener(Radio.request("Map", "registerListener", "precompose", this.handlePreCompose.bind(this)));
+                }
+                if (_.isEmpty(this.get("postcomposeListener"))) {
+                    this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.handlePostCompose.bind(this)));
+                }
             }
             else {
-                Radio.trigger("Map", "unregisterListener", "precompose", this.handlePreCompose, this);
-                Radio.trigger("Map", "unregisterListener", "postcompose", this.handlePostCompose, this);
+                Radio.trigger("Map", "unregisterListener", this.get("precomposeListener"));
+                Radio.trigger("Map", "unregisterListener", this.get("postcomposeListener"));
             }
             Radio.trigger("Map", "render");
         }
@@ -657,6 +663,12 @@ const PrintModel = Tool.extend({
         maxx = center[0] + (w / 2);
         maxy = center[1] + (h / 2);
         return [minx, miny, maxx, maxy];
+    },
+    setPrecomposeListener: function (value) {
+        this.set("precomposeListener", value);
+    },
+    setPostcomposeListener: function (value) {
+        this.set("postcomposeListener", value);
     }
 });
 

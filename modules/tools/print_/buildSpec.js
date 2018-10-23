@@ -66,14 +66,21 @@ const BuildSpecModel = Backbone.Model.extend({
             attributes = this.get("attributes");
 
         layerList.forEach(function (layer) {
+            var printLayers = [];
+
             if (layer instanceof Group) {
                 _.each(layer.getLayers().getArray(), function (childLayer) {
-                    layers.push(this.buildLayerType(childLayer));
+                    printLayers.push(this.buildLayerType(childLayer));
                 }, this);
             }
             else {
-                layers.push(this.buildLayerType(layer));
+                printLayers.push(this.buildLayerType(layer));
             }
+            _.each(printLayers, function (printLayer) {
+                if (!_.isUndefined(printLayer)) {
+                    layers.push(printLayer);
+                }
+            });
         }, this);
 
         attributes.map.layers = layers.reverse();
