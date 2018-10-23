@@ -11,7 +11,7 @@
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
-    "build": "webpack --config devtools/webpack.prod.js && node devtools/tasks/copy.js && node devtools/tasks/replace.js"
+    "build": "webpack --config devtools/webpack.prod.js && node devtools/tasks/copy.js"
   },
   "dependencies": {
     "backbone": "1.x",
@@ -38,16 +38,15 @@
     "@babel/preset-env": "^7.0.0",
     "babel-loader": "^8.0.0",
     "chai": "4.1.1",
-    "copy-concurrently": "^1.0.5",
     "css-loader": "^1.0.0",
     "deep-extend": "^0.3.2",
-    "del": "^3.0.0",
     "es6-promise": "^4.2.5",
     "eslint": "^4.14.0",
     "eslint-plugin-backbone": "^2.1.1",
     "eslint-plugin-chai-friendly": "^0.4.1",
     "file-loader": "^2.0.0",
     "fs": "0.0.1-security",
+    "fs-extra": "^7.0.0",
     "glob": "4.2.1",
     "inquirer": "^6.2.0",
     "jaguarjs-jsdoc": "0.0.1",
@@ -58,7 +57,6 @@
     "mocha": "3.5.0",
     "mocha-loader": "^2.0.0",
     "replace-in-file": "^3.4.2",
-    "rimraf": "^2.6.2",
     "selenium-webdriver": "^3.5.0",
     "style-loader": "^0.23.0",
     "text-loader": "0.0.1",
