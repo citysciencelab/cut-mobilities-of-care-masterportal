@@ -105,7 +105,7 @@ define(function (require) {
                         }
                     }
                     else {
-                        this.getLayer().setVisible(false);
+                        this.get("layer").setVisible(false);
                     }
                 }
             });
