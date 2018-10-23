@@ -23,7 +23,7 @@ const Gfi = Tool.extend({
         // Koordinate für das attached Popover und den Marker
         coordinate: undefined,
         // Verwaltet die Themes
-        themeList: new ThemeList(),
+        themeList: undefined,
         // Index für das aktuelle Theme
         themeIndex: 0,
         // Anzahl der Themes
@@ -32,9 +32,9 @@ const Gfi = Tool.extend({
         glyphicon: "glyphicon-info-sign"
     }),
     initialize: function () {
-        var channel = Radio.channel("GFI"),
-            tool;
+        var channel = Radio.channel("GFI");
 
+        this.setThemeList(new ThemeList());
         channel.on({
             "setIsVisible": this.setIsVisible,
             "layerAtPosition": this.setGfiOfLayerAtPosition,
@@ -101,13 +101,14 @@ const Gfi = Tool.extend({
             "activatedTool": this.toggleGFI
         });
 
-        tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+        this.listenTo(Radio.channel("Map"), {
+            "isReady": function () {
+                this.toggleGFI(this.get("id"), this.get("deactivateGFI"));
+                Radio.trigger("Map", "addOverlay", this.get("overlay"));
+            }
+        }, this);
 
-        if (!_.isUndefined(tool)) {
-            this.toggleGFI(tool.id, !tool.isActive);
-        }
         this.initView();
-        Radio.trigger("Map", "addOverlay", this.get("overlay"));
     },
 
     /**
@@ -134,7 +135,7 @@ const Gfi = Tool.extend({
     /**
      * Prüft ob GFI aktiviert ist und registriert entsprechend den Listener oder eben nicht
      * @param  {String} id - Tool Id
-     * @param  {String} deaktivateGFI - soll durch aktivierung des Tools das GFI deaktiviert werden?
+     * @param  {String} deactivateGFI - soll durch aktivierung des Tools das GFI deaktiviert werden?
      * @return {undefined}
      */
     toggleGFI: function (id, deactivateGFI) {
@@ -400,6 +401,11 @@ const Gfi = Tool.extend({
 
     setClickEventKey: function (value) {
         this.set("clickEventKey", value);
+    },
+
+    // setter for themeList
+    setThemeList: function (value) {
+        this.set("themeList", value);
     }
 
 });
